@@ -31,7 +31,7 @@
 //
 
 #import "SamplesViewController.h"
-#import "JaspersoftAppDelegate.h"
+#import "JasperMobileAppDelegate.h"
 #import "Sample1.h"
 #import "Sample2.h"
 #import "Sample3.h"
@@ -157,37 +157,37 @@
     
     if ([indexPath indexAtPosition:1] == 0)
     {
-        [Sample1 runSample: [[ JaspersoftAppDelegate sharedInstance] client]
+        [Sample1 runSample: [[ JasperMobileAppDelegate sharedInstance] client]
         parentViewController: self];
     }
     else if ([indexPath indexAtPosition:1] == 1)
     {
-        [Sample2 runSample: [[ JaspersoftAppDelegate sharedInstance] client]
+        [Sample2 runSample: [[ JasperMobileAppDelegate sharedInstance] client]
         parentViewController: self];
     }
     else if ([indexPath indexAtPosition:1] == 2)
     {
-        [Sample3 runSample: [[ JaspersoftAppDelegate sharedInstance] client]
+        [Sample3 runSample: [[ JasperMobileAppDelegate sharedInstance] client]
          parentViewController: self];
     }
     else if ([indexPath indexAtPosition:1] == 3)
     {
-        [Sample4 runSample: [[ JaspersoftAppDelegate sharedInstance] client]
+        [Sample4 runSample: [[ JasperMobileAppDelegate sharedInstance] client]
       parentViewController: self];
     }
     else if ([indexPath indexAtPosition:1] == 4)
     {
-        [Sample5 runSample: [[ JaspersoftAppDelegate sharedInstance] client]
+        [Sample5 runSample: [[ JasperMobileAppDelegate sharedInstance] client]
       parentViewController: self];
     }
     else if ([indexPath indexAtPosition:1] == 5)
     {
-        [Sample6 runSample: [[ JaspersoftAppDelegate sharedInstance] client]
+        [Sample6 runSample: [[ JasperMobileAppDelegate sharedInstance] client]
       parentViewController: self];
     }
 	else if ([indexPath indexAtPosition:1] == 6)
     {
-        [Sample7 runSample: [[ JaspersoftAppDelegate sharedInstance] client]
+        [Sample7 runSample: [[ JasperMobileAppDelegate sharedInstance] client]
       parentViewController: self];
     }
 	    

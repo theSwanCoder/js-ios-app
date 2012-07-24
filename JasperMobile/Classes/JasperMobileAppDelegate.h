@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <jasperserver-mobile-sdk-ios/JSClient.h>
 
-@interface JaspersoftAppDelegate : NSObject <UIApplicationDelegate> {
+@interface JasperMobileAppDelegate : NSObject <UIApplicationDelegate> {
     
     UIWindow *window;
     UINavigationController *navigationController;
@@ -35,7 +35,7 @@
 
 - (IBAction)configureServersDone:(id)sender;
 
-+ (JaspersoftAppDelegate *)sharedInstance;
++ (JasperMobileAppDelegate *)sharedInstance;
 -(void)loadServers;
 -(void)saveServers;
 

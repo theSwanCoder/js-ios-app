@@ -32,7 +32,7 @@
 
 #import "ServersViewController.h"
 #import <jasperserver-mobile-sdk-ios/JSClient.h>
-#import "JaspersoftAppDelegate.h"
+#import "JasperMobileAppDelegate.h"
 
 
 @implementation ServersViewController
@@ -55,7 +55,7 @@
 	editMode = false;
 	self.navigationItem.rightBarButtonItem = editDoneButton;
 	
-	if ([[[JaspersoftAppDelegate sharedInstance] servers] count] == 0)
+	if ([[[JasperMobileAppDelegate sharedInstance] servers] count] == 0)
 	{
 		[self editClient:nil];
 	}
@@ -85,7 +85,7 @@
 	[[self tableView] setEditing:true animated:YES];
     
     
-    if ([[[JaspersoftAppDelegate sharedInstance] servers] count] == 0)
+    if ([[[JasperMobileAppDelegate sharedInstance] servers] count] == 0)
     {
         // Run the view to configure something...
         ServerSettingsViewController *vc  = [[ServerSettingsViewController alloc] initWithNibName: @"ServerSettingsViewController" bundle:nil];
@@ -169,11 +169,11 @@
     
     if (!editMode)
     {
-        NSInteger serversCount = [[[JaspersoftAppDelegate sharedInstance] servers] count];
+        NSInteger serversCount = [[[JasperMobileAppDelegate sharedInstance] servers] count];
         
         if (serversCount == 1)
         {
-            JSClient *client = [[[JaspersoftAppDelegate sharedInstance] servers] objectAtIndex:0];
+            JSClient *client = [[[JasperMobileAppDelegate sharedInstance] servers] objectAtIndex:0];
             if ([client.jsServerProfile.alias isEqualToString:@"Jaspersoft Mobile Demo"])
             {
                 return @"\n\nYou can add and configure your own server by tapping Edit, or you can select the demo server provided by Jaspersoft to quickly try out how the app works.";
@@ -199,9 +199,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	
 	if (editMode)
-		return [[[JaspersoftAppDelegate sharedInstance] servers] count] + 1; // section is 0?
+		return [[[JasperMobileAppDelegate sharedInstance] servers] count] + 1; // section is 0?
 	
-	return [[[JaspersoftAppDelegate sharedInstance] servers] count];
+	return [[[JasperMobileAppDelegate sharedInstance] servers] count];
 }
 
 
@@ -211,7 +211,7 @@
     static NSString *CellIdentifier = @"Cell";
 	static NSString *CellAddAccount = @"AddAccount";
     
-	if ([indexPath indexAtPosition: 1] >= [[[JaspersoftAppDelegate sharedInstance] servers] count])
+	if ([indexPath indexAtPosition: 1] >= [[[JasperMobileAppDelegate sharedInstance] servers] count])
 	{
 		
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellAddAccount];
@@ -231,7 +231,7 @@
 			}
 			
 			// Configure the cell.
-			JSClient *client = [[[JaspersoftAppDelegate sharedInstance] servers] objectAtIndex:[indexPath indexAtPosition:1]];
+			JSClient *client = [[[JasperMobileAppDelegate sharedInstance] servers] objectAtIndex:[indexPath indexAtPosition:1]];
 			cell.textLabel.text = client.jsServerProfile.alias;
 			cell.detailTextLabel.text = client.jsServerProfile.baseUrl;
 			cell.accessoryType = UITableViewCellAccessoryNone;
@@ -244,7 +244,7 @@
 		}
 		
 		// Configure the cell.
-		JSClient *client = [[[JaspersoftAppDelegate sharedInstance] servers] objectAtIndex:[indexPath indexAtPosition:1]];
+		JSClient *client = [[[JasperMobileAppDelegate sharedInstance] servers] objectAtIndex:[indexPath indexAtPosition:1]];
 		cell.textLabel.text = client.jsServerProfile.alias;
 		cell.detailTextLabel.text = client.jsServerProfile.baseUrl;
 		cell.accessoryType = UITableViewCellAccessoryNone;
@@ -259,7 +259,7 @@
  // Override to support conditional editing of the table view.
  - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
  
-	 if (editMode == YES && [indexPath indexAtPosition: 1] < [[[JaspersoftAppDelegate sharedInstance] servers] count])
+	 if (editMode == YES && [indexPath indexAtPosition: 1] < [[[JasperMobileAppDelegate sharedInstance] servers] count])
 	 {
 		return UITableViewCellEditingStyleDelete;
 	 }
@@ -276,17 +276,17 @@
 	 {
 		 if (editingStyle == UITableViewCellEditingStyleDelete) {
 			 // Delete the row from the data source.
-			 JSClient *client = [[[JaspersoftAppDelegate sharedInstance] servers] objectAtIndex:[indexPath indexAtPosition:1]];
-			 NSInteger index = [[[JaspersoftAppDelegate sharedInstance] servers] indexOfObject:client];
+			 JSClient *client = [[[JasperMobileAppDelegate sharedInstance] servers] objectAtIndex:[indexPath indexAtPosition:1]];
+			 NSInteger index = [[[JasperMobileAppDelegate sharedInstance] servers] indexOfObject:client];
 			 if (index >= 0)
 			 {
-				 [[[JaspersoftAppDelegate sharedInstance] servers] removeObjectAtIndex:index];
-				 [[JaspersoftAppDelegate sharedInstance] saveServers];
+				 [[[JasperMobileAppDelegate sharedInstance] servers] removeObjectAtIndex:index];
+				 [[JasperMobileAppDelegate sharedInstance] saveServers];
 			 }
 			 [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
              
              // If the client is currently in use... remove it...
-             [[JaspersoftAppDelegate sharedInstance] setClient: nil];
+             [[JasperMobileAppDelegate sharedInstance] setClient: nil];
              
 		 }
 	 }
@@ -317,18 +317,18 @@
     
 	
 	JSClient *client = nil;
-	if ([indexPath indexAtPosition: 1] < [[[JaspersoftAppDelegate sharedInstance] servers] count])
+	if ([indexPath indexAtPosition: 1] < [[[JasperMobileAppDelegate sharedInstance] servers] count])
 	{
 		// Get the info of this client....
-		client = [[[JaspersoftAppDelegate sharedInstance] servers] objectAtIndex:[indexPath indexAtPosition:1]];
+		client = [[[JasperMobileAppDelegate sharedInstance] servers] objectAtIndex:[indexPath indexAtPosition:1]];
 	}
 	
 	if (!editMode)
 	{
 		if (client == nil) return;
 		// pick a server and come back...
-		[[JaspersoftAppDelegate sharedInstance] setClient:client];
-		[[JaspersoftAppDelegate sharedInstance] configureServersDone:self];
+		[[JasperMobileAppDelegate sharedInstance] setClient:client];
+		[[JasperMobileAppDelegate sharedInstance] configureServersDone:self];
 		return;
 	}
 	
@@ -348,8 +348,8 @@
 
 -(void)addServer:(JSClient *)client
 {
-	[[[JaspersoftAppDelegate sharedInstance] servers] addObject:client];
-	[[JaspersoftAppDelegate sharedInstance] saveServers];
+	[[[JasperMobileAppDelegate sharedInstance] servers] addObject:client];
+	[[JasperMobileAppDelegate sharedInstance] saveServers];
 	
     [[self tableView] beginUpdates];
 	[[self tableView] reloadSections: [NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
@@ -358,7 +358,7 @@
 
 -(void)updateServer:(JSClient *)client
 {
-	[[JaspersoftAppDelegate sharedInstance] saveServers];
+	[[JasperMobileAppDelegate sharedInstance] saveServers];
 	[[self tableView] beginUpdates];
 	[[self tableView] reloadSections: [NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 	[[self tableView] endUpdates];

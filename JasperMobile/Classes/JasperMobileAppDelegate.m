@@ -6,11 +6,11 @@
 //  Copyright 2011 Jaspersoft Corp.. All rights reserved.
 //
 
-#import "JaspersoftAppDelegate.h"
+#import "JasperMobileAppDelegate.h"
 #import <jasperserver-mobile-sdk-ios/JSUIBaseRepositoryViewController.h>
 
 
-@implementation JaspersoftAppDelegate
+@implementation JasperMobileAppDelegate
 
 @synthesize window;
 @synthesize navigationController;
@@ -21,26 +21,12 @@
 @synthesize servers;
 @synthesize client; // the active client
 
-static JaspersoftAppDelegate *sharedInstance = nil;
+static JasperMobileAppDelegate *sharedInstance = nil;
 
 
-+ (JaspersoftAppDelegate *)sharedInstance {
++ (JasperMobileAppDelegate *)sharedInstance {
     return sharedInstance;
 }
-
-
-/*
-- (IBAction)configureServers:(id)sender {
-	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:1.0];
-	[UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:window cache:YES];
-	
-	[navigationController.view removeFromSuperview];
-	[window addSubview:settingsController.view];
-	[UIView commitAnimations];
-}
-*/
 
 - (IBAction)configureServersDone:(id)sender {
 	

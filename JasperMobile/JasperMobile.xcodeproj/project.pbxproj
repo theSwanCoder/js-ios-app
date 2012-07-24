@@ -33,7 +33,7 @@
 		1067AA261415597800AC8033 /* Sample7ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1067AA241415597600AC8033 /* Sample7ViewController.xib */; };
 		1067AA351418145000AC8033 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1067AA341418145000AC8033 /* Icon@2x.png */; };
 		1067AA371418187300AC8033 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1067AA361418187300AC8033 /* Default@2x.png */; };
-		1D3623260D0F684500981E51 /* JaspersoftAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* JaspersoftAppDelegate.m */; };
+		1D3623260D0F684500981E51 /* JasperMobileAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* JasperMobileAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -98,12 +98,12 @@
 		1067AA341418145000AC8033 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		1067AA361418187300AC8033 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		1D3623240D0F684500981E51 /* JaspersoftAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = JaspersoftAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		1D3623250D0F684500981E51 /* JaspersoftAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = JaspersoftAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		1D3623240D0F684500981E51 /* JasperMobileAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = JasperMobileAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		1D3623250D0F684500981E51 /* JasperMobileAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = JasperMobileAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		1D6058910D05DD3D006BFB54 /* JasperMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JasperMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		28A0AAE50D9B0CCF005BE974 /* JaspersoftMobile_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JaspersoftMobile_Prefix.pch; sourceTree = "<group>"; };
+		28A0AAE50D9B0CCF005BE974 /* JasperMobile_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JasperMobile_Prefix.pch; sourceTree = "<group>"; };
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		641A2F0A138FE25700A1DBBE /* ServersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ServersViewController.xib; sourceTree = "<group>"; };
@@ -150,8 +150,8 @@
 			children = (
 				1067A9C51414142200AC8033 /* Sample */,
 				64979522135F197E00FA5BA0 /* SFHF */,
-				1D3623240D0F684500981E51 /* JaspersoftAppDelegate.h */,
-				1D3623250D0F684500981E51 /* JaspersoftAppDelegate.m */,
+				1D3623240D0F684500981E51 /* JasperMobileAppDelegate.h */,
+				1D3623250D0F684500981E51 /* JasperMobileAppDelegate.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -223,7 +223,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				28A0AAE50D9B0CCF005BE974 /* JaspersoftMobile_Prefix.pch */,
+				28A0AAE50D9B0CCF005BE974 /* JasperMobile_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
 			name = "Other Sources";
@@ -277,9 +277,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* JaspersoftMobile */ = {
+		1D6058900D05DD3D006BFB54 /* JasperMobile */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "JaspersoftMobile" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "JasperMobile" */;
 			buildPhases = (
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
@@ -289,7 +289,7 @@
 			);
 			dependencies = (
 			);
-			name = JaspersoftMobile;
+			name = JasperMobile;
 			productName = Jaspersoft;
 			productReference = 1D6058910D05DD3D006BFB54 /* JasperMobile.app */;
 			productType = "com.apple.product-type.application";
@@ -299,7 +299,7 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JaspersoftMobile" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JasperMobile" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -315,7 +315,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* JaspersoftMobile */,
+				1D6058900D05DD3D006BFB54 /* JasperMobile */,
 			);
 		};
 /* End PBXProject section */
@@ -353,7 +353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
-				1D3623260D0F684500981E51 /* JaspersoftAppDelegate.m in Sources */,
+				1D3623260D0F684500981E51 /* JasperMobileAppDelegate.m in Sources */,
 				64979521135F197A00FA5BA0 /* SFHFKeychainUtils.m in Sources */,
 				1067A9D41414142200AC8033 /* SamplesViewController.m in Sources */,
 				1067A9D51414142200AC8033 /* ServerSettingsViewController.m in Sources */,
@@ -423,7 +423,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = JaspersoftMobile_Prefix.pch;
+				GCC_PREFIX_HEADER = JasperMobile_Prefix.pch;
 				HEADER_SEARCH_PATHS = "${SDK_DIR}/usr/include/libxml2/**";
 				INFOPLIST_FILE = "Jaspersoft-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
@@ -445,7 +445,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = JaspersoftMobile_Prefix.pch;
+				GCC_PREFIX_HEADER = JasperMobile_Prefix.pch;
 				HEADER_SEARCH_PATHS = "${SDK_DIR}/usr/include/libxml2/**";
 				INFOPLIST_FILE = "Jaspersoft-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
@@ -465,7 +465,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = JaspersoftMobile_Prefix.pch;
+				GCC_PREFIX_HEADER = JasperMobile_Prefix.pch;
 				HEADER_SEARCH_PATHS = "${SDK_DIR}/usr/include/libxml2/**";
 				INFOPLIST_FILE = "Jaspersoft-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
@@ -530,7 +530,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "JaspersoftMobile" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "JasperMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
@@ -540,7 +540,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Distribution;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JaspersoftMobile" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "JasperMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
