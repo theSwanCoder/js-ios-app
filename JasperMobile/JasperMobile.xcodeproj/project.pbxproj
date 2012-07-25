@@ -52,7 +52,20 @@
 		649795CF13602DC800FA5BA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 649795CE13602DC800FA5BA0 /* QuartzCore.framework */; };
 		64A8072C135397AF00651C3B /* ServersController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A8072B135397AF00651C3B /* ServersController.xib */; };
 		64A80A33135C497E00651C3B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 64A80A31135C497E00651C3B /* Localizable.strings */; };
+		F5CB6F3615C05701003FCCF7 /* JSUIReportUnitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5CB6F3515C05701003FCCF7 /* JSUIReportUnitViewController.xib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F5CB6EEB15C045ED003FCCF7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		100ABEFE13D86F5F00776C8F /* repository.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = repository.png; path = icons/repository.png; sourceTree = "<group>"; };
@@ -122,6 +135,7 @@
 		64A80A32135C497E00651C3B /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		64A80A34135C499200651C3B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		8D1107310486CEB800E47090 /* Jaspersoft-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Jaspersoft-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		F5CB6F3515C05701003FCCF7 /* JSUIReportUnitViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSUIReportUnitViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +246,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F5CB6F3515C05701003FCCF7 /* JSUIReportUnitViewController.xib */,
 				64A8072B135397AF00651C3B /* ServersController.xib */,
 				1067AA361418187300AC8033 /* Default@2x.png */,
 				1067AA341418145000AC8033 /* Icon@2x.png */,
@@ -284,6 +299,7 @@
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+				F5CB6EEB15C045ED003FCCF7 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -342,6 +358,7 @@
 				1067AA261415597800AC8033 /* Sample7ViewController.xib in Resources */,
 				1067AA351418145000AC8033 /* Icon@2x.png in Resources */,
 				1067AA371418187300AC8033 /* Default@2x.png in Resources */,
+				F5CB6F3615C05701003FCCF7 /* JSUIReportUnitViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
