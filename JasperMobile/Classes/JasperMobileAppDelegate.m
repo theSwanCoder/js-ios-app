@@ -23,6 +23,12 @@
 
 static JasperMobileAppDelegate *sharedInstance = nil;
 
+// Private time out properties
+static const int defaultRequestTimeoutSeconds = 10;
+static const int defaultReportRequestTimeoutSeconds = 30;
+static NSString * const keyDefaultRequestTimeoutSeconds = @"defaultRequestTimeoutSeconds";
+static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutSeconds";
+static NSArray * reportRequestMethodsName;
 
 + (JasperMobileAppDelegate *)sharedInstance {
     return sharedInstance;
@@ -151,15 +157,22 @@ static JasperMobileAppDelegate *sharedInstance = nil;
     
     // Override point for customization after application launch.
     sharedInstance = self;
-    
+        
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSInteger firstRun = [prefs  integerForKey:@"jaspersoft.mobile.firstRun"];
+    reportRequestMethodsName = [NSArray arrayWithObjects:@"reportFile", @"reportRun", nil];
     
     
 	[self loadServers];
     
     if (self.client != nil)
     {
+        // Set timeouts for JSClient from project settings
+        self.client.timeOut = [prefs integerForKey:keyDefaultRequestTimeoutSeconds] ?: defaultRequestTimeoutSeconds;
+        for(NSString *reportMethod in reportRequestMethodsName) {
+            [self.client setTimeOut:([prefs integerForKey:keyReportRequestTimeoutSeconds] ?: defaultRequestTimeoutSeconds) forMethod:reportMethod];
+        }
+        
         // Set the client to the repository view...
         [(JSUIBaseRepositoryViewController *)(navigationController.topViewController) setClient: self.client];
         [(JSUIBaseRepositoryViewController *)(searchController.topViewController) setClient: self.client];
@@ -224,6 +237,14 @@ static JasperMobileAppDelegate *sharedInstance = nil;
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    // Re-set timeouts for JSClient from project settings (if setting was changed)
+    self.client.timeOut = [prefs integerForKey: keyDefaultRequestTimeoutSeconds] ?: defaultRequestTimeoutSeconds;
+    for(NSString *reportMethod in reportRequestMethodsName) {
+        [self.client setTimeOut:([prefs integerForKey:keyReportRequestTimeoutSeconds] ?: defaultRequestTimeoutSeconds) forMethod:reportMethod];
+    }
 }
 
 

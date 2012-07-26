@@ -88,6 +88,7 @@
 	{
 		isNew = YES;
 		client = [[[JSClient alloc] init] autorelease];
+        client.jsServerProfile = [[[JSServerProfile alloc] init] autorelease];
 	}
     
     client.jsServerProfile.alias = aliasTextField.text;
