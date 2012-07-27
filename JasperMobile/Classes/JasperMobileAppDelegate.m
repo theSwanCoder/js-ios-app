@@ -28,7 +28,9 @@ static const int defaultRequestTimeoutSeconds = 10;
 static const int defaultReportRequestTimeoutSeconds = 30;
 static NSString * const keyDefaultRequestTimeoutSeconds = @"defaultRequestTimeoutSeconds";
 static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutSeconds";
-static NSArray * reportRequestMethodsName;
+static NSString * const reportFileMethod = @"reportFile";
+static NSString * const reportRunMethod = @"reportRun";
+
 
 + (JasperMobileAppDelegate *)sharedInstance {
     return sharedInstance;
@@ -160,8 +162,7 @@ static NSArray * reportRequestMethodsName;
         
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSInteger firstRun = [prefs  integerForKey:@"jaspersoft.mobile.firstRun"];
-    reportRequestMethodsName = [NSArray arrayWithObjects:@"reportFile", @"reportRun", nil];
-    
+    NSArray *reportMethods = [NSArray arrayWithObjects:reportFileMethod, reportRunMethod, nil];    
     
 	[self loadServers];
     
@@ -169,7 +170,7 @@ static NSArray * reportRequestMethodsName;
     {
         // Set timeouts for JSClient from project settings
         self.client.timeOut = [prefs integerForKey:keyDefaultRequestTimeoutSeconds] ?: defaultRequestTimeoutSeconds;
-        for(NSString *reportMethod in reportRequestMethodsName) {
+        for(NSString *reportMethod in reportMethods) {
             [self.client setTimeOut:([prefs integerForKey:keyReportRequestTimeoutSeconds] ?: defaultRequestTimeoutSeconds) forMethod:reportMethod];
         }
         
@@ -239,10 +240,11 @@ static NSArray * reportRequestMethodsName;
      */
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSArray *reportMethods = [NSArray arrayWithObjects:reportFileMethod, reportRunMethod, nil];    
     
     // Re-set timeouts for JSClient from project settings (if setting was changed)
     self.client.timeOut = [prefs integerForKey: keyDefaultRequestTimeoutSeconds] ?: defaultRequestTimeoutSeconds;
-    for(NSString *reportMethod in reportRequestMethodsName) {
+    for(NSString *reportMethod in reportMethods) {
         [self.client setTimeOut:([prefs integerForKey:keyReportRequestTimeoutSeconds] ?: defaultRequestTimeoutSeconds) forMethod:reportMethod];
     }
 }
@@ -266,9 +268,6 @@ static NSArray * reportRequestMethodsName;
 	
 	NSLog(@"Memory warning!!!");
 }
-
-
-
 
 
 - (void)dealloc {
