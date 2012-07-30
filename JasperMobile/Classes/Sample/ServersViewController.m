@@ -327,6 +327,8 @@
 	{
 		if (client == nil) return;
 		// pick a server and come back...
+        [JSClient clearSession];
+        
 		[[JasperMobileAppDelegate sharedInstance] setClient:client];
 		[[JasperMobileAppDelegate sharedInstance] configureServersDone:self];
 		return;
