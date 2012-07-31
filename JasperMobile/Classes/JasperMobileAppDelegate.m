@@ -76,9 +76,9 @@ static NSString * const reportRunMethod = @"reportRun";
         if (firstRun == 0) // First run has never been set...
         {
             JSServerProfile *jsServerProfile = [[JSServerProfile alloc] initWithAlias: @"Jaspersoft Mobile Demo"
-                                                                             Username: @"joeuser"
-                                                                             Password: @"joeuser"
-                                                                         Organization: @""
+                                                                             Username: @"phoneuser"
+                                                                             Password: @"phoneuser"
+                                                                         Organization: @"organization_1"
                                                                                   Url: @"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
             
             JSClient *tmpClient = [[JSClient alloc] initWithJSServerProfile: jsServerProfile];
