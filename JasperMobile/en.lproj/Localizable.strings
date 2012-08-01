@@ -9,14 +9,19 @@
 // Login form
 
 "URL" = "URL";
-"http://example.com"="http://example.com";
+"http://example.com/jasperserver"="http://example.com/jasperserver";
 
 "Name"="Name";
-"My server"="My server";
+"My server"="my server name";
 
 "Organization"="Organization";
+"organization id"="organization id";
+
 "Username"="Username";
+"my username"="my username";
+
 "Password"="Password";
+"my password"="my password";
 
 // Repository controller
 "Servers"="Servers";

@@ -159,7 +159,7 @@
 // Customize the number of rows in the table view.
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
-	return @"JasperReports Server accounts";
+	return @"JasperReports Server profiles";
 		
 }
 

@@ -250,7 +250,7 @@
 						self.organizationCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OrganizationCell"] autorelease];
 						self.organizationCell.textLabel.text = NSLocalizedString(@"Organization", @"");
 						organizationTextField = [self newTextFieldForCell:self.organizationCell];
-						organizationTextField.placeholder = NSLocalizedString(@"Organization", @"");
+						organizationTextField.placeholder = NSLocalizedString(@"organization id", @"");
 						organizationTextField.keyboardType = UIKeyboardTypeDefault;
 						organizationTextField.returnKeyType = UIReturnKeyNext;
 						if(client != nil && client.jsServerProfile != nil && client.jsServerProfile.organization != nil)
@@ -266,7 +266,7 @@
 						self.usernameCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UsernameCell"] autorelease];
 						self.usernameCell.textLabel.text = NSLocalizedString(@"Username", @"");
 						usernameTextField = [self newTextFieldForCell:self.usernameCell];
-						usernameTextField.placeholder = @"jasperadmin"; // NOI18N
+						usernameTextField.placeholder = @"my username"; // NOI18N
 						usernameTextField.keyboardType = UIKeyboardTypeDefault;
 						usernameTextField.returnKeyType = UIReturnKeyNext;
 						if(client != nil && client.jsServerProfile != nil && client.jsServerProfile.username != nil)
@@ -282,7 +282,7 @@
 						self.passwordCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PasswordCell"] autorelease];
 						self.passwordCell.textLabel.text = NSLocalizedString(@"Password", @"");
 						passwordTextField = [self newTextFieldForCell:self.passwordCell];
-						passwordTextField.placeholder = @"jasperadmin"; // NOI18N
+						passwordTextField.placeholder = @"my password"; // NOI18N
 						passwordTextField.keyboardType = UIKeyboardTypeDefault;
 						passwordTextField.returnKeyType = UIReturnKeyDone;
 						passwordTextField.secureTextEntry = YES;

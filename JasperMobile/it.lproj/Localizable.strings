@@ -7,14 +7,19 @@
  */
 
 "URL" = "URL";
-"http://example.com"="http://esempio.it";
+"http://example.com/jasperserver"="http://esempio.it/jasperserver";
 
 "Name"="Nome";
-"My server"="Il mio server";
+"My server"="il mio server";
 
-"Organization"="Organizzazione";
+"Organization"="organizzazione";
+"organization id"="organizaazione id";
+
 "Username"="Nome utente";
+"my username"="il mio nome utente";
+
 "Password"="Password";
+"my password"="il mio password";
 
 // Repository controller
 "Servers"="Server";
