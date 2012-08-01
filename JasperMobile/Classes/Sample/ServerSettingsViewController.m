@@ -190,7 +190,7 @@
 // Customize the number of rows in the table view.
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
-	return @"Account Details";
+	return @"Server Profile Details";
 	
 }
 
