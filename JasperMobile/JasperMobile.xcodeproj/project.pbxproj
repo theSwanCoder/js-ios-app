@@ -52,6 +52,7 @@
 		649795CF13602DC800FA5BA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 649795CE13602DC800FA5BA0 /* QuartzCore.framework */; };
 		64A8072C135397AF00651C3B /* ServersController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A8072B135397AF00651C3B /* ServersController.xib */; };
 		64A80A33135C497E00651C3B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 64A80A31135C497E00651C3B /* Localizable.strings */; };
+		CA431B1115D1B4B6009AF041 /* libjasperserver-mobile-sdk-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA31336515D1B4250015F3E5 /* libjasperserver-mobile-sdk-ios.a */; };
 		F5EA575315D15E10003416D1 /* JSBooleanInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA572B15D15E10003416D1 /* JSBooleanInputControlCell.m */; };
 		F5EA575415D15E10003416D1 /* JSDateInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA572D15D15E10003416D1 /* JSDateInputControlCell.m */; };
 		F5EA575515D15E10003416D1 /* JSDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA572F15D15E10003416D1 /* JSDatePickerView.m */; };
@@ -72,7 +73,6 @@
 		F5EA576415D15E10003416D1 /* JSUIResourcePreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA574E15D15E10003416D1 /* JSUIResourcePreviewController.m */; };
 		F5EA576515D15E10003416D1 /* JSUIResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA575015D15E10003416D1 /* JSUIResourceViewController.m */; };
 		F5EA576615D15E10003416D1 /* JSUISearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA575215D15E10003416D1 /* JSUISearchViewController.m */; };
-		F5EA578115D1601C003416D1 /* libjasperserver-mobile-sdk-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5EA577015D15E4B003416D1 /* libjasperserver-mobile-sdk-ios.a */; };
 		F5EA578415D168CC003416D1 /* JSToggleFavorieImageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA578315D168CC003416D1 /* JSToggleFavorieImageControl.m */; };
 		F5EA578915D1A78E003416D1 /* JSFavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA578815D1A78E003416D1 /* JSFavoritesHelper.m */; };
 		F5F2B0F815C161FD00E97074 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5F2B0F715C161FC00E97074 /* Settings.bundle */; };
@@ -80,23 +80,23 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		F5EA576F15D15E4B003416D1 /* PBXContainerItemProxy */ = {
+		CA31336415D1B4250015F3E5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F5EA576715D15E4B003416D1 /* jasperserver-mobile-sdk-ios.xcodeproj */;
+			containerPortal = CA31335115D1B4220015F3E5 /* jasperserver-mobile-sdk-ios.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = F55A30961594819C00B58DD9;
 			remoteInfo = "jasperserver-mobile-sdk-ios";
 		};
-		F5EA577115D15E4B003416D1 /* PBXContainerItemProxy */ = {
+		CA31336615D1B4250015F3E5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F5EA576715D15E4B003416D1 /* jasperserver-mobile-sdk-ios.xcodeproj */;
+			containerPortal = CA31335115D1B4220015F3E5 /* jasperserver-mobile-sdk-ios.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = F51E1E7A1594BE9100D99EE3;
 			remoteInfo = "jasperserver-mobile-ASIHTTPRequest-ios";
 		};
-		F5EA577F15D16016003416D1 /* PBXContainerItemProxy */ = {
+		CA431B0F15D1B45E009AF041 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F5EA576715D15E4B003416D1 /* jasperserver-mobile-sdk-ios.xcodeproj */;
+			containerPortal = CA31335115D1B4220015F3E5 /* jasperserver-mobile-sdk-ios.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = F55A30951594819C00B58DD9;
 			remoteInfo = "jasperserver-mobile-sdk-ios";
@@ -171,6 +171,7 @@
 		64A80A32135C497E00651C3B /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		64A80A34135C499200651C3B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		8D1107310486CEB800E47090 /* Jaspersoft-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Jaspersoft-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		CA31335115D1B4220015F3E5 /* jasperserver-mobile-sdk-ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jasperserver-mobile-sdk-ios.xcodeproj"; path = "../../iossdk/JaspersoftMobileSDK/jasperserver-mobile-sdk-ios.xcodeproj"; sourceTree = "<group>"; };
 		F5EA572A15D15E10003416D1 /* JSBooleanInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSBooleanInputControlCell.h; sourceTree = "<group>"; };
 		F5EA572B15D15E10003416D1 /* JSBooleanInputControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSBooleanInputControlCell.m; sourceTree = "<group>"; };
 		F5EA572C15D15E10003416D1 /* JSDateInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSDateInputControlCell.h; sourceTree = "<group>"; };
@@ -211,7 +212,6 @@
 		F5EA575015D15E10003416D1 /* JSUIResourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUIResourceViewController.m; sourceTree = "<group>"; };
 		F5EA575115D15E10003416D1 /* JSUISearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUISearchViewController.h; sourceTree = "<group>"; };
 		F5EA575215D15E10003416D1 /* JSUISearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUISearchViewController.m; sourceTree = "<group>"; };
-		F5EA576715D15E4B003416D1 /* jasperserver-mobile-sdk-ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jasperserver-mobile-sdk-ios.xcodeproj"; path = "../JaspersoftMobileSDK/jasperserver-mobile-sdk-ios.xcodeproj"; sourceTree = "<group>"; };
 		F5EA578215D168CB003416D1 /* JSToggleFavorieImageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSToggleFavorieImageControl.h; sourceTree = "<group>"; };
 		F5EA578315D168CC003416D1 /* JSToggleFavorieImageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSToggleFavorieImageControl.m; sourceTree = "<group>"; };
 		F5EA578715D1A78E003416D1 /* JSFavoritesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSFavoritesHelper.h; sourceTree = "<group>"; };
@@ -225,7 +225,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5EA578115D1601C003416D1 /* libjasperserver-mobile-sdk-ios.a in Frameworks */,
+				CA431B1115D1B4B6009AF041 /* libjasperserver-mobile-sdk-ios.a in Frameworks */,
 				64252F001350C641005DAD57 /* libxml2.dylib in Frameworks */,
 				64252F191350C79A005DAD57 /* libz.dylib in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -311,7 +311,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				F5EA576715D15E4B003416D1 /* jasperserver-mobile-sdk-ios.xcodeproj */,
+				CA31335115D1B4220015F3E5 /* jasperserver-mobile-sdk-ios.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -377,6 +377,15 @@
 			name = SFHF;
 			sourceTree = "<group>";
 		};
+		CA31336015D1B4250015F3E5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CA31336515D1B4250015F3E5 /* libjasperserver-mobile-sdk-ios.a */,
+				CA31336715D1B4250015F3E5 /* libjasperserver-mobile-ASIHTTPRequest-ios.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F5EA572915D15E0F003416D1 /* JSInputControls */ = {
 			isa = PBXGroup;
 			children = (
@@ -433,15 +442,6 @@
 			path = JSUIComponents;
 			sourceTree = "<group>";
 		};
-		F5EA576815D15E4B003416D1 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				F5EA577015D15E4B003416D1 /* libjasperserver-mobile-sdk-ios.a */,
-				F5EA577215D15E4B003416D1 /* libjasperserver-mobile-ASIHTTPRequest-ios.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		F5EA578615D1A770003416D1 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -465,7 +465,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				F5EA578015D16016003416D1 /* PBXTargetDependency */,
+				CA431B1015D1B45E009AF041 /* PBXTargetDependency */,
 			);
 			name = JasperMobile;
 			productName = Jaspersoft;
@@ -496,8 +496,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = F5EA576815D15E4B003416D1 /* Products */;
-					ProjectRef = F5EA576715D15E4B003416D1 /* jasperserver-mobile-sdk-ios.xcodeproj */;
+					ProductGroup = CA31336015D1B4250015F3E5 /* Products */;
+					ProjectRef = CA31335115D1B4220015F3E5 /* jasperserver-mobile-sdk-ios.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -508,18 +508,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		F5EA577015D15E4B003416D1 /* libjasperserver-mobile-sdk-ios.a */ = {
+		CA31336515D1B4250015F3E5 /* libjasperserver-mobile-sdk-ios.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libjasperserver-mobile-sdk-ios.a";
-			remoteRef = F5EA576F15D15E4B003416D1 /* PBXContainerItemProxy */;
+			remoteRef = CA31336415D1B4250015F3E5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		F5EA577215D15E4B003416D1 /* libjasperserver-mobile-ASIHTTPRequest-ios.a */ = {
+		CA31336715D1B4250015F3E5 /* libjasperserver-mobile-ASIHTTPRequest-ios.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libjasperserver-mobile-ASIHTTPRequest-ios.a";
-			remoteRef = F5EA577115D15E4B003416D1 /* PBXContainerItemProxy */;
+			remoteRef = CA31336615D1B4250015F3E5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -604,10 +604,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		F5EA578015D16016003416D1 /* PBXTargetDependency */ = {
+		CA431B1015D1B45E009AF041 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "jasperserver-mobile-sdk-ios";
-			targetProxy = F5EA577F15D16016003416D1 /* PBXContainerItemProxy */;
+			targetProxy = CA431B0F15D1B45E009AF041 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -658,12 +658,10 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = JasperMobile_Prefix.pch;
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"",
-					"\"${SDK_DIR}/usr/include/libxml2\"",
-				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				INFOPLIST_FILE = "Jaspersoft-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = JasperMobile;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -684,12 +682,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = JasperMobile_Prefix.pch;
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"",
-					"\"${SDK_DIR}/usr/include/libxml2\"",
-				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				INFOPLIST_FILE = "Jaspersoft-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = JasperMobile;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -708,12 +704,10 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = JasperMobile_Prefix.pch;
-				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"",
-					"\"${SDK_DIR}/usr/include/libxml2\"",
-				);
+				HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				INFOPLIST_FILE = "Jaspersoft-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = JasperMobile;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
