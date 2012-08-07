@@ -20,6 +20,7 @@
 @synthesize tabBarController;
 @synthesize servers;
 @synthesize client; // the active client
+@synthesize activeServerIndex;
 
 static JasperMobileAppDelegate *sharedInstance = nil;
 
@@ -107,10 +108,10 @@ static NSString * const reportRunMethod = @"reportRun";
 	
 	if (count > 0)
 	{
-		NSInteger activeServerIndex = [prefs integerForKey:@"jaspersoft.server.active"];
-		if (activeServerIndex < 0 || activeServerIndex >= count) activeServerIndex = 0;
+        self.activeServerIndex = [prefs integerForKey:@"jaspersoft.server.active"];
+		if (self.activeServerIndex < 0 || self.activeServerIndex >= count) self.activeServerIndex = 0;
 		
-		client = (JSClient *)[servers objectAtIndex:activeServerIndex];
+		client = (JSClient *)[servers objectAtIndex:self.activeServerIndex];
 	}
     
 }
@@ -124,6 +125,7 @@ static NSString * const reportRunMethod = @"reportRun";
 	{
 		NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 		[prefs setInteger:index forKey:@"jaspersoft.server.active"];
+        self.activeServerIndex = index;
 	}
 }
 

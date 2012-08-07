@@ -32,6 +32,7 @@
 
 @property (nonatomic, readonly) NSMutableArray *servers;
 @property (nonatomic, retain) JSClient *client;
+@property (nonatomic) NSInteger activeServerIndex;
 
 - (IBAction)configureServersDone:(id)sender;
 
