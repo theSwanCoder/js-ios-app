@@ -47,6 +47,6 @@
     
     
     [[controller navigationController] pushViewController:sample7ViewController animated:TRUE];
-    
+    [sample7ViewController release];
 }
 @end

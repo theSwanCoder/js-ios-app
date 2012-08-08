@@ -198,9 +198,7 @@
     
     [statusLabel setText:@"Uploading, please wait..."];
     [self.client resourceCreate: parentFolder resourceDescriptor:rd data: data responseDelegate:self];
-    
-    
-    
+    [rd release];
 }
 
 -(void)slideTextfieldUp:(BOOL)b

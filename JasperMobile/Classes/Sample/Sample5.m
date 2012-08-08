@@ -47,7 +47,7 @@
     
     
     [[controller navigationController] pushViewController:sample5ViewController animated:TRUE];
-    
+    [sample5ViewController release];
 }
 
 

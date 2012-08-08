@@ -260,6 +260,8 @@
 		// 1. check for $P parameters...
 		
 		NSString *tmpQuery = [NSString stringWithString:query]; // copy of the string...
+        [query release];
+        
 		while ([tmpQuery length] > 2)
 		{
 			NSRange textRange;
@@ -348,7 +350,8 @@
 	ta.target = aTarget;
 	ta.action = anAction;
 	
-	[targetActionsOnChange addObject:ta];	
+	[targetActionsOnChange addObject:ta];
+	[ta release];
 }
 
 -(void)addDependency:(JSInputControlCell *)inputControlCell

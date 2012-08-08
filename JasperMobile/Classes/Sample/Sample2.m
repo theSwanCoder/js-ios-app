@@ -51,7 +51,7 @@
     [delegate setParentController: controller];
      
     [resourcePicker setDelegate:delegate];
-    
+    [delegate release];
     
     // 4. Prepare a navigation controller to display the picker as modal view...
     UINavigationController *picker = [[UINavigationController alloc] initWithRootViewController:resourcePicker];

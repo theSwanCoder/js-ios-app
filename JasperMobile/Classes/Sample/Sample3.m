@@ -41,7 +41,7 @@
 
 +(void)runSample:(JSClient *)client parentViewController: (UIViewController *)controller
 {
-    Sample3ViewController *sample3ViewController = [[Sample3ViewController alloc] initWithNibName:@"Sample3ViewController" bundle: nil];
+    Sample3ViewController *sample3ViewController = [[[Sample3ViewController alloc] initWithNibName:@"Sample3ViewController" bundle: nil] autorelease];
     
     [sample3ViewController setParentController: controller];
     [sample3ViewController setClient: client];
@@ -64,7 +64,7 @@
     if ([op returnCode] == 200)
     {
       
-        JSUIResourceViewController *resourceView = [[JSUIResourceViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        JSUIResourceViewController *resourceView = [[[JSUIResourceViewController alloc] initWithStyle:UITableViewStyleGrouped] autorelease];
         
         [resourceView setClient: self.client];
         [resourceView setDescriptor:[[op resourceDescriptors] objectAtIndex:0]];

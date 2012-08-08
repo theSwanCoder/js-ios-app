@@ -50,6 +50,8 @@
     
     // Force an update.
     [resourceView updateTableContent];
+    
+    [resourceView release];
 }
 
 

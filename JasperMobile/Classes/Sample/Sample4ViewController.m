@@ -136,8 +136,7 @@
     [rd setLabel: folderName];
     
     [self.client resourceCreate: parentFolder resourceDescriptor:rd data: nil responseDelegate:self];
-    
-    
+    [rd release];
 }
 
 

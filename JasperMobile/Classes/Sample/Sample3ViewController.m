@@ -146,7 +146,7 @@
         [resourceView setClient: self.client];
         [resourceView setDescriptor:rd];
         [[self navigationController] pushViewController: resourceView animated:TRUE];
-        
+        [resourceView release];
     }
     
     

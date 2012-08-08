@@ -9,7 +9,7 @@
 #import <jasperserver-mobile-sdk-ios/JSResourceDescriptor.h>
 #import <UIKit/UIKit.h>
 
-@interface JSToggleFavorieImageControl : UIControl
+@interface JSToggleFavoriteImageControl : UIControl
 
 @property (nonatomic) BOOL isSelected;
 @property (nonatomic, retain) UIImage *normalImage;

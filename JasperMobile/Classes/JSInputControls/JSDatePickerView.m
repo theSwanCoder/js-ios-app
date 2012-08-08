@@ -41,8 +41,8 @@
 		
 		
 		self.pickerMode = UIDatePickerModeDate;
-        self.datePickerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 260.0)]; //frame.size.height - DATE_PICKER_HEIGHT
-		self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0.0, 44, 320.0, 216.0)];
+        self.datePickerView = [[[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 260.0)] autorelease]; //frame.size.height - DATE_PICKER_HEIGHT
+		self.datePicker = [[[UIDatePicker alloc] initWithFrame:CGRectMake(0.0, 44, 320.0, 216.0)] autorelease];
 		[self.datePicker setDatePickerMode:UIDatePickerModeDate];
 		[self.datePickerView addSubview:self.datePicker];
 		
@@ -68,6 +68,8 @@
 		self.date = [NSDate date];
 
 		[self addSubview:self.datePickerView];
+        [pickerToolbar release];
+        [barItems release];
 	}
 	
     return self;

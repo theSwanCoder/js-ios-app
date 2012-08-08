@@ -152,7 +152,7 @@
 		//NSLog(@"Error reading response...");
 	}
 	else {
-		[self setResources: [[NSMutableArray alloc] initWithCapacity:0]];
+		[self setResources: [NSMutableArray arrayWithCapacity:0]];
 		
         
         if (self.descriptor == nil && type == JSUIResourcePickerTypeFolderOnly)

@@ -46,8 +46,7 @@
     
     
     [[controller navigationController] pushViewController:sample6ViewController animated:TRUE];
-    
-
+    [sample6ViewController release];
 }
 
 @end
