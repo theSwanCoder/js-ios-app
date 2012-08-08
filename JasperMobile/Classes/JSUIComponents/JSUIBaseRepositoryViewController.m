@@ -33,7 +33,6 @@
 
 #import <jasperserver-mobile-sdk-ios/JSClient.h>
 #import <jasperserver-mobile-sdk-ios/JSUtils.h>
-#import "JSToggleFavorieImageControl.h"
 #import "JSUIBaseRepositoryViewController.h"
 #import "JSUILoadingView.h"
 
@@ -249,10 +248,6 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-    } else {
-        for (int i = cell.contentView.subviews.count - 1; i >= 0; i--) {
-            [[cell.contentView.subviews objectAtIndex:i] removeFromSuperview];
-        }
     }
     
 	// Configure the cell.
@@ -263,18 +258,8 @@
 	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.userInteractionEnabled = true;
     
-    JSToggleFavorieImageControl *toggleControl = [[JSToggleFavorieImageControl alloc] initWithFrame: CGRectMake(5, 5, 40, 40) andResourceDescriptor:rd];
-    toggleControl.tag = indexPath.row;  // for reference in notifications.
-    [cell.contentView addSubview: toggleControl];
-    	
     return cell;
 }
-
--(NSInteger)tableView:(UITableView *)tableView indentationLevelForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 3;
-}
-
-
 
 #pragma mark -
 #pragma mark Table view delegate
