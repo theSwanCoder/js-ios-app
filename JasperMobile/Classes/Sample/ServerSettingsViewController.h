@@ -33,8 +33,6 @@
 #import <UIKit/UIKit.h>
 #import <jasperserver-mobile-sdk-ios/JSClient.h>
 
-
-
 @interface ServerSettingsViewController : UITableViewController <UITextFieldDelegate, UITableViewDelegate> {
 
 	bool keybordIsActive;

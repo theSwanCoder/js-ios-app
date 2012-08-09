@@ -47,7 +47,6 @@
 @end
 
 @interface JSUIResourcePicker : JSUIBaseRepositoryViewController {
-    
     int type;
 }
 

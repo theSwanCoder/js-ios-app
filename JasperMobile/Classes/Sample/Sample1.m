@@ -31,7 +31,7 @@
 //
 
 #import "Sample1.h"
-#include <jasperserver-mobile-sdk-ios/JSUIRepositoryViewController.h>
+#include "JSUIRepositoryViewController.h"
 
 
 @implementation Sample1

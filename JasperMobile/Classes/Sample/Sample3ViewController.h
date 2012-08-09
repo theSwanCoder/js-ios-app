@@ -32,8 +32,7 @@
 
 #import <UIKit/UIKit.h>
 #import <jasperserver-mobile-sdk-ios/JSClient.h>
-#import <jasperserver-mobile-sdk-ios/JSUIResourcePicker.h>
-
+#import "JSUIResourcePicker.h"
 
 @interface Sample3ViewController : UIViewController <JSUIResourcePickerDelegate> {
     

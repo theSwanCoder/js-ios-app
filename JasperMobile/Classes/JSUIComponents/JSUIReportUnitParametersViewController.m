@@ -321,7 +321,7 @@ static UIFont *detailFont;
             UITableViewCell *formatCell =  [tableView dequeueReusableCellWithIdentifier:@"FormatCell"];
             if (formatCell == nil) {
                 
-                formatCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FormatCell"];
+                formatCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FormatCell"] autorelease];
                 //formatCell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 40) reuseIdentifier: @"FormatCell"];
                 
                 UIView *backView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
@@ -349,7 +349,7 @@ static UIFont *detailFont;
             UITableViewCell *toolsCell =  [tableView dequeueReusableCellWithIdentifier:@"ToolsCell"];
             if (toolsCell == nil) {
                 
-                toolsCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ToolsCell"];
+                toolsCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ToolsCell"] autorelease];
                 //toolsCell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 40) reuseIdentifier: @"ToolsCell"];
 
                 UIView *backView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
@@ -487,7 +487,7 @@ static UIFont *detailFont;
 	
    
     [self presentModalViewController:reportViewer animated:YES];
-
+    [reportViewer release];
 }
 
 

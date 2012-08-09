@@ -43,7 +43,6 @@
 @synthesize client;
 @synthesize resources;
 
-
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -59,8 +58,6 @@
 }
 
 - (void)viewDidLoad {
-	
-    
    	if (descriptor != nil)
 	{
 		resourecInfoButton = [[[UIBarButtonItem alloc]
@@ -74,22 +71,7 @@
 	[super viewDidLoad];	
 }
 
--(IBAction)resourceInfoClicked:(id)sender {
-	
-	//if (descriptor != nil)
-	//{
-	//	ResourceViewController *rvc = [[ResourceViewController alloc] initWithNibName:@"ResourceViewController" bundle:nil];
-	//	[rvc setDescriptor: descriptor];
-	//	[self.navigationController pushViewController: rvc animated: YES];
-	//}
-    
-}
-
-
 -(void)requestFinished:(JSOperationResult *)res {
-	
-	
-	
 	if (res == nil)
 	{
 		UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:@"" message:@"Error reading the response" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] autorelease];
@@ -132,11 +114,7 @@
 	[[self tableView] endUpdates];
 	
 	[JSUILoadingView hideLoadingView];
-    
-	
 }
-
-
 
 - (void)viewWillAppear:(BOOL)animated {
     
@@ -157,10 +135,7 @@
 
     }
     
-    
 	descriptor = nil;
-    
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -242,18 +217,37 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    JSResourceDescriptor *rd = (JSResourceDescriptor *)[resources objectAtIndex: [indexPath indexAtPosition:1]];
     
-    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell;
+    NSString *imageNameAndCellIdentifier = nil;
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+    if ([rd.wsType isEqualToString: JS_TYPE_FOLDER]) {
+        imageNameAndCellIdentifier = @"ic_type_folder.png";
+    } else if ([rd.wsType isEqualToString: JS_TYPE_IMAGE]) {
+        imageNameAndCellIdentifier = @"ic_type_image.png";
+    } else if ([rd.wsType isEqualToString: JS_TYPE_REPORTUNIT]) {
+        imageNameAndCellIdentifier = @"ic_type_report.png";
+    } else if ([rd.wsType isEqualToString: JS_TYPE_DASHBOARD]) {
+        imageNameAndCellIdentifier = @"ic_type_dashboard.png";
+    } else if([rd.wsType isEqualToString: JS_TYPE_CSS] || 
+              [rd.wsType isEqualToString: JS_TYPE_XML_FILE]) {
+        imageNameAndCellIdentifier = @"ic_type_text.png";
+    } else {
+        imageNameAndCellIdentifier = @"ic_type_unknown.png";
     }
     
-	// Configure the cell.
+    cell = [tableView dequeueReusableCellWithIdentifier:imageNameAndCellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:imageNameAndCellIdentifier] autorelease];
+        cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        cell.imageView.image = [UIImage imageNamed:imageNameAndCellIdentifier];
+        cell.textLabel.textColor = [UIColor colorWithRed:46.0/255.0 green:109.0/255.0 blue:159.0/255.0  alpha:1];
+        cell.detailTextLabel.textColor = [UIColor orangeColor];
+    }
     
-	JSResourceDescriptor *rd = (JSResourceDescriptor *)[resources objectAtIndex: [indexPath indexAtPosition:1]];
-	cell.textLabel.text =  [rd label];
+	// Configure the cell.    
+    cell.textLabel.text =  [rd label];
 	cell.detailTextLabel.text =  [rd uri];
 	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.userInteractionEnabled = true;
@@ -272,7 +266,6 @@
     
 }
 
-
 #pragma mark -
 #pragma mark Memory management
 
@@ -288,7 +281,6 @@
     // For example: self.myOutlet = nil;
 }
 
-
 - (void)dealloc {
 
 	if (descriptor != nil)
@@ -303,7 +295,6 @@
 	
     [super dealloc];
 }
-
 
 @end
 

@@ -316,6 +316,7 @@
 			JSListItem *item = [[JSListItem alloc] initWithName:labelString andValue: [dataRow value]];
 			
 			[myItems addObject:item];
+            [item release];
 		}
 		
 		self.items = myItems;

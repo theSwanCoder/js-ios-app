@@ -30,8 +30,7 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <jasperserver-mobile-sdk-ios/JSUIResourcePicker.h>
-
+#import "JSUIResourcePicker.h"
 
 @interface Sample5ViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate, JSUIResourcePickerDelegate, UITextFieldDelegate, JSResponseDelegate> {
     

@@ -30,18 +30,13 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "JSUIBaseRepositoryViewController.h"
 #import <jasperserver-mobile-sdk-ios/JSClient.h>
 
-
-@interface JSUISearchViewController : UIViewController  <JSResponseDelegate, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
-    
+@interface JSUISearchViewController : JSUIBaseRepositoryViewController  <JSResponseDelegate, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     UISearchBar *searchBar;
     UITableView *tableView;
     
 }
-@property (nonatomic, retain) JSResourceDescriptor *descriptor;
-@property (nonatomic, retain) JSClient *client;
-@property (nonatomic, retain) NSMutableArray *resources;
-
 
 @end

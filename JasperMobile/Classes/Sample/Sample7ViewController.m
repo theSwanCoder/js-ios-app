@@ -31,7 +31,7 @@
 //
 
 #import "Sample7ViewController.h"
-#import <jasperserver-mobile-sdk-ios/JSUIResourcePicker.h>
+#import "JSUIResourcePicker.h"
 
 @implementation Sample7ViewController
 @synthesize parentController;

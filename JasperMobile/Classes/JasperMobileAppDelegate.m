@@ -7,7 +7,7 @@
 //
 
 #import "JasperMobileAppDelegate.h"
-#import <jasperserver-mobile-sdk-ios/JSUIBaseRepositoryViewController.h>
+#import "JSUIBaseRepositoryViewController.h"
 
 
 @implementation JasperMobileAppDelegate

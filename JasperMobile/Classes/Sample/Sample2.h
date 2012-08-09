@@ -31,7 +31,7 @@
 //
 
 #import "AbstractSample.h"
-#import <jasperserver-mobile-sdk-ios/JSUIResourcePicker.h>
+#import "JSUIResourcePicker.h"
 
 
 @interface Sample2 : NSObject <AbstractSample, JSUIResourcePickerDelegate> {

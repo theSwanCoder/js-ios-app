@@ -31,7 +31,7 @@
 //
 
 #import "Sample3.h"
-#import <jasperserver-mobile-sdk-ios/JSUIResourceViewController.h>
+#import "JSUIResourceViewController.h"
 #import "Sample3ViewController.h"
 
 

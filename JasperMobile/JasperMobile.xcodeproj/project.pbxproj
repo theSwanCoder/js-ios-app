@@ -52,6 +52,13 @@
 		649795CF13602DC800FA5BA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 649795CE13602DC800FA5BA0 /* QuartzCore.framework */; };
 		64A8072C135397AF00651C3B /* ServersController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A8072B135397AF00651C3B /* ServersController.xib */; };
 		64A80A33135C497E00651C3B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 64A80A31135C497E00651C3B /* Localizable.strings */; };
+		F5B9201C15D3D54B000CF3E6 /* libjasperserver-mobile-sdk-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5B9201715D3D541000CF3E6 /* libjasperserver-mobile-sdk-ios.a */; };
+		F5B9202715D3E1EC000CF3E6 /* ic_type_dashboard.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B9202015D3E1EC000CF3E6 /* ic_type_dashboard.png */; };
+		F5B9202815D3E1EC000CF3E6 /* ic_type_folder.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B9202115D3E1EC000CF3E6 /* ic_type_folder.png */; };
+		F5B9202915D3E1EC000CF3E6 /* ic_type_image.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B9202215D3E1EC000CF3E6 /* ic_type_image.png */; };
+		F5B9202A15D3E1EC000CF3E6 /* ic_type_report.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B9202315D3E1EC000CF3E6 /* ic_type_report.png */; };
+		F5B9202C15D3E1EC000CF3E6 /* ic_type_text.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B9202515D3E1EC000CF3E6 /* ic_type_text.png */; };
+		F5B9202D15D3E1EC000CF3E6 /* ic_type_unknown.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B9202615D3E1EC000CF3E6 /* ic_type_unknown.png */; };
 		F5EA575315D15E10003416D1 /* JSBooleanInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA572B15D15E10003416D1 /* JSBooleanInputControlCell.m */; };
 		F5EA575415D15E10003416D1 /* JSDateInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA572D15D15E10003416D1 /* JSDateInputControlCell.m */; };
 		F5EA575515D15E10003416D1 /* JSDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA572F15D15E10003416D1 /* JSDatePickerView.m */; };
@@ -73,29 +80,28 @@
 		F5EA576515D15E10003416D1 /* JSUIResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA575015D15E10003416D1 /* JSUIResourceViewController.m */; };
 		F5EA576615D15E10003416D1 /* JSUISearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA575215D15E10003416D1 /* JSUISearchViewController.m */; };
 		F5EA578915D1A78E003416D1 /* JSFavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA578815D1A78E003416D1 /* JSFavoritesHelper.m */; };
-		F5EE2AB715D2FBCD003D19D1 /* libjasperserver-mobile-sdk-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5EE2AB115D2FBBD003D19D1 /* libjasperserver-mobile-sdk-ios.a */; };
 		F5F2B0F815C161FD00E97074 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5F2B0F715C161FC00E97074 /* Settings.bundle */; };
 		F5F2B0FA15C16CBA00E97074 /* JSUIReportUnitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5F2B0F915C16CBA00E97074 /* JSUIReportUnitViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		F5EE2AB015D2FBBD003D19D1 /* PBXContainerItemProxy */ = {
+		F5B9201615D3D541000CF3E6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F5EE2AA815D2FBBC003D19D1 /* jasperserver-mobile-sdk-ios.xcodeproj */;
+			containerPortal = F5B9200E15D3D541000CF3E6 /* jasperserver-mobile-sdk-ios.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = F55A30961594819C00B58DD9;
 			remoteInfo = "jasperserver-mobile-sdk-ios";
 		};
-		F5EE2AB215D2FBBD003D19D1 /* PBXContainerItemProxy */ = {
+		F5B9201815D3D541000CF3E6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F5EE2AA815D2FBBC003D19D1 /* jasperserver-mobile-sdk-ios.xcodeproj */;
+			containerPortal = F5B9200E15D3D541000CF3E6 /* jasperserver-mobile-sdk-ios.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = F51E1E7A1594BE9100D99EE3;
 			remoteInfo = "jasperserver-mobile-ASIHTTPRequest-ios";
 		};
-		F5EE2AB515D2FBC8003D19D1 /* PBXContainerItemProxy */ = {
+		F5B9201A15D3D546000CF3E6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F5EE2AA815D2FBBC003D19D1 /* jasperserver-mobile-sdk-ios.xcodeproj */;
+			containerPortal = F5B9200E15D3D541000CF3E6 /* jasperserver-mobile-sdk-ios.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = F55A30951594819C00B58DD9;
 			remoteInfo = "jasperserver-mobile-sdk-ios";
@@ -170,6 +176,13 @@
 		64A80A32135C497E00651C3B /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		64A80A34135C499200651C3B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		8D1107310486CEB800E47090 /* Jaspersoft-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Jaspersoft-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		F5B9200E15D3D541000CF3E6 /* jasperserver-mobile-sdk-ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jasperserver-mobile-sdk-ios.xcodeproj"; path = "../JaspersoftMobileSDK/jasperserver-mobile-sdk-ios.xcodeproj"; sourceTree = "<group>"; };
+		F5B9202015D3E1EC000CF3E6 /* ic_type_dashboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_dashboard.png; sourceTree = "<group>"; };
+		F5B9202115D3E1EC000CF3E6 /* ic_type_folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_folder.png; sourceTree = "<group>"; };
+		F5B9202215D3E1EC000CF3E6 /* ic_type_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_image.png; sourceTree = "<group>"; };
+		F5B9202315D3E1EC000CF3E6 /* ic_type_report.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_report.png; sourceTree = "<group>"; };
+		F5B9202515D3E1EC000CF3E6 /* ic_type_text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_text.png; sourceTree = "<group>"; };
+		F5B9202615D3E1EC000CF3E6 /* ic_type_unknown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_unknown.png; sourceTree = "<group>"; };
 		F5EA572A15D15E10003416D1 /* JSBooleanInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSBooleanInputControlCell.h; sourceTree = "<group>"; };
 		F5EA572B15D15E10003416D1 /* JSBooleanInputControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSBooleanInputControlCell.m; sourceTree = "<group>"; };
 		F5EA572C15D15E10003416D1 /* JSDateInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSDateInputControlCell.h; sourceTree = "<group>"; };
@@ -210,11 +223,8 @@
 		F5EA575015D15E10003416D1 /* JSUIResourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUIResourceViewController.m; sourceTree = "<group>"; };
 		F5EA575115D15E10003416D1 /* JSUISearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUISearchViewController.h; sourceTree = "<group>"; };
 		F5EA575215D15E10003416D1 /* JSUISearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUISearchViewController.m; sourceTree = "<group>"; };
-		F5EA578215D168CB003416D1 /* JSToggleFavorieImageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSToggleFavorieImageControl.h; sourceTree = "<group>"; };
-		F5EA578315D168CC003416D1 /* JSToggleFavorieImageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSToggleFavorieImageControl.m; sourceTree = "<group>"; };
 		F5EA578715D1A78E003416D1 /* JSFavoritesHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSFavoritesHelper.h; sourceTree = "<group>"; };
 		F5EA578815D1A78E003416D1 /* JSFavoritesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSFavoritesHelper.m; sourceTree = "<group>"; };
-		F5EE2AA815D2FBBC003D19D1 /* jasperserver-mobile-sdk-ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jasperserver-mobile-sdk-ios.xcodeproj"; path = "../JaspersoftMobileSDK/jasperserver-mobile-sdk-ios.xcodeproj"; sourceTree = "<group>"; };
 		F5F2B0F715C161FC00E97074 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		F5F2B0F915C16CBA00E97074 /* JSUIReportUnitViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSUIReportUnitViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -224,7 +234,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5EE2AB715D2FBCD003D19D1 /* libjasperserver-mobile-sdk-ios.a in Frameworks */,
+				F5B9201C15D3D54B000CF3E6 /* libjasperserver-mobile-sdk-ios.a in Frameworks */,
 				64252F001350C641005DAD57 /* libxml2.dylib in Frameworks */,
 				64252F191350C79A005DAD57 /* libz.dylib in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -310,7 +320,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				F5EE2AA815D2FBBC003D19D1 /* jasperserver-mobile-sdk-ios.xcodeproj */,
+				F5B9200E15D3D541000CF3E6 /* jasperserver-mobile-sdk-ios.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -332,6 +342,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F5B9201F15D3E1EC000CF3E6 /* FileImages */,
 				F5F2B0F915C16CBA00E97074 /* JSUIReportUnitViewController.xib */,
 				F5F2B0F715C161FC00E97074 /* Settings.bundle */,
 				64A8072B135397AF00651C3B /* ServersController.xib */,
@@ -376,6 +387,28 @@
 			name = SFHF;
 			sourceTree = "<group>";
 		};
+		F5B9200F15D3D541000CF3E6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F5B9201715D3D541000CF3E6 /* libjasperserver-mobile-sdk-ios.a */,
+				F5B9201915D3D541000CF3E6 /* libjasperserver-mobile-ASIHTTPRequest-ios.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F5B9201F15D3E1EC000CF3E6 /* FileImages */ = {
+			isa = PBXGroup;
+			children = (
+				F5B9202015D3E1EC000CF3E6 /* ic_type_dashboard.png */,
+				F5B9202115D3E1EC000CF3E6 /* ic_type_folder.png */,
+				F5B9202215D3E1EC000CF3E6 /* ic_type_image.png */,
+				F5B9202315D3E1EC000CF3E6 /* ic_type_report.png */,
+				F5B9202515D3E1EC000CF3E6 /* ic_type_text.png */,
+				F5B9202615D3E1EC000CF3E6 /* ic_type_unknown.png */,
+			);
+			path = FileImages;
+			sourceTree = "<group>";
+		};
 		F5EA572915D15E0F003416D1 /* JSInputControls */ = {
 			isa = PBXGroup;
 			children = (
@@ -410,8 +443,6 @@
 			children = (
 				F5EA574115D15E10003416D1 /* JSUIBaseRepositoryViewController.h */,
 				F5EA574215D15E10003416D1 /* JSUIBaseRepositoryViewController.m */,
-				F5EA578215D168CB003416D1 /* JSToggleFavorieImageControl.h */,
-				F5EA578315D168CC003416D1 /* JSToggleFavorieImageControl.m */,
 				F5EA574315D15E10003416D1 /* JSUILoadingView.h */,
 				F5EA574415D15E10003416D1 /* JSUILoadingView.m */,
 				F5EA574515D15E10003416D1 /* JSUIReportUnitParametersViewController.h */,
@@ -441,15 +472,6 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		F5EE2AA915D2FBBC003D19D1 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				F5EE2AB115D2FBBD003D19D1 /* libjasperserver-mobile-sdk-ios.a */,
-				F5EE2AB315D2FBBD003D19D1 /* libjasperserver-mobile-ASIHTTPRequest-ios.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -464,7 +486,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				F5EE2AB615D2FBC8003D19D1 /* PBXTargetDependency */,
+				F5B9201B15D3D546000CF3E6 /* PBXTargetDependency */,
 			);
 			name = JasperMobile;
 			productName = Jaspersoft;
@@ -495,8 +517,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = F5EE2AA915D2FBBC003D19D1 /* Products */;
-					ProjectRef = F5EE2AA815D2FBBC003D19D1 /* jasperserver-mobile-sdk-ios.xcodeproj */;
+					ProductGroup = F5B9200F15D3D541000CF3E6 /* Products */;
+					ProjectRef = F5B9200E15D3D541000CF3E6 /* jasperserver-mobile-sdk-ios.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -507,18 +529,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		F5EE2AB115D2FBBD003D19D1 /* libjasperserver-mobile-sdk-ios.a */ = {
+		F5B9201715D3D541000CF3E6 /* libjasperserver-mobile-sdk-ios.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libjasperserver-mobile-sdk-ios.a";
-			remoteRef = F5EE2AB015D2FBBD003D19D1 /* PBXContainerItemProxy */;
+			remoteRef = F5B9201615D3D541000CF3E6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		F5EE2AB315D2FBBD003D19D1 /* libjasperserver-mobile-ASIHTTPRequest-ios.a */ = {
+		F5B9201915D3D541000CF3E6 /* libjasperserver-mobile-ASIHTTPRequest-ios.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libjasperserver-mobile-ASIHTTPRequest-ios.a";
-			remoteRef = F5EE2AB215D2FBBD003D19D1 /* PBXContainerItemProxy */;
+			remoteRef = F5B9201815D3D541000CF3E6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -547,6 +569,12 @@
 				1067AA371418187300AC8033 /* Default@2x.png in Resources */,
 				F5F2B0F815C161FD00E97074 /* Settings.bundle in Resources */,
 				F5F2B0FA15C16CBA00E97074 /* JSUIReportUnitViewController.xib in Resources */,
+				F5B9202715D3E1EC000CF3E6 /* ic_type_dashboard.png in Resources */,
+				F5B9202815D3E1EC000CF3E6 /* ic_type_folder.png in Resources */,
+				F5B9202915D3E1EC000CF3E6 /* ic_type_image.png in Resources */,
+				F5B9202A15D3E1EC000CF3E6 /* ic_type_report.png in Resources */,
+				F5B9202C15D3E1EC000CF3E6 /* ic_type_text.png in Resources */,
+				F5B9202D15D3E1EC000CF3E6 /* ic_type_unknown.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -602,10 +630,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		F5EE2AB615D2FBC8003D19D1 /* PBXTargetDependency */ = {
+		F5B9201B15D3D546000CF3E6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "jasperserver-mobile-sdk-ios";
-			targetProxy = F5EE2AB515D2FBC8003D19D1 /* PBXContainerItemProxy */;
+			targetProxy = F5B9201A15D3D546000CF3E6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

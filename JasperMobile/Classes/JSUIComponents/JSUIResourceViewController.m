@@ -351,7 +351,7 @@ static UIFont *detailFont;
 			self.nameCell = [tableView dequeueReusableCellWithIdentifier:@"NameCell"];
 			if (self.nameCell == nil) {
 				
-				self.nameCell = [[self createCell: @"NameCell"] autorelease];
+				self.nameCell = [self createCell: @"NameCell"];
 				self.nameCell.textLabel.text = NSLocalizedString(@"Name", @"");
 				self.nameCell.detailTextLabel.text = [descriptor name];
 				
@@ -372,7 +372,7 @@ static UIFont *detailFont;
 			
 			self.labelCell = [tableView dequeueReusableCellWithIdentifier:@"LabelCell"];
 			if (self.labelCell == nil) {
-				self.labelCell = [[self createCell: @"LabelCell"] autorelease];
+				self.labelCell = [self createCell: @"LabelCell"];
 				self.labelCell.textLabel.text = NSLocalizedString(@"Label", @"");
 				self.labelCell.detailTextLabel.text = [descriptor label];
 			}
@@ -383,7 +383,7 @@ static UIFont *detailFont;
 			
 			self.descriptionCell = [tableView dequeueReusableCellWithIdentifier:@"DescriptionCell"];
 			if (self.descriptionCell == nil) {
-				self.descriptionCell = [[self createCell: @"DescriptionCell"] autorelease];
+				self.descriptionCell = [self createCell: @"DescriptionCell"];
 				self.descriptionCell.textLabel.text = NSLocalizedString(@"Description", @"");
 				self.descriptionCell.detailTextLabel.text = [descriptor description];
 			}
@@ -394,7 +394,7 @@ static UIFont *detailFont;
 			
 			self.typeCell = [tableView dequeueReusableCellWithIdentifier:@"TypeCell"];
 			if (self.typeCell == nil) {
-				self.typeCell = [[self createCell: @"TypeCell"] autorelease];
+				self.typeCell = [self createCell: @"TypeCell"];
 				self.typeCell.textLabel.text = NSLocalizedString(@"Type", @"");
 				self.typeCell.detailTextLabel.text = [descriptor wsType];
 
@@ -445,7 +445,7 @@ static UIFont *detailFont;
 			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PropCell"];
 			
 			if (cell == nil) {
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"PropCell"];
+				cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"PropCell"] autorelease];
 				
 				cell.textLabel.font = [self LabelFont];
 				cell.detailTextLabel.font = [self DetailFont];
@@ -470,7 +470,7 @@ static UIFont *detailFont;
 		self.toolsCell = [tableView dequeueReusableCellWithIdentifier:@"ToolsCell"];
 		if (self.toolsCell == nil) {
 			
-            self.toolsCell = [[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: @"ToolsCell"];
+            self.toolsCell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: @"ToolsCell"] autorelease];
             //self.toolsCell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 40) reuseIdentifier: @"ToolsCell"];
 
 			UIView *backView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
@@ -635,7 +635,7 @@ static UIFont *detailFont;
     
     [alert setTag: 101]; // A tag to know this is the DELETE alert in the clickedButtonAtIndex...
     [alert show];
-	
+    [alert release];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

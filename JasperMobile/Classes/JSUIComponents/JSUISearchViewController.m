@@ -39,17 +39,12 @@
 
 @implementation JSUISearchViewController
 
-@synthesize descriptor;
-@synthesize client;
-@synthesize resources;
-
-
 -(id)init
 {
     self = [super init];
-    resources = nil;    
-    descriptor = nil;
-    client = nil;
+    self.resources = nil;    
+    self.descriptor = nil;
+    self.client = nil;
     
     return self;
 }
@@ -87,24 +82,13 @@
 
 #pragma mark - View lifecycle
 
-
-
-
-
-
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-
-    
-    if (searchBar == nil)
-    {
-        // Add the search bar...
-            }
-    
-    
+    [super viewDidLoad];    
     [super loadView];
+    
+    self.view = [[[UIView alloc] init] autorelease];
     
     searchBar = [[[UISearchBar alloc] initWithFrame:CGRectMake(0,0,320,44)] autorelease]; 
     searchBar.delegate = self;
@@ -114,16 +98,9 @@
     
     tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, 320, 427)];
     tableView.delegate = self;
-    tableView.dataSource = self;
-    
+    tableView.dataSource = self;   
     [self.view addSubview:tableView];
-
-    
-        
 }
-
-
-
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -131,8 +108,6 @@
 }
 
 -(void)requestFinished:(JSOperationResult *)res {
-	
-	
 	
 	if (res == nil)
 	{
@@ -161,19 +136,12 @@
     [tableView reloadData];
 	
 	[JSUILoadingView hideLoadingView];
-    
-	
 }
 
-
-
 - (void)viewWillAppear:(BOOL)animated {
-    
     [self.navigationController setToolbarHidden:YES animated:animated];
     [super viewWillAppear:animated];
 }
-
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -188,10 +156,8 @@
     return 1;
 }
 
-
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	
 	if (resources != nil)
 	{
 		return [resources count];
@@ -200,35 +166,10 @@
     return 0; // section is 0?
 }
 
-
-// Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tv cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tv dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-	// Configure the cell.
-    
-	JSResourceDescriptor *rd = (JSResourceDescriptor *)[resources objectAtIndex: [indexPath indexAtPosition:1]];
-	cell.textLabel.text =  [rd label];
-	cell.detailTextLabel.text =  [rd uri];
-	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;		
-	
-    return cell;
-}
-
-
-
 #pragma mark -
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-	
     // If the resource selected is a folder, navigate in the folder....
 	JSResourceDescriptor *rd = [resources  objectAtIndex: [indexPath indexAtPosition:1]];
 	
@@ -256,10 +197,7 @@
             [self.navigationController pushViewController: rvc animated: YES];
             [rvc release];
         }
-        
 	}
-    
 }
-
 
 @end

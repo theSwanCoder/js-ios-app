@@ -47,41 +47,60 @@
 
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
     
     UIBarButtonItem *cancelButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                target:self action:@selector(cancelPickClicked:)] autorelease];
 		
-    self.navigationItem.rightBarButtonItem = cancelButton;
-	
+    self.navigationItem.rightBarButtonItem = cancelButton;	
 }
 
--(IBAction)cancelPickClicked:(id)sender {
-	
+-(IBAction)cancelPickClicked:(id)sender {	
     [self.navigationController dismissModalViewControllerAnimated:TRUE];
-	[self.delegate resourcePicked: nil];
-    
+	[self.delegate resourcePicked: nil];    
 }
+
+//// Customize the appearance of table view cells.
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    
+//    static NSString *CellIdentifier = @"Cell";
+//    
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    if (cell == nil) {
+//        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+//    }
+//    
+//	// Configure the cell.
+//	JSResourceDescriptor *rd = (JSResourceDescriptor *)[self.resources objectAtIndex: [indexPath indexAtPosition:1]];
+//	cell.textLabel.text =  [rd label];
+//	cell.detailTextLabel.text =  [rd uri];
+//    
+//    if ([[rd wsType] isEqualToString: JS_TYPE_FOLDER])
+//    {
+//        
+//        if (type == JSUIResourcePickerTypeResourcesOnly)
+//        {
+//            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//        }
+//        else
+//        {
+//            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;		
+//        }
+//	}
+//    else
+//    {
+//        cell.accessoryType = UITableViewCellAccessoryNone;
+//    }
+//    return cell;
+//}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-	// Configure the cell.
-	JSResourceDescriptor *rd = (JSResourceDescriptor *)[self.resources objectAtIndex: [indexPath indexAtPosition:1]];
-	cell.textLabel.text =  [rd label];
-	cell.detailTextLabel.text =  [rd uri];
+    JSResourceDescriptor *rd = (JSResourceDescriptor *)[self.resources objectAtIndex: [indexPath indexAtPosition:1]];
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     
     if ([[rd wsType] isEqualToString: JS_TYPE_FOLDER])
-    {
-        
+    {    
         if (type == JSUIResourcePickerTypeResourcesOnly)
         {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -98,12 +117,7 @@
     return cell;
 }
 
- 
-
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-	
     // If the resource selected is a folder, navigate in the folder....
 	JSResourceDescriptor *rd = [self.resources  objectAtIndex: [indexPath indexAtPosition:1]];
 	
@@ -130,7 +144,6 @@
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     JSResourceDescriptor *rd = [self.resources  objectAtIndex: [indexPath indexAtPosition:1]];
-    
     JSUIResourcePicker *rvc = [[JSUIResourcePicker alloc] initWithNibName:nil bundle:nil];
     [rvc setClient: self.client];
     [rvc setDescriptor:rd];
@@ -189,46 +202,8 @@
 	[[self tableView] beginUpdates];
 	[[self tableView] reloadSections: [NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 	[[self tableView] endUpdates];
-	
-    
     [JSUILoadingView hideLoadingView];
     
 }
-
-
-/*
- This would be the most logic way to get only folders from JasperReports Server, but there is currently
- a problem preventing it to work on the server side.
- 
- -(void)updateTableContent {
- 
- if (self.client == nil) return;
- 
- if (resources == nil)
- {
- NSString *uri = @"/";
- if ([self descriptor] != nil)
- {
- uri =  [self.descriptor uri];
- self.navigationItem.title=[NSString stringWithFormat:@"%@", [self.descriptor label]];
- }
- else
- {
- self.navigationItem.title=[NSString stringWithFormat:@"%@", [self.client alias] ];
- }
- // load this view...
- if (busyView == nil)
- busyView = [JSUILoadingView loadingViewInView:[self.view.window.subviews objectAtIndex:0]];
- 
- NSMutableDictionary *args = [NSMutableDictionary dictionaryWithCapacity:1];
- [args setObject:@"folder" forKey:@"type"];
- //[args setObject:@"1" forKey:@"recursive"];
- 
- [self.client resources: uri withArguments:args responseDelegate: self];  
- 
- }
- 
- }
- */
 
 @end
