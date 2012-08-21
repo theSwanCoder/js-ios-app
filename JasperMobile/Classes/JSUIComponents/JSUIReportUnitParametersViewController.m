@@ -76,34 +76,14 @@ static UIFont *detailFont;
 {
 	if ((self = [super initWithStyle:style]))
 	{
-		
-		UIBarButtonItem *infoButton = [[[UIBarButtonItem alloc] 
-						   initWithTitle: @"Info"
-						   style: UIBarButtonItemStylePlain
-						   target:self action:@selector(infoClicked:)] autorelease];
-		
-		self.navigationItem.rightBarButtonItem = infoButton;
-		
 		descriptor = nil;
 		resourceLoaded = NO;
 		inputControls = [[NSMutableArray alloc] initWithCapacity:0];
-		inputControlCells = [[NSMutableArray alloc] initWithCapacity:0];
-		
+		inputControlCells = [[NSMutableArray alloc] initWithCapacity:0];        		
 	}
 	return self;
 	
 }
-
--(IBAction)infoClicked:(id)sender
-{
-	JSUIResourceViewController *rvc = [[JSUIResourceViewController alloc]  initWithStyle: UITableViewStyleGrouped];
-    [rvc setClient:self.client];
-	[rvc setDescriptor: descriptor];
-	[self.navigationController pushViewController: rvc animated: YES];
-	[rvc release];
-	
-}
-
 
 -(void)requestFinished:(JSOperationResult *)res {
 	
@@ -228,8 +208,7 @@ static UIFont *detailFont;
 	
 	if ([self descriptor] != nil)
 	{
-		self.navigationItem.title=[NSString stringWithFormat:@"%@", [descriptor label]];
-		
+		self.navigationItem.title = [NSString stringWithFormat:@"%@", [descriptor label]];
 		
 		// load this view...
         [JSUILoadingView showLoadingInView:self.view];

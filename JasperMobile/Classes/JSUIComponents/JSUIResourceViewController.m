@@ -30,6 +30,7 @@
 //  Copyright 2011 Jaspersoft Corp.. All rights reserved.
 //
 
+#import "JSUIResourceModifyViewController.h"
 #import "JSUIResourceViewController.h"
 #import "JSUIResourcePreviewController.h"
 #import "JSUILoadingView.h"
@@ -76,16 +77,29 @@ static UIFont *detailFont;
 
 -(id)initWithStyle:(UITableViewStyle)style
 {
-    self = [super initWithStyle:style];
-    descriptor = nil;
-    resourceLoaded = NO;
-    client = nil;
-    deleting = false;
+    if (self = [super initWithStyle:style]) {;
+        descriptor = nil;
+        resourceLoaded = NO;
+        client = nil;
+        deleting = false;
+        
+        UIBarButtonItem *editButton = [[[UIBarButtonItem alloc] initWithTitle: @"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editClicked:)] autorelease];
+        
+        self.navigationItem.rightBarButtonItem = editButton;
+    }
 
-	return self;
-	
+	return self;	
 }
 
+- (void)editClicked:(id)sender {
+    JSUIResourceModifyViewController *rmvc = [[JSUIResourceModifyViewController alloc] initWithNibName:@"JSUIResourceModifyViewController" bundle:nil];;
+    rmvc.client = self.client;
+    rmvc.descriptor = self.descriptor;
+    UIBarButtonItem *newBackButton = [[UIBarButtonItem alloc] initWithTitle: @"Back" style: UIBarButtonItemStyleBordered target:nil action:nil];    
+    [[self navigationItem] setBackBarButtonItem:newBackButton];
+	[self.navigationController pushViewController:rmvc animated: YES];
+	[rmvc release];
+}
 
 
 -(void)requestFinished:(JSOperationResult *)res {
@@ -354,16 +368,6 @@ static UIFont *detailFont;
 				self.nameCell = [self createCell: @"NameCell"];
 				self.nameCell.textLabel.text = NSLocalizedString(@"Name", @"");
 				self.nameCell.detailTextLabel.text = [descriptor name];
-				
-				
-				//aliasTextField.placeholder = NSLocalizedString(@"My server", @"");
-				//aliasTextField = [self newTextFieldForCell:self.aliasCell];
-				//aliasTextField.placeholder = NSLocalizedString(@"My server", @"");
-				//aliasTextField.keyboardType = UIKeyboardTypeURL;
-				//aliasTextField.returnKeyType = UIReturnKeyNext;
-				//if(client != nil && client.alias != nil)
-				//	aliasTextField.text = client.alias;
-				//[self.nameCell addSubview:label];
 			}
 			
 			return self.nameCell;
@@ -374,8 +378,8 @@ static UIFont *detailFont;
 			if (self.labelCell == nil) {
 				self.labelCell = [self createCell: @"LabelCell"];
 				self.labelCell.textLabel.text = NSLocalizedString(@"Label", @"");
-				self.labelCell.detailTextLabel.text = [descriptor label];
 			}
+            self.labelCell.detailTextLabel.text = [descriptor label];
 			
 			return self.labelCell;
 		}
@@ -385,8 +389,8 @@ static UIFont *detailFont;
 			if (self.descriptionCell == nil) {
 				self.descriptionCell = [self createCell: @"DescriptionCell"];
 				self.descriptionCell.textLabel.text = NSLocalizedString(@"Description", @"");
-				self.descriptionCell.detailTextLabel.text = [descriptor description];
 			}
+            self.descriptionCell.detailTextLabel.text = [descriptor description];
 			
 			return self.descriptionCell;
 		}
@@ -396,9 +400,8 @@ static UIFont *detailFont;
 			if (self.typeCell == nil) {
 				self.typeCell = [self createCell: @"TypeCell"];
 				self.typeCell.textLabel.text = NSLocalizedString(@"Type", @"");
-				self.typeCell.detailTextLabel.text = [descriptor wsType];
-
 			}
+            self.typeCell.detailTextLabel.text = [descriptor wsType];
 			
 			return self.typeCell;
 		}

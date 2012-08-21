@@ -37,21 +37,6 @@
 
 @implementation JSUIRepositoryViewController
 
-
--(IBAction)resourceInfoClicked:(id)sender {
-	
-	if (self.descriptor != nil)
-	{
-		JSUIResourceViewController *rvc = [[JSUIResourceViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        [rvc setClient: self.client];
-		[rvc setDescriptor: self.descriptor];
-		[self.navigationController pushViewController: rvc animated: YES];
-        [rvc release];
-	}
-		
-}
-
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 	
@@ -67,24 +52,20 @@
                 [rvc setDescriptor:rd];
 				[self.navigationController pushViewController: rvc animated: YES];
 				[rvc release];
-			}
-			else if ([[rd wsType] compare:JS_TYPE_REPORTUNIT] == 0 || [[rd wsType] compare:JS_TYPE_REPORTOPTIONS] == 0){
+			} else if ([[rd wsType] compare:JS_TYPE_REPORTUNIT] == 0 || [[rd wsType] compare:JS_TYPE_REPORTOPTIONS] == 0) {
 				JSUIReportUnitParametersViewController *rvc = [[JSUIReportUnitParametersViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 [rvc setClient: self.client];
 				[rvc setDescriptor: rd];
 				[self.navigationController pushViewController: rvc animated: YES];
 				[rvc release];
-			}
-			else {
+			} else {
 				JSUIResourceViewController *rvc = [[JSUIResourceViewController alloc] initWithStyle: UITableViewStyleGrouped];
                 [rvc setClient: self.client];
 				[rvc setDescriptor: rd];
 				[self.navigationController pushViewController: rvc animated: YES];
 				[rvc release];
 			}
-
 	}
-
 }
 
 @end

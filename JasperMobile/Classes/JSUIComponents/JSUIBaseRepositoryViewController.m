@@ -33,6 +33,7 @@
 
 #import <jasperserver-mobile-sdk-ios/JSClient.h>
 #import <jasperserver-mobile-sdk-ios/JSUtils.h>
+#import "JSUIResourceViewController.h"
 #import "JSUIBaseRepositoryViewController.h"
 #import "JSUILoadingView.h"
 
@@ -58,16 +59,6 @@
 }
 
 - (void)viewDidLoad {
-   	if (descriptor != nil)
-	{
-		resourecInfoButton = [[[UIBarButtonItem alloc]
-                               initWithTitle: @"Info"
-                               style: UIBarButtonItemStylePlain
-                               target:self action:@selector(resourceInfoClicked:)] autorelease];
-		
-		self.navigationItem.rightBarButtonItem = resourecInfoButton;
-	}
-    
 	[super viewDidLoad];	
 }
 
@@ -249,10 +240,22 @@
 	// Configure the cell.    
     cell.textLabel.text =  [rd label];
 	cell.detailTextLabel.text =  [rd uri];
-	cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+	cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     cell.userInteractionEnabled = true;
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
+    self.descriptor = [resources objectAtIndex: [indexPath indexAtPosition:1]];
+    if (self.descriptor)
+	{
+		JSUIResourceViewController *rvc = [[JSUIResourceViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        [rvc setClient: self.client];
+		[rvc setDescriptor: self.descriptor];
+		[self.navigationController pushViewController: rvc animated: YES];
+        [rvc release];
+	}
 }
 
 #pragma mark -
