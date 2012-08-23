@@ -35,6 +35,7 @@
 #import "JSUIResourcePreviewController.h"
 #import "JSUILoadingView.h"
 #import "JSUIRepositoryViewController.h"
+#import "JasperMobileAppDelegate.h"
 
 
 @implementation JSUIResourceViewController
@@ -269,7 +270,7 @@ static UIFont *detailFont;
 	if ([indexPath section] == COMMON_SECTION && indexPath.row == 1) { return [self heightOfCellWithText: [descriptor label]]; }
 	if ([indexPath section] == COMMON_SECTION && indexPath.row == 2) { return [self heightOfCellWithText: [descriptor description]]; }
 	
-	if ([indexPath section] == PROPERTIES_SECTION) { 
+	if ([indexPath section] == PROPERTIES_SECTION && descriptor.resourceProperties.count) { 
 		
 		JSResourceProperty *rp = (JSResourceProperty *)[[descriptor resourceProperties] objectAtIndex: indexPath.row];
 								  
@@ -363,12 +364,13 @@ static UIFont *detailFont;
 		
 		if (indexPath.row == 0) {
 			self.nameCell = [tableView dequeueReusableCellWithIdentifier:@"NameCell"];
-			if (self.nameCell == nil) {
-				
+			if (self.nameCell == nil) {				
 				self.nameCell = [self createCell: @"NameCell"];
 				self.nameCell.textLabel.text = NSLocalizedString(@"Name", @"");
-				self.nameCell.detailTextLabel.text = [descriptor name];
 			}
+            if (resourceLoaded) {
+                self.nameCell.detailTextLabel.text = [descriptor name];
+            }
 			
 			return self.nameCell;
 		}
@@ -379,7 +381,9 @@ static UIFont *detailFont;
 				self.labelCell = [self createCell: @"LabelCell"];
 				self.labelCell.textLabel.text = NSLocalizedString(@"Label", @"");
 			}
-            self.labelCell.detailTextLabel.text = [descriptor label];
+            if (resourceLoaded) {
+                self.labelCell.detailTextLabel.text = [descriptor label];
+            }
 			
 			return self.labelCell;
 		}
@@ -390,7 +394,9 @@ static UIFont *detailFont;
 				self.descriptionCell = [self createCell: @"DescriptionCell"];
 				self.descriptionCell.textLabel.text = NSLocalizedString(@"Description", @"");
 			}
-            self.descriptionCell.detailTextLabel.text = [descriptor description];
+            if (resourceLoaded) {
+                self.descriptionCell.detailTextLabel.text = [descriptor description];
+            }
 			
 			return self.descriptionCell;
 		}
@@ -401,7 +407,9 @@ static UIFont *detailFont;
 				self.typeCell = [self createCell: @"TypeCell"];
 				self.typeCell.textLabel.text = NSLocalizedString(@"Type", @"");
 			}
-            self.typeCell.detailTextLabel.text = [descriptor wsType];
+            if (resourceLoaded) {
+                self.typeCell.detailTextLabel.text = [descriptor wsType];
+            }
 			
 			return self.typeCell;
 		}
@@ -412,15 +420,12 @@ static UIFont *detailFont;
 				cell = [self createCell: @"Type2Cell"];
 				cell.textLabel.text = NSLocalizedString(@"Resources", @"");
 			}
-			cell.detailTextLabel.text = @"Loading";
+
 			if (resourceLoaded)
 			{
 				cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",[descriptor.resourceDescriptors count]];
 			}
-			else {
-				cell.detailTextLabel.text = @"?";
-			}				
-			
+            
 			return cell;
 		}
 	}
@@ -489,36 +494,22 @@ static UIFont *detailFont;
 			CGRect frame = CGRectMake(0, 0, buttonWidth, 40);
 			button.frame = frame;
 			button.tag = 1;
-			[button setTitle:@"View" forState:UIControlStateNormal];
-			[button addTarget:self action:@selector(viewButtonPressed:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+            [self changeFavoriteButtonUI:button isResourceInFavorites:[[JasperMobileAppDelegate sharedInstance].favorites isResourceInFavorites:self.descriptor]];
+            
+			[button addTarget:self action:@selector(favoriteButtonClicked:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 			[button setTag:indexPath.row];
 			[self.toolsCell.contentView addSubview:button];
-
-			
-            /*
 			
 			UIButton *button2 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-			frame = CGRectMake(buttonWidth+padding, 0, buttonWidth, 40);
-			button2.frame = frame;
-			button2.tag = 2;
-			[button2 setTitle:@"Edit" forState:UIControlStateNormal];
-			
-			//[button2 addTarget:self action:@selector(buttonPressed:withEvent:) forControlEvents:UIControlEventTouchUpInside];
-			//[button2 setTag:indexPath.row];
-			[self.toolsCell.contentView addSubview:button2];
-			
-            */
-			
-			UIButton *button3 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 			frame = CGRectMake(1*(buttonWidth+padding), 0, buttonWidth, 40);
-			button3.frame = frame;
-			button3.tag = 3;
-			button3.enabled = YES;
-			[button3 setTitle:@"Delete" forState:UIControlStateNormal];
+			button2.frame = frame;
+			button2.tag = 3;
+			button2.enabled = YES;
+			[button2 setTitle:@"Delete" forState:UIControlStateNormal];
 			
-            [button3 addTarget:self action:@selector(deleteButtonPressed:forEvent:) forControlEvents:UIControlEventTouchUpInside];
-			[button3 setTag:indexPath.row];
-			[self.toolsCell.contentView addSubview:button3];
+            [button2 addTarget:self action:@selector(deleteButtonPressed:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+			[button2 setTag:indexPath.row];
+			[self.toolsCell.contentView addSubview:button2];
 
 			
             
@@ -548,6 +539,24 @@ static UIFont *detailFont;
 
 }
 
+- (IBAction)favoriteButtonClicked:(id)sender forEvent:(UIEvent *)event {
+    JasperMobileAppDelegate *app = [JasperMobileAppDelegate sharedInstance];
+    if (![app.favorites isResourceInFavorites:self.descriptor]) {
+        [app.favorites addToFavorites:self.descriptor];
+        [self changeFavoriteButtonUI:sender isResourceInFavorites:YES];
+    } else {
+        [app.favorites removeFromFavorites:self.descriptor];
+        [self changeFavoriteButtonUI:sender isResourceInFavorites:NO];
+    }
+}
+
+- (void)changeFavoriteButtonUI:(UIButton *)favoriteButton isResourceInFavorites:(BOOL)isResourceInFavorites {
+    if (!isResourceInFavorites) {
+        [favoriteButton setTitle:@"Add Favorite" forState:UIControlStateNormal];
+    } else {
+        [favoriteButton setTitle:@"Remove Favorite" forState:UIControlStateNormal];
+    }
+}
 
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -610,25 +619,6 @@ static UIFont *detailFont;
 	}
 	
     [super dealloc];
-}
-
-
-- (IBAction)viewButtonPressed:(id)sender forEvent:(UIEvent *)event
-{
-	
-	JSUIResourcePreviewController *rvc = [[JSUIResourcePreviewController alloc] init];
-    [rvc setClient: self.client];
-	[rvc setDescriptor: self.descriptor];
-	[self.navigationController pushViewController: rvc animated: YES];
-	[rvc release];
-	
-	
-}
-
-- (IBAction)editButtonPressed:(id)sender forEvent:(UIEvent *)event
-{
-
-	
 }
 
 - (IBAction)deleteButtonPressed:(id)sender forEvent:(UIEvent *)event

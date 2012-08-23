@@ -28,7 +28,6 @@
 		1067AA111415251A00AC8033 /* Sample5.m in Sources */ = {isa = PBXBuildFile; fileRef = 1067AA101415251900AC8033 /* Sample5.m */; };
 		1067AA15141525A000AC8033 /* Sample5ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1067AA131415259D00AC8033 /* Sample5ViewController.m */; };
 		1067AA16141525A000AC8033 /* Sample5ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1067AA141415259F00AC8033 /* Sample5ViewController.xib */; };
-		1067AA211415586B00AC8033 /* Sample7.m in Sources */ = {isa = PBXBuildFile; fileRef = 1067AA201415586800AC8033 /* Sample7.m */; };
 		1067AA251415597800AC8033 /* Sample7ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1067AA231415597400AC8033 /* Sample7ViewController.m */; };
 		1067AA261415597800AC8033 /* Sample7ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1067AA241415597600AC8033 /* Sample7ViewController.xib */; };
 		1067AA351418145000AC8033 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1067AA341418145000AC8033 /* Icon@2x.png */; };
@@ -54,6 +53,8 @@
 		64A80A33135C497E00651C3B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 64A80A31135C497E00651C3B /* Localizable.strings */; };
 		F50AFED415E2E12B00F761A0 /* JSUIResourceModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50AFED215E2E12900F761A0 /* JSUIResourceModifyViewController.m */; };
 		F50AFED515E2E12B00F761A0 /* JSUIResourceModifyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F50AFED315E2E12A00F761A0 /* JSUIResourceModifyViewController.xib */; };
+		F5976A8315E461E2004165A7 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = F5976A8215E461E2004165A7 /* star.png */; };
+		F5ABD15B15E3251D00FEBB4F /* JSUIFavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABD15A15E3251D00FEBB4F /* JSUIFavoritesViewController.m */; };
 		F5B9201C15D3D54B000CF3E6 /* libjasperserver-mobile-sdk-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5B9201715D3D541000CF3E6 /* libjasperserver-mobile-sdk-ios.a */; };
 		F5B9202715D3E1EC000CF3E6 /* ic_type_dashboard.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B9202015D3E1EC000CF3E6 /* ic_type_dashboard.png */; };
 		F5B9202815D3E1EC000CF3E6 /* ic_type_folder.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B9202115D3E1EC000CF3E6 /* ic_type_folder.png */; };
@@ -146,8 +147,6 @@
 		1067AA121415259C00AC8033 /* Sample5ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sample5ViewController.h; sourceTree = "<group>"; };
 		1067AA131415259D00AC8033 /* Sample5ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sample5ViewController.m; sourceTree = "<group>"; };
 		1067AA141415259F00AC8033 /* Sample5ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Sample5ViewController.xib; sourceTree = "<group>"; };
-		1067AA1F1415586600AC8033 /* Sample7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sample7.h; sourceTree = "<group>"; };
-		1067AA201415586800AC8033 /* Sample7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sample7.m; sourceTree = "<group>"; };
 		1067AA221415597300AC8033 /* Sample7ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sample7ViewController.h; sourceTree = "<group>"; };
 		1067AA231415597400AC8033 /* Sample7ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sample7ViewController.m; sourceTree = "<group>"; };
 		1067AA241415597600AC8033 /* Sample7ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Sample7ViewController.xib; sourceTree = "<group>"; };
@@ -181,6 +180,9 @@
 		F50AFED115E2E12900F761A0 /* JSUIResourceModifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUIResourceModifyViewController.h; sourceTree = "<group>"; };
 		F50AFED215E2E12900F761A0 /* JSUIResourceModifyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUIResourceModifyViewController.m; sourceTree = "<group>"; };
 		F50AFED315E2E12A00F761A0 /* JSUIResourceModifyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = JSUIResourceModifyViewController.xib; path = Classes/JSUIComponents/JSUIResourceModifyViewController.xib; sourceTree = "<group>"; };
+		F5976A8215E461E2004165A7 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star.png; path = icons/star.png; sourceTree = "<group>"; };
+		F5ABD15915E3251D00FEBB4F /* JSUIFavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUIFavoritesViewController.h; sourceTree = "<group>"; };
+		F5ABD15A15E3251D00FEBB4F /* JSUIFavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUIFavoritesViewController.m; sourceTree = "<group>"; };
 		F5B9200E15D3D541000CF3E6 /* jasperserver-mobile-sdk-ios.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jasperserver-mobile-sdk-ios.xcodeproj"; path = "../JaspersoftMobileSDK/jasperserver-mobile-sdk-ios.xcodeproj"; sourceTree = "<group>"; };
 		F5B9202015D3E1EC000CF3E6 /* ic_type_dashboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_dashboard.png; sourceTree = "<group>"; };
 		F5B9202115D3E1EC000CF3E6 /* ic_type_folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_folder.png; sourceTree = "<group>"; };
@@ -308,8 +310,6 @@
 				1067AA121415259C00AC8033 /* Sample5ViewController.h */,
 				1067AA131415259D00AC8033 /* Sample5ViewController.m */,
 				1067AA141415259F00AC8033 /* Sample5ViewController.xib */,
-				1067AA1F1415586600AC8033 /* Sample7.h */,
-				1067AA201415586800AC8033 /* Sample7.m */,
 			);
 			path = Sample;
 			sourceTree = "<group>";
@@ -354,6 +354,7 @@
 				64A8072B135397AF00651C3B /* ServersController.xib */,
 				1067AA361418187300AC8033 /* Default@2x.png */,
 				1067AA341418145000AC8033 /* Icon@2x.png */,
+				F5976A8215E461E2004165A7 /* star.png */,
 				64975955139F84F700BA0A66 /* Icon.png */,
 				64975959139F854F00BA0A66 /* Default.png */,
 				100ABF0213D98B6900776C8F /* samples.png */,
@@ -451,6 +452,8 @@
 				F5EA574215D15E10003416D1 /* JSUIBaseRepositoryViewController.m */,
 				F5EA574315D15E10003416D1 /* JSUILoadingView.h */,
 				F5EA574415D15E10003416D1 /* JSUILoadingView.m */,
+				F5ABD15915E3251D00FEBB4F /* JSUIFavoritesViewController.h */,
+				F5ABD15A15E3251D00FEBB4F /* JSUIFavoritesViewController.m */,
 				F5EA574515D15E10003416D1 /* JSUIReportUnitParametersViewController.h */,
 				F5EA574615D15E10003416D1 /* JSUIReportUnitParametersViewController.m */,
 				F5EA574715D15E10003416D1 /* JSUIReportUnitViewController.h */,
@@ -584,6 +587,7 @@
 				F5B9202C15D3E1EC000CF3E6 /* ic_type_text.png in Resources */,
 				F5B9202D15D3E1EC000CF3E6 /* ic_type_unknown.png in Resources */,
 				F50AFED515E2E12B00F761A0 /* JSUIResourceModifyViewController.xib in Resources */,
+				F5976A8315E461E2004165A7 /* star.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,7 +614,6 @@
 				1067AA071414DD1700AC8033 /* Sample6ViewController.m in Sources */,
 				1067AA111415251A00AC8033 /* Sample5.m in Sources */,
 				1067AA15141525A000AC8033 /* Sample5ViewController.m in Sources */,
-				1067AA211415586B00AC8033 /* Sample7.m in Sources */,
 				1067AA251415597800AC8033 /* Sample7ViewController.m in Sources */,
 				F5EA575315D15E10003416D1 /* JSBooleanInputControlCell.m in Sources */,
 				F5EA575415D15E10003416D1 /* JSDateInputControlCell.m in Sources */,
@@ -634,6 +637,7 @@
 				F5EA576615D15E10003416D1 /* JSUISearchViewController.m in Sources */,
 				F5EA578915D1A78E003416D1 /* JSFavoritesHelper.m in Sources */,
 				F50AFED415E2E12B00F761A0 /* JSUIResourceModifyViewController.m in Sources */,
+				F5ABD15B15E3251D00FEBB4F /* JSUIFavoritesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JSFavoritesHelper.h"
 #import <jasperserver-mobile-sdk-ios/JSClient.h>
 
 @interface JasperMobileAppDelegate : NSObject <UIApplicationDelegate> {
@@ -15,7 +16,7 @@
     UINavigationController *navigationController;
     UINavigationController *searchController;
 	UINavigationController *settingsController;
-    UINavigationController *samplesController;
+    UINavigationController *favoritesController;
     
     UITabBarController *tabBarController;
 	// This is a list configured servers. Each server is an instance of JSClient...
@@ -26,13 +27,14 @@
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 @property (nonatomic, retain) IBOutlet UINavigationController *searchController;
 @property (nonatomic, retain) IBOutlet UINavigationController *settingsController;
-@property (nonatomic, retain) IBOutlet UINavigationController *samplesController;
+@property (nonatomic, retain) IBOutlet UINavigationController *favoritesController;
 
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 
 @property (nonatomic, readonly) NSMutableArray *servers;
 @property (nonatomic, retain) JSClient *client;
 @property (nonatomic) NSInteger activeServerIndex;
+@property (nonatomic, retain) JSFavoritesHelper *favorites;
 
 - (IBAction)configureServersDone:(id)sender;
 

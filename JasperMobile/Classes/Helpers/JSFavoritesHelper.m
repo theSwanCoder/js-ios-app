@@ -110,6 +110,10 @@ static NSString * const JS_APP_TYPE_FAVORITE_WRAPPER = @"JS_APP_TYPE_FAVORITE_WR
     [prefs synchronize];
 }
 
+- (BOOL)isChangesWasMade {
+    return self.changesWasMade;
+}
+
 - (void)dealloc {
     [_client release];
     [_serverKey release];

@@ -16,11 +16,12 @@
 @synthesize navigationController;
 @synthesize settingsController;
 @synthesize searchController;
-@synthesize samplesController;
+@synthesize favoritesController;
 @synthesize tabBarController;
 @synthesize servers;
 @synthesize client; // the active client
 @synthesize activeServerIndex;
+@synthesize favorites;
 
 static JasperMobileAppDelegate *sharedInstance = nil;
 
@@ -103,15 +104,16 @@ static NSString * const reportRunMethod = @"reportRun";
 		[servers addObject: tmpClient];
         [jsServerProfile release];
 		[tmpClient release];
-		
 	}
 	
 	if (count > 0)
 	{
         self.activeServerIndex = [prefs integerForKey:@"jaspersoft.server.active"];
-		if (self.activeServerIndex < 0 || self.activeServerIndex >= count) self.activeServerIndex = 0;
-		
+		if (self.activeServerIndex < 0 || self.activeServerIndex >= count) self.activeServerIndex = 0;		
 		client = (JSClient *)[servers objectAtIndex:self.activeServerIndex];
+        if (!self.favorites) {
+            self.favorites = [[JSFavoritesHelper alloc] initWithServerIndex:self.activeServerIndex andClient:client];
+        }
 	}
     
 }
@@ -179,9 +181,10 @@ static NSString * const reportRunMethod = @"reportRun";
         // Set the client to the repository view...
         [(JSUIBaseRepositoryViewController *)(navigationController.topViewController) setClient: self.client];
         [(JSUIBaseRepositoryViewController *)(searchController.topViewController) setClient: self.client];
+        [(JSUIBaseRepositoryViewController *)(favoritesController.topViewController) setClient: self.client];
     }
 	
-    NSArray* controllers = [NSArray arrayWithObjects:navigationController, searchController, samplesController, settingsController, nil];
+    NSArray* controllers = [NSArray arrayWithObjects:navigationController, searchController, favoritesController, settingsController, nil];
     tabBarController.viewControllers = controllers;
     
     
@@ -277,7 +280,8 @@ static NSString * const reportRunMethod = @"reportRun";
 	[navigationController release];
     [searchController release];
 	[settingsController release];
-    [samplesController release];
+    [favoritesController release];
+    [favorites release];
 	[window release];
 	[super dealloc];
 }

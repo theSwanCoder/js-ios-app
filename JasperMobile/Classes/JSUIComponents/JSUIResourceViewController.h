@@ -47,8 +47,6 @@
 @property (nonatomic, retain) UITableViewCell *nameCell, *labelCell, *descriptionCell, *typeCell, *previewCell;
 @property (nonatomic, assign) UITableViewCell *toolsCell;
 
-- (IBAction)viewButtonPressed:(id)sender forEvent:(UIEvent *)event;
-- (IBAction)editButtonPressed:(id)sender forEvent:(UIEvent *)event;
 - (IBAction)deleteButtonPressed:(id)sender forEvent:(UIEvent *)event;
 
 -(void)resourceDeleted;

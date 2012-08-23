@@ -38,7 +38,6 @@
 #import "Sample4.h"
 #import "Sample5.h"
 #import "Sample6.h"
-#import "Sample7.h"
 
 @implementation SamplesViewController
 
@@ -79,7 +78,6 @@
     [samples addObject:@"Create a folder"];
     [samples addObject:@"Load an image resource"];
     [samples addObject:@"Delete an object"];
-    [samples addObject:@"Modify a resource"];
     
     // update table...
     [[self tableView] beginUpdates];
@@ -184,13 +182,7 @@
     {
         [Sample6 runSample: [[ JasperMobileAppDelegate sharedInstance] client]
       parentViewController: self];
-    }
-	else if ([indexPath indexAtPosition:1] == 6)
-    {
-        [Sample7 runSample: [[ JasperMobileAppDelegate sharedInstance] client]
-      parentViewController: self];
-    }
-	    
+    }	    
 }
 
 
