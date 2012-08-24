@@ -125,8 +125,9 @@ static UIFont *detailFont;
             
             // close this view and refresh the parent view...
             [self resourceDeleted];
+            return;
         }                
-    }
+    } 
     
     if (res == nil)
 	{
@@ -339,20 +340,6 @@ static UIFont *detailFont;
 	{
 		return (resourceLoaded ? [[descriptor resourceDescriptors] count] : 0);
     }
-	
-	
-	//if ( [[descriptor wsType] compare: @"img"] == 0 && section == 1)
-	//{
-	//	// Display the preview of the image....
-	//	return 1;
-	//}
-	
-	//if ( section == 2)
-	//{
-	//	
-	//	NSLog(@"Number of propes: %d", [[descriptor resourceProperties] count]);
-	//	return [[descriptor resourceProperties] count];
-	//}
 	return 0;
 }
 
@@ -543,7 +530,7 @@ static UIFont *detailFont;
 #pragma mark -
 #pragma mark Favorite button flow
 
-- (IBAction)favoriteButtonClicked:(id)sender forEvent:(UIEvent *)event {
+- (IBAction)favoriteButtonClicked:(id)sender forEvent:(UIEvent *)event {    
     JasperMobileAppDelegate *app = [JasperMobileAppDelegate sharedInstance];
     if (![app.favorites isResourceInFavorites:self.descriptor]) {
         [app.favorites addToFavorites:self.descriptor];
@@ -645,50 +632,38 @@ static UIFont *detailFont;
     {
         deleting = true;
         [JSUILoadingView showLoadingInView:self.view];
-        [[self client] resourceDelete: [self.descriptor uri] responseDelegate: self];
-    }
-    
-    
-}
-
--(void)resourceDeleted
-{
-    // By default we have to go back of two view controllers and refresh it...
-    NSArray *viewControllers = [self.navigationController viewControllers];
-    
-    if ([viewControllers count] < 2) return; // We need at least 2 view controllers here...
-        
-        
-    // Find the first controller which has a different uri than the one just deleted...
-    for (int i = [viewControllers count]-1; i>=0; --i)
-    {
-        UIViewController *controller = [viewControllers objectAtIndex:i];
-        if ([controller respondsToSelector:@selector(descriptor)])
-        {
-            JSResourceDescriptor *rd = (JSResourceDescriptor *)[controller performSelector:@selector(descriptor)];
-            if (rd != nil && [[rd uri] isEqualToString:[self.descriptor uri]])
-            {
-                continue;
-            }
-            else
-            {
-                
-                
-                [self.navigationController popToViewController:controller animated:true];
-                
-                if ([controller respondsToSelector:@selector(refreshContent)])
-                {
-                    [controller performSelector:@selector(refreshContent) withObject:nil afterDelay:0.0];
-                }
-                
-            }
+        if ([[JasperMobileAppDelegate sharedInstance].favorites isResourceInFavorites:self.descriptor]) {
+            [[JasperMobileAppDelegate sharedInstance].favorites removeFromFavorites:self.descriptor];
         }
-        
-    }
-    
+        [[self client] resourceDelete: [self.descriptor uri] responseDelegate: self];
+    }    
 }
 
-
+- (void)resourceDeleted
+{
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    JSUIRepositoryViewController *repository = nil;
+    for (id viewController in viewControllers){
+        if ([viewController isKindOfClass:[JSUIRepositoryViewController class]]) {
+            repository = viewController;
+            break;
+        }
+    }
+    
+    if (repository) {
+        NSInteger index = 0;
+        for (JSResourceDescriptor *rd in repository.resources) {
+            if ([rd.uri isEqualToString:self.descriptor.uri]) {
+                [repository.resources removeObjectAtIndex:index];
+                [repository.tableView reloadData];
+                break;
+            }
+            index++;
+        }
+    }
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end
 

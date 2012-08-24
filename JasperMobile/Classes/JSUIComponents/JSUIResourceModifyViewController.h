@@ -41,7 +41,6 @@
 @property (nonatomic, retain) JSResourceDescriptor *descriptor;
 @property (retain, nonatomic) IBOutlet UITextField *resourceLabelTextField;
 @property (retain, nonatomic) IBOutlet UITextView *resourceDescriptionTextView;
-@property (retain, nonatomic) IBOutlet UIScrollView *scrollView;
 
 - (IBAction)doneClicked:(UIButton *)sender;
 

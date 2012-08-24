@@ -18,7 +18,6 @@
 @synthesize descriptor;
 @synthesize resourceLabelTextField;
 @synthesize resourceDescriptionTextView;
-@synthesize scrollView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,9 +31,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.scrollView.contentSize = self.view.frame.size;
-//    self.scrollView.contentSize = self.contentView.frame.size;
-    // Do any additional setup after loading the view from its nib.
     self.title = self.descriptor.label;
     self.resourceLabelTextField.text = self.descriptor.label;
     self.resourceDescriptionTextView.text = self.descriptor.description;
@@ -45,7 +41,6 @@
 {
     [self setResourceLabelTextField:nil];
     [self setResourceDescriptionTextView:nil];
-    [self setScrollView:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -98,7 +93,6 @@
     [resourceDescriptionTextView release];
     [client release];
     [descriptor release];
-    [scrollView release];
     [super dealloc];
 }
 
