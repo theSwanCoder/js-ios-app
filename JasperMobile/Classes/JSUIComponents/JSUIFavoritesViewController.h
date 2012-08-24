@@ -10,4 +10,7 @@
 
 @interface JSUIFavoritesViewController : JSUIRepositoryViewController
 
+@property (nonatomic, retain) UIBarButtonItem *editDoneButton;
+@property (nonatomic, assign) BOOL editMode;
+
 @end

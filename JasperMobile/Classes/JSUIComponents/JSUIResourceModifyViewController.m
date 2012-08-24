@@ -3,14 +3,12 @@
 //  JasperMobile
 //
 //  Created by Vlad Zavadskii on 21.08.12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Jaspersoft. All rights reserved.
 //
 
 #import "JSUIResourceModifyViewController.h"
 
 @interface JSUIResourceModifyViewController ()
-
-@property (nonatomic, retain) UIBarButtonItem *resourceDescriptionDoneButton;
 
 @end
 
@@ -20,7 +18,7 @@
 @synthesize descriptor;
 @synthesize resourceLabelTextField;
 @synthesize resourceDescriptionTextView;
-@synthesize resourceDescriptionDoneButton;
+@synthesize scrollView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,17 +32,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.scrollView.contentSize = self.view.frame.size;
+//    self.scrollView.contentSize = self.contentView.frame.size;
     // Do any additional setup after loading the view from its nib.
     self.title = self.descriptor.label;
     self.resourceLabelTextField.text = self.descriptor.label;
     self.resourceDescriptionTextView.text = self.descriptor.description;
-    self.resourceDescriptionDoneButton = [[UIBarButtonItem alloc] initWithTitle: @"Done" style: UIBarButtonItemStyleDone target: nil action: @selector(doneButtonClicked:)];    
+    self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle: @"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneClicked:)] autorelease];
 }
 
 - (void)viewDidUnload
 {
     [self setResourceLabelTextField:nil];
     [self setResourceDescriptionTextView:nil];
+    [self setScrollView:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -81,7 +82,6 @@
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     if (textView == self.resourceDescriptionTextView) {
-        self.navigationItem.rightBarButtonItem = self.resourceDescriptionDoneButton;
         [self slideTextViewUp: YES];
     }
 }
@@ -93,21 +93,16 @@
     }
 }
 
-- (void)doneButtonClicked:(id)sender {
-    self.navigationItem.rightBarButtonItem = nil;
-    [self.resourceDescriptionTextView resignFirstResponder];
-}
-
 - (void)dealloc {
     [resourceLabelTextField release];
     [resourceDescriptionTextView release];
     [client release];
     [descriptor release];
-    [resourceDescriptionDoneButton release];
+    [scrollView release];
     [super dealloc];
 }
 
-- (IBAction)saveResourceClicked:(UIButton *)sender {
+- (IBAction)doneClicked:(UIButton *)sender {
     
     // Create new label and description from text fields
     NSString *newLabel = [[self.resourceLabelTextField text] stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -118,28 +113,38 @@
     // Send request for modifying resource desctiptor
     [self.client resourceModify:self.descriptor.uri resourceDescriptor:self.descriptor data: nil responseDelegate:self];
     
-    // Clear top bar from "Done" button. Also hide keyboard
-    self.navigationItem.rightBarButtonItem = nil;
+    // Hide keyboard
     [self.resourceLabelTextField resignFirstResponder];
     [self.resourceDescriptionTextView resignFirstResponder];
 }
 
 - (void)requestFinished:(JSOperationResult *)op
 {
-    NSString *msg = nil;
+    NSMutableString *msg = [NSMutableString string];
+    NSString *title = @"";
     
-    if (op != nil) {
-        msg = [NSString stringWithFormat:@"Return code: %d\n%@", [op returnCode], [op message]];
-        
-        if ([op returnCode] == 200) {
-            msg = @"Resource was successfully modified";
+    if (op != nil) {        
+        if (op.returnCode >= 400 || op.error != nil) {
+            title = @"Error reading the response";
+
+            if (op.message.length) {
+                [msg appendFormat:@"%@\n", op.message]; 
+            }
+            
+            if (op.error) {
+                [msg appendFormat:@"%@\n", [op.error localizedDescription]]; 
+            }     
         }
-        NSLog(@"%@", self.navigationController);
     } else {
-        msg = @"Operation failed...";
+        msg = [NSMutableString stringWithString:@"Error reading the response"];
     }
-    UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:@"" message:msg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Back", nil] autorelease];
-    [uiView show];
+    
+    if (msg.length || title.length) {
+        UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Retry" otherButtonTitles:@"Cancel", nil] autorelease];
+        [uiView show];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

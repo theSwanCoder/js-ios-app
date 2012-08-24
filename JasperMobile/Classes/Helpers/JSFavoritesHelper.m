@@ -1,3 +1,27 @@
+/*
+ * Jaspersoft Mobile SDK
+ * Copyright (C) 2001 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://www.jasperforge.org/projects/mobile
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is part of Jaspersoft Mobile SDK.
+ *
+ * Jaspersoft Mobile SDK is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jaspersoft Mobile SDK is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Jaspersoft Mobile. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 //
 //  JSFavoritesHelper.m
 //  JasperMobile
@@ -13,6 +37,9 @@ static NSString * const JS_APP_TYPE_FAVORITE_WRAPPER = @"JS_APP_TYPE_FAVORITE_WR
 @interface JSFavoritesHelper()
 
 // Inner favorites state
+
+@property (nonatomic) NSInteger serverIndex;
+@property (nonatomic, copy) NSString *userNameWithOrgId;
 @property (nonatomic, retain) NSMutableDictionary *favorites;
 @property (nonatomic, retain) NSString *serverKey;
 @property (nonatomic) BOOL changesWasMade;
@@ -22,7 +49,7 @@ static NSString * const JS_APP_TYPE_FAVORITE_WRAPPER = @"JS_APP_TYPE_FAVORITE_WR
 @implementation JSFavoritesHelper
 
 @synthesize serverIndex = _serverIndex;
-@synthesize client = _client;
+@synthesize userNameWithOrgId = _userNameWithOrgId;
 @synthesize serverKey = _serverKey;
 @synthesize favorites = _favorites;
 @synthesize changesWasMade = _changesWasMade;
@@ -34,13 +61,13 @@ static NSString * const JS_APP_TYPE_FAVORITE_WRAPPER = @"JS_APP_TYPE_FAVORITE_WR
 - (id)initWithServerIndex:(NSInteger)serverIndex andClient:(JSClient *)client {
     if (self = [super init]) {
         self.serverIndex = serverIndex;
-        self.client = client;
+        self.userNameWithOrgId = [client.jsServerProfile getUsernameWithOrgId];
         self.serverKey = [NSString stringWithFormat: @"jaspersoft.server.favorites.%d", self.serverIndex];
         self.changesWasMade = NO;
         
         // Load all favorites for specified server
         NSDictionary *favorites = [[[NSUserDefaults standardUserDefaults] objectForKey:self.serverKey] 
-                                   objectForKey: [self.client.jsServerProfile getUsernameWithOrgId]] ?: [[[NSDictionary alloc] init] autorelease];
+                                   objectForKey: self.userNameWithOrgId] ?: [[[NSDictionary alloc] init] autorelease];
         self.favorites = [[[NSMutableDictionary alloc] initWithDictionary:favorites] autorelease];
     }
     
@@ -71,15 +98,14 @@ static NSString * const JS_APP_TYPE_FAVORITE_WRAPPER = @"JS_APP_TYPE_FAVORITE_WR
 }
 
 - (void)synchronizeWithUserDefaults {
-    if (self.changesWasMade) {
+    if (self.changesWasMade) {        
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSString *userWithOrgId = [self.client.jsServerProfile getUsernameWithOrgId];
         NSMutableDictionary *allFavorites = [[NSMutableDictionary alloc] 
                                              initWithDictionary:([prefs objectForKey:self.serverKey] ?: [NSDictionary dictionary])];
-        [allFavorites setObject:self.favorites forKey:userWithOrgId];
+        [allFavorites setObject:self.favorites forKey:self.userNameWithOrgId];
         [prefs setObject:allFavorites forKey:self.serverKey];
         [prefs synchronize];
-        self.changesWasMade = false;
+        self.changesWasMade = NO;
         [allFavorites release];
     }
 }
@@ -89,9 +115,12 @@ static NSString * const JS_APP_TYPE_FAVORITE_WRAPPER = @"JS_APP_TYPE_FAVORITE_WR
         return nil;
     }
     
-    // Create list of resources from favorites
+    NSArray *sortedKeys = [self.favorites keysSortedByValueUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [[obj1 objectForKey:@"label"] compare:[obj2 objectForKey:@"label"]];
+    }];
+    
     NSMutableArray *resources = [NSMutableArray arrayWithCapacity:0];
-    for (NSString *uri in self.favorites.keyEnumerator) {
+    for (NSString *uri in sortedKeys) {
         JSResourceDescriptor *resource = [[JSResourceDescriptor alloc] init];
         resource.uri = uri;
         resource.label = [[self.favorites objectForKey:uri] objectForKey:@"label"];
@@ -115,7 +144,7 @@ static NSString * const JS_APP_TYPE_FAVORITE_WRAPPER = @"JS_APP_TYPE_FAVORITE_WR
 }
 
 - (void)dealloc {
-    [_client release];
+    [_userNameWithOrgId release];
     [_serverKey release];
     [_favorites release];
     [super dealloc];

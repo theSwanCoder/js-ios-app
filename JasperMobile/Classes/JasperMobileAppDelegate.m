@@ -9,7 +9,6 @@
 #import "JasperMobileAppDelegate.h"
 #import "JSUIBaseRepositoryViewController.h"
 
-
 @implementation JasperMobileAppDelegate
 
 @synthesize window;
@@ -19,7 +18,7 @@
 @synthesize favoritesController;
 @synthesize tabBarController;
 @synthesize servers;
-@synthesize client; // the active client
+@synthesize client = _client; // the active client
 @synthesize activeServerIndex;
 @synthesize favorites;
 
@@ -108,23 +107,22 @@ static NSString * const reportRunMethod = @"reportRun";
 	
 	if (count > 0)
 	{
+        self.client = (JSClient *)[servers objectAtIndex:self.activeServerIndex];
         self.activeServerIndex = [prefs integerForKey:@"jaspersoft.server.active"];
-		if (self.activeServerIndex < 0 || self.activeServerIndex >= count) self.activeServerIndex = 0;		
-		client = (JSClient *)[servers objectAtIndex:self.activeServerIndex];
-        if (!self.favorites) {
-            self.favorites = [[JSFavoritesHelper alloc] initWithServerIndex:self.activeServerIndex andClient:client];
-        }
+		if (self.activeServerIndex < 0 || self.activeServerIndex >= count) self.activeServerIndex = 0;
 	}
     
 }
 
--(void)setClient:(JSClient *)cl
+- (void)setClient:(JSClient *)client 
 {
-	client = cl;
-	NSInteger index = [servers indexOfObject:cl];
+    _client = client;
+	NSInteger index = [servers indexOfObject:client];
 	
 	if (index >= 0)
 	{
+        [self.favorites synchronizeWithUserDefaults];
+        self.favorites = [[[JSFavoritesHelper alloc] initWithServerIndex:index andClient:client] autorelease];
 		NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 		[prefs setInteger:index forKey:@"jaspersoft.server.active"];
         self.activeServerIndex = index;
@@ -184,7 +182,7 @@ static NSString * const reportRunMethod = @"reportRun";
         [(JSUIBaseRepositoryViewController *)(favoritesController.topViewController) setClient: self.client];
     }
 	
-    NSArray* controllers = [NSArray arrayWithObjects:navigationController, searchController, favoritesController, settingsController, nil];
+    NSArray* controllers = [NSArray arrayWithObjects:navigationController, favoritesController, searchController, settingsController, nil];
     tabBarController.viewControllers = controllers;
     
     
@@ -229,6 +227,7 @@ static NSString * const reportRunMethod = @"reportRun";
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
+    [self.favorites synchronizeWithUserDefaults];
 }
 
 
@@ -255,13 +254,13 @@ static NSString * const reportRunMethod = @"reportRun";
 }
 
 
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void)applicationWillTerminate:(UIApplication *)application {    
     /*
      Called when the application is about to terminate.
      See also applicationDidEnterBackground:.
      */
+    [self.favorites synchronizeWithUserDefaults];
 }
-
 
 #pragma mark -
 #pragma mark Memory management

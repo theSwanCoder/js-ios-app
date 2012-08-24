@@ -37,9 +37,6 @@
 // and synchronizing favorites state with NSUserDefault
 @interface JSFavoritesHelper : NSObject
 
-@property (nonatomic) NSInteger serverIndex;
-@property (nonatomic, retain) JSClient *client;
-
 // Check if passed resource is a wrapper
 + (BOOL)isResourceWrapper:(JSResourceDescriptor *)resource;
 

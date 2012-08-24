@@ -116,8 +116,7 @@
 	
 	[[self tableView] beginUpdates];
 	[[self tableView] reloadSections: [NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-	[[self tableView] endUpdates];
-	
+	[[self tableView] endUpdates];	
 }
 
 

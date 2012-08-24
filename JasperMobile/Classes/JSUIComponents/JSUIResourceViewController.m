@@ -37,12 +37,18 @@
 #import "JSUIRepositoryViewController.h"
 #import "JasperMobileAppDelegate.h"
 
+@interface JSUIResourceViewController()
+
+@property (nonatomic, retain) UIButton *favoriteButton;
+
+@end
 
 @implementation JSUIResourceViewController
 
 @synthesize descriptor, client;
 @synthesize nameCell, labelCell, descriptionCell, typeCell, previewCell;
 @synthesize toolsCell;
+@synthesize favoriteButton;
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -63,9 +69,6 @@
 
 static UIFont *labelFont;
 static UIFont *detailFont;
-
-
-
 
 - (void)viewDidLoad {
 	
@@ -100,6 +103,7 @@ static UIFont *detailFont;
     [[self navigationItem] setBackBarButtonItem:newBackButton];
 	[self.navigationController pushViewController:rmvc animated: YES];
 	[rmvc release];
+    [newBackButton release];
 }
 
 
@@ -121,9 +125,7 @@ static UIFont *detailFont;
             
             // close this view and refresh the parent view...
             [self resourceDeleted];
-        }
-        
-        
+        }                
     }
     
     if (res == nil)
@@ -154,11 +156,9 @@ static UIFont *detailFont;
 }
 
 
-/*
- - (void)viewWillAppear:(BOOL)animated {
- [super viewWillAppear:animated];
- }
- */
+- (void)viewWillAppear:(BOOL)animated {
+    [self changeFavoriteButtonUI:self.favoriteButton isResourceInFavorites:[[JasperMobileAppDelegate sharedInstance].favorites isResourceInFavorites:self.descriptor]];
+}
 
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -499,6 +499,7 @@ static UIFont *detailFont;
 			[button addTarget:self action:@selector(favoriteButtonClicked:forEvent:) forControlEvents:UIControlEventTouchUpInside];
 			[button setTag:indexPath.row];
 			[self.toolsCell.contentView addSubview:button];
+            self.favoriteButton = button;
 			
 			UIButton *button2 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 			frame = CGRectMake(1*(buttonWidth+padding), 0, buttonWidth, 40);
@@ -539,6 +540,9 @@ static UIFont *detailFont;
 
 }
 
+#pragma mark -
+#pragma mark Favorite button flow
+
 - (IBAction)favoriteButtonClicked:(id)sender forEvent:(UIEvent *)event {
     JasperMobileAppDelegate *app = [JasperMobileAppDelegate sharedInstance];
     if (![app.favorites isResourceInFavorites:self.descriptor]) {
@@ -550,14 +554,13 @@ static UIFont *detailFont;
     }
 }
 
-- (void)changeFavoriteButtonUI:(UIButton *)favoriteButton isResourceInFavorites:(BOOL)isResourceInFavorites {
+- (void)changeFavoriteButtonUI:(UIButton *)button isResourceInFavorites:(BOOL)isResourceInFavorites {
     if (!isResourceInFavorites) {
-        [favoriteButton setTitle:@"Add Favorite" forState:UIControlStateNormal];
+        [button setTitle:@"Add Favorite" forState:UIControlStateNormal];
     } else {
-        [favoriteButton setTitle:@"Remove Favorite" forState:UIControlStateNormal];
+        [button setTitle:@"Remove Favorite" forState:UIControlStateNormal];
     }
 }
-
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -617,6 +620,9 @@ static UIFont *detailFont;
 	{
 		[descriptor release];
 	}
+    if (favoriteButton) {
+        [favoriteButton release];
+    }
 	
     [super dealloc];
 }

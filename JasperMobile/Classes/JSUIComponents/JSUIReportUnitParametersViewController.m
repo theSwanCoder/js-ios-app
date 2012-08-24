@@ -458,7 +458,7 @@ static UIFont *detailFont;
         [reportPdfViewer setDescriptor: self.descriptor];
         [reportPdfViewer setClient: self.client];
         [reportPdfViewer setPreviousController:self];
-    [reportPdfViewer setFormat:format];
+        [reportPdfViewer setFormat:format];
         
         [reportPdfViewer setParameters:params];
     
