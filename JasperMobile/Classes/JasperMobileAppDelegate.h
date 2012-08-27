@@ -10,7 +10,7 @@
 #import "JSFavoritesHelper.h"
 #import <jasperserver-mobile-sdk-ios/JSClient.h>
 
-@interface JasperMobileAppDelegate : NSObject <UIApplicationDelegate> {
+@interface JasperMobileAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
     
     UIWindow *window;
     UINavigationController *navigationController;

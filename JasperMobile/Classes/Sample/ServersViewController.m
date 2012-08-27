@@ -279,14 +279,14 @@
 			 NSInteger index = [[[JasperMobileAppDelegate sharedInstance] servers] indexOfObject:client];
 			 if (index >= 0)
 			 {
+                 [[JasperMobileAppDelegate sharedInstance].favorites clearFavoritesAndSynchronizeWithUserDefaults];
 				 [[[JasperMobileAppDelegate sharedInstance] servers] removeObjectAtIndex:index];
 				 [[JasperMobileAppDelegate sharedInstance] saveServers];
 			 }
 			 [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
              
              // If the client is currently in use... remove it...
-             [[JasperMobileAppDelegate sharedInstance] setClient: nil];
-             
+             [[JasperMobileAppDelegate sharedInstance] setClient: nil];             
 		 }
 	 }
  }

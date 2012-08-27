@@ -28,7 +28,7 @@
 //  Jaspersoft
 //
 //  Created by Giulio Toffoli on 7/22/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Jaspersoft. All rights reserved.
 //
 
 #import <jasperserver-mobile-sdk-ios/JSClient.h>
@@ -152,7 +152,7 @@
     [self updateTableContent];
 }
 
--(void)updateTableContent {
+- (void)updateTableContent {
     
 	if (self.client == nil) return;
     
@@ -164,20 +164,18 @@
 		if ([self descriptor] != nil)
 		{
 			uri =  [descriptor uri];
-			self.navigationItem.title=[NSString stringWithFormat:@"%@", [descriptor label]];
+			self.navigationItem.title = [NSString stringWithFormat:@"%@", [descriptor label]];
 		}
 		else
 		{
-			self.navigationItem.title=[NSString stringWithFormat:@"%@", [self.client.jsServerProfile alias] ];
+			self.navigationItem.title = [NSString stringWithFormat:@"%@", [self.client.jsServerProfile alias] ];
 		}
 		// load this view...
 		[JSUILoadingView showLoadingInView:self.view];
         
         [self.client resources:uri responseDelegate: self];  
 		
-	}
-	
-	
+	}	
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

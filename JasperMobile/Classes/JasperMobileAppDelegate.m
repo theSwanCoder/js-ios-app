@@ -184,6 +184,7 @@ static NSString * const reportRunMethod = @"reportRun";
 	
     NSArray* controllers = [NSArray arrayWithObjects:navigationController, favoritesController, searchController, settingsController, nil];
     tabBarController.viewControllers = controllers;
+    tabBarController.delegate = self;
     
     
     [self.window addSubview:tabBarController.view];
@@ -260,6 +261,16 @@ static NSString * const reportRunMethod = @"reportRun";
      See also applicationDidEnterBackground:.
      */
     [self.favorites synchronizeWithUserDefaults];
+}
+
+#pragma mark - 
+#pragma mark TabBarController delegate methods
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    // Go to root controller for favorites navigation
+    if (self.favoritesController == viewController) {
+        [self.favoritesController popToRootViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark -
