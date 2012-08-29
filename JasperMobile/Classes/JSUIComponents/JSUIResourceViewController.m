@@ -466,11 +466,9 @@ static UIFont *detailFont;
 		if (self.toolsCell == nil) {
 			
             self.toolsCell = [[[UITableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: @"ToolsCell"] autorelease];
-            //self.toolsCell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 40) reuseIdentifier: @"ToolsCell"];
 
 			UIView *backView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
 			backView.backgroundColor = [UIColor clearColor];
-			//self.toolsCell.backgroundColor = [UIColor clearColor];
 			self.toolsCell.backgroundView = backView;
 			   
 			int buttons = 2; //3;
@@ -481,6 +479,7 @@ static UIFont *detailFont;
 			CGRect frame = CGRectMake(0, 0, buttonWidth, 40);
 			button.frame = frame;
 			button.tag = 1;
+            [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             [self changeFavoriteButtonUI:button isResourceInFavorites:[[JasperMobileAppDelegate sharedInstance].favorites isResourceInFavorites:self.descriptor]];
             
 			[button addTarget:self action:@selector(favoriteButtonClicked:forEvent:) forControlEvents:UIControlEventTouchUpInside];
@@ -488,20 +487,20 @@ static UIFont *detailFont;
 			[self.toolsCell.contentView addSubview:button];
             self.favoriteButton = button;
 			
-			UIButton *button2 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-			frame = CGRectMake(1*(buttonWidth+padding), 0, buttonWidth, 40);
-			button2.frame = frame;
-			button2.tag = 3;
-			button2.enabled = YES;
-			[button2 setTitle:@"Delete" forState:UIControlStateNormal];
-			
-            [button2 addTarget:self action:@selector(deleteButtonPressed:forEvent:) forControlEvents:UIControlEventTouchUpInside];
-			[button2 setTag:indexPath.row];
-			[self.toolsCell.contentView addSubview:button2];
-
-			
+            UIImage *redButtonImage = [UIImage imageNamed:@"red.png"];
+			UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [deleteButton setTitle:@"Delete" forState:UIControlStateNormal];
+            deleteButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+            [deleteButton setBackgroundImage:redButtonImage forState:UIControlStateNormal];
+            [deleteButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+			deleteButton.frame = CGRectMake(1*(buttonWidth+padding), 0, buttonWidth, 40);
+			deleteButton.tag = 3;
+			deleteButton.enabled = YES;
             
-
+			
+            [deleteButton addTarget:self action:@selector(deleteButtonPressed:forEvent:) forControlEvents:UIControlEventTouchUpInside];
+			[deleteButton setTag:indexPath.row];
+			[self.toolsCell.contentView addSubview:deleteButton];            
 		}
 		return self.toolsCell;
 	}
@@ -544,8 +543,10 @@ static UIFont *detailFont;
 - (void)changeFavoriteButtonUI:(UIButton *)button isResourceInFavorites:(BOOL)isResourceInFavorites {
     if (!isResourceInFavorites) {
         [button setTitle:@"Add Favorite" forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"yellow.png"] forState:UIControlStateNormal];
     } else {
         [button setTitle:@"Remove Favorite" forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"gray.png"] forState:UIControlStateNormal];
     }
 }
 

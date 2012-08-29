@@ -52,6 +52,9 @@
 		F50AFED415E2E12B00F761A0 /* JSUIResourceModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50AFED215E2E12900F761A0 /* JSUIResourceModifyViewController.m */; };
 		F50AFED515E2E12B00F761A0 /* JSUIResourceModifyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F50AFED315E2E12A00F761A0 /* JSUIResourceModifyViewController.xib */; };
 		F53BFD5715E6E5CB000053A8 /* JSTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = F53BFD5615E6E5CB000053A8 /* JSTimer.m */; };
+		F5811F8215EE64CA00CE775A /* gray.png in Resources */ = {isa = PBXBuildFile; fileRef = F5811F7F15EE64CA00CE775A /* gray.png */; };
+		F5811F8315EE64CA00CE775A /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = F5811F8015EE64CA00CE775A /* red.png */; };
+		F5811F8415EE64CA00CE775A /* yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = F5811F8115EE64CA00CE775A /* yellow.png */; };
 		F5976A8315E461E2004165A7 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = F5976A8215E461E2004165A7 /* star.png */; };
 		F5ABD15B15E3251D00FEBB4F /* JSUIFavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5ABD15A15E3251D00FEBB4F /* JSUIFavoritesViewController.m */; };
 		F5B9201C15D3D54B000CF3E6 /* libjasperserver-mobile-sdk-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5B9201715D3D541000CF3E6 /* libjasperserver-mobile-sdk-ios.a */; };
@@ -178,6 +181,9 @@
 		F50AFED315E2E12A00F761A0 /* JSUIResourceModifyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = JSUIResourceModifyViewController.xib; path = Classes/JSUIComponents/JSUIResourceModifyViewController.xib; sourceTree = "<group>"; };
 		F53BFD5515E6E5CB000053A8 /* JSTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSTimer.h; sourceTree = "<group>"; };
 		F53BFD5615E6E5CB000053A8 /* JSTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSTimer.m; sourceTree = "<group>"; };
+		F5811F7F15EE64CA00CE775A /* gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray.png; sourceTree = "<group>"; };
+		F5811F8015EE64CA00CE775A /* red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red.png; sourceTree = "<group>"; };
+		F5811F8115EE64CA00CE775A /* yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow.png; sourceTree = "<group>"; };
 		F5976A8215E461E2004165A7 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star.png; path = icons/star.png; sourceTree = "<group>"; };
 		F5ABD15915E3251D00FEBB4F /* JSUIFavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUIFavoritesViewController.h; sourceTree = "<group>"; };
 		F5ABD15A15E3251D00FEBB4F /* JSUIFavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUIFavoritesViewController.m; sourceTree = "<group>"; };
@@ -342,6 +348,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F5811F7E15EE64CA00CE775A /* Buttons */,
 				F5B9201F15D3E1EC000CF3E6 /* FileImages */,
 				F50AFED315E2E12A00F761A0 /* JSUIResourceModifyViewController.xib */,
 				F5F2B0F915C16CBA00E97074 /* JSUIReportUnitViewController.xib */,
@@ -387,6 +394,17 @@
 				64979520135F197A00FA5BA0 /* SFHFKeychainUtils.m */,
 			);
 			name = SFHF;
+			sourceTree = "<group>";
+		};
+		F5811F7E15EE64CA00CE775A /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				F5811F7F15EE64CA00CE775A /* gray.png */,
+				F5811F8015EE64CA00CE775A /* red.png */,
+				F5811F8115EE64CA00CE775A /* yellow.png */,
+			);
+			name = Buttons;
+			path = icons/buttons;
 			sourceTree = "<group>";
 		};
 		F5B9200F15D3D541000CF3E6 /* Products */ = {
@@ -584,6 +602,9 @@
 				F5B9202D15D3E1EC000CF3E6 /* ic_type_unknown.png in Resources */,
 				F50AFED515E2E12B00F761A0 /* JSUIResourceModifyViewController.xib in Resources */,
 				F5976A8315E461E2004165A7 /* star.png in Resources */,
+				F5811F8215EE64CA00CE775A /* gray.png in Resources */,
+				F5811F8315EE64CA00CE775A /* red.png in Resources */,
+				F5811F8415EE64CA00CE775A /* yellow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
