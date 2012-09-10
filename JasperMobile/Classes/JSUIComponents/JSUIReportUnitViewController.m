@@ -343,6 +343,10 @@
 				NSString *fileName = [[[res reportExecution] fileNames] objectAtIndex: i];
 				NSString *fileType = [[[res reportExecution] fileTypes] objectAtIndex: i];
                 
+                if ([self.format isEqualToString:@"PDF"] && ![fileType isEqualToString:@"application/pdf"]) {
+                    continue;
+                }
+                
 				// We don't use cache here for now....
                 NSString *extension = @""; // use default extension.,,
 				if ( [fileType isEqualToString: @"text/html"])

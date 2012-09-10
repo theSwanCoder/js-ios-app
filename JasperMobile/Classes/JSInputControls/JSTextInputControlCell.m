@@ -100,11 +100,16 @@
 	return NO;
 }
 
--(BOOL)textField:(UITextField *)txtField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+- (id)selectedValue {
+    super.selectedValue = textField.text;    
+    return super.selectedValue;
+}
+
+- (BOOL)textField:(UITextField *)txtField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     NSString *newValue = nil;
     
-    if(range.length > 0){
+    if(range.length > 0) {
         newValue = [[NSString alloc] initWithString:[txtField.text substringToIndex:txtField.text.length - 1]];
     } else {
         newValue = [[NSString alloc] initWithFormat:@"%@%@", txtField.text, string];
