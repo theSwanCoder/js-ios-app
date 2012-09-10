@@ -64,21 +64,25 @@
     
     if (aliasTextField.text == nil || [aliasTextField.text isEqualToString:@""])
     {
-        UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:@"" message: @"Please specify a valid name" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] autorelease];
+        UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:@"" message: NSLocalizedString(@"servers.name.errmsg", @"") delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] autorelease];
         [uiView show];
         return;
     }
     
     if (urlTextField.text == nil || [urlTextField.text isEqualToString:@""])
     {
-        UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:@"" message: @"Please specify a valid URL" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] autorelease];
+        UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:@""
+                                                         message: NSLocalizedString(@"servers.url.errmsg", @"")
+                                                        delegate:nil
+                                               cancelButtonTitle:@"Ok"
+                                               otherButtonTitles:nil] autorelease];
         [uiView show];
         return;
     }
     
     if (usernameTextField.text == nil || [usernameTextField.text isEqualToString:@""])
     {
-        UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:@"" message: @"Please specify a valid username" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] autorelease];
+        UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:@"" message: NSLocalizedString(@"servers.username.errmsg", @"") delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] autorelease];
         [uiView show];
         return;
     }
@@ -216,9 +220,9 @@
 					self.aliasCell = [tableView dequeueReusableCellWithIdentifier:@"AliasCell"];
 					if (self.aliasCell == nil) {
 						self.aliasCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AliasCell"] autorelease];
-						self.aliasCell.textLabel.text = NSLocalizedString(@"Name", @"");
+						self.aliasCell.textLabel.text = NSLocalizedString(@"servers.name.label", @"");
 						aliasTextField = [self newTextFieldForCell:self.aliasCell];
-						aliasTextField.placeholder = NSLocalizedString(@"My server", @"");
+						aliasTextField.placeholder = NSLocalizedString(@"servers.name.tip", @"");
 						aliasTextField.keyboardType = UIKeyboardTypeDefault;
 						aliasTextField.returnKeyType = UIReturnKeyNext;
 						if(client != nil && client.jsServerProfile != nil && client.jsServerProfile.alias != nil)
@@ -232,9 +236,9 @@
 					self.urlCell = [tableView dequeueReusableCellWithIdentifier:@"UrlCell"];
 					if (self.urlCell == nil) {
 						self.urlCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UrlCell"] autorelease];
-						self.urlCell.textLabel.text = NSLocalizedString(@"URL", @"");
+						self.urlCell.textLabel.text = NSLocalizedString(@"servers.url.label", @"");
 						urlTextField = [self newTextFieldForCell:self.urlCell];
-						urlTextField.placeholder = NSLocalizedString(@"http://example.com/jasperserver", @"");
+						urlTextField.placeholder = NSLocalizedString(@"servers.url.tip", @"");
 						urlTextField.keyboardType = UIKeyboardTypeURL;
 						urlTextField.returnKeyType = UIReturnKeyNext;
 						if(client != nil && client.jsServerProfile != nil && client.jsServerProfile.baseUrl != nil)
@@ -248,9 +252,9 @@
 					self.organizationCell = [tableView dequeueReusableCellWithIdentifier:@"OrganizationCell"];
 					if (self.organizationCell == nil) {
 						self.organizationCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OrganizationCell"] autorelease];
-						self.organizationCell.textLabel.text = NSLocalizedString(@"Organization", @"");
+						self.organizationCell.textLabel.text = NSLocalizedString(@"servers.orgid.label", @"");
 						organizationTextField = [self newTextFieldForCell:self.organizationCell];
-						organizationTextField.placeholder = NSLocalizedString(@"organization id", @"");
+						organizationTextField.placeholder = NSLocalizedString(@"servers.orgid.tip", @"");
 						organizationTextField.keyboardType = UIKeyboardTypeDefault;
 						organizationTextField.returnKeyType = UIReturnKeyNext;
 						if(client != nil && client.jsServerProfile != nil && client.jsServerProfile.organization != nil)
@@ -264,9 +268,9 @@
 					self.usernameCell = [tableView dequeueReusableCellWithIdentifier:@"UsernameCell"];
 					if (self.usernameCell == nil) {
 						self.usernameCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UsernameCell"] autorelease];
-						self.usernameCell.textLabel.text = NSLocalizedString(@"Username", @"");
+						self.usernameCell.textLabel.text = NSLocalizedString(@"servers.username.label", @"");
 						usernameTextField = [self newTextFieldForCell:self.usernameCell];
-						usernameTextField.placeholder = @"my username"; // NOI18N
+						usernameTextField.placeholder = NSLocalizedString(@"servers.username.tip", @"");
 						usernameTextField.keyboardType = UIKeyboardTypeDefault;
 						usernameTextField.returnKeyType = UIReturnKeyNext;
 						if(client != nil && client.jsServerProfile != nil && client.jsServerProfile.username != nil)
@@ -280,9 +284,9 @@
 					self.passwordCell = [tableView dequeueReusableCellWithIdentifier:@"PasswordCell"];
 					if (self.passwordCell == nil) {
 						self.passwordCell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PasswordCell"] autorelease];
-						self.passwordCell.textLabel.text = NSLocalizedString(@"Password", @"");
+						self.passwordCell.textLabel.text = NSLocalizedString(@"servers.password.label", @"");
 						passwordTextField = [self newTextFieldForCell:self.passwordCell];
-						passwordTextField.placeholder = @"my password"; // NOI18N
+						passwordTextField.placeholder = NSLocalizedString(@"servers.password.tip", @"");
 						passwordTextField.keyboardType = UIKeyboardTypeDefault;
 						passwordTextField.returnKeyType = UIReturnKeyDone;
 						passwordTextField.secureTextEntry = YES;

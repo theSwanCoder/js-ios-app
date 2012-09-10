@@ -1,25 +1,23 @@
 /* 
    Localizable.strings
-   Jaspersoft
 
-   Created by Giulio Toffoli on 4/18/11.
-   Copyright 2011 Jaspersoft Corp.. All rights reserved.
+   Copyright 2011 Jaspersoft Corp. All rights reserved.
  */
 
-"URL" = "URL";
-"http://example.com/jasperserver"="http://esempio.it/jasperserver";
+"servers.url.label" = "URL";
+"servers.url.tip"="http://esempio.it/jasperserver";
 
-"Name"="Nome";
-"My server"="il mio server";
+"servers.name.label"="Nome";
+"servers.name.tip"="il mio server";
 
-"Organization"="organizzazione";
-"organization id"="organizaazione id";
+"servers.orgid.label"="organizzazione";
+"servers.orgid.tip"="organizaazione id";
 
-"Username"="Nome utente";
-"my username"="il mio nome utente";
+"servers.username.label"="Nome utente";
+"servers.username.tip"="il mio nome utente";
 
-"Password"="Password";
-"my password"="il mio password";
+"servers.password.label"="Password";
+"servers.password.tip"="il mio password";
 
 // Repository controller
-"Servers"="Server";
+"view.servers"="Server";

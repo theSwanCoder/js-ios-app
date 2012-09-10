@@ -46,7 +46,7 @@
 - (void)viewDidLoad {
 	
 	[[self tableView] setAllowsSelectionDuringEditing: YES];
-	self.title = @"Servers";
+	self.title = NSLocalizedString(@"view.servers", @"");
 	
 	editDoneButton = [[[UIBarButtonItem alloc] initWithTitle: @"Edit"
 					   style: UIBarButtonItemStylePlain
@@ -225,7 +225,7 @@
 		if (cell == nil) {
 			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellAddAccount] autorelease];
 		}
-		cell.textLabel.text = @"New server account...";
+		cell.textLabel.text = NSLocalizedString(@"servers.new.label",@"");
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		return cell;
 	}

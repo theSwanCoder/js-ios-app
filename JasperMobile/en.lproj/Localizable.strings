@@ -1,28 +1,40 @@
 /* 
    Localizable.strings
-   Jaspersoft
 
-   Created by Giulio Toffoli on 4/18/11.
-   Copyright 2011 Jaspersoft Corp.. All rights reserved.
+   Copyright 2011 Jaspersoft Corp. All rights reserved.
  */
  
-// Login form
+// Server Profiles form
 
-"URL" = "URL";
-"http://example.com/jasperserver"="http://example.com/jasperserver";
+"servers.url.label" = "URL";
+"servers.url.tip"="http://example.com/jasperserver";
+"servers.url.errmsg" = "Please specify a valid URL";
 
-"Name"="Name";
-"My server"="my server name";
+"servers.name.label"="Name";
+"servers.name.tip"="my server name";
+"servers.name.errmsg" = "Please specify a valid profile name";
 
-"Organization"="Organization";
-"organization id"="organization id";
+"servers.orgid.label"="Organization";
+"servers.orgid.tip"="organization id";
 
-"Username"="Username";
-"my username"="my username";
+"servers.username.label"="Username";
+"servers.username.tip"="my username";
+"servers.username.errmsg" = "Please specify a valid username";
 
-"Password"="Password";
-"my password"="my password";
+"servers.password.label"="Password";
+"servers.password.tip"="my password";
 
-// Repository controller
-"Servers"="Servers";
+"servers.new.label" = "Add server profile...";
+
+
+// navigation and view labels
+"view.repository" = "Repository";
+"view.servers"= "Servers";
+"view.search" = "Search";
+"view.favorites" = "Favorites";
+
+"noservers.dialog.title" = "No Servers Configured";
+"noservers.dialog.msg" = "You must add a server profile before you can view a repository";
+"noservers.dialog.button.label" = "Configure Server Profiles";
+
 

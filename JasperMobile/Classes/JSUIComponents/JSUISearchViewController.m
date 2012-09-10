@@ -88,6 +88,7 @@
     [super viewDidLoad];    
     [super loadView];
     
+    self.title = NSLocalizedString(@"view.search", @"");
     self.view = [[[UIView alloc] init] autorelease];
     
     searchBar = [[[UISearchBar alloc] initWithFrame:CGRectMake(0,0,320,44)] autorelease]; 

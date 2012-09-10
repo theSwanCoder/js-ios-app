@@ -33,9 +33,6 @@
 #import "JasperMobileAppDelegate.h"
 #import "JSUIFavoritesViewController.h"
 
-@interface JSUIFavoritesViewController ()
-
-@end
 
 @implementation JSUIFavoritesViewController
 
@@ -68,6 +65,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.title = NSLocalizedString(@"view.favorites", @"");
     self.editDoneButton = [[[UIBarButtonItem alloc] initWithTitle: @"Edit"
                                                             style: UIBarButtonItemStylePlain
                                                            target:self action:@selector(editClicked:)] autorelease];

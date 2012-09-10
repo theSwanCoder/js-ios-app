@@ -152,7 +152,11 @@
             [self updateTableContent];
             return;
         } else {
-            UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:@"Servers are empty" message:@"You should configure a server before you can view a repository" delegate:self cancelButtonTitle:@"Configure" otherButtonTitles:nil] autorelease];
+            UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle: NSLocalizedString(@"noservers.dialog.title", @"")
+                                                             message: NSLocalizedString(@"noservers.dialog.msg",@"")
+                                                            delegate: self
+                                                   cancelButtonTitle: NSLocalizedString(@"noservers.dialog.button.label", @"")
+                                                   otherButtonTitles:nil] autorelease];
             [uiView show];
             return;
         }

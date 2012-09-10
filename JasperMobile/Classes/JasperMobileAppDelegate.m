@@ -155,7 +155,8 @@ static NSString * const reportRunMethod = @"reportRun";
 #pragma mark -
 #pragma mark Application lifecycle
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     // Override point for customization after application launch.
     sharedInstance = self;
@@ -180,6 +181,11 @@ static NSString * const reportRunMethod = @"reportRun";
         [(JSUIBaseRepositoryViewController *)(favoritesController.topViewController) setClient: self.client];
     }
 	
+    navigationController.title = NSLocalizedString(@"view.repository",@"");
+    favoritesController.title = NSLocalizedString(@"view.favorites",@"");
+    searchController.title = NSLocalizedString(@"view.search",@"");
+    settingsController.title = NSLocalizedString(@"view.servers",@"");
+    
     NSArray* controllers = [NSArray arrayWithObjects:navigationController, favoritesController, searchController, settingsController, nil];
     tabBarController.viewControllers = controllers;
     tabBarController.delegate = self;
@@ -201,6 +207,7 @@ static NSString * const reportRunMethod = @"reportRun";
 	else
 	{
         [tabBarController setSelectedIndex:0];
+    
 		
 		[navigationController.topViewController performSelector:@selector(updateTableContent) withObject:nil afterDelay:0.0];
 		
