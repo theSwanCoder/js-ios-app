@@ -18,7 +18,7 @@
 		<string>Icon-Small.png</string>
 		<string>Icon-Small@2x.png</string>
 		<string>Icon-Small-50.png</string>
-		<string>iTunesArtwork.png</string>
+		<string>iTunesArtwork</string>
 	</array>
 	<key>CFBundleIdentifier</key>
 	<string>com.jaspersoft.mobile</string>
