@@ -4,7 +4,8 @@
    Copyright 2011 Jaspersoft Corp. All rights reserved.
  */
  
-// Server Profiles form
+/* Server Profiles view
+ ------------------------------ */
 
 "servers.url.label" = "URL";
 "servers.url.tip"="http://example.com/jasperserver";
@@ -27,9 +28,11 @@
 "servers.new.label" = "Add server profile...";
 
 
-// navigation and view labels
-"view.repository" = "Repository";
+/* navigation and view labels
+ ------------------------------ */
+
 "view.servers"= "Servers";
+"view.repository" = "Repository";
 "view.search" = "Search";
 "view.favorites" = "Favorites";
 
