@@ -35,7 +35,7 @@
 #import "JSUILoadingView.h"
 
 
-@interface JSUIBaseRepositoryViewController : UITableViewController <JSResponseDelegate> {
+@interface JSUIBaseRepositoryViewController : UITableViewController <JSResponseDelegate, UIAlertViewDelegate> {
     // The cache of resources for this folder
 	NSMutableArray *resources;
 	

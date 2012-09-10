@@ -36,6 +36,7 @@
 #import "JSUIResourceViewController.h"
 #import "JSUIBaseRepositoryViewController.h"
 #import "JSUILoadingView.h"
+#import "JasperMobileAppDelegate.h"
 
 
 @implementation JSUIBaseRepositoryViewController
@@ -114,16 +115,13 @@
 }
 
 
--(void)clear {
+- (void)clear {
+    self.navigationItem.title = nil;
     
-	if (resources != nil) 
-	{
-		[resources release];
-	
+	if (resources != nil)  {
+		[resources release];	
         resources = nil;
-
         [[self tableView] reloadData];
-
     }
     
 	descriptor = nil;
@@ -131,12 +129,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
-	if (descriptor != nil)
-	{
-		[self performSelector:@selector(updateTableContent) withObject:nil afterDelay:0.0];
-	}
-	
+    [self performSelector:@selector(updateTableContent) withObject:nil afterDelay:0.0];
 }
 
 -(void)refreshContent
@@ -147,14 +140,23 @@
         resources = nil;
     }
     
-    
-    
     [self updateTableContent];
 }
 
 - (void)updateTableContent {
     
-	if (self.client == nil) return;
+    if ([self client] == nil) {
+        JasperMobileAppDelegate *app = [JasperMobileAppDelegate sharedInstance];
+        if (app.servers.count) {
+            [app setClient:[app.servers objectAtIndex:0]];
+            [self updateTableContent];
+            return;
+        } else {
+            UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:@"Servers are empty" message:@"You should configure a server before you can view a repository" delegate:self cancelButtonTitle:@"Configure" otherButtonTitles:nil] autorelease];
+            [uiView show];
+            return;
+        }
+    }
     
     if (![JSUtils checkNetwork: true client: self.client]) return;
     
@@ -176,6 +178,10 @@
         [self.client resources:uri responseDelegate: self];  
 		
 	}	
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [[JasperMobileAppDelegate sharedInstance].tabBarController setSelectedIndex:3];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

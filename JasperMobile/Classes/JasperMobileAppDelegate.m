@@ -38,22 +38,19 @@ static NSString * const reportRunMethod = @"reportRun";
 }
 
 - (IBAction)configureServersDone:(id)sender {
-	
+    [self setClientForControllers:self.client];
+    [tabBarController setSelectedIndex:0];
+}
 
-	[navigationController popToRootViewControllerAnimated:NO];
+- (void)setClientForControllers:(JSClient *)client {
+    [navigationController popToRootViewControllerAnimated:NO];
     [(JSUIBaseRepositoryViewController *)navigationController.topViewController clear];
-    [(JSUIBaseRepositoryViewController *)navigationController.topViewController setClient: self.client];
+    [(JSUIBaseRepositoryViewController *)navigationController.topViewController setClient: client];
     if ([searchController.topViewController respondsToSelector:@selector(clear)])
     {
         [searchController.topViewController performSelector:@selector(clear)];
     }
-    [(JSUIBaseRepositoryViewController *)searchController.topViewController setClient: self.client];
-    
-    
-    [tabBarController setSelectedIndex:0];
-    
-    [navigationController.topViewController performSelector:@selector(updateTableContent) withObject:nil afterDelay:0.0];
-	
+    [(JSUIBaseRepositoryViewController *)searchController.topViewController setClient: client];    
 }
 
 
@@ -76,22 +73,22 @@ static NSString * const reportRunMethod = @"reportRun";
         //If this is the first time we are using this application, we should load a special demo configuration...
         if (firstRun == 0) // First run has never been set...
         {
-            JSServerProfile *jsServerProfile = [[JSServerProfile alloc] initWithAlias: @"Jaspersoft Mobile Demo"
+            JSServerProfile *jsServerProfile = [[[JSServerProfile alloc] initWithAlias: @"Jaspersoft Mobile Demo"
                                                                              Username: @"phoneuser"
                                                                              Password: @"phoneuser"
                                                                          Organization: @"organization_1"
-                                                                                  Url: @"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
+                                                                                  Url: @"http://mobiledemo.jaspersoft.com/jasperserver-pro"] autorelease];
             
-            JSClient *tmpClient = [[JSClient alloc] initWithJSServerProfile: jsServerProfile];
+            JSClient *tmpClient = [[[JSClient alloc] initWithJSServerProfile: jsServerProfile] autorelease];
             
             [servers addObject: tmpClient];
-            [jsServerProfile release];
-            [tmpClient release];
+            [self setClient:tmpClient];            
+            [self setClientForControllers:tmpClient];
         }
     }
     
     
-	for (NSInteger i=0; i<count; ++i) {
+	for (NSInteger i = 0; i < count; ++i) {
 		
         JSServerProfile *jsServerProfile = [[JSServerProfile alloc] initWithAlias: [prefs objectForKey:[NSString stringWithFormat: @"jaspersoft.server.alias.%d",i]]
                       Username: [prefs objectForKey:[NSString stringWithFormat: @"jaspersoft.server.username.%d",i]]
@@ -105,7 +102,7 @@ static NSString * const reportRunMethod = @"reportRun";
 		[tmpClient release];
 	}
 	
-	if (count > 0)
+	if (servers.count > 0)
 	{
         self.client = (JSClient *)[servers objectAtIndex:self.activeServerIndex];
         self.activeServerIndex = [prefs integerForKey:@"jaspersoft.server.active"];
@@ -118,6 +115,7 @@ static NSString * const reportRunMethod = @"reportRun";
 {
     _client = client;
 	NSInteger index = [servers indexOfObject:client];
+    [self setClientForControllers:_client];
 	
 	if (index >= 0)
 	{
