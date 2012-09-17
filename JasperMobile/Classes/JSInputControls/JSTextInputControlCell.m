@@ -47,6 +47,7 @@
 		textField.returnKeyType = UIReturnKeyDefault;
 		textField.textColor = [UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0];
         textField.backgroundColor = [UIColor clearColor];
+        self.selectedValue = nil;
 		[self addSubview:textField];
 	}
 	
@@ -96,12 +97,17 @@
         }
     }
 	[textField resignFirstResponder];
-	self.selectedValue = [txtField text];
+    if ([textField.text respondsToSelector:@selector(length)] && textField.text.length) {
+        self.selectedValue = [txtField text];
+    }
 	return NO;
 }
 
 - (id)selectedValue {
-    super.selectedValue = textField.text;    
+    if ([textField.text respondsToSelector:@selector(length)] && textField.text.length) {
+        super.selectedValue = textField.text;
+    }
+    
     return super.selectedValue;
 }
 

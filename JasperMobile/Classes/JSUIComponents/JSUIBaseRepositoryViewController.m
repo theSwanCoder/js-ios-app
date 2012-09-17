@@ -68,7 +68,6 @@
 	{
 		UIAlertView *uiView =[[[UIAlertView alloc] initWithTitle:@"" message:@"Error reading the response" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] autorelease];
 		[uiView show];
-		//NSLog(@"Error reading response...");
 	}
     else if ([res returnCode] > 400 || [res error] != nil)
     {
