@@ -28,7 +28,6 @@
 #import "JSBooleanInputControlCell.h"
 
 #define JS_LBL_BOOLEAN_WIDTH                  200.0f
-//#define JS_LBL_BOOLEAN_MANDATORY_WIDTH        240.0f
 
 @implementation JSBooleanInputControlCell
 
