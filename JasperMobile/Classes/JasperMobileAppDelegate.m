@@ -176,7 +176,6 @@ static NSString * const reportRunMethod = @"reportRun";
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
     // Override point for customization after application launch.
     sharedInstance = self;
         
@@ -222,18 +221,12 @@ static NSString * const reportRunMethod = @"reportRun";
             [prefs setInteger:1 forKey:@"jaspersoft.mobile.firstRun"];
             [prefs synchronize];
         }
-    }
-	else
-	{
+    } else {
         [tabBarController setSelectedIndex:0];
-    
-		
-		[navigationController.topViewController performSelector:@selector(updateTableContent) withObject:nil afterDelay:0.0];
-		
+//		[navigationController.topViewController performSelector:@selector(updateTableContent) withObject:nil afterDelay:0.0];
 	}
     
-    // Add the navigation controller's view to the window and display.
-    
+    [self.window makeKeyAndVisible];
 
     return YES;
 }

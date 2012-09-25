@@ -147,36 +147,6 @@
     return textField;
 }
 
-
-/*
- - (void)viewWillAppear:(BOOL)animated {
- [super viewWillAppear:animated];
- }
- */
-/*
- - (void)viewDidAppear:(BOOL)animated {
- [super viewDidAppear:animated];
- }
- */
-/*
- - (void)viewWillDisappear:(BOOL)animated {
- [super viewWillDisappear:animated];
- }
- */
-/*
- - (void)viewDidDisappear:(BOOL)animated {
- [super viewDidDisappear:animated];
- }
- */
-
-/*
- // Override to allow orientations other than the default portrait orientation.
- - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
- // Return YES for supported orientations.
- return (interfaceOrientation == UIInterfaceOrientationPortrait);
- }
- */
-
 #pragma mark -
 #pragma mark Table view data source
 
@@ -192,12 +162,6 @@
 	return @"Server Profile Details";
 	
 }
-
-// Customize the number of rows in the table view.
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-//	return (CGFloat)35.f;
-//}
 
 // Customize the number of rows in the table view.
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
