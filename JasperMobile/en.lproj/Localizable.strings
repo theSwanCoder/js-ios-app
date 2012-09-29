@@ -1,0 +1,43 @@
+/* 
+   Localizable.strings
+
+   Copyright 2011 Jaspersoft Corp. All rights reserved.
+ */
+ 
+/* Server Profiles view
+ ------------------------------ */
+
+"servers.url.label" = "URL";
+"servers.url.tip"="http://example.com/jasperserver";
+"servers.url.errmsg" = "Please specify a valid URL";
+
+"servers.name.label"="Name";
+"servers.name.tip"="my server name";
+"servers.name.errmsg" = "Please specify a valid profile name";
+
+"servers.orgid.label"="Organization";
+"servers.orgid.tip"="organization id";
+
+"servers.username.label"="Username";
+"servers.username.tip"="my username";
+"servers.username.errmsg" = "Please specify a valid username";
+
+"servers.password.label"="Password";
+"servers.password.tip"="my password";
+
+"servers.new.label" = "Add server profile...";
+
+
+/* navigation and view labels
+ ------------------------------ */
+
+"view.servers"= "Servers";
+"view.repository" = "Repository";
+"view.search" = "Search";
+"view.favorites" = "Favorites";
+
+"noservers.dialog.title" = "No Servers Configured";
+"noservers.dialog.msg" = "You must add a server profile before you can view a repository";
+"noservers.dialog.button.label" = "Configure Server Profiles";
+
+
