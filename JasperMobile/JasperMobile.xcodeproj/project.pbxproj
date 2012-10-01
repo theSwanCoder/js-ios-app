@@ -43,7 +43,6 @@
 		64252F191350C79A005DAD57 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 64252F181350C79A005DAD57 /* libz.dylib */; };
 		64975956139F84F700BA0A66 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 64975955139F84F700BA0A66 /* Icon.png */; };
 		6497595A139F854F00BA0A66 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 64975959139F854F00BA0A66 /* Default.png */; };
-		64979521135F197A00FA5BA0 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 64979520135F197A00FA5BA0 /* SFHFKeychainUtils.m */; };
 		64979538135F1AB900FA5BA0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64979537135F1AB900FA5BA0 /* Security.framework */; };
 		649795CF13602DC800FA5BA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 649795CE13602DC800FA5BA0 /* QuartzCore.framework */; };
 		64A8072C135397AF00651C3B /* ServersController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A8072B135397AF00651C3B /* ServersController.xib */; };
@@ -632,7 +631,6 @@
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* JasperMobileAppDelegate.m in Sources */,
-				64979521135F197A00FA5BA0 /* SFHFKeychainUtils.m in Sources */,
 				1067A9D41414142200AC8033 /* SamplesViewController.m in Sources */,
 				1067A9D51414142200AC8033 /* ServerSettingsViewController.m in Sources */,
 				1067A9D71414142200AC8033 /* ServersViewController.m in Sources */,
