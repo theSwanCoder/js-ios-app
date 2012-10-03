@@ -18,7 +18,7 @@ What's New
 • New *Favorites* feature
 • Resource type icons
 • Improved resource view/edit/delete flow
-• iOS 6 support
+• iPhone 5 and iOS 6 support
 • Bug fixes
 
 Source Build
