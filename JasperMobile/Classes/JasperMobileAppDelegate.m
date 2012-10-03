@@ -1,7 +1,7 @@
 /*
  * JasperMobile for iOS
  * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jasperforge.org/projects/mobile
+ * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
  * the following license terms apply:
