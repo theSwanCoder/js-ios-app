@@ -1,7 +1,7 @@
 /*
  * JasperMobile for iOS
  * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
- * http://www.jasperforge.org/projects/mobile
+ * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
  * the following license terms apply:
@@ -93,11 +93,11 @@
 
 -(void)infoClicked:(id)sender {
 	
-	NSString *beginMsg = @"Jaspersoft Mobile v ";
+	NSString *beginMsg = @"JasperMobile v ";
     
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     
-    NSString *endMsg = @"\n\nManagement tool and report viewer for JasperReports Server 4.2.0 and greater.\n\nFor more information visit:\nwww.jasperforge.org/projects/mobile\n\n(c) 2011-2012 Jaspersoft Corp.";
+    NSString *endMsg = @"\n\nJaspersoft mobile report viewer for JasperReports Server 4.2.0 and greater.\n\nFor more information visit:\ncommunity.jaspersoft.com/projects/mobile\n\n(c) 2011-2012 Jaspersoft Corp.";
     
     NSString *msg = [NSString stringWithFormat:@"%@%@%@",beginMsg,version,endMsg];
     

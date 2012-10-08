@@ -1,6 +1,6 @@
 JasperMobile for iOS version 1.2.1
 Copyright (C) 2012 Jaspersoft Corporation. All rights reserved.
-http://www.jasperforge.org/projects/androidsdk
+http://community.jaspersoft.com/projects/jaspermobile-ios
 
 Unless you have purchased a commercial license agreement from Jaspersoft,
 the following license terms apply:
@@ -22,14 +22,16 @@ along with Jaspersoft Mobile SDK for Android. If not, see
 <http://www.gnu.org/licenses/lgpl>.
 
 
+THIRD PARTY COMPONENTS
 -------------------------------
-This software includes third party software subject to the associated copyrights, as follows:
-- [name] ([license]) - [link]
-- [name] ([license]) - [link]
-
+This software is built using the Jaspersoft Mobile SDK for iOS, which depends on 
+third party software, subject to the associated copyrights, as follows:
+- ASIHTTPRequest v1.8.1-61 (BSD) - http://allseeing-i.com/ASIHTTPRequest/
+- Reachability 2.0.4ddg (BSD) - http://developer.apple.com/library/ios/#samplecode/Reachability/Introduction/Intro.html
 
 The text of licenses for the above software is included with the
-JasperMobile package, in the /licenses folder.
+Jaspersoft Mobile SDK for iOS source package, in the /docs/licenses folder.
+That package is available for download from http://community.jaspersoft.com/projects/mobile-sdk-ios
 
 
 
