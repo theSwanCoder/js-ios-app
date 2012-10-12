@@ -1,0 +1,63 @@
+/* 
+ Localizable.strings
+ 
+ Copyright 2011 Jaspersoft Corp. All rights reserved.
+ */
+
+/* Server Profiles view
+ ------------------------------ */
+
+"servers.url.label" = "URL";
+"servers.url.tip" = "http://example.com/jasperserver";
+"servers.url.errmsg" = "Please specify a valid URL";
+
+"servers.name.label" = "Name";
+"servers.name.tip" = "my server name";
+"servers.name.errmsg.empty" = "Please specify a valid profile name";
+"servers.name.errmsg.exists" = "Profile name already exists. Please specify another profile name";
+
+"servers.orgid.label" = "Organization";
+"servers.orgid.tip" = "organization id";
+
+"servers.username.label" = "Username";
+"servers.username.tip" = "my username";
+"servers.username.errmsg.empty" = "Please specify a valid username";
+
+"servers.password.label" = "Password";
+"servers.password.tip" = "my password";
+
+"servers.profile.exists" = "Server profile with this url, username and organization_id already exists. Please modify server profile";
+
+"servers.new.label" = "Add server profile...";
+"servers.askpassword.label" = "Always ask for password";
+"servers.askpassword.dialog.title.label" = "Enter Password";
+
+
+/* navigation and view labels
+ ------------------------------ */
+
+"view.servers"= "Servers";
+"view.repository" = "Repository";
+"view.search" = "Search";
+"view.favorites" = "Favorites";
+"view.library" = "Library";
+
+"noservers.dialog.title" = "No Servers Configured";
+"noservers.dialog.msg" = "You must add a server profile before you can view a repository";
+"noservers.dialog.button.label" = "Configure Server Profiles";
+
+/* error messages 
+ ------------------------------ */
+"error.readingresponse.dialog.msg" = "Error reading the response";
+"error.incorrectrequest.dialog.msg" = "The request was syntactically incorrect";
+
+"error.noconnection.dialog.title" = "No connection";
+"error.noconnection.dialog.msg" = "Please check your mobile network settings and try again";
+
+"error.authenication.dialog.title" = "Authenication needed";
+"error.authenication.dialog.msg" = "Please check server credentials";
+
+/* buttons 
+ ------------------------------ */
+"dialog.button.ok" = "OK";
+"dialog.button.cancel" = "Cancel";
