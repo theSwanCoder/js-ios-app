@@ -64,8 +64,10 @@
         NSString *errorTitle = @"error.readingresponse.dialog.msg";
  
         if (result.error) {
-            // Authorization problem
-            if ((result.error.code == -1012 && result.statusCode == 0) || result.statusCode == 401) {
+            if (result.error.code == -1003 && result.statusCode == 0) {
+                errorMsg = @"error.unknownhost.dialog.msg";
+                errorTitle = @"error.unknownhost.dialog.title";
+            } if ((result.error.code == -1012 && result.statusCode == 0) || result.statusCode == 401) {
                 errorMsg = @"error.authenication.dialog.msg";
                 errorTitle = @"error.authenication.dialog.title";
             } else {

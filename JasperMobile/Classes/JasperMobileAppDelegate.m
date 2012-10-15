@@ -181,7 +181,7 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [JSAppUpdater update];
     
-    // Override p=oint for customization after application launch.
+    // Override point for customization after application launch.
     sharedInstance = self;
         
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];

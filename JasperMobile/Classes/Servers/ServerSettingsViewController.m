@@ -76,7 +76,8 @@
         }
     }
     
-    if (urlTextField.text == nil || [urlTextField.text isEqualToString:@""])
+    NSURL *url = [NSURL URLWithString:urlTextField.text];    
+    if (!url || !url.scheme || !url.host)
     {
         [[UIAlertView localizedAlert:@"" message:@"servers.url.errmsg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
         return;
@@ -269,7 +270,7 @@
                 
                 CGSize labelSize = [askPasswordCell.textLabel.text sizeWithFont:askPasswordCell.textLabel.font];
                 labelSize.width = ceil(labelSize.width / 5) * 5;
-                CGRect frame = CGRectMake(labelSize.width + 30, 8, askPasswordCell.frame.size.width - labelSize.width - 50, 28);
+                CGRect frame = CGRectMake(labelSize.width + 55, 8, askPasswordCell.frame.size.width - labelSize.width - 50, 28);
                 askPasswordSwitch = [[UISwitch alloc] initWithFrame:frame];
                 askPasswordSwitch.on = profile.alwaysAskPassword.boolValue;
                 [askPasswordSwitch addTarget:self action:@selector(askPasswordSwitchToggled:) forControlEvents:UIControlEventTouchUpInside];

@@ -57,6 +57,9 @@
 "error.authenication.dialog.title" = "Authenication needed";
 "error.authenication.dialog.msg" = "Please check server credentials";
 
+"error.unknownhost.dialog.title" = "Unknown server";
+"error.unknownhost.dialog.msg" = "A server with the specified hostname could not be found";
+
 /* buttons 
  ------------------------------ */
 "dialog.button.ok" = "OK";
