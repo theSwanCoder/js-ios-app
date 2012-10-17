@@ -56,7 +56,6 @@
 @property(nonatomic, retain) UIScrollView* scrollView;
 @property(nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *pagesButton;
-@property(nonatomic, retain) NSMutableSet *downloadQueue;
 @property(nonatomic, retain) IBOutlet UIWebView *webView;
 @property(nonatomic, retain) IBOutlet UILabel *label;
 @property(nonatomic, retain) IBOutlet UIView  *backgroundView;

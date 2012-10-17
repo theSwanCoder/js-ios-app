@@ -100,7 +100,7 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [[JasperMobileAppDelegate sharedInstance].tabBarController setSelectedIndex:3];
+    [[JasperMobileAppDelegate sharedInstance].tabBarController setSelectedIndex:4];
 }
 
 - (void)clear {

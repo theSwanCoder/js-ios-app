@@ -92,6 +92,7 @@
     passwordTextField.textAlignment = UITextAlignmentLeft;
     passwordTextField.returnKeyType = UIReturnKeyDone;
     passwordTextField.enabled = YES;
+    passwordTextField.secureTextEntry = YES;
     tempStorage.passwordTextField = passwordTextField;
     tempStorage.askPasswordAlert = askPasswordAlert;
     

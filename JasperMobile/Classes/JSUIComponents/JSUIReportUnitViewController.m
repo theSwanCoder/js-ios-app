@@ -34,6 +34,12 @@
 #import "JSUILoadingView.h"
 #import "UIAlertView+LocalizedAlert.h"
 
+@interface JSUIReportUnitViewController()
+
+@property (nonatomic, retain) NSString *tempDirectory;
+
+@end
+
 @implementation JSUIReportUnitViewController
 
 @synthesize descriptor = _descriptor;
@@ -45,10 +51,10 @@
 @synthesize scrollView = _scrollView;
 @synthesize toolbar = _toolbar;
 @synthesize pagesButton = _pagesButton;
-@synthesize downloadQueue = _downloadQueue;
 @synthesize webView = _webViev;
 @synthesize label = _label;
 @synthesize backgroundView = _backgroundView;
+@synthesize tempDirectory = _tempDirectory;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 	return true;
@@ -117,11 +123,7 @@
     }
 }
 
--(void)fileRequestFinished:(JSOperationResult *)result {
-    NSString *path = result.downloadDestinationPath;
-	
-    
-	//[self.navigationController setToolbarHidden: NO];
+-(void)fileRequestFinished:(NSString *)path {	
 	NSFileManager *myFM = [NSFileManager defaultManager];
 	
 	if ( [myFM isReadableFileAtPath:path] )
@@ -217,28 +219,24 @@
 		uuid  = [report uuid];
 		pages = [report.totalPages integerValue];
 		
-		if (self.downloadQueue != nil) {
-			self.downloadQueue=nil;
-		}		
-		
 		if (pages > 0)
-		{
-			self.downloadQueue = [[NSMutableSet alloc] init];
-			
+		{			
 			// download all the files...
 			NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 			NSString *documentsDirectory = [paths objectAtIndex:0];
-			NSString *cacheDirectory = [documentsDirectory stringByAppendingPathComponent:@"cache"];
-			
-			cacheDirectory = [cacheDirectory stringByAppendingPathComponent: [report uuid]];
+//            self.tempDirectory = [documentsDirectory stringByAppendingPathComponent:];
+			self.tempDirectory = [documentsDirectory stringByAppendingPathComponent: [report uuid]];
 			
 			NSFileManager *fileManager = [NSFileManager defaultManager];
 			
-			if (![fileManager fileExistsAtPath:cacheDirectory])
+			if (![fileManager fileExistsAtPath:self.tempDirectory])
 			{
-				[fileManager createDirectoryAtPath:cacheDirectory withIntermediateDirectories: YES attributes: nil error:NULL];
+				[fileManager createDirectoryAtPath:self.tempDirectory withIntermediateDirectories: YES attributes: nil error:NULL];
 			}
-			
+            
+            __block NSInteger downloadedAttachments = 0;
+            NSInteger attSize = [self.format isEqualToString:@"PDF"] ? 1 : report.attachments.count;
+            NSString *mainFileName = @"";
             
 			for (JSReportAttachment *attachment in report.attachments) {
 				NSString *fileName = attachment.name;
@@ -264,13 +262,19 @@
 				}
 				
 				// the path to write file
-				NSString *resourceFile = [documentsDirectory stringByAppendingPathComponent: [NSString stringWithFormat:@"%@%@",fileName, extension]]; //self.descriptor.name
-				
-				[self.downloadQueue addObject:resourceFile];
+				NSString *resourceFile = [self.tempDirectory stringByAppendingPathComponent: [NSString stringWithFormat:@"%@%@",fileName, extension]]; //self.descriptor.name
+                
+                if ([extension isEqualToString:@".pdf"] || [extension isEqualToString:@".html"]) {
+                    mainFileName = resourceFile;
+                }
                 
                 [self.reportClient reportFile:uuid fileName:fileName path:resourceFile usingBlock:^(JSRequest *request) {
                     request.finishedBlock = ^(JSOperationResult *result) {
-                        [self fileRequestFinished:result];
+                        downloadedAttachments++;
+                        
+                        if (downloadedAttachments == attSize) {
+                            [self fileRequestFinished:mainFileName];
+                        }
                     };
                 }];
 			}
@@ -336,7 +340,7 @@
 }
 
 
--(IBAction)close:(id)sender
+- (IBAction)close:(id)sender
 {
     for (int i = 0; i < self.scrollView.subviews.count; i++) {
         UIView *sub = [self.scrollView.subviews objectAtIndex:i];
@@ -389,6 +393,16 @@
 	self.scrollView.contentOffset = offset;	
 	[self.scrollView setNeedsLayout];
 	self.scrollView.zoomScale = zoomScale;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    NSFileManager *manager = [[NSFileManager alloc] init];
+    
+    if ([manager fileExistsAtPath:self.tempDirectory]) {
+        [manager removeItemAtPath:self.tempDirectory error:nil];
+    }
 }
 
 @end
