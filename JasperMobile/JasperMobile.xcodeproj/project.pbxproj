@@ -79,6 +79,7 @@
 		F5EA578915D1A78E003416D1 /* JSFavoritesHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA578815D1A78E003416D1 /* JSFavoritesHelper.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F5F2B0F815C161FD00E97074 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5F2B0F715C161FC00E97074 /* Settings.bundle */; };
 		F5F2B0FA15C16CBA00E97074 /* JSUIReportUnitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5F2B0F915C16CBA00E97074 /* JSUIReportUnitViewController.xib */; };
+		F5FCF25F1630661200BC545E /* Cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = F5FCF25E1630661100BC545E /* Cancel.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -192,6 +193,7 @@
 		F5EA578815D1A78E003416D1 /* JSFavoritesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSFavoritesHelper.m; sourceTree = "<group>"; };
 		F5F2B0F715C161FC00E97074 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		F5F2B0F915C16CBA00E97074 /* JSUIReportUnitViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSUIReportUnitViewController.xib; sourceTree = "<group>"; };
+		F5FCF25E1630661100BC545E /* Cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cancel.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,6 +271,7 @@
 				F5F2B0F715C161FC00E97074 /* Settings.bundle */,
 				1067AA361418187300AC8033 /* Default@2x.png */,
 				1067AA341418145000AC8033 /* Icon@2x.png */,
+				F5FCF25E1630661100BC545E /* Cancel.png */,
 				F5976A8215E461E2004165A7 /* star.png */,
 				64975955139F84F700BA0A66 /* Icon.png */,
 				F57373C6162727DD000A8DD7 /* Library_Tab.png */,
@@ -517,6 +520,7 @@
 				F57D72AF15F5FCF900F9B1FB /* ServerSettingsViewController.xib in Resources */,
 				F57D730515F6009500F9B1FB /* jaspersoft-sdk-resources.bundle in Resources */,
 				F57373C7162727DD000A8DD7 /* Library_Tab.png in Resources */,
+				F5FCF25F1630661200BC545E /* Cancel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -622,7 +626,6 @@
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
-					"-fobjc-arc",
 				);
 				PRODUCT_NAME = JasperMobile;
 				PROVISIONING_PROFILE = "";
@@ -652,7 +655,6 @@
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
-					"-fobjc-arc",
 				);
 				PRODUCT_NAME = JasperMobile;
 				PROVISIONING_PROFILE = "";
@@ -680,7 +682,6 @@
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
-					"-fobjc-arc",
 				);
 				PRODUCT_NAME = JasperMobile;
 				PROVISIONING_PROFILE = "";

@@ -192,22 +192,14 @@ static JSUILoadingView *sharedInstance = nil;
         self.delegate = delegate;
         self.cancelBlock = theCancelBlock;
         
-        self.cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        self.cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.cancelButton.frame = CGRectMake(frame.size.width / 2 - cancelWidth / 2, 
                                         floor(0.75 * (frame.size.height - 140)),
                                         cancelWidth, cancelHeight);
-        [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    
-        CGRect rect = CGRectMake(5, 5, 135, 20);
-        UIImage *gray = [UIImage imageNamed:@"gray.png"];
-        CGImageRef imageRef = CGImageCreateWithImageInRect(gray.CGImage, rect);
-        UIImage *result = [UIImage imageWithCGImage:imageRef scale:gray.scale orientation:gray.imageOrientation];
-        [self.cancelButton setBackgroundImage:result forState:UIControlStateNormal];
+        [self.cancelButton setTitle:nil forState:UIControlStateNormal];
+        [self.cancelButton setBackgroundImage:[UIImage imageNamed:@"Cancel.png"] forState:UIControlStateNormal];
         [self.cancelButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
-        [self.cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    
         [self addSubview:self.cancelButton];
-        CGImageRelease(imageRef);
     }
     
 	return self;
