@@ -33,7 +33,11 @@
 #define JS_CELL_PADDING                       15.0f
 #define JS_CONTENT_PADDING					  10.0f
 
-
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSInputControlCell : UITableViewCell  {
 	UILabel *nameLabel;
 	CGFloat height;
@@ -42,9 +46,9 @@
 }
 
 @property( nonatomic) JSResourceDescriptor *descriptor;
-@property(readonly) bool mandatory;
-@property(readonly) bool readonly;
-@property(readonly) bool selectable;
+@property(readonly) BOOL mandatory;
+@property(readonly) BOOL readonly;
+@property(readonly) BOOL selectable;
 
 /** 
  * Resource client is used only by query based input controls 

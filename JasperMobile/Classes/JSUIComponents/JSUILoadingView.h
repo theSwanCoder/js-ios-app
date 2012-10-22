@@ -39,6 +39,11 @@
 
 typedef void(^JSUILoadingViewCancelBLock)(void);
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSUILoadingView : UIView
 
 + (void)showCancelableLoadingInView:(UIView *)view restClient:(JSRESTBase *)restClient

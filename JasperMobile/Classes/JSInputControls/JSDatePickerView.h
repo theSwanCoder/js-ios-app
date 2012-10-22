@@ -36,6 +36,11 @@
 - (UIView *)view;
 @end
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSDatePickerView : UIView {
 @private
 	id<JSDatePickerViewControllerDelegate> delegate;

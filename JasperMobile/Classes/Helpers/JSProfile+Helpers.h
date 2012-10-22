@@ -27,6 +27,10 @@
 
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.3
+ */
 @interface JSProfile (Helpers)
 
 @property (nonatomic, retain) NSString *tempPassword;

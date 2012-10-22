@@ -28,16 +28,18 @@
 #import "JSUILoadingView.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSUIReportUnitParametersViewController : UITableViewController <JSRequestDelegate> {
-
 	UISegmentedControl *segmentedControl;
-	
-	
-	bool resourceLoaded;
+	BOOL resourceLoaded;
 	NSMutableArray *inputControls;
 	NSMutableArray *inputControlCells;
-
 }
+
 @property (nonatomic) JSResourceDescriptor *descriptor;
 @property (nonatomic) JSRESTReport *reportClient;
 

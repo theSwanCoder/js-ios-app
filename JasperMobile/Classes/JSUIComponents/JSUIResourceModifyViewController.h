@@ -28,6 +28,11 @@
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import <UIKit/UIKit.h>
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSUIResourceModifyViewController : UIViewController <JSRequestDelegate, UIAlertViewDelegate>
 
 @property (nonatomic) JSRESTResource *resourceClient;

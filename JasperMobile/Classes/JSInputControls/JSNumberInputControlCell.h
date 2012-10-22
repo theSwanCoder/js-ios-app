@@ -28,9 +28,11 @@
 #import <Foundation/Foundation.h>
 #import "JSTextInputControlCell.h"
 
-@interface JSNumberInputControlCell : JSTextInputControlCell {
-
-}
-
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
+@interface JSNumberInputControlCell : JSTextInputControlCell
 
 @end

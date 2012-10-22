@@ -30,6 +30,11 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSUIReportUnitViewController : UIViewController  <JSRequestDelegate, UIScrollViewDelegate, UIWebViewDelegate> {
 	// Execution id
 	NSString *uuid;

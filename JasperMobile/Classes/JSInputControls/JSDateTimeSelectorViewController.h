@@ -29,21 +29,19 @@
 #import "JSDatePickerView.h"
 
 @interface JSDateTimeSelectorViewController : UITableViewController<JSDatePickerViewControllerDelegate>  {
-	
 	NSDate *selectedValue;
 	NSArray *predefinedDates;
 	NSArray *predefinedDateLabels;
 	JSDatePickerView* datePickerView;
-	
 }
-@property(nonatomic) BOOL dateOnly;
-@property(nonatomic) BOOL mandatory;
-@property( nonatomic) id selectionDelegate;
-@property( nonatomic) NSDate *selectedValue;
 
+@property(nonatomic, assign) BOOL dateOnly;
+@property(nonatomic, assign) BOOL mandatory;
+@property(nonatomic, retain) id selectionDelegate;
+@property(nonatomic, retain) NSDate *selectedValue;
 
 // Date picker view functions
 - (void)dateChanged:(NSDate *)newDate tag:(NSInteger)tag;
--(BOOL)isDateEqual:(NSDate *)dt1 to:(NSDate *)dt2;
+- (BOOL)isDateEqual:(NSDate *)dt1 to:(NSDate *)dt2;
 
 @end

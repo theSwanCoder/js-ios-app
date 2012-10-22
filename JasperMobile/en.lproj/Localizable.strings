@@ -63,4 +63,6 @@
 /* buttons 
  ------------------------------ */
 "dialog.button.ok" = "OK";
+"dialog.button.done" = "Done";
+"dialog.button.edit" = "Edit";
 "dialog.button.cancel" = "Cancel";

@@ -33,17 +33,21 @@
 - (void)setSelectedIndexes:(NSArray *)indexes;
 @end
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSListSelectorViewController : UITableViewController  {
-	
 	NSArray *values;
 	NSMutableArray *selectedValues;
-	
 }
-@property(nonatomic) BOOL singleSelection;
-@property(nonatomic) BOOL mandatory;
-@property( nonatomic) id<JSListSelectorDelegate> selectionDelegate;
-@property( nonatomic) NSArray *values;
-@property( nonatomic) NSMutableArray *selectedValues;
+
+@property(nonatomic, assign) BOOL singleSelection;
+@property(nonatomic, assign) BOOL mandatory;
+@property(nonatomic, retain) id<JSListSelectorDelegate> selectionDelegate;
+@property(nonatomic, retain) NSArray *values;
+@property(nonatomic, retain) NSMutableArray *selectedValues;
 
 - (void)ensureSelectionVisible;
 

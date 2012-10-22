@@ -58,7 +58,7 @@
 
 
 // Specifies if the user can select this cell
--(bool)selectable
+-(BOOL)selectable
 {
 	return !self.readonly;
 }

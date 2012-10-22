@@ -201,17 +201,17 @@
 }
 
 
-- (bool)mandatory {
+- (BOOL)mandatory {
     NSString *mandatory = [descriptor propertyByName:[JSConstants sharedInstance].PROP_INPUTCONTROL_IS_MANDATORY].value ?: @"";
     return [mandatory isEqualToString:@"true"];
 }
 
-- (bool)readonly {
+- (BOOL)readonly {
     NSString *readonly = [descriptor propertyByName:[JSConstants sharedInstance].PROP_INPUTCONTROL_IS_READONLY].value ?: @"";
     return [readonly isEqualToString:@"true"];
 }
 
-- (bool)selectable {
+- (BOOL)selectable {
 	return !self.readonly;
 }
 

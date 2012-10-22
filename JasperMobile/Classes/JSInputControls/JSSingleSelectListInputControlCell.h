@@ -30,6 +30,11 @@
 #import "JSInputControlCell.h"
 #import "JSListSelectorViewController.h"
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSSingleSelectListInputControlCell : JSInputControlCell <JSListSelectorDelegate, JSRequestDelegate> {
 	UILabel *label;
     BOOL loading;

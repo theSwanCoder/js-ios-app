@@ -28,6 +28,11 @@
 #import "JSUIBaseRepositoryViewController.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSUISearchViewController : JSUIBaseRepositoryViewController  <JSRequestDelegate, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate> {
     UISearchBar *searchBar;
     UITableView *tableView;

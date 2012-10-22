@@ -28,6 +28,11 @@
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import "JSUILoadingView.h"
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSUIBaseRepositoryViewController : UITableViewController <JSRequestDelegate, UIAlertViewDelegate> {
     // The cache of resources for this folder
 	NSMutableArray *resources;

@@ -28,6 +28,11 @@
 #import <Foundation/Foundation.h>
 #import "JSInputControlCell.h"
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSDateInputControlCell : JSInputControlCell {
 	// The label to display the date
 	UILabel *label;

@@ -27,6 +27,10 @@
 
 #import "JSUIRepositoryViewController.h"
 
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.2
+ */
 @interface JSUIFavoritesViewController : JSUIRepositoryViewController
 
 @property (nonatomic, retain) UIBarButtonItem *editDoneButton;

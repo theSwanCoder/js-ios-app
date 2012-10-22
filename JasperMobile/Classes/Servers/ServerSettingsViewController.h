@@ -28,8 +28,14 @@
 #import <UIKit/UIKit.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
+
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface ServerSettingsViewController : UITableViewController <UITextFieldDelegate, UITableViewDelegate> {
-	bool keybordIsActive;
+	BOOL keybordIsActive;
 	UITextField *aliasTextField; 
     UITextField *organizationTextField;
     UITextField *urlTextField;
@@ -42,7 +48,7 @@
 @property (nonatomic, retain) JSProfile *profile;
 @property (nonatomic, retain) UIViewController *previousViewController;
 
-- (bool)textFieldShouldReturn:(UITextField *)textField;
+- (BOOL)textFieldShouldReturn:(UITextField *)textField;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

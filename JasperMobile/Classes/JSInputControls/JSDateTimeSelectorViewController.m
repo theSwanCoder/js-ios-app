@@ -36,25 +36,16 @@
 @synthesize mandatory;
 @synthesize selectionDelegate;
 
-
-
 #pragma mark -
 #pragma mark View lifecycle
 
-
-
-
-- (void)viewWillDisappear:(BOOL)animated {
-    
+- (void)viewWillDisappear:(BOOL)animated {    
 	if ([self.selectionDelegate respondsToSelector:@selector(setSelectedValue:)])
 	{
 		[self.selectionDelegate performSelector:@selector(setSelectedValue:) withObject: self.selectedValue];
-	}	
-	
+	}
 	[super viewWillDisappear:animated];
-	
 }
-
 
 -(id)initWithStyle:(UITableViewStyle)style
 {

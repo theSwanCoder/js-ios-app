@@ -28,6 +28,11 @@
 #import <Foundation/Foundation.h>
 #import "JSSingleSelectListInputControlCell.h"
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSMultiselectListInputControlCell : JSSingleSelectListInputControlCell
 
 - (id)initWithDescriptor:(JSResourceDescriptor *)rd tableViewController:(UITableViewController *)tv 

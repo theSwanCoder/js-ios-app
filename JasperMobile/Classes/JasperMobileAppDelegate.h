@@ -29,6 +29,11 @@
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import "JSFavoritesHelper.h"
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JasperMobileAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
     UIWindow *window;
     UINavigationController *navigationController;

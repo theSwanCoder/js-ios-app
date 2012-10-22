@@ -27,6 +27,11 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSListItem : NSObject
 
 @property(nonatomic, retain) NSString *name;

@@ -27,6 +27,13 @@
 
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
+/**
+ Migrated from SDK 1.2
+ 
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.3
+ */
 @interface JSResourceDescriptor (Helpers)
 
 - (NSArray *)listOfItems;

@@ -35,17 +35,21 @@
 
 @protocol JSUIResourcePickerDelegate
 
--(void)resourcePicked:(JSResourceDescriptor *)rd;
+- (void)resourcePicked:(JSResourceDescriptor *)rd;
 
 @end
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSUIResourcePicker : JSUIBaseRepositoryViewController {
     int type;
 }
 
 @property(nonatomic) id<JSUIResourcePickerDelegate> delegate;
 
--(id)initWithResourceType:(int)tp;
-
+- (id)initWithResourceType:(int)tp;
 
 @end 

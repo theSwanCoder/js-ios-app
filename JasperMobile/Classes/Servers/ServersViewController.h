@@ -28,13 +28,15 @@
 #import <UIKit/UIKit.h>
 #import "ServerSettingsViewController.h"
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface ServersViewController : UITableViewController <UINavigationBarDelegate> {
-	
-	
 	UIBarButtonItem *editDoneButton;
-	bool editMode;
+	BOOL editMode;
 }
-
 
 - (void)addServer:(JSProfile *)profile;
 - (void)updateServer:(JSProfile *)profile;

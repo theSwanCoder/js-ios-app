@@ -57,7 +57,7 @@
 
 
 - (IBAction)saveAction:(id)sender {
-	bool isNew = NO;
+	BOOL isNew = NO;
     
     if (aliasTextField.text == nil || [aliasTextField.text isEqualToString:@""]) {
         [[UIAlertView localizedAlert:@"" message:@"servers.name.errmsg.empty" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];        
@@ -295,7 +295,7 @@
     }
 }
 
-- (bool)textFieldShouldReturn:(UITextField *)textField
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
 	if (textField.returnKeyType == UIReturnKeyNext) {
         UITableViewCell *cell = (UITableViewCell *)[textField superview];

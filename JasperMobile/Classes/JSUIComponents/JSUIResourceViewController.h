@@ -27,6 +27,11 @@
 
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSUIResourceViewController : UITableViewController <JSRequestDelegate, UIAlertViewDelegate> {
     BOOL resourceLoaded;
     BOOL deleting;

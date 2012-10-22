@@ -28,27 +28,24 @@
 #import "JasperMobileAppDelegate.h"
 #import "JSUIFavoritesViewController.h"
 
+@interface JSUIFavoritesViewController()
+
+@property (nonatomic, retain) NSString *localizedTitleDone;
+@property (nonatomic, retain) NSString *localizedTitleEdit;
+
+@end
+
 @implementation JSUIFavoritesViewController
 
-@synthesize editDoneButton;
-@synthesize editMode;
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        self.editMode = NO;
-    }
-    return self;
-}
+@synthesize editDoneButton = _editDoneButton;
+@synthesize editMode = _editMode;
+@synthesize localizedTitleDone = _localizedTitleDone;
+@synthesize localizedTitleEdit = _localizedTitleEdit;
 
 - (void)viewWillAppear:(BOOL)animated {
-    // Refresh table if resource was removed from favorites inside
-    
-    self.editMode = NO;
-    self.resources = [[JasperMobileAppDelegate sharedInstance].favorites wrappersFromFavorites];
-    
-    self.editDoneButton.title = @"Edit";
+    // Refresh table if resource was removed from favorites insid
+    self.resources = [[JasperMobileAppDelegate sharedInstance].favorites wrappersFromFavorites] ?: [NSArray array];
+    self.editDoneButton.title = self.localizedTitleEdit;
     self.editDoneButton.action = @selector(editClicked:);
     
     [[self tableView] setEditing:self.editMode animated:YES];
@@ -56,24 +53,25 @@
     [self enableDisableEditDoneButton];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    self.localizedTitleDone = NSLocalizedString(@"dialog.button.done", @"");
+    self.localizedTitleEdit = NSLocalizedString(@"dialog.button.edit", @"");
+    self.editMode = NO;
+    
     self.title = NSLocalizedString(@"view.favorites", @"");
-    self.editDoneButton = [[UIBarButtonItem alloc] initWithTitle: @"Edit"
-                                                            style: UIBarButtonItemStylePlain
+    self.editDoneButton = [[UIBarButtonItem alloc] initWithTitle:self.localizedTitleEdit
+                                                            style:UIBarButtonItemStylePlain
                                                            target:self action:@selector(editClicked:)];
     self.navigationItem.rightBarButtonItem = self.editDoneButton;
 }
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
@@ -94,15 +92,14 @@
 }
 
 - (void)editClicked:(id)sender {
-    self.editDoneButton.title = @"Done";
+    self.editDoneButton.title = self.localizedTitleDone;
 	self.editDoneButton.action = @selector(doneClicked:);
 	self.editMode = YES;
     [[self tableView] setEditing:true animated:YES];   
 }
 
 - (void)doneClicked:(id)sender {
-	
-	self.editDoneButton.title = @"Edit";
+	self.editDoneButton.title = self.localizedTitleEdit;
 	self.editDoneButton.action = @selector(editClicked:);
 	self.editMode = NO;	
 	[[self tableView] setEditing:false animated:YES];
@@ -115,16 +112,6 @@
     } else {
         self.navigationItem.rightBarButtonItem.enabled = NO;
     }
-}
-
-- (void)updateTableContent {
-    // Empty method for overriding base method
-    // Here we don't need automatically load resources if resources == nil
-    // also this allows to view favorites offline (only view)
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    // Empty method for overriding base method
 }
 
 @end

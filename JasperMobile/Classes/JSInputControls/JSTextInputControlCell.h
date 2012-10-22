@@ -28,11 +28,14 @@
 #import <Foundation/Foundation.h>
 #import "JSInputControlCell.h"
 
+/**
+ @author Giulio Toffoli giulio@jaspersoft.com
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.0
+ */
 @interface JSTextInputControlCell : JSInputControlCell <UITextFieldDelegate> {
-
 	// The textfield to display/edit the value
 	UITextField *textField;
-	
 }
 
 @end
