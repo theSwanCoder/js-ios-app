@@ -1,9 +1,28 @@
+/*
+ * JasperMobile for iOS
+ * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * http://community.jaspersoft.com/project/jaspermobile-ios
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 //
 //  JSUIAskPasswordDialog.m
-//  JasperMobile
-//
-//  Created by Vlad Zavadskii on 10.10.12.
-//
+//  Jaspersoft Corporation
 //
 
 #import "JSUIAskPasswordDialog.h"
@@ -42,31 +61,6 @@
     NSInteger yPosInc = 17;
     NSInteger generalWidth = 260;
     
-//    UILabel *profLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-//    profLabel.font = [UIFont boldSystemFontOfSize:14];
-//    profLabel.backgroundColor = [UIColor clearColor];
-//    profLabel.textColor = [UIColor whiteColor];
-//    profLabel.text = [NSString stringWithFormat:@"%@: %@",
-//                           NSLocalizedString(@"servers.name.label", @""), profile.alias];
-//    CGSize generalSize = [profLabel.text sizeWithFont:profLabel.font];
-//    CGRect generalRect = CGRectMake(xPos, yPos, generalWidth, generalSize.height);
-//    profLabel.frame = generalRect;
-//    
-//    generalRect.origin.y += yPosInc;
-//    UILabel *orgLabel = [[UILabel alloc] initWithFrame:generalRect];
-//    orgLabel.font = [UIFont boldSystemFontOfSize:14];
-//    orgLabel.backgroundColor = [UIColor clearColor];
-//    orgLabel.textColor = [UIColor whiteColor];
-//    orgLabel.text = [NSString stringWithFormat:@"%@: %@",
-//                          NSLocalizedString(@"servers.orgid.label", @""), profile.organization];
-//
-//    generalRect.origin.y += yPosInc;
-//    UILabel *userLabel = [[UILabel alloc] initWithFrame:generalRect];
-//    userLabel.font = [UIFont boldSystemFontOfSize:14];
-//    userLabel.backgroundColor = [UIColor clearColor];
-//    userLabel.textColor = [UIColor whiteColor];
-//    userLabel.text = [NSString stringWithFormat:@"%@: %@",
-//                           NSLocalizedString(@"servers.username.label", @""), profile.username];
     UILabel *passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     passwordLabel.font = [UIFont boldSystemFontOfSize:14];
     passwordLabel.text = NSLocalizedString(@"servers.password.label", @"");
@@ -96,9 +90,6 @@
     tempStorage.passwordTextField = passwordTextField;
     tempStorage.askPasswordAlert = askPasswordAlert;
     
-//    [askPasswordAlert addSubview:profLabel];
-//    [askPasswordAlert addSubview:orgLabel];
-//    [askPasswordAlert addSubview:userLabel];
     [askPasswordAlert addSubview:passwordLabel];
     [askPasswordAlert addSubview:passwordTextField];
     [tempStorage.passwordTextField becomeFirstResponder];
