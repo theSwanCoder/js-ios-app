@@ -1,4 +1,4 @@
-JasperMobile for iOS version 1.2.1
+JasperMobile for iOS version 1.3
 Copyright (C) 2012 Jaspersoft Corporation. All rights reserved.
 http://community.jaspersoft.com/projects/jaspermobile-ios
 
@@ -26,8 +26,8 @@ THIRD PARTY COMPONENTS
 -------------------------------
 This software is built using the Jaspersoft Mobile SDK for iOS, which depends on 
 third party software, subject to the associated copyrights, as follows:
-- ASIHTTPRequest v1.8.1-61 (BSD) - http://allseeing-i.com/ASIHTTPRequest/
-- Reachability 2.0.4ddg (BSD) - http://developer.apple.com/library/ios/#samplecode/Reachability/Introduction/Intro.html
+- RestKit v0.10.3 (Apache) - http://restkit.org/
+- SSKeychain v0.1.4 - https://github.com/soffes/sskeychain
 
 The text of licenses for the above software is included with the
 Jaspersoft Mobile SDK for iOS source package, in the /docs/licenses folder.

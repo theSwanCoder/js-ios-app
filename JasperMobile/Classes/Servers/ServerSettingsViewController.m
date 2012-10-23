@@ -263,9 +263,14 @@
                 askPasswordCell.selectionStyle = UITableViewCellSelectionStyleNone;
                 askPasswordCell.textLabel.font = [UIFont systemFontOfSize:15];
                 
+                NSInteger xSpace = 55;
+                if ([UIDevice currentDevice].systemVersion.integerValue < 5) {
+                    xSpace = 30;
+                }
+                
                 CGSize labelSize = [askPasswordCell.textLabel.text sizeWithFont:askPasswordCell.textLabel.font];
                 labelSize.width = ceil(labelSize.width / 5) * 5;
-                CGRect frame = CGRectMake(labelSize.width + 55, 8, askPasswordCell.frame.size.width - labelSize.width - 50, 28);
+                CGRect frame = CGRectMake(labelSize.width + xSpace, 8, askPasswordCell.frame.size.width - labelSize.width - 50, 28);
                 askPasswordSwitch = [[UISwitch alloc] initWithFrame:frame];
                 askPasswordSwitch.on = profile.alwaysAskPassword.boolValue;
                 [askPasswordSwitch addTarget:self action:@selector(askPasswordSwitchToggled:) forControlEvents:UIControlEventTouchUpInside];
