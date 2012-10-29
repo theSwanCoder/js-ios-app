@@ -35,6 +35,7 @@
 
 @property (nonatomic, assign) NSInteger requestTimeoutSeconds;
 @property (nonatomic, assign) NSInteger reportRequestTimeoutSeconds;
+@property (nonatomic, retain) id lastSelectedViewController;
 
 @end
 
@@ -54,6 +55,7 @@
 @synthesize favorites;
 @synthesize requestTimeoutSeconds;
 @synthesize reportRequestTimeoutSeconds;
+@synthesize lastSelectedViewController;
 
 static JasperMobileAppDelegate *sharedInstance = nil;
 static NSString * const keychainServiceName = @"JasperMobilePasswordStorage";
@@ -253,6 +255,7 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
             [self disableTabBar];
         }
     } else {
+        self.lastSelectedViewController = self.libraryController;
         [tabBarController setSelectedIndex:0];
 	}
 
@@ -307,9 +310,17 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
 
     if (self.libraryController == viewController) {
         [(JSUIBaseRepositoryViewController *)self.libraryController.topViewController clear];
+        if (self.lastSelectedViewController == self.libraryController) {
+            [(JSUIBaseRepositoryViewController *)self.libraryController.topViewController updateTableContent];
+        }
     } else if (self.navigationController == viewController) {
         [(JSUIBaseRepositoryViewController *)self.navigationController.topViewController clear];
+        if (self.lastSelectedViewController == self.navigationController) {
+            [(JSUIBaseRepositoryViewController *)self.navigationController.topViewController updateTableContent];
+        }
     }
+    
+    self.lastSelectedViewController = viewController;
 }
 
 //- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
