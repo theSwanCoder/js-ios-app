@@ -94,6 +94,7 @@ CGPathRef NewPathWithRoundRect(CGRect rect, CGFloat cornerRadius) {
 @property (nonatomic, retain) JSRESTBase *restClient;
 @property (nonatomic, retain) id<JSRequestDelegate> delegate;
 @property (nonatomic, copy) JSUILoadingViewCancelBLock cancelBlock;
+@property (nonatomic, assign) BOOL cancelAllRequests;
 
 @end
 
@@ -113,11 +114,19 @@ static JSUILoadingView *sharedInstance = nil;
     [sharedInstance showInView: view.window];    
 }
 
++ (void)showCancelableAllRequestsLoadingInView:(UIView *)view restClient:(JSRESTBase *)restClient cancelBlock:(JSUILoadingViewCancelBLock)theCancelBlock {
+    if (sharedInstance != nil) return;
+    sharedInstance = [[JSUILoadingView alloc] initWithFrame:view.window.bounds
+                                                 restClient:restClient delegate:nil cancelAllRequests:YES cancelBlock:theCancelBlock];
+    [sharedInstance showInView: view.window];
+}
+
+
 + (void)showCancelableLoadingInView:(UIView *)view restClient:(JSRESTBase *)restClient
                            delegate:(id<JSRequestDelegate>)delegate cancelBlock:(JSUILoadingViewCancelBLock)theCancelBlock {
     if (sharedInstance != nil) return;    
-    sharedInstance = [[JSUILoadingView alloc] initWithFrame:view.window.bounds 
-                                                 restClient:restClient delegate:delegate cancelBlock:theCancelBlock];
+    sharedInstance = [[JSUILoadingView alloc] initWithFrame:view.window.bounds restClient:restClient delegate:delegate
+                                          cancelAllRequests:NO cancelBlock:theCancelBlock];
     [sharedInstance showInView: view.window];
 }
 
@@ -179,8 +188,9 @@ static JSUILoadingView *sharedInstance = nil;
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame restClient:(JSRESTBase *)restClient 
-           delegate:(id<JSRequestDelegate>)delegate cancelBlock:(JSUILoadingViewCancelBLock)theCancelBlock {
+- (id)initWithFrame:(CGRect)frame restClient:(JSRESTBase *)restClient
+           delegate:(id<JSRequestDelegate>)delegate cancelAllRequests:(BOOL)cancelAllRequests
+        cancelBlock:(JSUILoadingViewCancelBLock)theCancelBlock {
     if (self = [self initWithFrame:frame]) {        
         CGFloat cancelWidth = 120;
         CGFloat cancelHeight = 35;
@@ -188,6 +198,7 @@ static JSUILoadingView *sharedInstance = nil;
         self.restClient = restClient;
         self.delegate = delegate;
         self.cancelBlock = theCancelBlock;
+        self.cancelAllRequests = cancelAllRequests ?: NO;
         
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.cancelButton.frame = CGRectMake(frame.size.width / 2 - cancelWidth / 2, 
@@ -206,8 +217,12 @@ static JSUILoadingView *sharedInstance = nil;
 
 // Cancel all requests by delegate
 - (IBAction)cancel:(id)sender {
-    if (self.restClient && self.delegate) {
-        [self.restClient cancelRequestsWithDelegate:self.delegate];
+    if (self.restClient) {
+        if (!self.cancelAllRequests && self.delegate) {
+            [self.restClient cancelRequestsWithDelegate:self.delegate];
+        } else {
+            [self.restClient cancelAllRequests];
+        }
     }
     
     [self removeView];

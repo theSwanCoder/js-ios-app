@@ -111,9 +111,11 @@
 	
 	if ([self descriptor] != nil) {
 		// Load the busy view
-        [JSUILoadingView showCancelableLoadingInView:self.view restClient:self.reportClient delegate:self cancelBlock:^{
+        
+        [JSUILoadingView showCancelableAllRequestsLoadingInView:self.view restClient:self.reportClient cancelBlock:^{
             [self.previousController dismissModalViewControllerAnimated:YES];
-         }];    
+        }];
+        
         [self.reportClient runReport:self.descriptor.uriString reportParams:self.parameters format:self.format delegate:self];
     }
 }
@@ -264,6 +266,8 @@
                 }
                 
                 [self.reportClient reportFile:uuid fileName:fileName path:resourceFile usingBlock:^(JSRequest *request) {
+                    // Disable timeout interval for getting files
+                    request.timeoutInterval = 0;
                     request.finishedBlock = ^(JSOperationResult *result) {
                         downloadedAttachments++;
                         

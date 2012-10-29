@@ -31,6 +31,13 @@
 #import "JSProfile+Helpers.h"
 #import "JSAppUpdater.h"
 
+@interface JasperMobileAppDelegate()
+
+@property (nonatomic, assign) NSInteger requestTimeoutSeconds;
+@property (nonatomic, assign) NSInteger reportRequestTimeoutSeconds;
+
+@end
+
 @implementation JasperMobileAppDelegate
 
 @synthesize window;
@@ -41,17 +48,15 @@
 @synthesize libraryController;
 @synthesize tabBarController;
 @synthesize servers;
-@synthesize reportClient = _reportClient;
-@synthesize resourceClient = _resourceClient;
+@synthesize reportClient;
+@synthesize resourceClient;
 @synthesize activeServerIndex;
 @synthesize favorites;
+@synthesize requestTimeoutSeconds;
+@synthesize reportRequestTimeoutSeconds;
 
 static JasperMobileAppDelegate *sharedInstance = nil;
 static NSString * const keychainServiceName = @"JasperMobilePasswordStorage";
-
-// Private time out properties
-static const int defaultRequestTimeoutSeconds = 120;
-static const int defaultReportRequestTimeoutSeconds = 180;
 static NSString * const keyDefaultRequestTimeoutSeconds = @"defaultRequestTimeoutSeconds";
 static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutSeconds";
 
@@ -68,17 +73,17 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
     [tabBarController setSelectedIndex:0];
 }
 
-- (void)setResourceClientForControllers:(JSRESTResource *)resourceClient {
+- (void)setResourceClientForControllers:(JSRESTResource *)resClient {
     [navigationController popToRootViewControllerAnimated:NO];
     [(JSUIBaseRepositoryViewController *)navigationController.topViewController clear];
-    [(JSUIBaseRepositoryViewController *)navigationController.topViewController setResourceClient:resourceClient];
+    [(JSUIBaseRepositoryViewController *)navigationController.topViewController setResourceClient:resClient];
     if ([searchController.topViewController respondsToSelector:@selector(clear)])
     {
         [searchController.topViewController performSelector:@selector(clear)];
     }
-    [(JSUIBaseRepositoryViewController *)libraryController.topViewController setResourceClient:resourceClient];
+    [(JSUIBaseRepositoryViewController *)libraryController.topViewController setResourceClient:resClient];
     [(JSUIBaseRepositoryViewController *)libraryController.topViewController clear];
-    [(JSUIBaseRepositoryViewController *)searchController.topViewController setResourceClient: resourceClient];    
+    [(JSUIBaseRepositoryViewController *)searchController.topViewController setResourceClient: resClient];    
 }
 
 
@@ -91,7 +96,7 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
     
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];	
-    NSInteger count = [prefs integerForKey:@"jaspersoft.server.count"];	
+    NSInteger count = [prefs integerForKey:@"jaspersoft.server.count"];
     NSInteger firstRun = [prefs integerForKey:@"jaspersoft.mobile.firstRun"];
     
     if (count == 0) {
@@ -152,6 +157,9 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
         self.reportClient.serverProfile = profile;
     }
     
+    self.resourceClient.timeoutInterval = self.requestTimeoutSeconds;
+    self.reportClient.timeoutInterval = self.reportRequestTimeoutSeconds;
+    
     [self setResourceClientForControllers:self.resourceClient];
     
     NSInteger index = [servers indexOfObject:profile];
@@ -204,15 +212,16 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
     sharedInstance = self;
         
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSInteger firstRun = [prefs  integerForKey:@"jaspersoft.mobile.firstRun"];    
+    NSInteger firstRun = [prefs  integerForKey:@"jaspersoft.mobile.firstRun"];
+    [self updateTimeouts];
 	[self loadServers];
 
     if (self.reportClient != nil) {
-        self.reportClient.timeoutInterval = [prefs integerForKey:keyReportRequestTimeoutSeconds] ?: defaultReportRequestTimeoutSeconds;        
+        self.reportClient.timeoutInterval = self.requestTimeoutSeconds;
     }
     
     if (self.resourceClient != nil) {
-        self.resourceClient.timeoutInterval = [prefs integerForKey:keyDefaultRequestTimeoutSeconds] ?: defaultRequestTimeoutSeconds;        
+        self.resourceClient.timeoutInterval = self.reportRequestTimeoutSeconds;
         [(JSUIBaseRepositoryViewController *)(navigationController.topViewController) setResourceClient:self.resourceClient];
         [(JSUIBaseRepositoryViewController *)(searchController.topViewController) setResourceClient:self.resourceClient];
         [(JSUIBaseRepositoryViewController *)(favoritesController.topViewController) setResourceClient:self.resourceClient];
@@ -268,29 +277,34 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
     [self.favorites synchronizeWithUserDefaults];
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
+- (void)applicationDidBecomeActive:(UIApplication *)application {    
     // Re-set timeouts from project settings (if setting was changed)
-    self.resourceClient.timeoutInterval = [prefs integerForKey:keyDefaultRequestTimeoutSeconds] ?: defaultRequestTimeoutSeconds;
-    self.reportClient.timeoutInterval = [prefs integerForKey:keyReportRequestTimeoutSeconds] ?: defaultReportRequestTimeoutSeconds;
+    [self updateTimeouts];
+    self.resourceClient.timeoutInterval = self.requestTimeoutSeconds;
+    self.reportClient.timeoutInterval = self.reportRequestTimeoutSeconds;
 }
-
 
 - (void)applicationWillTerminate:(UIApplication *)application {    
     [self.favorites synchronizeWithUserDefaults];
+}
+
+// Loads timeout for report / other type of requests from project settings
+// (defined in Settings.bundle)
+- (void)updateTimeouts {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    self.requestTimeoutSeconds = [prefs integerForKey:keyReportRequestTimeoutSeconds] ?: 120;
+    self.reportRequestTimeoutSeconds = [prefs integerForKey:keyDefaultRequestTimeoutSeconds] ?: 180;
 }
 
 #pragma mark - 
 #pragma mark TabBarController delegate methods
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-    
     // Go to root controller for favorites navigation
     if (self.favoritesController == viewController) {
         [self.favoritesController popToRootViewControllerAnimated:YES];
     }
-    
+
     if (self.libraryController == viewController) {
         [(JSUIBaseRepositoryViewController *)self.libraryController.topViewController clear];
     } else if (self.navigationController == viewController) {

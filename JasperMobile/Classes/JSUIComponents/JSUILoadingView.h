@@ -48,10 +48,12 @@ typedef void(^JSUILoadingViewCancelBLock)(void);
 
 + (void)showCancelableLoadingInView:(UIView *)view restClient:(JSRESTBase *)restClient
                            delegate:(id<JSRequestDelegate>)delegate cancelBlock:(JSUILoadingViewCancelBLock)cancelBlock;
++ (void)showCancelableAllRequestsLoadingInView:(UIView *)view restClient:(JSRESTBase *)restClient
+                                   cancelBlock:(JSUILoadingViewCancelBLock)cancelBlock;
 + (void)showLoadingInView:(UIView *)view;
 + (void)hideLoadingView;
 
-- (id)initWithFrame:(CGRect)frame restClient:(JSRESTBase *)restClient delegate:(id<JSRequestDelegate>)delegate cancelBlock:(JSUILoadingViewCancelBLock)cancelBlock;
+- (id)initWithFrame:(CGRect)frame restClient:(JSRESTBase *)restClient delegate:(id<JSRequestDelegate>)delegate cancelAllRequests:(BOOL)cancelAllRequests cancelBlock:(JSUILoadingViewCancelBLock)theCancelBlock;
 - (void)showInView:(UIView *)aSuperview;
 - (void)removeView;
 
