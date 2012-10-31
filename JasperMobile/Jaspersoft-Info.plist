@@ -14,6 +14,10 @@
 	<array>
 		<string>Icon.png</string>
 		<string>Icon@2x.png</string>
+		<string>Icon-72.png</string>
+		<string>Icon-Small.png</string>
+		<string>Icon-Small@2x.png</string>
+		<string>Icon-Small-50.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
 	<string>com.jaspersoft.mobile</string>
@@ -28,7 +32,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>03</string>
+	<string>04</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMainNibFile</key>
