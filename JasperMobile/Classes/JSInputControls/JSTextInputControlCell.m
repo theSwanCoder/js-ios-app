@@ -30,10 +30,8 @@
 
 @implementation JSTextInputControlCell : JSInputControlCell
 
-- (id)initWithDescriptor:(JSResourceDescriptor *)rd tableViewController: (UITableViewController *)tv
-{
-	if (self = [super initWithDescriptor: rd tableViewController: tv])
-	{
+- (id)initWithDescriptor:(JSResourceDescriptor *)rd tableViewController: (UITableViewController *)tv {
+	if (self = [super initWithDescriptor: rd tableViewController: tv]) {
 		textField = [[UITextField alloc] initWithFrame:CGRectMake(JS_CELL_PADDING + JS_CONTENT_PADDING + JS_LBL_WIDTH, 10.0, 
 																			   JS_CELL_WIDTH - (2*JS_CELL_PADDING + JS_CONTENT_PADDING + JS_LBL_WIDTH), 21.0)];
 		textField.textAlignment = UITextAlignmentRight;
@@ -50,15 +48,13 @@
 
 
 // Specifies if the user can select this cell
--(BOOL)selectable
-{
+- (BOOL)selectable {
 	return !self.readonly;
 }
 
 
 // Override the createNameLabel to adjust the label size...
--(void)createNameLabel
-{
+- (void)createNameLabel {
 	[super createNameLabel];
 	
 	// Adjust the label size...
@@ -70,8 +66,7 @@
 }
 
 // Resign and look first for another field...
-- (BOOL)textFieldShouldReturn:(UITextField *)txtField
-{
+- (BOOL)textFieldShouldReturn:(UITextField *)txtField {
 	if (txtField.returnKeyType == UIReturnKeyNext) {
         NSIndexPath *indexPath = [self.tableViewController.tableView indexPathForCell:self];
         NSIndexPath *nextIndexPath = [NSIndexPath indexPathForRow:(indexPath.row + 1) inSection:indexPath.section];
@@ -90,14 +85,17 @@
 	return NO;
 }
 
--(BOOL)textField:(UITextField *)txtField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
+- (BOOL)textField:(UITextField *)txtField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     NSString *newValue = nil;
     
     if(range.length > 0){
         newValue = [[NSString alloc] initWithString:[txtField.text substringToIndex:txtField.text.length - 1]];
     } else {
         newValue = [[NSString alloc] initWithFormat:@"%@%@", txtField.text, string];
+    }
+    
+    if ([newValue isEqualToString:@""]) {
+        newValue = nil;
     }
     
     NSLog(@"new selectedValue: %@", newValue);
@@ -107,18 +105,13 @@
     return YES;
 }
 
-
--(void)setSelectedValue:(id)vals
-{
+- (void)setSelectedValue:(id)vals {
 	[super setSelectedValue:vals];
     textField.text = self.selectedValue ?: @"";
 }
 
-
--(void)cellDidSelected {
-
+- (void)cellDidSelected {
 	[textField becomeFirstResponder];
 }
-
 
 @end

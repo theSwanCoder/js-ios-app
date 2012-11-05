@@ -258,7 +258,8 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
         self.lastSelectedViewController = self.libraryController;
         [tabBarController setSelectedIndex:0];
 	}
-
+    
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
