@@ -98,9 +98,7 @@
     [[JasperMobileAppDelegate sharedInstance].tabBarController setSelectedIndex:4];
 }
 
-- (void)clear {
-    self.navigationItem.title = nil;
-    
+- (void)clear {    
 	if (resources != nil) {
         resources = nil;
         [[self tableView] reloadData];

@@ -80,9 +80,7 @@
     [super viewDidLoad];    
     [super loadView];
     
-    self.title = NSLocalizedString(@"view.search", @"");
     self.view = [[UIView alloc] init];
-    
     searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,0,320,44)]; 
     searchBar.delegate = self;
     searchBar.showsCancelButton = YES;

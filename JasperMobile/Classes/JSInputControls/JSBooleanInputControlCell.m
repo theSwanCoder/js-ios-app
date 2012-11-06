@@ -74,6 +74,7 @@
 			label.tag = 100;
 			label.font = [UIFont systemFontOfSize:14.0];
 			label.textColor = [UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0];
+            label.backgroundColor = [UIColor clearColor];
 			label.text = @"Not set";
 			
 			if (self.readonly)
@@ -84,7 +85,7 @@
 				
 				self.selectionStyle = UITableViewCellSelectionStyleBlue;
 				self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-			}	
+			}
 			[self addSubview:label];
 		}
 	}
