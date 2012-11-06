@@ -89,13 +89,10 @@
     
 }
 
--(void)infoClicked:(id)sender {
-	
-	
-    UIAlertView *uiView =[[UIAlertView alloc] initWithTitle:@"" message: @"Jaspersoft Mobile v.1.1.1\n\nManagement tool and report viewer for JasperReports Server 4.2.0 and greater.\n\nFor more information visit:\nwww.jasperforge.org/projects/mobile\n\n(c) 2011-2012 Jaspersoft Corp." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [uiView show];
-    
-    
+- (void)infoClicked:(id)sender {
+    NSString *mssg = NSLocalizedString(@"servers.info", nil);
+    mssg = [NSString stringWithFormat:mssg, [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"]];
+    [[[UIAlertView alloc] initWithTitle:@"" message:mssg delegate:nil cancelButtonTitle:NSLocalizedString(@"dialog.button.ok", nil) otherButtonTitles:nil] show];
 }
 
 

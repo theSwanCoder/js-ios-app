@@ -7,6 +7,8 @@
 /* Server Profiles view
  ------------------------------ */
 
+"servers.info" = "Jaspersoft Mobile v %@\n\nManagement tool and report viewer for JasperReports Server 4.2.0 and greater.\n\nFor more information visit:\nwww.jasperforge.org/projects/mobile\n\n(c) 2011-2012 Jaspersoft Corp.";
+
 "servers.url.label" = "URL";
 "servers.url.tip" = "http://example.com/jasperserver";
 "servers.url.errmsg" = "Please specify a valid URL";
