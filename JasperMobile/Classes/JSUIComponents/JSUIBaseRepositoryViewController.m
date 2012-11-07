@@ -89,9 +89,10 @@
 	[JSUILoadingView hideLoadingView];
 }
 
-- (void)viewWillAppear:(BOOL)animated {   
-    [self.navigationController setToolbarHidden:YES animated:animated];
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController setToolbarHidden:YES animated:animated];
+    self.navigationItem.title = [NSString stringWithFormat:@"%@", [self.resourceClient.serverProfile alias]];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

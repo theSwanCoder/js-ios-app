@@ -47,6 +47,7 @@
     self.resources = [[JasperMobileAppDelegate sharedInstance].favorites wrappersFromFavorites] ?: [NSArray array];
     self.editDoneButton.title = self.localizedTitleEdit;
     self.editDoneButton.action = @selector(editClicked:);
+    self.navigationItem.title = self.resourceClient.serverProfile.alias;
     
     [[self tableView] setEditing:self.editMode animated:YES];
     [self.tableView reloadData];
@@ -58,8 +59,6 @@
     self.localizedTitleDone = NSLocalizedString(@"dialog.button.done", @"");
     self.localizedTitleEdit = NSLocalizedString(@"dialog.button.edit", @"");
     self.editMode = NO;
-    
-    self.title = NSLocalizedString(@"view.favorites", @"");
     self.editDoneButton = [[UIBarButtonItem alloc] initWithTitle:self.localizedTitleEdit
                                                             style:UIBarButtonItemStylePlain
                                                            target:self action:@selector(editClicked:)];
