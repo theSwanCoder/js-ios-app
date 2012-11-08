@@ -33,6 +33,7 @@
 		F50AFED415E2E12B00F761A0 /* JSUIResourceModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50AFED215E2E12900F761A0 /* JSUIResourceModifyViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F51E05B41609FF1900D17020 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F51E05B31609FF1900D17020 /* SSKeychain.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F5312729161B2CD5006AF5DD /* JSUILibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5312728161B2CD5006AF5DD /* JSUILibraryViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
+		F53B3262164C773900044187 /* JSUIResourceModifyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F53B3261164C773900044187 /* JSUIResourceModifyViewController.xib */; };
 		F53BFD5715E6E5CB000053A8 /* JSTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = F53BFD5615E6E5CB000053A8 /* JSTimer.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F56824501641B20C00CC4015 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = F568244B1641B20B00CC4015 /* Icon-72.png */; };
 		F56824511641B20C00CC4015 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = F568244C1641B20C00CC4015 /* Icon-Small-50.png */; };
@@ -123,6 +124,7 @@
 		F51E05B31609FF1900D17020 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		F5312727161B2CD5006AF5DD /* JSUILibraryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUILibraryViewController.h; sourceTree = "<group>"; };
 		F5312728161B2CD5006AF5DD /* JSUILibraryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUILibraryViewController.m; sourceTree = "<group>"; };
+		F53B3261164C773900044187 /* JSUIResourceModifyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = JSUIResourceModifyViewController.xib; path = Classes/JSUIComponents/JSUIResourceModifyViewController.xib; sourceTree = "<group>"; };
 		F53BFD5515E6E5CB000053A8 /* JSTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSTimer.h; sourceTree = "<group>"; };
 		F53BFD5615E6E5CB000053A8 /* JSTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSTimer.m; sourceTree = "<group>"; };
 		F568244B1641B20B00CC4015 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 		F5312726161AE56E006AF5DD /* XibFiles */ = {
 			isa = PBXGroup;
 			children = (
+				F53B3261164C773900044187 /* JSUIResourceModifyViewController.xib */,
 				F5F2B0F915C16CBA00E97074 /* JSUIReportUnitViewController.xib */,
 				64A8072B135397AF00651C3B /* ServersController.xib */,
 				641A2F0A138FE25700A1DBBE /* ServersViewController.xib */,
@@ -545,6 +548,7 @@
 				F56824541641B20C00CC4015 /* Icon@2x.png in Resources */,
 				F56824561641B22900CC4015 /* Default-568h@2x.png in Resources */,
 				F56824581641B26C00CC4015 /* iTunesArtwork in Resources */,
+				F53B3262164C773900044187 /* JSUIResourceModifyViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
