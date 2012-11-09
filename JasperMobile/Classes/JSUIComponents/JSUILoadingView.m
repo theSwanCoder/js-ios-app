@@ -148,7 +148,7 @@ static JSUILoadingView *sharedInstance = nil;
 	const CGFloat DEFAULT_LABEL_HEIGHT = 50.0;
 	CGRect labelFrame = CGRectMake(0, 0, DEFAULT_LABEL_WIDTH, DEFAULT_LABEL_HEIGHT);
 	UILabel *loadingLabel = [[UILabel alloc] initWithFrame:labelFrame];
-	loadingLabel.text = NSLocalizedString(@"Loading...", nil);
+	loadingLabel.text = NSLocalizedString(@"loading.dialog.title", nil);
 	loadingLabel.textColor = [UIColor whiteColor];
 	loadingLabel.backgroundColor = [UIColor clearColor];
 	loadingLabel.textAlignment = UITextAlignmentCenter;
@@ -181,7 +181,7 @@ static JSUILoadingView *sharedInstance = nil;
 	
 	CGRect activityIndicatorRect = activityIndicatorView.frame;
 	activityIndicatorRect.origin.x =
-    0.5 * (frame.size.width - activityIndicatorRect.size.width) - 37;
+    0.5 * (frame.size.width - activityIndicatorRect.size.width) - loadingLabel.text.length * 3.5;
 	activityIndicatorRect.origin.y = floor(0.5 * (frame.size.height - totalHeight)) + 7;
 	activityIndicatorView.frame = activityIndicatorRect;
     

@@ -40,9 +40,9 @@
 - (void)viewDidLoad {
 	
 	[[self tableView] setAllowsSelectionDuringEditing: YES];
-	self.title = @"Servers";
+	self.title = NSLocalizedString(@"view.servers", nil);
 	
-	editDoneButton = [[UIBarButtonItem alloc] initWithTitle: @"Edit"
+	editDoneButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"dialog.button.edit", nil)
 					   style: UIBarButtonItemStylePlain
 					   target:self action:@selector(editClicked:)];
 	
@@ -67,7 +67,7 @@
 
 -(void)editClicked:(id)sender {
 	
-	editDoneButton.title = @"Done";
+	editDoneButton.title = NSLocalizedString(@"dialog.button.done", nil);
 	editDoneButton.action = @selector(doneClicked:);
 	editMode = true;
 	
@@ -92,13 +92,13 @@
 - (void)infoClicked:(id)sender {
     NSString *mssg = NSLocalizedString(@"servers.info", nil);
     mssg = [NSString stringWithFormat:mssg, [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"]];
-    [[[UIAlertView alloc] initWithTitle:@"" message:mssg delegate:nil cancelButtonTitle:NSLocalizedString(@"dialog.button.ok", nil) otherButtonTitles:nil] show];
+    [[[UIAlertView alloc] initWithTitle:nil message:mssg delegate:nil cancelButtonTitle:NSLocalizedString(@"dialog.button.ok", nil) otherButtonTitles:nil] show];
 }
 
 
 -(void)doneClicked:(id)sender {
 	
-	editDoneButton.title = @"Edit";
+	editDoneButton.title = NSLocalizedString(@"dialog.button.edit", nil);
 	editDoneButton.action = @selector(editClicked:);
 	editMode = false;
 	

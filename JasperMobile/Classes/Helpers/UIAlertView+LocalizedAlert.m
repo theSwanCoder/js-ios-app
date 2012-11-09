@@ -31,15 +31,15 @@
 
 + (UIAlertView *)localizedAlert:(NSString *)title message:(NSString *)message delegate:(id /*<UIAlertViewDelegate>*/)delegate 
               cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION {
-    UIAlertView *view = [[UIAlertView alloc] initWithTitle:NSLocalizedString(title, @"") 
-                                                   message:NSLocalizedString(message, @"") 
+    UIAlertView *view = [[UIAlertView alloc] initWithTitle:NSLocalizedString(title, nil) 
+                                                   message:NSLocalizedString(message, nil) 
                                                   delegate:delegate 
-                                         cancelButtonTitle:NSLocalizedString(cancelButtonTitle, @"") 
+                                         cancelButtonTitle:NSLocalizedString(cancelButtonTitle, nil) 
                                          otherButtonTitles:nil];
     va_list args;
     va_start (args, otherButtonTitles);
         if (otherButtonTitles != nil) {
-            [view addButtonWithTitle:NSLocalizedString(otherButtonTitles, @"")];
+            [view addButtonWithTitle:NSLocalizedString(otherButtonTitles, nil)];
         }
     va_end(args);
 

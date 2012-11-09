@@ -56,8 +56,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.localizedTitleDone = NSLocalizedString(@"dialog.button.done", @"");
-    self.localizedTitleEdit = NSLocalizedString(@"dialog.button.edit", @"");
+    self.localizedTitleDone = NSLocalizedString(@"dialog.button.done", nil);
+    self.localizedTitleEdit = NSLocalizedString(@"dialog.button.edit", nil);
     self.editMode = NO;
     self.editDoneButton = [[UIBarButtonItem alloc] initWithTitle:self.localizedTitleEdit
                                                             style:UIBarButtonItemStylePlain

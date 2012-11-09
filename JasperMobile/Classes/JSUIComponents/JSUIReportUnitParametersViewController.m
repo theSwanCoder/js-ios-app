@@ -30,6 +30,7 @@
 #import "JSUIResourceViewController.h"
 #import "JSUIReportUnitViewController.h"
 #import "JasperMobileAppDelegate.h"
+#import "UIAlertView+LocalizedAlert.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
 @implementation JSUIReportUnitParametersViewController
@@ -78,15 +79,10 @@ static UIFont *detailFont;
     JSConstants *constants = [JSConstants sharedInstance];
 	
 	if (res == nil) {
-		UIAlertView *uiView =[[UIAlertView alloc] initWithTitle:@"" message:@"Error reading the response" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		[uiView show];
-		//NSLog(@"Error reading response...");
+        [[UIAlertView localizedAlert:@"" message:@"error.readingresponse.dialog.msg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
 	} else if (res.statusCode >= 400) {
-        UIAlertView *uiView =[[UIAlertView alloc] initWithTitle:@"" message:@"Error reading the response" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		[uiView show];
-    } else {
-		//NSLog( @"Code: %d, Message: %@", [res returnCode], [res message] );  
-		
+        [[UIAlertView localizedAlert:@"" message:@"error.readingresponse.dialog.msg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
+    } else {		
 		if (res.objects.count > 0) {
 			self.descriptor = [res.objects objectAtIndex:0];
 			

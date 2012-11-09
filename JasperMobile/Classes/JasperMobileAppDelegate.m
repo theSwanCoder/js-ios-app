@@ -229,11 +229,11 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
         [(JSUIBaseRepositoryViewController *)(favoritesController.topViewController) setResourceClient:self.resourceClient];
         [(JSUIBaseRepositoryViewController *)(libraryController.topViewController) setResourceClient:self.resourceClient];
         
-        navigationController.title = NSLocalizedString(@"view.repository",@"");
-        favoritesController.title = NSLocalizedString(@"view.favorites",@"");
-        searchController.title = NSLocalizedString(@"view.search",@"");
-        settingsController.title = NSLocalizedString(@"view.servers",@"");
-        libraryController.title = NSLocalizedString(@"view.library",@"");
+        navigationController.title = NSLocalizedString(@"view.repository", nil);
+        favoritesController.title = NSLocalizedString(@"view.favorites", nil);
+        searchController.title = NSLocalizedString(@"view.search", nil);
+        settingsController.title = NSLocalizedString(@"view.servers", nil);
+        libraryController.title = NSLocalizedString(@"view.library", nil);
     }
 	
     NSArray *controllers = [NSArray arrayWithObjects:libraryController, navigationController, favoritesController, searchController, settingsController, nil];

@@ -63,7 +63,7 @@
     
     UILabel *passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     passwordLabel.font = [UIFont boldSystemFontOfSize:14];
-    passwordLabel.text = NSLocalizedString(@"servers.password.label", @"");
+    passwordLabel.text = NSLocalizedString(@"servers.password.label", nil);
     passwordLabel.textColor = [UIColor whiteColor];
     passwordLabel.backgroundColor = [UIColor clearColor];
     CGSize generalSize = [passwordLabel.text sizeWithFont:passwordLabel.font];

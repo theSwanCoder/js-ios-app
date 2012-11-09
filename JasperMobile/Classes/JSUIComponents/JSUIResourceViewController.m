@@ -30,6 +30,7 @@
 #import "JSUIResourceViewController.h"
 #import "JSUIRepositoryViewController.h"
 #import "JSUIResourceModifyViewController.h"
+#import "UIAlertView+LocalizedAlert.h"
 
 @interface JSUIResourceViewController()
 
@@ -80,7 +81,7 @@ static UIFont *_detailFont;
         resourceLoaded = NO;
         deleting = false;
         
-        UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle: @"Edit" 
+        UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"dialog.button.edit", nil)
                                                                        style:UIBarButtonItemStylePlain
                                                                        target:self
                                                                        action:@selector(editClicked:)];
@@ -120,18 +121,9 @@ static UIFont *_detailFont;
     } 
     
     if (result == nil) {
-		UIAlertView *uiView =[[UIAlertView alloc] initWithTitle:@"" 
-                                                         message:@"Error reading the response"
-                                                        delegate:nil 
-                                               cancelButtonTitle:@"Ok" 
-                                               otherButtonTitles:nil];
-		[uiView show];
+        [[UIAlertView localizedAlert:@"" message:@"error.readingresponse.dialog.msg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
     } else if (result.statusCode >= 400) {
-        UIAlertView *uiView = [[UIAlertView alloc] initWithTitle:@""
-                                                          message:@"Error reading the response" 
-                                                         delegate:nil cancelButtonTitle:@"Ok" 
-                                                otherButtonTitles:nil];
-		[uiView show];
+        [[UIAlertView localizedAlert:@"" message:@"error.readingresponse.dialog.msg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
     } else {		
         if (result.objects.count) {
             self.descriptor = [result.objects objectAtIndex:0];
@@ -331,7 +323,7 @@ static UIFont *_detailFont;
 			self.nameCell = [tableView dequeueReusableCellWithIdentifier:@"NameCell"];
 			if (self.nameCell == nil) {				
 				self.nameCell = [self createCell: @"NameCell"];
-				self.nameCell.textLabel.text = NSLocalizedString(@"Name", @"");
+				self.nameCell.textLabel.text = NSLocalizedString(@"servers.name.label", nil);
 			}
             if (resourceLoaded) {
                 self.nameCell.detailTextLabel.text = [descriptor name];
@@ -344,7 +336,7 @@ static UIFont *_detailFont;
 			self.labelCell = [tableView dequeueReusableCellWithIdentifier:@"LabelCell"];
 			if (self.labelCell == nil) {
 				self.labelCell = [self createCell: @"LabelCell"];
-				self.labelCell.textLabel.text = NSLocalizedString(@"Label", @"");
+				self.labelCell.textLabel.text = NSLocalizedString(@"Label", nil);
 			}
             if (resourceLoaded) {
                 self.labelCell.detailTextLabel.text = [descriptor label];
@@ -357,7 +349,7 @@ static UIFont *_detailFont;
 			self.descriptionCell = [tableView dequeueReusableCellWithIdentifier:@"DescriptionCell"];
 			if (self.descriptionCell == nil) {
 				self.descriptionCell = [self createCell: @"DescriptionCell"];
-				self.descriptionCell.textLabel.text = NSLocalizedString(@"Description", @"");
+				self.descriptionCell.textLabel.text = NSLocalizedString(@"Description", nil);
 			}
             if (resourceLoaded) {
                 self.descriptionCell.detailTextLabel.text = [descriptor resourceDescription];
@@ -370,7 +362,7 @@ static UIFont *_detailFont;
 			self.typeCell = [tableView dequeueReusableCellWithIdentifier:@"TypeCell"];
 			if (self.typeCell == nil) {
 				self.typeCell = [self createCell: @"TypeCell"];
-				self.typeCell.textLabel.text = NSLocalizedString(@"Type", @"");
+				self.typeCell.textLabel.text = NSLocalizedString(@"Type", nil);
 			}
             if (resourceLoaded) {
                 self.typeCell.detailTextLabel.text = [descriptor wsType];
@@ -383,7 +375,7 @@ static UIFont *_detailFont;
 			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Type2Cell"];
 			if (cell == nil) {
 				cell = [self createCell: @"Type2Cell"];
-				cell.textLabel.text = NSLocalizedString(@"Resources", @"");
+				cell.textLabel.text = NSLocalizedString(@"Resources", nil);
 			}
 
 			if (resourceLoaded)
@@ -578,9 +570,7 @@ static UIFont *_detailFont;
 
 - (IBAction)deleteButtonPressed:(id)sender forEvent:(UIEvent *)event
 {
-	
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Deleting resource" message:@"Are you sure you want to delete this resource?" delegate:self cancelButtonTitle: @"Cancel" otherButtonTitles: @"Yes, delete!", nil];
-    
+	UIAlertView *alert = [UIAlertView localizedAlert:@"delete.dialog.title" message:@"delete.dialog.msg" delegate:self cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.yes", nil];
     [alert setTag: 101]; // A tag to know this is the DELETE alert in the clickedButtonAtIndex...
     [alert show];
 }

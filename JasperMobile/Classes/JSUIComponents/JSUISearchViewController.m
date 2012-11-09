@@ -102,14 +102,12 @@
 	
 	if (res == nil)
 	{
-		UIAlertView *uiView =[[UIAlertView alloc] initWithTitle:@"" message:@"Error reading the response" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		[uiView show];
+        [[UIAlertView localizedAlert:@"" message:@"error.readingresponse.dialog.msg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
 		NSLog(@"Error reading response...");
 	}
     else if ([res statusCode] > 400)
     {
-        UIAlertView *uiView =[[UIAlertView alloc] initWithTitle:@"" message:@"Error reading the response" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		[uiView show];
+        [[UIAlertView localizedAlert:@"" message:@"error.readingresponse.dialog.msg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
     }
 	else {
 		resources = [[NSMutableArray alloc] initWithCapacity:0];

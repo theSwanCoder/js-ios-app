@@ -47,7 +47,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	// Add our custom add button as the nav bar's custom right view
-	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:@"Save"
+	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"dialog.button.save", nil)
 																   style:UIBarButtonItemStyleBordered
 																  target:self
 																  action:@selector(saveAction:)];
@@ -174,9 +174,9 @@
             
             if (self.aliasCell == nil) {
 				self.aliasCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AliasCell"];
-				self.aliasCell.textLabel.text = NSLocalizedString(@"Name", @"");
+				self.aliasCell.textLabel.text = NSLocalizedString(@"servers.name.label", nil);
 				aliasTextField = [self newTextFieldForCell:self.aliasCell];
-				aliasTextField.placeholder = NSLocalizedString(@"My server", @"");
+				aliasTextField.placeholder = NSLocalizedString(@"My server", nil);
 				aliasTextField.keyboardType = UIKeyboardTypeDefault;
 				aliasTextField.returnKeyType = UIReturnKeyNext;
 				if(profile != nil && profile.alias != nil)
@@ -190,9 +190,9 @@
 			self.urlCell = [tableView dequeueReusableCellWithIdentifier:@"UrlCell"];
 			if (self.urlCell == nil) {
 				self.urlCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UrlCell"];
-				self.urlCell.textLabel.text = NSLocalizedString(@"URL", @"");
+				self.urlCell.textLabel.text = NSLocalizedString(@"servers.url.label", nil);
 				urlTextField = [self newTextFieldForCell:self.urlCell];
-				urlTextField.placeholder = NSLocalizedString(@"http://example.com/jasperserver", @"");
+				urlTextField.placeholder = NSLocalizedString(@"servers.url.tip", nil);
 				urlTextField.keyboardType = UIKeyboardTypeURL;
 				urlTextField.returnKeyType = UIReturnKeyNext;
 				if(profile != nil && profile.serverUrl != nil)
@@ -205,9 +205,9 @@
 			self.organizationCell = [tableView dequeueReusableCellWithIdentifier:@"OrganizationCell"];
 			if (self.organizationCell == nil) {
 				self.organizationCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OrganizationCell"];
-				self.organizationCell.textLabel.text = NSLocalizedString(@"Organization", @"");
+				self.organizationCell.textLabel.text = NSLocalizedString(@"servers.orgid.label", nil);
 				organizationTextField = [self newTextFieldForCell:self.organizationCell];
-				organizationTextField.placeholder = NSLocalizedString(@"organization id", @"");
+				organizationTextField.placeholder = NSLocalizedString(@"servers.orgid.tip", nil);
 				organizationTextField.keyboardType = UIKeyboardTypeDefault;
 				organizationTextField.returnKeyType = UIReturnKeyNext;
 				if(profile != nil && profile.organization != nil)
@@ -220,9 +220,9 @@
 			self.usernameCell = [tableView dequeueReusableCellWithIdentifier:@"UsernameCell"];
 			if (self.usernameCell == nil) {
 				self.usernameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UsernameCell"];
-				self.usernameCell.textLabel.text = NSLocalizedString(@"Username", @"");
+				self.usernameCell.textLabel.text = NSLocalizedString(@"servers.username.label", nil);
 				usernameTextField = [self newTextFieldForCell:self.usernameCell];
-				usernameTextField.placeholder = @"my username"; // NOI18N
+				usernameTextField.placeholder = NSLocalizedString(@"servers.username.tip", nil);
 				usernameTextField.keyboardType = UIKeyboardTypeDefault;
 				usernameTextField.returnKeyType = UIReturnKeyNext;
 				if(profile != nil && profile.username != nil)
@@ -235,9 +235,9 @@
 			self.passwordCell = [tableView dequeueReusableCellWithIdentifier:@"PasswordCell"];
 			if (self.passwordCell == nil) {
 				self.passwordCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PasswordCell"];
-				self.passwordCell.textLabel.text = NSLocalizedString(@"Password", @"");
+				self.passwordCell.textLabel.text = NSLocalizedString(@"servers.password.label", nil);
 				passwordTextField = [self newTextFieldForCell:self.passwordCell];
-				passwordTextField.placeholder = @"my password"; // NOI18N
+				passwordTextField.placeholder = NSLocalizedString(@"servers.password.tip", nil);
 				passwordTextField.keyboardType = UIKeyboardTypeDefault;
 				passwordTextField.returnKeyType = UIReturnKeyDone;
 				passwordTextField.secureTextEntry = YES;
@@ -259,7 +259,7 @@
             UITableViewCell *askPasswordCell = [tableView dequeueReusableCellWithIdentifier:@"AskPasswordCell"];
 			if (askPasswordCell == nil) {
                 askPasswordCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AskPasswordCell"];
-                askPasswordCell.textLabel.text = NSLocalizedString(@"servers.askpassword.label", @"");
+                askPasswordCell.textLabel.text = NSLocalizedString(@"servers.askpassword.label", nil);
                 askPasswordCell.selectionStyle = UITableViewCellSelectionStyleNone;
                 askPasswordCell.textLabel.font = [UIFont systemFontOfSize:15];
                 

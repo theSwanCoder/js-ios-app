@@ -26,6 +26,7 @@
 //
 
 #import "JSUIResourcePicker.h"
+#import "UIAlertView+LocalizedAlert.h"
 
 @implementation JSUIResourcePicker
 @synthesize delegate;
@@ -96,8 +97,7 @@
 
 - (void)requestFinished:(JSOperationResult *)res {
 	if (res == nil) {
-		UIAlertView *uiView =[[UIAlertView alloc] initWithTitle:@"" message:@"Error reading the response" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-		[uiView show];
+        [[UIAlertView localizedAlert:@"" message:@"error.readingresponse.dialog.msg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
 	} else {
 		[self setResources: [NSMutableArray arrayWithCapacity:0]];
 		  

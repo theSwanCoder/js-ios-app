@@ -47,7 +47,7 @@
     self.title = self.descriptor.label;
     self.resourceLabelTextField.text = self.descriptor.label;
     self.resourceDescriptionTextView.text = self.descriptor.resourceDescription;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" 
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"dialog.button.done", nil)
                                                                                style:UIBarButtonItemStyleDone
                                                                               target:self 
                                                                               action:@selector(doneClicked:)];
@@ -120,17 +120,17 @@
     
     if (op != nil) {        
         if (op.statusCode >= 400 || op.error != nil) {
-            title = @"Error reading the response";            
+            title = NSLocalizedString(@"error.readingresponse.dialog.msg", nil);
             if (op.error) {
                 [msg appendFormat:@"%@\n", [op.error localizedDescription]]; 
             }     
         }
     } else {
-        msg = [NSMutableString stringWithString:@"Error reading the response"];
+        msg = [NSMutableString stringWithString:NSLocalizedString(@"error.readingresponse.dialog.msg", nil)];
     }
     
     if (msg.length || title.length) {
-        UIAlertView *uiView =[[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:@"Retry" otherButtonTitles:@"Cancel", nil];
+        UIAlertView *uiView =[[UIAlertView alloc] initWithTitle:title message:msg delegate:self cancelButtonTitle:NSLocalizedString(@"dialog.button.retry", nil) otherButtonTitles:NSLocalizedString(@"dialog.button.cancel", nil), nil];
         [uiView show];
     } else {
         [self.navigationController popViewControllerAnimated:YES];
