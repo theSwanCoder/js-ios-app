@@ -87,7 +87,7 @@
     searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
     [self.view addSubview:searchBar];
     
-    tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, 320, 427)];
+    tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, 320, 323)];
     tableView.delegate = self;
     tableView.dataSource = self;   
     [self.view addSubview:tableView];

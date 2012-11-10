@@ -310,11 +310,13 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
     }
 
     if (self.libraryController == viewController) {
+        [self.libraryController popToRootViewControllerAnimated:NO];
         [(JSUIBaseRepositoryViewController *)self.libraryController.topViewController clear];
         if (self.lastSelectedViewController == self.libraryController) {
             [(JSUIBaseRepositoryViewController *)self.libraryController.topViewController updateTableContent];
         }
     } else if (self.navigationController == viewController) {
+        [self.navigationController popToRootViewControllerAnimated:NO];
         [(JSUIBaseRepositoryViewController *)self.navigationController.topViewController clear];
         if (self.lastSelectedViewController == self.navigationController) {
             [(JSUIBaseRepositoryViewController *)self.navigationController.topViewController updateTableContent];
