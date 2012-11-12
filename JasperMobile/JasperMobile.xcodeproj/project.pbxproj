@@ -30,6 +30,8 @@
 		649795CF13602DC800FA5BA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 649795CE13602DC800FA5BA0 /* QuartzCore.framework */; };
 		64A8072C135397AF00651C3B /* ServersController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A8072B135397AF00651C3B /* ServersController.xib */; };
 		64A80A33135C497E00651C3B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 64A80A31135C497E00651C3B /* Localizable.strings */; };
+		CA23689C164D982C008B3015 /* libjaspersoft-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA236890164D97FC008B3015 /* libjaspersoft-sdk.a */; };
+		CA23689E164D9D9C008B3015 /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CA23689D164D9D9C008B3015 /* jaspersoft-sdk-resources.bundle */; };
 		F50AFED415E2E12B00F761A0 /* JSUIResourceModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50AFED215E2E12900F761A0 /* JSUIResourceModifyViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F51E05B41609FF1900D17020 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F51E05B31609FF1900D17020 /* SSKeychain.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F5312729161B2CD5006AF5DD /* JSUILibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5312728161B2CD5006AF5DD /* JSUILibraryViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
@@ -89,6 +91,37 @@
 		F5FCF25F1630661200BC545E /* Cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = F5FCF25E1630661100BC545E /* Cancel.png */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		CA23688F164D97FC008B3015 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA236882164D97FB008B3015 /* jaspersoft-sdk.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F59768BD15E3C75F004165A7;
+			remoteInfo = "jaspersoft-sdk";
+		};
+		CA236891164D97FC008B3015 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA236882164D97FB008B3015 /* jaspersoft-sdk.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F59768D215E3C777004165A7;
+			remoteInfo = "jaspersoft-sdk-framework";
+		};
+		CA236893164D97FC008B3015 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA236882164D97FB008B3015 /* jaspersoft-sdk.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F5F68E0A15E55EC000270103;
+			remoteInfo = "jaspersoft-sdk-resources";
+		};
+		CA23689A164D9821008B3015 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CA236882164D97FB008B3015 /* jaspersoft-sdk.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F59768BC15E3C75F004165A7;
+			remoteInfo = "jaspersoft-sdk";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		100ABEFE13D86F5F00776C8F /* repository.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = repository.png; path = icons/repository.png; sourceTree = "<group>"; };
 		100ABF0013D8721100776C8F /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settings.png; path = icons/settings.png; sourceTree = "<group>"; };
@@ -118,6 +151,8 @@
 		64A80A32135C497E00651C3B /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		64A80A34135C499200651C3B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		8D1107310486CEB800E47090 /* Jaspersoft-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Jaspersoft-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		CA236882164D97FB008B3015 /* jaspersoft-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jaspersoft-sdk.xcodeproj"; path = "../../iossdk/JaspersoftSDK/jaspersoft-sdk.xcodeproj"; sourceTree = "<group>"; };
+		CA23689D164D9D9C008B3015 /* jaspersoft-sdk-resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "jaspersoft-sdk-resources.bundle"; path = "../../iossdk/JaspersoftSDK/jaspersoft-sdk-resources.bundle"; sourceTree = "<group>"; };
 		F50AFED115E2E12900F761A0 /* JSUIResourceModifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUIResourceModifyViewController.h; sourceTree = "<group>"; };
 		F50AFED215E2E12900F761A0 /* JSUIResourceModifyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUIResourceModifyViewController.m; sourceTree = "<group>"; };
 		F51E05B21609FF1900D17020 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
@@ -215,6 +250,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA23689C164D982C008B3015 /* libjaspersoft-sdk.a in Frameworks */,
 				64252F001350C641005DAD57 /* libxml2.dylib in Frameworks */,
 				64252F191350C79A005DAD57 /* libz.dylib in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -257,6 +293,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				CA236882164D97FB008B3015 /* jaspersoft-sdk.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -278,6 +315,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CA23689D164D9D9C008B3015 /* jaspersoft-sdk-resources.bundle */,
 				F5312726161AE56E006AF5DD /* XibFiles */,
 				F5811F7E15EE64CA00CE775A /* Buttons */,
 				F5B9201F15D3E1EC000CF3E6 /* FileImages */,
@@ -321,6 +359,16 @@
 				64252F071350C675005DAD57 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CA236883164D97FB008B3015 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CA236890164D97FC008B3015 /* libjaspersoft-sdk.a */,
+				CA236892164D97FC008B3015 /* jaspersoft-sdk.framework */,
+				CA236894164D97FC008B3015 /* jaspersoft-sdk-resources.bundle */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		F51E05B11609FF1900D17020 /* SSKeychain */ = {
@@ -475,6 +523,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				CA23689B164D9821008B3015 /* PBXTargetDependency */,
 			);
 			name = JasperMobile;
 			productName = Jaspersoft;
@@ -503,12 +552,42 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = CA236883164D97FB008B3015 /* Products */;
+					ProjectRef = CA236882164D97FB008B3015 /* jaspersoft-sdk.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* JasperMobile */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		CA236890164D97FC008B3015 /* libjaspersoft-sdk.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libjaspersoft-sdk.a";
+			remoteRef = CA23688F164D97FC008B3015 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CA236892164D97FC008B3015 /* jaspersoft-sdk.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = "jaspersoft-sdk.framework";
+			remoteRef = CA236891164D97FC008B3015 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CA236894164D97FC008B3015 /* jaspersoft-sdk-resources.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "jaspersoft-sdk-resources.bundle";
+			remoteRef = CA236893164D97FC008B3015 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1D60588D0D05DD3D006BFB54 /* Resources */ = {
@@ -549,6 +628,7 @@
 				F56824561641B22900CC4015 /* Default-568h@2x.png in Resources */,
 				F56824581641B26C00CC4015 /* iTunesArtwork in Resources */,
 				F53B3262164C773900044187 /* JSUIResourceModifyViewController.xib in Resources */,
+				CA23689E164D9D9C008B3015 /* jaspersoft-sdk-resources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -598,6 +678,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CA23689B164D9821008B3015 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "jaspersoft-sdk";
+			targetProxy = CA23689A164D9821008B3015 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		64A80A31135C497E00651C3B /* Localizable.strings */ = {
@@ -660,6 +748,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
+				VALID_ARCHS = "armv7 armv7s armv6";
 			};
 			name = Distribution;
 		};
@@ -689,6 +778,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
+				VALID_ARCHS = "armv7 armv7s armv6";
 			};
 			name = Debug;
 		};
@@ -716,6 +806,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
+				VALID_ARCHS = "armv7 armv7s armv6";
 			};
 			name = Release;
 		};
