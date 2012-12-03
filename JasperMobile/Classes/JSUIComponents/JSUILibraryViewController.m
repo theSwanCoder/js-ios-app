@@ -63,4 +63,19 @@
     }
 }
 
+- (void)requestFinished:(JSOperationResult *)result {
+    id type = [result.request.params objectForKey:@"type"];
+    JSConstants *constants = [JSConstants sharedInstance];
+    
+    if (result.error != nil &&
+        result.statusCode == 400 &&
+        [type isKindOfClass:[NSArray class]] &&
+        [type indexOfObject:constants.WS_TYPE_DASHBOARD] != NSNotFound) {
+        NSArray *types = [NSArray arrayWithObjects:constants.WS_TYPE_REPORT_UNIT, nil];
+        [self.resourceClient resources:nil query:nil types:types recursive:YES limit:0 delegate:self];
+    } else {
+        [super requestFinished:result];
+    }
+}
+
 @end
