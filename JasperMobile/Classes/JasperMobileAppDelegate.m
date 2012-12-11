@@ -240,7 +240,7 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
         libraryController.title = NSLocalizedString(@"view.library", nil);
     }
 	
-    NSArray *controllers = [NSArray arrayWithObjects:libraryController, navigationController, favoritesController, searchController, settingsController, nil];
+    NSArray *controllers = [NSArray arrayWithObjects:navigationController, libraryController, favoritesController, searchController, settingsController, nil];
     tabBarController.viewControllers = controllers;
     tabBarController.delegate = self;
     
