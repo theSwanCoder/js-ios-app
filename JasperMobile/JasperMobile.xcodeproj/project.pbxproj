@@ -65,6 +65,7 @@
 		F5B9202C15D3E1EC000CF3E6 /* ic_type_text.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B9202515D3E1EC000CF3E6 /* ic_type_text.png */; };
 		F5B9202D15D3E1EC000CF3E6 /* ic_type_unknown.png in Resources */ = {isa = PBXBuildFile; fileRef = F5B9202615D3E1EC000CF3E6 /* ic_type_unknown.png */; };
 		F5BE2636161730D2009331A1 /* JSAppUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = F5BE2635161730D2009331A1 /* JSAppUpdater.m */; settings = {COMPILER_FLAGS = ""; }; };
+		F5C1A9FE1677858500A42F97 /* JSUIResourceModifyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5C1A9FD1677858500A42F97 /* JSUIResourceModifyViewController.xib */; };
 		F5DA70221602186C009BFABE /* UIAlertView+LocalizedAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DA70211602186C009BFABE /* UIAlertView+LocalizedAlert.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F5EA575315D15E10003416D1 /* JSBooleanInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA572B15D15E10003416D1 /* JSBooleanInputControlCell.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F5EA575415D15E10003416D1 /* JSDateInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EA572D15D15E10003416D1 /* JSDateInputControlCell.m */; settings = {COMPILER_FLAGS = ""; }; };
@@ -199,6 +200,7 @@
 		F5B9202615D3E1EC000CF3E6 /* ic_type_unknown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_unknown.png; sourceTree = "<group>"; };
 		F5BE2634161730D2009331A1 /* JSAppUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSAppUpdater.h; sourceTree = "<group>"; };
 		F5BE2635161730D2009331A1 /* JSAppUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSAppUpdater.m; sourceTree = "<group>"; };
+		F5C1A9FD1677858500A42F97 /* JSUIResourceModifyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = JSUIResourceModifyViewController.xib; path = Classes/JSUIComponents/JSUIResourceModifyViewController.xib; sourceTree = "<group>"; };
 		F5DA70201602186B009BFABE /* UIAlertView+LocalizedAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+LocalizedAlert.h"; sourceTree = "<group>"; };
 		F5DA70211602186C009BFABE /* UIAlertView+LocalizedAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+LocalizedAlert.m"; sourceTree = "<group>"; };
 		F5EA572A15D15E10003416D1 /* JSBooleanInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSBooleanInputControlCell.h; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 		F5312726161AE56E006AF5DD /* XibFiles */ = {
 			isa = PBXGroup;
 			children = (
+				F5C1A9FD1677858500A42F97 /* JSUIResourceModifyViewController.xib */,
 				F5A61465165E34A4003CB2B8 /* JSUIDashboardViewController.xib */,
 				F57D72AB15F5FCF800F9B1FB /* ServerSettingsViewController.xib */,
 				F5F2B0F915C16CBA00E97074 /* JSUIReportUnitViewController.xib */,
@@ -630,6 +633,7 @@
 				F568251416433BBA00CC4015 /* iTunesArtwork in Resources */,
 				F5A61467165E34A4003CB2B8 /* JSUIDashboardViewController.xib in Resources */,
 				CA4D4671166D5AAE0086EC93 /* jaspersoft-sdk-resources.bundle in Resources */,
+				F5C1A9FE1677858500A42F97 /* JSUIResourceModifyViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
