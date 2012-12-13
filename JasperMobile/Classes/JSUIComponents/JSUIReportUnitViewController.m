@@ -92,6 +92,26 @@
         self.scrollView.zoomScale = xScale;
         self.scrollView.contentOffset = CGPointMake(0.0,0.0);
     }
+    
+    if (!self.loadingIndicator.isHidden) {
+        [[self class] setOriginsForLoadingIndicator:self.loadingIndicator interfaceOrientation:toInterfaceOrientation];
+    }
+}
+
++ (void)setOriginsForLoadingIndicator:(UIActivityIndicatorView *)loadingIndicator interfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    CGRect mainScreenFrame = [UIScreen mainScreen].bounds;
+    CGRect loadingIndicatorFrame = CGRectMake(0, 0, 20, 20);
+    
+    if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+        loadingIndicatorFrame.origin.y = mainScreenFrame.size.width / 2 - 50;
+        loadingIndicatorFrame.origin.x = mainScreenFrame.size.height / 2 - 10;
+    } else {
+        loadingIndicatorFrame.origin.x = mainScreenFrame.size.width / 2 - 15;
+        loadingIndicatorFrame.origin.y = mainScreenFrame.size.height / 2 - 50;
+    }
+    
+    loadingIndicator.frame = loadingIndicatorFrame;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -135,7 +155,8 @@
                 [self.webView setDelegate:self];
                 [self.webView setScalesPageToFit:YES];
                 
-                self.loadingIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(145, 190, 20, 20)];
+                self.loadingIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+                [[self class] setOriginsForLoadingIndicator:self.loadingIndicator interfaceOrientation:self.interfaceOrientation];
                 [self.loadingIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
                 [self.loadingIndicator setHidesWhenStopped:YES];
                 [self.webView addSubview:self.loadingIndicator];                

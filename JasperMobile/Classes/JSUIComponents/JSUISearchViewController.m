@@ -31,6 +31,7 @@
 #import "JSUIResourceViewController.h"
 #import "JSUILoadingView.h"
 #import "JasperMobileAppDelegate.h"
+#import "JSUIDashboardViewController.h"
 #import "UIAlertView+LocalizedAlert.h"
 
 @implementation JSUISearchViewController
@@ -98,32 +99,21 @@
     return YES;
 }
 
--(void)requestFinished:(JSOperationResult *)res {
-	
-	if (res == nil)
-	{
-        [[UIAlertView localizedAlert:@"" message:@"error.readingresponse.dialog.msg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
-		NSLog(@"Error reading response...");
-	}
-    else if ([res statusCode] > 400)
-    {
-        [[UIAlertView localizedAlert:@"" message:@"error.readingresponse.dialog.msg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
-    }
-	else {
+- (void)requestFinished:(JSOperationResult *)result {
+    if (result.error) {
+        [[self class] displayErrorMessage:result];
+    } else {
 		resources = [[NSMutableArray alloc] initWithCapacity:0];
 		
-		// Show resources....
-		for (NSUInteger i=0; i < [[res objects] count]; ++i)
-		{
-			JSResourceDescriptor *rd = [[res objects] objectAtIndex:i];
+		// Show resources
+		for (NSUInteger i = 0; i < result.objects.count; ++i) {
+			JSResourceDescriptor *rd = [result.objects objectAtIndex:i];
 			[resources addObject:rd];
 		}
 	}
 	
-	// Update the table...
-	
+	// Update the table
     [tableView reloadData];
-	
 	[JSUILoadingView hideLoadingView];
 }
 
@@ -158,23 +148,28 @@
     // If the resource selected is a folder, navigate in the folder....
 	JSResourceDescriptor *rd = [resources  objectAtIndex: [indexPath indexAtPosition:1]];
 	
-	if (rd != nil) {		
+	if (rd != nil) {
         if ([rd.wsType compare:constants.WS_TYPE_FOLDER] == 0) {
             JSUIRepositoryViewController *rvc = [[JSUIRepositoryViewController alloc] initWithNibName:nil bundle:nil];
-            [rvc setResourceClient:self.resourceClient];
+            [rvc setResourceClient: self.resourceClient];
             [rvc setDescriptor:rd];
             [self.navigationController pushViewController: rvc animated: YES];
-        } else if ([rd.wsType compare:constants.WS_TYPE_REPORT_UNIT] == 0 || [rd.wsType compare:constants.WS_TYPE_REPORT_OPTIONS] == 0) {
+        } else if ([rd.wsType compare:constants.WS_TYPE_REPORT_UNIT] == 0 ||
+                   [rd.wsType compare:constants.WS_TYPE_REPORT_OPTIONS] == 0) {
             JSUIReportUnitParametersViewController *rvc = [[JSUIReportUnitParametersViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            [rvc setReportClient:[JasperMobileAppDelegate sharedInstance].reportClient];
-            [rvc setDescriptor:rd];
-            [self.navigationController pushViewController:rvc animated: YES];
-        }
-        else {
+            [rvc setReportClient: [JasperMobileAppDelegate sharedInstance].reportClient];
+            [rvc setDescriptor: rd];
+            [self.navigationController pushViewController: rvc animated: YES];
+        } else if ([rd.wsType compare:constants.WS_TYPE_DASHBOARD] == 0) {
+            JSUIDashboardViewController *rvc = [[JSUIDashboardViewController alloc] initWithNibName:nil bundle:nil];
+            [rvc setResourceClient: self.resourceClient];
+            [rvc setDescriptor: rd];
+            [self presentModalViewController:rvc animated:YES];
+        } else {
             JSUIResourceViewController *rvc = [[JSUIResourceViewController alloc] initWithStyle: UITableViewStyleGrouped];
             [rvc setResourceClient:self.resourceClient];
-            [rvc setDescriptor:rd];
-            [self.navigationController pushViewController:rvc animated: YES];
+            [rvc setDescriptor: rd];
+            [self.navigationController pushViewController: rvc animated: YES];
         }
 	}
 }

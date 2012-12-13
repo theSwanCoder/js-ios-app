@@ -40,9 +40,35 @@
 #pragma mark -
 #pragma mark View lifecycle
 
++ (void)displayErrorMessage:(JSOperationResult *)result {
+    NSString *errorMsg = nil;
+    NSString *errorTitle = nil;
+    
+    if (result.error.code == -1003 && result.statusCode == 0) {
+        errorMsg = @"error.unknownhost.dialog.msg";
+        errorTitle = @"error.unknownhost.dialog.title";
+    } if ((result.error.code == -1012 && result.statusCode == 0) || result.statusCode == 401) {
+        errorMsg = @"error.authenication.dialog.msg";
+        errorTitle = @"error.authenication.dialog.title";
+    } else {
+        errorTitle = @"error.general.dialog.msg";
+        if (result.statusCode != 0) {
+            errorMsg = [NSString stringWithFormat:@"%@.%d", @"error.http", result.statusCode];
+        } else {
+            errorMsg = [[result error] localizedDescription];
+        }
+    }
+
+    [[UIAlertView localizedAlert:errorTitle
+                         message:errorMsg
+                        delegate:nil
+               cancelButtonTitle:@"dialog.button.ok"
+               otherButtonTitles:nil] show];
+}
+
 - (id)init {
     self = [super init];
-    resources = nil;    
+    resources = nil;
     descriptor = nil;
     resourceClient = nil;
     
@@ -54,27 +80,8 @@
 }
 
 - (void)requestFinished:(JSOperationResult *)result {  
-	if (result.error != nil) {     
-        NSString *errorMsg = nil;
-        NSString *errorTitle = @"error.readingresponse.dialog.msg";
- 
-        if (result.error) {
-            if (result.error.code == -1003 && result.statusCode == 0) {
-                errorMsg = @"error.unknownhost.dialog.msg";
-                errorTitle = @"error.unknownhost.dialog.title";
-            } if ((result.error.code == -1012 && result.statusCode == 0) || result.statusCode == 401) {
-                errorMsg = @"error.authenication.dialog.msg";
-                errorTitle = @"error.authenication.dialog.title";
-            } else {
-                errorMsg = [[result error] localizedDescription];
-            }
-        }
-        
-        [[UIAlertView localizedAlert:errorTitle 
-                             message:errorMsg 
-                            delegate:nil 
-                   cancelButtonTitle:@"dialog.button.ok"
-                   otherButtonTitles:nil] show];        
+	if (result.error != nil) {
+        [[self class] displayErrorMessage:result];
     } else {
 		resources = [[NSMutableArray alloc] initWithCapacity:0];
         for (JSResourceDescriptor *resourceDescriptor in result.objects) {

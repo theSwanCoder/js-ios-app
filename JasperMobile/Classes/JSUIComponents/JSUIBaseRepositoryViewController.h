@@ -39,6 +39,8 @@
 	UIBarButtonItem *resourecInfoButton;	
 }
 
++ (void)displayErrorMessage:(JSOperationResult *)result;
+
 @property (nonatomic, retain) JSResourceDescriptor *descriptor;
 @property (nonatomic, retain) JSRESTResource *resourceClient;
 @property (nonatomic, retain) NSMutableArray *resources;

@@ -29,8 +29,16 @@
 "servers.password.tip" = "il mio password";
 
 "servers.profile.exists" = "Profilo Server con questo URL, il nome utente e organization_id esiste già. Si prega di modificare il profilo del server";
+"servers.profile.details.title" = "Server Profilo Dettagli";
+"servers.profile.title" = "JasperReports Server profili";
+"servers.profile.configure.tips" = "\n\nÈ possibile aggiungere e configurare il proprio server toccando Edit, oppure è possibile selezionare il server demo fornito da Jaspersoft per provare rapidamente come l'applicazione funziona";
+"servers.profile.configure.help" = "Si prega di aggiungere e configurare un server JasperReports conto toccando Edit";
 
 "servers.new.label" = "Aggiungi profilo server";
+"servers.new.account.title" = "Server di Nuovo account";
+
+"servers.myserver.label" = "Il mio server";
+
 "servers.askpassword.label" = "Chiedi sempre la password";
 "servers.askpassword.dialog.title.label" = "Immettere la password";
 
@@ -43,6 +51,16 @@
 "view.favorites" = "Preferiti";
 "view.library" = "Biblioteca";
 
+"repository.inputparameters.title" = "Parametri di ingresso";
+
+"resource.properties.title" = "Proprietà delle risorse";
+"resource.nestedproperties.title" = "Risorse nidificati";
+"resource.name.title" = "Nome";
+"resource.label.title" = "Etichetta";
+"resource.description.title" = "Descrizione";
+"resource.type.title" = "Tipo";
+"resource.resources.title" = "Risorse";
+
 "noservers.dialog.title" = "Nessun server configurato";
 "noservers.dialog.msg" = "È necessario aggiungere un profilo del server prima di poter visualizzare un repository";
 "noservers.dialog.button.label" = "Configurazione di profili di server";
@@ -54,6 +72,8 @@
 
 /* error messages
  ------------------------------ */
+"error.general.dialog.msg" = "Errore";
+
 "error.readingresponse.dialog.msg" = "Errore durante la lettura della risposta";
 "error.incorrectrequest.dialog.msg" = "La richiesta è sintatticamente corretto";
 
@@ -66,6 +86,22 @@
 "error.unknownhost.dialog.title" = "Del server";
 "error.unknownhost.dialog.msg" = "Un server con il nome host specificato non è stato trovato";
 
+"error.resourcedelete.dialog.title" = "Errore durante l'eliminazione della risorsa";
+
+"error.reportissue.dialog.title" = "La relazione ha avuto alcuni problemi";
+"error.reportempty.dialog.title" = "La relazione è vuoto";
+
+/* HTTP error messages
+ ------------------------------ */
+
+"error.http.400" = "400 - Richiesta non valida. La richiesta non è valida";
+"error.http.403" = "403 - Autorizzazione negata. La richiesta è capito, ma è stato rifiutato";
+"error.http.404" = "404 - Non trovato. L'URI richiesto non è valido o la risorsa richiesta non esiste";
+"error.http.500" = "500 - Errore del server interno";
+"error.http.502" = "502 - Bad Gateway";
+"error.http.503" = "503 - Servizio non disponibile";
+"error.http.504" = "504 - Timeout del gateway";
+
 /* buttons
  ------------------------------ */
 "dialog.button.ok" = "Va bene";
@@ -75,3 +111,7 @@
 "dialog.button.retry" = "Riprova";
 "dialog.button.yes" = "Si";
 "dialog.button.save" = "Memorizzare";
+"dialog.button.info" = "Info";
+"dialog.button.delete" = "Annullare";
+"dialog.button.addfavorite" = "Aggiungi a Preferiti";
+"dialog.button.removefavorite" = "Rimuovi dai preferiti";

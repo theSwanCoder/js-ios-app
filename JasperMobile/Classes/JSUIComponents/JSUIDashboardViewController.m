@@ -26,6 +26,7 @@
 //
 
 #import "JSUILoadingView.h"
+#import "JSUIReportUnitViewController.h"
 #import "JSUIDashboardViewController.h"
 
 @interface JSUIDashboardViewController()
@@ -47,14 +48,22 @@
                               self.descriptor.uriString];
     self.webView.scalesPageToFit = YES;
     self.webView.delegate = self;
-
-    self.loadingIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(145, 190, 20, 20)];
+    
+    self.loadingIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    [JSUIReportUnitViewController setOriginsForLoadingIndicator:self.loadingIndicator interfaceOrientation:self.interfaceOrientation];
     [self.loadingIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
     [self.loadingIndicator setHidesWhenStopped:YES];
     [self.webView addSubview:self.loadingIndicator];
     
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dashboardUrl]]];
+}
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+	return true;
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [JSUIReportUnitViewController setOriginsForLoadingIndicator:self.loadingIndicator interfaceOrientation:toInterfaceOrientation];
 }
 
 - (void)viewDidUnload {
@@ -72,7 +81,6 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     [self.loadingIndicator stopAnimating];
-
 }
 
 @end

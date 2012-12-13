@@ -31,8 +31,8 @@
 "servers.profile.exists" = "Server profile with this url, username and organization_id already exists. Please modify server profile";
 "servers.profile.details.title" = "Server Profile Details";
 "servers.profile.title" = "JasperReports Server profiles";
-"servers.profile.configure.tips" = "\n\nYou can add and configure your own server by tapping Edit, or you can select the demo server provided by Jaspersoft to quickly try out how the app works.";
-"servers.profile.configure.help" = "Please add and configure a JasperReports Server account by tapping Edit.";
+"servers.profile.configure.tips" = "\n\nYou can add and configure your own server by tapping Edit, or you can select the demo server provided by Jaspersoft to quickly try out how the app works";
+"servers.profile.configure.help" = "Please add and configure a JasperReports Server account by tapping Edit";
 
 "servers.new.label" = "Add server profile";
 "servers.new.account.title" = "New server account";
@@ -72,6 +72,8 @@
 
 /* error messages 
  ------------------------------ */
+"error.general.dialog.msg" = "Error";
+
 "error.readingresponse.dialog.msg" = "Error reading the response";
 "error.incorrectrequest.dialog.msg" = "The request was syntactically incorrect";
 
@@ -86,8 +88,19 @@
 
 "error.resourcedelete.dialog.title" = "Error deleting the resource";
 
-"error.reportissue.dialog.title" = "The report had some problems...";
+"error.reportissue.dialog.title" = "The report had some problems";
 "error.reportempty.dialog.title" = "The report is empty";
+
+/* HTTP error messages
+ ------------------------------ */
+
+"error.http.400" = "400 - Bad Request. The request was invalid";
+"error.http.403" = "403 - Permission Denied. The request is understood, but it has been refused";
+"error.http.404" = "404 - Not Found. The URI requested is invalid or the resource requested does not exists";
+"error.http.500" = "500 - Internal Server Error";
+"error.http.502" = "502 - Bad Gateway";
+"error.http.503" = "503 - Service Unavailable";
+"error.http.504" = "504 - Gateway Timeout";
 
 /* input control messages
  ------------------------------ */

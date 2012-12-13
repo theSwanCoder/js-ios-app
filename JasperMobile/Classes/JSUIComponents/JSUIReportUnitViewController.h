@@ -58,8 +58,9 @@
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *pagesButton;
 @property(nonatomic, retain) IBOutlet UIWebView *webView;
 @property(nonatomic, retain) IBOutlet UILabel *label;
-@property(nonatomic, retain) IBOutlet UIView  *backgroundView;
+@property(nonatomic, retain) IBOutlet UIView *backgroundView;
 
++ (void)setOriginsForLoadingIndicator:(UIActivityIndicatorView *)loadingIndicator interfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 - (IBAction)nextPage:(id)sender;
 - (IBAction)prevPage:(id)sender;
 - (IBAction)close:(id)sender;
