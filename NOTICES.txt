@@ -1,4 +1,4 @@
-JasperMobile for iOS version 1.3
+JasperMobile for iOS version 1.4
 Copyright (C) 2012 Jaspersoft Corporation. All rights reserved.
 http://community.jaspersoft.com/projects/jaspermobile-ios
 
