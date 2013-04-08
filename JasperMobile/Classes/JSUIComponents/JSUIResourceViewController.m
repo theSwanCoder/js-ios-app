@@ -122,6 +122,7 @@ static UIFont *_detailFont;
     } else {		
         if (result.objects.count) {
             self.descriptor = [result.objects objectAtIndex:0];
+            [self removeChildResourceDescriptorsWithoutURI];
 		}
         resourceLoaded = true;
 	}
@@ -130,10 +131,22 @@ static UIFont *_detailFont;
     [JSUILoadingView hideLoadingView];
 }
 
+- (void)removeChildResourceDescriptorsWithoutURI {
+    NSMutableIndexSet *descriptorsToRemove = [NSMutableIndexSet indexSet];
+    NSInteger index = 0;
+    NSMutableArray *childResourceDescriptors = [NSMutableArray arrayWithArray:[self.descriptor childResourceDescriptors]];
+    for (JSResourceDescriptor *child in childResourceDescriptors) {
+        if (![child.uriString length]) {
+            [descriptorsToRemove addIndex:index];
+        }
+        index++;
+    }
+    [childResourceDescriptors removeObjectsAtIndexes:descriptorsToRemove];
+    self.descriptor.childResourceDescriptors = childResourceDescriptors;
+}
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self changeFavoriteButtonUI:self.favoriteButton isResourceInFavorites:[[JasperMobileAppDelegate sharedInstance].favorites 
-                                                                            isResourceInFavorites:self.descriptor]];
+    [self changeFavoriteButtonUI:self.favoriteButton isResourceInFavorites:[[JasperMobileAppDelegate sharedInstance].favorites isResourceInFavorites:self.descriptor]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
