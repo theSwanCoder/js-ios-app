@@ -28,6 +28,7 @@
 #import <UIKit/UIKit.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import "JSFavoritesHelper.h"
+#import "UITabBarController+RotationIn_IOS6.h"
 
 /**
  @author Giulio Toffoli giulio@jaspersoft.com

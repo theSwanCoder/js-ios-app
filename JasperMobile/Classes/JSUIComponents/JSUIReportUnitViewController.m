@@ -54,10 +54,6 @@
 @synthesize tempDirectory = _tempDirectory;
 @synthesize webData = _webData;
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return true;
-}
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
 		self.descriptor = nil;
@@ -206,7 +202,7 @@
 			pagingScrollViewFrame.origin.y = 10;
 			pagingScrollViewFrame.size.width += (2 * 10);
 			
-			self.scrollView =[[UIScrollView alloc] initWithFrame:pagingScrollViewFrame];
+			self.scrollView = [[UIScrollView alloc] initWithFrame:pagingScrollViewFrame];
 			self.scrollView.delegate = self;
 			[self setMaxMinZoomScalesForCurrentBounds:self.scrollView page: pageRect.size];			
 			[self.toolbar removeFromSuperview];
@@ -221,10 +217,10 @@
             [html replaceOccurrencesOfString:@"http://localhost:8080/jasperserver-pro" withString:self.reportClient.serverProfile.serverUrl options: NSLiteralSearch range: NSMakeRange(0, [html length])];
             [html replaceOccurrencesOfString:@"dataFormat: 'xml'," withString:@"dataFormat: 'xml',renderer: 'javascript'," options: NSLiteralSearch range: NSMakeRange(0, [html length])];
             [html replaceOccurrencesOfString:@"if(typeof(printRequest) === 'function') printRequest();" withString:@"" options: NSLiteralSearch range: NSMakeRange(0, [html length])];
-            [html writeToFile:path atomically:TRUE encoding:NSUTF8StringEncoding error:nil];
+            [html writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
                         
-            [self.webView setScalesPageToFit:true];
-            [self.webView setHidden:FALSE];
+            [self.webView setScalesPageToFit:YES];
+            [self.webView setHidden:NO];
             [self.webView setDelegate:self];
 			[self.webView loadRequest: [NSURLRequest requestWithURL: [NSURL fileURLWithPath:path]]];
             [JSUILoadingView hideLoadingView];
@@ -401,6 +397,7 @@
         sub = nil;
     }
     self.scrollView = nil;
+    [self.webView setHidden:YES];
     [self.previousController dismissModalViewControllerAnimated:true];
 }
 
@@ -486,6 +483,24 @@
     [self.webData writeToFile:reportFile atomically:YES];
     [self fileRequestFinished:reportFile];
     [JSUILoadingView hideLoadingView];
+}
+
+- (BOOL)shouldAutorotate {
+    return ![self.webView isHidden];
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return ![self.webView isHidden] && (interfaceOrientation == UIInterfaceOrientationPortrait ||
+                                        interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+                                        interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+}
+
+- (NSUInteger)supportedInterfaceOrientations {
+    if ([self.webView isHidden]) {
+        return UIInterfaceOrientationMaskPortrait;
+    }
+    
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 @end

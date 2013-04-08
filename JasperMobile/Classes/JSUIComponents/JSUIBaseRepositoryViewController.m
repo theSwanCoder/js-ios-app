@@ -40,6 +40,14 @@
 #pragma mark -
 #pragma mark View lifecycle
 
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationPortrait;
+}
+
 + (void)displayErrorMessage:(JSOperationResult *)result {
     NSString *errorMsg = nil;
     NSString *errorTitle = nil;
@@ -171,8 +179,7 @@
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
 	return (CGFloat)0.f;
 }
 

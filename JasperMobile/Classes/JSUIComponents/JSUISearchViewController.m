@@ -45,28 +45,21 @@
     return self;
 }
 
--(void)updateTableContent {
+- (void)updateTableContent {
     // does nothing...
 }
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)sBar                     // called when keyboard search button pressed
-{
+// Called when keyboard search button pressed
+- (void)searchBarSearchButtonClicked:(UISearchBar *)sBar {
     NSString *searchText = [sBar text];
-    if ([searchText length] > 0)
-    {
+    if ([searchText length] > 0) {
         [sBar resignFirstResponder];
-        
         NSMutableDictionary *args = [NSMutableDictionary dictionary];
         [args setObject:searchText forKey: @"q"];
         [args setObject:@"1" forKey:@"recursive"];
-
+        
         [self.resourceClient resources:@"" query:searchText types:nil recursive:YES limit:-1 delegate:self];        
     }
-    else
-    {
-        // [self clearTable];
-    }
-    
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)sBar {

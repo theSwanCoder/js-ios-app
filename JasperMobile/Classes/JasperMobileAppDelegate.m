@@ -244,7 +244,7 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
     tabBarController.viewControllers = controllers;
     tabBarController.delegate = self;
     
-    [self.window addSubview:tabBarController.view];
+    [self.window setRootViewController:tabBarController];
     
     if (firstRun == 0 || [servers count] == 0 || (self.resourceClient.serverProfile.alwaysAskPassword.boolValue &&
                                                   self.resourceClient.serverProfile.password == nil)) {
@@ -259,7 +259,7 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
             [self disableTabBar];
         }
     } else {
-        self.lastSelectedViewController = self.libraryController;
+        self.lastSelectedViewController = self.navigationController;
         [tabBarController setSelectedIndex:0];
 	}
     
