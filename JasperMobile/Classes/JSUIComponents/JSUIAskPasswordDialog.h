@@ -25,7 +25,7 @@
 //  Jaspersoft Corporation
 //
 
-#import <jaspersoft-sdk/JSProfile.h>
+#import "ServerProfile.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
@@ -33,7 +33,7 @@
  */
 @interface JSUIAskPasswordDialog : NSObject <UIAlertViewDelegate, UITextFieldDelegate>
 
-+ (UIAlertView *)askPasswordDialogForProfile:(JSProfile *)profile delegate:(id)delegate updateMethod:(SEL)updateMethod;
-- (id)initWithProfile:(JSProfile *)profile callback:(id)callback updateMethod:(SEL)updateMethod;
++ (UIAlertView *)askPasswordDialogForProfile:(ServerProfile *)profile delegate:(id)delegate updateMethod:(SEL)updateMethod;
+- (id)initWithProfile:(ServerProfile *)serverProfile callback:(id)callback updateMethod:(SEL)updateMethod;
 
 @end

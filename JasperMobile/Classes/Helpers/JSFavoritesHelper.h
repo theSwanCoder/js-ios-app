@@ -25,6 +25,7 @@
 //  Jaspersoft Corporation
 //
 
+#import "ServerProfile.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import <Foundation/Foundation.h>
 
@@ -37,11 +38,8 @@
  */
 @interface JSFavoritesHelper : NSObject
 
-// Checks if passed resource is a wrapper
-+ (BOOL)isResourceWrapper:(JSResourceDescriptor *)resource;
-
 // Init for specified server (by server index)
-- (id)initWithServerIndex:(NSInteger)serverIndex andProfile:(JSProfile *)profile;
+- (id)initWithServerProfile:(ServerProfile *)serverProfile;
 
 // Adds to favorites. Warning: This will not automatically write changes to NSUserDefaults,
 // additionaly you need to call synchronizeWithUserDefaults to do that
@@ -56,14 +54,5 @@
 // Returns list of wrappers from favorites. Wrapper is a JSResourceDescriptor 
 // with only setted name, label and special wsType
 - (NSMutableArray *)wrappersFromFavorites;
-
-// Writes changes to NSUserDefaults
-- (void)synchronizeWithUserDefaults;
-
-// Clears favorites for server and write changes to NSUserDefaults
-- (void)clearFavoritesAndSynchronizeWithUserDefaults;
-
-// Checks if changes was made to favorites
-- (BOOL)isChangesWasMade;
 
 @end

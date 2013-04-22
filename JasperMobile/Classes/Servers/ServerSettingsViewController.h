@@ -26,8 +26,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
-
+#import "ServerProfile+Helpers.h"
 
 /**
  @author Giulio Toffoli giulio@jaspersoft.com
@@ -45,7 +44,7 @@
 }
 
 @property (nonatomic, retain) UITableViewCell *aliasCell, *urlCell, *organizationCell, *usernameCell, *passwordCell;
-@property (nonatomic, retain) JSProfile *profile;
+@property (nonatomic, retain) ServerProfile *currentServerProfile;
 @property (nonatomic, retain) UIViewController *previousViewController;
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;

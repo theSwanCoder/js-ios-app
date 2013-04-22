@@ -38,8 +38,9 @@
                                          otherButtonTitles:nil];
     va_list args;
     va_start (args, otherButtonTitles);
-        if (otherButtonTitles != nil) {
+        while (otherButtonTitles != nil) {
             [view addButtonWithTitle:NSLocalizedString(otherButtonTitles, nil)];
+            otherButtonTitles = va_arg(args, NSString*);
         }
     va_end(args);
 

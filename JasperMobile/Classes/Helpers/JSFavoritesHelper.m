@@ -26,98 +26,67 @@
 //
 
 #import "JSFavoritesHelper.h"
-
-static NSString * const JS_APP_TYPE_FAVORITE_WRAPPER = @"JS_APP_TYPE_FAVORITE_WRAPPER";
+#import "Favorites.h"
+#import "JasperMobileAppDelegate.h"
 
 @interface JSFavoritesHelper()
 
-// Inner favorites state
-@property (nonatomic) NSInteger serverIndex;
-@property (nonatomic, copy) NSString *userNameWithOrgId;
-@property (nonatomic, retain) NSMutableDictionary *favorites;
-@property (nonatomic, retain) NSString *serverKey;
-@property (nonatomic) BOOL changesWasMade;
+@property (nonatomic, retain) ServerProfile *serverProfile;
 
 @end
 
 @implementation JSFavoritesHelper
 
-@synthesize serverIndex = _serverIndex;
-@synthesize userNameWithOrgId = _userNameWithOrgId;
-@synthesize serverKey = _serverKey;
-@synthesize favorites = _favorites;
-@synthesize changesWasMade = _changesWasMade;
-
-+ (BOOL)isResourceWrapper:(JSResourceDescriptor *)resource {
-    return [resource.wsType isEqualToString: JS_APP_TYPE_FAVORITE_WRAPPER];
-}
-
-- (id)initWithServerIndex:(NSInteger)serverIndex andProfile:(JSProfile *)profile {
+- (id)initWithServerProfile:(ServerProfile *)serverProfile {
     if (self = [super init]) {
-        self.serverIndex = serverIndex;
-        self.userNameWithOrgId = [profile getUsenameWithOrganization];
-        self.serverKey = [NSString stringWithFormat: @"jaspersoft.server.favorites.%d", self.serverIndex];
-        self.changesWasMade = NO;
-        
-        // Load all favorites for specified server
-        NSDictionary *favorites = [[[NSUserDefaults standardUserDefaults] objectForKey:self.serverKey] 
-                                   objectForKey: self.userNameWithOrgId] ?: [[NSDictionary alloc] init];
-        self.favorites = [[NSMutableDictionary alloc] initWithDictionary:favorites];
+        self.serverProfile = serverProfile;
     }
-    
     return self;
 }
 
-- (id)init {
-    return [self initWithServerIndex:0 andProfile:nil];
-}
-
 - (void)addToFavorites:(JSResourceDescriptor *)resourceDescriptor {
-    self.changesWasMade = YES;
-    [self.favorites setObject:[[NSDictionary alloc] initWithObjectsAndKeys:resourceDescriptor.label, @"label", 
-                               resourceDescriptor.wsType, @"wsType", nil] forKey:resourceDescriptor.uriString];
+    NSManagedObjectContext *managedObjectContext = [[JasperMobileAppDelegate sharedInstance] managedObjectContext];
+    
+    Favorites *favorites = [NSEntityDescription insertNewObjectForEntityForName:@"Favorites" inManagedObjectContext:managedObjectContext];
+    favorites.label = resourceDescriptor.label;
+    favorites.uri = resourceDescriptor.uriString;
+    favorites.wsType = resourceDescriptor.wsType;
+    favorites.username = self.serverProfile.username;
+    favorites.organization = self.serverProfile.organization;
+    [self.serverProfile addFavoritesObject:favorites];
+    
+    [managedObjectContext save:nil];
 }
 
 - (BOOL)isResourceInFavorites:(JSResourceDescriptor *)resourceDescriptor {
-    if (!resourceDescriptor) {
-        return NO;
-    }
-    
-    return [self.favorites objectForKey:resourceDescriptor.uriString] != NULL;
+    NSFetchRequest *favoritesFetchRequest = [self favoritesFetchRequest:resourceDescriptor];
+    NSManagedObjectContext *managedObjectContext = [[JasperMobileAppDelegate sharedInstance] managedObjectContext];
+    return [managedObjectContext countForFetchRequest:favoritesFetchRequest error:nil] == 1;
 }
 
 - (void)removeFromFavorites:(JSResourceDescriptor *)resourceDescriptor {
-    self.changesWasMade = YES;
-    [self.favorites removeObjectForKey:resourceDescriptor.uriString];
-}
+    NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resourceDescriptor];
+    NSManagedObjectContext *managedObjectContext = [[JasperMobileAppDelegate sharedInstance] managedObjectContext];
 
-- (void)synchronizeWithUserDefaults {
-    if (self.changesWasMade) {        
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSMutableDictionary *allFavorites = [[NSMutableDictionary alloc] 
-                                             initWithDictionary:([prefs objectForKey:self.serverKey] ?: [NSDictionary dictionary])];
-        [allFavorites setObject:self.favorites forKey:self.userNameWithOrgId];
-        [prefs setObject:allFavorites forKey:self.serverKey];
-        [prefs synchronize];
-        self.changesWasMade = NO;
-    }
+    Favorites *favorites = [[managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    [managedObjectContext deleteObject:favorites];
+    [managedObjectContext save:nil];
 }
-
+     
 - (NSArray *)wrappersFromFavorites {
-    if (!self.favorites.count) {
-        return nil;
-    }
-    
-    NSArray *sortedKeys = [self.favorites keysSortedByValueUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            return [[obj1 objectForKey:@"label"] compare:[obj2 objectForKey:@"label"]];
-    }];
-    
-    NSMutableArray *resources = [NSMutableArray arrayWithCapacity:0];
-    for (NSString *uri in sortedKeys) {
+    NSMutableArray *resources = [NSMutableArray array];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"label" ascending:YES]];
+    for (Favorites *favorites in [self.serverProfile.favorites sortedArrayUsingDescriptors:sortDescriptors]) {
+        // Skip favorites for other usernames and organizations
+        if (![self.serverProfile.username isEqual:favorites.username] ||
+            ![self.serverProfile.organization isEqual:favorites.organization]) {
+            continue;
+        }
+        
         JSResourceDescriptor *resource = [[JSResourceDescriptor alloc] init];
-        resource.uriString = uri;
-        resource.label = [[self.favorites objectForKey:uri] objectForKey:@"label"];
-        resource.wsType = [[self.favorites objectForKey:uri] objectForKey:@"wsType"];
+        resource.uriString = favorites.uri;
+        resource.label = favorites.label;
+        resource.wsType = favorites.wsType;
         
         [resources addObject:resource];
     }
@@ -125,15 +94,12 @@ static NSString * const JS_APP_TYPE_FAVORITE_WRAPPER = @"JS_APP_TYPE_FAVORITE_WR
     return resources;
 }
 
-- (void)clearFavoritesAndSynchronizeWithUserDefaults {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs removeObjectForKey:self.serverKey];
-    [prefs synchronize];
+- (NSFetchRequest *)favoritesFetchRequest:(JSResourceDescriptor *)resourceDescriptor {
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Favorites"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(serverProfile == %@) AND (uri like %@) AND (username like %@) AND (organization like %@)",
+                              self.serverProfile, resourceDescriptor.uriString, self.serverProfile.username, self.serverProfile.organization];
+    fetchRequest.predicate = predicate;
+    return fetchRequest;
 }
-
-- (BOOL)isChangesWasMade {
-    return self.changesWasMade;
-}
-
 
 @end

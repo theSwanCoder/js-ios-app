@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2005 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -21,26 +21,22 @@
  */
 
 //
-//  ServersViewController.h
+//  Favorites.h
 //  Jaspersoft Corporation
 //
 
-#import <UIKit/UIKit.h>
-#import "ServerSettingsViewController.h"
-#import "ServerProfile+Helpers.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-/**
- @author Giulio Toffoli giulio@jaspersoft.com
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.0
- */
-@interface ServersViewController : UITableViewController <UINavigationBarDelegate> {
-	UIBarButtonItem *editDoneButton;
-	BOOL editMode;
-}
+@class ServerProfile;
 
-- (void)addServer:(ServerProfile *)serverProfile;
-- (void)updateServer:(ServerProfile *)serverProfile;
-- (void)editServer:(ServerProfile *)serverProfile;
+@interface Favorites : NSManagedObject
+
+@property (nonatomic, retain) NSString * organization;
+@property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSString * label;
+@property (nonatomic, retain) NSString * uri;
+@property (nonatomic, retain) NSString * wsType;
+@property (nonatomic, retain) ServerProfile *serverProfile;
 
 @end

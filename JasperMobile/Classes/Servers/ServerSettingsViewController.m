@@ -29,7 +29,6 @@
 #import "ServersViewController.h"
 #import "JasperMobileAppDelegate.h"
 #import "UIAlertView+LocalizedAlert.h"
-#import "JSProfile+Helpers.h"
 
 @implementation ServerSettingsViewController
 
@@ -38,7 +37,7 @@
 @synthesize urlCell;
 @synthesize usernameCell;
 @synthesize passwordCell;
-@synthesize profile;
+@synthesize currentServerProfile;
 @synthesize previousViewController;
 
 #pragma mark -
@@ -58,34 +57,33 @@
 
 - (IBAction)saveAction:(id)sender {
 	BOOL isNew = NO;
+    JasperMobileAppDelegate *app = [JasperMobileAppDelegate sharedInstance];
     
     if (aliasTextField.text == nil || [aliasTextField.text isEqualToString:@""]) {
         [[UIAlertView localizedAlert:@"" message:@"servers.name.errmsg.empty" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];        
         return;
     }
     
-    for (JSProfile *serverProfile in [JasperMobileAppDelegate sharedInstance].servers) {
-        if (![serverProfile isEqual:profile] && [serverProfile.alias isEqualToString:aliasTextField.text]) {
+    for (ServerProfile *serverProfile in app.servers) {
+        if (![serverProfile isEqual:currentServerProfile] && [serverProfile.alias isEqualToString:aliasTextField.text]) {
             [[UIAlertView localizedAlert:@"" message:@"servers.name.errmsg.exists" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];        
             return;
         }
     }
     
     NSURL *url = [NSURL URLWithString:urlTextField.text];    
-    if (!url || !url.scheme || !url.host)
-    {
+    if (!url || !url.scheme || !url.host) {
         [[UIAlertView localizedAlert:@"" message:@"servers.url.errmsg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
         return;
     }
     
-    if (usernameTextField.text == nil || [usernameTextField.text isEqualToString:@""])
-    {
+    if (usernameTextField.text == nil || [usernameTextField.text isEqualToString:@""]) {
         [[UIAlertView localizedAlert:@"" message:@"servers.username.errmsg.empty" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
         return;
     }
     
-    for (JSProfile *serverProfile in [JasperMobileAppDelegate sharedInstance].servers) {
-        if (profile && [serverProfile isEqual:profile]) {
+    for (ServerProfile *serverProfile in app.servers) {
+        if (currentServerProfile && [serverProfile isEqual:currentServerProfile]) {
             continue;
         } else if ([serverProfile isEqualToProfileByServerURL:urlTextField.text username:usernameTextField.text 
                                           organization:organizationTextField.text]) {
@@ -96,27 +94,28 @@
     }
     
     // Create the new server
-	if (profile == nil) {
+	if (currentServerProfile == nil) {
 		isNew = YES;
-        profile = [[JSProfile alloc] init];
+        currentServerProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[app managedObjectContext]];
 	}
 
-    profile.alias = aliasTextField.text;
-    profile.serverUrl = urlTextField.text;
-    profile.organization = organizationTextField.text;
-    profile.username = usernameTextField.text;
-    profile.password = passwordTextField.text;
-    profile.tempPassword = profile.password;
-    profile.alwaysAskPassword = [NSNumber numberWithBool:askPasswordSwitch.on];
+    currentServerProfile.alias = aliasTextField.text;
+    currentServerProfile.serverUrl = urlTextField.text;
+    currentServerProfile.organization = organizationTextField.text;
+    currentServerProfile.username = usernameTextField.text;
+    currentServerProfile.password = passwordTextField.text;
+    currentServerProfile.askPassword = [NSNumber numberWithBool:askPasswordSwitch.on];
+    [[app managedObjectContext] save:nil];
+    [ServerProfile storePasswordInKeychain:currentServerProfile.password profileID:[currentServerProfile profileID]];
 	
 	[self.navigationController popViewControllerAnimated:YES];
 	
 	if (previousViewController != nil && [previousViewController isKindOfClass: [ServersViewController class]]) {
 		
 		if (!isNew) {
-			[(ServersViewController *)previousViewController updateServer:profile];
+			[(ServersViewController *)previousViewController updateServer:currentServerProfile];
 		} else {
-			[(ServersViewController *)previousViewController addServer:profile];
+			[(ServersViewController *)previousViewController addServer:currentServerProfile];
 		}
 	}
 }
@@ -179,8 +178,8 @@
 				aliasTextField.placeholder = NSLocalizedString(@"servers.myserver.label", nil);
 				aliasTextField.keyboardType = UIKeyboardTypeDefault;
 				aliasTextField.returnKeyType = UIReturnKeyNext;
-				if(profile != nil && profile.alias != nil) {
-                    aliasTextField.text = profile.alias;
+				if(currentServerProfile != nil && currentServerProfile.alias != nil) {
+                    aliasTextField.text = currentServerProfile.alias;
                 }
 				[self.aliasCell addSubview:aliasTextField];
 			}
@@ -196,8 +195,8 @@
 				urlTextField.placeholder = NSLocalizedString(@"servers.url.tip", nil);
 				urlTextField.keyboardType = UIKeyboardTypeURL;
 				urlTextField.returnKeyType = UIReturnKeyNext;
-				if(profile != nil && profile.serverUrl != nil)
-					urlTextField.text = profile.serverUrl;
+				if(currentServerProfile != nil && currentServerProfile.serverUrl != nil)
+					urlTextField.text = currentServerProfile.serverUrl;
 				[self.urlCell addSubview:urlTextField];
 			}
 			return self.urlCell;
@@ -211,8 +210,8 @@
 				organizationTextField.placeholder = NSLocalizedString(@"servers.orgid.tip", nil);
 				organizationTextField.keyboardType = UIKeyboardTypeDefault;
 				organizationTextField.returnKeyType = UIReturnKeyNext;
-				if(profile != nil && profile.organization != nil)
-					organizationTextField.text = profile.organization;
+				if(currentServerProfile != nil && currentServerProfile.organization != nil)
+					organizationTextField.text = currentServerProfile.organization;
 				[self.organizationCell addSubview:organizationTextField];
 			}
 			return self.organizationCell;
@@ -226,8 +225,8 @@
 				usernameTextField.placeholder = NSLocalizedString(@"servers.username.tip", nil);
 				usernameTextField.keyboardType = UIKeyboardTypeDefault;
 				usernameTextField.returnKeyType = UIReturnKeyNext;
-				if(profile != nil && profile.username != nil)
-					usernameTextField.text = profile.username;
+				if(currentServerProfile != nil && currentServerProfile.username != nil)
+					usernameTextField.text = currentServerProfile.username;
 				[self.usernameCell addSubview:usernameTextField];
 			}
 			return self.usernameCell;
@@ -245,8 +244,9 @@
 				passwordTextField.autocorrectionType = UITextAutocorrectionTypeNo;
 				passwordTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 
-                if (!profile.alwaysAskPassword.boolValue) {
-                    passwordTextField.text = profile.password ?: profile.tempPassword;
+                ///~ @TODO finish this
+                if (!currentServerProfile.askPassword.boolValue) {
+                    passwordTextField.text = currentServerProfile.password;// ?: profile.tempPassword;
                 } else {
                     passwordTextField.textColor = [UIColor lightGrayColor];
                     self.passwordCell.textLabel.textColor = [UIColor lightGrayColor];
@@ -273,7 +273,7 @@
                 labelSize.width = ceil(labelSize.width / 5) * 5;
                 CGRect frame = CGRectMake(labelSize.width + xSpace, 8, askPasswordCell.frame.size.width - labelSize.width - 50, 28);
                 askPasswordSwitch = [[UISwitch alloc] initWithFrame:frame];
-                askPasswordSwitch.on = profile.alwaysAskPassword.boolValue;
+                askPasswordSwitch.on = currentServerProfile.askPassword.boolValue;
                 [askPasswordSwitch addTarget:self action:@selector(askPasswordSwitchToggled:) forControlEvents:UIControlEventTouchUpInside];
                 
                 [askPasswordCell addSubview:askPasswordSwitch];
@@ -301,8 +301,7 @@
     }
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
 	if (textField.returnKeyType == UIReturnKeyNext) {
         UITableViewCell *cell = (UITableViewCell *)[textField superview];
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -333,7 +332,6 @@
 	 [detailViewController release];
 	 */
 }
-
 
 #pragma mark -
 #pragma mark Memory management

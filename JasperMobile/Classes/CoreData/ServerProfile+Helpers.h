@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2005 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -21,26 +21,20 @@
  */
 
 //
-//  ServersViewController.h
+//  ServerProfile+Helpers.h
 //  Jaspersoft Corporation
 //
 
-#import <UIKit/UIKit.h>
-#import "ServerSettingsViewController.h"
-#import "ServerProfile+Helpers.h"
+#import "ServerProfile.h"
 
-/**
- @author Giulio Toffoli giulio@jaspersoft.com
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.0
- */
-@interface ServersViewController : UITableViewController <UINavigationBarDelegate> {
-	UIBarButtonItem *editDoneButton;
-	BOOL editMode;
-}
+@interface ServerProfile (Helpers)
 
-- (void)addServer:(ServerProfile *)serverProfile;
-- (void)updateServer:(ServerProfile *)serverProfile;
-- (void)editServer:(ServerProfile *)serverProfile;
++ (NSString *)profileIDByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization;
++ (BOOL)storePasswordInKeychain:(NSString *)password profileID:(NSString *)profileID;
++ (NSString *)passwordFromKeychain:(NSString *)profileID;
++ (BOOL)deletePasswordFromKeychain:(NSString *)profileID;
+- (NSString *)profileID;
+- (BOOL)isEqualToProfile:(ServerProfile *)profile;
+- (BOOL)isEqualToProfileByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization;
 
 @end

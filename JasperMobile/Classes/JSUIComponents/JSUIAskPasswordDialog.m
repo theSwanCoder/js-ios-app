@@ -31,7 +31,7 @@
 @interface JSUIAskPasswordDialog()
 
 @property (nonatomic, retain) UITextField *passwordTextField;
-@property (nonatomic, retain) JSProfile *profile;
+@property (nonatomic, retain) ServerProfile *serverProfile;
 @property (nonatomic, retain) id callback;
 @property (nonatomic, assign) SEL updateMethod;
 @property (nonatomic, retain) UIAlertView *askPasswordAlert;
@@ -41,13 +41,13 @@
 @implementation JSUIAskPasswordDialog
 
 @synthesize passwordTextField = _passwordTextField;
-@synthesize profile = _profile;
+@synthesize serverProfile = _serverProfile;
 @synthesize callback = _callback;
 @synthesize updateMethod = _updateMethod;
 
-+ (UIAlertView *)askPasswordDialogForProfile:(JSProfile *)profile delegate:(id)delegate updateMethod:(SEL)updateMethod {
++ (UIAlertView *)askPasswordDialogForProfile:(ServerProfile *)serverProfile delegate:(id)delegate updateMethod:(SEL)updateMethod {
     static JSUIAskPasswordDialog *tempStorage;
-    tempStorage = [[JSUIAskPasswordDialog alloc] initWithProfile:profile callback:delegate updateMethod:updateMethod];
+    tempStorage = [[JSUIAskPasswordDialog alloc] initWithProfile:serverProfile callback:delegate updateMethod:updateMethod];
     
     UIAlertView *askPasswordAlert = [[UIAlertView alloc]
                  initWithTitle:NSLocalizedString(@"servers.askpassword.dialog.title.label", nil)
@@ -97,9 +97,9 @@
     return askPasswordAlert;
 }
 
-- (id)initWithProfile:(JSProfile *)profile callback:(id)callback updateMethod:(SEL)updateMethod {
+- (id)initWithProfile:(ServerProfile *)serverProfile callback:(id)callback updateMethod:(SEL)updateMethod {
     if (self = [super init]) {
-        self.profile = profile;
+        self.serverProfile = serverProfile;
         self.callback = callback;
         self.updateMethod = updateMethod;
     }
@@ -114,8 +114,8 @@
 }
 
 - (void)updateProfile {
-    self.profile.password = self.passwordTextField.text ? : @"";
-    [[JasperMobileAppDelegate sharedInstance] setProfile:self.profile];
+    self.serverProfile.password = self.passwordTextField.text ? : @"";
+    [[JasperMobileAppDelegate sharedInstance] initProfileForRESTClient:self.serverProfile];
     if (self.updateMethod && [self.callback respondsToSelector:self.updateMethod]) {
         [self.callback performSelector:self.updateMethod];
     }

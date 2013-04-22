@@ -27,8 +27,7 @@
 
 #import "JasperMobileAppDelegate.h"
 #import "JSUIBaseRepositoryViewController.h"
-#import "SSKeychain.h"
-#import "JSProfile+Helpers.h"
+#import "JSProfile.h"
 #import "JSAppUpdater.h"
 
 @interface JasperMobileAppDelegate()
@@ -51,23 +50,22 @@
 @synthesize servers;
 @synthesize reportClient;
 @synthesize resourceClient;
-@synthesize activeServerIndex;
 @synthesize favorites;
 @synthesize requestTimeoutSeconds;
 @synthesize reportRequestTimeoutSeconds;
 @synthesize lastSelectedViewController;
+@synthesize managedObjectContext = _managedObjectContext;
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 static JasperMobileAppDelegate *sharedInstance = nil;
-static NSString * const keychainServiceName = @"JasperMobilePasswordStorage";
 static NSString * const keyDefaultRequestTimeoutSeconds = @"defaultRequestTimeoutSeconds";
 static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutSeconds";
+static NSString * const productName = @"JasperMobile";
+static ServerProfile * currentActiveServerProfile;
 
 + (JasperMobileAppDelegate *)sharedInstance {
     return sharedInstance;
-}
-
-+ (NSString *)keychainServiceName {
-    return keychainServiceName;
 }
 
 - (IBAction)configureServersDone:(id)sender {
@@ -90,121 +88,86 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
     [(JSUIBaseRepositoryViewController *)searchController.topViewController setResourceClient: resClient];    
 }
 
-
--(void)loadServers {
-	
-	if (servers == nil)
-	{
+- (void)loadServers:(NSInteger)notFirstRun {
+    if (servers == nil) {
 		servers = [[NSMutableArray alloc] initWithCapacity:1];
 	}
     
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];	
-    NSInteger count = [prefs integerForKey:@"jaspersoft.server.count"];
-    NSInteger firstRun = [prefs integerForKey:@"jaspersoft.mobile.firstRun"];
+    // Get all ServerProfile instances
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"alias" ascending:YES]];
+    NSUInteger count = [[self managedObjectContext] countForFetchRequest:fetchRequest error:nil];
     
-    if (count == 0) {
-        // If this is the first time we are using this application, we should load a special demo configuration
+    if (count == 0 && notFirstRun == NO) {
+        ServerProfile *serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[self managedObjectContext]];
         
-        if (firstRun == 0) {
-
-            JSProfile *profile = [[JSProfile alloc] initWithAlias:@"Jaspersoft Mobile Demo" 
-                                                         username:@"phoneuser"
-                                                         password:@"phoneuser"
-                                                     organization:@"organization_1" 
-                                                        serverUrl:@"http://mobiledemo.jaspersoft.com/jasperserver-pro"];                    
-            [servers addObject: profile];
-        }
+        serverProfile.alias = @"Jaspersoft Mobile Demo";
+        serverProfile.username = @"phoneuser";
+        serverProfile.password = @"phoneuser";
+        serverProfile.organization = @"organization_1";
+        serverProfile.serverUrl = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
+        serverProfile.askPassword = [NSNumber numberWithBool:NO];
+        
+        [[self managedObjectContext] save:nil];
+        [servers addObject: serverProfile];
+        [ServerProfile storePasswordInKeychain:serverProfile.password profileID:[serverProfile profileID]];
     } else if (count > 0) {
-        for (NSInteger i = 0; i < count; ++i) {
-            NSString *alias = [prefs objectForKey:[NSString stringWithFormat: @"jaspersoft.server.alias.%d", i]];
-            NSString *username = [prefs objectForKey:[NSString stringWithFormat: @"jaspersoft.server.username.%d", i]];
-            NSString *organization = [prefs objectForKey:[NSString stringWithFormat: @"jaspersoft.server.organization.%d", i]];
-            NSString *profUrl = [prefs objectForKey:[NSString stringWithFormat: @"jaspersoft.server.baseUrl.%d",i]];
-            NSString *profID = [JSProfile profileIDByServerURL:profUrl username:username organization:organization];
-            NSNumber *askPassword = [prefs objectForKey:[NSString stringWithFormat: @"jaspersoft.server.alwaysAskPassword.%d", i]] ?: [NSNumber numberWithBool:NO];
-            NSString *password = nil;
-            NSString *tempPassword = [SSKeychain passwordForService:[self.class keychainServiceName] account:profID];
-            
-            if (!askPassword.boolValue) {
-                password = tempPassword;
-            }
-            
-            JSProfile *profile = [[JSProfile alloc] initWithAlias:alias
-                                                         username:username 
-                                                         password:password
-                                                     organization:organization
-                                                        serverUrl:profUrl];
-            profile.alwaysAskPassword = askPassword;
-            profile.tempPassword = tempPassword;
-            [servers addObject:profile];
+        NSArray *serverProfiles = [[self managedObjectContext] executeFetchRequest:fetchRequest error:nil];
+        ServerProfile *activeServerProfile;
+        
+        NSManagedObjectID *activeServerID = [[self persistentStoreCoordinator] managedObjectIDForURIRepresentation:[prefs URLForKey:@"jaspersoft.server.active"]];
+        if (!activeServerID) {
+            activeServerID = [[serverProfiles objectAtIndex:0] objectID];
         }
         
-        self.resourceClient = [[JSRESTResource alloc] initWithProfile:(JSProfile *)[servers objectAtIndex:self.activeServerIndex]];
-        self.reportClient = [[JSRESTReport alloc] initWithProfile:(JSProfile *)[servers objectAtIndex:self.activeServerIndex]];
-        [self setProfile:[servers objectAtIndex:self.activeServerIndex]];        
-        self.activeServerIndex = [prefs integerForKey:@"jaspersoft.server.active"];
-        if (self.activeServerIndex < 0 || self.activeServerIndex >= count) { 
-            self.activeServerIndex = 0;
+        for (ServerProfile *serverProfile in serverProfiles) {
+            serverProfile.password = [ServerProfile passwordFromKeychain:[serverProfile profileID]];
+            [servers addObject:serverProfile];
+            
+            if ([activeServerID isEqual:serverProfile.objectID]) {
+                activeServerProfile = serverProfile;
+            }
         }
+        
+        [self initProfileForRESTClient:activeServerProfile];
     }
 }
 
-- (void)setProfile:(JSProfile *)profile {
-    if (profile == nil) {
+- (void)initProfileForRESTClient:(ServerProfile *)serverProfile {
+    currentActiveServerProfile = serverProfile;
+    
+    if (serverProfile == nil) {
         self.resourceClient = nil;
         self.reportClient = nil;
-    } else {    
-        if (!self.resourceClient) { self.resourceClient = [[JSRESTResource alloc] init]; }
-        if (!self.reportClient) { self.reportClient = [[JSRESTReport alloc] init]; }
+    } else {
+        if (!self.resourceClient) {
+            self.resourceClient = [[JSRESTResource alloc] init];
+            self.reportClient = [[JSRESTReport alloc] init];
+        }
+
+        JSProfile *profile = [[JSProfile alloc] initWithAlias:serverProfile.alias
+                                username:serverProfile.username
+                                password:serverProfile.password
+                            organization:serverProfile.organization
+                               serverUrl:serverProfile.serverUrl];;
         self.resourceClient.serverProfile = profile;
+        // Forces to refresh server info
         [self.resourceClient serverInfo];
         self.reportClient.serverProfile = self.resourceClient.serverProfile;
-    }    
-    self.resourceClient.timeoutInterval = self.requestTimeoutSeconds;
-    self.reportClient.timeoutInterval = self.reportRequestTimeoutSeconds;
-    
-    self.resourceClient.timeoutInterval = self.requestTimeoutSeconds;
-    self.reportClient.timeoutInterval = self.reportRequestTimeoutSeconds;
-    
-    [self setResourceClientForControllers:self.resourceClient];
-    
-    NSInteger index = [servers indexOfObject:profile];
-    
-	if (index >= 0) {
-        [self.favorites synchronizeWithUserDefaults];
-        self.favorites = [[JSFavoritesHelper alloc] initWithServerIndex:index andProfile:profile];
-		NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-		[prefs setInteger:index forKey:@"jaspersoft.server.active"];
-        self.activeServerIndex = index;
-	}    
-}
-
-- (void)saveServers {
-	if (servers) {	
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        	
-        for (NSInteger i = 0; i < servers.count; ++i) {
-            JSProfile *profile = [servers objectAtIndex:i];
-    
-            [prefs setObject:profile.alias forKey:[NSString stringWithFormat: @"jaspersoft.server.alias.%d", i]];
-            [prefs setObject:profile.serverUrl forKey:[NSString stringWithFormat: @"jaspersoft.server.baseUrl.%d", i]];
-            [prefs setObject:profile.organization forKey:[NSString stringWithFormat: @"jaspersoft.server.organization.%d", i]];
-            [prefs setObject:profile.alwaysAskPassword forKey:[NSString stringWithFormat: @"jaspersoft.server.alwaysAskPassword.%d", i]];
-            
-            // TODO: make store of password safe using SFHF
-            [prefs setObject:profile.username forKey:[NSString stringWithFormat: @"jaspersoft.server.username.%d", i]];
-            
-            // Save password inside keychain storage by profile ID (hashed as SHA1)
-            [SSKeychain setPassword:profile.password forService:[self.class keychainServiceName] account:[profile profileID]];
-            
-            if (profile.alwaysAskPassword.boolValue) {
-                profile.password = nil;
-            }
-        }
-        [prefs setInteger: servers.count forKey: @"jaspersoft.server.count"];
-        [prefs synchronize];
+        self.resourceClient.timeoutInterval = self.requestTimeoutSeconds;
+        self.reportClient.timeoutInterval = self.reportRequestTimeoutSeconds;
+        self.resourceClient.timeoutInterval = self.requestTimeoutSeconds;
+        self.reportClient.timeoutInterval = self.reportRequestTimeoutSeconds;
+        [self setResourceClientForControllers:self.resourceClient];
+        self.favorites = [[JSFavoritesHelper alloc] initWithServerProfile:serverProfile];
         
+        if (![self.resourceClient.serverProfile.alias isEqual:serverProfile.alias]) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            [prefs setURL:[[serverProfile objectID] URIRepresentation] forKey:@"jaspersoft.server.active"];
+            [prefs synchronize];
+        }
     }
 }
 
@@ -212,16 +175,30 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
 #pragma mark Application lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [JSAppUpdater update];
-    
     // Override point for customization after application launch.
     sharedInstance = self;
-        
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSInteger firstRun = [prefs  integerForKey:@"jaspersoft.mobile.firstRun"];
-    [self updateTimeouts];
-	[self loadServers];
+    
+    ///~ @TODO: show some user friendy window instead blank screen
+    [JSAppUpdater update];
+    if (![JSAppUpdater hasErrors]) {
+        [self refreshApplication];
+    }
+    
+    [self.window makeKeyAndVisible];
+    return YES;
+}
 
+- (void)refreshApplication {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSInteger notFirstRun = [prefs integerForKey:@"jaspersoft.mobile.notFirstRun"];
+    
+    if (![JSAppUpdater currentAppVersion]) {
+        [JSAppUpdater updateAppVersionTo:[JSAppUpdater latestAppVersion]];
+    }
+    
+    [self updateTimeouts];
+	[self loadServers:notFirstRun];
+    
     if (self.reportClient != nil) {
         self.reportClient.timeoutInterval = self.requestTimeoutSeconds;
     }
@@ -246,17 +223,13 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
     
     [self.window setRootViewController:tabBarController];
     
-    if (firstRun == 0 || [servers count] == 0 || (self.resourceClient.serverProfile.alwaysAskPassword.boolValue &&
-                                                  self.resourceClient.serverProfile.password == nil)) {
+    if (notFirstRun == NO || [servers count] == 0 || currentActiveServerProfile.askPassword.boolValue) {
         [tabBarController setSelectedIndex:4];
+        [self disableTabBar];
         
-        if (firstRun == 0) {
-            [self saveServers];
-            [prefs setInteger:1 forKey:@"jaspersoft.mobile.firstRun"];
+        if (notFirstRun == NO) {
+            [prefs setInteger:1 forKey:@"jaspersoft.mobile.notFirstRun"];
             [prefs synchronize];
-        } else if (self.resourceClient.serverProfile.alwaysAskPassword.boolValue &&
-                   self.resourceClient.serverProfile.password == nil) {
-            [self disableTabBar];
         }
     } else {
         self.lastSelectedViewController = self.navigationController;
@@ -264,7 +237,6 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
 	}
     
     [self.window makeKeyAndVisible];
-    return YES;
 }
 
 - (void)disableTabBar {
@@ -281,19 +253,11 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
     }
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    [self.favorites synchronizeWithUserDefaults];
-}
-
 - (void)applicationDidBecomeActive:(UIApplication *)application {    
     // Re-set timeouts from project settings (if setting was changed)
     [self updateTimeouts];
     self.resourceClient.timeoutInterval = self.requestTimeoutSeconds;
     self.reportClient.timeoutInterval = self.reportRequestTimeoutSeconds;
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {    
-    [self.favorites synchronizeWithUserDefaults];
 }
 
 // Loads timeout for report / other type of requests from project settings
@@ -302,6 +266,21 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     self.requestTimeoutSeconds = [prefs integerForKey:keyReportRequestTimeoutSeconds] ?: 120;
     self.reportRequestTimeoutSeconds = [prefs integerForKey:keyDefaultRequestTimeoutSeconds] ?: 180;
+}
+
+// Resets whole database for (sqlite + NSUserDefaults)
+- (void)resetDatabase {
+    [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
+    NSArray *stores = [self.persistentStoreCoordinator persistentStores];
+    for (NSPersistentStore *store in stores) {
+        [self.persistentStoreCoordinator removePersistentStore:store error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:nil];
+    }
+    
+    // This will forces app to recreate db
+    _managedObjectModel = nil;
+    _managedObjectContext = nil;
+    _persistentStoreCoordinator = nil;
 }
 
 #pragma mark - 
@@ -335,6 +314,83 @@ static NSString * const keyReportRequestTimeoutSeconds = @"reportRequestTimeoutS
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
 	NSLog(@"Memory warning!!!");
+}
+
+#pragma mark - Core Data stack
+
+// Returns the managed object context for the application.
+// If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
+- (NSManagedObjectContext *)managedObjectContext {
+    if (_managedObjectContext != nil) {
+        return _managedObjectContext;
+    }
+    
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (coordinator != nil) {
+        _managedObjectContext = [[NSManagedObjectContext alloc] init];
+        [_managedObjectContext setPersistentStoreCoordinator:coordinator];
+    }
+    return _managedObjectContext;
+}
+
+// Returns the managed object model for the application.
+// If the model doesn't already exist, it is created from the application's model.
+- (NSManagedObjectModel *)managedObjectModel {
+    if (_managedObjectModel != nil) {
+        return _managedObjectModel;
+    }
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:productName withExtension:@"momd"];
+    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    return _managedObjectModel;
+}
+
+// Returns the persistent store coordinator for the application.
+// If the coordinator doesn't already exist, it is created and the application's store added to it.
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+    if (_persistentStoreCoordinator != nil) {
+        return _persistentStoreCoordinator;
+    }
+        
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:[productName stringByAppendingPathExtension:@"sqlite"]];
+    
+    NSError *error = nil;
+    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+        /*
+         Replace this implementation with code to handle the error appropriately.
+         
+         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+         
+         Typical reasons for an error here include:
+         * The persistent store is not accessible;
+         * The schema for the persistent store is incompatible with current managed object model.
+         Check the error message to determine what the actual problem was.
+         
+         
+         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
+         
+         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
+         * Simply deleting the existing store:
+         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
+         
+         * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
+         @{NSMigratePersistentStoresAutomaticallyOption:@YES, NSInferMappingModelAutomaticallyOption:@YES}
+         
+         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
+         
+         */
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
+    
+    return _persistentStoreCoordinator;
+}
+
+#pragma mark - Application's Documents directory
+
+// Returns the URL to the application's Documents directory.
+- (NSURL *)applicationDocumentsDirectory {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
 @end

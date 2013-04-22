@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2005 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -21,24 +21,20 @@
  */
 
 //
-//  JSProfile+Helpers.h
+//  Favorites.m
 //  Jaspersoft Corporation
 //
 
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "Favorites.h"
+#import "ServerProfile.h"
 
-/**
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.3
- */
-@interface JSProfile (Helpers)
+@implementation Favorites
 
-@property (nonatomic, retain) NSString *tempPassword;
-@property (nonatomic, retain) NSNumber *alwaysAskPassword;
-
-+ (NSString *)profileIDByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization;
-- (BOOL)isEqualToProfile:(JSProfile *)profile;
-- (BOOL)isEqualToProfileByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization;
-- (NSString *)profileID;
+@dynamic organization;
+@dynamic username;
+@dynamic label;
+@dynamic uri;
+@dynamic wsType;
+@dynamic serverProfile;
 
 @end

@@ -91,6 +91,10 @@
 "error.reportissue.dialog.title" = "The report had some problems";
 "error.reportempty.dialog.title" = "The report is empty";
 
+"error.update.to.1_5.title" = "Update error";
+"error.update.to.1_5.msg" = "Error update data";
+"error.update.retry" = "You can retry execute update again, apply update - but this will wipe data or cancel update and downgrade application to previous version";
+
 /* HTTP error messages
  ------------------------------ */
 
@@ -119,6 +123,7 @@
 
 /* buttons 
  ------------------------------ */
+"dialog.button.applyUpdate" = "Apply";
 "dialog.button.ok" = "OK";
 "dialog.button.done" = "Done";
 "dialog.button.edit" = "Edit";

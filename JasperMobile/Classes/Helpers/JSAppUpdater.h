@@ -38,9 +38,14 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.2
  */
-@interface JSAppUpdater : NSObject
+@interface JSAppUpdater : NSObject <UIAlertViewDelegate>
 
 // Updates app
 + (void)update;
++ (void)updateAppVersionTo:(NSNumber *)appVersion;
++ (NSNumber *)currentAppVersion;
++ (NSNumber *)latestAppVersion;
++ (BOOL)hasErrors;
++ (void)showErrors;
 
 @end

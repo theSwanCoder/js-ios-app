@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2005 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -21,20 +21,19 @@
  */
 
 //
-//  JSProfile+Helpers.m
+//  ServerProfile+Helpers.m
 //  Jaspersoft Corporation
 //
 
-#import "JSProfile+Helpers.h"
+#import "ServerProfile+Helpers.h"
+#import "JSProfile.h"
+#import "SSKeychain.h"
 #import <CommonCrypto/CommonDigest.h>
 #import <objc/runtime.h>
 
-@implementation JSProfile (Helpers)
+@implementation ServerProfile (Helpers)
 
-NSString * const kTempPassword = @"kTempPassword";
-NSString * const kAlwaysAskPassword = @"kAlwaysAskPassword";
-@dynamic tempPassword;
-@dynamic alwaysAskPassword;
+NSString * const keychainServiceName = @"JasperMobilePasswordStorage";
 
 + (NSString *)profileIDByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization {
     NSString *profileID = [NSString stringWithFormat:@"%@|%@|%@", url, username, organization];
@@ -52,37 +51,28 @@ NSString * const kAlwaysAskPassword = @"kAlwaysAskPassword";
     return encodedProfileID;
 }
 
-- (BOOL)isEqualToProfile:(JSProfile *)profile {
-    return [[self profileID] isEqualToString:[profile profileID]];
++ (BOOL)storePasswordInKeychain:(NSString *)password profileID:(NSString *)profileID {
+    return [SSKeychain setPassword:password forService:keychainServiceName account:profileID];
 }
 
-- (BOOL)isEqualToProfileByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization {
-    JSProfile *tempProfile = [[JSProfile alloc] initWithAlias:nil
-                                                     username:username 
-                                                     password:nil 
-                                                 organization:organization 
-                                                    serverUrl:url];
-    return [self isEqualToProfile:tempProfile];
++ (NSString *)passwordFromKeychain:(NSString *)profileID {
+    return [SSKeychain passwordForService:keychainServiceName account:profileID];
+}
+
++ (BOOL)deletePasswordFromKeychain:(NSString *)profileID {
+    return [SSKeychain deletePasswordForService:keychainServiceName account:profileID];
 }
 
 - (NSString *)profileID {
     return [self.class profileIDByServerURL:self.serverUrl username:self.username organization:self.organization];
 }
 
-- (void)setTempPassword:(NSString *)tempPassword {
-    objc_setAssociatedObject(self, &kTempPassword, tempPassword, OBJC_ASSOCIATION_RETAIN);
+- (BOOL)isEqualToProfile:(ServerProfile *)profile {
+    return [[self profileID] isEqualToString:[profile profileID]];
 }
 
-- (NSString *)tempPassword {
-    return objc_getAssociatedObject(self, &kTempPassword);
-}
-
-- (void)setAlwaysAskPassword:(NSNumber *)alwaysAskPassword {
-    objc_setAssociatedObject(self, &kAlwaysAskPassword, alwaysAskPassword, OBJC_ASSOCIATION_RETAIN);
-}
-
-- (NSNumber *)alwaysAskPassword {
-    return objc_getAssociatedObject(self, &kAlwaysAskPassword);
+- (BOOL)isEqualToProfileByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization {
+    return [[self profileID] isEqualToString:[ServerProfile profileIDByServerURL:url username:username organization:organization]];
 }
 
 @end

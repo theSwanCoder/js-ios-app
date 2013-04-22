@@ -151,7 +151,7 @@
     if (self.resourceClient == nil) {
         JasperMobileAppDelegate *app = [JasperMobileAppDelegate sharedInstance];
         if (app.servers.count) {
-            [app setProfile:[app.servers objectAtIndex:0]];
+            [app initProfileForRESTClient:[app.servers objectAtIndex:0]];
             [self updateTableContent];
             return;
         } else {

@@ -26,8 +26,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import "JSFavoritesHelper.h"
+#import "ServerProfile+Helpers.h"
 #import "UITabBarController+RotationIn_IOS6.h"
 
 /**
@@ -59,16 +61,20 @@
 @property (nonatomic, retain) JSRESTResource *resourceClient;
 @property (nonatomic, retain) JSRESTReport *reportClient;
 @property (nonatomic, retain) JSFavoritesHelper *favorites;
-@property (nonatomic) NSInteger activeServerIndex;
+
+// Core data
+@property (readonly, retain, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (readonly, retain, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (readonly, retain, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 - (IBAction)configureServersDone:(id)sender;
 + (JasperMobileAppDelegate *)sharedInstance;
-+ (NSString *)keychainServiceName;
-- (void)loadServers;
-- (void)saveServers;
-- (void)setProfile:(JSProfile *)profile;
+- (void)initProfileForRESTClient:(ServerProfile *)profile;
 - (void)disableTabBar;
 - (void)enableTabBar;
+- (void)refreshApplication;
+- (void)resetDatabase;
+- (NSURL *)applicationDocumentsDirectory;
 
 @end
 
