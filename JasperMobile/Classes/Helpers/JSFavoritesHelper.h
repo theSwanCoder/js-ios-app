@@ -31,8 +31,7 @@
 
 /**
  JSFavoritesHelper provides methods for adding, removing, getting resources from favorites
- and synchronizing favorites state with NSUserDefault
-
+ 
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.2
  */
@@ -41,8 +40,7 @@
 // Init for specified server (by server index)
 - (id)initWithServerProfile:(ServerProfile *)serverProfile;
 
-// Adds to favorites. Warning: This will not automatically write changes to NSUserDefaults,
-// additionaly you need to call synchronizeWithUserDefaults to do that
+// Adds to favorites
 - (void)addToFavorites:(JSResourceDescriptor *)resourceDescriptor;
 
 // Removes from favorites

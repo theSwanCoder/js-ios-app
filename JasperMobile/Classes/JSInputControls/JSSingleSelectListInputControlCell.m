@@ -181,11 +181,35 @@
 }
 
 
-- (void)setSelectedValue:(id)vals {
-    if (![self isModified:vals]) {
-        [super setSelectedValue:vals];
+- (void)setSelectedValue:(id)values {
+    if (![self isModified:values] && [self containsValues:values]) {
+        [super setSelectedValue:values];
         [self updateValueText];
     }
+}
+
+- (BOOL)containsValues:(id)values {
+    if (!values) return YES;
+    NSInteger containsValues = 0;
+    
+    if ([values isKindOfClass:[NSArray class]]) {
+        for (NSString *value in values) {
+            for (JSListItem *item in self.items) {
+                if ([item.value isEqualToString:value]) {
+                    containsValues++;
+                    break;
+                }
+            }
+        }
+        
+        return containsValues == ([values count] ?: 0);
+    } else {
+        for (JSListItem *item in self.items) {
+            if ([item.value isEqualToString:values]) return YES;
+        }
+    }
+    
+    return NO;
 }
 
 - (BOOL)isModified:(id)valuesToSet {

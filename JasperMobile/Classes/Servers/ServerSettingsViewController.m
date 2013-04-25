@@ -249,6 +249,7 @@
                     passwordTextField.text = currentServerProfile.password;// ?: profile.tempPassword;
                 } else {
                     passwordTextField.textColor = [UIColor lightGrayColor];
+                    passwordTextField.enabled = NO;
                     self.passwordCell.textLabel.textColor = [UIColor lightGrayColor];
                 }
                 

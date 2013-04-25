@@ -21,23 +21,17 @@
  */
 
 //
-//  ServerProfile.m
+//  JSReportOptionsHelper.h
 //  Jaspersoft Corporation
 //
 
-#import "ServerProfile.h"
-#import "Favorites.h"
-#import "ReportOptions.h"
+#import "ServerProfile+Helpers.h"
+#import <Foundation/Foundation.h>
 
-@implementation ServerProfile
+@interface JSReportOptionsHelper : NSObject
 
-@dynamic alias;
-@dynamic askPassword;
-@dynamic organization;
-@dynamic password;
-@dynamic serverUrl;
-@dynamic username;
-@dynamic favorites;
-@dynamic reportOptions;
+- (id)initWithServerProfile:(ServerProfile *)serverProfile;
+- (void)updateReportOptions:(NSDictionary *)parameters forReport:(NSString *)reportUri;
+- (NSDictionary *)reportOptionsAsDictionaryForReport:(NSString *)reportUri;
 
 @end

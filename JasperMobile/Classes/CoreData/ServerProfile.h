@@ -28,17 +28,18 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Favorites;
+@class Favorites, ReportOptions;
 
 @interface ServerProfile : NSManagedObject
 
 @property (nonatomic, retain) NSString * alias;
 @property (nonatomic, retain) NSNumber * askPassword;
 @property (nonatomic, retain) NSString * organization;
+@property (nonatomic, retain) NSString * password;
 @property (nonatomic, retain) NSString * serverUrl;
 @property (nonatomic, retain) NSString * username;
-@property (nonatomic, retain) NSString * password;
 @property (nonatomic, retain) NSSet *favorites;
+@property (nonatomic, retain) NSSet *reportOptions;
 @end
 
 @interface ServerProfile (CoreDataGeneratedAccessors)
@@ -47,5 +48,10 @@
 - (void)removeFavoritesObject:(Favorites *)value;
 - (void)addFavorites:(NSSet *)values;
 - (void)removeFavorites:(NSSet *)values;
+
+- (void)addReportOptionsObject:(ReportOptions *)value;
+- (void)removeReportOptionsObject:(ReportOptions *)value;
+- (void)addReportOptions:(NSSet *)values;
+- (void)removeReportOptions:(NSSet *)values;
 
 @end

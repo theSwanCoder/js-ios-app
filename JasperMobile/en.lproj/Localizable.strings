@@ -51,7 +51,7 @@
 "view.favorites" = "Favorites";
 "view.library" = "Library";
 
-"repository.inputparameters.title" = "Input parameters";
+"repository.inputparameters.title" = "Report options";
 
 "resource.properties.title" = "Resource properties";
 "resource.nestedproperties.title" = "Nested resources";

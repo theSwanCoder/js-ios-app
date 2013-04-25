@@ -28,6 +28,7 @@
 #import "JSUIReportUnitViewController.h"
 #import "JSUILoadingView.h"
 #import "UIAlertView+LocalizedAlert.h"
+#import "JasperMobileAppDelegate.h"
 
 @interface JSUIReportUnitViewController()
 
@@ -170,6 +171,8 @@
                     [theConnection cancel];
                 }];
             }
+            
+            [[[JasperMobileAppDelegate sharedInstance] reportOptions] updateReportOptions:self.parameters forReport:self.descriptor.uriString];
         } else {
             [JSUILoadingView showCancelableAllRequestsLoadingInView:self.view restClient:self.reportClient cancelBlock:^{
                 [self.previousController dismissModalViewControllerAnimated:YES];

@@ -51,6 +51,7 @@
 @synthesize reportClient;
 @synthesize resourceClient;
 @synthesize favorites;
+@synthesize reportOptions;
 @synthesize requestTimeoutSeconds;
 @synthesize reportRequestTimeoutSeconds;
 @synthesize lastSelectedViewController;
@@ -66,6 +67,10 @@ static ServerProfile * currentActiveServerProfile;
 
 + (JasperMobileAppDelegate *)sharedInstance {
     return sharedInstance;
+}
+
++ (ServerProfile *)currentActiveServerProfile {
+    return currentActiveServerProfile;
 }
 
 - (IBAction)configureServersDone:(id)sender {
@@ -162,6 +167,7 @@ static ServerProfile * currentActiveServerProfile;
         self.reportClient.timeoutInterval = self.reportRequestTimeoutSeconds;
         [self setResourceClientForControllers:self.resourceClient];
         self.favorites = [[JSFavoritesHelper alloc] initWithServerProfile:serverProfile];
+        self.reportOptions = [[JSReportOptionsHelper alloc] initWithServerProfile:serverProfile];
         
         if (![self.resourceClient.serverProfile.alias isEqual:serverProfile.alias]) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];

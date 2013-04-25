@@ -21,23 +21,23 @@
  */
 
 //
-//  ServerProfile.m
+//  ReportOptions.h
 //  Jaspersoft Corporation
 //
 
-#import "ServerProfile.h"
-#import "Favorites.h"
-#import "ReportOptions.h"
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@implementation ServerProfile
+@class ServerProfile;
 
-@dynamic alias;
-@dynamic askPassword;
-@dynamic organization;
-@dynamic password;
-@dynamic serverUrl;
-@dynamic username;
-@dynamic favorites;
-@dynamic reportOptions;
+@interface ReportOptions : NSManagedObject
+
+@property (nonatomic, retain) NSNumber * isListItem;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * organization;
+@property (nonatomic, retain) NSString * reportUri;
+@property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) NSString * value;
+@property (nonatomic, retain) ServerProfile *serverProfile;
 
 @end

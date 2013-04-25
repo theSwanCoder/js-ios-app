@@ -91,6 +91,15 @@ static UIFont *detailFont;
                         [inputControlCells addObject:cell];
                     }
                 }
+                
+                NSDictionary *reportOptions = [[[JasperMobileAppDelegate sharedInstance] reportOptions] reportOptionsAsDictionaryForReport:self.descriptor.uriString];
+                for (JSInputControlCell *cell in inputControlCells) {
+                    id options = [reportOptions objectForKey:cell.icDescriptor.uuid];
+                    if (options) {
+                        cell.wasModified = YES;
+                        cell.selectedValue = options;
+                    }
+                }
             } else {
                 self.descriptor = [res.objects objectAtIndex:0];			
                 NSString *reportUnitDsUri = nil;

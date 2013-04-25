@@ -21,23 +21,21 @@
  */
 
 //
-//  ServerProfile.m
+//  ReportOptions.h
 //  Jaspersoft Corporation
 //
 
-#import "ServerProfile.h"
-#import "Favorites.h"
 #import "ReportOptions.h"
+#import "ServerProfile.h"
 
-@implementation ServerProfile
+@implementation ReportOptions
 
-@dynamic alias;
-@dynamic askPassword;
+@dynamic isListItem;
+@dynamic name;
 @dynamic organization;
-@dynamic password;
-@dynamic serverUrl;
+@dynamic reportUri;
 @dynamic username;
-@dynamic favorites;
-@dynamic reportOptions;
+@dynamic value;
+@dynamic serverProfile;
 
 @end

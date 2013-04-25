@@ -93,19 +93,26 @@
 }
 
 - (void)setSelectedValue:(id)vals {
-	[super setSelectedValue:vals];
-	
-	if (self.selectedValue == nil) {
-		label.text = NSLocalizedString(@"ic.value.notset", nil);
-	} else {
-		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        if ([self.dateFormat length]) {
-            [dateFormatter setDateFormat:self.dateFormat];
+    if (vals && [vals isKindOfClass:[NSString class]]) {
+        label.text = vals;
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:self.dateFormat];
+        vals = [dateFormatter dateFromString:vals];
+        [super setSelectedValue:vals];
+    } else {
+        [super setSelectedValue:vals];
+        if (self.selectedValue == nil) {
+            label.text = NSLocalizedString(@"ic.value.notset", nil);
         } else {
-            [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            if ([self.dateFormat length]) {
+                [dateFormatter setDateFormat:self.dateFormat];
+            } else {
+                [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+            }
+            label.text = [dateFormatter stringFromDate: self.selectedValue];
         }
-		label.text = [dateFormatter stringFromDate: self.selectedValue];
-	}
+    }
 }
 
 - (void)cellDidSelected {

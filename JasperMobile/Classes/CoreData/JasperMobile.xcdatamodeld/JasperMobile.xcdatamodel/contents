@@ -6,7 +6,16 @@
         <attribute name="uri" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="wsType" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="serverProfile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ServerProfile" inverseName="favorites" inverseEntity="ServerProfile" syncable="YES"/>
+        <relationship name="serverProfile" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ServerProfile" inverseName="favorites" inverseEntity="ServerProfile" syncable="YES"/>
+    </entity>
+    <entity name="ReportOptions" representedClassName="ReportOptions" syncable="YES">
+        <attribute name="isListItem" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="organization" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="reportUri" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="serverProfile" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ServerProfile" inverseName="reportOptions" inverseEntity="ServerProfile" syncable="YES"/>
     </entity>
     <entity name="ServerProfile" representedClassName="ServerProfile" syncable="YES">
         <attribute name="alias" optional="YES" attributeType="String" syncable="YES"/>
@@ -16,9 +25,11 @@
         <attribute name="serverUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="favorites" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Favorites" inverseName="serverProfile" inverseEntity="Favorites" syncable="YES"/>
+        <relationship name="reportOptions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReportOptions" inverseName="serverProfile" inverseEntity="ReportOptions" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Favorites" positionX="-279" positionY="-0" width="126" height="133"/>
-        <element name="ServerProfile" positionX="-549" positionY="-85" width="126" height="148"/>
+        <element name="Favorites" positionX="-432" positionY="-27" width="126" height="133"/>
+        <element name="ReportOptions" positionX="-785" positionY="-45" width="119" height="148"/>
+        <element name="ServerProfile" positionX="-621" positionY="-171" width="126" height="163"/>
     </elements>
 </model>

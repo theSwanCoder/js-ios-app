@@ -52,6 +52,8 @@
 		F5811F8215EE64CA00CE775A /* gray.png in Resources */ = {isa = PBXBuildFile; fileRef = F5811F7F15EE64CA00CE775A /* gray.png */; };
 		F5811F8315EE64CA00CE775A /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = F5811F8015EE64CA00CE775A /* red.png */; };
 		F5811F8415EE64CA00CE775A /* yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = F5811F8115EE64CA00CE775A /* yellow.png */; };
+		F581B12617267D8A002F3CF0 /* JSReportOptionsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F581B12517267D8A002F3CF0 /* JSReportOptionsHelper.m */; };
+		F581B1291726839E002F3CF0 /* ReportOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = F581B1281726839E002F3CF0 /* ReportOptions.m */; };
 		F5976A8315E461E2004165A7 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = F5976A8215E461E2004165A7 /* star.png */; };
 		F5A61466165E34A4003CB2B8 /* JSUIDashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A61464165E34A4003CB2B8 /* JSUIDashboardViewController.m */; };
 		F5A61467165E34A4003CB2B8 /* JSUIDashboardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5A61465165E34A4003CB2B8 /* JSUIDashboardViewController.xib */; };
@@ -187,6 +189,10 @@
 		F5811F7F15EE64CA00CE775A /* gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray.png; sourceTree = "<group>"; };
 		F5811F8015EE64CA00CE775A /* red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red.png; sourceTree = "<group>"; };
 		F5811F8115EE64CA00CE775A /* yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow.png; sourceTree = "<group>"; };
+		F581B12417267D8A002F3CF0 /* JSReportOptionsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSReportOptionsHelper.h; sourceTree = "<group>"; };
+		F581B12517267D8A002F3CF0 /* JSReportOptionsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSReportOptionsHelper.m; sourceTree = "<group>"; };
+		F581B1271726839D002F3CF0 /* ReportOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportOptions.h; sourceTree = "<group>"; };
+		F581B1281726839E002F3CF0 /* ReportOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportOptions.m; sourceTree = "<group>"; };
 		F5976A8215E461E2004165A7 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star.png; path = icons/star.png; sourceTree = "<group>"; };
 		F5A61463165E34A4003CB2B8 /* JSUIDashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUIDashboardViewController.h; sourceTree = "<group>"; };
 		F5A61464165E34A4003CB2B8 /* JSUIDashboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUIDashboardViewController.m; sourceTree = "<group>"; };
@@ -497,6 +503,8 @@
 			children = (
 				F5EA578715D1A78E003416D1 /* JSFavoritesHelper.h */,
 				F5EA578815D1A78E003416D1 /* JSFavoritesHelper.m */,
+				F581B12417267D8A002F3CF0 /* JSReportOptionsHelper.h */,
+				F581B12517267D8A002F3CF0 /* JSReportOptionsHelper.m */,
 				F53BFD5515E6E5CB000053A8 /* JSTimer.h */,
 				F53BFD5615E6E5CB000053A8 /* JSTimer.m */,
 				F57D742815F75FA400F9B1FB /* JSListItem.h */,
@@ -525,6 +533,8 @@
 			isa = PBXGroup;
 			children = (
 				F5FD57B81715EAE600EC706B /* JasperMobile.xcdatamodeld */,
+				F581B1271726839D002F3CF0 /* ReportOptions.h */,
+				F581B1281726839E002F3CF0 /* ReportOptions.m */,
 				F5CDB455171F645C001C9D46 /* ServerProfile.h */,
 				F5CDB456171F645C001C9D46 /* ServerProfile.m */,
 				F5CDB44B171F63F5001C9D46 /* Favorites.h */,
@@ -704,6 +714,8 @@
 				F55F00A3171EEE4400530892 /* ServerProfile+Helpers.m in Sources */,
 				F5CDB44D171F63F5001C9D46 /* Favorites.m in Sources */,
 				F5CDB457171F645C001C9D46 /* ServerProfile.m in Sources */,
+				F581B12617267D8A002F3CF0 /* JSReportOptionsHelper.m in Sources */,
+				F581B1291726839E002F3CF0 /* ReportOptions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
