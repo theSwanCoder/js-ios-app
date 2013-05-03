@@ -203,7 +203,7 @@ static UIFont *detailFont;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
 	if (section == INPUT_CONTROLS_SECTION && resourceLoaded && [inputControls count] > 0) {
-		return (CGFloat)22.f; //[tableView sectionHeaderHeight];
+		return 12;
 	}
     
 	return 1;
@@ -221,15 +221,6 @@ static UIFont *detailFont;
 	int baseSections = 0;
 	if (resourceLoaded) baseSections = 3; // Input parameters and Tools...
 	return baseSections;
-}
-
-
-// Customize the number of rows in the table view.
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == INPUT_CONTROLS_SECTION && resourceLoaded && [inputControls count] > 0) {
-		return NSLocalizedString(@"repository.inputparameters.title", nil);
-	}
-	return @"";
 }
 
 // Customize the number of rows in the table view.
@@ -263,8 +254,19 @@ static UIFont *detailFont;
             formatCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FormatCell"];
             formatCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             reportFormat = @"HTML";
-            formatCell.textLabel.text = reportFormat;
+            formatCell.textLabel.text = NSLocalizedString(@"report.output.format", nil);
             formatCell.textLabel.font = [UIFont systemFontOfSize:14.0];
+            
+            reportFormatLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONST_Cell_width - 55, 10, 60, 21)];
+            reportFormatLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight;
+            reportFormatLabel.textAlignment = UITextAlignmentRight;
+            reportFormatLabel.tag = 100;
+            reportFormatLabel.font = [UIFont systemFontOfSize:14.0];
+            reportFormatLabel.textColor = [UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0];
+            reportFormatLabel.backgroundColor = [UIColor clearColor];
+            reportFormatLabel.text = reportFormat;
+            [formatCell addSubview:reportFormatLabel];
+            
             reportFormatCell = formatCell;
         }
         
@@ -362,7 +364,7 @@ static UIFont *detailFont;
             reportFormat = @"PDF";
         }
         
-        reportFormatCell.textLabel.text = reportFormat;
+        reportFormatLabel.text = reportFormat;
     }
 }
 

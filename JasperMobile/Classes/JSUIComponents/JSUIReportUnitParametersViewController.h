@@ -40,6 +40,7 @@
 	NSMutableArray *inputControlCells;
     NSString *reportFormat;
     UITableViewCell *reportFormatCell;
+    UILabel *reportFormatLabel;
 }
 
 @property (nonatomic, retain) JSResourceDescriptor *descriptor;

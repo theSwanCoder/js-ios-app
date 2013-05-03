@@ -33,8 +33,6 @@
 #import "JSUIReportUnitParametersViewController.h"
 #import "JSListItem.h"
 
-#define JS_LBL_VALUE_WIDTH		160.0f
-
 @implementation JSSingleSelectListInputControlCell
 
 @synthesize items;

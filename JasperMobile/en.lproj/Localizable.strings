@@ -51,8 +51,6 @@
 "view.favorites" = "Favorites";
 "view.library" = "Library";
 
-"repository.inputparameters.title" = "Report options";
-
 "resource.properties.title" = "Resource properties";
 "resource.nestedproperties.title" = "Nested resources";
 "resource.name.title" = "Name";
@@ -60,6 +58,8 @@
 "resource.description.title" = "Description";
 "resource.type.title" = "Type";
 "resource.resources.title" = "Resources";
+
+"report.output.format" = "Report format";
 
 "noservers.dialog.title" = "No Servers Configured";
 "noservers.dialog.msg" = "You must add a server profile before you can view a repository";

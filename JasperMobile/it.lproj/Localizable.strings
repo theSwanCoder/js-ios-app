@@ -51,8 +51,6 @@
 "view.favorites" = "Preferiti";
 "view.library" = "Biblioteca";
 
-"repository.inputparameters.title" = "Parametri di ingresso";
-
 "resource.properties.title" = "Proprietà delle risorse";
 "resource.nestedproperties.title" = "Risorse nidificati";
 "resource.name.title" = "Nome";
@@ -60,6 +58,8 @@
 "resource.description.title" = "Descrizione";
 "resource.type.title" = "Tipo";
 "resource.resources.title" = "Risorse";
+
+"report.output.format" = "Formato del report";
 
 "noservers.dialog.title" = "Nessun server configurato";
 "noservers.dialog.msg" = "È necessario aggiungere un profilo del server prima di poter visualizzare un repository";

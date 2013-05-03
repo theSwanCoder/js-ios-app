@@ -27,6 +27,7 @@
 
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
+#define JS_LBL_VALUE_WIDTH		              160.0f
 #define JS_LBL_DEFAULT_WIDTH                  180.0f
 #define JS_LBL_WIDTH                          self.nameLabel.frame.size.width
 #define JS_CELL_WIDTH                         self.frame.size.width

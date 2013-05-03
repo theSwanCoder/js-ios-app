@@ -184,8 +184,7 @@
 
 
 // create the label to display the input control name
--(void)createNameLabel
-{
+- (void)createNameLabel {
 	nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(JS_CELL_PADDING, 10.0, JS_LBL_DEFAULT_WIDTH, 21.0)];
 	[self addSubview: nameLabel];
     
