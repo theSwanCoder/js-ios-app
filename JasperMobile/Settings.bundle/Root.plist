@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>Title</key>
-			<string>Timeouts (in seconds)</string>
+			<string>timeouts</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
@@ -24,7 +24,7 @@
 			<key>KeyboardType</key>
 			<string>NumberPad</string>
 			<key>Title</key>
-			<string>Default request</string>
+			<string>default.request</string>
 			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
 		</dict>
@@ -42,7 +42,7 @@
 			<key>KeyboardType</key>
 			<string>NumberPad</string>
 			<key>Title</key>
-			<string>Report request</string>
+			<string>report.request</string>
 			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
 		</dict>

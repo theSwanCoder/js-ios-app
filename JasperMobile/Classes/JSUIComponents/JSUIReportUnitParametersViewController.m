@@ -46,10 +46,11 @@
 #define CONST_Cell_Content_width 200.0f
 #define CONST_Cell_Label_width 200.0f
 #define CONST_Cell_width 280.0f
-#define CONST_labelFontSize    12
-#define CONST_detailFontSize   15
-#define INPUT_CONTROLS_SECTION  0
-#define TOOLS_SECTION       1
+#define CONST_labelFontSize 12
+#define CONST_detailFontSize 15
+#define INPUT_CONTROLS_SECTION 0
+#define TOOLS_SECTION 1
+#define RUN_SECTION 2
 
 static UIFont *labelFont;
 static UIFont *detailFont;
@@ -60,7 +61,6 @@ static UIFont *detailFont;
 	}
 	[super viewDidLoad];
 }
-
 
 - (id)initWithStyle:(UITableViewStyle)style {
 	if ((self = [super initWithStyle:style])) {
@@ -201,14 +201,17 @@ static UIFont *detailFont;
 	return detailFont;
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
 	if (section == INPUT_CONTROLS_SECTION && resourceLoaded && [inputControls count] > 0) {
 		return (CGFloat)22.f; //[tableView sectionHeaderHeight];
 	}
-	return (CGFloat)0.f;
+    
+	return 1;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 8;
+}
 
 #pragma mark -
 #pragma mark Table view data source
@@ -216,7 +219,7 @@ static UIFont *detailFont;
 // Customize the number of sections in the table view.
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {	
 	int baseSections = 0;
-	if (resourceLoaded) baseSections = 2; // Input parameters and Tools...
+	if (resourceLoaded) baseSections = 3; // Input parameters and Tools...
 	return baseSections;
 }
 
@@ -234,149 +237,133 @@ static UIFont *detailFont;
 	
 	// Name, Label, Description, type, Preview
 	if (descriptor == nil || !resourceLoaded) return 0;
-	
-	if (section == INPUT_CONTROLS_SECTION) {
-		return [inputControls count];
-	}
-	
-	if (section == TOOLS_SECTION) {
-		return 2;
-	}
-	
-	return 0;
+    
+    switch (section) {
+        case INPUT_CONTROLS_SECTION:
+            return [inputControls count];
+        case TOOLS_SECTION:
+        case RUN_SECTION:
+            return 1;
+    }
+    
+    return 0;
 }
 
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-	if ([indexPath section] == INPUT_CONTROLS_SECTION && resourceLoaded)
-	{   // User details...
+	if (indexPath.section == INPUT_CONTROLS_SECTION && resourceLoaded) {
+        // User details
 		return [inputControlCells objectAtIndex:indexPath.row];
-	}
-	else if ([indexPath section] == TOOLS_SECTION) {   // User details...
-		
-        if (indexPath.row == 0)
-        {
-            UITableViewCell *formatCell =  [tableView dequeueReusableCellWithIdentifier:@"FormatCell"];
-            if (formatCell == nil) {
-                
-                formatCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FormatCell"];
-                
-                UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
-                backView.backgroundColor = [UIColor clearColor];
-                formatCell.backgroundView = backView;
-               
-                NSArray *segments = [NSArray arrayWithObjects:@"HTML", @"PDF", nil];
-                
-                segmentedControl = [[UISegmentedControl alloc] initWithItems: segments];
-
-                [segmentedControl setSelectedSegmentIndex:0];
-                int buttonWidth = self.tableView.frame.size.width -20;
-                
-                CGRect frame = CGRectMake(0, 0, buttonWidth, 40);
-                segmentedControl.frame = frame;
-                [segmentedControl addTarget:self action:@selector(setFormat) forControlEvents:UIControlEventTouchUpInside];
-                [formatCell.contentView addSubview:segmentedControl];
-            }
-            return formatCell;
-
+	} else if (indexPath.section == TOOLS_SECTION) {   // User details...
+        UITableViewCell *formatCell =  [tableView dequeueReusableCellWithIdentifier:@"FormatCell"];
+        if (formatCell == nil) {
+            
+            formatCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FormatCell"];
+            formatCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            reportFormat = @"HTML";
+            formatCell.textLabel.text = reportFormat;
+            formatCell.textLabel.font = [UIFont systemFontOfSize:14.0];
+            reportFormatCell = formatCell;
         }
-        else
-        {
-            UITableViewCell *toolsCell =  [tableView dequeueReusableCellWithIdentifier:@"ToolsCell"];
-            if (toolsCell == nil) {
-                
-                toolsCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ToolsCell"];
-                UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
-                backView.backgroundColor = [UIColor clearColor];
-                toolsCell.backgroundView = backView;
-                   
-                int buttons = 1;
-                int padding = 6;
-                int buttonWidth = (self.tableView.frame.size.width -20 -((padding)*(buttons-1))) / buttons;
-                
-                UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                CGRect frame = CGRectMake(0, 0, buttonWidth, 40);
-                button.frame = frame;
-                button.tag = 1;
-                [button setTitle:@"Run" forState:UIControlStateNormal];
-                [button setTag:indexPath.row];
-                [button addTarget:self action:@selector(runReport) forControlEvents:UIControlEventTouchUpInside];
-                [toolsCell.contentView addSubview:button];
-            }
-            return toolsCell;
-		}
-		
-	}
+        
+        return formatCell;
+    } else if (indexPath.section == RUN_SECTION) {
+        UITableViewCell *runCell =  [tableView dequeueReusableCellWithIdentifier:@"RunCell"];
+        if (runCell == nil) {
+            
+            runCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"RunCell"];
+            UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
+            backView.backgroundColor = [UIColor clearColor];
+            runCell.backgroundView = backView;
+               
+            int buttons = 1;
+            int padding = 6;
+            int buttonWidth = (self.tableView.frame.size.width - 20 - ((padding)*(buttons-1))) / buttons;
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            CGRect frame = CGRectMake(0, 0, buttonWidth, 40);
+            button.frame = frame;
+            button.tag = 1;
+            [button setTitle:@"Run" forState:UIControlStateNormal];
+            [button setTag:indexPath.row];
+            [button addTarget:self action:@selector(runReport) forControlEvents:UIControlEventTouchUpInside];
+            [runCell.contentView addSubview:button];
+        }
+        return runCell;
+    }
+    
 	// We shouldn't reach this point, but return an empty cell just in case
     return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NoCell"];
-
 }
 
-
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
-	if ([indexPath section] == TOOLS_SECTION)
-	{
-		return nil; // the touch is handled by the button inside the cell
-	}
-	
-	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-	if ([cell isKindOfClass: [JSInputControlCell class]]) return   [(JSInputControlCell *)cell selectable] ? indexPath : nil;
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {	
+    if (indexPath.section == INPUT_CONTROLS_SECTION) {
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        if ([cell isKindOfClass: [JSInputControlCell class]]) {
+            return [(JSInputControlCell *)cell selectable] ? indexPath : nil;
+        }
+    }
     
 	return indexPath;
-	
 }
 
-
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	
-	
-	if (indexPath.section == INPUT_CONTROLS_SECTION)
-	{
-		// get selected cell...
-		if (inputControlCells != nil && inputControlCells.count > indexPath.row)
-		{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {	
+	if (indexPath.section == INPUT_CONTROLS_SECTION) {
+		// Get selected cell
+		if (inputControlCells != nil && inputControlCells.count > indexPath.row) {
 			UITableViewCell *cell = [inputControlCells objectAtIndex:indexPath.row];
-			if ([cell isKindOfClass: [JSInputControlCell class]])
-			{
+			if ([cell isKindOfClass: [JSInputControlCell class]]) {
 				return [(JSInputControlCell *)cell height];
 			}
 		}
-	}
-	else if ([indexPath section] == TOOLS_SECTION) { 
-		return 44.0f; 
+	} else if (indexPath.section == TOOLS_SECTION || indexPath.section == RUN_SECTION) {
+		return 44.0f;
 	}
 	
 	return [self.tableView rowHeight];
 }
-
-
 
 #pragma mark -
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-	if (indexPath.section == INPUT_CONTROLS_SECTION)
-	{
-		// get selected cell...
+	if (indexPath.section == INPUT_CONTROLS_SECTION) {
+		// Get selected cell
 		UITableViewCell *cell = [inputControlCells objectAtIndex:indexPath.row];
 		if ([cell isKindOfClass: [JSInputControlCell class]])
 		{
 			[(JSInputControlCell *)cell cellDidSelected];
 		}
-	}
+	} else if (indexPath.section == TOOLS_SECTION) {
+        JSListSelectorViewController *rvc = [[JSListSelectorViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        rvc.values  = [NSArray arrayWithObjects:@"HTML", @"PDF", nil];
+        rvc.mandatory = YES;
+        NSNumber *selectedReportFormat;
+        if ([reportFormat isEqualToString:@"HTML"]) {
+            selectedReportFormat = [NSNumber numberWithInt:0];
+        } else {
+            selectedReportFormat = [NSNumber numberWithInt:1];
+        }
+        
+        rvc.selectedValues = [NSMutableArray arrayWithObject:selectedReportFormat];//selectedVals;
+        rvc.selectionDelegate = self;
+        [self.navigationController pushViewController:rvc animated:YES];
+    }
 }
 
-// Invoked by the tableViewer when the cell is selected. The default implementation does nothing
--(void)cellDidSelected {
-    
+- (void)setSelectedIndexes:(NSArray *)indexes {
+    if ([indexes count]) {
+        if ([[indexes objectAtIndex:0] intValue] == 0) {
+            reportFormat = @"HTML";
+        } else {
+            reportFormat = @"PDF";
+        }
+        
+        reportFormatCell.textLabel.text = reportFormat;
+    }
 }
 
 #pragma mark -
@@ -402,21 +389,16 @@ static UIFont *detailFont;
 	}    
     
     UIViewController *reportViewer = nil;    
-    NSString *format = @"PDF";
-    if ([segmentedControl selectedSegmentIndex] == 0) {
-        format = @"HTML";
-    }    
     
     JSUIReportUnitViewController *reportPdfViewer = [[JSUIReportUnitViewController alloc] initWithNibName:@"JSUIReportUnitViewController" bundle:nil];
     [reportPdfViewer setDescriptor:self.descriptor];
     [reportPdfViewer setReportClient:self.reportClient];
     [reportPdfViewer setPreviousController:self];
-    [reportPdfViewer setFormat:format];
+    [reportPdfViewer setFormat:reportFormat];
     [reportPdfViewer setParameters:params];
     reportViewer = reportPdfViewer;   
     [self presentModalViewController:reportViewer animated:YES];
 }
-
 
 #pragma mark -
 #pragma mark Memory management

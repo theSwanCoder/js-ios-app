@@ -26,6 +26,7 @@
 //
 
 #import "JSUILoadingView.h"
+#import "JSListSelectorViewController.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
@@ -33,11 +34,12 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.0
  */
-@interface JSUIReportUnitParametersViewController : UITableViewController <JSRequestDelegate> {
-	UISegmentedControl *segmentedControl;
+@interface JSUIReportUnitParametersViewController : UITableViewController <JSRequestDelegate, JSListSelectorDelegate> {
 	BOOL resourceLoaded;
 	NSMutableArray *inputControls;
 	NSMutableArray *inputControlCells;
+    NSString *reportFormat;
+    UITableViewCell *reportFormatCell;
 }
 
 @property (nonatomic, retain) JSResourceDescriptor *descriptor;

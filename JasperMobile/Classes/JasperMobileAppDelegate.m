@@ -169,11 +169,9 @@ static ServerProfile * currentActiveServerProfile;
         self.favorites = [[JSFavoritesHelper alloc] initWithServerProfile:serverProfile];
         self.reportOptions = [[JSReportOptionsHelper alloc] initWithServerProfile:serverProfile];
         
-        if (![self.resourceClient.serverProfile.alias isEqual:serverProfile.alias]) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            [prefs setURL:[[serverProfile objectID] URIRepresentation] forKey:@"jaspersoft.server.active"];
-            [prefs synchronize];
-        }
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [prefs setURL:[[serverProfile objectID] URIRepresentation] forKey:@"jaspersoft.server.active"];
+        [prefs synchronize];
     }
 }
 
@@ -270,8 +268,8 @@ static ServerProfile * currentActiveServerProfile;
 // (defined in Settings.bundle)
 - (void)updateTimeouts {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    self.requestTimeoutSeconds = [prefs integerForKey:keyReportRequestTimeoutSeconds] ?: 120;
-    self.reportRequestTimeoutSeconds = [prefs integerForKey:keyDefaultRequestTimeoutSeconds] ?: 180;
+    self.requestTimeoutSeconds = [prefs integerForKey:keyReportRequestTimeoutSeconds] ?: 30;
+    self.reportRequestTimeoutSeconds = [prefs integerForKey:keyDefaultRequestTimeoutSeconds] ?: 90;
 }
 
 // Resets whole database for (sqlite + NSUserDefaults)
