@@ -1,0 +1,70 @@
+﻿/* 
+ Localizable.strings
+ 
+ Copyright 2011 Jaspersoft Corp. All rights reserved.
+ */
+
+/* Server Profiles view
+ ------------------------------ */
+
+"servers.info" = "Jaspersoft Mobile v %@\n\nOutil de gestion et visionneuse de rapports pour JasperReports Server 4.2.0 et version ultérieure.\n\nPour plus d'informations, rendez-vous sur le site :\nwww.jasperforge.org/projects/mobile\n\n(c) 2011-2012 Jaspersoft Corp.";
+
+"servers.url.label" = "URL";
+"servers.url.tip" = "http://example.com/jasperserver";
+"servers.url.errmsg" = "Veuillez indiquer une URL valide.";
+
+"servers.name.label" = "Nom";
+"servers.name.tip" = "nom de mon serveur";
+"servers.name.errmsg.empty" = "Veuillez indiquer un nom de profil valide.";
+"servers.name.errmsg.exists" = "Ce nom de profil existe déjà. Veuillez indiquer un autre nom de profil.";
+
+"servers.orgid.label" = "Organisation";
+"servers.orgid.tip" = "ID de l’organisation";
+
+"servers.username.label" = "Nom d’utilisateur";
+"servers.username.tip" = "mon nom d'utilisateur";
+"servers.username.errmsg.empty" = "Veuillez indiquer un nom d'utilisateur valide.";
+
+"servers.password.label" = "Mot de passe";
+"servers.password.tip" = "mon mot de passe";
+
+"servers.profile.exists" = "Un serveur de profil avec cette URL, ce nom d'utilisateur et cet ID d'organisation existe déjà. Veuillez modifier le profil de serveur.";
+
+"servers.new.label" = "Ajouter un profil de serveur...";
+"servers.askpassword.label" = "Toujours demander un mot de passe";
+"servers.askpassword.dialog.title.label" = "Saisir le mot de passe";
+
+
+/* navigation and view labels
+ ------------------------------ */
+
+"view.servers"= "Serveurs";
+"view.repository" = "Référentiel";
+"view.search" = "Rechercher";
+"view.favorites" = "Favoris";
+"view.library" = "Bibliothèque";
+
+"noservers.dialog.title" = "Aucun serveur n'est configuré.";
+"noservers.dialog.msg" = "Vous devez ajouter un profil de serveur avant de pouvoir afficher un référentiel.";
+"noservers.dialog.button.label" = "Configurer les profils de serveur";
+
+/* error messages 
+ ------------------------------ */
+"error.readingresponse.dialog.msg" = "Erreur lors de la lecture de la réponse.";
+"error.incorrectrequest.dialog.msg" = "Demande syntaxiquement incorrecte.";
+
+"error.noconnection.dialog.title" = "Aucune connexion";
+"error.noconnection.dialog.msg" = "Veuillez vérifier les paramètres de votre réseau mobile et réessayer.";
+
+"error.authenication.dialog.title" = "Authentification requise";
+"error.authenication.dialog.msg" = "Veuillez vérifier les informations d'identification du serveur.";
+
+"error.unknownhost.dialog.title" = "Serveur inconnu";
+"error.unknownhost.dialog.msg" = "Impossible de trouver un serveur portant ce nom d'hôte.";
+
+/* buttons 
+ ------------------------------ */
+"dialog.button.ok" = "OK";
+"dialog.button.done" = "Terminé";
+"dialog.button.edit" = "Modifier";
+"dialog.button.cancel" = "Annuler";

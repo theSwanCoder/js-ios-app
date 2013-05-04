@@ -30,6 +30,8 @@
 		649795CF13602DC800FA5BA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 649795CE13602DC800FA5BA0 /* QuartzCore.framework */; };
 		64A8072C135397AF00651C3B /* ServersController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A8072B135397AF00651C3B /* ServersController.xib */; };
 		64A80A33135C497E00651C3B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 64A80A31135C497E00651C3B /* Localizable.strings */; };
+		CAFE22731735B34600AA354A /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CAFE22721735B34600AA354A /* jaspersoft-sdk-resources.bundle */; };
+		CAFE22761735B36F00AA354A /* libjaspersoft-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CAFE226D1735B33700AA354A /* libjaspersoft-sdk.a */; };
 		F50AFED415E2E12B00F761A0 /* JSUIResourceModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50AFED215E2E12900F761A0 /* JSUIResourceModifyViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F51E05B41609FF1900D17020 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F51E05B31609FF1900D17020 /* SSKeychain.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F5312729161B2CD5006AF5DD /* JSUILibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5312728161B2CD5006AF5DD /* JSUILibraryViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
@@ -92,36 +94,34 @@
 		F5F2B0F815C161FD00E97074 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5F2B0F715C161FC00E97074 /* Settings.bundle */; };
 		F5F2B0FA15C16CBA00E97074 /* JSUIReportUnitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5F2B0F915C16CBA00E97074 /* JSUIReportUnitViewController.xib */; };
 		F5FCF25F1630661200BC545E /* Cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = F5FCF25E1630661100BC545E /* Cancel.png */; };
-		F5FD57B11714E3B100EC706B /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5FD57B01714E3B100EC706B /* jaspersoft-sdk-resources.bundle */; };
-		F5FD57B41714E3CE00EC706B /* libjaspersoft-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5FD57AB1714E29300EC706B /* libjaspersoft-sdk.a */; };
 		F5FD57BD1715EAE600EC706B /* JasperMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F5FD57B81715EAE600EC706B /* JasperMobile.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		F5FD57AA1714E29300EC706B /* PBXContainerItemProxy */ = {
+		CAFE226C1735B33700AA354A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F5FD57A31714E29200EC706B /* jaspersoft-sdk.xcodeproj */;
+			containerPortal = CAFE22651735B33700AA354A /* jaspersoft-sdk.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = F59768BD15E3C75F004165A7;
 			remoteInfo = "jaspersoft-sdk";
 		};
-		F5FD57AC1714E29300EC706B /* PBXContainerItemProxy */ = {
+		CAFE226E1735B33700AA354A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F5FD57A31714E29200EC706B /* jaspersoft-sdk.xcodeproj */;
+			containerPortal = CAFE22651735B33700AA354A /* jaspersoft-sdk.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = F59768D215E3C777004165A7;
 			remoteInfo = "jaspersoft-sdk-framework";
 		};
-		F5FD57AE1714E29300EC706B /* PBXContainerItemProxy */ = {
+		CAFE22701735B33700AA354A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F5FD57A31714E29200EC706B /* jaspersoft-sdk.xcodeproj */;
+			containerPortal = CAFE22651735B33700AA354A /* jaspersoft-sdk.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = F5F68E0A15E55EC000270103;
 			remoteInfo = "jaspersoft-sdk-resources";
 		};
-		F5FD57B21714E3C800EC706B /* PBXContainerItemProxy */ = {
+		CAFE22741735B36200AA354A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F5FD57A31714E29200EC706B /* jaspersoft-sdk.xcodeproj */;
+			containerPortal = CAFE22651735B33700AA354A /* jaspersoft-sdk.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = F59768BC15E3C75F004165A7;
 			remoteInfo = "jaspersoft-sdk";
@@ -142,7 +142,7 @@
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AAE50D9B0CCF005BE974 /* JasperMobile_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JasperMobile_Prefix.pch; sourceTree = "<group>"; };
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
-		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = main.m; path = ../main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		641A2F0A138FE25700A1DBBE /* ServersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ServersViewController.xib; sourceTree = "<group>"; };
 		64252EFF1350C641005DAD57 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		64252F011350C650005DAD57 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -157,6 +157,13 @@
 		64A80A32135C497E00651C3B /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		64A80A34135C499200651C3B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		8D1107310486CEB800E47090 /* Jaspersoft-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Jaspersoft-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		CAFE22651735B33700AA354A /* jaspersoft-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jaspersoft-sdk.xcodeproj"; path = "../../iossdk/JaspersoftSDK/jaspersoft-sdk.xcodeproj"; sourceTree = "<group>"; };
+		CAFE22721735B34600AA354A /* jaspersoft-sdk-resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "jaspersoft-sdk-resources.bundle"; path = "../../iossdk/JaspersoftSDK/jaspersoft-sdk-resources.bundle"; sourceTree = "<group>"; };
+		CAFE22771735B3F900AA354A /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CAFE22781735B40100AA354A /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CAFE22791735B40800AA354A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CAFE227A1735B40F00AA354A /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CAFE227B1735B42000AA354A /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F50AFED115E2E12900F761A0 /* JSUIResourceModifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUIResourceModifyViewController.h; sourceTree = "<group>"; };
 		F50AFED215E2E12900F761A0 /* JSUIResourceModifyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUIResourceModifyViewController.m; sourceTree = "<group>"; };
 		F51E05B21609FF1900D17020 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
@@ -199,12 +206,12 @@
 		F5A61465165E34A4003CB2B8 /* JSUIDashboardViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = JSUIDashboardViewController.xib; path = Classes/JSUIComponents/JSUIDashboardViewController.xib; sourceTree = "<group>"; };
 		F5ABD15915E3251D00FEBB4F /* JSUIFavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUIFavoritesViewController.h; sourceTree = "<group>"; };
 		F5ABD15A15E3251D00FEBB4F /* JSUIFavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUIFavoritesViewController.m; sourceTree = "<group>"; };
-		F5B9202015D3E1EC000CF3E6 /* ic_type_dashboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_dashboard.png; sourceTree = "<group>"; };
-		F5B9202115D3E1EC000CF3E6 /* ic_type_folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_folder.png; sourceTree = "<group>"; };
-		F5B9202215D3E1EC000CF3E6 /* ic_type_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_image.png; sourceTree = "<group>"; };
-		F5B9202315D3E1EC000CF3E6 /* ic_type_report.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_report.png; sourceTree = "<group>"; };
-		F5B9202515D3E1EC000CF3E6 /* ic_type_text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_text.png; sourceTree = "<group>"; };
-		F5B9202615D3E1EC000CF3E6 /* ic_type_unknown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_type_unknown.png; sourceTree = "<group>"; };
+		F5B9202015D3E1EC000CF3E6 /* ic_type_dashboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_type_dashboard.png; path = FileImages/ic_type_dashboard.png; sourceTree = "<group>"; };
+		F5B9202115D3E1EC000CF3E6 /* ic_type_folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_type_folder.png; path = FileImages/ic_type_folder.png; sourceTree = "<group>"; };
+		F5B9202215D3E1EC000CF3E6 /* ic_type_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_type_image.png; path = FileImages/ic_type_image.png; sourceTree = "<group>"; };
+		F5B9202315D3E1EC000CF3E6 /* ic_type_report.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_type_report.png; path = FileImages/ic_type_report.png; sourceTree = "<group>"; };
+		F5B9202515D3E1EC000CF3E6 /* ic_type_text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_type_text.png; path = FileImages/ic_type_text.png; sourceTree = "<group>"; };
+		F5B9202615D3E1EC000CF3E6 /* ic_type_unknown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_type_unknown.png; path = FileImages/ic_type_unknown.png; sourceTree = "<group>"; };
 		F5BE2634161730D2009331A1 /* JSAppUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSAppUpdater.h; sourceTree = "<group>"; };
 		F5BE2635161730D2009331A1 /* JSAppUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSAppUpdater.m; sourceTree = "<group>"; };
 		F5C1A9FD1677858500A42F97 /* JSUIResourceModifyViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = JSUIResourceModifyViewController.xib; path = Classes/JSUIComponents/JSUIResourceModifyViewController.xib; sourceTree = "<group>"; };
@@ -256,9 +263,7 @@
 		F5EA578815D1A78E003416D1 /* JSFavoritesHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSFavoritesHelper.m; sourceTree = "<group>"; };
 		F5F2B0F715C161FC00E97074 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		F5F2B0F915C16CBA00E97074 /* JSUIReportUnitViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JSUIReportUnitViewController.xib; sourceTree = "<group>"; };
-		F5FCF25E1630661100BC545E /* Cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Cancel.png; sourceTree = "<group>"; };
-		F5FD57A31714E29200EC706B /* jaspersoft-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jaspersoft-sdk.xcodeproj"; path = "../../JaspersoftSDK/jaspersoft-sdk.xcodeproj"; sourceTree = "<group>"; };
-		F5FD57B01714E3B100EC706B /* jaspersoft-sdk-resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "jaspersoft-sdk-resources.bundle"; path = "../../JaspersoftSDK/jaspersoft-sdk-resources.bundle"; sourceTree = "<group>"; };
+		F5FCF25E1630661100BC545E /* Cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Cancel.png; path = ../../Cancel.png; sourceTree = "<group>"; };
 		F5FD57B91715EAE600EC706B /* JasperMobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -267,13 +272,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAFE22761735B36F00AA354A /* libjaspersoft-sdk.a in Frameworks */,
 				649795CF13602DC800FA5BA0 /* QuartzCore.framework in Frameworks */,
 				64252F001350C641005DAD57 /* libxml2.dylib in Frameworks */,
 				64252F081350C675005DAD57 /* SystemConfiguration.framework in Frameworks */,
 				64252F061350C665005DAD57 /* MobileCoreServices.framework in Frameworks */,
 				64979538135F1AB900FA5BA0 /* Security.framework in Frameworks */,
 				64252F021350C650005DAD57 /* CFNetwork.framework in Frameworks */,
-				F5FD57B41714E3CE00EC706B /* libjaspersoft-sdk.a in Frameworks */,
 				64252F191350C79A005DAD57 /* libz.dylib in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				F57D744115F82D2B00F9B1FB /* CoreData.framework in Frameworks */,
@@ -294,6 +299,7 @@
 				F5FD57B51715EAE600EC706B /* CoreData */,
 				F5EA578615D1A770003416D1 /* Helpers */,
 				F51E05B11609FF1900D17020 /* SSKeychain */,
+				CAFE227C1735B46A00AA354A /* Support */,
 				1D3623240D0F684500981E51 /* JasperMobileAppDelegate.h */,
 				1D3623250D0F684500981E51 /* JasperMobileAppDelegate.m */,
 			);
@@ -311,9 +317,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				F5FD57A31714E29200EC706B /* jaspersoft-sdk.xcodeproj */,
+				CAFE22651735B33700AA354A /* jaspersoft-sdk.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
-				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
@@ -321,41 +326,16 @@
 			name = CustomTemplate;
 			sourceTree = "<group>";
 		};
-		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
-			isa = PBXGroup;
-			children = (
-				28A0AAE50D9B0CCF005BE974 /* JasperMobile_Prefix.pch */,
-				29B97316FDCFA39411CA2CEA /* main.m */,
-			);
-			name = "Other Sources";
-			sourceTree = "<group>";
-		};
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F5FD57B01714E3B100EC706B /* jaspersoft-sdk-resources.bundle */,
+				CAFE227D1735B48C00AA354A /* Images */,
 				F5312726161AE56E006AF5DD /* XibFiles */,
-				F5811F7E15EE64CA00CE775A /* Buttons */,
-				F5B9201F15D3E1EC000CF3E6 /* FileImages */,
-				F5F2B0F715C161FC00E97074 /* Settings.bundle */,
-				1067AA361418187300AC8033 /* Default@2x.png */,
-				F568250916433B8800CC4015 /* Default-568h@2x.png */,
-				1067AA341418145000AC8033 /* Icon@2x.png */,
-				F568250B16433BA500CC4015 /* Icon-72.png */,
-				F568250C16433BA600CC4015 /* Icon-Small-50.png */,
-				F568250D16433BA600CC4015 /* Icon-Small.png */,
-				F568250E16433BA600CC4015 /* Icon-Small@2x.png */,
-				F5FCF25E1630661100BC545E /* Cancel.png */,
-				F5976A8215E461E2004165A7 /* star.png */,
-				64975955139F84F700BA0A66 /* Icon.png */,
-				F57373C6162727DD000A8DD7 /* Library_Tab.png */,
-				64975959139F854F00BA0A66 /* Default.png */,
-				100ABF0213D98B6900776C8F /* samples.png */,
-				100ABF0013D8721100776C8F /* settings.png */,
-				100ABEFE13D86F5F00776C8F /* repository.png */,
-				F568251316433BBA00CC4015 /* iTunesArtwork */,
-				8D1107310486CEB800E47090 /* Jaspersoft-Info.plist */,
 				64A80A31135C497E00651C3B /* Localizable.strings */,
+				CAFE22721735B34600AA354A /* jaspersoft-sdk-resources.bundle */,
+				F5F2B0F715C161FC00E97074 /* Settings.bundle */,
+				8D1107310486CEB800E47090 /* Jaspersoft-Info.plist */,
+				28A0AAE50D9B0CCF005BE974 /* JasperMobile_Prefix.pch */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -376,6 +356,77 @@
 				64252F071350C675005DAD57 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CAFE22661735B33700AA354A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CAFE226D1735B33700AA354A /* libjaspersoft-sdk.a */,
+				CAFE226F1735B33700AA354A /* jaspersoft-sdk.framework */,
+				CAFE22711735B33700AA354A /* jaspersoft-sdk-resources.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CAFE227C1735B46A00AA354A /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = Support;
+			sourceTree = "<group>";
+		};
+		CAFE227D1735B48C00AA354A /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				CAFE22801735B4C700AA354A /* Tabs */,
+				CAFE227F1735B4BB00AA354A /* App */,
+				F5811F7E15EE64CA00CE775A /* Buttons */,
+				CAFE227E1735B49600AA354A /* Resources */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		CAFE227E1735B49600AA354A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F5B9202015D3E1EC000CF3E6 /* ic_type_dashboard.png */,
+				F5B9202115D3E1EC000CF3E6 /* ic_type_folder.png */,
+				F5B9202215D3E1EC000CF3E6 /* ic_type_image.png */,
+				F5B9202315D3E1EC000CF3E6 /* ic_type_report.png */,
+				F5B9202515D3E1EC000CF3E6 /* ic_type_text.png */,
+				F5B9202615D3E1EC000CF3E6 /* ic_type_unknown.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		CAFE227F1735B4BB00AA354A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				1067AA361418187300AC8033 /* Default@2x.png */,
+				F568250916433B8800CC4015 /* Default-568h@2x.png */,
+				1067AA341418145000AC8033 /* Icon@2x.png */,
+				F568250B16433BA500CC4015 /* Icon-72.png */,
+				F568250C16433BA600CC4015 /* Icon-Small-50.png */,
+				F568250D16433BA600CC4015 /* Icon-Small.png */,
+				F568250E16433BA600CC4015 /* Icon-Small@2x.png */,
+				64975955139F84F700BA0A66 /* Icon.png */,
+				64975959139F854F00BA0A66 /* Default.png */,
+				F568251316433BBA00CC4015 /* iTunesArtwork */,
+			);
+			name = App;
+			sourceTree = "<group>";
+		};
+		CAFE22801735B4C700AA354A /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				F5976A8215E461E2004165A7 /* star.png */,
+				F57373C6162727DD000A8DD7 /* Library_Tab.png */,
+				100ABF0213D98B6900776C8F /* samples.png */,
+				100ABF0013D8721100776C8F /* settings.png */,
+				100ABEFE13D86F5F00776C8F /* repository.png */,
+			);
+			name = Tabs;
 			sourceTree = "<group>";
 		};
 		F51E05B11609FF1900D17020 /* SSKeychain */ = {
@@ -415,25 +466,13 @@
 		F5811F7E15EE64CA00CE775A /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				F5FCF25E1630661100BC545E /* Cancel.png */,
 				F5811F7F15EE64CA00CE775A /* gray.png */,
 				F5811F8015EE64CA00CE775A /* red.png */,
 				F5811F8115EE64CA00CE775A /* yellow.png */,
 			);
 			name = Buttons;
 			path = icons/buttons;
-			sourceTree = "<group>";
-		};
-		F5B9201F15D3E1EC000CF3E6 /* FileImages */ = {
-			isa = PBXGroup;
-			children = (
-				F5B9202015D3E1EC000CF3E6 /* ic_type_dashboard.png */,
-				F5B9202115D3E1EC000CF3E6 /* ic_type_folder.png */,
-				F5B9202215D3E1EC000CF3E6 /* ic_type_image.png */,
-				F5B9202315D3E1EC000CF3E6 /* ic_type_report.png */,
-				F5B9202515D3E1EC000CF3E6 /* ic_type_text.png */,
-				F5B9202615D3E1EC000CF3E6 /* ic_type_unknown.png */,
-			);
-			path = FileImages;
 			sourceTree = "<group>";
 		};
 		F5EA572915D15E0F003416D1 /* JSInputControls */ = {
@@ -519,16 +558,6 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		F5FD57A41714E29200EC706B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				F5FD57AB1714E29300EC706B /* libjaspersoft-sdk.a */,
-				F5FD57AD1714E29300EC706B /* jaspersoft-sdk.framework */,
-				F5FD57AF1714E29300EC706B /* jaspersoft-sdk-resources.bundle */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		F5FD57B51715EAE600EC706B /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -559,7 +588,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				F5FD57B31714E3C800EC706B /* PBXTargetDependency */,
+				CAFE22751735B36200AA354A /* PBXTargetDependency */,
 			);
 			name = JasperMobile;
 			productName = Jaspersoft;
@@ -585,13 +614,18 @@
 				German,
 				en,
 				it,
+				ja,
+				fr,
+				de,
+				es,
+				zh,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = F5FD57A41714E29200EC706B /* Products */;
-					ProjectRef = F5FD57A31714E29200EC706B /* jaspersoft-sdk.xcodeproj */;
+					ProductGroup = CAFE22661735B33700AA354A /* Products */;
+					ProjectRef = CAFE22651735B33700AA354A /* jaspersoft-sdk.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -602,25 +636,25 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		F5FD57AB1714E29300EC706B /* libjaspersoft-sdk.a */ = {
+		CAFE226D1735B33700AA354A /* libjaspersoft-sdk.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libjaspersoft-sdk.a";
-			remoteRef = F5FD57AA1714E29300EC706B /* PBXContainerItemProxy */;
+			remoteRef = CAFE226C1735B33700AA354A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		F5FD57AD1714E29300EC706B /* jaspersoft-sdk.framework */ = {
+		CAFE226F1735B33700AA354A /* jaspersoft-sdk.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = "jaspersoft-sdk.framework";
-			remoteRef = F5FD57AC1714E29300EC706B /* PBXContainerItemProxy */;
+			remoteRef = CAFE226E1735B33700AA354A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		F5FD57AF1714E29300EC706B /* jaspersoft-sdk-resources.bundle */ = {
+		CAFE22711735B33700AA354A /* jaspersoft-sdk-resources.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "jaspersoft-sdk-resources.bundle";
-			remoteRef = F5FD57AE1714E29300EC706B /* PBXContainerItemProxy */;
+			remoteRef = CAFE22701735B33700AA354A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -664,7 +698,7 @@
 				F568251416433BBA00CC4015 /* iTunesArtwork in Resources */,
 				F5A61467165E34A4003CB2B8 /* JSUIDashboardViewController.xib in Resources */,
 				F5C1A9FE1677858500A42F97 /* JSUIResourceModifyViewController.xib in Resources */,
-				F5FD57B11714E3B100EC706B /* jaspersoft-sdk-resources.bundle in Resources */,
+				CAFE22731735B34600AA354A /* jaspersoft-sdk-resources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -722,10 +756,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		F5FD57B31714E3C800EC706B /* PBXTargetDependency */ = {
+		CAFE22751735B36200AA354A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "jaspersoft-sdk";
-			targetProxy = F5FD57B21714E3C800EC706B /* PBXContainerItemProxy */;
+			targetProxy = CAFE22741735B36200AA354A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -735,6 +769,11 @@
 			children = (
 				64A80A32135C497E00651C3B /* en */,
 				64A80A34135C499200651C3B /* it */,
+				CAFE22771735B3F900AA354A /* ja */,
+				CAFE22781735B40100AA354A /* fr */,
+				CAFE22791735B40800AA354A /* de */,
+				CAFE227A1735B40F00AA354A /* es */,
+				CAFE227B1735B42000AA354A /* zh */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
