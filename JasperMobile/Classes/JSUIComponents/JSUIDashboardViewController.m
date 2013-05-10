@@ -54,8 +54,12 @@
     [self.loadingIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
     [self.loadingIndicator setHidesWhenStopped:YES];
     [self.webView addSubview:self.loadingIndicator];
-    
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dashboardUrl]]];
+    [self.loadingIndicator startAnimating];
+    [self.resourceClient resource:@"/" usingBlock:^(JSRequest *request) {
+        request.finishedBlock = ^(JSOperationResult *result) {
+            [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dashboardUrl]]];
+        };
+    }];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -73,10 +77,6 @@
 
 - (IBAction)close:(id)sender {
     [self dismissModalViewControllerAnimated:YES];
-}
-
-- (void)webViewDidStartLoad:(UIWebView *)webView {
-    [self.loadingIndicator startAnimating];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
