@@ -26,6 +26,7 @@
 //
 
 #import "JSBooleanInputControlCell.h"
+#import "JSLocalization.h"
 
 #define JS_LBL_BOOLEAN_WIDTH                  200.0f
 
@@ -115,9 +116,9 @@
 		
 	} else {
 		NSMutableArray *vals = [NSMutableArray arrayWithCapacity:3];
-		[vals addObject:NSLocalizedString(@"ic.value.notset", nil)];
-		[vals addObject:NSLocalizedString(@"ic.value.yes", nil)];
-		[vals addObject:NSLocalizedString(@"ic.value.no", nil)];
+		[vals addObject:JSCustomLocalizedString(@"ic.value.notset", nil)];
+		[vals addObject:JSCustomLocalizedString(@"ic.value.yes", nil)];
+		[vals addObject:JSCustomLocalizedString(@"ic.value.no", nil)];
 		
 		NSMutableArray *selectedVals = [NSMutableArray arrayWithCapacity:1];
 		if (self.selectedValue == nil) {
@@ -150,11 +151,11 @@
 	} else {
 		[super setSelectedValue:vals];
 		if (self.selectedValue == nil) {
-			label.text = NSLocalizedString(@"ic.value.notset", nil);
+			label.text = JSCustomLocalizedString(@"ic.value.notset", nil);
 		} else if ([self.selectedValue isEqualToString:@"true"]) {
-			label.text = NSLocalizedString(@"ic.value.yes", nil);
+			label.text = JSCustomLocalizedString(@"ic.value.yes", nil);
 		} else {
-			label.text = NSLocalizedString(@"ic.value.no", nil);
+			label.text = JSCustomLocalizedString(@"ic.value.no", nil);
 		}
         
         self.icDescriptor.state.value = self.selectedValue;

@@ -31,6 +31,7 @@
 #import "JSUIRepositoryViewController.h"
 #import "JSUIResourceModifyViewController.h"
 #import "UIAlertView+LocalizedAlert.h"
+#import "JSLocalization.h"
 
 @interface JSUIResourceViewController()
 
@@ -81,7 +82,7 @@ static UIFont *_detailFont;
         resourceLoaded = NO;
         deleting = false;
         
-        UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle: NSLocalizedString(@"dialog.button.edit", nil)
+        UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle: JSCustomLocalizedString(@"dialog.button.edit", nil)
                                                                        style:UIBarButtonItemStylePlain
                                                                        target:self
                                                                        action:@selector(editClicked:)];
@@ -282,12 +283,12 @@ static UIFont *_detailFont;
 
     if (section == PROPERTIES_SECTION)
 	{
-		return NSLocalizedString(@"resource.properties.title", nil);
+		return JSCustomLocalizedString(@"resource.properties.title", nil);
 	}
 	
 	if (section == RESOURCES_SECTION && resourceLoaded && [descriptor.childResourceDescriptors count] > 0)
 	{
-		return NSLocalizedString(@"resource.nestedproperties.title", nil);
+		return JSCustomLocalizedString(@"resource.nestedproperties.title", nil);
     }
 	return @"";
 		
@@ -331,7 +332,7 @@ static UIFont *_detailFont;
 			self.nameCell = [tableView dequeueReusableCellWithIdentifier:@"NameCell"];
 			if (self.nameCell == nil) {				
 				self.nameCell = [self createCell: @"NameCell"];
-				self.nameCell.textLabel.text = NSLocalizedString(@"resource.name.title", nil);
+				self.nameCell.textLabel.text = JSCustomLocalizedString(@"resource.name.title", nil);
 			}
             if (resourceLoaded) {
                 self.nameCell.detailTextLabel.text = [descriptor name];
@@ -344,7 +345,7 @@ static UIFont *_detailFont;
 			self.labelCell = [tableView dequeueReusableCellWithIdentifier:@"LabelCell"];
 			if (self.labelCell == nil) {
 				self.labelCell = [self createCell: @"LabelCell"];
-				self.labelCell.textLabel.text = NSLocalizedString(@"resource.label.title", nil);
+				self.labelCell.textLabel.text = JSCustomLocalizedString(@"resource.label.title", nil);
 			}
             if (resourceLoaded) {
                 self.labelCell.detailTextLabel.text = [descriptor label];
@@ -357,7 +358,7 @@ static UIFont *_detailFont;
 			self.descriptionCell = [tableView dequeueReusableCellWithIdentifier:@"DescriptionCell"];
 			if (self.descriptionCell == nil) {
 				self.descriptionCell = [self createCell: @"DescriptionCell"];
-				self.descriptionCell.textLabel.text = NSLocalizedString(@"resource.description.title", nil);
+				self.descriptionCell.textLabel.text = JSCustomLocalizedString(@"resource.description.title", nil);
 			}
             if (resourceLoaded) {
                 self.descriptionCell.detailTextLabel.text = [descriptor resourceDescription];
@@ -370,7 +371,7 @@ static UIFont *_detailFont;
 			self.typeCell = [tableView dequeueReusableCellWithIdentifier:@"TypeCell"];
 			if (self.typeCell == nil) {
 				self.typeCell = [self createCell: @"TypeCell"];
-				self.typeCell.textLabel.text = NSLocalizedString(@"resource.type.title", nil);
+				self.typeCell.textLabel.text = JSCustomLocalizedString(@"resource.type.title", nil);
 			}
             if (resourceLoaded) {
                 self.typeCell.detailTextLabel.text = [descriptor wsType];
@@ -383,7 +384,7 @@ static UIFont *_detailFont;
 			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Type2Cell"];
 			if (cell == nil) {
 				cell = [self createCell: @"Type2Cell"];
-				cell.textLabel.text = NSLocalizedString(@"resource.resources.title", nil);
+				cell.textLabel.text = JSCustomLocalizedString(@"resource.resources.title", nil);
 			}
 
 			if (resourceLoaded)
@@ -403,7 +404,7 @@ static UIFont *_detailFont;
 		if (!cell) {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WaitCell"];
 		
-			cell.textLabel.text = NSLocalizedString(@"status.loading", nil);
+			cell.textLabel.text = JSCustomLocalizedString(@"status.loading", nil);
 		}
 		
 		return cell;
@@ -464,7 +465,7 @@ static UIFont *_detailFont;
 			
             UIImage *redButtonImage = [UIImage imageNamed:@"red.png"];
 			UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            [deleteButton setTitle:NSLocalizedString(@"dialog.button.delete", nil) forState:UIControlStateNormal];
+            [deleteButton setTitle:JSCustomLocalizedString(@"dialog.button.delete", nil) forState:UIControlStateNormal];
             deleteButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
             [deleteButton setBackgroundImage:redButtonImage forState:UIControlStateNormal];
             [deleteButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -517,10 +518,10 @@ static UIFont *_detailFont;
 
 - (void)changeFavoriteButtonUI:(UIButton *)button isResourceInFavorites:(BOOL)isResourceInFavorites {
     if (!isResourceInFavorites) {
-        [button setTitle:NSLocalizedString(@"dialog.button.addfavorite", nil) forState:UIControlStateNormal];
+        [button setTitle:JSCustomLocalizedString(@"dialog.button.addfavorite", nil) forState:UIControlStateNormal];
         [button setBackgroundImage:[UIImage imageNamed:@"yellow.png"] forState:UIControlStateNormal];
     } else {
-        [button setTitle:NSLocalizedString(@"dialog.button.removefavorite", nil) forState:UIControlStateNormal];
+        [button setTitle:JSCustomLocalizedString(@"dialog.button.removefavorite", nil) forState:UIControlStateNormal];
         [button setBackgroundImage:[UIImage imageNamed:@"gray.png"] forState:UIControlStateNormal];
     }
 }

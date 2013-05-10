@@ -28,6 +28,7 @@
 #import "ServersViewController.h"
 #import "JasperMobileAppDelegate.h"
 #import "JSUIAskPasswordDialog.h"
+#import "JSLocalization.h"
 
 @implementation ServersViewController
 
@@ -36,9 +37,9 @@
 
 - (void)viewDidLoad {
 	[[self tableView] setAllowsSelectionDuringEditing: YES];
-	self.title = NSLocalizedString(@"view.servers", nil);
+	self.title = JSCustomLocalizedString(@"view.servers", nil);
 	
-	editDoneButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"dialog.button.edit", nil)
+	editDoneButton = [[UIBarButtonItem alloc] initWithTitle:JSCustomLocalizedString(@"dialog.button.edit", nil)
 					   style: UIBarButtonItemStylePlain
 					   target:self action:@selector(editClicked:)];
 	
@@ -50,7 +51,7 @@
 	}
 	
     UIBarButtonItem *infoButton = [[UIBarButtonItem alloc]
-                                   initWithTitle:NSLocalizedString(@"dialog.button.info", nil)
+                                   initWithTitle:JSCustomLocalizedString(@"dialog.button.info", nil)
                                    style: UIBarButtonItemStylePlain
                                    target:self action:@selector(infoClicked:)];
     
@@ -69,7 +70,7 @@
         vc.previousViewController = self;
         [self.navigationController pushViewController:vc animated: YES];
     } else {
-        editDoneButton.title = NSLocalizedString(@"dialog.button.done", nil);
+        editDoneButton.title = JSCustomLocalizedString(@"dialog.button.done", nil);
         editDoneButton.action = @selector(doneClicked:);
         [[self tableView] beginUpdates];
         [[self tableView] reloadSections: [NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
@@ -79,20 +80,20 @@
 }
 
 - (void)infoClicked:(id)sender {
-    NSString *mssg = NSLocalizedString(@"servers.info", nil);
+    NSString *mssg = JSCustomLocalizedString(@"servers.info", nil);
     mssg = [NSString stringWithFormat:mssg, [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"]];
-    [[[UIAlertView alloc] initWithTitle:nil message:mssg delegate:nil cancelButtonTitle:NSLocalizedString(@"dialog.button.ok", nil) otherButtonTitles:nil] show];
+    [[[UIAlertView alloc] initWithTitle:nil message:mssg delegate:nil cancelButtonTitle:JSCustomLocalizedString(@"dialog.button.ok", nil) otherButtonTitles:nil] show];
 }
 
 - (void)doneClicked:(id)sender {
-	editDoneButton.title = NSLocalizedString(@"dialog.button.edit", nil);
+	editDoneButton.title = JSCustomLocalizedString(@"dialog.button.edit", nil);
 	editDoneButton.action = @selector(editClicked:);
 	editMode = NO;
 	
 	[[self tableView] setEditing:false animated:YES];
 	[[self tableView] beginUpdates];
 	[[self tableView] reloadSections: [NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-	[[self tableView] endUpdates];	
+	[[self tableView] endUpdates];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -109,7 +110,7 @@
 
 // Customize the number of rows in the table view.
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	return NSLocalizedString(@"servers.profile.title", nil);
+	return JSCustomLocalizedString(@"servers.profile.title", nil);
 }
 
 // Customize the number of rows in the table view.
@@ -120,10 +121,10 @@
         if (serversCount == 1) {
             ServerProfile *serverProfile = [[JasperMobileAppDelegate sharedInstance].servers objectAtIndex:0];
             if ([serverProfile.alias isEqualToString:@"Jaspersoft Mobile Demo"]) {
-                return NSLocalizedString(@"servers.profile.configure.tips", nil);
+                return JSCustomLocalizedString(@"servers.profile.configure.tips", nil);
             }
         } else if (serversCount == 0) {
-            return NSLocalizedString(@"servers.profile.configure.help", nil);
+            return JSCustomLocalizedString(@"servers.profile.configure.help", nil);
         }
     }
     
@@ -148,7 +149,7 @@
 		if (cell == nil) {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellAddAccount];
 		}
-		cell.textLabel.text = NSLocalizedString(@"servers.new.account.title", nil);
+		cell.textLabel.text = JSCustomLocalizedString(@"servers.new.account.title", nil);
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		return cell;
 	}
@@ -196,6 +197,8 @@
              
 			 // Delete the row from the data source.
 			 ServerProfile *serverProfile = [app.servers objectAtIndex:[indexPath indexAtPosition:1]];
+             BOOL isProfileInUse = [[JasperMobileAppDelegate currentActiveServerProfile].alias isEqualToString:serverProfile.alias];
+             
 			 NSInteger index = [app.servers indexOfObject:serverProfile];
 			 if (index >= 0) {
 				 [app.servers removeObjectAtIndex:index];
@@ -205,8 +208,10 @@
 			 }
 			 [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
              
-             // If the profile is currently in use... remove it...
-             [[JasperMobileAppDelegate sharedInstance] initProfileForRESTClient: nil];    
+             if (isProfileInUse) {
+                 // If the profile is currently in use then remove it
+                 [app initProfileForRESTClient: nil];
+             }
 		 }
 	 }
  }

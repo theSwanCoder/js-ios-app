@@ -29,6 +29,7 @@
 #import "JasperMobileAppDelegate.h"
 #import "ServerProfile+Helpers.h"
 #import "Favorites.h"
+#import "JSLocalization.h"
 #import "UIAlertView+LocalizedAlert.h"
 
 // Contains version:method structure. Method updates specific part of application for specific app version
@@ -220,9 +221,9 @@ static NSString * errorMessage = nil;
     
     if (error != nil) {
         errorMessage = [NSString stringWithFormat:@"%@: %@\n%@",
-                             NSLocalizedString(@"error.update.to.1_5.msg", nil),
+                             JSCustomLocalizedString(@"error.update.to.1_5.msg", nil),
                              [error localizedDescription],
-                             NSLocalizedString(@"error.update.retry", nil)];
+                             JSCustomLocalizedString(@"error.update.retry", nil)];
         return NO;
     } else {
         // Change location for firstRun value and delete unnecessary data

@@ -29,6 +29,7 @@
 #import "JSUIBaseRepositoryViewController.h"
 #import "JSProfile.h"
 #import "JSAppUpdater.h"
+#import "JSLocalization.h"
 
 @interface JasperMobileAppDelegate()
 
@@ -142,10 +143,13 @@ static ServerProfile * currentActiveServerProfile;
 
 - (void)initProfileForRESTClient:(ServerProfile *)serverProfile {
     currentActiveServerProfile = serverProfile;
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if (serverProfile == nil) {
         self.resourceClient = nil;
         self.reportClient = nil;
+        [prefs removeObjectForKey:@"jaspersoft.server.active"];
+        [self disableTabBar];
     } else {
         if (!self.resourceClient) {
             self.resourceClient = [[JSRESTResource alloc] init];
@@ -169,10 +173,10 @@ static ServerProfile * currentActiveServerProfile;
         self.favorites = [[JSFavoritesHelper alloc] initWithServerProfile:serverProfile];
         self.reportOptions = [[JSReportOptionsHelper alloc] initWithServerProfile:serverProfile];
         
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         [prefs setURL:[[serverProfile objectID] URIRepresentation] forKey:@"jaspersoft.server.active"];
-        [prefs synchronize];
     }
+    
+    [prefs synchronize];
 }
 
 #pragma mark -
@@ -214,11 +218,11 @@ static ServerProfile * currentActiveServerProfile;
         [(JSUIBaseRepositoryViewController *)(favoritesController.topViewController) setResourceClient:self.resourceClient];
         [(JSUIBaseRepositoryViewController *)(libraryController.topViewController) setResourceClient:self.resourceClient];
         
-        navigationController.title = NSLocalizedString(@"view.repository", nil);
-        favoritesController.title = NSLocalizedString(@"view.favorites", nil);
-        searchController.title = NSLocalizedString(@"view.search", nil);
-        settingsController.title = NSLocalizedString(@"view.servers", nil);
-        libraryController.title = NSLocalizedString(@"view.library", nil);
+        navigationController.title = JSCustomLocalizedString(@"view.repository", nil);
+        favoritesController.title = JSCustomLocalizedString(@"view.favorites", nil);
+        searchController.title = JSCustomLocalizedString(@"view.search", nil);
+        settingsController.title = JSCustomLocalizedString(@"view.servers", nil);
+        libraryController.title = JSCustomLocalizedString(@"view.library", nil);
     }
 	
     NSArray *controllers = [NSArray arrayWithObjects:navigationController, libraryController, favoritesController, searchController, settingsController, nil];
@@ -245,7 +249,7 @@ static ServerProfile * currentActiveServerProfile;
 
 - (void)disableTabBar {
     for (UITabBarItem *item in self.tabBarController.tabBar.items) {
-        if (![item.title isEqualToString: NSLocalizedString(@"view.servers", nil)]) {
+        if (![item.title isEqualToString: JSCustomLocalizedString(@"view.servers", nil)]) {
             [item setEnabled:NO];
         }
     }

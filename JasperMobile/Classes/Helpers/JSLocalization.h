@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2005 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -21,36 +21,17 @@
  */
 
 //
-//  JSTimer.m
+//  JSLocalization.h
 //  Jaspersoft Corporation
 //
 
-#import "JSTimer.h"
+#import <Foundation/Foundation.h>
 
-@implementation JSTimer
+@interface JSLocalization : NSObject
 
-+ (void)time:(void(^)(void))block {
-    NSDate *methodStart = [NSDate date];
-    
-    block();
-    
-    NSDate *methodFinish = [NSDate date];
-    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    
-    NSLog(@"Execution time: %f", executionTime);
-}
-
-+ (void)time:(void(^)(void))block repeat:(NSInteger)times {
-    NSDate *methodStart = [NSDate date];
-    
-    for (int i = times; i > 0; i--) { 
-        block();
-    }
-    
-    NSDate *methodFinish = [NSDate date];
-    NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:methodStart];
-    
-    NSLog(@"Execution time: %f", executionTime);
-}
++ (NSString *)localizedStringForKey:(NSString *)key;
 
 @end
+
+#define JSCustomLocalizedString(key, comment) \
+        [JSLocalization localizedStringForKey:(key)]

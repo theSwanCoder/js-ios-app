@@ -31,6 +31,7 @@
 #import "JSUIReportUnitViewController.h"
 #import "JasperMobileAppDelegate.h"
 #import "UIAlertView+LocalizedAlert.h"
+#import "JSLocalization.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
 @implementation JSUIReportUnitParametersViewController
@@ -254,7 +255,7 @@ static UIFont *detailFont;
             formatCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FormatCell"];
             formatCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             reportFormat = @"HTML";
-            formatCell.textLabel.text = NSLocalizedString(@"report.output.format", nil);
+            formatCell.textLabel.text = JSCustomLocalizedString(@"report.output.format", nil);
             formatCell.textLabel.font = [UIFont systemFontOfSize:14.0];
             
             reportFormatLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONST_Cell_width - 55, 10, 60, 21)];
@@ -288,7 +289,7 @@ static UIFont *detailFont;
             CGRect frame = CGRectMake(0, 0, buttonWidth, 40);
             button.frame = frame;
             button.tag = 1;
-            [button setTitle:@"Run" forState:UIControlStateNormal];
+            [button setTitle:JSCustomLocalizedString(@"dialog.button.run.report", nil) forState:UIControlStateNormal];
             [button setTag:indexPath.row];
             [button addTarget:self action:@selector(runReport) forControlEvents:UIControlEventTouchUpInside];
             [runCell.contentView addSubview:button];

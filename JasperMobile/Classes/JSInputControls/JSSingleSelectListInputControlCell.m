@@ -30,6 +30,7 @@
 #import "JSListSelectorViewController.h"
 #import "JSResourceDescriptor+Helpers.h"
 #import "JasperMobileAppDelegate.h"
+#import "JSLocalization.h"
 #import "JSUIReportUnitParametersViewController.h"
 #import "JSListItem.h"
 
@@ -216,12 +217,12 @@
 
 - (void)updateValueText {
     if (loading) {
-        label.text = NSLocalizedString(@"status.loading", nil);
+        label.text = JSCustomLocalizedString(@"status.loading", nil);
         return;
     }
     
 	if (self.selectedValue == nil) {
-		label.text = NSLocalizedString(@"ic.value.notset", nil);
+		label.text = JSCustomLocalizedString(@"ic.value.notset", nil);
 	} else {
 		NSInteger index = [self indexOfItemWithValue: self.selectedValue];
 		if (index >= 0 && index < [items count]) {
@@ -293,7 +294,7 @@
     loading = FALSE;
     if (result == nil || result.objects.count == 0) {
         [label setTextColor:[UIColor redColor] ];
-		label.text = NSLocalizedString(@"ic.label.error", nil);
+		label.text = JSCustomLocalizedString(@"ic.label.error", nil);
 	} else {
 		// Get the data from the descriptor
 		// Data is stored in a structured form, let's take a look at it        

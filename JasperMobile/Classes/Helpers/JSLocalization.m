@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2005 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -21,15 +21,26 @@
  */
 
 //
-//  JSTimer.h
+//  JSLocalization.h
 //  Jaspersoft Corporation
 //
 
-#import <Foundation/Foundation.h>
+#import "JSLocalization.h"
 
-@interface JSTimer : NSObject
+static NSString * const preferredLanguage = @"en";
 
-+ (void)time:(void(^)(void))block;
-+ (void)time:(void(^)(void))block repeat:(NSInteger)times;
+@implementation JSLocalization
+
++ (NSString *)localizedStringForKey:(NSString *)key {
+    NSString *localizedString = NSLocalizedString(key, nil);
+    if (![[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:preferredLanguage] &&
+        [localizedString isEqualToString:key]) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:preferredLanguage ofType:@"lproj"];
+        NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];
+        localizedString = [preferredLanguageBundle localizedStringForKey:key value:@"" table:nil];
+    }
+    
+    return localizedString;
+}
 
 @end

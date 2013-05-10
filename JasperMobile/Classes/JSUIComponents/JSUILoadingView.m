@@ -34,6 +34,7 @@
 //
 
 #import "JSUILoadingView.h"
+#import "JSLocalization.h"
 #import <QuartzCore/QuartzCore.h>
 
 //
@@ -148,7 +149,7 @@ static JSUILoadingView *sharedInstance = nil;
 	const CGFloat DEFAULT_LABEL_HEIGHT = 50.0;
 	CGRect labelFrame = CGRectMake(0, 0, DEFAULT_LABEL_WIDTH, DEFAULT_LABEL_HEIGHT);
 	UILabel *loadingLabel = [[UILabel alloc] initWithFrame:labelFrame];
-	loadingLabel.text = NSLocalizedString(@"status.loading", nil);
+	loadingLabel.text = JSCustomLocalizedString(@"status.loading", nil);
 	loadingLabel.textColor = [UIColor whiteColor];
 	loadingLabel.backgroundColor = [UIColor clearColor];
 	loadingLabel.textAlignment = UITextAlignmentCenter;
@@ -200,6 +201,19 @@ static JSUILoadingView *sharedInstance = nil;
         self.cancelBlock = theCancelBlock;
         self.cancelAllRequests = cancelAllRequests ?: NO;
         
+        UIImage *cancelImage = [UIImage imageNamed:@"Cancel.png"];
+        CGFloat cancelLabelWidth = 80;
+        CGFloat cancelLabelHeight = 39;
+        CGFloat cancelLabelXPos = cancelImage.size.width / 2 - cancelLabelWidth / 2;
+        CGFloat cancelLabelYPos = cancelImage.size.height / 2 - cancelLabelHeight / 2;
+        
+        UILabel *cancelLabel = [[UILabel alloc] initWithFrame:CGRectMake(cancelLabelXPos, cancelLabelYPos, cancelLabelWidth, cancelHeight)];
+        cancelLabel.font = [UIFont boldSystemFontOfSize:14];
+        cancelLabel.text = JSCustomLocalizedString(@"dialog.button.cancel", nil);
+        cancelLabel.backgroundColor = [UIColor clearColor];
+        cancelLabel.textColor = [UIColor whiteColor];
+        cancelLabel.textAlignment = NSTextAlignmentCenter;
+        
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         self.cancelButton.frame = CGRectMake(frame.size.width / 2 - cancelWidth / 2, 
                                         floor(0.75 * (frame.size.height - 140)),
@@ -207,6 +221,7 @@ static JSUILoadingView *sharedInstance = nil;
         [self.cancelButton setTitle:nil forState:UIControlStateNormal];
         [self.cancelButton setBackgroundImage:[UIImage imageNamed:@"Cancel.png"] forState:UIControlStateNormal];
         [self.cancelButton addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelButton addSubview:cancelLabel];
         [self addSubview:self.cancelButton];
     }
     

@@ -27,6 +27,7 @@
 
 #import "JSUIAskPasswordDialog.h"
 #import "JasperMobileAppDelegate.h"
+#import "JSLocalization.h"
 
 @interface JSUIAskPasswordDialog()
 
@@ -50,11 +51,11 @@
     tempStorage = [[JSUIAskPasswordDialog alloc] initWithProfile:serverProfile callback:delegate updateMethod:updateMethod];
     
     UIAlertView *askPasswordAlert = [[UIAlertView alloc]
-                 initWithTitle:NSLocalizedString(@"servers.askpassword.dialog.title.label", nil)
+                 initWithTitle:JSCustomLocalizedString(@"servers.askpassword.dialog.title.label", nil)
                  message:@"\n\n"
                  delegate:tempStorage
                  cancelButtonTitle:nil
-                 otherButtonTitles:NSLocalizedString(@"dialog.button.ok", nil), NSLocalizedString(@"dialog.button.cancel", nil), nil];
+                 otherButtonTitles:JSCustomLocalizedString(@"dialog.button.ok", nil), JSCustomLocalizedString(@"dialog.button.cancel", nil), nil];
     
     NSInteger xPos = 12;
     NSInteger yPos = 40;
@@ -63,7 +64,7 @@
     
     UILabel *passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     passwordLabel.font = [UIFont boldSystemFontOfSize:14];
-    passwordLabel.text = NSLocalizedString(@"servers.password.label", nil);
+    passwordLabel.text = JSCustomLocalizedString(@"servers.password.label", nil);
     passwordLabel.textColor = [UIColor whiteColor];
     passwordLabel.backgroundColor = [UIColor clearColor];
     CGSize generalSize = [passwordLabel.text sizeWithFont:passwordLabel.font];
@@ -77,7 +78,7 @@
                                       CGRectMake(xPos, generalRect.origin.y, 260, 35)];
     passwordTextField.adjustsFontSizeToFitWidth = YES;
     passwordTextField.textColor = [UIColor blackColor];
-    passwordTextField.placeholder = NSLocalizedString(@"servers.password.tip", nil);
+    passwordTextField.placeholder = JSCustomLocalizedString(@"servers.password.tip", nil);
     passwordTextField.backgroundColor = [UIColor whiteColor];
     passwordTextField.borderStyle = UITextBorderStyleRoundedRect;
     passwordTextField.autocorrectionType = UITextAutocorrectionTypeNo;

@@ -27,6 +27,7 @@
 
 #import "JSDateTimeInputControlCell.h"
 #import "JSDateTimeSelectorViewController.h"
+#import "JSLocalization.h"
 
 #define JS_LBL_TEXT_WIDTH	160.0f
 
@@ -45,7 +46,7 @@
 		label.textAlignment = UITextAlignmentRight;
 		label.font = [UIFont systemFontOfSize:14.0];
 		label.textColor = [UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0];
-		label.text = NSLocalizedString(@"ic.value.notset", nil);
+		label.text = JSCustomLocalizedString(@"ic.value.notset", nil);
 		label.numberOfLines = 2;
         label.backgroundColor = [UIColor clearColor];
 		if (!self.readonly) self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -66,7 +67,7 @@
 		label.textAlignment = UITextAlignmentRight;
 		label.font = [UIFont systemFontOfSize:14.0];
 		label.textColor = [UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0];
-		label.text = NSLocalizedString(@"ic.value.notset", nil);
+		label.text = JSCustomLocalizedString(@"ic.value.notset", nil);
 		label.numberOfLines = 2;
         label.backgroundColor = [UIColor clearColor];
         self.dateFormat = self.icDescriptor.validationRules.dateTimeFormatValidationRule.format;
@@ -97,7 +98,7 @@
 	[super setSelectedValue:vals];
     
 	if (self.selectedValue == nil) {
-		label.text = NSLocalizedString(@"ic.value.notset", nil);
+		label.text = JSCustomLocalizedString(@"ic.value.notset", nil);
 	} else {
 		NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         

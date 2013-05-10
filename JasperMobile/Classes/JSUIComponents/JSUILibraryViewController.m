@@ -35,23 +35,7 @@
     [super loadView];
 }
 
-- (void)updateTableContent {
-    if (self.resourceClient == nil) {
-        JasperMobileAppDelegate *app = [JasperMobileAppDelegate sharedInstance];
-        if (app.servers.count) {
-            [app initProfileForRESTClient:[app.servers objectAtIndex:0]];
-            [self updateTableContent];
-            return;
-        } else {
-            [[UIAlertView localizedAlert:@"noservers.dialog.title"
-                                 message:@"noservers.dialog.msg"
-                                delegate:self
-                       cancelButtonTitle:@"noservers.dialog.button.label"
-                       otherButtonTitles:nil] show];
-            return;
-        }
-    }
-    
+- (void)updateTableContent {    
     if ([JSRESTBase isNetworkReachable] && resources == nil) {
 		// load this view
         [JSUILoadingView showCancelableLoadingInView:self.view restClient:self.resourceClient delegate:self cancelBlock:^{

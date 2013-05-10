@@ -26,6 +26,7 @@
 //
 
 #import "JSDateTimeSelectorViewController.h"
+#import "JSLocalization.h"
 
 #define DATE_SECTION    0
 #define TIME_SECTION    1
@@ -70,9 +71,9 @@
     
     
     predefinedDates = [NSArray arrayWithObjects: today, prevMonth, prev3Month, nil];
-    predefinedDateLabels = [NSArray arrayWithObjects: NSLocalizedString(@"ic.value.today", nil),
-                            NSLocalizedString(@"ic.value.monthago", nil),
-                            NSLocalizedString(@"ic.value.3monthsago", nil), nil];
+    predefinedDateLabels = [NSArray arrayWithObjects: JSCustomLocalizedString(@"ic.value.today", nil),
+                            JSCustomLocalizedString(@"ic.value.monthago", nil),
+                            JSCustomLocalizedString(@"ic.value.3monthsago", nil), nil];
     self.selectedValue = today;
     
     return self;
@@ -81,8 +82,8 @@
 
 // Customize the number of rows in the table view.
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	if (section == DATE_SECTION) return NSLocalizedString(@"ic.title.date", nil);
-	if (section == TIME_SECTION && !self.dateOnly) return NSLocalizedString(@"ic.title.time", nil);
+	if (section == DATE_SECTION) return JSCustomLocalizedString(@"ic.title.date", nil);
+	if (section == TIME_SECTION && !self.dateOnly) return JSCustomLocalizedString(@"ic.title.time", nil);
 	return @"";
 }
 
@@ -323,7 +324,7 @@
 	{
 	    // Add the button...
 		UIBarButtonItem *unsetButton = [[UIBarButtonItem alloc]
-                                        initWithTitle: NSLocalizedString(@"ic.title.unset", nil)
+                                        initWithTitle: JSCustomLocalizedString(@"ic.title.unset", nil)
                                         style: UIBarButtonItemStylePlain
                                         target:self action:@selector(unsetClicked:)];
 		

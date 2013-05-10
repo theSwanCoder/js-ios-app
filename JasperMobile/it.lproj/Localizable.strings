@@ -63,10 +63,6 @@
 "report.output.format" = "Formato del report";
 "view.library" = "Libreria";
 
-"noservers.dialog.title" = "Nessun server configurato";
-"noservers.dialog.msg" = "È necessario aggiungere un profilo server prima di poter visualizzare un archivio";
-"noservers.dialog.button.label" = "Configura profili server";
-
 "delete.dialog.title" = "Cancellare delle risorse";
 "delete.dialog.msg" = "Sei sicuro di voler cancellare questa risorsa?";
 

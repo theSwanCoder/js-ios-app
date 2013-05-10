@@ -27,6 +27,7 @@
 
 #import "JSMultiselectListInputControlCell.h"
 #import "JSResourceDescriptor+Helpers.h"
+#import "JSLocalization.h"
 #import "JSListItem.h"
 
 #define JS_LBL_VALUE_WIDTH		160.0f
@@ -77,7 +78,7 @@
 		label.tag = 100;
 		label.font = [UIFont systemFontOfSize:14.0];
 		label.textColor = [UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0];
-		label.text = NSLocalizedString(@"ic.value.notset", nil);
+		label.text = JSCustomLocalizedString(@"ic.value.notset", nil);
         label.backgroundColor = [UIColor clearColor];
             
 		if (self.readonly) {
@@ -141,10 +142,10 @@
 
 - (void)updateValueText {
 	if (self.selectedValue == nil) {
-		label.text = NSLocalizedString(@"ic.value.notset", nil);
+		label.text = JSCustomLocalizedString(@"ic.value.notset", nil);
 	} else if ([self.selectedValue isKindOfClass: [NSArray class]]) {
         if ([self.selectedValue count] > 1) {
-            label.text = [NSString stringWithFormat:@"%d %@", [self.selectedValue count], NSLocalizedString(@"ic.label.selected", nil)];
+            label.text = [NSString stringWithFormat:@"%d %@", [self.selectedValue count], JSCustomLocalizedString(@"ic.label.selected", nil)];
         } else {
             label.text = [NSString stringWithFormat:@"%@", [self.selectedValue objectAtIndex:0]];
         }

@@ -28,6 +28,7 @@
 #import "JSListSelectorViewController.h"
 #import "JSResourceDescriptor+Helpers.h"
 #import "JSListItem.h"
+#import "JSLocalization.h"
 
 @implementation JSListSelectorViewController
 @synthesize singleSelection;
@@ -193,7 +194,7 @@
         if (!mandatory) {
             // Add the button
             UIBarButtonItem *unsetButton = [[UIBarButtonItem alloc]
-								  initWithTitle: NSLocalizedString(@"ic.title.unset", nil)
+								  initWithTitle: JSCustomLocalizedString(@"ic.title.unset", nil)
 								  style: UIBarButtonItemStylePlain
 								  target:self action:@selector(unsetClicked:)];		
             self.navigationItem.rightBarButtonItem = unsetButton;

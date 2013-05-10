@@ -29,6 +29,7 @@
 #import "ServersViewController.h"
 #import "JasperMobileAppDelegate.h"
 #import "UIAlertView+LocalizedAlert.h"
+#import "JSLocalization.h"
 
 @implementation ServerSettingsViewController
 
@@ -46,7 +47,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	// Add our custom add button as the nav bar's custom right view
-	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"dialog.button.save", nil)
+	UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithTitle:JSCustomLocalizedString(@"dialog.button.save", nil)
 																   style:UIBarButtonItemStyleBordered
 																  target:self
 																  action:@selector(saveAction:)];
@@ -155,7 +156,7 @@
 
 // Customize the number of rows in the table view.
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {    
-	return NSLocalizedString(@"servers.profile.details.title", nil);
+	return JSCustomLocalizedString(@"servers.profile.details.title", nil);
 }
 
 // Customize the number of rows in the table view.
@@ -173,9 +174,9 @@
             
             if (self.aliasCell == nil) {
 				self.aliasCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AliasCell"];
-				self.aliasCell.textLabel.text = NSLocalizedString(@"servers.name.label", nil);
+				self.aliasCell.textLabel.text = JSCustomLocalizedString(@"servers.name.label", nil);
 				aliasTextField = [self newTextFieldForCell:self.aliasCell];
-				aliasTextField.placeholder = NSLocalizedString(@"servers.myserver.label", nil);
+				aliasTextField.placeholder = JSCustomLocalizedString(@"servers.myserver.label", nil);
 				aliasTextField.keyboardType = UIKeyboardTypeDefault;
 				aliasTextField.returnKeyType = UIReturnKeyNext;
 				if(currentServerProfile != nil && currentServerProfile.alias != nil) {
@@ -190,9 +191,9 @@
 			self.urlCell = [tableView dequeueReusableCellWithIdentifier:@"UrlCell"];
 			if (self.urlCell == nil) {
 				self.urlCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UrlCell"];
-				self.urlCell.textLabel.text = NSLocalizedString(@"servers.url.label", nil);
+				self.urlCell.textLabel.text = JSCustomLocalizedString(@"servers.url.label", nil);
 				urlTextField = [self newTextFieldForCell:self.urlCell];
-				urlTextField.placeholder = NSLocalizedString(@"servers.url.tip", nil);
+				urlTextField.placeholder = JSCustomLocalizedString(@"servers.url.tip", nil);
 				urlTextField.keyboardType = UIKeyboardTypeURL;
 				urlTextField.returnKeyType = UIReturnKeyNext;
 				if(currentServerProfile != nil && currentServerProfile.serverUrl != nil)
@@ -205,9 +206,9 @@
 			self.organizationCell = [tableView dequeueReusableCellWithIdentifier:@"OrganizationCell"];
 			if (self.organizationCell == nil) {
 				self.organizationCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"OrganizationCell"];
-				self.organizationCell.textLabel.text = NSLocalizedString(@"servers.orgid.label", nil);
+				self.organizationCell.textLabel.text = JSCustomLocalizedString(@"servers.orgid.label", nil);
 				organizationTextField = [self newTextFieldForCell:self.organizationCell];
-				organizationTextField.placeholder = NSLocalizedString(@"servers.orgid.tip", nil);
+				organizationTextField.placeholder = JSCustomLocalizedString(@"servers.orgid.tip", nil);
 				organizationTextField.keyboardType = UIKeyboardTypeDefault;
 				organizationTextField.returnKeyType = UIReturnKeyNext;
 				if(currentServerProfile != nil && currentServerProfile.organization != nil)
@@ -220,9 +221,9 @@
 			self.usernameCell = [tableView dequeueReusableCellWithIdentifier:@"UsernameCell"];
 			if (self.usernameCell == nil) {
 				self.usernameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UsernameCell"];
-				self.usernameCell.textLabel.text = NSLocalizedString(@"servers.username.label", nil);
+				self.usernameCell.textLabel.text = JSCustomLocalizedString(@"servers.username.label", nil);
 				usernameTextField = [self newTextFieldForCell:self.usernameCell];
-				usernameTextField.placeholder = NSLocalizedString(@"servers.username.tip", nil);
+				usernameTextField.placeholder = JSCustomLocalizedString(@"servers.username.tip", nil);
 				usernameTextField.keyboardType = UIKeyboardTypeDefault;
 				usernameTextField.returnKeyType = UIReturnKeyNext;
 				if(currentServerProfile != nil && currentServerProfile.username != nil)
@@ -235,9 +236,9 @@
 			self.passwordCell = [tableView dequeueReusableCellWithIdentifier:@"PasswordCell"];
 			if (self.passwordCell == nil) {
 				self.passwordCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PasswordCell"];
-				self.passwordCell.textLabel.text = NSLocalizedString(@"servers.password.label", nil);
+				self.passwordCell.textLabel.text = JSCustomLocalizedString(@"servers.password.label", nil);
 				passwordTextField = [self newTextFieldForCell:self.passwordCell];
-				passwordTextField.placeholder = NSLocalizedString(@"servers.password.tip", nil);
+				passwordTextField.placeholder = JSCustomLocalizedString(@"servers.password.tip", nil);
 				passwordTextField.keyboardType = UIKeyboardTypeDefault;
 				passwordTextField.returnKeyType = UIReturnKeyDone;
 				passwordTextField.secureTextEntry = YES;
@@ -261,7 +262,7 @@
             UITableViewCell *askPasswordCell = [tableView dequeueReusableCellWithIdentifier:@"AskPasswordCell"];
 			if (askPasswordCell == nil) {
                 askPasswordCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AskPasswordCell"];
-                askPasswordCell.textLabel.text = NSLocalizedString(@"servers.askpassword.label", nil);
+                askPasswordCell.textLabel.text = JSCustomLocalizedString(@"servers.askpassword.label", nil);
                 askPasswordCell.selectionStyle = UITableViewCellSelectionStyleNone;
                 askPasswordCell.textLabel.font = [UIFont systemFontOfSize:15];
                 
@@ -271,8 +272,7 @@
                 }
                 
                 CGSize labelSize = [askPasswordCell.textLabel.text sizeWithFont:askPasswordCell.textLabel.font];
-                labelSize.width = ceil(labelSize.width / 5) * 5;
-                CGRect frame = CGRectMake(labelSize.width + xSpace, 8, askPasswordCell.frame.size.width - labelSize.width - 50, 28);
+                CGRect frame = CGRectMake(225, 8, askPasswordCell.frame.size.width - labelSize.width - 50, 28);
                 askPasswordSwitch = [[UISwitch alloc] initWithFrame:frame];
                 askPasswordSwitch.on = currentServerProfile.askPassword.boolValue;
                 [askPasswordSwitch addTarget:self action:@selector(askPasswordSwitchToggled:) forControlEvents:UIControlEventTouchUpInside];

@@ -60,10 +60,7 @@
 "resource.resources.title" = "Resources";
 
 "report.output.format" = "Report format";
-
-"noservers.dialog.title" = "No Servers Configured";
-"noservers.dialog.msg" = "You must add a server profile before you can view a repository";
-"noservers.dialog.button.label" = "Configure Server Profiles";
+"view.library" = "Library";
 
 "delete.dialog.title" = "Deleting resource";
 "delete.dialog.msg" = "Are you sure you want to delete this resource?";
@@ -129,6 +126,7 @@
 "dialog.button.edit" = "Edit";
 "dialog.button.cancel" = "Cancel";
 "dialog.button.retry" = "Retry";
+"dialog.button.run.report" = "Run Report";
 "dialog.button.yes" = "Yes";
 "dialog.button.save" = "Save";
 "dialog.button.info" = "Info";

@@ -27,6 +27,7 @@
 
 #import "JasperMobileAppDelegate.h"
 #import "JSUIFavoritesViewController.h"
+#import "JSLocalization.h"
 
 @interface JSUIFavoritesViewController()
 
@@ -56,10 +57,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.localizedTitleDone = NSLocalizedString(@"dialog.button.done", nil);
-    self.localizedTitleEdit = NSLocalizedString(@"dialog.button.edit", nil);
+    self.localizedTitleDone = JSCustomLocalizedString(@"dialog.button.done", nil);
+    self.localizedTitleEdit = JSCustomLocalizedString(@"dialog.button.edit", nil);
     self.editMode = NO;
-    self.title = NSLocalizedString(@"view.favorites", nil);
+    self.title = JSCustomLocalizedString(@"view.favorites", nil);
     self.editDoneButton = [[UIBarButtonItem alloc] initWithTitle:self.localizedTitleEdit
                                                             style:UIBarButtonItemStylePlain
                                                            target:self action:@selector(editClicked:)];
