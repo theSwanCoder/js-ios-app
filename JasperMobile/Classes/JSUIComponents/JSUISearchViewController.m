@@ -81,14 +81,14 @@
     searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
     [self.view addSubview:searchBar];
     
-    tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 44, 320, 323)];
+    NSInteger screenHeight = self.parentViewController.view.frame.size.height;    
+    tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 44, 320, screenHeight - 108)];
     tableView.delegate = self;
-    tableView.dataSource = self;   
+    tableView.dataSource = self;
     [self.view addSubview:tableView];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
 
