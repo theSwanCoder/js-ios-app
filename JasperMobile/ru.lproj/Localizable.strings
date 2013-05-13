@@ -79,10 +79,8 @@
 "error.reportissue.dialog.title" = "Ошибка создания отчета";
 "error.reportempty.dialog.title" = "Отчет пустой";
 
-// Not confirmed!
-"error.update.to.1_5.title" = "Update error";
-"error.update.to.1_5.msg" = "Error update data";
-"error.update.retry" = "You can retry execute update again, apply update - but this will wipe data or cancel update and downgrade application to previous version";
+"error.upgrade.data.title" = "Ошибка обновления - обновление данных пользователя";
+"error.upgrade.data.msg" = "Возникла ошибка обновления данных пользователя (серверы, избранное, значения фильтров и настройки). Нажмите:\nПовторить - выполнить обновление данных еще раз\nПрименить - игнорировать ошибку и продолжить обновление, вы можете ПОТЕРЯТЬ все пользовательские данные\nОтменить - для отмены обновления (остаться на текущей версии)";
 
 /* HTTP error messages
  ------------------------------ */

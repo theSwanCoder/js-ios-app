@@ -113,7 +113,7 @@ static NSString * errorMessage = nil;
 }
 
 + (void)showErrors {
-    [[UIAlertView localizedAlert:@"error.update.to.1_5.title"
+    [[UIAlertView localizedAlert:@"error.upgrade.data.title"
                         message:errorMessage
                        delegate:self
               cancelButtonTitle:@"dialog.button.cancel"
@@ -220,10 +220,7 @@ static NSString * errorMessage = nil;
     }
     
     if (error != nil) {
-        errorMessage = [NSString stringWithFormat:@"%@: %@\n%@",
-                             JSCustomLocalizedString(@"error.update.to.1_5.msg", nil),
-                             [error localizedDescription],
-                             JSCustomLocalizedString(@"error.update.retry", nil)];
+        errorMessage = JSCustomLocalizedString(@"error.upgrade.data.msg", nil);
         return NO;
     } else {
         // Change location for firstRun value and delete unnecessary data

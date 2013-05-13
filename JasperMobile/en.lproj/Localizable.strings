@@ -88,9 +88,8 @@
 "error.reportissue.dialog.title" = "The report had some problems";
 "error.reportempty.dialog.title" = "The report is empty";
 
-"error.update.to.1_5.title" = "Update error";
-"error.update.to.1_5.msg" = "Error update data";
-"error.update.retry" = "You can retry execute update again, apply update - but this will wipe data or cancel update and downgrade application to previous version";
+"error.upgrade.data.title" = "Upgrade Error - User Data Update";
+"error.upgrade.data.msg" = "There was an error updating user data (Servers, Favorites, Filter values & Settings) during the upgrade process. Press:\nRetry - to re-execute the data update again\nApply - to ignore the error and continue with upgrade, you may LOSE all user data\nCancel - to cancel the upgrade (this will leave you at current version)";
 
 /* HTTP error messages
  ------------------------------ */

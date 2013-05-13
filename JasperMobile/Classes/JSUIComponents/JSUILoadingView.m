@@ -203,12 +203,12 @@ static JSUILoadingView *sharedInstance = nil;
         
         UIImage *cancelImage = [UIImage imageNamed:@"Cancel.png"];
         CGFloat cancelLabelWidth = 80;
-        CGFloat cancelLabelHeight = 39;
+        CGFloat cancelLabelHeight = 38;
         CGFloat cancelLabelXPos = cancelImage.size.width / 2 - cancelLabelWidth / 2;
         CGFloat cancelLabelYPos = cancelImage.size.height / 2 - cancelLabelHeight / 2;
         
         UILabel *cancelLabel = [[UILabel alloc] initWithFrame:CGRectMake(cancelLabelXPos, cancelLabelYPos, cancelLabelWidth, cancelHeight)];
-        cancelLabel.font = [UIFont boldSystemFontOfSize:14];
+        cancelLabel.font = [UIFont boldSystemFontOfSize:15];
         cancelLabel.text = JSCustomLocalizedString(@"dialog.button.cancel", nil);
         cancelLabel.backgroundColor = [UIColor clearColor];
         cancelLabel.textColor = [UIColor whiteColor];
