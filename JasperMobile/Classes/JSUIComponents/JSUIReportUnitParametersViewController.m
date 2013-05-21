@@ -257,16 +257,17 @@ static UIFont *detailFont;
             reportFormat = @"HTML";
             formatCell.textLabel.text = JSCustomLocalizedString(@"report.output.format", nil);
             formatCell.textLabel.font = [UIFont systemFontOfSize:14.0];
+            formatCell.contentView.autoresizesSubviews = YES;
             
-            reportFormatLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONST_Cell_width - 55, 10, 60, 21)];
-            reportFormatLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight;
+            reportFormatLabel = [[UILabel alloc] initWithFrame:CGRectMake(CONST_Cell_width - 25, 10, 60, 21)];
+            reportFormatLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleHeight;
             reportFormatLabel.textAlignment = UITextAlignmentRight;
             reportFormatLabel.tag = 100;
             reportFormatLabel.font = [UIFont systemFontOfSize:14.0];
             reportFormatLabel.textColor = [UIColor colorWithRed:.196 green:0.3098 blue:0.52 alpha:1.0];
             reportFormatLabel.backgroundColor = [UIColor clearColor];
-            reportFormatLabel.text = reportFormat;
-            [formatCell addSubview:reportFormatLabel];
+            reportFormatLabel.text = reportFormat;            
+            [formatCell.contentView addSubview:reportFormatLabel];
             
             reportFormatCell = formatCell;
         }
@@ -280,12 +281,11 @@ static UIFont *detailFont;
             UIView *backView = [[UIView alloc] initWithFrame:CGRectZero];
             backView.backgroundColor = [UIColor clearColor];
             runCell.backgroundView = backView;
-               
-            int buttons = 1;
-            int padding = 6;
-            int buttonWidth = (self.tableView.frame.size.width - 20 - ((padding)*(buttons-1))) / buttons;
+            runCell.contentView.autoresizesSubviews = YES;
             
+            int buttonWidth = self.tableView.frame.size.width;
             UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            button.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             CGRect frame = CGRectMake(0, 0, buttonWidth, 40);
             button.frame = frame;
             button.tag = 1;
