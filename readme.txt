@@ -1,4 +1,4 @@
-JasperMobile for iOS version 1.4 Readme
+JasperMobile for iOS version 1.5 Readme
 
 JasperMobile for iOS is a native application which allows you to browse your JasperReports Server repository and view reports in several formats.
 
@@ -11,14 +11,13 @@ General Information
 --------------------
 
 Please see the JasperMobile for iOS Community project page:
-http://community.jaspersoft.com/projects/jaspermobile-ios
+http://community.jaspersoft.com/project/jaspermobile-ios
 
 What's New
 --------------------
-• New Dashboard viewer
-• Support for JasperReports Server REST v2 services
-• Support for new interactive (HTML 5) charts
-• Support for localized input controls
+• Re-use the last set of input control values
+• Move to SQLite database for increase performance
+• Translations for: Chinese, French, German, Italian, Japanese, Spanish, Russian
 • Bug fixes
 
 Source Build

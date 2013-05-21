@@ -1,6 +1,6 @@
 JasperMobile for iOS version 1.4
 Copyright (C) 2012 Jaspersoft Corporation. All rights reserved.
-http://community.jaspersoft.com/projects/jaspermobile-ios
+http://community.jaspersoft.com/project/jaspermobile-ios
 
 Unless you have purchased a commercial license agreement from Jaspersoft,
 the following license terms apply:
@@ -32,7 +32,7 @@ third party software, subject to the associated copyrights, as follows:
 
 The text of licenses for the above software is included with the
 Jaspersoft Mobile SDK for iOS source package, in the /docs/licenses folder.
-That package is available for download from http://community.jaspersoft.com/projects/mobile-sdk-ios
+That package is available for download from http://community.jaspersoft.com/project/mobile-sdk-ios
 
 
 
