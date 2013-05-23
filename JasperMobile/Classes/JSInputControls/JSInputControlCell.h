@@ -25,7 +25,7 @@
 //  Jaspersoft Corporation
 //
 
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JaspersoftSDK.h"
 
 #define JS_LBL_VALUE_WIDTH		              160.0f
 #define JS_LBL_DEFAULT_WIDTH                  180.0f

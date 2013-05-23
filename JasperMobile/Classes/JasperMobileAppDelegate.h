@@ -27,7 +27,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JaspersoftSDK.h"
 #import "JSFavoritesHelper.h"
 #import "JSReportOptionsHelper.h"
 #import "ServerProfile+Helpers.h"

@@ -25,7 +25,7 @@
 //  Jaspersoft Corporation
 //
 
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JaspersoftSDK.h"
 #import <UIKit/UIKit.h>
 
 @interface JSUIDashboardViewController : UIViewController <UIWebViewDelegate>

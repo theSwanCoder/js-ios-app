@@ -32,7 +32,7 @@
 #import "JasperMobileAppDelegate.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "JSLocalization.h"
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JaspersoftSDK.h"
 
 @implementation JSUIReportUnitParametersViewController
 

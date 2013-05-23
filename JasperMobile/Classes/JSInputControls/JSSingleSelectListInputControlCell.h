@@ -26,7 +26,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JaspersoftSDK.h"
 #import "JSInputControlCell.h"
 #import "JSListSelectorViewController.h"
 

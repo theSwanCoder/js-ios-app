@@ -30,8 +30,6 @@
 		649795CF13602DC800FA5BA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 649795CE13602DC800FA5BA0 /* QuartzCore.framework */; };
 		64A8072C135397AF00651C3B /* ServersController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 64A8072B135397AF00651C3B /* ServersController.xib */; };
 		64A80A33135C497E00651C3B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 64A80A31135C497E00651C3B /* Localizable.strings */; };
-		CAB9DD0A1746DEC400058D31 /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CAB9DD091746DEC400058D31 /* jaspersoft-sdk-resources.bundle */; };
-		CAB9DD0D1746DEDC00058D31 /* libjaspersoft-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CAB9DD041746DEB900058D31 /* libjaspersoft-sdk.a */; };
 		F50AFED415E2E12B00F761A0 /* JSUIResourceModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50AFED215E2E12900F761A0 /* JSUIResourceModifyViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F51E05B41609FF1900D17020 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F51E05B31609FF1900D17020 /* SSKeychain.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F5312729161B2CD5006AF5DD /* JSUILibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5312728161B2CD5006AF5DD /* JSUILibraryViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
@@ -44,6 +42,8 @@
 		F568251416433BBA00CC4015 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = F568251316433BBA00CC4015 /* iTunesArtwork */; };
 		F57373941626EB23000A8DD7 /* JSUIAskPasswordDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = F57373931626EB23000A8DD7 /* JSUIAskPasswordDialog.m */; };
 		F57373C7162727DD000A8DD7 /* Library_Tab.png in Resources */ = {isa = PBXBuildFile; fileRef = F57373C6162727DD000A8DD7 /* Library_Tab.png */; };
+		F57590C9174ECCE300C355C1 /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F57590B1174ECCE300C355C1 /* jaspersoft-sdk-resources.bundle */; };
+		F57590CA174ECCE300C355C1 /* libjaspersoft-sdk-universal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F57590C8174ECCE300C355C1 /* libjaspersoft-sdk-universal.a */; };
 		F57D72AE15F5FCF900F9B1FB /* ServerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F57D72AA15F5FCF800F9B1FB /* ServerSettingsViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F57D72AF15F5FCF900F9B1FB /* ServerSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F57D72AB15F5FCF800F9B1FB /* ServerSettingsViewController.xib */; };
 		F57D72B015F5FCF900F9B1FB /* ServersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F57D72AD15F5FCF800F9B1FB /* ServersViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
@@ -97,37 +97,6 @@
 		F5FD57BD1715EAE600EC706B /* JasperMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F5FD57B81715EAE600EC706B /* JasperMobile.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		CAB9DD031746DEB900058D31 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CAB9DCFC1746DEB900058D31 /* jaspersoft-sdk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F59768BD15E3C75F004165A7;
-			remoteInfo = "jaspersoft-sdk";
-		};
-		CAB9DD051746DEB900058D31 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CAB9DCFC1746DEB900058D31 /* jaspersoft-sdk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F59768D215E3C777004165A7;
-			remoteInfo = "jaspersoft-sdk-framework";
-		};
-		CAB9DD071746DEB900058D31 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CAB9DCFC1746DEB900058D31 /* jaspersoft-sdk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F5F68E0A15E55EC000270103;
-			remoteInfo = "jaspersoft-sdk-resources";
-		};
-		CAB9DD0B1746DED500058D31 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CAB9DCFC1746DEB900058D31 /* jaspersoft-sdk.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = F59768BC15E3C75F004165A7;
-			remoteInfo = "jaspersoft-sdk";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		100ABEFE13D86F5F00776C8F /* repository.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = repository.png; path = icons/repository.png; sourceTree = "<group>"; };
 		100ABF0013D8721100776C8F /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settings.png; path = icons/settings.png; sourceTree = "<group>"; };
@@ -157,8 +126,6 @@
 		64A80A32135C497E00651C3B /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		64A80A34135C499200651C3B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		8D1107310486CEB800E47090 /* Jaspersoft-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Jaspersoft-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
-		CAB9DCFC1746DEB900058D31 /* jaspersoft-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jaspersoft-sdk.xcodeproj"; path = "../../iossdk/JaspersoftSDK/jaspersoft-sdk.xcodeproj"; sourceTree = "<group>"; };
-		CAB9DD091746DEC400058D31 /* jaspersoft-sdk-resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "jaspersoft-sdk-resources.bundle"; path = "../../iossdk/JaspersoftSDK/jaspersoft-sdk-resources.bundle"; sourceTree = "<group>"; };
 		CAFE22771735B3F900AA354A /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CAFE22781735B40100AA354A /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CAFE22791735B40800AA354A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -181,6 +148,30 @@
 		F57373921626EB23000A8DD7 /* JSUIAskPasswordDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUIAskPasswordDialog.h; sourceTree = "<group>"; };
 		F57373931626EB23000A8DD7 /* JSUIAskPasswordDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUIAskPasswordDialog.m; sourceTree = "<group>"; };
 		F57373C6162727DD000A8DD7 /* Library_Tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Library_Tab.png; sourceTree = "<group>"; };
+		F57590B1174ECCE300C355C1 /* jaspersoft-sdk-resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = "jaspersoft-sdk-resources.bundle"; sourceTree = "<group>"; };
+		F57590B2174ECCE300C355C1 /* JaspersoftSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JaspersoftSDK.h; sourceTree = "<group>"; };
+		F57590B3174ECCE300C355C1 /* JSConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSConstants.h; sourceTree = "<group>"; };
+		F57590B4174ECCE300C355C1 /* JSDateTimeFormatValidationRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSDateTimeFormatValidationRule.h; sourceTree = "<group>"; };
+		F57590B5174ECCE300C355C1 /* JSInputControlDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSInputControlDescriptor.h; sourceTree = "<group>"; };
+		F57590B6174ECCE300C355C1 /* JSInputControlOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSInputControlOption.h; sourceTree = "<group>"; };
+		F57590B7174ECCE300C355C1 /* JSInputControlState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSInputControlState.h; sourceTree = "<group>"; };
+		F57590B8174ECCE300C355C1 /* JSOperationResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSOperationResult.h; sourceTree = "<group>"; };
+		F57590B9174ECCE300C355C1 /* JSProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSProfile.h; sourceTree = "<group>"; };
+		F57590BA174ECCE300C355C1 /* JSReportAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSReportAttachment.h; sourceTree = "<group>"; };
+		F57590BB174ECCE300C355C1 /* JSReportDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSReportDescriptor.h; sourceTree = "<group>"; };
+		F57590BC174ECCE300C355C1 /* JSReportParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSReportParameter.h; sourceTree = "<group>"; };
+		F57590BD174ECCE300C355C1 /* JSReportParametersList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSReportParametersList.h; sourceTree = "<group>"; };
+		F57590BE174ECCE300C355C1 /* JSRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSRequest.h; sourceTree = "<group>"; };
+		F57590BF174ECCE300C355C1 /* JSResourceDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSResourceDescriptor.h; sourceTree = "<group>"; };
+		F57590C0174ECCE300C355C1 /* JSResourceParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSResourceParameter.h; sourceTree = "<group>"; };
+		F57590C1174ECCE300C355C1 /* JSResourceProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSResourceProperty.h; sourceTree = "<group>"; };
+		F57590C2174ECCE300C355C1 /* JSRESTBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSRESTBase.h; sourceTree = "<group>"; };
+		F57590C3174ECCE300C355C1 /* JSRESTReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSRESTReport.h; sourceTree = "<group>"; };
+		F57590C4174ECCE300C355C1 /* JSRESTResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSRESTResource.h; sourceTree = "<group>"; };
+		F57590C5174ECCE300C355C1 /* JSSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSSerializer.h; sourceTree = "<group>"; };
+		F57590C6174ECCE300C355C1 /* JSServerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSServerInfo.h; sourceTree = "<group>"; };
+		F57590C7174ECCE300C355C1 /* JSValidationRules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSValidationRules.h; sourceTree = "<group>"; };
+		F57590C8174ECCE300C355C1 /* libjaspersoft-sdk-universal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjaspersoft-sdk-universal.a"; sourceTree = "<group>"; };
 		F57D72A915F5FCF800F9B1FB /* ServerSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerSettingsViewController.h; sourceTree = "<group>"; };
 		F57D72AA15F5FCF800F9B1FB /* ServerSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerSettingsViewController.m; sourceTree = "<group>"; };
 		F57D72AB15F5FCF800F9B1FB /* ServerSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ServerSettingsViewController.xib; path = Classes/Servers/ServerSettingsViewController.xib; sourceTree = "<group>"; };
@@ -273,18 +264,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CAB9DD0D1746DEDC00058D31 /* libjaspersoft-sdk.a in Frameworks */,
 				649795CF13602DC800FA5BA0 /* QuartzCore.framework in Frameworks */,
-				64252F001350C641005DAD57 /* libxml2.dylib in Frameworks */,
 				64252F081350C675005DAD57 /* SystemConfiguration.framework in Frameworks */,
 				64252F061350C665005DAD57 /* MobileCoreServices.framework in Frameworks */,
 				64979538135F1AB900FA5BA0 /* Security.framework in Frameworks */,
 				64252F021350C650005DAD57 /* CFNetwork.framework in Frameworks */,
-				64252F191350C79A005DAD57 /* libz.dylib in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				F57D744115F82D2B00F9B1FB /* CoreData.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
+				64252F191350C79A005DAD57 /* libz.dylib in Frameworks */,
+				64252F001350C641005DAD57 /* libxml2.dylib in Frameworks */,
+				F57590CA174ECCE300C355C1 /* libjaspersoft-sdk-universal.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,11 +309,11 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				CAB9DCFC1746DEB900058D31 /* jaspersoft-sdk.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				F57590AF174ECCE300C355C1 /* Vendor */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -330,7 +321,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				CAB9DD091746DEC400058D31 /* jaspersoft-sdk-resources.bundle */,
 				CAFE227D1735B48C00AA354A /* Images */,
 				F5312726161AE56E006AF5DD /* XibFiles */,
 				64A80A31135C497E00651C3B /* Localizable.strings */,
@@ -357,16 +347,6 @@
 				64252F071350C675005DAD57 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		CAB9DCFD1746DEB900058D31 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CAB9DD041746DEB900058D31 /* libjaspersoft-sdk.a */,
-				CAB9DD061746DEB900058D31 /* jaspersoft-sdk.framework */,
-				CAB9DD081746DEB900058D31 /* jaspersoft-sdk-resources.bundle */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		CAFE227C1735B46A00AA354A /* Support */ = {
@@ -451,6 +431,45 @@
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 			);
 			name = XibFiles;
+			sourceTree = "<group>";
+		};
+		F57590AF174ECCE300C355C1 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				F57590B0174ECCE300C355C1 /* jaspersoft-sdk-lib */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
+		F57590B0174ECCE300C355C1 /* jaspersoft-sdk-lib */ = {
+			isa = PBXGroup;
+			children = (
+				F57590B1174ECCE300C355C1 /* jaspersoft-sdk-resources.bundle */,
+				F57590B2174ECCE300C355C1 /* JaspersoftSDK.h */,
+				F57590B3174ECCE300C355C1 /* JSConstants.h */,
+				F57590B4174ECCE300C355C1 /* JSDateTimeFormatValidationRule.h */,
+				F57590B5174ECCE300C355C1 /* JSInputControlDescriptor.h */,
+				F57590B6174ECCE300C355C1 /* JSInputControlOption.h */,
+				F57590B7174ECCE300C355C1 /* JSInputControlState.h */,
+				F57590B8174ECCE300C355C1 /* JSOperationResult.h */,
+				F57590B9174ECCE300C355C1 /* JSProfile.h */,
+				F57590BA174ECCE300C355C1 /* JSReportAttachment.h */,
+				F57590BB174ECCE300C355C1 /* JSReportDescriptor.h */,
+				F57590BC174ECCE300C355C1 /* JSReportParameter.h */,
+				F57590BD174ECCE300C355C1 /* JSReportParametersList.h */,
+				F57590BE174ECCE300C355C1 /* JSRequest.h */,
+				F57590BF174ECCE300C355C1 /* JSResourceDescriptor.h */,
+				F57590C0174ECCE300C355C1 /* JSResourceParameter.h */,
+				F57590C1174ECCE300C355C1 /* JSResourceProperty.h */,
+				F57590C2174ECCE300C355C1 /* JSRESTBase.h */,
+				F57590C3174ECCE300C355C1 /* JSRESTReport.h */,
+				F57590C4174ECCE300C355C1 /* JSRESTResource.h */,
+				F57590C5174ECCE300C355C1 /* JSSerializer.h */,
+				F57590C6174ECCE300C355C1 /* JSServerInfo.h */,
+				F57590C7174ECCE300C355C1 /* JSValidationRules.h */,
+				F57590C8174ECCE300C355C1 /* libjaspersoft-sdk-universal.a */,
+			);
+			path = "jaspersoft-sdk-lib";
 			sourceTree = "<group>";
 		};
 		F57D72A815F5FCF800F9B1FB /* Servers */ = {
@@ -589,7 +608,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				CAB9DD0C1746DED500058D31 /* PBXTargetDependency */,
 			);
 			name = JasperMobile;
 			productName = Jaspersoft;
@@ -624,42 +642,12 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = CAB9DCFD1746DEB900058D31 /* Products */;
-					ProjectRef = CAB9DCFC1746DEB900058D31 /* jaspersoft-sdk.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				1D6058900D05DD3D006BFB54 /* JasperMobile */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		CAB9DD041746DEB900058D31 /* libjaspersoft-sdk.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libjaspersoft-sdk.a";
-			remoteRef = CAB9DD031746DEB900058D31 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		CAB9DD061746DEB900058D31 /* jaspersoft-sdk.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = "jaspersoft-sdk.framework";
-			remoteRef = CAB9DD051746DEB900058D31 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		CAB9DD081746DEB900058D31 /* jaspersoft-sdk-resources.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "jaspersoft-sdk-resources.bundle";
-			remoteRef = CAB9DD071746DEB900058D31 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1D60588D0D05DD3D006BFB54 /* Resources */ = {
@@ -700,7 +688,7 @@
 				F568251416433BBA00CC4015 /* iTunesArtwork in Resources */,
 				F5A61467165E34A4003CB2B8 /* JSUIDashboardViewController.xib in Resources */,
 				F5C1A9FE1677858500A42F97 /* JSUIResourceModifyViewController.xib in Resources */,
-				CAB9DD0A1746DEC400058D31 /* jaspersoft-sdk-resources.bundle in Resources */,
+				F57590C9174ECCE300C355C1 /* jaspersoft-sdk-resources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -756,14 +744,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		CAB9DD0C1746DED500058D31 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "jaspersoft-sdk";
-			targetProxy = CAB9DD0B1746DED500058D31 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		64A80A31135C497E00651C3B /* Localizable.strings */ = {
@@ -828,6 +808,10 @@
 				);
 				INFOPLIST_FILE = "Jaspersoft-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/jaspersoft-sdk-lib\"",
+				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -861,6 +845,10 @@
 				);
 				INFOPLIST_FILE = "Jaspersoft-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/jaspersoft-sdk-lib\"",
+				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
@@ -892,6 +880,10 @@
 				);
 				INFOPLIST_FILE = "Jaspersoft-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Vendor/jaspersoft-sdk-lib\"",
+				);
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",

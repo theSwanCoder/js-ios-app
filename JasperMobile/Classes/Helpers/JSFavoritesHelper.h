@@ -26,7 +26,7 @@
 //
 
 #import "ServerProfile.h"
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JaspersoftSDK.h"
 #import <Foundation/Foundation.h>
 
 /**

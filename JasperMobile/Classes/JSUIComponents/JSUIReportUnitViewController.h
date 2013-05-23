@@ -25,7 +25,7 @@
 //  Jaspersoft Corporation
 //
 
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JaspersoftSDK.h"
 #import "JSResourceDescriptor+Helpers.h"
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>

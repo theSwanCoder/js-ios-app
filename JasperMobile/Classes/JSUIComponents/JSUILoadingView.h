@@ -35,7 +35,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JaspersoftSDK.h"
 
 typedef void(^JSUILoadingViewCancelBLock)(void);
 

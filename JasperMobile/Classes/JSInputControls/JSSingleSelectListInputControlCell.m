@@ -25,7 +25,7 @@
 //  Jaspersoft Corporation
 //
 
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JaspersoftSDK.h"
 #import "JSSingleSelectListInputControlCell.h"
 #import "JSListSelectorViewController.h"
 #import "JSResourceDescriptor+Helpers.h"
