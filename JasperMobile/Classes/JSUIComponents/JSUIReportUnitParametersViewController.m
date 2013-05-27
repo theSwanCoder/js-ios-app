@@ -289,9 +289,21 @@ static UIFont *detailFont;
             CGRect frame = CGRectMake(0, 0, buttonWidth, 40);
             button.frame = frame;
             button.tag = 1;
+            
             [button setTitle:JSCustomLocalizedString(@"dialog.button.run.report", nil) forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+            
             [button setTag:indexPath.row];
             [button addTarget:self action:@selector(runReport) forControlEvents:UIControlEventTouchUpInside];
+            
+            UIImage *buttonImage = [[UIImage imageNamed:@"blue.png"]
+                                    resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
+            UIImage *buttonImageHighlight = [[UIImage imageNamed:@"blue.png"]
+                                             resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
+            [button setBackgroundImage:buttonImage forState:UIControlStateNormal];
+            [button setBackgroundImage:buttonImageHighlight forState:UIControlStateHighlighted];
+            
             [runCell.contentView addSubview:button];
         }
         return runCell;

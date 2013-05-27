@@ -34,6 +34,7 @@
 		F51E05B41609FF1900D17020 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F51E05B31609FF1900D17020 /* SSKeychain.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F5312729161B2CD5006AF5DD /* JSUILibraryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5312728161B2CD5006AF5DD /* JSUILibraryViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F55F00A3171EEE4400530892 /* ServerProfile+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = F55F00A2171EEE4400530892 /* ServerProfile+Helpers.m */; };
+		F56639AA174FBB45007978BE /* blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F56639A9174FBB45007978BE /* blue.png */; };
 		F568250A16433B8800CC4015 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F568250916433B8800CC4015 /* Default-568h@2x.png */; };
 		F568250F16433BA600CC4015 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = F568250B16433BA500CC4015 /* Icon-72.png */; };
 		F568251016433BA600CC4015 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = F568250C16433BA600CC4015 /* Icon-Small-50.png */; };
@@ -44,6 +45,7 @@
 		F57373C7162727DD000A8DD7 /* Library_Tab.png in Resources */ = {isa = PBXBuildFile; fileRef = F57373C6162727DD000A8DD7 /* Library_Tab.png */; };
 		F57590C9174ECCE300C355C1 /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F57590B1174ECCE300C355C1 /* jaspersoft-sdk-resources.bundle */; };
 		F57590CA174ECCE300C355C1 /* libjaspersoft-sdk-universal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F57590C8174ECCE300C355C1 /* libjaspersoft-sdk-universal.a */; };
+		F576BC441753E4D400DF765B /* JSUITabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = F576BC431753E4D300DF765B /* JSUITabBarController.m */; };
 		F57D72AE15F5FCF900F9B1FB /* ServerSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F57D72AA15F5FCF800F9B1FB /* ServerSettingsViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
 		F57D72AF15F5FCF900F9B1FB /* ServerSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F57D72AB15F5FCF800F9B1FB /* ServerSettingsViewController.xib */; };
 		F57D72B015F5FCF900F9B1FB /* ServersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F57D72AD15F5FCF800F9B1FB /* ServersViewController.m */; settings = {COMPILER_FLAGS = ""; }; };
@@ -139,6 +141,7 @@
 		F5312728161B2CD5006AF5DD /* JSUILibraryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUILibraryViewController.m; sourceTree = "<group>"; };
 		F55F00A1171EEE4400530892 /* ServerProfile+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ServerProfile+Helpers.h"; sourceTree = "<group>"; };
 		F55F00A2171EEE4400530892 /* ServerProfile+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ServerProfile+Helpers.m"; sourceTree = "<group>"; };
+		F56639A9174FBB45007978BE /* blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blue.png; sourceTree = "<group>"; };
 		F568250916433B8800CC4015 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		F568250B16433BA500CC4015 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		F568250C16433BA600CC4015 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
@@ -172,6 +175,8 @@
 		F57590C6174ECCE300C355C1 /* JSServerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSServerInfo.h; sourceTree = "<group>"; };
 		F57590C7174ECCE300C355C1 /* JSValidationRules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSValidationRules.h; sourceTree = "<group>"; };
 		F57590C8174ECCE300C355C1 /* libjaspersoft-sdk-universal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjaspersoft-sdk-universal.a"; sourceTree = "<group>"; };
+		F576BC421753E4D200DF765B /* JSUITabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSUITabBarController.h; sourceTree = "<group>"; };
+		F576BC431753E4D300DF765B /* JSUITabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSUITabBarController.m; sourceTree = "<group>"; };
 		F57D72A915F5FCF800F9B1FB /* ServerSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerSettingsViewController.h; sourceTree = "<group>"; };
 		F57D72AA15F5FCF800F9B1FB /* ServerSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerSettingsViewController.m; sourceTree = "<group>"; };
 		F57D72AB15F5FCF800F9B1FB /* ServerSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ServerSettingsViewController.xib; path = Classes/Servers/ServerSettingsViewController.xib; sourceTree = "<group>"; };
@@ -290,7 +295,6 @@
 				F57D72A815F5FCF800F9B1FB /* Servers */,
 				F5FD57B51715EAE600EC706B /* CoreData */,
 				F5EA578615D1A770003416D1 /* Helpers */,
-				F51E05B11609FF1900D17020 /* SSKeychain */,
 				CAFE227C1735B46A00AA354A /* Support */,
 				1D3623240D0F684500981E51 /* JasperMobileAppDelegate.h */,
 				1D3623250D0F684500981E51 /* JasperMobileAppDelegate.m */,
@@ -416,7 +420,8 @@
 				F51E05B21609FF1900D17020 /* SSKeychain.h */,
 				F51E05B31609FF1900D17020 /* SSKeychain.m */,
 			);
-			path = SSKeychain;
+			name = SSKeychain;
+			path = ../Classes/SSKeychain;
 			sourceTree = "<group>";
 		};
 		F5312726161AE56E006AF5DD /* XibFiles */ = {
@@ -436,6 +441,7 @@
 		F57590AF174ECCE300C355C1 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				F51E05B11609FF1900D17020 /* SSKeychain */,
 				F57590B0174ECCE300C355C1 /* jaspersoft-sdk-lib */,
 			);
 			path = Vendor;
@@ -490,6 +496,7 @@
 				F5811F7F15EE64CA00CE775A /* gray.png */,
 				F5811F8015EE64CA00CE775A /* red.png */,
 				F5811F8115EE64CA00CE775A /* yellow.png */,
+				F56639A9174FBB45007978BE /* blue.png */,
 			);
 			name = Buttons;
 			path = icons/buttons;
@@ -553,6 +560,8 @@
 				F50AFED215E2E12900F761A0 /* JSUIResourceModifyViewController.m */,
 				F5A61463165E34A4003CB2B8 /* JSUIDashboardViewController.h */,
 				F5A61464165E34A4003CB2B8 /* JSUIDashboardViewController.m */,
+				F576BC421753E4D200DF765B /* JSUITabBarController.h */,
+				F576BC431753E4D300DF765B /* JSUITabBarController.m */,
 			);
 			path = JSUIComponents;
 			sourceTree = "<group>";
@@ -689,6 +698,7 @@
 				F5A61467165E34A4003CB2B8 /* JSUIDashboardViewController.xib in Resources */,
 				F5C1A9FE1677858500A42F97 /* JSUIResourceModifyViewController.xib in Resources */,
 				F57590C9174ECCE300C355C1 /* jaspersoft-sdk-resources.bundle in Resources */,
+				F56639AA174FBB45007978BE /* blue.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -740,6 +750,7 @@
 				F581B12617267D8A002F3CF0 /* JSReportOptionsHelper.m in Sources */,
 				F581B1291726839E002F3CF0 /* ReportOptions.m in Sources */,
 				F5E0306C173D5D2A00BEA262 /* JSLocalization.m in Sources */,
+				F576BC441753E4D400DF765B /* JSUITabBarController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
