@@ -26,7 +26,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "195"
          endingLineNumber = "195"
-         landmarkName = "-updateValueText"
+         landmarkName = "-containsValues:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -91,8 +91,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "151"
          endingLineNumber = "151"
-         landmarkName = "@implementation JSUIReportUnitParametersViewController"
-         landmarkType = "3">
+         landmarkName = "-requestFinished:"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -104,7 +104,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "152"
          endingLineNumber = "152"
-         landmarkName = "-viewDidAppear:"
+         landmarkName = "-requestFinished:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -117,7 +117,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "153"
          endingLineNumber = "153"
-         landmarkName = "-viewDidAppear:"
+         landmarkName = "-requestFinished:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -182,7 +182,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "43"
          endingLineNumber = "43"
-         landmarkName = "-initWithDescriptor:tableViewController:"
+         landmarkName = "-initWithInputControlDescriptor:resourceDescriptor:tableViewController:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -212,7 +212,7 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/JSInputControls/JSSingleSelectListInputControlCell.m"
@@ -221,7 +221,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "341"
          endingLineNumber = "341"
-         landmarkName = "-findDataSourceUri:resourceClient:"
+         landmarkName = "-adjustSelection"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -238,7 +238,7 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Classes/JasperMobileAppDelegate.m"
@@ -247,7 +247,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "161"
          endingLineNumber = "161"
-         landmarkName = "-setProfile:"
+         landmarkName = "-initProfileForRESTClient:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

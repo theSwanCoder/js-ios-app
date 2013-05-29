@@ -297,9 +297,9 @@ static UIFont *detailFont;
             [button setTag:indexPath.row];
             [button addTarget:self action:@selector(runReport) forControlEvents:UIControlEventTouchUpInside];
             
-            UIImage *buttonImage = [[UIImage imageNamed:@"blue.png"]
+            UIImage *buttonImage = [[UIImage imageNamed:@"b1.png"]
                                     resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
-            UIImage *buttonImageHighlight = [[UIImage imageNamed:@"blue.png"]
+            UIImage *buttonImageHighlight = [[UIImage imageNamed:@"b2.png"]
                                              resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
             [button setBackgroundImage:buttonImage forState:UIControlStateNormal];
             [button setBackgroundImage:buttonImageHighlight forState:UIControlStateHighlighted];

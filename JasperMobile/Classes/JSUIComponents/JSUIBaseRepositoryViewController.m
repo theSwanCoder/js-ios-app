@@ -197,7 +197,7 @@
     
     if ([rd.wsType isEqualToString: constants.WS_TYPE_FOLDER]) {
         imageNameAndCellIdentifier = @"ic_type_folder.png";
-    } else if ([rd.wsType isEqualToString: constants.WS_TYPE_FOLDER]) {
+    } else if ([rd.wsType isEqualToString: constants.WS_TYPE_IMG]) {
         imageNameAndCellIdentifier = @"ic_type_image.png";
     } else if ([rd.wsType isEqualToString: constants.WS_TYPE_REPORT_UNIT]) {
         imageNameAndCellIdentifier = @"ic_type_report.png";

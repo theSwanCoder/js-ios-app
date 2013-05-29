@@ -102,7 +102,6 @@ static UIFont *_detailFont;
 	[self.navigationController pushViewController:rmvc animated: YES];
 }
 
-
 - (void)requestFinished:(JSOperationResult *)result {
     if (deleting) {
         [JSUILoadingView hideLoadingView];
@@ -456,6 +455,7 @@ static UIFont *_detailFont;
 			button.frame = frame;
 			button.tag = 1;
             [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
             [self changeFavoriteButtonUI:button isResourceInFavorites:[[JasperMobileAppDelegate sharedInstance].favorites isResourceInFavorites:self.descriptor]];
             
 			[button addTarget:self action:@selector(favoriteButtonClicked:forEvent:) forControlEvents:UIControlEventTouchUpInside];
@@ -463,12 +463,13 @@ static UIFont *_detailFont;
 			[self.toolsCell.contentView addSubview:button];
             self.favoriteButton = button;
 			
-            UIImage *redButtonImage = [UIImage imageNamed:@"red.png"];
 			UIButton *deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [deleteButton setTitle:JSCustomLocalizedString(@"dialog.button.delete", nil) forState:UIControlStateNormal];
             deleteButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
-            [deleteButton setBackgroundImage:redButtonImage forState:UIControlStateNormal];
+            [deleteButton setBackgroundImage:[UIImage imageNamed:@"r1.png"] forState:UIControlStateNormal];
+            [deleteButton setBackgroundImage:[UIImage imageNamed:@"r2.png"] forState:UIControlStateHighlighted];
             [deleteButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [deleteButton setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
 			deleteButton.frame = CGRectMake(1*(buttonWidth+padding), 0, buttonWidth, 40);
 			deleteButton.tag = 3;
 			deleteButton.enabled = YES;
@@ -519,10 +520,12 @@ static UIFont *_detailFont;
 - (void)changeFavoriteButtonUI:(UIButton *)button isResourceInFavorites:(BOOL)isResourceInFavorites {
     if (!isResourceInFavorites) {
         [button setTitle:JSCustomLocalizedString(@"dialog.button.addfavorite", nil) forState:UIControlStateNormal];
-        [button setBackgroundImage:[UIImage imageNamed:@"yellow.png"] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"y1.png"] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"y2.png"] forState:UIControlStateHighlighted];
     } else {
         [button setTitle:JSCustomLocalizedString(@"dialog.button.removefavorite", nil) forState:UIControlStateNormal];
-        [button setBackgroundImage:[UIImage imageNamed:@"gray.png"] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"g1.png"] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"g2.png"] forState:UIControlStateHighlighted];
     }
 }
 
