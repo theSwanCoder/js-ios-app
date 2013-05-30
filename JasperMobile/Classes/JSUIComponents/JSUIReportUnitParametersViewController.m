@@ -284,12 +284,13 @@ static UIFont *detailFont;
             runCell.contentView.autoresizesSubviews = YES;
             
             int buttonWidth = self.tableView.frame.size.width;
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             button.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             CGRect frame = CGRectMake(0, 0, buttonWidth, 40);
             button.frame = frame;
             button.tag = 1;
             
+            [button.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
             [button setTitle:JSCustomLocalizedString(@"dialog.button.run.report", nil) forState:UIControlStateNormal];
             [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];

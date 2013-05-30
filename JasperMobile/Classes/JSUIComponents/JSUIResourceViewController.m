@@ -450,7 +450,9 @@ static UIFont *_detailFont;
 			int padding = 6;
 			int buttonWidth = (self.tableView.frame.size.width -20 -((padding)*(buttons-1))) / buttons;
 			
-			UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+			UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button.titleLabel setFont:[UIFont boldSystemFontOfSize:15]];
+            
 			CGRect frame = CGRectMake(0, 0, buttonWidth, 40);
 			button.frame = frame;
 			button.tag = 1;
