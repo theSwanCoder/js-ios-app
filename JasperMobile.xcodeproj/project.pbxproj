@@ -59,7 +59,6 @@
 		F5A2E77A175CBAD300CBA00E /* BasedOnSplitViewControllerStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5A2E778175CBAD300CBA00E /* BasedOnSplitViewControllerStoryboard.storyboard */; };
 		F5A2E77D175CCB2400CBA00E /* JMMenuTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A2E77C175CCB2400CBA00E /* JMMenuTableViewController.m */; };
 		F5A2E783175CD47B00CBA00E /* JMBarButtonPresenterNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A2E782175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.m */; };
-		F5A2E788175E04DD00CBA00E /* libjaspersoft-sdk-universal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A2E787175E04DD00CBA00E /* libjaspersoft-sdk-universal.a */; };
 		F5A5F553176206360018FEFC /* JMResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A5F552176206360018FEFC /* JMResourceViewController.m */; };
 		F5B6A6A3175F57B90047CB6D /* JMLibraryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */; };
 		F5B6A6A6175F586A0047CB6D /* JMRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6A6A5175F586A0047CB6D /* JMRepositoryTableViewController.m */; };
@@ -74,6 +73,7 @@
 		F5D814B7176894A5004E0A62 /* add_favorite_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5D814AE176894A5004E0A62 /* add_favorite_button.png */; };
 		F5DC4EA71769F01000038D58 /* JMResourceModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DC4EA61769F01000038D58 /* JMResourceModifyViewController.m */; };
 		F5DC4EAB176A101D00038D58 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */; };
+		F5DC4EAD176A715E00038D58 /* libjaspersoft-sdk-universal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC4EAC176A715E00038D58 /* libjaspersoft-sdk-universal.a */; };
 		F5FE06DF1757383800030331 /* JMMenuTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE06DE1757383800030331 /* JMMenuTabBarController.m */; };
 		F5FE06E517574D8200030331 /* JMPhoneRotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE06E417574D8200030331 /* JMPhoneRotation.m */; };
 		F5FE06E817574D9700030331 /* JMPadRotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE06E717574D9700030331 /* JMPadRotation.m */; };
@@ -185,7 +185,6 @@
 		F5A2E780175CCFA700CBA00E /* JMSplitViewBarButtonPresenterProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMSplitViewBarButtonPresenterProtocol.h; path = JasperMobile/Classes/JMSplitViewBarButtonPresenterProtocol.h; sourceTree = "<group>"; };
 		F5A2E781175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBarButtonPresenterNavigationViewController.h; path = Classes/JMBarButtonPresenterNavigationViewController.h; sourceTree = "<group>"; };
 		F5A2E782175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBarButtonPresenterNavigationViewController.m; path = Classes/JMBarButtonPresenterNavigationViewController.m; sourceTree = "<group>"; };
-		F5A2E787175E04DD00CBA00E /* libjaspersoft-sdk-universal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjaspersoft-sdk-universal.a"; sourceTree = "<group>"; };
 		F5A5F551176206360018FEFC /* JMResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourceViewController.h; path = Classes/JMResourceViewController.h; sourceTree = "<group>"; };
 		F5A5F552176206360018FEFC /* JMResourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceViewController.m; path = Classes/JMResourceViewController.m; sourceTree = "<group>"; };
 		F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMResourceClientHolder.h; path = JasperMobile/Classes/JMResourceClientHolder.h; sourceTree = "<group>"; };
@@ -206,6 +205,7 @@
 		F5DC4EA61769F01000038D58 /* JMResourceModifyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceModifyViewController.m; path = Classes/JMResourceModifyViewController.m; sourceTree = "<group>"; };
 		F5DC4EA9176A101D00038D58 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
 		F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
+		F5DC4EAC176A715E00038D58 /* libjaspersoft-sdk-universal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjaspersoft-sdk-universal.a"; sourceTree = "<group>"; };
 		F5FE06DD1757383800030331 /* JMMenuTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMenuTabBarController.h; path = Classes/JMMenuTabBarController.h; sourceTree = "<group>"; };
 		F5FE06DE1757383800030331 /* JMMenuTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMenuTabBarController.m; path = Classes/JMMenuTabBarController.m; sourceTree = "<group>"; };
 		F5FE06E017573DB000030331 /* JMRotatable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMRotatable.h; path = JasperMobile/Classes/JMRotatable.h; sourceTree = "<group>"; };
@@ -231,7 +231,7 @@
 				F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */,
 				F5663A311752F9D0007978BE /* Objection-iOS.framework in Frameworks */,
 				F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */,
-				F5A2E788175E04DD00CBA00E /* libjaspersoft-sdk-universal.a in Frameworks */,
+				F5DC4EAD176A715E00038D58 /* libjaspersoft-sdk-universal.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,7 +445,7 @@
 				F5663A2A1752F9D0007978BE /* JSSerializer.h */,
 				F5663A2B1752F9D0007978BE /* JSServerInfo.h */,
 				F5663A2C1752F9D0007978BE /* JSValidationRules.h */,
-				F5A2E787175E04DD00CBA00E /* libjaspersoft-sdk-universal.a */,
+				F5DC4EAC176A715E00038D58 /* libjaspersoft-sdk-universal.a */,
 			);
 			path = "jaspersoft-sdk-lib";
 			sourceTree = "<group>";
