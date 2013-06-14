@@ -20,13 +20,6 @@
 #define kJMToolsSection 1
 #define kJMResourcePropertiesSection 2
 
-#define kJMDeleteButtonImage @"delete_button.png"
-#define kJMDeleteButtonHighlightedImage @"delete_button_highlighted.png"
-#define kJMAddFavoriteButtonImage @"add_favorite_button.png"
-#define kJMAddFavoriteButtonHighlightedImage @"add_favorite_button_highlighted.png"
-#define kJMRemoveFavoriteButtonImage @"remove_favorite_button.png"
-#define kJMRemoveFavoriteButtonHighlightedImage @"remove_favorite_button_highlighted.png"
-
 #define kJMConfirmButtonIndex 1
 
 #define kJMTitleKey @"title"

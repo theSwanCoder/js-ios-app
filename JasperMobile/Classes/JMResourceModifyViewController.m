@@ -91,7 +91,11 @@ objection_requires(@"resourceClient");
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [self.descriptionTextView becomeFirstResponder];
+    [self.labelTextField resignFirstResponder];
+    // Using perform selector instead of calling becomeFirstResponder directly fixes
+    // issue with new line at the beginning in description text view
+    // (more details about issue: http://stackoverflow.com/questions/1896399/becomefirstresponder-on-uitextview-not-working )
+    [self.descriptionTextView performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0.0];
     return YES;
 }
 
