@@ -7,9 +7,9 @@
 //
 
 #import "JMResourceViewController.h"
-#import "JMViewControllerHelper.h"
-#import "JMLocalization.h"
+#import "JMUtils.h"
 #import "JMFilter.h"
+#import "JMLocalization.h"
 #import "JMCancelRequestPopup.h"
 #import "JMBaseRepositoryTableViewController.h"
 #import "UIAlertView+LocalizedAlert.h"
@@ -53,6 +53,7 @@ typedef enum {
 
 @implementation JMResourceViewController
 objection_requires(@"resourceClient");
+inject_default_rotation();
 
 #pragma mark - Accessors
 
@@ -131,7 +132,7 @@ objection_requires(@"resourceClient");
 
 - (void)awakeFromNib
 {
-    [JMViewControllerHelper awakeFromNibForResourceViewController:self];
+    [JMUtils awakeFromNibForResourceViewController:self];
 }
 
 #pragma mark - UIViewController

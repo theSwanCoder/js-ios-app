@@ -7,9 +7,8 @@
 //
 
 #import "JMBaseRepositoryTableViewController.h"
+#import "JMUtils.h"
 #import "JMCancelRequestPopup.h"
-#import "JMRotationBase.h"
-#import "JMViewControllerHelper.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
 
@@ -61,7 +60,7 @@ inject_default_rotation()
 
 - (void)awakeFromNib
 {
-    [JMViewControllerHelper awakeFromNibForResourceViewController:self];
+    [JMUtils awakeFromNibForResourceViewController:self];
 }
 
 #pragma mark - UIViewController

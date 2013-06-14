@@ -7,14 +7,15 @@
 //
 
 #import "JMResourceModifyViewController.h"
+#import "JMUtils.h"
 #import "JMFilter.h"
-#import "JMViewControllerHelper.h"
 #import <QuartzCore/QuartzCore.h>
 #import <Objection-iOS/Objection.h>
 
 @interface JMResourceModifyViewController ()
 @property (nonatomic, weak) IBOutlet UITextField *labelTextField;
 @property (nonatomic, weak) IBOutlet UITextView *descriptionTextView;
+@property (nonatomic, weak) IBOutlet UIButton *saveButton;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *doneButton;
 
 - (void)showDoneButton;
@@ -33,7 +34,7 @@ objection_requires(@"resourceClient");
 
 - (void)awakeFromNib
 {
-    [JMViewControllerHelper awakeFromNibForResourceViewController:self];
+    [JMUtils awakeFromNibForResourceViewController:self];
 }
 
 #pragma mark - UIViewController
@@ -47,8 +48,11 @@ objection_requires(@"resourceClient");
     
     self.descriptionTextView.text = self.resourceDescriptor.resourceDescription;
     self.descriptionTextView.layer.cornerRadius = 5.0f;
-//    self.descriptionTextView.delegate = self;
     
+    [JMUtils setBackgroundImagesForButton:self.saveButton
+                                imageName:@"blue_button"
+                     highlightedImageName:@"blue_button_highlighted"
+                               edgesInset:18.0f];
     [self hideDoneButton];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -59,6 +63,7 @@ objection_requires(@"resourceClient");
     [self setLabelTextField:nil];
     [self setDescriptionTextView:nil];
     [self setDoneButton:nil];
+    [self setSaveButton:nil];
     [super viewDidUnload];
 }
 
