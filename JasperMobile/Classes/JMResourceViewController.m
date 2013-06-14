@@ -27,10 +27,12 @@
 #define kJMRemoveFavoriteButtonImage @"remove_favorite_button.png"
 #define kJMRemoveFavoriteButtonHighlightedImage @"remove_favorite_button_highlighted.png"
 
+#define kJMConfirmButtonIndex 1
+
 #define kJMTitleKey @"title"
 #define kJMValueKey @"value"
 
-#define kJMConfirmButtonIndex 1
+#define kJMEditResourceDescriptorSegue @"EditResourceDescriptor"
 
 typedef enum {
     JMGetResourceRequest,
@@ -43,6 +45,7 @@ typedef enum {
 @property (nonatomic, strong, readonly) NSDictionary *cellIdentifiers;
 @property (nonatomic, assign) JMRequestType requestType;
 
+- (void)fetchResourceDescriptor;
 - (JSResourceProperty *)resourcePropertyForIndexPath:(NSIndexPath *)indexPath;
 - (NSDictionary *)resourceDescriptorPropertyForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)localizedTextLabelTitleForProperty:(NSString *)property;
@@ -58,6 +61,7 @@ objection_requires(@"resourceClient");
 @synthesize resourceDescriptorProperties = _resourceDescriptorProperties;
 @synthesize numberOfRowsForSections = _numberOfRowsForSections;
 @synthesize cellIdentifiers = _cellIdentifiers;
+@synthesize needsToRefreshResourceDescriptorData = _needsToRefreshResourceDescriptorData;
 
 - (NSDictionary *)resourceDescriptorProperties
 {
@@ -135,24 +139,29 @@ objection_requires(@"resourceClient");
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Presents cancel request popup
-    [JMCancelRequestPopup presentInViewController:self restClient:self.resourceClient cancelBlock:^{
-        [self.navigationController popViewControllerAnimated:YES];
-    }];
-    
-    [JMFilter checkNetworkReachabilityForBlock:^{
-        self.requestType = JMGetResourceRequest;
-        [self.resourceClient resource:self.resourceDescriptor.uriString delegate:[JMFilter checkRequestResultForDelegate:self]];
-    } viewControllerToDismiss:self];
-    
+    [self fetchResourceDescriptor];
     self.resourceDescriptor = nil;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    id <JMResourceClientHolder> destinationViewController = segue.destinationViewController;
-    [destinationViewController setResourceDescriptor:self.resourceDescriptor];
+    id  destinationViewController = segue.destinationViewController;
+    
+    if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
+        [destinationViewController setResourceDescriptor:self.resourceDescriptor];
+    }
+    
+    if ([segue.identifier isEqualToString:kJMEditResourceDescriptorSegue]) {
+        [destinationViewController setDelegate:self];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    if (self.needsToRefreshResourceDescriptorData) {
+        [self fetchResourceDescriptor];
+        self.needsToRefreshResourceDescriptorData = NO;
+    }
 }
 
 #pragma mark - Table view data source
@@ -263,20 +272,27 @@ objection_requires(@"resourceClient");
         self.resourceDescriptor = [result.objects objectAtIndex:0];
         [self.tableView reloadData];
     } else if (self.requestType == JMDeleteResourceRequest) {
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        
 #warning Finish Favorites Implementation
 //        if ([[JasperMobileAppDelegate sharedInstance].favorites isResourceInFavorites:self.descriptor]) {
 //            [[JasperMobileAppDelegate sharedInstance].favorites removeFromFavorites:self.descriptor];
 //        }
-        
-        JMBaseRepositoryTableViewController *previousViewController = [viewControllers objectAtIndex:[viewControllers count] - 2];
-        [previousViewController removeResource:self.resourceDescriptor];
+        [self.delegate removeResource:self.resourceDescriptor];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
 #pragma mark - Private
+
+- (void)fetchResourceDescriptor {
+    [JMCancelRequestPopup presentInViewController:self restClient:self.resourceClient cancelBlock:^{
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    
+    [JMFilter checkNetworkReachabilityForBlock:^{
+        self.requestType = JMGetResourceRequest;
+        [self.resourceClient resource:self.resourceDescriptor.uriString delegate:[JMFilter checkRequestResultForDelegate:self]];
+    } viewControllerToDismiss:self];
+}
 
 - (JSResourceProperty *)resourcePropertyForIndexPath:(NSIndexPath *)indexPath
 {

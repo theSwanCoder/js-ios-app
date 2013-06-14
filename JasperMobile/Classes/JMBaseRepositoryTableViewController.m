@@ -13,7 +13,8 @@
 #import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
 
-NSString * const JMShowResourceInfoSegue = @"ShowResourceInfo";
+#define kJMShowResourceInfoSegue @"ShowResourceInfo"
+#define kJMUnknownCell @"UnknownCell"
 
 @interface JMBaseRepositoryTableViewController ()
 @property (nonatomic, strong) NSMutableArray *resources;
@@ -53,7 +54,7 @@ inject_default_rotation()
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    [self performSegueWithIdentifier:JMShowResourceInfoSegue sender:cell];
+    [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:cell];
 }
 
 #pragma mark - Initialization
@@ -78,9 +79,16 @@ inject_default_rotation()
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-    JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
-    id <JMResourceClientHolder> destinationViewController = segue.destinationViewController;
-    [destinationViewController setResourceDescriptor:resourceDescriptor];
+    id destinationViewController = segue.destinationViewController;
+    
+    if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
+        JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
+        [destinationViewController setResourceDescriptor:resourceDescriptor];
+    }
+    
+    if ([segue.identifier isEqualToString:kJMShowResourceInfoSegue]) {
+        [destinationViewController setDelegate:self];
+    }
 }
 
 #pragma mark - Table view data source
@@ -98,14 +106,24 @@ inject_default_rotation()
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
-    NSString *CellIdentifier = [self cellIdentifierForResourceType:resourceDescriptor.wsType];
+    NSString *cellIdentifier = [self cellIdentifierForResourceType:resourceDescriptor.wsType];
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     cell.textLabel.text = resourceDescriptor.label;
     cell.detailTextLabel.text = resourceDescriptor.uriString;
         
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSResourceDescriptor *resoruceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
+    NSString *cellIdentifier = [self cellIdentifierForResourceType:resoruceDescriptor.wsType];
+    
+    if ([cellIdentifier isEqualToString:kJMUnknownCell]) {
+        [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:self];
+    }
 }
 
 #pragma mark - JSRequestDelegate
@@ -116,7 +134,7 @@ inject_default_rotation()
     [self.tableView reloadData];
 }
 
-#pragma mark - JMBaseRepositoryTableViewController
+#pragma mark - JMResourceViewControllerDelegate
 
 - (void)removeResource:(JSResourceDescriptor *)resourceDescriptor
 {
@@ -138,7 +156,7 @@ inject_default_rotation()
 
 - (NSString *)cellIdentifierForResourceType:(NSString *)resourceType
 {
-    return [self.cellIdentifiers objectForKey:resourceType] ?: @"UnknownCell";
+    return [self.cellIdentifiers objectForKey:resourceType] ?: kJMUnknownCell;
 }
 
 @end

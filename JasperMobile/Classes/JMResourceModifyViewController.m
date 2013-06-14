@@ -94,6 +94,7 @@ objection_requires(@"resourceClient");
 
 - (void)requestFinished:(JSOperationResult *)result
 {
+    [self.delegate setNeedsToRefreshResourceDescriptorData:YES];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

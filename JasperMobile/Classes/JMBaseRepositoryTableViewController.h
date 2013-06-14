@@ -9,16 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "JaspersoftSDK.h"
 #import "JMResourceClientHolder.h"
+#import "JMResourceViewController.h"
 
-@interface JMBaseRepositoryTableViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate>
+@interface JMBaseRepositoryTableViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate, JMResourceViewControllerDelegate>
 
 @property (nonatomic, strong) JSConstants *constants;
-
-/**
- Removes specified resource descriptor from table view
- 
- @param resourceDescriptor A resource to remove from table view
- */
-- (void)removeResource:(JSResourceDescriptor *)resourceDescriptor;
 
 @end

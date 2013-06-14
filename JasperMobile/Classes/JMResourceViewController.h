@@ -9,7 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "JaspersoftSDK.h"
 #import "JMResourceClientHolder.h"
+#import "JMResourceModifyViewController.h"
 
-@interface JMResourceViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate, UIAlertViewDelegate>
+@protocol JMResourceViewControllerDelegate;
+
+@interface JMResourceViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate, JMResourceModifyViewControllerDelegate, UIAlertViewDelegate>
+
+@property (nonatomic, weak) id <JMResourceViewControllerDelegate> delegate;
 
 @end
+
+@protocol JMResourceViewControllerDelegate <NSObject>
+@required
+- (void)removeResource:(JSResourceDescriptor *)resourceDescriptor;
+
+@end
+
