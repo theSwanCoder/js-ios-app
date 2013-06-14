@@ -23,7 +23,7 @@
 		F54C91A91752FAC20009E2BE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A81752FAC20009E2BE /* QuartzCore.framework */; };
 		F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91AA1752FAC90009E2BE /* libxml2.dylib */; };
 		F54C91B41752FCA70009E2BE /* JMBaseModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F54C91B31752FCA70009E2BE /* JMBaseModule.m */; };
-		F55048D917622B8C0067304B /* JMViewControllerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F55048D817622B8C0067304B /* JMViewControllerHelper.m */; };
+		F55048D917622B8C0067304B /* JMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F55048D817622B8C0067304B /* JMUtils.m */; };
 		F55CC333174CFFCE00CEB39E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC332174CFFCE00CEB39E /* UIKit.framework */; };
 		F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC334174CFFCE00CEB39E /* Foundation.framework */; };
 		F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */; };
@@ -62,8 +62,7 @@
 		F5A5F553176206360018FEFC /* JMResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A5F552176206360018FEFC /* JMResourceViewController.m */; };
 		F5B6A6A3175F57B90047CB6D /* JMLibraryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */; };
 		F5B6A6A6175F586A0047CB6D /* JMRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6A6A5175F586A0047CB6D /* JMRepositoryTableViewController.m */; };
-		F5D814AF176894A5004E0A62 /* run_report__button_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F5D814A6176894A5004E0A62 /* run_report__button_highlighted.png */; };
-		F5D814B0176894A5004E0A62 /* run_report_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5D814A7176894A5004E0A62 /* run_report_button.png */; };
+		F5D814AF176894A5004E0A62 /* blue_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F5D814A6176894A5004E0A62 /* blue_highlighted.png */; };
 		F5D814B1176894A5004E0A62 /* cancel_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5D814A8176894A5004E0A62 /* cancel_button.png */; };
 		F5D814B2176894A5004E0A62 /* remove_favorite_button_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F5D814A9176894A5004E0A62 /* remove_favorite_button_highlighted.png */; };
 		F5D814B3176894A5004E0A62 /* remove_favorite_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5D814AA176894A5004E0A62 /* remove_favorite_button.png */; };
@@ -74,6 +73,7 @@
 		F5DC4EA71769F01000038D58 /* JMResourceModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DC4EA61769F01000038D58 /* JMResourceModifyViewController.m */; };
 		F5DC4EAB176A101D00038D58 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */; };
 		F5DC4EAD176A715E00038D58 /* libjaspersoft-sdk-universal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DC4EAC176A715E00038D58 /* libjaspersoft-sdk-universal.a */; };
+		F5FD8820176B3A6D0021D4CA /* blue_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5FD881F176B3A6D0021D4CA /* blue_button.png */; };
 		F5FE06DF1757383800030331 /* JMMenuTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE06DE1757383800030331 /* JMMenuTabBarController.m */; };
 		F5FE06E517574D8200030331 /* JMPhoneRotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE06E417574D8200030331 /* JMPhoneRotation.m */; };
 		F5FE06E817574D9700030331 /* JMPadRotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE06E717574D9700030331 /* JMPadRotation.m */; };
@@ -110,8 +110,8 @@
 		F54C91AA1752FAC90009E2BE /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		F54C91B21752FCA70009E2BE /* JMBaseModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseModule.h; path = Classes/JMBaseModule.h; sourceTree = "<group>"; };
 		F54C91B31752FCA70009E2BE /* JMBaseModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseModule.m; path = Classes/JMBaseModule.m; sourceTree = "<group>"; };
-		F55048D717622B8C0067304B /* JMViewControllerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMViewControllerHelper.h; path = JasperMobile/Classes/JMViewControllerHelper.h; sourceTree = "<group>"; };
-		F55048D817622B8C0067304B /* JMViewControllerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMViewControllerHelper.m; path = JasperMobile/Classes/JMViewControllerHelper.m; sourceTree = "<group>"; };
+		F55048D717622B8C0067304B /* JMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMUtils.h; path = JasperMobile/Classes/JMUtils.h; sourceTree = "<group>"; };
+		F55048D817622B8C0067304B /* JMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMUtils.m; path = JasperMobile/Classes/JMUtils.m; sourceTree = "<group>"; };
 		F55CC32F174CFFCE00CEB39E /* JasperMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JasperMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F55CC332174CFFCE00CEB39E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F55CC334174CFFCE00CEB39E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -192,8 +192,7 @@
 		F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMLibraryTableViewController.m; path = Classes/JMLibraryTableViewController.m; sourceTree = "<group>"; };
 		F5B6A6A4175F58690047CB6D /* JMRepositoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRepositoryTableViewController.h; path = Classes/JMRepositoryTableViewController.h; sourceTree = "<group>"; };
 		F5B6A6A5175F586A0047CB6D /* JMRepositoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMRepositoryTableViewController.m; path = Classes/JMRepositoryTableViewController.m; sourceTree = "<group>"; };
-		F5D814A6176894A5004E0A62 /* run_report__button_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = run_report__button_highlighted.png; sourceTree = "<group>"; };
-		F5D814A7176894A5004E0A62 /* run_report_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = run_report_button.png; sourceTree = "<group>"; };
+		F5D814A6176894A5004E0A62 /* blue_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blue_highlighted.png; sourceTree = "<group>"; };
 		F5D814A8176894A5004E0A62 /* cancel_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel_button.png; sourceTree = "<group>"; };
 		F5D814A9176894A5004E0A62 /* remove_favorite_button_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = remove_favorite_button_highlighted.png; sourceTree = "<group>"; };
 		F5D814AA176894A5004E0A62 /* remove_favorite_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = remove_favorite_button.png; sourceTree = "<group>"; };
@@ -206,6 +205,7 @@
 		F5DC4EA9176A101D00038D58 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
 		F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		F5DC4EAC176A715E00038D58 /* libjaspersoft-sdk-universal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjaspersoft-sdk-universal.a"; sourceTree = "<group>"; };
+		F5FD881F176B3A6D0021D4CA /* blue_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blue_button.png; sourceTree = "<group>"; };
 		F5FE06DD1757383800030331 /* JMMenuTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMenuTabBarController.h; path = Classes/JMMenuTabBarController.h; sourceTree = "<group>"; };
 		F5FE06DE1757383800030331 /* JMMenuTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMenuTabBarController.m; path = Classes/JMMenuTabBarController.m; sourceTree = "<group>"; };
 		F5FE06E017573DB000030331 /* JMRotatable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMRotatable.h; path = JasperMobile/Classes/JMRotatable.h; sourceTree = "<group>"; };
@@ -258,8 +258,8 @@
 				F514E6911754E4C200C9F61E /* JMLocalization.m */,
 				F502CFC41756B69C007C12C3 /* JMFilter.h */,
 				F502CFC51756B69C007C12C3 /* JMFilter.m */,
-				F55048D717622B8C0067304B /* JMViewControllerHelper.h */,
-				F55048D817622B8C0067304B /* JMViewControllerHelper.m */,
+				F55048D717622B8C0067304B /* JMUtils.h */,
+				F55048D817622B8C0067304B /* JMUtils.m */,
 			);
 			name = Helpers;
 			path = ..;
@@ -497,8 +497,8 @@
 			isa = PBXGroup;
 			children = (
 				F5D814A8176894A5004E0A62 /* cancel_button.png */,
-				F5D814A7176894A5004E0A62 /* run_report_button.png */,
-				F5D814A6176894A5004E0A62 /* run_report__button_highlighted.png */,
+				F5FD881F176B3A6D0021D4CA /* blue_button.png */,
+				F5D814A6176894A5004E0A62 /* blue_highlighted.png */,
 				F5D814AC176894A5004E0A62 /* delete_button.png */,
 				F5D814AB176894A5004E0A62 /* delete_button_highlighted.png */,
 				F5D814AE176894A5004E0A62 /* add_favorite_button.png */,
@@ -674,8 +674,7 @@
 				F55CC34F174CFFCE00CEB39E /* MainStoryboard_iPad.storyboard in Resources */,
 				F5A2E77A175CBAD300CBA00E /* BasedOnSplitViewControllerStoryboard.storyboard in Resources */,
 				F58FF3041760A1600021CC8B /* JMCancelRequestPopup.xib in Resources */,
-				F5D814AF176894A5004E0A62 /* run_report__button_highlighted.png in Resources */,
-				F5D814B0176894A5004E0A62 /* run_report_button.png in Resources */,
+				F5D814AF176894A5004E0A62 /* blue_highlighted.png in Resources */,
 				F5D814B1176894A5004E0A62 /* cancel_button.png in Resources */,
 				F5D814B2176894A5004E0A62 /* remove_favorite_button_highlighted.png in Resources */,
 				F5D814B3176894A5004E0A62 /* remove_favorite_button.png in Resources */,
@@ -683,6 +682,7 @@
 				F5D814B5176894A5004E0A62 /* delete_button.png in Resources */,
 				F5D814B6176894A5004E0A62 /* add_favorite_button_highlighted.png in Resources */,
 				F5D814B7176894A5004E0A62 /* add_favorite_button.png in Resources */,
+				F5FD8820176B3A6D0021D4CA /* blue_button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -738,7 +738,7 @@
 				F58FF2F51760A0B50021CC8B /* UIViewController+MJPopupViewController.m in Sources */,
 				F58FF2F91760A1090021CC8B /* JMCancelRequestPopup.m in Sources */,
 				F5A5F553176206360018FEFC /* JMResourceViewController.m in Sources */,
-				F55048D917622B8C0067304B /* JMViewControllerHelper.m in Sources */,
+				F55048D917622B8C0067304B /* JMUtils.m in Sources */,
 				F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */,
 				F5DC4EA71769F01000038D58 /* JMResourceModifyViewController.m in Sources */,
 				F5DC4EAB176A101D00038D58 /* TPKeyboardAvoidingScrollView.m in Sources */,
