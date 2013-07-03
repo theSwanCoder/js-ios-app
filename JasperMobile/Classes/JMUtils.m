@@ -7,6 +7,7 @@
 //
 
 #import "JMUtils.h"
+#import "JMLocalization.h"
 #import <Objection-iOS/Objection.h>
 
 @implementation JMUtils
@@ -29,6 +30,26 @@
     if (highlightedImage) {
         [button setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
     }
+}
+
++ (NSString *)localizedTitleForMenuItemByTag:(NSInteger)tag {
+    NSString *title = @"";
+    
+    switch (tag) {
+        case 0:
+            title = @"view.library";
+            break;
+        case 1:
+            title = @"view.repository";
+            break;
+        case 2:
+            title = @"view.favorites";
+            break;
+        case 3:
+            title = @"view.servers";
+    }
+    
+    return JMCustomLocalizedString(title, nil);
 }
 
 @end

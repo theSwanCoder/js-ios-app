@@ -1,0 +1,68 @@
+/*
+ Localizable.strings
+ 
+ Copyright 2011 Jaspersoft Corp. All rights reserved.
+ */
+
+/* Server Profiles view */
+
+"servers.info" = "Jaspersoft Mobile V. %@\n\nVerwaltungstool und Berichts-Viewer für JasperReports Server 4.2.0 und höher.\n\nWeitere Informationen erhalten Sie unter:\nwww.jasperforge.org/projects/mobile\n\n(c) 2011-2012 Jaspersoft Corp.";
+
+"servers.url.label" = "URL";
+"servers.url.tip" = "http://example.com/jasperserver";
+"servers.url.errmsg" = "Geben Sie eine gültige URL an.";
+
+"servers.name.label" = "Name";
+"servers.name.tip" = "mein Servername";
+"servers.name.errmsg.empty" = "Geben Sie einen gültigen Profilnamen an.";
+"servers.name.errmsg.exists" = "Der Profilname ist bereits vorhanden. Geben Sie einen anderen Profilnamen an.";
+
+"servers.orgid.label" = "Organisation";
+"servers.orgid.tip" = "Organisations-ID";
+
+"servers.username.label" = "Benutzername";
+"servers.username.tip" = "mein Benutzername";
+"servers.username.errmsg.empty" = "Geben Sie einen gültigen Benutzernamen an.";
+
+"servers.password.label" = "Passwort";
+"servers.password.tip" = "mein Passwort";
+
+"servers.profile.exists" = "Es ist bereits ein Serverprofil mit dieser URL, diesem Benutzernamen und dieser Organisations-ID vorhanden. Bearbeiten Sie das Serverprofil.";
+
+"servers.new.label" = "Serverprofil hinzufügen...";
+"servers.askpassword.label" = "Immer nach Passwort fragen";
+"servers.askpassword.dialog.title.label" = "Passwort eingeben";
+
+
+/* Navigation and view labels */
+
+"view.servers"= "Server";
+"view.repository" = "Repository";
+"view.search" = "Suchen";
+"view.favorites" = "Favoriten";
+"view.library" = "Bibliothek";
+
+"noservers.dialog.title" = "Kein Server konfiguriert";
+"noservers.dialog.msg" = "Sie müssen ein Serverprofil hinzufügen, bevor Sie ein Repository anzeigen können.";
+"noservers.dialog.button.label" = "Serverprofile konfigurieren";
+
+/* Error messages */
+
+"error.readingresponse.dialog.msg" = "Fehler beim Lesen der Antwort";
+"error.incorrectrequest.dialog.msg" = "Die Syntax der Anforderung war falsch.";
+
+"error.noconnection.dialog.title" = "Keine Verbindung";
+"error.noconnection.dialog.msg" = "Prüfen Sie die Einstellungen Ihres mobilen Netzwerks, und versuchen Sie es erneut.";
+
+"error.authenication.dialog.title" = "Authentifizierung erforderlich";
+"error.authenication.dialog.msg" = "Prüfen Sie die Anmeldeinformationen für den Server.";
+
+"error.unknownhost.dialog.title" = "Unbekannter Server";
+"error.unknownhost.dialog.msg" = "Es wurde kein Server mit dem angegebenen Hostnamen gefunden.";
+
+/* Buttons */
+
+"dialog.button.ok" = "OK";
+"dialog.button.done" = "Fertig";
+"dialog.button.edit" = "Bearbeiten";
+"dialog.button.cancel" = "Abbrechen";

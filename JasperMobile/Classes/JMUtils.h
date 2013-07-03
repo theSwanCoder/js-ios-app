@@ -30,4 +30,12 @@
  */
 + (void)setBackgroundImagesForButton:(UIButton *)button imageName:(NSString *)imageName highlightedImageName:(NSString *)highlightedImageName edgesInset:(CGFloat)edgesInset;
 
+/**
+ Returns localized title for menu item (Library, Repository, Favorites etc) depends
+ on item's tag
+ 
+ @param tag A tag for the item
+ */
++ (NSString *)localizedTitleForMenuItemByTag:(NSInteger)tag;
+
 @end

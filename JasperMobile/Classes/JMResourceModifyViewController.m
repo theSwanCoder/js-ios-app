@@ -9,17 +9,16 @@
 #import "JMResourceModifyViewController.h"
 #import "JMUtils.h"
 #import "JMFilter.h"
+#import "JMLocalization.h"
 #import <QuartzCore/QuartzCore.h>
 #import <Objection-iOS/Objection.h>
 
 @interface JMResourceModifyViewController ()
 @property (nonatomic, weak) IBOutlet UITextField *labelTextField;
 @property (nonatomic, weak) IBOutlet UITextView *descriptionTextView;
-@property (nonatomic, weak) IBOutlet UIButton *saveButton;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *doneButton;
-
-- (void)showDoneButton;
-- (void)hideDoneButton;
+@property (nonatomic, weak) IBOutlet UILabel *label;
+@property (nonatomic, weak) IBOutlet UILabel *description;
 @end
 
 @implementation JMResourceModifyViewController
@@ -49,29 +48,20 @@ objection_requires(@"resourceClient");
     self.descriptionTextView.text = self.resourceDescriptor.resourceDescription;
     self.descriptionTextView.layer.cornerRadius = 5.0f;
     
-    [JMUtils setBackgroundImagesForButton:self.saveButton
-                                imageName:@"blue_button"
-                     highlightedImageName:@"blue_button_highlighted"
-                               edgesInset:18.0f];
-    [self hideDoneButton];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    self.label.text = JMCustomLocalizedString(@"resource.label.title", nil);
+    self.description.text = JMCustomLocalizedString(@"resource.description.title", nil);
 }
 
 - (void)viewDidUnload {
     [self setLabelTextField:nil];
     [self setDescriptionTextView:nil];
     [self setDoneButton:nil];
-    [self setSaveButton:nil];
+    [self setLabel:nil];
+    [self setDescription:nil];
     [super viewDidUnload];
 }
 
 #pragma mark - Actions
-
-- (IBAction)doneEditing:(id)sender {
-    [self.view endEditing:YES];
-}
 
 - (IBAction)modifyResource:(id)sender {
     NSString *updatedLabel = [self.labelTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -105,30 +95,6 @@ objection_requires(@"resourceClient");
 {
     [self.delegate setNeedsToRefreshResourceDescriptorData:YES];
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-#pragma mark - Notifications
-
-- (void)keyboardWillHide:(NSNotification*)notification
-{
-    [self hideDoneButton];
-}
-
-- (void)keyboardWillShow:(NSNotification*)notification
-{
-    [self showDoneButton];
-}
-
-#pragma mark - Private
-
-- (void)hideDoneButton
-{
-    self.navigationItem.rightBarButtonItem = nil;
-}
-
-- (void)showDoneButton
-{
-    self.navigationItem.rightBarButtonItem = self.doneButton;
 }
 
 @end

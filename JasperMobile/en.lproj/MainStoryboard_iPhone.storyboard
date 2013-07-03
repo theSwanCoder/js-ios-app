@@ -264,7 +264,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ToolsClearCell" id="cPT-rX-uBh">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ResourceToolsCell" id="cPT-rX-uBh">
                                 <rect key="frame" x="0.0" y="135" width="320" height="45"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -272,17 +272,17 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" id="V4Q-Yo-uPe">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="45"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vja-qQ-gXp">
+                                                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vja-qQ-gXp">
                                                     <rect key="frame" x="0.0" y="-1" width="145" height="45"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <state key="normal" title="dialog.button.addfavorite" backgroundImage="add_favorite_button.png">
+                                                    <state key="normal" title="Favorite" backgroundImage="add_favorite_button.png">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </state>
-                                                    <state key="highlighted" title="dialog.button.addfavorite" backgroundImage="add_favorite_button_highlighted.png">
+                                                    <state key="highlighted" backgroundImage="add_favorite_button_highlighted.png">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -290,14 +290,14 @@
                                                         <action selector="favoriteClicked:" destination="cdD-E5-cP8" eventType="touchUpInside" id="TJG-CW-fEN"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HTq-UR-vAs">
+                                                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HTq-UR-vAs">
                                                     <rect key="frame" x="155" y="-1" width="145" height="45"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                    <state key="normal" title="dialog.button.delete" backgroundImage="delete_button.png">
+                                                    <state key="normal" title="Delete" backgroundImage="delete_button.png">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </state>
-                                                    <state key="highlighted" title="dialog.button.delete" backgroundImage="delete_button_highlighted.png">
+                                                    <state key="highlighted" backgroundImage="delete_button_highlighted.png">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -321,7 +321,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Resource Title" id="IfX-o3-obc">
-                        <barButtonItem key="rightBarButtonItem" title="Edit" id="apF-mL-aP0">
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="apF-mL-aP0">
                             <connections>
                                 <segue destination="XK3-Bq-51x" kind="push" identifier="EditResourceDescriptor" id="n1t-D6-XQf"/>
                             </connections>
@@ -352,7 +352,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="akU-ce-Ccw">
-                                        <rect key="frame" x="20" y="98" width="280" height="186"/>
+                                        <rect key="frame" x="20" y="98" width="280" height="236"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
@@ -372,21 +372,6 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="l82-7A-6NC">
-                                        <rect key="frame" x="17" y="302" width="285" height="45"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" title="Save" backgroundImage="blue_button.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="modifyResource:" destination="XK3-Bq-51x" eventType="touchUpInside" id="anB-z1-95F"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                             </scrollView>
                         </subviews>
@@ -395,15 +380,16 @@
                     <navigationItem key="navigationItem" title="Resource Title" id="9yI-A9-gch">
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="NS2-QM-Wv8">
                             <connections>
-                                <action selector="doneEditing:" destination="XK3-Bq-51x" id="vnV-1i-vd8"/>
+                                <action selector="modifyResource:" destination="XK3-Bq-51x" id="ump-mS-R1x"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="description" destination="mo5-dy-ZSs" id="6rA-fd-7vP"/>
                         <outlet property="descriptionTextView" destination="akU-ce-Ccw" id="QDY-g7-HtT"/>
                         <outlet property="doneButton" destination="NS2-QM-Wv8" id="Kkp-TM-RFs"/>
+                        <outlet property="label" destination="Q0G-4z-Mnf" id="zRj-0Y-PJ3"/>
                         <outlet property="labelTextField" destination="GiI-7y-aV1" id="TFW-RC-0cL"/>
-                        <outlet property="saveButton" destination="l82-7A-6NC" id="yfd-QI-inh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yJc-Sf-EAg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -433,7 +419,7 @@
         <scene sceneID="iyj-Jc-bkV">
             <objects>
                 <navigationController id="OEY-Fh-70r" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Repository" image="repository_bar_item.png" id="ffa-YM-Laz"/>
+                    <tabBarItem key="tabBarItem" tag="1" title="Repository" image="repository_bar_item.png" id="ffa-YM-Laz"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="wVW-6c-7n8"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
@@ -673,7 +659,6 @@
     <resources>
         <image name="add_favorite_button.png" width="152" height="45"/>
         <image name="add_favorite_button_highlighted.png" width="152" height="45"/>
-        <image name="blue_button.png" width="152" height="45"/>
         <image name="delete_button.png" width="152" height="45"/>
         <image name="delete_button_highlighted.png" width="152" height="45"/>
         <image name="library_bar_item.png" width="30" height="30"/>
@@ -685,41 +670,6 @@
         <image name="res_type_text.png" width="32" height="32"/>
         <image name="res_type_unknown.png" width="32" height="32"/>
     </resources>
-    <classes>
-        <class className="JMBaseRepositoryTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMBaseRepositoryTableViewController.h"/>
-        </class>
-        <class className="JMLibraryTableViewController" superclassName="JMBaseRepositoryTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMLibraryTableViewController.h"/>
-        </class>
-        <class className="JMMenuTabBarController" superclassName="UITabBarController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMMenuTabBarController.h"/>
-        </class>
-        <class className="JMRepositoryTableViewController" superclassName="JMBaseRepositoryTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMRepositoryTableViewController.h"/>
-        </class>
-        <class className="JMResourceModifyViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceModifyViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="doneEditing:"/>
-                <relationship kind="action" name="modifyResource:"/>
-                <relationship kind="outlet" name="descriptionTextView" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="doneButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="labelTextField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="saveButton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="JMResourceViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="deleteResource:"/>
-                <relationship kind="action" name="favoriteClicked:"/>
-            </relationships>
-        </class>
-        <class className="TPKeyboardAvoidingScrollView" superclassName="UIScrollView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TPKeyboardAvoidingScrollView.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

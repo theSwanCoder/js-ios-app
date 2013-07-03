@@ -70,11 +70,11 @@ inject_default_rotation();
               kJMValueKey : self.resourceDescriptor.label ?: @""
             },
             @2 : @{
-              kJMTitleKey : @"resourceDescription",
+              kJMTitleKey : @"description",
               kJMValueKey : self.resourceDescriptor.resourceDescription ?: @""
             },
             @3 : @{
-              kJMTitleKey : @"wsType",
+              kJMTitleKey : @"type",
               kJMValueKey : self.resourceDescriptor.wsType ?: @""
             }
         };
@@ -101,7 +101,7 @@ inject_default_rotation();
     if (!_cellIdentifiers) {
         _cellIdentifiers = @{
             @kJMAttributesSection : @"ResourceAttributeCell",
-            @kJMToolsSection : @"ToolsClearCell",
+            @kJMToolsSection : @"ResourceToolsCell",
             @kJMResourcePropertiesSection : @"ResourcePropertyCell"
         };
     }
@@ -190,6 +190,8 @@ inject_default_rotation();
         cell.detailTextLabel.text = value;
     } else if (section == kJMToolsSection) {
         cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+        UIButton *deleteButton = (UIButton *)[cell viewWithTag:2];
+        [deleteButton setTitle:JMCustomLocalizedString(@"dialog.button.delete", nil) forState:UIControlStateNormal];
     } else if (section == kJMResourcePropertiesSection) {
         JSResourceProperty *resourceProperty = [self resourcePropertyForIndexPath:indexPath];
         

@@ -7,9 +7,7 @@
 //
 
 #import "JMMenuTabBarController.h"
-#import "JMRotatable.h"
-#import "JMRotationBase.h"
-#import <Objection-iOS/Objection.h>
+#import "JMUtils.h"
 
 @implementation JMMenuTabBarController
 inject_default_rotation()
@@ -19,7 +17,11 @@ inject_default_rotation()
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	[[JSObjection defaultInjector] injectDependencies:self];
+    
+    // TODO: refactor without possilbe code duplication (as general solution for both devices)
+    for (UITabBarItem *item in self.tabBar.items) {
+        item.title = [JMUtils localizedTitleForMenuItemByTag:item.tag];
+    }
 }
 
 @end
