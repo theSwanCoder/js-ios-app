@@ -280,7 +280,7 @@ inject_default_rotation();
 #pragma mark - Private
 
 - (void)fetchResourceDescriptor {
-    [JMCancelRequestPopup presentInViewController:self restClient:self.resourceClient cancelBlock:^{
+    [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
         [self.navigationController popViewControllerAnimated:YES];
     }];
     

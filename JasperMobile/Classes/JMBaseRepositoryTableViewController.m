@@ -70,7 +70,7 @@ inject_default_rotation()
     [super viewDidLoad];
     
     // Presents cancel request popup
-    [JMCancelRequestPopup presentInViewController:self restClient:self.resourceClient cancelBlock:^{
+    [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
         [self.navigationController popViewControllerAnimated:YES];
     }];
 }

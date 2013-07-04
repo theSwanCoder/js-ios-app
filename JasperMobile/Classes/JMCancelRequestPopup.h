@@ -17,10 +17,11 @@ typedef void(^JMCancelRequestBlock)(void);
  Presents cancel request popup in view controller
  
  @param viewController A view controller inside which popup will be shown
- @param client A rest client to cancel all requests
+ @param progressMessage A message of progress dialog
+ @param restClient A rest client to cancel all requests
  @param cancelBlock A cancelBlock to execute
  */
-+ (void)presentInViewController:(UIViewController *)viewController restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock;
++ (void)presentInViewController:(UIViewController *)viewController progressMessage:(NSString *)progressMessage restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock;
 
 /**
  Dismisses last presented popup

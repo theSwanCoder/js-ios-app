@@ -7,6 +7,7 @@
 //
 
 #import "JMCancelRequestPopup.h"
+#import "JMLocalization.h"
 #import "UIViewController+MJPopupViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -18,13 +19,17 @@ static JMCancelRequestPopup *instance;
 @property (nonatomic, strong) JSRESTBase *restClient;
 @property (nonatomic, strong) UIViewController *viewController;
 @property (nonatomic, copy) JMCancelRequestBlock cancelBlock;
+@property (nonatomic, weak) IBOutlet UIButton *cancelButton;
+@property (nonatomic, weak) IBOutlet UILabel *progressLabel;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil viewController:(UIViewController *)viewController restClient:(JSRESTBase *)restClient cancelBlock:(JMCancelRequestBlock)cancelBlock;
 @end
 
 @implementation JMCancelRequestPopup
 
 #pragma mark - Class Methods
 
-+ (void)presentInViewController:(UIViewController *)viewController restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock
++ (void)presentInViewController:(UIViewController *)viewController progressMessage:(NSString *)progressMessage restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock
 {
     // Before presenting new cancel request popup we should dismiss previous one
     [[self class] dismiss];
@@ -34,6 +39,10 @@ static JMCancelRequestPopup *instance;
                                               viewController:viewController
                                                   restClient:client
                                                  cancelBlock:cancelBlock];
+    
+    [instance.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
+    instance.progressLabel.text = JMCustomLocalizedString(progressMessage, nil);
+    
     [viewController presentPopupViewController:instance animationType:MJPopupViewAnimationFade];
 }
 
@@ -79,4 +88,9 @@ static JMCancelRequestPopup *instance;
     return self;
 }
 
+- (void)viewDidUnload {
+    [self setCancelButton:nil];
+    [self setProgressLabel:nil];
+    [super viewDidUnload];
+}
 @end
