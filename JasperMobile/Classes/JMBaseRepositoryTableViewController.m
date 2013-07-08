@@ -65,16 +65,6 @@ inject_default_rotation()
 
 #pragma mark - UIViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    // Presents cancel request popup
-    [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
-        [self.navigationController popViewControllerAnimated:YES];
-    }];
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
@@ -117,8 +107,8 @@ inject_default_rotation()
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSResourceDescriptor *resoruceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
-    NSString *cellIdentifier = [self cellIdentifierForResourceType:resoruceDescriptor.wsType];
+    JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
+    NSString *cellIdentifier = [self cellIdentifierForResourceType:resourceDescriptor.wsType];
     
     if ([cellIdentifier isEqualToString:kJMUnknownCell]) {
         [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:self];

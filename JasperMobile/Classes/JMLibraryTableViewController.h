@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 com.jaspersoft. All rights reserved.
 //
 
-#import "JMBaseRepositoryTableViewController.h"
+#import "JMSearchTableViewController.h"
 
-@interface JMLibraryTableViewController : JMBaseRepositoryTableViewController
+@interface JMLibraryTableViewController : JMSearchTableViewController
 
 @end

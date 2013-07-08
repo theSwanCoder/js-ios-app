@@ -7,6 +7,7 @@
 //
 
 #import "JMRepositoryTableViewController.h"
+#import "JMCancelRequestPopup.h"
 #import "JMFilter.h"
 
 @implementation JMRepositoryTableViewController
@@ -17,10 +18,33 @@
 {
     [super viewDidLoad];
     
-    NSString *path = self.resourceDescriptor.uriString ?: @"/";
+    [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    
     [JMFilter checkNetworkReachabilityForBlock:^{
-        [self.resourceClient resources:path delegate:[JMFilter checkRequestResultForDelegate:self]];
+        [self.resourceClient resources:[self path] delegate:[JMFilter checkRequestResultForDelegate:self]];
     } viewControllerToDismiss:self];
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [super searchBarSearchButtonClicked:searchBar];
+    
+    [JMFilter checkNetworkReachabilityForBlock:^{
+        [self.resourceClient resources:[self path] query:searchBar.text types:nil recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
+    } viewControllerToDismiss:self];
+    
+    searchBar.text = @"";
+}
+
+#pragma mark - Private
+
+- (NSString *)path
+{
+    return self.resourceDescriptor.uriString ?: @"/";
 }
 
 @end

@@ -7,9 +7,16 @@
 //
 
 #import "JMLibraryTableViewController.h"
+#import "JMCancelRequestPopup.h"
 #import "JMFilter.h"
 
 #define kJMRequestType @"type"
+
+@interface JMLibraryTableViewController()
+@property (nonatomic, strong) NSString *query;
+
+- (void)searchReportsByQuery:(NSString *)query includingDashboards:(BOOL)includingDashboards;
+@end
 
 @implementation JMLibraryTableViewController
 
@@ -18,12 +25,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    NSArray *types = @[
-       self.constants.WS_TYPE_REPORT_UNIT,
-       self.constants.WS_TYPE_DASHBOARD
-    ];
-    [self.resourceClient resources:nil query:nil types:types recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
+    [self searchReportsByQuery:nil includingDashboards:YES];
 }
 
 #pragma mark - JSRequestDelegate
@@ -36,14 +38,42 @@
     // doesn't have this type)
     if ([result isError] && [type isKindOfClass:[NSArray class]] &&
         [type containsObject:self.constants.WS_TYPE_DASHBOARD]) {
-        NSArray *types = @[self.constants.WS_TYPE_REPORT_UNIT];
-        
-        [JMFilter checkNetworkReachabilityForBlock:^{
-            [self.resourceClient resources:nil query:nil types:types recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
-        } viewControllerToDismiss:self];
+        [self searchReportsByQuery:self.query includingDashboards:NO];
     } else {
         [super requestFinished:result];
     }
+    
+    self.query = nil;
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [super searchBarSearchButtonClicked:searchBar];
+    
+    self.query = searchBar.text;
+    [self searchReportsByQuery:self.query includingDashboards:YES];
+    
+    searchBar.text = @"";
+}
+
+#pragma mark - Private
+
+- (void)searchReportsByQuery:(NSString *)query includingDashboards:(BOOL)includingDashboards
+{
+    NSMutableArray *types = [NSMutableArray arrayWithObject:self.constants.WS_TYPE_REPORT_UNIT];
+    if (includingDashboards) {
+        [types addObject:self.constants.WS_TYPE_DASHBOARD];
+    }
+    
+    [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    
+    [JMFilter checkNetworkReachabilityForBlock:^{
+        [self.resourceClient resources:@"/" query:self.query types:types recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
+    } viewControllerToDismiss:nil];
 }
 
 @end

@@ -28,7 +28,7 @@
         [JMCancelRequestPopup dismiss];
         [[UIAlertView localizedAlert:@"error.noconnection.dialog.title"
                              message:@"error.noconnection.dialog.msg"
-                            delegate:[[self alloc] initWithDismissalViewController:viewController]
+                            delegate:[[[self class] alloc] initWithDismissalViewController:viewController]
                    cancelButtonTitle:@"dialog.button.ok"
                    otherButtonTitles:nil] show];
     } else {
