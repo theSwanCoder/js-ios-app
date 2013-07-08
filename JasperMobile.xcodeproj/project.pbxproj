@@ -25,6 +25,7 @@
 		F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91AA1752FAC90009E2BE /* libxml2.dylib */; };
 		F54C91B41752FCA70009E2BE /* JMBaseModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F54C91B31752FCA70009E2BE /* JMBaseModule.m */; };
 		F55048D917622B8C0067304B /* JMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F55048D817622B8C0067304B /* JMUtils.m */; };
+		F55174D0178AB1A5006186B4 /* JMServersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F55174CF178AB1A5006186B4 /* JMServersTableViewController.m */; };
 		F55CC333174CFFCE00CEB39E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC332174CFFCE00CEB39E /* UIKit.framework */; };
 		F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC334174CFFCE00CEB39E /* Foundation.framework */; };
 		F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */; };
@@ -122,6 +123,8 @@
 		F54C91B31752FCA70009E2BE /* JMBaseModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseModule.m; path = Classes/JMBaseModule.m; sourceTree = "<group>"; };
 		F55048D717622B8C0067304B /* JMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMUtils.h; path = JasperMobile/Classes/JMUtils.h; sourceTree = "<group>"; };
 		F55048D817622B8C0067304B /* JMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMUtils.m; path = JasperMobile/Classes/JMUtils.m; sourceTree = "<group>"; };
+		F55174CE178AB1A5006186B4 /* JMServersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServersTableViewController.h; path = Classes/JMServersTableViewController.h; sourceTree = "<group>"; };
+		F55174CF178AB1A5006186B4 /* JMServersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMServersTableViewController.m; path = Classes/JMServersTableViewController.m; sourceTree = "<group>"; };
 		F55CC32F174CFFCE00CEB39E /* JasperMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JasperMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F55CC332174CFFCE00CEB39E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F55CC334174CFFCE00CEB39E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -324,6 +327,8 @@
 				F576BC401753DFF600DF765B /* JMBaseRepositoryTableViewController.m */,
 				F5DE3FA1178A387B00840808 /* JMSearchTableViewController.h */,
 				F5DE3FA2178A387B00840808 /* JMSearchTableViewController.m */,
+				F55174CE178AB1A5006186B4 /* JMServersTableViewController.h */,
+				F55174CF178AB1A5006186B4 /* JMServersTableViewController.m */,
 				F5B6A6A1175F57B90047CB6D /* JMLibraryTableViewController.h */,
 				F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */,
 				F5B6A6A4175F58690047CB6D /* JMRepositoryTableViewController.h */,
@@ -766,6 +771,7 @@
 				F5DC4EA71769F01000038D58 /* JMResourceModifyViewController.m in Sources */,
 				F5DC4EAB176A101D00038D58 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				F5DE3FA3178A387B00840808 /* JMSearchTableViewController.m in Sources */,
+				F55174D0178AB1A5006186B4 /* JMServersTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
