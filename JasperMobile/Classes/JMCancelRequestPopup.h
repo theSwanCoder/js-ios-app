@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JaspersoftSDK.h"
+#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 typedef void(^JMCancelRequestBlock)(void);
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "JaspersoftSDK.h"
+#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 @interface JMFilter : NSObject <JSRequestDelegate, UIAlertViewDelegate>
 

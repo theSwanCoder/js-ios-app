@@ -7,7 +7,7 @@
 //
 
 #import <Objection-iOS/Objection.h>
-#import "JaspersoftSDK.h"
+#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 @interface JMBaseModule : JSObjectionModule
 

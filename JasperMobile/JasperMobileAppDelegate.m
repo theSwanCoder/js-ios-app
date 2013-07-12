@@ -9,7 +9,7 @@
 #import "JasperMobileAppDelegate.h"
 #import "JMPhoneModule.h"
 #import "JMPadModule.h"
-#import "JaspersoftSDK.h"
+#import <jaspersoft-sdk/JaspersoftSDK.h>
 #import <Objection-iOS/Objection.h>
 
 #define kJMProductName @"JasperMobile"
