@@ -12,8 +12,8 @@
 #import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
 
-#define kJMShowResourceInfoSegue @"ShowResourceInfo"
-#define kJMUnknownCell @"UnknownCell"
+static NSString * const kJMShowResourceInfoSegue = @"ShowResourceInfo";
+static NSString * const kJMUnknownCell = @"UnknownCell";
 
 @interface JMBaseRepositoryTableViewController ()
 @property (nonatomic, strong) NSMutableArray *resources;
@@ -140,7 +140,7 @@ inject_default_rotation()
 
 - (JSResourceDescriptor *)resourceDescriptorForIndexPath:(NSIndexPath *)indexPath
 {
-    return [self.resources objectAtIndex:[indexPath indexAtPosition:1]];
+    return [self.resources objectAtIndex:indexPath.row];
 }
 
 - (NSString *)cellIdentifierForResourceType:(NSString *)resourceType

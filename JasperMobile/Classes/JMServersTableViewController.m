@@ -7,37 +7,47 @@
 //
 
 #import "JMServersTableViewController.h"
+#import "JMLocalization.h"
+#import "UIAlertView+LocalizedAlert.h"
+#import "JMServerProfile+Helpers.h"
+#import <CoreData/CoreData.h>
+#import <Objection-iOS/Objection.h>
 
 @interface JMServersTableViewController ()
-@property (nonatomic, assign) BOOL isEditing;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) UIBarButtonItem *editButton;
+@property (nonatomic, strong) UIBarButtonItem *doneButton;
+@property (nonatomic, strong) NSMutableArray *servers;
 @end
 
 @implementation JMServersTableViewController
+objection_requires(@"managedObjectContext");
 
-- (id)initWithStyle:(UITableViewStyle)style
+#pragma mark - Initialization
+
+- (void)awakeFromNib
 {
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+    [[JSObjection defaultInjector] injectDependencies:self];
+    
+    self.editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editServers:)];
+    self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditing:)];
 }
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationItem.rightBarButtonItem = self.editButton;
+    
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"alias" ascending:YES]];
+    self.servers = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    for (JMServerProfile *server in self.servers) {
+        server.password = [JMServerProfile passwordFromKeychain:[server encodedProfileID]];
+    }
 }
 
 #pragma mark - Table view data source
@@ -49,17 +59,25 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    return self.servers.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    static NSString *cellIdentifier = @"ServerCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    // Configure the cell...
+    JMServerProfile *server = [self.servers objectAtIndex:indexPath.row];
+    
+    cell.textLabel.text = server.alias;
+    cell.detailTextLabel.text = server.serverUrl;
     
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return JMCustomLocalizedString(@"servers.profile.title", nil);
 }
 
 /*
@@ -107,11 +125,46 @@
 {
     // Navigation logic may go here. Create and push another view controller.
     /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+     DetailViewController *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
      // ...
      // Pass the selected object to the new view controller.
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
+}
+
+#pragma mark - Action
+
+- (IBAction)editServers:(id)sender
+{
+    self.navigationItem.rightBarButtonItem = self.doneButton;
+    // TODO: need implementation
+    
+    if (!self.servers.count) {
+        // Redirect to Add New Server directly
+        
+    } else {
+        [self.tableView setEditing:YES animated:YES];
+    }
+}
+
+- (IBAction)doneEditing:(id)sender
+{
+    self.navigationItem.rightBarButtonItem = self.editButton;
+    // TODO: need implementation
+    
+    [self.tableView setEditing:NO animated:YES];
+}
+
+- (IBAction)applicationInfo:(id)sender
+{
+    NSString *message = JMCustomLocalizedString(@"servers.info", nil);
+    // TODO: replace with normal version from app updater
+    message = [NSString stringWithFormat:message, @1.6];
+    [[UIAlertView localizedAlert:nil
+                         message:message
+                        delegate:nil
+               cancelButtonTitle:@"dialog.button.ok"
+               otherButtonTitles:nil] show];
 }
 
 @end

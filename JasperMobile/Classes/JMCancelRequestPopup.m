@@ -11,7 +11,7 @@
 #import "UIViewController+MJPopupViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define kJMCancelRequestPopupNib @"JMCancelRequestPopup"
+static NSString * const kJMCancelRequestPopupNib = @"JMCancelRequestPopup";
 
 static JMCancelRequestPopup *instance;
 
@@ -62,6 +62,13 @@ static JMCancelRequestPopup *instance;
     self.view.layer.cornerRadius = 5.0f;
 }
 
+- (void)viewDidUnload
+{
+    [self setCancelButton:nil];
+    [self setProgressLabel:nil];
+    [super viewDidUnload];
+}
+
 #pragma mark - Actions
 
 - (IBAction)cancelRequests:(id)sender
@@ -88,9 +95,4 @@ static JMCancelRequestPopup *instance;
     return self;
 }
 
-- (void)viewDidUnload {
-    [self setCancelButton:nil];
-    [self setProgressLabel:nil];
-    [super viewDidUnload];
-}
 @end

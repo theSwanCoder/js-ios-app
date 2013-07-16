@@ -52,7 +52,8 @@ objection_requires(@"resourceClient");
     self.description.text = JMCustomLocalizedString(@"resource.description.title", nil);
 }
 
-- (void)viewDidUnload {
+- (void)viewDidUnload
+{
     [self setLabelTextField:nil];
     [self setDescriptionTextView:nil];
     [self setDoneButton:nil];
@@ -63,7 +64,8 @@ objection_requires(@"resourceClient");
 
 #pragma mark - Actions
 
-- (IBAction)modifyResource:(id)sender {
+- (IBAction)modifyResource:(id)sender
+{
     NSString *updatedLabel = [self.labelTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSString *updatedDescription = [[self.descriptionTextView text] stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
     

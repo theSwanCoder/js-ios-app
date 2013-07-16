@@ -16,16 +16,18 @@
 #import "UITableViewController+CellRelativeHeight.h"
 #import <Objection-iOS/Objection.h>
 
+// Declared as define const because of int to NSNumber convertion trick (i.e.
+// we can use literal @kJMAttributesSection to represent NSNumber)
 #define kJMAttributesSection 0
 #define kJMToolsSection 1
 #define kJMResourcePropertiesSection 2
 
-#define kJMConfirmButtonIndex 1
+static NSInteger const kJMConfirmButtonIndex = 1;
 
-#define kJMTitleKey @"title"
-#define kJMValueKey @"value"
+static NSString * const kJMTitleKey = @"title";
+static NSString * const kJMValueKey = @"value";
 
-#define kJMEditResourceDescriptorSegue @"EditResourceDescriptor"
+static NSString * const kJMEditResourceDescriptorSegue = @"EditResourceDescriptor";
 
 typedef enum {
     JMGetResourceRequest,
@@ -279,7 +281,8 @@ inject_default_rotation();
 
 #pragma mark - Private
 
-- (void)fetchResourceDescriptor {
+- (void)fetchResourceDescriptor
+{
     [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
         [self.navigationController popViewControllerAnimated:YES];
     }];
@@ -292,12 +295,12 @@ inject_default_rotation();
 
 - (JSResourceProperty *)resourcePropertyForIndexPath:(NSIndexPath *)indexPath
 {
-    return [self.resourceDescriptor.resourceProperties objectAtIndex:[indexPath indexAtPosition:1]];
+    return [self.resourceDescriptor.resourceProperties objectAtIndex:indexPath.row];
 }
 
 - (NSDictionary *)resourceDescriptorPropertyForIndexPath:(NSIndexPath *)indexPath
 {
-    return [self.resourceDescriptorProperties objectForKey:[NSNumber numberWithInt:[indexPath indexAtPosition:1]]];
+    return [self.resourceDescriptorProperties objectForKey:[NSNumber numberWithInt:indexPath.row]];
 }
 
 - (NSString *)cellIdentifierForSection:(NSInteger)section

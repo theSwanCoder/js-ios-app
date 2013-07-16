@@ -12,7 +12,7 @@
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import <Objection-iOS/Objection.h>
 
-#define kJMProductName @"JasperMobile"
+static NSString * const kJMProductName = @"JasperMobile";
 
 @implementation JasperMobileAppDelegate
 
@@ -20,25 +20,13 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
-+ (void)initialize
+- (id)init
 {
-    if (self == [JasperMobileAppDelegate class]) {
-        JSProfile *profile = [[JSProfile alloc] initWithAlias:@"MobileDemo"
-                                                     username:@"jasperadmin"
-                                                     password:@"jasperadmin"
-                                                 organization:@"organization_1"
-                                                    serverUrl:@"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
-        
-        JMBaseModule *module;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            module = [[JMPadModule alloc] initWithProfile:profile];
-        } else {
-            module = [[JMPhoneModule alloc] initWithProfile:profile];
-        }
-        
-        JSObjectionInjector *injector = [JSObjection createInjector:module];
-        [JSObjection setDefaultInjector:injector];
+    if (self == [super init]) {
+        [self initObjectionModules];
     }
+    
+    return self;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -77,7 +65,8 @@
 
 // Returns the managed object context for the application.
 // If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
-- (NSManagedObjectContext *)managedObjectContext {
+- (NSManagedObjectContext *)managedObjectContext
+{
     if (_managedObjectContext != nil) {
         return _managedObjectContext;
     }
@@ -92,7 +81,8 @@
 
 // Returns the managed object model for the application.
 // If the model doesn't already exist, it is created from the application's model.
-- (NSManagedObjectModel *)managedObjectModel {
+- (NSManagedObjectModel *)managedObjectModel
+{
     if (_managedObjectModel != nil) {
         return _managedObjectModel;
     }
@@ -103,7 +93,8 @@
 
 // Returns the persistent store coordinator for the application.
 // If the coordinator doesn't already exist, it is created and the application's store added to it.
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
+{
     if (_persistentStoreCoordinator != nil) {
         return _persistentStoreCoordinator;
     }
@@ -146,8 +137,37 @@
 #pragma mark - Application's Documents directory
 
 // Returns the URL to the application's Documents directory.
-- (NSURL *)applicationDocumentsDirectory {
+- (NSURL *)applicationDocumentsDirectory
+{
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+#pragma mark - Private
+
+- (void)initObjectionModules
+{
+    JSProfile *profile = [[JSProfile alloc] initWithAlias:@"MobileDemo"
+                                                 username:@"jasperadmin"
+                                                 password:@"jasperadmin"
+                                             organization:@"organization_1"
+                                                serverUrl:@"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
+    
+    JMBaseModule *module;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        module = [[JMPadModule alloc] init];
+    } else {
+        module = [[JMPhoneModule alloc] init];
+    }
+    
+    module.managedObjectContext = self.managedObjectContext;
+    
+    JSObjectionInjector *injector = [JSObjection createInjector:module];
+    [JSObjection setDefaultInjector:injector];
+    
+    JSRESTResource *resource = [injector getObject:[JSRESTResource class]];
+    resource.serverProfile = profile;
+    JSRESTReport *report = [injector getObject:[JSRESTReport class]];
+    report.serverProfile = profile;
 }
 
 @end

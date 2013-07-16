@@ -11,6 +11,6 @@
 
 @interface JMBaseModule : JSObjectionModule
 
-- (id)initWithProfile:(JSProfile *)profile;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 @end

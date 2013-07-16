@@ -10,21 +10,9 @@
 #import "JMRotatable.h"
 #import "JMPhoneRotation.h"
 #import "JMPadRotation.h"
-
-@interface JMBaseModule()
-@property (nonatomic, strong) JSProfile *profile;
-@end
+#import <CoreData/CoreData.h>
 
 @implementation JMBaseModule
-
-- (id)initWithProfile:(JSProfile *)profile
-{
-    if (self = [self init]) {
-        self.profile = profile;
-    }
-    
-    return self;
-}
 
 - (void)configure
 {
@@ -32,10 +20,11 @@
     [self bindClass:[JSRESTReport class] inScope:JSObjectionScopeSingleton];
     [self bindClass:[JSRESTResource class] inScope:JSObjectionScopeSingleton];
     [self bindClass:[JSConstants class] inScope:JSObjectionScopeSingleton];
-    [self bind:self.profile toClass:[JSProfile class]];
-    [self bind:[[JSRESTReport alloc] initWithProfile:self.profile] toClass:[JSRESTReport class]];
-    [self bind:[[JSRESTResource alloc] initWithProfile:self.profile] toClass:[JSRESTResource class]];
+    [self bindClass:[NSManagedObjectContext class] inScope:JSObjectionScopeSingleton];
+    [self bind:[[JSRESTReport alloc] init] toClass:[JSRESTReport class]];
+    [self bind:[[JSRESTResource alloc] init] toClass:[JSRESTResource class]];
     [self bind:[[JSConstants alloc] init] toClass:[JSConstants class]];
+    [self bind:self.managedObjectContext toClass:[NSManagedObjectContext class]];
 }
 
 @end
