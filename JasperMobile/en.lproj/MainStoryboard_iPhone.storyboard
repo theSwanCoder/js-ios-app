@@ -461,7 +461,7 @@
         <scene sceneID="Tkw-ha-f6R">
             <objects>
                 <tableViewController id="VQO-SP-BGa" customClass="JMServersTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="QwG-XB-B58">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="QwG-XB-B58">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -524,6 +524,10 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="skN-h0-Krt"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="infoButton" destination="fOj-Ta-ONw" id="8iq-bB-5s2"/>
+                        <segue destination="iuM-6r-QhG" kind="push" identifier="EditServer" id="meS-uh-6V6"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ocn-Y9-834" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -534,7 +538,7 @@
             <objects>
                 <tableViewController id="iuM-6r-QhG" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="g5p-m4-s4s">
-                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
@@ -553,6 +557,7 @@
                             <outlet property="delegate" destination="iuM-6r-QhG" id="ch2-3r-WAM"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="Jjn-4f-d4c"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zmU-en-wX8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -763,7 +768,7 @@
         <scene sceneID="ugh-KA-mOB">
             <objects>
                 <navigationController id="1vT-2a-AXd" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Servers" image="settings_bar_item.png" id="auR-pC-Uqe"/>
+                    <tabBarItem key="tabBarItem" tag="3" title="Servers" image="settings_bar_item.png" id="auR-pC-Uqe"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="VFV-wZ-qWd">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -825,6 +830,9 @@
         </class>
         <class className="JMServersTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMServersTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="infoButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
         </class>
         <class className="TPKeyboardAvoidingScrollView" superclassName="UIScrollView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TPKeyboardAvoidingScrollView.h"/>
@@ -838,6 +846,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="dQB-9X-IRD"/>
         <segue reference="iUA-aA-WXK"/>
-        <segue reference="bQI-n6-E7D"/>
+        <segue reference="Y5l-Qb-Vpq"/>
     </inferredMetricsTieBreakers>
 </document>

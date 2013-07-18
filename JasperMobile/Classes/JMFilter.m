@@ -10,6 +10,8 @@
 #import "JMCancelRequestPopup.h"
 #import "UIAlertView+LocalizedAlert.h"
 
+static JMFilter * delegate;
+
 @interface JMFilter()
 @property (nonatomic, weak) id <JSRequestDelegate> delegate;
 @property (nonatomic, weak) UIViewController *viewControllerToDismiss;
@@ -25,10 +27,12 @@
 + (void)checkNetworkReachabilityForBlock:(void (^)(void))block viewControllerToDismiss:(id)viewController
 {
     if (![JSRESTBase isNetworkReachable]) {
+        delegate = [[JMFilter alloc] initWithDismissalViewController:viewController];
+        
         [JMCancelRequestPopup dismiss];
         [[UIAlertView localizedAlert:@"error.noconnection.dialog.title"
                              message:@"error.noconnection.dialog.msg"
-                            delegate:[[[self class] alloc] initWithDismissalViewController:viewController]
+                            delegate:delegate
                    cancelButtonTitle:@"dialog.button.ok"
                    otherButtonTitles:nil] show];
     } else {
@@ -62,6 +66,8 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    delegate = nil;
+    
     if (self.viewControllerToDismiss.navigationController) {
         [self.viewControllerToDismiss.navigationController popViewControllerAnimated:YES];
     }

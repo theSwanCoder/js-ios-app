@@ -10,7 +10,7 @@
 #import "JMCancelRequestPopup.h"
 #import "JMFilter.h"
 
-#define kJMRequestType @"type"
+static NSString * const kJMRequestType = @"type";
 
 @interface JMLibraryTableViewController()
 @property (nonatomic, strong) NSString *query;

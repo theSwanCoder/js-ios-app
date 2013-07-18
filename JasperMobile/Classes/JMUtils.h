@@ -12,13 +12,11 @@
 @interface JMUtils : NSObject
 
 /**
- Injects all required dependencies into navigation view controller that implements 
- JMResourceClientHolder protocol. Also sets title equals to resource's name or 
- profile's alias if resource is <b>nil</b>
+ Sets title equal to resource's name or profile's alias if resource is <b>nil</b>
  
- @param viewController A viewController to configure
+ @param viewController A viewController for which title will be set
  */
-+ (void)awakeFromNibForResourceViewController:(UIViewController <JMResourceClientHolder>*)viewController;
++ (void)setTitleForResourceViewController:(UIViewController <JMResourceClientHolder>*)viewController;
 
 /**
  Sets background images to the button.

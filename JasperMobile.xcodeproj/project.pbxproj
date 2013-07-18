@@ -233,8 +233,8 @@
 		F5D97F9C179587100059C761 /* JMReportOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportOptions.m; path = Classes/JMReportOptions.m; sourceTree = "<group>"; };
 		F5D97F9D179587100059C761 /* JMServerProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServerProfile.h; path = Classes/JMServerProfile.h; sourceTree = "<group>"; };
 		F5D97F9E179587100059C761 /* JMServerProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMServerProfile.m; path = Classes/JMServerProfile.m; sourceTree = "<group>"; };
-		F5D97F9F179587100059C761 /* JMServerProfile+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "JMServerProfile+Helpers.h"; path = "Classes/JMServerProfile+Helpers.h"; sourceTree = "<group>"; };
-		F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "JMServerProfile+Helpers.m"; path = "Classes/JMServerProfile+Helpers.m"; sourceTree = "<group>"; };
+		F5D97F9F179587100059C761 /* JMServerProfile+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "JMServerProfile+Helpers.h"; path = "JasperMobile/Classes/JMServerProfile+Helpers.h"; sourceTree = "<group>"; };
+		F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "JMServerProfile+Helpers.m"; path = "JasperMobile/Classes/JMServerProfile+Helpers.m"; sourceTree = "<group>"; };
 		F5D97FA8179587CF0059C761 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		F5D97FA9179587CF0059C761 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		F5DC4EA51769F01000038D58 /* JMResourceModifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourceModifyViewController.h; path = Classes/JMResourceModifyViewController.h; sourceTree = "<group>"; };
@@ -505,6 +505,8 @@
 				F514E69B175575AE00C9F61E /* UIAlertView+LocalizedAlert.m */,
 				F585FB6C176753460079D89C /* UITableViewController+CellRelativeHeight.h */,
 				F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */,
+				F5D97F9F179587100059C761 /* JMServerProfile+Helpers.h */,
+				F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */,
 			);
 			name = Categories;
 			path = ..;
@@ -606,8 +608,6 @@
 				F5D97F9C179587100059C761 /* JMReportOptions.m */,
 				F5D97F9D179587100059C761 /* JMServerProfile.h */,
 				F5D97F9E179587100059C761 /* JMServerProfile.m */,
-				F5D97F9F179587100059C761 /* JMServerProfile+Helpers.h */,
-				F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */,
 			);
 			name = Entities;
 			sourceTree = "<group>";

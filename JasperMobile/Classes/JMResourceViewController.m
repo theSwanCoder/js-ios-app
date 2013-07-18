@@ -40,7 +40,7 @@ typedef enum {
 @property (nonatomic, strong, readonly) NSDictionary *cellIdentifiers;
 @property (nonatomic, assign) JMRequestType requestType;
 
-- (void)fetchResourceDescriptor;
+- (void)refreshResourceDescriptor;
 - (JSResourceProperty *)resourcePropertyForIndexPath:(NSIndexPath *)indexPath;
 - (NSDictionary *)resourceDescriptorPropertyForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)localizedTextLabelTitleForProperty:(NSString *)property;
@@ -127,7 +127,7 @@ inject_default_rotation();
 
 - (void)awakeFromNib
 {
-    [JMUtils awakeFromNibForResourceViewController:self];
+    [[JSObjection defaultInjector] injectDependencies:self];
 }
 
 #pragma mark - UIViewController
@@ -135,7 +135,8 @@ inject_default_rotation();
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self fetchResourceDescriptor];
+    [JMUtils setTitleForResourceViewController:self];
+    [self refreshResourceDescriptor];
     self.resourceDescriptor = nil;
 }
 
@@ -155,8 +156,7 @@ inject_default_rotation();
 - (void)viewWillAppear:(BOOL)animated
 {
     if (self.needsToRefreshResourceDescriptorData) {
-        [self fetchResourceDescriptor];
-        self.needsToRefreshResourceDescriptorData = NO;
+        [self refreshResourceDescriptor];        
     }
 }
 
@@ -268,20 +268,26 @@ inject_default_rotation();
 {
     if (self.requestType == JMGetResourceRequest) {
         self.resourceDescriptor = [result.objects objectAtIndex:0];
+        
+        if (self.needsToRefreshResourceDescriptorData) {
+            self.needsToRefreshResourceDescriptorData = NO;
+            [self.delegate refreshWithResource:self.resourceDescriptor];
+        }
+        
         [self.tableView reloadData];
     } else if (self.requestType == JMDeleteResourceRequest) {
 #warning Finish Favorites Implementation
 //        if ([[JasperMobileAppDelegate sharedInstance].favorites isResourceInFavorites:self.descriptor]) {
 //            [[JasperMobileAppDelegate sharedInstance].favorites removeFromFavorites:self.descriptor];
 //        }
-        [self.delegate removeResource:self.resourceDescriptor];
+        [self.delegate removeResource];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
 #pragma mark - Private
 
-- (void)fetchResourceDescriptor
+- (void)refreshResourceDescriptor
 {
     [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
         [self.navigationController popViewControllerAnimated:YES];

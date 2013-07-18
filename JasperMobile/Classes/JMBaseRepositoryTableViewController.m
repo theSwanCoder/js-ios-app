@@ -18,6 +18,7 @@ static NSString * const kJMUnknownCell = @"UnknownCell";
 @interface JMBaseRepositoryTableViewController ()
 @property (nonatomic, strong) NSMutableArray *resources;
 @property (nonatomic, strong, readonly) NSDictionary *cellIdentifiers;
+@property (nonatomic, strong) NSIndexPath *lastIndexPath;
 
 - (JSResourceDescriptor *)resourceDescriptorForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)cellIdentifierForResourceType:(NSString *)resourceType;
@@ -60,7 +61,12 @@ inject_default_rotation()
 
 - (void)awakeFromNib
 {
-    [JMUtils awakeFromNibForResourceViewController:self];
+    [[JSObjection defaultInjector] injectDependencies:self];
+}
+
+- (void)viewDidLoad
+{
+    [JMUtils setTitleForResourceViewController:self];
 }
 
 #pragma mark - UIViewController
@@ -71,6 +77,7 @@ inject_default_rotation()
     id destinationViewController = segue.destinationViewController;
     
     if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
+        self.lastIndexPath = indexPath;
         JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
         [destinationViewController setResourceDescriptor:resourceDescriptor];
     }
@@ -125,15 +132,16 @@ inject_default_rotation()
 
 #pragma mark - JMResourceViewControllerDelegate
 
-- (void)removeResource:(JSResourceDescriptor *)resourceDescriptor
+- (void)removeResource
+{    
+    [self.resources removeObjectAtIndex:self.lastIndexPath.row];
+    [self.tableView reloadData];
+}
+
+- (void)refreshWithResource:(JSResourceDescriptor *)resourceDescriptor
 {
-    for (JSResourceDescriptor *resource in self.resources) {
-        if ([resource.uriString isEqualToString:resourceDescriptor.uriString]) {
-            [self.resources removeObject:resource];
-            [self.tableView reloadData];
-            break;
-        }
-    }
+    [self.resources replaceObjectAtIndex:self.lastIndexPath.row withObject:resourceDescriptor];
+    [self.tableView reloadRowsAtIndexPaths:@[self.lastIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - Private

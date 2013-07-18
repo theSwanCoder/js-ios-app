@@ -12,9 +12,8 @@
 
 @implementation JMUtils
 
-+ (void)awakeFromNibForResourceViewController:(UIViewController <JMResourceClientHolder>*)viewController
++ (void)setTitleForResourceViewController:(UIViewController<JMResourceClientHolder> *)viewController
 {
-    [[JSObjection defaultInjector] injectDependencies:viewController];
     viewController.navigationItem.title = viewController.resourceDescriptor.label ?: viewController.resourceClient.serverProfile.alias;
 }
 

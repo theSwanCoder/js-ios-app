@@ -11,6 +11,8 @@
 #import "JMCancelRequestPopup.h"
 
 @interface JMSearchTableViewController ()
+@property (nonatomic, strong) UISearchBar *searchBar;
+
 - (void)hideSearchBar:(UISearchBar *)searchBar animated:(BOOL)animated;
 @end
 
@@ -22,15 +24,15 @@
 {
     [super viewDidLoad];
 
-    UISearchBar *searchBar = [[UISearchBar alloc] init];
-    searchBar.delegate = self;
+    self.searchBar = [[UISearchBar alloc] init];
+    self.searchBar.delegate = self;
     
     // TODO: change to proper message
-    searchBar.placeholder = JMCustomLocalizedString(@"Search resources", nil);
-    [searchBar sizeToFit];
+    self.searchBar.placeholder = JMCustomLocalizedString(@"Search resources", nil);
+    [self.searchBar sizeToFit];
     
-    self.tableView.tableHeaderView = searchBar;
-    [self hideSearchBar:searchBar animated:NO];
+    self.tableView.tableHeaderView = self.searchBar;
+    [self hideSearchBar:self.searchBar animated:NO];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -60,6 +62,14 @@
                                   progressMessage:@"status.searching"
                                        restClient:self.resourceClient
                                       cancelBlock:nil];
+}
+
+#pragma mark - JMResourceViewControllerDelegate
+
+- (void)refreshWithResource:(JSResourceDescriptor *)resourceDescriptor
+{
+    [super refreshWithResource:resourceDescriptor];
+    [self hideSearchBar:self.searchBar animated:NO];
 }
 
 #pragma mark - Private

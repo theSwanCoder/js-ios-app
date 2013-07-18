@@ -21,7 +21,8 @@
 
 @protocol JMResourceViewControllerDelegate <NSObject>
 @required
-- (void)removeResource:(JSResourceDescriptor *)resourceDescriptor;
+- (void)removeResource;
+- (void)refreshWithResource:(JSResourceDescriptor *)resourceDescriptor;
 
 @end
 

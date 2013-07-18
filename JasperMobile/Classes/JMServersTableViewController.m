@@ -18,6 +18,9 @@
 @property (nonatomic, strong) UIBarButtonItem *editButton;
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
 @property (nonatomic, strong) NSMutableArray *servers;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *infoButton;
+
+- (NSIndexPath *)indexPathForTheNewServerCell;
 @end
 
 @implementation JMServersTableViewController
@@ -29,6 +32,7 @@ objection_requires(@"managedObjectContext");
 {
     [[JSObjection defaultInjector] injectDependencies:self];
     
+    self.infoButton.title = JMCustomLocalizedString(@"dialog.button.info", nil);
     self.editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editServers:)];
     self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditing:)];
 }
@@ -39,6 +43,7 @@ objection_requires(@"managedObjectContext");
 {
     [super viewDidLoad];
     
+    self.title = JMCustomLocalizedString(@"view.servers", nil);
     self.navigationItem.rightBarButtonItem = self.editButton;
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
@@ -50,6 +55,12 @@ objection_requires(@"managedObjectContext");
     }
 }
 
+- (void)viewDidUnload
+{
+    [self setInfoButton:nil];
+    [super viewDidUnload];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -59,18 +70,25 @@ objection_requires(@"managedObjectContext");
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.servers.count;
+    return self.tableView.isEditing ? self.servers.count + 1 : self.servers.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"ServerCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    static NSString *serverCellIdentifier = @"ServerCell";
+    static NSString *newServerCellIdentifier = @"NewServerCell";
     
-    JMServerProfile *server = [self.servers objectAtIndex:indexPath.row];
+    UITableViewCell *cell;
     
-    cell.textLabel.text = server.alias;
-    cell.detailTextLabel.text = server.serverUrl;
+    if (self.tableView.isEditing && indexPath.row == self.servers.count) {
+        cell = [tableView dequeueReusableCellWithIdentifier:newServerCellIdentifier];
+        cell.textLabel.text = JMCustomLocalizedString(@"servers.new.account.title", nil);
+    } else {
+        JMServerProfile *server = [self.servers objectAtIndex:indexPath.row];
+        cell = [tableView dequeueReusableCellWithIdentifier:serverCellIdentifier];
+        cell.textLabel.text = server.alias;
+        cell.detailTextLabel.text = server.serverUrl;
+    }
     
     return cell;
 }
@@ -80,44 +98,47 @@ objection_requires(@"managedObjectContext");
     return JMCustomLocalizedString(@"servers.profile.title", nil);
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    if (self.tableView.isEditing && indexPath.row == self.servers.count) {
+        return UITableViewCellEditingStyleNone;
+    }
+    
+    return UITableViewCellEditingStyleDelete;
 }
-*/
 
-/*
-// Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+        JMServerProfile *serverProfile = [self.servers objectAtIndex:indexPath.row];
+        
+        // TODO: Check if profile is not active
+        // ... isProfileUsed etc ...
+        
+        [self.servers removeObjectAtIndex:indexPath.row];
+//        [self.managedObjectContext deleteObject:serverProfile];
+//        [self.managedObjectContext save:nil];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
+    NSString *title;
+    
+    if (!self.tableView.isEditing) {
+        NSUInteger serversCount = self.servers.count;
+        
+        // TODO: change logic of displaying help and tips
+        if (serversCount == 0) {
+            title = JMCustomLocalizedString(@"servers.profile.configure.help", nil);
+        } else if(serversCount == 1 && [[[self.servers objectAtIndex:0] alias] isEqualToString:@"Jaspersoft Mobile Demo"]) {
+            title = JMCustomLocalizedString(@"servers.profile.configure.tips", nil);
+        }
+    }
+    
+    return title;
 }
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -140,10 +161,14 @@ objection_requires(@"managedObjectContext");
     // TODO: need implementation
     
     if (!self.servers.count) {
-        // Redirect to Add New Server directly
+        // TODO: Redirect to Add New Server directly
         
     } else {
         [self.tableView setEditing:YES animated:YES];
+        
+        // Add "New server account" table view cell
+        NSIndexPath *indexPath = [self indexPathForTheNewServerCell];
+        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
     }
 }
 
@@ -153,6 +178,9 @@ objection_requires(@"managedObjectContext");
     // TODO: need implementation
     
     [self.tableView setEditing:NO animated:YES];
+    
+    NSIndexPath *indexPath = [self indexPathForTheNewServerCell];   
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (IBAction)applicationInfo:(id)sender
@@ -165,6 +193,13 @@ objection_requires(@"managedObjectContext");
                         delegate:nil
                cancelButtonTitle:@"dialog.button.ok"
                otherButtonTitles:nil] show];
+}
+
+#pragma mark - Private
+
+- (NSIndexPath *)indexPathForTheNewServerCell
+{
+    return [NSIndexPath indexPathForRow:self.servers.count inSection:0];
 }
 
 @end

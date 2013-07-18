@@ -33,7 +33,7 @@ objection_requires(@"resourceClient");
 
 - (void)awakeFromNib
 {
-    [JMUtils awakeFromNibForResourceViewController:self];
+    [[JSObjection defaultInjector] injectDependencies:self];
 }
 
 #pragma mark - UIViewController
@@ -41,6 +41,8 @@ objection_requires(@"resourceClient");
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [JMUtils setTitleForResourceViewController:self];
     
     self.labelTextField.text = self.resourceDescriptor.label;
     self.labelTextField.delegate = self;
