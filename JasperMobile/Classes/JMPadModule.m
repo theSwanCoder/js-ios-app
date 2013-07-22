@@ -11,7 +11,8 @@
 
 @implementation JMPadModule
 
-- (void)configure {
+- (void)configure
+{
     [super configure];
     [self bind:[[JMPadRotation alloc] init] toProtocol:@protocol(JMRotatable)];
 }

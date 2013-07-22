@@ -21,19 +21,48 @@
  */
 
 //
-//  UIAlertView+LocalizedAlert.h
+//  JSAppUpdater.h
 //  Jaspersoft Corporation
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 /**
- @author Giulio Toffoli giulio@jaspersoft.com
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.3
- */
-@interface UIAlertView (LocalizedAlert)
+ This class automatically updates/moves NSUserDefaults or/and Core Data if 
+ application was updated from App Store. Idea is to store version of application 
+ inside NSUserDefaults, and if that version was changed then perform update.
+ Example: if old app was 1.0 version, and there was some major changes (i.e.
+ changed database structure), after updating to 1.2 updates 1.1 and 1.2 will
+ be performed (which adapts and move data from old to new database structure)
 
-+ (UIAlertView *)localizedAlertWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.2
+ */
+@interface JMAppUpdater : NSObject <UIAlertViewDelegate>
+
+/**
+ Performs all migrations and updates app to latest version
+ */
++ (void)update;
+
+/**
+ Updates app to specific version
+ */
++ (void)updateAppVersionTo:(NSNumber *)appVersion;
+
+/**
+ Returns current version of app structure (from user defaults)
+ */
++ (NSNumber *)currentAppVersion;
+
+/**
+ Returns lastets version of app structure (from bundles)
+ */
++ (NSNumber *)latestAppVersion;
+
+/**
+ Checks if update has any errors
+ */
++ (BOOL)hasErrors;
 
 @end

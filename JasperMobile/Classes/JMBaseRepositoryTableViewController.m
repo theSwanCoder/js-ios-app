@@ -8,6 +8,7 @@
 
 #import "JMBaseRepositoryTableViewController.h"
 #import "JMUtils.h"
+#import "JMRotationBase.h"
 #import "JMCancelRequestPopup.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
@@ -53,8 +54,7 @@ inject_default_rotation()
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:cell];
+    [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:indexPath];
 }
 
 #pragma mark - Initialization
@@ -73,12 +73,11 @@ inject_default_rotation()
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
     id destinationViewController = segue.destinationViewController;
     
     if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
-        self.lastIndexPath = indexPath;
-        JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
+        self.lastIndexPath = (NSIndexPath *)sender;
+        JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:self.lastIndexPath];
         [destinationViewController setResourceDescriptor:resourceDescriptor];
     }
     

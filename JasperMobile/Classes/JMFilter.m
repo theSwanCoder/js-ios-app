@@ -30,7 +30,7 @@ static JMFilter * delegate;
         delegate = [[JMFilter alloc] initWithDismissalViewController:viewController];
         
         [JMCancelRequestPopup dismiss];
-        [[UIAlertView localizedAlert:@"error.noconnection.dialog.title"
+        [[UIAlertView localizedAlertWithTitle:@"error.noconnection.dialog.title"
                              message:@"error.noconnection.dialog.msg"
                             delegate:delegate
                    cancelButtonTitle:@"dialog.button.ok"
@@ -54,7 +54,7 @@ static JMFilter * delegate;
     if ([result isSuccessful]) {
         [self.delegate requestFinished:result];
     } else {
-        [[UIAlertView localizedAlert:@"error.readingresponse.dialog.msg"
+        [[UIAlertView localizedAlertWithTitle:@"error.readingresponse.dialog.msg"
                              message:[NSString stringWithFormat:@"error.http.%i", result.statusCode]
                             delegate:nil
                    cancelButtonTitle:@"dialog.button.ok"

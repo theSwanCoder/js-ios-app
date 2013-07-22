@@ -8,11 +8,23 @@
 
 #import "JMMenuTabBarController.h"
 #import "JMUtils.h"
+#import "JMConstants.h"
+#import "JMRotationBase.h"
+#import "JMServerProfile.h"
 
 @implementation JMMenuTabBarController
 inject_default_rotation()
 
 #pragma mark - UIViewController
+
+- (void)awakeFromNib
+{
+    [self disableTabBar];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeServerProfile:)
+                                                 name:kJMChangeServerProfileNotification
+                                               object:nil];
+}
 
 - (void)viewDidLoad
 {
@@ -21,6 +33,37 @@ inject_default_rotation()
     // TODO: refactor without possilbe code duplication (as general solution for both devices)
     for (UITabBarItem *item in self.tabBar.items) {
         item.title = [JMUtils localizedTitleForMenuItemByTag:item.tag];
+    }
+}
+
+#pragma mark - Private
+
+// TODO: move to @protocol if there will be more than 1 implementation
+- (void)disableTabBar
+{
+    for (UITabBarItem *item in self.tabBar.items) {
+        if (item.tag != kJMServersMenuTag) {
+            item.enabled = NO;
+        }
+    }
+}
+
+- (void)enableTabBar
+{
+    for (UITabBarItem *item in self.tabBar.items) {
+        item.enabled = YES;
+    }
+}
+
+- (void)changeServerProfile:(NSNotification *)notification
+{
+    JMServerProfile *serverProfile = [[notification userInfo] objectForKey:kJMServerProfileKey];
+    if (!serverProfile) {
+        [self disableTabBar];
+        [self setSelectedIndex:kJMServersMenuTag];
+    } else {
+        [self enableTabBar];
+        [self setSelectedIndex:kJMLibraryMenuTag];
     }
 }
 

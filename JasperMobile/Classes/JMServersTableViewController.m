@@ -7,6 +7,7 @@
 //
 
 #import "JMServersTableViewController.h"
+#import "JMConstants.h"
 #import "JMLocalization.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "JMServerProfile+Helpers.h"
@@ -123,34 +124,47 @@ objection_requires(@"managedObjectContext");
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    NSString *title;
-    
+{   
     if (!self.tableView.isEditing) {
         NSUInteger serversCount = self.servers.count;
         
         // TODO: change logic of displaying help and tips
         if (serversCount == 0) {
-            title = JMCustomLocalizedString(@"servers.profile.configure.help", nil);
-        } else if(serversCount == 1 && [[[self.servers objectAtIndex:0] alias] isEqualToString:@"Jaspersoft Mobile Demo"]) {
-            title = JMCustomLocalizedString(@"servers.profile.configure.tips", nil);
+            return JMCustomLocalizedString(@"servers.profile.configure.help", nil);
+        } else if(serversCount == 1) {
+            return  JMCustomLocalizedString(@"servers.profile.configure.tips", nil);
         }
     }
     
-    return title;
+    return nil;
 }
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     DetailViewController *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    if (self.tableView.isEditing) {
+        
+        
+    } else {
+        JMServerProfile *serverProfile = [self.servers objectAtIndex:indexPath.row];
+        if (serverProfile.askPassword.boolValue) {
+            
+        }
+        
+        if (serverProfile.askPassword.boolValue) {
+            serverProfile.password = nil;
+            // TODO: need implementation for ask password
+        } else {
+            NSDictionary *userInfo = @{
+                kJMServerProfileKey : serverProfile
+            };
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
+                                                                object:nil
+                                                              userInfo:userInfo];
+        }
+    }
 }
 
 #pragma mark - Action
@@ -188,7 +202,7 @@ objection_requires(@"managedObjectContext");
     NSString *message = JMCustomLocalizedString(@"servers.info", nil);
     // TODO: replace with normal version from app updater
     message = [NSString stringWithFormat:message, @1.6];
-    [[UIAlertView localizedAlert:nil
+    [[UIAlertView localizedAlertWithTitle:nil
                          message:message
                         delegate:nil
                cancelButtonTitle:@"dialog.button.ok"

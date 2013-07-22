@@ -16,13 +16,21 @@
 
 - (void)configure
 {
+    // Set visibility scope
     [self bindClass:[JSProfile class] inScope:JSObjectionScopeSingleton];
     [self bindClass:[JSRESTReport class] inScope:JSObjectionScopeSingleton];
     [self bindClass:[JSRESTResource class] inScope:JSObjectionScopeSingleton];
     [self bindClass:[JSConstants class] inScope:JSObjectionScopeSingleton];
     [self bindClass:[NSManagedObjectContext class] inScope:JSObjectionScopeSingleton];
-    [self bind:[[JSRESTReport alloc] init] toClass:[JSRESTReport class]];
-    [self bind:[[JSRESTResource alloc] init] toClass:[JSRESTResource class]];
+    
+    JSRESTReport *reportClient = [[JSRESTReport alloc] init];
+    JSRESTResource *resourceClient = [[JSRESTResource alloc] init];
+    // Set "continue request" as a default request background policy
+    reportClient.requestBackgroundPolicy = JSRequestBackgroundPolicyContinue;
+    resourceClient.requestBackgroundPolicy = JSRequestBackgroundPolicyContinue;
+    
+    [self bind:reportClient toClass:[JSRESTReport class]];
+    [self bind:resourceClient toClass:[JSRESTResource class]];
     [self bind:[[JSConstants alloc] init] toClass:[JSConstants class]];
     [self bind:self.managedObjectContext toClass:[NSManagedObjectContext class]];
 }

@@ -8,22 +8,50 @@
 
 #import "JasperMobileAppDelegate.h"
 #import "JMPhoneModule.h"
+#import "JMConstants.h"
 #import "JMPadModule.h"
+#import "JMAppUpdater.h"
+#import "JMReportClientHolder.h"
+#import "JMResourceClientHolder.h"
+#import "JMServerProfile+Helpers.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import <Objection-iOS/Objection.h>
 
 static NSString * const kJMProductName = @"JasperMobile";
+static NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";
+static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
+
+@interface JasperMobileAppDelegate() <JMResourceClientHolder, JMReportClientHolder>
+@end
 
 @implementation JasperMobileAppDelegate
 
+@synthesize reportClient = _reportClient;
+@synthesize resourceClient = _resourceClient;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
+#pragma mark - Initialization
 
 - (id)init
 {
     if (self == [super init]) {
         [self initObjectionModules];
+        
+        // Check if app is running for the first time
+        if (![JMAppUpdater currentAppVersion]) {
+            [JMAppUpdater updateAppVersionTo:[JMAppUpdater latestAppVersion]];
+            [self coreDataInit];
+        } else {
+            [JMAppUpdater update];
+        }
+        
+        // Add notification to track selecting of the another server profile
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(changeServerProfile:)
+                                                     name:kJMChangeServerProfileNotification
+                                                   object:nil];
     }
     
     return self;
@@ -31,6 +59,15 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    JMServerProfile *serverProfile = [self activeServerProfile];
+    
+    NSDictionary *userInfo = serverProfile ? @{
+        kJMServerProfileKey : serverProfile
+    } : nil;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
+                                                        object:nil
+                                                      userInfo:userInfo];
     return YES;
 }
 							
@@ -53,7 +90,7 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [self updateTimeouts];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -146,12 +183,6 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (void)initObjectionModules
 {
-    JSProfile *profile = [[JSProfile alloc] initWithAlias:@"MobileDemo"
-                                                 username:@"jasperadmin"
-                                                 password:@"jasperadmin"
-                                             organization:@"organization_1"
-                                                serverUrl:@"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
-    
     JMBaseModule *module;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         module = [[JMPadModule alloc] init];
@@ -164,10 +195,106 @@ static NSString * const kJMProductName = @"JasperMobile";
     JSObjectionInjector *injector = [JSObjection createInjector:module];
     [JSObjection setDefaultInjector:injector];
     
-    JSRESTResource *resource = [injector getObject:[JSRESTResource class]];
-    resource.serverProfile = profile;
-    JSRESTReport *report = [injector getObject:[JSRESTReport class]];
-    report.serverProfile = profile;
+    // Inject resource and report clients
+    self.resourceClient = [injector getObject:[JSRESTResource class]];
+    self.reportClient = [injector getObject:[JSRESTReport class]];
+}
+
+- (void)coreDataInit
+{
+    JMServerProfile *serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
+    
+    serverProfile.alias = @"Jaspersoft Mobile Demo";
+    serverProfile.username = @"phoneuser";
+    serverProfile.password = @"phoneuser";
+    serverProfile.organization = @"organization_1";
+    serverProfile.serverUrl = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
+    serverProfile.askPassword = [NSNumber numberWithBool:NO];
+    
+    [self.managedObjectContext save:nil];
+    [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:[serverProfile encodedProfileID]];
+}
+
+- (void)changeServerProfile:(NSNotification *)notification {
+    JMServerProfile *serverProfile = [[notification userInfo] objectForKey:kJMServerProfileKey];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    if (serverProfile == nil) {
+        [defaults removeObjectForKey:@"jaspersoft.server.active"];
+        [self disableMenu];
+    } else {
+        JSProfile *profile = [[JSProfile alloc] initWithAlias:serverProfile.alias
+                                                     username:serverProfile.username
+                                                     password:serverProfile.password
+                                                 organization:serverProfile.organization
+                                                    serverUrl:serverProfile.serverUrl];
+        // Set connection details
+        self.reportClient.serverProfile = profile;
+        self.resourceClient.serverProfile = profile;
+        
+        // Forces to refresh server info
+        [self.resourceClient serverInfo];
+        
+        // Update timeouts
+        [self updateTimeouts];
+        
+        // TODO: favorites implementation needed
+        //        self.favorites = [[JSFavoritesHelper alloc] initWithServerProfile:serverProfile];
+        //        self.reportOptions = [[JSReportOptionsHelper alloc] initWithServerProfile:serverProfile];
+        
+        [defaults setURL:[[serverProfile objectID] URIRepresentation] forKey:@"jaspersoft.server.active"];
+    }
+    
+    [defaults synchronize];
+}
+
+// Loads timeout for report / other type of requests from project settings
+// (defined in Settings.bundle)
+- (void)updateTimeouts
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    self.resourceClient.timeoutInterval = [prefs integerForKey:kJMDefaultRequestTimeout] ?: 30;
+    self.reportClient.timeoutInterval = [prefs integerForKey:kJMReportRequestTimeout] ?: 90;
+}
+
+// Resets whole database for (sqlite + NSUserDefaults)
+- (void)resetDatabase
+{
+    [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
+    NSArray *stores = [self.persistentStoreCoordinator persistentStores];
+    
+    for (NSPersistentStore *store in stores) {
+        [self.persistentStoreCoordinator removePersistentStore:store error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:nil];
+    }
+    
+    // This will forces app to recreate db
+    _managedObjectModel = nil;
+    _managedObjectContext = nil;
+    _persistentStoreCoordinator = nil;
+}
+
+- (JMServerProfile *)activeServerProfile
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSManagedObjectID *activeServerID = [[self persistentStoreCoordinator] managedObjectIDForURIRepresentation:[defaults URLForKey:kJMDefaultsActiveServer]];
+    
+    if (activeServerID) {
+        JMServerProfile *serverProfile = (JMServerProfile *)[self.managedObjectContext existingObjectWithID:activeServerID error:nil];
+        if (serverProfile) {
+            serverProfile.password = [JMServerProfile passwordFromKeychain:serverProfile.encodedProfileID];
+        }
+        
+        return serverProfile;
+    }
+    
+    return nil;
+}
+
+// TODO: logic needed
+- (void)disableMenu
+{
+//    self.
 }
 
 @end

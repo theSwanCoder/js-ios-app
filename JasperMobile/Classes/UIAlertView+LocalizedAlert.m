@@ -30,8 +30,9 @@
 
 @implementation UIAlertView (LocalizedAlert)
 
-+ (UIAlertView *)localizedAlert:(NSString *)title message:(NSString *)message delegate:(id <UIAlertViewDelegate>)delegate
-              cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION {
++ (UIAlertView *)localizedAlertWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate
+              cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION
+{
     UIAlertView *view = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(title, nil)
                                                    message:JMCustomLocalizedString(message, nil) 
                                                   delegate:delegate 

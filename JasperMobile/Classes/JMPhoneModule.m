@@ -11,7 +11,8 @@
 
 @implementation JMPhoneModule
 
-- (void)configure {
+- (void)configure
+{
     [super configure];
     [self bind:[[JMPhoneRotation alloc] init] toProtocol:@protocol(JMRotatable)];
 }

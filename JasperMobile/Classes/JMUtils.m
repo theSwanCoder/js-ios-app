@@ -7,6 +7,7 @@
 //
 
 #import "JMUtils.h"
+#import "JMConstants.h"
 #import "JMLocalization.h"
 #import <Objection-iOS/Objection.h>
 
@@ -35,16 +36,16 @@
     NSString *title = @"";
     
     switch (tag) {
-        case 0:
+        case kJMLibraryMenuTag:
             title = @"view.library";
             break;
-        case 1:
+        case kJMRepositoryMenuTag:
             title = @"view.repository";
             break;
-        case 2:
+        case kJMFavoritesMenuTag:
             title = @"view.favorites";
             break;
-        case 3:
+        case kJMServersMenuTag:
             title = @"view.servers";
     }
     

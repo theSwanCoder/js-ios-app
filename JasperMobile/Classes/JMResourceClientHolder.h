@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import <jaspersoft-sdk/JSRESTResource.h>
+#import <jaspersoft-sdk/JSResourceDescriptor.h>
 
 /**
  This protocol aggregates all the information implementing object should know about 
@@ -17,6 +18,8 @@
 
 @required
 @property (nonatomic, strong) JSRESTResource *resourceClient;
+
+@optional
 @property (nonatomic, strong) JSResourceDescriptor *resourceDescriptor;
 
 @end

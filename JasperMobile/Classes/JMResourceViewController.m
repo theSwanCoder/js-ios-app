@@ -10,6 +10,7 @@
 #import "JMUtils.h"
 #import "JMFilter.h"
 #import "JMLocalization.h"
+#import "JMRotationBase.h"
 #import "JMCancelRequestPopup.h"
 #import "JMBaseRepositoryTableViewController.h"
 #import "UIAlertView+LocalizedAlert.h"
@@ -237,7 +238,7 @@ inject_default_rotation();
 
 - (IBAction)deleteResource:(id)sender
 {
-    [[UIAlertView localizedAlert:@"delete.dialog.title"
+    [[UIAlertView localizedAlertWithTitle:@"delete.dialog.title"
                          message:@"delete.dialog.msg"
                         delegate:self
                cancelButtonTitle:@"dialog.button.cancel"
