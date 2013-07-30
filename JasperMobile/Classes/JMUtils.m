@@ -9,7 +9,6 @@
 #import "JMUtils.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
-#import <Objection-iOS/Objection.h>
 
 @implementation JMUtils
 
@@ -50,6 +49,17 @@
     }
     
     return JMCustomLocalizedString(title, nil);
+}
+
++ (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile
+{
+    NSDictionary *userInfo = serverProfile ? @{
+        kJMServerProfileKey : serverProfile
+    } : nil;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
+                                                        object:nil
+                                                      userInfo:userInfo];
 }
 
 @end

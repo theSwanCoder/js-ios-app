@@ -7,16 +7,15 @@
 //
 
 #import "JMResourceModifyViewController.h"
-#import "JMUtils.h"
 #import "JMFilter.h"
 #import "JMLocalization.h"
+#import "JMUtils.h"
 #import <QuartzCore/QuartzCore.h>
 #import <Objection-iOS/Objection.h>
 
 @interface JMResourceModifyViewController ()
 @property (nonatomic, weak) IBOutlet UITextField *labelTextField;
 @property (nonatomic, weak) IBOutlet UITextView *descriptionTextView;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *doneButton;
 @property (nonatomic, weak) IBOutlet UILabel *label;
 @property (nonatomic, weak) IBOutlet UILabel *description;
 @end
@@ -58,7 +57,6 @@ objection_requires(@"resourceClient");
 {
     [self setLabelTextField:nil];
     [self setDescriptionTextView:nil];
-    [self setDoneButton:nil];
     [self setLabel:nil];
     [self setDescription:nil];
     [super viewDidUnload];

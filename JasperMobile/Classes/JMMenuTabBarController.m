@@ -7,10 +7,10 @@
 //
 
 #import "JMMenuTabBarController.h"
-#import "JMUtils.h"
 #import "JMConstants.h"
 #import "JMRotationBase.h"
 #import "JMServerProfile.h"
+#import "JMUtils.h"
 
 @implementation JMMenuTabBarController
 inject_default_rotation()

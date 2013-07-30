@@ -7,8 +7,8 @@
 //
 
 #import "JMSearchTableViewController.h"
-#import "JMLocalization.h"
 #import "JMCancelRequestPopup.h"
+#import "JMLocalization.h"
 
 @interface JMSearchTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;

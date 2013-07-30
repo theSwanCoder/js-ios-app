@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "JMResourceClientHolder.h"
+#import "JMServerProfile.h"
 
 @interface JMUtils : NSObject
 
@@ -35,5 +36,12 @@
  @param tag A tag for the item
  */
 + (NSString *)localizedTitleForMenuItemByTag:(NSInteger)tag;
+
+/**
+ Sends "changeServerProfile" notification to defaultCenter
+ 
+ @param serverProfile A profile that will be provided to receiver via userInfo dictionary (kJMServerProfileKey key)
+ */
++ (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile;
 
 @end

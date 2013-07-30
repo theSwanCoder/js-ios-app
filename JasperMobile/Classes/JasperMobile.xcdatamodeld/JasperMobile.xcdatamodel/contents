@@ -28,8 +28,8 @@
         <relationship name="reportOptions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReportOptions" inverseName="serverProfile" inverseEntity="ReportOptions" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Favorites" positionX="-207" positionY="-117" width="128" height="135"/>
-        <element name="ReportOptions" positionX="169" positionY="-117" width="128" height="150"/>
+        <element name="Favorites" positionX="-200" positionY="-144" width="128" height="135"/>
+        <element name="ReportOptions" positionX="187" positionY="-150" width="128" height="150"/>
         <element name="ServerProfile" positionX="-18" positionY="-261" width="128" height="165"/>
     </elements>
 </model>

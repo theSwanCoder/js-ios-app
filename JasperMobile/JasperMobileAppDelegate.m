@@ -7,13 +7,15 @@
 //
 
 #import "JasperMobileAppDelegate.h"
-#import "JMPhoneModule.h"
+#import "JMAppUpdater.h"
+#import "JMAskPasswordDialog.h"
 #import "JMConstants.h"
 #import "JMPadModule.h"
-#import "JMAppUpdater.h"
+#import "JMPhoneModule.h"
 #import "JMReportClientHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMUtils.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import <Objection-iOS/Objection.h>
 
@@ -61,13 +63,14 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 {
     JMServerProfile *serverProfile = [self activeServerProfile];
     
-    NSDictionary *userInfo = serverProfile ? @{
-        kJMServerProfileKey : serverProfile
-    } : nil;
+    if (serverProfile.askPassword.boolValue) {
+        [[JMAskPasswordDialog askPasswordDialogForServerProfile:serverProfile] show];
+        // Setting server profile to "nil" indicates that application menu should be disabled (except Servers tab)
+        serverProfile = nil;
+    }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
-                                                        object:nil
-                                                      userInfo:userInfo];
+    [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
+    
     return YES;
 }
 							
@@ -220,8 +223,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     if (serverProfile == nil) {
-        [defaults removeObjectForKey:@"jaspersoft.server.active"];
-        [self disableMenu];
+        [defaults removeObjectForKey:kJMDefaultsActiveServer];
     } else {
         JSProfile *profile = [[JSProfile alloc] initWithAlias:serverProfile.alias
                                                      username:serverProfile.username
@@ -242,7 +244,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
         //        self.favorites = [[JSFavoritesHelper alloc] initWithServerProfile:serverProfile];
         //        self.reportOptions = [[JSReportOptionsHelper alloc] initWithServerProfile:serverProfile];
         
-        [defaults setURL:[[serverProfile objectID] URIRepresentation] forKey:@"jaspersoft.server.active"];
+        [defaults setURL:[serverProfile.objectID URIRepresentation] forKey:kJMDefaultsActiveServer];
     }
     
     [defaults synchronize];
@@ -289,12 +291,6 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     }
     
     return nil;
-}
-
-// TODO: logic needed
-- (void)disableMenu
-{
-//    self.
 }
 
 @end

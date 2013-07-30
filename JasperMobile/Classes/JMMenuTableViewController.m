@@ -7,9 +7,9 @@
 //
 
 #import "JMMenuTableViewController.h"
-#import "JMSplitViewBarButtonPresenterProtocol.h"
-#import "JMRotationBase.h"
 #import "JMLocalization.h"
+#import "JMRotationBase.h"
+#import "JMSplitViewBarButtonPresenterProtocol.h"
 
 @implementation JMMenuTableViewController
 inject_default_rotation();

@@ -26,11 +26,10 @@
 //
 
 #import "JMAppUpdater.h"
-#import "JasperMobileAppDelegate.h"
-#import "JMServerProfile+Helpers.h"
+#import "JMConstants.h"
 #import "JMFavorites.h"
 #import "JMLocalization.h"
-#import "JMConstants.h"
+#import "JMServerProfile+Helpers.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
 
@@ -79,6 +78,7 @@ static NSManagedObjectContext * managedObjectContext;
     for (NSNumber *version in versionsToUpdate.allKeys) {
         SEL selector = [[versionsToUpdate objectForKey:version] pointerValue];
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:selector]];
+        invocation.selector = selector;
         invocation.target = self;
         [invocation invoke];
         
@@ -257,7 +257,8 @@ static NSManagedObjectContext * managedObjectContext;
 
 #pragma mark - Alert view delegate methods
 
-+ (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
++ (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     if (buttonIndex == 1) {
         [JMAppUpdater update];
     } else if (buttonIndex == 2) {

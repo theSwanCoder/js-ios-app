@@ -41,6 +41,10 @@
 "servers.askpassword.label" = "Always ask for password";
 "servers.askpassword.dialog.title.label" = "Enter Password";
 
+// TODO: localize for other bundles
+"servers.title.new" = "New Server Profile";
+"servers.title.edit" = "Edit Server Profile";
+
 /* Navigation and view labels */
 
 "view.servers" = "Servers";

@@ -1,0 +1,17 @@
+//
+//  JMServerSettingsTableViewController.h
+//  JasperMobile
+//
+//  Created by Vlad Zavadskii on 7/25/13.
+//  Copyright (c) 2013 com.jaspersoft. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "JMServerProfile+Helpers.h"
+
+@interface JMServerSettingsTableViewController : UITableViewController <UITextFieldDelegate>
+
+@property (nonatomic, strong) JMServerProfile *serverToEdit;
+@property (nonatomic, strong) NSArray *servers;
+
+@end

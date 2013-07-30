@@ -7,9 +7,9 @@
 //
 
 #import "JMBaseRepositoryTableViewController.h"
-#import "JMUtils.h"
-#import "JMRotationBase.h"
 #import "JMCancelRequestPopup.h"
+#import "JMRotationBase.h"
+#import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
 
@@ -18,7 +18,7 @@ static NSString * const kJMUnknownCell = @"UnknownCell";
 
 @interface JMBaseRepositoryTableViewController ()
 @property (nonatomic, strong) NSMutableArray *resources;
-@property (nonatomic, strong, readonly) NSDictionary *cellIdentifiers;
+@property (nonatomic, strong, readonly) NSDictionary *cellsIdentifiers;
 @property (nonatomic, strong) NSIndexPath *lastIndexPath;
 
 - (JSResourceDescriptor *)resourceDescriptorForIndexPath:(NSIndexPath *)indexPath;
@@ -34,7 +34,7 @@ inject_default_rotation()
 @synthesize resourceClient = _resourceClient;
 @synthesize constants = _constants;
 @synthesize resourceDescriptor = _resourceDescriptor;
-@synthesize cellIdentifiers = _cellIdentifiers;
+@synthesize cellsIdentifiers = _cellIdentifiers;
 
 - (NSDictionary *)cellIdentifiers
 {
@@ -54,7 +54,8 @@ inject_default_rotation()
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:indexPath];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:cell];
 }
 
 #pragma mark - Initialization
@@ -64,20 +65,21 @@ inject_default_rotation()
     [[JSObjection defaultInjector] injectDependencies:self];
 }
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [JMUtils setTitleForResourceViewController:self];
 }
-
-#pragma mark - UIViewController
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     id destinationViewController = segue.destinationViewController;
     
     if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
-        self.lastIndexPath = (NSIndexPath *)sender;
-        JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:self.lastIndexPath];
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        self.lastIndexPath = indexPath;
+        JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
         [destinationViewController setResourceDescriptor:resourceDescriptor];
     }
     
@@ -117,7 +119,8 @@ inject_default_rotation()
     NSString *cellIdentifier = [self cellIdentifierForResourceType:resourceDescriptor.wsType];
     
     if ([cellIdentifier isEqualToString:kJMUnknownCell]) {
-        [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:self];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:cell];
     }
 }
 
@@ -152,7 +155,7 @@ inject_default_rotation()
 
 - (NSString *)cellIdentifierForResourceType:(NSString *)resourceType
 {
-    return [self.cellIdentifiers objectForKey:resourceType] ?: kJMUnknownCell;
+    return [self.cellsIdentifiers objectForKey:resourceType] ?: kJMUnknownCell;
 }
 
 @end

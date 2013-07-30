@@ -27,9 +27,9 @@
 
 #import "JMServerProfile+Helpers.h"
 #import "SSKeychain.h"
-#import <jaspersoft-sdk/JSProfile.h>
-#import <CommonCrypto/CommonDigest.h>
 #import <objc/runtime.h>
+#import <CommonCrypto/CommonDigest.h>
+#import <jaspersoft-sdk/JSProfile.h>
 
 @implementation JMServerProfile (Helpers)
 

@@ -7,12 +7,20 @@
 //
 
 #import "JMServersTableViewController.h"
+#import "JMAskPasswordDialog.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
-#import "UIAlertView+LocalizedAlert.h"
+#import "JMUtils.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMServerSettingsTableViewController.h"
+#import "UIAlertView+LocalizedAlert.h"
 #import <CoreData/CoreData.h>
 #import <Objection-iOS/Objection.h>
+
+static NSString * const kJMEditServerSegue = @"EditServer";
+
+static NSInteger const kJMServersSection = 0;
+static NSInteger const kJMFooterSection = 1;
 
 @interface JMServersTableViewController ()
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
@@ -40,6 +48,12 @@ objection_requires(@"managedObjectContext");
 
 #pragma mark - UIViewController
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    [segue.destinationViewController setServerToEdit:sender];
+    [segue.destinationViewController setServers:self.servers];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -66,12 +80,16 @@ objection_requires(@"managedObjectContext");
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.tableView.isEditing ? self.servers.count + 1 : self.servers.count;
+    if (section == kJMServersSection) {
+        return self.tableView.isEditing ? self.servers.count + 1 : self.servers.count;
+    }
+    
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -96,7 +114,11 @@ objection_requires(@"managedObjectContext");
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return JMCustomLocalizedString(@"servers.profile.title", nil);
+    if (section == kJMServersSection) {
+        return JMCustomLocalizedString(@"servers.profile.title", nil);
+    }
+    
+    return nil;
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -113,19 +135,30 @@ objection_requires(@"managedObjectContext");
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         JMServerProfile *serverProfile = [self.servers objectAtIndex:indexPath.row];
         
-        // TODO: Check if profile is not active
-        // ... isProfileUsed etc ...
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults URLForKey:kJMDefaultsActiveServer];
         
         [self.servers removeObjectAtIndex:indexPath.row];
-//        [self.managedObjectContext deleteObject:serverProfile];
-//        [self.managedObjectContext save:nil];
+        [self.managedObjectContext deleteObject:serverProfile];
+        [self.managedObjectContext save:nil];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        NSURL *serverProfileID = [serverProfile.objectID URIRepresentation];
+        NSURL *activeProfileID = [defaults URLForKey:kJMDefaultsActiveServer];
+        
+        // Check if profile to delete is an active
+        if ([serverProfileID isEqual:activeProfileID]) {
+            // Sets server profile to nil
+            [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
+                                                                object:nil
+                                                              userInfo:nil];
+        }
     }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {   
-    if (!self.tableView.isEditing) {
+    if (!self.tableView.isEditing && section == kJMFooterSection) {
         NSUInteger serversCount = self.servers.count;
         
         // TODO: change logic of displaying help and tips
@@ -143,26 +176,20 @@ objection_requires(@"managedObjectContext");
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.tableView.isEditing) {
-        
-        
+    if (self.tableView.isEditing || indexPath.row == self.servers.count) {
+        JMServerProfile *serverProfile = indexPath.row < self.servers.count ? [self.servers objectAtIndex:indexPath.row] : nil;
+        [self performSegueWithIdentifier:kJMEditServerSegue sender:serverProfile];
     } else {
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        cell.selected = NO;
+        
         JMServerProfile *serverProfile = [self.servers objectAtIndex:indexPath.row];
-        if (serverProfile.askPassword.boolValue) {
-            
-        }
         
         if (serverProfile.askPassword.boolValue) {
             serverProfile.password = nil;
-            // TODO: need implementation for ask password
+            [[JMAskPasswordDialog askPasswordDialogForServerProfile:serverProfile] show];
         } else {
-            NSDictionary *userInfo = @{
-                kJMServerProfileKey : serverProfile
-            };
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
-                                                                object:nil
-                                                              userInfo:userInfo];
+            [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
         }
     }
 }
@@ -194,7 +221,8 @@ objection_requires(@"managedObjectContext");
     [self.tableView setEditing:NO animated:YES];
     
     NSIndexPath *indexPath = [self indexPathForTheNewServerCell];   
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kJMFooterSection] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (IBAction)applicationInfo:(id)sender
