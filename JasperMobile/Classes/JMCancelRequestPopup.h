@@ -21,7 +21,7 @@
  */
 
 //
-//  JMAskPasswordDialog.h
+//  JMCancelRequestPopup.h
 //  Jaspersoft Corporation
 //
 

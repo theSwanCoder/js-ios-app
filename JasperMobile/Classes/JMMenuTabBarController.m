@@ -21,7 +21,7 @@
  */
 
 //
-//  JMTabBarController.m
+//  JMMenuTabBarController.m
 //  Jaspersoft Corporation
 //
 
