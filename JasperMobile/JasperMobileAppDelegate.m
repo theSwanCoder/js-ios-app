@@ -215,7 +215,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     serverProfile.askPassword = [NSNumber numberWithBool:NO];
     
     [self.managedObjectContext save:nil];
-    [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:[serverProfile encodedProfileID]];
+    [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:serverProfile.profileID];
 }
 
 - (void)changeServerProfile:(NSNotification *)notification {
@@ -284,7 +284,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     if (activeServerID) {
         JMServerProfile *serverProfile = (JMServerProfile *)[self.managedObjectContext existingObjectWithID:activeServerID error:nil];
         if (serverProfile) {
-            serverProfile.password = [JMServerProfile passwordFromKeychain:serverProfile.encodedProfileID];
+            serverProfile.password = [JMServerProfile passwordFromKeychain:serverProfile.profileID];
         }
         
         return serverProfile;

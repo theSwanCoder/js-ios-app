@@ -35,7 +35,7 @@
 
 static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
 
-+ (NSString *)encodedProfileIDByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization
++ (NSString *)profileIDByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization
 {
     NSString *profileID = [NSString stringWithFormat:@"%@|%@|%@", url, username, organization];
     
@@ -67,19 +67,19 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
     return [SSKeychain deletePasswordForService:kJMKeychainServiceName account:profileID];
 }
 
-- (NSString *)encodedProfileID
+- (NSString *)profileID
 {
-    return [self.class encodedProfileIDByServerURL:self.serverUrl username:self.username organization:self.organization];
+    return [self.class profileIDByServerURL:self.serverUrl username:self.username organization:self.organization];
 }
 
 - (BOOL)isEqualToProfile:(JMServerProfile *)profile
 {
-    return [[self encodedProfileID] isEqualToString:[profile encodedProfileID]];
+    return [self.profileID isEqualToString:profile.profileID];
 }
 
 - (BOOL)isEqualToProfileByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization
 {
-    return [[self encodedProfileID] isEqualToString:[JMServerProfile encodedProfileIDByServerURL:url username:username organization:organization]];
+    return [self.profileID isEqualToString:[JMServerProfile profileIDByServerURL:url username:username organization:organization]];
 }
 
 @end

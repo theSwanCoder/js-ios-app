@@ -1,12 +1,12 @@
 //
-//  JMResourceViewController.m
+//  JMResourceTableViewController.m
 //  JasperMobile
 //
 //  Created by Vlad Zavadskii on 6/7/13.
 //  Copyright (c) 2013 com.jaspersoft. All rights reserved.
 //
 
-#import "JMResourceViewController.h"
+#import "JMResourceTableViewController.h"
 #import "JMBaseRepositoryTableViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMFilter.h"
@@ -35,7 +35,7 @@ typedef enum {
     JMDeleteResourceRequest
 } JMRequestType;
 
-@interface JMResourceViewController ()
+@interface JMResourceTableViewController ()
 @property (nonatomic, strong, readonly) NSDictionary *numberOfRowsForSections;
 @property (nonatomic, strong, readonly) NSDictionary *resourceDescriptorProperties;
 @property (nonatomic, strong, readonly) NSDictionary *cellIdentifiers;
@@ -47,7 +47,7 @@ typedef enum {
 - (NSString *)localizedTextLabelTitleForProperty:(NSString *)property;
 @end
 
-@implementation JMResourceViewController
+@implementation JMResourceTableViewController
 objection_requires(@"resourceClient");
 inject_default_rotation();
 

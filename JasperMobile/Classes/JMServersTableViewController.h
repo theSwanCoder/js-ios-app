@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JMServerSettingsTableViewController.h"
 
-@interface JMServersTableViewController : UITableViewController
+@interface JMServersTableViewController : UITableViewController <JMServerSettingsTableViewControllerDelegate>
 
 @end

@@ -29,7 +29,6 @@ static NSString * const kJMPlaceholderKey = @"placeholder";
 static NSString * const kJMValidationBlockKey = @"validationBlock";
 static NSString * const kJMCellIdentifierKey = @"cellIdentifier";
 static NSString * const kJMSelectorKey = @"selector";
-
 // Tracking state of cell to avoid calculation of frame multiple times (for label and text field)
 static NSString * const kJMWasConfiguredKey = @"wasConfigured";
 
@@ -42,9 +41,9 @@ typedef BOOL (^JMValidationBlock)(NSString *value, NSString **errorMessage);
 
 @interface JMServerSettingsTableViewController ()
 // Containts different properties for cell: identifier, label name, placeholder / value
-// for component (can be text field or switch), validation block
+// for component (can be text field or switch), validation block and indicator, if cell
+// was configured
 @property (nonatomic, strong) NSDictionary *cellsProperties;
-@property (nonatomic, strong) NSMutableDictionary *cellsWasConfigured;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @end
 
@@ -57,99 +56,90 @@ objection_requires(@"managedObjectContext");
 {
     if (!_cellsProperties) {
         _cellsProperties = @{
-            @kJMNameCell : @{
-                 kJMTitleKey : @"servers.name.label",
-                 kJMPlaceholderKey : @"servers.myserver.label",
-                 kJMValueKey : self.serverToEdit.alias ?: @"",
-                 kJMCellIdentifierKey : kJMTextFieldCellIdentifier,
-                 kJMSelectorKey : [NSValue valueWithPointer:@selector(setAlias:)],
-                 kJMValidationBlockKey : ^(NSString *value, NSString **errorMessage) {
-                     // Check if alias is nil or empty
-                     if (!value || !value.length) {
-                         *errorMessage = @"servers.name.errmsg.empty";
-                         return NO;
-                     }
+            @kJMNameCell : [@{
+                kJMTitleKey : @"servers.name.label",
+                kJMPlaceholderKey : @"servers.myserver.label",
+                kJMValueKey : self.serverToEdit.alias ?: @"",
+                kJMCellIdentifierKey : kJMTextFieldCellIdentifier,
+                kJMSelectorKey : [NSValue valueWithPointer:@selector(setAlias:)],
+                kJMValidationBlockKey : ^(NSString *value, NSString **errorMessage) {
+                    // Check if alias is nil or empty
+                    if (!value || !value.length) {
+                        *errorMessage = @"servers.name.errmsg.empty";
+                        return NO;
+                    }
                      
-                     // Check if alias is unique
-                     for (JMServerProfile *server in self.servers) {
-                         if (server != self.serverToEdit && [server.alias isEqualToString:value]) {
-                             *errorMessage = @"servers.name.errmsg.exists";
-                             return NO;
-                         }
-                     }
+                    // Check if alias is unique
+                    for (JMServerProfile *server in self.servers) {
+                        if (server != self.serverToEdit && [server.alias isEqualToString:value]) {
+                            *errorMessage = @"servers.name.errmsg.exists";
+                            return NO;
+                        }
+                    }
                      
-                     return YES;
-                 }
-            },
+                    return YES;
+                }
+            } mutableCopy],
             
-            @kJMURLCell : @{
-                 kJMTitleKey : @"servers.url.label",
-                 kJMPlaceholderKey : @"servers.url.tip",
-                 kJMValueKey : self.serverToEdit.serverUrl ?: @"",
-                 kJMCellIdentifierKey : kJMTextFieldCellIdentifier,
-                 kJMSelectorKey : [NSValue valueWithPointer:@selector(setServerUrl:)],
-                 kJMValidationBlockKey : ^(NSString *value, NSString **errorMessage) {
-                     NSURL *url = [NSURL URLWithString:value];                     
-                     if (!url || !url.scheme || !url.host) {
-                         *errorMessage = @"servers.url.errmsg";
-                         return NO;
-                     }
+            @kJMURLCell : [@{
+                kJMTitleKey : @"servers.url.label",
+                kJMPlaceholderKey : @"servers.url.tip",
+                kJMValueKey : self.serverToEdit.serverUrl ?: @"",
+                kJMCellIdentifierKey : kJMTextFieldCellIdentifier,
+                kJMSelectorKey : [NSValue valueWithPointer:@selector(setServerUrl:)],
+                kJMValidationBlockKey : ^(NSString *value, NSString **errorMessage) {
+                    NSURL *url = [NSURL URLWithString:value];
+                    if (!url || !url.scheme || !url.host) {
+                        *errorMessage = @"servers.url.errmsg";
+                        return NO;
+                    }
                      
-                     return YES;
-                 }
-            },
+                    return YES;
+                }
+            } mutableCopy],
              
-            @kJMOrganizationCell : @{
-                 kJMTitleKey : @"servers.orgid.label",
-                 kJMPlaceholderKey : @"servers.orgid.tip",
-                 kJMValueKey : self.serverToEdit.organization ?: @"",
-                 kJMCellIdentifierKey : kJMTextFieldCellIdentifier,
-                 kJMSelectorKey : [NSValue valueWithPointer:@selector(setOrganization:)]
-            },
+            @kJMOrganizationCell : [@{
+                kJMTitleKey : @"servers.orgid.label",
+                kJMPlaceholderKey : @"servers.orgid.tip",
+                kJMValueKey : self.serverToEdit.organization ?: @"",
+                kJMCellIdentifierKey : kJMTextFieldCellIdentifier,
+                kJMSelectorKey : [NSValue valueWithPointer:@selector(setOrganization:)]
+            } mutableCopy],
              
-            @kJMUsernameCell : @{
-                 kJMTitleKey : @"servers.username.label",
-                 kJMPlaceholderKey : @"servers.username.tip",
-                 kJMValueKey : self.serverToEdit.username ?: @"",
-                 kJMCellIdentifierKey : kJMTextFieldCellIdentifier,
-                 kJMSelectorKey : [NSValue valueWithPointer:@selector(setUsername:)],
-                 kJMValidationBlockKey : ^(NSString *value, NSString **errorMessage) {
-                     if (!value || !value.length) {
-                         *errorMessage = @"servers.username.errmsg.empty";
-                         return NO;
-                     }
+            @kJMUsernameCell : [@{
+                kJMTitleKey : @"servers.username.label",
+                kJMPlaceholderKey : @"servers.username.tip",
+                kJMValueKey : self.serverToEdit.username ?: @"",
+                kJMCellIdentifierKey : kJMTextFieldCellIdentifier,
+                kJMSelectorKey : [NSValue valueWithPointer:@selector(setUsername:)],
+                kJMValidationBlockKey : ^(NSString *value, NSString **errorMessage) {
+                    if (!value || !value.length) {
+                        *errorMessage = @"servers.username.errmsg.empty";
+                        return NO;
+                    }
                      
-                     return YES;
-                 }
-            },
+                    return YES;
+                }
+            } mutableCopy],
              
-            @kJMPasswordCell : @{
-                 kJMTitleKey : @"servers.password.label",
-                 kJMPlaceholderKey : @"servers.password.tip",
-                 kJMValueKey : self.serverToEdit.password ?: @"",
-                 kJMCellIdentifierKey : kJMSecureTextFieldCellIdentifier,
-                 kJMSelectorKey : [NSValue valueWithPointer:@selector(setPassword:)]
-            },
+            @kJMPasswordCell : [@{
+                kJMTitleKey : @"servers.password.label",
+                kJMPlaceholderKey : @"servers.password.tip",
+                kJMValueKey : self.serverToEdit.password ?: @"",
+                kJMCellIdentifierKey : kJMSecureTextFieldCellIdentifier,
+                kJMSelectorKey : [NSValue valueWithPointer:@selector(setPassword:)]
+            } mutableCopy],
              
-            @kJMAskPasswordCell : @{
-                 kJMTitleKey : @"servers.askpassword.label",
-                 kJMValueKey : self.serverToEdit.askPassword ?: @NO,
-                 kJMCellIdentifierKey : kJMSwitchCellIdentifier,
-                 kJMSelectorKey : [NSValue valueWithPointer:@selector(setAskPassword:)]
-            },
+            @kJMAskPasswordCell : [@{
+                kJMTitleKey : @"servers.askpassword.label",
+                kJMValueKey : self.serverToEdit.askPassword ?: @NO,
+                kJMCellIdentifierKey : kJMSwitchCellIdentifier,
+                kJMSelectorKey : [NSValue valueWithPointer:@selector(setAskPassword:)]
+            } mutableCopy],
         };
     }
     
     return _cellsProperties;
-}
-
-- (NSMutableDictionary *)cellsWasConfigured
-{
-    if (!_cellsWasConfigured) {
-        _cellsWasConfigured = [NSMutableDictionary dictionary];
-    }
-    
-    return _cellsWasConfigured;
 }
 
 #pragma mark - Initialization
@@ -191,11 +181,11 @@ objection_requires(@"managedObjectContext");
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *cellProperties = [self.cellsProperties objectForKey:@(indexPath.row)];
+    NSMutableDictionary *cellProperties = [self.cellsProperties objectForKey:@(indexPath.row)];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellProperties[kJMCellIdentifierKey]];
     
     // Check if cell wasn't alredy configured
-    BOOL cellWasConfigured = [self.cellsWasConfigured[@(indexPath.row)] boolValue];
+    BOOL cellWasConfigured = [cellProperties[kJMWasConfiguredKey] boolValue];
     if (cellWasConfigured) return cell;
     
     UILabel *label = (UILabel *) [cell viewWithTag:1];
@@ -223,16 +213,25 @@ objection_requires(@"managedObjectContext");
         [self askPasswordSwitchToggled:askPasswordSwitch];
     }
     
-    self.cellsWasConfigured[@(indexPath.row)] = @YES;
+    cellProperties[kJMWasConfiguredKey] = @YES;
     
     return cell;
 }
 
 #pragma mark - Actions
 
+- (IBAction)valueChanged:(id)sender
+{
+    // Update value for cell
+    NSIndexPath *indexPath = [self indexPathForTextField:sender];
+    NSMutableDictionary *cellProperties = self.cellsProperties[@(indexPath.row)];
+    cellProperties[kJMValueKey] = [sender text];
+}
+
 - (IBAction)askPasswordSwitchToggled:(id)sender
 {
-    UITableViewCell *passwordCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:kJMPasswordCell inSection:0]];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:kJMPasswordCell inSection:0];
+    UITableViewCell *passwordCell = [self.tableView cellForRowAtIndexPath:indexPath];
     
     UILabel *label = (UILabel *) [passwordCell viewWithTag:1];
     UITextField *textField = (UITextField *) [passwordCell viewWithTag:2];
@@ -246,6 +245,10 @@ objection_requires(@"managedObjectContext");
         textField.textColor = [UIColor lightGrayColor];
         label.textColor = textField.textColor;
     }
+    
+    // Update value for ask password cell
+    NSMutableDictionary *cellProperties = self.cellsProperties[@kJMAskPasswordCell];
+    cellProperties[kJMValueKey] = @([sender isOn]);    
 }
 
 // Modifies existing or creates new server profile
@@ -260,16 +263,7 @@ objection_requires(@"managedObjectContext");
     
     for (NSNumber *key in allKeys) {
         NSDictionary *cellProperties = self.cellsProperties[key];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[key integerValue] inSection:0];
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        id value;
-        
-        // Get value for different cell types (can be text field or switch)
-        if ([key integerValue] != kJMAskPasswordCell) {
-            value = [(UITextField *)[cell viewWithTag:2] text];
-        } else {
-            value = @([(UISwitch *)[cell viewWithTag:2] isOn]);
-        }
+        id value = cellProperties[kJMValueKey];
         
         JMValidationBlock validation = cellProperties[kJMValidationBlockKey];
         NSString *errorMessage;
@@ -312,6 +306,10 @@ objection_requires(@"managedObjectContext");
     if ([self.managedObjectContext hasChanges]) {
         // Save changes
         [self.managedObjectContext save:nil];
+        // Store password for server profile in keychain
+        [JMServerProfile storePasswordInKeychain:self.serverToEdit.password profileID:self.serverToEdit.profileID];
+        // Update previous view controller with modified server profile
+        [self.delegate updateWithServerProfile:self.serverToEdit];
         // Go to previous view controller
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -323,7 +321,7 @@ objection_requires(@"managedObjectContext");
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
 	if (textField.returnKeyType == UIReturnKeyNext) {
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:(UITableViewCell *)textField.superview.superview];
+        NSIndexPath *indexPath = [self indexPathForTextField:textField];
         UITableViewCell *nextCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]];
         
         if (nextCell) {
@@ -335,6 +333,13 @@ objection_requires(@"managedObjectContext");
     }
     
 	return YES;
+}
+
+#pragma mark - Private
+
+- (NSIndexPath *)indexPathForTextField:(UITextField *)textField
+{
+    return [self.tableView indexPathForCell:(UITableViewCell *)textField.superview.superview];
 }
 
 @end

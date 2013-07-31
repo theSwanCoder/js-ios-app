@@ -134,7 +134,7 @@ static NSManagedObjectContext * managedObjectContext;
         NSString *username = [defaults objectForKey:[NSString stringWithFormat:kJMDefaultsServerUsername, i]];
         NSString *organization = [defaults objectForKey:[NSString stringWithFormat:kJMDefaultsServerOrganization, i]];
         NSString *password = [defaults objectForKey:[NSString stringWithFormat:kJMDefaultsServerPassword, i]];
-        NSString *profileID = [JMServerProfile encodedProfileIDByServerURL:serverUrl username:username organization:organization];
+        NSString *profileID = [JMServerProfile profileIDByServerURL:serverUrl username:username organization:organization];
         [JMServerProfile storePasswordInKeychain:password profileID:profileID];
         [defaults removeObjectForKey:[NSString stringWithFormat:kJMDefaultsServerPassword, i]];
     }

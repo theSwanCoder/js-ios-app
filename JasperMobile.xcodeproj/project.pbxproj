@@ -61,7 +61,7 @@
 		F5A2E77A175CBAD300CBA00E /* BasedOnSplitViewControllerStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5A2E778175CBAD300CBA00E /* BasedOnSplitViewControllerStoryboard.storyboard */; };
 		F5A2E77D175CCB2400CBA00E /* JMMenuTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A2E77C175CCB2400CBA00E /* JMMenuTableViewController.m */; };
 		F5A2E783175CD47B00CBA00E /* JMBarButtonPresenterNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A2E782175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.m */; };
-		F5A5F553176206360018FEFC /* JMResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A5F552176206360018FEFC /* JMResourceViewController.m */; };
+		F5A5F553176206360018FEFC /* JMResourceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A5F552176206360018FEFC /* JMResourceTableViewController.m */; };
 		F5B6A6A3175F57B90047CB6D /* JMLibraryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */; };
 		F5B6A6A6175F586A0047CB6D /* JMRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6A6A5175F586A0047CB6D /* JMRepositoryTableViewController.m */; };
 		F5D6373117909D3C005BA5CD /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */; };
@@ -216,8 +216,8 @@
 		F5A2E780175CCFA700CBA00E /* JMSplitViewBarButtonPresenterProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMSplitViewBarButtonPresenterProtocol.h; path = JasperMobile/Classes/JMSplitViewBarButtonPresenterProtocol.h; sourceTree = "<group>"; };
 		F5A2E781175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBarButtonPresenterNavigationViewController.h; path = Classes/JMBarButtonPresenterNavigationViewController.h; sourceTree = "<group>"; };
 		F5A2E782175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBarButtonPresenterNavigationViewController.m; path = Classes/JMBarButtonPresenterNavigationViewController.m; sourceTree = "<group>"; };
-		F5A5F551176206360018FEFC /* JMResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourceViewController.h; path = Classes/JMResourceViewController.h; sourceTree = "<group>"; };
-		F5A5F552176206360018FEFC /* JMResourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceViewController.m; path = Classes/JMResourceViewController.m; sourceTree = "<group>"; };
+		F5A5F551176206360018FEFC /* JMResourceTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourceTableViewController.h; path = Classes/JMResourceTableViewController.h; sourceTree = "<group>"; };
+		F5A5F552176206360018FEFC /* JMResourceTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceTableViewController.m; path = Classes/JMResourceTableViewController.m; sourceTree = "<group>"; };
 		F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMResourceClientHolder.h; path = JasperMobile/Classes/JMResourceClientHolder.h; sourceTree = "<group>"; };
 		F5B6A6A1175F57B90047CB6D /* JMLibraryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMLibraryTableViewController.h; path = Classes/JMLibraryTableViewController.h; sourceTree = "<group>"; };
 		F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMLibraryTableViewController.m; path = Classes/JMLibraryTableViewController.m; sourceTree = "<group>"; };
@@ -368,8 +368,8 @@
 				F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */,
 				F5B6A6A4175F58690047CB6D /* JMRepositoryTableViewController.h */,
 				F5B6A6A5175F586A0047CB6D /* JMRepositoryTableViewController.m */,
-				F5A5F551176206360018FEFC /* JMResourceViewController.h */,
-				F5A5F552176206360018FEFC /* JMResourceViewController.m */,
+				F5A5F551176206360018FEFC /* JMResourceTableViewController.h */,
+				F5A5F552176206360018FEFC /* JMResourceTableViewController.m */,
 				F5DC4EA51769F01000038D58 /* JMResourceModifyViewController.h */,
 				F5DC4EA61769F01000038D58 /* JMResourceModifyViewController.m */,
 				F5DE3FA1178A387B00840808 /* JMSearchTableViewController.h */,
@@ -876,7 +876,7 @@
 				F58FF2F41760A0B50021CC8B /* MJPopupBackgroundView.m in Sources */,
 				F58FF2F51760A0B50021CC8B /* UIViewController+MJPopupViewController.m in Sources */,
 				F58FF2F91760A1090021CC8B /* JMCancelRequestPopup.m in Sources */,
-				F5A5F553176206360018FEFC /* JMResourceViewController.m in Sources */,
+				F5A5F553176206360018FEFC /* JMResourceTableViewController.m in Sources */,
 				F55048D917622B8C0067304B /* JMUtils.m in Sources */,
 				F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */,
 				F5DC4EA71769F01000038D58 /* JMResourceModifyViewController.m in Sources */,

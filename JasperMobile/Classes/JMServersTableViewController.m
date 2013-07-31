@@ -50,6 +50,7 @@ objection_requires(@"managedObjectContext");
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    [segue.destinationViewController setDelegate:self];
     [segue.destinationViewController setServerToEdit:sender];
     [segue.destinationViewController setServers:self.servers];
 }
@@ -62,12 +63,7 @@ objection_requires(@"managedObjectContext");
     self.navigationItem.rightBarButtonItem = self.editButton;
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
-    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"alias" ascending:YES]];
     self.servers = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
-
-    for (JMServerProfile *server in self.servers) {
-        server.password = [JMServerProfile passwordFromKeychain:[server encodedProfileID]];
-    }
 }
 
 - (void)viewDidUnload
@@ -235,6 +231,24 @@ objection_requires(@"managedObjectContext");
                         delegate:nil
                cancelButtonTitle:@"dialog.button.ok"
                otherButtonTitles:nil] show];
+}
+
+#pragma mark - JMServerSettingsTableViewControllerDelegate
+
+- (void)updateWithServerProfile:(JMServerProfile *)serverProfile
+{
+    NSUInteger index = [self.servers indexOfObject:serverProfile];
+    NSIndexPath *indexPath;
+    
+    if (index != NSNotFound) {
+        indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+        [self.servers replaceObjectAtIndex:index withObject:serverProfile];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    } else {
+        indexPath = [NSIndexPath indexPathForRow:self.servers.count inSection:0];
+        [self.servers addObject:serverProfile];
+        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 #pragma mark - Private

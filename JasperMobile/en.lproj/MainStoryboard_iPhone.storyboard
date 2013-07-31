@@ -205,10 +205,10 @@
             </objects>
             <point key="canvasLocation" x="-293" y="-925"/>
         </scene>
-        <!--Resource View Controller - Resource Title-->
+        <!--Resource Table View Controller - Resource Title-->
         <scene sceneID="T3E-kQ-QJa">
             <objects>
-                <tableViewController id="cdD-E5-cP8" customClass="JMResourceViewController" sceneMemberID="viewController">
+                <tableViewController id="cdD-E5-cP8" customClass="JMResourceTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="QOB-ex-0cf">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -561,6 +561,9 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
+                                            <connections>
+                                                <action selector="valueChanged:" destination="iuM-6r-QhG" eventType="editingChanged" id="wsZ-RG-Tcf"/>
+                                            </connections>
                                         </textField>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -585,6 +588,9 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
+                                            <connections>
+                                                <action selector="valueChanged:" destination="iuM-6r-QhG" eventType="editingDidEnd" id="oYV-M2-n7S"/>
+                                            </connections>
                                         </textField>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1089,6 +1095,52 @@
         <image name="res_type_unknown.png" width="32" height="32"/>
         <image name="settings_bar_item.png" width="30" height="29"/>
     </resources>
+    <classes>
+        <class className="JMBaseRepositoryTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMBaseRepositoryTableViewController.h"/>
+        </class>
+        <class className="JMLibraryTableViewController" superclassName="JMSearchTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMLibraryTableViewController.h"/>
+        </class>
+        <class className="JMMenuTabBarController" superclassName="UITabBarController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMMenuTabBarController.h"/>
+        </class>
+        <class className="JMRepositoryTableViewController" superclassName="JMSearchTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMRepositoryTableViewController.h"/>
+        </class>
+        <class className="JMResourceModifyViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceModifyViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="description" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="descriptionTextView" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTextField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="JMResourceTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceTableViewController.h"/>
+        </class>
+        <class className="JMSearchTableViewController" superclassName="JMBaseRepositoryTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSearchTableViewController.h"/>
+        </class>
+        <class className="JMServerSettingsTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMServerSettingsTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="askPasswordSwitchToggled:"/>
+                <relationship kind="action" name="save:"/>
+                <relationship kind="action" name="valueChanged:"/>
+            </relationships>
+        </class>
+        <class className="JMServersTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMServersTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="infoButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="TPKeyboardAvoidingScrollView" superclassName="UIScrollView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TPKeyboardAvoidingScrollView.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

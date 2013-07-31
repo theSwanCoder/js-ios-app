@@ -207,10 +207,10 @@
             </objects>
             <point key="canvasLocation" x="-549" y="-1589"/>
         </scene>
-        <!--Resource View Controller - Resource Title-->
+        <!--Resource Table View Controller - Resource Title-->
         <scene sceneID="ddH-aD-G8a">
             <objects>
-                <tableViewController id="xh7-oZ-8dJ" customClass="JMResourceViewController" sceneMemberID="viewController">
+                <tableViewController id="xh7-oZ-8dJ" customClass="JMResourceTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="lnl-YI-Kuc">
                         <rect key="frame" x="0.0" y="64" width="768" height="911"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1072,9 +1072,6 @@
                 <relationship kind="outlet" name="label" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="labelTextField" candidateClass="UITextField"/>
             </relationships>
-        </class>
-        <class className="JMResourceViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceViewController.h"/>
         </class>
         <class className="JMSearchTableViewController" superclassName="JMBaseRepositoryTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSearchTableViewController.h"/>

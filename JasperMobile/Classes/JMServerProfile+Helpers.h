@@ -35,9 +35,9 @@
  @param url The URL of JasperReports Server
  @param username The username, must be a valid account on JasperReports Server
  @param organization The name of organization
- @return encoded profile id
+ @return profile id
  */
-+ (NSString *)encodedProfileIDByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization;
++ (NSString *)profileIDByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization;
 
 /**
  Stores profile password in Keychain for profile
@@ -66,7 +66,7 @@
 /**
  Returns encoded profile id
  */
-- (NSString *)encodedProfileID;
+- (NSString *)profileID;
 
 /**
  Returns a Boolean value that indicates whether a given profile is equal to the

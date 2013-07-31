@@ -7,11 +7,11 @@
 //
 
 #import "JMResourceClientHolder.h"
-#import "JMResourceViewController.h"
+#import "JMResourceTableViewController.h"
 #import <UIKit/UIKit.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
-@interface JMBaseRepositoryTableViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate, JMResourceViewControllerDelegate>
+@interface JMBaseRepositoryTableViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate, JMResourceTableViewControllerDelegate>
 
 @property (nonatomic, strong) JSConstants *constants;
 
