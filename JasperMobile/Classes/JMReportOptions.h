@@ -21,7 +21,7 @@
  */
 
 //
-//  ReportOptions.h
+//  JMReportOptions.h
 //  Jaspersoft Corporation
 //
 
@@ -30,6 +30,10 @@
 
 @class ServerProfile;
 
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.6
+ */
 @interface JMReportOptions : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * isListItem;

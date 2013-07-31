@@ -21,7 +21,7 @@
  */
 
 //
-//  JMLocalization
+//  JMLocalization.m
 //  Jaspersoft Corporation
 //
 

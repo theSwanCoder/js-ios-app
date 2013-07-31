@@ -21,7 +21,7 @@
  */
 
 //
-//  ReportOptions.h
+//  JMReportOptions.h
 //  Jaspersoft Corporation
 //
 

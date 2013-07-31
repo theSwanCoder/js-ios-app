@@ -29,7 +29,7 @@
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.5
+ @since 1.6
  */
 @interface JMLocalization : NSObject
 

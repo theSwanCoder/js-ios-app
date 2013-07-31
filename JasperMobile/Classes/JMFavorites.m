@@ -21,7 +21,7 @@
  */
 
 //
-//  Favorites.m
+//  JMFavorites.m
 //  Jaspersoft Corporation
 //
 

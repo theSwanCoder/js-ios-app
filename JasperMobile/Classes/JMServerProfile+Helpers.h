@@ -21,12 +21,16 @@
  */
 
 //
-//  ServerProfile+Helpers.h
+//  JMServerProfile+Helpers.h
 //  Jaspersoft Corporation
 //
 
 #import "JMServerProfile.h"
 
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.6
+ */
 @interface JMServerProfile (Helpers)
 
 /**

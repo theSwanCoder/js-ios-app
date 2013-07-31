@@ -21,7 +21,7 @@
  */
 
 //
-//  Favorites.h
+//  JMFavorites.h
 //  Jaspersoft Corporation
 //
 
@@ -30,6 +30,10 @@
 
 @class JMServerProfile;
 
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.6
+ */
 @interface JMFavorites : NSManagedObject
 
 @property (nonatomic, retain) NSString * organization;

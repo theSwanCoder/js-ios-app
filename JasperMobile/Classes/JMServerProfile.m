@@ -21,7 +21,7 @@
  */
 
 //
-//  ServerProfile.m
+//  JMServerProfile.m
 //  Jaspersoft Corporation
 //
 

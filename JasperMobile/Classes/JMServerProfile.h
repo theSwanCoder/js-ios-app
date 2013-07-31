@@ -21,7 +21,7 @@
  */
 
 //
-//  ServerProfile.h
+//  JMServerProfile.h
 //  Jaspersoft Corporation
 //
 
@@ -30,6 +30,10 @@
 
 @class JMFavorites, JMReportOptions;
 
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.6
+ */
 @interface JMServerProfile : NSManagedObject
 
 @property (nonatomic, retain) NSString * alias;

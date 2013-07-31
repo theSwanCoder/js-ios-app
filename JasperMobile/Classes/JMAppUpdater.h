@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2005 - 2012 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2005 - 2013 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -21,7 +21,7 @@
  */
 
 //
-//  JSAppUpdater.h
+//  JMAppUpdater.h
 //  Jaspersoft Corporation
 //
 
@@ -36,7 +36,7 @@
  be performed (which adapts and move data from old to new database structure)
 
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.2
+ @since 1.6
  */
 @interface JMAppUpdater : NSObject <UIAlertViewDelegate>
 
