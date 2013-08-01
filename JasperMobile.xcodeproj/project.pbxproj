@@ -675,7 +675,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F55CC375174CFFCF00CEB39E /* Build configuration list for PBXNativeTarget "JasperMobile" */;
 			buildPhases = (
-				F5D637361790A32F005BA5CD /* ShellScript */,
 				F55CC32B174CFFCE00CEB39E /* Sources */,
 				F55CC32C174CFFCE00CEB39E /* Frameworks */,
 				F55CC32D174CFFCE00CEB39E /* Resources */,
@@ -835,19 +834,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-		F5D637361790A32F005BA5CD /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"============\"\necho \"${BUILD_ROOT}\"\necho \"######\"\nls \"${BUILD_ROOT}/../\"\necho \"######\"\nls \"${BUILD_ROOT}/../Headers\"\necho \"######\"\nls \"${BUILD_ROOT}/../Headers/jaspersoft-sdk\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
