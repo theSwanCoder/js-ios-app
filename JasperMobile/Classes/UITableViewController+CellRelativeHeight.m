@@ -44,6 +44,11 @@
     CGSize textSize,
            detailTextSize;
     
+    // Add some padding for better layout view if detail text is nil
+    if (!detailText) {
+        detailTextSize = CGSizeMake(0, 3.0f);
+    }
+    
     // Calculate height depends on cell style
     if (cellStyle == UITableViewCellStyleValue2) {
         // Calculate width for textLabel (this label used as a title)
@@ -53,7 +58,9 @@
         // Calculate size of text for textLabel 
         textSize = [text sizeWithFont:cell.textLabel.font constrainedToSize:CGSizeMake(textLabelWidth, CGFLOAT_MAX)];
         // Calculate size of details text for detailTextLabel
-        detailTextSize = [detailText sizeWithFont:cell.detailTextLabel.font constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)];
+        if (detailText) {
+            detailTextSize = [detailText sizeWithFont:cell.detailTextLabel.font constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)];
+        }
         // Check what label has bigger height (this is necessary only for UITableViewCellStyleValue2 cell style
         // where 2 labels locates on the same line)
         height = textSize.height > detailTextSize.height ? textSize.height : detailTextSize.height;
@@ -61,7 +68,9 @@
         // Calculate width for whole cell
         width = [self contentWidthForTableViewCell:cell];
         textSize = [text sizeWithFont:cell.textLabel.font constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)];
-        detailTextSize = [detailText sizeWithFont:cell.detailTextLabel.font constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)];
+        if (detailText) {
+            detailTextSize = [detailText sizeWithFont:cell.detailTextLabel.font constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)];
+        }
         // For UITableViewCellStyleSubtitle cell style new height equals sum of labels height
         // (detailTextLabel locates under textLabel)
         height = textSize.height + detailTextSize.height;

@@ -53,6 +53,7 @@ static NSInteger const kJMFooterSection = 1;
 
 @implementation JMServersTableViewController
 objection_requires(@"managedObjectContext");
+inject_default_rotation();
 
 #pragma mark - Initialization
 
@@ -213,13 +214,10 @@ objection_requires(@"managedObjectContext");
 
 - (IBAction)editServers:(id)sender
 {
-    self.navigationItem.rightBarButtonItem = self.doneButton;
-    // TODO: need implementation
-    
     if (!self.servers.count) {
-        // TODO: Redirect to Add New Server directly
-        
+        [self performSegueWithIdentifier:kJMEditServerSegue sender:nil];
     } else {
+        self.navigationItem.rightBarButtonItem = self.doneButton;        
         [self.tableView setEditing:YES animated:YES];
         
         // Add "New server account" table view cell

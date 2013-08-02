@@ -53,12 +53,12 @@ inject_default_rotation()
 @synthesize resourceClient = _resourceClient;
 @synthesize constants = _constants;
 @synthesize resourceDescriptor = _resourceDescriptor;
-@synthesize cellsIdentifiers = _cellIdentifiers;
+@synthesize cellsIdentifiers = _cellsIdentifiers;
 
-- (NSDictionary *)cellIdentifiers
+- (NSDictionary *)cellsIdentifiers
 {
-    if (!_cellIdentifiers) {
-        _cellIdentifiers = @{
+    if (!_cellsIdentifiers) {
+        _cellsIdentifiers = @{
             self.constants.WS_TYPE_FOLDER : @"FolderCell",
             self.constants.WS_TYPE_IMG : @"ImageCell",
             self.constants.WS_TYPE_REPORT_UNIT : @"ReportCell",
@@ -68,7 +68,7 @@ inject_default_rotation()
         };
     }
     
-    return _cellIdentifiers;
+    return _cellsIdentifiers;
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath

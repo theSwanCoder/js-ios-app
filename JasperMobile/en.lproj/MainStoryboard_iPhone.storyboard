@@ -214,7 +214,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ResourceAttributeCell" textLabel="pe5-MM-IR6" detailTextLabel="xBr-d8-F7W" style="IBUITableViewCellStyleValue2" id="ju5-Ga-hWL">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="2" indentationWidth="0.0" reuseIdentifier="ResourceAttributeCell" textLabel="pe5-MM-IR6" detailTextLabel="xBr-d8-F7W" style="IBUITableViewCellStyleValue2" id="ju5-Ga-hWL">
                                 <rect key="frame" x="0.0" y="46" width="320" height="45"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -249,6 +249,7 @@
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Resource Property" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3ig-3b-hGS">
                                             <rect key="frame" x="10" y="2" width="162" height="22"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -562,7 +563,7 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="next"/>
                                             <connections>
-                                                <action selector="valueChanged:" destination="iuM-6r-QhG" eventType="editingChanged" id="wsZ-RG-Tcf"/>
+                                                <action selector="valueChanged:" destination="iuM-6r-QhG" eventType="editingChanged" id="MJj-KO-ODq"/>
                                             </connections>
                                         </textField>
                                     </subviews>
@@ -589,7 +590,7 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
                                             <connections>
-                                                <action selector="valueChanged:" destination="iuM-6r-QhG" eventType="editingDidEnd" id="oYV-M2-n7S"/>
+                                                <action selector="valueChanged:" destination="iuM-6r-QhG" eventType="editingChanged" id="qQh-ql-rNn"/>
                                             </connections>
                                         </textField>
                                     </subviews>
@@ -1148,8 +1149,8 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="iUA-aA-WXK"/>
-        <segue reference="dQB-9X-IRD"/>
-        <segue reference="NAP-wd-oQS"/>
         <segue reference="Y5l-Qb-Vpq"/>
+        <segue reference="NAP-wd-oQS"/>
+        <segue reference="dQB-9X-IRD"/>
     </inferredMetricsTieBreakers>
 </document>
