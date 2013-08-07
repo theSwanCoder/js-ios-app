@@ -45,7 +45,6 @@ static NSInteger const kJMFooterSection = 1;
 @interface JMServersTableViewController ()
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSMutableArray *servers;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *infoButton;
 
 - (NSIndexPath *)indexPathForTheNewServerCell;
 @end

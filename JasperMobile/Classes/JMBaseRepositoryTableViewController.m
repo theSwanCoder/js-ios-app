@@ -49,10 +49,10 @@ inject_default_rotation()
 
 #pragma mark - Accessors
 
-@synthesize resourceClient = _resourceClient;
 @synthesize constants = _constants;
-@synthesize resourceDescriptor = _resourceDescriptor;
 @synthesize cellsIdentifiers = _cellsIdentifiers;
+@synthesize resourceClient = _resourceClient;
+@synthesize resourceDescriptor = _resourceDescriptor;
 
 - (NSDictionary *)cellsIdentifiers
 {
@@ -99,6 +99,7 @@ inject_default_rotation()
         self.lastIndexPath = indexPath;
         JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
         [destinationViewController setResourceDescriptor:resourceDescriptor];
+        [destinationViewController setResourceClient:self.resourceClient];
     }
     
     if ([segue.identifier isEqualToString:kJMShowResourceInfoSegue]) {
@@ -136,6 +137,22 @@ inject_default_rotation()
 - (void)requestFinished:(JSOperationResult *)result
 {
     self.resources = [result.objects mutableCopy];
+    
+    // TODO: move comparator to sdk
+    [self.resources sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        if ([obj1 wsType] == self.constants.WS_TYPE_FOLDER) {
+            if ([obj2 wsType] != self.constants.WS_TYPE_FOLDER) {
+                return NSOrderedDescending;
+            }
+        } else {
+            if ([obj2 wsType] == self.constants.WS_TYPE_FOLDER) {
+                return NSOrderedAscending;
+            }
+        }
+        
+        return [[obj1 label] compare:[obj2 label] options:NSCaseInsensitiveSearch];
+    }];
+    
     [self.tableView reloadData];
 }
 

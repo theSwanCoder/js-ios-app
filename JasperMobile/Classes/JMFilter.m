@@ -85,11 +85,11 @@ static JMFilter * delegate;
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    delegate = nil;
-    
     if (self.viewControllerToDismiss.navigationController) {
         [self.viewControllerToDismiss.navigationController popViewControllerAnimated:YES];
     }
+    
+    delegate = nil;
 }
 
 #pragma mark - Private

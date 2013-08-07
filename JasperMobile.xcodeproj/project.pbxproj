@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F502CFC61756B69C007C12C3 /* JMFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = F502CFC51756B69C007C12C3 /* JMFilter.m */; };
+		F511A55117B26B8B004D90A2 /* JMDashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F511A55017B26B8A004D90A2 /* JMDashboardViewController.m */; };
 		F513EE9117A16E2D00A553C4 /* JMServerSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F513EE9017A16E2D00A553C4 /* JMServerSettingsTableViewController.m */; };
 		F514E69C175575AE00C9F61E /* UIAlertView+LocalizedAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F514E69B175575AE00C9F61E /* UIAlertView+LocalizedAlert.m */; };
 		F514E69D175575C800C9F61E /* JMLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = F514E6911754E4C200C9F61E /* JMLocalization.m */; };
@@ -136,6 +137,8 @@
 /* Begin PBXFileReference section */
 		F502CFC41756B69C007C12C3 /* JMFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMFilter.h; path = JasperMobile/Classes/JMFilter.h; sourceTree = "<group>"; };
 		F502CFC51756B69C007C12C3 /* JMFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMFilter.m; path = JasperMobile/Classes/JMFilter.m; sourceTree = "<group>"; };
+		F511A54F17B26B8A004D90A2 /* JMDashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDashboardViewController.h; path = Classes/JMDashboardViewController.h; sourceTree = "<group>"; };
+		F511A55017B26B8A004D90A2 /* JMDashboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDashboardViewController.m; path = Classes/JMDashboardViewController.m; sourceTree = "<group>"; };
 		F513EE8F17A16E2C00A553C4 /* JMServerSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServerSettingsTableViewController.h; path = Classes/JMServerSettingsTableViewController.h; sourceTree = "<group>"; };
 		F513EE9017A16E2D00A553C4 /* JMServerSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMServerSettingsTableViewController.m; path = Classes/JMServerSettingsTableViewController.m; sourceTree = "<group>"; };
 		F514E6901754E4C200C9F61E /* JMLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMLocalization.h; path = JasperMobile/Classes/JMLocalization.h; sourceTree = "<group>"; };
@@ -385,6 +388,8 @@
 				F5DC4EA61769F01000038D58 /* JMResourceModifyViewController.m */,
 				F5DE3FA1178A387B00840808 /* JMSearchTableViewController.h */,
 				F5DE3FA2178A387B00840808 /* JMSearchTableViewController.m */,
+				F511A54F17B26B8A004D90A2 /* JMDashboardViewController.h */,
+				F511A55017B26B8A004D90A2 /* JMDashboardViewController.m */,
 				F55174CE178AB1A5006186B4 /* JMServersTableViewController.h */,
 				F55174CF178AB1A5006186B4 /* JMServersTableViewController.m */,
 				F513EE8F17A16E2C00A553C4 /* JMServerSettingsTableViewController.h */,
@@ -892,6 +897,7 @@
 				F513EE9117A16E2D00A553C4 /* JMServerSettingsTableViewController.m in Sources */,
 				F59FD9C017B1014A00331BD8 /* JMFavoritesUtil.m in Sources */,
 				F5325D8417B17B2900C11E33 /* JMFavoritesTableViewController.m in Sources */,
+				F511A55117B26B8B004D90A2 /* JMDashboardViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

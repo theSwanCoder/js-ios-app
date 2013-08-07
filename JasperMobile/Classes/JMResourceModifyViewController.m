@@ -32,13 +32,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import <Objection-iOS/Objection.h>
 
-@interface JMResourceModifyViewController ()
-@property (nonatomic, weak) IBOutlet UITextField *labelTextField;
-@property (nonatomic, weak) IBOutlet UITextView *descriptionTextView;
-@property (nonatomic, weak) IBOutlet UILabel *label;
-@property (nonatomic, weak) IBOutlet UILabel *description;
-@end
-
 @implementation JMResourceModifyViewController
 objection_requires(@"resourceClient");
 

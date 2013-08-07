@@ -34,4 +34,6 @@
  */
 @interface JMServersTableViewController : UITableViewController <JMServerSettingsTableViewControllerDelegate>
 
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *infoButton;
+
 @end

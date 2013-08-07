@@ -37,6 +37,10 @@
 @interface JMResourceModifyViewController : UIViewController <JMResourceClientHolder, JSRequestDelegate, UITextFieldDelegate>
 
 @property (nonatomic, weak) id <JMResourceModifyViewControllerDelegate> delegate;
+@property (nonatomic, weak) IBOutlet UITextField *labelTextField;
+@property (nonatomic, weak) IBOutlet UITextView *descriptionTextView;
+@property (nonatomic, weak) IBOutlet UILabel *label;
+@property (nonatomic, weak) IBOutlet UILabel *description;
 
 @end
 

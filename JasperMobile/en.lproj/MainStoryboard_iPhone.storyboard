@@ -73,6 +73,9 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <connections>
+                                    <segue destination="HJq-ZR-BI2" kind="push" id="f3B-eB-Zkq"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ReportCell" textLabel="gZg-jb-aQk" detailTextLabel="DWJ-Va-qX6" imageView="bwc-2q-BBX" style="IBUITableViewCellStyleSubtitle" id="zqA-37-m4g">
                                 <rect key="frame" x="0.0" y="110" width="320" height="44"/>
@@ -213,6 +216,41 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rzJ-UC-2ps" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-294" y="-960"/>
+        </scene>
+        <!--Dashboard View Controller-->
+        <scene sceneID="hK4-6Z-0UK">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="HJq-ZR-BI2" customClass="JMDashboardViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="NLU-uQ-Y17">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <webView opaque="NO" contentMode="scaleToFill" scalesPageToFit="YES" id="oOK-Cd-gAG">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <dataDetectorType key="dataDetectorTypes"/>
+                                <connections>
+                                    <outlet property="delegate" destination="NLU-uQ-Y17" id="TuI-Vf-fQ3"/>
+                                </connections>
+                            </webView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="gray" id="mAP-u7-cwD">
+                                <rect key="frame" x="150" y="198" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="NMn-LN-cwB"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="mAP-u7-cwD" id="gI1-yB-75y"/>
+                        <outlet property="webView" destination="oOK-Cd-gAG" id="v2c-mF-Vjh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OL6-L5-Ld0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="537" y="-969"/>
         </scene>
         <!--Resource Table View Controller - Resource Title-->
         <scene sceneID="T3E-kQ-QJa">
@@ -686,6 +724,9 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <connections>
+                                    <segue destination="HJq-ZR-BI2" kind="push" id="2sv-EJ-Gcx"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ReportCell" textLabel="JZt-GG-a4n" detailTextLabel="AJV-o4-Ce9" imageView="r17-rz-lz1" style="IBUITableViewCellStyleSubtitle" id="Zzf-kI-uyR">
                                 <rect key="frame" x="0.0" y="66" width="320" height="44"/>
@@ -839,6 +880,9 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <connections>
+                                    <segue destination="HJq-ZR-BI2" kind="push" id="Ete-rd-4of"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ReportCell" textLabel="gHT-je-sRZ" detailTextLabel="6Nc-8u-LPs" imageView="L52-S2-Kdi" style="IBUITableViewCellStyleSubtitle" id="pGx-Ri-g7N">
                                 <rect key="frame" x="0.0" y="110" width="320" height="44"/>
@@ -1186,6 +1230,13 @@
         <class className="JMBaseRepositoryTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMBaseRepositoryTableViewController.h"/>
         </class>
+        <class className="JMDashboardViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMDashboardViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
+            </relationships>
+        </class>
         <class className="JMFavoritesTableViewController" superclassName="JMBaseRepositoryTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMFavoritesTableViewController.h"/>
         </class>
@@ -1209,6 +1260,10 @@
         </class>
         <class className="JMResourceTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="deleteResource:"/>
+                <relationship kind="action" name="favoriteButtonClicked:"/>
+            </relationships>
         </class>
         <class className="JMSearchTableViewController" superclassName="JMBaseRepositoryTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSearchTableViewController.h"/>
@@ -1233,6 +1288,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="4G2-Cf-EF7"/>
-        <segue reference="SHZ-Ys-bNs"/>
+        <segue reference="Ete-rd-4of"/>
+        <segue reference="wp3-22-jSm"/>
     </inferredMetricsTieBreakers>
 </document>
