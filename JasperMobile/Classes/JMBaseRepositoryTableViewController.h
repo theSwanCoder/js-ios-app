@@ -37,5 +37,6 @@
 @interface JMBaseRepositoryTableViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate, JMResourceTableViewControllerDelegate>
 
 @property (nonatomic, strong) JSConstants *constants;
+@property (nonatomic, strong) NSMutableArray *resources;
 
 @end

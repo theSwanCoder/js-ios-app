@@ -47,7 +47,7 @@
     self.searchBar.delegate = self;
     
     // TODO: change to proper message
-    self.searchBar.placeholder = JMCustomLocalizedString(@"Search resources", nil);
+    self.searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
     [self.searchBar sizeToFit];
     
     self.tableView.tableHeaderView = self.searchBar;

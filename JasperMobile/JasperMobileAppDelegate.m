@@ -29,6 +29,7 @@
 #import "JMAppUpdater.h"
 #import "JMAskPasswordDialog.h"
 #import "JMConstants.h"
+#import "JMFavoritesUtil.h"
 #import "JMPadModule.h"
 #import "JMPhoneModule.h"
 #import "JMReportClientHolder.h"
@@ -43,6 +44,7 @@ static NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";
 static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 
 @interface JasperMobileAppDelegate() <JMResourceClientHolder, JMReportClientHolder>
+@property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;
 @end
 
 @implementation JasperMobileAppDelegate
@@ -72,6 +74,11 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(changeServerProfile:)
                                                      name:kJMChangeServerProfileNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(resetApplication)
+                                                     name:kJMResetApplicationNotification
                                                    object:nil];
     }
     
@@ -220,6 +227,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     // Inject resource and report clients
     self.resourceClient = [injector getObject:[JSRESTResource class]];
     self.reportClient = [injector getObject:[JSRESTReport class]];
+    self.favoritesUtil = [injector getObject:[JMFavoritesUtil class]];
 }
 
 - (void)coreDataInit
@@ -253,14 +261,16 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
         self.reportClient.serverProfile = profile;
         self.resourceClient.serverProfile = profile;
         
+        // Update favorites with active server profile
+        self.favoritesUtil.serverProfile = serverProfile;
+        
         // Forces to refresh server info
         [self.resourceClient serverInfo];
         
         // Update timeouts
         [self updateTimeouts];
         
-        // TODO: favorites implementation needed
-        //        self.favorites = [[JSFavoritesHelper alloc] initWithServerProfile:serverProfile];
+        // TODO: Report options implementation needed
         //        self.reportOptions = [[JSReportOptionsHelper alloc] initWithServerProfile:serverProfile];
         
         [defaults setURL:[serverProfile.objectID URIRepresentation] forKey:kJMDefaultsActiveServer];
@@ -278,21 +288,27 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     self.reportClient.timeoutInterval = [prefs integerForKey:kJMReportRequestTimeout] ?: 90;
 }
 
-// Resets whole database for (sqlite + NSUserDefaults)
-- (void)resetDatabase
+// Resets database and defaults
+- (void)resetApplication
 {
-    [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
+    [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary]
+                                                       forName:[[NSBundle mainBundle] bundleIdentifier]];
     NSArray *stores = [self.persistentStoreCoordinator persistentStores];
+    NSMutableArray *storesURLs = [NSMutableArray array];
     
     for (NSPersistentStore *store in stores) {
+        [storesURLs addObject:store.URL];
         [self.persistentStoreCoordinator removePersistentStore:store error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:nil];
     }
     
-    // This will forces app to recreate db
-    _managedObjectModel = nil;
-    _managedObjectContext = nil;
-    _persistentStoreCoordinator = nil;
+    for (NSURL *storeURL in storesURLs) {
+        [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:nil];
+    }
+    
+    // Update db with latest app version and demo profile
+    [JMAppUpdater updateAppVersionTo:[JMAppUpdater latestAppVersion]];
+    [self coreDataInit];
 }
 
 - (JMServerProfile *)activeServerProfile

@@ -36,11 +36,11 @@
  */
 @interface JMFavorites : NSManagedObject
 
-@property (nonatomic, retain) NSString * organization;
-@property (nonatomic, retain) NSString * username;
-@property (nonatomic, retain) NSString * label;
-@property (nonatomic, retain) NSString * uri;
-@property (nonatomic, retain) NSString * wsType;
-@property (nonatomic, retain) JMServerProfile *serverProfile;
+@property (nonatomic, strong) NSString * organization;
+@property (nonatomic, strong) NSString * username;
+@property (nonatomic, strong) NSString * label;
+@property (nonatomic, strong) NSString * uri;
+@property (nonatomic, strong) NSString * wsType;
+@property (nonatomic, strong) JMServerProfile *serverProfile;
 
 @end

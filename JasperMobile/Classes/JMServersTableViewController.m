@@ -26,6 +26,7 @@
 //
 
 #import "JMServersTableViewController.h"
+#import "JMAppUpdater.h"
 #import "JMAskPasswordDialog.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
@@ -43,8 +44,6 @@ static NSInteger const kJMFooterSection = 1;
 
 @interface JMServersTableViewController ()
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, strong) UIBarButtonItem *editButton;
-@property (nonatomic, strong) UIBarButtonItem *doneButton;
 @property (nonatomic, strong) NSMutableArray *servers;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *infoButton;
 
@@ -60,10 +59,7 @@ inject_default_rotation();
 - (void)awakeFromNib
 {
     [[JSObjection defaultInjector] injectDependencies:self];
-    
     self.infoButton.title = JMCustomLocalizedString(@"dialog.button.info", nil);
-    self.editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editServers:)];
-    self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditing:)];
 }
 
 #pragma mark - UIViewController
@@ -80,7 +76,7 @@ inject_default_rotation();
     [super viewDidLoad];
     
     self.title = JMCustomLocalizedString(@"view.servers", nil);
-    self.navigationItem.rightBarButtonItem = self.editButton;
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
     self.servers = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
@@ -90,6 +86,31 @@ inject_default_rotation();
 {
     [self setInfoButton:nil];
     [super viewDidUnload];
+}
+
+#pragma mark - UIViewControllerEditing
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+{
+    [super setEditing:editing animated:animated];
+    
+    if (editing) {
+        if (!self.servers.count) {
+            [self performSegueWithIdentifier:kJMEditServerSegue sender:nil];
+        } else {
+            [self.tableView setEditing:YES animated:YES];
+            
+            // Add "New server account" table view cell
+            NSIndexPath *indexPath = [self indexPathForTheNewServerCell];
+            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+        }        
+    } else {
+        [self.tableView setEditing:NO animated:YES];
+        
+        NSIndexPath *indexPath = [self indexPathForTheNewServerCell];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kJMFooterSection] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 #pragma mark - Table view data source
@@ -139,7 +160,7 @@ inject_default_rotation();
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.tableView.isEditing && indexPath.row == self.servers.count) {
+    if (!self.tableView.isEditing || indexPath.row == self.servers.count) {
         return UITableViewCellEditingStyleNone;
     }
     
@@ -210,39 +231,13 @@ inject_default_rotation();
     }
 }
 
-#pragma mark - Action
-
-- (IBAction)editServers:(id)sender
-{
-    if (!self.servers.count) {
-        [self performSegueWithIdentifier:kJMEditServerSegue sender:nil];
-    } else {
-        self.navigationItem.rightBarButtonItem = self.doneButton;        
-        [self.tableView setEditing:YES animated:YES];
-        
-        // Add "New server account" table view cell
-        NSIndexPath *indexPath = [self indexPathForTheNewServerCell];
-        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
-    }
-}
-
-- (IBAction)doneEditing:(id)sender
-{
-    self.navigationItem.rightBarButtonItem = self.editButton;
-    // TODO: need implementation
-    
-    [self.tableView setEditing:NO animated:YES];
-    
-    NSIndexPath *indexPath = [self indexPathForTheNewServerCell];   
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kJMFooterSection] withRowAnimation:UITableViewRowAnimationNone];
-}
+#pragma mark - Actions
 
 - (IBAction)applicationInfo:(id)sender
 {
     NSString *message = JMCustomLocalizedString(@"servers.info", nil);
-    // TODO: replace with normal version from app updater
-    message = [NSString stringWithFormat:message, @1.6];
+    message = [NSString stringWithFormat:message, [JMAppUpdater latestAppVersion]];
+    
     [[UIAlertView localizedAlertWithTitle:nil
                          message:message
                         delegate:nil

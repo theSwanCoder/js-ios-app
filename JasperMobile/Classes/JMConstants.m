@@ -37,14 +37,10 @@ NSString * const kJMDefaultsServerBaseUrl = @"jaspersoft.server.baseUrl.%d";
 NSString * const kJMDefaultsServerOrganization = @"jaspersoft.server.organization.%d";
 NSString * const kJMDefaultsServerPassword = @"jaspersoft.server.password.%d";
 NSString * const kJMDefaultsServerUsername = @"jaspersoft.server.username.%d";
-// Deprecated
-NSString * const kJMDefaultsCount = @"jaspersoft.server.count";
-NSString * const kJMDefaultsFirstRun = @"jaspersoft.mobile.firstRun";
-NSString * const kJMDefaultsNotFirstRun = @"jaspersoft.mobile.notFirstRun";
-NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated.versions";
 
 // Notifications
 NSString * const kJMChangeServerProfileNotification = @"changeServerProfile";
+NSString * const kJMResetApplicationNotification = @"resetApplication";
 
 // Some shared keys for dictionary
 NSString * const kJMServerProfileKey = @"serverProfile";

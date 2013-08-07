@@ -29,6 +29,7 @@
 #import "JMRotatable.h"
 #import "JMPhoneRotation.h"
 #import "JMPadRotation.h"
+#import "JMFavoritesUtil.h"
 #import <CoreData/CoreData.h>
 
 @implementation JMBaseModule

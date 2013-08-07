@@ -42,7 +42,7 @@ inject_default_rotation()
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(changeServerProfile:)
                                                  name:kJMChangeServerProfileNotification
-                                               object:nil];
+                                               object:nil];    
 }
 
 - (void)viewDidLoad
@@ -57,7 +57,8 @@ inject_default_rotation()
 
 #pragma mark - Private
 
-// TODO: move to @protocol if there will be more than 1 implementation
+// TODO: move to protocol if there will be more than 1 implementation
+// (i.e. make general disableMenu method or smt like that)
 - (void)disableTabBar
 {
     for (UITabBarItem *item in self.tabBar.items) {

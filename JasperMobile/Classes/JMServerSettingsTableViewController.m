@@ -26,6 +26,7 @@
 //
 
 #import "JMServerSettingsTableViewController.h"
+#import "JMFavoritesUtil.h"
 #import "JMLocalization.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
@@ -64,10 +65,11 @@ typedef BOOL (^JMValidationBlock)(NSString *value, NSString **errorMessage);
 // was configured
 @property (nonatomic, strong) NSDictionary *cellsProperties;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;
 @end
 
 @implementation JMServerSettingsTableViewController
-objection_requires(@"managedObjectContext");
+objection_requires(@"managedObjectContext", @"favoritesUtil");
 
 #pragma mark - Accessors
 
@@ -329,6 +331,8 @@ objection_requires(@"managedObjectContext");
         [JMServerProfile storePasswordInKeychain:self.serverToEdit.password profileID:self.serverToEdit.profileID];
         // Update previous view controller with modified server profile
         [self.delegate updateWithServerProfile:self.serverToEdit];
+        // Indicate that Favorites View Controller should refresh data
+        self.favoritesUtil.needsToRefreshFavorites = YES;
         // Go to previous view controller
         [self.navigationController popViewControllerAnimated:YES];
     }

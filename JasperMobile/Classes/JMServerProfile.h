@@ -36,14 +36,14 @@
  */
 @interface JMServerProfile : NSManagedObject
 
-@property (nonatomic, retain) NSString * alias;
-@property (nonatomic, retain) NSNumber * askPassword;
-@property (nonatomic, retain) NSString * organization;
-@property (nonatomic, retain) NSString * password;
-@property (nonatomic, retain) NSString * serverUrl;
-@property (nonatomic, retain) NSString * username;
-@property (nonatomic, retain) NSSet *favorites;
-@property (nonatomic, retain) NSSet *reportOptions;
+@property (nonatomic, strong) NSString * alias;
+@property (nonatomic, strong) NSNumber * askPassword;
+@property (nonatomic, strong) NSString * organization;
+@property (nonatomic, strong) NSString * password;
+@property (nonatomic, strong) NSString * serverUrl;
+@property (nonatomic, strong) NSString * username;
+@property (nonatomic, strong) NSSet *favorites;
+@property (nonatomic, strong) NSSet *reportOptions;
 @end
 
 @interface JMServerProfile (CoreDataGeneratedAccessors)

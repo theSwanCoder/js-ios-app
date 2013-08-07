@@ -36,12 +36,12 @@
  */
 @interface JMReportOptions : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * isListItem;
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSString * organization;
-@property (nonatomic, retain) NSString * reportUri;
-@property (nonatomic, retain) NSString * username;
-@property (nonatomic, retain) NSString * value;
-@property (nonatomic, retain) ServerProfile *serverProfile;
+@property (nonatomic, strong) NSNumber * isListItem;
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, strong) NSString * organization;
+@property (nonatomic, strong) NSString * reportUri;
+@property (nonatomic, strong) NSString * username;
+@property (nonatomic, strong) NSString * value;
+@property (nonatomic, strong) ServerProfile *serverProfile;
 
 @end

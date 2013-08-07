@@ -278,7 +278,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="bRr-oA-Y3u">
-                                                    <rect key="frame" x="0.0" y="-1" width="145" height="45"/>
+                                                    <rect key="frame" x="-1" y="-1" width="144" height="44"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                     <state key="normal" title="Favorite" backgroundImage="add_favorite_button.png">
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -288,9 +288,6 @@
                                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </state>
-                                                    <connections>
-                                                        <action selector="favoriteClicked:" destination="xh7-oZ-8dJ" eventType="touchUpInside" id="oeW-JH-Mix"/>
-                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZzU-Zs-feG">
                                                     <rect key="frame" x="155" y="-1" width="145" height="45"/>
@@ -1065,12 +1062,11 @@
         </class>
         <class className="JMResourceModifyViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceModifyViewController.h"/>
+        </class>
+        <class className="JMResourceTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceTableViewController.h"/>
             <relationships>
-                <relationship kind="outlet" name="description" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="descriptionTextView" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="doneButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelTextField" candidateClass="UITextField"/>
+                <relationship kind="action" name="deleteResource:"/>
             </relationships>
         </class>
         <class className="JMSearchTableViewController" superclassName="JMBaseRepositoryTableViewController">
@@ -1081,9 +1077,6 @@
         </class>
         <class className="JMServersTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMServersTableViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="infoButton" candidateClass="UIBarButtonItem"/>
-            </relationships>
         </class>
         <class className="TPKeyboardAvoidingScrollView" superclassName="UIScrollView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TPKeyboardAvoidingScrollView.h"/>

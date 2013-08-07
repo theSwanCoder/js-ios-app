@@ -28,6 +28,7 @@
 #import "JMResourceTableViewController.h"
 #import "JMBaseRepositoryTableViewController.h"
 #import "JMCancelRequestPopup.h"
+#import "JMFavoritesUtil.h"
 #import "JMFilter.h"
 #import "JMLocalization.h"
 #import "JMRotationBase.h"
@@ -58,16 +59,18 @@ typedef enum {
 @property (nonatomic, strong, readonly) NSDictionary *numberOfRowsForSections;
 @property (nonatomic, strong, readonly) NSDictionary *resourceDescriptorProperties;
 @property (nonatomic, strong, readonly) NSDictionary *cellIdentifiers;
+@property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;
 @property (nonatomic, assign) JMRequestType requestType;
 
 - (void)refreshResourceDescriptor;
+- (void)reloadToolsSection;
 - (JSResourceProperty *)resourcePropertyForIndexPath:(NSIndexPath *)indexPath;
 - (NSDictionary *)resourceDescriptorPropertyForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)localizedTextLabelTitleForProperty:(NSString *)property;
 @end
 
 @implementation JMResourceTableViewController
-objection_requires(@"resourceClient");
+objection_requires(@"resourceClient", @"favoritesUtil");
 inject_default_rotation();
 
 #pragma mark - Accessors
@@ -176,8 +179,24 @@ inject_default_rotation();
 - (void)viewWillAppear:(BOOL)animated
 {
     if (self.needsToRefreshResourceDescriptorData) {
-        [self refreshResourceDescriptor];        
+        [self refreshResourceDescriptor];
     }
+
+    // TODO: remove if main menu will be changed to "List" instead tab bar controller
+    if (self.resourceDescriptor) {
+        // Persist old changes, if they were made previously. This case can be when 2
+        // Resource Table View Controller are opened simultaneously (on 2 diff 
+        [self.favoritesUtil persist];
+        self.favoritesUtil.resourceDescriptor = self.resourceDescriptor;
+        // Reload whole data instead just 1 section because of issue with height autoresizing
+        // (height is different after each reload)
+        [self.tableView reloadData];        
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.favoritesUtil persist];
 }
 
 #pragma mark - Table view data source
@@ -212,8 +231,14 @@ inject_default_rotation();
         cell.detailTextLabel.text = value;
     } else if (section == kJMToolsSection) {
         cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+        
+        UIButton *favoriteButton = (UIButton *)[cell viewWithTag:1];
         UIButton *deleteButton = (UIButton *)[cell viewWithTag:2];
+        
         [deleteButton setTitle:JMCustomLocalizedString(@"dialog.button.delete", nil) forState:UIControlStateNormal];
+        
+        BOOL isResourceInFavorites = self.resourceDescriptor ? [self.favoritesUtil isResourceInFavorites] : NO;
+        [self changeFavoriteButton:favoriteButton isResourceInFavorites:isResourceInFavorites];
     } else if (section == kJMResourcePropertiesSection) {
         JSResourceProperty *resourceProperty = [self resourcePropertyForIndexPath:indexPath];
         
@@ -264,10 +289,17 @@ inject_default_rotation();
                otherButtonTitles:@"dialog.button.yes", nil] show];
 }
 
-- (IBAction)favoriteClicked:(id)sender
+- (IBAction)favoriteButtonClicked:(id)sender
 {
-#warning Needs Implementation For Favorite Button
-    NSLog(@"Favorite Action Works");
+    BOOL isResourceInFavorites = [self.favoritesUtil isResourceInFavorites];
+    
+    if (!isResourceInFavorites) {
+        [self.favoritesUtil addToFavorites];
+        [self changeFavoriteButton:sender isResourceInFavorites:YES];
+    } else {
+        [self.favoritesUtil removeFromFavorites];
+        [self changeFavoriteButton:sender isResourceInFavorites:NO];
+    }
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -288,6 +320,7 @@ inject_default_rotation();
 {
     if (self.requestType == JMGetResourceRequest) {
         self.resourceDescriptor = [result.objects objectAtIndex:0];
+        self.favoritesUtil.resourceDescriptor = self.resourceDescriptor;
         
         if (self.needsToRefreshResourceDescriptorData) {
             self.needsToRefreshResourceDescriptorData = NO;
@@ -296,10 +329,10 @@ inject_default_rotation();
         
         [self.tableView reloadData];
     } else if (self.requestType == JMDeleteResourceRequest) {
-#warning Finish Favorites Implementation
-//        if ([[JasperMobileAppDelegate sharedInstance].favorites isResourceInFavorites:self.descriptor]) {
-//            [[JasperMobileAppDelegate sharedInstance].favorites removeFromFavorites:self.descriptor];
-//        }
+        if ([self.favoritesUtil isResourceInFavorites]) {
+            [self.favoritesUtil removeFromFavorites];
+        }
+        
         [self.delegate removeResource];
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -337,6 +370,25 @@ inject_default_rotation();
 - (NSString *)localizedTextLabelTitleForProperty:(NSString *)property
 {
     return JMCustomLocalizedString([NSString stringWithFormat:@"resource.%@.title", property], nil);
+}
+
+- (void)reloadToolsSection
+{
+    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:kJMToolsSection];
+    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)changeFavoriteButton:(UIButton *)button isResourceInFavorites:(BOOL)isResourceInFavorites
+{
+    if (!isResourceInFavorites) {
+        [button setTitle:JMCustomLocalizedString(@"dialog.button.addfavorite", nil) forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"add_favorite_button.png"] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"add_favorite_button_highlighted.png"] forState:UIControlStateHighlighted];
+    } else {
+        [button setTitle:JMCustomLocalizedString(@"dialog.button.removefavorite", nil) forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"remove_favorite_button.png"] forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"remove_favorite_button_highlighted.png"] forState:UIControlStateHighlighted];
+    }
 }
 
 @end

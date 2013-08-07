@@ -36,7 +36,6 @@ static NSString * const kJMShowResourceInfoSegue = @"ShowResourceInfo";
 static NSString * const kJMUnknownCell = @"UnknownCell";
 
 @interface JMBaseRepositoryTableViewController ()
-@property (nonatomic, strong) NSMutableArray *resources;
 @property (nonatomic, strong, readonly) NSDictionary *cellsIdentifiers;
 @property (nonatomic, strong) NSIndexPath *lastIndexPath;
 
@@ -130,17 +129,6 @@ inject_default_rotation()
     cell.detailTextLabel.text = resourceDescriptor.uriString;
         
     return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
-    NSString *cellIdentifier = [self cellIdentifierForResourceType:resourceDescriptor.wsType];
-    
-    if ([cellIdentifier isEqualToString:kJMUnknownCell]) {
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:cell];
-    }
 }
 
 #pragma mark - JSRequestDelegate

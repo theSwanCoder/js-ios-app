@@ -66,6 +66,9 @@
 "servers.title.new" = "New Server Profile";
 "servers.title.edit" = "Edit Server Profile";
 
+// TODO: localize for other bundles
+"search.resources.placeholder" = "Search Resources";
+
 /* Navigation and view labels */
 
 "view.servers" = "Servers";

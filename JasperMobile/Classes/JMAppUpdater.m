@@ -48,6 +48,12 @@ static JMAppUpdater *delegate;
 // Context to work with database
 static NSManagedObjectContext * managedObjectContext;
 
+// Old constants used in previous versions of application
+static NSString * const kJMDefaultsCount = @"jaspersoft.server.count";
+static NSString * const kJMDefaultsFirstRun = @"jaspersoft.mobile.firstRun";
+static NSString * const kJMDefaultsNotFirstRun = @"jaspersoft.mobile.notFirstRun";
+static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated.versions";
+
 @implementation JMAppUpdater
 
 // Fill migrations with update methods for different versions
@@ -123,7 +129,6 @@ static NSManagedObjectContext * managedObjectContext;
 #pragma mark - Migration methods
 
 // Moves password for profiles from NSUserDefaults to keychain
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 + (BOOL)update_1_2
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -143,7 +148,6 @@ static NSManagedObjectContext * managedObjectContext;
 }
 
 // Moves all data from NSUserDefaults persistent Map to SQLite database
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 + (BOOL)update_1_5 
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -251,7 +255,12 @@ static NSManagedObjectContext * managedObjectContext;
 
 + (BOOL)update_1_6
 {
-    // TODO: remove unnecessary keys
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults removeObjectForKey:kJMDefaultsCount];
+    [defaults removeObjectForKey:kJMDefaultsFirstRun];
+    [defaults removeObjectForKey:kJMDefaultsNotFirstRun];
+    [defaults removeObjectForKey:kJMDefaultsUpdatedVersions];
+    
     return YES;
 }
 
@@ -262,9 +271,8 @@ static NSManagedObjectContext * managedObjectContext;
     if (buttonIndex == 1) {
         [JMAppUpdater update];
     } else if (buttonIndex == 2) {
-//        JasperMobileAppDelegate *app = [JasperMobileAppDelegate sharedInstance];
-//        [app resetDatabase];
-//        [app refreshApplication];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMResetApplicationNotification
+                                                            object:nil];
     } else {
         // TODO: change to smt more user friendly
         abort();

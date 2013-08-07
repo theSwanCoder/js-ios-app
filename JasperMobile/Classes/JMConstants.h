@@ -41,13 +41,9 @@ extern NSString * const kJMDefaultsServerOrganization;
 extern NSString * const kJMDefaultsServerPassword;
 extern NSString * const kJMDefaultsServerUsername;
 
-__deprecated extern NSString * const kJMDefaultsCount;
-__deprecated extern NSString * const kJMDefaultsFirstRun;
-__deprecated extern NSString * const kJMDefaultsNotFirstRun;
-__deprecated extern NSString * const kJMDefaultsUpdatedVersions;
-
 // Notifications
 extern NSString * const kJMChangeServerProfileNotification;
+extern NSString * const kJMResetApplicationNotification;
 
 // Some shared keys for dictionary
 extern NSString * const kJMServerProfileKey;

@@ -387,8 +387,8 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="1cY-CU-zDf"/>
         <segue reference="MrB-gN-heN"/>
-        <segue reference="FGe-9Z-ChX"/>
         <segue reference="yAv-9T-Ye9"/>
     </inferredMetricsTieBreakers>
 </document>
