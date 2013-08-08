@@ -19,10 +19,14 @@
 @implementation JMFavoritesTableViewController
 objection_requires(@"favoritesUtil");
 
+#pragma mark - Initialization
+
 - (void)awakeFromNib
 {
     [[JSObjection defaultInjector] injectDependencies:self];
 }
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
@@ -40,11 +44,15 @@ objection_requires(@"favoritesUtil");
     }
 }
 
+#pragma mark - UIViewControllerEditing
+
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
     [super setEditing:editing animated:animated];
     [self checkAvailabilityOfEditButton];
 }
+
+#pragma mark - Table view data source
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -56,10 +64,11 @@ objection_requires(@"favoritesUtil");
     }
 }
 
+#pragma mark - Private
+
 - (void)checkAvailabilityOfEditButton
 {
     self.navigationItem.rightBarButtonItem.enabled = self.resources.count > 0;
 }
-
 
 @end

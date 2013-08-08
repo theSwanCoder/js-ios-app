@@ -33,4 +33,6 @@
  */
 @interface JMSearchTableViewController : JMBaseRepositoryTableViewController <UISearchBarDelegate>
 
+//@property (nonatomic, weak, readonly) UISearchBar *searchBar;
+
 @end

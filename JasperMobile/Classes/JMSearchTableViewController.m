@@ -31,6 +31,8 @@
 
 @interface JMSearchTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;
+@property (nonatomic, assign) BOOL isRotating;
+@property (nonatomic, assign) CGPoint contentOffset;
 
 - (void)hideSearchBar:(UISearchBar *)searchBar animated:(BOOL)animated;
 @end
@@ -42,7 +44,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     self.searchBar = [[UISearchBar alloc] init];
     self.searchBar.delegate = self;
     
@@ -52,6 +54,18 @@
     
     self.tableView.tableHeaderView = self.searchBar;
     [self hideSearchBar:self.searchBar animated:NO];
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    self.isRotating = YES;
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    self.isRotating = NO;
 }
 
 #pragma mark - UISearchBarDelegate
@@ -76,11 +90,22 @@
 {
     [searchBar resignFirstResponder];
     [self hideSearchBar:searchBar animated:YES];
-
+    
     [JMCancelRequestPopup presentInViewController:self
                                   progressMessage:@"status.searching"
                                        restClient:self.resourceClient
                                       cancelBlock:nil];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (self.isRotating) {
+        [self.tableView setContentOffset:self.contentOffset];
+    } else {
+        self.contentOffset = scrollView.contentOffset;
+    }
 }
 
 #pragma mark - JMResourceViewControllerDelegate

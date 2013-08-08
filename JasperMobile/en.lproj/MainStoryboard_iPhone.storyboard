@@ -1226,61 +1226,6 @@
         <image name="res_type_unknown.png" width="32" height="32"/>
         <image name="settings_bar_item.png" width="30" height="29"/>
     </resources>
-    <classes>
-        <class className="JMBaseRepositoryTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMBaseRepositoryTableViewController.h"/>
-        </class>
-        <class className="JMDashboardViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMDashboardViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
-                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-        <class className="JMFavoritesTableViewController" superclassName="JMBaseRepositoryTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMFavoritesTableViewController.h"/>
-        </class>
-        <class className="JMLibraryTableViewController" superclassName="JMSearchTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMLibraryTableViewController.h"/>
-        </class>
-        <class className="JMMenuTabBarController" superclassName="UITabBarController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMMenuTabBarController.h"/>
-        </class>
-        <class className="JMRepositoryTableViewController" superclassName="JMSearchTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMRepositoryTableViewController.h"/>
-        </class>
-        <class className="JMResourceModifyViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceModifyViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="description" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="descriptionTextView" candidateClass="UITextView"/>
-                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="labelTextField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="JMResourceTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceTableViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="deleteResource:"/>
-                <relationship kind="action" name="favoriteButtonClicked:"/>
-            </relationships>
-        </class>
-        <class className="JMSearchTableViewController" superclassName="JMBaseRepositoryTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSearchTableViewController.h"/>
-        </class>
-        <class className="JMServerSettingsTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMServerSettingsTableViewController.h"/>
-        </class>
-        <class className="JMServersTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMServersTableViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="infoButton" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="TPKeyboardAvoidingScrollView" superclassName="UIScrollView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TPKeyboardAvoidingScrollView.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
@@ -1288,7 +1233,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="4G2-Cf-EF7"/>
-        <segue reference="Ete-rd-4of"/>
-        <segue reference="wp3-22-jSm"/>
+        <segue reference="ire-M8-0ci"/>
+        <segue reference="f3B-eB-Zkq"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -16,6 +16,8 @@ inject_default_rotation()
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceDescriptor = _resourceDescriptor;
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -34,6 +36,8 @@ inject_default_rotation()
         [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dashboardUrl]]];
     } viewControllerToDismiss:self];
 }
+
+#pragma mark - UIWebViewDelegate
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
