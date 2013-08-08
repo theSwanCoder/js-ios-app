@@ -61,6 +61,7 @@ typedef enum {
 @property (nonatomic, strong, readonly) NSDictionary *cellIdentifiers;
 @property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;
 @property (nonatomic, assign) JMRequestType requestType;
+@property (nonatomic, weak) UIButton *favoriteButton;
 
 - (void)refreshResourceDescriptor;
 - (void)reloadToolsSection;
@@ -184,13 +185,17 @@ inject_default_rotation();
 
     // TODO: remove if main menu will be changed to "List" instead tab bar controller
     if (self.resourceDescriptor) {
-        // Persist old changes, if they were made previously. This case can be when 2
-        // Resource Table View Controller are opened simultaneously (on 2 diff 
+        // Persist old changes, if they were made previously. This is required
+        // because for some reason "viewWillAppear" method of 2-nd view controller is
+        // called earlier then "viewWillDisappear" of 1-st one (storyboard bug?).
+        // This is true even if view controllers are same type
         [self.favoritesUtil persist];
         self.favoritesUtil.resourceDescriptor = self.resourceDescriptor;
-        // Reload whole data instead just 1 section because of issue with height autoresizing
-        // (height is different after each reload)
-        [self.tableView reloadData];        
+        
+        // Update favorite button if needed
+        if (self.favoriteButton) {
+            [self changeFavoriteButton:self.favoriteButton isResourceInFavorites:[self.favoritesUtil isResourceInFavorites]];
+        }
     }
 }
 
@@ -232,13 +237,13 @@ inject_default_rotation();
     } else if (section == kJMToolsSection) {
         cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         
-        UIButton *favoriteButton = (UIButton *)[cell viewWithTag:1];
+        self.favoriteButton = (UIButton *)[cell viewWithTag:1];
         UIButton *deleteButton = (UIButton *)[cell viewWithTag:2];
         
         [deleteButton setTitle:JMCustomLocalizedString(@"dialog.button.delete", nil) forState:UIControlStateNormal];
         
         BOOL isResourceInFavorites = self.resourceDescriptor ? [self.favoritesUtil isResourceInFavorites] : NO;
-        [self changeFavoriteButton:favoriteButton isResourceInFavorites:isResourceInFavorites];
+        [self changeFavoriteButton:self.favoriteButton isResourceInFavorites:isResourceInFavorites];
     } else if (section == kJMResourcePropertiesSection) {
         JSResourceProperty *resourceProperty = [self resourcePropertyForIndexPath:indexPath];
         

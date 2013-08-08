@@ -28,6 +28,7 @@
 #import "JMUtils.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
+#import "Reachability.h"
 
 @implementation JMUtils
 
@@ -79,6 +80,15 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
                                                         object:nil
                                                       userInfo:userInfo];
+}
+
++ (BOOL)isNetworkReachable
+{
+    NetworkStatus networkStatus = [[Reachability reachabilityForLocalWiFi] currentReachabilityStatus];
+    if (networkStatus == ReachableViaWiFi) return YES;
+    
+    networkStatus = [[Reachability reachabilityForInternetConnection] currentReachabilityStatus];
+    return networkStatus == ReachableViaWWAN;
 }
 
 @end

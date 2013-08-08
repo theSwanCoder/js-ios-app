@@ -27,6 +27,7 @@
 
 #import "JMFilter.h"
 #import "JMCancelRequestPopup.h"
+#import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 
 static JMFilter * delegate;
@@ -45,10 +46,11 @@ static JMFilter * delegate;
 
 + (void)checkNetworkReachabilityForBlock:(void (^)(void))block viewControllerToDismiss:(id)viewController
 {
-    if (![JSRESTBase isNetworkReachable]) {
+    if (![JMUtils isNetworkReachable]) {
+        [JMCancelRequestPopup dismiss];
+        
         delegate = [[JMFilter alloc] initWithDismissalViewController:viewController];
         
-        [JMCancelRequestPopup dismiss];
         [[UIAlertView localizedAlertWithTitle:@"error.noconnection.dialog.title"
                              message:@"error.noconnection.dialog.msg"
                             delegate:delegate

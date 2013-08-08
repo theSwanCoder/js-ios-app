@@ -20,6 +20,7 @@
 		F514E6AD17563B6F00C9F61E /* res_type_unknown.png in Resources */ = {isa = PBXBuildFile; fileRef = F514E6A717563B6F00C9F61E /* res_type_unknown.png */; };
 		F51D6A82178472870079AE50 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F51D6A80178472870079AE50 /* Localizable.strings */; };
 		F5325D8417B17B2900C11E33 /* JMFavoritesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5325D8317B17B2900C11E33 /* JMFavoritesTableViewController.m */; };
+		F53C0AB617B3EBAD0063AE90 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F53C0AB517B3EBAD0063AE90 /* Reachability.m */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
 		F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */; };
@@ -161,6 +162,8 @@
 		F51D6A89178474030079AE50 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F5325D8217B17B2900C11E33 /* JMFavoritesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMFavoritesTableViewController.h; path = Classes/JMFavoritesTableViewController.h; sourceTree = "<group>"; };
 		F5325D8317B17B2900C11E33 /* JMFavoritesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMFavoritesTableViewController.m; path = Classes/JMFavoritesTableViewController.m; sourceTree = "<group>"; };
+		F53C0AB417B3EBAD0063AE90 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		F53C0AB517B3EBAD0063AE90 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F54C91A21752FAAD0009E2BE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -344,6 +347,15 @@
 			path = ResourceTypes;
 			sourceTree = "<group>";
 		};
+		F53C0AB317B3EBAD0063AE90 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				F53C0AB417B3EBAD0063AE90 /* Reachability.h */,
+				F53C0AB517B3EBAD0063AE90 /* Reachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
 		F54C91AC1752FADD0009E2BE /* ObjectionModules */ = {
 			isa = PBXGroup;
 			children = (
@@ -494,8 +506,9 @@
 		F5663A141752F9D0007978BE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
-				F5D97FA7179587CF0059C761 /* SSKeychain */,
 				F58FF2EF1760A0B50021CC8B /* MJPopupViewController */,
+				F53C0AB317B3EBAD0063AE90 /* Reachability */,
+				F5D97FA7179587CF0059C761 /* SSKeychain */,
 				F5DC4EA8176A101D00038D58 /* TPKeyboardAvoiding */,
 			);
 			name = Vendor;
@@ -898,6 +911,7 @@
 				F59FD9C017B1014A00331BD8 /* JMFavoritesUtil.m in Sources */,
 				F5325D8417B17B2900C11E33 /* JMFavoritesTableViewController.m in Sources */,
 				F511A55117B26B8B004D90A2 /* JMDashboardViewController.m in Sources */,
+				F53C0AB617B3EBAD0063AE90 /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
