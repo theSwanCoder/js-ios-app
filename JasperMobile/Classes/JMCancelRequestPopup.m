@@ -27,6 +27,7 @@
 
 #import "JMCancelRequestPopup.h"
 #import "JMLocalization.h"
+#import "JMUtils.h"
 #import "UIViewController+MJPopupViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -50,8 +51,8 @@ static JMCancelRequestPopup *instance;
 
 + (void)presentInViewController:(UIViewController *)viewController progressMessage:(NSString *)progressMessage restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock
 {
-    // Before presenting new cancel request popup we should dismiss previous one
-    [[self class] dismiss];
+    // Before presenting new cancel request popup we should dismiss previous one (if previous popup exists)
+//    [[self class] dismiss];
     
     instance = [[JMCancelRequestPopup alloc] initWithNibName:kJMCancelRequestPopupNib
                                                       bundle:nil
@@ -69,6 +70,9 @@ static JMCancelRequestPopup *instance;
 {
     if (instance) {
         [instance.viewController dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
+        // Remove all targets for cancel button before releasing instance (instance = nil)
+        // to avoid memory issue: when click is performed but instance was released already
+        [instance.cancelButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         instance = nil;
     }
 }
@@ -81,17 +85,11 @@ static JMCancelRequestPopup *instance;
     self.view.layer.cornerRadius = 5.0f;
 }
 
-- (void)viewDidUnload
-{
-    [self setCancelButton:nil];
-    [self setProgressLabel:nil];
-    [super viewDidUnload];
-}
-
 #pragma mark - Actions
 
 - (IBAction)cancelRequests:(id)sender
 {
+    [JMUtils hideNetworkActivityIndicator];
     [self.restClient cancelAllRequests];
     [self.viewController dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
     

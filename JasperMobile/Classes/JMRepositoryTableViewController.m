@@ -37,11 +37,11 @@
 {
     [super viewDidLoad];
     
-    [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
-        [self.navigationController popViewControllerAnimated:YES];
-    }];
-    
     [JMFilter checkNetworkReachabilityForBlock:^{
+        [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        
         [self.resourceClient resources:[self path] delegate:[JMFilter checkRequestResultForDelegate:self]];
     } viewControllerToDismiss:self];
 }

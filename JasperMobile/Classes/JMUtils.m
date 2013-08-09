@@ -91,4 +91,14 @@
     return networkStatus == ReachableViaWWAN;
 }
 
++ (void)showNetworkActivityIndicator
+{
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+}
+
++ (void)hideNetworkActivityIndicator
+{
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+}
+
 @end

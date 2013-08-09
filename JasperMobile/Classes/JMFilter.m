@@ -57,6 +57,7 @@ static JMFilter * delegate;
                    cancelButtonTitle:@"dialog.button.ok"
                    otherButtonTitles:nil] show];
     } else {
+        [JMUtils showNetworkActivityIndicator];
         block();
 	}
 }
@@ -70,6 +71,7 @@ static JMFilter * delegate;
 
 - (void)requestFinished:(JSOperationResult *)result
 {
+    [JMUtils hideNetworkActivityIndicator];
     [JMCancelRequestPopup dismiss];
     
     if ([result isSuccessful]) {

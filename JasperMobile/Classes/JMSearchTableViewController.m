@@ -31,7 +31,7 @@
 
 @interface JMSearchTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;
-@property (nonatomic, assign) BOOL isRotating;
+@property (nonatomic, assign) BOOL shouldMoveToContentOffset;
 @property (nonatomic, assign) CGPoint contentOffset;
 
 - (void)hideSearchBar:(UISearchBar *)searchBar animated:(BOOL)animated;
@@ -56,16 +56,22 @@
     [self hideSearchBar:self.searchBar animated:NO];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.shouldMoveToContentOffset = YES;
+}
+
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    self.isRotating = YES;
+    self.shouldMoveToContentOffset = YES;
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    self.isRotating = NO;
+    self.shouldMoveToContentOffset = NO;
 }
 
 #pragma mark - UISearchBarDelegate
@@ -101,7 +107,8 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (self.isRotating) {
+    if (self.shouldMoveToContentOffset) {
+        self.shouldMoveToContentOffset = NO;
         [self.tableView setContentOffset:self.contentOffset];
     } else {
         self.contentOffset = scrollView.contentOffset;

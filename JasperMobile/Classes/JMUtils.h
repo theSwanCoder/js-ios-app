@@ -75,4 +75,14 @@
  */
 + (BOOL)isNetworkReachable;
 
+/**
+ Shows network activity indicator
+ */
++ (void)showNetworkActivityIndicator;
+
+/**
+ Hides network activity indicator
+ */
++ (void)hideNetworkActivityIndicator;
+
 @end

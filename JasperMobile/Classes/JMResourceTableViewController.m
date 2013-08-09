@@ -347,11 +347,11 @@ inject_default_rotation();
 
 - (void)refreshResourceDescriptor
 {
-    [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
-        [self.navigationController popViewControllerAnimated:YES];
-    }];
-    
     [JMFilter checkNetworkReachabilityForBlock:^{
+        [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        
         self.requestType = JMGetResourceRequest;
         [self.resourceClient resource:self.resourceDescriptor.uriString delegate:[JMFilter checkRequestResultForDelegate:self]];
     } viewControllerToDismiss:self];

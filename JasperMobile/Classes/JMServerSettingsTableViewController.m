@@ -342,7 +342,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-	if (textField.returnKeyType == UIReturnKeyNext) {
+    if (textField.returnKeyType == UIReturnKeyNext) {
         NSIndexPath *indexPath = [self indexPathForTextField:textField];
         UITableViewCell *nextCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]];
         
