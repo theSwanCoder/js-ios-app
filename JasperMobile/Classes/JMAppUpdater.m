@@ -82,7 +82,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     }
     
     for (NSNumber *version in versionsToUpdate.allKeys) {
-        SEL selector = [[versionsToUpdate objectForKey:version] pointerValue];
+        SEL selector = [versionsToUpdate[version] pointerValue];
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:selector]];
         invocation.selector = selector;
         invocation.target = self;
@@ -112,7 +112,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
 + (NSNumber *)latestAppVersion
 {
-    NSString *appVersion = [[NSBundle mainBundle].infoDictionary objectForKey:kJMApplicationVersion];
+    NSString *appVersion = [NSBundle mainBundle].infoDictionary[kJMApplicationVersion];
     return [NSNumber numberWithDouble:[appVersion doubleValue]];
 }
 

@@ -167,6 +167,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
 }
 
@@ -203,14 +204,14 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSMutableDictionary *cellProperties = [self.cellsProperties objectForKey:@(indexPath.row)];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellProperties[kJMCellIdentifierKey]];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[cellProperties objectForKey:kJMCellIdentifierKey]];
     
     // Check if cell wasn't alredy configured
-    BOOL cellWasConfigured = [cellProperties[kJMWasConfiguredKey] boolValue];
+    BOOL cellWasConfigured = [[cellProperties objectForKey:kJMWasConfiguredKey] boolValue];
     if (cellWasConfigured) return cell;
     
     UILabel *label = (UILabel *) [cell viewWithTag:1];
-    label.text = JMCustomLocalizedString(cellProperties[kJMTitleKey], nil);
+    label.text = JMCustomLocalizedString([cellProperties objectForKey:kJMTitleKey], nil);
     [label sizeToFit];
     
     if (indexPath.row != kJMAskPasswordCell) {
@@ -223,18 +224,18 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
         textField.frame = newTextFieldFrame;
         
         if (indexPath.row != kJMPasswordCell || !self.serverToEdit.askPassword.boolValue) {
-            textField.placeholder = JMCustomLocalizedString(cellProperties[kJMPlaceholderKey], nil);
-            textField.text = cellProperties[kJMValueKey];
+            textField.placeholder = JMCustomLocalizedString([cellProperties objectForKey:kJMPlaceholderKey], nil);
+            textField.text = [cellProperties objectForKey:kJMValueKey];
         }
         
         textField.delegate = self;
     } else {
         UISwitch *askPasswordSwitch = (UISwitch *) [cell viewWithTag:2];
-        askPasswordSwitch.on = [cellProperties[kJMValueKey] boolValue];
+        askPasswordSwitch.on = [[cellProperties objectForKey:kJMValueKey] boolValue];
         [self askPasswordSwitchToggled:askPasswordSwitch];
     }
     
-    cellProperties[kJMWasConfiguredKey] = @YES;
+    [cellProperties setObject:@YES forKey:kJMWasConfiguredKey];
     
     return cell;
 }
@@ -245,8 +246,8 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
 {
     // Update value for cell
     NSIndexPath *indexPath = [self indexPathForTextField:sender];
-    NSMutableDictionary *cellProperties = self.cellsProperties[@(indexPath.row)];
-    cellProperties[kJMValueKey] = [sender text];
+    NSMutableDictionary *cellProperties = [self.cellsProperties objectForKey:@(indexPath.row)];
+    [cellProperties setObject:[sender text] forKey:kJMValueKey];
 }
 
 - (IBAction)askPasswordSwitchToggled:(id)sender
@@ -268,8 +269,8 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
     }
     
     // Update value for ask password cell
-    NSMutableDictionary *cellProperties = self.cellsProperties[@kJMAskPasswordCell];
-    cellProperties[kJMValueKey] = @([sender isOn]);    
+    NSMutableDictionary *cellProperties = [self.cellsProperties objectForKey:@kJMAskPasswordCell];
+    [cellProperties setObject:@([sender isOn]) forKey:kJMValueKey];
 }
 
 // Modifies existing or creates new server profile
@@ -283,10 +284,10 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
     NSArray *allKeys = [[self.cellsProperties allKeys] sortedArrayUsingSelector:@selector(compare:)];
     
     for (NSNumber *key in allKeys) {
-        NSDictionary *cellProperties = self.cellsProperties[key];
-        id value = cellProperties[kJMValueKey];
+        NSDictionary *cellProperties = [self.cellsProperties objectForKey:key];
+        id value = [cellProperties objectForKey:kJMValueKey];
         
-        JMValidationBlock validation = cellProperties[kJMValidationBlockKey];
+        JMValidationBlock validation = [cellProperties objectForKey:kJMValidationBlockKey];
         NSString *errorMessage;
         
         // Perform validation for value and check if it's invalid
@@ -315,7 +316,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
         // profile by selector (in this case selector is just a setter). Here
         // NSInvocation was used becase "performSelector:withObject:" produces
         // memory leak warning
-        SEL selector = [cellProperties[kJMSelectorKey] pointerValue];
+        SEL selector = [[cellProperties objectForKey:kJMSelectorKey] pointerValue];
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self.serverToEdit methodSignatureForSelector:selector]];
         invocation.selector = selector;
         invocation.target = self.serverToEdit;

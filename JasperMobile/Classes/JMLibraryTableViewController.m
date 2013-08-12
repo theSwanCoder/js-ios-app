@@ -41,10 +41,14 @@ static NSString * const kJMRequestType = @"type";
 
 #pragma mark - UIViewController
 
-- (void)viewDidLoad
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLoad];
-    [self searchReportsByQuery:nil includingDashboards:YES];
+    [super viewWillAppear:animated];
+    
+    // Check if resources are already updated
+    if (self.resources && !self.query.length) return;
+    
+    [self searchReportsByQuery:self.query includingDashboards:YES];
 }
 
 #pragma mark - JSRequestDelegate
@@ -65,18 +69,6 @@ static NSString * const kJMRequestType = @"type";
     self.query = nil;
 }
 
-#pragma mark - UISearchBarDelegate
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    [super searchBarSearchButtonClicked:searchBar];
-    
-    self.query = searchBar.text;
-    [self searchReportsByQuery:self.query includingDashboards:YES];
-    
-    searchBar.text = @"";
-}
-
 #pragma mark - Private
 
 - (void)searchReportsByQuery:(NSString *)query includingDashboards:(BOOL)includingDashboards
@@ -92,6 +84,8 @@ static NSString * const kJMRequestType = @"type";
         }];
         
         [self.resourceClient resources:@"/" query:self.query types:types recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
+        // TODO: change logic if JMSearchTVC will be rewritten as composition
+        self.searchQuery = nil;
     } viewControllerToDismiss:nil];
 }
 

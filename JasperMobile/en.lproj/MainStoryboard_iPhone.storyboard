@@ -7,7 +7,7 @@
         <!--Repository Table View Controller - Resource Title-->
         <scene sceneID="RNt-F6-8fI">
             <objects>
-                <tableViewController id="emS-J6-pPR" customClass="JMRepositoryTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="JMRepositoryTableViewController" id="emS-J6-pPR" customClass="JMRepositoryTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="kBF-Wa-YRu">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -690,7 +690,7 @@
         <!--Library Table View Controller - Resource Title-->
         <scene sceneID="SvU-6i-jov">
             <objects>
-                <tableViewController id="vw2-Au-SSX" customClass="JMLibraryTableViewController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="JMLibraryTableViewController" id="vw2-Au-SSX" customClass="JMLibraryTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="vPg-KI-eVH">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1226,14 +1226,65 @@
         <image name="res_type_unknown.png" width="32" height="32"/>
         <image name="settings_bar_item.png" width="30" height="29"/>
     </resources>
+    <classes>
+        <class className="JMBaseRepositoryTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMBaseRepositoryTableViewController.h"/>
+        </class>
+        <class className="JMDashboardViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMDashboardViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
+            </relationships>
+        </class>
+        <class className="JMFavoritesTableViewController" superclassName="JMBaseRepositoryTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMFavoritesTableViewController.h"/>
+        </class>
+        <class className="JMLibraryTableViewController" superclassName="JMSearchTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMLibraryTableViewController.h"/>
+        </class>
+        <class className="JMMenuTabBarController" superclassName="UITabBarController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMMenuTabBarController.h"/>
+        </class>
+        <class className="JMRepositoryTableViewController" superclassName="JMSearchTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMRepositoryTableViewController.h"/>
+        </class>
+        <class className="JMResourceModifyViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceModifyViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="description" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="descriptionTextView" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTextField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="JMResourceTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceTableViewController.h"/>
+        </class>
+        <class className="JMSearchTableViewController" superclassName="JMBaseRepositoryTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSearchTableViewController.h"/>
+        </class>
+        <class className="JMServerSettingsTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMServerSettingsTableViewController.h"/>
+        </class>
+        <class className="JMServersTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMServersTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="infoButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="TPKeyboardAvoidingScrollView" superclassName="UIScrollView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TPKeyboardAvoidingScrollView.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="2sv-EJ-Gcx"/>
+        <segue reference="bQI-n6-E7D"/>
         <segue reference="4G2-Cf-EF7"/>
-        <segue reference="ire-M8-0ci"/>
-        <segue reference="f3B-eB-Zkq"/>
     </inferredMetricsTieBreakers>
 </document>

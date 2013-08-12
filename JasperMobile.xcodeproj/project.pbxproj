@@ -21,6 +21,7 @@
 		F51D6A82178472870079AE50 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F51D6A80178472870079AE50 /* Localizable.strings */; };
 		F5325D8417B17B2900C11E33 /* JMFavoritesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5325D8317B17B2900C11E33 /* JMFavoritesTableViewController.m */; };
 		F53C0AB617B3EBAD0063AE90 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F53C0AB517B3EBAD0063AE90 /* Reachability.m */; };
+		F53C0AD217B50C080063AE90 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F53C0AD017B50C080063AE90 /* MainStoryboard_iPhone.storyboard */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
 		F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */; };
@@ -39,7 +40,6 @@
 		F55CC345174CFFCE00CEB39E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F55CC344174CFFCE00CEB39E /* Default.png */; };
 		F55CC347174CFFCE00CEB39E /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F55CC346174CFFCE00CEB39E /* Default@2x.png */; };
 		F55CC349174CFFCE00CEB39E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F55CC348174CFFCE00CEB39E /* Default-568h@2x.png */; };
-		F55CC34C174CFFCE00CEB39E /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F55CC34A174CFFCE00CEB39E /* MainStoryboard_iPhone.storyboard */; };
 		F55CC34F174CFFCE00CEB39E /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F55CC34D174CFFCE00CEB39E /* MainStoryboard_iPad.storyboard */; };
 		F55CC365174CFFCF00CEB39E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC364174CFFCF00CEB39E /* SenTestingKit.framework */; };
 		F55CC366174CFFCF00CEB39E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC332174CFFCE00CEB39E /* UIKit.framework */; };
@@ -164,6 +164,7 @@
 		F5325D8317B17B2900C11E33 /* JMFavoritesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMFavoritesTableViewController.m; path = Classes/JMFavoritesTableViewController.m; sourceTree = "<group>"; };
 		F53C0AB417B3EBAD0063AE90 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		F53C0AB517B3EBAD0063AE90 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		F53C0AD117B50C080063AE90 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F54C91A21752FAAD0009E2BE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -189,7 +190,6 @@
 		F55CC344174CFFCE00CEB39E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		F55CC346174CFFCE00CEB39E /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		F55CC348174CFFCE00CEB39E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		F55CC34B174CFFCE00CEB39E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		F55CC34E174CFFCE00CEB39E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		F55CC363174CFFCF00CEB39E /* JasperMobileTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JasperMobileTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F55CC364174CFFCF00CEB39E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -373,7 +373,7 @@
 			isa = PBXGroup;
 			children = (
 				F5A2E778175CBAD300CBA00E /* BasedOnSplitViewControllerStoryboard.storyboard */,
-				F55CC34A174CFFCE00CEB39E /* MainStoryboard_iPhone.storyboard */,
+				F53C0AD017B50C080063AE90 /* MainStoryboard_iPhone.storyboard */,
 				F55CC34D174CFFCE00CEB39E /* MainStoryboard_iPad.storyboard */,
 			);
 			name = Storyboards;
@@ -821,7 +821,6 @@
 				F514E6AB17563B6F00C9F61E /* res_type_report.png in Resources */,
 				F514E6AC17563B6F00C9F61E /* res_type_text.png in Resources */,
 				F514E6AD17563B6F00C9F61E /* res_type_unknown.png in Resources */,
-				F55CC34C174CFFCE00CEB39E /* MainStoryboard_iPhone.storyboard in Resources */,
 				F55CC34F174CFFCE00CEB39E /* MainStoryboard_iPad.storyboard in Resources */,
 				F5A2E77A175CBAD300CBA00E /* BasedOnSplitViewControllerStoryboard.storyboard in Resources */,
 				F58FF3041760A1600021CC8B /* JMCancelRequestPopup.xib in Resources */,
@@ -837,6 +836,7 @@
 				F51D6A82178472870079AE50 /* Localizable.strings in Resources */,
 				F5D6373117909D3C005BA5CD /* jaspersoft-sdk-resources.bundle in Resources */,
 				F5EAA2671797F5970091BA43 /* Settings.bundle in Resources */,
+				F53C0AD217B50C080063AE90 /* MainStoryboard_iPhone.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -954,20 +954,20 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
+		F53C0AD017B50C080063AE90 /* MainStoryboard_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F53C0AD117B50C080063AE90 /* en */,
+			);
+			name = MainStoryboard_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
 		F55CC33B174CFFCE00CEB39E /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				F55CC33C174CFFCE00CEB39E /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		F55CC34A174CFFCE00CEB39E /* MainStoryboard_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F55CC34B174CFFCE00CEB39E /* en */,
-			);
-			name = MainStoryboard_iPhone.storyboard;
 			sourceTree = "<group>";
 		};
 		F55CC34D174CFFCE00CEB39E /* MainStoryboard_iPad.storyboard */ = {
@@ -1031,7 +1031,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1058,7 +1058,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
@@ -1084,6 +1084,7 @@
 					"\"${BUILD_ROOT}/../\"/**",
 				);
 				INFOPLIST_FILE = "JasperMobile/JasperMobile-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -1111,6 +1112,7 @@
 					"\"${BUILD_ROOT}/../\"/**",
 				);
 				INFOPLIST_FILE = "JasperMobile/JasperMobile-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (

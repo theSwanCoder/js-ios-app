@@ -44,6 +44,7 @@ objection_requires(@"resourceClient");
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
 }
 
@@ -52,7 +53,6 @@ objection_requires(@"resourceClient");
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     [JMUtils setTitleForResourceViewController:self];
     
     self.labelTextField.text = self.resourceDescriptor.label;
@@ -71,6 +71,9 @@ objection_requires(@"resourceClient");
     [self setDescriptionTextView:nil];
     [self setLabel:nil];
     [self setDescription:nil];
+    [self setDelegate:nil];
+    [self setResourceClient:nil];
+    [self setResourceDescriptor:nil];
     [super viewDidUnload];
 }
 

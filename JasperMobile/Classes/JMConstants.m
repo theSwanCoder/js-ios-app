@@ -44,3 +44,17 @@ NSString * const kJMResetApplicationNotification = @"resetApplication";
 
 // Some shared keys for dictionary
 NSString * const kJMServerProfileKey = @"serverProfile";
+
+// Storyboard name
+static NSString *_mainStoryboardName;
+NSString *JMMainStoryboard() {
+    if (!_mainStoryboardName) {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            _mainStoryboardName = @"MainStoryboard_iPad";
+        } else {
+            _mainStoryboardName = @"MainStoryboard_iPhone";
+        }
+    }
+    
+    return _mainStoryboardName;
+}

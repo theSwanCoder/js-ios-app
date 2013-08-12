@@ -27,7 +27,9 @@
 
 #import "JMSearchTableViewController.h"
 #import "JMCancelRequestPopup.h"
+#import "JMConstants.h"
 #import "JMLocalization.h"
+#import "JMResourceClientHolder.h"
 
 @interface JMSearchTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;
@@ -45,33 +47,17 @@
 {
     [super viewDidLoad];
     
-    self.searchBar = [[UISearchBar alloc] init];
-    self.searchBar.delegate = self;
+    if (!self.isScrollDisabled) {
+        self.searchBar = [[UISearchBar alloc] init];
+        self.searchBar.delegate = self;
+        self.searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
+        [self.searchBar sizeToFit];
+        
+        self.contentOffset = CGPointMake(0, self.searchBar.frame.size.height);
     
-    // TODO: change to proper message
-    self.searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
-    [self.searchBar sizeToFit];
-    
-    self.tableView.tableHeaderView = self.searchBar;
-    [self hideSearchBar:self.searchBar animated:NO];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.shouldMoveToContentOffset = YES;
-}
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    self.shouldMoveToContentOffset = YES;
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    self.shouldMoveToContentOffset = NO;
+        self.tableView.tableHeaderView = self.searchBar;
+        [self hideSearchBar:self.searchBar animated:NO];
+    }
 }
 
 #pragma mark - UISearchBarDelegate
@@ -94,24 +80,35 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    [searchBar resignFirstResponder];
-    [self hideSearchBar:searchBar animated:YES];
-    
-    [JMCancelRequestPopup presentInViewController:self
-                                  progressMessage:@"status.searching"
-                                       restClient:self.resourceClient
-                                      cancelBlock:nil];
+    if (self.navigationController) {
+        [searchBar resignFirstResponder];
+        
+        // TODO: consult about hiding search bar
+//        [self hideSearchBar:searchBar animated:NO];
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:JMMainStoryboard() bundle:nil];
+        id destinationViewController = [storyboard instantiateViewControllerWithIdentifier:NSStringFromClass(self.class)];
+        
+        if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
+            [destinationViewController setResourceClient:self.resourceClient];
+            [destinationViewController setResourceDescriptor:self.resourceDescriptor];
+            [destinationViewController setIsScrollDisabled:YES];
+        }
+        
+        [destinationViewController setSearchQuery:searchBar.text];
+        
+        [self.navigationController pushViewController:destinationViewController animated:YES];
+    }
 }
 
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (self.shouldMoveToContentOffset) {
-        self.shouldMoveToContentOffset = NO;
-        [self.tableView setContentOffset:self.contentOffset];
-    } else {
+    if (scrollView.isDecelerating || scrollView.isDragging) {
         self.contentOffset = scrollView.contentOffset;
+    } else {
+        [self.tableView setContentOffset:self.contentOffset];
     }
 }
 
@@ -125,6 +122,7 @@
 
 #pragma mark - Private
 
+// TODO: remove if hiding 
 - (void)hideSearchBar:(UISearchBar *)searchBar animated:(BOOL)animated
 {
     [self.tableView setContentOffset:CGPointMake(0, searchBar.frame.size.height) animated:animated];

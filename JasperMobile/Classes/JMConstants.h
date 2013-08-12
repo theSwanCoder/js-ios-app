@@ -48,6 +48,9 @@ extern NSString * const kJMResetApplicationNotification;
 // Some shared keys for dictionary
 extern NSString * const kJMServerProfileKey;
 
+// Storyboard name
+NSString *JMMainStoryboard();
+
 // Tags for menus. Decraled as define constants because they can be used
 // in switch-case structure
 #define kJMLibraryMenuTag 0

@@ -38,6 +38,7 @@ inject_default_rotation()
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     [self disableTabBar];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(changeServerProfile:)

@@ -23,6 +23,7 @@ objection_requires(@"favoritesUtil");
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
 }
 
@@ -36,6 +37,8 @@ objection_requires(@"favoritesUtil");
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    
     if (!self.resources || self.favoritesUtil.needsToRefreshFavorites) {
         self.resources = [self.favoritesUtil wrappersFromFavorites] ?: [NSArray array];
         self.favoritesUtil.needsToRefreshFavorites = NO;

@@ -33,37 +33,34 @@
 
 #pragma mark - UIViewController
 
-- (void)viewDidLoad
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLoad];
+    [super viewWillAppear:animated];
+
+    // Check if resources are already updated
+    if (self.resources && !self.searchQuery.length) return;
     
     [JMFilter checkNetworkReachabilityForBlock:^{
         [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
             [self.navigationController popViewControllerAnimated:YES];
         }];
         
-        [self.resourceClient resources:[self path] delegate:[JMFilter checkRequestResultForDelegate:self]];
+        // Check if search action wasn't performed
+        if (self.searchQuery.length > 0) {
+            [self.resourceClient resources:[self path:@""] query:self.searchQuery types:nil recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
+            // TODO: change logic if JMSearchTVC will be rewritten as composition
+            self.searchQuery = nil;
+        } else {
+            [self.resourceClient resources:[self path:@"/"] delegate:[JMFilter checkRequestResultForDelegate:self]];
+        }
     } viewControllerToDismiss:self];
-}
-
-#pragma mark - UISearchBarDelegate
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    [super searchBarSearchButtonClicked:searchBar];
-    
-    [JMFilter checkNetworkReachabilityForBlock:^{
-        [self.resourceClient resources:[self path] query:searchBar.text types:nil recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
-    } viewControllerToDismiss:self];
-    
-    searchBar.text = @"";
 }
 
 #pragma mark - Private
 
-- (NSString *)path
+- (NSString *)path:(NSString *)defaultPath
 {
-    return self.resourceDescriptor.uriString ?: @"/";
+    return self.resourceDescriptor.uriString ?: defaultPath;
 }
 
 @end

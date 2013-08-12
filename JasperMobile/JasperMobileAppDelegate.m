@@ -59,7 +59,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 
 - (id)init
 {
-    if (self == [super init]) {
+    if (self = [super init]) {
         [self initObjectionModules];
         
         // Check if app is running for the first time
@@ -125,6 +125,11 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
 #pragma mark - Core Data stack
@@ -317,7 +322,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     NSManagedObjectID *activeServerID = [[self persistentStoreCoordinator] managedObjectIDForURIRepresentation:[defaults URLForKey:kJMDefaultsActiveServer]];
     
     if (activeServerID) {
-        JMServerProfile *serverProfile = (JMServerProfile *)[self.managedObjectContext existingObjectWithID:activeServerID error:nil];
+        JMServerProfile *serverProfile = (JMServerProfile *) [self.managedObjectContext existingObjectWithID:activeServerID error:nil];
         if (serverProfile) {
             serverProfile.password = [JMServerProfile passwordFromKeychain:serverProfile.profileID];
         }

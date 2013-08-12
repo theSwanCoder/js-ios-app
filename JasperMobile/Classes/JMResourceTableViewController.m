@@ -151,6 +151,7 @@ inject_default_rotation();
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
 }
 
@@ -179,6 +180,8 @@ inject_default_rotation();
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     if (self.needsToRefreshResourceDescriptorData) {
         [self refreshResourceDescriptor];
     }
@@ -201,6 +204,7 @@ inject_default_rotation();
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     [self.favoritesUtil persist];
 }
 
@@ -237,8 +241,8 @@ inject_default_rotation();
     } else if (section == kJMToolsSection) {
         cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         
-        self.favoriteButton = (UIButton *)[cell viewWithTag:1];
-        UIButton *deleteButton = (UIButton *)[cell viewWithTag:2];
+        self.favoriteButton = (UIButton *) [cell viewWithTag:1];
+        UIButton *deleteButton = (UIButton *) [cell viewWithTag:2];
         
         [deleteButton setTitle:JMCustomLocalizedString(@"dialog.button.delete", nil) forState:UIControlStateNormal];
         

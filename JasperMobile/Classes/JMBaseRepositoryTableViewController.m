@@ -80,6 +80,7 @@ inject_default_rotation()
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
 }
 
@@ -87,6 +88,7 @@ inject_default_rotation()
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];    
     [JMUtils setTitleForResourceViewController:self];
 }
 

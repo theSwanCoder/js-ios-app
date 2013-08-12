@@ -33,6 +33,7 @@
  */
 @interface JMSearchTableViewController : JMBaseRepositoryTableViewController <UISearchBarDelegate>
 
-//@property (nonatomic, weak, readonly) UISearchBar *searchBar;
+@property (nonatomic, strong) NSString *searchQuery;
+@property (nonatomic, assign) BOOL isScrollDisabled;
 
 @end

@@ -57,6 +57,7 @@ inject_default_rotation();
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
     self.infoButton.title = JMCustomLocalizedString(@"dialog.button.info", nil);
 }
@@ -84,6 +85,8 @@ inject_default_rotation();
 - (void)viewDidUnload
 {
     [self setInfoButton:nil];
+    [self setServers:nil];
+    [self setManagedObjectContext:nil];
     [super viewDidUnload];
 }
 
