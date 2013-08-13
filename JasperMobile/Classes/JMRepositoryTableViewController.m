@@ -29,34 +29,48 @@
 #import "JMCancelRequestPopup.h"
 #import "JMFilter.h"
 
+@interface JMRepositoryTableViewController()
+- (NSString *)path:(NSString *)defaultPath;
+- (void)searchReportsByQuery:(NSString *)query;
+@end
+
 @implementation JMRepositoryTableViewController
 
 #pragma mark - UIViewController
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
 
     // Check if resources are already updated
-    if (self.resources && !self.searchQuery.length) return;
-    
+    if ([self isNeedsToReloadData]) {
+        [self searchReportsByQuery:self.searchQuery];
+    }
+}
+
+#pragma mark - JMRefreshable
+
+- (void)refresh
+{
+    [super refresh];
+    [self searchReportsByQuery:nil];
+}
+
+#pragma mark - Private
+
+- (void)searchReportsByQuery:(NSString *)query
+{
     [JMFilter checkNetworkReachabilityForBlock:^{
-        [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
-            [self.navigationController popViewControllerAnimated:YES];
-        }];
+        [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
         
-        // Check if search action wasn't performed
+        // Check if search action was not performed
         if (self.searchQuery.length > 0) {
             [self.resourceClient resources:[self path:@""] query:self.searchQuery types:nil recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
-            // TODO: change logic if JMSearchTVC will be rewritten as composition
-            self.searchQuery = nil;
         } else {
             [self.resourceClient resources:[self path:@"/"] delegate:[JMFilter checkRequestResultForDelegate:self]];
         }
     } viewControllerToDismiss:self];
 }
-
-#pragma mark - Private
 
 - (NSString *)path:(NSString *)defaultPath
 {

@@ -250,7 +250,8 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:serverProfile.profileID];
 }
 
-- (void)changeServerProfile:(NSNotification *)notification {
+- (void)changeServerProfile:(NSNotification *)notification
+{
     JMServerProfile *serverProfile = [[notification userInfo] objectForKey:kJMServerProfileKey];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     

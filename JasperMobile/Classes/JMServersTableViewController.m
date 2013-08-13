@@ -80,6 +80,10 @@ inject_default_rotation();
     
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
     self.servers = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
+    
+    for (JMServerProfile *serverProfile in self.servers) {
+        serverProfile.password = [JMServerProfile passwordFromKeychain:serverProfile.profileID];
+    }
 }
 
 - (void)viewDidUnload
@@ -188,9 +192,7 @@ inject_default_rotation();
         // Check if profile to delete is an active
         if ([serverProfileID isEqual:activeProfileID]) {
             // Sets server profile to nil
-            [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
-                                                                object:nil
-                                                              userInfo:nil];
+            [JMUtils sendChangeServerProfileNotificationWithProfile:nil];
         }
     }
 }

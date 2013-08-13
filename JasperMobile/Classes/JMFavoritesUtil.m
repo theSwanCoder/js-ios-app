@@ -95,7 +95,6 @@ objection_requires(@"managedObjectContext")
         [self removeFromFavorites:self.resourceDescriptor];
     }
     
-    self.needsToRefreshFavorites = YES;
     self.isResourceInFavoritesPreviousValue = self.isResourceInFavorites;
 }
 

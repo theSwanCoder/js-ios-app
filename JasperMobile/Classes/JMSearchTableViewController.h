@@ -26,14 +26,17 @@
 //
 
 #import "JMBaseRepositoryTableViewController.h"
+#import "JMCancelRequestPopup.h"
+#import "JMRefreshable.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMSearchTableViewController : JMBaseRepositoryTableViewController <UISearchBarDelegate>
+@interface JMSearchTableViewController : JMBaseRepositoryTableViewController <UISearchBarDelegate, JMRefreshable>
 
 @property (nonatomic, strong) NSString *searchQuery;
 @property (nonatomic, assign) BOOL isScrollDisabled;
+@property (nonatomic, readonly) JMCancelRequestBlock cancelBlock;
 
 @end

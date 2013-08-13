@@ -47,6 +47,7 @@ extern NSString * const kJMResetApplicationNotification;
 
 // Some shared keys for dictionary
 extern NSString * const kJMServerProfileKey;
+extern NSString * const kJMIgnoreMenuUpdatesKey;
 
 // Storyboard name
 NSString *JMMainStoryboard();

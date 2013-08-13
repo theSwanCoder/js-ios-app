@@ -39,4 +39,6 @@
 @property (nonatomic, strong) JSConstants *constants;
 @property (nonatomic, strong) NSMutableArray *resources;
 
+- (BOOL)isNeedsToReloadData;
+
 @end

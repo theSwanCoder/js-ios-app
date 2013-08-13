@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @protocol JMSplitViewBarButtonPresenterProtocol <NSObject>
-
+@required
 @property (nonatomic, strong) UIBarButtonItem *splitViewBarButtonItem;
 
 @end

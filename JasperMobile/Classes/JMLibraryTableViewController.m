@@ -32,8 +32,6 @@
 static NSString * const kJMRequestType = @"type";
 
 @interface JMLibraryTableViewController()
-@property (nonatomic, strong) NSString *query;
-
 - (void)searchReportsByQuery:(NSString *)query includingDashboards:(BOOL)includingDashboards;
 @end
 
@@ -41,14 +39,14 @@ static NSString * const kJMRequestType = @"type";
 
 #pragma mark - UIViewController
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
     
     // Check if resources are already updated
-    if (self.resources && !self.query.length) return;
-    
-    [self searchReportsByQuery:self.query includingDashboards:YES];
+    if ([self isNeedsToReloadData]) {
+        [self searchReportsByQuery:self.searchQuery includingDashboards:YES];
+    }
 }
 
 #pragma mark - JSRequestDelegate
@@ -61,12 +59,18 @@ static NSString * const kJMRequestType = @"type";
     // doesn't have this type)
     if ([result isError] && [type isKindOfClass:[NSArray class]] &&
         [type containsObject:self.constants.WS_TYPE_DASHBOARD]) {
-        [self searchReportsByQuery:self.query includingDashboards:NO];
+        [self searchReportsByQuery:self.searchQuery includingDashboards:NO];
     } else {
         [super requestFinished:result];
     }
-    
-    self.query = nil;
+}
+
+#pragma mark - JMRefreshable
+
+- (void)refresh
+{
+    [super refresh];
+    [self searchReportsByQuery:nil includingDashboards:YES];
 }
 
 #pragma mark - Private
@@ -79,13 +83,9 @@ static NSString * const kJMRequestType = @"type";
     }
     
     [JMFilter checkNetworkReachabilityForBlock:^{
-        [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
-            [self.navigationController popViewControllerAnimated:YES];
-        }];
+        [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
         
-        [self.resourceClient resources:@"/" query:self.query types:types recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
-        // TODO: change logic if JMSearchTVC will be rewritten as composition
-        self.searchQuery = nil;
+        [self.resourceClient resources:@"/" query:query types:types recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
     } viewControllerToDismiss:nil];
 }
 

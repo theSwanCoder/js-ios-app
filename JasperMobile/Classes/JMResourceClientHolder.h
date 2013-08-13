@@ -37,7 +37,6 @@
  @since 1.6
  */
 @protocol JMResourceClientHolder <NSObject>
-
 @required
 @property (nonatomic, strong) JSRESTResource *resourceClient;
 

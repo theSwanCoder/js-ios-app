@@ -35,11 +35,34 @@
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, assign) BOOL shouldMoveToContentOffset;
 @property (nonatomic, assign) CGPoint contentOffset;
-
-- (void)hideSearchBar:(UISearchBar *)searchBar animated:(BOOL)animated;
 @end
 
 @implementation JMSearchTableViewController
+
+@synthesize isRefreshing = _isRefreshing;
+
+- (BOOL)isNeedsToReloadData
+{
+    return !self.isRefreshing && ([super isNeedsToReloadData] || self.searchQuery.length);
+}
+
+#pragma mark - Accessors
+
+@synthesize cancelBlock = _cancelBlock;
+
+- (JMCancelRequestBlock)cancelBlock
+{
+    if (!_cancelBlock) {
+        __weak JMSearchTableViewController *search = self;
+        _cancelBlock = ^{
+            search.searchQuery = nil;
+            search.isRefreshing = NO;
+            [[search navigationController] popViewControllerAnimated:YES];
+        };
+    }
+    
+    return _cancelBlock;
+}
 
 #pragma mark - UIViewController
 
@@ -53,10 +76,10 @@
         self.searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
         [self.searchBar sizeToFit];
         
-        self.contentOffset = CGPointMake(0, self.searchBar.frame.size.height);
-    
+        self.contentOffset = [self defaultContentOffset];
+        
         self.tableView.tableHeaderView = self.searchBar;
-        [self hideSearchBar:self.searchBar animated:NO];
+        self.tableView.contentOffset = self.contentOffset;
     }
 }
 
@@ -103,29 +126,49 @@
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    if (scrollView.isDecelerating || scrollView.isDragging) {
+//        self.contentOffset = scrollView.contentOffset;
+//    } else {
+//        self.tableView.contentOffset = self.contentOffset;
+//    }
+//}
+
+#pragma mark - JSRequestDelegate
+
+- (void)requestFinished:(JSOperationResult *)result
 {
-    if (scrollView.isDecelerating || scrollView.isDragging) {
-        self.contentOffset = scrollView.contentOffset;
-    } else {
-        [self.tableView setContentOffset:self.contentOffset];
-    }
+    self.isRefreshing = NO;
+    self.searchQuery = nil;
+    [super requestFinished:result];
 }
 
-#pragma mark - JMResourceViewControllerDelegate
+#pragma mark - JMResourceTableViewControllerDelegate
 
 - (void)refreshWithResource:(JSResourceDescriptor *)resourceDescriptor
 {
     [super refreshWithResource:resourceDescriptor];
-    [self hideSearchBar:self.searchBar animated:NO];
+    self.tableView.contentOffset = self.contentOffset;
+}
+
+#pragma mark - JMRefreshable
+
+- (void)refresh
+{
+    self.isRefreshing = YES;
+    // Clear table content
+    self.resources = nil;
+    [self.tableView reloadData];
+    // Reset scroll position to base
+    self.contentOffset = [self defaultContentOffset];
 }
 
 #pragma mark - Private
 
-// TODO: remove if hiding 
-- (void)hideSearchBar:(UISearchBar *)searchBar animated:(BOOL)animated
+- (CGPoint)defaultContentOffset
 {
-    [self.tableView setContentOffset:CGPointMake(0, searchBar.frame.size.height) animated:animated];
+    return CGPointMake(0, self.searchBar.frame.size.height);
 }
 
 @end

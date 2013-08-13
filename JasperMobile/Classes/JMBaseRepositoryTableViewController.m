@@ -27,6 +27,8 @@
 
 #import "JMBaseRepositoryTableViewController.h"
 #import "JMCancelRequestPopup.h"
+#import "JMConstants.h"
+#import "JMRefreshable.h"
 #import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
@@ -46,6 +48,11 @@ static NSString * const kJMUnknownCell = @"UnknownCell";
 @implementation JMBaseRepositoryTableViewController
 objection_requires(@"resourceClient", @"constants");
 inject_default_rotation()
+
+- (BOOL)isNeedsToReloadData
+{
+    return self.resources == nil;
+}
 
 #pragma mark - Accessors
 
@@ -82,13 +89,19 @@ inject_default_rotation()
 {
     [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
+    
+        // Add observer to refresh controller after profile was changed
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(changeServerProfile)
+                                                 name:kJMChangeServerProfileNotification
+                                               object:nil];
 }
 
 #pragma mark - UIViewController
 
-- (void)viewDidLoad
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLoad];    
+    [super viewWillAppear:animated];
     [JMUtils setTitleForResourceViewController:self];
 }
 
@@ -158,7 +171,7 @@ inject_default_rotation()
     [self.tableView reloadData];
 }
 
-#pragma mark - JMResourceViewControllerDelegate
+#pragma mark - JMResourceTableViewControllerDelegate
 
 - (void)removeResource
 {    
@@ -173,6 +186,15 @@ inject_default_rotation()
 }
 
 #pragma mark - Private
+
+- (void)changeServerProfile
+{
+    if (self.resources) {
+        self.resources = nil;
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        [self.tableView reloadData];
+    }
+}
 
 - (JSResourceDescriptor *)resourceDescriptorForIndexPath:(NSIndexPath *)indexPath
 {

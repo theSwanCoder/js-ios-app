@@ -31,6 +31,6 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMMenuTabBarController : UITabBarController
+@interface JMMenuTabBarController : UITabBarController <UITabBarControllerDelegate>
 
 @end

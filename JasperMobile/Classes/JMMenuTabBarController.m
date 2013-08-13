@@ -27,9 +27,14 @@
 
 #import "JMMenuTabBarController.h"
 #import "JMConstants.h"
+#import "JMRefreshable.h"
 #import "JMRotationBase.h"
 #import "JMServerProfile.h"
 #import "JMUtils.h"
+
+@interface JMMenuTabBarController()
+@property (nonatomic, strong) id lastSelectedViewController;
+@end
 
 @implementation JMMenuTabBarController
 inject_default_rotation()
@@ -43,7 +48,8 @@ inject_default_rotation()
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(changeServerProfile:)
                                                  name:kJMChangeServerProfileNotification
-                                               object:nil];    
+                                               object:nil];
+    self.delegate = self;
 }
 
 - (void)viewDidLoad
@@ -54,6 +60,20 @@ inject_default_rotation()
     for (UITabBarItem *item in self.tabBar.items) {
         item.title = [JMUtils localizedTitleForMenuItemByTag:item.tag];
     }
+}
+
+#pragma mark - UITabBarController
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    UIViewController *selectedViewController = [viewController.childViewControllers objectAtIndex:0];
+    // TODO: change implementation if 2 diff menus will be adapted via protocols (for pad and phone)
+    if (self.lastSelectedViewController == selectedViewController &&
+        [selectedViewController conformsToProtocol:@protocol(JMRefreshable)]) {
+        [self.lastSelectedViewController refresh];
+    }
+    
+    self.lastSelectedViewController = selectedViewController;
 }
 
 #pragma mark - Private
@@ -78,14 +98,24 @@ inject_default_rotation()
 
 - (void)changeServerProfile:(NSNotification *)notification
 {
-    JMServerProfile *serverProfile = [[notification userInfo] objectForKey:kJMServerProfileKey];
+    NSUInteger index;
+    NSDictionary *userInfo = notification.userInfo;
+    
+    if ([userInfo objectForKey:kJMIgnoreMenuUpdatesKey]) return;
+    
+    JMServerProfile *serverProfile = [userInfo objectForKey:kJMServerProfileKey];
+    
     if (!serverProfile) {
         [self disableTabBar];
-        [self setSelectedIndex:kJMServersMenuTag];
+        index = kJMServersMenuTag;
     } else {
         [self enableTabBar];
-        [self setSelectedIndex:kJMLibraryMenuTag];
+        index = kJMLibraryMenuTag;
     }
+        
+    [self setSelectedIndex:index];
+    UIViewController *selectedViewController = [self.viewControllers objectAtIndex:index];
+    [self tabBarController:self didSelectViewController:selectedViewController];
 }
 
 @end

@@ -199,6 +199,7 @@
 		F55CC371174CFFCF00CEB39E /* JasperMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JasperMobileTests.m; sourceTree = "<group>"; };
 		F5663A2E1752F9D0007978BE /* Objection-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Objection-iOS.framework"; path = "JasperMobile/Vendor/Objection-iOS.framework"; sourceTree = "<group>"; };
 		F5663A321752FA5C007978BE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		F57364EA17B91BB500A10588 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRefreshable.h; path = JasperMobile/Classes/JMRefreshable.h; sourceTree = "<group>"; };
 		F576BC371753DB0700DF765B /* favorites_bar_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorites_bar_item.png; sourceTree = "<group>"; };
 		F576BC381753DB0700DF765B /* library_bar_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = library_bar_item.png; sourceTree = "<group>"; };
 		F576BC391753DB0700DF765B /* repository_bar_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = repository_bar_item.png; sourceTree = "<group>"; };
@@ -605,9 +606,10 @@
 			isa = PBXGroup;
 			children = (
 				F5FE06E017573DB000030331 /* JMRotatable.h */,
-				F5A2E780175CCFA700CBA00E /* JMSplitViewBarButtonPresenterProtocol.h */,
+				F57364EA17B91BB500A10588 /* JMRefreshable.h */,
 				F5EAA2681797FF350091BA43 /* JMReportClientHolder.h */,
 				F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */,
+				F5A2E780175CCFA700CBA00E /* JMSplitViewBarButtonPresenterProtocol.h */,
 			);
 			name = Protocols;
 			path = ..;

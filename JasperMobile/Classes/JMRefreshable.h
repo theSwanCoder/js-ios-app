@@ -21,48 +21,24 @@
  */
 
 //
-//  JMFavoritesUtil.h
+//  JMRefreshable.h
 //  Jaspersoft Corporation
 //
 
-#import "JMServerProfile.h"
 #import <Foundation/Foundation.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
- Provides methods for adding, removing, getting resources from favorites
+ Implementations of the `JMRefreshable` protocol provide general data refresh (from
+ different sources) solution
  
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMFavoritesUtil : NSObject {
-    @private
-    JMServerProfile *_serverProfile;
-}
+@protocol JMRefreshable <NSObject>
+@required
+- (void)refresh;
 
-// For this resource favorites will be modified
-@property (nonatomic, strong) JSResourceDescriptor *resourceDescriptor;
-
-// Sets a server profile to retrieve, add or delete favorites
-- (void)setServerProfile:(JMServerProfile *)serverProfile;
-
-// Adds to favorites "resourceDescriptor" provided as property
-- (void)addToFavorites;
-
-// Removes from favorites "resourceDescriptor" provided as property
-- (void)removeFromFavorites;
-
-// Removes from favorites
-- (void)removeFromFavorites:(JSResourceDescriptor *)resourceDescriptor;
-
-// Checks if resource was already added to favorites
-- (BOOL)isResourceInFavorites;
-
-// Returns list of wrappers from favorites. Wrapper is a JSResourceDescriptor 
-// with only provided name, label and wsType
-- (NSMutableArray *)wrappersFromFavorites;
-
-// Saves changes
-- (void)persist;
+@optional
+@property (nonatomic, assign) BOOL isRefreshing;
 
 @end

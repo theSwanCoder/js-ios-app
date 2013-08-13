@@ -40,7 +40,7 @@
  
  @param viewController A viewController for which title will be set
  */
-+ (void)setTitleForResourceViewController:(UIViewController <JMResourceClientHolder>*)viewController;
++ (void)setTitleForResourceViewController:(UIViewController <JMResourceClientHolder> *)viewController;
 
 /**
  Sets background images to the button.

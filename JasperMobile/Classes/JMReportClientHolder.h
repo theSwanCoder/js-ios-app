@@ -36,7 +36,6 @@
  @since 1.6
  */
 @protocol JMReportClientHolder <NSObject>
-
 @required
 @property (nonatomic, strong) JSRESTReport *reportClient;
 

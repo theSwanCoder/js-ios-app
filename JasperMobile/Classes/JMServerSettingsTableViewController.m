@@ -26,8 +26,10 @@
 //
 
 #import "JMServerSettingsTableViewController.h"
+#import "JMConstants.h"
 #import "JMFavoritesUtil.h"
 #import "JMLocalization.h"
+#import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
 
@@ -332,8 +334,18 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
         [JMServerProfile storePasswordInKeychain:self.serverToEdit.password profileID:self.serverToEdit.profileID];
         // Update previous view controller with modified server profile
         [self.delegate updateWithServerProfile:self.serverToEdit];
-        // Indicate that Favorites View Controller should refresh data
-        self.favoritesUtil.needsToRefreshFavorites = YES;
+        // Send notification that server profile was changed. This will update REST Clients
+        
+        // TODO: refactor, change logic
+        NSDictionary *userInfo = @{
+            kJMServerProfileKey : self.serverToEdit,
+            kJMIgnoreMenuUpdatesKey : @YES
+        };
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
+                                                            object:nil
+                                                          userInfo:userInfo];
+        
         // Go to previous view controller
         [self.navigationController popViewControllerAnimated:YES];
     }

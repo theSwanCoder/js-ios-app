@@ -71,7 +71,6 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
 #pragma mark - Class methods
 
-// TODO: test!!!
 + (void)update
 {
     NSNumber *latestAppVersion = [self latestAppVersion];
@@ -274,7 +273,6 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMResetApplicationNotification
                                                             object:nil];
     } else {
-        // TODO: change to smt more user friendly
         abort();
     }
 }
