@@ -64,7 +64,7 @@ static JMServerProfile * serverProfile;
 + (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex != alertView.cancelButtonIndex && serverProfile) {
-        serverProfile.password = [alertView textFieldAtIndex:0].text ?: @"";
+        [serverProfile setPasswordAsPrimitive:[alertView textFieldAtIndex:0].text ?: @""];
         [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
         serverProfile = nil;
     }

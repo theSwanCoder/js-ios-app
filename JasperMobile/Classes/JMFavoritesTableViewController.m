@@ -50,8 +50,9 @@ objection_requires(@"favoritesUtil");
 {
     [super viewDidAppear:animated];
     
-    if (!self.resources) {
+    if ([super isNeedsToReloadData] || self.favoritesUtil.needsToRefreshFavorites) {
         self.resources = [self.favoritesUtil wrappersFromFavorites] ?: [NSArray array];
+        self.favoritesUtil.needsToRefreshFavorites = NO;
         [self.tableView reloadData];
         [self checkAvailabilityOfEditButton];
     }

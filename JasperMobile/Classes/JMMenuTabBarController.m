@@ -101,7 +101,7 @@ inject_default_rotation()
     NSUInteger index;
     NSDictionary *userInfo = notification.userInfo;
     
-    if ([userInfo objectForKey:kJMIgnoreMenuUpdatesKey]) return;
+    if ([userInfo objectForKey:kJMNotUpdateMenuKey]) return;
     
     JMServerProfile *serverProfile = [userInfo objectForKey:kJMServerProfileKey];
     

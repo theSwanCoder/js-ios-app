@@ -91,4 +91,12 @@
  */
 - (BOOL)isEqualToProfileByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization;
 
+/**
+ Sets in the receiver's private internal storage the value of a password.
+ This method does not invoke the change notification methods (willChangeValueForKey: and didChangeValueForKey:)
+ 
+ @param password A new password value
+ */
+- (void)setPasswordAsPrimitive:(NSString *)password;
+
 @end

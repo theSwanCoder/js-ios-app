@@ -44,7 +44,7 @@ NSString * const kJMResetApplicationNotification = @"resetApplication";
 
 // Some shared keys for dictionary
 NSString * const kJMServerProfileKey = @"serverProfile";
-NSString * const kJMIgnoreMenuUpdatesKey = @"ignoreMenuUpdates";
+NSString * const kJMNotUpdateMenuKey = @"ignoreMenuUpdates";
 
 // Storyboard name
 static NSString *_mainStoryboardName;

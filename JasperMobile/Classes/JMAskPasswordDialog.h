@@ -26,7 +26,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "JMServerProfile.h"
+#import "JMServerProfile+Helpers.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com

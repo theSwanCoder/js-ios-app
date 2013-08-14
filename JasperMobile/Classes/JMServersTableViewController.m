@@ -82,7 +82,7 @@ inject_default_rotation();
     self.servers = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
     
     for (JMServerProfile *serverProfile in self.servers) {
-        serverProfile.password = [JMServerProfile passwordFromKeychain:serverProfile.profileID];
+        [serverProfile setPasswordAsPrimitive:[JMServerProfile passwordFromKeychain:serverProfile.profileID]];
     }
 }
 

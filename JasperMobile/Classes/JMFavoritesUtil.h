@@ -43,6 +43,10 @@
 // For this resource favorites will be modified
 @property (nonatomic, strong) JSResourceDescriptor *resourceDescriptor;
 
+// Indicates if there was any db transactions or server profile was modified
+// so data should be refreshed
+@property (nonatomic, assign) BOOL needsToRefreshFavorites;
+
 // Sets a server profile to retrieve, add or delete favorites
 - (void)setServerProfile:(JMServerProfile *)serverProfile;
 

@@ -82,4 +82,9 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
     return [self.profileID isEqualToString:[JMServerProfile profileIDByServerURL:url username:username organization:organization]];
 }
 
+- (void)setPasswordAsPrimitive:(NSString *)password
+{
+    [self setPrimitiveValue:password forKey:@"password"];
+}
+
 @end

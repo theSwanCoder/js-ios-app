@@ -325,7 +325,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     if (activeServerID) {
         JMServerProfile *serverProfile = (JMServerProfile *) [self.managedObjectContext existingObjectWithID:activeServerID error:nil];
         if (serverProfile) {
-            serverProfile.password = [JMServerProfile passwordFromKeychain:serverProfile.profileID];
+            [serverProfile setPasswordAsPrimitive:[JMServerProfile passwordFromKeychain:serverProfile.profileID]];
         }
         
         return serverProfile;
