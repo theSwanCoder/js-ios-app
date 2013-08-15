@@ -71,6 +71,7 @@ typedef BOOL (^JMValidationBlock)(NSString *value, NSString **errorMessage);
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;
 
+- (void)sendChangeServerProfileNotification;
 - (NSIndexPath *)indexPathForTextField:(UITextField *)textField;
 - (void)checkPasswordTextField:(UITextField *)textField andPasswordLabel:(UILabel *)label askPassword:(BOOL)askPassword;
 @end
@@ -356,16 +357,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
         // Update previous view controller with modified server profile
         [self.delegate updateWithServerProfile:self.serverToEdit];
         // Send notification that server profile was changed. This will update REST Clients
-        
-        // TODO: refactor, change logic (one of the solution is to add another notification)
-        NSDictionary *userInfo = @{
-            kJMServerProfileKey : self.serverToEdit,
-            kJMNotUpdateMenuKey : @YES
-        };
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
-                                                            object:nil
-                                                          userInfo:userInfo];
+        [self sendChangeServerProfileNotification];
     }
     
     // Go to previous view controller
@@ -409,6 +401,25 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
     }
     
     label.textColor = textField.textColor;
+}
+
+- (void)sendChangeServerProfileNotification
+{
+    NSManagedObjectID *serverToEditID = [self.serverToEdit objectID];
+    NSManagedObjectID *activeServerID = [JMServerProfile activeServerID];
+    
+    // Do not send notification if updated serverToEdit profile is not active
+    if (![serverToEditID isEqual:activeServerID]) return;
+    
+    // TODO: refactor, change logic (one of the solution is to add another notification)
+    NSDictionary *userInfo = @{
+        kJMServerProfileKey : self.serverToEdit,
+        kJMNotUpdateMenuKey : @YES
+    };
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
+                                                        object:nil
+                                                      userInfo:userInfo];
 }
 
 @end

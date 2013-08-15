@@ -91,8 +91,6 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     
     if (serverProfile.askPassword.boolValue) {
         [[JMAskPasswordDialog askPasswordDialogForServerProfile:serverProfile] show];
-        // Setting server profile to "nil" indicates that application menu should be disabled (except Servers tab)
-        serverProfile = nil;
     }
     
     [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
@@ -319,8 +317,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 
 - (JMServerProfile *)activeServerProfile
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSManagedObjectID *activeServerID = [[self persistentStoreCoordinator] managedObjectIDForURIRepresentation:[defaults URLForKey:kJMDefaultsActiveServer]];
+    NSManagedObjectID *activeServerID = [JMServerProfile activeServerID];
     
     if (activeServerID) {
         JMServerProfile *serverProfile = (JMServerProfile *) [self.managedObjectContext existingObjectWithID:activeServerID error:nil];

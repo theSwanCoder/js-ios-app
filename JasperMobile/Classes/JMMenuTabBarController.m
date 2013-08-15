@@ -111,7 +111,7 @@ inject_default_rotation()
     
     JMServerProfile *serverProfile = [userInfo objectForKey:kJMServerProfileKey];
     
-    if (!serverProfile) {
+    if (!serverProfile || serverProfile.askPassword.boolValue) {
         [self disableTabBar];
         index = kJMServersMenuTag;
     } else {

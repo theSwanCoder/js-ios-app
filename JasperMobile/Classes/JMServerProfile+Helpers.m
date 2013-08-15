@@ -26,10 +26,12 @@
 //
 
 #import "JMServerProfile+Helpers.h"
+#import "JMConstants.h"
 #import "SSKeychain.h"
 #import <objc/runtime.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <jaspersoft-sdk/JSProfile.h>
+#import <Objection-iOS/Objection.h>
 
 @implementation JMServerProfile (Helpers)
 
@@ -65,6 +67,19 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
 + (BOOL)deletePasswordFromKeychain:(NSString *)profileID
 {
     return [SSKeychain deletePasswordForService:kJMKeychainServiceName account:profileID];
+}
+
++ (NSManagedObjectID *)activeServerID
+{
+    JSObjectionInjector *injector = [JSObjection defaultInjector];
+    NSManagedObjectContext *managedObjectContext = [injector getObject:[NSManagedObjectContext class]];
+    
+    if (!managedObjectContext) return nil;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSURL *url = [defaults URLForKey:kJMDefaultsActiveServer];
+    NSManagedObjectID *activeServerID = [managedObjectContext.persistentStoreCoordinator managedObjectIDForURIRepresentation:url];
+    
+    return activeServerID;
 }
 
 - (NSString *)profileID

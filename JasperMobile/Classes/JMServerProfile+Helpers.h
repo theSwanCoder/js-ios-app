@@ -68,6 +68,13 @@
 + (BOOL)deletePasswordFromKeychain:(NSString *)profileID;
 
 /**
+ Returns an id of last selected server profile
+ 
+ @return An id of active server profile
+ */
++ (NSManagedObjectID *)activeServerID;
+
+/**
  Returns encoded profile id
  */
 - (NSString *)profileID;
