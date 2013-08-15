@@ -25,12 +25,12 @@
 //  Jaspersoft Corporation
 //
 
-#import "JMSearchTableViewController.h"
+#import "JMSearchableTableViewController.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMLibraryTableViewController : JMSearchTableViewController
+@interface JMLibraryTableViewController : JMSearchableTableViewController
 
 @end

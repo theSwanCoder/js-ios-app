@@ -191,13 +191,6 @@ objection_requires(@"managedObjectContext", @"favoritesUtil");
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    self.cellsProperties = nil;
-    self.managedObjectContext = nil;
-    self.favoritesUtil = nil;
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

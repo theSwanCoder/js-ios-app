@@ -25,19 +25,21 @@
 //  Jaspersoft Corporation
 //
 
-#import "JMSearchTableViewController.h"
+#import "JMSearchableTableViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
 #import "JMResourceClientHolder.h"
 
-@interface JMSearchTableViewController ()
+@interface JMSearchableTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;
-@property (nonatomic, assign) BOOL shouldMoveToContentOffset;
 @property (nonatomic, assign) CGPoint contentOffset;
+
+- (CGPoint)defaultContentOffset;
+- (void)resetSearchState;
 @end
 
-@implementation JMSearchTableViewController
+@implementation JMSearchableTableViewController
 
 @synthesize isRefreshing = _isRefreshing;
 
@@ -53,11 +55,24 @@
 - (JMCancelRequestBlock)cancelBlock
 {
     if (!_cancelBlock) {
-        __weak JMSearchTableViewController *search = self;
+        __weak JMSearchableTableViewController *search = self;
         _cancelBlock = ^{
             search.searchQuery = nil;
             search.isRefreshing = NO;
-            [[search navigationController] popViewControllerAnimated:YES];
+            
+            UINavigationController *navigationController = [search navigationController];
+            
+            if (navigationController.topViewController == search) {
+                NSDictionary *userInfo = @{
+                    kJMMenuTag : @kJMServersMenuTag
+                };
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:kJMSelectMenuNotification
+                                                                    object:nil
+                                                                  userInfo:userInfo];
+            } else {
+                [[search navigationController] popViewControllerAnimated:YES];
+            }
         };
     }
     
@@ -75,19 +90,31 @@
         self.searchBar.delegate = self;
         self.searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
         [self.searchBar sizeToFit];
-        
         self.contentOffset = [self defaultContentOffset];
-        
         self.tableView.tableHeaderView = self.searchBar;
-        self.tableView.contentOffset = self.contentOffset;
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (![self resources]) {
+        [self resetSearchState];
+    }
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    self.tableView.contentOffset = self.contentOffset;
 }
 
 #pragma mark - UISearchBarDelegate
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    searchBar.text = @"";
+    searchBar.text = nil;
     [searchBar resignFirstResponder];
 }
 
@@ -107,7 +134,7 @@
         [searchBar resignFirstResponder];
         
         // TODO: consult about hiding search bar
-//        [self hideSearchBar:searchBar animated:NO];
+        //        [self hideSearchBar:searchBar animated:NO];
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:JMMainStoryboard() bundle:nil];
         id destinationViewController = [storyboard instantiateViewControllerWithIdentifier:NSStringFromClass(self.class)];
@@ -126,14 +153,12 @@
 
 #pragma mark - UIScrollViewDelegate
 
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-//{
-//    if (scrollView.isDecelerating || scrollView.isDragging) {
-//        self.contentOffset = scrollView.contentOffset;
-//    } else {
-//        self.tableView.contentOffset = self.contentOffset;
-//    }
-//}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.isDecelerating || scrollView.isDragging) {
+        self.contentOffset = scrollView.contentOffset;
+    }
+}
 
 #pragma mark - JSRequestDelegate
 
@@ -159,9 +184,8 @@
     self.isRefreshing = YES;
     // Clear table content
     self.resources = nil;
+    [self resetSearchState];
     [self.tableView reloadData];
-    // Reset scroll position to base
-    self.contentOffset = [self defaultContentOffset];
 }
 
 #pragma mark - Private
@@ -169,6 +193,13 @@
 - (CGPoint)defaultContentOffset
 {
     return CGPointMake(0, self.searchBar.frame.size.height);
+}
+
+- (void)resetSearchState
+{
+    self.searchBar.text = nil;
+    self.searchQuery = nil;
+    self.contentOffset = [self defaultContentOffset];
 }
 
 @end

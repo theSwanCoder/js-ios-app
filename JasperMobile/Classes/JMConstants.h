@@ -44,10 +44,12 @@ extern NSString * const kJMDefaultsServerUsername;
 // Notifications
 extern NSString * const kJMChangeServerProfileNotification;
 extern NSString * const kJMResetApplicationNotification;
+extern NSString * const kJMSelectMenuNotification;
 
 // Some shared keys for dictionary
-extern NSString * const kJMServerProfileKey;
+extern NSString * const kJMMenuTag;
 extern NSString * const kJMNotUpdateMenuKey;
+extern NSString * const kJMServerProfileKey;
 
 // Storyboard name
 NSString *JMMainStoryboard();

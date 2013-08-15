@@ -45,9 +45,15 @@ inject_default_rotation()
 {
     [super awakeFromNib];
     [self disableTabBar];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(changeServerProfile:)
                                                  name:kJMChangeServerProfileNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(selectMenu:)
+                                                 name:kJMSelectMenuNotification
                                                object:nil];
     self.delegate = self;
 }
@@ -116,6 +122,13 @@ inject_default_rotation()
     [self setSelectedIndex:index];
     UIViewController *selectedViewController = [self.viewControllers objectAtIndex:index];
     [self tabBarController:self didSelectViewController:selectedViewController];
+}
+
+- (void)selectMenu:(NSNotification *)notification
+{
+    NSDictionary *userInfo = notification.userInfo;
+    NSInteger menuTag = [[userInfo objectForKey:kJMMenuTag] integerValue];
+    [self setSelectedIndex:menuTag];
 }
 
 @end

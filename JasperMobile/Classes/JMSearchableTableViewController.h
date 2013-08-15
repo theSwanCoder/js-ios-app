@@ -33,7 +33,7 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMSearchTableViewController : JMBaseRepositoryTableViewController <UISearchBarDelegate, JMRefreshable>
+@interface JMSearchableTableViewController : JMBaseRepositoryTableViewController <UISearchBarDelegate, JMRefreshable>
 
 @property (nonatomic, strong) NSString *searchQuery;
 @property (nonatomic, assign) BOOL isScrollDisabled;

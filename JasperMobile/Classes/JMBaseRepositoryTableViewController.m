@@ -187,15 +187,6 @@ inject_default_rotation()
 
 #pragma mark - Private
 
-- (void)changeServerProfile
-{
-    if (self.resources) {
-        self.resources = nil;
-        [self.navigationController popToRootViewControllerAnimated:NO];
-        [self.tableView reloadData];
-    }
-}
-
 - (JSResourceDescriptor *)resourceDescriptorForIndexPath:(NSIndexPath *)indexPath
 {
     return [self.resources objectAtIndex:indexPath.row];
@@ -204,6 +195,15 @@ inject_default_rotation()
 - (NSString *)cellIdentifierForResourceType:(NSString *)resourceType
 {
     return [self.cellsIdentifiers objectForKey:resourceType] ?: kJMUnknownCell;
+}
+
+- (void)changeServerProfile
+{
+    if (self.resources) {
+        self.resources = nil;
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        [self.tableView reloadData];
+    }
 }
 
 @end
