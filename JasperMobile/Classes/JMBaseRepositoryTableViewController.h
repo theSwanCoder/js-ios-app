@@ -40,5 +40,6 @@
 @property (nonatomic, strong) NSMutableArray *resources;
 
 - (BOOL)isNeedsToReloadData;
+- (void)changeServerProfile;
 
 @end

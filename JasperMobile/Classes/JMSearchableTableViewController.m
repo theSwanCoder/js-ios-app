@@ -48,6 +48,12 @@
     return !self.isRefreshing && ([super isNeedsToReloadData] || self.searchQuery.length);
 }
 
+- (void)changeServerProfile
+{
+    [super changeServerProfile];
+    [self resetSearchState];
+}
+
 #pragma mark - Accessors
 
 @synthesize cancelBlock = _cancelBlock;
@@ -61,8 +67,9 @@
             search.isRefreshing = NO;
             
             UINavigationController *navigationController = [search navigationController];
+            UIViewController *topController = [navigationController.viewControllers objectAtIndex:0];
             
-            if (navigationController.topViewController == search) {
+            if (topController == search) {
                 NSDictionary *userInfo = @{
                     kJMMenuTag : @kJMServersMenuTag
                 };
@@ -92,15 +99,6 @@
         [self.searchBar sizeToFit];
         self.contentOffset = [self defaultContentOffset];
         self.tableView.tableHeaderView = self.searchBar;
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    if (![self resources]) {
-        [self resetSearchState];
     }
 }
 

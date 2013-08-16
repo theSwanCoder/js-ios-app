@@ -52,7 +52,7 @@
 
 "servers.new.label" = "添加服务器配置文件...";
 "servers.askpassword.label" = "总是要求输入密码";
-"servers.askpassword.dialog.title.label" = "输入密码";
+"servers.askpassword.dialog.title" = "输入密码";
 
 /* Navigation and view labels */
 

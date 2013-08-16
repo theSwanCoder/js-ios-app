@@ -34,19 +34,20 @@ static JMServerProfile * serverProfile;
 
 @implementation JMAskPasswordDialog
 
-// TODO: use custom alert view dialog
 + (UIAlertView *)askPasswordDialogForServerProfile:(JMServerProfile *)profile
 {
-    NSString *alias = [NSString stringWithFormat:@"%@\n", profile.alias];
-    NSMutableString *credentials = [NSMutableString string];
+    NSString *alias = [NSString stringWithFormat:@"%@ %@", profile.alias,
+                       JMCustomLocalizedString(@"servers.password.label", nil)];
     
+    NSMutableString *credentials = [NSMutableString string];
     [credentials appendString:profile.username];
+    
     if (profile.organization) {
         [credentials appendFormat:@" | %@", profile.organization];
     }
     
-    UIAlertView *askPasswordDialog = [UIAlertView localizedAlertWithTitle:@"servers.askpassword.dialog.title.label"
-                                                                  message:@""//[alias stringByAppendingString:credentials]
+    UIAlertView *askPasswordDialog = [UIAlertView localizedAlertWithTitle:alias
+                                                                  message:credentials
                                                                  delegate:self
                                                         cancelButtonTitle:@"dialog.button.cancel"
                                                         otherButtonTitles:@"dialog.button.ok", nil];

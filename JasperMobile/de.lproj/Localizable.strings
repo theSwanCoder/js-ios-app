@@ -52,7 +52,7 @@
 
 "servers.new.label" = "Serverprofil hinzufügen...";
 "servers.askpassword.label" = "Immer nach Passwort fragen";
-"servers.askpassword.dialog.title.label" = "Passwort eingeben";
+"servers.askpassword.dialog.title" = "Passwort eingeben";
 
 
 /* Navigation and view labels */

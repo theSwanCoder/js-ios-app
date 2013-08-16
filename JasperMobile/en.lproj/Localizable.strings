@@ -60,7 +60,12 @@
 "servers.myserver.label" = "My server";
 
 "servers.askpassword.label" = "Always ask for password";
-"servers.askpassword.dialog.title.label" = "Enter Password";
+"servers.askpassword.dialog.title" = "Enter Password";
+// TODO: localize for other bundles
+"servers.askpassword.serverprofile" = "Server Profile: ";
+"servers.askpassword.organization" = "Organization: ";
+"servers.askpassword.username" = "Username: ";
+
 
 // TODO: localize for other bundles
 "servers.title.new" = "New Server Profile";

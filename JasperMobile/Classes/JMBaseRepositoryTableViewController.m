@@ -54,6 +54,15 @@ inject_default_rotation()
     return self.resources == nil;
 }
 
+- (void)changeServerProfile
+{
+    if (self.resources) {
+        self.resources = nil;
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        [self.tableView reloadData];
+    }
+}
+
 #pragma mark - Accessors
 
 @synthesize constants = _constants;
@@ -195,15 +204,6 @@ inject_default_rotation()
 - (NSString *)cellIdentifierForResourceType:(NSString *)resourceType
 {
     return [self.cellsIdentifiers objectForKey:resourceType] ?: kJMUnknownCell;
-}
-
-- (void)changeServerProfile
-{
-    if (self.resources) {
-        self.resources = nil;
-        [self.navigationController popToRootViewControllerAnimated:NO];
-        [self.tableView reloadData];
-    }
 }
 
 @end

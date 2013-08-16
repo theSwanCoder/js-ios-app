@@ -1240,13 +1240,13 @@
         <class className="JMFavoritesTableViewController" superclassName="JMBaseRepositoryTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMFavoritesTableViewController.h"/>
         </class>
-        <class className="JMLibraryTableViewController" superclassName="JMSearchTableViewController">
+        <class className="JMLibraryTableViewController" superclassName="JMSearchableTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMLibraryTableViewController.h"/>
         </class>
         <class className="JMMenuTabBarController" superclassName="UITabBarController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMMenuTabBarController.h"/>
         </class>
-        <class className="JMRepositoryTableViewController" superclassName="JMSearchTableViewController">
+        <class className="JMRepositoryTableViewController" superclassName="JMSearchableTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMRepositoryTableViewController.h"/>
         </class>
         <class className="JMResourceModifyViewController" superclassName="UIViewController">
@@ -1261,8 +1261,8 @@
         <class className="JMResourceTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceTableViewController.h"/>
         </class>
-        <class className="JMSearchTableViewController" superclassName="JMBaseRepositoryTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSearchTableViewController.h"/>
+        <class className="JMSearchableTableViewController" superclassName="JMBaseRepositoryTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSearchableTableViewController.h"/>
         </class>
         <class className="JMServerSettingsTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMServerSettingsTableViewController.h"/>

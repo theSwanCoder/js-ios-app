@@ -52,7 +52,7 @@
 
 "servers.new.label" = "サーバープロファイルを追加...";
 "servers.askpassword.label" = "常にパスワードを要求";
-"servers.askpassword.dialog.title.label" = "パスワードを入力";
+"servers.askpassword.dialog.title" = "パスワードを入力";
 
 /* Navigation and view labels */
 

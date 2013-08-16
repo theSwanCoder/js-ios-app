@@ -85,7 +85,7 @@ static NSString * const kJMRequestType = @"type";
     [JMFilter checkNetworkReachabilityForBlock:^{
         [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
         
-        [self.resourceClient resources:@"/" query:query types:types recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
+        [self.resourceClient resources:nil query:query types:types recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
     } viewControllerToDismiss:nil];
 }
 

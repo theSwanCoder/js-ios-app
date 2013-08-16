@@ -52,7 +52,7 @@
 "servers.new.account.title" = "Новый профиль сервера";
 
 "servers.askpassword.label" = "Всегда спрашивать пароль";
-"servers.askpassword.dialog.title.label" = "Введите пароль";
+"servers.askpassword.dialog.title" = "Введите пароль";
 
 /* Navigation and view labels */
 

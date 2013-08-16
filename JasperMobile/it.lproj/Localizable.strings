@@ -57,12 +57,12 @@
 "servers.new.account.title" = "Server di Nuovo account";
 "servers.new.label" = "Aggiungi profilo server...";
 "servers.askpassword.label" = "Chiedi sempre password";
-"servers.askpassword.dialog.title.label" = "Immetti password";
+"servers.askpassword.dialog.title" = "Immetti password";
 
 "servers.myserver.label" = "Il mio server";
 
 "servers.askpassword.label" = "Chiedi sempre la password";
-"servers.askpassword.dialog.title.label" = "Immettere la password";
+"servers.askpassword.dialog.title" = "Immettere la password";
 
 /* Navigation and view labels */
 

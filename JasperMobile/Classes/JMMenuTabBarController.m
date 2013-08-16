@@ -66,6 +66,9 @@ inject_default_rotation()
     for (UITabBarItem *item in self.tabBar.items) {
         item.title = [JMUtils localizedTitleForMenuItemByTag:item.tag];
     }
+    
+    [self disableTabBar];
+    self.selectedIndex = kJMServersMenuTag;
 }
 
 #pragma mark - UITabBarController
@@ -111,17 +114,15 @@ inject_default_rotation()
     
     JMServerProfile *serverProfile = [userInfo objectForKey:kJMServerProfileKey];
     
-    if (!serverProfile || serverProfile.askPassword.boolValue) {
+    if (!serverProfile) {
         [self disableTabBar];
         index = kJMServersMenuTag;
     } else {
         [self enableTabBar];
         index = kJMLibraryMenuTag;
     }
-        
-    [self setSelectedIndex:index];
-    UIViewController *selectedViewController = [self.viewControllers objectAtIndex:index];
-    [self tabBarController:self didSelectViewController:selectedViewController];
+    
+    self.selectedIndex = index;
 }
 
 - (void)selectMenu:(NSNotification *)notification
@@ -129,6 +130,13 @@ inject_default_rotation()
     NSDictionary *userInfo = notification.userInfo;
     NSInteger menuTag = [[userInfo objectForKey:kJMMenuTag] integerValue];
     [self setSelectedIndex:menuTag];
+}
+
+- (void)setSelectedIndex:(NSUInteger)selectedIndex
+{
+    [super setSelectedIndex:selectedIndex];
+    UIViewController *selectedViewController = [self.viewControllers objectAtIndex:selectedIndex];
+    [self tabBarController:self didSelectViewController:selectedViewController];
 }
 
 @end

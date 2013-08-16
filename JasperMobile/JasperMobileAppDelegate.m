@@ -91,9 +91,9 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     
     if (serverProfile.askPassword.boolValue) {
         [[JMAskPasswordDialog askPasswordDialogForServerProfile:serverProfile] show];
+    } else {
+        [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
     }
-    
-    [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
     
     return YES;
 }
