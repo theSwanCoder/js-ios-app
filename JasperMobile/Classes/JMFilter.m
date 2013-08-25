@@ -30,14 +30,11 @@
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 
-static JMFilter * delegate;
+static JMFilter * filterDelegate;
 
 @interface JMFilter()
 @property (nonatomic, weak) id <JSRequestDelegate> delegate;
 @property (nonatomic, weak) UIViewController *viewControllerToDismiss;
-
-- (id)initWithDelegate:(id <JSRequestDelegate>)delegate;
-- (id)initWithDismissalViewController:(UIViewController *)viewController;
 @end
 
 @implementation JMFilter
@@ -49,11 +46,12 @@ static JMFilter * delegate;
     if (![JMUtils isNetworkReachable]) {
         [JMCancelRequestPopup dismiss];
         
-        delegate = [[JMFilter alloc] initWithDismissalViewController:viewController];
+        filterDelegate = [[JMFilter alloc] init];
+        filterDelegate.viewControllerToDismiss = viewController;
         
         [[UIAlertView localizedAlertWithTitle:@"error.noconnection.dialog.title"
                              message:@"error.noconnection.dialog.msg"
-                            delegate:delegate
+                            delegate:filterDelegate
                    cancelButtonTitle:@"dialog.button.ok"
                    otherButtonTitles:nil] show];
     } else {
@@ -62,26 +60,33 @@ static JMFilter * delegate;
 	}
 }
 
-+ (JMFilter *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate;
++ (JMFilter *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate
 {
-    return [[self alloc] initWithDelegate:delegate];
+    JMFilter *filter = [[JMFilter alloc] init];
+    filter.delegate = delegate;
+    return filter;
 }
+
++ (void)showAlertViewDialogForStatusCode:(NSInteger)statusCode
+{
+    [[UIAlertView localizedAlertWithTitle:@"error.readingresponse.dialog.msg"
+                                  message:[NSString stringWithFormat:@"error.http.%i", statusCode]
+                                 delegate:nil
+                        cancelButtonTitle:@"dialog.button.ok"
+                        otherButtonTitles:nil] show];
+}
+
 
 #pragma mark - JSRequestDelegate
 
 - (void)requestFinished:(JSOperationResult *)result
 {
-    [JMUtils hideNetworkActivityIndicator];
     [JMCancelRequestPopup dismiss];
     
     if ([result isSuccessful]) {
-        [self.delegate requestFinished:result];
+        if (self.delegate) [self.delegate requestFinished:result];
     } else {
-        [[UIAlertView localizedAlertWithTitle:@"error.readingresponse.dialog.msg"
-                             message:[NSString stringWithFormat:@"error.http.%i", result.statusCode]
-                            delegate:nil
-                   cancelButtonTitle:@"dialog.button.ok"
-                   otherButtonTitles:nil] show];
+        [JMFilter showAlertViewDialogForStatusCode:result.statusCode];
     }
 }
 
@@ -93,27 +98,7 @@ static JMFilter * delegate;
         [self.viewControllerToDismiss.navigationController popViewControllerAnimated:YES];
     }
     
-    delegate = nil;
-}
-
-#pragma mark - Private
-
-- (id)initWithDelegate:(id <JSRequestDelegate>)delegate
-{
-    if (self = [self init]) {
-        self.delegate = delegate;
-    }
-    
-    return self;
-}
-
-- (id)initWithDismissalViewController:(UIViewController *)viewController
-{
-    if (self = [self init]) {
-        self.viewControllerToDismiss = viewController;
-    }
-    
-    return self;
+    filterDelegate = nil;
 }
 
 @end

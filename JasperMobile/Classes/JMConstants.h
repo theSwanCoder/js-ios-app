@@ -56,7 +56,7 @@ NSString *JMMainStoryboard();
 
 // Tags for menus. Decraled as define constants because they can be used
 // in switch-case structure
-#define kJMLibraryMenuTag 0
-#define kJMRepositoryMenuTag 1
+#define kJMRepositoryMenuTag 0
+#define kJMLibraryMenuTag 1
 #define kJMFavoritesMenuTag 2
 #define kJMServersMenuTag 3

@@ -44,11 +44,19 @@
 + (void)checkNetworkReachabilityForBlock:(void (^)(void))block viewControllerToDismiss:(id)viewController;
 
 /**
- Passes request result to final delegate object if request was successful. Otherwise displays
+ Passes a request result to final delegate object if request was successful. Otherwise displays
  alert view dialog with error message
  
  @param delegate A deleage object
  */
 + (JMFilter *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate;
+
+/**
+ Displays alert view dialog with provided status code
+ 
+ @param statusCode The response HTTP code
+ */
++ (void)showAlertViewDialogForStatusCode:(NSInteger)statusCode;
+
 
 @end

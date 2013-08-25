@@ -71,8 +71,8 @@ typedef enum {
 @end
 
 @implementation JMResourceTableViewController
-objection_requires(@"resourceClient", @"favoritesUtil");
-inject_default_rotation();
+objection_requires(@"resourceClient", @"favoritesUtil")
+inject_default_rotation()
 
 #pragma mark - Accessors
 
@@ -115,7 +115,8 @@ inject_default_rotation();
         _numberOfRowsForSections = @{
             @kJMAttributesSection : @4,
             @kJMToolsSection : @1,
-            @kJMResourcePropertiesSection : [NSNumber numberWithInt:self.resourceDescriptor.resourceProperties.count]
+             // Uncomment to display Resource Properties Section
+//            @kJMResourcePropertiesSection : [NSNumber numberWithInt:self.resourceDescriptor.resourceProperties.count]
         };
     }
     
@@ -352,7 +353,7 @@ inject_default_rotation();
 - (void)refreshResourceDescriptor
 {
     [JMFilter checkNetworkReachabilityForBlock:^{
-        [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:^{
+        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
             [self.navigationController popViewControllerAnimated:YES];
         }];
         

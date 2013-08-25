@@ -36,7 +36,7 @@
 @end
 
 @implementation JMFavoritesTableViewController
-objection_requires(@"favoritesUtil");
+objection_requires(@"favoritesUtil")
 
 #pragma mark - UIViewController
 

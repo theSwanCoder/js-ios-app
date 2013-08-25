@@ -33,7 +33,7 @@
 #import <Objection-iOS/Objection.h>
 
 @implementation JMResourceModifyViewController
-objection_requires(@"resourceClient");
+objection_requires(@"resourceClient")
 
 #pragma mark - Accessors
 

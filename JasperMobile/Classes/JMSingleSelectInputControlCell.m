@@ -21,35 +21,25 @@
  */
 
 //
-//  JMCancelRequestPopup.h
+//  JMSingleSelectInputControlCell.m
 //  Jaspersoft Corporation
 //
 
-#import <UIKit/UIKit.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JMSingleSelectInputControlCell.h"
 
-typedef void(^JMCancelRequestBlock)(void);
+@implementation JMSingleSelectInputControlCell
 
-/**
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
- */
-@interface JMCancelRequestPopup : UIViewController
+- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
+{
+    [super setInputControlWrapper:inputControlWrapper];
+    
+    self.label.text = [NSString stringWithFormat:@"%@%@%@", self.label.text,self.label.text,self.label.text];
+    self.detailLabel.text = self.label.text;
+}
 
-/**
- Presents cancel request popup in view controller
- 
- @param viewController A view controller inside which popup will be shown
- @param message A message of a progress dialog
- @param restClient A rest client to cancel all requests
- @param cancelBlock A cancelBlock to execute
- */
-+ (void)presentInViewController:(UIViewController *)viewController message:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock;
-
-/**
- Dismisses last presented popup
- */
-+ (void)dismiss;
+- (UILabel *)detailLabel
+{
+    return (UILabel *) [self viewWithTag:2];
+}
 
 @end
-

@@ -21,35 +21,48 @@
  */
 
 //
-//  JMCancelRequestPopup.h
+//  JMRequestDelegate.h
 //  Jaspersoft Corporation
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
-typedef void(^JMCancelRequestBlock)(void);
-
 /**
+ Helper class which gives possibility to work with multiple requests in the same
+ View Controller. Each new instance is adding to request pool and removing when
+ request is complete
+ 
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMCancelRequestPopup : UIViewController
+@interface JMRequestDelegate : NSObject <JSRequestDelegate>
 
 /**
- Presents cancel request popup in view controller
+ Sets a block which will be invoked after all requests will finish
+
+ @param block A final block
+ */
++ (void)setFinalBlock:(void (^)(void))block;
+
+/**
+ Creates new instance of request delegate and adds it to the request pool
  
- @param viewController A view controller inside which popup will be shown
- @param message A message of a progress dialog
- @param restClient A rest client to cancel all requests
- @param cancelBlock A cancelBlock to execute
+ @param finishedBlock 
+ @return An new request delegate instance
  */
-+ (void)presentInViewController:(UIViewController *)viewController message:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock;
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock;
 
 /**
- Dismisses last presented popup
+ Check if request pool is empty (no any active request exists)
+ 
+ @return YES if request pool is empty, otherwise returns NO
  */
-+ (void)dismiss;
++ (BOOL)isRequestPoolEmpty;
+
+/**
+ Removes all requests from request pool. This will also disable callback
+ */
++ (void)clearRequestPool;
 
 @end
-

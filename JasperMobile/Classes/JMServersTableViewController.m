@@ -50,8 +50,8 @@ static NSInteger const kJMFooterSection = 1;
 @end
 
 @implementation JMServersTableViewController
-objection_requires(@"managedObjectContext");
-inject_default_rotation();
+objection_requires(@"managedObjectContext")
+inject_default_rotation()
 
 #pragma mark - Initialization
 

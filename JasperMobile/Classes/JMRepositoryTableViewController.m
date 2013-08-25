@@ -61,7 +61,7 @@
 - (void)searchReportsByQuery:(NSString *)query
 {
     [JMFilter checkNetworkReachabilityForBlock:^{
-        [JMCancelRequestPopup presentInViewController:self progressMessage:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
+        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
         
         // Check if search action was not performed
         if (self.searchQuery.length > 0) {

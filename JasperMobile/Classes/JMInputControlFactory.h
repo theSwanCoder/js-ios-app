@@ -21,35 +21,46 @@
  */
 
 //
-//  JMCancelRequestPopup.h
+//  JMInputControlFactory.h
 //  Jaspersoft Corporation
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "JMInputControlCell.h"
+#import "JMReportOptionsTableViewController.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
-
-typedef void(^JMCancelRequestBlock)(void);
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMCancelRequestPopup : UIViewController
+@interface JMInputControlFactory : NSObject
+
+// TODO: make protocol instead direct calls
+@property (nonatomic, weak) UITableViewController *tableViewController;
 
 /**
- Presents cancel request popup in view controller
+ Initialize a new factory
  
- @param viewController A view controller inside which popup will be shown
- @param message A message of a progress dialog
- @param restClient A rest client to cancel all requests
- @param cancelBlock A cancelBlock to execute
+ @param tableViewController A table view controller which is required to get prototype cells
+ @return An initialized factory
  */
-+ (void)presentInViewController:(UIViewController *)viewController message:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock;
+- (id)initWithTableViewController:(UITableViewController *)tableViewController;
 
 /**
- Dismisses last presented popup
+ Creates the input controll cell
+ 
+ @param inputConrol A wrapper for IC (REST v1)
+ @return The IC cell of a certain type
  */
-+ (void)dismiss;
+- (JMInputControlCell *)inputControlWithInputControlWrapper:(JSInputControlWrapper *)inputControl;
+
+/**
+ Creates the input controll cell
+ 
+ @param inputConrol An IC descriptor (REST v2)
+ @return The IC cell of a certain type
+ */
+- (JMInputControlCell *)inputControlWithInputControlDescriptor:(JSInputControlDescriptor *)inputControl;
 
 @end
-

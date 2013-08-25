@@ -49,11 +49,8 @@ static JMCancelRequestPopup *instance;
 
 #pragma mark - Class Methods
 
-+ (void)presentInViewController:(UIViewController *)viewController progressMessage:(NSString *)progressMessage restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock
++ (void)presentInViewController:(UIViewController *)viewController message:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock
 {
-    // Before presenting new cancel request popup we should dismiss previous one (if previous popup exists)
-//    [[self class] dismiss];
-    
     instance = [[JMCancelRequestPopup alloc] initWithNibName:kJMCancelRequestPopupNib
                                                       bundle:nil
                                               viewController:viewController
@@ -61,7 +58,7 @@ static JMCancelRequestPopup *instance;
                                                  cancelBlock:cancelBlock];
     
     [instance.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
-    instance.progressLabel.text = JMCustomLocalizedString(progressMessage, nil);
+    instance.progressLabel.text = JMCustomLocalizedString(message, nil);
     
     [viewController presentPopupViewController:instance animationType:MJPopupViewAnimationFade];
 }
@@ -69,6 +66,7 @@ static JMCancelRequestPopup *instance;
 + (void)dismiss
 {
     if (instance) {
+        [JMUtils hideNetworkActivityIndicator];
         [instance.viewController dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
         // Remove all targets for cancel button before releasing instance (instance = nil)
         // to avoid memory issue: when click is performed but instance was released already

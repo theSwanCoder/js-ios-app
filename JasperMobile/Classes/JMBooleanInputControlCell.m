@@ -21,35 +21,12 @@
  */
 
 //
-//  JMCancelRequestPopup.h
+//  JMBooleanInputControlCell.m
 //  Jaspersoft Corporation
 //
 
-#import <UIKit/UIKit.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JMBooleanInputControlCell.h"
 
-typedef void(^JMCancelRequestBlock)(void);
-
-/**
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
- */
-@interface JMCancelRequestPopup : UIViewController
-
-/**
- Presents cancel request popup in view controller
- 
- @param viewController A view controller inside which popup will be shown
- @param message A message of a progress dialog
- @param restClient A rest client to cancel all requests
- @param cancelBlock A cancelBlock to execute
- */
-+ (void)presentInViewController:(UIViewController *)viewController message:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock;
-
-/**
- Dismisses last presented popup
- */
-+ (void)dismiss;
+@implementation JMBooleanInputControlCell
 
 @end
-

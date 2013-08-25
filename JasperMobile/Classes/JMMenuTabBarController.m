@@ -34,6 +34,9 @@
 
 @interface JMMenuTabBarController()
 @property (nonatomic, strong) id lastSelectedViewController;
+
+- (void)enableTabBar;
+- (void)disableTabBar;
 @end
 
 @implementation JMMenuTabBarController
@@ -55,6 +58,8 @@ inject_default_rotation()
                                              selector:@selector(selectMenu:)
                                                  name:kJMSelectMenuNotification
                                                object:nil];
+    [self disableTabBar];
+    self.selectedIndex = kJMServersMenuTag;
     self.delegate = self;
 }
 
@@ -66,9 +71,6 @@ inject_default_rotation()
     for (UITabBarItem *item in self.tabBar.items) {
         item.title = [JMUtils localizedTitleForMenuItemByTag:item.tag];
     }
-    
-    [self disableTabBar];
-    self.selectedIndex = kJMServersMenuTag;
 }
 
 #pragma mark - UITabBarController
@@ -119,7 +121,7 @@ inject_default_rotation()
         index = kJMServersMenuTag;
     } else {
         [self enableTabBar];
-        index = kJMLibraryMenuTag;
+        index = kJMRepositoryMenuTag;
     }
     
     self.selectedIndex = index;

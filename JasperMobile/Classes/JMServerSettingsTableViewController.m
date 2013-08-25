@@ -77,7 +77,7 @@ typedef BOOL (^JMValidationBlock)(NSString *value, NSString **errorMessage);
 @end
 
 @implementation JMServerSettingsTableViewController
-objection_requires(@"managedObjectContext", @"favoritesUtil");
+objection_requires(@"managedObjectContext", @"favoritesUtil")
 
 #pragma mark - Accessors
 

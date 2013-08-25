@@ -90,7 +90,8 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     JMServerProfile *serverProfile = [self activeServerProfile];
     
     if (serverProfile.askPassword.boolValue) {
-        [[JMAskPasswordDialog askPasswordDialogForServerProfile:serverProfile] show];
+        // Using performSelector to fix warning: "Applications are expected to have a root view controller at the end of application launch"
+        [[JMAskPasswordDialog askPasswordDialogForServerProfile:serverProfile] performSelector:@selector(show) withObject:nil afterDelay:0.0];
     } else {
         [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
     }
