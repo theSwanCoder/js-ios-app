@@ -71,8 +71,7 @@ inject_default_rotation()
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell;
     
     switch (indexPath.section) {
         case kJMICSection:
@@ -178,7 +177,13 @@ inject_default_rotation()
     static JMInputControlFactory *inputControlFactory;
     if (!inputControlFactory || !inputControlFactory.tableViewController) inputControlFactory = [[JMInputControlFactory alloc] initWithTableViewController:self];
     
-    JMInputControlCell *cell = [inputControlFactory inputControlWithInputControlWrapper:inputControl];
+    id cell = [inputControlFactory inputControlWithInputControlWrapper:inputControl];
+    
+    if ([cell conformsToProtocol:@protocol(JMResourceClientHolder)]) {
+        [cell setResourceClient:self.resourceClient];
+        [cell setResourceDescriptor:self.resourceDescriptor];
+    }
+    
     [self.inputControls addObject:cell];
 }
 
@@ -189,16 +194,14 @@ inject_default_rotation()
     JMCancelRequestBlock cancelBlock = ^{
         [JMRequestDelegate clearRequestPool];
         [self.navigationController popViewControllerAnimated:YES];
-    };
-    
-    JMFilter *delegate = [JMFilter checkRequestResultForDelegate:self];
+    };    
     
     // TODO: REMOVE!!!
     if (NO && self.reportClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD) {
         [JMFilter checkNetworkReachabilityForBlock:^{
             [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:cancelBlock];
-            // TODO: 
-            [self.reportClient inputControlsForReport:self.resourceDescriptor.uriString delegate:delegate];
+            // TODO: add functional
+//            [self.reportClient inputControlsForReport:self.resourceDescriptor.uriString delegate:delegate];
         } viewControllerToDismiss:self];
         
     } else {
@@ -222,6 +225,7 @@ inject_default_rotation()
         
         // Remove controls that have transitive dependencies
         [dependentControls removeObjectsInArray:subDependentControls];
+        inputControl.slaveDependencies = dependentControls;
     }
 }
 
@@ -281,12 +285,15 @@ inject_default_rotation()
         [reportOptions cleanupDependencies:inputControlWrappers];
         
         for (JSInputControlWrapper *inputControl in inputControlWrappers) {
-            if (inputControl.dataType == 0 && inputControl.dataTypeUri.length > 0) {
+            if (!inputControl.dataType && inputControl.dataTypeUri.length > 0) {
                 [reportOptions requestDataTypeForInputControlWrapper:inputControl];
             } else {
                 [reportOptions createCellFromWrapper:inputControl];
             }
         }
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMUpdateInputControlQueryDataNotification
+                                                            object:nil];
     }];
 }
 

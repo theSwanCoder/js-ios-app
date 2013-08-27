@@ -26,9 +26,14 @@
 //
 
 #import "JMInputControlCell.h"
+#import "JMResourceClientHolder.h"
 
-@interface JMSingleSelectInputControlCell : JMInputControlCell
+@interface JMSingleSelectInputControlCell : JMInputControlCell <JMResourceClientHolder>
+
+@property (nonatomic, strong) NSMutableArray *values;
+@property (nonatomic, strong) JSConstants *constants;
 
 - (UILabel *)detailLabel;
+- (NSString *)isListItem;
 
 @end

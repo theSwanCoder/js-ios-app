@@ -21,39 +21,32 @@
  */
 
 //
-//  JMInputControlCell.m
+//  JMListItem.m
 //  Jaspersoft Corporation
 //
 
-#import "JMInputControlCell.h"
+#import "JMListItem.h"
 
-@implementation JMInputControlCell
+@implementation JMListItem
 
-- (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
+#pragma mark - Initialization
+
+- (id)initWithName:(NSString *)name andValue:(NSString *)value isSelected:(BOOL)selected
 {
-    if (!inputControlDescriptor) return;
-    
-    self.label.text = inputControlDescriptor.label;
-}
-
-- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
-{
-    if (!inputControlWrapper) return;
-    
-    _inputControlWrapper = inputControlWrapper;
-    _isMandatory = inputControlWrapper.isMandatory;
-    
-    NSString *label = inputControlWrapper.label;
-    if (_isMandatory) {
-        label = [NSString stringWithFormat:@"* %@", label];
+    if (self = [self init]) {
+        self.name = name;
+		self.value = value;
+        self.selected = selected;
     }
     
-    self.label.text = label;
+    return self;
 }
 
-- (UILabel *)label
+#pragma mark - NSObject
+
+- (NSString *)description
 {
-    return (UILabel *) [self viewWithTag:1];
+    return [NSString stringWithFormat:@"Name: %@; Value: %@; Selected: %@", self.name, self.value, self.selected ? @"YES" : @"NO"];
 }
 
 @end

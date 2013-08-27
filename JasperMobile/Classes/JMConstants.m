@@ -42,11 +42,14 @@ NSString * const kJMDefaultsServerUsername = @"jaspersoft.server.username.%d";
 NSString * const kJMChangeServerProfileNotification = @"changeServerProfile";
 NSString * const kJMResetApplicationNotification = @"resetApplication";
 NSString * const kJMSelectMenuNotification = @"selectMenu";
+NSString * const kJMUpdateInputControlQueryDataNotification = @"updateICQueryData";
 
 // Some shared keys for dictionary
+NSString * const kJMInputControlsToUpdate = @"inputControlsToUpdate";
 NSString * const kJMMenuTag = @"menuTag";
 NSString * const kJMNotUpdateMenuKey = @"ignoreMenuUpdates";
 NSString * const kJMServerProfileKey = @"serverProfile";
+NSString * const kJMParameters = @"parameters";
 
 // Storyboard name
 static NSString *_mainStoryboardName;

@@ -29,4 +29,16 @@
 
 @implementation JMBooleanInputControlCell
 
+- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
+{
+    [super setInputControlWrapper:inputControlWrapper];
+    
+    self.uiSwitch.enabled = NO;
+}
+
+- (UISwitch *)uiSwitch
+{
+    return (UISwitch *) [self viewWithTag:2];
+}
+
 @end

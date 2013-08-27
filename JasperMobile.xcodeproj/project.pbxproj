@@ -62,6 +62,7 @@
 		F58FF2F51760A0B50021CC8B /* UIViewController+MJPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F58FF2F31760A0B50021CC8B /* UIViewController+MJPopupViewController.m */; };
 		F58FF2F91760A1090021CC8B /* JMCancelRequestPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = F58FF2F71760A1090021CC8B /* JMCancelRequestPopup.m */; };
 		F58FF3041760A1600021CC8B /* JMCancelRequestPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = F58FF3021760A1600021CC8B /* JMCancelRequestPopup.xib */; };
+		F59AFBAC17CB58F300F168CE /* JMReportOptionsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F59AFBAB17CB58F300F168CE /* JMReportOptionsHelper.m */; };
 		F59BF2EC1757EE980091EB88 /* JMPhoneModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F59BF2EB1757EE980091EB88 /* JMPhoneModule.m */; };
 		F59BF2EF1757F1960091EB88 /* JMPadModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F59BF2EE1757F1960091EB88 /* JMPadModule.m */; };
 		F59BF2FF1758164E0091EB88 /* JMRotationBase.m in Sources */ = {isa = PBXBuildFile; fileRef = F59BF2FE1758164E0091EB88 /* JMRotationBase.m */; };
@@ -82,6 +83,7 @@
 		F5D814B5176894A5004E0A62 /* delete_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5D814AC176894A5004E0A62 /* delete_button.png */; };
 		F5D814B6176894A5004E0A62 /* add_favorite_button_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F5D814AD176894A5004E0A62 /* add_favorite_button_highlighted.png */; };
 		F5D814B7176894A5004E0A62 /* add_favorite_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5D814AE176894A5004E0A62 /* add_favorite_button.png */; };
+		F5D849E717CC19B600C0F44E /* JMListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D849E617CC19B600C0F44E /* JMListItem.m */; };
 		F5D97FA1179587100059C761 /* JMFavorites.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97F98179587100059C761 /* JMFavorites.m */; };
 		F5D97FA2179587100059C761 /* JasperMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F5D97F99179587100059C761 /* JasperMobile.xcdatamodeld */; };
 		F5D97FA3179587100059C761 /* JMReportOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97F9C179587100059C761 /* JMReportOptions.m */; };
@@ -234,6 +236,8 @@
 		F58FF2F61760A1090021CC8B /* JMCancelRequestPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMCancelRequestPopup.h; path = Classes/JMCancelRequestPopup.h; sourceTree = "<group>"; };
 		F58FF2F71760A1090021CC8B /* JMCancelRequestPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMCancelRequestPopup.m; path = Classes/JMCancelRequestPopup.m; sourceTree = "<group>"; };
 		F58FF3031760A1600021CC8B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/JMCancelRequestPopup.xib; sourceTree = "<group>"; };
+		F59AFBAA17CB58F300F168CE /* JMReportOptionsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMReportOptionsHelper.h; path = JasperMobile/Classes/JMReportOptionsHelper.h; sourceTree = "<group>"; };
+		F59AFBAB17CB58F300F168CE /* JMReportOptionsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportOptionsHelper.m; path = JasperMobile/Classes/JMReportOptionsHelper.m; sourceTree = "<group>"; };
 		F59BF2EA1757EE980091EB88 /* JMPhoneModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMPhoneModule.h; path = Classes/JMPhoneModule.h; sourceTree = "<group>"; };
 		F59BF2EB1757EE980091EB88 /* JMPhoneModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMPhoneModule.m; path = Classes/JMPhoneModule.m; sourceTree = "<group>"; };
 		F59BF2ED1757F1960091EB88 /* JMPadModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMPadModule.h; path = Classes/JMPadModule.h; sourceTree = "<group>"; };
@@ -265,6 +269,8 @@
 		F5D814AC176894A5004E0A62 /* delete_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete_button.png; sourceTree = "<group>"; };
 		F5D814AD176894A5004E0A62 /* add_favorite_button_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_favorite_button_highlighted.png; sourceTree = "<group>"; };
 		F5D814AE176894A5004E0A62 /* add_favorite_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_favorite_button.png; sourceTree = "<group>"; };
+		F5D849E517CC19B600C0F44E /* JMListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMListItem.h; path = Classes/JMListItem.h; sourceTree = "<group>"; };
+		F5D849E617CC19B600C0F44E /* JMListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMListItem.m; path = Classes/JMListItem.m; sourceTree = "<group>"; };
 		F5D97F97179587100059C761 /* JMFavorites.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMFavorites.h; path = Classes/JMFavorites.h; sourceTree = "<group>"; };
 		F5D97F98179587100059C761 /* JMFavorites.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMFavorites.m; path = Classes/JMFavorites.m; sourceTree = "<group>"; };
 		F5D97F9A179587100059C761 /* JasperMobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile.xcdatamodel; sourceTree = "<group>"; };
@@ -360,6 +366,8 @@
 				F502CFC51756B69C007C12C3 /* JMFilter.m */,
 				F514E6901754E4C200C9F61E /* JMLocalization.h */,
 				F514E6911754E4C200C9F61E /* JMLocalization.m */,
+				F59AFBAA17CB58F300F168CE /* JMReportOptionsHelper.h */,
+				F59AFBAB17CB58F300F168CE /* JMReportOptionsHelper.m */,
 				F572814517C77047000B192D /* JMRequestDelegate.h */,
 				F572814617C77048000B192D /* JMRequestDelegate.m */,
 				F55048D717622B8C0067304B /* JMUtils.h */,
@@ -571,6 +579,7 @@
 				F54936FB17C4F1F40009F321 /* JMInputControlFactory.h */,
 				F54936FC17C4F1F40009F321 /* JMInputControlFactory.m */,
 				F549370117C4F1FA0009F321 /* Cells */,
+				F5D849E117CC16EA00C0F44E /* ListItem */,
 			);
 			name = "Input Controls";
 			sourceTree = "<group>";
@@ -714,6 +723,15 @@
 				F5D6372C17909B1D005BA5CD /* jaspersoft-sdk-resources.bundle */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F5D849E117CC16EA00C0F44E /* ListItem */ = {
+			isa = PBXGroup;
+			children = (
+				F5D849E517CC19B600C0F44E /* JMListItem.h */,
+				F5D849E617CC19B600C0F44E /* JMListItem.m */,
+			);
+			name = ListItem;
 			sourceTree = "<group>";
 		};
 		F5D97F93179586AD0059C761 /* CoreData */ = {
@@ -996,6 +1014,8 @@
 				F5E4FB7317C61BBF00A69FCC /* JMMultiSelectInputControlCell.m in Sources */,
 				F5E4FB7F17C61DE500A69FCC /* JMBooleanInputControlCell.m in Sources */,
 				F572814717C77048000B192D /* JMRequestDelegate.m in Sources */,
+				F59AFBAC17CB58F300F168CE /* JMReportOptionsHelper.m in Sources */,
+				F5D849E717CC19B600C0F44E /* JMListItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

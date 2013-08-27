@@ -21,39 +21,22 @@
  */
 
 //
-//  JMInputControlCell.m
+//  JMListItem.h
 //  Jaspersoft Corporation
 //
 
-#import "JMInputControlCell.h"
+#import <Foundation/Foundation.h>
 
-@implementation JMInputControlCell
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.6
+ */
+@interface JMListItem : NSObject
 
-- (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
-{
-    if (!inputControlDescriptor) return;
-    
-    self.label.text = inputControlDescriptor.label;
-}
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *value;
+@property (nonatomic, assign) BOOL selected;
 
-- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
-{
-    if (!inputControlWrapper) return;
-    
-    _inputControlWrapper = inputControlWrapper;
-    _isMandatory = inputControlWrapper.isMandatory;
-    
-    NSString *label = inputControlWrapper.label;
-    if (_isMandatory) {
-        label = [NSString stringWithFormat:@"* %@", label];
-    }
-    
-    self.label.text = label;
-}
-
-- (UILabel *)label
-{
-    return (UILabel *) [self viewWithTag:1];
-}
+- (id)initWithName:(NSString *)name andValue:(NSString *)value isSelected:(BOOL)selected;
 
 @end

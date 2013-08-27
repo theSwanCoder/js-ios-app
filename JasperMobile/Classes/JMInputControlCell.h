@@ -36,6 +36,7 @@
 
 @property (nonatomic, strong) JSInputControlWrapper *inputControlWrapper;
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
+@property (nonatomic, readonly) BOOL isMandatory;
 
 - (UILabel *)label;
 

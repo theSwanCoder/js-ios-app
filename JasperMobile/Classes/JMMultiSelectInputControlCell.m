@@ -29,4 +29,9 @@
 
 @implementation JMMultiSelectInputControlCell
 
+- (NSString *)isListItem
+{
+    return @"YES";
+}
+
 @end

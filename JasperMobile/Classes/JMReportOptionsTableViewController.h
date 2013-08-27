@@ -11,7 +11,7 @@
 #import "JMResourceClientHolder.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
-@interface JMReportOptionsTableViewController : UITableViewController <JMReportClientHolder, JMResourceClientHolder, JSRequestDelegate>
+@interface JMReportOptionsTableViewController : UITableViewController <JMReportClientHolder, JMResourceClientHolder>
 
 @property (nonatomic, strong) JSConstants *constants;
 @property (nonatomic, strong) NSMutableArray *inputControls;
