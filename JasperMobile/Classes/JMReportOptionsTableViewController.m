@@ -11,10 +11,10 @@
 #import "JMConstants.h"
 #import "JMFilter.h"
 #import "JMInputControlCell.h"
+#import "JMInputControlFactory.h"
+#import "JMSingleSelectTableViewController.h"
 #import "JMRequestDelegate.h"
 #import "JMUtils.h"
-#import "UITableViewController+CellRelativeHeight.h"
-#import "JMInputControlFactory.h"
 #import <Objection-iOS/Objection.h>
 
 #define kJMICSection 0
@@ -25,6 +25,9 @@ static NSString * const kJMDetailCellIdentifier = @"DetailCell";
 static NSString * const kJMTextEditCellIdentifier = @"TextEditCell";
 static NSString * const kJMBooleanCellIdentifier = @"BooleanCell";
 static NSString * const kJMRunCellIdentifier = @"RunCell";
+
+static NSString * const kJMShowSingleSelectSegue = @"ShowSingleSelect";
+static NSString * const kJMShowMultiSelectSegue = @"ShowMultiSelect";
 
 @implementation JMReportOptionsTableViewController
 objection_requires(@"resourceClient", @"reportClient", @"constants")
@@ -43,17 +46,22 @@ inject_default_rotation()
     self.inputControls = [NSMutableArray array];
 }
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [JMUtils setTitleForResourceViewController:self];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];    
     if (self.resourceDescriptor) {
         [self updateInputControls];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kJMShowSingleSelectSegue] ||
+        [segue.identifier isEqualToString:kJMShowMultiSelectSegue]) {
+        [segue.destinationViewController setCell:sender];
     }
 }
 

@@ -21,32 +21,28 @@
  */
 
 //
-//  JMListItem.m
+//  JMSingleSelectTableViewController.h
 //  Jaspersoft Corporation
 //
 
-#import "JMListItem.h"
+#import <UIKit/UIKit.h>
+#import "JMSingleSelectInputControlCell.h"
+#import "JMListValue.h"
 
-@implementation JMListItem
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.6
+ */
+@interface JMSingleSelectTableViewController : UITableViewController
 
-#pragma mark - Initialization
+@property (nonatomic, strong) JMSingleSelectInputControlCell *cell;
+@property (nonatomic, strong) NSMutableArray *selectedValues;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *unsetButton;
 
-- (id)initWithName:(NSString *)name andValue:(NSString *)value isSelected:(BOOL)selected
-{
-    if (self = [self init]) {
-        self.name = name;
-		self.value = value;
-        self.selected = selected;
-    }
-    
-    return self;
-}
-
-#pragma mark - NSObject
-
-- (NSString *)description
-{
-    return [NSString stringWithFormat:@"Name: %@; Value: %@; Selected: %@", self.name, self.value, self.selected ? @"YES" : @"NO"];
-}
+/**
+ Changes disclosure indicator (checked or not) for table view cell depends 
+ on whether listValue is selected or not
+ */
+- (void)markCell:(UITableViewCell *)cell isSelected:(JMListValue *)listValue;
 
 @end

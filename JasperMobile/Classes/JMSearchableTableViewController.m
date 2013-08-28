@@ -26,10 +26,8 @@
 //
 
 #import "JMSearchableTableViewController.h"
-#import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
-#import "JMResourceClientHolder.h"
 
 @interface JMSearchableTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;

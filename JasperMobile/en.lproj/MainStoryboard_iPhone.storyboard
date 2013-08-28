@@ -370,7 +370,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B7w-V7-hdn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1472" y="-1294"/>
+            <point key="canvasLocation" x="1172" y="-1290"/>
         </scene>
         <!--Resource Table View Controller - Resource Title-->
         <scene sceneID="T3E-kQ-QJa">
@@ -1547,7 +1547,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z8J-ws-1wP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1866" y="-1287"/>
+            <point key="canvasLocation" x="1578" y="-1302"/>
         </scene>
         <!--Report Options Table View Controller-->
         <scene sceneID="tOF-SO-kDq">
@@ -1582,6 +1582,9 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <connections>
+                                    <segue destination="p3s-dd-WdS" kind="push" identifier="ShowSingleSelect" id="6mC-Uo-v3K"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MultiSelectCell" rowHeight="50" id="2Sc-Nd-wlE" customClass="JMMultiSelectInputControlCell">
                                 <rect key="frame" x="0.0" y="97" width="320" height="50"/>
@@ -1607,6 +1610,9 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <connections>
+                                    <segue destination="H3P-lu-eIz" kind="push" identifier="ShowMultiSelect" id="obC-Va-EPk"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DateCell" rowHeight="50" id="gXX-dM-D2r" customClass="JMDateInputControlCell">
                                 <rect key="frame" x="0.0" y="147" width="320" height="50"/>
@@ -1656,7 +1662,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextEditCell" rowHeight="60" id="d1F-pI-agX" userLabel="Edit Input Control Cell - TextEditCell" customClass="JMTextInputControlCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextEditCell" rowHeight="60" id="d1F-pI-agX" userLabel="Edit Input Control Cell - TextEditCell" customClass="JMTextInputControlCell">
                                 <rect key="frame" x="0.0" y="247" width="320" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1680,7 +1686,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NumberCell" rowHeight="60" id="uUw-Xa-Vpy" customClass="JMNumberInputControlCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NumberCell" rowHeight="60" id="uUw-Xa-Vpy" customClass="JMNumberInputControlCell">
                                 <rect key="frame" x="0.0" y="307" width="320" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1761,7 +1767,105 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CEG-xF-dnS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2284" y="-1287"/>
+            <point key="canvasLocation" x="2032" y="-1302"/>
+        </scene>
+        <!--Single Select Table View Controller-->
+        <scene sceneID="yBI-d3-EtV">
+            <objects>
+                <tableViewController id="p3s-dd-WdS" customClass="JMSingleSelectTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="ANy-Z0-Ujx">
+                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ListValueCell" textLabel="tBD-Qr-OVQ" style="IBUITableViewCellStyleDefault" id="EYU-RN-vMl">
+                                <rect key="frame" x="0.0" y="46" width="320" height="45"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="List Item" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tBD-Qr-OVQ">
+                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="p3s-dd-WdS" id="xaw-fI-XXb"/>
+                            <outlet property="delegate" destination="p3s-dd-WdS" id="VrY-vM-9FS"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="1K5-1B-78V">
+                        <barButtonItem key="rightBarButtonItem" title="Unset" id="9Ds-JN-0fE">
+                            <connections>
+                                <action selector="unsetAllValues:" destination="p3s-dd-WdS" id="uuU-GD-Kgh"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="unsetButton" destination="9Ds-JN-0fE" id="0eF-Ch-WZT"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YxS-9J-uqb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2530" y="-1314"/>
+        </scene>
+        <!--Multi Select Table View Controller-->
+        <scene sceneID="PPT-DZ-AGE">
+            <objects>
+                <tableViewController id="H3P-lu-eIz" customClass="JMMultiSelectTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Id0-se-5Bc">
+                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ListValueCell" textLabel="BLc-qa-PFN" style="IBUITableViewCellStyleDefault" id="egS-g0-lWj">
+                                <rect key="frame" x="0.0" y="46" width="320" height="45"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="List Item" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BLc-qa-PFN">
+                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="H3P-lu-eIz" id="mAq-O6-gn7"/>
+                            <outlet property="delegate" destination="H3P-lu-eIz" id="4aE-0g-wR0"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="MWI-Mu-QcW">
+                        <barButtonItem key="rightBarButtonItem" title="Unset" id="np8-BL-DJG">
+                            <connections>
+                                <action selector="unsetAllValues:" destination="H3P-lu-eIz" id="YXr-LU-g24"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="unsetButton" destination="np8-BL-DJG" id="VVg-wy-gDG"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3cC-MX-akp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2570" y="-715"/>
         </scene>
     </scenes>
     <resources>
@@ -1817,6 +1921,9 @@
         <class className="JMMultiSelectInputControlCell" superclassName="JMSingleSelectInputControlCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMMultiSelectInputControlCell.h"/>
         </class>
+        <class className="JMMultiSelectTableViewController" superclassName="JMSingleSelectTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMMultiSelectTableViewController.h"/>
+        </class>
         <class className="JMNumberInputControlCell" superclassName="JMTextInputControlCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMNumberInputControlCell.h"/>
         </class>
@@ -1853,6 +1960,12 @@
         <class className="JMSingleSelectInputControlCell" superclassName="JMInputControlCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSingleSelectInputControlCell.h"/>
         </class>
+        <class className="JMSingleSelectTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSingleSelectTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="unsetButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
         <class className="JMTextInputControlCell" superclassName="JMInputControlCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMTextInputControlCell.h"/>
         </class>
@@ -1866,9 +1979,9 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="4G2-Cf-EF7"/>
         <segue reference="Ete-rd-4of"/>
-        <segue reference="tcw-WR-V9Y"/>
-        <segue reference="YMA-cY-hS5"/>
+        <segue reference="U9A-kX-Q5k"/>
+        <segue reference="4G2-Cf-EF7"/>
+        <segue reference="Y5l-Qb-Vpq"/>
     </inferredMetricsTieBreakers>
 </document>

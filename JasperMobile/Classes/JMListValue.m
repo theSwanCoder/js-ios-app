@@ -21,16 +21,32 @@
  */
 
 //
-//  JMTextInputControlCell.h
+//  JMListItem.m
 //  Jaspersoft Corporation
 //
 
-#import "JMInputControlCell.h"
+#import "JMListValue.h"
 
-/**
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
- */
-@interface JMTextInputControlCell : JMInputControlCell
+@implementation JMListValue
+
+#pragma mark - Initialization
+
+- (id)initWithName:(NSString *)name andValue:(NSString *)value isSelected:(BOOL)selected
+{
+    if (self = [self init]) {
+        self.name = name;
+		self.value = value;
+        self.selected = selected;
+    }
+    
+    return self;
+}
+
+#pragma mark - NSObject
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"Name: %@; Value: %@; Selected: %@", self.name, self.value, self.selected ? @"YES" : @"NO"];
+}
 
 @end

@@ -26,7 +26,6 @@
 //
 
 #import "JMInputControlFactory.h"
-#import <jaspersoft-sdk/JaspersoftSDK.h>
 #import <Objection-iOS/Objection.h>
 
 static NSString * const kJMBooleanCellIdentifier = @"BooleanCell";

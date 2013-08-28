@@ -26,12 +26,8 @@
 //
 
 #import "JMBaseRepositoryTableViewController.h"
-#import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
-#import "JMRefreshable.h"
-#import "JMRotationBase.h"
 #import "JMUtils.h"
-#import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
 
 static NSString * const kJMShowResourceInfoSegue = @"ShowResourceInfo";

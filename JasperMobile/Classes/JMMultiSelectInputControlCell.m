@@ -26,12 +26,36 @@
 //
 
 #import "JMMultiSelectInputControlCell.h"
+#import "JMListValue.h"
 
 @implementation JMMultiSelectInputControlCell
 
 - (NSString *)isListItem
 {
     return @"YES";
+}
+
+- (BOOL)needsToUpdateInputControlQueryData
+{
+    NSInteger type = self.inputControlWrapper.type;
+    return type == self.constants.IC_TYPE_MULTI_SELECT_QUERY || type == self.constants.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX;
+}
+
+- (void)setValue:(id)value
+{
+    NSInteger numberOfValues = [value count];
+    
+    if (numberOfValues > 0) {
+        NSMutableString *selectedValues = [NSMutableString stringWithFormat:@"%@", [[value objectAtIndex:0] name]];
+        
+        for (NSInteger i = 1; i < numberOfValues; i++) {
+            [selectedValues appendFormat:@", %@", [[value objectAtIndex:i] name]];
+        }
+        
+        self.detailLabel.text = selectedValues;
+    } else {
+        self.detailLabel.text = @"";
+    }
 }
 
 @end

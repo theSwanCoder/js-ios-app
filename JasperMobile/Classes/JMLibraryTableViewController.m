@@ -26,7 +26,6 @@
 //
 
 #import "JMLibraryTableViewController.h"
-#import "JMCancelRequestPopup.h"
 #import "JMFilter.h"
 
 static NSString * const kJMRequestType = @"type";

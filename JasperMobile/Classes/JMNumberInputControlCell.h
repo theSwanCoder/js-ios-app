@@ -27,6 +27,10 @@
 
 #import "JMTextInputControlCell.h"
 
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.6
+ */
 @interface JMNumberInputControlCell : JMTextInputControlCell
 
 @end

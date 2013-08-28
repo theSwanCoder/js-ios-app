@@ -21,22 +21,16 @@
  */
 
 //
-//  JMListItem.h
+//  JMMultiSelectTableViewController.h
 //  Jaspersoft Corporation
 //
 
-#import <Foundation/Foundation.h>
+#import "JMSingleSelectTableViewController.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMListItem : NSObject
-
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *value;
-@property (nonatomic, assign) BOOL selected;
-
-- (id)initWithName:(NSString *)name andValue:(NSString *)value isSelected:(BOOL)selected;
+@interface JMMultiSelectTableViewController : JMSingleSelectTableViewController
 
 @end

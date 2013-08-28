@@ -25,7 +25,6 @@
 //  Jaspersoft Corporation
 //
 
-#import "JMRotationBase.h"
 #import "JMRotatable.h"
 #import <Objection-iOS/Objection.h>
 

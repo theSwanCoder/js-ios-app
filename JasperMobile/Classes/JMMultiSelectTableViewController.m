@@ -21,16 +21,33 @@
  */
 
 //
-//  JMTextInputControlCell.h
+//  JMMultiSelectTableViewController.m
 //  Jaspersoft Corporation
 //
 
-#import "JMInputControlCell.h"
+#import "JMMultiSelectTableViewController.h"
 
-/**
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
- */
-@interface JMTextInputControlCell : JMInputControlCell
+@implementation JMMultiSelectTableViewController
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    JMListValue *value = [self.cell.listOfValues objectAtIndex:indexPath.row];
+    value.selected = !value.selected;
+    
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [self markCell:cell isSelected:value];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    // TODO: discuss about showing alert view if value is unset
+    // ...
+    
+    self.cell.value = self.selectedValues;
+}
 
 @end

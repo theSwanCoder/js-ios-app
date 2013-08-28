@@ -31,10 +31,7 @@
 #import "JMConstants.h"
 #import "JMLocalization.h"
 #import "JMUtils.h"
-#import "JMServerProfile+Helpers.h"
-#import "JMServerSettingsTableViewController.h"
 #import "UIAlertView+LocalizedAlert.h"
-#import <CoreData/CoreData.h>
 #import <Objection-iOS/Objection.h>
 
 static NSString * const kJMEditServerSegue = @"EditServer";

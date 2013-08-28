@@ -38,6 +38,12 @@
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
 @property (nonatomic, readonly) BOOL isMandatory;
 
+/**
+ Contains value for the Input Control. Can be NSString, NSDictionary or 
+ NSArray (plus mutable) type
+ */
+@property (nonatomic, strong) id value;
+
 - (UILabel *)label;
 
 @end

@@ -27,6 +27,10 @@
 
 #import "JMSingleSelectInputControlCell.h"
 
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.6
+ */
 @interface JMMultiSelectInputControlCell : JMSingleSelectInputControlCell
 
 @end

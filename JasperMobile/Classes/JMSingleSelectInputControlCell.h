@@ -28,12 +28,17 @@
 #import "JMInputControlCell.h"
 #import "JMResourceClientHolder.h"
 
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.6
+ */
 @interface JMSingleSelectInputControlCell : JMInputControlCell <JMResourceClientHolder>
 
-@property (nonatomic, strong) NSMutableArray *values;
+@property (nonatomic, strong) NSMutableArray *listOfValues;
 @property (nonatomic, strong) JSConstants *constants;
 
 - (UILabel *)detailLabel;
 - (NSString *)isListItem;
+- (BOOL)needsToUpdateInputControlQueryData;
 
 @end

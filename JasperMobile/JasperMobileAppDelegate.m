@@ -34,10 +34,7 @@
 #import "JMPhoneModule.h"
 #import "JMReportClientHolder.h"
 #import "JMResourceClientHolder.h"
-#import "JMServerProfile+Helpers.h"
 #import "JMUtils.h"
-#import <jaspersoft-sdk/JaspersoftSDK.h>
-#import <Objection-iOS/Objection.h>
 
 static NSString * const kJMProductName = @"JasperMobile";
 static NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";

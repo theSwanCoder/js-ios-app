@@ -26,7 +26,6 @@
 //
 
 #import "JMReportOptions.h"
-#import "JMServerProfile.h"
 
 @implementation JMReportOptions
 

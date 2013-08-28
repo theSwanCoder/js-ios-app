@@ -21,16 +21,22 @@
  */
 
 //
-//  JMTextInputControlCell.h
+//  JMListItem.h
 //  Jaspersoft Corporation
 //
 
-#import "JMInputControlCell.h"
+#import <Foundation/Foundation.h>
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMTextInputControlCell : JMInputControlCell
+@interface JMListValue : NSObject
+
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSString *value;
+@property (nonatomic, assign) BOOL selected;
+
+- (id)initWithName:(NSString *)name andValue:(NSString *)value isSelected:(BOOL)selected;
 
 @end

@@ -26,12 +26,10 @@
 //
 
 #import "JMResourceTableViewController.h"
-#import "JMBaseRepositoryTableViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMFavoritesUtil.h"
 #import "JMFilter.h"
 #import "JMLocalization.h"
-#import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "UITableViewController+CellRelativeHeight.h"

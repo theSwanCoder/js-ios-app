@@ -26,7 +26,6 @@
 //
 
 #import "JMFavorites.h"
-#import "JMServerProfile.h"
 
 @implementation JMFavorites
 

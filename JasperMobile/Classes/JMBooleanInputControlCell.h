@@ -27,6 +27,10 @@
 
 #import "JMInputControlCell.h"
 
+/**
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.6
+ */
 @interface JMBooleanInputControlCell : JMInputControlCell
 
 - (UISwitch *)uiSwitch;

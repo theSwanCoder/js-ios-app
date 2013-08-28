@@ -29,7 +29,6 @@
 #import "JMConstants.h"
 #import "JMFavoritesUtil.h"
 #import "JMLocalization.h"
-#import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
 

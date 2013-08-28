@@ -26,7 +26,6 @@
 //
 
 #import "JMRepositoryTableViewController.h"
-#import "JMCancelRequestPopup.h"
 #import "JMFilter.h"
 
 @interface JMRepositoryTableViewController()

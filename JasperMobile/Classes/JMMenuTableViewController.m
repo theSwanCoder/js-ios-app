@@ -26,8 +26,6 @@
 //
 
 #import "JMMenuTableViewController.h"
-#import "JMLocalization.h"
-#import "JMRotationBase.h"
 #import "JMSplitViewBarButtonPresenterProtocol.h"
 
 @implementation JMMenuTableViewController
