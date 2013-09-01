@@ -36,8 +36,8 @@
 @interface JMSingleSelectTableViewController : UITableViewController
 
 @property (nonatomic, strong) JMSingleSelectInputControlCell *cell;
-@property (nonatomic, strong) NSMutableArray *selectedValues;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *unsetButton;
+@property (nonatomic, strong) NSMutableSet *selectedValues;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *unsetButton;
 
 /**
  Changes disclosure indicator (checked or not) for table view cell depends 

@@ -37,8 +37,24 @@
 @property (nonatomic, strong) NSMutableArray *listOfValues;
 @property (nonatomic, strong) JSConstants *constants;
 
+/**
+ Returns detail label for IC
+ */
 - (UILabel *)detailLabel;
+
+/**
+ Forces to reload data for dependent Input Controls (if exists)
+ */
+- (void)updateWithParameters:(NSSet *)parameters;
+
+/**
+ Indicates if IC is single or multi select. Used for REST v1
+ */
 - (NSString *)isListItem;
+
+/**
+ Indicates if IC needs to update query data (including dependencies). Used for REST v1
+ */
 - (BOOL)needsToUpdateInputControlQueryData;
 
 @end

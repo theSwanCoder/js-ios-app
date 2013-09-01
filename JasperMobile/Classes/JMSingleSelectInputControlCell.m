@@ -26,45 +26,29 @@
 //
 
 #import "JMSingleSelectInputControlCell.h"
+#import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
 #import "JMRequestDelegate.h"
 #import "JMListValue.h"
 #import <Objection-iOS/Objection.h>
+
+@interface JMSingleSelectInputControlCell()
+@property  (nonatomic, copy) void (^updateWithParametersBlock)(NSSet *parameters);
+@property  (nonatomic, strong) NSMutableDictionary *masterDependenciesParameters;
+@end
 
 @implementation JMSingleSelectInputControlCell
 
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceDescriptor = _resourceDescriptor;
 
-- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
-{
-    [super setInputControlWrapper:inputControlWrapper];
-
-    JSObjectionInjector *injector = [JSObjection defaultInjector];
-    self.constants = [injector getObject:[JSConstants class]];
-    self.value = [NSMutableArray array];
-    self.listOfValues = [NSMutableArray array];
-    self.detailLabel.text = self.inputControlWrapper.NOTHING_SUBSTITUTE_LABEL;
-
-    // Disable cell
-    [self enabled:NO];
-
-    if (self.needsToUpdateInputControlQueryData) {
-        // Add observer to check whenever Input Control should be updated
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(updateInputControlQueryData:)
-                                                     name:kJMUpdateInputControlQueryDataNotification
-                                                   object:nil];
-    }
-}
-
 - (void)setValue:(id)value
 {
     if ([value count] > 0) {
-        JMListValue *item = [value objectAtIndex:0];
+        JMListValue *item = [value anyObject];
         self.detailLabel.text = item.name;
     } else {
-        self.detailLabel.text = @"";
+        self.detailLabel.text = self.inputControlWrapper.NOTHING_SUBSTITUTE_LABEL;
     }
 }
 
@@ -84,102 +68,9 @@
     return type == self.constants.IC_TYPE_SINGLE_SELECT_QUERY || type == self.constants.IC_TYPE_SINGLE_SELECT_QUERY_RADIO;
 }
 
-#pragma mark - Private
-
-- (void)updateInputControlQueryData:(NSNotification *)notification
+- (void)updateWithParameters:(NSSet *)parameters
 {
-    // Exclude notifications that object sends to itself
-    if (notification.object == self) return;
-
-    NSDictionary *userInfo = notification.userInfo;
-
-    // Get names of input controls that should be updated
-    NSArray *inputControlsToUpdate = [userInfo objectForKey:kJMInputControlsToUpdate];
-
-    // Get parameters
-    NSMutableDictionary *parameters = [userInfo objectForKey:kJMParameters] ? : [NSMutableDictionary dictionary];
-
-    // Check if input conrol is updating for the 1-st time or inputControlsToUpdate array contains IC name (force update)
-    if ((self.inputControlWrapper.masterDependencies.count == 0 && !inputControlsToUpdate) ||
-            [inputControlsToUpdate containsObject:self.inputControlWrapper.name]) {
-
-        __block JMSingleSelectInputControlCell *cell = self;
-
-        JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-            JSResourceDescriptor *descriptor = [result.objects objectAtIndex:0];
-            NSArray *data = descriptor.inputControlQueryData;
-
-            // Add values to IC cell
-            for (JSResourceProperty *property in data) {
-                JMListValue *item = [[JMListValue alloc] initWithName:property.name andValue:property.value isSelected:NO];
-                [cell.listOfValues addObject:item];
-            }
-
-            if (cell.listOfValues.count) {
-                [self enabled:YES];
-            }
-
-            // Select first value if cell is mandatory
-            if (cell.isMandatory && cell.listOfValues.count) {
-                // Make first value selected
-                JMListValue *first = [cell.listOfValues objectAtIndex:0];
-                first.selected = YES;
-
-                // Set selected value
-                self.value = @[first];
-
-                if (cell.inputControlWrapper.slaveDependencies) {
-
-                    JSResourceParameter *parameter = [[JSResourceParameter alloc] initWithName:descriptor.name
-                                                                                    isListItem:cell.isListItem
-                                                                                         value:first.value];
-
-                    // Get all dependent IC's that should be updated
-                    NSMutableArray *slaveInputControls = [NSMutableArray array];
-                    for (JSInputControlWrapper *inputControl in cell.inputControlWrapper.slaveDependencies) {
-                        [slaveInputControls addObject:inputControl.name];
-                    }
-
-                    [parameters setObject:parameter forKey:descriptor.name];
-
-                    NSDictionary *info = @{
-                        kJMInputControlsToUpdate : slaveInputControls,
-                        kJMParameters : parameters
-                    };
-
-                    // Post update notification
-                    [[NSNotificationCenter defaultCenter] postNotificationName:kJMUpdateInputControlQueryDataNotification
-                                                                        object:self
-                                                                      userInfo:info];
-                }
-            }
-        }];
-
-        NSString *dataSourceUri = self.inputControlWrapper.dataSourceUri;
-        // Get data source from report if it isn't available for input control
-        if (!dataSourceUri) {
-            JSResourceDescriptor *dataSource = [self.resourceDescriptor resourceDescriptorDataSource];
-            dataSourceUri = [dataSource resourceDescriptorDataSourceURI:dataSource];
-        }
-
-        NSMutableArray *dependentParameters = [NSMutableArray array];
-
-        if (parameters.count > 0) {
-            for (JSInputControlWrapper *inputControl in self.inputControlWrapper.masterDependencies) {
-                id inputControlParameter = [parameters objectForKey:inputControl.name];
-                if ([inputControlParameter isKindOfClass:[NSArray class]]) {
-                    [dependentParameters addObjectsFromArray:inputControlParameter];
-                } else {
-                    [dependentParameters addObject:inputControlParameter];
-                }
-            }
-        }
-
-        [self.resourceClient resourceWithQueryData:self.inputControlWrapper.uri
-                                     datasourceUri:dataSourceUri
-                                resourceParameters:dependentParameters
-                                          delegate:delegate];
-    }
+    self.updateWithParametersBlock(parameters);
 }
 
 - (void)enabled:(BOOL)enabled
@@ -193,6 +84,193 @@
     self.label.enabled = enabled;
     // Enable / Disable calls for didSelectRowAtIndexPath: method
     self.userInteractionEnabled = enabled;
+}
+
+// Clears data, temp solution for memory leak problem
+- (void)clearData
+{
+    self.updateWithParametersBlock = nil;
+    self.masterDependenciesParameters = nil;
+    self.resourceDescriptor = nil;
+    self.resourceClient = nil;
+    self.listOfValues = nil;
+    self.constants = nil;
+    self.detailLabel.text = nil;
+    
+    [super clearData];
+}
+
+#pragma mark - REST v2 -
+#pragma mark Private
+
+// TODO: here will be REST 2 code ...
+
+#pragma mark - REST v1 -
+
+- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
+{
+    [super setInputControlWrapper:inputControlWrapper];
+
+    JSObjectionInjector *injector = [JSObjection defaultInjector];
+    self.constants = [injector getObject:[JSConstants class]];
+    self.value = [NSMutableArray array];
+    self.listOfValues = [NSMutableArray array];
+    self.masterDependenciesParameters = [NSMutableDictionary dictionary];
+
+    // Disable cell
+    [self enabled:NO];
+
+    if (self.needsToUpdateInputControlQueryData) {
+        // Add observer to check whenever Input Control should be updated
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(updateInputControlQueryData:)
+                                                     name:kJMUpdateInputControlQueryDataNotification
+                                                   object:nil];
+    }
+        
+    __weak JMSingleSelectInputControlCell *cell = self;
+
+    self.updateWithParametersBlock = ^(NSSet *parameters) {
+        [cell sendInputControlQueryNotificationWithParams:parameters masterDependenciesParameters:[cell.masterDependenciesParameters mutableCopy]];
+    };
+}
+
+#pragma mark Private
+
+- (void)updateInputControlQueryData:(NSNotification *)notification
+{
+    // Exclude notifications that object sends to itself
+    if (notification.object == self) return;
+
+    NSDictionary *userInfo = notification.userInfo;
+
+    // Get names of ICs that should be updated
+    NSArray *inputControlsToUpdate = [userInfo objectForKey:kJMInputControlsToUpdate];
+
+    // Get master dependencies parameters
+    NSMutableDictionary *masterDependenciesParameters = [userInfo objectForKey:kJMParameters] ? : [NSMutableDictionary dictionary];
+
+    // Check if IC is updating for the 1-st time or inputControlsToUpdate array contains IC name (force update)
+    if ((!self.inputControlWrapper.getMasterDependencies.count && !inputControlsToUpdate) ||
+            [inputControlsToUpdate containsObject:self.inputControlWrapper.name]) {
+
+        NSString *dataSourceUri = self.inputControlWrapper.dataSourceUri;
+        // Get data source from report if it isn't available for input control
+        if (!dataSourceUri) {
+            JSResourceDescriptor *dataSource = [self.resourceDescriptor resourceDescriptorDataSource];
+            dataSourceUri = [dataSource resourceDescriptorDataSourceURI:dataSource];
+        }
+
+        NSMutableArray *dependentParameters = [NSMutableArray array];
+
+        if (masterDependenciesParameters.count) {
+            for (JSInputControlWrapper *inputControl in self.inputControlWrapper.getMasterDependencies) {
+                NSMutableArray *inputControlParameter = [masterDependenciesParameters objectForKey:inputControl.name];
+
+                if (inputControlParameter.count) {
+                    [dependentParameters addObjectsFromArray:inputControlParameter];
+                    [self.masterDependenciesParameters setObject:inputControlParameter forKey:inputControl.name];
+                } else {
+                    [dependentParameters removeAllObjects];
+                    [self.masterDependenciesParameters removeAllObjects];
+                    break;
+                }
+            }
+        }
+
+        // Disable IC cell and remove all items if dependentParameters are empty but cell should be updated
+        if (!dependentParameters.count && [inputControlsToUpdate containsObject:self.inputControlWrapper.name]) {
+            [self.listOfValues removeAllObjects];
+            [self enabled:NO];
+            [self sendInputControlQueryNotificationWithParams:nil masterDependenciesParameters:nil];
+
+            return;
+        }
+
+        //
+        if ([JMRequestDelegate isRequestPoolEmpty]) {
+            [JMCancelRequestPopup presentInViewController:self.viewController message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
+                NSLog(@"Dismiss view controller");
+            }];
+
+            [JMRequestDelegate setFinalBlock:^{
+                [JMCancelRequestPopup dismiss];
+            }];
+        }
+
+        __weak JMSingleSelectInputControlCell *cell = self;
+
+        JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+            JSResourceDescriptor *descriptor = [result.objects objectAtIndex:0];
+            NSArray *data = descriptor.inputControlQueryData;
+
+            [cell.listOfValues removeAllObjects];
+
+            // Add values to IC cell
+            for (JSResourceProperty *property in data) {
+                JMListValue *item = [[JMListValue alloc] initWithName:property.name andValue:property.value isSelected:NO];
+                [cell.listOfValues addObject:item];
+            }
+
+            if (cell.listOfValues.count) {
+                [self enabled:YES];
+
+                // Select first value if cell is mandatory
+                if (cell.isMandatory) {
+                    // Make first value selected
+                    JMListValue *firstItem = [cell.listOfValues objectAtIndex:0];
+                    firstItem.selected = YES;
+
+                    [self sendInputControlQueryNotificationWithParams:[NSSet setWithObject:firstItem] masterDependenciesParameters:masterDependenciesParameters];
+                }
+            }
+        }];
+
+        [self.resourceClient resourceWithQueryData:self.inputControlWrapper.uri
+                                     datasourceUri:dataSourceUri
+                                resourceParameters:dependentParameters
+                                          delegate:delegate];
+    }
+}
+
+// Send UpdateInputControlQueryDataNotification to all dependent ICs.
+- (void)sendInputControlQueryNotificationWithParams:(NSSet *)parameters masterDependenciesParameters:(NSMutableDictionary *)masterDependenciesParameters
+{
+    // Set selected value
+    self.value = parameters;
+
+    // Do not send notification if there are no slave dependencies
+    if (!self.inputControlWrapper.getSlaveDependencies.count) return;
+    
+    NSMutableArray *resourceParameters = [NSMutableArray array];
+    if (!masterDependenciesParameters) masterDependenciesParameters = [NSMutableDictionary dictionary];
+    
+    for (JMListValue *item in parameters) {
+        JSResourceParameter *parameter = [[JSResourceParameter alloc] initWithName:self.inputControlWrapper.name
+                                                                        isListItem:self.isListItem
+                                                                             value:item.value];
+        [resourceParameters addObject:parameter];
+    }
+    
+    // Get all dependent ICs that should be updated
+    NSMutableArray *slaveInputControls = [NSMutableArray array];
+    for (JSInputControlWrapper *inputControl in self.inputControlWrapper.getSlaveDependencies) {
+        [slaveInputControls addObject:inputControl.name];
+    }
+
+    if (resourceParameters.count) {
+        [masterDependenciesParameters setObject:resourceParameters forKey:self.inputControlWrapper.name];
+    }
+    
+    NSDictionary *userInfo = @{
+        kJMInputControlsToUpdate : slaveInputControls,
+        kJMParameters : masterDependenciesParameters
+    };
+    
+    // Post update notification
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMUpdateInputControlQueryDataNotification
+                                                        object:self
+                                                      userInfo:userInfo];
 }
 
 @end

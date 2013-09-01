@@ -49,18 +49,8 @@ inject_default_rotation();
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.selectedValues = [NSMutableArray array];
+    self.selectedValues = [NSMutableSet set];
     self.unsetButton.title = JMCustomLocalizedString(@"ic.title.unset", nil);
-}
-
-#pragma mark - UIViewController
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (self.cell.isMandatory) {
-        self.unsetButton.enabled = NO;
-    }
 }
 
 #pragma mark - Table view data source
@@ -92,15 +82,15 @@ inject_default_rotation();
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.selectedValues.count > 0) {
-        JMListValue *previousSelectedValue = [self.selectedValues objectAtIndex:0];
+    JMListValue *selectedValue = [self.cell.listOfValues objectAtIndex:indexPath.row];
+    JMListValue *previousSelectedValue = [self.selectedValues anyObject];
+
+    if (previousSelectedValue != selectedValue) {
+        selectedValue.selected = YES;
         previousSelectedValue.selected = NO;
+        [self.cell updateWithParameters:[NSSet setWithObject:selectedValue]];
     }
-    
-    JMListValue *value = [self.cell.listOfValues objectAtIndex:indexPath.row];
-    value.selected = YES;
-    
-    [self.cell setValue:@[value]];
+
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -108,10 +98,13 @@ inject_default_rotation();
 
 - (IBAction)unsetAllValues:(id)sender
 {
-    for (JMListValue *value in self.selectedValues) {
-        value.selected = NO;
+    JMListValue *previousSelectedValue = [self.selectedValues anyObject];
+
+    if (previousSelectedValue != nil) {
+        previousSelectedValue.selected = NO;
+        [self.cell updateWithParameters:nil];
     }
-    [self.selectedValues removeAllObjects];
+
     [self.navigationController popViewControllerAnimated:YES];
 }
 

@@ -44,17 +44,22 @@
 - (void)setValue:(id)value
 {
     NSInteger numberOfValues = [value count];
-    
+    NSArray *allValues = [value allObjects];
+
+    [allValues sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [[obj1 name] compare:[obj2 name]];
+    }];
+
     if (numberOfValues > 0) {
-        NSMutableString *selectedValues = [NSMutableString stringWithFormat:@"%@", [[value objectAtIndex:0] name]];
+        NSMutableString *selectedValues = [NSMutableString stringWithFormat:@"%@", [[allValues objectAtIndex:0] name]];
         
-        for (NSInteger i = 1; i < numberOfValues; i++) {
-            [selectedValues appendFormat:@", %@", [[value objectAtIndex:i] name]];
+        for (NSUInteger i = 1; i < numberOfValues; i++) {
+            [selectedValues appendFormat:@", %@", [[allValues objectAtIndex:i] name]];
         }
         
         self.detailLabel.text = selectedValues;
     } else {
-        self.detailLabel.text = @"";
+        self.detailLabel.text = self.inputControlWrapper.NOTHING_SUBSTITUTE_LABEL;
     }
 }
 

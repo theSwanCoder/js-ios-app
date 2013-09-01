@@ -66,6 +66,7 @@ objection_requires(@"constants")
     // TODO: add default IC Cell
     JMInputControlCell *cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     cell.inputControlWrapper = inputControl;
+    cell.viewController = self.tableViewController;
     
     return cell;
 }

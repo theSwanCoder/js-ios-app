@@ -33,7 +33,7 @@ static void (^finalBlock)(void);
 #import "JMFilter.h"
 
 @interface JMRequestDelegate()
-@property (nonatomic, strong) JSRequestFinishedBlock finishedBlock;
+@property (nonatomic, copy) JSRequestFinishedBlock finishedBlock;
 @end
 
 @implementation JMRequestDelegate

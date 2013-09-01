@@ -56,4 +56,13 @@
     return (UILabel *) [self viewWithTag:1];
 }
 
+- (void)clearData
+{
+    self.value = nil;
+    self.label.text = nil;
+    self.inputControlDescriptor = nil;
+    self.inputControlWrapper = nil;
+    self.viewController = nil;
+}
+
 @end

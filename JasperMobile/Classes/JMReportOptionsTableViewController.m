@@ -21,11 +21,7 @@
 #define kJMReportFormatSection 1
 #define kJMRunReportSection 2
 
-static NSString * const kJMDetailCellIdentifier = @"DetailCell";
-static NSString * const kJMTextEditCellIdentifier = @"TextEditCell";
-static NSString * const kJMBooleanCellIdentifier = @"BooleanCell";
 static NSString * const kJMRunCellIdentifier = @"RunCell";
-
 static NSString * const kJMShowSingleSelectSegue = @"ShowSingleSelect";
 static NSString * const kJMShowMultiSelectSegue = @"ShowMultiSelect";
 
@@ -44,6 +40,23 @@ inject_default_rotation()
     [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
     self.inputControls = [NSMutableArray array];
+}
+
+- (void)dealloc
+{
+    id defaultCenter = [NSNotificationCenter defaultCenter];
+
+    for (JMInputControlCell *cell in self.inputControls) {
+        [defaultCenter removeObserver:cell];
+        [cell clearData];
+    }
+
+    self.inputControls = nil;
+    self.resourceDescriptor = nil;
+    self.resourceClient = nil;
+    self.reportClient = nil;
+
+    [JMRequestDelegate clearRequestPool];
 }
 
 #pragma mark - UIViewController
@@ -223,30 +236,31 @@ inject_default_rotation()
 - (void)cleanupDependencies:(NSArray *)inputControls
 {
     for (JSInputControlWrapper *inputControl in inputControls) {
+        NSArray *slaveDependencies = inputControl.getSlaveDependencies;
         NSMutableArray *subDependentControls = [NSMutableArray array];
-        NSMutableArray *dependentControls = inputControl.slaveDependencies.mutableCopy;
-        
+
         // Collect all sub dependent controls
-        for (JSInputControlWrapper *dependentControl in dependentControls) {
+        for (JSInputControlWrapper *dependentControl in slaveDependencies) {
             [subDependentControls addObjectsFromArray:[self allSubDependentControls:dependentControl]];
         }
-        
+
         // Remove controls that have transitive dependencies
-        [dependentControls removeObjectsInArray:subDependentControls];
-        inputControl.slaveDependencies = dependentControls;
+        for (JSInputControlWrapper *subDependentControl in subDependentControls) {
+            [inputControl removeSlaveDependency:subDependentControl];
+        }
     }
 }
 
 - (NSArray *)allSubDependentControls:(JSInputControlWrapper *)inputControl
 {
     NSMutableArray *result = [NSMutableArray array];
-    NSArray *dependentContols = inputControl.slaveDependencies;
+    NSArray *dependentControls = inputControl.getSlaveDependencies;
     
     // Collect recursively dependent controls if it is not empty
-    if (dependentContols) {
-        [result addObjectsFromArray:dependentContols];
-        for (JSInputControlWrapper *dependentControl in dependentContols) {
-            [result addObjectsFromArray:[self allSubDependentControls:dependentControl]];            
+    if (dependentControls) {
+        [result addObjectsFromArray:dependentControls];
+        for (JSInputControlWrapper *dependentControl in dependentControls) {
+            [result addObjectsFromArray:[self allSubDependentControls:dependentControl]];
         }
     }
     
@@ -257,7 +271,7 @@ inject_default_rotation()
 
 - (id <JSRequestDelegate>)resourceDelegate
 {
-    __block JMReportOptionsTableViewController *reportOptions = self;
+    __weak JMReportOptionsTableViewController *reportOptions = self;
     
     // Will be invoked in the end after all requests will finish 
     [JMRequestDelegate setFinalBlock:^{
@@ -283,8 +297,8 @@ inject_default_rotation()
             for (NSString *parameter in i.parameterDependencies) {
                 for (JSInputControlWrapper *j in inputControlWrappers) {
                     if (j != i && [j.name isEqualToString:parameter]) {
-                        [j.slaveDependencies addObject:i];
-                        [i.masterDependencies addObject:j];
+                        [j addSlaveDependency:i];
+                        [i addMasterDependency:j];
                     }
                 }
             }
@@ -307,10 +321,10 @@ inject_default_rotation()
 
 - (void)requestDataTypeForInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper;
 {
-    // Define self with __block modifier (require to avoid circular references and for
+    // Define self with __weak modifier (require to avoid circular references and for
     // proper memory management)
-    __block JMReportOptionsTableViewController *reportOptions = self;
-    __block JSInputControlWrapper *inputControl = inputControlWrapper;
+    __weak JMReportOptionsTableViewController *reportOptions = self;
+    __weak JSInputControlWrapper *inputControl = inputControlWrapper;
     
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         JSResourceDescriptor *dataType = [result.objects objectAtIndex:0];

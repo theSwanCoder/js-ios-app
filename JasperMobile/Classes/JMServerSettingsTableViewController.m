@@ -302,6 +302,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
     }
     
     NSArray *allKeys = [[self.cellsProperties allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    BOOL hasErrors = NO;
     
     for (NSNumber *key in allKeys) {
         NSDictionary *cellProperties = [self.cellsProperties objectForKey:key];
@@ -328,6 +329,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
             
             // Rollback all changes
             [self.managedObjectContext rollback];
+            hasErrors = YES;
             
             break;
         }
@@ -359,8 +361,11 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
         [self sendChangeServerProfileNotification];
     }
     
-    // Go to previous view controller
-    [self.navigationController popViewControllerAnimated:YES];
+    // Check if all fields are valid
+    if (!hasErrors) {
+        // Then go to previous view controller
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark - UITextFieldDelegate

@@ -59,7 +59,7 @@
 - (JMCancelRequestBlock)cancelBlock
 {
     if (!_cancelBlock) {
-        __block JMSearchableTableViewController *search = self;
+        __weak JMSearchableTableViewController *search = self;
         _cancelBlock = ^{
             search.searchQuery = nil;
             search.isRefreshing = NO;

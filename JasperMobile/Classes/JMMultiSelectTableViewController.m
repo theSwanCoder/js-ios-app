@@ -27,7 +27,26 @@
 
 #import "JMMultiSelectTableViewController.h"
 
+@interface JMMultiSelectTableViewController()
+@property (nonatomic, strong) NSSet *previousSelectedValues;
+@end
+
 @implementation JMMultiSelectTableViewController
+
+#pragma mark - UITableViewController
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.previousSelectedValues = [self.selectedValues copy];
+}
+
+- (void)didMoveToParentViewController:(UIViewController *)parent
+{
+    if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
+        [self.cell updateWithParameters:self.selectedValues];
+    }
+}
 
 #pragma mark - Table view delegate
 
@@ -40,14 +59,18 @@
     [self markCell:cell isSelected:value];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+#pragma mark - Actions
+
+- (IBAction)unsetAllValues:(id)sender
 {
-    [super viewWillDisappear:animated];
-    
-    // TODO: discuss about showing alert view if value is unset
-    // ...
-    
-    self.cell.value = self.selectedValues;
+    for (JMListValue *value in self.selectedValues) {
+        value.selected = NO;
+    }
+
+    [self.selectedValues removeAllObjects];
+    [self.cell updateWithParameters:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
+
 
 @end
