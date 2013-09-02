@@ -27,6 +27,7 @@
 
 #import <UIKit/UIKit.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JMReportOptionsTableViewController.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
@@ -36,7 +37,7 @@
 
 @property (nonatomic, strong) JSInputControlWrapper *inputControlWrapper;
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
-@property (nonatomic, weak) UIViewController *viewController;
+@property (nonatomic, weak) JMReportOptionsTableViewController *tableViewController;
 @property (nonatomic, readonly) BOOL isMandatory;
 
 /**

@@ -36,8 +36,7 @@
  */
 @interface JMInputControlFactory : NSObject
 
-// TODO: make protocol instead direct calls
-@property (nonatomic, weak) UITableViewController *tableViewController;
+@property (nonatomic, weak) JMReportOptionsTableViewController *tableViewController;
 
 /**
  Initialize a new factory
@@ -45,7 +44,7 @@
  @param tableViewController A table view controller which is required to get prototype cells
  @return An initialized factory
  */
-- (id)initWithTableViewController:(UITableViewController *)tableViewController;
+- (id)initWithTableViewController:(JMReportOptionsTableViewController *)tableViewController;
 
 /**
  Creates the input controll cell

@@ -27,12 +27,13 @@
 
 #import "JMInputControlCell.h"
 #import "JMResourceClientHolder.h"
+#import "JMReportClientHolder.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMSingleSelectInputControlCell : JMInputControlCell <JMResourceClientHolder>
+@interface JMSingleSelectInputControlCell : JMInputControlCell <JMResourceClientHolder, JMReportClientHolder>
 
 @property (nonatomic, strong) NSMutableArray *listOfValues;
 @property (nonatomic, strong) JSConstants *constants;
@@ -45,7 +46,7 @@
 /**
  Forces to reload data for dependent Input Controls (if exists)
  */
-- (void)updateWithParameters:(NSSet *)parameters;
+- (void)updateWithParameters:(NSArray *)parameters;
 
 /**
  Indicates if IC is single or multi select. Used for REST v1

@@ -27,7 +27,6 @@
 
 #import <UIKit/UIKit.h>
 #import "JMSingleSelectInputControlCell.h"
-#import "JMListValue.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
@@ -38,11 +37,5 @@
 @property (nonatomic, strong) JMSingleSelectInputControlCell *cell;
 @property (nonatomic, strong) NSMutableSet *selectedValues;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *unsetButton;
-
-/**
- Changes disclosure indicator (checked or not) for table view cell depends 
- on whether listValue is selected or not
- */
-- (void)markCell:(UITableViewCell *)cell isSelected:(JMListValue *)listValue;
 
 @end

@@ -198,8 +198,7 @@ inject_default_rotation()
 {   
     if (!self.tableView.isEditing && section == kJMFooterSection) {
         NSUInteger serversCount = self.servers.count;
-        
-        // TODO: change logic of displaying help and tips
+
         if (serversCount == 0) {
             return JMCustomLocalizedString(@"servers.profile.configure.help", nil);
         } else if(serversCount == 1) {

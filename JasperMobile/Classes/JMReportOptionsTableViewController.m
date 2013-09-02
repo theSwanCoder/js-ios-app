@@ -21,9 +21,9 @@
 #define kJMReportFormatSection 1
 #define kJMRunReportSection 2
 
-static NSString * const kJMRunCellIdentifier = @"RunCell";
-static NSString * const kJMShowSingleSelectSegue = @"ShowSingleSelect";
-static NSString * const kJMShowMultiSelectSegue = @"ShowMultiSelect";
+#define kJMRunCellIdentifier @"RunCell"
+#define kJMShowSingleSelectSegue @"ShowSingleSelect"
+#define kJMShowMultiSelectSegue @"ShowMultiSelect"
 
 @implementation JMReportOptionsTableViewController
 objection_requires(@"resourceClient", @"reportClient", @"constants")
@@ -195,17 +195,35 @@ inject_default_rotation()
 
 - (void)createCellFromWrapper:(JSInputControlWrapper *)inputControl
 {
+    id cell = [self.inputControlFactory inputControlWithInputControlWrapper:inputControl];
+    [self configureInputControlCell:cell];
+    [self.inputControls addObject:cell];
+}
+
+- (void)createCellFromInputControlDescriptor:(JSInputControlDescriptor *)inputControl
+{
+    id cell = [self.inputControlFactory inputControlWithInputControlDescriptor:inputControl];
+    [self configureInputControlCell:cell];
+    [self.inputControls addObject:cell];
+}
+
+- (JMInputControlFactory *)inputControlFactory
+{
     static JMInputControlFactory *inputControlFactory;
     if (!inputControlFactory || !inputControlFactory.tableViewController) inputControlFactory = [[JMInputControlFactory alloc] initWithTableViewController:self];
-    
-    id cell = [inputControlFactory inputControlWithInputControlWrapper:inputControl];
-    
+    return inputControlFactory;
+}
+
+- (void)configureInputControlCell:(id)cell
+{
     if ([cell conformsToProtocol:@protocol(JMResourceClientHolder)]) {
         [cell setResourceClient:self.resourceClient];
         [cell setResourceDescriptor:self.resourceDescriptor];
     }
-    
-    [self.inputControls addObject:cell];
+
+    if ([cell conformsToProtocol:@protocol(JMReportClientHolder)]) {
+        [cell setReportClient:self.reportClient];
+    }
 }
 
 #pragma mark Input Controls
@@ -216,13 +234,11 @@ inject_default_rotation()
         [JMRequestDelegate clearRequestPool];
         [self.navigationController popViewControllerAnimated:YES];
     };    
-    
-    // TODO: REMOVE!!!
-    if (NO && self.reportClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD) {
+
+    if (self.reportClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD) {
         [JMFilter checkNetworkReachabilityForBlock:^{
             [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:cancelBlock];
-            // TODO: add functional
-//            [self.reportClient inputControlsForReport:self.resourceDescriptor.uriString delegate:delegate];
+            [self.reportClient inputControlsForReport:self.resourceDescriptor.uriString delegate:self.inputControlsForReportDelegate];
         } viewControllerToDismiss:self];
         
     } else {
@@ -267,7 +283,7 @@ inject_default_rotation()
     return result;
 }
 
-#pragma mark Request Finished Blocks
+#pragma mark Rest v1 Request Finished Blocks
 
 - (id <JSRequestDelegate>)resourceDelegate
 {
@@ -336,5 +352,19 @@ inject_default_rotation()
     [self.resourceClient resource:inputControlWrapper.dataTypeUri delegate:delegate];
 }
 
+#pragma mark Rest v2 Request Finished Blocks
+
+- (JMRequestDelegate *)inputControlsForReportDelegate
+{
+    __weak JMReportOptionsTableViewController *reportOptions = self;
+
+    return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        for (JSInputControlDescriptor *inputControlDescriptor in result.objects) {
+            [reportOptions createCellFromInputControlDescriptor:inputControlDescriptor];
+        }
+
+        [reportOptions.tableView reloadData];
+    }];
+}
 
 @end

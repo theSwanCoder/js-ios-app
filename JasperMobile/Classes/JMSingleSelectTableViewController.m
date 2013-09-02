@@ -31,16 +31,15 @@
 @implementation JMSingleSelectTableViewController
 inject_default_rotation();
 
-- (void)markCell:(UITableViewCell *)cell isSelected:(JMListValue *)listValue
+- (void)setCell:(JMSingleSelectInputControlCell *)cell
 {
-    if (listValue.selected) {
-        [self.selectedValues addObject:listValue];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    } else {
-        if ([self.selectedValues containsObject:listValue]) {
-            [self.selectedValues removeObject:listValue];
-        }
-        cell.accessoryType = UITableViewCellAccessoryNone;
+    _cell = cell;
+
+    JSInputControlOption *option = [cell.value objectAtIndex:0];
+    if (option) {
+        [self.selectedValues addObject:option];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[cell.listOfValues indexOfObject:option] inSection:0];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle  animated:YES];
     }
 }
 
@@ -70,11 +69,10 @@ inject_default_rotation();
     static NSString *cellIdentifier = @"ListValueCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    JMListValue *value = [self.cell.listOfValues objectAtIndex:indexPath.row];
-    
-    cell.textLabel.text = value.name;
-    [self markCell:cell isSelected:value];
-    
+    JSInputControlOption *option = [self.cell.listOfValues objectAtIndex:indexPath.row];
+    cell.textLabel.text = option.label;
+    cell.accessoryType = option.selected.boolValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+
     return cell;
 }
 
@@ -82,13 +80,13 @@ inject_default_rotation();
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMListValue *selectedValue = [self.cell.listOfValues objectAtIndex:indexPath.row];
-    JMListValue *previousSelectedValue = [self.selectedValues anyObject];
+    JSInputControlOption *selectedOption = [self.cell.listOfValues objectAtIndex:indexPath.row];
+    JSInputControlOption *previousSelectedOption = [self.selectedValues anyObject];
 
-    if (previousSelectedValue != selectedValue) {
-        selectedValue.selected = YES;
-        previousSelectedValue.selected = NO;
-        [self.cell updateWithParameters:[NSSet setWithObject:selectedValue]];
+    if (previousSelectedOption != selectedOption) {
+        selectedOption.selected = [JSConstants stringFromBOOL:YES];
+        previousSelectedOption.selected = [JSConstants stringFromBOOL:NO];
+        [self.cell updateWithParameters:@[selectedOption]];
     }
 
     [self.navigationController popViewControllerAnimated:YES];
@@ -98,10 +96,10 @@ inject_default_rotation();
 
 - (IBAction)unsetAllValues:(id)sender
 {
-    JMListValue *previousSelectedValue = [self.selectedValues anyObject];
+    JSInputControlOption *previousSelectedOption = [self.selectedValues anyObject];
 
-    if (previousSelectedValue != nil) {
-        previousSelectedValue.selected = NO;
+    if (previousSelectedOption != nil) {
+        previousSelectedOption.selected = [JSConstants stringFromBOOL:NO];
         [self.cell updateWithParameters:nil];
     }
 

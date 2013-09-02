@@ -29,26 +29,29 @@
 #import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
 #import "JMRequestDelegate.h"
-#import "JMListValue.h"
 #import <Objection-iOS/Objection.h>
 
 @interface JMSingleSelectInputControlCell()
-@property  (nonatomic, copy) void (^updateWithParametersBlock)(NSSet *parameters);
+@property  (nonatomic, copy) void (^updateWithParametersBlock)(NSArray *parameters);
 @property  (nonatomic, strong) NSMutableDictionary *masterDependenciesParameters;
 @end
 
 @implementation JMSingleSelectInputControlCell
 
+@synthesize value = _value;
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceDescriptor = _resourceDescriptor;
+@synthesize reportClient = _reportClient;
 
 - (void)setValue:(id)value
 {
+    _value = value;
+
     if ([value count] > 0) {
-        JMListValue *item = [value anyObject];
-        self.detailLabel.text = item.name;
+        JSInputControlOption *item = [value objectAtIndex:0];
+        self.detailLabel.text = item.label;
     } else {
-        self.detailLabel.text = self.inputControlWrapper.NOTHING_SUBSTITUTE_LABEL;
+        self.detailLabel.text = JS_IC_NOTHING_SUBSTITUTE_LABEL;
     }
 }
 
@@ -68,7 +71,7 @@
     return type == self.constants.IC_TYPE_SINGLE_SELECT_QUERY || type == self.constants.IC_TYPE_SINGLE_SELECT_QUERY_RADIO;
 }
 
-- (void)updateWithParameters:(NSSet *)parameters
+- (void)updateWithParameters:(NSArray *)parameters
 {
     self.updateWithParametersBlock(parameters);
 }
@@ -101,15 +104,94 @@
 }
 
 #pragma mark - REST v2 -
+
+- (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
+{
+    [super setInputControlDescriptor:inputControlDescriptor];
+    if (!self.inputControlDescriptor) return;
+
+    [self setInputControlState:inputControlDescriptor.state];
+
+    __weak JMSingleSelectInputControlCell *cell = self;
+
+    self.updateWithParametersBlock = ^(NSArray *parameters) {
+        [cell updatedInputControlsValues:parameters];
+    };
+}
+
 #pragma mark Private
 
-// TODO: here will be REST 2 code ...
+- (void)updatedInputControlsValues:(NSArray *)parameters
+{
+    // Set selected value
+    self.value = parameters;
+
+    if (!self.inputControlDescriptor.slaveDependencies.count) return;
+
+    // TODO: change logic to select previous values instead dismissing view. And check network status!
+    [JMCancelRequestPopup presentInViewController:self.tableViewController message:@"status.loading" restClient:self.reportClient cancelBlock:^{
+        [JMRequestDelegate clearRequestPool];
+        [[self.tableViewController navigationController] popViewControllerAnimated:YES];
+    }];
+
+    [JMRequestDelegate setFinalBlock:^{
+        [JMCancelRequestPopup dismiss];
+    }];
+
+    NSMutableArray *selectedValues = [NSMutableArray array];
+
+    // Get values from master dependencies
+    for (NSString *masterID in self.inputControlDescriptor.masterDependencies) {
+        for (id inputControlCell in self.tableViewController.inputControls) {
+            JSInputControlDescriptor *descriptor = [inputControlCell inputControlDescriptor];
+            if ([descriptor.uuid isEqualToString:masterID]) {
+                [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
+                value:descriptor.selectedValues]];
+            }
+        }
+    }
+
+    [selectedValues addObject:[[JSReportParameter alloc] initWithName:self.inputControlDescriptor.uuid
+                                                                value:self.inputControlDescriptor.selectedValues]];
+
+    __weak JMSingleSelectInputControlCell *cell = self;
+
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        for (JSInputControlState *state in result.objects) {
+            for (id slaveDependency in cell.tableViewController.inputControls) {
+                if ([state.uuid isEqualToString:[slaveDependency inputControlDescriptor].uuid]) {
+                    [slaveDependency setInputControlState:state];
+                }
+            }
+        }
+    }];
+
+    [self.reportClient updatedInputControlsValues:self.resourceDescriptor.uriString
+                                              ids:self.inputControlDescriptor.slaveDependencies
+                                   selectedValues:selectedValues
+                                         delegate:delegate];
+}
+
+- (void)setInputControlState:(JSInputControlState *)state
+{
+    self.listOfValues = [state.options mutableCopy];
+
+    NSMutableArray *selectedValues = [NSMutableArray array];
+    for (JSInputControlOption *option in self.listOfValues) {
+        if (option.selected.boolValue) {
+            [selectedValues addObject:option];
+        }
+    }
+
+    self.value = selectedValues;
+}
 
 #pragma mark - REST v1 -
 
 - (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
 {
     [super setInputControlWrapper:inputControlWrapper];
+    if (!inputControlWrapper) return;
 
     JSObjectionInjector *injector = [JSObjection defaultInjector];
     self.constants = [injector getObject:[JSConstants class]];
@@ -130,7 +212,7 @@
         
     __weak JMSingleSelectInputControlCell *cell = self;
 
-    self.updateWithParametersBlock = ^(NSSet *parameters) {
+    self.updateWithParametersBlock = ^(NSArray *parameters) {
         [cell sendInputControlQueryNotificationWithParams:parameters masterDependenciesParameters:[cell.masterDependenciesParameters mutableCopy]];
     };
 }
@@ -187,10 +269,12 @@
             return;
         }
 
-        //
+        // Show CancelRequestPopup if value for IC was changed (in this case request pool is empty)
         if ([JMRequestDelegate isRequestPoolEmpty]) {
-            [JMCancelRequestPopup presentInViewController:self.viewController message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
-                NSLog(@"Dismiss view controller");
+            // TODO: change logic to select previous values instead dismissing view controller
+            [JMCancelRequestPopup presentInViewController:self.tableViewController message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
+                [JMRequestDelegate clearRequestPool];
+                [[self.tableViewController navigationController] popViewControllerAnimated:YES];
             }];
 
             [JMRequestDelegate setFinalBlock:^{
@@ -208,8 +292,12 @@
 
             // Add values to IC cell
             for (JSResourceProperty *property in data) {
-                JMListValue *item = [[JMListValue alloc] initWithName:property.name andValue:property.value isSelected:NO];
-                [cell.listOfValues addObject:item];
+                JSInputControlOption *option = [[JSInputControlOption alloc] init];
+                option.label = property.name;
+                option.value = property.value;
+                option.selected = [JSConstants stringFromBOOL:NO];
+
+                [cell.listOfValues addObject:option];
             }
 
             if (cell.listOfValues.count) {
@@ -218,10 +306,10 @@
                 // Select first value if cell is mandatory
                 if (cell.isMandatory) {
                     // Make first value selected
-                    JMListValue *firstItem = [cell.listOfValues objectAtIndex:0];
-                    firstItem.selected = YES;
+                    JSInputControlOption *firstOption = [cell.listOfValues objectAtIndex:0];
+                    firstOption.selected = [JSConstants stringFromBOOL:YES];
 
-                    [self sendInputControlQueryNotificationWithParams:[NSSet setWithObject:firstItem] masterDependenciesParameters:masterDependenciesParameters];
+                    [self sendInputControlQueryNotificationWithParams:@[firstOption] masterDependenciesParameters:masterDependenciesParameters];
                 }
             }
         }];
@@ -234,7 +322,7 @@
 }
 
 // Send UpdateInputControlQueryDataNotification to all dependent ICs.
-- (void)sendInputControlQueryNotificationWithParams:(NSSet *)parameters masterDependenciesParameters:(NSMutableDictionary *)masterDependenciesParameters
+- (void)sendInputControlQueryNotificationWithParams:(NSArray *)parameters masterDependenciesParameters:(NSMutableDictionary *)masterDependenciesParameters
 {
     // Set selected value
     self.value = parameters;
@@ -244,11 +332,11 @@
     
     NSMutableArray *resourceParameters = [NSMutableArray array];
     if (!masterDependenciesParameters) masterDependenciesParameters = [NSMutableDictionary dictionary];
-    
-    for (JMListValue *item in parameters) {
+
+    for (JSInputControlOption *option in parameters) {
         JSResourceParameter *parameter = [[JSResourceParameter alloc] initWithName:self.inputControlWrapper.name
                                                                         isListItem:self.isListItem
-                                                                             value:item.value];
+                                                                             value:option.value];
         [resourceParameters addObject:parameter];
     }
     

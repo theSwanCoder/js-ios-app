@@ -26,29 +26,31 @@
 //
 
 #import "JMInputControlCell.h"
+#import "JMReportOptionsTableViewController.h"
 
 @implementation JMInputControlCell
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
-    if (!inputControlDescriptor) return;
-    
-    self.label.text = inputControlDescriptor.label;
+    _inputControlDescriptor = inputControlDescriptor;
+    if (inputControlDescriptor) {
+        self.label.text = inputControlDescriptor.label;
+    }
 }
 
 - (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
 {
-    if (!inputControlWrapper) return;
-    
     _inputControlWrapper = inputControlWrapper;
-    _isMandatory = inputControlWrapper.isMandatory;
-    
-    NSString *label = inputControlWrapper.label;
-    if (_isMandatory) {
-        label = [NSString stringWithFormat:@"* %@", label];
+    if (inputControlWrapper) {
+        _isMandatory = inputControlWrapper.isMandatory;
+
+        NSString *label = inputControlWrapper.label;
+        if (_isMandatory) {
+            label = [NSString stringWithFormat:@"* %@", label];
+        }
+
+        self.label.text = label;
     }
-    
-    self.label.text = label;
 }
 
 - (UILabel *)label
@@ -62,7 +64,7 @@
     self.label.text = nil;
     self.inputControlDescriptor = nil;
     self.inputControlWrapper = nil;
-    self.viewController = nil;
+    self.tableViewController = nil;
 }
 
 @end

@@ -33,6 +33,17 @@
 
 @implementation JMMultiSelectTableViewController
 
+@synthesize cell = _cell;
+
+- (void)setCell:(JMSingleSelectInputControlCell *)cell
+{
+    _cell = cell;
+
+    for (JSInputControlOption *option in cell.value) {
+        [self.selectedValues addObject:option];
+    }
+}
+
 #pragma mark - UITableViewController
 
 - (void)viewDidAppear:(BOOL)animated
@@ -44,7 +55,7 @@
 - (void)didMoveToParentViewController:(UIViewController *)parent
 {
     if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
-        [self.cell updateWithParameters:self.selectedValues];
+        [self.cell updateWithParameters:[self.selectedValues allObjects]];
     }
 }
 
@@ -52,23 +63,31 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMListValue *value = [self.cell.listOfValues objectAtIndex:indexPath.row];
-    value.selected = !value.selected;
+    JSInputControlOption *option = [self.cell.listOfValues objectAtIndex:indexPath.row];
+    option.selected = [JSConstants stringFromBOOL:!option.selected.boolValue];
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [self markCell:cell isSelected:value];
+
+    if (option.selected.boolValue) {
+        [self.selectedValues addObject:option];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        if ([self.selectedValues containsObject:option]) {
+            [self.selectedValues removeObject:option];
+        }
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
 }
 
 #pragma mark - Actions
 
 - (IBAction)unsetAllValues:(id)sender
 {
-    for (JMListValue *value in self.selectedValues) {
-        value.selected = NO;
+    for (JSInputControlOption *option in self.selectedValues) {
+        option.selected = [JSConstants stringFromBOOL:NO];
     }
 
     [self.selectedValues removeAllObjects];
-    [self.cell updateWithParameters:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

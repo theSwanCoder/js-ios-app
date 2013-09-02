@@ -43,7 +43,7 @@ static NSString * const kJMSingleSelectCellIdentifier = @"SingleSelectCell";
 @implementation JMInputControlFactory
 objection_requires(@"constants")
 
-- (id)initWithTableViewController:(UITableViewController *)tableViewController
+- (id)initWithTableViewController:(JMReportOptionsTableViewController *)tableViewController
 {
     if (self = [self init]) {
         self.tableViewController = tableViewController;
@@ -66,7 +66,7 @@ objection_requires(@"constants")
     // TODO: add default IC Cell
     JMInputControlCell *cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     cell.inputControlWrapper = inputControl;
-    cell.viewController = self.tableViewController;
+    cell.tableViewController = self.tableViewController;
     
     return cell;
 }
@@ -80,6 +80,7 @@ objection_requires(@"constants")
     
     JMInputControlCell *cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     cell.inputControlDescriptor = inputControl;
+    cell.tableViewController = self.tableViewController;
     
     return cell;
 }

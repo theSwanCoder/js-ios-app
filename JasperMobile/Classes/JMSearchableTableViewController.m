@@ -128,7 +128,7 @@
 {
     if (self.navigationController) {
         [searchBar resignFirstResponder];
-        
+
         // TODO: consult about hiding search bar
         //        [self hideSearchBar:searchBar animated:NO];
         
