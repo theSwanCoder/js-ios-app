@@ -31,6 +31,8 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMTextInputControlCell : JMInputControlCell
+@interface JMTextInputControlCell : JMInputControlCell <UITextFieldDelegate>
+
+- (UITextField *)textField;
 
 @end

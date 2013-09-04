@@ -26,7 +26,6 @@
 //
 
 #import "JMInputControlCell.h"
-#import "JMReportOptionsTableViewController.h"
 
 @implementation JMInputControlCell
 
@@ -61,10 +60,10 @@
 - (void)clearData
 {
     self.value = nil;
-    self.label.text = nil;
     self.inputControlDescriptor = nil;
     self.inputControlWrapper = nil;
     self.tableViewController = nil;
+    [self.label removeFromSuperview];
 }
 
 @end

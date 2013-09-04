@@ -29,4 +29,33 @@
 
 @implementation JMTextInputControlCell
 
+- (id)value
+{
+    return self.textField.text;
+}
+
+- (void)setTableViewController:(JMReportOptionsTableViewController *)tableViewController
+{
+    [super setTableViewController:tableViewController];
+    self.textField.delegate = self;
+}
+
+- (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
+{
+    [super setInputControlDescriptor:inputControlDescriptor];
+    self.textField.text = inputControlDescriptor.state.value;
+}
+
+- (UITextField *)textField
+{
+    return (UITextField *) [self viewWithTag:2];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    return [textField resignFirstResponder];
+}
+
 @end

@@ -38,6 +38,7 @@ static NSString * const kJMSingleSelectCellIdentifier = @"SingleSelectCell";
 
 @interface JMInputControlFactory()
 @property (nonatomic, strong) JSConstants *constants;
+@property (nonatomic, strong) NSDictionary *types;
 @end
 
 @implementation JMInputControlFactory
@@ -55,10 +56,9 @@ objection_requires(@"constants")
 
 - (JMInputControlCell *)inputControlWithInputControlWrapper:(JSInputControlWrapper *)inputControl
 {
-    static NSDictionary *types;
-    if (!types) types = [self inputControlWrapperTypes];
+    if (!self.types) self.types = [self inputControlWrapperTypes];
     
-    id cellIdentifier = [types objectForKey:@(inputControl.type)];
+    id cellIdentifier = [self.types objectForKey:@(inputControl.type)];
     if ([cellIdentifier isKindOfClass:[NSDictionary class]]) {
         cellIdentifier = [cellIdentifier objectForKey:@(inputControl.dataType)];
     }
@@ -73,10 +73,9 @@ objection_requires(@"constants")
 
 - (JMInputControlCell *)inputControlWithInputControlDescriptor:(JSInputControlDescriptor *)inputControl
 {
-    static NSDictionary *types;
-    if (!types) types = [self inputControlDescriptorTypes];
+    if (!self.types) self.types = [self inputControlDescriptorTypes];
     
-    NSString *cellIdentifier = [types objectForKey:inputControl.type];
+    NSString *cellIdentifier = [self.types objectForKey:inputControl.type];
     
     JMInputControlCell *cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     cell.inputControlDescriptor = inputControl;
@@ -126,6 +125,7 @@ objection_requires(@"constants")
         constants.ICD_TYPE_SINGLE_VALUE_TEXT : kJMTextEditCellIdentifier,
         constants.ICD_TYPE_SINGLE_VALUE_NUMBER : kJMNumberCellIdentifier,
         constants.ICD_TYPE_SINGLE_VALUE_DATE : kJMDateCellIdentifier,
+        constants.ICD_TYPE_SINGLE_VALUE_DATETIME : kJMDateTimeCellIdentifier,
         constants.ICD_TYPE_SINGLE_SELECT : kJMSingleSelectCellIdentifier,
         constants.ICD_TYPE_SINGLE_SELECT_RADIO : kJMSingleSelectCellIdentifier,
         constants.ICD_TYPE_MULTI_SELECT : kJMMultiSelectCellIdentifier,

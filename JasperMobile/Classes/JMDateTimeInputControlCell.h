@@ -25,12 +25,12 @@
 //  Jaspersoft Corporation
 //
 
-#import "JMInputControlCell.h"
+#import "JMDateInputControlCell.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMDateTimeInputControlCell : JMInputControlCell
+@interface JMDateTimeInputControlCell : JMDateInputControlCell
 
 @end

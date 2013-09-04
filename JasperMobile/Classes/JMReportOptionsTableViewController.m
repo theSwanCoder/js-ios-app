@@ -1,9 +1,28 @@
+/*
+ * JasperMobile for iOS
+ * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://community.jaspersoft.com/project/jaspermobile-ios
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 //
 //  JMReportOptionsTableViewController.m
-//  JasperMobile
-//
-//  Created by Vlad Zavadskii on 8/19/13.
-//  Copyright (c) 2013 com.jaspersoft. All rights reserved.
+//  Jaspersoft Corporation
 //
 
 #import "JMReportOptionsTableViewController.h"
@@ -21,9 +40,9 @@
 #define kJMReportFormatSection 1
 #define kJMRunReportSection 2
 
-#define kJMRunCellIdentifier @"RunCell"
-#define kJMShowSingleSelectSegue @"ShowSingleSelect"
-#define kJMShowMultiSelectSegue @"ShowMultiSelect"
+static NSString * const kJMRunCellIdentifier = @"RunCell";
+static NSString * const kJMShowSingleSelectSegue = @"ShowSingleSelect";
+static NSString * const kJMShowMultiSelectSegue = @"ShowMultiSelect";
 
 @implementation JMReportOptionsTableViewController
 objection_requires(@"resourceClient", @"reportClient", @"constants")
@@ -87,7 +106,11 @@ inject_default_rotation()
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return section == kJMICSection ? self.inputControls.count : 1;
+    if (section == kJMICSection) {
+        return [JMRequestDelegate isRequestPoolEmpty] ? self.inputControls.count : 0;
+    }
+    
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -340,7 +363,7 @@ inject_default_rotation()
     // Define self with __weak modifier (require to avoid circular references and for
     // proper memory management)
     __weak JMReportOptionsTableViewController *reportOptions = self;
-    __weak JSInputControlWrapper *inputControl = inputControlWrapper;
+    __block JSInputControlWrapper *inputControl = inputControlWrapper;
     
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         JSResourceDescriptor *dataType = [result.objects objectAtIndex:0];
@@ -358,12 +381,16 @@ inject_default_rotation()
 {
     __weak JMReportOptionsTableViewController *reportOptions = self;
 
+    // Will be invoked in the end after all requests will finish
+    [JMRequestDelegate setFinalBlock:^{
+        [reportOptions.tableView reloadData];
+        [JMCancelRequestPopup dismiss];
+    }];
+
     return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         for (JSInputControlDescriptor *inputControlDescriptor in result.objects) {
             [reportOptions createCellFromInputControlDescriptor:inputControlDescriptor];
         }
-
-        [reportOptions.tableView reloadData];
     }];
 }
 

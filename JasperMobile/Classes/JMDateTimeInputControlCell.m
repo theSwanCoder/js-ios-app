@@ -29,5 +29,18 @@
 
 @implementation JMDateTimeInputControlCell
 
+- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
+{
+    [super setInputControlWrapper:inputControlWrapper];
+
+    self.dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+    self.dateFormatter.timeStyle = NSDateFormatterShortStyle;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self datePicker].datePickerMode = UIDatePickerModeDateAndTime;
+    textField.inputView = [self datePicker];
+}
 
 @end

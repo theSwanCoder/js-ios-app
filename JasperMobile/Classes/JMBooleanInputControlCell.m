@@ -33,12 +33,28 @@
 {
     [super setInputControlWrapper:inputControlWrapper];
     
-    self.uiSwitch.enabled = NO;
+    self.uiSwitch.on = NO;
+    self.value = [JSConstants stringFromBOOL:NO];
+}
+
+- (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
+{
+    [super setInputControlDescriptor:inputControlDescriptor];
+    
+    self.value = inputControlDescriptor.state.value;
+    self.uiSwitch.enabled = [self.value boolValue];
 }
 
 - (UISwitch *)uiSwitch
 {
     return (UISwitch *) [self viewWithTag:2];
+}
+
+#pragma mark - Actions
+
+- (IBAction)switchChanged:(id)sender
+{
+    self.value = [JSConstants stringFromBOOL:[sender isOn]];
 }
 
 @end

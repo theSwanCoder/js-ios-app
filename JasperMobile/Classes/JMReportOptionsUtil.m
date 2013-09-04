@@ -52,9 +52,9 @@ objection_requires(@"managedObjectContext");
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ReportOptions"];
     fetchRequest.predicate = [self reportOptionsPredicateForReport:reportUri];
-    NSArray *reportOptions = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    NSArray *options = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
     
-    for (JMReportOptions *reportOption in reportOptions) {
+    for (JMReportOptions *reportOption in options) {
         [self.managedObjectContext deleteObject:reportOption];
     }
     

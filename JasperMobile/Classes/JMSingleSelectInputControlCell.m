@@ -98,8 +98,8 @@
     self.resourceClient = nil;
     self.listOfValues = nil;
     self.constants = nil;
-    self.detailLabel.text = nil;
-    
+    [self.detailLabel removeFromSuperview];
+
     [super clearData];
 }
 
@@ -196,11 +196,28 @@
     JSObjectionInjector *injector = [JSObjection defaultInjector];
     self.constants = [injector getObject:[JSConstants class]];
     self.value = [NSMutableArray array];
-    self.listOfValues = [NSMutableArray array];
     self.masterDependenciesParameters = [NSMutableDictionary dictionary];
+    self.listOfValues = [NSMutableArray array];
 
-    // Disable cell
-    [self enabled:NO];
+    if (inputControlWrapper.listOfValues.count) {
+        for (JSResourceProperty *property in inputControlWrapper.listOfValues) {
+            JSInputControlOption *option = [[JSInputControlOption alloc] init];
+            option.label = property.value;
+            option.value = property.name;
+            option.selected = [JSConstants stringFromBOOL:NO];
+            
+            [self.listOfValues addObject:option];
+        }
+
+        if (inputControlWrapper.isMandatory) {
+            JSInputControlOption *firstOption = [self.listOfValues objectAtIndex:0];
+            firstOption.selected = [JSConstants stringFromBOOL:YES];
+            self.value = @[firstOption];
+        }
+    } else {
+        // Disable cell
+        [self enabled:NO];
+    }
 
     if (self.needsToUpdateInputControlQueryData) {
         // Add observer to check whenever Input Control should be updated
@@ -296,7 +313,7 @@
                 option.label = property.name;
                 option.value = property.value;
                 option.selected = [JSConstants stringFromBOOL:NO];
-
+                
                 [cell.listOfValues addObject:option];
             }
 

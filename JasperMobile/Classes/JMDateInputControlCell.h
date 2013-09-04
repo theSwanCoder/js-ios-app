@@ -25,12 +25,16 @@
 //  Jaspersoft Corporation
 //
 
-#import "JMInputControlCell.h"
+#import "JMTextInputControlCell.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMDateInputControlCell : JMInputControlCell
+@interface JMDateInputControlCell : JMTextInputControlCell
+
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
+- (UIDatePicker *)datePicker;
 
 @end

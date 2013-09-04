@@ -25,8 +25,119 @@
 //  Jaspersoft Corporation
 //
 
+static UIToolbar *pickerToolbar;
+static UIDatePicker *datePicker;
+
 #import "JMDateInputControlCell.h"
+#import "JMLocalization.h"
 
 @implementation JMDateInputControlCell
+
+- (UIDatePicker *)datePicker
+{
+    if (!datePicker) {
+        datePicker = [[UIDatePicker alloc] init];
+        datePicker.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        datePicker.date = [NSDate date];
+        [datePicker sizeToFit];
+    }
+
+    return datePicker;
+}
+
+- (NSDateFormatter *)dateFormatter
+{
+    if (!_dateFormatter) _dateFormatter = [[NSDateFormatter alloc] init];
+    return _dateFormatter;
+}
+
+- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
+{
+    [super setInputControlWrapper:inputControlWrapper];
+
+    self.dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+    self.dateFormatter.timeStyle = NSDateFormatterNoStyle;
+}
+
+- (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
+{
+    [super setInputControlDescriptor:inputControlDescriptor];
+
+    self.dateFormatter.dateFormat = inputControlDescriptor.validationRules.dateTimeFormatValidationRule.format;
+}
+
+- (void)clearData
+{
+    [self.textField removeFromSuperview];
+    datePicker = nil;
+    pickerToolbar = nil;
+    [super clearData];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self datePicker].datePickerMode = UIDatePickerModeDate;
+    textField.inputView = [self datePicker];
+}
+
+#pragma mark - UIResponder
+
+- (UIView *)inputAccessoryView
+{
+    if (!pickerToolbar) {
+        pickerToolbar = [[UIToolbar alloc] init];
+        pickerToolbar.barStyle = UIBarStyleBlackOpaque;
+        pickerToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [pickerToolbar sizeToFit];
+
+        UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+        UIBarButtonItem *unset = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"ic.title.unset", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(unset:)];
+        UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
+
+        // Used only for adding flexible space between buttons
+        UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+
+        [pickerToolbar setItems:@[cancel, flexibleSpace, unset, done]];
+    } else {
+        for (UIBarButtonItem *item in pickerToolbar.items) {
+            if (item.style != UIBarButtonSystemItemFlexibleSpace) {
+                item.target = self;
+            }
+        }
+    }
+
+    return pickerToolbar;
+}
+
+#pragma mark - Actions
+
+- (void)done:(id)sender
+{
+    NSDate *date = self.datePicker.date;
+    self.value = date;
+    self.textField.text = [self.dateFormatter stringFromDate:date];
+    [self hideDatePicker];
+}
+
+- (void)unset:(id)sender
+{
+    self.value = nil;
+    self.textField.text = nil;
+    [self hideDatePicker];
+}
+
+- (void)cancel:(id)sender
+{
+    [self hideDatePicker];
+}
+
+#pragma mark - Private
+
+- (void)hideDatePicker
+{
+    [self.textField resignFirstResponder];
+}
 
 @end

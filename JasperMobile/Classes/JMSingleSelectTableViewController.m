@@ -35,8 +35,8 @@ inject_default_rotation();
 {
     _cell = cell;
 
-    JSInputControlOption *option = [cell.value objectAtIndex:0];
-    if (option) {
+    if ([cell.value count]) {
+        JSInputControlOption *option = [cell.value objectAtIndex:0];
         [self.selectedValues addObject:option];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[cell.listOfValues indexOfObject:option] inSection:0];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle  animated:YES];
