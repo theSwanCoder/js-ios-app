@@ -26,6 +26,7 @@
 //
 
 #import "JMInputControlCell.h"
+#import "JMInputControlsHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMReportClientHolder.h"
 
@@ -35,8 +36,10 @@
  */
 @interface JMSingleSelectInputControlCell : JMInputControlCell <JMResourceClientHolder, JMReportClientHolder>
 
+@property (nonatomic, assign) BOOL disableUnsetFunctional;
 @property (nonatomic, strong) NSMutableArray *listOfValues;
 @property (nonatomic, strong) JSConstants *constants;
+@property (nonatomic, weak) UIViewController <JMInputControlsHolder> *delegate;
 
 /**
  Returns detail label for IC

@@ -27,6 +27,7 @@
 
 #import <Foundation/Foundation.h>
 #import "JMInputControlCell.h"
+#import "JMInputControlsHolder.h"
 #import "JMReportOptionsTableViewController.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
@@ -36,7 +37,7 @@
  */
 @interface JMInputControlFactory : NSObject
 
-@property (nonatomic, weak) JMReportOptionsTableViewController *tableViewController;
+@property (nonatomic, weak) UITableViewController <JMInputControlsHolder> *tableViewController;
 
 /**
  Initialize a new factory
@@ -44,20 +45,28 @@
  @param tableViewController A table view controller which is required to get prototype cells
  @return An initialized factory
  */
-- (id)initWithTableViewController:(JMReportOptionsTableViewController *)tableViewController;
+- (id)initWithTableViewController:(UITableViewController <JMInputControlsHolder> *)tableViewController;
 
 /**
- Creates the input controll cell
+ Creates a cell for selecting report output format
  
- @param inputConrol A wrapper for IC (REST v1)
+ @param formats An array of possible report output formats
+ @return A format cell
+ */
+- (JMInputControlCell *)reportOutputFormatCellWithFormats:(NSArray *)formats;
+
+/**
+ Creates the input control cell
+ 
+ @param inputControl A wrapper for IC (REST v1)
  @return The IC cell of a certain type
  */
 - (JMInputControlCell *)inputControlWithInputControlWrapper:(JSInputControlWrapper *)inputControl;
 
 /**
- Creates the input controll cell
+ Creates the input control cell
  
- @param inputConrol An IC descriptor (REST v2)
+ @param inputControl An IC descriptor (REST v2)
  @return The IC cell of a certain type
  */
 - (JMInputControlCell *)inputControlWithInputControlDescriptor:(JSInputControlDescriptor *)inputControl;

@@ -35,7 +35,7 @@
 #import "UITableViewController+CellRelativeHeight.h"
 #import <Objection-iOS/Objection.h>
 
-// Declared as define const because of int to NSNumber convertion trick (i.e.
+// Declared as define const because of int to NSNumber conversion trick (i.e.
 // we can use literal @kJMAttributesSection to represent NSNumber)
 #define kJMAttributesSection 0
 #define kJMToolsSection 1
@@ -62,7 +62,6 @@ typedef enum {
 @property (nonatomic, weak) UIButton *favoriteButton;
 
 - (void)refreshResourceDescriptor;
-- (void)reloadToolsSection;
 - (JSResourceProperty *)resourcePropertyForIndexPath:(NSIndexPath *)indexPath;
 - (NSDictionary *)resourceDescriptorPropertyForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)localizedTextLabelTitleForProperty:(NSString *)property;
@@ -315,10 +314,8 @@ inject_default_rotation()
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == kJMConfirmButtonIndex) {
-        [JMFilter checkNetworkReachabilityForBlock:^{
-            self.requestType = JMDeleteResourceRequest;
-            [self.resourceClient deleteResource:self.resourceDescriptor.uriString delegate:[JMFilter checkRequestResultForDelegate:self]];
-        } viewControllerToDismiss:nil];
+        self.requestType = JMDeleteResourceRequest;
+        [self.resourceClient deleteResource:self.resourceDescriptor.uriString delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:nil]];
     }
 }
 
@@ -350,14 +347,12 @@ inject_default_rotation()
 
 - (void)refreshResourceDescriptor
 {
-    [JMFilter checkNetworkReachabilityForBlock:^{
-        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
-            [self.navigationController popViewControllerAnimated:YES];
-        }];
-        
-        self.requestType = JMGetResourceRequest;
-        [self.resourceClient resource:self.resourceDescriptor.uriString delegate:[JMFilter checkRequestResultForDelegate:self]];
-    } viewControllerToDismiss:self];
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+
+    self.requestType = JMGetResourceRequest;
+    [self.resourceClient resource:self.resourceDescriptor.uriString delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:self]];
 }
 
 - (JSResourceProperty *)resourcePropertyForIndexPath:(NSIndexPath *)indexPath
@@ -380,22 +375,20 @@ inject_default_rotation()
     return JMCustomLocalizedString([NSString stringWithFormat:@"resource.%@.title", property], nil);
 }
 
-- (void)reloadToolsSection
-{
-    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:kJMToolsSection];
-    [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
-}
-
 - (void)changeFavoriteButton:(UIButton *)button isResourceInFavorites:(BOOL)isResourceInFavorites
 {
     if (!isResourceInFavorites) {
         [button setTitle:JMCustomLocalizedString(@"dialog.button.addfavorite", nil) forState:UIControlStateNormal];
-        [button setBackgroundImage:[UIImage imageNamed:@"add_favorite_button.png"] forState:UIControlStateNormal];
-        [button setBackgroundImage:[UIImage imageNamed:@"add_favorite_button_highlighted.png"] forState:UIControlStateHighlighted];
+        [JMUtils setBackgroundImagesForButton:button
+                                    imageName:@"add_favorite_button.png"
+                         highlightedImageName:@"add_favorite_button_highlighted.png"
+                                   edgesInset:kJMNoEdgesInset];
     } else {
         [button setTitle:JMCustomLocalizedString(@"dialog.button.removefavorite", nil) forState:UIControlStateNormal];
-        [button setBackgroundImage:[UIImage imageNamed:@"remove_favorite_button.png"] forState:UIControlStateNormal];
-        [button setBackgroundImage:[UIImage imageNamed:@"remove_favorite_button_highlighted.png"] forState:UIControlStateHighlighted];
+        [JMUtils setBackgroundImagesForButton:button
+                                    imageName:@"remove_favorite_button.png"
+                         highlightedImageName:@"remove_favorite_button_highlighted.png"
+                                   edgesInset:kJMNoEdgesInset];
     }
 }
 

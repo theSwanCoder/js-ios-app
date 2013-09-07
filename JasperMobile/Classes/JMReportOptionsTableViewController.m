@@ -34,6 +34,7 @@
 #import "JMSingleSelectTableViewController.h"
 #import "JMRequestDelegate.h"
 #import "JMUtils.h"
+#import "JMReportViewerViewController.h"
 #import <Objection-iOS/Objection.h>
 
 #define kJMICSection 0
@@ -43,14 +44,30 @@
 static NSString * const kJMRunCellIdentifier = @"RunCell";
 static NSString * const kJMShowSingleSelectSegue = @"ShowSingleSelect";
 static NSString * const kJMShowMultiSelectSegue = @"ShowMultiSelect";
+static NSString * const kJMRunReportSegue = @"RunReport";
+
+@interface JMReportOptionsTableViewController()
+@property (nonatomic, strong) JMInputControlCell *reportFormatCell;
+@property (nonatomic, strong) JMInputControlFactory *inputControlFactory;
+@end
 
 @implementation JMReportOptionsTableViewController
 objection_requires(@"resourceClient", @"reportClient", @"constants")
 inject_default_rotation()
 
+@synthesize inputControls = _inputControls;
 @synthesize reportClient = _reportClient;
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceDescriptor = _resourceDescriptor;
+
+- (JMInputControlFactory *)inputControlFactory
+{
+    if (!_inputControlFactory) {
+        _inputControlFactory = [[JMInputControlFactory alloc] initWithTableViewController:self];
+    }
+    
+    return _inputControlFactory;
+}
 
 #pragma mark - Initialization
 
@@ -94,6 +111,9 @@ inject_default_rotation()
     if ([segue.identifier isEqualToString:kJMShowSingleSelectSegue] ||
         [segue.identifier isEqualToString:kJMShowMultiSelectSegue]) {
         [segue.destinationViewController setCell:sender];
+
+    } else if ([segue.identifier isEqualToString:kJMRunReportSegue]) {
+        [segue.destinationViewController setParameters:sender];
     }
 }
 
@@ -122,9 +142,11 @@ inject_default_rotation()
             cell = [self.inputControls objectAtIndex:indexPath.row];
             break;
             
-        // TODO: implement
         case kJMReportFormatSection: {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"SingleSelectCell"];
+            if (!self.reportFormatCell) {
+                self.reportFormatCell = [self.inputControlFactory reportOutputFormatCellWithFormats:@[@"HTML", @"PDF"]];
+            }
+            cell = self.reportFormatCell;
             break;
         }
             
@@ -132,8 +154,12 @@ inject_default_rotation()
         default:
             cell = [tableView dequeueReusableCellWithIdentifier:kJMRunCellIdentifier];
             cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+
             UIButton *run = (UIButton *) [cell viewWithTag:1];
-            [self configureRunButton:run];        
+            [JMUtils setBackgroundImagesForButton:run
+                                        imageName:@"run_report_button.png"
+                             highlightedImageName:@"run_report_button_highlighted.png"
+                                       edgesInset:18.0f];
     }
     
     return cell;
@@ -188,54 +214,19 @@ inject_default_rotation()
     return 8.0f;
 }
 
-#pragma mark - Table view delegate
+#pragma mark - Actions
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (IBAction)runReport:(id)sender
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     DetailViewController *detailViewController = [[DetailViewController alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    if (self.reportClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD) {
+        [self restV2RunReport];
+    } else {
+        [self restV1RunReport];
+    }
 }
 
 #pragma mark - Private -
 #pragma mark Configuration
-
-- (void)configureRunButton:(UIButton *)button
-{
-    CGFloat corner = 18.0f;
-    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(corner, corner, corner, corner);
-    
-    UIImage *normal = [[UIImage imageNamed:@"run_report_button.png"] resizableImageWithCapInsets:edgeInsets];
-    UIImage *highlighted = [[UIImage imageNamed:@"run_report_button_highlighted.png"] resizableImageWithCapInsets:edgeInsets];
-    
-    [button setBackgroundImage:normal forState:UIControlStateNormal];
-    [button setBackgroundImage:highlighted forState:UIControlStateHighlighted];
-}
-
-- (void)createCellFromWrapper:(JSInputControlWrapper *)inputControl
-{
-    id cell = [self.inputControlFactory inputControlWithInputControlWrapper:inputControl];
-    [self configureInputControlCell:cell];
-    [self.inputControls addObject:cell];
-}
-
-- (void)createCellFromInputControlDescriptor:(JSInputControlDescriptor *)inputControl
-{
-    id cell = [self.inputControlFactory inputControlWithInputControlDescriptor:inputControl];
-    [self configureInputControlCell:cell];
-    [self.inputControls addObject:cell];
-}
-
-- (JMInputControlFactory *)inputControlFactory
-{
-    static JMInputControlFactory *inputControlFactory;
-    if (!inputControlFactory || !inputControlFactory.tableViewController) inputControlFactory = [[JMInputControlFactory alloc] initWithTableViewController:self];
-    return inputControlFactory;
-}
 
 - (void)configureInputControlCell:(id)cell
 {
@@ -256,19 +247,16 @@ inject_default_rotation()
     JMCancelRequestBlock cancelBlock = ^{
         [JMRequestDelegate clearRequestPool];
         [self.navigationController popViewControllerAnimated:YES];
-    };    
+    };
+
+    [JMFilter setViewControllerToDismiss:self];
 
     if (self.reportClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD) {
-        [JMFilter checkNetworkReachabilityForBlock:^{
-            [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:cancelBlock];
-            [self.reportClient inputControlsForReport:self.resourceDescriptor.uriString delegate:self.inputControlsForReportDelegate];
-        } viewControllerToDismiss:self];
-        
+        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:cancelBlock];
+        [self.reportClient inputControlsForReport:self.resourceDescriptor.uriString delegate:self.inputControlsForReportDelegate];
     } else {
-        [JMFilter checkNetworkReachabilityForBlock:^{
-            [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:cancelBlock];
-            [self.resourceClient resource:self.resourceDescriptor.uriString delegate:self.resourceDelegate];
-        } viewControllerToDismiss:self];
+        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:cancelBlock];
+        [self.resourceClient resource:self.resourceDescriptor.uriString delegate:self.resourceDelegate];
     }
 }
 
@@ -306,7 +294,14 @@ inject_default_rotation()
     return result;
 }
 
-#pragma mark Rest v1 Request Finished Blocks
+#pragma mark Rest v1
+
+- (void)createCellFromWrapper:(JSInputControlWrapper *)inputControl
+{
+    id cell = [self.inputControlFactory inputControlWithInputControlWrapper:inputControl];
+    [self configureInputControlCell:cell];
+    [self.inputControls addObject:cell];
+}
 
 - (id <JSRequestDelegate>)resourceDelegate
 {
@@ -315,7 +310,6 @@ inject_default_rotation()
     // Will be invoked in the end after all requests will finish 
     [JMRequestDelegate setFinalBlock:^{
         [reportOptions.tableView reloadData];
-        [JMCancelRequestPopup dismiss];
     }];
     
     return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
@@ -375,7 +369,25 @@ inject_default_rotation()
     [self.resourceClient resource:inputControlWrapper.dataTypeUri delegate:delegate];
 }
 
-#pragma mark Rest v2 Request Finished Blocks
+- (void)restV1RunReport
+{
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    for (JMInputControlCell *cell in self.inputControls) {
+        if (cell.value != nil) {
+            [parameters setObject:cell.value forKey:cell.inputControlWrapper.name];
+        }
+    }
+    [self performSegueWithIdentifier:kJMRunReportSegue sender:parameters];
+}
+
+#pragma mark Rest v2
+
+- (void)createCellFromInputControlDescriptor:(JSInputControlDescriptor *)inputControl
+{
+    id cell = [self.inputControlFactory inputControlWithInputControlDescriptor:inputControl];
+    [self configureInputControlCell:cell];
+    [self.inputControls addObject:cell];
+}
 
 - (JMRequestDelegate *)inputControlsForReportDelegate
 {
@@ -384,7 +396,6 @@ inject_default_rotation()
     // Will be invoked in the end after all requests will finish
     [JMRequestDelegate setFinalBlock:^{
         [reportOptions.tableView reloadData];
-        [JMCancelRequestPopup dismiss];
     }];
 
     return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
@@ -392,6 +403,47 @@ inject_default_rotation()
             [reportOptions createCellFromInputControlDescriptor:inputControlDescriptor];
         }
     }];
+}
+
+- (void)restV2RunReport
+{
+    NSMutableArray *ids = [NSMutableArray array];
+    NSMutableArray *parametersToValidate = [NSMutableArray array];
+
+    for (JMInputControlCell *cell in self.inputControls) {
+        [ids addObject:cell.inputControlDescriptor.uuid];
+        JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:cell.inputControlDescriptor.uuid
+                                                                               value:cell.inputControlDescriptor.selectedValues];
+        [parametersToValidate addObject:reportParameter];
+    }
+
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:^{
+        [JMRequestDelegate clearRequestPool];
+    }];
+
+    __weak JMReportOptionsTableViewController *reportOptions = self;
+
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        // TODO: finish validation implementation
+        BOOL isValid = YES;
+        for (JSInputControlState *state in result.objects) {
+            if (state.error.length) isValid = NO;
+        }
+
+        if (!isValid) return;
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+        for (JMInputControlCell *cell in self.inputControls) {
+            if (cell.value != nil) {
+                [parameters setObject:cell.value forKey:cell.inputControlDescriptor.uuid];
+            }
+        }
+        [reportOptions performSegueWithIdentifier:kJMRunReportSegue sender:parameters];
+    }];
+
+    [self.reportClient updatedInputControlsValues:self.resourceDescriptor.uriString
+                                              ids:ids
+                                   selectedValues:parametersToValidate
+                                         delegate:delegate];
 }
 
 @end

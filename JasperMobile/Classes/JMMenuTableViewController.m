@@ -42,12 +42,12 @@ inject_default_rotation();
 
 - (id <JMSplitViewBarButtonPresenterProtocol>)splitViewBarButtonItemPresenter
 {
-    id detailsViewContoller = [self.splitViewController.viewControllers lastObject];
-    if (![detailsViewContoller conformsToProtocol:@protocol(JMSplitViewBarButtonPresenterProtocol)]) {
-        detailsViewContoller = nil;
+    id detailsViewController = [self.splitViewController.viewControllers lastObject];
+    if (![detailsViewController conformsToProtocol:@protocol(JMSplitViewBarButtonPresenterProtocol)]) {
+        detailsViewController = nil;
     }
     
-    return detailsViewContoller;
+    return detailsViewController;
 }
 
 #pragma mark - SplitViewController delegate

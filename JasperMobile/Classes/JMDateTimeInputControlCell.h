@@ -33,4 +33,6 @@
  */
 @interface JMDateTimeInputControlCell : JMDateInputControlCell
 
+@property (nonatomic, strong) NSDate *time;
+
 @end

@@ -28,7 +28,8 @@
 #import "JMUtils.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
-#import "Reachability.h"
+
+CGFloat kJMNoEdgesInset = -1;
 
 @implementation JMUtils
 
@@ -39,20 +40,26 @@
 
 + (void)setBackgroundImagesForButton:(UIButton *)button imageName:(NSString *)imageName highlightedImageName:(NSString *)highlightedImageName edgesInset:(CGFloat)edgesInset
 {
-    UIEdgeInsets capInsets = UIEdgeInsetsMake(edgesInset, edgesInset, edgesInset, edgesInset);
-    UIImage *image = [[UIImage imageNamed:imageName] resizableImageWithCapInsets:capInsets];
-    UIImage *highlightedImage = [[UIImage imageNamed:highlightedImageName] resizableImageWithCapInsets:capInsets];
+    UIImage *image = [UIImage imageNamed:imageName];
+    UIImage *highlightedImage = [UIImage imageNamed:highlightedImageName];
+
+    if (edgesInset != kJMNoEdgesInset) {
+        UIEdgeInsets capInsets = UIEdgeInsetsMake(edgesInset, edgesInset, edgesInset, edgesInset);
+        image = [image resizableImageWithCapInsets:capInsets];
+        highlightedImage = [highlightedImage resizableImageWithCapInsets:capInsets];
+    }
     
     if (image) {
         [button setBackgroundImage:image forState:UIControlStateNormal];
     }
+
     if (highlightedImage) {
         [button setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
     }
 }
 
 + (NSString *)localizedTitleForMenuItemByTag:(NSInteger)tag {
-    NSString *title = @"";
+    NSString *title;
     
     switch (tag) {
         case kJMLibraryMenuTag:
@@ -65,6 +72,7 @@
             title = @"view.favorites";
             break;
         case kJMServersMenuTag:
+        default:
             title = @"view.servers";
     }
     
@@ -80,15 +88,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
                                                         object:nil
                                                       userInfo:userInfo];
-}
-
-+ (BOOL)isNetworkReachable
-{
-    NetworkStatus networkStatus = [[Reachability reachabilityForLocalWiFi] currentReachabilityStatus];
-    if (networkStatus == ReachableViaWiFi) return YES;
-    
-    networkStatus = [[Reachability reachabilityForInternetConnection] currentReachabilityStatus];
-    return networkStatus == ReachableViaWWAN;
 }
 
 + (void)showNetworkActivityIndicator

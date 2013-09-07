@@ -29,27 +29,37 @@
 
 @implementation JMInputControlCell
 
+- (void)setValue:(id)value
+{
+    _value = value;
+    if (self.inputControlDescriptor) {
+        self.inputControlDescriptor.state.value = value;
+    }
+}
+
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     _inputControlDescriptor = inputControlDescriptor;
-    if (inputControlDescriptor) {
-        self.label.text = inputControlDescriptor.label;
+    
+    NSString *label = inputControlDescriptor.label;
+    if (inputControlDescriptor.mandatory.boolValue) {
+        label = [NSString stringWithFormat:@"* %@", label];
     }
+    
+    self.label.text = label;
 }
 
 - (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
 {
     _inputControlWrapper = inputControlWrapper;
-    if (inputControlWrapper) {
-        _isMandatory = inputControlWrapper.isMandatory;
+    _isMandatory = inputControlWrapper.isMandatory;
 
-        NSString *label = inputControlWrapper.label;
-        if (_isMandatory) {
-            label = [NSString stringWithFormat:@"* %@", label];
-        }
-
-        self.label.text = label;
+    NSString *label = inputControlWrapper.label;
+    if (_isMandatory) {
+        label = [NSString stringWithFormat:@"* %@", label];
     }
+
+    self.label.text = label;
 }
 
 - (UILabel *)label
@@ -59,10 +69,10 @@
 
 - (void)clearData
 {
-    self.value = nil;
-    self.inputControlDescriptor = nil;
-    self.inputControlWrapper = nil;
-    self.tableViewController = nil;
+    // Release through ivar to avoid additional calls of overridden setters
+    _value = nil;
+    _inputControlDescriptor = nil;
+    _inputControlWrapper = nil;
     [self.label removeFromSuperview];
 }
 

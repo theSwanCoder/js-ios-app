@@ -30,52 +30,65 @@
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 
-static JMFilter * filterDelegate;
+__weak static UIViewController *viewControllerToDismiss;
 
 @interface JMFilter()
 @property (nonatomic, weak) id <JSRequestDelegate> delegate;
-@property (nonatomic, weak) UIViewController *viewControllerToDismiss;
 @end
 
 @implementation JMFilter
 
 #pragma mark - Class Methods
 
-+ (void)checkNetworkReachabilityForBlock:(void (^)(void))block viewControllerToDismiss:(id)viewController
++ (void)setViewControllerToDismiss:(UIViewController *)viewController
 {
-    if (![JMUtils isNetworkReachable]) {
-        [JMCancelRequestPopup dismiss];
-        
-        filterDelegate = [[JMFilter alloc] init];
-        filterDelegate.viewControllerToDismiss = viewController;
-        
-        [[UIAlertView localizedAlertWithTitle:@"error.noconnection.dialog.title"
-                             message:@"error.noconnection.dialog.msg"
-                            delegate:filterDelegate
-                   cancelButtonTitle:@"dialog.button.ok"
-                   otherButtonTitles:nil] show];
-    } else {
-        [JMUtils showNetworkActivityIndicator];
-        block();
-	}
+    viewControllerToDismiss = viewController;
 }
 
-+ (JMFilter *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate
++ (JMFilter *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate viewControllerToDismiss:(UIViewController *)viewController;
 {
+    [JMUtils showNetworkActivityIndicator];
+
     JMFilter *filter = [[JMFilter alloc] init];
     filter.delegate = delegate;
+    viewControllerToDismiss = viewController;
     return filter;
 }
 
-+ (void)showAlertViewDialogForStatusCode:(NSInteger)statusCode
++ (void)showAlertViewDialogForStatusCode:(NSInteger)statusCode orErrorCode:(NSInteger)errorCode;
 {
-    [[UIAlertView localizedAlertWithTitle:@"error.readingresponse.dialog.msg"
-                                  message:[NSString stringWithFormat:@"error.http.%i", statusCode]
-                                 delegate:nil
+    NSString *title;
+    NSString *message;
+
+    if (statusCode != 0) {
+        title = @"error.readingresponse.dialog.msg";
+        message = [NSString stringWithFormat:@"error.http.%i", statusCode];
+    } else {
+        switch (errorCode) {
+            case NSURLErrorUserCancelledAuthentication:
+            case NSURLErrorUserAuthenticationRequired:
+                title = @"error.authenication.dialog.title";
+                message = @"error.authenication.dialog.msg";
+                break;
+
+            case NSURLErrorCannotFindHost:
+                title = @"error.unknownhost.dialog.title";
+                message = @"error.unknownhost.dialog.msg" ;
+                break;
+
+            default:
+                title = @"error.noconnection.dialog.title";
+                message = @"error.noconnection.dialog.msg";
+                break;
+        }
+    }
+
+    [[UIAlertView localizedAlertWithTitle:title
+                                  message:message
+                                 delegate:JMFilter.class
                         cancelButtonTitle:@"dialog.button.ok"
                         otherButtonTitles:nil] show];
 }
-
 
 #pragma mark - JSRequestDelegate
 
@@ -86,19 +99,18 @@ static JMFilter * filterDelegate;
     if ([result isSuccessful]) {
         if (self.delegate) [self.delegate requestFinished:result];
     } else {
-        [JMFilter showAlertViewDialogForStatusCode:result.statusCode];
+        [JMFilter showAlertViewDialogForStatusCode:result.statusCode orErrorCode:result.error.code];
     }
 }
 
 #pragma mark - UIAlertViewDelegate
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
++ (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (self.viewControllerToDismiss.navigationController) {
-        [self.viewControllerToDismiss.navigationController popViewControllerAnimated:YES];
+    if (viewControllerToDismiss.navigationController) {
+        [viewControllerToDismiss.navigationController popViewControllerAnimated:YES];
+        viewControllerToDismiss = nil;
     }
-    
-    filterDelegate = nil;
 }
 
 @end

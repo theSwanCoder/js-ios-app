@@ -16,9 +16,9 @@
 		F51D6A82178472870079AE50 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F51D6A80178472870079AE50 /* Localizable.strings */; };
 		F5325D8417B17B2900C11E33 /* JMFavoritesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5325D8317B17B2900C11E33 /* JMFavoritesTableViewController.m */; };
 		F5339A1617CE0F0F005073EE /* JMMultiSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5339A1517CE0F0E005073EE /* JMMultiSelectTableViewController.m */; };
-		F53C0AB617B3EBAD0063AE90 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = F53C0AB517B3EBAD0063AE90 /* Reachability.m */; };
 		F53C0AD217B50C080063AE90 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F53C0AD017B50C080063AE90 /* MainStoryboard_iPhone.storyboard */; };
 		F54936FD17C4F1F50009F321 /* JMInputControlFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F54936FC17C4F1F40009F321 /* JMInputControlFactory.m */; };
+		F54BE93B17D7495D00437EA9 /* JMReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F54BE93A17D7495D00437EA9 /* JMReportViewerViewController.m */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
 		F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */; };
@@ -173,11 +173,12 @@
 		F5325D8317B17B2900C11E33 /* JMFavoritesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMFavoritesTableViewController.m; path = Classes/JMFavoritesTableViewController.m; sourceTree = "<group>"; };
 		F5339A1417CE0F0E005073EE /* JMMultiSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMultiSelectTableViewController.h; path = Classes/JMMultiSelectTableViewController.h; sourceTree = "<group>"; };
 		F5339A1517CE0F0E005073EE /* JMMultiSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMultiSelectTableViewController.m; path = Classes/JMMultiSelectTableViewController.m; sourceTree = "<group>"; };
-		F53C0AB417B3EBAD0063AE90 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		F53C0AB517B3EBAD0063AE90 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		F53C0AD117B50C080063AE90 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		F54936FB17C4F1F40009F321 /* JMInputControlFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMInputControlFactory.h; path = Classes/JMInputControlFactory.h; sourceTree = "<group>"; };
 		F54936FC17C4F1F40009F321 /* JMInputControlFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMInputControlFactory.m; path = Classes/JMInputControlFactory.m; sourceTree = "<group>"; };
+		F54BE93917D7495D00437EA9 /* JMReportViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMReportViewerViewController.h; path = Classes/JMReportViewerViewController.h; sourceTree = "<group>"; };
+		F54BE93A17D7495D00437EA9 /* JMReportViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportViewerViewController.m; path = Classes/JMReportViewerViewController.m; sourceTree = "<group>"; };
+		F54BE94117D7E41B00437EA9 /* JMInputControlsHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMInputControlsHolder.h; path = JasperMobile/Classes/JMInputControlsHolder.h; sourceTree = "<group>"; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F54C91A21752FAAD0009E2BE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -222,8 +223,8 @@
 		F55D622E17C24D9100EC320F /* JMReportOptionsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportOptionsTableViewController.m; path = Classes/JMReportOptionsTableViewController.m; sourceTree = "<group>"; };
 		F5663A2E1752F9D0007978BE /* Objection-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Objection-iOS.framework"; path = "JasperMobile/Vendor/Objection-iOS.framework"; sourceTree = "<group>"; };
 		F5663A321752FA5C007978BE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		F572814517C77047000B192D /* JMRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRequestDelegate.h; sourceTree = "<group>"; };
-		F572814617C77048000B192D /* JMRequestDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRequestDelegate.m; sourceTree = "<group>"; };
+		F572814517C77047000B192D /* JMRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRequestDelegate.h; path = JasperMobile/Classes/JMRequestDelegate.h; sourceTree = "<group>"; };
+		F572814617C77048000B192D /* JMRequestDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMRequestDelegate.m; path = JasperMobile/Classes/JMRequestDelegate.m; sourceTree = "<group>"; };
 		F57364EA17B91BB500A10588 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRefreshable.h; path = JasperMobile/Classes/JMRefreshable.h; sourceTree = "<group>"; };
 		F576BC371753DB0700DF765B /* favorites_bar_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorites_bar_item.png; sourceTree = "<group>"; };
 		F576BC381753DB0700DF765B /* library_bar_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = library_bar_item.png; sourceTree = "<group>"; };
@@ -379,15 +380,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		F53C0AB317B3EBAD0063AE90 /* Reachability */ = {
-			isa = PBXGroup;
-			children = (
-				F53C0AB417B3EBAD0063AE90 /* Reachability.h */,
-				F53C0AB517B3EBAD0063AE90 /* Reachability.m */,
-			);
-			path = Reachability;
-			sourceTree = "<group>";
-		};
 		F549370117C4F1FA0009F321 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -457,6 +449,8 @@
 				F513EE9017A16E2D00A553C4 /* JMServerSettingsTableViewController.m */,
 				F55D622D17C24D9100EC320F /* JMReportOptionsTableViewController.h */,
 				F55D622E17C24D9100EC320F /* JMReportOptionsTableViewController.m */,
+				F54BE93917D7495D00437EA9 /* JMReportViewerViewController.h */,
+				F54BE93A17D7495D00437EA9 /* JMReportViewerViewController.m */,
 				F5B6A6A4175F58690047CB6D /* JMRepositoryTableViewController.h */,
 				F5B6A6A5175F586A0047CB6D /* JMRepositoryTableViewController.m */,
 				F5DC4EA51769F01000038D58 /* JMResourceModifyViewController.h */,
@@ -591,7 +585,6 @@
 			isa = PBXGroup;
 			children = (
 				F58FF2EF1760A0B50021CC8B /* MJPopupViewController */,
-				F53C0AB317B3EBAD0063AE90 /* Reachability */,
 				F5D97FA7179587CF0059C761 /* SSKeychain */,
 				F5DC4EA8176A101D00038D58 /* TPKeyboardAvoiding */,
 			);
@@ -688,6 +681,7 @@
 		F5A2E77F175CCF8C00CBA00E /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				F54BE94117D7E41B00437EA9 /* JMInputControlsHolder.h */,
 				F5FE06E017573DB000030331 /* JMRotatable.h */,
 				F57364EA17B91BB500A10588 /* JMRefreshable.h */,
 				F5EAA2681797FF350091BA43 /* JMReportClientHolder.h */,
@@ -995,7 +989,6 @@
 				F59FD9C017B1014A00331BD8 /* JMFavoritesUtil.m in Sources */,
 				F5325D8417B17B2900C11E33 /* JMFavoritesTableViewController.m in Sources */,
 				F511A55117B26B8B004D90A2 /* JMDashboardViewController.m in Sources */,
-				F53C0AB617B3EBAD0063AE90 /* Reachability.m in Sources */,
 				F55D622F17C24D9100EC320F /* JMReportOptionsTableViewController.m in Sources */,
 				F553F5DD17C40CD9007625DF /* JMInputControlCell.m in Sources */,
 				F54936FD17C4F1F50009F321 /* JMInputControlFactory.m in Sources */,
@@ -1010,6 +1003,7 @@
 				F59AFBAC17CB58F300F168CE /* JMReportOptionsUtil.m in Sources */,
 				F50F5B5D17CCF14300582196 /* JMSingleSelectTableViewController.m in Sources */,
 				F5339A1617CE0F0F005073EE /* JMMultiSelectTableViewController.m in Sources */,
+				F54BE93B17D7495D00437EA9 /* JMReportViewerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

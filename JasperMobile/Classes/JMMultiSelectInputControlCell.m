@@ -44,8 +44,6 @@
 
 - (void)setValue:(id)value
 {
-    _value = value;
-
     NSInteger numberOfValues = [value count];
     NSArray *allValues = [value allObjects];
 
@@ -54,14 +52,20 @@
     }];
 
     if (numberOfValues > 0) {
-        NSMutableString *selectedValues = [NSMutableString stringWithFormat:@"%@", [[allValues objectAtIndex:0] label]];
+        JSInputControlOption *firstOption = [allValues objectAtIndex:0];
+        NSMutableString *selectedValues = [NSMutableString stringWithFormat:@"%@", firstOption.label];
+        NSMutableArray *valuesAsStrings = [NSMutableArray arrayWithObject:firstOption.value];
         
         for (NSUInteger i = 1; i < numberOfValues; i++) {
-            [selectedValues appendFormat:@", %@", [[allValues objectAtIndex:i] label]];
+            JSInputControlOption *option = [allValues objectAtIndex:i];
+            [selectedValues appendFormat:@", %@", option.label];
+            [valuesAsStrings addObject:option.value];
         }
-        
+
+        _value = valuesAsStrings;
         self.detailLabel.text = selectedValues;
     } else {
+        _value = nil;
         self.detailLabel.text = JS_IC_NOTHING_SUBSTITUTE_LABEL;
     }
 }

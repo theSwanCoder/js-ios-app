@@ -26,7 +26,6 @@
 //
 
 #import "JMDashboardViewController.h"
-#import "JMFilter.h"
 #import "JMUtils.h"
 
 @implementation JMDashboardViewController
@@ -45,16 +44,13 @@ inject_default_rotation()
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [JMFilter checkNetworkReachabilityForBlock:^{
-        NSString *dashboardUrl = [NSString stringWithFormat:@"%@%@%@",
-                                  self.resourceClient.serverProfile.serverUrl,
-                                  @"/flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=",
-                                  self.resourceDescriptor.uriString];
-        
-        [self.activityIndicator startAnimating];
-        
-        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dashboardUrl]]];
-    } viewControllerToDismiss:self];
+    NSString *dashboardUrl = [NSString stringWithFormat:@"%@%@%@",
+                              self.resourceClient.serverProfile.serverUrl,
+                              @"/flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=",
+                              self.resourceDescriptor.uriString];
+
+    [self.activityIndicator startAnimating];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dashboardUrl]]];
 }
 
 #pragma mark - UIWebViewDelegate

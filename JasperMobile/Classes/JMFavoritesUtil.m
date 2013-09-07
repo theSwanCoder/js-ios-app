@@ -104,7 +104,7 @@ objection_requires(@"managedObjectContext")
     return _isResourceInFavorites;
 }
      
-- (NSArray *)wrappersFromFavorites
+- (NSMutableArray *)wrappersFromFavorites
 {
     NSMutableArray *resources = [NSMutableArray array];
     NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"label" ascending:YES]];

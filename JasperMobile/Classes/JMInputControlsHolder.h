@@ -21,42 +21,21 @@
  */
 
 //
-//  JMFilter.h
+//  JMInputControlsHolder.h
 //  Jaspersoft Corporation
 //
 
 #import <Foundation/Foundation.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
+ Implementations of the `JMInputControlsHolder` protocol should provide an array of 
+ input controls
+ 
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMFilter : NSObject <JSRequestDelegate, UIAlertViewDelegate>
-
-/**
- Sets view controller that will be dismissed if any request with JMFilter as delegate will fail
-
- @param viewController A view controller that will be dismissed
- */
-+ (void)setViewControllerToDismiss:(UIViewController *)viewController;
-
-/**
- Passes a request result to final delegate object if request was successful. Otherwise displays
- alert view dialog with error message
- 
- @param delegate A delegate object
- @param viewController A view controller that will be dismissed if any request with JMFilter as delegate will fail
- */
-+ (JMFilter *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate viewControllerToDismiss:(UIViewController *)viewController;
-
-/**
- Displays alert view dialog with provided status code or error code
-
- @param statusCode The response HTTP code
- @param errorCode The receiver’s error code.
- */
-+ (void)showAlertViewDialogForStatusCode:(NSInteger)statusCode orErrorCode:(NSInteger)errorCode;
-
+@protocol JMInputControlsHolder <NSObject>
+@required
+@property (nonatomic, strong) NSMutableArray *inputControls;
 
 @end

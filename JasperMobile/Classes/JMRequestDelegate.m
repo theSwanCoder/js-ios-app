@@ -76,7 +76,7 @@ static void (^finalBlock)(void);
     if (![result isSuccessful]) {
         [JMRequestDelegate clearRequestPool];
         [JMCancelRequestPopup dismiss];
-        [JMFilter showAlertViewDialogForStatusCode:result.statusCode];
+        [JMFilter showAlertViewDialogForStatusCode:result.statusCode orErrorCode:result.error.code];
     } else if ([requestDelegatePool containsObject:self]) {
         self.finishedBlock(result);
         [requestDelegatePool removeObject:self];

@@ -35,11 +35,13 @@ inject_default_rotation();
 {
     _cell = cell;
 
-    if ([cell.value count]) {
-        JSInputControlOption *option = [cell.value objectAtIndex:0];
-        [self.selectedValues addObject:option];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[cell.listOfValues indexOfObject:option] inSection:0];
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle  animated:YES];
+    for (JSInputControlOption *option in cell.listOfValues) {
+        if (option.selected.boolValue) {
+            [self.selectedValues addObject:option];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[cell.listOfValues indexOfObject:option] inSection:0];
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle  animated:YES];
+            break;
+        }
     }
 }
 
@@ -50,6 +52,17 @@ inject_default_rotation();
     [super awakeFromNib];
     self.selectedValues = [NSMutableSet set];
     self.unsetButton.title = JMCustomLocalizedString(@"ic.title.unset", nil);
+}
+
+#pragma mark - UIViewController
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    if (self.cell.disableUnsetFunctional) {
+        self.unsetButton.title = nil;
+    }
 }
 
 #pragma mark - Table view data source

@@ -29,21 +29,20 @@
 
 @implementation JMTextInputControlCell
 
-- (id)value
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    return self.textField.text;
-}
+    if (self = [super initWithCoder:aDecoder]) {
+        self.textField.delegate = self;
+    }
 
-- (void)setTableViewController:(JMReportOptionsTableViewController *)tableViewController
-{
-    [super setTableViewController:tableViewController];
-    self.textField.delegate = self;
+    return self;
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
-    self.textField.text = inputControlDescriptor.state.value;
+    self.value = inputControlDescriptor.state.value;
+    self.textField.text = self.value;
 }
 
 - (UITextField *)textField
@@ -56,6 +55,15 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     return [textField resignFirstResponder];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString *value = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    self.value = value.length ? value : nil;
+    self.inputControlDescriptor.state.value = self.value;
+
+    return YES;
 }
 
 @end

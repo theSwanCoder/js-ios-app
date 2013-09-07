@@ -66,7 +66,7 @@ inject_default_rotation()
 {
     [super viewDidLoad];
     
-    // TODO: refactor without possilbe code duplication (as general solution for both devices)
+    // TODO: refactor without possible code duplication (as general solution for both devices)
     for (UITabBarItem *item in self.tabBar.items) {
         item.title = [JMUtils localizedTitleForMenuItemByTag:item.tag];
     }
@@ -88,8 +88,6 @@ inject_default_rotation()
 
 #pragma mark - Private
 
-// TODO: move to protocol if there will be more than 1 implementation
-// (i.e. make general disableMenu method or smt like that)
 - (void)disableTabBar
 {
     for (UITabBarItem *item in self.tabBar.items) {

@@ -63,7 +63,7 @@ static NSInteger const kJMTextFieldRightMargin = 10;
 typedef BOOL (^JMValidationBlock)(NSString *value, NSString **errorMessage);
 
 @interface JMServerSettingsTableViewController ()
-// Containts different properties for cell: identifier, label name, placeholder / value
+// Contains different properties for cell: identifier, label name, placeholder / value
 // for component (can be text field or switch), validation block and indicator, if cell
 // is configured
 @property (nonatomic, strong) NSDictionary *cellsProperties;
@@ -84,7 +84,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
 {
     if (!_cellsProperties) {
         _cellsProperties = @{
-            @kJMNameCell : [@{
+            @(kJMNameCell) : [@{
                 kJMTitleKey : @"servers.name.label",
                 kJMPlaceholderKey : @"servers.myserver.label",
                 kJMValueKey : self.serverToEdit.alias ?: @"",
@@ -109,7 +109,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
                 }
             } mutableCopy],
             
-            @kJMURLCell : [@{
+            @(kJMURLCell) : [@{
                 kJMTitleKey : @"servers.url.label",
                 kJMPlaceholderKey : @"servers.url.tip",
                 kJMValueKey : self.serverToEdit.serverUrl ?: @"",
@@ -126,7 +126,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
                 }
             } mutableCopy],
              
-            @kJMOrganizationCell : [@{
+            @(kJMOrganizationCell) : [@{
                 kJMTitleKey : @"servers.orgid.label",
                 kJMPlaceholderKey : @"servers.orgid.tip",
                 kJMValueKey : self.serverToEdit.organization ?: @"",
@@ -134,7 +134,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
                 kJMSelectorKey : [NSValue valueWithPointer:@selector(setOrganization:)]
             } mutableCopy],
              
-            @kJMUsernameCell : [@{
+            @(kJMUsernameCell) : [@{
                 kJMTitleKey : @"servers.username.label",
                 kJMPlaceholderKey : @"servers.username.tip",
                 kJMValueKey : self.serverToEdit.username ?: @"",
@@ -150,7 +150,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
                 }
             } mutableCopy],
              
-            @kJMPasswordCell : [@{
+            @(kJMPasswordCell) : [@{
                 kJMTitleKey : @"servers.password.label",
                 kJMPlaceholderKey : @"servers.password.tip",
                 kJMValueKey : self.serverToEdit.password ?: @"",
@@ -158,7 +158,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
                 kJMSelectorKey : [NSValue valueWithPointer:@selector(setPassword:)]
             } mutableCopy],
              
-            @kJMAskPasswordCell : [@{
+            @(kJMAskPasswordCell) : [@{
                 kJMTitleKey : @"servers.askpassword.label",
                 kJMValueKey : self.serverToEdit.askPassword ?: @NO,
                 kJMCellIdentifierKey : kJMSwitchCellIdentifier,
@@ -339,7 +339,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
         
         // Apply value (if validation step was successfully passed) to server
         // profile by selector (in this case selector is just a setter). Here
-        // NSInvocation was used becase "performSelector:withObject:" produces
+        // NSInvocation was used because "performSelector:withObject:" produces
         // memory leak warning
         SEL selector = [[cellProperties objectForKey:kJMSelectorKey] pointerValue];
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self.serverToEdit methodSignatureForSelector:selector]];

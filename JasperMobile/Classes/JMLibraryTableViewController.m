@@ -80,12 +80,9 @@ static NSString * const kJMRequestType = @"type";
     if (includingDashboards) {
         [types addObject:self.constants.WS_TYPE_DASHBOARD];
     }
-    
-    [JMFilter checkNetworkReachabilityForBlock:^{
-        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
-        
-        [self.resourceClient resources:nil query:query types:types recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
-    } viewControllerToDismiss:nil];
+
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
+    [self.resourceClient resources:nil query:query types:types recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:self]];
 }
 
 @end

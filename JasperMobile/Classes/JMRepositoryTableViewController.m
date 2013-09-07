@@ -30,7 +30,7 @@
 
 @interface JMRepositoryTableViewController()
 - (NSString *)path:(NSString *)defaultPath;
-- (void)searchReportsByQuery:(NSString *)query;
+- (void)reloadData;
 @end
 
 @implementation JMRepositoryTableViewController
@@ -43,7 +43,7 @@
 
     // Check if resources are already updated
     if ([self isNeedsToReloadData]) {
-        [self searchReportsByQuery:self.searchQuery];
+        [self reloadData];
     }
 }
 
@@ -52,23 +52,21 @@
 - (void)refresh
 {
     [super refresh];
-    [self searchReportsByQuery:nil];
+    [self reloadData];
 }
 
 #pragma mark - Private
 
-- (void)searchReportsByQuery:(NSString *)query
+- (void)reloadData
 {
-    [JMFilter checkNetworkReachabilityForBlock:^{
-        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
-        
-        // Check if search action was not performed
-        if (self.searchQuery.length > 0) {
-            [self.resourceClient resources:[self path:@""] query:self.searchQuery types:nil recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self]];
-        } else {
-            [self.resourceClient resources:[self path:@"/"] delegate:[JMFilter checkRequestResultForDelegate:self]];
-        }
-    } viewControllerToDismiss:self];
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
+
+    // Check if search action was not performed
+    if (self.searchQuery.length > 0) {
+        [self.resourceClient resources:[self path:@""] query:self.searchQuery types:nil recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:self]];
+    } else {
+        [self.resourceClient resources:[self path:@"/"] delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:self]];
+    }
 }
 
 - (NSString *)path:(NSString *)defaultPath

@@ -21,22 +21,18 @@
  */
 
 //
-//  JasperMobileAppDelegate.h
+//  JMReportViewerViewController.h
 //  Jaspersoft Corporation
 //
 
 #import <UIKit/UIKit.h>
-#import <CoreData/CoreData.h>
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JasperMobileAppDelegate : UIResponder <UIApplicationDelegate>
+@interface JMReportViewerViewController : UIViewController
 
-// Core data
-@property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
-@property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
-@property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (nonatomic, strong) NSDictionary *parameters;
 
 @end

@@ -56,7 +56,7 @@
 + (NSNumber *)currentAppVersion;
 
 /**
- Returns lastets version of app structure (from bundles)
+ Returns latest version of app structure (from bundles)
  */
 + (NSNumber *)latestAppVersion;
 

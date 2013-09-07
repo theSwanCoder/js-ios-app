@@ -62,7 +62,7 @@ objection_requires(@"resourceClient")
     self.descriptionTextView.layer.cornerRadius = 5.0f;
     
     self.label.text = JMCustomLocalizedString(@"resource.label.title", nil);
-    self.description.text = JMCustomLocalizedString(@"resource.description.title", nil);
+    self.descriptionLabel.text = JMCustomLocalizedString(@"resource.description.title", nil);
 }
 
 - (void)viewDidUnload
@@ -70,7 +70,7 @@ objection_requires(@"resourceClient")
     [self setLabelTextField:nil];
     [self setDescriptionTextView:nil];
     [self setLabel:nil];
-    [self setDescription:nil];
+    [self setDescriptionLabel:nil];
     [self setDelegate:nil];
     [self setResourceClient:nil];
     [self setResourceDescriptor:nil];
@@ -88,10 +88,7 @@ objection_requires(@"resourceClient")
     self.resourceDescriptor.resourceDescription = updatedDescription;
     
     [self.view endEditing:YES];
-    
-    [JMFilter checkNetworkReachabilityForBlock:^{
-        [self.resourceClient modifyResource:self.resourceDescriptor delegate:[JMFilter checkRequestResultForDelegate:self]];
-    } viewControllerToDismiss:nil];
+    [self.resourceClient modifyResource:self.resourceDescriptor delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:nil]];
 }
 
 #pragma mark - UITextFieldDelegate

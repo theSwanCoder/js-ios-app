@@ -26,6 +26,8 @@
 //
 
 #import "JMInputControlFactory.h"
+#import "JMSingleSelectInputControlCell.h"
+#import "JMLocalization.h"
 #import <Objection-iOS/Objection.h>
 
 static NSString * const kJMBooleanCellIdentifier = @"BooleanCell";
@@ -44,7 +46,7 @@ static NSString * const kJMSingleSelectCellIdentifier = @"SingleSelectCell";
 @implementation JMInputControlFactory
 objection_requires(@"constants")
 
-- (id)initWithTableViewController:(JMReportOptionsTableViewController *)tableViewController
+- (id)initWithTableViewController:(UITableViewController <JMInputControlsHolder> *)tableViewController
 {
     if (self = [self init]) {
         self.tableViewController = tableViewController;
@@ -52,6 +54,27 @@ objection_requires(@"constants")
     }
     
     return self;
+}
+
+- (JMInputControlCell *)reportOutputFormatCellWithFormats:(NSArray *)formats
+{
+    JMSingleSelectInputControlCell *cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:kJMSingleSelectCellIdentifier];
+    cell.listOfValues = [NSMutableArray array];
+    cell.label.text = JMCustomLocalizedString(@"dialog.button.run.report", nil);
+    cell.disableUnsetFunctional = YES;
+    
+    for (NSString *format in formats) {
+        JSInputControlOption *option = [[JSInputControlOption alloc] init];
+        option.label = format;
+        option.value = format;
+        [cell.listOfValues addObject:option];
+    }
+    
+    JSInputControlOption *firstOption = [cell.listOfValues objectAtIndex:0];
+    firstOption.selected = [JSConstants stringFromBOOL:YES];
+    cell.value = @[firstOption];
+    
+    return cell;
 }
 
 - (JMInputControlCell *)inputControlWithInputControlWrapper:(JSInputControlWrapper *)inputControl
@@ -64,9 +87,12 @@ objection_requires(@"constants")
     }
     
     // TODO: add default IC Cell
-    JMInputControlCell *cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    cell.inputControlWrapper = inputControl;
-    cell.tableViewController = self.tableViewController;
+    id cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    [cell setInputControlWrapper:inputControl];
+
+    if ([cell respondsToSelector:@selector(setDelegate:)]) {
+        [cell setDelegate:self.tableViewController];
+    }
     
     return cell;
 }
@@ -77,10 +103,13 @@ objection_requires(@"constants")
     
     NSString *cellIdentifier = [self.types objectForKey:inputControl.type];
     
-    JMInputControlCell *cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    cell.inputControlDescriptor = inputControl;
-    cell.tableViewController = self.tableViewController;
-    
+    id cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    [cell setInputControlDescriptor:inputControl];
+
+    if ([cell respondsToSelector:@selector(setDelegate:)]) {
+        [cell setDelegate:self.tableViewController];
+    }
+
     return cell;
 }
 

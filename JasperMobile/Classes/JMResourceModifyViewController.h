@@ -40,7 +40,7 @@
 @property (nonatomic, weak) IBOutlet UITextField *labelTextField;
 @property (nonatomic, weak) IBOutlet UITextView *descriptionTextView;
 @property (nonatomic, weak) IBOutlet UILabel *label;
-@property (nonatomic, weak) IBOutlet UILabel *description;
+@property (nonatomic, weak) IBOutlet UILabel *descriptionLabel;
 
 @end
 

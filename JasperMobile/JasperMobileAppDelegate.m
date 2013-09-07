@@ -46,6 +46,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 
 @implementation JasperMobileAppDelegate
 
+@synthesize window = _window;
 @synthesize reportClient = _reportClient;
 @synthesize resourceClient = _resourceClient;
 @synthesize managedObjectContext = _managedObjectContext;
@@ -182,7 +183,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
          Check the error message to determine what the actual problem was.
          
          
-         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
+         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writable directory.
          
          If you encounter schema incompatibility errors during development, you can reduce their frequency by:
          * Simply deleting the existing store:
@@ -285,9 +286,9 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 // (defined in Settings.bundle)
 - (void)updateTimeouts
 {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    self.resourceClient.timeoutInterval = [prefs integerForKey:kJMDefaultRequestTimeout] ?: 30;
-    self.reportClient.timeoutInterval = [prefs integerForKey:kJMReportRequestTimeout] ?: 90;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.resourceClient.timeoutInterval = [defaults integerForKey:kJMDefaultRequestTimeout] ?: 30;
+    self.reportClient.timeoutInterval = [defaults integerForKey:kJMReportRequestTimeout] ?: 90;
 }
 
 // Resets database and defaults

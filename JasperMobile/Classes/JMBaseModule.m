@@ -26,7 +26,6 @@
 //
 
 #import "JMBaseModule.h"
-#import "JMRotatable.h"
 #import "JMFavoritesUtil.h"
 
 @implementation JMBaseModule

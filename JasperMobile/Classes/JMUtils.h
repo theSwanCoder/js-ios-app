@@ -29,6 +29,8 @@
 #import "JMResourceClientHolder.h"
 #import "JMServerProfile.h"
 
+extern CGFloat kJMNoEdgesInset;
+
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
@@ -67,13 +69,6 @@
  @param serverProfile A profile that will be provided to receiver via userInfo dictionary (kJMServerProfileKey key)
  */
 + (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile;
-
-/**
- Checks if network is available
- 
- @return A boolean value represents network is availability
- */
-+ (BOOL)isNetworkReachable;
 
 /**
  Shows network activity indicator

@@ -28,7 +28,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class ServerProfile;
+@class JMServerProfile;
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
@@ -42,6 +42,6 @@
 @property (nonatomic, strong) NSString * reportUri;
 @property (nonatomic, strong) NSString * username;
 @property (nonatomic, strong) NSString * value;
-@property (nonatomic, strong) ServerProfile *serverProfile;
+@property (nonatomic, strong) JMServerProfile *serverProfile;
 
 @end

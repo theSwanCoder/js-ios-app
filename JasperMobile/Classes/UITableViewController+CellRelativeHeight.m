@@ -111,7 +111,7 @@
 
 - (CGFloat)contentWidthForTableViewCell:(UITableViewCell *)cell;
 {
-    // Calclating width can be done only by using self.tableView.frame instead cell.contentView.frame
+    // Calculating width can be done only by using self.tableView.frame instead cell.contentView.frame
     // because contentView.frame depends on rotation, accessory views, cell initialization etc
     CGFloat width = self.tableView.frame.size.width - kJMTextPadding - [self leftMarginForTableView] * 2;
     // Check if cell has disclosure indicator

@@ -177,6 +177,7 @@ inject_default_rotation()
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults URLForKey:kJMDefaultsActiveServer];
+        [JMServerProfile deletePasswordFromKeychain:serverProfile.profileID];
         
         [self.servers removeObjectAtIndex:indexPath.row];
         [self.managedObjectContext deleteObject:serverProfile];

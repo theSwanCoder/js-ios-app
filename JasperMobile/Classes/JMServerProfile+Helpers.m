@@ -40,8 +40,8 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
 {
     NSString *profileID = [NSString stringWithFormat:@"%@|%@|%@", url, username, organization];
     
-    const char *cstr = [profileID cStringUsingEncoding:NSUTF8StringEncoding];
-    NSData *data = [NSData dataWithBytes:cstr length:profileID.length];
+    const char *cString = [profileID cStringUsingEncoding:NSUTF8StringEncoding];
+    NSData *data = [NSData dataWithBytes:cString length:profileID.length];
     uint8_t digest[CC_SHA1_DIGEST_LENGTH];
     CC_SHA1(data.bytes, data.length, digest);
     
@@ -84,16 +84,6 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
 - (NSString *)profileID
 {
     return [self.class profileIDByServerURL:self.serverUrl username:self.username organization:self.organization];
-}
-
-- (BOOL)isEqualToProfile:(JMServerProfile *)profile
-{
-    return [self.profileID isEqualToString:profile.profileID];
-}
-
-- (BOOL)isEqualToProfileByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization
-{
-    return [self.profileID isEqualToString:[JMServerProfile profileIDByServerURL:url username:username organization:organization]];
 }
 
 - (void)setPasswordAsPrimitive:(NSString *)password

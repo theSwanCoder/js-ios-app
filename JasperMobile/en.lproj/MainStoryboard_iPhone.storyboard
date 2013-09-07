@@ -229,7 +229,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <webView opaque="NO" contentMode="scaleToFill" scalesPageToFit="YES" id="oOK-Cd-gAG">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <rect key="frame" x="2" y="2" width="316" height="412"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <dataDetectorType key="dataDetectorTypes"/>
@@ -1753,6 +1753,9 @@
                                             <state key="highlighted" backgroundImage="run_report_button_highlighted.png">
                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <action selector="runReport:" destination="lCR-s0-MJL" eventType="touchUpInside" id="dNl-Z9-BNc"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1767,10 +1770,13 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="y7w-zn-yLI"/>
+                    <connections>
+                        <segue destination="P0H-Cl-wTR" kind="push" identifier="RunReport" id="WwX-kz-GW0"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CEG-xF-dnS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2032" y="-1302"/>
+            <point key="canvasLocation" x="2020" y="-1302"/>
         </scene>
         <!--Single Select Table View Controller-->
         <scene sceneID="yBI-d3-EtV">
@@ -1870,6 +1876,37 @@
             </objects>
             <point key="canvasLocation" x="2530" y="-703"/>
         </scene>
+        <!--Report Viewer View Controller-->
+        <scene sceneID="4fj-Xc-Fcg">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="P0H-Cl-wTR" customClass="JMReportViewerViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0ex-Oo-Id8">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <webView opaque="NO" contentMode="scaleToFill" scalesPageToFit="YES" id="cv0-Ok-S0i">
+                                <rect key="frame" x="2" y="2" width="316" height="412"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <dataDetectorType key="dataDetectorTypes"/>
+                                <connections>
+                                    <outlet property="delegate" destination="0ex-Oo-Id8" id="YmP-Rt-GC8"/>
+                                </connections>
+                            </webView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="gray" id="qWJ-A0-bcy">
+                                <rect key="frame" x="151" y="196" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="V3V-BF-lxt"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8gy-B3-LMA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2509" y="-13"/>
+        </scene>
     </scenes>
     <resources>
         <image name="add_favorite_button.png" width="152" height="45"/>
@@ -1889,15 +1926,105 @@
         <image name="run_report_button_highlighted.png" width="152" height="45"/>
         <image name="settings_bar_item.png" width="30" height="29"/>
     </resources>
+    <classes>
+        <class className="JMBaseRepositoryTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMBaseRepositoryTableViewController.h"/>
+        </class>
+        <class className="JMBooleanInputControlCell" superclassName="JMInputControlCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMBooleanInputControlCell.h"/>
+        </class>
+        <class className="JMDashboardViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMDashboardViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
+            </relationships>
+        </class>
+        <class className="JMDateInputControlCell" superclassName="JMTextInputControlCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMDateInputControlCell.h"/>
+        </class>
+        <class className="JMDateTimeInputControlCell" superclassName="JMDateInputControlCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMDateTimeInputControlCell.h"/>
+        </class>
+        <class className="JMFavoritesTableViewController" superclassName="JMBaseRepositoryTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMFavoritesTableViewController.h"/>
+        </class>
+        <class className="JMInputControlCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMInputControlCell.h"/>
+        </class>
+        <class className="JMLibraryTableViewController" superclassName="JMSearchableTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMLibraryTableViewController.h"/>
+        </class>
+        <class className="JMMenuTabBarController" superclassName="UITabBarController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMMenuTabBarController.h"/>
+        </class>
+        <class className="JMMultiSelectInputControlCell" superclassName="JMSingleSelectInputControlCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMMultiSelectInputControlCell.h"/>
+        </class>
+        <class className="JMMultiSelectTableViewController" superclassName="JMSingleSelectTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMMultiSelectTableViewController.h"/>
+        </class>
+        <class className="JMNumberInputControlCell" superclassName="JMTextInputControlCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMNumberInputControlCell.h"/>
+        </class>
+        <class className="JMReportOptionsTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMReportOptionsTableViewController.h"/>
+        </class>
+        <class className="JMReportViewerViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMReportViewerViewController.h"/>
+        </class>
+        <class className="JMRepositoryTableViewController" superclassName="JMSearchableTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMRepositoryTableViewController.h"/>
+        </class>
+        <class className="JMResourceModifyViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceModifyViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="descriptionLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="descriptionTextView" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="label" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="labelTextField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="JMResourceTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceTableViewController.h"/>
+        </class>
+        <class className="JMSearchableTableViewController" superclassName="JMBaseRepositoryTableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSearchableTableViewController.h"/>
+        </class>
+        <class className="JMServerSettingsTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMServerSettingsTableViewController.h"/>
+        </class>
+        <class className="JMServersTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMServersTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="infoButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="JMSingleSelectInputControlCell" superclassName="JMInputControlCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSingleSelectInputControlCell.h"/>
+        </class>
+        <class className="JMSingleSelectTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMSingleSelectTableViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="unsetButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="JMTextInputControlCell" superclassName="JMInputControlCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/JMTextInputControlCell.h"/>
+        </class>
+        <class className="TPKeyboardAvoidingScrollView" superclassName="UIScrollView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TPKeyboardAvoidingScrollView.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="Y5l-Qb-Vpq"/>
         <segue reference="iUA-aA-WXK"/>
-        <segue reference="f3B-eB-Zkq"/>
+        <segue reference="Ete-rd-4of"/>
         <segue reference="YMA-cY-hS5"/>
-        <segue reference="wp3-22-jSm"/>
     </inferredMetricsTieBreakers>
 </document>

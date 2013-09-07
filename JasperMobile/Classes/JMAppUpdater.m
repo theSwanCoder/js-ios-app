@@ -161,7 +161,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     
     for (int i = 0; i < count; i++) {
         // Create keys for profile's fields stored in NSUserDefaults (persistent Map)
-        // In NSUserDefauls profile's data looks like: {
+        // In NSUserDefaults profile's data looks like: {
         //      "jaspersoft.server.alias.0" : "Alias 0",
         //      "jaspersoft.server.username.0" : "Username 0",
         //      ...
@@ -188,8 +188,8 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         
         // Get all favorites from user defaults structured by "username|organization" or "username" key patterns
         NSDictionary *oldFavorites = [defaults objectForKey:keyFavorites];
-        NSArray *usenameWithOrganizationValues = [oldFavorites allKeys];
-        for (NSString *usernameWithOrganizationValue in usenameWithOrganizationValues) {
+        NSArray *usernameWithOrganizationValues = [oldFavorites allKeys];
+        for (NSString *usernameWithOrganizationValue in usernameWithOrganizationValues) {
             // Get all favorites for UserWithOrg key
             NSDictionary *oldFavoritesForUserWithOrgValue = [oldFavorites objectForKey:usernameWithOrganizationValue];
             
@@ -241,7 +241,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         }
         
         if (activeServeProfile) {
-            // After moving to sqlite database we need to change @"jaspersoft.server.active" key representation.
+            // After moving to SQLite database we need to change @"jaspersoft.server.active" key representation.
             // Idea is to store object id as url (as there are no other primary key and adding a new "active" field to database is not so clean solution also).
             // We need to get object id after object was saved
             NSURL *activeObjectIDURIRepresentation = [[activeServeProfile objectID] URIRepresentation];
@@ -277,7 +277,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     }
 }
 
-#pragma makr - Private
+#pragma mark - Private
 
 + (void)showErrors
 {

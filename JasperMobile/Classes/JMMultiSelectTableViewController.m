@@ -39,8 +39,10 @@
 {
     _cell = cell;
 
-    for (JSInputControlOption *option in cell.value) {
-        [self.selectedValues addObject:option];
+    for (JSInputControlOption *option in cell.listOfValues) {
+        if (option.selected.boolValue) {
+            [self.selectedValues addObject:option];
+        }
     }
 }
 

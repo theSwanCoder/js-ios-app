@@ -80,25 +80,6 @@
 - (NSString *)profileID;
 
 /**
- Returns a Boolean value that indicates whether a given profile is equal to the
- receiver by server url, username and organization
- 
- @return YES if profile is equal to receiver, otherwise returns NO
- */
-- (BOOL)isEqualToProfile:(JMServerProfile *)profile;
-
-/**
- Returns a Boolean value that indicates whether a given profile is equal to the
- receiver by server url, username and organization
- 
- @param url The URL of JasperReports Server
- @param username The username, must be a valid account on JasperReports Server
- @param organization The name of organization
- @return YES if profile is equal to receiver, otherwise returns NO
- */
-- (BOOL)isEqualToProfileByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization;
-
-/**
  Sets in the receiver's private internal storage the value of a password.
  This method does not invoke the change notification methods (willChangeValueForKey: and didChangeValueForKey:)
  
