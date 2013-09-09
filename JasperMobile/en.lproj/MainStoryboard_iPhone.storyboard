@@ -1902,6 +1902,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="V3V-BF-lxt"/>
                     <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="qWJ-A0-bcy" id="jLF-TZ-2P2"/>
+                        <outlet property="webView" destination="cv0-Ok-S0i" id="ARs-Ie-m4B"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8gy-B3-LMA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1969,9 +1973,16 @@
         </class>
         <class className="JMReportOptionsTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMReportOptionsTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="runReport:"/>
+            </relationships>
         </class>
         <class className="JMReportViewerViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMReportViewerViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="activityIndicator" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="webView" candidateClass="UIWebView"/>
+            </relationships>
         </class>
         <class className="JMRepositoryTableViewController" superclassName="JMSearchableTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMRepositoryTableViewController.h"/>

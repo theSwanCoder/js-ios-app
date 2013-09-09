@@ -47,7 +47,7 @@
     
     [self bind:reportClient toClass:[JSRESTReport class]];
     [self bind:resourceClient toClass:[JSRESTResource class]];
-    [self bind:[[JSConstants alloc] init] toClass:[JSConstants class]];
+    [self bind:[JSConstants sharedInstance] toClass:[JSConstants class]];
     [self bind:self.managedObjectContext toClass:[NSManagedObjectContext class]];
 }
 

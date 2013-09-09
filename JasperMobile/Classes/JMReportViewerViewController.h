@@ -26,13 +26,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JMDashboardViewController.h"
+#import "JMReportClientHolder.h"
+#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMReportViewerViewController : UIViewController
+@interface JMReportViewerViewController : UIViewController <UIWebViewDelegate, JMReportClientHolder, JMResourceClientHolder>
 
+@property (nonatomic, weak) IBOutlet UIWebView *webView;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) NSDictionary *parameters;
+@property (nonatomic, strong) NSString *reportFormat;
+@property (nonatomic, strong) JSConstants *constants;
 
 @end

@@ -109,83 +109,6 @@
     [super clearData];
 }
 
-#pragma mark - REST v2 -
-
-- (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
-{
-    [super setInputControlDescriptor:inputControlDescriptor];
-    [self setInputControlState:inputControlDescriptor.state];
-
-    __weak JMSingleSelectInputControlCell *cell = self;
-
-    self.updateSlaveDependenciesBlock = ^{
-        [cell updatedInputControlsValues];
-    };
-}
-
-#pragma mark Private
-
-- (void)updatedInputControlsValues
-{
-    if (!self.inputControlDescriptor.slaveDependencies.count) return;
-
-    [JMFilter setViewControllerToDismiss:self.delegate];
-
-    // TODO: change logic to select previous values instead dismissing view. And check network status!
-    [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.reportClient cancelBlock:^{
-        [JMRequestDelegate clearRequestPool];
-        [[self.delegate navigationController] popViewControllerAnimated:YES];
-    }];
-
-    NSMutableArray *selectedValues = [NSMutableArray array];
-
-    // Get values from master dependencies
-    for (NSString *masterID in self.inputControlDescriptor.masterDependencies) {
-        for (id inputControlCell in self.delegate.inputControls) {
-            JSInputControlDescriptor *descriptor = [inputControlCell inputControlDescriptor];
-            if ([descriptor.uuid isEqualToString:masterID]) {
-                [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
-                value:descriptor.selectedValues]];
-            }
-        }
-    }
-
-    [selectedValues addObject:[[JSReportParameter alloc] initWithName:self.inputControlDescriptor.uuid
-                                                                value:self.inputControlDescriptor.selectedValues]];
-
-    __weak JMSingleSelectInputControlCell *cell = self;
-
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        for (JSInputControlState *state in result.objects) {
-            for (id slaveDependency in cell.delegate.inputControls) {
-                if ([state.uuid isEqualToString:[slaveDependency inputControlDescriptor].uuid]) {
-                    [slaveDependency setInputControlState:state];
-                }
-            }
-        }
-    }];
-
-    [self.reportClient updatedInputControlsValues:self.resourceDescriptor.uriString
-                                              ids:self.inputControlDescriptor.slaveDependencies
-                                   selectedValues:selectedValues
-                                         delegate:delegate];
-}
-
-- (void)setInputControlState:(JSInputControlState *)state
-{
-    self.inputControlDescriptor.state = state;
-    self.listOfValues = [state.options mutableCopy];
-
-    NSMutableArray *selectedValues = [NSMutableArray array];
-    for (JSInputControlOption *option in self.listOfValues) {
-        if (option.selected.boolValue) {
-            [selectedValues addObject:option];
-        }
-    }
-
-    self.value = selectedValues;
-}
-
 #pragma mark - REST v1 -
 
 - (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
@@ -287,16 +210,16 @@
             return;
         }
 
+        __weak JMSingleSelectInputControlCell *cell = self;
+
         // Show CancelRequestPopup if value for IC was changed (in this case request pool is empty)
         if ([JMRequestDelegate isRequestPoolEmpty]) {
             // TODO: change logic to select previous values instead dismissing view controller
             [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
                 [JMRequestDelegate clearRequestPool];
-                [[self.delegate navigationController] popViewControllerAnimated:YES];
+                [[cell.delegate navigationController] popViewControllerAnimated:YES];
             }];
         }
-
-        __weak JMSingleSelectInputControlCell *cell = self;
 
         JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
             JSResourceDescriptor *descriptor = [result.objects objectAtIndex:0];
@@ -371,6 +294,83 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMUpdateInputControlQueryDataNotification
                                                         object:self
                                                       userInfo:userInfo];
+}
+
+#pragma mark - REST v2 -
+
+- (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
+{
+    [super setInputControlDescriptor:inputControlDescriptor];
+    [self setInputControlState:inputControlDescriptor.state];
+    
+    __weak JMSingleSelectInputControlCell *cell = self;
+    
+    self.updateSlaveDependenciesBlock = ^{
+        [cell updatedInputControlsValues];
+    };
+}
+
+#pragma mark Private
+
+- (void)updatedInputControlsValues
+{
+    if (!self.inputControlDescriptor.slaveDependencies.count) return;
+    
+    [JMFilter setViewControllerToDismiss:self.delegate];
+
+    __weak JMSingleSelectInputControlCell *cell = self;
+    
+    // TODO: change logic to select previous values instead dismissing view. And check network status!
+    [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.reportClient cancelBlock:^{
+        [JMRequestDelegate clearRequestPool];
+        [[cell.delegate navigationController] popViewControllerAnimated:YES];
+    }];
+    
+    NSMutableArray *selectedValues = [NSMutableArray array];
+    
+    // Get values from master dependencies
+    for (NSString *masterID in self.inputControlDescriptor.masterDependencies) {
+        for (id inputControlCell in self.delegate.inputControls) {
+            JSInputControlDescriptor *descriptor = [inputControlCell inputControlDescriptor];
+            if ([descriptor.uuid isEqualToString:masterID]) {
+                [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
+                                                                            value:descriptor.selectedValues]];
+            }
+        }
+    }
+    
+    [selectedValues addObject:[[JSReportParameter alloc] initWithName:self.inputControlDescriptor.uuid
+                                                                value:self.inputControlDescriptor.selectedValues]];
+    
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        for (JSInputControlState *state in result.objects) {
+            for (id slaveDependency in cell.delegate.inputControls) {
+                if ([state.uuid isEqualToString:[slaveDependency inputControlDescriptor].uuid]) {
+                    [slaveDependency setInputControlState:state];
+                }
+            }
+        }
+    }];
+    
+    [self.reportClient updatedInputControlsValues:self.resourceDescriptor.uriString
+                                              ids:self.inputControlDescriptor.slaveDependencies
+                                   selectedValues:selectedValues
+                                         delegate:delegate];
+}
+
+- (void)setInputControlState:(JSInputControlState *)state
+{
+    self.inputControlDescriptor.state = state;
+    self.listOfValues = [state.options mutableCopy];
+    
+    NSMutableArray *selectedValues = [NSMutableArray array];
+    for (JSInputControlOption *option in self.listOfValues) {
+        if (option.selected.boolValue) {
+            [selectedValues addObject:option];
+        }
+    }
+    
+    self.value = selectedValues;
 }
 
 @end

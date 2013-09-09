@@ -51,6 +51,10 @@ NSString * const kJMNotUpdateMenuKey = @"ignoreMenuUpdates";
 NSString * const kJMServerProfileKey = @"serverProfile";
 NSString * const kJMParameters = @"parameters";
 
+// Report output formats
+NSString * const kJMRunOutputFormatHTML = @"HTML";
+NSString * const kJMRunOutputFormatPDF = @"PDF";
+
 // Storyboard name
 static NSString *_mainStoryboardName;
 NSString *JMMainStoryboard() {

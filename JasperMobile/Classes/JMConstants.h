@@ -54,6 +54,10 @@ extern NSString * const kJMNotUpdateMenuKey;
 extern NSString * const kJMServerProfileKey;
 extern NSString * const kJMParameters;
 
+// Report output formats
+extern NSString * const kJMRunOutputFormatHTML;
+extern NSString * const kJMRunOutputFormatPDF;
+
 // Storyboard name
 NSString *JMMainStoryboard();
 

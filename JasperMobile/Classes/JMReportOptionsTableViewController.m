@@ -108,12 +108,17 @@ inject_default_rotation()
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:kJMShowSingleSelectSegue] ||
-        [segue.identifier isEqualToString:kJMShowMultiSelectSegue]) {
-        [segue.destinationViewController setCell:sender];
+    id destinationViewController = segue.destinationViewController;
+    NSString *identifier = segue.identifier;
 
-    } else if ([segue.identifier isEqualToString:kJMRunReportSegue]) {
-        [segue.destinationViewController setParameters:sender];
+    if ([identifier isEqualToString:kJMShowSingleSelectSegue] ||
+        [identifier isEqualToString:kJMShowMultiSelectSegue]) {
+        [destinationViewController setCell:sender];
+
+    } else if ([identifier isEqualToString:kJMRunReportSegue]) {
+        [destinationViewController setResourceDescriptor:self.resourceDescriptor];
+        [destinationViewController setReportFormat:self.reportFormatCell.value];
+        [destinationViewController setParameters:sender];
     }
 }
 
@@ -144,7 +149,10 @@ inject_default_rotation()
             
         case kJMReportFormatSection: {
             if (!self.reportFormatCell) {
-                self.reportFormatCell = [self.inputControlFactory reportOutputFormatCellWithFormats:@[@"HTML", @"PDF"]];
+                NSArray *reportOutputFormats = @[
+                    kJMRunOutputFormatHTML, kJMRunOutputFormatPDF
+                ];
+                self.reportFormatCell = [self.inputControlFactory reportOutputFormatCellWithFormats:reportOutputFormats];
             }
             cell = self.reportFormatCell;
             break;
