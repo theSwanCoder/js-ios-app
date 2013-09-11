@@ -25,32 +25,19 @@
 //  Jaspersoft Corporation
 //
 
+#define kJMReportOptions @"ReportOptions"
+
 #import "JMReportOptionsUtil.h"
 #import "JMReportOptions.h"
 #import <Objection-iOS/Objection.h>
 
-@interface JMReportOptionsUtil ()
-@property (nonatomic, strong) JMServerProfile *serverProfile;
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@end
-
 @implementation JMReportOptionsUtil
+objection_register_singleton(JMReportOptionsUtil)
 objection_requires(@"managedObjectContext");
-
-@synthesize serverProfile = _serverProfile;
-
-- (id)initWithServerProfile:(JMServerProfile *)serverProfile
-{
-    if (self = [super init]) {
-        self.serverProfile = serverProfile;
-    }
-    
-    return self;
-}
 
 - (void)updateReportOptions:(NSDictionary *)parameters forReport:(NSString *)reportUri
 {
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ReportOptions"];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMReportOptions];
     fetchRequest.predicate = [self reportOptionsPredicateForReport:reportUri];
     NSArray *options = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
     
@@ -59,12 +46,13 @@ objection_requires(@"managedObjectContext");
     }
     
     for (NSString *icName in [parameters allKeys]) {
-        JMReportOptions *reportOptions = [NSEntityDescription insertNewObjectForEntityForName:@"ReportOptions" inManagedObjectContext:self.managedObjectContext];
+        JMReportOptions *reportOptions = [NSEntityDescription insertNewObjectForEntityForName:kJMReportOptions inManagedObjectContext:self.managedObjectContext];
         reportOptions.username = self.serverProfile.username;
         reportOptions.organization = self.serverProfile.organization;
         reportOptions.name = icName;
        
         id values = [parameters objectForKey:icName];
+
         if ([values isKindOfClass:[NSArray class]]) {
             reportOptions.value = [values componentsJoinedByString:@","];
             reportOptions.isListItem = [NSNumber numberWithBool:YES];
@@ -80,9 +68,9 @@ objection_requires(@"managedObjectContext");
     [self.managedObjectContext save:nil];
 }
 
-- (NSDictionary *)reportOptionsAsDictionaryForReport:(NSString *)reportUri
+- (NSDictionary *)reportOptionsForReport:(NSString *)reportUri
 {
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ReportOptions"];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMReportOptions];
     fetchRequest.predicate = [self reportOptionsPredicateForReport:reportUri];
     NSArray *reportOptions = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
     

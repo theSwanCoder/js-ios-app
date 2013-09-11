@@ -28,6 +28,7 @@
 #import <UIKit/UIKit.h>
 #import "JMInputControlsHolder.h"
 #import "JMReportClientHolder.h"
+#import "JMReportOptionsUtil.h"
 #import "JMResourceClientHolder.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
@@ -38,5 +39,6 @@
 @interface JMReportOptionsTableViewController : UITableViewController <JMReportClientHolder, JMResourceClientHolder, JMInputControlsHolder>
 
 @property (nonatomic, strong) JSConstants *constants;
+@property (nonatomic, strong) JMReportOptionsUtil *reportOptionsUtil;
 
 @end

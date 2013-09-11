@@ -21,23 +21,18 @@
  */
 
 //
-//  JMReportOptionsUtil.h
+//  JSInputControlDescriptor+RestoreLastValues.h
 //  Jaspersoft Corporation
 //
-
-#import "JMServerProfile+Helpers.h"
-#import <Foundation/Foundation.h>
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMReportOptionsUtil : NSObject
+#import <jaspersoft-sdk/JaspersoftSDK.h>
 
-@property (nonatomic, strong) JMServerProfile *serverProfile;
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@interface JSInputControlDescriptor (RestoreLastValues)
 
-- (void)updateReportOptions:(NSDictionary *)parameters forReport:(NSString *)reportUri;
-- (NSDictionary *)reportOptionsForReport:(NSString *)reportUri;
+- (void)restoreLastValues:(id)values;
 
 @end

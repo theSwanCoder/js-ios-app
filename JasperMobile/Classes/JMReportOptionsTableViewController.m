@@ -35,6 +35,7 @@
 #import "JMRequestDelegate.h"
 #import "JMUtils.h"
 #import "JMReportViewerViewController.h"
+#import "JSInputControlDescriptor+RestoreLastValues.h"
 #import <Objection-iOS/Objection.h>
 
 #define kJMICSection 0
@@ -52,7 +53,7 @@ static NSString * const kJMRunReportSegue = @"RunReport";
 @end
 
 @implementation JMReportOptionsTableViewController
-objection_requires(@"resourceClient", @"reportClient", @"constants")
+objection_requires(@"resourceClient", @"reportClient", @"constants", @"reportOptionsUtil")
 inject_default_rotation()
 
 @synthesize inputControls = _inputControls;
@@ -400,8 +401,11 @@ inject_default_rotation()
         [reportOptions.tableView reloadData];
     }];
 
+    NSDictionary *selectedValues = [self.reportOptionsUtil reportOptionsForReport:self.resourceDescriptor.uriString];
+
     return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         for (JSInputControlDescriptor *inputControlDescriptor in result.objects) {
+            [inputControlDescriptor restoreLastValues:[selectedValues objectForKey:inputControlDescriptor.uuid]];
             [reportOptions createCellFromInputControlDescriptor:inputControlDescriptor];
         }
     }];
@@ -409,6 +413,11 @@ inject_default_rotation()
 
 - (void)restV2RunReport
 {
+    if (!self.inputControls.count) {
+        [self performSegueWithIdentifier:kJMRunReportSegue sender:nil];
+        return;
+    }
+
     NSMutableArray *ids = [NSMutableArray array];
     NSMutableArray *parametersToValidate = [NSMutableArray array];
 
@@ -443,18 +452,18 @@ inject_default_rotation()
             [JMRequestDelegate setFinalBlock:^{
                 [reportOptions.tableView reloadData];
             }];
-            return;
-        }
+        } else {
+            NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
 
-        NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-
-        for (JMInputControlCell *cell in self.inputControls) {
-            if (cell.value != nil) {
-                [parameters setObject:cell.value forKey:cell.inputControlDescriptor.uuid];
+            for (JMInputControlCell *cell in self.inputControls) {
+                if (cell.value != nil) {
+                    [parameters setObject:cell.value forKey:cell.inputControlDescriptor.uuid];
+                }
             }
-        }
 
-        [reportOptions performSegueWithIdentifier:kJMRunReportSegue sender:parameters];
+            [self.reportOptionsUtil updateReportOptions:parameters forReport:reportOptions.resourceDescriptor.uriString];
+            [reportOptions performSegueWithIdentifier:kJMRunReportSegue sender:parameters];
+        }
     }];
 
     [self.reportClient updatedInputControlsValues:self.resourceDescriptor.uriString

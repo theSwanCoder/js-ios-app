@@ -29,6 +29,8 @@
 #import "JMFavorites.h"
 #import <Objection-iOS/Objection.h>
 
+#define kJMFavorites @"Favorites"
+
 @interface JMFavoritesUtil()
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, assign) BOOL isResourceInFavorites;
@@ -81,7 +83,7 @@ objection_requires(@"managedObjectContext")
     
     // Check if resource should be added to favorites
     if (self.isResourceInFavorites) {
-        JMFavorites *favorites = [NSEntityDescription insertNewObjectForEntityForName:@"Favorites"
+        JMFavorites *favorites = [NSEntityDescription insertNewObjectForEntityForName:kJMFavorites
                                                                inManagedObjectContext:self.managedObjectContext];
         favorites.label = self.resourceDescriptor.label;
         favorites.uri = self.resourceDescriptor.uriString;
@@ -131,7 +133,7 @@ objection_requires(@"managedObjectContext")
 
 - (NSFetchRequest *)favoritesFetchRequest:(JSResourceDescriptor *)resourceDescriptor
 {
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Favorites"];
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMFavorites];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(serverProfile == %@) AND (uri like %@) AND (username like %@) AND (organization like %@)",
                               _serverProfile, resourceDescriptor.uriString, _serverProfile.username, _serverProfile.organization];
     fetchRequest.predicate = predicate;

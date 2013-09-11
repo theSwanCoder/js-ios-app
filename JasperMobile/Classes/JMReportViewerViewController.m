@@ -76,8 +76,8 @@ inject_default_rotation()
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
-    if ([fileManager fileExistsAtPath:self.reportPath]) {
-        [fileManager removeItemAtPath:self.reportPath error:nil];
+    if ([fileManager fileExistsAtPath:self.tempDirectory]) {
+        [fileManager removeItemAtPath:self.tempDirectory error:nil];
     }
 
     self.webView = nil;
@@ -92,7 +92,7 @@ inject_default_rotation()
 }
 
 #pragma mark - Private -
-#pragma mark Rest v1
+#pragma mark Rest v2
 
 - (void)generateReportURL
 {
@@ -106,7 +106,7 @@ inject_default_rotation()
     [self.webView loadRequest:request];
 }
 
-#pragma mark Rest v2
+#pragma mark Rest v1
 
 - (void)runReport
 {

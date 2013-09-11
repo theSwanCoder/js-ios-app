@@ -33,6 +33,7 @@
 #import "JMPadModule.h"
 #import "JMPhoneModule.h"
 #import "JMReportClientHolder.h"
+#import "JMReportOptionsUtil.h"
 #import "JMResourceClientHolder.h"
 #import "JMUtils.h"
 
@@ -42,6 +43,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 
 @interface JasperMobileAppDelegate() <JMResourceClientHolder, JMReportClientHolder>
 @property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;
+@property (nonatomic, strong) JMReportOptionsUtil *reportOptionsUtil;
 @end
 
 @implementation JasperMobileAppDelegate
@@ -230,6 +232,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     self.resourceClient = [injector getObject:[JSRESTResource class]];
     self.reportClient = [injector getObject:[JSRESTReport class]];
     self.favoritesUtil = [injector getObject:[JMFavoritesUtil class]];
+    self.reportOptionsUtil = [injector getObject:[JMReportOptionsUtil class]];
 }
 
 - (void)coreDataInit
@@ -263,6 +266,9 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
         // Set connection details
         self.reportClient.serverProfile = profile;
         self.resourceClient.serverProfile = profile;
+
+        // Update report options with active server profile
+        self.reportOptionsUtil.serverProfile = serverProfile;
         
         // Update favorites with active server profile
         self.favoritesUtil.serverProfile = serverProfile;
@@ -272,10 +278,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
         
         // Update timeouts
         [self updateTimeouts];
-        
-        // TODO: Report options implementation needed
-        //        self.reportOptions = [[JSReportOptionsHelper alloc] initWithServerProfile:serverProfile];
-        
+
         [defaults setURL:[serverProfile.objectID URIRepresentation] forKey:kJMDefaultsActiveServer];
     }
     
