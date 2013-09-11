@@ -29,12 +29,29 @@
 
 @implementation JMInputControlCell
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        baseHeight = 50.0f;
+    }
+
+    return self;
+}
+
 - (void)setValue:(id)value
 {
     _value = value;
     if (self.inputControlDescriptor) {
         self.inputControlDescriptor.state.value = value;
     }
+}
+
+- (void)setErrorMessage:(NSString *)errorMessage
+{
+    UILabel *errorLabel = (UILabel *) [self viewWithTag:3];
+    errorLabel.text = errorMessage;
+    errorLabel.hidden = errorMessage.length ? NO : YES;
+    [errorLabel sizeToFit];
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
@@ -45,7 +62,7 @@
     if (inputControlDescriptor.mandatory.boolValue) {
         label = [NSString stringWithFormat:@"* %@", label];
     }
-    
+
     self.label.text = label;
 }
 
@@ -74,6 +91,22 @@
     _inputControlDescriptor = nil;
     _inputControlWrapper = nil;
     [self.label removeFromSuperview];
+}
+
+- (CGFloat)height
+{
+    if (self.errorLabel.hidden) {
+        return baseHeight;
+    } else {
+        return baseHeight + self.errorLabel.frame.size.height;
+    }
+}
+
+#pragma mark - Private
+
+- (UILabel *)errorLabel
+{
+    return (UILabel *) [self viewWithTag:3];
 }
 
 @end

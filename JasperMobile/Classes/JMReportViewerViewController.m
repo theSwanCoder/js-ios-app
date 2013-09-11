@@ -52,13 +52,6 @@ inject_default_rotation()
     [[JSObjection defaultInjector] injectDependencies:self];
 }
 
-// TODO: remove
-- (void)setParameters:(NSDictionary *)parameters
-{
-    _parameters = parameters;
-    NSLog(@"%@", parameters);
-}
-
 #pragma mark - UITableViewController
 
 - (void)viewDidLoad

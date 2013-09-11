@@ -202,14 +202,8 @@ inject_default_rotation()
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == kJMRunReportSection) return 50;
-    
-    if (self.inputControls.count > 0 && self.inputControls.count >= indexPath.row) {
-        JMInputControlCell *cell = [self.inputControls objectAtIndex:indexPath.row];
-        return cell.frame.size.height;
-    }
-    
-    return 44.0f;
+    if (indexPath.section == kJMRunReportSection || indexPath.section == kJMReportFormatSection) return 50;
+    return [[self.inputControls objectAtIndex:indexPath.row] height];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -432,19 +426,34 @@ inject_default_rotation()
     __weak JMReportOptionsTableViewController *reportOptions = self;
 
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        // TODO: finish validation implementation
         BOOL isValid = YES;
+
         for (JSInputControlState *state in result.objects) {
-            if (state.error.length) isValid = NO;
+            if (!state.error.length) continue;
+
+            for (JMInputControlCell *cell in reportOptions.inputControls) {
+                if ([cell.inputControlDescriptor.uuid isEqualToString:state.uuid]) {
+                    cell.errorMessage = state.error;
+                    isValid = NO;
+                }
+            }
         }
 
-        if (!isValid) return;
+        if (!isValid) {
+            [JMRequestDelegate setFinalBlock:^{
+                [reportOptions.tableView reloadData];
+            }];
+            return;
+        }
+
         NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+
         for (JMInputControlCell *cell in self.inputControls) {
             if (cell.value != nil) {
                 [parameters setObject:cell.value forKey:cell.inputControlDescriptor.uuid];
             }
         }
+
         [reportOptions performSegueWithIdentifier:kJMRunReportSegue sender:parameters];
     }];
 

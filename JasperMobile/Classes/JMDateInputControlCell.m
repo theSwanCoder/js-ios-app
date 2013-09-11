@@ -38,6 +38,7 @@ static UIDatePicker *datePicker;
     if (self = [super initWithCoder:aDecoder]) {
         [self datePicker].datePickerMode = UIDatePickerModeDate;
         self.textField.inputView = [self datePicker];
+        baseHeight = 50.0f;
     }
 
     return self;

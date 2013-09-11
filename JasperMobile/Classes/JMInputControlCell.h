@@ -33,10 +33,14 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMInputControlCell : UITableViewCell
+@interface JMInputControlCell : UITableViewCell {
+@protected
+    CGFloat baseHeight;
+}
 
 @property (nonatomic, strong) JSInputControlWrapper *inputControlWrapper;
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
+@property (nonatomic, strong) NSString *errorMessage;
 @property (nonatomic, readonly) BOOL isMandatory;
 
 /**
@@ -47,5 +51,6 @@
 
 - (UILabel *)label;
 - (void)clearData;
+- (CGFloat)height;
 
 @end
