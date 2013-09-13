@@ -327,33 +327,28 @@
     }];
     
     NSMutableArray *selectedValues = [NSMutableArray array];
-    
-    // Get values from master dependencies
-    for (NSString *masterID in self.inputControlDescriptor.masterDependencies) {
-        for (id inputControlCell in self.delegate.inputControls) {
-            JSInputControlDescriptor *descriptor = [inputControlCell inputControlDescriptor];
-            if ([descriptor.uuid isEqualToString:masterID]) {
-                [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
-                                                                            value:descriptor.selectedValues]];
-            }
-        }
+    NSMutableArray *allInputControls = [NSMutableArray array];
+
+    // Get values from Input Controls
+    for (id inputControlCell in self.delegate.inputControls) {
+        JSInputControlDescriptor *descriptor = [inputControlCell inputControlDescriptor];
+        [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
+                                                                    value:descriptor.selectedValues]];
+        [allInputControls addObject:descriptor.uuid];
     }
-    
-    [selectedValues addObject:[[JSReportParameter alloc] initWithName:self.inputControlDescriptor.uuid
-                                                                value:self.inputControlDescriptor.selectedValues]];
-    
+
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         for (JSInputControlState *state in result.objects) {
-            for (id slaveDependency in cell.delegate.inputControls) {
-                if ([state.uuid isEqualToString:[slaveDependency inputControlDescriptor].uuid]) {
-                    [slaveDependency setInputControlState:state];
+            for (id inputControl in cell.delegate.inputControls) {
+                if ([state.uuid isEqualToString:[inputControl inputControlDescriptor].uuid]) {
+                    [inputControl setInputControlState:state];
                 }
             }
         }
     }];
     
     [self.reportClient updatedInputControlsValues:self.resourceDescriptor.uriString
-                                              ids:self.inputControlDescriptor.slaveDependencies
+                                              ids:allInputControls
                                    selectedValues:selectedValues
                                          delegate:delegate];
 }

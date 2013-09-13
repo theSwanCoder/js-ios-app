@@ -32,7 +32,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
-        baseHeight = 50.0f;
+        baseHeight = self.frame.size.height;
     }
 
     return self;

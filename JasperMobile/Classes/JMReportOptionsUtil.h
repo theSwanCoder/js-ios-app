@@ -38,6 +38,6 @@
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 - (void)updateReportOptions:(NSDictionary *)parameters forReport:(NSString *)reportUri;
-- (NSDictionary *)reportOptionsForReport:(NSString *)reportUri;
+- (NSArray *)reportOptionsAsParametersForReport:(NSString *)reportUri;
 
 @end

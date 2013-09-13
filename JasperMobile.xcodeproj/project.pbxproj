@@ -54,7 +54,6 @@
 		F5663A311752F9D0007978BE /* Objection-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A2E1752F9D0007978BE /* Objection-iOS.framework */; };
 		F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A321752FA5C007978BE /* CFNetwork.framework */; };
 		F572814717C77048000B192D /* JMRequestDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F572814617C77048000B192D /* JMRequestDelegate.m */; };
-		F572FE0817E0977E00BB6A2C /* JSInputControlDescriptor+RestoreLastValues.m in Sources */ = {isa = PBXBuildFile; fileRef = F572FE0717E0977E00BB6A2C /* JSInputControlDescriptor+RestoreLastValues.m */; };
 		F576BC3B1753DB0700DF765B /* favorites_bar_item.png in Resources */ = {isa = PBXBuildFile; fileRef = F576BC371753DB0700DF765B /* favorites_bar_item.png */; };
 		F576BC3C1753DB0700DF765B /* library_bar_item.png in Resources */ = {isa = PBXBuildFile; fileRef = F576BC381753DB0700DF765B /* library_bar_item.png */; };
 		F576BC3D1753DB0700DF765B /* repository_bar_item.png in Resources */ = {isa = PBXBuildFile; fileRef = F576BC391753DB0700DF765B /* repository_bar_item.png */; };
@@ -226,8 +225,6 @@
 		F5663A321752FA5C007978BE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		F572814517C77047000B192D /* JMRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRequestDelegate.h; path = JasperMobile/Classes/JMRequestDelegate.h; sourceTree = "<group>"; };
 		F572814617C77048000B192D /* JMRequestDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMRequestDelegate.m; path = JasperMobile/Classes/JMRequestDelegate.m; sourceTree = "<group>"; };
-		F572FE0617E0977E00BB6A2C /* JSInputControlDescriptor+RestoreLastValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "JSInputControlDescriptor+RestoreLastValues.h"; path = "JasperMobile/Classes/JSInputControlDescriptor+RestoreLastValues.h"; sourceTree = "<group>"; };
-		F572FE0717E0977E00BB6A2C /* JSInputControlDescriptor+RestoreLastValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "JSInputControlDescriptor+RestoreLastValues.m"; path = "JasperMobile/Classes/JSInputControlDescriptor+RestoreLastValues.m"; sourceTree = "<group>"; };
 		F57364EA17B91BB500A10588 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRefreshable.h; path = JasperMobile/Classes/JMRefreshable.h; sourceTree = "<group>"; };
 		F576BC371753DB0700DF765B /* favorites_bar_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorites_bar_item.png; sourceTree = "<group>"; };
 		F576BC381753DB0700DF765B /* library_bar_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = library_bar_item.png; sourceTree = "<group>"; };
@@ -637,8 +634,6 @@
 				F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */,
 				F5D97F9F179587100059C761 /* JMServerProfile+Helpers.h */,
 				F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */,
-				F572FE0617E0977E00BB6A2C /* JSInputControlDescriptor+RestoreLastValues.h */,
-				F572FE0717E0977E00BB6A2C /* JSInputControlDescriptor+RestoreLastValues.m */,
 			);
 			name = Categories;
 			path = ..;
@@ -1009,7 +1004,6 @@
 				F50F5B5D17CCF14300582196 /* JMSingleSelectTableViewController.m in Sources */,
 				F5339A1617CE0F0F005073EE /* JMMultiSelectTableViewController.m in Sources */,
 				F54BE93B17D7495D00437EA9 /* JMReportViewerViewController.m in Sources */,
-				F572FE0817E0977E00BB6A2C /* JSInputControlDescriptor+RestoreLastValues.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

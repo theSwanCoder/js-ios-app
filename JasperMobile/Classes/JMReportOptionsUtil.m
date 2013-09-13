@@ -29,6 +29,7 @@
 
 #import "JMReportOptionsUtil.h"
 #import "JMReportOptions.h"
+#import "JSReportParameter.h"
 #import <Objection-iOS/Objection.h>
 
 @implementation JMReportOptionsUtil
@@ -68,7 +69,7 @@ objection_requires(@"managedObjectContext");
     [self.managedObjectContext save:nil];
 }
 
-- (NSDictionary *)reportOptionsForReport:(NSString *)reportUri
+- (NSArray *)reportOptionsAsParametersForReport:(NSString *)reportUri
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMReportOptions];
     fetchRequest.predicate = [self reportOptionsPredicateForReport:reportUri];
@@ -76,17 +77,21 @@ objection_requires(@"managedObjectContext");
     
     if (!reportOptions.count) return nil;
     
-    NSMutableDictionary *reportOptionsAsDictionary = [NSMutableDictionary dictionary];
+    NSMutableArray *reportParameters = [NSMutableArray array];
         
     for (JMReportOptions *reportOption in reportOptions) {
-        if ([reportOption.isListItem boolValue]) {
-            [reportOptionsAsDictionary setObject:[NSMutableArray arrayWithArray:[reportOption.value componentsSeparatedByString:@","]] forKey:reportOption.name];
+        NSArray *value;
+
+        if (reportOption.isListItem.boolValue) {
+            value = [reportOption.value componentsSeparatedByString:@","];
         } else {
-            [reportOptionsAsDictionary setObject:reportOption.value forKey:reportOption.name];
+            value = @[reportOption.value];
         }
+
+        [reportParameters addObject:[[JSReportParameter alloc] initWithName:reportOption.name value:value]];
     }
     
-    return reportOptionsAsDictionary;
+    return reportParameters;
 }
 
 - (NSPredicate *)reportOptionsPredicateForReport:(NSString *)reportUri

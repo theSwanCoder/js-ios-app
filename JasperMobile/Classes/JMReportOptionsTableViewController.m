@@ -35,7 +35,6 @@
 #import "JMRequestDelegate.h"
 #import "JMUtils.h"
 #import "JMReportViewerViewController.h"
-#import "JSInputControlDescriptor+RestoreLastValues.h"
 #import <Objection-iOS/Objection.h>
 
 #define kJMICSection 0
@@ -102,8 +101,16 @@ inject_default_rotation()
 {
     [super viewDidLoad];
     [JMUtils setTitleForResourceViewController:self];
+    
     if (self.resourceDescriptor) {
         [self updateInputControls];
+    }
+    
+    if (!self.reportFormatCell) {
+        NSArray *reportOutputFormats = @[
+            kJMRunOutputFormatHTML, kJMRunOutputFormatPDF
+        ];
+        self.reportFormatCell = [self.inputControlFactory reportOutputFormatCellWithFormats:reportOutputFormats];
     }
 }
 
@@ -141,27 +148,16 @@ inject_default_rotation()
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell;
-    
     switch (indexPath.section) {
         case kJMICSection:
-            cell = [self.inputControls objectAtIndex:indexPath.row];
-            break;
+            return [self.inputControls objectAtIndex:indexPath.row];
             
-        case kJMReportFormatSection: {
-            if (!self.reportFormatCell) {
-                NSArray *reportOutputFormats = @[
-                    kJMRunOutputFormatHTML, kJMRunOutputFormatPDF
-                ];
-                self.reportFormatCell = [self.inputControlFactory reportOutputFormatCellWithFormats:reportOutputFormats];
-            }
-            cell = self.reportFormatCell;
-            break;
-        }
+        case kJMReportFormatSection:
+            return self.reportFormatCell;
             
         case kJMRunReportSection:
-        default:
-            cell = [tableView dequeueReusableCellWithIdentifier:kJMRunCellIdentifier];
+        default: {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kJMRunCellIdentifier];
             cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
 
             UIButton *run = (UIButton *) [cell viewWithTag:1];
@@ -169,41 +165,15 @@ inject_default_rotation()
                                         imageName:@"run_report_button.png"
                              highlightedImageName:@"run_report_button_highlighted.png"
                                        edgesInset:18.0f];
+            return cell;
+        }
     }
-    
-    return cell;
 }
-
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    return [self tableView:self.tableView viewForFooterInSection:section];
-//}
-//
-//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-//{
-//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)];
-//    [view setBackgroundColor:[UIColor whiteColor]];
-//    
-//    return view;
-//}
-//
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-//    if (section == kJMICSection || section == kJMReportFormatSection) {
-//        return 0.01f;
-//    }
-//    
-//    return 10.0f;
-//}
-//
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-//{
-//    return 0.001f;
-//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == kJMRunReportSection || indexPath.section == kJMReportFormatSection) return 50;
+    if (indexPath.section == kJMRunReportSection) return 50.0f;
+    if (indexPath.section == kJMReportFormatSection) return self.reportFormatCell.height;
     return [[self.inputControls objectAtIndex:indexPath.row] height];
 }
 
@@ -256,7 +226,9 @@ inject_default_rotation()
 
     if (self.reportClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD) {
         [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:cancelBlock];
-        [self.reportClient inputControlsForReport:self.resourceDescriptor.uriString delegate:self.inputControlsForReportDelegate];
+
+        NSArray *reportParameters = [self.reportOptionsUtil reportOptionsAsParametersForReport:self.resourceDescriptor.uriString];
+        [self.reportClient inputControlsForReport:self.resourceDescriptor.uriString ids:nil selectedValues:reportParameters delegate:self.inputControlsForReportDelegate];
     } else {
         [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:cancelBlock];
         [self.resourceClient resource:self.resourceDescriptor.uriString delegate:self.resourceDelegate];
@@ -401,11 +373,8 @@ inject_default_rotation()
         [reportOptions.tableView reloadData];
     }];
 
-    NSDictionary *selectedValues = [self.reportOptionsUtil reportOptionsForReport:self.resourceDescriptor.uriString];
-
     return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         for (JSInputControlDescriptor *inputControlDescriptor in result.objects) {
-            [inputControlDescriptor restoreLastValues:[selectedValues objectForKey:inputControlDescriptor.uuid]];
             [reportOptions createCellFromInputControlDescriptor:inputControlDescriptor];
         }
     }];

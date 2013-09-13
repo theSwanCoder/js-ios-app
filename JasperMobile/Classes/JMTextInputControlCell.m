@@ -33,7 +33,6 @@
 {
     if (self = [super initWithCoder:aDecoder]) {
         self.textField.delegate = self;
-        baseHeight = 60.0f;
     }
 
     return self;

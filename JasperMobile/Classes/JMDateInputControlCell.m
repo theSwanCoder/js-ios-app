@@ -38,7 +38,6 @@ static UIDatePicker *datePicker;
     if (self = [super initWithCoder:aDecoder]) {
         [self datePicker].datePickerMode = UIDatePickerModeDate;
         self.textField.inputView = [self datePicker];
-        baseHeight = 50.0f;
     }
 
     return self;
@@ -48,7 +47,13 @@ static UIDatePicker *datePicker;
 {
     if (!datePicker) {
         datePicker = [[UIDatePicker alloc] init];
-        datePicker.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            datePicker.autoresizingMask = UIViewAutoresizingNone;
+        } else {
+            datePicker.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        }
+        
         [datePicker sizeToFit];
     }
 
