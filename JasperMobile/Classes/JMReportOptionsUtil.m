@@ -29,8 +29,8 @@
 
 #import "JMReportOptionsUtil.h"
 #import "JMReportOptions.h"
-#import "JSReportParameter.h"
 #import <Objection-iOS/Objection.h>
+#import <jaspersoft-sdk/JSReportParameter.h>
 
 @implementation JMReportOptionsUtil
 objection_register_singleton(JMReportOptionsUtil)

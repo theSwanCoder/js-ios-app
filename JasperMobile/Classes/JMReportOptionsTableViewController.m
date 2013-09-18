@@ -28,7 +28,6 @@
 #import "JMReportOptionsTableViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
-#import "JMFilter.h"
 #import "JMInputControlCell.h"
 #import "JMInputControlFactory.h"
 #import "JMSingleSelectTableViewController.h"
@@ -222,8 +221,6 @@ inject_default_rotation()
         [self.navigationController popViewControllerAnimated:YES];
     };
 
-    [JMFilter setViewControllerToDismiss:self];
-
     if (self.reportClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD) {
         [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:cancelBlock];
 
@@ -324,7 +321,7 @@ inject_default_rotation()
         
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMUpdateInputControlQueryDataNotification
                                                             object:nil];
-    }];
+    } viewControllerToDismiss:self];
 }
 
 - (void)requestDataTypeForInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper;
@@ -377,7 +374,7 @@ inject_default_rotation()
         for (JSInputControlDescriptor *inputControlDescriptor in result.objects) {
             [reportOptions createCellFromInputControlDescriptor:inputControlDescriptor];
         }
-    }];
+    } viewControllerToDismiss:self];
 }
 
 - (void)restV2RunReport

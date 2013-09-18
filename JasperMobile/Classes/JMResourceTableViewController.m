@@ -28,11 +28,11 @@
 #import "JMResourceTableViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMFavoritesUtil.h"
-#import "JMFilter.h"
 #import "JMLocalization.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "UITableViewController+CellRelativeHeight.h"
+#import "JMRequestDelegate.h"
 #import <Objection-iOS/Objection.h>
 
 // Declared as define const because of int to NSNumber conversion trick (i.e.
@@ -315,7 +315,7 @@ inject_default_rotation()
 {
     if (buttonIndex == kJMConfirmButtonIndex) {
         self.requestType = JMDeleteResourceRequest;
-        [self.resourceClient deleteResource:self.resourceDescriptor.uriString delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:nil]];
+        [self.resourceClient deleteResource:self.resourceDescriptor.uriString delegate:[JMRequestDelegate checkRequestResultForDelegate:self]];
     }
 }
 
@@ -354,7 +354,7 @@ inject_default_rotation()
     }];
 
     self.requestType = JMGetResourceRequest;
-    [self.resourceClient resource:self.resourceDescriptor.uriString delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:self]];
+    [self.resourceClient resource:self.resourceDescriptor.uriString delegate:[JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self]];
 }
 
 - (JSResourceProperty *)resourcePropertyForIndexPath:(NSIndexPath *)indexPath

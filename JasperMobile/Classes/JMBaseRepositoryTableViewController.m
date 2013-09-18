@@ -42,6 +42,7 @@ static NSString * const kJMUnknownCell = @"UnknownCell";
 @end
 
 @implementation JMBaseRepositoryTableViewController
+
 objection_requires(@"resourceClient", @"constants")
 inject_default_rotation()
 

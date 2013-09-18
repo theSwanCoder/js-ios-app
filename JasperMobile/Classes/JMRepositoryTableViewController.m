@@ -26,7 +26,7 @@
 //
 
 #import "JMRepositoryTableViewController.h"
-#import "JMFilter.h"
+#import "JMRequestDelegate.h"
 
 @interface JMRepositoryTableViewController()
 - (NSString *)path:(NSString *)defaultPath;
@@ -63,9 +63,9 @@
 
     // Check if search action was not performed
     if (self.searchQuery.length > 0) {
-        [self.resourceClient resources:[self path:@""] query:self.searchQuery types:nil recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:self]];
+        [self.resourceClient resources:[self path:@""] query:self.searchQuery types:nil recursive:YES limit:0 delegate:[JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self]];
     } else {
-        [self.resourceClient resources:[self path:@"/"] delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:self]];
+        [self.resourceClient resources:[self path:@"/"] delegate:[JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self]];
     }
 }
 

@@ -29,7 +29,6 @@
 #import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
 #import "JMRequestDelegate.h"
-#import "JMFilter.h"
 #import <Objection-iOS/Objection.h>
 
 @interface JMSingleSelectInputControlCell()
@@ -315,8 +314,6 @@
 - (void)updatedInputControlsValues
 {
     if (!self.inputControlDescriptor.slaveDependencies.count) return;
-    
-    [JMFilter setViewControllerToDismiss:self.delegate];
 
     __weak JMSingleSelectInputControlCell *cell = self;
     
@@ -345,7 +342,7 @@
                 }
             }
         }
-    }];
+    } viewControllerToDismiss:self.delegate];
     
     [self.reportClient updatedInputControlsValues:self.resourceDescriptor.uriString
                                               ids:allInputControls

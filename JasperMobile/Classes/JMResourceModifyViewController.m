@@ -26,9 +26,9 @@
 //
 
 #import "JMResourceModifyViewController.h"
-#import "JMFilter.h"
 #import "JMLocalization.h"
 #import "JMUtils.h"
+#import "JMRequestDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import <Objection-iOS/Objection.h>
 
@@ -88,7 +88,7 @@ objection_requires(@"resourceClient")
     self.resourceDescriptor.resourceDescription = updatedDescription;
     
     [self.view endEditing:YES];
-    [self.resourceClient modifyResource:self.resourceDescriptor delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:nil]];
+    [self.resourceClient modifyResource:self.resourceDescriptor delegate:[JMRequestDelegate checkRequestResultForDelegate:self]];
 }
 
 #pragma mark - UITextFieldDelegate

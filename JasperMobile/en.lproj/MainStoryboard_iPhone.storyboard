@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -553,7 +553,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="description" destination="mo5-dy-ZSs" id="6rA-fd-7vP"/>
+                        <outlet property="descriptionLabel" destination="mo5-dy-ZSs" id="LYH-zP-39y"/>
                         <outlet property="descriptionTextView" destination="akU-ce-Ccw" id="QDY-g7-HtT"/>
                         <outlet property="label" destination="Q0G-4z-Mnf" id="zRj-0Y-PJ3"/>
                         <outlet property="labelTextField" destination="GiI-7y-aV1" id="TFW-RC-0cL"/>
@@ -2029,6 +2029,7 @@
         <class className="JMResourceModifyViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/JMResourceModifyViewController.h"/>
             <relationships>
+                <relationship kind="action" name="modifyResource:"/>
                 <relationship kind="outlet" name="descriptionLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="descriptionTextView" candidateClass="UITextView"/>
                 <relationship kind="outlet" name="label" candidateClass="UILabel"/>

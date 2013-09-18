@@ -54,6 +54,35 @@
 + (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock;
 
 /**
+ Creates new instance of request delegate and adds it to the request pool.
+ Sets the view controller (for all requests in pool) that will be dismissed if any request will fail
+
+ @param finishedBlock
+ @param viewController A view controller that will be dismissed
+ @return An new request delegate instance
+ */
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock viewControllerToDismiss:(UIViewController *)viewController;
+
+/**
+ Passes a request result to final delegate object if request was successful. Otherwise displays alert view dialog
+ with error message
+
+ @param delegate A delegate object
+ @return An new request delegate instance
+ */
++ (JMRequestDelegate *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate;
+
+/**
+ Passes a request result to final delegate object if request was successful. Otherwise displays alert view dialog
+ with error message. Sets the view controller (for all requests in pool) that will be dismissed if any request will fail
+
+ @param delegate A delegate object
+ @param viewController A view controller that will be dismissed
+ @return An new request delegate instance
+ */
++ (JMRequestDelegate *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate viewControllerToDismiss:(UIViewController *)viewController;
+
+/**
  Check if request pool is empty (no any active request exists)
  
  @return YES if request pool is empty, otherwise returns NO

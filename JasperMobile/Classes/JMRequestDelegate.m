@@ -27,20 +27,29 @@
 
 static NSMutableArray *requestDelegatePool;
 static void (^finalBlock)(void);
+__weak static UIViewController *viewControllerToDismiss;
 
 #import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"
-#import "JMFilter.h"
+#import "UIAlertView+LocalizedAlert.h"
 
 @interface JMRequestDelegate()
 @property (nonatomic, copy) JSRequestFinishedBlock finishedBlock;
+@property (nonatomic, weak) id <JSRequestDelegate> delegate;
 @end
 
 @implementation JMRequestDelegate
 
+#pragma mark - Class Methods
+
 + (void)initialize
 {
     requestDelegatePool = [NSMutableArray array];
+}
+
++ (void)setFinalBlock:(void (^)(void))block
+{
+    finalBlock = block;
 }
 
 + (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock
@@ -53,9 +62,26 @@ static void (^finalBlock)(void);
     return requestDelegate;
 }
 
-+ (void)setFinalBlock:(void (^)(void))block
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock viewControllerToDismiss:(UIViewController *)viewController
 {
-    finalBlock = block;
+    viewControllerToDismiss = viewController;
+    return [self requestDelegateForFinishBlock:finishedBlock];
+}
+
++ (JMRequestDelegate *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate
+{
+    JMRequestDelegate *requestDelegate = [[JMRequestDelegate alloc] init];
+    requestDelegate.delegate = delegate;
+
+    [requestDelegatePool addObject:requestDelegate];
+
+    return requestDelegate;
+}
+
++ (JMRequestDelegate *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate viewControllerToDismiss:(UIViewController *)viewController
+{
+    viewControllerToDismiss = viewController;
+    return [self checkRequestResultForDelegate:delegate];
 }
 
 + (BOOL)isRequestPoolEmpty
@@ -76,21 +102,68 @@ static void (^finalBlock)(void);
     if (![result isSuccessful]) {
         [JMRequestDelegate clearRequestPool];
         [JMCancelRequestPopup dismiss];
-        [JMFilter showAlertViewDialogForStatusCode:result.statusCode orErrorCode:result.error.code];
+
+        NSString *title;
+        NSString *message;
+
+        if (result.statusCode != 0) {
+            title = @"error.readingresponse.dialog.msg";
+            message = [NSString stringWithFormat:@"error.http.%i", result.statusCode];
+        } else {
+            switch (result.statusCode) {
+                case NSURLErrorUserCancelledAuthentication:
+                case NSURLErrorUserAuthenticationRequired:
+                    title = @"error.authenication.dialog.title";
+                    message = @"error.authenication.dialog.msg";
+                    break;
+
+                case NSURLErrorCannotFindHost:
+                    title = @"error.unknownhost.dialog.title";
+                    message = @"error.unknownhost.dialog.msg" ;
+                    break;
+
+                default:
+                    title = @"error.noconnection.dialog.title";
+                    message = @"error.noconnection.dialog.msg";
+            }
+        }
+
+        [[UIAlertView localizedAlertWithTitle:title
+                                      message:message
+                                     delegate:JMRequestDelegate.class
+                            cancelButtonTitle:@"dialog.button.ok"
+                            otherButtonTitles:nil] show];
+
     } else if ([requestDelegatePool containsObject:self]) {
         if (self.finishedBlock) {
             self.finishedBlock(result);
+        }
+
+        if (self.delegate) {
+            [self.delegate requestFinished:result];
         }
 
         [requestDelegatePool removeObject:self];
         
         if ([JMRequestDelegate isRequestPoolEmpty]) {
             [JMCancelRequestPopup dismiss];
+            viewControllerToDismiss = nil;
+
             if (finalBlock) {
                 finalBlock();
                 finalBlock = nil;
             }
         }
+    }
+}
+
+#pragma mark - UIAlertViewDelegate
+
++ (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (viewControllerToDismiss.navigationController) {
+        [viewControllerToDismiss.navigationController popViewControllerAnimated:YES];
+        viewControllerToDismiss = nil;
     }
 }
 

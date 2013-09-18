@@ -26,7 +26,7 @@
 //
 
 #import "JMLibraryTableViewController.h"
-#import "JMFilter.h"
+#import "JMRequestDelegate.h"
 
 static NSString * const kJMRequestType = @"type";
 
@@ -53,7 +53,7 @@ static NSString * const kJMRequestType = @"type";
 - (void)requestFinished:(JSOperationResult *)result
 {
     id type = [result.request.params objectForKey:kJMRequestType];
-    
+
     // Check if server supports dashboard type of resource (JasperServer CE version
     // doesn't have this type)
     if ([result isError] && [type isKindOfClass:[NSArray class]] &&
@@ -82,7 +82,7 @@ static NSString * const kJMRequestType = @"type";
     }
 
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
-    [self.resourceClient resources:nil query:query types:types recursive:YES limit:0 delegate:[JMFilter checkRequestResultForDelegate:self viewControllerToDismiss:self]];
+    [self.resourceClient resources:nil query:query types:types recursive:YES limit:0 delegate:[JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self]];
 }
 
 @end
