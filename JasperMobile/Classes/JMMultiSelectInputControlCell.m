@@ -53,17 +53,17 @@
 
     if (numberOfValues > 0) {
         JSInputControlOption *firstOption = [allValues objectAtIndex:0];
-        NSMutableString *selectedValues = [NSMutableString stringWithFormat:@"%@", firstOption.label];
-        NSMutableArray *valuesAsStrings = [NSMutableArray arrayWithObject:firstOption.value];
+        NSMutableString *valuesAsStrings = [NSMutableString stringWithFormat:@"%@", firstOption.label];
+        NSMutableArray *selectedValues = [NSMutableArray arrayWithObject:firstOption.value];
         
         for (NSUInteger i = 1; i < numberOfValues; i++) {
             JSInputControlOption *option = [allValues objectAtIndex:i];
-            [selectedValues appendFormat:@", %@", option.label];
-            [valuesAsStrings addObject:option.value];
+            [valuesAsStrings appendFormat:@", %@", option.label];
+            [selectedValues addObject:option.value];
         }
 
-        _value = valuesAsStrings;
-        self.detailLabel.text = selectedValues;
+        _value = selectedValues;
+        self.detailLabel.text = valuesAsStrings;
     } else {
         _value = nil;
         self.detailLabel.text = JS_IC_NOTHING_SUBSTITUTE_LABEL;

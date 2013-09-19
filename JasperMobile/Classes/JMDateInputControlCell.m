@@ -37,7 +37,9 @@ static UIDatePicker *datePicker;
 {
     if (self = [super initWithCoder:aDecoder]) {
         [self datePicker].datePickerMode = UIDatePickerModeDate;
-        self.textField.inputView = [self datePicker];
+        UITextField *textField = self.textField;
+        textField.inputView = [self datePicker];
+        textField.leftView = nil;
     }
 
     return self;
@@ -136,6 +138,8 @@ static UIDatePicker *datePicker;
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     self.datePicker.date = self.date;
+    
+    self.datePicker.frame = CGRectMake(0, 0, self.datePicker.frame.size.width, self.datePicker.frame.size.height);
 
     // Check if this IC is not a target of DatePicker
     if ([self.datePicker allTargets].anyObject != self) {
@@ -172,6 +176,7 @@ static UIDatePicker *datePicker;
         self.value = self.textField.text;
     }
 
+    [self dismissError];
     [self hideDatePicker];
 }
 

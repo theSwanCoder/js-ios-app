@@ -42,6 +42,7 @@
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
 @property (nonatomic, strong) NSString *errorMessage;
 @property (nonatomic, readonly) BOOL isMandatory;
+@property (nonatomic, weak) UITableViewController <JMInputControlsHolder> *delegate;
 
 /**
  Contains value for the Input Control. Can be NSString, NSDictionary or 
@@ -52,5 +53,6 @@
 - (UILabel *)label;
 - (void)clearData;
 - (CGFloat)height;
+- (BOOL)dismissError;
 
 @end

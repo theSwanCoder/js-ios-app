@@ -48,22 +48,58 @@
 
 - (void)setErrorMessage:(NSString *)errorMessage
 {
-    UILabel *errorLabel = (UILabel *) [self viewWithTag:3];
+    _errorMessage = errorMessage;
+    
+    UILabel *errorLabel = self.errorLabel;
     errorLabel.text = errorMessage;
     errorLabel.hidden = errorMessage.length ? NO : YES;
-    [errorLabel sizeToFit];
+    if (!errorLabel.hidden) {
+        [errorLabel sizeToFit];
+    }
+}
+
+- (BOOL)dismissError
+{
+    if (self.errorMessage.length) {
+        self.errorMessage = nil;
+        
+        NSInteger row = [self.delegate.inputControls indexOfObject:self];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+        
+        [self.delegate.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.delegate.tableView beginUpdates];
+        [self.delegate.tableView endUpdates];
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+
+    UILabel *errorLabel = self.errorLabel;
+    if (!errorLabel.hidden) {
+        CGRect oldFrame = errorLabel.frame;
+        CGRect frame = CGRectMake(oldFrame.origin.x,
+                                  oldFrame.origin.y,
+                                  self.label.frame.size.width,
+                                  oldFrame.size.height);
+        errorLabel.frame = frame;
+        [errorLabel sizeToFit];
+    }
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     _inputControlDescriptor = inputControlDescriptor;
-    
-    NSString *label = inputControlDescriptor.label;
-    if (inputControlDescriptor.mandatory.boolValue) {
-        label = [NSString stringWithFormat:@"* %@", label];
-    }
 
-    self.label.text = label;
+    if (inputControlDescriptor.mandatory.boolValue) {
+        self.mandatoryLabel.hidden = NO;
+    }
+    
+    self.label.text = inputControlDescriptor.label;
 }
 
 - (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
@@ -71,12 +107,11 @@
     _inputControlWrapper = inputControlWrapper;
     _isMandatory = inputControlWrapper.isMandatory;
 
-    NSString *label = inputControlWrapper.label;
     if (_isMandatory) {
-        label = [NSString stringWithFormat:@"* %@", label];
+        self.mandatoryLabel.hidden = NO;
     }
-
-    self.label.text = label;
+    
+    self.label.text = inputControlWrapper.label;
 }
 
 - (UILabel *)label
@@ -95,11 +130,11 @@
 
 - (CGFloat)height
 {
-    if (self.errorLabel.hidden) {
-        return baseHeight;
-    } else {
+    if (!self.errorLabel.hidden) {
         return baseHeight + self.errorLabel.frame.size.height;
     }
+    
+    return baseHeight;
 }
 
 #pragma mark - Private
@@ -107,6 +142,11 @@
 - (UILabel *)errorLabel
 {
     return (UILabel *) [self viewWithTag:3];
+}
+
+- (UILabel *)mandatoryLabel
+{
+    return (UILabel *) [self viewWithTag:4];
 }
 
 @end

@@ -32,7 +32,11 @@
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
-        self.textField.delegate = self;
+        UITextField *textField = self.textField;
+        textField.delegate = self;
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10.0f, 0)];
+        self.textField.leftView = leftView;
+        self.textField.leftViewMode = UITextFieldViewModeAlways;
     }
 
     return self;
@@ -64,6 +68,13 @@
     self.inputControlDescriptor.state.value = self.value;
 
     return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if ([self dismissError]) {
+        [self.textField becomeFirstResponder];
+    }
 }
 
 @end

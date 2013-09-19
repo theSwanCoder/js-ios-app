@@ -313,7 +313,10 @@
 
 - (void)updatedInputControlsValues
 {
-    if (!self.inputControlDescriptor.slaveDependencies.count) return;
+    if (!self.inputControlDescriptor.slaveDependencies.count) {
+        [self dismissError];
+        return;
+    }
 
     __weak JMSingleSelectInputControlCell *cell = self;
     
@@ -344,6 +347,10 @@
         }
     } viewControllerToDismiss:self.delegate];
     
+    [JMRequestDelegate setFinalBlock:^{
+        [self.delegate.tableView reloadData];
+    }];
+    
     [self.reportClient updatedInputControlsValues:self.resourceDescriptor.uriString
                                               ids:allInputControls
                                    selectedValues:selectedValues
@@ -363,6 +370,9 @@
     }
     
     self.value = selectedValues;
+    if (selectedValues.count) {
+        self.errorMessage = nil;
+    }
 }
 
 @end
