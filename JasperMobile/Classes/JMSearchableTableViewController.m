@@ -28,6 +28,7 @@
 #import "JMSearchableTableViewController.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
+#import "JMUtils.h"
 
 @interface JMSearchableTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;
@@ -50,6 +51,16 @@
 {
     [super changeServerProfile];
     [self resetSearchState];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    if (![JMUtils isViewControllerVisible:self]) {
+        self.searchBar = nil;
+        self.searchQuery = nil;
+        _cancelBlock = nil;
+    }
+    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - Accessors

@@ -36,7 +36,7 @@
  */
 @interface JMBaseRepositoryTableViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate, JMResourceTableViewControllerDelegate>
 
-@property (nonatomic, strong) JSConstants *constants;
+@property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, strong) NSMutableArray *resources;
 
 - (BOOL)isNeedsToReloadData;

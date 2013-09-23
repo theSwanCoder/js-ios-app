@@ -61,7 +61,7 @@ extern NSString * const kJMRunOutputFormatPDF;
 // Storyboard name
 NSString *JMMainStoryboard();
 
-// Tags for menus. Decraled as define constants because they can be used
+// Tags for menus. Declared as define constants because they can be used
 // in switch-case structure
 #define kJMRepositoryMenuTag 0
 #define kJMLibraryMenuTag 1

@@ -125,7 +125,11 @@
     _value = nil;
     _inputControlDescriptor = nil;
     _inputControlWrapper = nil;
+    _errorMessage = nil;
+    self.label.text = nil;
+    self.errorLabel.text = nil;
     [self.label removeFromSuperview];
+    [self.errorLabel removeFromSuperview];
 }
 
 - (CGFloat)height

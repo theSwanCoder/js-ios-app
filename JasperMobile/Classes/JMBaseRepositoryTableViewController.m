@@ -42,7 +42,6 @@ static NSString * const kJMUnknownCell = @"UnknownCell";
 @end
 
 @implementation JMBaseRepositoryTableViewController
-
 objection_requires(@"resourceClient", @"constants")
 inject_default_rotation()
 
@@ -126,6 +125,18 @@ inject_default_rotation()
     if ([segue.identifier isEqualToString:kJMShowResourceInfoSegue]) {
         [destinationViewController setDelegate:self];
     }
+}
+
+- (void)didReceiveMemoryWarning
+{
+    if (![JMUtils isViewControllerVisible:self]) {
+        self.resources = nil;
+        self.lastIndexPath = nil;
+        self.resourceDescriptor = nil;
+        [self.tableView reloadData];
+        _cellsIdentifiers = nil;
+    }
+    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - Table view data source

@@ -125,7 +125,6 @@ static UIDatePicker *datePicker;
 
 - (void)clearData
 {
-    [self.textField removeFromSuperview];
     datePicker = nil;
     datePickerToolbar = nil;
     self.date = nil;

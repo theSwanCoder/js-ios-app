@@ -32,7 +32,7 @@
 #import "JMUtils.h"
 
 @interface JMMenuTabBarController()
-@property (nonatomic, strong) id lastSelectedViewController;
+@property (nonatomic, weak) id lastSelectedViewController;
 
 - (void)enableTabBar;
 - (void)disableTabBar;

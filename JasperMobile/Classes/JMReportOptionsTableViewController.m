@@ -79,19 +79,7 @@ inject_default_rotation()
 
 - (void)dealloc
 {
-    id defaultCenter = [NSNotificationCenter defaultCenter];
-
-    for (JMInputControlCell *cell in self.inputControls) {
-        [defaultCenter removeObserver:cell];
-        [cell clearData];
-    }
-
-    self.inputControls = nil;
-    self.resourceDescriptor = nil;
-    self.resourceClient = nil;
-    self.reportClient = nil;
-
-    [JMRequestDelegate clearRequestPool];
+    [self clearData];
 }
 
 #pragma mark - UIViewController
@@ -100,8 +88,8 @@ inject_default_rotation()
 {
     [super viewDidLoad];
     [JMUtils setTitleForResourceViewController:self];
-    
-    if (self.resourceDescriptor) {
+
+    if (self.resourceDescriptor && !self.inputControls.count) {
         [self updateInputControls];
     }
     
@@ -210,6 +198,21 @@ inject_default_rotation()
     if ([cell conformsToProtocol:@protocol(JMReportClientHolder)]) {
         [cell setReportClient:self.reportClient];
     }
+}
+
+- (void)clearData
+{
+    id defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    for (JMInputControlCell *cell in self.inputControls) {
+        [defaultCenter removeObserver:cell];
+        [cell clearData];
+    }
+    
+    self.inputControls = nil;
+    self.inputControlFactory = nil;
+    
+    [JMRequestDelegate clearRequestPool];
 }
 
 #pragma mark Input Controls

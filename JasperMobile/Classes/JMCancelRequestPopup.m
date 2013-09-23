@@ -29,6 +29,7 @@
 #import "JMLocalization.h"
 #import "JMUtils.h"
 #import "UIViewController+MJPopupViewController.h"
+#import "JMRequestDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 
 static NSString * const kJMCancelRequestPopupNib = @"JMCancelRequestPopup";
@@ -89,6 +90,7 @@ static JMCancelRequestPopup *instance;
 {
     [JMUtils hideNetworkActivityIndicator];
     [self.restClient cancelAllRequests];
+    [JMRequestDelegate clearRequestPool];
     [self.viewController dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
     
     if (self.cancelBlock) {

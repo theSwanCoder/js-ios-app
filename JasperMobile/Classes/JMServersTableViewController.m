@@ -81,14 +81,24 @@ inject_default_rotation()
     for (JMServerProfile *serverProfile in self.servers) {
         [serverProfile setPasswordAsPrimitive:[JMServerProfile passwordFromKeychain:serverProfile.profileID]];
     }
+
+    if (self.editButtonItem.style == UIBarButtonItemStyleDone) {
+        [self setEditing:YES animated:NO];
+    }
 }
 
 - (void)viewDidUnload
 {
     [self setInfoButton:nil];
-    [self setServers:nil];
-    [self setManagedObjectContext:nil];
     [super viewDidUnload];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    if (![JMUtils isViewControllerVisible:self]) {
+        self.servers = nil;
+    }
+    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - UIViewControllerEditing

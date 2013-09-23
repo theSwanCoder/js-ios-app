@@ -37,6 +37,7 @@
         UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10.0f, 0)];
         self.textField.leftView = leftView;
         self.textField.leftViewMode = UITextFieldViewModeAlways;
+        self.textField.background = [self.textField.background resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10.0f, 0, 10.0f)];
     }
 
     return self;
@@ -52,6 +53,13 @@
 - (UITextField *)textField
 {
     return (UITextField *) [self viewWithTag:2];
+}
+
+- (void)clearData
+{
+    self.textField.text = nil;
+    [self.textField removeFromSuperview];
+    [super clearData];
 }
 
 #pragma mark - UITextFieldDelegate

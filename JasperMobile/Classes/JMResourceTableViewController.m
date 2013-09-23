@@ -206,6 +206,16 @@ inject_default_rotation()
     [self.favoritesUtil persist];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    if (![JMUtils isViewControllerVisible:self]) {
+        _numberOfRowsForSections = nil;
+        _resourceDescriptorProperties = nil;
+        _cellIdentifiers = nil;
+    }
+    [super didReceiveMemoryWarning];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

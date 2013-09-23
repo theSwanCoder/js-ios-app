@@ -80,6 +80,9 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
                                                  selector:@selector(resetApplication)
                                                      name:kJMResetApplicationNotification
                                                    object:nil];
+        
+        NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
+        [NSURLCache setSharedURLCache:sharedCache];
     }
     
     return self;

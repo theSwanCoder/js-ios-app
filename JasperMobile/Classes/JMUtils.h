@@ -64,6 +64,14 @@ extern CGFloat kJMNoEdgesInset;
 + (NSString *)localizedTitleForMenuItemByTag:(NSInteger)tag;
 
 /**
+ Checks if specified view controller is presented on screen
+ 
+ @param viewController A view controller
+ @return YES if view controller is presented on screen, otherwise returns NO
+ */
++ (BOOL)isViewControllerVisible:(UIViewController *)viewController;
+
+/**
  Sends "changeServerProfile" notification to defaultCenter
  
  @param serverProfile A profile that will be provided to receiver via userInfo dictionary (kJMServerProfileKey key)

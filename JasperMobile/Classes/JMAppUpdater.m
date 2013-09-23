@@ -33,20 +33,14 @@
 #import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
 
-// Contains version:method structure. Method updates specific part of application for specific app version
-static NSDictionary *versionsToUpdate = nil;
-
 // Key for app version
 static NSString * const kJMApplicationVersion = @"CFBundleShortVersionString";
 
 // Error message
 static NSString * errorMessage = nil;
 
-// Delegate for UIAlertView
-static JMAppUpdater *delegate;
-
 // Context to work with database
-static NSManagedObjectContext * managedObjectContext;
+__weak static NSManagedObjectContext * managedObjectContext;
 
 // Old constants used in previous versions of application
 static NSString * const kJMDefaultsCount = @"jaspersoft.server.count";
@@ -57,17 +51,6 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 @implementation JMAppUpdater
 
 // Fill migrations with update methods for different versions
-+ (void)initialize
-{
-    NSMutableDictionary *temp = [NSMutableDictionary dictionary];
-    
-    // Add update methods
-    [temp setObject:[NSValue valueWithPointer:@selector(update_1_2)] forKey:@1.2];
-    [temp setObject:[NSValue valueWithPointer:@selector(update_1_5)] forKey:@1.5];
-    
-    versionsToUpdate = temp;
-    managedObjectContext = [[JSObjection defaultInjector] getObject:[NSManagedObjectContext class]];
-}
 
 #pragma mark - Class methods
 
@@ -75,7 +58,14 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 {
     NSNumber *latestAppVersion = [self latestAppVersion];
     NSNumber *currentAppVersion = [self currentAppVersion];
+    managedObjectContext = [[JSObjection defaultInjector] getObject:[NSManagedObjectContext class]];
+    NSMutableDictionary *versionsToUpdate = [NSMutableDictionary dictionary];
     
+    // Add update methods
+    [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_2)] forKey:@1.2];
+    [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_5)] forKey:@1.5];
+    [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_6)] forKey:@1.6];
+
     if (currentAppVersion == nil || [currentAppVersion compare:latestAppVersion] == 0) {
         return;
     }
@@ -122,7 +112,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
 + (BOOL)hasErrors
 {
-    return errorMessage != nil;
+    return errorMessage.length != 0;
 }
 
 #pragma mark - Migration methods
@@ -166,7 +156,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         //      "jaspersoft.server.username.0" : "Username 0",
         //      ...
         // }
-        // Wheres 0 - profile position (or "id" as in relation databases)
+        // Wheres 0 is a profile position (or "id" as in relation databases)
         NSString *keyAlias = [NSString stringWithFormat:kJMDefaultsServerAlias, i];
         NSString *keyServerBaseUrl = [NSString stringWithFormat:kJMDefaultsServerBaseUrl, i];
         NSString *keyUsername = [NSString stringWithFormat:kJMDefaultsServerUsername, i];
@@ -281,12 +271,12 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
 + (void)showErrors
 {
-    delegate = [[JMAppUpdater alloc] init];
     [[UIAlertView localizedAlertWithTitle:@"error.upgrade.data.title"
                                   message:errorMessage
-                                 delegate:self
+                                 delegate:JMAppUpdater.class
                         cancelButtonTitle:@"dialog.button.cancel"
                         otherButtonTitles:@"dialog.button.retry", @"dialog.button.applyUpdate", nil] show];
+    errorMessage = nil;
 }
 
 @end

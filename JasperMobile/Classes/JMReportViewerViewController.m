@@ -121,10 +121,9 @@ inject_default_rotation()
         JSReportDescriptor *reportDescriptor = [result.objects objectAtIndex:0];
         NSString *uuid = reportDescriptor.uuid;
 
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *tempDirectory = NSTemporaryDirectory();
 
-        reportViewerViewController.tempDirectory = [documentsDirectory stringByAppendingPathComponent:uuid];
+        reportViewerViewController.tempDirectory = [tempDirectory stringByAppendingPathComponent:uuid];
         NSFileManager *fileManager = [NSFileManager defaultManager];
 
         if (![fileManager fileExistsAtPath:reportViewerViewController.tempDirectory]) {

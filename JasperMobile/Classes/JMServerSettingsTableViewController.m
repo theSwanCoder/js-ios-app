@@ -30,6 +30,7 @@
 #import "JMFavoritesUtil.h"
 #import "JMLocalization.h"
 #import "UIAlertView+LocalizedAlert.h"
+#import "JMUtils.h"
 #import <Objection-iOS/Objection.h>
 
 // Indexes for cells
@@ -66,7 +67,7 @@ typedef BOOL (^JMValidationBlock)(NSString *value, NSString **errorMessage);
 // Contains different properties for cell: identifier, label name, placeholder / value
 // for component (can be text field or switch), validation block and indicator, if cell
 // is configured
-@property (nonatomic, strong) NSDictionary *cellsProperties;
+@property (nonatomic, strong, readonly) NSDictionary *cellsProperties;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;
 
@@ -78,13 +79,15 @@ typedef BOOL (^JMValidationBlock)(NSString *value, NSString **errorMessage);
 @implementation JMServerSettingsTableViewController
 objection_requires(@"managedObjectContext", @"favoritesUtil")
 
+@synthesize cellsProperties = _cellsProperties;
+
 #pragma mark - Accessors
 
 - (NSDictionary *)cellsProperties
 {
     if (!_cellsProperties) {
         _cellsProperties = @{
-            @(kJMNameCell) : [@{
+            @kJMNameCell : [@{
                 kJMTitleKey : @"servers.name.label",
                 kJMPlaceholderKey : @"servers.myserver.label",
                 kJMValueKey : self.serverToEdit.alias ?: @"",
@@ -109,7 +112,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
                 }
             } mutableCopy],
             
-            @(kJMURLCell) : [@{
+            @kJMURLCell : [@{
                 kJMTitleKey : @"servers.url.label",
                 kJMPlaceholderKey : @"servers.url.tip",
                 kJMValueKey : self.serverToEdit.serverUrl ?: @"",
@@ -126,7 +129,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
                 }
             } mutableCopy],
              
-            @(kJMOrganizationCell) : [@{
+            @kJMOrganizationCell : [@{
                 kJMTitleKey : @"servers.orgid.label",
                 kJMPlaceholderKey : @"servers.orgid.tip",
                 kJMValueKey : self.serverToEdit.organization ?: @"",
@@ -134,7 +137,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
                 kJMSelectorKey : [NSValue valueWithPointer:@selector(setOrganization:)]
             } mutableCopy],
              
-            @(kJMUsernameCell) : [@{
+            @kJMUsernameCell : [@{
                 kJMTitleKey : @"servers.username.label",
                 kJMPlaceholderKey : @"servers.username.tip",
                 kJMValueKey : self.serverToEdit.username ?: @"",
@@ -150,7 +153,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
                 }
             } mutableCopy],
              
-            @(kJMPasswordCell) : [@{
+            @kJMPasswordCell : [@{
                 kJMTitleKey : @"servers.password.label",
                 kJMPlaceholderKey : @"servers.password.tip",
                 kJMValueKey : self.serverToEdit.password ?: @"",
@@ -158,7 +161,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
                 kJMSelectorKey : [NSValue valueWithPointer:@selector(setPassword:)]
             } mutableCopy],
              
-            @(kJMAskPasswordCell) : [@{
+            @kJMAskPasswordCell : [@{
                 kJMTitleKey : @"servers.askpassword.label",
                 kJMValueKey : self.serverToEdit.askPassword ?: @NO,
                 kJMCellIdentifierKey : kJMSwitchCellIdentifier,
@@ -187,8 +190,19 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
     if (!self.serverToEdit) {
         self.title = JMCustomLocalizedString(@"servers.title.new", nil);
     } else {
+        if (self.serverToEdit.askPassword.boolValue) {
+            self.serverToEdit.password = @"";
+        }
         self.title = JMCustomLocalizedString(@"servers.title.edit", nil);
     }
+}
+
+-  (void)didReceiveMemoryWarning
+{
+    if (![JMUtils isViewControllerVisible:self]) {
+        if (self.cellsProperties) _cellsProperties = nil;
+    }
+    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - Table view data source

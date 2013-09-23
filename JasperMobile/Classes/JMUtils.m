@@ -79,6 +79,11 @@ CGFloat kJMNoEdgesInset = -1;
     return JMCustomLocalizedString(title, nil);
 }
 
++ (BOOL)isViewControllerVisible:(UIViewController *)viewController
+{
+    return viewController.isViewLoaded && viewController.view.window;
+}
+
 + (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile
 {
     NSDictionary *userInfo = serverProfile ? @{

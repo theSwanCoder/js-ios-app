@@ -30,7 +30,7 @@
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 
-static JMServerProfile * serverProfile;
+__weak static JMServerProfile * serverProfile;
 
 @implementation JMAskPasswordDialog
 

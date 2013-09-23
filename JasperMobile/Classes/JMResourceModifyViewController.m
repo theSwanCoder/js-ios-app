@@ -67,13 +67,13 @@ objection_requires(@"resourceClient")
 
 - (void)viewDidUnload
 {
-    [self setLabelTextField:nil];
-    [self setDescriptionTextView:nil];
-    [self setLabel:nil];
-    [self setDescriptionLabel:nil];
-    [self setDelegate:nil];
-    [self setResourceClient:nil];
-    [self setResourceDescriptor:nil];
+    self.labelTextField = nil;
+    self.descriptionTextView = nil;
+    self.label = nil;
+    self.descriptionLabel = nil;
+    self.delegate = nil;
+    self.resourceClient = nil;
+    self.resourceDescriptor = nil;
     [super viewDidUnload];
 }
 

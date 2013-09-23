@@ -49,8 +49,17 @@ inject_default_rotation()
                               @"/flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=",
                               self.resourceDescriptor.uriString];
 
+    NSURL *url = [NSURL URLWithString:dashboardUrl];    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:500];
     [self.activityIndicator startAnimating];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:dashboardUrl]]];
+    [self.webView loadRequest:request];
+}
+
+- (void)viewDidUnload
+{
+    self.webView = nil;
+    self.activityIndicator = nil;
+    [super viewDidUnload];
 }
 
 #pragma mark - UIWebViewDelegate
@@ -64,7 +73,11 @@ inject_default_rotation()
 - (void)viewWillDisappear:(BOOL)animated
 {
     if (self.webView.isLoading) {
+        [self.webView loadHTMLString:@"" baseURL:nil];
         [self.webView stopLoading];
+        [self.webView setDelegate:nil];
+        [self.webView removeFromSuperview];
+        [[NSURLCache sharedURLCache] removeAllCachedResponses];
         // Hide network indicator if webView did not finish loading yet (back button
         // was pressed earlier)
         [JMUtils hideNetworkActivityIndicator];
