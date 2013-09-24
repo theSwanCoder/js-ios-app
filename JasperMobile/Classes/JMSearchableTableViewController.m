@@ -59,6 +59,11 @@
         self.searchBar = nil;
         self.searchQuery = nil;
         _cancelBlock = nil;
+        // If search is disabled then this is pushed view controller with search result
+        // and we should dismiss it at warning
+        if (self.isSearchDisabled) {
+            [self.navigationController popViewControllerAnimated:NO];
+        }
     }
     [super didReceiveMemoryWarning];
 }
@@ -101,7 +106,7 @@
 {
     [super viewDidLoad];
     
-    if (!self.isScrollDisabled) {
+    if (!self.isSearchDisabled) {
         self.searchBar = [[UISearchBar alloc] init];
         self.searchBar.delegate = self;
         self.searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
@@ -149,7 +154,7 @@
         if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
             [destinationViewController setResourceClient:self.resourceClient];
             [destinationViewController setResourceDescriptor:self.resourceDescriptor];
-            [destinationViewController setIsScrollDisabled:YES];
+            [destinationViewController setIsSearchDisabled:YES];
         }
         
         [destinationViewController setSearchQuery:searchBar.text];

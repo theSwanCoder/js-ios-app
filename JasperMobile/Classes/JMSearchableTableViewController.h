@@ -36,7 +36,7 @@
 @interface JMSearchableTableViewController : JMBaseRepositoryTableViewController <UISearchBarDelegate, JMRefreshable>
 
 @property (nonatomic, strong) NSString *searchQuery;
-@property (nonatomic, assign) BOOL isScrollDisabled;
+@property (nonatomic, assign) BOOL isSearchDisabled;
 @property (nonatomic, readonly) JMCancelRequestBlock cancelBlock;
 
 @end
