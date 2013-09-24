@@ -112,18 +112,17 @@ objection_requires(@"managedObjectContext")
     NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"label" ascending:YES]];
     
     for (JMFavorites *favorites in [_serverProfile.favorites sortedArrayUsingDescriptors:sortDescriptors]) {
-        // Skip favorites for other usernames and organizations
-        if (![_serverProfile.username isEqual:favorites.username] ||
-            ![_serverProfile.organization isEqual:favorites.organization]) {
-            continue;
+        if ([_serverProfile.username isEqualToString:favorites.username] &&
+            (_serverProfile.organization == favorites.organization ||
+             [_serverProfile.organization isEqualToString:favorites.organization])) {
+
+            JSResourceDescriptor *resource = [[JSResourceDescriptor alloc] init];
+            resource.uriString = favorites.uri;
+            resource.label = favorites.label;
+            resource.wsType = favorites.wsType;
+            
+            [resources addObject:resource];
         }
-        
-        JSResourceDescriptor *resource = [[JSResourceDescriptor alloc] init];
-        resource.uriString = favorites.uri;
-        resource.label = favorites.label;
-        resource.wsType = favorites.wsType;
-        
-        [resources addObject:resource];
     }
     
     return resources;
@@ -133,8 +132,17 @@ objection_requires(@"managedObjectContext")
 
 - (NSFetchRequest *)favoritesFetchRequest:(JSResourceDescriptor *)resourceDescriptor
 {
+
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMFavorites];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(serverProfile == %@) AND (uri like %@) AND (username like %@) AND (organization like %@)",
+    NSMutableString *format = [NSMutableString stringWithString:@"(serverProfile == %@) AND (uri like %@) AND (username like %@) AND "];
+
+    if (_serverProfile.organization.length) {
+        [format appendString:@"(organization like %@)"];
+    } else {
+        [format appendString:@"(organization = %@)"];
+    }
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:format,
                               _serverProfile, resourceDescriptor.uriString, _serverProfile.username, _serverProfile.organization];
     fetchRequest.predicate = predicate;
     
