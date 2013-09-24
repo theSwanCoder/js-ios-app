@@ -15,6 +15,14 @@
 		F51D6A82178472870079AE50 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F51D6A80178472870079AE50 /* Localizable.strings */; };
 		F5325D8417B17B2900C11E33 /* JMFavoritesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5325D8317B17B2900C11E33 /* JMFavoritesTableViewController.m */; };
 		F5339A1617CE0F0F005073EE /* JMMultiSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5339A1517CE0F0E005073EE /* JMMultiSelectTableViewController.m */; };
+		F539A6FA17F1992000310D72 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A6F917F1992000310D72 /* Icon@2x.png */; };
+		F539A70117F19A4F00310D72 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A6FE17F19A4F00310D72 /* Default-568h@2x.png */; };
+		F539A70317F19A4F00310D72 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A70017F19A4F00310D72 /* Default@2x.png */; };
+		F539A70517F19AA100310D72 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A70417F19AA100310D72 /* Default.png */; };
+		F539A72517F1A01400310D72 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A72417F1A01400310D72 /* Default-Portrait~ipad.png */; };
+		F539A72717F1A03900310D72 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A72617F1A03900310D72 /* Default-Portrait@2x~ipad.png */; };
+		F539A72917F1A06A00310D72 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A72817F1A06A00310D72 /* Default-Landscape~ipad.png */; };
+		F539A72B17F1A0A500310D72 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A72A17F1A0A500310D72 /* Default-Landscape@2x~ipad.png */; };
 		F53C0AD217B50C080063AE90 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F53C0AD017B50C080063AE90 /* MainStoryboard_iPhone.storyboard */; };
 		F54936FD17C4F1F50009F321 /* JMInputControlFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F54936FC17C4F1F40009F321 /* JMInputControlFactory.m */; };
 		F54BE93B17D7495D00437EA9 /* JMReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F54BE93A17D7495D00437EA9 /* JMReportViewerViewController.m */; };
@@ -40,9 +48,6 @@
 		F55CC33D174CFFCE00CEB39E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F55CC33B174CFFCE00CEB39E /* InfoPlist.strings */; };
 		F55CC33F174CFFCE00CEB39E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F55CC33E174CFFCE00CEB39E /* main.m */; };
 		F55CC343174CFFCE00CEB39E /* JasperMobileAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F55CC342174CFFCE00CEB39E /* JasperMobileAppDelegate.m */; };
-		F55CC345174CFFCE00CEB39E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F55CC344174CFFCE00CEB39E /* Default.png */; };
-		F55CC347174CFFCE00CEB39E /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F55CC346174CFFCE00CEB39E /* Default@2x.png */; };
-		F55CC349174CFFCE00CEB39E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F55CC348174CFFCE00CEB39E /* Default-568h@2x.png */; };
 		F55CC34F174CFFCE00CEB39E /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F55CC34D174CFFCE00CEB39E /* MainStoryboard_iPad.storyboard */; };
 		F55CC365174CFFCF00CEB39E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC364174CFFCF00CEB39E /* SenTestingKit.framework */; };
 		F55CC366174CFFCF00CEB39E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC332174CFFCE00CEB39E /* UIKit.framework */; };
@@ -99,10 +104,16 @@
 		F5E4FB7017C61B7700A69FCC /* JMSingleSelectInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4FB6F17C61B7700A69FCC /* JMSingleSelectInputControlCell.m */; };
 		F5E4FB7317C61BBF00A69FCC /* JMMultiSelectInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4FB7217C61BBE00A69FCC /* JMMultiSelectInputControlCell.m */; };
 		F5E4FB7F17C61DE500A69FCC /* JMBooleanInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4FB7E17C61DDE00A69FCC /* JMBooleanInputControlCell.m */; };
+		F5E87CD317F1A9DD007FC6A7 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = F5E87CD217F1A9DD007FC6A7 /* iTunesArtwork */; };
 		F5EAA25F1797DF840091BA43 /* JMConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EAA25E1797DF840091BA43 /* JMConstants.m */; };
 		F5EAA2651797E0950091BA43 /* JMAppUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = F5EAA2641797E0950091BA43 /* JMAppUpdater.m */; };
 		F5EAA2671797F5970091BA43 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5EAA2661797F5960091BA43 /* Settings.bundle */; };
 		F5EB25DC17E3579800B56FC2 /* input_control_text_field.png in Resources */ = {isa = PBXBuildFile; fileRef = F5EB25DB17E3579800B56FC2 /* input_control_text_field.png */; };
+		F5F1B40717F197F900EB2587 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F1B40117F197F900EB2587 /* Icon-Small-50.png */; };
+		F5F1B40817F197F900EB2587 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F1B40217F197F900EB2587 /* Icon-Small.png */; };
+		F5F1B40917F197F900EB2587 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F1B40317F197F900EB2587 /* Icon-Small@2x.png */; };
+		F5F1B40A17F197F900EB2587 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F1B40417F197F900EB2587 /* Icon.png */; };
+		F5F1B41217F198A600EB2587 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F1B41117F198A600EB2587 /* Icon-72.png */; };
 		F5F8B7C3179DA3720096C61A /* JMAskPasswordDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F8B7C2179DA3720096C61A /* JMAskPasswordDialog.m */; };
 		F5FD8820176B3A6D0021D4CA /* run_report_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5FD881F176B3A6D0021D4CA /* run_report_button.png */; };
 		F5FE06DF1757383800030331 /* JMMenuTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE06DE1757383800030331 /* JMMenuTabBarController.m */; };
@@ -171,6 +182,14 @@
 		F5325D8317B17B2900C11E33 /* JMFavoritesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMFavoritesTableViewController.m; path = Classes/JMFavoritesTableViewController.m; sourceTree = "<group>"; };
 		F5339A1417CE0F0E005073EE /* JMMultiSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMultiSelectTableViewController.h; path = Classes/JMMultiSelectTableViewController.h; sourceTree = "<group>"; };
 		F5339A1517CE0F0E005073EE /* JMMultiSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMultiSelectTableViewController.m; path = Classes/JMMultiSelectTableViewController.m; sourceTree = "<group>"; };
+		F539A6F917F1992000310D72 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		F539A6FE17F19A4F00310D72 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		F539A70017F19A4F00310D72 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		F539A70417F19AA100310D72 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		F539A72417F1A01400310D72 /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait~ipad.png"; sourceTree = "<group>"; };
+		F539A72617F1A03900310D72 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
+		F539A72817F1A06A00310D72 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
+		F539A72A17F1A0A500310D72 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
 		F53C0AD117B50C080063AE90 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		F54936FB17C4F1F40009F321 /* JMInputControlFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMInputControlFactory.h; path = Classes/JMInputControlFactory.h; sourceTree = "<group>"; };
 		F54936FC17C4F1F40009F321 /* JMInputControlFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMInputControlFactory.m; path = Classes/JMInputControlFactory.m; sourceTree = "<group>"; };
@@ -207,9 +226,6 @@
 		F55CC340174CFFCE00CEB39E /* JasperMobile-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JasperMobile-Prefix.pch"; sourceTree = "<group>"; };
 		F55CC341174CFFCE00CEB39E /* JasperMobileAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JasperMobileAppDelegate.h; sourceTree = "<group>"; };
 		F55CC342174CFFCE00CEB39E /* JasperMobileAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JasperMobileAppDelegate.m; sourceTree = "<group>"; };
-		F55CC344174CFFCE00CEB39E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		F55CC346174CFFCE00CEB39E /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		F55CC348174CFFCE00CEB39E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		F55CC34E174CFFCE00CEB39E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		F55CC363174CFFCF00CEB39E /* JasperMobileTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JasperMobileTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F55CC364174CFFCF00CEB39E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -302,6 +318,7 @@
 		F5E4FB7217C61BBE00A69FCC /* JMMultiSelectInputControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMultiSelectInputControlCell.m; path = Classes/JMMultiSelectInputControlCell.m; sourceTree = "<group>"; };
 		F5E4FB7D17C61DDB00A69FCC /* JMBooleanInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBooleanInputControlCell.h; path = Classes/JMBooleanInputControlCell.h; sourceTree = "<group>"; };
 		F5E4FB7E17C61DDE00A69FCC /* JMBooleanInputControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBooleanInputControlCell.m; path = Classes/JMBooleanInputControlCell.m; sourceTree = "<group>"; };
+		F5E87CD217F1A9DD007FC6A7 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		F5EAA25D1797DF840091BA43 /* JMConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMConstants.h; path = JasperMobile/Classes/JMConstants.h; sourceTree = "<group>"; };
 		F5EAA25E1797DF840091BA43 /* JMConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMConstants.m; path = JasperMobile/Classes/JMConstants.m; sourceTree = "<group>"; };
 		F5EAA2631797E0950091BA43 /* JMAppUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMAppUpdater.h; path = JasperMobile/Classes/JMAppUpdater.h; sourceTree = "<group>"; };
@@ -309,6 +326,11 @@
 		F5EAA2661797F5960091BA43 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = JasperMobile/Settings.bundle; sourceTree = "<group>"; };
 		F5EAA2681797FF350091BA43 /* JMReportClientHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMReportClientHolder.h; path = JasperMobile/Classes/JMReportClientHolder.h; sourceTree = "<group>"; };
 		F5EB25DB17E3579800B56FC2 /* input_control_text_field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = input_control_text_field.png; sourceTree = "<group>"; };
+		F5F1B40117F197F900EB2587 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
+		F5F1B40217F197F900EB2587 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
+		F5F1B40317F197F900EB2587 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
+		F5F1B40417F197F900EB2587 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		F5F1B41117F198A600EB2587 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		F5F8B7C1179DA3720096C61A /* JMAskPasswordDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMAskPasswordDialog.h; path = Classes/JMAskPasswordDialog.h; sourceTree = "<group>"; };
 		F5F8B7C2179DA3720096C61A /* JMAskPasswordDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMAskPasswordDialog.m; path = Classes/JMAskPasswordDialog.m; sourceTree = "<group>"; };
 		F5FD881F176B3A6D0021D4CA /* run_report_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = run_report_button.png; sourceTree = "<group>"; };
@@ -375,6 +397,20 @@
 			);
 			name = Utils;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		F539A6FD17F19A4F00310D72 /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				F539A70417F19AA100310D72 /* Default.png */,
+				F539A6FE17F19A4F00310D72 /* Default-568h@2x.png */,
+				F539A70017F19A4F00310D72 /* Default@2x.png */,
+				F539A72417F1A01400310D72 /* Default-Portrait~ipad.png */,
+				F539A72617F1A03900310D72 /* Default-Portrait@2x~ipad.png */,
+				F539A72817F1A06A00310D72 /* Default-Landscape~ipad.png */,
+				F539A72A17F1A0A500310D72 /* Default-Landscape@2x~ipad.png */,
+			);
+			path = Launch;
 			sourceTree = "<group>";
 		};
 		F549370117C4F1FA0009F321 /* Cells */ = {
@@ -537,9 +573,6 @@
 				F55CC33B174CFFCE00CEB39E /* InfoPlist.strings */,
 				F55CC33E174CFFCE00CEB39E /* main.m */,
 				F55CC340174CFFCE00CEB39E /* JasperMobile-Prefix.pch */,
-				F55CC344174CFFCE00CEB39E /* Default.png */,
-				F55CC346174CFFCE00CEB39E /* Default@2x.png */,
-				F55CC348174CFFCE00CEB39E /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
 			path = JasperMobile;
@@ -592,6 +625,7 @@
 		F576BC341753D7B200DF765B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F5E87CD217F1A9DD007FC6A7 /* iTunesArtwork */,
 				F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */,
 				F5EAA2661797F5960091BA43 /* Settings.bundle */,
 				F54C91AD1752FAEA0009E2BE /* Storyboards */,
@@ -603,6 +637,8 @@
 		F576BC351753DB0700DF765B /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F5F1B3FF17F197F900EB2587 /* Icons */,
+				F539A6FD17F19A4F00310D72 /* Launch */,
 				F5EB25DA17E3579800B56FC2 /* TextField */,
 				F58FF2EC1760A0AC0021CC8B /* Buttons */,
 				F553F5DE17C41777007625DF /* ResourceTypes */,
@@ -768,6 +804,19 @@
 			path = TextField;
 			sourceTree = "<group>";
 		};
+		F5F1B3FF17F197F900EB2587 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				F5F1B41117F198A600EB2587 /* Icon-72.png */,
+				F5F1B40117F197F900EB2587 /* Icon-Small-50.png */,
+				F5F1B40217F197F900EB2587 /* Icon-Small.png */,
+				F5F1B40317F197F900EB2587 /* Icon-Small@2x.png */,
+				F5F1B40417F197F900EB2587 /* Icon.png */,
+				F539A6F917F1992000310D72 /* Icon@2x.png */,
+			);
+			path = Icons;
+			sourceTree = "<group>";
+		};
 		F5FE06E217573FC200030331 /* Rotation */ = {
 			isa = PBXGroup;
 			children = (
@@ -893,9 +942,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F55CC33D174CFFCE00CEB39E /* InfoPlist.strings in Resources */,
-				F55CC345174CFFCE00CEB39E /* Default.png in Resources */,
-				F55CC347174CFFCE00CEB39E /* Default@2x.png in Resources */,
-				F55CC349174CFFCE00CEB39E /* Default-568h@2x.png in Resources */,
 				F576BC3B1753DB0700DF765B /* favorites_bar_item.png in Resources */,
 				F576BC3C1753DB0700DF765B /* library_bar_item.png in Resources */,
 				F576BC3D1753DB0700DF765B /* repository_bar_item.png in Resources */,
@@ -922,6 +968,20 @@
 				F553F5E917C41777007625DF /* res_type_text.png in Resources */,
 				F553F5EA17C41777007625DF /* res_type_unknown.png in Resources */,
 				F5EB25DC17E3579800B56FC2 /* input_control_text_field.png in Resources */,
+				F5F1B40717F197F900EB2587 /* Icon-Small-50.png in Resources */,
+				F5F1B40817F197F900EB2587 /* Icon-Small.png in Resources */,
+				F5F1B40917F197F900EB2587 /* Icon-Small@2x.png in Resources */,
+				F5F1B40A17F197F900EB2587 /* Icon.png in Resources */,
+				F5F1B41217F198A600EB2587 /* Icon-72.png in Resources */,
+				F539A6FA17F1992000310D72 /* Icon@2x.png in Resources */,
+				F539A70117F19A4F00310D72 /* Default-568h@2x.png in Resources */,
+				F539A70317F19A4F00310D72 /* Default@2x.png in Resources */,
+				F539A70517F19AA100310D72 /* Default.png in Resources */,
+				F539A72517F1A01400310D72 /* Default-Portrait~ipad.png in Resources */,
+				F539A72717F1A03900310D72 /* Default-Portrait@2x~ipad.png in Resources */,
+				F539A72917F1A06A00310D72 /* Default-Landscape~ipad.png in Resources */,
+				F539A72B17F1A0A500310D72 /* Default-Landscape@2x~ipad.png in Resources */,
+				F5E87CD317F1A9DD007FC6A7 /* iTunesArtwork in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

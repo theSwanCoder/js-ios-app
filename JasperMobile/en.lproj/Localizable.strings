@@ -63,7 +63,6 @@
 "servers.askpassword.dialog.title" = "Enter Password";
 // TODO: localize for other bundles
 "servers.askpassword.serverprofile" = "Server Profile: ";
-"servers.askpassword.organization" = "Organization: ";
 "servers.askpassword.username" = "Username: ";
 
 
@@ -78,12 +77,10 @@
 
 "view.servers" = "Servers";
 "view.repository" = "Repository";
-"view.search" = "Search";
 "view.favorites" = "Favorites";
 "view.library" = "Library";
 
 "resource.properties.title" = "Resource properties";
-"resource.nestedproperties.title" = "Nested resources";
 "resource.name.title" = "Name:";
 "resource.label.title" = "Label:";
 "resource.description.title" = "Desc:";
@@ -95,14 +92,11 @@
 "delete.dialog.msg" = "Are you sure you want to delete this resource?";
 
 "status.loading" = "Loading...";
-"status.searching" = "Searching..."; // TODO: localize
+"status.searching" = "Searching...";
 
 /* Error messages */
 
-"error.general.dialog.msg" = "Error";
-
 "error.readingresponse.dialog.msg" = "Error reading the response";
-"error.incorrectrequest.dialog.msg" = "The request was syntactically incorrect";
 
 "error.noconnection.dialog.title" = "No connection";
 "error.noconnection.dialog.msg" = "Please check your mobile network settings and try again";
@@ -112,11 +106,6 @@
 
 "error.unknownhost.dialog.title" = "Unknown server";
 "error.unknownhost.dialog.msg" = "A server with the specified hostname could not be found";
-
-"error.resourcedelete.dialog.title" = "Error deleting the resource";
-
-"error.reportissue.dialog.title" = "The report had some problems";
-"error.reportempty.dialog.title" = "The report is empty";
 
 "error.upgrade.data.title" = "Upgrade Error - User Data Update";
 "error.upgrade.data.msg" = "There was an error updating user data (Servers, Favorites, Filter values & Settings) during the upgrade process. Press:\nRetry - to re-execute the data update again\nApply - to ignore the error and continue with upgrade, you may LOSE all user data\nCancel - to cancel the upgrade (this will leave you at current version)";
@@ -133,29 +122,22 @@
 
 /* Input control messages */
 
-"ic.value.notset" = "Not set";
 "ic.value.yes" = "Yes";
 "ic.value.no" = "No";
-"ic.value.today" = "Today";
-"ic.value.monthago" = "A month ago";
-"ic.value.3monthsago" = "3 months ago";
 "ic.title.date" = "Date";
 "ic.title.time" = "Time";
 "ic.title.unset" = "Unset";
-"ic.label.selected" = "selected";
 "ic.label.error" = "Error";
 
 /* Buttons */
 
 "dialog.button.applyUpdate" = "Apply";
 "dialog.button.ok" = "OK";
-"dialog.button.done" = "Done";
 "dialog.button.edit" = "Edit";
 "dialog.button.cancel" = "Cancel";
 "dialog.button.retry" = "Retry";
 "dialog.button.run.report" = "Run Report";
 "dialog.button.yes" = "Yes";
-"dialog.button.save" = "Save";
 "dialog.button.info" = "Info";
 "dialog.button.delete" = "Delete";
 "dialog.button.addfavorite" = "Add Favorite";
