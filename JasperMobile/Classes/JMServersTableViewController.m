@@ -106,25 +106,21 @@ inject_default_rotation()
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
-    [super setEditing:editing animated:animated];
-    
-    if (editing) {
-        if (!self.servers.count) {
-            [self performSegueWithIdentifier:kJMEditServerSegue sender:nil];
-        } else {
-            [self.tableView setEditing:YES animated:YES];
-            
-            // Add "New server account" table view cell
-            NSIndexPath *indexPath = [self indexPathForTheNewServerCell];
-            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
-        }        
-    } else {
-        [self.tableView setEditing:NO animated:YES];
-        
-        NSIndexPath *indexPath = [self indexPathForTheNewServerCell];
-        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kJMFooterSection] withRowAnimation:UITableViewRowAnimationNone];
+    if (editing && !self.servers.count) {
+        [self performSegueWithIdentifier:kJMEditServerSegue sender:nil];
+        return;
     }
+
+    [super setEditing:editing animated:animated];
+    NSArray *indexPaths = [NSArray arrayWithObject:[self indexPathForTheNewServerCell]];
+
+    if (editing) {
+        [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
+    } else {
+        [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kJMFooterSection] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - Table view data source
@@ -270,9 +266,13 @@ inject_default_rotation()
         [self.servers replaceObjectAtIndex:index withObject:serverProfile];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     } else {
+        BOOL needsToRefreshFooter = !self.servers.count;
         indexPath = [NSIndexPath indexPathForRow:self.servers.count inSection:0];
         [self.servers addObject:serverProfile];
         [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        if (needsToRefreshFooter) {
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kJMFooterSection] withRowAnimation:UITableViewRowAnimationNone];
+        }
     }
 }
 
