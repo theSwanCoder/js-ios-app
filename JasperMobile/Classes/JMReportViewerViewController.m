@@ -74,6 +74,7 @@ inject_default_rotation()
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [JMUtils hideNetworkActivityIndicator];
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     if ([fileManager fileExistsAtPath:self.tempDirectory]) {
@@ -113,7 +114,6 @@ inject_default_rotation()
     __weak JMReportViewerViewController *reportViewerViewController = self;
 
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:^{
-        [JMRequestDelegate clearRequestPool];
         [reportViewerViewController.navigationController popViewControllerAnimated:YES];
     }];
 

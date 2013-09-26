@@ -32,6 +32,7 @@ __weak static UIViewController *viewControllerToDismiss;
 #import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"
 #import "UIAlertView+LocalizedAlert.h"
+#import "JMUtils.h"
 
 @interface JMRequestDelegate()
 @property (nonatomic, copy) JSRequestFinishedBlock finishedBlock;
@@ -74,6 +75,7 @@ __weak static UIViewController *viewControllerToDismiss;
     requestDelegate.delegate = delegate;
 
     [requestDelegatePool addObject:requestDelegate];
+    [JMUtils showNetworkActivityIndicator];
 
     return requestDelegate;
 }

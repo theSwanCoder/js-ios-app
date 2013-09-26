@@ -32,6 +32,7 @@
 #import "JMLocalization.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
+#import "JMRequestDelegate.h"
 #import <Objection-iOS/Objection.h>
 
 static NSString * const kJMEditServerSegue = @"EditServer";
@@ -228,6 +229,7 @@ inject_default_rotation()
         JMServerProfile *serverProfile = indexPath.row < self.servers.count ? [self.servers objectAtIndex:indexPath.row] : nil;
         [self performSegueWithIdentifier:kJMEditServerSegue sender:serverProfile];
     } else {
+        [JMRequestDelegate clearRequestPool];
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         cell.selected = NO;
         

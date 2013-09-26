@@ -215,7 +215,6 @@
         if ([JMRequestDelegate isRequestPoolEmpty]) {
             // TODO: change logic to select previous values instead dismissing view controller
             [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
-                [JMRequestDelegate clearRequestPool];
                 [[cell.delegate navigationController] popViewControllerAnimated:YES];
             }];
         }
@@ -322,7 +321,6 @@
     
     // TODO: change logic to select previous values instead dismissing view. And check network status!
     [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.reportClient cancelBlock:^{
-        [JMRequestDelegate clearRequestPool];
         [[cell.delegate navigationController] popViewControllerAnimated:YES];
     }];
     

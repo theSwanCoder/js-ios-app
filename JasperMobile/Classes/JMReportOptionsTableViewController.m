@@ -211,8 +211,6 @@ inject_default_rotation()
     
     self.inputControls = nil;
     self.inputControlFactory = nil;
-    
-    [JMRequestDelegate clearRequestPool];
 }
 
 #pragma mark Input Controls
@@ -220,7 +218,6 @@ inject_default_rotation()
 - (void)updateInputControls
 {
     JMCancelRequestBlock cancelBlock = ^{
-        [JMRequestDelegate clearRequestPool];
         [self.navigationController popViewControllerAnimated:YES];
     };
 
@@ -397,9 +394,7 @@ inject_default_rotation()
         [parametersToValidate addObject:reportParameter];
     }
 
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:^{
-        [JMRequestDelegate clearRequestPool];
-    }];
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:nil];
 
     __weak JMReportOptionsTableViewController *reportOptions = self;
 

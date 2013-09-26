@@ -88,7 +88,6 @@ static JMCancelRequestPopup *instance;
 
 - (IBAction)cancelRequests:(id)sender
 {
-    [JMUtils hideNetworkActivityIndicator];
     [self.restClient cancelAllRequests];
     [JMRequestDelegate clearRequestPool];
     [self.viewController dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
@@ -96,6 +95,8 @@ static JMCancelRequestPopup *instance;
     if (self.cancelBlock) {
         self.cancelBlock();
     }
+
+    [JMCancelRequestPopup dismiss];
 }
 
 #pragma mark - Private
