@@ -74,6 +74,8 @@ typedef BOOL (^JMValidationBlock)(NSString *value, NSString **errorMessage);
 - (void)sendChangeServerProfileNotification;
 - (NSIndexPath *)indexPathForTextField:(UITextField *)textField;
 - (void)checkPasswordTextField:(UITextField *)textField andPasswordLabel:(UILabel *)label askPassword:(BOOL)askPassword;
+- (NSInteger)tagForCell:(NSInteger)cell;
+- (NSInteger)cellForTag:(NSInteger)tag;
 @end
 
 @implementation JMServerSettingsTableViewController
@@ -251,13 +253,17 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
             BOOL askPassword = self.serverToEdit.askPassword.boolValue;
             [self checkPasswordTextField:textField andPasswordLabel:label askPassword:askPassword];
         }
+        // Set new tag for textField to find his owner cell
+        textField.tag = [self tagForCell:indexPath.row];
     } else {
         UISwitch *askPasswordSwitch = (UISwitch *) [cell viewWithTag:2];
         askPasswordSwitch.on = [[cellProperties objectForKey:kJMValueKey] boolValue];
+        // Set new tag for askPasswordSwitch to find his owner cell
+        askPasswordSwitch.tag = [self tagForCell:indexPath.row];
     }
     
     [cellProperties setObject:@YES forKey:kJMIsCellConfiguredKey];
-    
+
     return cell;
 }
 
@@ -285,10 +291,9 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
     
     UITableViewCell *passwordCell = [self.tableView cellForRowAtIndexPath:indexPath];
     UILabel *label = (UILabel *) [passwordCell viewWithTag:1];
-    UITextField *textField = (UITextField *) [passwordCell viewWithTag:2];
+    UITextField *textField = (UITextField *) [passwordCell viewWithTag:[self tagForCell:kJMPasswordCell]];
     
-    // Check if password text field should be disabled: askPassword switch in this
-    // case is enabled
+    // Check if password text field should be disabled: askPassword switch in this should be enabled
     [self checkPasswordTextField:textField andPasswordLabel:label askPassword:askPassword];
     
     // Change password value. If askPassword switch is enabled then password should be deleted
@@ -315,11 +320,11 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
         self.serverToEdit = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
     }
     
-    NSArray *allKeys = [[self.cellsProperties allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSArray *allCells = [self.cellsProperties.allKeys sortedArrayUsingSelector:@selector(compare:)];
     BOOL hasErrors = NO;
     
-    for (NSNumber *key in allKeys) {
-        NSDictionary *cellProperties = [self.cellsProperties objectForKey:key];
+    for (NSNumber *cell in allCells) {
+        NSDictionary *cellProperties = [self.cellsProperties objectForKey:cell];
         id value = [cellProperties objectForKey:kJMValueKey];
         
         JMValidationBlock validation = [cellProperties objectForKey:kJMValidationBlockKey];
@@ -368,8 +373,10 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
         // Save changes
         [self.managedObjectContext save:nil];
         // Store password for server profile in keychain
+
         [JMServerProfile storePasswordInKeychain:self.serverToEdit.password profileID:self.serverToEdit.profileID];
         // Update previous view controller with modified server profile
+
         [self.delegate updateWithServerProfile:self.serverToEdit];
         // Send notification that server profile was changed. This will update REST Clients
         [self sendChangeServerProfileNotification];
@@ -387,12 +394,11 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.returnKeyType == UIReturnKeyNext) {
-        NSIndexPath *indexPath = [self indexPathForTextField:textField];
-        UITableViewCell *nextCell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]];
+        NSInteger nextTextField = textField.tag + 1;
         
-        if (nextCell) {
-            [textField resignFirstResponder];
-            [[nextCell viewWithTag:2] becomeFirstResponder];
+        [textField resignFirstResponder];
+        if ([self cellForTag:nextTextField] < kJMAskPasswordCell) {
+            [[self.view viewWithTag:nextTextField] becomeFirstResponder];
         }
     } else {
         [textField resignFirstResponder];
@@ -405,7 +411,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
 
 - (NSIndexPath *)indexPathForTextField:(UITextField *)textField
 {
-    return [self.tableView indexPathForCell:(UITableViewCell *)textField.superview.superview];
+    return [NSIndexPath indexPathForRow:[self cellForTag:textField.tag] inSection:0];
 }
 
 - (void)checkPasswordTextField:(UITextField *)textField andPasswordLabel:(UILabel *)label askPassword:(BOOL)askPassword;
@@ -428,16 +434,25 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
     
     // Do not send notification if updated serverToEdit profile is not active
     if (![serverToEditID isEqual:activeServerID]) return;
-    
-    // TODO: refactor, change logic (one of the solution is to add another notification)
+
     NSDictionary *userInfo = @{
         kJMServerProfileKey : self.serverToEdit,
         kJMNotUpdateMenuKey : @YES
     };
-    
+
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
                                                         object:nil
                                                       userInfo:userInfo];
+}
+
+- (NSInteger)tagForCell:(NSInteger)cell
+{
+    return cell + 2;
+}
+
+- (NSInteger)cellForTag:(NSInteger)tag
+{
+    return tag - 2;
 }
 
 @end

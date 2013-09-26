@@ -61,16 +61,12 @@
 
 "servers.askpassword.label" = "Always ask for password";
 "servers.askpassword.dialog.title" = "Enter Password";
-// TODO: localize for other bundles
 "servers.askpassword.serverprofile" = "Server Profile: ";
 "servers.askpassword.username" = "Username: ";
 
-
-// TODO: localize for other bundles
 "servers.title.new" = "New Server Profile";
 "servers.title.edit" = "Edit Server Profile";
 
-// TODO: localize for other bundles
 "search.resources.placeholder" = "Search Resources";
 
 /* Navigation and view labels */
