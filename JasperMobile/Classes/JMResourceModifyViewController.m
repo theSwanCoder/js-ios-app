@@ -63,6 +63,9 @@ objection_requires(@"resourceClient")
     
     self.label.text = JMCustomLocalizedString(@"resource.label.title", nil);
     self.descriptionLabel.text = JMCustomLocalizedString(@"resource.description.title", nil);
+
+    self.resourceDescriptor.resourceProperties = nil;
+    self.resourceDescriptor.childResourceDescriptors = nil;
 }
 
 - (void)viewDidUnload
