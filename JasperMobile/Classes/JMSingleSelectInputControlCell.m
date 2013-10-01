@@ -94,6 +94,12 @@
     self.userInteractionEnabled = enabled;
 }
 
+- (void)disableCell
+{
+    [super disableCell];
+    [self enabled:NO];
+}
+
 // Clears data, temp solution for memory leak problem
 - (void)clearData
 {
@@ -236,7 +242,9 @@
             }
 
             if (cell.listOfValues.count) {
-                [self enabled:YES];
+                if (!self.inputControlWrapper.isReadOnly) {
+                    [self enabled:YES];
+                }
 
                 // Select first value if cell is mandatory
                 if (cell.isMandatory) {

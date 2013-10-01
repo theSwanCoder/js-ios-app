@@ -1,3 +1,5 @@
+#import "JMRequestDelegate.h"
+
 /*
  * JasperMobile for iOS
  * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
@@ -26,7 +28,7 @@
 //
 
 static NSMutableArray *requestDelegatePool;
-static void (^finalBlock)(void);
+static JMRequestDelegateFinalBlock finalBlock;
 __weak static UIViewController *viewControllerToDismiss;
 
 #import "JMRequestDelegate.h"
@@ -48,7 +50,7 @@ __weak static UIViewController *viewControllerToDismiss;
     requestDelegatePool = [NSMutableArray array];
 }
 
-+ (void)setFinalBlock:(void (^)(void))block
++ (void)setFinalBlock:(JMRequestDelegateFinalBlock)block
 {
     finalBlock = block;
 }

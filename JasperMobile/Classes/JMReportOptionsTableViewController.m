@@ -48,6 +48,8 @@ static NSString * const kJMRunReportSegue = @"RunReport";
 @interface JMReportOptionsTableViewController()
 @property (nonatomic, strong) JMInputControlCell *reportFormatCell;
 @property (nonatomic, strong) JMInputControlFactory *inputControlFactory;
+// Input Controls that should be presented in UI
+@property (nonatomic, strong) NSMutableArray *visibleInputControls;
 @end
 
 @implementation JMReportOptionsTableViewController
@@ -127,7 +129,7 @@ inject_default_rotation()
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == kJMICSection) {
-        return [JMRequestDelegate isRequestPoolEmpty] ? self.inputControls.count : 0;
+        return [JMRequestDelegate isRequestPoolEmpty] ? self.visibleInputControls.count : 0;
     }
     
     return 1;
@@ -137,7 +139,7 @@ inject_default_rotation()
 {
     switch (indexPath.section) {
         case kJMICSection:
-            return [self.inputControls objectAtIndex:indexPath.row];
+            return [self.visibleInputControls objectAtIndex:indexPath.row];
             
         case kJMReportFormatSection:
             return self.reportFormatCell;
@@ -161,12 +163,12 @@ inject_default_rotation()
 {
     if (indexPath.section == kJMRunReportSection) return 50.0f;
     if (indexPath.section == kJMReportFormatSection) return self.reportFormatCell.height;
-    return [[self.inputControls objectAtIndex:indexPath.row] height];
+    return [[self.visibleInputControls objectAtIndex:indexPath.row] height];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return (section == kJMICSection && self.inputControls.count > 0) ? 12.0f : 1.0f;
+    return (section == kJMICSection && self.visibleInputControls.count > 0) ? 12.0f : 1.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -211,6 +213,23 @@ inject_default_rotation()
     
     self.inputControls = nil;
     self.inputControlFactory = nil;
+    self.visibleInputControls = nil;
+}
+
+- (JMRequestDelegateFinalBlock)finalBlockForReportOptions:(__weak JMReportOptionsTableViewController *)reportOptions
+{
+    return ^{
+        if (!reportOptions.visibleInputControls.count) {
+            reportOptions.visibleInputControls = [NSMutableArray array];
+            for (JMInputControlCell *cell in reportOptions.inputControls) {
+                if (!cell.isHidden) {
+                    [reportOptions.visibleInputControls addObject:cell];
+                }
+            }
+        }
+
+        [reportOptions.tableView reloadData];
+    };
 }
 
 #pragma mark Input Controls
@@ -280,9 +299,7 @@ inject_default_rotation()
     __weak JMReportOptionsTableViewController *reportOptions = self;
     
     // Will be invoked in the end after all requests will finish 
-    [JMRequestDelegate setFinalBlock:^{
-        [reportOptions.tableView reloadData];
-    }];
+    [JMRequestDelegate setFinalBlock:[self finalBlockForReportOptions:reportOptions]];
     
     return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         reportOptions.resourceDescriptor = [result.objects objectAtIndex:0];
@@ -366,9 +383,7 @@ inject_default_rotation()
     __weak JMReportOptionsTableViewController *reportOptions = self;
 
     // Will be invoked in the end after all requests will finish
-    [JMRequestDelegate setFinalBlock:^{
-        [reportOptions.tableView reloadData];
-    }];
+    [JMRequestDelegate setFinalBlock:[self finalBlockForReportOptions:reportOptions]];
 
     return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         for (JSInputControlDescriptor *inputControlDescriptor in result.objects) {
@@ -413,9 +428,7 @@ inject_default_rotation()
         }
 
         if (!isValid) {
-            [JMRequestDelegate setFinalBlock:^{
-                [reportOptions.tableView reloadData];
-            }];
+            [JMRequestDelegate setFinalBlock:[self finalBlockForReportOptions:reportOptions]];
         } else {
             NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
 

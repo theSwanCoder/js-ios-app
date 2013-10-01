@@ -29,6 +29,11 @@
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
+ This block which will be invoked after all requests will finish
+ */
+typedef void(^JMRequestDelegateFinalBlock)(void);
+
+/**
  Helper class which gives possibility to work with multiple requests in the same
  View Controller. Each new instance is adding to request pool and removing when
  request is complete
@@ -43,7 +48,7 @@
 
  @param block A final block
  */
-+ (void)setFinalBlock:(void (^)(void))block;
++ (void)setFinalBlock:(JMRequestDelegateFinalBlock)block;
 
 /**
  Creates new instance of request delegate and adds it to the request pool

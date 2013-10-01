@@ -54,5 +54,6 @@
 - (void)clearData;
 - (CGFloat)height;
 - (BOOL)dismissError;
+- (void)disableCell;
 
 @end

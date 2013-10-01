@@ -50,6 +50,12 @@
     return (UISwitch *) [self viewWithTag:2];
 }
 
+- (void)disableCell
+{
+    [super disableCell];
+    self.uiSwitch.enabled = NO;
+}
+
 #pragma mark - Actions
 
 - (IBAction)switchChanged:(id)sender

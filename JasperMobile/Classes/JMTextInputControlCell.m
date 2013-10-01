@@ -62,6 +62,12 @@
     [super clearData];
 }
 
+- (void)disableCell
+{
+    [super disableCell];
+    self.textField.enabled = NO;
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

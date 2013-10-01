@@ -95,11 +95,19 @@
 {
     _inputControlDescriptor = inputControlDescriptor;
 
-    if (inputControlDescriptor.mandatory.boolValue) {
-        self.mandatoryLabel.hidden = NO;
+    if (!inputControlDescriptor.visible.boolValue) {
+        self.hidden = YES;
+    } else {
+        if (inputControlDescriptor.mandatory.boolValue) {
+            self.mandatoryLabel.hidden = NO;
+        }
+
+        if (inputControlDescriptor.readOnly.boolValue) {
+            [self disableCell];
+        }
+
+        self.label.text = inputControlDescriptor.label;
     }
-    
-    self.label.text = inputControlDescriptor.label;
 }
 
 - (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
@@ -107,11 +115,19 @@
     _inputControlWrapper = inputControlWrapper;
     _isMandatory = inputControlWrapper.isMandatory;
 
-    if (_isMandatory) {
-        self.mandatoryLabel.hidden = NO;
+    if (!inputControlWrapper.isVisible) {
+        self.hidden = YES;
+    } else {
+        if (_isMandatory) {
+            self.mandatoryLabel.hidden = NO;
+        }
+
+        if (inputControlWrapper.isReadOnly) {
+            [self disableCell];
+        }
+
+        self.label.text = inputControlWrapper.label;
     }
-    
-    self.label.text = inputControlWrapper.label;
 }
 
 - (UILabel *)label
@@ -139,6 +155,12 @@
     }
     
     return baseHeight;
+}
+
+- (void)disableCell
+{
+    self.label.textColor = [UIColor grayColor];
+    self.mandatoryLabel.textColor = self.label.textColor;
 }
 
 #pragma mark - Private
