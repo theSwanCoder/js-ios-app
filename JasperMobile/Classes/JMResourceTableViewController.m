@@ -31,6 +31,7 @@
 #import "JMLocalization.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
+#import "UITableViewCell+SetSeparators.h"
 #import "UITableViewController+CellRelativeHeight.h"
 #import "JMRequestDelegate.h"
 #import <Objection-iOS/Objection.h>
@@ -161,6 +162,7 @@ inject_default_rotation()
     [JMUtils setTitleForResourceViewController:self];
     [self refreshResourceDescriptor];
     self.resourceDescriptor = nil;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -246,8 +248,20 @@ inject_default_rotation()
         
         cell.textLabel.text = [self localizedTextLabelTitleForProperty:title];
         cell.detailTextLabel.text = value;
+        
+        CGFloat separatorHeight = 1.0f;
+        UIColor *separatorColor = self.tableView.separatorColor;
+
+        [cell setTopSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
+        
+        NSInteger numberOfRows = [[self.numberOfRowsForSections objectForKey:@kJMAttributesSection] integerValue];
+        // Check if we have last row
+        if (indexPath.row == numberOfRows - 1) {
+            [cell setBottomSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
+        }
     } else if (section == kJMToolsSection) {
         cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+        cell.backgroundColor = [UIColor clearColor];
         
         self.favoriteButton = (UIButton *) [cell viewWithTag:1];
         UIButton *deleteButton = (UIButton *) [cell viewWithTag:2];

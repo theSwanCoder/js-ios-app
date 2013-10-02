@@ -111,6 +111,7 @@
 		F5AD3C5817F4A90D00F16D3C /* input_control_text_field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5AD3C5717F4A90D00F16D3C /* input_control_text_field@2x.png */; };
 		F5B6A6A3175F57B90047CB6D /* JMLibraryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */; };
 		F5B6A6A6175F586A0047CB6D /* JMRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6A6A5175F586A0047CB6D /* JMRepositoryTableViewController.m */; };
+		F5C72FDE17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C72FDD17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m */; };
 		F5D6373117909D3C005BA5CD /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */; };
 		F5D6373217909D8F005BA5CD /* libjaspersoft-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D6372817909B1D005BA5CD /* libjaspersoft-sdk.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		F5D97FA1179587100059C761 /* JMFavorites.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97F98179587100059C761 /* JMFavorites.m */; };
@@ -334,6 +335,8 @@
 		F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMLibraryTableViewController.m; path = Classes/JMLibraryTableViewController.m; sourceTree = "<group>"; };
 		F5B6A6A4175F58690047CB6D /* JMRepositoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRepositoryTableViewController.h; path = Classes/JMRepositoryTableViewController.h; sourceTree = "<group>"; };
 		F5B6A6A5175F586A0047CB6D /* JMRepositoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMRepositoryTableViewController.m; path = Classes/JMRepositoryTableViewController.m; sourceTree = "<group>"; };
+		F5C72FDC17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewCell+SetSeparators.h"; path = "JasperMobile/Classes/UITableViewCell+SetSeparators.h"; sourceTree = "<group>"; };
+		F5C72FDD17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableViewCell+SetSeparators.m"; path = "JasperMobile/Classes/UITableViewCell+SetSeparators.m"; sourceTree = "<group>"; };
 		F5D6372017909B1D005BA5CD /* jaspersoft-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jaspersoft-sdk.xcodeproj"; path = "JasperMobile/Vendor/jaspersoft-sdk/jaspersoft-sdk.xcodeproj"; sourceTree = "<group>"; };
 		F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "jaspersoft-sdk-resources.bundle"; path = "JasperMobile/Vendor/jaspersoft-sdk/jaspersoft-sdk-resources.bundle"; sourceTree = "<group>"; };
 		F5D97F97179587100059C761 /* JMFavorites.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMFavorites.h; path = Classes/JMFavorites.h; sourceTree = "<group>"; };
@@ -726,6 +729,8 @@
 				F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */,
 				F5D97F9F179587100059C761 /* JMServerProfile+Helpers.h */,
 				F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */,
+				F5C72FDC17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.h */,
+				F5C72FDD17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m */,
 			);
 			name = Categories;
 			path = ..;
@@ -1151,6 +1156,7 @@
 				F59FD9C017B1014A00331BD8 /* JMFavoritesUtil.m in Sources */,
 				F5325D8417B17B2900C11E33 /* JMFavoritesTableViewController.m in Sources */,
 				F511A55117B26B8B004D90A2 /* JMDashboardViewController.m in Sources */,
+				F5C72FDE17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m in Sources */,
 				F55D622F17C24D9100EC320F /* JMReportOptionsTableViewController.m in Sources */,
 				F553F5DD17C40CD9007625DF /* JMInputControlCell.m in Sources */,
 				F54936FD17C4F1F50009F321 /* JMInputControlFactory.m in Sources */,

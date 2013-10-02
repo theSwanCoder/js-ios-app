@@ -34,6 +34,7 @@
 #import "JMRequestDelegate.h"
 #import "JMUtils.h"
 #import "JMReportViewerViewController.h"
+#import "UITableViewCell+SetSeparators.h"
 #import <Objection-iOS/Objection.h>
 
 #define kJMICSection 0
@@ -44,6 +45,9 @@ static NSString * const kJMRunCellIdentifier = @"RunCell";
 static NSString * const kJMShowSingleSelectSegue = @"ShowSingleSelect";
 static NSString * const kJMShowMultiSelectSegue = @"ShowMultiSelect";
 static NSString * const kJMRunReportSegue = @"RunReport";
+
+static CGFloat const separatorHeight = 1.0f;
+__weak static UIColor * separatorColor;
 
 @interface JMReportOptionsTableViewController()
 @property (nonatomic, strong) JMInputControlCell *reportFormatCell;
@@ -91,16 +95,25 @@ inject_default_rotation()
     [super viewDidLoad];
     [JMUtils setTitleForResourceViewController:self];
 
+
     if (self.resourceDescriptor && !self.inputControls.count) {
         [self updateInputControls];
     }
+
+    separatorColor = self.tableView.separatorColor;
     
     if (!self.reportFormatCell) {
         NSArray *reportOutputFormats = @[
             kJMRunOutputFormatHTML, kJMRunOutputFormatPDF
         ];
         self.reportFormatCell = [self.inputControlFactory reportOutputFormatCellWithFormats:reportOutputFormats];
+        
+        CGFloat separatorHeight = 1.0f;
+        [self.reportFormatCell setTopSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
+        [self.reportFormatCell setBottomSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
     }
+    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -148,6 +161,7 @@ inject_default_rotation()
         default: {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kJMRunCellIdentifier];
             cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+            cell.backgroundColor = [UIColor clearColor];
 
             UIButton *run = (UIButton *) [cell viewWithTag:1];
             [JMUtils setBackgroundImagesForButton:run
@@ -221,8 +235,17 @@ inject_default_rotation()
     return ^{
         if (!reportOptions.visibleInputControls.count) {
             reportOptions.visibleInputControls = [NSMutableArray array];
-            for (JMInputControlCell *cell in reportOptions.inputControls) {
+            
+            for (NSUInteger i = 0, count = reportOptions.inputControls.count; i < count; i++) {
+                JMInputControlCell *cell = [reportOptions.inputControls objectAtIndex:i];
+                
                 if (!cell.isHidden) {
+                    [cell setTopSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
+                    // Check if this is the last IC
+                    if (i == count - 1) {
+                        // And set bottom separator if yes
+                        [cell setBottomSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
+                    }
                     [reportOptions.visibleInputControls addObject:cell];
                 }
             }
