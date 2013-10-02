@@ -119,7 +119,9 @@
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    self.tableView.contentOffset = self.contentOffset;
+    if (!self.isSearchDisabled) {
+        self.tableView.contentOffset = self.contentOffset;
+    }
 }
 
 #pragma mark - UISearchBarDelegate
@@ -204,7 +206,12 @@
 
 - (CGPoint)defaultContentOffset
 {
-    return CGPointMake(0, self.searchBar.frame.size.height);
+    // TODO: find a better way to fix issue with contentOffset
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        return CGPointMake(0, -20.0f);
+    } else {
+        return CGPointMake(0, self.searchBar.frame.size.height);
+    }
 }
 
 - (void)resetSearchState
