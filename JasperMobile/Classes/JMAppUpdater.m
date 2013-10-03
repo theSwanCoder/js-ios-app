@@ -58,6 +58,8 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 {
     NSNumber *latestAppVersion = [self latestAppVersion];
     NSNumber *currentAppVersion = [self currentAppVersion];
+    if (currentAppVersion != nil && [currentAppVersion compare:latestAppVersion] == NSOrderedSame) return;
+    
     managedObjectContext = [[JSObjection defaultInjector] getObject:[NSManagedObjectContext class]];
     NSMutableDictionary *versionsToUpdate = [NSMutableDictionary dictionary];
     
@@ -65,12 +67,10 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_2)] forKey:@1.2];
     [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_5)] forKey:@1.5];
     [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_6)] forKey:@1.6];
-
-    if (currentAppVersion == nil || [currentAppVersion compare:latestAppVersion] == 0) {
-        return;
-    }
     
     for (NSNumber *version in versionsToUpdate.allKeys) {
+        if (version.doubleValue <= currentAppVersion.doubleValue) continue;
+        
         SEL selector = [versionsToUpdate[version] pointerValue];
         NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:selector]];
         invocation.selector = selector;
@@ -80,7 +80,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         BOOL *updateResult;
         [invocation getReturnValue:&updateResult];
         
-        if ([currentAppVersion compare:version] == -1 && updateResult) {
+        if (updateResult) {
             // Update app version for each migration. This allows to track which migration was failed
             [self updateAppVersionTo:version];
             errorMessage = nil;
@@ -113,6 +113,16 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 + (BOOL)hasErrors
 {
     return errorMessage.length != 0;
+}
+
++ (BOOL)isRunningForTheFirstTime
+{
+    NSNumber *currentAppVersion = [self currentAppVersion];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber *wasFirstRun = [defaults objectForKey:kJMDefaultsFirstRun];
+    NSNumber *notFirstRun = [defaults objectForKey:kJMDefaultsNotFirstRun];
+    
+    return currentAppVersion == nil && wasFirstRun.intValue != 1 && notFirstRun.intValue != 1;
 }
 
 #pragma mark - Migration methods

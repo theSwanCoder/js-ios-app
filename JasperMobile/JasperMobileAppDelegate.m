@@ -62,8 +62,7 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     if (self = [super init]) {
         [self initObjectionModules];
         
-        // Check if app is running for the first time
-        if (![JMAppUpdater currentAppVersion]) {
+        if ([JMAppUpdater isRunningForTheFirstTime]) {
             [JMAppUpdater updateAppVersionTo:[JMAppUpdater latestAppVersion]];
             [self coreDataInit];
         } else {

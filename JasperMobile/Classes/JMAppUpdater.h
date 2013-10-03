@@ -61,6 +61,11 @@
 + (NSNumber *)latestAppVersion;
 
 /**
+ Indicates if app is running for the first time
+ */
++ (BOOL)isRunningForTheFirstTime;
+
+/**
  Checks if update has any errors
  */
 + (BOOL)hasErrors;
