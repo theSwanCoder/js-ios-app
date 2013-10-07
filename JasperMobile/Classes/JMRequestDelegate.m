@@ -61,6 +61,7 @@ __weak static UIViewController *viewControllerToDismiss;
     requestDelegate.finishedBlock = finishedBlock;
     
     [requestDelegatePool addObject:requestDelegate];
+    [JMUtils showNetworkActivityIndicator];
     
     return requestDelegate;
 }

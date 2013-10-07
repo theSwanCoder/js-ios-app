@@ -51,6 +51,7 @@ inject_default_rotation()
 
     NSURL *url = [NSURL URLWithString:dashboardUrl];    
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:500];
+    [JMUtils showNetworkActivityIndicator];
     [self.activityIndicator startAnimating];
     [self.webView loadRequest:request];
 }

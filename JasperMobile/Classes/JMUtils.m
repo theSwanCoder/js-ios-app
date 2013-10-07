@@ -97,12 +97,18 @@ CGFloat kJMNoEdgesInset = -1;
 
 + (void)showNetworkActivityIndicator
 {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    UIApplication *application = [UIApplication sharedApplication];
+    if (!application.networkActivityIndicatorVisible) {
+        application.networkActivityIndicatorVisible = YES;
+    }
 }
 
 + (void)hideNetworkActivityIndicator
 {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    UIApplication *application = [UIApplication sharedApplication];
+    if (application.networkActivityIndicatorVisible) {
+        application.networkActivityIndicatorVisible = NO;
+    }
 }
 
 @end
