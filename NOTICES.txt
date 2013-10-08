@@ -25,15 +25,16 @@ along with Jaspersoft Mobile SDK for Android. If not, see
 THIRD PARTY COMPONENTS
 -------------------------------
 This software includes third party software subject to the associated copyrights, as follows:
-- JRSwizzle v1.0 (MIT) - https://github.com/rentzsch/jrswizzle
 - MJPopupViewController v0.4 (MIT) - https://github.com/martinjuhasz/MJPopupViewController
-- Objection (MIT) v0.16.0 - https://github.com/atomicobject/objection
+- Objection v0.16.0 (MIT) - https://github.com/atomicobject/objection
 - SSKeychain v0.1.4 (MIT) - https://github.com/soffes/sskeychain
 - TPKeyboardAvoiding v1.1 - https://github.com/michaeltyson/TPKeyboardAvoiding
 
 This software is built using the Jaspersoft Mobile SDK for iOS, which depends on 
 third party software, subject to the associated copyrights, as follows:
 - RestKit v0.10.3 (Apache) - https://github.com/RestKit/RestKit
+- JRSwizzle v1.0 (MIT) - https://github.com/rentzsch/jrswizzle
+- XMLWriter (MIT) - http://code.google.com/p/xswi/
 
 The text of licenses for the above software is included with the
 JasperMobile for iOS source package, in the /docs/licenses folder.
