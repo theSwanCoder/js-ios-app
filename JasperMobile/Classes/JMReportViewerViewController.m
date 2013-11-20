@@ -42,7 +42,7 @@ inject_default_rotation()
 
 @synthesize reportClient = _reportClient;
 @synthesize resourceClient = _resourceClient;
-@synthesize resourceDescriptor = _resourceDescriptor;
+@synthesize resourceLookup = _resourceLookup;
 
 #pragma mark - Initialization
 
@@ -97,7 +97,7 @@ inject_default_rotation()
 
 - (void)generateReportURL
 {
-    NSURL *reportURL = [NSURL URLWithString:[self.reportClient generateReportUrl:self.resourceDescriptor.uriString
+    NSURL *reportURL = [NSURL URLWithString:[self.reportClient generateReportUrl:self.resourceLookup.uri
                                                                     reportParams:self.parameters
                                                                             page:0
                                                                           format:self.reportFormat]];
@@ -165,7 +165,7 @@ inject_default_rotation()
         [reportViewerViewController.webView loadRequest:[NSURLRequest requestWithURL:reportPath]];
     }];
 
-    [self.reportClient runReport:self.resourceDescriptor.uriString reportParams:self.parameters format:self.reportFormat delegate:delegate];
+    [self.reportClient runReport:self.resourceLookup.uri reportParams:self.parameters format:self.reportFormat delegate:delegate];
 }
 
 @end

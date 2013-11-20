@@ -21,31 +21,21 @@
  */
 
 //
-//  JMResourceModifyViewController.h
+//  JSRESTBase+updateServerInfo.m
 //  Jaspersoft Corporation
 //
 
-#import <UIKit/UIKit.h>
-#import "JMResourceClientHolder.h"
+#import "JSRESTBase+updateServerInfo.h"
 
-@protocol JMResourceModifyViewControllerDelegate;
+@implementation JSRESTBase (updateServerInfo)
 
-/**
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
- */
-@interface JMResourceModifyViewController : UIViewController <JMResourceClientHolder, JSRequestDelegate, UITextFieldDelegate>
-
-@property (nonatomic, weak) id <JMResourceModifyViewControllerDelegate> delegate;
-@property (nonatomic, weak) IBOutlet UITextField *labelTextField;
-@property (nonatomic, weak) IBOutlet UITextView *descriptionTextView;
-@property (nonatomic, weak) IBOutlet UILabel *label;
-@property (nonatomic, weak) IBOutlet UILabel *descriptionLabel;
-
-@end
-
-@protocol JMResourceModifyViewControllerDelegate <NSObject>
-@required
-@property (nonatomic, assign) BOOL needsToRefreshResourceDescriptorData;
+- (void)updateServerInfo:(id <JSRequestDelegate>)delegate
+{
+    if (!self.serverProfile.serverInfo) {
+        [self serverInfo:delegate];
+    } else {
+        [delegate requestFinished:nil];
+    }
+}
 
 @end

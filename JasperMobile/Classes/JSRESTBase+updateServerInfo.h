@@ -21,31 +21,23 @@
  */
 
 //
-//  JasperMobileTests.m
+//  JSRESTBase+updateServerInfo.h
 //  Jaspersoft Corporation
 //
 
-#import "JasperMobileTests.h"
+#import <jaspersoft-sdk/JaspersoftSDK.h>
 
-@implementation JasperMobileTests
+/**
+ Provides a cached version of "serverInfo" method
+ 
+ @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @since 1.6
+ */
+@interface JSRESTBase (updateServerInfo)
 
-- (void)setUp
-{
-    [super setUp];
-    
-    // Set-up code here.
-}
-
-- (void)tearDown
-{
-    // Tear-down code here.
-    
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    STFail(@"Unit tests are not implemented yet in JasperMobileTests");
-}
+/**
+ Gets server information details only if this information wasn't requested (is nil)
+ */
+- (void)updateServerInfo:(id <JSRequestDelegate>)delegate;
 
 @end

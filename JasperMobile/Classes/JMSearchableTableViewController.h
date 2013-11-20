@@ -38,5 +38,7 @@
 @property (nonatomic, strong) NSString *searchQuery;
 @property (nonatomic, assign) BOOL isSearchDisabled;
 @property (nonatomic, readonly) JMCancelRequestBlock cancelBlock;
+@property (nonatomic, assign) NSInteger offset;
+@property (nonatomic, assign) NSInteger totalCount;
 
 @end

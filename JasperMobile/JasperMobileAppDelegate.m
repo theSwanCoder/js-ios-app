@@ -278,9 +278,6 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
         // Update timeouts
         [self updateTimeouts];
         
-        // Forces to refresh server info
-        [self updateServerInfoAsynchronouslyForRestClient:self.resourceClient];
-
         [defaults setURL:[serverProfile.objectID URIRepresentation] forKey:kJMDefaultsActiveServer];
     }
     
@@ -333,26 +330,6 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     }
     
     return nil;
-}
-
-- (void)updateServerInfoAsynchronouslyForRestClient:(JSRESTBase *)client
-{
-    JSConstants *constants = [[JSObjection defaultInjector] getObject:[JSConstants class]];
-
-    JSRequest *request = [[JSRequest alloc] init];
-    request.uri = constants.REST_SERVER_INFO_URI;
-    request.restVersion = JSRESTVersion_2;
-    request.asynchronous = YES;
-    request.timeoutInterval = client.timeoutInterval;
-
-    __weak JSRESTBase *clientWeak = client;
-    request.finishedBlock = ^(JSOperationResult *result) {
-        if (!result.error && result.objects.count) {
-            clientWeak.serverProfile.serverInfo = [result.objects objectAtIndex:0];
-        }
-    };
-
-    [client sendRequest:request];
 }
 
 @end

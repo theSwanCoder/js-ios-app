@@ -35,6 +35,7 @@
 #import "JMUtils.h"
 #import "JMReportViewerViewController.h"
 #import "UITableViewCell+SetSeparators.h"
+#import "JSRESTBase+updateServerInfo.h"
 #import <Objection-iOS/Objection.h>
 
 #define kJMICSection 0
@@ -63,6 +64,7 @@ inject_default_rotation()
 @synthesize inputControls = _inputControls;
 @synthesize reportClient = _reportClient;
 @synthesize resourceClient = _resourceClient;
+@synthesize resourceLookup = _resourceLookup;
 @synthesize resourceDescriptor = _resourceDescriptor;
 
 - (JMInputControlFactory *)inputControlFactory
@@ -96,7 +98,7 @@ inject_default_rotation()
     [JMUtils setTitleForResourceViewController:self];
 
 
-    if (self.resourceDescriptor && !self.inputControls.count) {
+    if ((self.resourceDescriptor || self.resourceLookup) && !self.inputControls.count) {
         [self updateInputControls];
     }
 
@@ -126,7 +128,7 @@ inject_default_rotation()
         [destinationViewController setCell:sender];
 
     } else if ([identifier isEqualToString:kJMRunReportSegue]) {
-        [destinationViewController setResourceDescriptor:self.resourceDescriptor];
+        [destinationViewController setResourceLookup:self.resourceLookup];
         [destinationViewController setReportFormat:self.reportFormatCell.value];
         [destinationViewController setParameters:sender];
     }
@@ -208,7 +210,11 @@ inject_default_rotation()
 {
     if ([cell conformsToProtocol:@protocol(JMResourceClientHolder)]) {
         [cell setResourceClient:self.resourceClient];
-        [cell setResourceDescriptor:self.resourceDescriptor];
+        if (self.reportClient.serverProfile.serverInfo.versionAsInteger < self.constants.VERSION_CODE_EMERALD) {
+            [cell setResourceDescriptor:self.resourceDescriptor];
+        } else {
+            [cell setResourceLookup:self.resourceLookup];
+        }
     }
 
     if ([cell conformsToProtocol:@protocol(JMReportClientHolder)]) {
@@ -262,16 +268,22 @@ inject_default_rotation()
     JMCancelRequestBlock cancelBlock = ^{
         [self.navigationController popViewControllerAnimated:YES];
     };
-
-    if (self.reportClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD) {
-        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:cancelBlock];
-
-        NSArray *reportParameters = [self.reportOptionsUtil reportOptionsAsParametersForReport:self.resourceDescriptor.uriString];
-        [self.reportClient inputControlsForReport:self.resourceDescriptor.uriString ids:nil selectedValues:reportParameters delegate:self.inputControlsForReportDelegate];
-    } else {
-        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:cancelBlock];
-        [self.resourceClient resource:self.resourceDescriptor.uriString delegate:self.resourceDelegate];
-    }
+    
+    __weak JMReportOptionsTableViewController *weakSelf = self;
+    
+//    self.resourceClient.serverInfo.version = nil;
+    
+    // TODO: add possibility to cancel request for many rest clients
+    [JMCancelRequestPopup presentInViewController:weakSelf message:@"status.loading" restClient:nil cancelBlock:cancelBlock];
+    
+    [self.resourceClient updateServerInfo:[JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *resourceInfoResult) {
+        if (self.reportClient.serverProfile.serverInfo.versionAsInteger >= weakSelf.constants.VERSION_CODE_EMERALD) {
+            NSArray *reportParameters = [weakSelf.reportOptionsUtil reportOptionsAsParametersForReport:weakSelf.resourceLookup.uri];
+            [self.reportClient inputControlsForReport:weakSelf.resourceLookup.uri ids:nil selectedValues:reportParameters delegate:weakSelf.inputControlsForReportDelegate];
+        } else {
+            [weakSelf.resourceClient resource:weakSelf.resourceDescriptor.uriString delegate:weakSelf.resourceDelegate];
+        }
+    }]];
 }
 
 - (void)cleanupDependencies:(NSArray *)inputControls
@@ -331,7 +343,7 @@ inject_default_rotation()
         
         // Create wrapper for IC
         for (JSResourceDescriptor *childResourceDescriptor in reportOptions.resourceDescriptor.childResourceDescriptors) {
-            if ([childResourceDescriptor.wsType isEqualToString:reportOptions.constants.WS_TYPE_INPUT_CONTROL]){
+            if ([childResourceDescriptor.wsType isEqualToString:reportOptions.constants.WS_TYPE_INPUT_CONTROL]) {
                 JSInputControlWrapper *inputControl = [[JSInputControlWrapper alloc] initWithResourceDescriptor:childResourceDescriptor];
                 [inputControlWrappers addObject:inputControl];
             }
@@ -461,12 +473,12 @@ inject_default_rotation()
                 }
             }
 
-            [self.reportOptionsUtil updateReportOptions:parameters forReport:reportOptions.resourceDescriptor.uriString];
+            [self.reportOptionsUtil updateReportOptions:parameters forReport:reportOptions.resourceLookup.uri];
             [reportOptions performSegueWithIdentifier:kJMRunReportSegue sender:parameters];
         }
     }];
 
-    [self.reportClient updatedInputControlsValues:self.resourceDescriptor.uriString
+    [self.reportClient updatedInputControlsValues:self.resourceLookup.uri
                                               ids:ids
                                    selectedValues:parametersToValidate
                                          delegate:delegate];

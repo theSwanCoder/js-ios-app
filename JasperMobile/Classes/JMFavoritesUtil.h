@@ -40,29 +40,29 @@
     JMServerProfile *_serverProfile;
 }
 
-// For this resource favorites will be modified
-@property (nonatomic, strong) JSResourceDescriptor *resourceDescriptor;
-
 // Indicates if there was any db transactions or server profile was modified
 // so data should be refreshed
 @property (nonatomic, assign) BOOL needsToRefreshFavorites;
 
+// Sets resource with a specified uri, label and type. For this resource favorites will be modified
+- (void)setResource:(NSString *)resourceUri label:(NSString *)label type:(NSString *)type;
+
 // Sets a server profile to retrieve, add or delete favorites
 - (void)setServerProfile:(JMServerProfile *)serverProfile;
 
-// Adds to favorites "resourceDescriptor" provided as property
+// Adds resource to favorites
 - (void)addToFavorites;
 
-// Removes from favorites "resourceDescriptor" provided as property
+// Removes resource from favorites
 - (void)removeFromFavorites;
 
 // Removes from favorites
-- (void)removeFromFavorites:(JSResourceDescriptor *)resourceDescriptor;
+- (void)removeFromFavorites:(NSString *)resourceUri;
 
 // Checks if resource was already added to favorites
 - (BOOL)isResourceInFavorites;
 
-// Returns list of wrappers from favorites. Wrapper is a JSResourceDescriptor 
+// Returns list of wrappers from favorites. Wrapper is a JSResourceLookup
 // with only provided name, label and wsType
 - (NSMutableArray *)wrappersFromFavorites;
 

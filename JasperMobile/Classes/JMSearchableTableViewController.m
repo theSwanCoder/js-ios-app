@@ -30,6 +30,8 @@
 #import "JMLocalization.h"
 #import "JMUtils.h"
 
+static NSInteger const kJMLoadingCellTag = 100;
+
 @interface JMSearchableTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, assign) CGPoint contentOffset;
@@ -44,13 +46,18 @@
 
 - (BOOL)isNeedsToReloadData
 {
-    return !self.isRefreshing && ([super isNeedsToReloadData] || self.searchQuery.length);
+    return !self.isRefreshing && [super isNeedsToReloadData];
 }
 
 - (void)changeServerProfile
 {
     [super changeServerProfile];
     [self resetSearchState];
+}
+
+- (void)getResources
+{
+    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:@"You need to implement \"getResources\" method in subclasses" userInfo:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -155,7 +162,7 @@
         
         if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
             [destinationViewController setResourceClient:self.resourceClient];
-            [destinationViewController setResourceDescriptor:self.resourceDescriptor];
+            [destinationViewController setResourceLookup:self.resourceLookup];
             [destinationViewController setIsSearchDisabled:YES];
         }
         
@@ -179,16 +186,13 @@
 - (void)requestFinished:(JSOperationResult *)result
 {
     self.isRefreshing = NO;
-    self.searchQuery = nil;
+    [JMUtils hideNetworkActivityIndicator];
+
+    if (self.isPaginationAvailable && !self.totalCount) {
+        self.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
+    }
+
     [super requestFinished:result];
-}
-
-#pragma mark - JMResourceTableViewControllerDelegate
-
-- (void)refreshWithResource:(JSResourceDescriptor *)resourceDescriptor
-{
-    [super refreshWithResource:resourceDescriptor];
-    self.tableView.contentOffset = self.contentOffset;
 }
 
 #pragma mark - JMRefreshable
@@ -200,6 +204,36 @@
     self.resources = nil;
     [self resetSearchState];
     [self.tableView reloadData];
+}
+
+#pragma mark - Pagination Implementation
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSInteger numberOfRows = [super tableView:tableView numberOfRowsInSection:section];
+    if (self.isPaginationAvailable && numberOfRows != 0 && self.offset + kJMResourcesLimit < self.totalCount) {
+        numberOfRows++;
+    }
+    return numberOfRows;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == self.resources.count) {
+        UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"LoadingCell"];
+        cell.tag = kJMLoadingCellTag;
+        return cell;
+    }
+
+    return [super tableView:tableView cellForRowAtIndexPath:indexPath];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (cell.tag == kJMLoadingCellTag) {
+        self.offset += kJMResourcesLimit;
+        [self getResources];
+    }
 }
 
 #pragma mark - Private
@@ -218,6 +252,8 @@
 {
     self.searchBar.text = nil;
     self.searchQuery = nil;
+    self.offset = 0;
+    self.totalCount = 0;
     self.contentOffset = [self defaultContentOffset];
 }
 

@@ -51,6 +51,7 @@
 		F55D622F17C24D9100EC320F /* JMReportOptionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F55D622E17C24D9100EC320F /* JMReportOptionsTableViewController.m */; };
 		F5663A311752F9D0007978BE /* Objection-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A2E1752F9D0007978BE /* Objection-iOS.framework */; };
 		F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A321752FA5C007978BE /* CFNetwork.framework */; };
+		F57186C3183658DD0013B6EB /* JSRESTBase+updateServerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F57186C2183658DD0013B6EB /* JSRESTBase+updateServerInfo.m */; };
 		F572814717C77048000B192D /* JMRequestDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F572814617C77048000B192D /* JMRequestDelegate.m */; };
 		F576BC411753DFF600DF765B /* JMBaseRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F576BC401753DFF600DF765B /* JMBaseRepositoryTableViewController.m */; };
 		F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */; };
@@ -120,7 +121,6 @@
 		F5D97FA4179587100059C761 /* JMServerProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97F9E179587100059C761 /* JMServerProfile.m */; };
 		F5D97FA5179587100059C761 /* JMServerProfile+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */; };
 		F5D97FAA179587CF0059C761 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97FA9179587CF0059C761 /* SSKeychain.m */; };
-		F5DC4EA71769F01000038D58 /* JMResourceModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DC4EA61769F01000038D58 /* JMResourceModifyViewController.m */; };
 		F5DC4EAB176A101D00038D58 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */; };
 		F5DE3FA3178A387B00840808 /* JMSearchableTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DE3FA2178A387B00840808 /* JMSearchableTableViewController.m */; };
 		F5E4FB5F17C6053900A69FCC /* JMDateInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4FB5E17C6053900A69FCC /* JMDateInputControlCell.m */; };
@@ -256,6 +256,8 @@
 		F55D622E17C24D9100EC320F /* JMReportOptionsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportOptionsTableViewController.m; path = Classes/JMReportOptionsTableViewController.m; sourceTree = "<group>"; };
 		F5663A2E1752F9D0007978BE /* Objection-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Objection-iOS.framework"; path = "JasperMobile/Vendor/Objection-iOS.framework"; sourceTree = "<group>"; };
 		F5663A321752FA5C007978BE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		F57186C1183658DD0013B6EB /* JSRESTBase+updateServerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "JSRESTBase+updateServerInfo.h"; path = "JasperMobile/Classes/JSRESTBase+updateServerInfo.h"; sourceTree = "<group>"; };
+		F57186C2183658DD0013B6EB /* JSRESTBase+updateServerInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "JSRESTBase+updateServerInfo.m"; path = "JasperMobile/Classes/JSRESTBase+updateServerInfo.m"; sourceTree = "<group>"; };
 		F572814517C77047000B192D /* JMRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRequestDelegate.h; path = JasperMobile/Classes/JMRequestDelegate.h; sourceTree = "<group>"; };
 		F572814617C77048000B192D /* JMRequestDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMRequestDelegate.m; path = JasperMobile/Classes/JMRequestDelegate.m; sourceTree = "<group>"; };
 		F57364EA17B91BB500A10588 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRefreshable.h; path = JasperMobile/Classes/JMRefreshable.h; sourceTree = "<group>"; };
@@ -350,8 +352,6 @@
 		F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "JMServerProfile+Helpers.m"; path = "JasperMobile/Classes/JMServerProfile+Helpers.m"; sourceTree = "<group>"; };
 		F5D97FA8179587CF0059C761 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		F5D97FA9179587CF0059C761 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
-		F5DC4EA51769F01000038D58 /* JMResourceModifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourceModifyViewController.h; path = Classes/JMResourceModifyViewController.h; sourceTree = "<group>"; };
-		F5DC4EA61769F01000038D58 /* JMResourceModifyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceModifyViewController.m; path = Classes/JMResourceModifyViewController.m; sourceTree = "<group>"; };
 		F5DC4EA9176A101D00038D58 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
 		F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		F5DE3FA1178A387B00840808 /* JMSearchableTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSearchableTableViewController.h; path = Classes/JMSearchableTableViewController.h; sourceTree = "<group>"; };
@@ -537,8 +537,6 @@
 				F54BE93A17D7495D00437EA9 /* JMReportViewerViewController.m */,
 				F5B6A6A4175F58690047CB6D /* JMRepositoryTableViewController.h */,
 				F5B6A6A5175F586A0047CB6D /* JMRepositoryTableViewController.m */,
-				F5DC4EA51769F01000038D58 /* JMResourceModifyViewController.h */,
-				F5DC4EA61769F01000038D58 /* JMResourceModifyViewController.m */,
 				F5A5F551176206360018FEFC /* JMResourceTableViewController.h */,
 				F5A5F552176206360018FEFC /* JMResourceTableViewController.m */,
 			);
@@ -727,10 +725,12 @@
 				F514E69B175575AE00C9F61E /* UIAlertView+LocalizedAlert.m */,
 				F585FB6C176753460079D89C /* UITableViewController+CellRelativeHeight.h */,
 				F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */,
-				F5D97F9F179587100059C761 /* JMServerProfile+Helpers.h */,
-				F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */,
 				F5C72FDC17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.h */,
 				F5C72FDD17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m */,
+				F5D97F9F179587100059C761 /* JMServerProfile+Helpers.h */,
+				F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */,
+				F57186C1183658DD0013B6EB /* JSRESTBase+updateServerInfo.h */,
+				F57186C2183658DD0013B6EB /* JSRESTBase+updateServerInfo.m */,
 			);
 			name = Categories;
 			path = ..;
@@ -1139,7 +1139,7 @@
 				F5A5F553176206360018FEFC /* JMResourceTableViewController.m in Sources */,
 				F55048D917622B8C0067304B /* JMUtils.m in Sources */,
 				F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */,
-				F5DC4EA71769F01000038D58 /* JMResourceModifyViewController.m in Sources */,
+				F57186C3183658DD0013B6EB /* JSRESTBase+updateServerInfo.m in Sources */,
 				F5DC4EAB176A101D00038D58 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				F5DE3FA3178A387B00840808 /* JMSearchableTableViewController.m in Sources */,
 				F55174D0178AB1A5006186B4 /* JMServersTableViewController.m in Sources */,

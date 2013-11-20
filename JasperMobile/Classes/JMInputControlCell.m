@@ -52,7 +52,7 @@
     
     UILabel *errorLabel = self.errorLabel;
     errorLabel.text = errorMessage;
-    errorLabel.hidden = errorMessage.length ? NO : YES;
+    errorLabel.hidden = errorMessage.length == 0;
     if (!errorLabel.hidden) {
         [errorLabel sizeToFit];
     }

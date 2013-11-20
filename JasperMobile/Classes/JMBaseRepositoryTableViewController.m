@@ -30,14 +30,14 @@
 #import "JMUtils.h"
 #import <Objection-iOS/Objection.h>
 
+NSInteger const kJMResourcesLimit = 40;
 static NSString * const kJMShowResourceInfoSegue = @"ShowResourceInfo";
 static NSString * const kJMUnknownCell = @"UnknownCell";
 
 @interface JMBaseRepositoryTableViewController ()
 @property (nonatomic, strong, readonly) NSDictionary *cellsIdentifiers;
-@property (nonatomic, strong) NSIndexPath *lastIndexPath;
 
-- (JSResourceDescriptor *)resourceDescriptorForIndexPath:(NSIndexPath *)indexPath;
+- (JSResourceLookup *)resourceLookupForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)cellIdentifierForResourceType:(NSString *)resourceType;
 @end
 
@@ -47,7 +47,7 @@ inject_default_rotation()
 
 - (BOOL)isNeedsToReloadData
 {
-    return self.resources == nil;
+    return self.resources.count == 0;
 }
 
 - (void)changeServerProfile
@@ -64,6 +64,7 @@ inject_default_rotation()
 @synthesize constants = _constants;
 @synthesize cellsIdentifiers = _cellsIdentifiers;
 @synthesize resourceClient = _resourceClient;
+@synthesize resourceLookup = _resourceLookup;
 @synthesize resourceDescriptor = _resourceDescriptor;
 
 - (NSDictionary *)cellsIdentifiers
@@ -82,6 +83,20 @@ inject_default_rotation()
     return _cellsIdentifiers;
 }
 
+- (NSMutableArray *)resources
+{
+    if (!_resources) {
+        _resources = [NSMutableArray array];
+    }
+
+    return  _resources;
+}
+
+- (BOOL)isPaginationAvailable
+{
+    return self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_TWO;
+}
+
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
@@ -94,8 +109,8 @@ inject_default_rotation()
 {
     [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
-    
-        // Add observer to refresh controller after profile was changed
+
+    // Add observer to refresh controller after profile was changed
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(changeServerProfile)
                                                  name:kJMChangeServerProfileNotification
@@ -116,14 +131,9 @@ inject_default_rotation()
     
     if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-        self.lastIndexPath = indexPath;
-        JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
-        [destinationViewController setResourceDescriptor:resourceDescriptor];
+        JSResourceLookup *resourceLookup = [self resourceLookupForIndexPath:indexPath];
+        [destinationViewController setResourceLookup:resourceLookup];
         [destinationViewController setResourceClient:self.resourceClient];
-    }
-    
-    if ([segue.identifier isEqualToString:kJMShowResourceInfoSegue]) {
-        [destinationViewController setDelegate:self];
     }
 }
 
@@ -131,8 +141,7 @@ inject_default_rotation()
 {
     if (![JMUtils isViewControllerVisible:self]) {
         self.resources = nil;
-        self.lastIndexPath = nil;
-        self.resourceDescriptor = nil;
+        self.resourceLookup = nil;
         [self.tableView reloadData];
         _cellsIdentifiers = nil;
     }
@@ -153,13 +162,13 @@ inject_default_rotation()
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSResourceDescriptor *resourceDescriptor = [self resourceDescriptorForIndexPath:indexPath];
-    NSString *cellIdentifier = [self cellIdentifierForResourceType:resourceDescriptor.wsType];
+    JSResourceLookup *resourceLookup = [self resourceLookupForIndexPath:indexPath];
+    NSString *cellIdentifier = [self cellIdentifierForResourceType:resourceLookup.resourceType];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    cell.textLabel.text = resourceDescriptor.label;
-    cell.detailTextLabel.text = resourceDescriptor.uriString;
+    cell.textLabel.text = resourceLookup.label;
+    cell.detailTextLabel.text = resourceLookup.uri;
         
     return cell;
 }
@@ -168,16 +177,34 @@ inject_default_rotation()
 
 - (void)requestFinished:(JSOperationResult *)result
 {
-    self.resources = [result.objects mutableCopy];
+    if (!self.isPaginationAvailable) {
+        for (JSResourceDescriptor *resourceDescriptor in result.objects) {
+            NSString *type = resourceDescriptor.wsType;
+            // Show only folder, report and dashboard resources
+            if ([type isEqualToString:self.constants.WS_TYPE_FOLDER] ||
+                [type isEqualToString:self.constants.WS_TYPE_REPORT_UNIT] ||
+                [type isEqualToString:self.constants.WS_TYPE_DASHBOARD]) {
+            
+                JSResourceLookup *resourceLookup = [[JSResourceLookup alloc] init];
+                resourceLookup.label = resourceDescriptor.label;
+                resourceLookup.resourceDescription = resourceDescriptor.resourceDescription;
+                resourceLookup.resourceType = type;
+                resourceLookup.uri = resourceDescriptor.uriString;
+                [self.resources addObject:resourceLookup];
+            }
+        }
+    } else {
+        [self.resources addObjectsFromArray:result.objects];
+    }
     
     // TODO: move comparator to sdk
     [self.resources sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        if ([obj1 wsType] == self.constants.WS_TYPE_FOLDER) {
-            if ([obj2 wsType] != self.constants.WS_TYPE_FOLDER) {
+        if ([obj1 resourceType] == self.constants.WS_TYPE_FOLDER) {
+            if ([obj2 resourceType] != self.constants.WS_TYPE_FOLDER) {
                 return NSOrderedDescending;
             }
         } else {
-            if ([obj2 wsType] == self.constants.WS_TYPE_FOLDER) {
+            if ([obj2 resourceType] == self.constants.WS_TYPE_FOLDER) {
                 return NSOrderedAscending;
             }
         }
@@ -188,23 +215,9 @@ inject_default_rotation()
     [self.tableView reloadData];
 }
 
-#pragma mark - JMResourceTableViewControllerDelegate
-
-- (void)removeResource
-{    
-    [self.resources removeObjectAtIndex:self.lastIndexPath.row];
-    [self.tableView reloadData];
-}
-
-- (void)refreshWithResource:(JSResourceDescriptor *)resourceDescriptor
-{
-    [self.resources replaceObjectAtIndex:self.lastIndexPath.row withObject:resourceDescriptor];
-    [self.tableView reloadRowsAtIndexPaths:@[self.lastIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-}
-
 #pragma mark - Private
 
-- (JSResourceDescriptor *)resourceDescriptorForIndexPath:(NSIndexPath *)indexPath
+- (JSResourceLookup *)resourceLookupForIndexPath:(NSIndexPath *)indexPath
 {
     return [self.resources objectAtIndex:indexPath.row];
 }

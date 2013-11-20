@@ -32,7 +32,7 @@
 inject_default_rotation()
 
 @synthesize resourceClient = _resourceClient;
-@synthesize resourceDescriptor = _resourceDescriptor;
+@synthesize resourceLookup = _resourceLookup;
 
 #pragma mark - UIViewController
 
@@ -47,7 +47,7 @@ inject_default_rotation()
     NSString *dashboardUrl = [NSString stringWithFormat:@"%@%@%@",
                               self.resourceClient.serverProfile.serverUrl,
                               @"/flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=",
-                              self.resourceDescriptor.uriString];
+                              self.resourceLookup.uri];
 
     NSURL *url = [NSURL URLWithString:dashboardUrl];    
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:500];

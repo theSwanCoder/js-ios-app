@@ -27,11 +27,13 @@
 
 #import "JMLibraryTableViewController.h"
 #import "JMRequestDelegate.h"
+#import "JSRESTBase+updateServerInfo.h"
 
 static NSString * const kJMRequestType = @"type";
 
 @interface JMLibraryTableViewController()
-- (void)searchReportsByQuery:(NSString *)query includingDashboards:(BOOL)includingDashboards;
+@property (nonatomic, assign) BOOL includeDashboards;
+- (void)reloadData;
 @end
 
 @implementation JMLibraryTableViewController
@@ -42,9 +44,11 @@ static NSString * const kJMRequestType = @"type";
 {
     [super viewDidAppear:animated];
     
-    // Check if resources are already updated
-    if ([self isNeedsToReloadData]) {
-        [self searchReportsByQuery:self.searchQuery includingDashboards:YES];
+    self.includeDashboards = YES;
+    
+    // Check if resources are needs to be reloaded
+    if (self.isNeedsToReloadData) {
+        [self reloadData];
     }
 }
 
@@ -58,7 +62,9 @@ static NSString * const kJMRequestType = @"type";
     // doesn't have this type)
     if ([result isError] && [type isKindOfClass:[NSArray class]] &&
         [type containsObject:self.constants.WS_TYPE_DASHBOARD]) {
-        [self searchReportsByQuery:self.searchQuery includingDashboards:NO];
+        
+        self.includeDashboards = YES;
+        [self reloadData];
     } else {
         [super requestFinished:result];
     }
@@ -69,20 +75,35 @@ static NSString * const kJMRequestType = @"type";
 - (void)refresh
 {
     [super refresh];
-    [self searchReportsByQuery:nil includingDashboards:YES];
+    [self reloadData];
 }
 
 #pragma mark - Private
 
-- (void)searchReportsByQuery:(NSString *)query includingDashboards:(BOOL)includingDashboards
+- (void)getResources
 {
     NSMutableArray *types = [NSMutableArray arrayWithObject:self.constants.WS_TYPE_REPORT_UNIT];
-    if (includingDashboards) {
+    if (self.includeDashboards) {
         [types addObject:self.constants.WS_TYPE_DASHBOARD];
     }
+    
+    JMRequestDelegate *delegate = [JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self];
+    if (self.isPaginationAvailable) {
+        [self.resourceClient resourceLookups:nil query:self.searchQuery types:types recursive:YES offset:self.offset limit:kJMResourcesLimit delegate:delegate];
+    } else {
+        [self.resourceClient resources:nil query:self.searchQuery types:types recursive:YES limit:0 delegate:delegate];
+    }
+}
 
+- (void)reloadData
+{
+    JMRequestDelegate *serverInfoDelegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        [self getResources];
+    }];
+    
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
-    [self.resourceClient resources:nil query:query types:types recursive:YES limit:0 delegate:[JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self]];
+    // Update server info (if needed)
+    [self.resourceClient updateServerInfo:serverInfoDelegate];
 }
 
 @end

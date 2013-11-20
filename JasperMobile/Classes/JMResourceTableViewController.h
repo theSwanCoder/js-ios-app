@@ -26,26 +26,13 @@
 //
 
 #import "JMResourceClientHolder.h"
-#import "JMResourceModifyViewController.h"
 #import <UIKit/UIKit.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
-
-@protocol JMResourceTableViewControllerDelegate;
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMResourceTableViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate, JMResourceModifyViewControllerDelegate, UIAlertViewDelegate>
-
-@property (nonatomic, weak) id <JMResourceTableViewControllerDelegate> delegate;
+@interface JMResourceTableViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate, UIAlertViewDelegate>
 
 @end
-
-@protocol JMResourceTableViewControllerDelegate <NSObject>
-@required
-- (void)removeResource;
-- (void)refreshWithResource:(JSResourceDescriptor *)resourceDescriptor;
-
-@end
-

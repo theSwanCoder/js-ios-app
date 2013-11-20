@@ -76,7 +76,6 @@
 "view.favorites" = "Favorites";
 "view.library" = "Library";
 
-"resource.properties.title" = "Resource properties";
 "resource.name.title" = "Name:";
 "resource.label.title" = "Label:";
 "resource.description.title" = "Desc:";
@@ -85,7 +84,6 @@
 "report.output.format" = "Report format";
 
 "delete.dialog.title" = "Deleting resource";
-"delete.dialog.msg" = "Are you sure you want to delete this resource?";
 
 "status.loading" = "Loading...";
 "status.searching" = "Searching...";
@@ -133,7 +131,6 @@
 "dialog.button.cancel" = "Cancel";
 "dialog.button.retry" = "Retry";
 "dialog.button.run.report" = "Run Report";
-"dialog.button.yes" = "Yes";
 "dialog.button.info" = "Info";
 "dialog.button.delete" = "Delete";
 "dialog.button.addfavorite" = "Add Favorite";

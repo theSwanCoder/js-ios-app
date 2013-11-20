@@ -35,6 +35,9 @@
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, assign) BOOL isResourceInFavorites;
 @property (nonatomic, assign) BOOL isResourceInFavoritesPreviousValue;
+@property (nonatomic, strong) NSString *resourceUri;
+@property (nonatomic, strong) NSString *type;
+@property (nonatomic, strong) NSString *label;
 @end
 
 @implementation JMFavoritesUtil
@@ -43,17 +46,20 @@ objection_requires(@"managedObjectContext")
 
 #pragma mark - Accessors
 
+- (void)setResource:(NSString *)resourceUri label:(NSString *)label type:(NSString *)type
+{
+    self.resourceUri = resourceUri;
+    self.label = label;
+    self.type = type;
+    
+    NSFetchRequest *favoritesFetchRequest = [self favoritesFetchRequest:resourceUri];
+    self.isResourceInFavorites = [self.managedObjectContext countForFetchRequest:favoritesFetchRequest error:nil] == 1;
+    self.isResourceInFavoritesPreviousValue = self.isResourceInFavorites;
+}
+
 - (void)setServerProfile:(JMServerProfile *)serverProfile
 {
     _serverProfile = serverProfile;
-}
-
-- (void)setResourceDescriptor:(JSResourceDescriptor *)resourceDescriptor
-{
-    _resourceDescriptor = resourceDescriptor;
-    NSFetchRequest *favoritesFetchRequest = [self favoritesFetchRequest:resourceDescriptor];
-    self.isResourceInFavorites = [self.managedObjectContext countForFetchRequest:favoritesFetchRequest error:nil] == 1;
-    self.isResourceInFavoritesPreviousValue = self.isResourceInFavorites;
 }
 
 #pragma mark - JMFavoritesUtil
@@ -68,9 +74,9 @@ objection_requires(@"managedObjectContext")
     self.isResourceInFavorites = NO;
 }
 
-- (void)removeFromFavorites:(JSResourceDescriptor *)resourceDescriptor
+- (void)removeFromFavorites:(NSString *)resourceUri
 {
-    NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resourceDescriptor];
+    NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resourceUri];
     JMFavorites *favorites = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
     [self.managedObjectContext deleteObject:favorites];
     [self.managedObjectContext save:nil];
@@ -85,16 +91,16 @@ objection_requires(@"managedObjectContext")
     if (self.isResourceInFavorites) {
         JMFavorites *favorites = [NSEntityDescription insertNewObjectForEntityForName:kJMFavorites
                                                                inManagedObjectContext:self.managedObjectContext];
-        favorites.label = self.resourceDescriptor.label;
-        favorites.uri = self.resourceDescriptor.uriString;
-        favorites.wsType = self.resourceDescriptor.wsType;
+        favorites.label = self.label;
+        favorites.uri = self.resourceUri;
+        favorites.wsType = self.type;
         favorites.username = _serverProfile.username;
         favorites.organization = _serverProfile.organization;
         
         [_serverProfile addFavoritesObject:favorites];
         [self.managedObjectContext save:nil];
     } else {
-        [self removeFromFavorites:self.resourceDescriptor];
+        [self removeFromFavorites:self.resourceUri];
     }
     
     self.needsToRefreshFavorites = YES;
@@ -116,11 +122,11 @@ objection_requires(@"managedObjectContext")
             (_serverProfile.organization == favorites.organization ||
              [_serverProfile.organization isEqualToString:favorites.organization])) {
 
-            JSResourceDescriptor *resource = [[JSResourceDescriptor alloc] init];
-            resource.uriString = favorites.uri;
+            JSResourceLookup *resource = [[JSResourceLookup alloc] init];
+            resource.uri = favorites.uri;
             resource.label = favorites.label;
-            resource.wsType = favorites.wsType;
-            
+            resource.resourceType = favorites.wsType;
+
             [resources addObject:resource];
         }
     }
@@ -130,7 +136,7 @@ objection_requires(@"managedObjectContext")
 
 #pragma mark - Private
 
-- (NSFetchRequest *)favoritesFetchRequest:(JSResourceDescriptor *)resourceDescriptor
+- (NSFetchRequest *)favoritesFetchRequest:(NSString *)uri
 {
 
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMFavorites];
@@ -143,7 +149,7 @@ objection_requires(@"managedObjectContext")
     }
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:format,
-                              _serverProfile, resourceDescriptor.uriString, _serverProfile.username, _serverProfile.organization];
+                              _serverProfile, uri, _serverProfile.username, _serverProfile.organization];
     fetchRequest.predicate = predicate;
     
     return fetchRequest;

@@ -40,6 +40,7 @@
 
 @synthesize value = _value;
 @synthesize resourceClient = _resourceClient;
+@synthesize resourceLookup = _resourceLookup;
 @synthesize resourceDescriptor = _resourceDescriptor;
 @synthesize reportClient = _reportClient;
 
@@ -105,6 +106,7 @@
 {
     self.updateSlaveDependenciesBlock = nil;
     self.masterDependenciesParameters = nil;
+    self.resourceLookup = nil;
     self.resourceDescriptor = nil;
     self.resourceClient = nil;
     self.listOfValues = nil;
@@ -357,7 +359,7 @@
         [self.delegate.tableView reloadData];
     }];
     
-    [self.reportClient updatedInputControlsValues:self.resourceDescriptor.uriString
+    [self.reportClient updatedInputControlsValues:self.resourceLookup.uri
                                               ids:allInputControls
                                    selectedValues:selectedValues
                                          delegate:delegate];

@@ -98,9 +98,7 @@ static UIDatePicker *datePicker;
 - (void)setSelfAsDelegateForPickerToolbar:(UIToolbar *)pickerToolbar
 {
     for (UIBarButtonItem *item in pickerToolbar.items) {
-        if (item.style != UIBarButtonSystemItemFlexibleSpace) {
-            item.target = self;
-        }
+        item.target = self;
     }
 }
 

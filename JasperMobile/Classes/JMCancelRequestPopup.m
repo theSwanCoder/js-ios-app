@@ -32,8 +32,6 @@
 #import "JMRequestDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 
-static NSString * const kJMCancelRequestPopupNib = @"JMCancelRequestPopup";
-
 static JMCancelRequestPopup *instance;
 
 @interface JMCancelRequestPopup ()
@@ -42,8 +40,6 @@ static JMCancelRequestPopup *instance;
 @property (nonatomic, copy) JMCancelRequestBlock cancelBlock;
 @property (nonatomic, weak) IBOutlet UIButton *cancelButton;
 @property (nonatomic, weak) IBOutlet UILabel *progressLabel;
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil viewController:(UIViewController *)viewController restClient:(JSRESTBase *)restClient cancelBlock:(JMCancelRequestBlock)cancelBlock;
 @end
 
 @implementation JMCancelRequestPopup
@@ -52,12 +48,10 @@ static JMCancelRequestPopup *instance;
 
 + (void)presentInViewController:(UIViewController *)viewController message:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock
 {
-    instance = [[JMCancelRequestPopup alloc] initWithNibName:kJMCancelRequestPopupNib
-                                                      bundle:nil
-                                              viewController:viewController
-                                                  restClient:client
-                                                 cancelBlock:cancelBlock];
-    
+    instance = [[JMCancelRequestPopup alloc] initWithNibName:@"JMCancelRequestPopup" bundle:nil];
+    instance.restClient = client;
+    instance.viewController = viewController;
+    instance.cancelBlock = cancelBlock;
     [instance.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
     instance.progressLabel.text = JMCustomLocalizedString(message, nil);
     
@@ -97,20 +91,6 @@ static JMCancelRequestPopup *instance;
     }
 
     [JMCancelRequestPopup dismiss];
-}
-
-#pragma mark - Private
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil viewController:(UIViewController *)viewController restClient:(JSRESTBase *)restClient cancelBlock:(JMCancelRequestBlock)cancelBlock
-{
-    self = [self initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        self.restClient = restClient;
-        self.viewController = viewController;
-        self.cancelBlock = cancelBlock;
-    }
-    
-    return self;
 }
 
 @end
