@@ -21,27 +21,29 @@
  */
 
 //
-//  JMRepositoryTableViewController.h
+//  JMSearchFilterTableViewController.h
 //  Jaspersoft Corporation
 //
 
-#import "JMResourceClientHolder.h"
+#import "JMRefreshable.h"
 #import <UIKit/UIKit.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
 
-extern NSInteger const kJMResourcesLimit;
+@protocol JMSearchFilterTableViewControllerDelegate;
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
+ @since 1.7
  */
-@interface JMBaseRepositoryTableViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate>
+@interface JMSearchFilterTableViewController : UITableViewController
 
 @property (nonatomic, weak) JSConstants *constants;
-@property (nonatomic, strong) NSMutableArray *resources;
-@property (nonatomic, readonly) BOOL isPaginationAvailable;
-@property (nonatomic, assign) BOOL isNeedsToReloadData;
+@property (nonatomic, weak) id <JMRefreshable, JMSearchFilterTableViewControllerDelegate> delegate;
+@property (nonatomic, strong) NSMutableSet *resourceTypes;
 
-- (void)changeServerProfile;
+@end
+
+@protocol JMSearchFilterTableViewControllerDelegate <NSObject>
+@required
+@property (nonatomic, strong) NSMutableSet *resourceTypes;
 
 @end

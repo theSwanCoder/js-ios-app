@@ -289,8 +289,8 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 - (void)updateTimeouts
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.resourceClient.timeoutInterval = [defaults integerForKey:kJMDefaultRequestTimeout] ?: 30;
-    self.reportClient.timeoutInterval = [defaults integerForKey:kJMReportRequestTimeout] ?: 90;
+    self.resourceClient.timeoutInterval = [defaults integerForKey:kJMDefaultRequestTimeout] ?: 120;
+    self.reportClient.timeoutInterval = [defaults integerForKey:kJMReportRequestTimeout] ?: 120;
 }
 
 // Resets database and defaults

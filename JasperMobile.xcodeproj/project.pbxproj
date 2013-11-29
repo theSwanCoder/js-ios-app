@@ -108,6 +108,7 @@
 		F59FD9C017B1014A00331BD8 /* JMFavoritesUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F59FD9BF17B1014A00331BD8 /* JMFavoritesUtil.m */; };
 		F5A2E77D175CCB2400CBA00E /* JMMenuTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A2E77C175CCB2400CBA00E /* JMMenuTableViewController.m */; };
 		F5A2E783175CD47B00CBA00E /* JMBarButtonPresenterNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A2E782175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.m */; };
+		F5A356AA183FC93300BD9473 /* JMSearchFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A356A9183FC93300BD9473 /* JMSearchFilterTableViewController.m */; };
 		F5A5F553176206360018FEFC /* JMResourceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A5F552176206360018FEFC /* JMResourceTableViewController.m */; };
 		F5AD3C5817F4A90D00F16D3C /* input_control_text_field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5AD3C5717F4A90D00F16D3C /* input_control_text_field@2x.png */; };
 		F5B6A6A3175F57B90047CB6D /* JMLibraryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */; };
@@ -329,6 +330,8 @@
 		F5A2E780175CCFA700CBA00E /* JMSplitViewBarButtonPresenterProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMSplitViewBarButtonPresenterProtocol.h; path = JasperMobile/Classes/JMSplitViewBarButtonPresenterProtocol.h; sourceTree = "<group>"; };
 		F5A2E781175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBarButtonPresenterNavigationViewController.h; path = Classes/JMBarButtonPresenterNavigationViewController.h; sourceTree = "<group>"; };
 		F5A2E782175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBarButtonPresenterNavigationViewController.m; path = Classes/JMBarButtonPresenterNavigationViewController.m; sourceTree = "<group>"; };
+		F5A356A8183FC93300BD9473 /* JMSearchFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSearchFilterTableViewController.h; path = Classes/JMSearchFilterTableViewController.h; sourceTree = "<group>"; };
+		F5A356A9183FC93300BD9473 /* JMSearchFilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSearchFilterTableViewController.m; path = Classes/JMSearchFilterTableViewController.m; sourceTree = "<group>"; };
 		F5A5F551176206360018FEFC /* JMResourceTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourceTableViewController.h; path = Classes/JMResourceTableViewController.h; sourceTree = "<group>"; };
 		F5A5F552176206360018FEFC /* JMResourceTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceTableViewController.m; path = Classes/JMResourceTableViewController.m; sourceTree = "<group>"; };
 		F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMResourceClientHolder.h; path = JasperMobile/Classes/JMResourceClientHolder.h; sourceTree = "<group>"; };
@@ -389,7 +392,7 @@
 		F5FE06DE1757383800030331 /* JMMenuTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMenuTabBarController.m; path = Classes/JMMenuTabBarController.m; sourceTree = "<group>"; };
 		F5FE06E017573DB000030331 /* JMRotatable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMRotatable.h; path = JasperMobile/Classes/JMRotatable.h; sourceTree = "<group>"; };
 		F5FE06E317574D8200030331 /* JMPhoneRotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMPhoneRotation.h; path = Classes/JMPhoneRotation.h; sourceTree = "<group>"; };
-		F5FE06E417574D8200030331 /* JMPhoneRotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMPhoneRotation.m; path = Classes/JMPhoneRotation.m; sourceTree = "<group>"; };
+		F5FE06E417574D8200030331 /* JMPhoneRotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMPhoneRotation.m; path = JasperMobile/Classes/JMPhoneRotation.m; sourceTree = "<group>"; };
 		F5FE06E617574D9700030331 /* JMPadRotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMPadRotation.h; path = Classes/JMPadRotation.h; sourceTree = "<group>"; };
 		F5FE06E717574D9700030331 /* JMPadRotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMPadRotation.m; path = Classes/JMPadRotation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -441,6 +444,7 @@
 				F59AFBAA17CB58F300F168CE /* JMReportOptionsUtil.h */,
 				F59AFBAB17CB58F300F168CE /* JMReportOptionsUtil.m */,
 				F572814517C77047000B192D /* JMRequestDelegate.h */,
+				F5FE06E417574D8200030331 /* JMPhoneRotation.m */,
 				F572814617C77048000B192D /* JMRequestDelegate.m */,
 				F55048D717622B8C0067304B /* JMUtils.h */,
 				F55048D817622B8C0067304B /* JMUtils.m */,
@@ -527,6 +531,8 @@
 				F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */,
 				F5DE3FA1178A387B00840808 /* JMSearchableTableViewController.h */,
 				F5DE3FA2178A387B00840808 /* JMSearchableTableViewController.m */,
+				F5A356A8183FC93300BD9473 /* JMSearchFilterTableViewController.h */,
+				F5A356A9183FC93300BD9473 /* JMSearchFilterTableViewController.m */,
 				F55174CE178AB1A5006186B4 /* JMServersTableViewController.h */,
 				F55174CF178AB1A5006186B4 /* JMServersTableViewController.m */,
 				F513EE8F17A16E2C00A553C4 /* JMServerSettingsTableViewController.h */,
@@ -898,7 +904,6 @@
 			isa = PBXGroup;
 			children = (
 				F5FE06E317574D8200030331 /* JMPhoneRotation.h */,
-				F5FE06E417574D8200030331 /* JMPhoneRotation.m */,
 				F5FE06E617574D9700030331 /* JMPadRotation.h */,
 				F5FE06E717574D9700030331 /* JMPadRotation.m */,
 				F59BF2FD1758164E0091EB88 /* JMRotationBase.h */,
@@ -1123,6 +1128,7 @@
 				F576BC411753DFF600DF765B /* JMBaseRepositoryTableViewController.m in Sources */,
 				F514E69D175575C800C9F61E /* JMLocalization.m in Sources */,
 				F514E69C175575AE00C9F61E /* UIAlertView+LocalizedAlert.m in Sources */,
+				F5A356AA183FC93300BD9473 /* JMSearchFilterTableViewController.m in Sources */,
 				F5FE06DF1757383800030331 /* JMMenuTabBarController.m in Sources */,
 				F5FE06E517574D8200030331 /* JMPhoneRotation.m in Sources */,
 				F5FE06E817574D9700030331 /* JMPadRotation.m in Sources */,

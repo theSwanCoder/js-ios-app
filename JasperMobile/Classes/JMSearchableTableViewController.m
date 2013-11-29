@@ -31,6 +31,7 @@
 #import "JMUtils.h"
 
 static NSInteger const kJMLoadingCellTag = 100;
+static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 
 @interface JMSearchableTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;
@@ -42,11 +43,13 @@ static NSInteger const kJMLoadingCellTag = 100;
 
 @implementation JMSearchableTableViewController
 
+@synthesize resourceTypes = _resourceTypes;
 @synthesize isRefreshing = _isRefreshing;
+@synthesize isNeedsToReloadData = _isNeedsToReloadData;
 
 - (BOOL)isNeedsToReloadData
 {
-    return !self.isRefreshing && [super isNeedsToReloadData];
+    return !self.isRefreshing && _isNeedsToReloadData;
 }
 
 - (void)changeServerProfile
@@ -60,16 +63,24 @@ static NSInteger const kJMLoadingCellTag = 100;
     @throw [NSException exceptionWithName:@"Method implementation is missing" reason:@"You need to implement \"getResources\" method in subclasses" userInfo:nil];
 }
 
+- (NSMutableSet *)resourceTypes
+{
+    if (!_resourceTypes) {
+        _resourceTypes = [NSMutableSet setWithObjects:self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD, nil];
+    }
+    
+    return _resourceTypes;
+}
+
 - (void)didReceiveMemoryWarning
 {
     if (![JMUtils isViewControllerVisible:self]) {
-        self.searchBar = nil;
-        self.searchQuery = nil;
+        self.offset = 0;
+        self.totalCount = 0;
         _cancelBlock = nil;
-        // If search is disabled then this is pushed view controller with search result
-        // and we should dismiss it at warning
-        if (self.isSearchDisabled) {
-            [self.navigationController popViewControllerAnimated:NO];
+        
+        if (!self.searchBar.text.length) {
+            self.contentOffset = [self defaultContentOffset];
         }
     }
     [super didReceiveMemoryWarning];
@@ -118,8 +129,15 @@ static NSInteger const kJMLoadingCellTag = 100;
         self.searchBar.delegate = self;
         self.searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
         [self.searchBar sizeToFit];
+        
+        self.navigationItem.rightBarButtonItem = nil;
+        
         self.contentOffset = [self defaultContentOffset];
         self.tableView.tableHeaderView = self.searchBar;
+    } else if (!self.isPaginationAvailable) {
+        self.navigationItem.rightBarButtonItem = nil;
+    } else {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
     }
 }
 
@@ -129,6 +147,17 @@ static NSInteger const kJMLoadingCellTag = 100;
     if (!self.isSearchDisabled) {
         self.tableView.contentOffset = self.contentOffset;
     }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kJMShowSearchFilterSegue]) {
+        id destinationViewController = segue.destinationViewController;
+        [destinationViewController setDelegate:self];
+        [destinationViewController setResourceTypes:self.resourceTypes];
+    }
+
+    [super prepareForSegue:segue sender:sender];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -190,8 +219,11 @@ static NSInteger const kJMLoadingCellTag = 100;
 
     if (self.isPaginationAvailable && !self.totalCount) {
         self.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
+        if (self.totalCount) {
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+        }
     }
-
+    
     [super requestFinished:result];
 }
 
@@ -221,6 +253,8 @@ static NSInteger const kJMLoadingCellTag = 100;
 {
     if (indexPath.row == self.resources.count) {
         UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"LoadingCell"];
+        UIActivityIndicatorView *activityIndicator = (UIActivityIndicatorView *) [cell viewWithTag:1];
+        [activityIndicator startAnimating];
         cell.tag = kJMLoadingCellTag;
         return cell;
     }
@@ -250,8 +284,9 @@ static NSInteger const kJMLoadingCellTag = 100;
 
 - (void)resetSearchState
 {
-    self.searchBar.text = nil;
-    self.searchQuery = nil;
+    if (self.searchBar) {
+        self.searchBar.text = nil;
+    }
     self.offset = 0;
     self.totalCount = 0;
     self.contentOffset = [self defaultContentOffset];

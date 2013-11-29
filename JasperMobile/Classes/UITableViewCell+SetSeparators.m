@@ -36,7 +36,7 @@
     UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, height)];
     separator.backgroundColor = color;
     separator.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [self.contentView addSubview:separator];
+    [self addSubview:separator];
 }
 
 - (void)setBottomSeparatorWithHeight:(CGFloat)height color:(UIColor *)color tableViewStyle:(UITableViewStyle)style
@@ -46,7 +46,7 @@
     UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - height, self.frame.size.width, height)];
     separator.backgroundColor = color;
     separator.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [self.contentView addSubview:separator];
+    [self addSubview:separator];
 }
 
 #pragma mark - Private

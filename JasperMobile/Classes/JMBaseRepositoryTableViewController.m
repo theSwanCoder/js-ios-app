@@ -45,9 +45,16 @@ static NSString * const kJMUnknownCell = @"UnknownCell";
 objection_requires(@"resourceClient", @"constants")
 inject_default_rotation()
 
-- (BOOL)isNeedsToReloadData
+@synthesize resources = _resources;
+
+- (void)setResources:(NSMutableArray *)resources
 {
-    return self.resources.count == 0;
+    if (_resources != resources) {
+        _resources = resources;
+        if (!resources) {
+            self.isNeedsToReloadData = YES;
+        }
+    }
 }
 
 - (void)changeServerProfile
@@ -109,6 +116,7 @@ inject_default_rotation()
 {
     [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
+    self.isNeedsToReloadData = YES;
 
     // Add observer to refresh controller after profile was changed
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -141,7 +149,6 @@ inject_default_rotation()
 {
     if (![JMUtils isViewControllerVisible:self]) {
         self.resources = nil;
-        self.resourceLookup = nil;
         [self.tableView reloadData];
         _cellsIdentifiers = nil;
     }
@@ -177,6 +184,8 @@ inject_default_rotation()
 
 - (void)requestFinished:(JSOperationResult *)result
 {
+    self.isNeedsToReloadData = NO;
+    
     if (!self.isPaginationAvailable) {
         for (JSResourceDescriptor *resourceDescriptor in result.objects) {
             NSString *type = resourceDescriptor.wsType;
@@ -193,24 +202,24 @@ inject_default_rotation()
                 [self.resources addObject:resourceLookup];
             }
         }
+        
+        // TODO: move comparator to sdk
+        [self.resources sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            if ([obj1 resourceType] == self.constants.WS_TYPE_FOLDER) {
+                if ([obj2 resourceType] != self.constants.WS_TYPE_FOLDER) {
+                    return NSOrderedDescending;
+                }
+            } else {
+                if ([obj2 resourceType] == self.constants.WS_TYPE_FOLDER) {
+                    return NSOrderedAscending;
+                }
+            }
+            
+            return [[obj1 label] compare:[obj2 label] options:NSCaseInsensitiveSearch];
+        }];
     } else {
         [self.resources addObjectsFromArray:result.objects];
     }
-    
-    // TODO: move comparator to sdk
-    [self.resources sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        if ([obj1 resourceType] == self.constants.WS_TYPE_FOLDER) {
-            if ([obj2 resourceType] != self.constants.WS_TYPE_FOLDER) {
-                return NSOrderedDescending;
-            }
-        } else {
-            if ([obj2 resourceType] == self.constants.WS_TYPE_FOLDER) {
-                return NSOrderedAscending;
-            }
-        }
-        
-        return [[obj1 label] compare:[obj2 label] options:NSCaseInsensitiveSearch];
-    }];
     
     [self.tableView reloadData];
 }

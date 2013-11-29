@@ -38,9 +38,9 @@
 #import "JSRESTBase+updateServerInfo.h"
 #import <Objection-iOS/Objection.h>
 
-#define kJMICSection 0
-#define kJMReportFormatSection 1
-#define kJMRunReportSection 2
+static NSInteger const kJMICSection = 0;
+static NSInteger const kJMReportFormatSection = 1;
+static NSInteger const kJMRunReportSection = 2;
 
 static NSString * const kJMRunCellIdentifier = @"RunCell";
 static NSString * const kJMShowSingleSelectSegue = @"ShowSingleSelect";
@@ -97,11 +97,10 @@ inject_default_rotation()
     [super viewDidLoad];
     [JMUtils setTitleForResourceViewController:self];
 
-
     if ((self.resourceDescriptor || self.resourceLookup) && !self.inputControls.count) {
         [self updateInputControls];
     }
-
+    
     separatorColor = self.tableView.separatorColor;
     
     if (!self.reportFormatCell) {

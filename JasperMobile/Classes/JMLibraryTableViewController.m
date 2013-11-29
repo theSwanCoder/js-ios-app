@@ -63,7 +63,7 @@ static NSString * const kJMRequestType = @"type";
     if ([result isError] && [type isKindOfClass:[NSArray class]] &&
         [type containsObject:self.constants.WS_TYPE_DASHBOARD]) {
         
-        self.includeDashboards = YES;
+        self.includeDashboards = NO;
         [self reloadData];
     } else {
         [super requestFinished:result];
@@ -82,16 +82,15 @@ static NSString * const kJMRequestType = @"type";
 
 - (void)getResources
 {
-    NSMutableArray *types = [NSMutableArray arrayWithObject:self.constants.WS_TYPE_REPORT_UNIT];
-    if (self.includeDashboards) {
-        [types addObject:self.constants.WS_TYPE_DASHBOARD];
+    if (!self.includeDashboards) {
+        [self.resourceTypes removeObject:self.constants.WS_TYPE_DASHBOARD];
     }
     
     JMRequestDelegate *delegate = [JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self];
     if (self.isPaginationAvailable) {
-        [self.resourceClient resourceLookups:nil query:self.searchQuery types:types recursive:YES offset:self.offset limit:kJMResourcesLimit delegate:delegate];
+        [self.resourceClient resourceLookups:nil query:self.searchQuery types:self.resourceTypes.allObjects recursive:YES offset:self.offset limit:kJMResourcesLimit delegate:delegate];
     } else {
-        [self.resourceClient resources:nil query:self.searchQuery types:types recursive:YES limit:0 delegate:delegate];
+        [self.resourceClient resources:nil query:self.searchQuery types:self.resourceTypes.allObjects recursive:YES limit:0 delegate:delegate];
     }
 }
 

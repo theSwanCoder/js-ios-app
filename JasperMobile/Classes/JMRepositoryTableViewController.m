@@ -39,15 +39,20 @@
 - (void)getResources
 {
     JMRequestDelegate *delegate = [JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self];
+    BOOL recursive = YES;
+    
     if (self.isPaginationAvailable) {
-        NSArray *types = @[self.constants.WS_TYPE_FOLDER, self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD];
-        BOOL recursive = self.searchQuery.length != 0;
-        [self.resourceClient resourceLookups:[self path:@"/"] query:self.searchQuery types:types recursive:recursive offset:self.offset limit:kJMResourcesLimit delegate:delegate];
+        if (!self.searchQuery.length) {
+            recursive = NO;
+            [self.resourceTypes addObject:self.constants.WS_TYPE_FOLDER];
+        }
+        
+        [self.resourceClient resourceLookups:[self path:@"/"] query:self.searchQuery types:self.resourceTypes.allObjects recursive:recursive offset:self.offset limit:kJMResourcesLimit delegate:delegate];
     } else {
         // Check if search action was not performed
-        // TODO: remove condition for searchQuery. Make 1 call instead two
+        // TODO: remove condition for searchQuery
         if (self.searchQuery.length > 0) {
-            [self.resourceClient resources:[self path:@""] query:self.searchQuery types:nil recursive:YES limit:0 delegate:delegate];
+            [self.resourceClient resources:[self path:@""] query:self.searchQuery types:self.resourceTypes.allObjects recursive:recursive limit:0 delegate:delegate];
         } else {
             [self.resourceClient resources:[self path:@"/"] delegate:delegate];
         }
