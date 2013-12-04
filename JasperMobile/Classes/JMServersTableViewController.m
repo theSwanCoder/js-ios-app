@@ -210,7 +210,7 @@ inject_default_rotation()
         if (serversCount == 0) {
             return JMCustomLocalizedString(@"servers.profile.configure.help", nil);
         } else if(serversCount == 1) {
-            return  JMCustomLocalizedString(@"servers.profile.configure.tips", nil);
+            return JMCustomLocalizedString(@"servers.profile.configure.tips", nil);
         }
     }
     

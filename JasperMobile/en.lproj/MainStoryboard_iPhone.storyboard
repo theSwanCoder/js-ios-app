@@ -1696,10 +1696,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="scc-t2-s6W"/>
-        <segue reference="wp3-22-jSm"/>
         <segue reference="4G2-Cf-EF7"/>
-        <segue reference="Ete-rd-4of"/>
         <segue reference="4B5-09-C2l"/>
+        <segue reference="ire-M8-0ci"/>
+        <segue reference="o5R-lu-uP9"/>
+        <segue reference="f3B-eB-Zkq"/>
     </inferredMetricsTieBreakers>
 </document>

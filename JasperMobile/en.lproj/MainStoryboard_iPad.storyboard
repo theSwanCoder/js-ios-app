@@ -209,7 +209,7 @@
                                     <subviews>
                                         <activityIndicatorView opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" id="yJf-ZQ-Ddj">
                                             <rect key="frame" x="374" y="12" width="20" height="20"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                         </activityIndicatorView>
                                     </subviews>
                                 </tableViewCellContentView>
@@ -1711,10 +1711,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="aZn-o4-OAd"/>
+        <segue reference="HcD-3B-Nmh"/>
+        <segue reference="CNL-wC-CPz"/>
+        <segue reference="IV8-Zc-6l3"/>
+        <segue reference="aov-Sd-Jph"/>
         <segue reference="gWk-M7-tOO"/>
-        <segue reference="mXe-lN-TQk"/>
-        <segue reference="zhl-Cf-pU1"/>
-        <segue reference="xwD-KJ-4AL"/>
     </inferredMetricsTieBreakers>
 </document>

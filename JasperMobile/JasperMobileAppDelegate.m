@@ -109,8 +109,13 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger == 0) {
+        self.resourceClient.serverProfile.serverInfo = nil;
+    }
+    
+    if (self.reportClient.serverProfile.serverInfo.versionAsInteger == 0) {
+        self.reportClient.serverProfile.serverInfo = nil;
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
