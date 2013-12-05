@@ -42,6 +42,15 @@ __weak static UIViewController *viewControllerToDismiss;
 
 @implementation JMRequestDelegate
 
+- (id)init
+{
+    if (self = [super init]) {
+        self.checkStatusCode = YES;
+    }
+    
+    return self;
+}
+
 #pragma mark - Class Methods
 
 + (void)initialize
@@ -103,7 +112,7 @@ __weak static UIViewController *viewControllerToDismiss;
 
 - (void)requestFinished:(JSOperationResult *)result
 {
-    if (result && ![result isSuccessful]) {
+    if (result && (![result isSuccessful] && self.checkStatusCode)) {
         [JMRequestDelegate clearRequestPool];
         [JMCancelRequestPopup dismiss];
 

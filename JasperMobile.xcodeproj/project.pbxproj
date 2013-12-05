@@ -122,7 +122,6 @@
 		F5D97FA4179587100059C761 /* JMServerProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97F9E179587100059C761 /* JMServerProfile.m */; };
 		F5D97FA5179587100059C761 /* JMServerProfile+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */; };
 		F5D97FAA179587CF0059C761 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97FA9179587CF0059C761 /* SSKeychain.m */; };
-		F5DC4EAB176A101D00038D58 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */; };
 		F5DE3FA3178A387B00840808 /* JMSearchableTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DE3FA2178A387B00840808 /* JMSearchableTableViewController.m */; };
 		F5E4FB5F17C6053900A69FCC /* JMDateInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4FB5E17C6053900A69FCC /* JMDateInputControlCell.m */; };
 		F5E4FB6517C6058500A69FCC /* JMDateTimeInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4FB6417C6058400A69FCC /* JMDateTimeInputControlCell.m */; };
@@ -355,8 +354,6 @@
 		F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "JMServerProfile+Helpers.m"; path = "JasperMobile/Classes/JMServerProfile+Helpers.m"; sourceTree = "<group>"; };
 		F5D97FA8179587CF0059C761 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		F5D97FA9179587CF0059C761 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
-		F5DC4EA9176A101D00038D58 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
-		F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		F5DE3FA1178A387B00840808 /* JMSearchableTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSearchableTableViewController.h; path = Classes/JMSearchableTableViewController.h; sourceTree = "<group>"; };
 		F5DE3FA2178A387B00840808 /* JMSearchableTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSearchableTableViewController.m; path = Classes/JMSearchableTableViewController.m; sourceTree = "<group>"; };
 		F5E4FB5D17C6053900A69FCC /* JMDateInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDateInputControlCell.h; path = Classes/JMDateInputControlCell.h; sourceTree = "<group>"; };
@@ -677,7 +674,6 @@
 			children = (
 				F58FF2EF1760A0B50021CC8B /* MJPopupViewController */,
 				F5D97FA7179587CF0059C761 /* SSKeychain */,
-				F5DC4EA8176A101D00038D58 /* TPKeyboardAvoiding */,
 			);
 			name = Vendor;
 			path = JasperMobile/Vendor;
@@ -863,15 +859,6 @@
 				F5D97FA9179587CF0059C761 /* SSKeychain.m */,
 			);
 			path = SSKeychain;
-			sourceTree = "<group>";
-		};
-		F5DC4EA8176A101D00038D58 /* TPKeyboardAvoiding */ = {
-			isa = PBXGroup;
-			children = (
-				F5DC4EA9176A101D00038D58 /* TPKeyboardAvoidingScrollView.h */,
-				F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */,
-			);
-			path = TPKeyboardAvoiding;
 			sourceTree = "<group>";
 		};
 		F5EB25DA17E3579800B56FC2 /* TextField */ = {
@@ -1146,7 +1133,6 @@
 				F55048D917622B8C0067304B /* JMUtils.m in Sources */,
 				F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */,
 				F57186C3183658DD0013B6EB /* JSRESTBase+updateServerInfo.m in Sources */,
-				F5DC4EAB176A101D00038D58 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				F5DE3FA3178A387B00840808 /* JMSearchableTableViewController.m in Sources */,
 				F55174D0178AB1A5006186B4 /* JMServersTableViewController.m in Sources */,
 				F5D97FA1179587100059C761 /* JMFavorites.m in Sources */,

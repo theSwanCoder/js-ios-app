@@ -97,7 +97,7 @@ inject_default_rotation()
     [super viewDidLoad];
     [JMUtils setTitleForResourceViewController:self];
 
-    if ((self.resourceDescriptor || self.resourceLookup) && !self.inputControls.count) {
+    if (self.resourceLookup && !self.inputControls.count) {
         [self updateInputControls];
     }
     
@@ -270,8 +270,6 @@ inject_default_rotation()
     
     __weak JMReportOptionsTableViewController *weakSelf = self;
     
-//    self.resourceClient.serverInfo.version = nil;
-    
     // TODO: add possibility to cancel request for many rest clients
     [JMCancelRequestPopup presentInViewController:weakSelf message:@"status.loading" restClient:nil cancelBlock:cancelBlock];
     
@@ -280,7 +278,7 @@ inject_default_rotation()
             NSArray *reportParameters = [weakSelf.reportOptionsUtil reportOptionsAsParametersForReport:weakSelf.resourceLookup.uri];
             [self.reportClient inputControlsForReport:weakSelf.resourceLookup.uri ids:nil selectedValues:reportParameters delegate:weakSelf.inputControlsForReportDelegate];
         } else {
-            [weakSelf.resourceClient resource:weakSelf.resourceDescriptor.uriString delegate:weakSelf.resourceDelegate];
+            [weakSelf.resourceClient resource:weakSelf.resourceLookup.uri delegate:weakSelf.resourceDelegate];
         }
     }]];
 }

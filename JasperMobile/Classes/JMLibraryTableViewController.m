@@ -64,7 +64,7 @@ static NSString * const kJMRequestType = @"type";
         [type containsObject:self.constants.WS_TYPE_DASHBOARD]) {
         
         self.includeDashboards = NO;
-        [self reloadData];
+        [self getResources];
     } else {
         [super requestFinished:result];
     }
@@ -90,7 +90,10 @@ static NSString * const kJMRequestType = @"type";
     if (self.isPaginationAvailable) {
         [self.resourceClient resourceLookups:nil query:self.searchQuery types:self.resourceTypes.allObjects recursive:YES offset:self.offset limit:kJMResourcesLimit delegate:delegate];
     } else {
-        [self.resourceClient resources:nil query:self.searchQuery types:self.resourceTypes.allObjects recursive:YES limit:0 delegate:delegate];
+        if (self.includeDashboards) {
+            delegate.checkStatusCode = NO;
+        }
+        [self.resourceClient resources:@"/" query:self.searchQuery types:self.resourceTypes.allObjects recursive:YES limit:0 delegate:delegate];
     }
 }
 
