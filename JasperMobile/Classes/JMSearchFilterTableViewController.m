@@ -36,6 +36,7 @@ static NSInteger const kJMApplyFilterSection = 1;
 
 static NSString * const kJMCellIdentifier = @"identifier";
 static NSString * const kJMCellResourceTypes = @"types";
+static NSString * const kJMCellText = @"text";
 
 @interface JMSearchFilterTableViewController ()
 @property (nonatomic, strong) NSDictionary *cellsProperties;
@@ -61,15 +62,18 @@ inject_default_rotation()
         _cellsProperties = @{
             @0 : @{
                 kJMCellIdentifier : @"AllResourcesCell",
-                kJMCellResourceTypes : [NSSet setWithObjects:self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD, nil]
+                kJMCellResourceTypes : [NSSet setWithObjects:self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD, nil],
+                kJMCellText : JMCustomLocalizedString(@"filter.resources.type.all", nil)
             },
             @1 : @{
                 kJMCellIdentifier : @"ReportsCell",
-                kJMCellResourceTypes : [NSSet setWithObjects:self.constants.WS_TYPE_REPORT_UNIT, nil]
+                kJMCellResourceTypes : [NSSet setWithObjects:self.constants.WS_TYPE_REPORT_UNIT, nil],
+                kJMCellText : JMCustomLocalizedString(@"filter.resources.type.reportUnit", nil)
             },
             @2 : @{
                 kJMCellIdentifier : @"DashboardCell",
-                kJMCellResourceTypes : [NSSet setWithObjects:self.constants.WS_TYPE_DASHBOARD, nil]
+                kJMCellResourceTypes : [NSSet setWithObjects:self.constants.WS_TYPE_DASHBOARD, nil],
+                kJMCellText : JMCustomLocalizedString(@"filter.resources.type.dashboard", nil)
             },
         };
     }
@@ -118,6 +122,7 @@ inject_default_rotation()
         case kJMResourceTypesSection: {
             NSDictionary *cellProperties = [self.cellsProperties objectForKey:@(indexPath.row)];
             cell = [tableView dequeueReusableCellWithIdentifier:[cellProperties objectForKey:kJMCellIdentifier]];
+            cell.textLabel.text = [cellProperties objectForKey:kJMCellText];
             
             if ([[cellProperties objectForKey:kJMCellResourceTypes] isEqualToSet:self.resourceTypes]) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;

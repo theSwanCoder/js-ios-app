@@ -88,6 +88,12 @@
 "status.loading" = "Loading...";
 "status.searching" = "Searching...";
 
+/* Search filter */
+
+"filter.resources.type.all" = "All";
+"filter.resources.type.reportUnit" = "Reports";
+"filter.resources.type.dashboard" = "Dashboards";
+
 /* Error messages */
 
 "error.readingresponse.dialog.msg" = "Error reading the response";
