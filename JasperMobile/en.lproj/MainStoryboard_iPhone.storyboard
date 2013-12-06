@@ -223,7 +223,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Resource Title" id="2KE-Bf-TmD">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="0AT-r4-zxl">
+                        <barButtonItem key="rightBarButtonItem" image="list_options.png" id="0AT-r4-zxl">
                             <connections>
                                 <segue destination="jxU-R3-ZrJ" kind="push" identifier="ShowSearchFilter" id="4B5-09-C2l"/>
                             </connections>
@@ -364,14 +364,14 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="All" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bLi-WC-vpf">
-                                            <rect key="frame" x="60" y="0.0" width="221" height="43"/>
+                                            <rect key="frame" x="62" y="0.0" width="219" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="repository_bar_item.png" id="LvL-DW-Rzm">
-                                            <rect key="frame" x="15" y="7" width="30" height="29"/>
+                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="all_res_types.png" id="LvL-DW-Rzm">
+                                            <rect key="frame" x="15" y="5" width="32" height="32"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </imageView>
                                     </subviews>
@@ -791,7 +791,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Resource Title" id="soG-YH-drx">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="Esc-V9-eCv">
+                        <barButtonItem key="rightBarButtonItem" image="list_options.png" id="Esc-V9-eCv">
                             <connections>
                                 <segue destination="jxU-R3-ZrJ" kind="push" identifier="ShowSearchFilter" id="SzG-1S-eJZ"/>
                             </connections>
@@ -1645,7 +1645,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <webView opaque="NO" contentMode="scaleToFill" scalesPageToFit="YES" id="cv0-Ok-S0i">
+                            <webView opaque="NO" contentMode="scaleToFill" scalesPageToFit="YES" allowsInlineMediaPlayback="NO" mediaPlaybackRequiresUserAction="NO" mediaPlaybackAllowsAirPlay="NO" keyboardDisplayRequiresUserAction="NO" id="cv0-Ok-S0i">
                                 <rect key="frame" x="2" y="2" width="316" height="476"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -1676,9 +1676,11 @@
     <resources>
         <image name="add_favorite_button.png" width="152" height="45"/>
         <image name="add_favorite_button_highlighted.png" width="152" height="45"/>
+        <image name="all_res_types.png" width="32" height="32"/>
         <image name="favorites_bar_item.png" width="32" height="32"/>
         <image name="input_control_text_field.png" width="247" height="31"/>
         <image name="library_bar_item.png" width="30" height="30"/>
+        <image name="list_options.png" width="20" height="20"/>
         <image name="repository_bar_item.png" width="30" height="29"/>
         <image name="res_type_dashboard.png" width="32" height="32"/>
         <image name="res_type_folder.png" width="32" height="32"/>
@@ -1696,9 +1698,9 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="ire-M8-0ci"/>
         <segue reference="4G2-Cf-EF7"/>
         <segue reference="4B5-09-C2l"/>
-        <segue reference="ire-M8-0ci"/>
         <segue reference="o5R-lu-uP9"/>
         <segue reference="f3B-eB-Zkq"/>
     </inferredMetricsTieBreakers>

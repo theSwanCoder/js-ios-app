@@ -56,6 +56,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 {
     [super changeServerProfile];
     [self resetSearchState];
+    self.resourceTypes = nil;
 }
 
 - (void)getResources
@@ -290,7 +291,6 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
     self.offset = 0;
     self.totalCount = 0;
     self.contentOffset = [self defaultContentOffset];
-    self.resourceTypes = nil;
 }
 
 @end

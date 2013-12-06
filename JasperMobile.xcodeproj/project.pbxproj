@@ -33,6 +33,10 @@
 		F54C91A91752FAC20009E2BE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A81752FAC20009E2BE /* QuartzCore.framework */; };
 		F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91AA1752FAC90009E2BE /* libxml2.dylib */; };
 		F54C91B41752FCA70009E2BE /* JMBaseModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F54C91B31752FCA70009E2BE /* JMBaseModule.m */; };
+		F55043581851D18600DA6D33 /* all_res_types.png in Resources */ = {isa = PBXBuildFile; fileRef = F55043561851D18600DA6D33 /* all_res_types.png */; };
+		F55043591851D18600DA6D33 /* all_res_types@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F55043571851D18600DA6D33 /* all_res_types@2x.png */; };
+		F550435F1851E00600DA6D33 /* list_options.png in Resources */ = {isa = PBXBuildFile; fileRef = F550435D1851E00600DA6D33 /* list_options.png */; };
+		F55043601851E00600DA6D33 /* list_options@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F550435E1851E00600DA6D33 /* list_options@2x.png */; };
 		F55048D917622B8C0067304B /* JMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F55048D817622B8C0067304B /* JMUtils.m */; };
 		F55174D0178AB1A5006186B4 /* JMServersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F55174CF178AB1A5006186B4 /* JMServersTableViewController.m */; };
 		F553F5DD17C40CD9007625DF /* JMInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F553F5DC17C40CD9007625DF /* JMInputControlCell.m */; };
@@ -229,6 +233,10 @@
 		F54C91AA1752FAC90009E2BE /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		F54C91B21752FCA70009E2BE /* JMBaseModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseModule.h; path = Classes/JMBaseModule.h; sourceTree = "<group>"; };
 		F54C91B31752FCA70009E2BE /* JMBaseModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseModule.m; path = Classes/JMBaseModule.m; sourceTree = "<group>"; };
+		F55043561851D18600DA6D33 /* all_res_types.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = all_res_types.png; sourceTree = "<group>"; };
+		F55043571851D18600DA6D33 /* all_res_types@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "all_res_types@2x.png"; sourceTree = "<group>"; };
+		F550435D1851E00600DA6D33 /* list_options.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list_options.png; sourceTree = "<group>"; };
+		F550435E1851E00600DA6D33 /* list_options@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list_options@2x.png"; sourceTree = "<group>"; };
 		F55048D717622B8C0067304B /* JMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMUtils.h; path = JasperMobile/Classes/JMUtils.h; sourceTree = "<group>"; };
 		F55048D817622B8C0067304B /* JMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMUtils.m; path = JasperMobile/Classes/JMUtils.m; sourceTree = "<group>"; };
 		F55174CE178AB1A5006186B4 /* JMServersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServersTableViewController.h; path = Classes/JMServersTableViewController.h; sourceTree = "<group>"; };
@@ -440,8 +448,8 @@
 				F514E6911754E4C200C9F61E /* JMLocalization.m */,
 				F59AFBAA17CB58F300F168CE /* JMReportOptionsUtil.h */,
 				F59AFBAB17CB58F300F168CE /* JMReportOptionsUtil.m */,
-				F572814517C77047000B192D /* JMRequestDelegate.h */,
 				F5FE06E417574D8200030331 /* JMPhoneRotation.m */,
+				F572814517C77047000B192D /* JMRequestDelegate.h */,
 				F572814617C77048000B192D /* JMRequestDelegate.m */,
 				F55048D717622B8C0067304B /* JMUtils.h */,
 				F55048D817622B8C0067304B /* JMUtils.m */,
@@ -549,6 +557,8 @@
 		F553F5DE17C41777007625DF /* ResourceTypes */ = {
 			isa = PBXGroup;
 			children = (
+				F55043561851D18600DA6D33 /* all_res_types.png */,
+				F55043571851D18600DA6D33 /* all_res_types@2x.png */,
 				F58EF6CF17F4882800C9EBA8 /* res_type_dashboard.png */,
 				F58EF6D017F4882800C9EBA8 /* res_type_dashboard@2x.png */,
 				F58EF6D117F4882800C9EBA8 /* res_type_folder.png */,
@@ -751,6 +761,8 @@
 				F58EF6B217F487A800C9EBA8 /* delete_button_highlighted@2x.png */,
 				F58EF6B317F487A800C9EBA8 /* delete_button.png */,
 				F58EF6B417F487A800C9EBA8 /* delete_button@2x.png */,
+				F550435D1851E00600DA6D33 /* list_options.png */,
+				F550435E1851E00600DA6D33 /* list_options@2x.png */,
 				F58EF6B517F487A800C9EBA8 /* remove_favorite_button_highlighted.png */,
 				F58EF6B617F487A800C9EBA8 /* remove_favorite_button_highlighted@2x.png */,
 				F58EF6B717F487A800C9EBA8 /* remove_favorite_button.png */,
@@ -1010,6 +1022,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F55043601851E00600DA6D33 /* list_options@2x.png in Resources */,
 				F58EF6BE17F487A800C9EBA8 /* add_favorite_button_highlighted@2x.png in Resources */,
 				F58EF6DF17F4882800C9EBA8 /* res_type_image.png in Resources */,
 				F58EF6C617F487A800C9EBA8 /* delete_button@2x.png in Resources */,
@@ -1018,6 +1031,7 @@
 				F55CC34F174CFFCE00CEB39E /* MainStoryboard_iPad.storyboard in Resources */,
 				F5AD3C5817F4A90D00F16D3C /* input_control_text_field@2x.png in Resources */,
 				F58EF6DC17F4882800C9EBA8 /* res_type_dashboard@2x.png in Resources */,
+				F55043581851D18600DA6D33 /* all_res_types.png in Resources */,
 				F58FF3041760A1600021CC8B /* JMCancelRequestPopup.xib in Resources */,
 				F58EF6DD17F4882800C9EBA8 /* res_type_folder.png in Resources */,
 				F58EF6DB17F4882800C9EBA8 /* res_type_dashboard.png in Resources */,
@@ -1043,6 +1057,7 @@
 				F58EF6C417F487A800C9EBA8 /* delete_button_highlighted@2x.png in Resources */,
 				F58EF6E417F4882800C9EBA8 /* res_type_text@2x.png in Resources */,
 				F58EF6C317F487A800C9EBA8 /* delete_button_highlighted.png in Resources */,
+				F550435F1851E00600DA6D33 /* list_options.png in Resources */,
 				F58EF6C017F487A800C9EBA8 /* add_favorite_button@2x.png in Resources */,
 				F5EB25DC17E3579800B56FC2 /* input_control_text_field.png in Resources */,
 				F5F1B40717F197F900EB2587 /* Icon-Small-50.png in Resources */,
@@ -1061,6 +1076,7 @@
 				F539A70117F19A4F00310D72 /* Default-568h@2x.png in Resources */,
 				F539A70317F19A4F00310D72 /* Default@2x.png in Resources */,
 				F58EF6BD17F487A800C9EBA8 /* add_favorite_button_highlighted.png in Resources */,
+				F55043591851D18600DA6D33 /* all_res_types@2x.png in Resources */,
 				F58EF6F417F4884C00C9EBA8 /* library_bar_item@2x.png in Resources */,
 				F539A70517F19AA100310D72 /* Default.png in Resources */,
 				F539A72517F1A01400310D72 /* Default-Portrait~ipad.png in Resources */,
