@@ -39,23 +39,13 @@
 - (void)getResources
 {
     JMRequestDelegate *delegate = [JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self];
-    BOOL recursive = YES;
     
     if (self.isPaginationAvailable) {
-        if (!self.searchQuery.length) {
-            recursive = NO;
-            [self.resourceTypes addObject:self.constants.WS_TYPE_FOLDER];
-        }
+        [self.resourceTypes addObject:self.constants.WS_TYPE_FOLDER];
         
-        [self.resourceClient resourceLookups:[self path:@"/"] query:self.searchQuery types:self.resourceTypes.allObjects recursive:recursive offset:self.offset limit:kJMResourcesLimit delegate:delegate];
+        [self.resourceClient resourceLookups:[self path:@"/"] query:nil types:self.resourceTypes.allObjects recursive:NO offset:self.offset limit:kJMResourcesLimit delegate:delegate];
     } else {
-        // Check if search action was not performed
-        // TODO: remove condition for searchQuery
-        if (self.searchQuery.length > 0) {
-            [self.resourceClient resources:[self path:@""] query:self.searchQuery types:self.resourceTypes.allObjects recursive:recursive limit:0 delegate:delegate];
-        } else {
-            [self.resourceClient resources:[self path:@"/"] delegate:delegate];
-        }
+        [self.resourceClient resources:[self path:@"/"] delegate:delegate];
     }
 }
 

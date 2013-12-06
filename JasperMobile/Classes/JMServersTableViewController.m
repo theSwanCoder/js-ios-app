@@ -94,14 +94,6 @@ inject_default_rotation()
     [super viewDidUnload];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    if (![JMUtils isViewControllerVisible:self]) {
-        self.servers = nil;
-    }
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - UIViewControllerEditing
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated

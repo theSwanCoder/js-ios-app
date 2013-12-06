@@ -36,7 +36,9 @@
  */
 @interface JMSearchableTableViewController : JMBaseRepositoryTableViewController <UISearchBarDelegate, JMRefreshable, JMSearchFilterTableViewControllerDelegate>
 
+// TODO: move searchQuery to a separate view controller
 @property (nonatomic, strong) NSString *searchQuery;
+
 @property (nonatomic, assign) BOOL isSearchDisabled;
 @property (nonatomic, readonly) JMCancelRequestBlock cancelBlock;
 @property (nonatomic, assign) NSInteger offset;

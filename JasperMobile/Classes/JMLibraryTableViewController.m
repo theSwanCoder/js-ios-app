@@ -87,13 +87,14 @@ static NSString * const kJMRequestType = @"type";
     }
     
     JMRequestDelegate *delegate = [JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self];
+    
     if (self.isPaginationAvailable) {
-        [self.resourceClient resourceLookups:nil query:self.searchQuery types:self.resourceTypes.allObjects recursive:YES offset:self.offset limit:kJMResourcesLimit delegate:delegate];
+        [self.resourceClient resourceLookups:[self path:nil] query:self.searchQuery types:self.resourceTypes.allObjects recursive:YES offset:self.offset limit:kJMResourcesLimit delegate:delegate];
     } else {
         if (self.includeDashboards) {
             delegate.checkStatusCode = NO;
         }
-        [self.resourceClient resources:@"/" query:self.searchQuery types:self.resourceTypes.allObjects recursive:YES limit:0 delegate:delegate];
+        [self.resourceClient resources:[self path:@"/"] query:self.searchQuery types:self.resourceTypes.allObjects recursive:YES limit:0 delegate:delegate];
     }
 }
 
@@ -106,6 +107,11 @@ static NSString * const kJMRequestType = @"type";
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];
     // Update server info (if needed)
     [self.resourceClient updateServerInfo:serverInfoDelegate];
+}
+
+- (NSString *)path:(NSString *)defaultPath
+{
+    return self.resourceLookup.uri ?: defaultPath;
 }
 
 @end

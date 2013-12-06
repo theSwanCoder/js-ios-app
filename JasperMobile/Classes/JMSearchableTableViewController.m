@@ -28,6 +28,7 @@
 #import "JMSearchableTableViewController.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
+#import "JMLibraryTableViewController.h"
 #import "JMUtils.h"
 
 static NSInteger const kJMLoadingCellTag = 100;
@@ -188,7 +189,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
         //        [self hideSearchBar:searchBar animated:NO];
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:JMMainStoryboard() bundle:nil];
-        id destinationViewController = [storyboard instantiateViewControllerWithIdentifier:NSStringFromClass(self.class)];
+        id destinationViewController = [storyboard instantiateViewControllerWithIdentifier:NSStringFromClass(JMLibraryTableViewController.class)];
         
         if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
             [destinationViewController setResourceClient:self.resourceClient];

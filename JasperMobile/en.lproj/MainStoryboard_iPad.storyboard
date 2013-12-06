@@ -222,13 +222,7 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Resource Title" id="c9J-im-YxG">
-                        <barButtonItem key="rightBarButtonItem" image="list_options.png" id="5dq-Qg-vks">
-                            <connections>
-                                <segue destination="Cxw-3d-Wsh" kind="push" identifier="ShowSearchFilter" id="xwD-KJ-4AL"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Resource Title" id="c9J-im-YxG"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -1714,9 +1708,8 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="gWk-M7-tOO"/>
-        <segue reference="CNL-wC-CPz"/>
-        <segue reference="HcD-3B-Nmh"/>
-        <segue reference="IV8-Zc-6l3"/>
-        <segue reference="aov-Sd-Jph"/>
+        <segue reference="zhl-Cf-pU1"/>
+        <segue reference="mXe-lN-TQk"/>
+        <segue reference="aZn-o4-OAd"/>
     </inferredMetricsTieBreakers>
 </document>
