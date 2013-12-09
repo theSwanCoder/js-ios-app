@@ -83,8 +83,6 @@
 
 "report.output.format" = "Report format";
 
-"delete.dialog.title" = "Deleting resource";
-
 "status.loading" = "Loading...";
 "status.searching" = "Searching...";
 
@@ -138,6 +136,5 @@
 "dialog.button.retry" = "Retry";
 "dialog.button.run.report" = "Run Report";
 "dialog.button.info" = "Info";
-"dialog.button.delete" = "Delete";
 "dialog.button.addfavorite" = "Add Favorite";
 "dialog.button.removefavorite" = "Remove Favorite";
