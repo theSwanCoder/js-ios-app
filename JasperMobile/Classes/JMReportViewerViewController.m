@@ -136,7 +136,7 @@ inject_default_rotation()
         for (JSReportAttachment *attachment in reportDescriptor.attachments) {
             NSString *fileName = attachment.name;
             NSString *fileType = attachment.type;
-            NSString *extension;
+            NSString *extension = @"";
 
             if ([fileType isEqualToString:@"text/html"]) {
                 extension = @".html";
@@ -148,7 +148,7 @@ inject_default_rotation()
             NSString *resourceFile = [self.tempDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@", fileName, extension]];
 
             // Set as main file to render in web view if extension is equals to HTML or PDF
-            if (extension) {
+            if (extension.length) {
                 reportViewerViewController.reportPath = resourceFile;
             }
 
