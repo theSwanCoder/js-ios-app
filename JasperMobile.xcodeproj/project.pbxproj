@@ -33,6 +33,10 @@
 		F54C91A91752FAC20009E2BE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A81752FAC20009E2BE /* QuartzCore.framework */; };
 		F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91AA1752FAC90009E2BE /* libxml2.dylib */; };
 		F54C91B41752FCA70009E2BE /* JMBaseModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F54C91B31752FCA70009E2BE /* JMBaseModule.m */; };
+		F55043581851D18600DA6D33 /* all_res_types.png in Resources */ = {isa = PBXBuildFile; fileRef = F55043561851D18600DA6D33 /* all_res_types.png */; };
+		F55043591851D18600DA6D33 /* all_res_types@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F55043571851D18600DA6D33 /* all_res_types@2x.png */; };
+		F550435F1851E00600DA6D33 /* list_options.png in Resources */ = {isa = PBXBuildFile; fileRef = F550435D1851E00600DA6D33 /* list_options.png */; };
+		F55043601851E00600DA6D33 /* list_options@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F550435E1851E00600DA6D33 /* list_options@2x.png */; };
 		F55048D917622B8C0067304B /* JMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F55048D817622B8C0067304B /* JMUtils.m */; };
 		F55174D0178AB1A5006186B4 /* JMServersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F55174CF178AB1A5006186B4 /* JMServersTableViewController.m */; };
 		F553F5DD17C40CD9007625DF /* JMInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F553F5DC17C40CD9007625DF /* JMInputControlCell.m */; };
@@ -51,6 +55,7 @@
 		F55D622F17C24D9100EC320F /* JMReportOptionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F55D622E17C24D9100EC320F /* JMReportOptionsTableViewController.m */; };
 		F5663A311752F9D0007978BE /* Objection-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A2E1752F9D0007978BE /* Objection-iOS.framework */; };
 		F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A321752FA5C007978BE /* CFNetwork.framework */; };
+		F57186C3183658DD0013B6EB /* JSRESTBase+updateServerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F57186C2183658DD0013B6EB /* JSRESTBase+updateServerInfo.m */; };
 		F572814717C77048000B192D /* JMRequestDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F572814617C77048000B192D /* JMRequestDelegate.m */; };
 		F576BC411753DFF600DF765B /* JMBaseRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F576BC401753DFF600DF765B /* JMBaseRepositoryTableViewController.m */; };
 		F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */; };
@@ -107,6 +112,7 @@
 		F59FD9C017B1014A00331BD8 /* JMFavoritesUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F59FD9BF17B1014A00331BD8 /* JMFavoritesUtil.m */; };
 		F5A2E77D175CCB2400CBA00E /* JMMenuTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A2E77C175CCB2400CBA00E /* JMMenuTableViewController.m */; };
 		F5A2E783175CD47B00CBA00E /* JMBarButtonPresenterNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A2E782175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.m */; };
+		F5A356AA183FC93300BD9473 /* JMSearchFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A356A9183FC93300BD9473 /* JMSearchFilterTableViewController.m */; };
 		F5A5F553176206360018FEFC /* JMResourceTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5A5F552176206360018FEFC /* JMResourceTableViewController.m */; };
 		F5AD3C5817F4A90D00F16D3C /* input_control_text_field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5AD3C5717F4A90D00F16D3C /* input_control_text_field@2x.png */; };
 		F5B6A6A3175F57B90047CB6D /* JMLibraryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */; };
@@ -120,8 +126,6 @@
 		F5D97FA4179587100059C761 /* JMServerProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97F9E179587100059C761 /* JMServerProfile.m */; };
 		F5D97FA5179587100059C761 /* JMServerProfile+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */; };
 		F5D97FAA179587CF0059C761 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97FA9179587CF0059C761 /* SSKeychain.m */; };
-		F5DC4EA71769F01000038D58 /* JMResourceModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DC4EA61769F01000038D58 /* JMResourceModifyViewController.m */; };
-		F5DC4EAB176A101D00038D58 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */; };
 		F5DE3FA3178A387B00840808 /* JMSearchableTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5DE3FA2178A387B00840808 /* JMSearchableTableViewController.m */; };
 		F5E4FB5F17C6053900A69FCC /* JMDateInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4FB5E17C6053900A69FCC /* JMDateInputControlCell.m */; };
 		F5E4FB6517C6058500A69FCC /* JMDateTimeInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E4FB6417C6058400A69FCC /* JMDateTimeInputControlCell.m */; };
@@ -229,6 +233,10 @@
 		F54C91AA1752FAC90009E2BE /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		F54C91B21752FCA70009E2BE /* JMBaseModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseModule.h; path = Classes/JMBaseModule.h; sourceTree = "<group>"; };
 		F54C91B31752FCA70009E2BE /* JMBaseModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseModule.m; path = Classes/JMBaseModule.m; sourceTree = "<group>"; };
+		F55043561851D18600DA6D33 /* all_res_types.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = all_res_types.png; sourceTree = "<group>"; };
+		F55043571851D18600DA6D33 /* all_res_types@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "all_res_types@2x.png"; sourceTree = "<group>"; };
+		F550435D1851E00600DA6D33 /* list_options.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list_options.png; sourceTree = "<group>"; };
+		F550435E1851E00600DA6D33 /* list_options@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list_options@2x.png"; sourceTree = "<group>"; };
 		F55048D717622B8C0067304B /* JMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMUtils.h; path = JasperMobile/Classes/JMUtils.h; sourceTree = "<group>"; };
 		F55048D817622B8C0067304B /* JMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMUtils.m; path = JasperMobile/Classes/JMUtils.m; sourceTree = "<group>"; };
 		F55174CE178AB1A5006186B4 /* JMServersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServersTableViewController.h; path = Classes/JMServersTableViewController.h; sourceTree = "<group>"; };
@@ -256,6 +264,8 @@
 		F55D622E17C24D9100EC320F /* JMReportOptionsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportOptionsTableViewController.m; path = Classes/JMReportOptionsTableViewController.m; sourceTree = "<group>"; };
 		F5663A2E1752F9D0007978BE /* Objection-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Objection-iOS.framework"; path = "JasperMobile/Vendor/Objection-iOS.framework"; sourceTree = "<group>"; };
 		F5663A321752FA5C007978BE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		F57186C1183658DD0013B6EB /* JSRESTBase+updateServerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "JSRESTBase+updateServerInfo.h"; path = "JasperMobile/Classes/JSRESTBase+updateServerInfo.h"; sourceTree = "<group>"; };
+		F57186C2183658DD0013B6EB /* JSRESTBase+updateServerInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "JSRESTBase+updateServerInfo.m"; path = "JasperMobile/Classes/JSRESTBase+updateServerInfo.m"; sourceTree = "<group>"; };
 		F572814517C77047000B192D /* JMRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRequestDelegate.h; path = JasperMobile/Classes/JMRequestDelegate.h; sourceTree = "<group>"; };
 		F572814617C77048000B192D /* JMRequestDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMRequestDelegate.m; path = JasperMobile/Classes/JMRequestDelegate.m; sourceTree = "<group>"; };
 		F57364EA17B91BB500A10588 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRefreshable.h; path = JasperMobile/Classes/JMRefreshable.h; sourceTree = "<group>"; };
@@ -327,6 +337,8 @@
 		F5A2E780175CCFA700CBA00E /* JMSplitViewBarButtonPresenterProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMSplitViewBarButtonPresenterProtocol.h; path = JasperMobile/Classes/JMSplitViewBarButtonPresenterProtocol.h; sourceTree = "<group>"; };
 		F5A2E781175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBarButtonPresenterNavigationViewController.h; path = Classes/JMBarButtonPresenterNavigationViewController.h; sourceTree = "<group>"; };
 		F5A2E782175CD47A00CBA00E /* JMBarButtonPresenterNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBarButtonPresenterNavigationViewController.m; path = Classes/JMBarButtonPresenterNavigationViewController.m; sourceTree = "<group>"; };
+		F5A356A8183FC93300BD9473 /* JMSearchFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSearchFilterTableViewController.h; path = Classes/JMSearchFilterTableViewController.h; sourceTree = "<group>"; };
+		F5A356A9183FC93300BD9473 /* JMSearchFilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSearchFilterTableViewController.m; path = Classes/JMSearchFilterTableViewController.m; sourceTree = "<group>"; };
 		F5A5F551176206360018FEFC /* JMResourceTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourceTableViewController.h; path = Classes/JMResourceTableViewController.h; sourceTree = "<group>"; };
 		F5A5F552176206360018FEFC /* JMResourceTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceTableViewController.m; path = Classes/JMResourceTableViewController.m; sourceTree = "<group>"; };
 		F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMResourceClientHolder.h; path = JasperMobile/Classes/JMResourceClientHolder.h; sourceTree = "<group>"; };
@@ -350,10 +362,6 @@
 		F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "JMServerProfile+Helpers.m"; path = "JasperMobile/Classes/JMServerProfile+Helpers.m"; sourceTree = "<group>"; };
 		F5D97FA8179587CF0059C761 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		F5D97FA9179587CF0059C761 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
-		F5DC4EA51769F01000038D58 /* JMResourceModifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourceModifyViewController.h; path = Classes/JMResourceModifyViewController.h; sourceTree = "<group>"; };
-		F5DC4EA61769F01000038D58 /* JMResourceModifyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceModifyViewController.m; path = Classes/JMResourceModifyViewController.m; sourceTree = "<group>"; };
-		F5DC4EA9176A101D00038D58 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
-		F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		F5DE3FA1178A387B00840808 /* JMSearchableTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSearchableTableViewController.h; path = Classes/JMSearchableTableViewController.h; sourceTree = "<group>"; };
 		F5DE3FA2178A387B00840808 /* JMSearchableTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSearchableTableViewController.m; path = Classes/JMSearchableTableViewController.m; sourceTree = "<group>"; };
 		F5E4FB5D17C6053900A69FCC /* JMDateInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDateInputControlCell.h; path = Classes/JMDateInputControlCell.h; sourceTree = "<group>"; };
@@ -389,7 +397,7 @@
 		F5FE06DE1757383800030331 /* JMMenuTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMenuTabBarController.m; path = Classes/JMMenuTabBarController.m; sourceTree = "<group>"; };
 		F5FE06E017573DB000030331 /* JMRotatable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMRotatable.h; path = JasperMobile/Classes/JMRotatable.h; sourceTree = "<group>"; };
 		F5FE06E317574D8200030331 /* JMPhoneRotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMPhoneRotation.h; path = Classes/JMPhoneRotation.h; sourceTree = "<group>"; };
-		F5FE06E417574D8200030331 /* JMPhoneRotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMPhoneRotation.m; path = Classes/JMPhoneRotation.m; sourceTree = "<group>"; };
+		F5FE06E417574D8200030331 /* JMPhoneRotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMPhoneRotation.m; path = JasperMobile/Classes/JMPhoneRotation.m; sourceTree = "<group>"; };
 		F5FE06E617574D9700030331 /* JMPadRotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMPadRotation.h; path = Classes/JMPadRotation.h; sourceTree = "<group>"; };
 		F5FE06E717574D9700030331 /* JMPadRotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMPadRotation.m; path = Classes/JMPadRotation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -440,6 +448,7 @@
 				F514E6911754E4C200C9F61E /* JMLocalization.m */,
 				F59AFBAA17CB58F300F168CE /* JMReportOptionsUtil.h */,
 				F59AFBAB17CB58F300F168CE /* JMReportOptionsUtil.m */,
+				F5FE06E417574D8200030331 /* JMPhoneRotation.m */,
 				F572814517C77047000B192D /* JMRequestDelegate.h */,
 				F572814617C77048000B192D /* JMRequestDelegate.m */,
 				F55048D717622B8C0067304B /* JMUtils.h */,
@@ -527,6 +536,8 @@
 				F5B6A6A2175F57B90047CB6D /* JMLibraryTableViewController.m */,
 				F5DE3FA1178A387B00840808 /* JMSearchableTableViewController.h */,
 				F5DE3FA2178A387B00840808 /* JMSearchableTableViewController.m */,
+				F5A356A8183FC93300BD9473 /* JMSearchFilterTableViewController.h */,
+				F5A356A9183FC93300BD9473 /* JMSearchFilterTableViewController.m */,
 				F55174CE178AB1A5006186B4 /* JMServersTableViewController.h */,
 				F55174CF178AB1A5006186B4 /* JMServersTableViewController.m */,
 				F513EE8F17A16E2C00A553C4 /* JMServerSettingsTableViewController.h */,
@@ -537,8 +548,6 @@
 				F54BE93A17D7495D00437EA9 /* JMReportViewerViewController.m */,
 				F5B6A6A4175F58690047CB6D /* JMRepositoryTableViewController.h */,
 				F5B6A6A5175F586A0047CB6D /* JMRepositoryTableViewController.m */,
-				F5DC4EA51769F01000038D58 /* JMResourceModifyViewController.h */,
-				F5DC4EA61769F01000038D58 /* JMResourceModifyViewController.m */,
 				F5A5F551176206360018FEFC /* JMResourceTableViewController.h */,
 				F5A5F552176206360018FEFC /* JMResourceTableViewController.m */,
 			);
@@ -548,6 +557,8 @@
 		F553F5DE17C41777007625DF /* ResourceTypes */ = {
 			isa = PBXGroup;
 			children = (
+				F55043561851D18600DA6D33 /* all_res_types.png */,
+				F55043571851D18600DA6D33 /* all_res_types@2x.png */,
 				F58EF6CF17F4882800C9EBA8 /* res_type_dashboard.png */,
 				F58EF6D017F4882800C9EBA8 /* res_type_dashboard@2x.png */,
 				F58EF6D117F4882800C9EBA8 /* res_type_folder.png */,
@@ -673,7 +684,6 @@
 			children = (
 				F58FF2EF1760A0B50021CC8B /* MJPopupViewController */,
 				F5D97FA7179587CF0059C761 /* SSKeychain */,
-				F5DC4EA8176A101D00038D58 /* TPKeyboardAvoiding */,
 			);
 			name = Vendor;
 			path = JasperMobile/Vendor;
@@ -727,10 +737,12 @@
 				F514E69B175575AE00C9F61E /* UIAlertView+LocalizedAlert.m */,
 				F585FB6C176753460079D89C /* UITableViewController+CellRelativeHeight.h */,
 				F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */,
-				F5D97F9F179587100059C761 /* JMServerProfile+Helpers.h */,
-				F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */,
 				F5C72FDC17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.h */,
 				F5C72FDD17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m */,
+				F5D97F9F179587100059C761 /* JMServerProfile+Helpers.h */,
+				F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */,
+				F57186C1183658DD0013B6EB /* JSRESTBase+updateServerInfo.h */,
+				F57186C2183658DD0013B6EB /* JSRESTBase+updateServerInfo.m */,
 			);
 			name = Categories;
 			path = ..;
@@ -749,6 +761,8 @@
 				F58EF6B217F487A800C9EBA8 /* delete_button_highlighted@2x.png */,
 				F58EF6B317F487A800C9EBA8 /* delete_button.png */,
 				F58EF6B417F487A800C9EBA8 /* delete_button@2x.png */,
+				F550435D1851E00600DA6D33 /* list_options.png */,
+				F550435E1851E00600DA6D33 /* list_options@2x.png */,
 				F58EF6B517F487A800C9EBA8 /* remove_favorite_button_highlighted.png */,
 				F58EF6B617F487A800C9EBA8 /* remove_favorite_button_highlighted@2x.png */,
 				F58EF6B717F487A800C9EBA8 /* remove_favorite_button.png */,
@@ -859,15 +873,6 @@
 			path = SSKeychain;
 			sourceTree = "<group>";
 		};
-		F5DC4EA8176A101D00038D58 /* TPKeyboardAvoiding */ = {
-			isa = PBXGroup;
-			children = (
-				F5DC4EA9176A101D00038D58 /* TPKeyboardAvoidingScrollView.h */,
-				F5DC4EAA176A101D00038D58 /* TPKeyboardAvoidingScrollView.m */,
-			);
-			path = TPKeyboardAvoiding;
-			sourceTree = "<group>";
-		};
 		F5EB25DA17E3579800B56FC2 /* TextField */ = {
 			isa = PBXGroup;
 			children = (
@@ -898,7 +903,6 @@
 			isa = PBXGroup;
 			children = (
 				F5FE06E317574D8200030331 /* JMPhoneRotation.h */,
-				F5FE06E417574D8200030331 /* JMPhoneRotation.m */,
 				F5FE06E617574D9700030331 /* JMPadRotation.h */,
 				F5FE06E717574D9700030331 /* JMPadRotation.m */,
 				F59BF2FD1758164E0091EB88 /* JMRotationBase.h */,
@@ -1018,6 +1022,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F55043601851E00600DA6D33 /* list_options@2x.png in Resources */,
 				F58EF6BE17F487A800C9EBA8 /* add_favorite_button_highlighted@2x.png in Resources */,
 				F58EF6DF17F4882800C9EBA8 /* res_type_image.png in Resources */,
 				F58EF6C617F487A800C9EBA8 /* delete_button@2x.png in Resources */,
@@ -1026,6 +1031,7 @@
 				F55CC34F174CFFCE00CEB39E /* MainStoryboard_iPad.storyboard in Resources */,
 				F5AD3C5817F4A90D00F16D3C /* input_control_text_field@2x.png in Resources */,
 				F58EF6DC17F4882800C9EBA8 /* res_type_dashboard@2x.png in Resources */,
+				F55043581851D18600DA6D33 /* all_res_types.png in Resources */,
 				F58FF3041760A1600021CC8B /* JMCancelRequestPopup.xib in Resources */,
 				F58EF6DD17F4882800C9EBA8 /* res_type_folder.png in Resources */,
 				F58EF6DB17F4882800C9EBA8 /* res_type_dashboard.png in Resources */,
@@ -1051,6 +1057,7 @@
 				F58EF6C417F487A800C9EBA8 /* delete_button_highlighted@2x.png in Resources */,
 				F58EF6E417F4882800C9EBA8 /* res_type_text@2x.png in Resources */,
 				F58EF6C317F487A800C9EBA8 /* delete_button_highlighted.png in Resources */,
+				F550435F1851E00600DA6D33 /* list_options.png in Resources */,
 				F58EF6C017F487A800C9EBA8 /* add_favorite_button@2x.png in Resources */,
 				F5EB25DC17E3579800B56FC2 /* input_control_text_field.png in Resources */,
 				F5F1B40717F197F900EB2587 /* Icon-Small-50.png in Resources */,
@@ -1069,6 +1076,7 @@
 				F539A70117F19A4F00310D72 /* Default-568h@2x.png in Resources */,
 				F539A70317F19A4F00310D72 /* Default@2x.png in Resources */,
 				F58EF6BD17F487A800C9EBA8 /* add_favorite_button_highlighted.png in Resources */,
+				F55043591851D18600DA6D33 /* all_res_types@2x.png in Resources */,
 				F58EF6F417F4884C00C9EBA8 /* library_bar_item@2x.png in Resources */,
 				F539A70517F19AA100310D72 /* Default.png in Resources */,
 				F539A72517F1A01400310D72 /* Default-Portrait~ipad.png in Resources */,
@@ -1123,6 +1131,7 @@
 				F576BC411753DFF600DF765B /* JMBaseRepositoryTableViewController.m in Sources */,
 				F514E69D175575C800C9F61E /* JMLocalization.m in Sources */,
 				F514E69C175575AE00C9F61E /* UIAlertView+LocalizedAlert.m in Sources */,
+				F5A356AA183FC93300BD9473 /* JMSearchFilterTableViewController.m in Sources */,
 				F5FE06DF1757383800030331 /* JMMenuTabBarController.m in Sources */,
 				F5FE06E517574D8200030331 /* JMPhoneRotation.m in Sources */,
 				F5FE06E817574D9700030331 /* JMPadRotation.m in Sources */,
@@ -1139,8 +1148,7 @@
 				F5A5F553176206360018FEFC /* JMResourceTableViewController.m in Sources */,
 				F55048D917622B8C0067304B /* JMUtils.m in Sources */,
 				F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */,
-				F5DC4EA71769F01000038D58 /* JMResourceModifyViewController.m in Sources */,
-				F5DC4EAB176A101D00038D58 /* TPKeyboardAvoidingScrollView.m in Sources */,
+				F57186C3183658DD0013B6EB /* JSRESTBase+updateServerInfo.m in Sources */,
 				F5DE3FA3178A387B00840808 /* JMSearchableTableViewController.m in Sources */,
 				F55174D0178AB1A5006186B4 /* JMServersTableViewController.m in Sources */,
 				F5D97FA1179587100059C761 /* JMFavorites.m in Sources */,

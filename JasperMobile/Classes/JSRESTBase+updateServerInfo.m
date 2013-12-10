@@ -21,31 +21,21 @@
  */
 
 //
-//  JasperMobileTests.m
+//  JSRESTBase+updateServerInfo.m
 //  Jaspersoft Corporation
 //
 
-#import "JasperMobileTests.h"
+#import "JSRESTBase+updateServerInfo.h"
 
-@implementation JasperMobileTests
+@implementation JSRESTBase (updateServerInfo)
 
-- (void)setUp
+- (void)updateServerInfo:(id <JSRequestDelegate>)delegate
 {
-    [super setUp];
-    
-    // Set-up code here.
-}
-
-- (void)tearDown
-{
-    // Tear-down code here.
-    
-    [super tearDown];
-}
-
-- (void)testExample
-{
-    STFail(@"Unit tests are not implemented yet in JasperMobileTests");
+    if (!self.serverProfile.serverInfo) {
+        [self serverInfo:delegate];
+    } else {
+        [delegate requestFinished:nil];
+    }
 }
 
 @end

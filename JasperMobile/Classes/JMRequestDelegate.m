@@ -31,7 +31,6 @@ static NSMutableArray *requestDelegatePool;
 static JMRequestDelegateFinalBlock finalBlock;
 __weak static UIViewController *viewControllerToDismiss;
 
-#import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "JMUtils.h"
@@ -42,6 +41,15 @@ __weak static UIViewController *viewControllerToDismiss;
 @end
 
 @implementation JMRequestDelegate
+
+- (id)init
+{
+    if (self = [super init]) {
+        self.checkStatusCode = YES;
+    }
+    
+    return self;
+}
 
 #pragma mark - Class Methods
 
@@ -104,7 +112,7 @@ __weak static UIViewController *viewControllerToDismiss;
 
 - (void)requestFinished:(JSOperationResult *)result
 {
-    if (![result isSuccessful]) {
+    if (result && (![result isSuccessful] && self.checkStatusCode)) {
         [JMRequestDelegate clearRequestPool];
         [JMCancelRequestPopup dismiss];
 

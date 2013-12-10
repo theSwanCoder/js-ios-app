@@ -94,14 +94,6 @@ inject_default_rotation()
     [super viewDidUnload];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    if (![JMUtils isViewControllerVisible:self]) {
-        self.servers = nil;
-    }
-    [super didReceiveMemoryWarning];
-}
-
 #pragma mark - UIViewControllerEditing
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -210,7 +202,7 @@ inject_default_rotation()
         if (serversCount == 0) {
             return JMCustomLocalizedString(@"servers.profile.configure.help", nil);
         } else if(serversCount == 1) {
-            return  JMCustomLocalizedString(@"servers.profile.configure.tips", nil);
+            return JMCustomLocalizedString(@"servers.profile.configure.tips", nil);
         }
     }
     

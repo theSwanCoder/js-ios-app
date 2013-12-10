@@ -109,8 +109,13 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger == 0) {
+        self.resourceClient.serverProfile.serverInfo = nil;
+    }
+    
+    if (self.reportClient.serverProfile.serverInfo.versionAsInteger == 0) {
+        self.reportClient.serverProfile.serverInfo = nil;
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -278,9 +283,6 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
         // Update timeouts
         [self updateTimeouts];
         
-        // Forces to refresh server info
-        [self updateServerInfoAsynchronouslyForRestClient:self.resourceClient];
-
         [defaults setURL:[serverProfile.objectID URIRepresentation] forKey:kJMDefaultsActiveServer];
     }
     
@@ -292,8 +294,8 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 - (void)updateTimeouts
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.resourceClient.timeoutInterval = [defaults integerForKey:kJMDefaultRequestTimeout] ?: 30;
-    self.reportClient.timeoutInterval = [defaults integerForKey:kJMReportRequestTimeout] ?: 90;
+    self.resourceClient.timeoutInterval = [defaults integerForKey:kJMDefaultRequestTimeout] ?: 120;
+    self.reportClient.timeoutInterval = [defaults integerForKey:kJMReportRequestTimeout] ?: 120;
 }
 
 // Resets database and defaults
@@ -333,26 +335,6 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     }
     
     return nil;
-}
-
-- (void)updateServerInfoAsynchronouslyForRestClient:(JSRESTBase *)client
-{
-    JSConstants *constants = [[JSObjection defaultInjector] getObject:[JSConstants class]];
-
-    JSRequest *request = [[JSRequest alloc] init];
-    request.uri = constants.REST_SERVER_INFO_URI;
-    request.restVersion = JSRESTVersion_2;
-    request.asynchronous = YES;
-    request.timeoutInterval = client.timeoutInterval;
-
-    __weak JSRESTBase *clientWeak = client;
-    request.finishedBlock = ^(JSOperationResult *result) {
-        if (!result.error && result.objects.count) {
-            clientWeak.serverProfile.serverInfo = [result.objects objectAtIndex:0];
-        }
-    };
-
-    [client sendRequest:request];
 }
 
 @end

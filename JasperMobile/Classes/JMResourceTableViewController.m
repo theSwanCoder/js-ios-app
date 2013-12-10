@@ -30,7 +30,6 @@
 #import "JMFavoritesUtil.h"
 #import "JMLocalization.h"
 #import "JMUtils.h"
-#import "UIAlertView+LocalizedAlert.h"
 #import "UITableViewCell+SetSeparators.h"
 #import "UITableViewController+CellRelativeHeight.h"
 #import "JMRequestDelegate.h"
@@ -40,30 +39,18 @@
 // we can use literal @kJMAttributesSection to represent NSNumber)
 #define kJMAttributesSection 0
 #define kJMToolsSection 1
-#define kJMResourcePropertiesSection 2
-
-static NSInteger const kJMConfirmButtonIndex = 1;
 
 static NSString * const kJMTitleKey = @"title";
 static NSString * const kJMValueKey = @"value";
-
-static NSString * const kJMEditResourceDescriptorSegue = @"EditResourceDescriptor";
-
-typedef enum {
-    JMGetResourceRequest,
-    JMDeleteResourceRequest
-} JMRequestType;
 
 @interface JMResourceTableViewController ()
 @property (nonatomic, strong, readonly) NSDictionary *numberOfRowsForSections;
 @property (nonatomic, strong, readonly) NSDictionary *resourceDescriptorProperties;
 @property (nonatomic, strong, readonly) NSDictionary *cellIdentifiers;
 @property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;
-@property (nonatomic, assign) JMRequestType requestType;
 @property (nonatomic, weak) UIButton *favoriteButton;
 
 - (void)refreshResourceDescriptor;
-- (JSResourceProperty *)resourcePropertyForIndexPath:(NSIndexPath *)indexPath;
 - (NSDictionary *)resourceDescriptorPropertyForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)localizedTextLabelTitleForProperty:(NSString *)property;
 @end
@@ -75,11 +62,11 @@ inject_default_rotation()
 #pragma mark - Accessors
 
 @synthesize resourceClient = _resourceClient;
+@synthesize resourceLookup = _resourceLookup;
 @synthesize resourceDescriptor = _resourceDescriptor;
 @synthesize resourceDescriptorProperties = _resourceDescriptorProperties;
 @synthesize numberOfRowsForSections = _numberOfRowsForSections;
 @synthesize cellIdentifiers = _cellIdentifiers;
-@synthesize needsToRefreshResourceDescriptorData = _needsToRefreshResourceDescriptorData;
 
 - (NSDictionary *)resourceDescriptorProperties
 {
@@ -112,9 +99,7 @@ inject_default_rotation()
     if (!_numberOfRowsForSections) {
         _numberOfRowsForSections = @{
             @kJMAttributesSection : @4,
-            @kJMToolsSection : @1,
-             // Uncomment to display Resource Properties Section
-//            @kJMResourcePropertiesSection : [NSNumber numberWithInt:self.resourceDescriptor.resourceProperties.count]
+            @kJMToolsSection : @1
         };
     }
     
@@ -126,8 +111,7 @@ inject_default_rotation()
     if (!_cellIdentifiers) {
         _cellIdentifiers = @{
             @kJMAttributesSection : @"ResourceAttributeCell",
-            @kJMToolsSection : @"ResourceToolsCell",
-            @kJMResourcePropertiesSection : @"ResourcePropertyCell"
+            @kJMToolsSection : @"ResourceToolsCell"
         };
     }
     
@@ -138,9 +122,6 @@ inject_default_rotation()
 {
     if (_resourceDescriptor != resourceDescriptor) {
         _resourceDescriptor = resourceDescriptor;
-        // Update the number of rows for resource properties section by re-creating
-        // numberOfRowsForSections variable
-        _numberOfRowsForSections = nil;
         // Also update properties for resource descriptor
         _resourceDescriptorProperties = nil;
     }
@@ -161,30 +142,12 @@ inject_default_rotation()
     [super viewDidLoad];
     [JMUtils setTitleForResourceViewController:self];
     [self refreshResourceDescriptor];
-    self.resourceDescriptor = nil;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    id  destinationViewController = segue.destinationViewController;
-    
-    if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
-        [destinationViewController setResourceDescriptor:self.resourceDescriptor];
-    }
-    
-    if ([segue.identifier isEqualToString:kJMEditResourceDescriptorSegue]) {
-        [destinationViewController setDelegate:self];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    if (self.needsToRefreshResourceDescriptorData) {
-        [self refreshResourceDescriptor];
-    }
 
     // TODO: remove if main menu will be changed to "List" instead tab bar controller
     if (self.resourceDescriptor) {
@@ -193,8 +156,9 @@ inject_default_rotation()
         // called earlier then "viewWillDisappear" of 1-st one (storyboard bug?).
         // This is true even if view controllers are same type
         [self.favoritesUtil persist];
-        self.favoritesUtil.resourceDescriptor = self.resourceDescriptor;
-        
+        [self.favoritesUtil setResource:self.resourceDescriptor.uriString
+                                  label:self.resourceDescriptor.label
+                                   type:self.resourceDescriptor.wsType];
         // Update favorite button if needed
         if (self.favoriteButton) {
             [self changeFavoriteButton:self.favoriteButton isResourceInFavorites:[self.favoritesUtil isResourceInFavorites]];
@@ -223,11 +187,6 @@ inject_default_rotation()
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return self.numberOfRowsForSections.count;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return section == kJMResourcePropertiesSection ? JMCustomLocalizedString(@"resource.properties.title", nil) : @"";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -262,19 +221,9 @@ inject_default_rotation()
     } else if (section == kJMToolsSection) {
         cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
         cell.backgroundColor = [UIColor clearColor];
-        
         self.favoriteButton = (UIButton *) [cell viewWithTag:1];
-        UIButton *deleteButton = (UIButton *) [cell viewWithTag:2];
-        
-        [deleteButton setTitle:JMCustomLocalizedString(@"dialog.button.delete", nil) forState:UIControlStateNormal];
-        
-        BOOL isResourceInFavorites = self.resourceDescriptor ? [self.favoritesUtil isResourceInFavorites] : NO;
+        BOOL isResourceInFavorites = self.resourceDescriptor != nil && [self.favoritesUtil isResourceInFavorites];
         [self changeFavoriteButton:self.favoriteButton isResourceInFavorites:isResourceInFavorites];
-    } else if (section == kJMResourcePropertiesSection) {
-        JSResourceProperty *resourceProperty = [self resourcePropertyForIndexPath:indexPath];
-        
-        cell.textLabel.text = resourceProperty.name;
-        cell.detailTextLabel.text = resourceProperty.value;
     }
     
     return cell;
@@ -294,31 +243,14 @@ inject_default_rotation()
     NSString *text,
              *detailText;    
     UITableViewCellStyle cellStyle = UITableViewCellStyleValue2;
-    
-    if (section == kJMAttributesSection) {
-        NSDictionary *propertyForIndexPath = [self resourceDescriptorPropertyForIndexPath:indexPath];
-        text = [self localizedTextLabelTitleForProperty:[propertyForIndexPath objectForKey:kJMTitleKey]];
-        detailText = [propertyForIndexPath objectForKey:kJMValueKey];
-    } else if (section == kJMResourcePropertiesSection) {
-        JSResourceProperty *property = [self resourcePropertyForIndexPath:indexPath];
-        text = property.name;
-        detailText = property.value;
-        cellStyle = UITableViewCellStyleSubtitle;
-    }
+    NSDictionary *propertyForIndexPath = [self resourceDescriptorPropertyForIndexPath:indexPath];
+    text = [self localizedTextLabelTitleForProperty:[propertyForIndexPath objectForKey:kJMTitleKey]];
+    detailText = [propertyForIndexPath objectForKey:kJMValueKey];
         
     return [self relativeHeightForTableViewCell:cell text:text detailText:detailText cellStyle:cellStyle];
 }
 
 #pragma mark - Actions
-
-- (IBAction)deleteResource:(id)sender
-{
-    [[UIAlertView localizedAlertWithTitle:@"delete.dialog.title"
-                         message:@"delete.dialog.msg"
-                        delegate:self
-               cancelButtonTitle:@"dialog.button.cancel"
-               otherButtonTitles:@"dialog.button.yes", nil] show];
-}
 
 - (IBAction)favoriteButtonClicked:(id)sender
 {
@@ -333,38 +265,15 @@ inject_default_rotation()
     }
 }
 
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == kJMConfirmButtonIndex) {
-        self.requestType = JMDeleteResourceRequest;
-        [self.resourceClient deleteResource:self.resourceDescriptor.uriString delegate:[JMRequestDelegate checkRequestResultForDelegate:self]];
-    }
-}
-
 #pragma mark - JSRequestDelegate
 
 - (void)requestFinished:(JSOperationResult *)result
 {
-    if (self.requestType == JMGetResourceRequest) {
-        self.resourceDescriptor = [result.objects objectAtIndex:0];
-        self.favoritesUtil.resourceDescriptor = self.resourceDescriptor;
-        
-        if (self.needsToRefreshResourceDescriptorData) {
-            self.needsToRefreshResourceDescriptorData = NO;
-            [self.delegate refreshWithResource:self.resourceDescriptor];
-        }
-        
-        [self.tableView reloadData];
-    } else if (self.requestType == JMDeleteResourceRequest) {
-        if ([self.favoritesUtil isResourceInFavorites]) {
-            [self.favoritesUtil removeFromFavorites];
-        }
-        
-        [self.delegate removeResource];
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+    self.resourceDescriptor = [result.objects objectAtIndex:0];
+    [self.favoritesUtil setResource:self.resourceDescriptor.uriString
+                              label:self.resourceDescriptor.label
+                               type:self.resourceDescriptor.wsType];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Private
@@ -377,13 +286,7 @@ inject_default_rotation()
         [resourceViewController.navigationController popViewControllerAnimated:YES];
     }];
 
-    self.requestType = JMGetResourceRequest;
-    [self.resourceClient resource:self.resourceDescriptor.uriString delegate:[JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self]];
-}
-
-- (JSResourceProperty *)resourcePropertyForIndexPath:(NSIndexPath *)indexPath
-{
-    return [self.resourceDescriptor.resourceProperties objectAtIndex:indexPath.row];
+    [self.resourceClient resource:self.resourceLookup.uri delegate:[JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self]];
 }
 
 - (NSDictionary *)resourceDescriptorPropertyForIndexPath:(NSIndexPath *)indexPath
@@ -408,13 +311,13 @@ inject_default_rotation()
         [JMUtils setBackgroundImagesForButton:button
                                     imageName:@"add_favorite_button.png"
                          highlightedImageName:@"add_favorite_button_highlighted.png"
-                                   edgesInset:kJMNoEdgesInset];
+                                   edgesInset:18.0f];
     } else {
         [button setTitle:JMCustomLocalizedString(@"dialog.button.removefavorite", nil) forState:UIControlStateNormal];
         [JMUtils setBackgroundImagesForButton:button
                                     imageName:@"remove_favorite_button.png"
                          highlightedImageName:@"remove_favorite_button_highlighted.png"
-                                   edgesInset:kJMNoEdgesInset];
+                                   edgesInset:18.0f];
     }
 }
 

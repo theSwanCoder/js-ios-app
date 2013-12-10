@@ -51,7 +51,7 @@ objection_requires(@"favoritesUtil")
     [super viewDidAppear:animated];
     
     if ([super isNeedsToReloadData] || self.favoritesUtil.needsToRefreshFavorites) {
-        self.resources = [self.favoritesUtil wrappersFromFavorites] ?: [NSArray array];
+        self.resources = [self.favoritesUtil wrappersFromFavorites] ?: [NSMutableArray array];
         self.favoritesUtil.needsToRefreshFavorites = NO;
         [self.tableView reloadData];
         [self checkAvailabilityOfEditButton];
@@ -71,10 +71,10 @@ objection_requires(@"favoritesUtil")
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        JSResourceDescriptor *resource = [self.resources objectAtIndex:indexPath.row];
+        JSResourceLookup *resource = [self.resources objectAtIndex:indexPath.row];
         [self.resources removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        [self.favoritesUtil removeFromFavorites:resource];
+        [self.favoritesUtil removeFromFavorites:resource.uri];
     }
 }
 

@@ -35,7 +35,7 @@ CGFloat kJMNoEdgesInset = -1;
 
 + (void)setTitleForResourceViewController:(UIViewController<JMResourceClientHolder> *)viewController
 {
-    viewController.navigationItem.title = viewController.resourceDescriptor.label ?: viewController.resourceClient.serverProfile.alias;
+    viewController.navigationItem.title = viewController.resourceLookup.label ?: viewController.resourceClient.serverProfile.alias;
 }
 
 + (void)setBackgroundImagesForButton:(UIButton *)button imageName:(NSString *)imageName highlightedImageName:(NSString *)highlightedImageName edgesInset:(CGFloat)edgesInset

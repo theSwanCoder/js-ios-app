@@ -1,4 +1,4 @@
-JasperMobile for iOS version 1.5
+JasperMobile for iOS version 1.7
 Copyright (C) 2013 Jaspersoft Corporation. All rights reserved.
 http://community.jaspersoft.com/project/jaspermobile-ios
 
@@ -28,7 +28,6 @@ This software includes third party software subject to the associated copyrights
 - MJPopupViewController v0.4 (MIT) - https://github.com/martinjuhasz/MJPopupViewController
 - Objection v0.16.0 (MIT) - https://github.com/atomicobject/objection
 - SSKeychain v0.1.4 (MIT) - https://github.com/soffes/sskeychain
-- TPKeyboardAvoiding v1.1 - https://github.com/michaeltyson/TPKeyboardAvoiding
 
 This software is built using the Jaspersoft Mobile SDK for iOS, which depends on 
 third party software, subject to the associated copyrights, as follows:

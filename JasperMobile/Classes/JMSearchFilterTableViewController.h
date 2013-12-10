@@ -21,31 +21,29 @@
  */
 
 //
-//  JMResourceModifyViewController.h
+//  JMSearchFilterTableViewController.h
 //  Jaspersoft Corporation
 //
 
+#import "JMRefreshable.h"
 #import <UIKit/UIKit.h>
-#import "JMResourceClientHolder.h"
 
-@protocol JMResourceModifyViewControllerDelegate;
+@protocol JMSearchFilterTableViewControllerDelegate;
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
+ @since 1.7
  */
-@interface JMResourceModifyViewController : UIViewController <JMResourceClientHolder, JSRequestDelegate, UITextFieldDelegate>
+@interface JMSearchFilterTableViewController : UITableViewController
 
-@property (nonatomic, weak) id <JMResourceModifyViewControllerDelegate> delegate;
-@property (nonatomic, weak) IBOutlet UITextField *labelTextField;
-@property (nonatomic, weak) IBOutlet UITextView *descriptionTextView;
-@property (nonatomic, weak) IBOutlet UILabel *label;
-@property (nonatomic, weak) IBOutlet UILabel *descriptionLabel;
+@property (nonatomic, weak) JSConstants *constants;
+@property (nonatomic, weak) id <JMRefreshable, JMSearchFilterTableViewControllerDelegate> delegate;
+@property (nonatomic, strong) NSMutableSet *resourceTypes;
 
 @end
 
-@protocol JMResourceModifyViewControllerDelegate <NSObject>
+@protocol JMSearchFilterTableViewControllerDelegate <NSObject>
 @required
-@property (nonatomic, assign) BOOL needsToRefreshResourceDescriptorData;
+@property (nonatomic, strong) NSMutableSet *resourceTypes;
 
 @end

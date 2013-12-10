@@ -25,7 +25,7 @@
 //  Jaspersoft Corporation
 //
 
-#define kJMReportOptions @"ReportOptions"
+static NSString * const kJMReportOptions = @"ReportOptions";
 
 #import "JMReportOptionsUtil.h"
 #import "JMReportOptions.h"
@@ -93,6 +93,8 @@ objection_requires(@"managedObjectContext");
     
     return reportParameters;
 }
+
+#pragma mark - Private
 
 - (NSPredicate *)reportOptionsPredicateForReport:(NSString *)reportUri
 {

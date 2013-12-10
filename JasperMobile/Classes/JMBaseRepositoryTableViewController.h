@@ -26,20 +26,22 @@
 //
 
 #import "JMResourceClientHolder.h"
-#import "JMResourceTableViewController.h"
 #import <UIKit/UIKit.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
+
+extern NSInteger const kJMResourcesLimit;
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMBaseRepositoryTableViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate, JMResourceTableViewControllerDelegate>
+@interface JMBaseRepositoryTableViewController : UITableViewController <JMResourceClientHolder, JSRequestDelegate>
 
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, strong) NSMutableArray *resources;
+@property (nonatomic, readonly) BOOL isPaginationAvailable;
+@property (nonatomic, assign) BOOL isNeedsToReloadData;
 
-- (BOOL)isNeedsToReloadData;
 - (void)changeServerProfile;
 
 @end

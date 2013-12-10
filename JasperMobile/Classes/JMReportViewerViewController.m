@@ -42,7 +42,7 @@ inject_default_rotation()
 
 @synthesize reportClient = _reportClient;
 @synthesize resourceClient = _resourceClient;
-@synthesize resourceDescriptor = _resourceDescriptor;
+@synthesize resourceLookup = _resourceLookup;
 
 #pragma mark - Initialization
 
@@ -97,7 +97,7 @@ inject_default_rotation()
 
 - (void)generateReportURL
 {
-    NSURL *reportURL = [NSURL URLWithString:[self.reportClient generateReportUrl:self.resourceDescriptor.uriString
+    NSURL *reportURL = [NSURL URLWithString:[self.reportClient generateReportUrl:self.resourceLookup.uri
                                                                     reportParams:self.parameters
                                                                             page:0
                                                                           format:self.reportFormat]];
@@ -136,7 +136,7 @@ inject_default_rotation()
         for (JSReportAttachment *attachment in reportDescriptor.attachments) {
             NSString *fileName = attachment.name;
             NSString *fileType = attachment.type;
-            NSString *extension;
+            NSString *extension = @"";
 
             if ([fileType isEqualToString:@"text/html"]) {
                 extension = @".html";
@@ -148,7 +148,7 @@ inject_default_rotation()
             NSString *resourceFile = [self.tempDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@", fileName, extension]];
 
             // Set as main file to render in web view if extension is equals to HTML or PDF
-            if (extension) {
+            if (extension.length) {
                 reportViewerViewController.reportPath = resourceFile;
             }
 
@@ -165,7 +165,7 @@ inject_default_rotation()
         [reportViewerViewController.webView loadRequest:[NSURLRequest requestWithURL:reportPath]];
     }];
 
-    [self.reportClient runReport:self.resourceDescriptor.uriString reportParams:self.parameters format:self.reportFormat delegate:delegate];
+    [self.reportClient runReport:self.resourceLookup.uri reportParams:self.parameters format:self.reportFormat delegate:delegate];
 }
 
 @end

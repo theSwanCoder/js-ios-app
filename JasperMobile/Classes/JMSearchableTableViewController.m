@@ -28,7 +28,11 @@
 #import "JMSearchableTableViewController.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
+#import "JMLibraryTableViewController.h"
 #import "JMUtils.h"
+
+static NSInteger const kJMLoadingCellTag = 100;
+static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 
 @interface JMSearchableTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;
@@ -40,29 +44,45 @@
 
 @implementation JMSearchableTableViewController
 
+@synthesize resourceTypes = _resourceTypes;
 @synthesize isRefreshing = _isRefreshing;
+@synthesize isNeedsToReloadData = _isNeedsToReloadData;
 
 - (BOOL)isNeedsToReloadData
 {
-    return !self.isRefreshing && ([super isNeedsToReloadData] || self.searchQuery.length);
+    return !self.isRefreshing && _isNeedsToReloadData;
 }
 
 - (void)changeServerProfile
 {
     [super changeServerProfile];
     [self resetSearchState];
+    self.resourceTypes = nil;
+}
+
+- (void)getResources
+{
+    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:@"You need to implement \"getResources\" method in subclasses" userInfo:nil];
+}
+
+- (NSMutableSet *)resourceTypes
+{
+    if (!_resourceTypes) {
+        _resourceTypes = [NSMutableSet setWithObjects:self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD, nil];
+    }
+    
+    return _resourceTypes;
 }
 
 - (void)didReceiveMemoryWarning
 {
     if (![JMUtils isViewControllerVisible:self]) {
-        self.searchBar = nil;
-        self.searchQuery = nil;
+        self.offset = 0;
+        self.totalCount = 0;
         _cancelBlock = nil;
-        // If search is disabled then this is pushed view controller with search result
-        // and we should dismiss it at warning
-        if (self.isSearchDisabled) {
-            [self.navigationController popViewControllerAnimated:NO];
+        
+        if (!self.searchBar.text.length) {
+            self.contentOffset = [self defaultContentOffset];
         }
     }
     [super didReceiveMemoryWarning];
@@ -111,8 +131,15 @@
         self.searchBar.delegate = self;
         self.searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
         [self.searchBar sizeToFit];
+        
+        self.navigationItem.rightBarButtonItem = nil;
+        
         self.contentOffset = [self defaultContentOffset];
         self.tableView.tableHeaderView = self.searchBar;
+    } else if (!self.isPaginationAvailable) {
+        self.navigationItem.rightBarButtonItem = nil;
+    } else {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
     }
 }
 
@@ -122,6 +149,17 @@
     if (!self.isSearchDisabled) {
         self.tableView.contentOffset = self.contentOffset;
     }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:kJMShowSearchFilterSegue]) {
+        id destinationViewController = segue.destinationViewController;
+        [destinationViewController setDelegate:self];
+        [destinationViewController setResourceTypes:self.resourceTypes];
+    }
+
+    [super prepareForSegue:segue sender:sender];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -151,11 +189,11 @@
         //        [self hideSearchBar:searchBar animated:NO];
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:JMMainStoryboard() bundle:nil];
-        id destinationViewController = [storyboard instantiateViewControllerWithIdentifier:NSStringFromClass(self.class)];
+        id destinationViewController = [storyboard instantiateViewControllerWithIdentifier:NSStringFromClass(JMLibraryTableViewController.class)];
         
         if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
             [destinationViewController setResourceClient:self.resourceClient];
-            [destinationViewController setResourceDescriptor:self.resourceDescriptor];
+            [destinationViewController setResourceLookup:self.resourceLookup];
             [destinationViewController setIsSearchDisabled:YES];
         }
         
@@ -179,16 +217,16 @@
 - (void)requestFinished:(JSOperationResult *)result
 {
     self.isRefreshing = NO;
-    self.searchQuery = nil;
+    [JMUtils hideNetworkActivityIndicator];
+
+    if (self.isPaginationAvailable && !self.totalCount) {
+        self.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
+        if (self.totalCount) {
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+        }
+    }
+    
     [super requestFinished:result];
-}
-
-#pragma mark - JMResourceTableViewControllerDelegate
-
-- (void)refreshWithResource:(JSResourceDescriptor *)resourceDescriptor
-{
-    [super refreshWithResource:resourceDescriptor];
-    self.tableView.contentOffset = self.contentOffset;
 }
 
 #pragma mark - JMRefreshable
@@ -200,6 +238,38 @@
     self.resources = nil;
     [self resetSearchState];
     [self.tableView reloadData];
+}
+
+#pragma mark - Pagination Implementation
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSInteger numberOfRows = [super tableView:tableView numberOfRowsInSection:section];
+    if (self.isPaginationAvailable && numberOfRows != 0 && self.offset + kJMResourcesLimit < self.totalCount) {
+        numberOfRows++;
+    }
+    return numberOfRows;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == self.resources.count) {
+        UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"LoadingCell"];
+        UIActivityIndicatorView *activityIndicator = (UIActivityIndicatorView *) [cell viewWithTag:1];
+        [activityIndicator startAnimating];
+        cell.tag = kJMLoadingCellTag;
+        return cell;
+    }
+
+    return [super tableView:tableView cellForRowAtIndexPath:indexPath];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (cell.tag == kJMLoadingCellTag) {
+        self.offset += kJMResourcesLimit;
+        [self getResources];
+    }
 }
 
 #pragma mark - Private
@@ -216,8 +286,11 @@
 
 - (void)resetSearchState
 {
-    self.searchBar.text = nil;
-    self.searchQuery = nil;
+    if (self.searchBar) {
+        self.searchBar.text = nil;
+    }
+    self.offset = 0;
+    self.totalCount = 0;
     self.contentOffset = [self defaultContentOffset];
 }
 

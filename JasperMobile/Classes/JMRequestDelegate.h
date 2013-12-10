@@ -29,7 +29,7 @@
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
- This block which will be invoked after all requests will finish
+ This block which will be invoked after all requests will finished
  */
 typedef void(^JMRequestDelegateFinalBlock)(void);
 
@@ -42,6 +42,13 @@ typedef void(^JMRequestDelegateFinalBlock)(void);
  @since 1.6
  */
 @interface JMRequestDelegate : NSObject <JSRequestDelegate>
+
+/**
+ Indicates if delegate should check response status code, and display error dialog if needed
+ 
+ **Default**: YES
+ */
+@property (nonatomic, assign) BOOL checkStatusCode;
 
 /**
  Sets a block which will be invoked after all requests will finish
