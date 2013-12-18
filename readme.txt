@@ -15,10 +15,10 @@ http://community.jaspersoft.com/project/jaspermobile-ios
 
 What's New
 --------------------
-• Pagination on Library & Repository (JasperReports Server 5.5+) 
-• New API utilized on Library & Repository for better performance (JasperReports Server 5.5+) 
-• Removed unnecessary resources to appear on Library & Repository 
-• Filters by types for search results 
+• Uses new REST repository service for better performance (with JasperReports Server 5.5 or above)
+• Pagination of Library, Repository, and Search results (with JasperReports Server 5.5 or above)
+• Removed unnecessary resources from Library, Repository, and Search results
+• Search results can be filtered by resource type
 • Bug fixes
 
 Source Build
