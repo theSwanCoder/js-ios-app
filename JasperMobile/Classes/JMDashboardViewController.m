@@ -26,6 +26,7 @@
 //
 
 #import "JMDashboardViewController.h"
+#import "JMRotationBase.h"
 #import "JMUtils.h"
 
 @implementation JMDashboardViewController

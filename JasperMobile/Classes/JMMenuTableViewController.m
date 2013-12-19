@@ -26,10 +26,11 @@
 //
 
 #import "JMMenuTableViewController.h"
+#import "JMRotationBase.h"
 #import "JMSplitViewBarButtonPresenterProtocol.h"
 
 @implementation JMMenuTableViewController
-inject_default_rotation();
+inject_default_rotation()
 
 #pragma mark - Initialization
 

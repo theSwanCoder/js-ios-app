@@ -28,6 +28,7 @@
 #import "JMMenuTabBarController.h"
 #import "JMConstants.h"
 #import "JMRefreshable.h"
+#import "JMRotationBase.h"
 #import "JMServerProfile.h"
 #import "JMUtils.h"
 

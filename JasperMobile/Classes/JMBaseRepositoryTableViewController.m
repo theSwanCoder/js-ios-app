@@ -27,6 +27,7 @@
 
 #import "JMBaseRepositoryTableViewController.h"
 #import "JMConstants.h"
+#import "JMRotationBase.h"
 #import "JMUtils.h"
 #import <Objection-iOS/Objection.h>
 
@@ -79,11 +80,8 @@ inject_default_rotation()
     if (!_cellsIdentifiers) {
         _cellsIdentifiers = @{
             self.constants.WS_TYPE_FOLDER : @"FolderCell",
-            self.constants.WS_TYPE_IMG : @"ImageCell",
             self.constants.WS_TYPE_REPORT_UNIT : @"ReportCell",
             self.constants.WS_TYPE_DASHBOARD : @"DashboardCell",
-            self.constants.WS_TYPE_CSS : @"TextCell",
-            self.constants.WS_TYPE_XML : @"TextCell"
         };
     }
     
@@ -178,6 +176,17 @@ inject_default_rotation()
     cell.detailTextLabel.text = resourceLookup.uri;
         
     return cell;
+}
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSResourceLookup *resourceLookup = [self resourceLookupForIndexPath:indexPath];
+    NSArray *supportedResources = self.cellsIdentifiers.allKeys;
+    if (![supportedResources containsObject:resourceLookup.resourceType]) {
+        [self tableView:self.tableView accessoryButtonTappedForRowWithIndexPath:indexPath];
+    }
 }
 
 #pragma mark - JSRequestDelegate

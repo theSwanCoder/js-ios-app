@@ -30,6 +30,7 @@
 #import "JMAskPasswordDialog.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
+#import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "JMRequestDelegate.h"

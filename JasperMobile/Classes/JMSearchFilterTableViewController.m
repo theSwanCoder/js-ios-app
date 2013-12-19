@@ -26,6 +26,7 @@
 //
 
 #import "JMUtils.h"
+#import "JMRotationBase.h"
 #import "JMLocalization.h"
 #import "JMSearchFilterTableViewController.h"
 #import "UITableViewCell+SetSeparators.h"
