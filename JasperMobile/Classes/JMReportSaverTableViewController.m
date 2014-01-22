@@ -1,0 +1,337 @@
+/*
+ * JasperMobile for iOS
+ * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * http://community.jaspersoft.com/project/jaspermobile-ios
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
+//
+//  JMReportSaverViewController.m
+//  Jaspersoft Corporation
+//
+
+#import "JMReportSaverTableViewController.h"
+#import "JMCancelRequestPopup.h"
+#import "JMConstants.h"
+#import "JMLocalization.h"
+#import "JMReportDownloaderUtil.h"
+#import "JMRotationBase.h"
+#import "JMUtils.h"
+#import "UITableViewCell+SetSeparators.h"
+#import "UITableViewController+CellRelativeHeight.h"
+#import "ALToastView.h"
+#import <Objection-iOS/Objection.h>
+
+#define kJMReportNameSection 0
+#define kJMReportFormatSection 1
+#define kJMSaveReportSection 2
+
+__weak static UIColor *separatorColor;
+static CGFloat const separatorHeight = 1.0f;
+
+// Validation constrains
+static NSInteger const kJMNameMin = 1;
+static NSInteger const kJMNameMax = 255;
+static NSString * const kJMInvalidCharacters = @":/";
+
+@interface JMReportSaverTableViewController ()
+@property (nonatomic, strong) NSString *selectedReportFormat;
+@property (nonatomic, strong) NSArray *reportFormats;
+@property (nonatomic, strong) NSDictionary *cellsIdentifiers;
+@property (nonatomic, strong) NSString *reportName;
+@property (nonatomic, strong) NSString *errorMessage;
+@property (nonatomic, weak) JMReportDownloaderUtil *reportDownloader;
+@property (nonatomic, weak) JSConstants *constants;
+@property (nonatomic, assign) CGFloat baseErrorLabelWidth;
+@end
+
+@implementation JMReportSaverTableViewController
+objection_requires(@"resourceClient", @"constants", @"reportDownloader")
+inject_default_rotation()
+
+@synthesize reportClient = _reportClient;
+@synthesize resourceClient = _resourceClient;
+@synthesize resourceLookup = _resourceLookup;
+@synthesize reportDownloader = _reportDownloader;
+
+#pragma mark - Accessors
+
+- (NSDictionary *)cellsIdentifiers
+{
+    if (!_cellsIdentifiers) {
+        _cellsIdentifiers = @{
+            @kJMReportNameSection : @"ReportNameCell",
+            @kJMReportFormatSection : @"ReportFormatCell",
+            @kJMSaveReportSection : @"SaveReportCell"
+        };
+    }
+
+    return _cellsIdentifiers;
+}
+
+- (NSArray *)reportFormats
+{
+    if (!_reportFormats) {
+        _reportFormats = @[
+            self.constants.CONTENT_TYPE_HTML,
+            self.constants.CONTENT_TYPE_PDF
+        ];
+    }
+
+    return _reportFormats;
+}
+
+#pragma mark - Initialization
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [[JSObjection defaultInjector] injectDependencies:self];
+}
+
+#pragma mark - UIViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    self.reportName = self.resourceLookup.label;
+    self.selectedReportFormat = [self.reportFormats firstObject];
+    separatorColor = self.tableView.separatorColor;
+
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+}
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 3;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (section == kJMReportFormatSection) {
+        return self.reportFormats.count;
+    }
+
+    return 1;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == kJMReportNameSection) {
+        return JMCustomLocalizedString(@"reportsaver.name", nil);
+    } else if (section == kJMReportFormatSection) {
+        return JMCustomLocalizedString(@"reportsaver.format", nil);
+    }
+
+    return @"";
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == kJMReportNameSection) {
+        CGFloat height = 72.0f;
+
+        if (self.errorMessage.length) {
+            height += self.errorMessageSize.height;
+        }
+
+        return height;
+
+    }
+    return self.defaultHeightForTableViewCell;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *cellIdentifier = [self.cellsIdentifiers objectForKey:[NSNumber numberWithInt:indexPath.section]];
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+
+    if (indexPath.section == kJMReportNameSection) {
+        UITextField *textField = (UITextField *) [cell viewWithTag:1];
+        UILabel *errorLabel = (UILabel *) [cell viewWithTag:2];
+
+        textField.text = self.reportName;
+        textField.delegate = self;
+        textField.placeholder = JMCustomLocalizedString(@"reportsaver.name", nil);
+
+        if (!textField.leftView) {
+            UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10.0f, 0)];
+            textField.leftView = leftView;
+            textField.leftViewMode = UITextFieldViewModeAlways;
+            textField.background = [textField.background resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10.0f, 0, 10.0f)];
+        }
+
+        if (!self.baseErrorLabelWidth) {
+            self.baseErrorLabelWidth = errorLabel.frame.size.width;
+        }
+
+        if (self.errorMessage.length) {
+            errorLabel.hidden = NO;
+            errorLabel.numberOfLines = 0;
+            errorLabel.text = self.errorMessage;
+            CGSize size = [errorLabel sizeThatFits:CGSizeMake(self.baseErrorLabelWidth, self.errorMessageSize.height)];
+            errorLabel.frame = CGRectMake(errorLabel.frame.origin.x, errorLabel.frame.origin.y, errorLabel.frame.size.width, size.height);
+        } else {
+            errorLabel.hidden = YES;
+        }
+    } else if (indexPath.section == kJMReportFormatSection) {
+        NSString *reportFormat = [self.reportFormats objectAtIndex:indexPath.row];
+        cell.textLabel.text = [reportFormat uppercaseString];
+        if ([self.selectedReportFormat isEqualToString:reportFormat]) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+    } else {
+        cell.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+        cell.backgroundColor = [UIColor clearColor];
+
+        UIButton *run = (UIButton *) [cell viewWithTag:1];
+        run.titleLabel.text = JMCustomLocalizedString(@"dialog.button.save", nil);
+        [JMUtils setBackgroundImagesForButton:run
+                                    imageName:@"blue_button.png"
+                         highlightedImageName:@"blue_button_highlighted.png"
+                                   edgesInset:18.0f];
+    }
+
+    if (indexPath.section != kJMSaveReportSection) {
+        [cell setTopSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
+        // Check if this is the last cell in the section
+        if ([self.tableView numberOfRowsInSection:indexPath.section] - 1 == indexPath.row) {
+            [cell setBottomSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
+        }
+    }
+
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section != kJMReportFormatSection) return;
+
+    self.selectedReportFormat = [self.reportFormats objectAtIndex:indexPath.row];
+    [self.tableView reloadData];
+}
+
+#pragma mark - Actions
+
+- (IBAction)saveReport:(id)sender
+{
+    self.errorMessage = nil;
+
+    NSString *reportDirectory = [self reportDirectory];
+    if (![self validateReportNameAndDirectory:reportDirectory] ||
+            ![self createReportDirectory:reportDirectory]) return;
+
+    [self.tableView reloadData];
+
+    __weak JMReportSaverTableViewController *reportSaver = self;
+    __block id <JSRequestDelegate> delegate;
+
+    [JMCancelRequestPopup presentInViewController:self message:@"status.saving" restClient:nil cancelBlock:^{
+//        [reportSaver.reportClient cancelRequestsWithDelegate:delegate];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        [fileManager removeItemAtPath:reportDirectory error:nil];
+    }];
+
+    void (^completionBlock)(NSString *) = ^(NSString *fullReportPath) {
+        [JMCancelRequestPopup dismiss];
+        [reportSaver.navigationController popViewControllerAnimated:YES];
+        [ALToastView toastInView:reportSaver.delegate.view withText:JMCustomLocalizedString(@"reportsaver.saved", nil)];
+    };
+
+    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_TWO) {
+        delegate = [self.reportDownloader runReportExecution:self.resourceLookup.uri parameters:self.parameters format:self.selectedReportFormat path:reportDirectory completionBlock:completionBlock];
+    } else {
+        delegate = [self.reportDownloader runReport:self.resourceLookup.uri parameters:self.parameters format:self.selectedReportFormat path:reportDirectory completionBlock:completionBlock];
+    }
+}
+
+- (IBAction)reportNameChanged:(id)sender
+{
+    self.reportName = [sender text];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return NO;
+}
+
+#pragma mark - Private
+
+- (NSString *)reportDirectory {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    return [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@/%@", kJMReportsDirectory, self.reportName]];
+}
+
+- (BOOL)createReportDirectory:(NSString *)reportDirectory
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+
+    NSError *error;
+    [fileManager createDirectoryAtPath:reportDirectory
+           withIntermediateDirectories:YES
+                            attributes:nil
+                                 error:&error];
+
+    if (error) {
+        self.errorMessage = error.localizedDescription;
+        [self.tableView reloadData];
+        return NO;
+    }
+
+    return YES;
+}
+
+- (BOOL)validateReportNameAndDirectory:(NSString *)reportDirectory
+{
+    NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
+
+    // TODO: refactor
+    if (self.reportName.length < kJMNameMin) {
+        self.errorMessage = JMCustomLocalizedString(@"reportsaver.name.errmsg.empty", nil);
+    } else if (self.reportName.length > kJMNameMax) {
+        self.errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"reportsaver.name.errmsg.maxlength", nil), kJMNameMax];
+    } else if ([self.reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
+        self.errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"reportsaver.name.errmsg.characters", nil), kJMInvalidCharacters];
+    } else if ([[NSFileManager defaultManager] fileExistsAtPath:reportDirectory]) {
+        self.errorMessage = JMCustomLocalizedString(@"reportsaver.name.errmsg.notunique", nil);
+    }
+
+    if (self.errorMessage.length) {
+        [self.tableView reloadData];
+        return NO;
+    }
+
+    return YES;
+}
+
+- (CGSize)errorMessageSize
+{
+    UIFont *font = [UIFont systemFontOfSize:14.0f];
+    CGSize size = CGSizeMake(self.baseErrorLabelWidth, CGFLOAT_MAX);
+    return [self.errorMessage sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
+}
+
+@end

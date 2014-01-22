@@ -72,6 +72,7 @@
 /* Navigation and view labels */
 
 "view.servers" = "Servers";
+"view.savedreports" = "Saved Reports";
 "view.repository" = "Repository";
 "view.favorites" = "Favorites";
 "view.library" = "Library";
@@ -80,6 +81,14 @@
 "resource.label.title" = "Label:";
 "resource.description.title" = "Desc:";
 "resource.type.title" = "Type:";
+
+"reportsaver.name" = "Report Name";
+"reportsaver.format" = "Output Format";
+"reportsaver.saved" = "Report was succesfully saved";
+"reportsaver.name.errmsg.empty" = "Cannot be empty";
+"reportsaver.name.errmsg.notunique" = "This name has been already taken, please choose different name";
+"reportsaver.name.errmsg.maxlength" = "Should be less than %i symbols";
+"reportsaver.name.errmsg.characters" = "Characters %@ are not allowed";
 
 "report.output.format" = "Report format";
 
@@ -138,3 +147,4 @@
 "dialog.button.info" = "Info";
 "dialog.button.addfavorite" = "Add Favorite";
 "dialog.button.removefavorite" = "Remove Favorite";
+"dialog.button.save" = "Save";

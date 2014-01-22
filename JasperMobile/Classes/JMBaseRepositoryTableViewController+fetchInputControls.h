@@ -21,30 +21,37 @@
  */
 
 //
-//  JMSearchFilterTableViewController.h
+//  JMBaseRepositoryTableViewController+fetchInputControls.h
 //  Jaspersoft Corporation
 //
 
-#import "JMRefreshable.h"
-#import <UIKit/UIKit.h>
-#import <jaspersoft-sdk/JSConstants.h>
+extern NSString * const kJMShowReportOptionsSegue;
+extern NSString * const kJMShowReportViewerSegue;
 
-@protocol JMSearchFilterTableViewControllerDelegate;
+#import "JMBaseRepositoryTableViewController.h"
 
 /**
+ Adds possibility to get list of input controls for report directly in repository
+ 
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.7
+ @since 1.8
  */
-@interface JMSearchFilterTableViewController : UITableViewController
+@interface JMBaseRepositoryTableViewController (fetchInputControls)
 
-@property (nonatomic, weak) JSConstants *constants;
-@property (nonatomic, weak) id <JMRefreshable, JMSearchFilterTableViewControllerDelegate> delegate;
-@property (nonatomic, strong) NSMutableSet *resourceTypes;
+/**
+ Gets input controls for specified report and calls segue depending on a request result
+ */
+- (void)fetchInputControlsForReport:(JSResourceLookup *)resourceLookup;
 
-@end
+/**
+ Sets resource lookup and (if exists) fetched input controls to destination view controller. Destination could
+ be <b>JMReportOptionsTableViewController</b> or <b>JMReportViewerViewController</b> view controller
+ */
+- (void)setResults:(id)sender toDestinationViewController:(id)viewController;
 
-@protocol JMSearchFilterTableViewControllerDelegate <NSObject>
-@required
-@property (nonatomic, strong) NSMutableSet *resourceTypes;
+/**
+ Indicates if segue has a "ShowReportOptions" or "ShowReportViewer" identifier
+ */
+- (BOOL)isReportSegue:(UIStoryboardSegue *)segue;
 
 @end

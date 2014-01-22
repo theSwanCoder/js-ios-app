@@ -101,21 +101,6 @@
     [self enabled:NO];
 }
 
-// Clears data, temp solution for memory leak problem
-- (void)clearData
-{
-    self.updateSlaveDependenciesBlock = nil;
-    self.masterDependenciesParameters = nil;
-    self.resourceLookup = nil;
-    self.resourceDescriptor = nil;
-    self.resourceClient = nil;
-    self.listOfValues = nil;
-    self.constants = nil;
-    [self.detailLabel removeFromSuperview];
-
-    [super clearData];
-}
-
 #pragma mark - REST v1 -
 
 - (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
@@ -138,6 +123,7 @@
             [self.listOfValues addObject:option];
         }
 
+        // TODO: check if invisible input controls should be included also
         if (inputControlWrapper.isMandatory) {
             JSInputControlOption *firstOption = [self.listOfValues objectAtIndex:0];
             firstOption.selected = [JSConstants stringFromBOOL:YES];

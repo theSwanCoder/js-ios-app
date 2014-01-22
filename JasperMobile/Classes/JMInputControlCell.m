@@ -135,19 +135,6 @@
     return (UILabel *) [self viewWithTag:1];
 }
 
-- (void)clearData
-{
-    // Release through ivar to avoid additional calls of overridden setters
-    _value = nil;
-    _inputControlDescriptor = nil;
-    _inputControlWrapper = nil;
-    _errorMessage = nil;
-    self.label.text = nil;
-    self.errorLabel.text = nil;
-    [self.label removeFromSuperview];
-    [self.errorLabel removeFromSuperview];
-}
-
 - (CGFloat)height
 {
     if (!self.errorLabel.hidden) {

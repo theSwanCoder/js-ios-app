@@ -45,7 +45,7 @@
     
     UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - height, self.frame.size.width, height)];
     separator.backgroundColor = color;
-    separator.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    separator.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [self addSubview:separator];
 }
 

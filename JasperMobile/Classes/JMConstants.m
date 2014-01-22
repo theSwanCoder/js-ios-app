@@ -51,9 +51,11 @@ NSString * const kJMNotUpdateMenuKey = @"ignoreMenuUpdates";
 NSString * const kJMServerProfileKey = @"serverProfile";
 NSString * const kJMParameters = @"parameters";
 
-// Report output formats
-NSString * const kJMRunOutputFormatHTML = @"HTML";
-NSString * const kJMRunOutputFormatPDF = @"PDF";
+// Directory to store downloaded reports
+NSString * const kJMReportsDirectory = @"reports";
+
+// Name of the main report file (outputResource)
+NSString * const kJMReportFilename = @"report";
 
 // Storyboard name
 static NSString *_mainStoryboardName;

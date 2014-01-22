@@ -101,7 +101,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
 + (NSNumber *)latestAppVersion
 {
-    NSString *appVersion = [NSBundle mainBundle].infoDictionary[kJMApplicationVersion];
+    NSString *appVersion = [[NSBundle mainBundle].infoDictionary objectForKey:kJMApplicationVersion];
     return [NSNumber numberWithDouble:[appVersion doubleValue]];
 }
 

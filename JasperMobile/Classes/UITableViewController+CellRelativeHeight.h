@@ -42,7 +42,16 @@
  @param text A text for "textLabel"
  @param detailText A text for "detailTextLabel"
  @param cellStyle The style of table view cell
+ 
+ @return cell calculated height
  */
 - (CGFloat)relativeHeightForTableViewCell:(UITableViewCell *)cell text:(NSString *)text detailText:(NSString *)detailText cellStyle:(UITableViewCellStyle)cellStyle;
+
+/**
+ Calculates default height for table view cell
+ 
+ @return cell calculated height
+ */
+- (CGFloat)defaultHeightForTableViewCell;
 
 @end

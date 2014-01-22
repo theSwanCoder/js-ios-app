@@ -71,6 +71,9 @@ CGFloat kJMNoEdgesInset = -1;
         case kJMFavoritesMenuTag:
             title = @"view.favorites";
             break;
+        case kJMSavedReportsMenuTag:
+            title = @"view.savedreports";
+            break;
         case kJMServersMenuTag:
         default:
             title = @"view.servers";

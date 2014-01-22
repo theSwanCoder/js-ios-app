@@ -21,30 +21,18 @@
  */
 
 //
-//  JMSearchFilterTableViewController.h
+//  JMSavedReportsTableViewController.h
 //  Jaspersoft Corporation
 //
 
-#import "JMRefreshable.h"
 #import <UIKit/UIKit.h>
-#import <jaspersoft-sdk/JSConstants.h>
-
-@protocol JMSearchFilterTableViewControllerDelegate;
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.7
+ @since 1.8
  */
-@interface JMSearchFilterTableViewController : UITableViewController
+@interface JMSavedReportsTableViewController : UITableViewController
 
-@property (nonatomic, weak) JSConstants *constants;
-@property (nonatomic, weak) id <JMRefreshable, JMSearchFilterTableViewControllerDelegate> delegate;
-@property (nonatomic, strong) NSMutableSet *resourceTypes;
-
-@end
-
-@protocol JMSearchFilterTableViewControllerDelegate <NSObject>
-@required
-@property (nonatomic, strong) NSMutableSet *resourceTypes;
+@property (nonatomic, strong) NSMutableArray *reports;
 
 @end

@@ -121,15 +121,6 @@ static UIDatePicker *datePicker;
     return pickerToolbar;
 }
 
-- (void)clearData
-{
-    datePicker = nil;
-    datePickerToolbar = nil;
-    self.date = nil;
-    self.dateFormatter = nil;
-    [super clearData];
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField

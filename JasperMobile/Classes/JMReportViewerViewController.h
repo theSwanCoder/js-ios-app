@@ -28,6 +28,7 @@
 #import <UIKit/UIKit.h>
 #import "JMDashboardViewController.h"
 #import "JMReportClientHolder.h"
+#import "JMReportDownloaderUtil.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
@@ -38,8 +39,7 @@
 
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, strong) NSDictionary *parameters;
-@property (nonatomic, strong) NSString *reportFormat;
-@property (nonatomic, strong) JSConstants *constants;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *saveButton;
+@property (nonatomic, strong) id parameters;
 
 @end

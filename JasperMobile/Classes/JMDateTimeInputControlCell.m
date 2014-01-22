@@ -66,13 +66,6 @@ typedef enum {
     self.time = self.date;
 }
 
-- (void)clearData
-{
-    dateTimePickerToolbar = nil;
-    self.time = nil;
-    [super clearData];
-}
-
 #pragma mark - UIResponder
 
 - (UIView *)inputAccessoryView

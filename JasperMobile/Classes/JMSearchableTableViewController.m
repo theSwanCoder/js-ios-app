@@ -37,6 +37,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 @interface JMSearchableTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, assign) CGPoint contentOffset;
+@property (nonatomic, readwrite) JMCancelRequestBlock cancelBlock;
 
 - (CGPoint)defaultContentOffset;
 - (void)resetSearchState;
@@ -57,6 +58,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 {
     [super changeServerProfile];
     [self resetSearchState];
+    self.isRefreshing = NO;
     self.resourceTypes = nil;
 }
 
@@ -79,7 +81,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
     if (![JMUtils isViewControllerVisible:self]) {
         self.offset = 0;
         self.totalCount = 0;
-        _cancelBlock = nil;
+        self.cancelBlock = nil;
         
         if (!self.searchBar.text.length) {
             self.contentOffset = [self defaultContentOffset];
@@ -89,8 +91,6 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 }
 
 #pragma mark - Accessors
-
-@synthesize cancelBlock = _cancelBlock;
 
 - (JMCancelRequestBlock)cancelBlock
 {

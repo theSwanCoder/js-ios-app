@@ -48,14 +48,6 @@
 - (id)initWithTableViewController:(UITableViewController <JMInputControlsHolder> *)tableViewController;
 
 /**
- Creates a cell for selecting report output format
- 
- @param formats An array of possible report output formats
- @return A format cell
- */
-- (JMInputControlCell *)reportOutputFormatCellWithFormats:(NSArray *)formats;
-
-/**
  Creates the input control cell
  
  @param inputControl A wrapper for IC (REST v1)

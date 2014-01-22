@@ -85,8 +85,6 @@
     return height > [self defaultHeightForTableViewCell] ? height + kJMTextPaddingAfterHeightCalculation : [self defaultHeightForTableViewCell];
 }
 
-#pragma mark - Private
-
 - (CGFloat)defaultHeightForTableViewCell
 {
     static CGFloat height = 0.0f;
@@ -97,6 +95,8 @@
     
     return height;
 }
+
+#pragma mark - Private
 
 - (CGFloat)leftMarginForTableView
 {

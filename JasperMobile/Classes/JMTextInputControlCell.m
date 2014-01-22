@@ -55,13 +55,6 @@
     return (UITextField *) [self viewWithTag:2];
 }
 
-- (void)clearData
-{
-    self.textField.text = nil;
-    [self.textField removeFromSuperview];
-    [super clearData];
-}
-
 - (void)disableCell
 {
     [super disableCell];

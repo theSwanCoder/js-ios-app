@@ -21,38 +21,30 @@
  */
 
 //
-//  JMInputControlCell.h
+//  JMReportDownloaderUtil.h
 //  Jaspersoft Corporation
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "JMReportClientHolder.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
-#import "JMReportOptionsTableViewController.h"
 
 /**
+ Helps to run report, download it with all attachments and save to the file system
+ 
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
+ @since 1.8
  */
-@interface JMInputControlCell : UITableViewCell {
-@protected
-    CGFloat baseHeight;
-}
+@interface JMReportDownloaderUtil : NSObject <JMReportClientHolder>
 
-@property (nonatomic, strong) JSInputControlWrapper *inputControlWrapper;
-@property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
-@property (nonatomic, strong) NSString *errorMessage;
-@property (nonatomic, readonly) BOOL isMandatory;
-@property (nonatomic, weak) UITableViewController <JMInputControlsHolder> *delegate;
+@property (nonatomic, strong) JSConstants *constants;
 
-/**
- Contains value for the Input Control. Can be NSString, NSDate or
- NSArray type
- */
-@property (nonatomic, strong) id value;
+// Runs report using REST v2 report execution service
+// Returns delegate to provide a possibility to cancel request for it (instead of canceling all requests)
+- (id <JSRequestDelegate>)runReportExecution:(NSString *)reportUri parameters:(NSArray *)parameters format:(NSString *)format path:(NSString *)path completionBlock:(void (^)(NSString *fullReportPath))completionBlock;
 
-- (UILabel *)label;
-- (CGFloat)height;
-- (BOOL)dismissError;
-- (void)disableCell;
+// Runs report using REST v1 report service
+// Returns delegate to provide a possibility to cancel request for it (instead of canceling all requests)
+- (id <JSRequestDelegate>)runReport:(NSString *)reportUri parameters:(NSDictionary *)parameters format:(NSString *)format path:(NSString *)path completionBlock:(void (^)(NSString *fullReportPath))completionBlock;
 
 @end

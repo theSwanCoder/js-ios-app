@@ -56,27 +56,6 @@ objection_requires(@"constants")
     return self;
 }
 
-- (JMInputControlCell *)reportOutputFormatCellWithFormats:(NSArray *)formats
-{
-    JMSingleSelectInputControlCell *cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:kJMSingleSelectCellIdentifier];
-    cell.listOfValues = [NSMutableArray array];
-    cell.label.text = JMCustomLocalizedString(@"dialog.button.run.report", nil);
-    cell.disableUnsetFunctional = YES;
-    
-    for (NSString *format in formats) {
-        JSInputControlOption *option = [[JSInputControlOption alloc] init];
-        option.label = format;
-        option.value = format;
-        [cell.listOfValues addObject:option];
-    }
-    
-    JSInputControlOption *firstOption = [cell.listOfValues objectAtIndex:0];
-    firstOption.selected = [JSConstants stringFromBOOL:YES];
-    cell.value = @[firstOption];
-    
-    return cell;
-}
-
 - (JMInputControlCell *)inputControlWithInputControlWrapper:(JSInputControlWrapper *)inputControl
 {
     if (!self.types) self.types = [self inputControlWrapperTypes];

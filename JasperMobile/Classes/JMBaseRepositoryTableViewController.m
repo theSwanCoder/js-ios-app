@@ -26,12 +26,14 @@
 //
 
 #import "JMBaseRepositoryTableViewController.h"
+#import "JMBaseRepositoryTableViewController+fetchInputControls.h"
 #import "JMConstants.h"
 #import "JMRotationBase.h"
 #import "JMUtils.h"
 #import <Objection-iOS/Objection.h>
 
 NSInteger const kJMResourcesLimit = 40;
+
 static NSString * const kJMShowResourceInfoSegue = @"ShowResourceInfo";
 static NSString * const kJMUnknownCell = @"UnknownCell";
 
@@ -46,7 +48,13 @@ static NSString * const kJMUnknownCell = @"UnknownCell";
 objection_requires(@"resourceClient", @"constants")
 inject_default_rotation()
 
-@synthesize resources = _resources;
+@synthesize constants = _constants;
+@synthesize cellsIdentifiers = _cellsIdentifiers;
+@synthesize resourceClient = _resourceClient;
+@synthesize resourceLookup = _resourceLookup;
+@synthesize resourceDescriptor = _resourceDescriptor;
+
+#pragma mark - Accessors
 
 - (void)setResources:(NSMutableArray *)resources
 {
@@ -67,14 +75,6 @@ inject_default_rotation()
     }
 }
 
-#pragma mark - Accessors
-
-@synthesize constants = _constants;
-@synthesize cellsIdentifiers = _cellsIdentifiers;
-@synthesize resourceClient = _resourceClient;
-@synthesize resourceLookup = _resourceLookup;
-@synthesize resourceDescriptor = _resourceDescriptor;
-
 - (NSDictionary *)cellsIdentifiers
 {
     if (!_cellsIdentifiers) {
@@ -86,15 +86,6 @@ inject_default_rotation()
     }
     
     return _cellsIdentifiers;
-}
-
-- (NSMutableArray *)resources
-{
-    if (!_resources) {
-        _resources = [NSMutableArray array];
-    }
-
-    return  _resources;
 }
 
 - (BOOL)isPaginationAvailable
@@ -115,7 +106,7 @@ inject_default_rotation()
     [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
     self.isNeedsToReloadData = YES;
-
+    
     // Add observer to refresh controller after profile was changed
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(changeServerProfile)
@@ -135,7 +126,9 @@ inject_default_rotation()
 {
     id destinationViewController = segue.destinationViewController;
     
-    if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
+    if ([self isReportSegue:segue]) {
+        [self setResults:sender toDestinationViewController:destinationViewController];
+    } else  if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         JSResourceLookup *resourceLookup = [self resourceLookupForIndexPath:indexPath];
         [destinationViewController setResourceLookup:resourceLookup];
@@ -174,7 +167,7 @@ inject_default_rotation()
     
     cell.textLabel.text = resourceLookup.label;
     cell.detailTextLabel.text = resourceLookup.uri;
-        
+    
     return cell;
 }
 
@@ -186,6 +179,9 @@ inject_default_rotation()
     NSArray *supportedResources = self.cellsIdentifiers.allKeys;
     if (![supportedResources containsObject:resourceLookup.resourceType]) {
         [self tableView:self.tableView accessoryButtonTappedForRowWithIndexPath:indexPath];
+    } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+        [self fetchInputControlsForReport:resourceLookup];
     }
 }
 
@@ -195,6 +191,10 @@ inject_default_rotation()
 {
     self.isNeedsToReloadData = NO;
     
+    if (!self.resources) {
+        self.resources = [NSMutableArray array];
+    }
+    
     if (!self.isPaginationAvailable) {
         for (JSResourceDescriptor *resourceDescriptor in result.objects) {
             NSString *type = resourceDescriptor.wsType;
@@ -202,7 +202,7 @@ inject_default_rotation()
             if ([type isEqualToString:self.constants.WS_TYPE_FOLDER] ||
                 [type isEqualToString:self.constants.WS_TYPE_REPORT_UNIT] ||
                 [type isEqualToString:self.constants.WS_TYPE_DASHBOARD]) {
-            
+                
                 JSResourceLookup *resourceLookup = [[JSResourceLookup alloc] init];
                 resourceLookup.label = resourceDescriptor.label;
                 resourceLookup.resourceDescription = resourceDescriptor.resourceDescription;
