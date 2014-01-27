@@ -92,7 +92,8 @@ inject_default_rotation()
 - (void)disableTabBar
 {
     for (UITabBarItem *item in self.tabBar.items) {
-        if (item.tag != kJMServersMenuTag) {
+        if (item.tag != kJMServersMenuTag &&
+            item.tag != kJMSavedReportsMenuTag) {
             item.enabled = NO;
         }
     }

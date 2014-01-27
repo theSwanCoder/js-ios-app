@@ -60,8 +60,9 @@ static JMCancelRequestPopup *instance;
 
 + (void)dismiss
 {
+    [JMUtils hideNetworkActivityIndicator];
+
     if (instance) {
-        [JMUtils hideNetworkActivityIndicator];
         [instance.viewController dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
         // Remove all targets for cancel button before releasing instance (instance = nil)
         // to avoid memory issue: when click is performed but instance was released already

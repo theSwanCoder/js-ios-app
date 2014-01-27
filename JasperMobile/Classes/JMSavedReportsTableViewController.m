@@ -27,6 +27,9 @@
 
 #import "JMSavedReportsTableViewController.h"
 #import "JMConstants.h"
+#import "JMSavedReportViewerViewController.h"
+
+static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 
 @interface JMReportTableViewCell : UITableViewCell
 @property (nonatomic, weak) IBOutlet UILabel *reportName;
@@ -40,6 +43,7 @@
 @interface JMSavedReportsTableViewController()
 @property (nonatomic, strong) NSString *reportsDirectory;
 @property (nonatomic, strong) NSFileManager *fileManager;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
 
 @implementation JMSavedReportsTableViewController
@@ -49,22 +53,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     self.reportsDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:kJMReportsDirectory];
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.fileManager = [NSFileManager defaultManager];
+    self.reports = [[self.fileManager contentsOfDirectoryAtPath:self.reportsDirectory error:nil] mutableCopy];;
+    [self.reports removeObject:@".DS_Store"];
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    NSMutableArray *reports = [[self.fileManager contentsOfDirectoryAtPath:self.reportsDirectory error:nil] mutableCopy];
-    [reports removeObject:@".DS_Store"];
-    self.reports = reports;
     [self checkAvailabilityOfEditButton];
     [self.tableView reloadData];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    [segue.destinationViewController setReportPath:sender];
 }
 
 #pragma mark - UIViewControllerEditing
@@ -73,12 +82,6 @@
 {
     [super setEditing:editing animated:animated];
     [self checkAvailabilityOfEditButton];
-}
-
-- (void)didReceiveMemoryWarning
-{
-//    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
@@ -95,23 +98,20 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString * const cellIdentifier = @"ReportCell";
-    JMReportTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
     NSString *report = [self.reports objectAtIndex:indexPath.row];
     NSString *reportDirectory = [self.reportsDirectory stringByAppendingPathComponent:report];
     NSDictionary *directoryAttributes = [self.fileManager attributesOfItemAtPath:reportDirectory error:nil];
     NSArray *files = [self.fileManager subpathsOfDirectoryAtPath:reportDirectory error:nil];
     NSDate *creationDate = [directoryAttributes objectForKey:NSFileCreationDate];
-
-    unsigned long long size = 0;
     NSString *extension;
+    NSString *reportFilename = [kJMReportFilename stringByAppendingString:@"."];
+    double size = 0;
 
     for (NSString *file in files) {
         if (!extension) {
-            NSRange dotRange = [file rangeOfString:@"."];
-            if (dotRange.location != NSNotFound) {
-                extension = [file substringWithRange:NSMakeRange(dotRange.location, file.length)];
+            NSRange filenameRange = [file rangeOfString:reportFilename];
+            if (filenameRange.location != NSNotFound) {
+                extension = [[file substringFromIndex:filenameRange.length] lowercaseString];
             }
         }
 
@@ -119,20 +119,13 @@
         NSDictionary *fileAttributes = [self.fileManager attributesOfItemAtPath:filePath error:nil];
         size += fileAttributes.fileSize;
     }
-    
-    size /= 1024.0f;
-    NSString *sizeUnit;
-    
-    if (size > 1000) {
-        size /= 1024.0f;
-        sizeUnit = @" mb";
-    } else {
-        sizeUnit = @" kb";
-    }
-    
-//    cell.textLabel.text = report;
-//    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@; size: %.1f %@", creationDate, size, sizeUnit];
-    
+
+    // Table view cell has the same identifier as a file extension
+    JMReportTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:extension];
+    cell.reportName.text = report;
+    cell.creationDate.text = [self.dateFormatter stringFromDate:creationDate];
+    cell.size.text = [self formattedSize:size];
+
     return cell;
 }
 
@@ -147,11 +140,33 @@
     }
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    JMReportTableViewCell *cell = (JMReportTableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
+    NSString *reportPath = [self.reportsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@/report.%@", cell.reportName.text, cell.reuseIdentifier]];
+    [self performSegueWithIdentifier:kJMShowSavedReportSegue sender:reportPath];
+}
+
 #pragma mark - Private
 
 - (void)checkAvailabilityOfEditButton
 {
     self.navigationItem.rightBarButtonItem.enabled = self.reports.count > 0;
+}
+
+- (NSString *)formattedSize:(double)size
+{
+    size = size / 1024.0f;
+    NSString *sizeUnit;
+
+    if (size > 1000) {
+        size = size / 1024.0f;
+        sizeUnit = @" mb";
+    } else {
+        sizeUnit = @" kb";
+    }
+
+    return [NSString stringWithFormat:@"%.1f %@", size, sizeUnit];
 }
 
 @end
