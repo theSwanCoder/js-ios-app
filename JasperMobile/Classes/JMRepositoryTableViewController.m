@@ -73,7 +73,7 @@
 - (void)reloadData
 {
     JMRequestDelegate *serverInfoDelegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        [self getResources];
+        if(self.isServerVersionSupported) [self getResources];
     }];
     
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:self.cancelBlock];

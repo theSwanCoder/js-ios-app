@@ -43,5 +43,6 @@ extern NSInteger const kJMResourcesLimit;
 @property (nonatomic, assign) BOOL isNeedsToReloadData;
 
 - (void)changeServerProfile;
+- (BOOL)isServerVersionSupported;
 
 @end

@@ -29,12 +29,12 @@
 #import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
-#import "JMReportDownloaderUtil.h"
 #import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UITableViewCell+SetSeparators.h"
 #import "UITableViewController+CellRelativeHeight.h"
 #import "ALToastView.h"
+#import "JMRequestDelegate.h"
 #import <Objection-iOS/Objection.h>
 
 #define kJMReportNameSection 0
@@ -46,8 +46,9 @@ static CGFloat const separatorHeight = 1.0f;
 
 // Validation constrains
 static NSInteger const kJMNameMin = 1;
-static NSInteger const kJMNameMax = 255;
+static NSInteger const kJMNameMax = 250;
 static NSString * const kJMInvalidCharacters = @":/";
+static NSString * const kJMAttachmentPrefix = @"_";
 
 @interface JMReportSaverTableViewController ()
 @property (nonatomic, strong) NSString *selectedReportFormat;
@@ -55,19 +56,17 @@ static NSString * const kJMInvalidCharacters = @":/";
 @property (nonatomic, strong) NSDictionary *cellsIdentifiers;
 @property (nonatomic, strong) NSString *reportName;
 @property (nonatomic, strong) NSString *errorMessage;
-@property (nonatomic, weak) JMReportDownloaderUtil *reportDownloader;
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, assign) CGFloat baseErrorLabelWidth;
 @end
 
 @implementation JMReportSaverTableViewController
-objection_requires(@"resourceClient", @"constants", @"reportDownloader")
+objection_requires(@"reportClient", @"constants")
 inject_default_rotation()
 
 @synthesize reportClient = _reportClient;
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceLookup = _resourceLookup;
-@synthesize reportDownloader = _reportDownloader;
 
 #pragma mark - Accessors
 
@@ -237,32 +236,52 @@ inject_default_rotation()
 {
     self.errorMessage = nil;
 
-    NSString *reportDirectory = [self reportDirectory];
-    if (![self validateReportNameAndDirectory:reportDirectory] ||
-            ![self createReportDirectory:reportDirectory]) return;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *reportDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@/%@.%@", kJMReportsDirectory,
+                                                                                         self.reportName, self.selectedReportFormat]];
 
+    if (![self validateReportNameAndDirectory:reportDirectory] || ![self createReportDirectory:reportDirectory]) return;
     [self.tableView reloadData];
 
     __weak JMReportSaverTableViewController *reportSaver = self;
-    __block id <JSRequestDelegate> delegate;
 
-    [JMCancelRequestPopup presentInViewController:self message:@"status.saving" restClient:nil cancelBlock:^{
-//        [reportSaver.reportClient cancelRequestsWithDelegate:delegate];
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        [fileManager removeItemAtPath:reportDirectory error:nil];
+    [JMCancelRequestPopup presentInViewController:self message:@"status.saving" restClient:self.reportClient cancelBlock:^{
+        [[NSFileManager defaultManager] removeItemAtPath:reportDirectory error:nil];
     }];
-
-    void (^completionBlock)(NSString *) = ^(NSString *fullReportPath) {
-        [JMCancelRequestPopup dismiss];
-        [reportSaver.navigationController popViewControllerAnimated:YES];
-        [ALToastView toastInView:reportSaver.delegate.view withText:JMCustomLocalizedString(@"reportsaver.saved", nil)];
+    
+    JSRequestFinishedBlock checkErrorBlock = ^(JSOperationResult *result) {
+        if (result.isSuccessful) return;
+        [reportSaver.reportClient cancelAllRequests];
+        [[NSFileManager defaultManager] removeItemAtPath:reportDirectory error:nil];
     };
 
-    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_TWO) {
-        delegate = [self.reportDownloader runReportExecution:self.resourceLookup.uri parameters:self.parameters format:self.selectedReportFormat path:reportDirectory completionBlock:completionBlock];
-    } else {
-        delegate = [self.reportDownloader runReport:self.resourceLookup.uri parameters:self.parameters format:self.selectedReportFormat path:reportDirectory completionBlock:completionBlock];
-    }
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
+        JSExportExecution *export = [response.exports objectAtIndex:0];
+        NSString *requestId = response.requestId;
+
+        NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", reportDirectory, kJMReportFilename, self.selectedReportFormat];
+        [reportSaver.reportClient saveReportOutput:requestId exportOutput:export.uuid path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
+
+        for (JSReportOutputResource *attachment in export.attachments) {
+            NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", reportDirectory, kJMAttachmentPrefix, attachment.fileName];
+            [reportSaver.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
+                request.delegate = [JMRequestDelegate requestDelegateForFinishBlock:nil];
+                request.finishedBlock = checkErrorBlock;
+            }];
+        }
+    }];
+
+    [JMRequestDelegate setFinalBlock:^{
+        [reportSaver.navigationController popViewControllerAnimated:YES];
+        [ALToastView toastInView:reportSaver.delegate.view withText:JMCustomLocalizedString(@"reportsaver.saved", nil)];
+    }];
+
+    [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO freshData:YES saveDataSnapshot:NO
+                         ignorePagination:NO transformerKey:nil pages:nil attachmentsPrefix:kJMAttachmentPrefix parameters:self.parameters usingBlock:^(JSRequest *request) {
+        request.delegate = delegate;
+        request.finishedBlock = checkErrorBlock;
+    }];
 }
 
 - (IBAction)reportNameChanged:(id)sender
@@ -279,11 +298,6 @@ inject_default_rotation()
 }
 
 #pragma mark - Private
-
-- (NSString *)reportDirectory {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    return [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@/%@", kJMReportsDirectory, self.reportName]];
-}
 
 - (BOOL)createReportDirectory:(NSString *)reportDirectory
 {
@@ -308,7 +322,6 @@ inject_default_rotation()
 {
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
 
-    // TODO: refactor
     if (self.reportName.length < kJMNameMin) {
         self.errorMessage = JMCustomLocalizedString(@"reportsaver.name.errmsg.empty", nil);
     } else if (self.reportName.length > kJMNameMax) {

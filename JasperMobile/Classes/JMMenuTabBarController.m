@@ -66,8 +66,7 @@ inject_default_rotation()
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // TODO: refactor without possible code duplication (as general solution for both devices)
+
     for (UITabBarItem *item in self.tabBar.items) {
         item.title = [JMUtils localizedTitleForMenuItemByTag:item.tag];
     }
@@ -78,7 +77,7 @@ inject_default_rotation()
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
     UIViewController *selectedViewController = [viewController.childViewControllers objectAtIndex:0];
-    // TODO: change implementation if 2 diff menus will be adapted via protocols (for pad and phone)
+
     if (self.lastSelectedViewController == selectedViewController &&
         [selectedViewController conformsToProtocol:@protocol(JMRefreshable)]) {
         [self.lastSelectedViewController refresh];

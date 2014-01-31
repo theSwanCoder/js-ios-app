@@ -31,17 +31,6 @@
 
 @synthesize value = _value;
 
-- (NSString *)isListItem
-{
-    return @"YES";
-}
-
-- (BOOL)needsToUpdateInputControlQueryData
-{
-    NSInteger type = self.inputControlWrapper.type;
-    return type == self.constants.IC_TYPE_MULTI_SELECT_QUERY || type == self.constants.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX;
-}
-
 - (void)setValue:(id)value
 {
     NSInteger numberOfValues = [value count];

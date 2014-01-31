@@ -50,14 +50,4 @@
  */
 - (void)updateWithParameters:(NSArray *)parameters;
 
-/**
- Indicates if IC is single or multi select. Used for REST v1
- */
-- (NSString *)isListItem;
-
-/**
- Indicates if IC needs to update query data (including dependencies). Used for REST v1
- */
-- (BOOL)needsToUpdateInputControlQueryData;
-
 @end

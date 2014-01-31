@@ -50,14 +50,6 @@
 /**
  Creates the input control cell
  
- @param inputControl A wrapper for IC (REST v1)
- @return The IC cell of a certain type
- */
-- (JMInputControlCell *)inputControlWithInputControlWrapper:(JSInputControlWrapper *)inputControl;
-
-/**
- Creates the input control cell
- 
  @param inputControl An IC descriptor (REST v2)
  @return The IC cell of a certain type
  */

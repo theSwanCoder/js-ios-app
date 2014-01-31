@@ -38,10 +38,8 @@
     CGFloat baseHeight;
 }
 
-@property (nonatomic, strong) JSInputControlWrapper *inputControlWrapper;
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
 @property (nonatomic, strong) NSString *errorMessage;
-@property (nonatomic, readonly) BOOL isMandatory;
 @property (nonatomic, weak) UITableViewController <JMInputControlsHolder> *delegate;
 
 /**

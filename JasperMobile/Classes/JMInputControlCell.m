@@ -110,26 +110,6 @@
     }
 }
 
-- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
-{
-    _inputControlWrapper = inputControlWrapper;
-    _isMandatory = inputControlWrapper.isMandatory;
-
-    if (!inputControlWrapper.isVisible) {
-        self.hidden = YES;
-    } else {
-        if (_isMandatory) {
-            self.mandatoryLabel.hidden = NO;
-        }
-
-        if (inputControlWrapper.isReadOnly) {
-            [self disableCell];
-        }
-
-        self.label.text = inputControlWrapper.label;
-    }
-}
-
 - (UILabel *)label
 {
     return (UILabel *) [self viewWithTag:1];

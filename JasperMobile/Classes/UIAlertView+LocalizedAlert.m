@@ -44,7 +44,7 @@
             [view addButtonWithTitle:JMCustomLocalizedString(otherButtonTitles, nil)];
             otherButtonTitles = va_arg(args, NSString*);
         }
-    va_end(args);
+    va_end (args);
 
     return view;
 }

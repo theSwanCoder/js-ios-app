@@ -32,16 +32,18 @@
 #import "JMRequestDelegate.h"
 #import "JMRotationBase.h"
 #import "JMUtils.h"
+#import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
+
+static NSString * const kJMShowReportSaverSegue = @"ShowReportSaver";
 
 @interface JMReportViewerViewController()
 @property (nonatomic, strong) NSString *tempDirectory;
 @property (nonatomic, weak) JSConstants *constants;
-@property (nonatomic, weak) JMReportDownloaderUtil *reportDownloader;
 @end
 
 @implementation JMReportViewerViewController
-objection_requires(@"resourceClient", @"reportClient", @"constants", @"reportDownloader")
+objection_requires(@"resourceClient", @"reportClient", @"constants")
 inject_default_rotation()
 
 @synthesize reportClient = _reportClient;
@@ -65,8 +67,10 @@ inject_default_rotation()
     self.webView.delegate = self;
     [self createTempDirectory];
 
-    // TODO: change server version to 5.2.0 instead of 5..5
-    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_TWO) {
+    [JMCancelRequestPopup dismiss];
+    [self.activityIndicator startAnimating];
+
+    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_V2) {
         [self runReportExecution];
     } else {
         [self runReport];
@@ -94,6 +98,7 @@ inject_default_rotation()
         [JMUtils hideNetworkActivityIndicator];
         NSFileManager *fileManager = [NSFileManager defaultManager];
         [fileManager removeItemAtPath:self.tempDirectory error:nil];
+        [self.webView stopLoading];
         self.webView = nil;
         
         // Cancel all active requests before disappearing
@@ -112,9 +117,25 @@ inject_default_rotation()
     [self.activityIndicator stopAnimating];
 }
 
+#pragma mark - Actions
+
+- (IBAction)saveReport:(id)sender
+{
+    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_V2) {
+        [self performSegueWithIdentifier:kJMShowReportSaverSegue sender:self];
+    } else {
+        [[UIAlertView localizedAlertWithTitle:@"error.savereport.notavaialble.title"
+                                      message:@"error.savereport.notavaialble.msg"
+                                     delegate:nil
+                            cancelButtonTitle:@"dialog.button.ok"
+                            otherButtonTitles:nil] show];
+    }
+}
+
 #pragma mark - Private -
 
-- (void)createTempDirectory {
+- (void)createTempDirectory
+{
     NSString *tempDirectory = NSTemporaryDirectory();
     self.tempDirectory = [tempDirectory stringByAppendingPathComponent:kJMReportsDirectory];
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -124,13 +145,10 @@ inject_default_rotation()
                                  error:nil];
 }
 
-#pragma mark Rest v2
+#pragma mark Uses for JRS versions 5.5 and higher
 
 - (void)runReportExecution
 {
-    [JMCancelRequestPopup dismiss];
-    [self.activityIndicator startAnimating];
-    
     __weak JMReportViewerViewController *reportViewerViewController = self;
     
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
@@ -144,19 +162,17 @@ inject_default_rotation()
     [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.constants.CONTENT_TYPE_HTML interactive:YES freshData:YES saveDataSnapshot:NO ignorePagination:YES transformerKey:nil pages:nil attachmentsPrefix:nil parameters:self.parameters delegate:delegate];
 }
 
-#pragma mark Rest v1
+#pragma mark Uses for JRS versions 5.0 - 5.5
 
 - (void)runReport
 {
-    [JMCancelRequestPopup dismiss];
-    [self.activityIndicator startAnimating];
-
-    __weak JMReportViewerViewController *reportViewerViewController = self;
-    
-    [self.reportDownloader runReport:self.resourceLookup.uri parameters:self.parameters format:self.constants.CONTENT_TYPE_HTML path:self.tempDirectory completionBlock:^(NSString *fullReportPath) {
-        NSURL *reportPath = [NSURL fileURLWithPath:fullReportPath];
-        [reportViewerViewController.webView loadRequest:[NSURLRequest requestWithURL:reportPath]];
-    }];
+    NSURL *reportURL = [NSURL URLWithString:[self.reportClient generateReportUrl:self.resourceLookup.uri
+                                                                    reportParams:self.parameters
+                                                                            page:0
+                                                                          format:self.constants.CONTENT_TYPE_HTML]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:reportURL];
+    [JMUtils showNetworkActivityIndicator];
+    [self.webView loadRequest:request];
 }
 
 @end

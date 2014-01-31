@@ -1526,7 +1526,7 @@
                     <navigationItem key="navigationItem" id="YqW-JB-ERI">
                         <barButtonItem key="rightBarButtonItem" title="Save" id="crm-WR-31x">
                             <connections>
-                                <segue destination="4ae-WQ-Ich" kind="push" id="lE1-Yh-Yb6"/>
+                                <action selector="saveReport:" destination="RLL-O7-NrJ" id="af2-1j-vjS"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1535,6 +1535,7 @@
                         <outlet property="activityIndicator" destination="ycL-2x-WOp" id="yIF-CK-64O"/>
                         <outlet property="saveButton" destination="crm-WR-31x" id="VCh-cl-mWA"/>
                         <outlet property="webView" destination="niU-Gf-Jhe" id="gqc-Ef-Tze"/>
+                        <segue destination="4ae-WQ-Ich" kind="push" identifier="ShowReportSaver" id="YcX-95-1o8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XJD-sw-fu7" userLabel="First Responder" sceneMemberID="firstResponder"/>

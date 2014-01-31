@@ -29,14 +29,6 @@
 
 @implementation JMBooleanInputControlCell
 
-- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
-{
-    [super setInputControlWrapper:inputControlWrapper];
-
-    self.uiSwitch.on = NO;
-    self.value = [JSConstants stringFromBOOL:NO];
-}
-
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];

@@ -68,15 +68,6 @@ static UIDatePicker *datePicker;
     return _dateFormatter;
 }
 
-- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
-{
-    [super setInputControlWrapper:inputControlWrapper];
-
-    self.date = [NSDate date];
-    self.dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-    self.dateFormatter.timeStyle = NSDateFormatterNoStyle;
-}
-
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
@@ -157,12 +148,7 @@ static UIDatePicker *datePicker;
 - (void)done:(id)sender
 {
     self.textField.text = [self.dateFormatter stringFromDate:self.date];
-
-    if (self.inputControlWrapper) {
-        self.value = self.date;
-    } else {
-        self.value = self.textField.text;
-    }
+    self.value = self.textField.text;
 
     [self dismissError];
     [self hideDatePicker];

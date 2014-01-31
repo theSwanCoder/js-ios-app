@@ -28,6 +28,7 @@
 #import "JMSavedReportsTableViewController.h"
 #import "JMConstants.h"
 #import "JMSavedReportViewerViewController.h"
+#import "UIAlertView+LocalizedAlert.h"
 
 static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 
@@ -53,13 +54,11 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     self.reportsDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:kJMReportsDirectory];
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.fileManager = [NSFileManager defaultManager];
-    self.reports = [[self.fileManager contentsOfDirectoryAtPath:self.reportsDirectory error:nil] mutableCopy];;
-    [self.reports removeObject:@".DS_Store"];
     self.dateFormatter = [[NSDateFormatter alloc] init];
     [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
 }
@@ -67,6 +66,11 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    // TODO: make notification instead of each time reports fetching
+    self.reports = [[self.fileManager contentsOfDirectoryAtPath:self.reportsDirectory error:nil] mutableCopy];
+    [self.reports removeObject:@".DS_Store"];
+
     [self checkAvailabilityOfEditButton];
     [self.tableView reloadData];
 }
@@ -103,29 +107,20 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
     NSDictionary *directoryAttributes = [self.fileManager attributesOfItemAtPath:reportDirectory error:nil];
     NSArray *files = [self.fileManager subpathsOfDirectoryAtPath:reportDirectory error:nil];
     NSDate *creationDate = [directoryAttributes objectForKey:NSFileCreationDate];
-    NSString *extension;
-    NSString *reportFilename = [kJMReportFilename stringByAppendingString:@"."];
     double size = 0;
-
+    
     for (NSString *file in files) {
-        if (!extension) {
-            NSRange filenameRange = [file rangeOfString:reportFilename];
-            if (filenameRange.location != NSNotFound) {
-                extension = [[file substringFromIndex:filenameRange.length] lowercaseString];
-            }
-        }
-
         NSString *filePath = [reportDirectory stringByAppendingPathComponent:file];
         NSDictionary *fileAttributes = [self.fileManager attributesOfItemAtPath:filePath error:nil];
         size += fileAttributes.fileSize;
     }
 
     // Table view cell has the same identifier as a file extension
-    JMReportTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:extension];
-    cell.reportName.text = report;
+    JMReportTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:report.pathExtension];
+    cell.reportName.text = [report stringByDeletingPathExtension];
     cell.creationDate.text = [self.dateFormatter stringFromDate:creationDate];
     cell.size.text = [self formattedSize:size];
-
+    
     return cell;
 }
 
@@ -143,8 +138,16 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JMReportTableViewCell *cell = (JMReportTableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
-    NSString *reportPath = [self.reportsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@/report.%@", cell.reportName.text, cell.reuseIdentifier]];
-    [self performSegueWithIdentifier:kJMShowSavedReportSegue sender:reportPath];
+    NSString *reportPath = [self.reportsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@/report.%@", cell.reportName.text, cell.reuseIdentifier, cell.reuseIdentifier]];
+    if (![self.fileManager fileExistsAtPath:reportPath]) {
+        [[UIAlertView localizedAlertWithTitle:@"savedreports.error.reportnotfound.title"
+                                      message:@"savedreports.error.reportnotfound.msg"
+                                     delegate:nil
+                            cancelButtonTitle:@"dialog.button.ok"
+                            otherButtonTitles:nil] show];
+    } else {
+        [self performSegueWithIdentifier:kJMShowSavedReportSegue sender:reportPath];
+    }
 }
 
 #pragma mark - Private
@@ -156,16 +159,20 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 
 - (NSString *)formattedSize:(double)size
 {
+    if (size == 0) {
+        return NSLocalizedString(@"savedreports.folder.empty", nil);
+    }
+
     size = size / 1024.0f;
     NSString *sizeUnit;
-
+    
     if (size > 1000) {
         size = size / 1024.0f;
         sizeUnit = @" mb";
     } else {
         sizeUnit = @" kb";
     }
-
+    
     return [NSString stringWithFormat:@"%.1f %@", size, sizeUnit];
 }
 

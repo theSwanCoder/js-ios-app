@@ -1526,7 +1526,7 @@
                     <navigationItem key="navigationItem" id="V3V-BF-lxt">
                         <barButtonItem key="rightBarButtonItem" title="Save" id="T5S-rR-Y6l">
                             <connections>
-                                <segue destination="aAe-bt-6mQ" kind="push" id="6KV-v8-u8s"/>
+                                <action selector="saveReport:" destination="P0H-Cl-wTR" id="Qjm-w8-Lea"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1535,6 +1535,7 @@
                         <outlet property="activityIndicator" destination="qWJ-A0-bcy" id="jLF-TZ-2P2"/>
                         <outlet property="saveButton" destination="T5S-rR-Y6l" id="wss-KL-mDp"/>
                         <outlet property="webView" destination="cv0-Ok-S0i" id="ARs-Ie-m4B"/>
+                        <segue destination="aAe-bt-6mQ" kind="push" identifier="ShowReportSaver" id="Doe-i2-NtC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8gy-B3-LMA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1780,7 +1781,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="155-bZ-vaf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="438" y="905"/>
+            <point key="canvasLocation" x="428" y="905"/>
         </scene>
     </scenes>
     <resources>
@@ -1811,10 +1812,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="iUA-aA-WXK"/>
-        <segue reference="zHE-Xy-emR"/>
-        <segue reference="f3B-eB-Zkq"/>
-        <segue reference="tcw-WR-V9Y"/>
+        <segue reference="Ete-rd-4of"/>
         <segue reference="w4O-aM-gRB"/>
+        <segue reference="S0v-p9-FbZ"/>
+        <segue reference="tcw-WR-V9Y"/>
+        <segue reference="4G2-Cf-EF7"/>
     </inferredMetricsTieBreakers>
 </document>

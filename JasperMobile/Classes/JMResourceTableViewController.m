@@ -150,7 +150,6 @@ inject_default_rotation()
 {
     [super viewWillAppear:animated];
 
-    // TODO: remove if main menu will be changed to "List" instead tab bar controller
     if (self.resourceDescriptor) {
         // Persist old changes, if they were made previously. This is required
         // because for some reason "viewWillAppear" method of 2-nd view controller is

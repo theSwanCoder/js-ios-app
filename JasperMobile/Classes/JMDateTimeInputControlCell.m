@@ -25,15 +25,15 @@
 //  Jaspersoft Corporation
 //
 
+#import "JMDateTimeInputControlCell.h"
+#import "JMLocalization.h"
+
 static UIToolbar *dateTimePickerToolbar;
 
 typedef enum {
     kJMDateType,
     kJMTimeType
 } JMDatePickerType;
-
-#import "JMDateTimeInputControlCell.h"
-#import "JMLocalization.h"
 
 @interface JMDateTimeInputControlCell()
 @property (nonatomic, assign) JMDatePickerType datePickerType;
@@ -49,15 +49,6 @@ typedef enum {
     }
 
     return self;
-}
-
-- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
-{
-    [super setInputControlWrapper:inputControlWrapper];
-
-    self.time = self.date;
-    self.dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-    self.dateFormatter.timeStyle = NSDateFormatterShortStyle;
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor

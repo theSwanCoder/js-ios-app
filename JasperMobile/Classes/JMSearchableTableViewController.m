@@ -184,9 +184,6 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 {
     if (self.navigationController) {
         [searchBar resignFirstResponder];
-
-        // TODO: consult about hiding search bar
-        //        [self hideSearchBar:searchBar animated:NO];
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:JMMainStoryboard() bundle:nil];
         id destinationViewController = [storyboard instantiateViewControllerWithIdentifier:NSStringFromClass(JMLibraryTableViewController.class)];

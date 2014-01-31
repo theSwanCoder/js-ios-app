@@ -56,26 +56,6 @@ objection_requires(@"constants")
     return self;
 }
 
-- (JMInputControlCell *)inputControlWithInputControlWrapper:(JSInputControlWrapper *)inputControl
-{
-    if (!self.types) self.types = [self inputControlWrapperTypes];
-    
-    id cellIdentifier = [self.types objectForKey:@(inputControl.type)];
-    if ([cellIdentifier isKindOfClass:[NSDictionary class]]) {
-        cellIdentifier = [cellIdentifier objectForKey:@(inputControl.dataType)];
-    }
-    
-    // TODO: add default IC Cell
-    id cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    [cell setInputControlWrapper:inputControl];
-
-    if ([cell respondsToSelector:@selector(setDelegate:)]) {
-        [cell setDelegate:self.tableViewController];
-    }
-    
-    return cell;
-}
-
 - (JMInputControlCell *)inputControlWithInputControlDescriptor:(JSInputControlDescriptor *)inputControl
 {
     if (!self.types) self.types = [self inputControlDescriptorTypes];
@@ -94,36 +74,7 @@ objection_requires(@"constants")
 
 #pragma mark - Private
 
-// Returns IC types for REST v1
-- (NSDictionary *)inputControlWrapperTypes
-{
-    JSConstants *constants = self.constants;
-    
-    NSDictionary *types = @{
-        @(constants.IC_TYPE_BOOLEAN) : kJMBooleanCellIdentifier,
-        
-        @(constants.IC_TYPE_SINGLE_VALUE) : @{
-              @(constants.DT_TYPE_TEXT) : kJMTextEditCellIdentifier,
-              @(constants.DT_TYPE_NUMBER) : kJMNumberCellIdentifier,
-              @(constants.DT_TYPE_DATE) : kJMDateCellIdentifier,
-              @(constants.DT_TYPE_DATE_TIME) : kJMDateTimeCellIdentifier,
-        },
-        
-        @(constants.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES) : kJMSingleSelectCellIdentifier,
-        @(constants.IC_TYPE_SINGLE_SELECT_LIST_OF_VALUES_RADIO) : kJMSingleSelectCellIdentifier,
-        @(constants.IC_TYPE_SINGLE_SELECT_QUERY) : kJMSingleSelectCellIdentifier,
-        @(constants.IC_TYPE_SINGLE_SELECT_QUERY_RADIO) : kJMSingleSelectCellIdentifier,
-        
-        @(constants.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES) : kJMMultiSelectCellIdentifier,
-        @(constants.IC_TYPE_MULTI_SELECT_LIST_OF_VALUES_CHECKBOX) : kJMMultiSelectCellIdentifier,
-        @(constants.IC_TYPE_MULTI_SELECT_QUERY) : kJMMultiSelectCellIdentifier,
-        @(constants.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX) : kJMMultiSelectCellIdentifier,
-    };
-
-    return types;
-}
-
-// Returns IC types for REST v2
+// Returns input control types
 - (NSDictionary *)inputControlDescriptorTypes
 {
     JSConstants *constants = self.constants;

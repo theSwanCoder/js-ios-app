@@ -36,14 +36,13 @@ static NSString * const kJMResourceLookup = @"resourceLookup";
 #import "JMInputControlsHolder.h"
 #import "JMRequestDelegate.h"
 #import "JMReportOptionsUtil.h"
-#import "JSRESTBase+updateServerInfo.h"
 
 @implementation JMBaseRepositoryTableViewController (fetchInputControls)
 
 - (void)fetchInputControlsForReport:(JSResourceLookup *)resourceLookup
 {
     __weak JMBaseRepositoryTableViewController *weakSelf = self;
-    
+
     JSObjectionInjector *objectionInjector = [JSObjection defaultInjector];
     JSRESTReport *report = [objectionInjector getObject:JSRESTReport.class];
     
@@ -51,17 +50,37 @@ static NSString * const kJMResourceLookup = @"resourceLookup";
         [weakSelf.resourceClient cancelAllRequests];
         [report cancelAllRequests];
     }];
-    
-    [self.resourceClient updateServerInfo:[JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        // TODO: change server version to 5.2.0 instead of 5.5.0 (EMERALD_TWO)
-        if (self.resourceClient.serverProfile.serverInfo.versionAsInteger >= weakSelf.constants.VERSION_CODE_EMERALD_TWO) {
-            JMReportOptionsUtil *reportOptionsUtil = [objectionInjector getObject:JMReportOptionsUtil.class];
-            NSArray *reportParameters = [reportOptionsUtil reportOptionsAsParametersForReport:resourceLookup.uri];
-            [report inputControlsForReport:resourceLookup.uri ids:nil selectedValues:reportParameters delegate:[self reportDelegate:resourceLookup]];
-        } else {
-            [weakSelf.resourceClient resource:resourceLookup.uri delegate:[self resourceDelegate:resourceLookup]];
+
+    JMReportOptionsUtil *reportOptionsUtil = [objectionInjector getObject:JMReportOptionsUtil.class];
+    NSArray *reportParameters = [reportOptionsUtil reportOptionsAsParametersForReport:resourceLookup.uri];
+
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        NSMutableArray *invisibleInputControls = [NSMutableArray array];
+        for (JSInputControlDescriptor *inputControl in result.objects) {
+            if (!inputControl.visible.boolValue) {
+                [invisibleInputControls addObject:inputControl];
+            }
         }
-    }]];
+
+        NSMutableDictionary *data = [NSMutableDictionary dictionary];
+        [data setObject:resourceLookup forKey:kJMResourceLookup];
+
+        if (result.objects.count - invisibleInputControls.count == 0) {
+            [weakSelf performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
+        } else {
+            if (invisibleInputControls.count) {
+                NSMutableArray *inputControls = [result.objects mutableCopy];
+                [inputControls removeObjectsInArray:invisibleInputControls];
+                [data setObject:inputControls forKey:kJMInputControls];
+            } else {
+                [data setObject:result.objects forKey:kJMInputControls];
+            }
+
+            [weakSelf performSegueWithIdentifier:kJMShowReportOptionsSegue sender:data];
+        }
+    } viewControllerToDismiss:nil];
+
+    [report inputControlsForReport:resourceLookup.uri ids:nil selectedValues:reportParameters delegate:delegate];
 }
 
 - (void)setResults:(id)sender toDestinationViewController:(id)viewController
@@ -69,75 +88,15 @@ static NSString * const kJMResourceLookup = @"resourceLookup";
     NSDictionary *data = sender;
     JSResourceLookup *resourceLookup = [data objectForKey:kJMResourceLookup];
     NSMutableArray *inputControls = [data objectForKey:kJMInputControls];
-    
+
     [viewController setResourceLookup:resourceLookup];
-    if (inputControls.count) {
-        [viewController setInputControls:inputControls];
-    }
+    if (inputControls.count) [viewController setInputControls:inputControls];
 }
 
 - (BOOL)isReportSegue:(UIStoryboardSegue *)segue;
 {
     NSString *identifier = segue.identifier;
     return [identifier isEqualToString:kJMShowReportViewerSegue] || [identifier isEqualToString:kJMShowReportOptionsSegue];
-}
-
-#pragma mark - Private -
-
-- (void)performSegueWithReport:(JSResourceLookup *)resourceLookup andInputControls:(NSArray *)inputControls restVersion:(JSRESTVersion)restVersion
-{
-    NSDictionary *data = @{
-        kJMResourceLookup : resourceLookup,
-        kJMInputControls : inputControls
-    };
-    
-    NSMutableArray *invisibleInputControls = [NSMutableArray array];
-    for (id inputControl in inputControls) {
-        BOOL isVisible = restVersion == JSRESTVersion_1 ? [inputControl isVisible] : [[inputControl visible] boolValue];
-        if (!isVisible) {
-            [invisibleInputControls addObject:inputControl];
-        }
-    }
-    
-    if (inputControls.count - invisibleInputControls.count == 0) {
-        [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
-    } else {
-        [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:data];
-    }
-}
-
-#pragma mark Rest v1
-
-- (JMRequestDelegate *)resourceDelegate:(JSResourceLookup *)resourceLookup
-{
-    __weak JMBaseRepositoryTableViewController *weakSelf = self;
-    
-    return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        [JMCancelRequestPopup dismiss];
-        JSResourceDescriptor *descriptor = [result.objects objectAtIndex:0];
-        NSMutableArray *inputControlWrappers = [NSMutableArray array];
-        
-        for (JSResourceDescriptor *childResourceDescriptor in descriptor.childResourceDescriptors) {
-            if ([childResourceDescriptor.wsType isEqualToString:weakSelf.constants.WS_TYPE_INPUT_CONTROL]) {
-                JSInputControlWrapper *inputControl = [[JSInputControlWrapper alloc] initWithResourceDescriptor:childResourceDescriptor];
-                [inputControlWrappers addObject:inputControl];
-            }
-        }
-        
-        [self performSegueWithReport:resourceLookup andInputControls:inputControlWrappers restVersion:JSRESTVersion_1];
-    }];
-}
-
-#pragma mark Rest v2
-
-- (JMRequestDelegate *)reportDelegate:(JSResourceLookup *)resourceLookup
-{
-    __weak JMBaseRepositoryTableViewController *weakSelf = self;
-    
-    return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        [JMCancelRequestPopup dismiss];
-        [weakSelf performSegueWithReport:resourceLookup andInputControls:result.objects restVersion:JSRESTVersion_2];
-    } viewControllerToDismiss:nil];
 }
 
 @end

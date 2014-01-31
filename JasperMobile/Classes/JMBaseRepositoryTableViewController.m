@@ -30,6 +30,8 @@
 #import "JMConstants.h"
 #import "JMRotationBase.h"
 #import "JMUtils.h"
+#import "UIAlertView+LocalizedAlert.h"
+#import "JMLocalization.h"
 #import <Objection-iOS/Objection.h>
 
 NSInteger const kJMResourcesLimit = 40;
@@ -38,7 +40,7 @@ static NSString * const kJMShowResourceInfoSegue = @"ShowResourceInfo";
 static NSString * const kJMUnknownCell = @"UnknownCell";
 
 @interface JMBaseRepositoryTableViewController ()
-@property (nonatomic, strong, readonly) NSDictionary *cellsIdentifiers;
+@property (nonatomic, strong) NSDictionary *cellsIdentifiers;
 
 - (JSResourceLookup *)resourceLookupForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)cellIdentifierForResourceType:(NSString *)resourceType;
@@ -49,7 +51,6 @@ objection_requires(@"resourceClient", @"constants")
 inject_default_rotation()
 
 @synthesize constants = _constants;
-@synthesize cellsIdentifiers = _cellsIdentifiers;
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceLookup = _resourceLookup;
 @synthesize resourceDescriptor = _resourceDescriptor;
@@ -93,10 +94,19 @@ inject_default_rotation()
     return self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_TWO;
 }
 
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+- (BOOL)isServerVersionSupported
 {
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:cell];
+    NSInteger serverVersion = self.resourceClient.serverInfo.versionAsInteger;
+    BOOL isServerVersionSupported =  serverVersion > self.constants.VERSION_CODE_EMERALD;
+    if (!isServerVersionSupported) {
+        NSString *title = [NSString stringWithFormat:JMCustomLocalizedString(@"error.server.notsupported.title", nil), serverVersion];
+        [[UIAlertView localizedAlertWithTitle:title
+                                      message:@"error.server.notsupported.msg"
+                                     delegate:nil
+                            cancelButtonTitle:@"dialog.button.ok"
+                            otherButtonTitles:nil] show];
+    }
+    return isServerVersionSupported;
 }
 
 #pragma mark - Initialization
@@ -140,8 +150,8 @@ inject_default_rotation()
 {
     if (![JMUtils isViewControllerVisible:self]) {
         self.resources = nil;
+        self.cellsIdentifiers = nil;
         [self.tableView reloadData];
-        _cellsIdentifiers = nil;
     }
     [super didReceiveMemoryWarning];
 }
@@ -185,6 +195,12 @@ inject_default_rotation()
     }
 }
 
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:cell];
+}
+
 #pragma mark - JSRequestDelegate
 
 - (void)requestFinished:(JSOperationResult *)result
@@ -211,8 +227,7 @@ inject_default_rotation()
                 [self.resources addObject:resourceLookup];
             }
         }
-        
-        // TODO: move comparator to sdk
+
         [self.resources sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             if ([obj1 resourceType] == self.constants.WS_TYPE_FOLDER) {
                 if ([obj2 resourceType] != self.constants.WS_TYPE_FOLDER) {
