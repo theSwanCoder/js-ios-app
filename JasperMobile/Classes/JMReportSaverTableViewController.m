@@ -29,12 +29,12 @@
 #import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
+#import "JMRequestDelegate.h"
 #import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UITableViewCell+SetSeparators.h"
 #import "UITableViewController+CellRelativeHeight.h"
 #import "ALToastView.h"
-#import "JMRequestDelegate.h"
 #import <Objection-iOS/Objection.h>
 
 #define kJMReportNameSection 0
@@ -44,10 +44,6 @@
 __weak static UIColor *separatorColor;
 static CGFloat const separatorHeight = 1.0f;
 
-// Validation constrains
-static NSInteger const kJMNameMin = 1;
-static NSInteger const kJMNameMax = 250;
-static NSString * const kJMInvalidCharacters = @":/";
 static NSString * const kJMAttachmentPrefix = @"_";
 
 @interface JMReportSaverTableViewController ()
@@ -225,8 +221,8 @@ inject_default_rotation()
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section != kJMReportFormatSection) return;
-
     self.selectedReportFormat = [self.reportFormats objectAtIndex:indexPath.row];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     [self.tableView reloadData];
 }
 
@@ -236,11 +232,17 @@ inject_default_rotation()
 {
     self.errorMessage = nil;
 
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *reportDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@/%@.%@", kJMReportsDirectory,
-                                                                                         self.reportName, self.selectedReportFormat]];
+    NSString *reportDirectory = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:[self.reportName stringByAppendingPathExtension:self.selectedReportFormat]];
+    NSString *errorMessage;
 
-    if (![self validateReportNameAndDirectory:reportDirectory] || ![self createReportDirectory:reportDirectory]) return;
+    if (![JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessage] ||
+        ![self createReportDirectory:reportDirectory errorMessage:&errorMessage]) {
+        self.errorMessage = errorMessage;
+        [self.tableView reloadData];
+        return;
+    }
+
+    // Clear any errors
     [self.tableView reloadData];
 
     __weak JMReportSaverTableViewController *reportSaver = self;
@@ -275,6 +277,7 @@ inject_default_rotation()
     [JMRequestDelegate setFinalBlock:^{
         [reportSaver.navigationController popViewControllerAnimated:YES];
         [ALToastView toastInView:reportSaver.delegate.view withText:JMCustomLocalizedString(@"reportsaver.saved", nil)];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMClearSavedReportsListNotification object:nil];
     }];
 
     [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO freshData:YES saveDataSnapshot:NO
@@ -299,7 +302,7 @@ inject_default_rotation()
 
 #pragma mark - Private
 
-- (BOOL)createReportDirectory:(NSString *)reportDirectory
+- (BOOL)createReportDirectory:(NSString *)reportDirectory errorMessage:(NSString **)errorMessage
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
@@ -309,35 +312,8 @@ inject_default_rotation()
                             attributes:nil
                                  error:&error];
 
-    if (error) {
-        self.errorMessage = error.localizedDescription;
-        [self.tableView reloadData];
-        return NO;
-    }
-
-    return YES;
-}
-
-- (BOOL)validateReportNameAndDirectory:(NSString *)reportDirectory
-{
-    NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
-
-    if (self.reportName.length < kJMNameMin) {
-        self.errorMessage = JMCustomLocalizedString(@"reportsaver.name.errmsg.empty", nil);
-    } else if (self.reportName.length > kJMNameMax) {
-        self.errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"reportsaver.name.errmsg.maxlength", nil), kJMNameMax];
-    } else if ([self.reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
-        self.errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"reportsaver.name.errmsg.characters", nil), kJMInvalidCharacters];
-    } else if ([[NSFileManager defaultManager] fileExistsAtPath:reportDirectory]) {
-        self.errorMessage = JMCustomLocalizedString(@"reportsaver.name.errmsg.notunique", nil);
-    }
-
-    if (self.errorMessage.length) {
-        [self.tableView reloadData];
-        return NO;
-    }
-
-    return YES;
+    if (error) *errorMessage = error.localizedDescription;
+    return [*errorMessage length] == 0;
 }
 
 - (CGSize)errorMessageSize

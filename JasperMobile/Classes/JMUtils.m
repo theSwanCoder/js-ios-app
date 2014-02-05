@@ -87,6 +87,46 @@ CGFloat kJMNoEdgesInset = -1;
     return viewController.isViewLoaded && viewController.view.window;
 }
 
+#define kJMNameMin 1
+#define kJMNameMax 250
+#define kJMInvalidCharacters @":/"
++ (BOOL)validateReportName:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage
+{
+    NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
+
+    if (reportName.length < kJMNameMin) {
+        *errorMessage = JMCustomLocalizedString(@"reportsaver.name.errmsg.empty", nil);
+    } else if (reportName.length > kJMNameMax) {
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"reportsaver.name.errmsg.maxlength", nil), kJMNameMax];
+    } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"reportsaver.name.errmsg.characters", nil), kJMInvalidCharacters];
+    } else {
+        if (extension) {
+            reportName = [reportName stringByAppendingPathExtension:extension];
+        }
+
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString *reportPath = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:reportName];
+
+        if ([fileManager fileExistsAtPath:reportPath]) {
+            *errorMessage = JMCustomLocalizedString(@"reportsaver.name.errmsg.notunique", nil);
+        }
+    }
+
+    return [*errorMessage length] == 0;
+}
+
++ (NSString *)documentsReportDirectoryPath
+{
+    static NSString *reportDirectory;
+    if (!reportDirectory) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        reportDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@", kJMReportsDirectory]];
+    }
+
+    return reportDirectory;
+}
+
 + (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile
 {
     NSDictionary *userInfo = serverProfile ? @{

@@ -28,35 +28,49 @@
 #import "JMSavedReportsTableViewController.h"
 #import "JMConstants.h"
 #import "JMSavedReportViewerViewController.h"
+#import "JMSavedReportModifyViewController.h"
+#import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 
 static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
+static NSString * const kJMShowSavedReportModifyControllerSegue = @"ShowSavedReportModifyController";
+static NSString * const kJMDSStoreFile = @".DS_Store";
 
 @interface JMReportTableViewCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UILabel *reportName;
-@property (nonatomic, weak) IBOutlet UILabel *creationDate;
-@property (nonatomic, weak) IBOutlet UILabel *size;
+@property (nonatomic, weak) IBOutlet UILabel *reportNameLabel;
+@property (nonatomic, weak) IBOutlet UILabel *creationDateLabel;
+@property (nonatomic, weak) IBOutlet UILabel *sizeLabel;
 @end
 
 @implementation JMReportTableViewCell
 @end
 
 @interface JMSavedReportsTableViewController()
-@property (nonatomic, strong) NSString *reportsDirectory;
 @property (nonatomic, strong) NSFileManager *fileManager;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, strong) NSMutableArray *reports;
+@property (nonatomic, assign) NSInteger reportToModify;
 @end
 
 @implementation JMSavedReportsTableViewController
+
+#pragma mark - Initialization
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(clearSavedReports)
+                                                 name:kJMClearSavedReportsListNotification
+                                               object:nil];
+}
 
 #pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    self.reportsDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:kJMReportsDirectory];
+
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.fileManager = [NSFileManager defaultManager];
     self.dateFormatter = [[NSDateFormatter alloc] init];
@@ -67,9 +81,17 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 {
     [super viewWillAppear:animated];
 
-    // TODO: make notification instead of each time reports fetching
-    self.reports = [[self.fileManager contentsOfDirectoryAtPath:self.reportsDirectory error:nil] mutableCopy];
-    [self.reports removeObject:@".DS_Store"];
+    if (!self.reports.count) {
+        self.reports = [[self.fileManager contentsOfDirectoryAtPath:[JMUtils documentsReportDirectoryPath] error:nil] mutableCopy];
+        [self.reports removeObject:kJMDSStoreFile];
+
+        NSString *reportDirectory = [JMUtils documentsReportDirectoryPath];
+        [self.reports sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            NSDate *obj1Date = [self modificationDateForDirectory:[reportDirectory stringByAppendingPathComponent:obj1]];
+            NSDate *obj2Date = [self modificationDateForDirectory:[reportDirectory stringByAppendingPathComponent:obj2]];
+            return [obj2Date compare:obj1Date];
+        }];
+    }
 
     [self checkAvailabilityOfEditButton];
     [self.tableView reloadData];
@@ -77,7 +99,12 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    [segue.destinationViewController setReportPath:sender];
+    if ([segue.identifier isEqualToString:kJMShowSavedReportSegue]) {
+        [segue.destinationViewController setReportPath:sender];
+    } else {
+        self.reportToModify = [sender row];
+        [segue.destinationViewController setReportName:[self.reports objectAtIndex:self.reportToModify]];
+    }
 }
 
 #pragma mark - UIViewControllerEditing
@@ -86,6 +113,14 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 {
     [super setEditing:editing animated:animated];
     [self checkAvailabilityOfEditButton];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    if (![JMUtils isViewControllerVisible:self]) {
+        self.reports = nil;
+    }
+    [super didReceiveMemoryWarning];
 }
 
 #pragma mark - Table view data source
@@ -103,12 +138,11 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *report = [self.reports objectAtIndex:indexPath.row];
-    NSString *reportDirectory = [self.reportsDirectory stringByAppendingPathComponent:report];
-    NSDictionary *directoryAttributes = [self.fileManager attributesOfItemAtPath:reportDirectory error:nil];
-    NSArray *files = [self.fileManager subpathsOfDirectoryAtPath:reportDirectory error:nil];
-    NSDate *creationDate = [directoryAttributes objectForKey:NSFileCreationDate];
+    NSString *reportDirectory = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:report];
+    NSMutableArray *files = [[self.fileManager subpathsOfDirectoryAtPath:reportDirectory error:nil] mutableCopy];
+    [files removeObject:kJMDSStoreFile];
     double size = 0;
-    
+
     for (NSString *file in files) {
         NSString *filePath = [reportDirectory stringByAppendingPathComponent:file];
         NSDictionary *fileAttributes = [self.fileManager attributesOfItemAtPath:filePath error:nil];
@@ -117,10 +151,10 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 
     // Table view cell has the same identifier as a file extension
     JMReportTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:report.pathExtension];
-    cell.reportName.text = [report stringByDeletingPathExtension];
-    cell.creationDate.text = [self.dateFormatter stringFromDate:creationDate];
-    cell.size.text = [self formattedSize:size];
-    
+    cell.reportNameLabel.text = [report stringByDeletingPathExtension];
+    cell.creationDateLabel.text = [self.dateFormatter stringFromDate:[self modificationDateForDirectory:reportDirectory]];
+    cell.sizeLabel.text = [self formattedSize:size];
+
     return cell;
 }
 
@@ -128,7 +162,7 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSString *report = [self.reports objectAtIndex:indexPath.row];
-        NSString *reportDirectory = [self.reportsDirectory stringByAppendingPathComponent:report];
+        NSString *reportDirectory = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:report];
         [self.fileManager removeItemAtPath:reportDirectory error:nil];
         [self.reports removeObject:report];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -138,7 +172,8 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JMReportTableViewCell *cell = (JMReportTableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
-    NSString *reportPath = [self.reportsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@/report.%@", cell.reportName.text, cell.reuseIdentifier, cell.reuseIdentifier]];
+    NSString *reportPath = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@/report.%@",
+                    cell.reportNameLabel.text, cell.reuseIdentifier, cell.reuseIdentifier]];
     if (![self.fileManager fileExistsAtPath:reportPath]) {
         [[UIAlertView localizedAlertWithTitle:@"savedreports.error.reportnotfound.title"
                                       message:@"savedreports.error.reportnotfound.msg"
@@ -150,29 +185,43 @@ static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
     }
 }
 
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:kJMShowSavedReportModifyControllerSegue sender:indexPath];
+}
+
 #pragma mark - Private
+
+- (void)clearSavedReports
+{
+    self.reports = nil;
+}
 
 - (void)checkAvailabilityOfEditButton
 {
     self.navigationItem.rightBarButtonItem.enabled = self.reports.count > 0;
 }
 
+- (NSDate *)modificationDateForDirectory:(NSString *)directory
+{
+    NSDictionary *directoryAttributes = [self.fileManager attributesOfItemAtPath:directory error:nil];
+    return [directoryAttributes objectForKey:NSFileModificationDate];
+}
+
 - (NSString *)formattedSize:(double)size
 {
-    if (size == 0) {
-        return NSLocalizedString(@"savedreports.folder.empty", nil);
-    }
-
     size = size / 1024.0f;
     NSString *sizeUnit;
-    
+
     if (size > 1000) {
         size = size / 1024.0f;
         sizeUnit = @" mb";
     } else {
         sizeUnit = @" kb";
     }
-    
+
     return [NSString stringWithFormat:@"%.1f %@", size, sizeUnit];
 }
 

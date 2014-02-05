@@ -21,17 +21,18 @@
  */
 
 //
-//  JMSavedReportsTableViewController.h
+//  JMSavedReportModifyViewController.h
 //  Jaspersoft Corporation
 //
 
-#import <UIKit/UIKit.h>
-#import "JMSavedReportModifyViewController.h"
+#import <Foundation/Foundation.h>
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.8
  */
-@interface JMSavedReportsTableViewController : UITableViewController
+@interface JMSavedReportModifyViewController : UIViewController <UITextFieldDelegate>
+
+@property (nonatomic, strong) NSString *reportName;
 
 @end

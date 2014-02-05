@@ -72,6 +72,22 @@ extern CGFloat kJMNoEdgesInset;
 + (BOOL)isViewControllerVisible:(UIViewController *)viewController;
 
 /**
+ Validates report name and directory to store report
+
+ @param reportName A report name to validate. It needs to be unique, without /: characters, not empty, and less or equals than 250 symbols (last 5 are reserved for extension)
+ @param extension A report file extension. Optional, can be provided to validate uniqueness in file system
+ @return YES if report name is valid, otherwise returns NO
+ */
++ (BOOL)validateReportName:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage;
+
+/**
+ Returns full path of report directory located in NSDocumentDirectory directory for NSUserDomainMask domain
+
+ @return full path of report directory
+*/
++ (NSString *)documentsReportDirectoryPath;
+
+/**
  Sends "changeServerProfile" notification to defaultCenter
  
  @param serverProfile A profile that will be provided to receiver via userInfo dictionary (kJMServerProfileKey key)

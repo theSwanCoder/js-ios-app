@@ -42,6 +42,7 @@ NSString * const kJMDefaultsServerUsername = @"jaspersoft.server.username.%d";
 NSString * const kJMChangeServerProfileNotification = @"changeServerProfile";
 NSString * const kJMResetApplicationNotification = @"resetApplication";
 NSString * const kJMSelectMenuNotification = @"selectMenu";
+NSString * const kJMClearSavedReportsListNotification = @"clearSavedReports";
 
 // Some shared keys for dictionary
 NSString * const kJMMenuTag = @"menuTag";

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		374550FD545E1F37936003FA /* JMSavedReportModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455CC4B5676C6EFAA302D0 /* JMSavedReportModifyViewController.m */; };
 		374556BBBF0752750658B28C /* JMReportSaverTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455254674C60AA7EE47EE1 /* JMReportSaverTableViewController.m */; };
 		3745583E1EF263008FD3B022 /* JMSavedReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455069BCE4FA993F7FED0E /* JMSavedReportViewerViewController.m */; };
 		F50F5B5D17CCF14300582196 /* JMSingleSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50F5B5C17CCF14300582196 /* JMSingleSelectTableViewController.m */; };
@@ -199,6 +200,8 @@
 		3745509FDBC0D658DDAB6003 /* JMSavedReportViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSavedReportViewerViewController.h; path = Classes/JMSavedReportViewerViewController.h; sourceTree = "<group>"; };
 		37455254674C60AA7EE47EE1 /* JMReportSaverTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportSaverTableViewController.m; path = Classes/JMReportSaverTableViewController.m; sourceTree = "<group>"; };
 		374554182DB68D076D8CA12A /* JMReportSaverTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMReportSaverTableViewController.h; path = Classes/JMReportSaverTableViewController.h; sourceTree = "<group>"; };
+		374556A70775486865291400 /* JMSavedReportModifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedReportModifyViewController.h; sourceTree = "<group>"; };
+		37455CC4B5676C6EFAA302D0 /* JMSavedReportModifyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedReportModifyViewController.m; sourceTree = "<group>"; };
 		F50F5B5B17CCF14300582196 /* JMSingleSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSingleSelectTableViewController.h; path = Classes/JMSingleSelectTableViewController.h; sourceTree = "<group>"; };
 		F50F5B5C17CCF14300582196 /* JMSingleSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSingleSelectTableViewController.m; path = Classes/JMSingleSelectTableViewController.m; sourceTree = "<group>"; };
 		F511A54F17B26B8A004D90A2 /* JMDashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDashboardViewController.h; path = Classes/JMDashboardViewController.h; sourceTree = "<group>"; };
@@ -569,6 +572,8 @@
 				F5A5F552176206360018FEFC /* JMResourceTableViewController.m */,
 				3745509FDBC0D658DDAB6003 /* JMSavedReportViewerViewController.h */,
 				37455069BCE4FA993F7FED0E /* JMSavedReportViewerViewController.m */,
+				374556A70775486865291400 /* JMSavedReportModifyViewController.h */,
+				37455CC4B5676C6EFAA302D0 /* JMSavedReportModifyViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -1208,6 +1213,7 @@
 				F54BE93B17D7495D00437EA9 /* JMReportViewerViewController.m in Sources */,
 				374556BBBF0752750658B28C /* JMReportSaverTableViewController.m in Sources */,
 				3745583E1EF263008FD3B022 /* JMSavedReportViewerViewController.m in Sources */,
+				374550FD545E1F37936003FA /* JMSavedReportModifyViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

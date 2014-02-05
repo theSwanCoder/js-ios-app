@@ -81,9 +81,14 @@
 
 /* Saved Reports view */
 
-"savedreports.folder.empty" = "Folder is empty";
 "savedreports.error.reportnotfound.title" = "Cannot open report";
 "savedreports.error.reportnotfound.msg" = "Selected report was not found. Please try to save report again";
+
+/* Saved Report Modify view */
+
+"savedreportmodify.title" = "Rename Report";
+"savedreportmodify.reportname" = "Report Name";
+
 
 /* Navigation and view labels */
 
