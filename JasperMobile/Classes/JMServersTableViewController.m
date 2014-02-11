@@ -259,12 +259,12 @@ inject_default_rotation()
         [self.servers replaceObjectAtIndex:index withObject:serverProfile];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     } else {
-        BOOL needsToRefreshFooter = !self.servers.count;
+        BOOL needsToRefreshFooter = !self.servers.count || [JMUtils isFoundationNumber7OrHigher];
         indexPath = [NSIndexPath indexPathForRow:self.servers.count inSection:0];
         [self.servers addObject:serverProfile];
         [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         if (needsToRefreshFooter) {
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kJMFooterSection] withRowAnimation:UITableViewRowAnimationNone];
+            [self.tableView reloadData];
         }
     }
 }

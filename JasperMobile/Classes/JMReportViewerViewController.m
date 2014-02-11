@@ -65,6 +65,7 @@ inject_default_rotation()
 {
     [super viewDidLoad];
     self.webView.delegate = self;
+
     [self createTempDirectory];
 
     [JMCancelRequestPopup dismiss];
@@ -150,16 +151,19 @@ inject_default_rotation()
 - (void)runReportExecution
 {
     __weak JMReportViewerViewController *reportViewerViewController = self;
-    
+
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
         JSExportExecution *export = [response.exports objectAtIndex:0];
         
         NSString *reportUrl = [reportViewerViewController.reportClient generateReportOutputUrl:response.requestId exportOutput:export.uuid];
         [reportViewerViewController.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:reportUrl]]];
+    } errorBlock:^(JSOperationResult *result) {
+        [reportViewerViewController.activityIndicator stopAnimating];
     }];
     
-    [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.constants.CONTENT_TYPE_HTML interactive:YES freshData:YES saveDataSnapshot:NO ignorePagination:YES transformerKey:nil pages:nil attachmentsPrefix:nil parameters:self.parameters delegate:delegate];
+    [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.constants.CONTENT_TYPE_HTML
+                              interactive:YES freshData:YES saveDataSnapshot:NO ignorePagination:YES transformerKey:nil pages:nil attachmentsPrefix:nil parameters:self.parameters delegate:delegate];
 }
 
 #pragma mark Uses for JRS versions 5.0 - 5.5

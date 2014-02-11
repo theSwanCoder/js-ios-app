@@ -26,6 +26,7 @@
 //
 
 #import "UITableViewCell+SetSeparators.h"
+#import "JMUtils.h"
 
 @implementation UITableViewCell (SetSeparators)
 
@@ -53,7 +54,7 @@
 
 - (BOOL)isSeparatorNeeded:(UITableViewStyle)style
 {
-    return floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1 || style != UITableViewStyleGrouped;
+    return [JMUtils isFoundationNumber7OrHigher] || style != UITableViewStyleGrouped;
 }
 
 @end

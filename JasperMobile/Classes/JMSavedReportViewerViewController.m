@@ -26,14 +26,40 @@
 //
 
 #import "JMSavedReportViewerViewController.h"
+#import "JMUtils.h"
 
 @implementation JMSavedReportViewerViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    // TODO: remove after iOS 5/6 drop
+    if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+        [self adjustWebView];
+    }
+
     NSURL *reportPath = [NSURL fileURLWithPath:self.reportPath];
     [self.webView loadRequest:[NSURLRequest requestWithURL:reportPath]];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
+        [self adjustWebView];
+    }
+}
+
+#pragma mark - Private
+
+- (void)adjustWebView
+{
+    CGRect navigationBarFrame = self.navigationController.navigationBar.frame;
+    CGRect webViewFrame = self.webView.frame;
+    webViewFrame.origin.y = navigationBarFrame.origin.y + navigationBarFrame.size.height + 2.5f;
+    self.webView.frame = webViewFrame;
 }
 
 @end

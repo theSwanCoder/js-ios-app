@@ -27,7 +27,7 @@
 
 /* Server Profiles view */
 
-"servers.info" = "Jaspersoft Mobile v %@\n\nStrumento di gestione e visualizzatore di report per JasperReports Server 4.7.1 e versioni superiori.\n\nPer ulteriori informazioni visitare:\nwww.jasperforge.org/projects/mobile\n\n(c) 2011 - 2013 Jaspersoft Corp.";
+"servers.info" = "Jaspersoft Mobile v %@\n\nStrumento di gestione e visualizzatore di report per JasperReports Server 5.0 e versioni superiori.\n\nPer ulteriori informazioni visitare:\nwww.jasperforge.org/projects/mobile\n\n(c) 2011 - 2014 Jaspersoft Corp.";
 
 "servers.url.label" = "URL";
 "servers.url.tip" = "http://example.com/jasperserver";

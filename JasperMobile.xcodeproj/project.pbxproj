@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		374550FD545E1F37936003FA /* JMSavedReportModifyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455CC4B5676C6EFAA302D0 /* JMSavedReportModifyViewController.m */; };
 		374556BBBF0752750658B28C /* JMReportSaverTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455254674C60AA7EE47EE1 /* JMReportSaverTableViewController.m */; };
 		3745583E1EF263008FD3B022 /* JMSavedReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455069BCE4FA993F7FED0E /* JMSavedReportViewerViewController.m */; };
 		F50F5B5D17CCF14300582196 /* JMSingleSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50F5B5C17CCF14300582196 /* JMSingleSelectTableViewController.m */; };
@@ -61,6 +60,9 @@
 		F57186C3183658DD0013B6EB /* JSRESTBase+updateServerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F57186C2183658DD0013B6EB /* JSRESTBase+updateServerInfo.m */; };
 		F572814717C77048000B192D /* JMRequestDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F572814617C77048000B192D /* JMRequestDelegate.m */; };
 		F576BC411753DFF600DF765B /* JMBaseRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F576BC401753DFF600DF765B /* JMBaseRepositoryTableViewController.m */; };
+		F57972ED18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = F57972EC18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m */; };
+		F57972F318A9233600BD16B9 /* JMSavedReportInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F57972F218A9233600BD16B9 /* JMSavedReportInfoViewController.m */; };
+		F57972F518A92D3900BD16B9 /* edit_name_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F57972F418A92D3900BD16B9 /* edit_name_button.png */; };
 		F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */; };
 		F5894FD71887EC1400FD8C00 /* saved_reports.png in Resources */ = {isa = PBXBuildFile; fileRef = F5894FD51887EC1400FD8C00 /* saved_reports.png */; };
 		F5894FD81887EC1400FD8C00 /* saved_reports@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5894FD61887EC1400FD8C00 /* saved_reports@2x.png */; };
@@ -69,6 +71,7 @@
 		F5894FDF1887ED1400FD8C00 /* res_type_html@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5894FDD1887ED1400FD8C00 /* res_type_html@2x.png */; };
 		F5894FE01887ED1400FD8C00 /* res_type_html.png in Resources */ = {isa = PBXBuildFile; fileRef = F5894FDE1887ED1400FD8C00 /* res_type_html.png */; };
 		F58A97CD1875846A00EA5538 /* JMSavedReportsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F58A97CC1875846A00EA5538 /* JMSavedReportsTableViewController.m */; };
+		F58B5C8818A2506000223763 /* JMSavedReportModifyPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = F58B5C8618A2506000223763 /* JMSavedReportModifyPopup.xib */; };
 		F58EF6A117F483D300C9EBA8 /* Icon-144.png in Resources */ = {isa = PBXBuildFile; fileRef = F58EF6A017F483D300C9EBA8 /* Icon-144.png */; };
 		F58EF6A617F484D600C9EBA8 /* Icon-80.png in Resources */ = {isa = PBXBuildFile; fileRef = F58EF6A517F484D600C9EBA8 /* Icon-80.png */; };
 		F58EF6A817F4856300C9EBA8 /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = F58EF6A717F4856300C9EBA8 /* Icon-120.png */; };
@@ -200,8 +203,6 @@
 		3745509FDBC0D658DDAB6003 /* JMSavedReportViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSavedReportViewerViewController.h; path = Classes/JMSavedReportViewerViewController.h; sourceTree = "<group>"; };
 		37455254674C60AA7EE47EE1 /* JMReportSaverTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportSaverTableViewController.m; path = Classes/JMReportSaverTableViewController.m; sourceTree = "<group>"; };
 		374554182DB68D076D8CA12A /* JMReportSaverTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMReportSaverTableViewController.h; path = Classes/JMReportSaverTableViewController.h; sourceTree = "<group>"; };
-		374556A70775486865291400 /* JMSavedReportModifyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedReportModifyViewController.h; sourceTree = "<group>"; };
-		37455CC4B5676C6EFAA302D0 /* JMSavedReportModifyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedReportModifyViewController.m; sourceTree = "<group>"; };
 		F50F5B5B17CCF14300582196 /* JMSingleSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSingleSelectTableViewController.h; path = Classes/JMSingleSelectTableViewController.h; sourceTree = "<group>"; };
 		F50F5B5C17CCF14300582196 /* JMSingleSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSingleSelectTableViewController.m; path = Classes/JMSingleSelectTableViewController.m; sourceTree = "<group>"; };
 		F511A54F17B26B8A004D90A2 /* JMDashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDashboardViewController.h; path = Classes/JMDashboardViewController.h; sourceTree = "<group>"; };
@@ -284,6 +285,11 @@
 		F57364EA17B91BB500A10588 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRefreshable.h; path = JasperMobile/Classes/JMRefreshable.h; sourceTree = "<group>"; };
 		F576BC3F1753DFF600DF765B /* JMBaseRepositoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseRepositoryTableViewController.h; path = Classes/JMBaseRepositoryTableViewController.h; sourceTree = "<group>"; };
 		F576BC401753DFF600DF765B /* JMBaseRepositoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseRepositoryTableViewController.m; path = Classes/JMBaseRepositoryTableViewController.m; sourceTree = "<group>"; };
+		F57972EB18A8F5D700BD16B9 /* JMSavedReportModifyPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSavedReportModifyPopup.h; path = Classes/JMSavedReportModifyPopup.h; sourceTree = "<group>"; };
+		F57972EC18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSavedReportModifyPopup.m; path = Classes/JMSavedReportModifyPopup.m; sourceTree = "<group>"; };
+		F57972F118A9233600BD16B9 /* JMSavedReportInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSavedReportInfoViewController.h; path = Classes/JMSavedReportInfoViewController.h; sourceTree = "<group>"; };
+		F57972F218A9233600BD16B9 /* JMSavedReportInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSavedReportInfoViewController.m; path = Classes/JMSavedReportInfoViewController.m; sourceTree = "<group>"; };
+		F57972F418A92D3900BD16B9 /* edit_name_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_name_button.png; sourceTree = "<group>"; };
 		F585FB6C176753460079D89C /* UITableViewController+CellRelativeHeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewController+CellRelativeHeight.h"; path = "JasperMobile/Classes/UITableViewController+CellRelativeHeight.h"; sourceTree = "<group>"; };
 		F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableViewController+CellRelativeHeight.m"; path = "JasperMobile/Classes/UITableViewController+CellRelativeHeight.m"; sourceTree = "<group>"; };
 		F5894FD51887EC1400FD8C00 /* saved_reports.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = saved_reports.png; sourceTree = "<group>"; };
@@ -294,6 +300,7 @@
 		F5894FDE1887ED1400FD8C00 /* res_type_html.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = res_type_html.png; sourceTree = "<group>"; };
 		F58A97CB1875846A00EA5538 /* JMSavedReportsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSavedReportsTableViewController.h; path = Classes/JMSavedReportsTableViewController.h; sourceTree = "<group>"; };
 		F58A97CC1875846A00EA5538 /* JMSavedReportsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSavedReportsTableViewController.m; path = Classes/JMSavedReportsTableViewController.m; sourceTree = "<group>"; };
+		F58B5C8718A2506000223763 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/JMSavedReportModifyPopup.xib; sourceTree = "<group>"; };
 		F58EF6A017F483D300C9EBA8 /* Icon-144.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-144.png"; sourceTree = "<group>"; };
 		F58EF6A517F484D600C9EBA8 /* Icon-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-80.png"; sourceTree = "<group>"; };
 		F58EF6A717F4856300C9EBA8 /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-120.png"; sourceTree = "<group>"; };
@@ -407,7 +414,7 @@
 		F5F1B40217F197F900EB2587 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
 		F5F1B40317F197F900EB2587 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
 		F5F1B40417F197F900EB2587 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		F5F1B41117F198A600EB2587 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
+		F5F1B41117F198A600EB2587 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../Icons/Icon-72.png"; sourceTree = "<group>"; };
 		F5F8B7C1179DA3720096C61A /* JMAskPasswordDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMAskPasswordDialog.h; path = Classes/JMAskPasswordDialog.h; sourceTree = "<group>"; };
 		F5F8B7C2179DA3720096C61A /* JMAskPasswordDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMAskPasswordDialog.m; path = Classes/JMAskPasswordDialog.m; sourceTree = "<group>"; };
 		F5FE06DD1757383800030331 /* JMMenuTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMenuTabBarController.h; path = Classes/JMMenuTabBarController.h; sourceTree = "<group>"; };
@@ -479,6 +486,7 @@
 		F539A6FD17F19A4F00310D72 /* Launch */ = {
 			isa = PBXGroup;
 			children = (
+				F5F1B41117F198A600EB2587 /* Icon-72.png */,
 				F539A70417F19AA100310D72 /* Default.png */,
 				F539A6FE17F19A4F00310D72 /* Default-568h@2x.png */,
 				F539A70017F19A4F00310D72 /* Default@2x.png */,
@@ -570,10 +578,10 @@
 				F5B6A6A5175F586A0047CB6D /* JMRepositoryTableViewController.m */,
 				F5A5F551176206360018FEFC /* JMResourceTableViewController.h */,
 				F5A5F552176206360018FEFC /* JMResourceTableViewController.m */,
+				F57972F118A9233600BD16B9 /* JMSavedReportInfoViewController.h */,
+				F57972F218A9233600BD16B9 /* JMSavedReportInfoViewController.m */,
 				3745509FDBC0D658DDAB6003 /* JMSavedReportViewerViewController.h */,
 				37455069BCE4FA993F7FED0E /* JMSavedReportViewerViewController.m */,
-				374556A70775486865291400 /* JMSavedReportModifyViewController.h */,
-				37455CC4B5676C6EFAA302D0 /* JMSavedReportModifyViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -800,6 +808,7 @@
 				F58EF6BA17F487A800C9EBA8 /* blue_button_highlighted@2x.png */,
 				F58EF6BB17F487A800C9EBA8 /* blue_button.png */,
 				F58EF6BC17F487A800C9EBA8 /* blue_button@2x.png */,
+				F57972F418A92D3900BD16B9 /* edit_name_button.png */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -823,6 +832,9 @@
 				F58FF2F61760A1090021CC8B /* JMCancelRequestPopup.h */,
 				F58FF2F71760A1090021CC8B /* JMCancelRequestPopup.m */,
 				F58FF3021760A1600021CC8B /* JMCancelRequestPopup.xib */,
+				F57972EB18A8F5D700BD16B9 /* JMSavedReportModifyPopup.h */,
+				F57972EC18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m */,
+				F58B5C8618A2506000223763 /* JMSavedReportModifyPopup.xib */,
 			);
 			name = Popups;
 			sourceTree = "<group>";
@@ -912,7 +924,6 @@
 		F5F1B3FF17F197F900EB2587 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				F5F1B41117F198A600EB2587 /* Icon-72.png */,
 				F58EF6A917F4863600C9EBA8 /* Icon-76.png */,
 				F58EF6A517F484D600C9EBA8 /* Icon-80.png */,
 				F58EF6A717F4856300C9EBA8 /* Icon-120.png */,
@@ -1051,6 +1062,7 @@
 			files = (
 				F55043601851E00600DA6D33 /* list_options@2x.png in Resources */,
 				F5894FDB1887ECF200FD8C00 /* res_type_pdf.png in Resources */,
+				F57972F518A92D3900BD16B9 /* edit_name_button.png in Resources */,
 				F58EF6BE17F487A800C9EBA8 /* add_favorite_button_highlighted@2x.png in Resources */,
 				F58EF6C617F487A800C9EBA8 /* delete_button@2x.png in Resources */,
 				F55CC33D174CFFCE00CEB39E /* InfoPlist.strings in Resources */,
@@ -1118,6 +1130,7 @@
 				F5E87CD317F1A9DD007FC6A7 /* iTunesArtwork in Resources */,
 				F5894FDF1887ED1400FD8C00 /* res_type_html@2x.png in Resources */,
 				F58EF6C817F487A800C9EBA8 /* remove_favorite_button_highlighted@2x.png in Resources */,
+				F58B5C8818A2506000223763 /* JMSavedReportModifyPopup.xib in Resources */,
 				F58EF6E517F4882800C9EBA8 /* res_type_unknown.png in Resources */,
 				F58EF6F217F4884C00C9EBA8 /* favorites_bar_item@2x.png in Resources */,
 				F58EF6C117F487A800C9EBA8 /* cancel_button.png in Resources */,
@@ -1190,6 +1203,8 @@
 				F5D97FAA179587CF0059C761 /* SSKeychain.m in Sources */,
 				F5EAA25F1797DF840091BA43 /* JMConstants.m in Sources */,
 				F5EAA2651797E0950091BA43 /* JMAppUpdater.m in Sources */,
+				F57972F318A9233600BD16B9 /* JMSavedReportInfoViewController.m in Sources */,
+				F57972ED18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m in Sources */,
 				F5F8B7C3179DA3720096C61A /* JMAskPasswordDialog.m in Sources */,
 				F513EE9117A16E2D00A553C4 /* JMServerSettingsTableViewController.m in Sources */,
 				F59FD9C017B1014A00331BD8 /* JMFavoritesUtil.m in Sources */,
@@ -1213,7 +1228,6 @@
 				F54BE93B17D7495D00437EA9 /* JMReportViewerViewController.m in Sources */,
 				374556BBBF0752750658B28C /* JMReportSaverTableViewController.m in Sources */,
 				3745583E1EF263008FD3B022 /* JMSavedReportViewerViewController.m in Sources */,
-				374550FD545E1F37936003FA /* JMSavedReportModifyViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1286,6 +1300,14 @@
 				F55CC36E174CFFCF00CEB39E /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		F58B5C8618A2506000223763 /* JMSavedReportModifyPopup.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F58B5C8718A2506000223763 /* en */,
+			);
+			name = JMSavedReportModifyPopup.xib;
 			sourceTree = "<group>";
 		};
 		F58FF3021760A1600021CC8B /* JMCancelRequestPopup.xib */ = {

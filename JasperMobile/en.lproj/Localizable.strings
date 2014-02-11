@@ -27,7 +27,7 @@
 
 /* Server Profiles view */
 
-"servers.info" = "Jaspersoft Mobile v %@\n\nManagement tool and report viewer for JasperReports Server 4.7.1 and greater.\n\nFor more information visit:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\n(c) 2011 - 2013 Jaspersoft Corp.";
+"servers.info" = "Jaspersoft Mobile v %@\n\nManagement tool and report viewer for JasperReports Server 5.0 and greater.\n\nFor more information visit:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\n(c) 2011 - 2014 Jaspersoft Corp.";
 
 "servers.url.label" = "URL";
 "servers.url.tip" = "http://example.com/jasperserver";
@@ -84,11 +84,18 @@
 "savedreports.error.reportnotfound.title" = "Cannot open report";
 "savedreports.error.reportnotfound.msg" = "Selected report was not found. Please try to save report again";
 
+/* Saved Report Info view */
+
+"savedreportinfo.title" = "Details";
+"savedreportinfo.sectionheader" = "Info";
+"savedreportinfo.reportname" = "Name";
+"savedreportinfo.creationdate" = "Creation Date";
+"savedreportinfo.size" = "Size";
+
 /* Saved Report Modify view */
 
 "savedreportmodify.title" = "Rename Report";
 "savedreportmodify.reportname" = "Report Name";
-
 
 /* Navigation and view labels */
 
@@ -134,7 +141,7 @@
 "error.server.notsupported.msg" = "Please update server to 5.0.0 version or greater";
 
 "error.savereport.notavaialble.title" = "Cannot save report";
-"error.savereport.notavaialble.msg" = "Save report functional is only available for servers with version 5.2.0 and higher";
+"error.savereport.notavaialble.msg" = "This functionality is only available for JasperReports Server 5.2 or higher";
 
 /* HTTP error messages */
 

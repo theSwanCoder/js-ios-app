@@ -53,7 +53,7 @@ static NSString * const kJMAttachmentPrefix = @"_";
 @property (nonatomic, strong) NSString *reportName;
 @property (nonatomic, strong) NSString *errorMessage;
 @property (nonatomic, weak) JSConstants *constants;
-@property (nonatomic, assign) CGFloat baseErrorLabelWidth;
+@property (nonatomic, assign) CGRect baseErrorLabelFrame;
 @end
 
 @implementation JMReportSaverTableViewController
@@ -145,7 +145,10 @@ inject_default_rotation()
         CGFloat height = 72.0f;
 
         if (self.errorMessage.length) {
-            height += self.errorMessageSize.height;
+            UIFont *font = [UIFont systemFontOfSize:14.0f];
+            CGSize errorMessageSize = [self.errorMessage sizeWithFont:font constrainedToSize:CGSizeMake(self.baseErrorLabelFrame.size.width, CGFLOAT_MAX)
+                                                        lineBreakMode:NSLineBreakByWordWrapping];
+            height += errorMessageSize.height;
         }
 
         return height;
@@ -174,16 +177,16 @@ inject_default_rotation()
             textField.background = [textField.background resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10.0f, 0, 10.0f)];
         }
 
-        if (!self.baseErrorLabelWidth) {
-            self.baseErrorLabelWidth = errorLabel.frame.size.width;
+        if (CGRectIsEmpty(self.baseErrorLabelFrame)) {
+            self.baseErrorLabelFrame = errorLabel.frame;
         }
 
         if (self.errorMessage.length) {
             errorLabel.hidden = NO;
             errorLabel.numberOfLines = 0;
             errorLabel.text = self.errorMessage;
-            CGSize size = [errorLabel sizeThatFits:CGSizeMake(self.baseErrorLabelWidth, self.errorMessageSize.height)];
-            errorLabel.frame = CGRectMake(errorLabel.frame.origin.x, errorLabel.frame.origin.y, errorLabel.frame.size.width, size.height);
+            errorLabel.frame = self.baseErrorLabelFrame;
+            [errorLabel sizeToFit];
         } else {
             errorLabel.hidden = YES;
         }
@@ -314,13 +317,6 @@ inject_default_rotation()
 
     if (error) *errorMessage = error.localizedDescription;
     return [*errorMessage length] == 0;
-}
-
-- (CGSize)errorMessageSize
-{
-    UIFont *font = [UIFont systemFontOfSize:14.0f];
-    CGSize size = CGSizeMake(self.baseErrorLabelWidth, CGFLOAT_MAX);
-    return [self.errorMessage sizeWithFont:font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
 }
 
 @end

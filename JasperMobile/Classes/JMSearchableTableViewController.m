@@ -273,8 +273,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 
 - (CGPoint)defaultContentOffset
 {
-    // TODO: find a better way to fix issue with contentOffset
-    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+    if ([JMUtils isFoundationNumber7OrHigher]) {
         return CGPointMake(0, -20.0f);
     } else {
         return CGPointMake(0, self.searchBar.frame.size.height);

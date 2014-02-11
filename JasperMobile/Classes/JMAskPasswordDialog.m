@@ -42,7 +42,7 @@ __weak static JMServerProfile * serverProfile;
     NSMutableString *credentials = [NSMutableString string];
     [credentials appendString:profile.username];
     
-    if (profile.organization) {
+    if (profile.organization.length) {
         [credentials appendFormat:@" | %@", profile.organization];
     }
     

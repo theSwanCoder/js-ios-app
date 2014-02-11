@@ -21,18 +21,20 @@
  */
 
 //
-//  JMSavedReportModifyViewController.h
+//  JMSavedReportInfoViewController.h
 //  Jaspersoft Corporation
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "JMSavedReportModifyPopup.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.8
  */
-@interface JMSavedReportModifyViewController : UIViewController <UITextFieldDelegate>
-
-@property (nonatomic, strong) NSString *reportName;
-
+@interface JMSavedReportInfoViewController : UIViewController <JMSavedReportModifyPopupDelegate>
+// A report name with an extension
+@property (nonatomic, strong) NSString *fullReportName;
+@property (nonatomic, strong) NSString *creationDate;
+@property (nonatomic, strong) NSString *reportSize;
 @end

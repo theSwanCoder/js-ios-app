@@ -37,6 +37,7 @@ __weak static UIViewController *viewControllerToDismiss;
 
 @interface JMRequestDelegate()
 @property (nonatomic, copy) JSRequestFinishedBlock finishedBlock;
+@property (nonatomic, copy) JSRequestFinishedBlock errorBlock;
 @property (nonatomic, weak) id <JSRequestDelegate> delegate;
 @end
 
@@ -74,10 +75,26 @@ __weak static UIViewController *viewControllerToDismiss;
     return requestDelegate;
 }
 
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock
+{
+    JMRequestDelegate *requestDelegate = [self requestDelegateForFinishBlock:finishedBlock];
+    requestDelegate.errorBlock = errorBlock;
+
+    return requestDelegate;
+}
+
 + (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock viewControllerToDismiss:(UIViewController *)viewController
 {
     viewControllerToDismiss = viewController;
     return [self requestDelegateForFinishBlock:finishedBlock];
+}
+
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController
+{
+    JMRequestDelegate *requestDelegate = [self requestDelegateForFinishBlock:finishedBlock viewControllerToDismiss:viewController];
+    requestDelegate.errorBlock = errorBlock;
+
+    return requestDelegate;
 }
 
 + (JMRequestDelegate *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate
@@ -113,6 +130,10 @@ __weak static UIViewController *viewControllerToDismiss;
 - (void)requestFinished:(JSOperationResult *)result
 {
     if (result && (![result isSuccessful] && self.checkStatusCode)) {
+        if ([requestDelegatePool containsObject:self] && self.errorBlock) {
+            self.errorBlock(result);
+        }
+
         [JMRequestDelegate clearRequestPool];
         [JMCancelRequestPopup dismiss];
 

@@ -21,16 +21,31 @@
  */
 
 //
-//  JMSavedReportsTableViewController.h
+//  JMSavedReportModifyPopup.h
 //  Jaspersoft Corporation
 //
 
 #import <UIKit/UIKit.h>
 
+@protocol JMSavedReportModifyPopupDelegate;
+
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.8
  */
-@interface JMSavedReportsTableViewController : UITableViewController
+@interface JMSavedReportModifyPopup : UIViewController <UITextFieldDelegate>
 
+/**
+ Presents a popup to modify name of saved report
+
+ @param viewController A view controller to display popup
+ @param fullReportName A report name with an extension
+ */
++ (void)presentInViewController:(UIViewController <JMSavedReportModifyPopupDelegate> *)viewController fullReportName:(NSString *)fullReportName;
+
+@end
+
+@protocol JMSavedReportModifyPopupDelegate
+@required
+- (void)updateReportName:(NSString *)modifiedName;
 @end

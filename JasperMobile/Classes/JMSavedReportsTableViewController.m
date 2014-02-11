@@ -28,12 +28,13 @@
 #import "JMSavedReportsTableViewController.h"
 #import "JMConstants.h"
 #import "JMSavedReportViewerViewController.h"
-#import "JMSavedReportModifyViewController.h"
+#import "JMSavedReportModifyPopup.h"
+#import "JMSavedReportInfoViewController.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 
-static NSString * const kJMShowSavedReportSegue = @"ShowSavedReport";
-static NSString * const kJMShowSavedReportModifyControllerSegue = @"ShowSavedReportModifyController";
+static NSString * const kJMShowSavedReportViewerSegue = @"ShowSavedReportViewer";
+static NSString * const kJMShowSavedReportInfoSegue = @"ShowSavedReportInfo";
 static NSString * const kJMDSStoreFile = @".DS_Store";
 
 @interface JMReportTableViewCell : UITableViewCell
@@ -49,7 +50,6 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
 @property (nonatomic, strong) NSFileManager *fileManager;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) NSMutableArray *reports;
-@property (nonatomic, assign) NSInteger reportToModify;
 @end
 
 @implementation JMSavedReportsTableViewController
@@ -81,7 +81,7 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
 {
     [super viewWillAppear:animated];
 
-    if (!self.reports.count) {
+    if (!self.reports) {
         self.reports = [[self.fileManager contentsOfDirectoryAtPath:[JMUtils documentsReportDirectoryPath] error:nil] mutableCopy];
         [self.reports removeObject:kJMDSStoreFile];
 
@@ -91,19 +91,23 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
             NSDate *obj2Date = [self modificationDateForDirectory:[reportDirectory stringByAppendingPathComponent:obj2]];
             return [obj2Date compare:obj1Date];
         }];
+
+        [self checkAvailabilityOfEditButton];
+        [self.tableView reloadData];
     }
 
-    [self checkAvailabilityOfEditButton];
-    [self.tableView reloadData];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:kJMShowSavedReportSegue]) {
+    if ([segue.identifier isEqualToString:kJMShowSavedReportViewerSegue]) {
         [segue.destinationViewController setReportPath:sender];
     } else {
-        self.reportToModify = [sender row];
-        [segue.destinationViewController setReportName:[self.reports objectAtIndex:self.reportToModify]];
+        JMSavedReportInfoViewController *destinationViewController = segue.destinationViewController;
+        NSString *reportDirectory = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:sender];
+        destinationViewController.fullReportName = sender;
+        destinationViewController.creationDate = [self.dateFormatter stringFromDate:[self modificationDateForDirectory:reportDirectory]];
+        destinationViewController.reportSize = [self sizeForDirectory:reportDirectory];
     }
 }
 
@@ -139,21 +143,12 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
 {
     NSString *report = [self.reports objectAtIndex:indexPath.row];
     NSString *reportDirectory = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:report];
-    NSMutableArray *files = [[self.fileManager subpathsOfDirectoryAtPath:reportDirectory error:nil] mutableCopy];
-    [files removeObject:kJMDSStoreFile];
-    double size = 0;
-
-    for (NSString *file in files) {
-        NSString *filePath = [reportDirectory stringByAppendingPathComponent:file];
-        NSDictionary *fileAttributes = [self.fileManager attributesOfItemAtPath:filePath error:nil];
-        size += fileAttributes.fileSize;
-    }
-
+    
     // Table view cell has the same identifier as a file extension
     JMReportTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:report.pathExtension];
     cell.reportNameLabel.text = [report stringByDeletingPathExtension];
     cell.creationDateLabel.text = [self.dateFormatter stringFromDate:[self modificationDateForDirectory:reportDirectory]];
-    cell.sizeLabel.text = [self formattedSize:size];
+    cell.sizeLabel.text = [self sizeForDirectory:reportDirectory];
 
     return cell;
 }
@@ -181,7 +176,7 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
                             cancelButtonTitle:@"dialog.button.ok"
                             otherButtonTitles:nil] show];
     } else {
-        [self performSegueWithIdentifier:kJMShowSavedReportSegue sender:reportPath];
+        [self performSegueWithIdentifier:kJMShowSavedReportViewerSegue sender:reportPath];
     }
 }
 
@@ -189,7 +184,7 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    [self performSegueWithIdentifier:kJMShowSavedReportModifyControllerSegue sender:indexPath];
+    [self performSegueWithIdentifier:kJMShowSavedReportInfoSegue sender:[self.reports objectAtIndex:indexPath.row]];
 }
 
 #pragma mark - Private
@@ -210,18 +205,28 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
     return [directoryAttributes objectForKey:NSFileModificationDate];
 }
 
-- (NSString *)formattedSize:(double)size
+- (NSString *)sizeForDirectory:(NSString *)directory
 {
+    NSMutableArray *files = [[self.fileManager subpathsOfDirectoryAtPath:directory error:nil] mutableCopy];
+    [files removeObject:kJMDSStoreFile];
+    double size = 0;
+    
+    for (NSString *file in files) {
+        NSString *filePath = [directory stringByAppendingPathComponent:file];
+        NSDictionary *fileAttributes = [self.fileManager attributesOfItemAtPath:filePath error:nil];
+        size += fileAttributes.fileSize;
+    }
+    
     size = size / 1024.0f;
     NSString *sizeUnit;
-
+    
     if (size > 1000) {
         size = size / 1024.0f;
-        sizeUnit = @" mb";
+        sizeUnit = @" Mb";
     } else {
-        sizeUnit = @" kb";
+        sizeUnit = @" Kb";
     }
-
+    
     return [NSString stringWithFormat:@"%.1f %@", size, sizeUnit];
 }
 

@@ -37,7 +37,7 @@ typedef void(^JMRequestDelegateFinalBlock)(void);
  Helper class which gives possibility to work with multiple requests in the same
  View Controller. Each new instance is adding to request pool and removing when
  request is complete
- 
+
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
@@ -45,7 +45,7 @@ typedef void(^JMRequestDelegateFinalBlock)(void);
 
 /**
  Indicates if delegate should check response status code, and display error dialog if needed
- 
+
  **Default**: YES
  */
 @property (nonatomic, assign) BOOL checkStatusCode;
@@ -58,51 +58,71 @@ typedef void(^JMRequestDelegateFinalBlock)(void);
 + (void)setFinalBlock:(JMRequestDelegateFinalBlock)block;
 
 /**
- Creates new instance of request delegate and adds it to the request pool
- 
- @param finishedBlock 
- @return An new request delegate instance
+ Creates new request delegate instance and adds it to the pool
+
+ @param finishedBlock
+ @return Request delegate instance
  */
 + (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock;
 
 /**
- Creates new instance of request delegate and adds it to the request pool.
+ Creates new request delegate instance and adds it to the pool
+
+ @param finishedBlock
+ @param errorBlock
+ @return New request delegate instance
+ */
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock;
+
+/**
+ Creates new request delegate instance and adds it to the pool.
  Sets the view controller (for all requests in pool) that will be dismissed if any request will fail
 
  @param finishedBlock
- @param viewController A view controller that will be dismissed
- @return An new request delegate instance
+ @param viewController A view controller to dismiss
+ @return New request delegate instance
  */
 + (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock viewControllerToDismiss:(UIViewController *)viewController;
 
 /**
- Passes a request result to final delegate object if request was successful. Otherwise displays alert view dialog
+ Creates new request delegate instance and adds it to the pool.
+ Sets the view controller (for all requests in pool) that will be dismissed if any request will fail
+
+ @param finishedBlock
+ @param errorBlock
+ @param viewController A view controller to dismiss
+ @return New request delegate instance
+ */
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController;
+
+/**
+ Passes a request result to final delegate object if request was successful. Otherwise displays an alert view dialog
  with error message
 
  @param delegate A delegate object
- @return An new request delegate instance
+ @return New request delegate instance
  */
 + (JMRequestDelegate *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate;
 
 /**
- Passes a request result to final delegate object if request was successful. Otherwise displays alert view dialog
+ Passes a request result to final delegate object if request was successful. Otherwise displays an alert view dialog
  with error message. Sets the view controller (for all requests in pool) that will be dismissed if any request will fail
 
  @param delegate A delegate object
- @param viewController A view controller that will be dismissed
- @return An new request delegate instance
+ @param viewController A view controller to dismiss
+ @return New request delegate instance
  */
 + (JMRequestDelegate *)checkRequestResultForDelegate:(id <JSRequestDelegate>)delegate viewControllerToDismiss:(UIViewController *)viewController;
 
 /**
  Check if request pool is empty (no any active request exists)
- 
+
  @return YES if request pool is empty, otherwise returns NO
  */
 + (BOOL)isRequestPoolEmpty;
 
 /**
- Removes all requests from request pool. This will also disable callback
+ Removes all requests from pool. This will also disable any callback
  */
 + (void)clearRequestPool;
 
