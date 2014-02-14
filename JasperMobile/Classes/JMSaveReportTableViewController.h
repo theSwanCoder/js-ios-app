@@ -21,7 +21,7 @@
  */
 
 //
-//  JMReportSaverViewController.h
+//  JMSaveReportTableViewController.h
 //  Jaspersoft Corporation
 //
 
@@ -33,7 +33,7 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.8
  */
-@interface JMReportSaverTableViewController : UITableViewController <UITextFieldDelegate, JMReportClientHolder, JMResourceClientHolder>
+@interface JMSaveReportTableViewController : UITableViewController <UITextFieldDelegate, JMReportClientHolder, JMResourceClientHolder>
 
 @property (nonatomic, weak) UIViewController *delegate;
 @property (nonatomic, strong) id parameters;

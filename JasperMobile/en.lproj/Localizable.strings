@@ -71,13 +71,13 @@
 
 /* Report Saver view */
 
-"reportsaver.name" = "Report Name";
-"reportsaver.format" = "Output Format";
-"reportsaver.saved" = "Report was succesfully saved";
-"reportsaver.name.errmsg.empty" = "Cannot be empty";
-"reportsaver.name.errmsg.notunique" = "This name has been already taken, please choose different name";
-"reportsaver.name.errmsg.maxlength" = "Should be less than %i symbols";
-"reportsaver.name.errmsg.characters" = "Characters %@ are not allowed";
+"savereport.name" = "Report Name";
+"savereport.format" = "Output Format";
+"savereport.saved" = "Report was successfully saved";
+"savereport.name.errmsg.empty" = "Cannot be empty";
+"savereport.name.errmsg.notunique" = "This name has been already taken, please choose different name";
+"savereport.name.errmsg.maxlength" = "Should be less than %i symbols";
+"savereport.name.errmsg.characters" = "Characters : / are not allowed";
 
 /* Saved Reports view */
 
@@ -89,13 +89,13 @@
 "savedreportinfo.title" = "Details";
 "savedreportinfo.sectionheader" = "Info";
 "savedreportinfo.reportname" = "Name";
-"savedreportinfo.creationdate" = "Creation Date";
+"savedreportinfo.date" = "Run Date";
 "savedreportinfo.size" = "Size";
 
-/* Saved Report Modify view */
+/* Rename Saved Report popup */
 
-"savedreportmodify.title" = "Rename Report";
-"savedreportmodify.reportname" = "Report Name";
+"modifysavedreport.title" = "Rename Report";
+"modifysavedreport.reportname" = "Report Name";
 
 /* Navigation and view labels */
 
@@ -137,8 +137,8 @@
 "error.upgrade.data.title" = "Upgrade Error - User Data Update";
 "error.upgrade.data.msg" = "There was an error updating user data (Servers, Favorites, Filter values & Settings) during the upgrade process. Press:\nRetry - to re-execute the data update again\nApply - to ignore the error and continue with upgrade, you may LOSE all user data\nCancel - to cancel the upgrade (this will leave you at current version)";
 
-"error.server.notsupported.title" = "Server version %i is not supported";
-"error.server.notsupported.msg" = "Please update server to 5.0.0 version or greater";
+"error.server.notsupported.title" = "Server version is not supported";
+"error.server.notsupported.msg" = "Server version is older than 5.0, which is not supported";
 
 "error.savereport.notavaialble.title" = "Cannot save report";
 "error.savereport.notavaialble.msg" = "This functionality is only available for JasperReports Server 5.2 or higher";
@@ -155,12 +155,9 @@
 
 /* Input control messages */
 
-"ic.value.yes" = "Yes";
-"ic.value.no" = "No";
 "ic.title.date" = "Date";
 "ic.title.time" = "Time";
 "ic.title.unset" = "Unset";
-"ic.label.error" = "Error";
 
 /* Buttons */
 

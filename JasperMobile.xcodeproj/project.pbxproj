@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		374556BBBF0752750658B28C /* JMReportSaverTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455254674C60AA7EE47EE1 /* JMReportSaverTableViewController.m */; };
+		374556BBBF0752750658B28C /* JMSaveReportTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455254674C60AA7EE47EE1 /* JMSaveReportTableViewController.m */; };
 		3745583E1EF263008FD3B022 /* JMSavedReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455069BCE4FA993F7FED0E /* JMSavedReportViewerViewController.m */; };
 		F50F5B5D17CCF14300582196 /* JMSingleSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50F5B5C17CCF14300582196 /* JMSingleSelectTableViewController.m */; };
 		F511A55117B26B8B004D90A2 /* JMDashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F511A55017B26B8A004D90A2 /* JMDashboardViewController.m */; };
@@ -201,8 +201,8 @@
 /* Begin PBXFileReference section */
 		37455069BCE4FA993F7FED0E /* JMSavedReportViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSavedReportViewerViewController.m; path = Classes/JMSavedReportViewerViewController.m; sourceTree = "<group>"; };
 		3745509FDBC0D658DDAB6003 /* JMSavedReportViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSavedReportViewerViewController.h; path = Classes/JMSavedReportViewerViewController.h; sourceTree = "<group>"; };
-		37455254674C60AA7EE47EE1 /* JMReportSaverTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportSaverTableViewController.m; path = Classes/JMReportSaverTableViewController.m; sourceTree = "<group>"; };
-		374554182DB68D076D8CA12A /* JMReportSaverTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMReportSaverTableViewController.h; path = Classes/JMReportSaverTableViewController.h; sourceTree = "<group>"; };
+		37455254674C60AA7EE47EE1 /* JMSaveReportTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSaveReportTableViewController.m; path = Classes/JMSaveReportTableViewController.m; sourceTree = "<group>"; };
+		374554182DB68D076D8CA12A /* JMSaveReportTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSaveReportTableViewController.h; path = Classes/JMSaveReportTableViewController.h; sourceTree = "<group>"; };
 		F50F5B5B17CCF14300582196 /* JMSingleSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSingleSelectTableViewController.h; path = Classes/JMSingleSelectTableViewController.h; sourceTree = "<group>"; };
 		F50F5B5C17CCF14300582196 /* JMSingleSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSingleSelectTableViewController.m; path = Classes/JMSingleSelectTableViewController.m; sourceTree = "<group>"; };
 		F511A54F17B26B8A004D90A2 /* JMDashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDashboardViewController.h; path = Classes/JMDashboardViewController.h; sourceTree = "<group>"; };
@@ -570,8 +570,8 @@
 				F513EE9017A16E2D00A553C4 /* JMServerSettingsTableViewController.m */,
 				F55D622D17C24D9100EC320F /* JMReportOptionsTableViewController.h */,
 				F55D622E17C24D9100EC320F /* JMReportOptionsTableViewController.m */,
-				374554182DB68D076D8CA12A /* JMReportSaverTableViewController.h */,
-				37455254674C60AA7EE47EE1 /* JMReportSaverTableViewController.m */,
+				374554182DB68D076D8CA12A /* JMSaveReportTableViewController.h */,
+				37455254674C60AA7EE47EE1 /* JMSaveReportTableViewController.m */,
 				F54BE93917D7495D00437EA9 /* JMReportViewerViewController.h */,
 				F54BE93A17D7495D00437EA9 /* JMReportViewerViewController.m */,
 				F5B6A6A4175F58690047CB6D /* JMRepositoryTableViewController.h */,
@@ -1226,7 +1226,7 @@
 				F50F5B5D17CCF14300582196 /* JMSingleSelectTableViewController.m in Sources */,
 				F5339A1617CE0F0F005073EE /* JMMultiSelectTableViewController.m in Sources */,
 				F54BE93B17D7495D00437EA9 /* JMReportViewerViewController.m in Sources */,
-				374556BBBF0752750658B28C /* JMReportSaverTableViewController.m in Sources */,
+				374556BBBF0752750658B28C /* JMSaveReportTableViewController.m in Sources */,
 				3745583E1EF263008FD3B022 /* JMSavedReportViewerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1346,7 +1346,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1373,7 +1373,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
@@ -1388,6 +1388,7 @@
 		F55CC376174CFFCF00CEB39E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/JasperMobile/Vendor\"",
@@ -1399,7 +1400,7 @@
 					"\"${BUILD_ROOT}/../\"/**",
 				);
 				INFOPLIST_FILE = "JasperMobile/JasperMobile-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -1418,6 +1419,7 @@
 		F55CC377174CFFCF00CEB39E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/JasperMobile/Vendor\"",
@@ -1429,7 +1431,7 @@
 					"\"${BUILD_ROOT}/../\"/**",
 				);
 				INFOPLIST_FILE = "JasperMobile/JasperMobile-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (

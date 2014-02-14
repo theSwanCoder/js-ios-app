@@ -35,6 +35,6 @@
 @interface JMSavedReportInfoViewController : UIViewController <JMSavedReportModifyPopupDelegate>
 // A report name with an extension
 @property (nonatomic, strong) NSString *fullReportName;
-@property (nonatomic, strong) NSString *creationDate;
+@property (nonatomic, strong) NSString *date;
 @property (nonatomic, strong) NSString *reportSize;
 @end

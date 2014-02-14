@@ -7,7 +7,7 @@
 //
 
 //
-//  Modified by Vlad Zavadskii on 06.06.13.
+//  Modified by Vlad Zavadskii vzavadskii@jaspersoft.com on 06.06.13.
 //
 
 #import "UIViewController+MJPopupViewController.h"

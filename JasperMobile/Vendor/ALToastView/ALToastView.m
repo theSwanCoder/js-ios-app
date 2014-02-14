@@ -23,6 +23,10 @@
 // THE SOFTWARE.
 //
 
+//
+//  Modified by Vlad Zavadskii vzavadskii@jaspersoft.com on 14.02.14.
+//
+
 #import <QuartzCore/QuartzCore.h>
 #import "ALToastView.h"
 
@@ -70,7 +74,7 @@ static NSMutableArray *toasts;
 		// Init and add label
 		_textLabel = [[UILabel alloc] init];
 		_textLabel.text = text;
-		_textLabel.minimumFontSize = 14;
+		_textLabel.minimumScaleFactor = 14;
 		_textLabel.font = [UIFont systemFontOfSize:14];
 		_textLabel.textColor = [UIColor whiteColor];
 		_textLabel.adjustsFontSizeToFitWidth = NO;

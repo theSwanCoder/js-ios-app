@@ -95,11 +95,11 @@ CGFloat kJMNoEdgesInset = -1;
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
 
     if (reportName.length < kJMNameMin) {
-        *errorMessage = JMCustomLocalizedString(@"reportsaver.name.errmsg.empty", nil);
+        *errorMessage = JMCustomLocalizedString(@"savereport.name.errmsg.empty", nil);
     } else if (reportName.length > kJMNameMax) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"reportsaver.name.errmsg.maxlength", nil), kJMNameMax];
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"savereport.name.errmsg.maxlength", nil), kJMNameMax];
     } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"reportsaver.name.errmsg.characters", nil), kJMInvalidCharacters];
+        *errorMessage = JMCustomLocalizedString(@"savereport.name.errmsg.characters", nil);
     } else {
         if (extension) {
             reportName = [reportName stringByAppendingPathExtension:extension];
@@ -109,7 +109,7 @@ CGFloat kJMNoEdgesInset = -1;
         NSString *reportPath = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:reportName];
 
         if ([fileManager fileExistsAtPath:reportPath]) {
-            *errorMessage = JMCustomLocalizedString(@"reportsaver.name.errmsg.notunique", nil);
+            *errorMessage = JMCustomLocalizedString(@"savereport.name.errmsg.notunique", nil);
         }
     }
 

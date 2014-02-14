@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
     <dependencies>
-        <deployment defaultVersion="1280" identifier="iOS"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
@@ -591,14 +591,14 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" text="Property" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3GH-FJ-cPJ">
-                                            <rect key="frame" x="12" y="9" width="70" height="20"/>
+                                            <rect key="frame" x="12" y="12" width="70" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="15"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
                                         <switch opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="eXE-6l-rXc">
-                                            <rect key="frame" x="261" y="3" width="52" height="33"/>
+                                            <rect key="frame" x="261" y="5" width="52" height="33"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <connections>
                                                 <action selector="askPasswordSwitchToggled:" destination="iuM-6r-QhG" eventType="valueChanged" id="uJ2-dC-LgX"/>
@@ -1461,7 +1461,7 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ListValueCell" textLabel="BLc-qa-PFN" style="IBUITableViewCellStyleDefault" id="egS-g0-lWj">
-                                <rect key="frame" x="0.0" y="46" width="320" height="45"/>
+                                <rect key="frame" x="0.0" y="119" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="egS-g0-lWj" id="i0R-xx-43I">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -1542,24 +1542,24 @@
             </objects>
             <point key="canvasLocation" x="1498" y="245"/>
         </scene>
-        <!--Report Saver Table View Controller - Save Report-->
+        <!--Save Report Table View Controller - Save Report-->
         <scene sceneID="B7V-nj-t6M">
             <objects>
-                <tableViewController id="aAe-bt-6mQ" customClass="JMReportSaverTableViewController" sceneMemberID="viewController">
+                <tableViewController id="aAe-bt-6mQ" customClass="JMSaveReportTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="9He-rl-uRk">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ReportNameCell" rowHeight="72" id="bpl-ca-Drl">
-                                <rect key="frame" x="0.0" y="46" width="320" height="73"/>
+                                <rect key="frame" x="0.0" y="119" width="320" height="72"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bpl-ca-Drl" id="oSk-12-WqN">
-                                    <rect key="frame" x="10" y="1" width="300" height="71"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Report Name" minimumFontSize="17" background="input_control_text_field.png" id="rYk-Ly-Atj">
-                                            <rect key="frame" x="14" y="21" width="272" height="30"/>
+                                            <rect key="frame" x="13" y="21" width="293" height="30"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -1568,7 +1568,7 @@
                                             </connections>
                                         </textField>
                                         <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Amz-be-mda">
-                                            <rect key="frame" x="17" y="52" width="269" height="21"/>
+                                            <rect key="frame" x="16" y="52" width="290" height="21"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1578,14 +1578,14 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ReportFormatCell" textLabel="Qp3-nq-Ix0" style="IBUITableViewCellStyleDefault" id="yt4-DO-IMB">
-                                <rect key="frame" x="0.0" y="119" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="191" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yt4-DO-IMB" id="eyn-9a-gfc">
-                                    <rect key="frame" x="10" y="0.0" width="300" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Report Format" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Qp3-nq-Ix0">
-                                            <rect key="frame" x="10" y="0.0" width="280" height="43"/>
+                                            <rect key="frame" x="15" y="0.0" width="290" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1595,14 +1595,14 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SaveReportCell" rowHeight="50" id="9L1-co-Aju">
-                                <rect key="frame" x="0.0" y="163" width="320" height="51"/>
+                                <rect key="frame" x="0.0" y="235" width="320" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9L1-co-Aju" id="m4i-gu-gU1">
-                                    <rect key="frame" x="10" y="0.0" width="300" height="49"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="y60-l0-Tmp">
-                                            <rect key="frame" x="2" y="5" width="295" height="40"/>
+                                            <rect key="frame" x="1" y="5" width="315" height="40"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                             <state key="normal" title="Save" backgroundImage="blue_button.png">
@@ -1672,7 +1672,7 @@
                                             <color key="textColor" red="0.18039215689999999" green="0.42745098040000001" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </label>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Creation Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qia-fG-Ncq">
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qia-fG-Ncq">
                                             <rect key="frame" x="60" y="24" width="127" height="17"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1692,7 +1692,7 @@
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="62" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
-                                    <outlet property="creationDateLabel" destination="qia-fG-Ncq" id="BMN-wf-4bK"/>
+                                    <outlet property="dateLabel" destination="qia-fG-Ncq" id="BMN-wf-4bK"/>
                                     <outlet property="reportNameLabel" destination="xhR-D3-PMi" id="40F-x6-RgA"/>
                                     <outlet property="sizeLabel" destination="UZm-Ni-Rti" id="gd1-aG-IVT"/>
                                 </connections>
@@ -1711,7 +1711,7 @@
                                             <color key="textColor" red="0.18039215689999999" green="0.42745098040000001" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </label>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Creation Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EVW-YF-SRQ">
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EVW-YF-SRQ">
                                             <rect key="frame" x="60" y="24" width="127" height="17"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1731,7 +1731,7 @@
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="62" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
-                                    <outlet property="creationDateLabel" destination="EVW-YF-SRQ" id="kVg-nL-0PA"/>
+                                    <outlet property="dateLabel" destination="EVW-YF-SRQ" id="kVg-nL-0PA"/>
                                     <outlet property="reportNameLabel" destination="cZJ-PZ-duN" id="XZY-CN-4NI"/>
                                     <outlet property="sizeLabel" destination="fbH-1A-cWt" id="lTF-A6-caH"/>
                                 </connections>
@@ -1845,15 +1845,15 @@
                                         <rect key="frame" x="10" y="97" width="300" height="50"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Creation Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jht-kF-YeX">
-                                                <rect key="frame" x="16" y="15" width="95" height="21"/>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jht-kF-YeX">
+                                                <rect key="frame" x="16" y="15" width="114" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.4431372549" green="0.4431372549" blue="0.4431372549" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jul 4, 2007, 9:20 AM " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eno-LP-TWo">
-                                                <rect key="frame" x="139.99999960263565" y="15" width="150" height="21"/>
+                                                <rect key="frame" x="140" y="15" width="150" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.4431372549" green="0.4431372549" blue="0.4431372549" alpha="1" colorSpace="calibratedRGB"/>
@@ -1874,7 +1874,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12.1 Mb  " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gBz-3q-iv7">
-                                                <rect key="frame" x="139.99999921806011" y="15" width="150" height="21"/>
+                                                <rect key="frame" x="139.99999960263565" y="15" width="150" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.4431372549" green="0.4431372549" blue="0.4431372549" alpha="1" colorSpace="calibratedRGB"/>
@@ -1890,7 +1890,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="suH-gF-nnD"/>
                     <connections>
-                        <outlet property="creationDateView" destination="23S-fQ-15S" id="7au-ZP-7gn"/>
+                        <outlet property="dateView" destination="23S-fQ-15S" id="7au-ZP-7gn"/>
                         <outlet property="headerView" destination="L9E-5P-QeK" id="beS-Pz-7vC"/>
                         <outlet property="reportNameView" destination="iiR-41-qQj" id="Kb7-GE-pGx"/>
                         <outlet property="sizeView" destination="Yco-AV-3l3" id="mAQ-XZ-TuH"/>

@@ -28,6 +28,7 @@
 #import "JMSavedReportInfoViewController.h"
 #import "JMLocalization.h"
 #import "JMSavedReportModifyPopup.h"
+#import "JMUtils.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface JMSavedReportInfoView : UIView
@@ -54,7 +55,7 @@
 @interface JMSavedReportInfoViewController()
 @property (nonatomic, weak) IBOutlet JMSavedReportInfoView *headerView;
 @property (nonatomic, weak) IBOutlet JMSavedReportInfoView *reportNameView;
-@property (nonatomic, weak) IBOutlet JMSavedReportInfoView *creationDateView;
+@property (nonatomic, weak) IBOutlet JMSavedReportInfoView *dateView;
 @property (nonatomic, weak) IBOutlet JMSavedReportInfoView *sizeView;
 @end
 
@@ -70,8 +71,8 @@
     [self.headerView setText:JMCustomLocalizedString(@"savedreportinfo.sectionheader", nil)];
     [self.reportNameView setText:JMCustomLocalizedString(@"savedreportinfo.reportname", nil)];
     [self.reportNameView setDetailText:[self.fullReportName stringByDeletingPathExtension]];
-    [self.creationDateView setText:JMCustomLocalizedString(@"savedreportinfo.creationdate", nil)];
-    [self.creationDateView setDetailText:self.creationDate];
+    [self.dateView setText:JMCustomLocalizedString(@"savedreportinfo.date", nil)];
+    [self.dateView setDetailText:self.date];
     [self.sizeView setText:JMCustomLocalizedString(@"savedreportinfo.size", nil)];
     [self.sizeView setDetailText:self.reportSize];
 
@@ -79,7 +80,7 @@
     CGColorRef borderColor = [[UIColor colorWithRed:rgbComponent green:rgbComponent blue:rgbComponent alpha:1.0f] CGColor];
     CGFloat borderWidth = 1.0f / [UIScreen mainScreen].scale;
 
-    NSArray *views = @[self.headerView, self.reportNameView, self.creationDateView, self.sizeView];
+    NSArray *views = @[self.headerView, self.reportNameView, self.dateView, self.sizeView];
     for (UIView *view in views) {
         view.layer.borderColor = borderColor;
         view.layer.borderWidth = borderWidth;
@@ -90,6 +91,8 @@
 
 - (void)updateReportName:(NSString *)modifiedName
 {
+    NSString *extension = [self.fullReportName pathExtension];
+    self.fullReportName = [modifiedName stringByAppendingPathExtension:extension];
     [self.reportNameView setDetailText:modifiedName];
 }
 

@@ -21,11 +21,11 @@
  */
 
 //
-//  JMReportSaverViewController.m
+//  JMSaveReportTableViewController.m
 //  Jaspersoft Corporation
 //
 
-#import "JMReportSaverTableViewController.h"
+#import "JMSaveReportTableViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
@@ -46,7 +46,7 @@ static CGFloat const separatorHeight = 1.0f;
 
 static NSString * const kJMAttachmentPrefix = @"_";
 
-@interface JMReportSaverTableViewController ()
+@interface JMSaveReportTableViewController ()
 @property (nonatomic, strong) NSString *selectedReportFormat;
 @property (nonatomic, strong) NSArray *reportFormats;
 @property (nonatomic, strong) NSDictionary *cellsIdentifiers;
@@ -56,7 +56,7 @@ static NSString * const kJMAttachmentPrefix = @"_";
 @property (nonatomic, assign) CGRect baseErrorLabelFrame;
 @end
 
-@implementation JMReportSaverTableViewController
+@implementation JMSaveReportTableViewController
 objection_requires(@"reportClient", @"constants")
 inject_default_rotation()
 
@@ -131,9 +131,9 @@ inject_default_rotation()
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == kJMReportNameSection) {
-        return JMCustomLocalizedString(@"reportsaver.name", nil);
+        return JMCustomLocalizedString(@"savereport.name", nil);
     } else if (section == kJMReportFormatSection) {
-        return JMCustomLocalizedString(@"reportsaver.format", nil);
+        return JMCustomLocalizedString(@"savereport.format", nil);
     }
 
     return @"";
@@ -168,7 +168,7 @@ inject_default_rotation()
 
         textField.text = self.reportName;
         textField.delegate = self;
-        textField.placeholder = JMCustomLocalizedString(@"reportsaver.name", nil);
+        textField.placeholder = JMCustomLocalizedString(@"savereport.name", nil);
 
         if (!textField.leftView) {
             UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10.0f, 0)];
@@ -248,7 +248,7 @@ inject_default_rotation()
     // Clear any errors
     [self.tableView reloadData];
 
-    __weak JMReportSaverTableViewController *reportSaver = self;
+    __weak JMSaveReportTableViewController *reportSaver = self;
 
     [JMCancelRequestPopup presentInViewController:self message:@"status.saving" restClient:self.reportClient cancelBlock:^{
         [[NSFileManager defaultManager] removeItemAtPath:reportDirectory error:nil];
@@ -279,7 +279,7 @@ inject_default_rotation()
 
     [JMRequestDelegate setFinalBlock:^{
         [reportSaver.navigationController popViewControllerAnimated:YES];
-        [ALToastView toastInView:reportSaver.delegate.view withText:JMCustomLocalizedString(@"reportsaver.saved", nil)];
+        [ALToastView toastInView:reportSaver.delegate.view withText:JMCustomLocalizedString(@"savereport.saved", nil)];
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMClearSavedReportsListNotification object:nil];
     }];
 

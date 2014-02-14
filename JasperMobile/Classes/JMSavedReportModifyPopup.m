@@ -104,10 +104,10 @@
     self.reportNameTextField.leftViewMode = UITextFieldViewModeAlways;
     self.reportNameTextField.background = [self.reportNameTextField.background resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10.0f, 0, 10.0f)];
     self.reportNameTextField.text = [self.reportName stringByDeletingPathExtension];
-    self.reportNameTextField.placeholder = JMCustomLocalizedString(@"savedreportmodify.reportname", nil);
+    self.reportNameTextField.placeholder = JMCustomLocalizedString(@"modifysavedreport.reportname", nil);
     self.reportNameTextField.delegate = self;
     self.saveButton.titleLabel.text = JMCustomLocalizedString(@"dialog.button.ok", nil);
-    self.reportNameLabel.text = JMCustomLocalizedString(@"savedreportmodify.title", nil);
+    self.reportNameLabel.text = JMCustomLocalizedString(@"modifysavedreport.title", nil);
     self.errorLabelBaseFrame = self.errorLabel.frame;
 }
 
@@ -169,13 +169,6 @@
     NSError *error;
 
     [fileManager moveItemAtPath:oldPath toPath:newPath error:&error];
-    *errorMessage = error.localizedDescription;
-
-    NSDictionary *attributesToUpdate = @{
-            NSFileModificationDate : [NSDate date]
-    };
-    [fileManager setAttributes:attributesToUpdate ofItemAtPath:newPath error:&error];
-    *errorMessage = [*errorMessage stringByAppendingFormat:@".%@", error.localizedDescription];
 
     if (error) {
         *errorMessage = error.localizedDescription;

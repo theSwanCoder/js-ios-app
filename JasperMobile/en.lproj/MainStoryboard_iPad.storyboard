@@ -591,7 +591,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" text="Property" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qWy-Fu-EA9">
-                                            <rect key="frame" x="12" y="10" width="70" height="19"/>
+                                            <rect key="frame" x="12" y="12" width="70" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="15"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -1542,10 +1542,10 @@
             </objects>
             <point key="canvasLocation" x="6806" y="2132"/>
         </scene>
-        <!--Report Saver Table View Controller - Save Report-->
+        <!--Save Report Table View Controller - Save Report-->
         <scene sceneID="w2b-ec-bOc">
             <objects>
-                <tableViewController id="4ae-WQ-Ich" customClass="JMReportSaverTableViewController" sceneMemberID="viewController">
+                <tableViewController id="4ae-WQ-Ich" customClass="JMSaveReportTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="cHA-Ru-6c7">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1672,7 +1672,7 @@
                                             <color key="textColor" red="0.18039215689999999" green="0.42745098040000001" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </label>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Creation Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Hoe-EL-zcG">
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Hoe-EL-zcG">
                                             <rect key="frame" x="62" y="24" width="574" height="17"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1692,7 +1692,7 @@
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="62" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
-                                    <outlet property="creationDateLabel" destination="Hoe-EL-zcG" id="GnK-PG-jY4"/>
+                                    <outlet property="dateLabel" destination="Hoe-EL-zcG" id="GnK-PG-jY4"/>
                                     <outlet property="reportNameLabel" destination="mXk-ev-DNT" id="T2l-3F-CE8"/>
                                     <outlet property="sizeLabel" destination="Trd-Jq-Adl" id="fMh-Sj-gfS"/>
                                 </connections>
@@ -1711,7 +1711,7 @@
                                             <color key="textColor" red="0.18039215689999999" green="0.42745098040000001" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </label>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Creation Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VK4-dK-xFQ">
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VK4-dK-xFQ">
                                             <rect key="frame" x="62" y="24" width="574" height="17"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1731,7 +1731,7 @@
                                 </tableViewCellContentView>
                                 <inset key="separatorInset" minX="62" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
-                                    <outlet property="creationDateLabel" destination="VK4-dK-xFQ" id="orM-gu-4IS"/>
+                                    <outlet property="dateLabel" destination="VK4-dK-xFQ" id="orM-gu-4IS"/>
                                     <outlet property="reportNameLabel" destination="YRC-qx-Msu" id="NhM-bQ-UxZ"/>
                                     <outlet property="sizeLabel" destination="0a2-ht-giE" id="9EF-oU-afl"/>
                                 </connections>
@@ -1845,15 +1845,15 @@
                                         <rect key="frame" x="10" y="97" width="748" height="50"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Creation Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fvo-b6-06N">
-                                                <rect key="frame" x="16" y="15" width="95" height="21"/>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fvo-b6-06N">
+                                                <rect key="frame" x="16" y="15" width="114" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.4431372549" green="0.4431372549" blue="0.4431372549" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jul 4, 2007, 9:20 AM " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TfL-W5-6WO">
-                                                <rect key="frame" x="356.00000044313401" y="15" width="382" height="21"/>
+                                                <rect key="frame" x="356.00000089227251" y="15" width="382" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.4431372549" green="0.4431372549" blue="0.4431372549" alpha="1" colorSpace="calibratedRGB"/>
@@ -1874,7 +1874,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12.1 Mb  " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PJK-s4-NKv">
-                                                <rect key="frame" x="356.00000044313401" y="15" width="382" height="21"/>
+                                                <rect key="frame" x="356.00000089227251" y="15" width="382" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.4431372549" green="0.4431372549" blue="0.4431372549" alpha="1" colorSpace="calibratedRGB"/>
@@ -1890,7 +1890,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="CzV-NP-IPA"/>
                     <connections>
-                        <outlet property="creationDateView" destination="KIz-Lh-rmk" id="62l-OP-XpG"/>
+                        <outlet property="dateView" destination="KIz-Lh-rmk" id="62l-OP-XpG"/>
                         <outlet property="headerView" destination="Hb1-w6-uQn" id="8kh-Us-ZNh"/>
                         <outlet property="reportNameView" destination="oKR-NJ-sYg" id="L1A-5j-wey"/>
                         <outlet property="sizeView" destination="5sy-SX-LBb" id="nLT-i6-OlY"/>

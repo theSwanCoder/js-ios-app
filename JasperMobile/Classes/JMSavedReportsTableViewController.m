@@ -39,7 +39,7 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
 
 @interface JMReportTableViewCell : UITableViewCell
 @property (nonatomic, weak) IBOutlet UILabel *reportNameLabel;
-@property (nonatomic, weak) IBOutlet UILabel *creationDateLabel;
+@property (nonatomic, weak) IBOutlet UILabel *dateLabel;
 @property (nonatomic, weak) IBOutlet UILabel *sizeLabel;
 @end
 
@@ -87,8 +87,8 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
 
         NSString *reportDirectory = [JMUtils documentsReportDirectoryPath];
         [self.reports sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            NSDate *obj1Date = [self modificationDateForDirectory:[reportDirectory stringByAppendingPathComponent:obj1]];
-            NSDate *obj2Date = [self modificationDateForDirectory:[reportDirectory stringByAppendingPathComponent:obj2]];
+            NSDate *obj1Date = [self creationDateForDirectory:[reportDirectory stringByAppendingPathComponent:obj1]];
+            NSDate *obj2Date = [self creationDateForDirectory:[reportDirectory stringByAppendingPathComponent:obj2]];
             return [obj2Date compare:obj1Date];
         }];
 
@@ -106,7 +106,7 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
         JMSavedReportInfoViewController *destinationViewController = segue.destinationViewController;
         NSString *reportDirectory = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:sender];
         destinationViewController.fullReportName = sender;
-        destinationViewController.creationDate = [self.dateFormatter stringFromDate:[self modificationDateForDirectory:reportDirectory]];
+        destinationViewController.date = [self.dateFormatter stringFromDate:[self creationDateForDirectory:reportDirectory]];
         destinationViewController.reportSize = [self sizeForDirectory:reportDirectory];
     }
 }
@@ -147,7 +147,7 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
     // Table view cell has the same identifier as a file extension
     JMReportTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:report.pathExtension];
     cell.reportNameLabel.text = [report stringByDeletingPathExtension];
-    cell.creationDateLabel.text = [self.dateFormatter stringFromDate:[self modificationDateForDirectory:reportDirectory]];
+    cell.dateLabel.text = [self.dateFormatter stringFromDate:[self creationDateForDirectory:reportDirectory]];
     cell.sizeLabel.text = [self sizeForDirectory:reportDirectory];
 
     return cell;
@@ -170,6 +170,7 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
     NSString *reportPath = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@/report.%@",
                     cell.reportNameLabel.text, cell.reuseIdentifier, cell.reuseIdentifier]];
     if (![self.fileManager fileExistsAtPath:reportPath]) {
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
         [[UIAlertView localizedAlertWithTitle:@"savedreports.error.reportnotfound.title"
                                       message:@"savedreports.error.reportnotfound.msg"
                                      delegate:nil
@@ -191,6 +192,7 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
 
 - (void)clearSavedReports
 {
+    // TODO: improve performance. Add / Replace single report instead deleting whole list
     self.reports = nil;
 }
 
@@ -199,10 +201,10 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
     self.navigationItem.rightBarButtonItem.enabled = self.reports.count > 0;
 }
 
-- (NSDate *)modificationDateForDirectory:(NSString *)directory
+- (NSDate *)creationDateForDirectory:(NSString *)directory
 {
     NSDictionary *directoryAttributes = [self.fileManager attributesOfItemAtPath:directory error:nil];
-    return [directoryAttributes objectForKey:NSFileModificationDate];
+    return [directoryAttributes objectForKey:NSFileCreationDate];
 }
 
 - (NSString *)sizeForDirectory:(NSString *)directory
