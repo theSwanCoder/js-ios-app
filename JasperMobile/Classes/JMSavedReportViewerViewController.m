@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -33,13 +33,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     // TODO: remove after iOS 5/6 drop
     if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
         self.automaticallyAdjustsScrollViewInsets = NO;
         [self adjustWebView];
     }
-
+    
     NSURL *reportPath = [NSURL fileURLWithPath:self.reportPath];
     [self.webView loadRequest:[NSURLRequest requestWithURL:reportPath]];
 }

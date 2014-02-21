@@ -155,6 +155,13 @@
     [self.delegate dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
 }
 
+#pragma mark - NSObject
+
+- (void)dealloc
+{
+    self.view = nil;
+}
+
 #pragma mark - Private
 
 - (BOOL)renameReportDirectoryTo:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage

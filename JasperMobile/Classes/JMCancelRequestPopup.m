@@ -61,14 +61,8 @@ static JMCancelRequestPopup *instance;
 + (void)dismiss
 {
     [JMUtils hideNetworkActivityIndicator];
-
-    if (instance) {
-        [instance.delegate dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
-        // Remove all targets for cancel button before releasing instance (instance = nil)
-        // to avoid memory issue: when click is performed but instance was released already
-        [instance.cancelButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        instance = nil;
-    }
+    [instance.delegate dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
+    instance = nil;
 }
 
 #pragma mark - UIViewController
@@ -90,8 +84,15 @@ static JMCancelRequestPopup *instance;
     if (self.cancelBlock) {
         self.cancelBlock();
     }
-
+    
     [JMCancelRequestPopup dismiss];
+}
+
+#pragma mark - NSObject
+
+- (void)dealloc
+{
+    self.view = nil;
 }
 
 @end
