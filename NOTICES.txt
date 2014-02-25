@@ -37,7 +37,7 @@ third party software, subject to the associated copyrights, as follows:
 - XMLWriter (MIT) - http://code.google.com/p/xswi/
 
 The text of licenses for the above software is included with the
-JasperMobile for iOS source package, in the /docs/licenses folder.
+JasperMobile for iOS source package, in the /licenses folder.
 
 
 

@@ -137,8 +137,8 @@
 "error.upgrade.data.title" = "Upgrade Error - User Data Update";
 "error.upgrade.data.msg" = "There was an error updating user data (Servers, Favorites, Filter values & Settings) during the upgrade process. Press:\nRetry - to re-execute the data update again\nApply - to ignore the error and continue with upgrade, you may LOSE all user data\nCancel - to cancel the upgrade (this will leave you at current version)";
 
-"error.server.notsupported.title" = "Server version is not supported";
-"error.server.notsupported.msg" = "Server version is older than 5.0, which is not supported";
+"error.server.notsupported.title" = "Wrong server version or URL";
+"error.server.notsupported.msg" = "Server version is either older than 5.0 (not supported) or URL is incorrect";
 
 "error.savereport.notavaialble.title" = "Cannot save report";
 "error.savereport.notavaialble.msg" = "This functionality is only available for JasperReports Server 5.2 or higher";
