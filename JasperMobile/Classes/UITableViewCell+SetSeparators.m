@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -26,6 +26,7 @@
 //
 
 #import "UITableViewCell+SetSeparators.h"
+#import "JMUtils.h"
 
 @implementation UITableViewCell (SetSeparators)
 
@@ -45,7 +46,7 @@
     
     UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - height, self.frame.size.width, height)];
     separator.backgroundColor = color;
-    separator.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    separator.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [self addSubview:separator];
 }
 
@@ -53,7 +54,7 @@
 
 - (BOOL)isSeparatorNeeded:(UITableViewStyle)style
 {
-    return floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1 || style != UITableViewStyleGrouped;
+    return [JMUtils isFoundationNumber7OrHigher] || style != UITableViewStyleGrouped;
 }
 
 @end

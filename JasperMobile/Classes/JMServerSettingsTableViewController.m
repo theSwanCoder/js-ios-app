@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -67,7 +67,7 @@ typedef BOOL (^JMValidationBlock)(NSString *value, NSString **errorMessage);
 // Contains different properties for cell: identifier, label name, placeholder / value
 // for component (can be text field or switch), validation block and indicator, if cell
 // is configured
-@property (nonatomic, strong, readonly) NSDictionary *cellsProperties;
+@property (nonatomic, strong) NSDictionary *cellsProperties;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;
 
@@ -80,8 +80,6 @@ typedef BOOL (^JMValidationBlock)(NSString *value, NSString **errorMessage);
 
 @implementation JMServerSettingsTableViewController
 objection_requires(@"managedObjectContext", @"favoritesUtil")
-
-@synthesize cellsProperties = _cellsProperties;
 
 #pragma mark - Accessors
 
@@ -202,7 +200,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
 -  (void)didReceiveMemoryWarning
 {
     if (![JMUtils isViewControllerVisible:self]) {
-        if (self.cellsProperties) _cellsProperties = nil;
+        if (self.cellsProperties) self.cellsProperties = nil;
     }
     [super didReceiveMemoryWarning];
 }

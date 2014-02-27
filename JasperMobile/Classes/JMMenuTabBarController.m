@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -28,6 +28,7 @@
 #import "JMMenuTabBarController.h"
 #import "JMConstants.h"
 #import "JMRefreshable.h"
+#import "JMRotationBase.h"
 #import "JMServerProfile.h"
 #import "JMUtils.h"
 
@@ -65,8 +66,7 @@ inject_default_rotation()
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // TODO: refactor without possible code duplication (as general solution for both devices)
+
     for (UITabBarItem *item in self.tabBar.items) {
         item.title = [JMUtils localizedTitleForMenuItemByTag:item.tag];
     }
@@ -77,7 +77,7 @@ inject_default_rotation()
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
     UIViewController *selectedViewController = [viewController.childViewControllers objectAtIndex:0];
-    // TODO: change implementation if 2 diff menus will be adapted via protocols (for pad and phone)
+
     if (self.lastSelectedViewController == selectedViewController &&
         [selectedViewController conformsToProtocol:@protocol(JMRefreshable)]) {
         [self.lastSelectedViewController refresh];
@@ -91,7 +91,8 @@ inject_default_rotation()
 - (void)disableTabBar
 {
     for (UITabBarItem *item in self.tabBar.items) {
-        if (item.tag != kJMServersMenuTag) {
+        if (item.tag != kJMServersMenuTag &&
+            item.tag != kJMSavedReportsMenuTag) {
             item.enabled = NO;
         }
     }

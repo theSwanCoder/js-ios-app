@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -42,18 +42,18 @@ NSString * const kJMDefaultsServerUsername = @"jaspersoft.server.username.%d";
 NSString * const kJMChangeServerProfileNotification = @"changeServerProfile";
 NSString * const kJMResetApplicationNotification = @"resetApplication";
 NSString * const kJMSelectMenuNotification = @"selectMenu";
-NSString * const kJMUpdateInputControlQueryDataNotification = @"updateICQueryData";
+NSString * const kJMClearSavedReportsListNotification = @"clearSavedReports";
 
 // Some shared keys for dictionary
-NSString * const kJMInputControlsToUpdate = @"inputControlsToUpdate";
 NSString * const kJMMenuTag = @"menuTag";
 NSString * const kJMNotUpdateMenuKey = @"ignoreMenuUpdates";
 NSString * const kJMServerProfileKey = @"serverProfile";
-NSString * const kJMParameters = @"parameters";
 
-// Report output formats
-NSString * const kJMRunOutputFormatHTML = @"HTML";
-NSString * const kJMRunOutputFormatPDF = @"PDF";
+// Directory to store downloaded reports
+NSString * const kJMReportsDirectory = @"reports";
+
+// Name of the main report file (outputResource)
+NSString * const kJMReportFilename = @"report";
 
 // Storyboard name
 static NSString *_mainStoryboardName;

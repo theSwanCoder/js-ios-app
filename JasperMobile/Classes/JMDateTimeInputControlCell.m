@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -25,15 +25,15 @@
 //  Jaspersoft Corporation
 //
 
+#import "JMDateTimeInputControlCell.h"
+#import "JMLocalization.h"
+
 static UIToolbar *dateTimePickerToolbar;
 
 typedef enum {
     kJMDateType,
     kJMTimeType
 } JMDatePickerType;
-
-#import "JMDateTimeInputControlCell.h"
-#import "JMLocalization.h"
 
 @interface JMDateTimeInputControlCell()
 @property (nonatomic, assign) JMDatePickerType datePickerType;
@@ -51,26 +51,10 @@ typedef enum {
     return self;
 }
 
-- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
-{
-    [super setInputControlWrapper:inputControlWrapper];
-
-    self.time = self.date;
-    self.dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-    self.dateFormatter.timeStyle = NSDateFormatterShortStyle;
-}
-
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
     self.time = self.date;
-}
-
-- (void)clearData
-{
-    dateTimePickerToolbar = nil;
-    self.time = nil;
-    [super clearData];
 }
 
 #pragma mark - UIResponder

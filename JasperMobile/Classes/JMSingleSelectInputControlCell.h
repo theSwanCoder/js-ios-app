@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -49,15 +49,5 @@
  Forces to reload data for dependent Input Controls (if exists)
  */
 - (void)updateWithParameters:(NSArray *)parameters;
-
-/**
- Indicates if IC is single or multi select. Used for REST v1
- */
-- (NSString *)isListItem;
-
-/**
- Indicates if IC needs to update query data (including dependencies). Used for REST v1
- */
-- (BOOL)needsToUpdateInputControlQueryData;
 
 @end

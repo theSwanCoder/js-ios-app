@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -21,16 +21,31 @@
  */
 
 //
-//  JMMenuTableViewController.h
+//  JMSavedReportModifyPopup.h
 //  Jaspersoft Corporation
 //
 
 #import <UIKit/UIKit.h>
 
+@protocol JMSavedReportModifyPopupDelegate;
+
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
+ @since 1.8
  */
-@interface JMMenuTableViewController : UITableViewController <UISplitViewControllerDelegate>
+@interface JMSavedReportModifyPopup : UIViewController <UITextFieldDelegate>
 
+/**
+ Presents a popup to modify name of saved report
+
+ @param viewController A view controller to display popup
+ @param fullReportName A report name with an extension
+ */
++ (void)presentInViewController:(UIViewController <JMSavedReportModifyPopupDelegate> *)viewController fullReportName:(NSString *)fullReportName;
+
+@end
+
+@protocol JMSavedReportModifyPopupDelegate
+@required
+- (void)updateReportName:(NSString *)modifiedName;
 @end

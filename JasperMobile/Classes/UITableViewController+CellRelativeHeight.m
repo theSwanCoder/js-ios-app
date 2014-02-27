@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -85,8 +85,6 @@
     return height > [self defaultHeightForTableViewCell] ? height + kJMTextPaddingAfterHeightCalculation : [self defaultHeightForTableViewCell];
 }
 
-#pragma mark - Private
-
 - (CGFloat)defaultHeightForTableViewCell
 {
     static CGFloat height = 0.0f;
@@ -97,6 +95,8 @@
     
     return height;
 }
+
+#pragma mark - Private
 
 - (CGFloat)leftMarginForTableView
 {

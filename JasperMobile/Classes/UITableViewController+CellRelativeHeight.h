@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -42,7 +42,16 @@
  @param text A text for "textLabel"
  @param detailText A text for "detailTextLabel"
  @param cellStyle The style of table view cell
+ 
+ @return cell calculated height
  */
 - (CGFloat)relativeHeightForTableViewCell:(UITableViewCell *)cell text:(NSString *)text detailText:(NSString *)detailText cellStyle:(UITableViewCellStyle)cellStyle;
+
+/**
+ Calculates default height for table view cell
+ 
+ @return cell calculated height
+ */
+- (CGFloat)defaultHeightForTableViewCell;
 
 @end

@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -38,20 +38,17 @@
     CGFloat baseHeight;
 }
 
-@property (nonatomic, strong) JSInputControlWrapper *inputControlWrapper;
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
 @property (nonatomic, strong) NSString *errorMessage;
-@property (nonatomic, readonly) BOOL isMandatory;
 @property (nonatomic, weak) UITableViewController <JMInputControlsHolder> *delegate;
 
 /**
- Contains value for the Input Control. Can be NSString, NSDictionary or 
- NSArray (plus mutable) type
+ Contains value for the Input Control. Can be NSString, NSDate or
+ NSArray type
  */
 @property (nonatomic, strong) id value;
 
 - (UILabel *)label;
-- (void)clearData;
 - (CGFloat)height;
 - (BOOL)dismissError;
 - (void)disableCell;

@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -29,6 +29,7 @@
 #import "JMCancelRequestPopup.h"
 #import "JMFavoritesUtil.h"
 #import "JMLocalization.h"
+#import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UITableViewCell+SetSeparators.h"
 #import "UITableViewController+CellRelativeHeight.h"
@@ -44,9 +45,9 @@ static NSString * const kJMTitleKey = @"title";
 static NSString * const kJMValueKey = @"value";
 
 @interface JMResourceTableViewController ()
-@property (nonatomic, strong, readonly) NSDictionary *numberOfRowsForSections;
-@property (nonatomic, strong, readonly) NSDictionary *resourceDescriptorProperties;
-@property (nonatomic, strong, readonly) NSDictionary *cellIdentifiers;
+@property (nonatomic, strong) NSDictionary *numberOfRowsForSections;
+@property (nonatomic, strong) NSDictionary *resourceDescriptorProperties;
+@property (nonatomic, strong) NSDictionary *cellIdentifiers;
 @property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;
 @property (nonatomic, weak) UIButton *favoriteButton;
 
@@ -149,7 +150,6 @@ inject_default_rotation()
 {
     [super viewWillAppear:animated];
 
-    // TODO: remove if main menu will be changed to "List" instead tab bar controller
     if (self.resourceDescriptor) {
         // Persist old changes, if they were made previously. This is required
         // because for some reason "viewWillAppear" method of 2-nd view controller is
@@ -175,9 +175,9 @@ inject_default_rotation()
 - (void)didReceiveMemoryWarning
 {
     if (![JMUtils isViewControllerVisible:self]) {
-        _numberOfRowsForSections = nil;
-        _resourceDescriptorProperties = nil;
-        _cellIdentifiers = nil;
+        self.numberOfRowsForSections = nil;
+        self.resourceDescriptorProperties = nil;
+        self.cellIdentifiers = nil;
     }
     [super didReceiveMemoryWarning];
 }

@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -26,6 +26,7 @@
 //
 
 #import "JMUtils.h"
+#import "JMRotationBase.h"
 #import "JMLocalization.h"
 #import "JMSearchFilterTableViewController.h"
 #import "UITableViewCell+SetSeparators.h"
@@ -154,8 +155,8 @@ inject_default_rotation()
             UIButton *run = (UIButton *) [cell viewWithTag:1];
             [run setTitle:JMCustomLocalizedString(@"dialog.button.applyUpdate", nil) forState:UIControlStateNormal];
             [JMUtils setBackgroundImagesForButton:run
-                                        imageName:@"run_report_button.png"
-                             highlightedImageName:@"run_report_button_highlighted.png"
+                                        imageName:@"blue_button.png"
+                             highlightedImageName:@"blue_button_highlighted.png"
                                        edgesInset:18.0f];
             break;
         }

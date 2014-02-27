@@ -36,8 +36,8 @@ static JMCancelRequestPopup *instance;
 
 @interface JMCancelRequestPopup ()
 @property (nonatomic, strong) JSRESTBase *restClient;
-@property (nonatomic, strong) UIViewController *viewController;
 @property (nonatomic, copy) JMCancelRequestBlock cancelBlock;
+@property (nonatomic, weak) UIViewController *delegate;
 @property (nonatomic, weak) IBOutlet UIButton *cancelButton;
 @property (nonatomic, weak) IBOutlet UILabel *progressLabel;
 @end
@@ -50,7 +50,7 @@ static JMCancelRequestPopup *instance;
 {
     instance = [[JMCancelRequestPopup alloc] initWithNibName:@"JMCancelRequestPopup" bundle:nil];
     instance.restClient = client;
-    instance.viewController = viewController;
+    instance.delegate = viewController;
     instance.cancelBlock = cancelBlock;
     [instance.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
     instance.progressLabel.text = JMCustomLocalizedString(message, nil);
@@ -60,14 +60,9 @@ static JMCancelRequestPopup *instance;
 
 + (void)dismiss
 {
-    if (instance) {
-        [JMUtils hideNetworkActivityIndicator];
-        [instance.viewController dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
-        // Remove all targets for cancel button before releasing instance (instance = nil)
-        // to avoid memory issue: when click is performed but instance was released already
-        [instance.cancelButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        instance = nil;
-    }
+    [JMUtils hideNetworkActivityIndicator];
+    [instance.delegate dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
+    instance = nil;
 }
 
 #pragma mark - UIViewController
@@ -84,13 +79,20 @@ static JMCancelRequestPopup *instance;
 {
     [self.restClient cancelAllRequests];
     [JMRequestDelegate clearRequestPool];
-    [self.viewController dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
+    [self.delegate dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];
     
     if (self.cancelBlock) {
         self.cancelBlock();
     }
-
+    
     [JMCancelRequestPopup dismiss];
+}
+
+#pragma mark - NSObject
+
+- (void)dealloc
+{
+    self.view = nil;
 }
 
 @end

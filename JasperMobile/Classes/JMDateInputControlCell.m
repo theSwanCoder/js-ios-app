@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -68,15 +68,6 @@ static UIDatePicker *datePicker;
     return _dateFormatter;
 }
 
-- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
-{
-    [super setInputControlWrapper:inputControlWrapper];
-
-    self.date = [NSDate date];
-    self.dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-    self.dateFormatter.timeStyle = NSDateFormatterNoStyle;
-}
-
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
@@ -121,15 +112,6 @@ static UIDatePicker *datePicker;
     return pickerToolbar;
 }
 
-- (void)clearData
-{
-    datePicker = nil;
-    datePickerToolbar = nil;
-    self.date = nil;
-    self.dateFormatter = nil;
-    [super clearData];
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
@@ -166,12 +148,7 @@ static UIDatePicker *datePicker;
 - (void)done:(id)sender
 {
     self.textField.text = [self.dateFormatter stringFromDate:self.date];
-
-    if (self.inputControlWrapper) {
-        self.value = self.date;
-    } else {
-        self.value = self.textField.text;
-    }
+    self.value = self.textField.text;
 
     [self dismissError];
     [self hideDatePicker];

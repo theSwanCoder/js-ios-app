@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -42,7 +42,7 @@ __weak static JMServerProfile * serverProfile;
     NSMutableString *credentials = [NSMutableString string];
     [credentials appendString:profile.username];
     
-    if (profile.organization) {
+    if (profile.organization.length) {
         [credentials appendFormat:@" | %@", profile.organization];
     }
     

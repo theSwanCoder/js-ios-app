@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -70,6 +70,27 @@ extern CGFloat kJMNoEdgesInset;
  @return YES if view controller is presented on screen, otherwise returns NO
  */
 + (BOOL)isViewControllerVisible:(UIViewController *)viewController;
+
+/**
+ Validates report name and directory to store report
+
+ @param reportName A report name to validate. It needs to be unique, without /: characters, not empty, and less or equals than 250 symbols (last 5 are reserved for extension)
+ @param extension A report file extension. Optional, can be provided to validate uniqueness in file system
+ @return YES if report name is valid, otherwise returns NO
+ */
++ (BOOL)validateReportName:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage;
+
+/**
+ Returns full path of report directory located in NSDocumentDirectory directory for NSUserDomainMask domain
+
+ @return full path of report directory
+*/
++ (NSString *)documentsReportDirectoryPath;
+
+/**
+ Checks if iOS version (foundation number) is 7 or higher
+*/
++ (BOOL)isFoundationNumber7OrHigher;
 
 /**
  Sends "changeServerProfile" notification to defaultCenter

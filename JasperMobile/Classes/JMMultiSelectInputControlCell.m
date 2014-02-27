@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -30,17 +30,6 @@
 @implementation JMMultiSelectInputControlCell
 
 @synthesize value = _value;
-
-- (NSString *)isListItem
-{
-    return @"YES";
-}
-
-- (BOOL)needsToUpdateInputControlQueryData
-{
-    NSInteger type = self.inputControlWrapper.type;
-    return type == self.constants.IC_TYPE_MULTI_SELECT_QUERY || type == self.constants.IC_TYPE_MULTI_SELECT_QUERY_CHECKBOX;
-}
 
 - (void)setValue:(id)value
 {

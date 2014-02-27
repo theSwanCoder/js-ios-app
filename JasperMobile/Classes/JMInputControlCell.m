@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -110,42 +110,9 @@
     }
 }
 
-- (void)setInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper
-{
-    _inputControlWrapper = inputControlWrapper;
-    _isMandatory = inputControlWrapper.isMandatory;
-
-    if (!inputControlWrapper.isVisible) {
-        self.hidden = YES;
-    } else {
-        if (_isMandatory) {
-            self.mandatoryLabel.hidden = NO;
-        }
-
-        if (inputControlWrapper.isReadOnly) {
-            [self disableCell];
-        }
-
-        self.label.text = inputControlWrapper.label;
-    }
-}
-
 - (UILabel *)label
 {
     return (UILabel *) [self viewWithTag:1];
-}
-
-- (void)clearData
-{
-    // Release through ivar to avoid additional calls of overridden setters
-    _value = nil;
-    _inputControlDescriptor = nil;
-    _inputControlWrapper = nil;
-    _errorMessage = nil;
-    self.label.text = nil;
-    self.errorLabel.text = nil;
-    [self.label removeFromSuperview];
-    [self.errorLabel removeFromSuperview];
 }
 
 - (CGFloat)height

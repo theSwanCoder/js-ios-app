@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -46,22 +46,6 @@
  @return An initialized factory
  */
 - (id)initWithTableViewController:(UITableViewController <JMInputControlsHolder> *)tableViewController;
-
-/**
- Creates a cell for selecting report output format
- 
- @param formats An array of possible report output formats
- @return A format cell
- */
-- (JMInputControlCell *)reportOutputFormatCellWithFormats:(NSArray *)formats;
-
-/**
- Creates the input control cell
- 
- @param inputControl A wrapper for IC (REST v1)
- @return The IC cell of a certain type
- */
-- (JMInputControlCell *)inputControlWithInputControlWrapper:(JSInputControlWrapper *)inputControl;
 
 /**
  Creates the input control cell

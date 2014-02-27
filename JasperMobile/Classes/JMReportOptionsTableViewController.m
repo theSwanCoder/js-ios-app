@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -27,20 +27,19 @@
 
 #import "JMReportOptionsTableViewController.h"
 #import "JMCancelRequestPopup.h"
-#import "JMConstants.h"
 #import "JMInputControlCell.h"
 #import "JMInputControlFactory.h"
+#import "JMLocalization.h"
 #import "JMSingleSelectTableViewController.h"
 #import "JMRequestDelegate.h"
+#import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "JMReportViewerViewController.h"
 #import "UITableViewCell+SetSeparators.h"
-#import "JSRESTBase+updateServerInfo.h"
 #import <Objection-iOS/Objection.h>
 
 static NSInteger const kJMICSection = 0;
-static NSInteger const kJMReportFormatSection = 1;
-static NSInteger const kJMRunReportSection = 2;
+static NSInteger const kJMRunReportSection = 1;
 
 static NSString * const kJMRunCellIdentifier = @"RunCell";
 static NSString * const kJMShowSingleSelectSegue = @"ShowSingleSelect";
@@ -48,13 +47,11 @@ static NSString * const kJMShowMultiSelectSegue = @"ShowMultiSelect";
 static NSString * const kJMRunReportSegue = @"RunReport";
 
 static CGFloat const separatorHeight = 1.0f;
+
 __weak static UIColor * separatorColor;
 
 @interface JMReportOptionsTableViewController()
-@property (nonatomic, strong) JMInputControlCell *reportFormatCell;
 @property (nonatomic, strong) JMInputControlFactory *inputControlFactory;
-// Input Controls that should be presented in UI
-@property (nonatomic, strong) NSMutableArray *visibleInputControls;
 @end
 
 @implementation JMReportOptionsTableViewController
@@ -85,36 +82,39 @@ inject_default_rotation()
     self.inputControls = [NSMutableArray array];
 }
 
-- (void)dealloc
-{
-    [self clearData];
-}
-
 #pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [JMUtils setTitleForResourceViewController:self];
-
-    if (self.resourceLookup && !self.inputControls.count) {
-        [self updateInputControls];
-    }
-    
     separatorColor = self.tableView.separatorColor;
-    
-    if (!self.reportFormatCell) {
-        NSArray *reportOutputFormats = @[
-            kJMRunOutputFormatHTML, kJMRunOutputFormatPDF
-        ];
-        self.reportFormatCell = [self.inputControlFactory reportOutputFormatCellWithFormats:reportOutputFormats];
-        
-        CGFloat separatorHeight = 1.0f;
-        [self.reportFormatCell setTopSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
-        [self.reportFormatCell setBottomSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
-    }
-    
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+    // TODO: refactor, remove isKindOfClass: method usage
+    if ([self.inputControls.firstObject isKindOfClass:JMInputControlCell.class]) return;
+
+    NSArray *inputControlsData = [self.inputControls copy];
+    [self.inputControls removeAllObjects];
+
+    for (JSInputControlDescriptor *inputControlDescriptor in inputControlsData) {
+        id cell = [self.inputControlFactory inputControlWithInputControlDescriptor:inputControlDescriptor];
+
+        if ([cell conformsToProtocol:@protocol(JMResourceClientHolder)]) {
+            [cell setResourceClient:self.resourceClient];
+            [cell setResourceLookup:self.resourceLookup];
+        }
+
+        if ([cell conformsToProtocol:@protocol(JMReportClientHolder)]) {
+            [cell setReportClient:self.reportClient];
+        }
+
+        [cell setTopSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
+        [self.inputControls addObject:cell];
+    }
+
+    id lastCell = self.inputControls.lastObject;
+    [lastCell setBottomSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -128,7 +128,6 @@ inject_default_rotation()
 
     } else if ([identifier isEqualToString:kJMRunReportSegue]) {
         [destinationViewController setResourceLookup:self.resourceLookup];
-        [destinationViewController setReportFormat:self.reportFormatCell.value];
         [destinationViewController setParameters:sender];
     }
 }
@@ -137,13 +136,13 @@ inject_default_rotation()
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == kJMICSection) {
-        return [JMRequestDelegate isRequestPoolEmpty] ? self.visibleInputControls.count : 0;
+        return [JMRequestDelegate isRequestPoolEmpty] ? self.inputControls.count : 0;
     }
     
     return 1;
@@ -153,10 +152,7 @@ inject_default_rotation()
 {
     switch (indexPath.section) {
         case kJMICSection:
-            return [self.visibleInputControls objectAtIndex:indexPath.row];
-            
-        case kJMReportFormatSection:
-            return self.reportFormatCell;
+            return [self.inputControls objectAtIndex:indexPath.row];
             
         case kJMRunReportSection:
         default: {
@@ -165,9 +161,10 @@ inject_default_rotation()
             cell.backgroundColor = [UIColor clearColor];
 
             UIButton *run = (UIButton *) [cell viewWithTag:1];
+            run.titleLabel.text = JMCustomLocalizedString(@"dialog.button.run.report", nil);
             [JMUtils setBackgroundImagesForButton:run
-                                        imageName:@"run_report_button.png"
-                             highlightedImageName:@"run_report_button_highlighted.png"
+                                        imageName:@"blue_button.png"
+                             highlightedImageName:@"blue_button_highlighted.png"
                                        edgesInset:18.0f];
             return cell;
         }
@@ -177,13 +174,12 @@ inject_default_rotation()
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == kJMRunReportSection) return 50.0f;
-    if (indexPath.section == kJMReportFormatSection) return self.reportFormatCell.height;
-    return [[self.visibleInputControls objectAtIndex:indexPath.row] height];
+    return [[self.inputControls objectAtIndex:indexPath.row] height];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return (section == kJMICSection && self.visibleInputControls.count > 0) ? 12.0f : 1.0f;
+    return (section == kJMICSection && self.inputControls.count > 0) ? 12.0f : 1.0f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -195,250 +191,14 @@ inject_default_rotation()
 
 - (IBAction)runReport:(id)sender
 {
-    if (self.reportClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD) {
-        [self restV2RunReport];
-    } else {
-        [self restV1RunReport];
-    }
-}
-
-#pragma mark - Private -
-#pragma mark Configuration
-
-- (void)configureInputControlCell:(id)cell
-{
-    if ([cell conformsToProtocol:@protocol(JMResourceClientHolder)]) {
-        [cell setResourceClient:self.resourceClient];
-        if (self.reportClient.serverProfile.serverInfo.versionAsInteger < self.constants.VERSION_CODE_EMERALD) {
-            [cell setResourceDescriptor:self.resourceDescriptor];
-        } else {
-            [cell setResourceLookup:self.resourceLookup];
-        }
-    }
-
-    if ([cell conformsToProtocol:@protocol(JMReportClientHolder)]) {
-        [cell setReportClient:self.reportClient];
-    }
-}
-
-- (void)clearData
-{
-    id defaultCenter = [NSNotificationCenter defaultCenter];
-    
-    for (JMInputControlCell *cell in self.inputControls) {
-        [defaultCenter removeObserver:cell];
-        [cell clearData];
-    }
-    
-    self.inputControls = nil;
-    self.inputControlFactory = nil;
-    self.visibleInputControls = nil;
-}
-
-- (JMRequestDelegateFinalBlock)finalBlockForReportOptions:(__weak JMReportOptionsTableViewController *)reportOptions
-{
-    return ^{
-        if (!reportOptions.visibleInputControls.count) {
-            reportOptions.visibleInputControls = [NSMutableArray array];
-            
-            for (NSUInteger i = 0, count = reportOptions.inputControls.count; i < count; i++) {
-                JMInputControlCell *cell = [reportOptions.inputControls objectAtIndex:i];
-                
-                if (!cell.isHidden) {
-                    [cell setTopSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
-                    // Check if this is the last IC
-                    if (i == count - 1) {
-                        // And set bottom separator if yes
-                        [cell setBottomSeparatorWithHeight:separatorHeight color:separatorColor tableViewStyle:self.tableView.style];
-                    }
-                    [reportOptions.visibleInputControls addObject:cell];
-                }
-            }
-        }
-
-        [reportOptions.tableView reloadData];
-    };
-}
-
-#pragma mark Input Controls
-
-- (void)updateInputControls
-{
-    JMCancelRequestBlock cancelBlock = ^{
-        [self.navigationController popViewControllerAnimated:YES];
-    };
-    
-    __weak JMReportOptionsTableViewController *weakSelf = self;
-    
-    // TODO: add possibility to cancel request for many rest clients
-    [JMCancelRequestPopup presentInViewController:weakSelf message:@"status.loading" restClient:nil cancelBlock:cancelBlock];
-    
-    [self.resourceClient updateServerInfo:[JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *resourceInfoResult) {
-        if (self.reportClient.serverProfile.serverInfo.versionAsInteger >= weakSelf.constants.VERSION_CODE_EMERALD) {
-            NSArray *reportParameters = [weakSelf.reportOptionsUtil reportOptionsAsParametersForReport:weakSelf.resourceLookup.uri];
-            [self.reportClient inputControlsForReport:weakSelf.resourceLookup.uri ids:nil selectedValues:reportParameters delegate:weakSelf.inputControlsForReportDelegate];
-        } else {
-            [weakSelf.resourceClient resource:weakSelf.resourceLookup.uri delegate:weakSelf.resourceDelegate];
-        }
-    }]];
-}
-
-- (void)cleanupDependencies:(NSArray *)inputControls
-{
-    for (JSInputControlWrapper *inputControl in inputControls) {
-        NSArray *slaveDependencies = inputControl.getSlaveDependencies;
-        NSMutableArray *subDependentControls = [NSMutableArray array];
-
-        // Collect all sub dependent controls
-        for (JSInputControlWrapper *dependentControl in slaveDependencies) {
-            [subDependentControls addObjectsFromArray:[self allSubDependentControls:dependentControl]];
-        }
-
-        // Remove controls that have transitive dependencies
-        for (JSInputControlWrapper *subDependentControl in subDependentControls) {
-            [inputControl removeSlaveDependency:subDependentControl];
-        }
-    }
-}
-
-- (NSArray *)allSubDependentControls:(JSInputControlWrapper *)inputControl
-{
-    NSMutableArray *result = [NSMutableArray array];
-    NSArray *dependentControls = inputControl.getSlaveDependencies;
-    
-    // Collect recursively dependent controls if it is not empty
-    if (dependentControls) {
-        [result addObjectsFromArray:dependentControls];
-        for (JSInputControlWrapper *dependentControl in dependentControls) {
-            [result addObjectsFromArray:[self allSubDependentControls:dependentControl]];
-        }
-    }
-    
-    return result;
-}
-
-#pragma mark Rest v1
-
-- (void)createCellFromWrapper:(JSInputControlWrapper *)inputControl
-{
-    id cell = [self.inputControlFactory inputControlWithInputControlWrapper:inputControl];
-    [self configureInputControlCell:cell];
-    [self.inputControls addObject:cell];
-}
-
-- (id <JSRequestDelegate>)resourceDelegate
-{
-    __weak JMReportOptionsTableViewController *reportOptions = self;
-    
-    // Will be invoked in the end after all requests will finish 
-    [JMRequestDelegate setFinalBlock:[self finalBlockForReportOptions:reportOptions]];
-    
-    return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        reportOptions.resourceDescriptor = [result.objects objectAtIndex:0];
-        
-        NSMutableArray *inputControlWrappers = [NSMutableArray array];
-        
-        // Create wrapper for IC
-        for (JSResourceDescriptor *childResourceDescriptor in reportOptions.resourceDescriptor.childResourceDescriptors) {
-            if ([childResourceDescriptor.wsType isEqualToString:reportOptions.constants.WS_TYPE_INPUT_CONTROL]) {
-                JSInputControlWrapper *inputControl = [[JSInputControlWrapper alloc] initWithResourceDescriptor:childResourceDescriptor];
-                [inputControlWrappers addObject:inputControl];
-            }
-        }
-        
-        // Update dependencies for IC
-        for (JSInputControlWrapper *i in inputControlWrappers) {
-            for (NSString *parameter in i.parameterDependencies) {
-                for (JSInputControlWrapper *j in inputControlWrappers) {
-                    if (j != i && [j.name isEqualToString:parameter]) {
-                        [j addSlaveDependency:i];
-                        [i addMasterDependency:j];
-                    }
-                }
-            }
-        }
-        
-        [reportOptions cleanupDependencies:inputControlWrappers];
-        
-        for (JSInputControlWrapper *inputControl in inputControlWrappers) {
-            if (!inputControl.dataType && inputControl.dataTypeUri.length > 0) {
-                [reportOptions requestDataTypeForInputControlWrapper:inputControl];
-            } else {
-                [reportOptions createCellFromWrapper:inputControl];
-            }
-        }
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMUpdateInputControlQueryDataNotification
-                                                            object:nil];
-    } viewControllerToDismiss:self];
-}
-
-- (void)requestDataTypeForInputControlWrapper:(JSInputControlWrapper *)inputControlWrapper;
-{
-    // Define self with __weak modifier (require to avoid circular references and for
-    // proper memory management)
-    __weak JMReportOptionsTableViewController *reportOptions = self;
-    __block JSInputControlWrapper *inputControl = inputControlWrapper;
-    
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        JSResourceDescriptor *dataType = [result.objects objectAtIndex:0];
-        JSResourceProperty *dataTypeProperty = [dataType propertyByName:reportOptions.constants.PROP_DATATYPE_TYPE];
-        [inputControl setDataType:dataTypeProperty.value.intValue];
-        [reportOptions createCellFromWrapper:inputControl];
-    }];
-    
-    [self.resourceClient resource:inputControlWrapper.dataTypeUri delegate:delegate];
-}
-
-- (void)restV1RunReport
-{
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    for (JMInputControlCell *cell in self.inputControls) {
-        if (cell.value != nil) {
-            [parameters setObject:cell.value forKey:cell.inputControlWrapper.name];
-        }
-    }
-    [self performSegueWithIdentifier:kJMRunReportSegue sender:parameters];
-}
-
-#pragma mark Rest v2
-
-- (void)createCellFromInputControlDescriptor:(JSInputControlDescriptor *)inputControl
-{
-    id cell = [self.inputControlFactory inputControlWithInputControlDescriptor:inputControl];
-    [self configureInputControlCell:cell];
-    [self.inputControls addObject:cell];
-}
-
-- (JMRequestDelegate *)inputControlsForReportDelegate
-{
-    __weak JMReportOptionsTableViewController *reportOptions = self;
-
-    // Will be invoked in the end after all requests will finish
-    [JMRequestDelegate setFinalBlock:[self finalBlockForReportOptions:reportOptions]];
-
-    return [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        for (JSInputControlDescriptor *inputControlDescriptor in result.objects) {
-            [reportOptions createCellFromInputControlDescriptor:inputControlDescriptor];
-        }
-    } viewControllerToDismiss:self];
-}
-
-- (void)restV2RunReport
-{
-    if (!self.inputControls.count) {
-        [self performSegueWithIdentifier:kJMRunReportSegue sender:nil];
-        return;
-    }
-
     NSMutableArray *ids = [NSMutableArray array];
-    NSMutableArray *parametersToValidate = [NSMutableArray array];
+    NSMutableArray *parameters = [NSMutableArray array];
 
     for (JMInputControlCell *cell in self.inputControls) {
         [ids addObject:cell.inputControlDescriptor.uuid];
         JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:cell.inputControlDescriptor.uuid
                                                                                value:cell.inputControlDescriptor.selectedValues];
-        [parametersToValidate addObject:reportParameter];
+        [parameters addObject:reportParameter];
     }
 
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:nil];
@@ -460,24 +220,28 @@ inject_default_rotation()
         }
 
         if (!isValid) {
-            [JMRequestDelegate setFinalBlock:[self finalBlockForReportOptions:reportOptions]];
+            [JMRequestDelegate setFinalBlock:^{
+                [reportOptions.tableView reloadData];
+            }];
         } else {
-            NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+            NSMutableDictionary *parametersToUpdate = [NSMutableDictionary dictionary];
 
             for (JMInputControlCell *cell in self.inputControls) {
                 if (cell.value != nil) {
-                    [parameters setObject:cell.value forKey:cell.inputControlDescriptor.uuid];
+                    [parametersToUpdate setObject:cell.value forKey:cell.inputControlDescriptor.uuid];
                 }
             }
 
-            [self.reportOptionsUtil updateReportOptions:parameters forReport:reportOptions.resourceLookup.uri];
-            [reportOptions performSegueWithIdentifier:kJMRunReportSegue sender:parameters];
+            [self.reportOptionsUtil updateReportOptions:parametersToUpdate forReport:reportOptions.resourceLookup.uri];
+
+            id params = self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_TWO ? parameters : parametersToUpdate;
+            [reportOptions performSegueWithIdentifier:kJMRunReportSegue sender:params];
         }
     }];
 
     [self.reportClient updatedInputControlsValues:self.resourceLookup.uri
                                               ids:ids
-                                   selectedValues:parametersToValidate
+                                   selectedValues:parameters
                                          delegate:delegate];
 }
 

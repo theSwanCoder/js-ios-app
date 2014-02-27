@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -27,7 +27,7 @@
 
 /* Server Profiles view */
 
-"servers.info" = "Jaspersoft Mobile v %@\n\nJasperReports Server 4.7.1 以上用の管理ツール/レポートビューアです。\n\n詳細は、以下の URL を参照してください。\nwww.jasperforge.org/projects/mobile\n\n(c) 2011 - 2013 Jaspersoft Corp.";
+"servers.info" = "Jaspersoft Mobile v %@\n\nJasperReports Server 5.0 以上用の管理ツール/レポートビューアです。\n\n詳細は、以下の URL を参照してください。\nwww.jasperforge.org/projects/mobile\n\n(c) 2011 - 2014 Jaspersoft Corp.";
 
 "servers.url.label" = "URL";
 "servers.url.tip" = "http://example.com/jasperserver";

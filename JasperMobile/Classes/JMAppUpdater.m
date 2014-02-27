@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -101,7 +101,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
 + (NSNumber *)latestAppVersion
 {
-    NSString *appVersion = [NSBundle mainBundle].infoDictionary[kJMApplicationVersion];
+    NSString *appVersion = [[NSBundle mainBundle].infoDictionary objectForKey:kJMApplicationVersion];
     return [NSNumber numberWithDouble:[appVersion doubleValue]];
 }
 

@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -21,17 +21,16 @@
  */
 
 //
-//  JMBarButtonPresenterNavigationViewController.h
+//  JMSavedReportsTableViewController.h
 //  Jaspersoft Corporation
 //
 
 #import <UIKit/UIKit.h>
-#import "JMSplitViewBarButtonPresenterProtocol.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
+ @since 1.8
  */
-@interface JMBarButtonPresenterNavigationViewController : UINavigationController <JMSplitViewBarButtonPresenterProtocol>
+@interface JMSavedReportsTableViewController : UITableViewController
 
 @end

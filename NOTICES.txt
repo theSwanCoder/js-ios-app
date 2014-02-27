@@ -1,5 +1,5 @@
-JasperMobile for iOS version 1.7
-Copyright (C) 2013 Jaspersoft Corporation. All rights reserved.
+JasperMobile for iOS version 1.8
+Copyright (C) 2014 Jaspersoft Corporation. All rights reserved.
 http://community.jaspersoft.com/project/jaspermobile-ios
 
 Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -25,6 +25,7 @@ along with Jaspersoft Mobile SDK for Android. If not, see
 THIRD PARTY COMPONENTS
 -------------------------------
 This software includes third party software subject to the associated copyrights, as follows:
+- ALToastView (MIT) - https://github.com/alexleutgoeb/ALToastView
 - MJPopupViewController v0.4 (MIT) - https://github.com/martinjuhasz/MJPopupViewController
 - Objection v0.16.0 (MIT) - https://github.com/atomicobject/objection
 - SSKeychain v0.1.4 (MIT) - https://github.com/soffes/sskeychain
@@ -36,7 +37,7 @@ third party software, subject to the associated copyrights, as follows:
 - XMLWriter (MIT) - http://code.google.com/p/xswi/
 
 The text of licenses for the above software is included with the
-JasperMobile for iOS source package, in the /docs/licenses folder.
+JasperMobile for iOS source package, in the /licenses folder.
 
 
 

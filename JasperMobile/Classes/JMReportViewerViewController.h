@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -38,8 +38,7 @@
 
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, strong) NSDictionary *parameters;
-@property (nonatomic, strong) NSString *reportFormat;
-@property (nonatomic, strong) JSConstants *constants;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *saveButton;
+@property (nonatomic, strong) id parameters;
 
 @end

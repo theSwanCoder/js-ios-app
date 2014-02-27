@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -37,6 +37,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 @interface JMSearchableTableViewController ()
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, assign) CGPoint contentOffset;
+@property (nonatomic, readwrite) JMCancelRequestBlock cancelBlock;
 
 - (CGPoint)defaultContentOffset;
 - (void)resetSearchState;
@@ -57,6 +58,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 {
     [super changeServerProfile];
     [self resetSearchState];
+    self.isRefreshing = NO;
     self.resourceTypes = nil;
 }
 
@@ -79,7 +81,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
     if (![JMUtils isViewControllerVisible:self]) {
         self.offset = 0;
         self.totalCount = 0;
-        _cancelBlock = nil;
+        self.cancelBlock = nil;
         
         if (!self.searchBar.text.length) {
             self.contentOffset = [self defaultContentOffset];
@@ -89,8 +91,6 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 }
 
 #pragma mark - Accessors
-
-@synthesize cancelBlock = _cancelBlock;
 
 - (JMCancelRequestBlock)cancelBlock
 {
@@ -184,9 +184,6 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 {
     if (self.navigationController) {
         [searchBar resignFirstResponder];
-
-        // TODO: consult about hiding search bar
-        //        [self hideSearchBar:searchBar animated:NO];
         
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:JMMainStoryboard() bundle:nil];
         id destinationViewController = [storyboard instantiateViewControllerWithIdentifier:NSStringFromClass(JMLibraryTableViewController.class)];
@@ -276,8 +273,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 
 - (CGPoint)defaultContentOffset
 {
-    // TODO: find a better way to fix issue with contentOffset
-    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+    if ([JMUtils isFoundationNumber7OrHigher]) {
         return CGPointMake(0, -20.0f);
     } else {
         return CGPointMake(0, self.searchBar.frame.size.height);

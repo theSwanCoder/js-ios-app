@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -30,6 +30,7 @@
 #import "JMAskPasswordDialog.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
+#import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "JMRequestDelegate.h"
@@ -258,12 +259,12 @@ inject_default_rotation()
         [self.servers replaceObjectAtIndex:index withObject:serverProfile];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     } else {
-        BOOL needsToRefreshFooter = !self.servers.count;
+        BOOL needsToRefreshFooter = !self.servers.count || [JMUtils isFoundationNumber7OrHigher];
         indexPath = [NSIndexPath indexPathForRow:self.servers.count inSection:0];
         [self.servers addObject:serverProfile];
         [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         if (needsToRefreshFooter) {
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kJMFooterSection] withRowAnimation:UITableViewRowAnimationNone];
+            [self.tableView reloadData];
         }
     }
 }

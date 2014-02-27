@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -26,14 +26,20 @@
 //
 
 #import "JMReportViewerViewController.h"
-#import "JMUtils.h"
 #import "JMCancelRequestPopup.h"
+#import "JMConstants.h"
+#import "JMLocalization.h"
 #import "JMRequestDelegate.h"
+#import "JMRotationBase.h"
+#import "JMUtils.h"
+#import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
+
+static NSString * const kJMShowReportSaverSegue = @"ShowReportSaver";
 
 @interface JMReportViewerViewController()
 @property (nonatomic, strong) NSString *tempDirectory;
-@property (nonatomic, strong) NSString *reportPath;
+@property (nonatomic, weak) JSConstants *constants;
 @end
 
 @implementation JMReportViewerViewController
@@ -50,6 +56,7 @@ inject_default_rotation()
 {
     [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
+    self.saveButton.title = JMCustomLocalizedString(@"dialog.button.save", nil);
 }
 
 #pragma mark - UITableViewController
@@ -58,11 +65,25 @@ inject_default_rotation()
 {
     [super viewDidLoad];
     self.webView.delegate = self;
-    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD) {
-        [self generateReportURL];
+
+    [self createTempDirectory];
+
+    [JMCancelRequestPopup dismiss];
+    [self.activityIndicator startAnimating];
+
+    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_V2) {
+        [self runReportExecution];
     } else {
         [self runReport];
     }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    id destinationViewController = segue.destinationViewController;
+    [destinationViewController setResourceLookup:self.resourceLookup];
+    [destinationViewController setParameters:self.parameters];
+    [destinationViewController setDelegate:self];
 }
 
 - (void)viewDidUnload
@@ -72,16 +93,21 @@ inject_default_rotation()
     [super viewDidUnload];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)willMoveToParentViewController:(UIViewController *)parent
 {
-    [JMUtils hideNetworkActivityIndicator];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-
-    if ([fileManager fileExistsAtPath:self.tempDirectory]) {
+    if (!parent) {
+        [JMUtils hideNetworkActivityIndicator];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
         [fileManager removeItemAtPath:self.tempDirectory error:nil];
+        [self.webView stopLoading];
+        self.webView = nil;
+        
+        // Cancel all active requests before disappearing
+        if (![JMRequestDelegate isRequestPoolEmpty]) {
+            [self.reportClient cancelAllRequests];
+            [JMRequestDelegate clearRequestPool];
+        }
     }
-
-    self.webView = nil;
 }
 
 #pragma mark - UIWebViewDelegate
@@ -92,80 +118,65 @@ inject_default_rotation()
     [self.activityIndicator stopAnimating];
 }
 
-#pragma mark - Private -
-#pragma mark Rest v2
+#pragma mark - Actions
 
-- (void)generateReportURL
+- (IBAction)saveReport:(id)sender
+{
+    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_V2) {
+        [self performSegueWithIdentifier:kJMShowReportSaverSegue sender:self];
+    } else {
+        [[UIAlertView localizedAlertWithTitle:@"error.savereport.notavaialble.title"
+                                      message:@"error.savereport.notavaialble.msg"
+                                     delegate:nil
+                            cancelButtonTitle:@"dialog.button.ok"
+                            otherButtonTitles:nil] show];
+    }
+}
+
+#pragma mark - Private -
+
+- (void)createTempDirectory
+{
+    NSString *tempDirectory = NSTemporaryDirectory();
+    self.tempDirectory = [tempDirectory stringByAppendingPathComponent:kJMReportsDirectory];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager createDirectoryAtPath:self.tempDirectory
+           withIntermediateDirectories:YES
+                            attributes:nil
+                                 error:nil];
+}
+
+#pragma mark Uses for JRS versions 5.5 and higher
+
+- (void)runReportExecution
+{
+    __weak JMReportViewerViewController *reportViewerViewController = self;
+
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
+        JSExportExecution *export = [response.exports objectAtIndex:0];
+        
+        NSString *reportUrl = [reportViewerViewController.reportClient generateReportOutputUrl:response.requestId exportOutput:export.uuid];
+        [reportViewerViewController.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:reportUrl]]];
+    } errorBlock:^(JSOperationResult *result) {
+        [reportViewerViewController.activityIndicator stopAnimating];
+    }];
+    
+    [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.constants.CONTENT_TYPE_HTML
+                              interactive:YES freshData:YES saveDataSnapshot:NO ignorePagination:YES transformerKey:nil pages:nil attachmentsPrefix:nil parameters:self.parameters delegate:delegate];
+}
+
+#pragma mark Uses for JRS versions 5.0 - 5.5
+
+- (void)runReport
 {
     NSURL *reportURL = [NSURL URLWithString:[self.reportClient generateReportUrl:self.resourceLookup.uri
                                                                     reportParams:self.parameters
                                                                             page:0
-                                                                          format:self.reportFormat]];
+                                                                          format:self.constants.CONTENT_TYPE_HTML]];
     NSURLRequest *request = [NSURLRequest requestWithURL:reportURL];
     [JMUtils showNetworkActivityIndicator];
-    [self.activityIndicator startAnimating];
     [self.webView loadRequest:request];
-}
-
-#pragma mark Rest v1
-
-- (void)runReport
-{
-    __weak JMReportViewerViewController *reportViewerViewController = self;
-
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:^{
-        [reportViewerViewController.navigationController popViewControllerAnimated:YES];
-    }];
-
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        JSReportDescriptor *reportDescriptor = [result.objects objectAtIndex:0];
-        NSString *uuid = reportDescriptor.uuid;
-
-        NSString *tempDirectory = NSTemporaryDirectory();
-
-        reportViewerViewController.tempDirectory = [tempDirectory stringByAppendingPathComponent:uuid];
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-
-        if (![fileManager fileExistsAtPath:reportViewerViewController.tempDirectory]) {
-            [fileManager createDirectoryAtPath:reportViewerViewController.tempDirectory
-                   withIntermediateDirectories:YES
-                                    attributes:nil
-                                         error:nil];
-        }
-
-        for (JSReportAttachment *attachment in reportDescriptor.attachments) {
-            NSString *fileName = attachment.name;
-            NSString *fileType = attachment.type;
-            NSString *extension = @"";
-
-            if ([fileType isEqualToString:@"text/html"]) {
-                extension = @".html";
-            } else if ([fileType isEqualToString:@"application/pdf"]) {
-                extension = @".pdf";
-            }
-
-            // The path to write a file
-            NSString *resourceFile = [self.tempDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@", fileName, extension]];
-
-            // Set as main file to render in web view if extension is equals to HTML or PDF
-            if (extension.length) {
-                reportViewerViewController.reportPath = resourceFile;
-            }
-
-            [self.reportClient reportFile:uuid fileName:fileName path:resourceFile usingBlock:^(JSRequest *request) {
-                request.timeoutInterval = 0;
-                // Request delegate uses as counter for asynchronous requests and finish block is not needed
-                request.delegate = [JMRequestDelegate requestDelegateForFinishBlock:nil];
-            }];
-        }
-    }];
-
-    [JMRequestDelegate setFinalBlock:^{
-        NSURL *reportPath = [NSURL fileURLWithPath:reportViewerViewController.reportPath];
-        [reportViewerViewController.webView loadRequest:[NSURLRequest requestWithURL:reportPath]];
-    }];
-
-    [self.reportClient runReport:self.resourceLookup.uri reportParams:self.parameters format:self.reportFormat delegate:delegate];
 }
 
 @end

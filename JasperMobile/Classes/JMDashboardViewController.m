@@ -1,6 +1,6 @@
 /*
  * JasperMobile for iOS
- * Copyright (C) 2011 - 2013 Jaspersoft Corporation. All rights reserved.
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -26,6 +26,7 @@
 //
 
 #import "JMDashboardViewController.h"
+#import "JMRotationBase.h"
 #import "JMUtils.h"
 
 @implementation JMDashboardViewController
