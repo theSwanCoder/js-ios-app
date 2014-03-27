@@ -56,9 +56,14 @@
 + (NSNumber *)currentAppVersion;
 
 /**
- Returns latest version of app structure (from bundles)
+ Returns latest version of app (from bundles)
  */
 + (NSNumber *)latestAppVersion;
+
+/**
+ Returns string representation for latest version of app (from bundles)
+ */
++ (NSString *)latestAppVersionAsString;
 
 /**
  Indicates if app is running for the first time
