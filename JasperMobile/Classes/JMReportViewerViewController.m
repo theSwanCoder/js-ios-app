@@ -71,7 +71,7 @@ inject_default_rotation()
     [JMCancelRequestPopup dismiss];
     [self.activityIndicator startAnimating];
 
-    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_V2) {
+    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_TWO) {
         [self runReportExecution];
     } else {
         [self runReport];
