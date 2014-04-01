@@ -234,7 +234,7 @@ inject_default_rotation()
 
             [self.reportOptionsUtil updateReportOptions:parametersToUpdate forReport:reportOptions.resourceLookup.uri];
 
-            id params = self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_TWO ? parameters : parametersToUpdate;
+            id params = self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_V2 ? parameters : parametersToUpdate;
             [reportOptions performSegueWithIdentifier:kJMRunReportSegue sender:params];
         }
     }];
