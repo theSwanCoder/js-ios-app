@@ -97,7 +97,7 @@ inject_default_rotation()
 - (BOOL)isServerVersionSupported
 {
     NSInteger serverVersion = self.resourceClient.serverInfo.versionAsInteger;
-    BOOL isServerVersionSupported =  serverVersion > self.constants.VERSION_CODE_EMERALD;
+    BOOL isServerVersionSupported =  serverVersion >= self.constants.VERSION_CODE_EMERALD;
     if (!isServerVersionSupported) {
         NSString *title = [NSString stringWithFormat:JMCustomLocalizedString(@"error.server.notsupported.title", nil), serverVersion];
         [[UIAlertView localizedAlertWithTitle:title

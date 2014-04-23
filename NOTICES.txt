@@ -1,4 +1,4 @@
-JasperMobile for iOS version 1.8
+JasperMobile for iOS version 1.8.1
 Copyright (C) 2014 Jaspersoft Corporation. All rights reserved.
 http://community.jaspersoft.com/project/jaspermobile-ios
 

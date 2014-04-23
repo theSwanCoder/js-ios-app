@@ -238,7 +238,7 @@ inject_default_rotation()
 - (IBAction)applicationInfo:(id)sender
 {
     NSString *message = JMCustomLocalizedString(@"servers.info", nil);
-    message = [NSString stringWithFormat:message, [JMAppUpdater latestAppVersion]];
+    message = [NSString stringWithFormat:message, [JMAppUpdater latestAppVersionAsString]];
     
     [[UIAlertView localizedAlertWithTitle:nil
                          message:message
