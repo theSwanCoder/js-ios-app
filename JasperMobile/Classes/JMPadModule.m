@@ -27,6 +27,7 @@
 
 #import "JMPadModule.h"
 #import "JMPadRotation.h"
+#import "JMResourcesDataManager.h"
 
 @implementation JMPadModule
 
@@ -34,6 +35,7 @@
 {
     [super configure];
     [self bind:[[JMPadRotation alloc] init] toProtocol:@protocol(JMRotatable)];
+    [self bind:[[JMResourcesDataManager alloc] init] toClass:[JMResourcesDataManager class]];
 }
 
 @end

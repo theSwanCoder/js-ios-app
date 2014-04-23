@@ -51,7 +51,7 @@ objection_requires(@"favoritesUtil")
     [super viewDidAppear:animated];
     
     if (self.isServerVersionSupported &&
-        ([super isNeedsToReloadData] || self.favoritesUtil.needsToRefreshFavorites)) {
+        ([super needsToReloadData] || self.favoritesUtil.needsToRefreshFavorites)) {
         self.resources = [self.favoritesUtil wrappersFromFavorites] ?: [NSMutableArray array];
         self.favoritesUtil.needsToRefreshFavorites = NO;
         [self.tableView reloadData];

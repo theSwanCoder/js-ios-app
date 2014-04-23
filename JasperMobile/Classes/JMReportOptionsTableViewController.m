@@ -44,7 +44,7 @@ static NSInteger const kJMRunReportSection = 1;
 static NSString * const kJMRunCellIdentifier = @"RunCell";
 static NSString * const kJMShowSingleSelectSegue = @"ShowSingleSelect";
 static NSString * const kJMShowMultiSelectSegue = @"ShowMultiSelect";
-static NSString * const kJMRunReportSegue = @"RunReport";
+static NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
 
 static CGFloat const separatorHeight = 1.0f;
 
@@ -126,7 +126,7 @@ inject_default_rotation()
         [identifier isEqualToString:kJMShowMultiSelectSegue]) {
         [destinationViewController setCell:sender];
 
-    } else if ([identifier isEqualToString:kJMRunReportSegue]) {
+    } else if ([identifier isEqualToString:kJMShowReportViewerSegue]) {
         [destinationViewController setResourceLookup:self.resourceLookup];
         [destinationViewController setParameters:sender];
     }
@@ -235,7 +235,7 @@ inject_default_rotation()
             [self.reportOptionsUtil updateReportOptions:parametersToUpdate forReport:reportOptions.resourceLookup.uri];
 
             id params = self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_V2 ? parameters : parametersToUpdate;
-            [reportOptions performSegueWithIdentifier:kJMRunReportSegue sender:params];
+            [reportOptions performSegueWithIdentifier:kJMShowReportViewerSegue sender:params];
         }
     }];
 

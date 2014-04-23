@@ -36,7 +36,7 @@
 @implementation JMUILineView
 
 // Mimics UITableView iOS7 default line separator
-// Thanks to danypata for the solution (http://stackoverflow.com/a/20091771)
+// Thanks to danypata for the solution ( http://stackoverflow.com/a/20091771 )
 - (void)layoutSubviews {
     [super layoutSubviews];
 

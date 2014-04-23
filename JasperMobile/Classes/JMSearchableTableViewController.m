@@ -47,11 +47,11 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 
 @synthesize resourceTypes = _resourceTypes;
 @synthesize isRefreshing = _isRefreshing;
-@synthesize isNeedsToReloadData = _isNeedsToReloadData;
+@synthesize needsToReloadData = _needsToReloadData;
 
-- (BOOL)isNeedsToReloadData
+- (BOOL)needsToReloadData
 {
-    return !self.isRefreshing && _isNeedsToReloadData;
+    return !self.isRefreshing && _needsToReloadData;
 }
 
 - (void)changeServerProfile
@@ -185,8 +185,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
     if (self.navigationController) {
         [searchBar resignFirstResponder];
         
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:JMMainStoryboard() bundle:nil];
-        id destinationViewController = [storyboard instantiateViewControllerWithIdentifier:NSStringFromClass(JMLibraryTableViewController.class)];
+        id destinationViewController = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass(JMLibraryTableViewController.class)];
         
         if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
             [destinationViewController setResourceClient:self.resourceClient];

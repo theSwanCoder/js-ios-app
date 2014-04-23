@@ -21,7 +21,7 @@
  */
 
 //
-//  JMAskPasswordDialog.m
+//  JMSwitchMenu.m
 //  Jaspersoft Corporation
 //
 

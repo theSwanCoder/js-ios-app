@@ -55,7 +55,7 @@
 {
     [super viewDidAppear:animated];
 
-    if (self.isNeedsToReloadData) {
+    if (self.needsToReloadData) {
         [self reloadData];
     }
 }

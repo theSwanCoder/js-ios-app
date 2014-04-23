@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
         <!--Repository Table View Controller - Resource Title-->
@@ -159,7 +159,7 @@
                     <connections>
                         <segue destination="cdD-E5-cP8" kind="push" identifier="ShowResourceInfo" id="Y5l-Qb-Vpq"/>
                         <segue destination="lCR-s0-MJL" kind="push" identifier="ShowReportOptions" id="zHE-Xy-emR"/>
-                        <segue destination="P0H-Cl-wTR" kind="push" identifier="ShowReportViewer" id="OWg-UQ-Aao"/>
+                        <segue destination="wH5-e1-g89" kind="push" identifier="ShowReportViewer" id="iAD-0x-hj1"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rzJ-UC-2ps" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -727,7 +727,7 @@
                     <connections>
                         <segue destination="cdD-E5-cP8" kind="push" identifier="ShowResourceInfo" id="bQI-n6-E7D"/>
                         <segue destination="lCR-s0-MJL" kind="push" identifier="ShowReportOptions" id="ATX-lC-zMh"/>
-                        <segue destination="P0H-Cl-wTR" kind="push" identifier="ShowReportViewer" id="w4O-aM-gRB"/>
+                        <segue destination="wH5-e1-g89" kind="push" identifier="ShowReportViewer" id="LkN-jP-rQI"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2YZ-dY-KeK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -910,7 +910,7 @@
                     <connections>
                         <segue destination="cdD-E5-cP8" kind="push" identifier="ShowResourceInfo" id="tcw-WR-V9Y"/>
                         <segue destination="lCR-s0-MJL" kind="push" identifier="ShowReportOptions" id="S0v-p9-FbZ"/>
-                        <segue destination="P0H-Cl-wTR" kind="push" identifier="ShowReportViewer" id="hBN-jc-0AO"/>
+                        <segue destination="wH5-e1-g89" kind="push" identifier="ShowReportViewer" id="GP7-gs-pZo"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mSl-PB-q2d" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1396,7 +1396,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="y7w-zn-yLI"/>
                     <connections>
-                        <segue destination="P0H-Cl-wTR" kind="push" identifier="RunReport" id="WwX-kz-GW0"/>
+                        <segue destination="wH5-e1-g89" kind="push" identifier="ShowReportViewer" id="Gft-4M-Lq4"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CEG-xF-dnS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1502,13 +1502,13 @@
         <!--Report Viewer View Controller-->
         <scene sceneID="4fj-Xc-Fcg">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="P0H-Cl-wTR" customClass="JMReportViewerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ReportViewerViewController" hidesBottomBarWhenPushed="YES" id="P0H-Cl-wTR" customClass="JMReportViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0ex-Oo-Id8">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <webView opaque="NO" contentMode="scaleToFill" scalesPageToFit="YES" allowsInlineMediaPlayback="NO" mediaPlaybackRequiresUserAction="NO" mediaPlaybackAllowsAirPlay="NO" keyboardDisplayRequiresUserAction="NO" id="cv0-Ok-S0i">
-                                <rect key="frame" x="2" y="2" width="316" height="476"/>
+                                <rect key="frame" x="20" y="20" width="280" height="440"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <dataDetectorType key="dataDetectorTypes"/>
@@ -1516,31 +1516,25 @@
                                     <outlet property="delegate" destination="0ex-Oo-Id8" id="YmP-Rt-GC8"/>
                                 </connections>
                             </webView>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" style="gray" id="qWJ-A0-bcy">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" hidesWhenStopped="YES" animating="YES" style="gray" id="qWJ-A0-bcy">
                                 <rect key="frame" x="151" y="228" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="V3V-BF-lxt">
-                        <barButtonItem key="rightBarButtonItem" title="Save" id="T5S-rR-Y6l">
-                            <connections>
-                                <action selector="saveReport:" destination="P0H-Cl-wTR" id="Qjm-w8-Lea"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="T5S-rR-Y6l"/>
                     </navigationItem>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="activityIndicator" destination="qWJ-A0-bcy" id="jLF-TZ-2P2"/>
-                        <outlet property="saveButton" destination="T5S-rR-Y6l" id="wss-KL-mDp"/>
                         <outlet property="webView" destination="cv0-Ok-S0i" id="ARs-Ie-m4B"/>
-                        <segue destination="aAe-bt-6mQ" kind="push" identifier="ShowReportSaver" id="Doe-i2-NtC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8gy-B3-LMA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1498" y="245"/>
+            <point key="canvasLocation" x="1958" y="-339"/>
         </scene>
         <!--Save Report Table View Controller - Save Report-->
         <scene sceneID="B7V-nj-t6M">
@@ -1631,7 +1625,33 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UVI-TV-yEu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2023" y="240"/>
+            <point key="canvasLocation" x="1958" y="327"/>
+        </scene>
+        <!--Report Paging View Controller-->
+        <scene sceneID="sz8-qE-RY1">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="wH5-e1-g89" customClass="JMReportPagingViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ItZ-Cp-iAb">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="s8a-Id-gkp">
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="Rni-4w-FwP">
+                            <connections>
+                                <action selector="saveReport:" destination="wH5-e1-g89" id="OvN-5H-76v"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <segue destination="aAe-bt-6mQ" kind="push" identifier="ShowReportSaver" id="3s6-CD-VJy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xc1-9y-2fP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1478" y="327"/>
         </scene>
         <!--Navigation Controller - Saved Reports-->
         <scene sceneID="PFC-vA-apj">
@@ -1832,7 +1852,7 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Customer Orders Report" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y6G-41-6fq">
-                                                <rect key="frame" x="110.99999774104401" y="15" width="150" height="21"/>
+                                                <rect key="frame" x="110.99999860097623" y="15" width="150" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.4431372549" green="0.4431372549" blue="0.4431372549" alpha="1" colorSpace="calibratedRGB"/>
@@ -1853,7 +1873,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jul 4, 2007, 9:20 AM " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eno-LP-TWo">
-                                                <rect key="frame" x="139.99999919156906" y="15" width="150" height="21"/>
+                                                <rect key="frame" x="140" y="15" width="150" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.4431372549" green="0.4431372549" blue="0.4431372549" alpha="1" colorSpace="calibratedRGB"/>
@@ -1874,7 +1894,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12.1 Mb  " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gBz-3q-iv7">
-                                                <rect key="frame" x="140" y="15" width="150" height="21"/>
+                                                <rect key="frame" x="140" y="15" width="149.99999919156906" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="0.4431372549" green="0.4431372549" blue="0.4431372549" alpha="1" colorSpace="calibratedRGB"/>
@@ -1930,10 +1950,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="OWg-UQ-Aao"/>
-        <segue reference="iUA-aA-WXK"/>
-        <segue reference="f3B-eB-Zkq"/>
-        <segue reference="Y5l-Qb-Vpq"/>
-        <segue reference="zHE-Xy-emR"/>
+        <segue reference="LkN-jP-rQI"/>
+        <segue reference="bQI-n6-E7D"/>
+        <segue reference="2sv-EJ-Gcx"/>
+        <segue reference="ATX-lC-zMh"/>
+        <segue reference="4G2-Cf-EF7"/>
     </inferredMetricsTieBreakers>
 </document>

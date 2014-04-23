@@ -47,7 +47,7 @@ static NSString * const kJMRequestType = @"type";
     self.includeDashboards = YES;
     
     // Check if resources are needs to be reloaded
-    if (self.isNeedsToReloadData) {
+    if (self.needsToReloadData) {
         [self reloadData];
     }
 }

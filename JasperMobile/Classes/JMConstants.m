@@ -54,17 +54,3 @@ NSString * const kJMReportsDirectory = @"reports";
 
 // Name of the main report file (outputResource)
 NSString * const kJMReportFilename = @"report";
-
-// Storyboard name
-static NSString *_mainStoryboardName;
-NSString *JMMainStoryboard() {
-    if (!_mainStoryboardName) {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            _mainStoryboardName = @"MainStoryboard_iPad";
-        } else {
-            _mainStoryboardName = @"MainStoryboard_iPhone";
-        }
-    }
-    
-    return _mainStoryboardName;
-}

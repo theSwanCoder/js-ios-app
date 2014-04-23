@@ -58,9 +58,6 @@ extern NSString * const kJMReportsDirectory;
 // Name of the main report file (outputResource)
 extern NSString * const kJMReportFilename;
 
-// Storyboard name
-NSString *JMMainStoryboard();
-
 // Tags for menus. Declared as define constants because they can be used
 // in switch-case structure
 #define kJMRepositoryMenuTag 0

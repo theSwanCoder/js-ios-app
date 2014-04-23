@@ -34,3 +34,11 @@
 @interface JMSavedReportsTableViewController : UITableViewController
 
 @end
+
+@interface JMReportTableViewCell : UITableViewCell
+
+@property (nonatomic, weak) IBOutlet UILabel *reportNameLabel;
+@property (nonatomic, weak) IBOutlet UILabel *dateLabel;
+@property (nonatomic, weak) IBOutlet UILabel *sizeLabel;
+
+@end

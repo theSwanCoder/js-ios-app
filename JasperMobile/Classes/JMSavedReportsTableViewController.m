@@ -37,15 +37,6 @@ static NSString * const kJMShowSavedReportViewerSegue = @"ShowSavedReportViewer"
 static NSString * const kJMShowSavedReportInfoSegue = @"ShowSavedReportInfo";
 static NSString * const kJMDSStoreFile = @".DS_Store";
 
-@interface JMReportTableViewCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UILabel *reportNameLabel;
-@property (nonatomic, weak) IBOutlet UILabel *dateLabel;
-@property (nonatomic, weak) IBOutlet UILabel *sizeLabel;
-@end
-
-@implementation JMReportTableViewCell
-@end
-
 @interface JMSavedReportsTableViewController()
 @property (nonatomic, strong) NSFileManager *fileManager;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
@@ -232,4 +223,7 @@ static NSString * const kJMDSStoreFile = @".DS_Store";
     return [NSString stringWithFormat:@"%.1f %@", size, sizeUnit];
 }
 
+@end
+
+@implementation JMReportTableViewCell
 @end

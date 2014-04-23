@@ -40,7 +40,7 @@ extern NSInteger const kJMResourcesLimit;
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, strong) NSMutableArray *resources;
 @property (nonatomic, readonly) BOOL isPaginationAvailable;
-@property (nonatomic, assign) BOOL isNeedsToReloadData;
+@property (nonatomic, assign) BOOL needsToReloadData;
 
 - (void)changeServerProfile;
 - (BOOL)isServerVersionSupported;

@@ -62,7 +62,7 @@ inject_default_rotation()
     if (_resources != resources) {
         _resources = resources;
         if (!resources) {
-            self.isNeedsToReloadData = YES;
+            self.needsToReloadData = YES;
         }
     }
 }
@@ -115,7 +115,7 @@ inject_default_rotation()
 {
     [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
-    self.isNeedsToReloadData = YES;
+    self.needsToReloadData = YES;
     
     // Add observer to refresh controller after profile was changed
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -205,7 +205,7 @@ inject_default_rotation()
 
 - (void)requestFinished:(JSOperationResult *)result
 {
-    self.isNeedsToReloadData = NO;
+    self.needsToReloadData = NO;
     
     if (!self.resources) {
         self.resources = [NSMutableArray array];

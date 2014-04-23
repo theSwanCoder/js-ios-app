@@ -33,6 +33,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 static JMCancelRequestPopup *instance;
+static CGPoint popupOffset;
 
 @interface JMCancelRequestPopup ()
 @property (nonatomic, strong) JSRESTBase *restClient;
@@ -54,8 +55,20 @@ static JMCancelRequestPopup *instance;
     instance.cancelBlock = cancelBlock;
     [instance.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
     instance.progressLabel.text = JMCustomLocalizedString(message, nil);
+    instance.view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
+            UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     
     [viewController presentPopupViewController:instance animationType:MJPopupViewAnimationFade];
+    
+    [self applyOffset];
+}
+
++ (void)offset:(CGPoint)offset
+{
+    popupOffset = offset;
+    if (instance != nil) {
+        [self applyOffset];
+    }
 }
 
 + (void)dismiss
@@ -93,6 +106,17 @@ static JMCancelRequestPopup *instance;
 - (void)dealloc
 {
     self.view = nil;
+}
+
+#pragma mark - Private
+
++ (void)applyOffset
+{
+    if (!CGPointEqualToPoint(popupOffset, CGPointZero)) {
+        CGRect frame = instance.view.frame;
+        CGRect frameWithOffset = CGRectMake(frame.origin.x + popupOffset.x, frame.origin.y + popupOffset.y, frame.size.width, frame.size.height);
+        instance.view.frame = frameWithOffset;
+    }
 }
 
 @end

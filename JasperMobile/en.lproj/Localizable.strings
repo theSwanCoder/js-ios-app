@@ -121,6 +121,47 @@
 "filter.resources.type.reportUnit" = "Reports";
 "filter.resources.type.dashboard" = "Dashboards";
 
+/* Home View (Pad) */
+
+// Labels
+"home.menuitem.library.label" = "Library";
+"home.menuitem.savedreports.label" = "Saved Items";
+"home.menuitem.settings.label" = "Settings";
+"home.menuitem.repository.label" = "Repository";
+"home.menuitem.favorites.label" = "Favorites";
+"home.menuitem.serverprofiles.label" = "Server Profiles";
+
+// Descriptions
+"home.menuitem.library.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
+"home.menuitem.savedreports.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
+"home.menuitem.settings.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
+"home.menuitem.repository.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
+"home.menuitem.favorites.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
+"home.menuitem.serverprofiles.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
+
+/* Master view (Pad) */
+
+// Resources
+"master.resources.title" = "Resources";
+"master.resources.type.all" = "All";
+"master.resources.type.reportUnit" = "Reports";
+"master.resources.type.dashboard" = "Dashboards";
+
+// Sort by
+"master.sortby.title" = "Sort";
+"master.sortby.type.name" = "Name";
+"master.sortby.type.date" = "Date";
+"master.sortby.type.creator" = "Creator";
+
+// Categories
+"master.category.title" = "Category";
+"master.category.type.all" = "All";
+"master.category.type.sales" = "Sales";
+"master.category.type.marketing" = "Marketing";
+
+// Tools
+"master.tools.type.refresh" = "Refresh";
+
 /* Error messages */
 
 "error.readingresponse.dialog.msg" = "Error reading the response";

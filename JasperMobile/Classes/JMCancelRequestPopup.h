@@ -47,6 +47,15 @@ typedef void(^JMCancelRequestBlock)(void);
 + (void)presentInViewController:(UIViewController *)viewController message:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock;
 
 /**
+ Provides a global offset for all popups that will be displayed
+
+ @param offset A popup offset
+
+ **Default**: CGPointZero (same as CGPointMake(0,0) )
+*/
++ (void)offset:(CGPoint)offset;
+
+/**
  Dismisses last presented popup
  */
 + (void)dismiss;
