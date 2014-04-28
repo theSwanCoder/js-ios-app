@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="NbM-KM-ab4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="NbM-KM-ab4">
     <dependencies>
         <deployment version="1536" defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
         <!--Save Report Table View Controller - Save Report-->
@@ -114,17 +114,18 @@
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0039215686269999999" green="0.52156862749999999" blue="0.76470588240000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <inset key="insetFor6xAndEarlier" minX="0.0" minY="0.0" maxX="0.0" maxY="-20"/>
                             </view>
                             <containerView tag="1" contentMode="scaleToFill" id="guL-pz-gPB">
                                 <rect key="frame" x="0.0" y="74" width="163" height="778"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
                             </containerView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="163" height="852"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W7o-Rz-gVx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -142,6 +143,7 @@
                                 <rect key="frame" x="-24" y="0.0" width="792" height="74"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.20392156862745098" green="0.2196078431372549" blue="0.25490196078431371" alpha="1" colorSpace="calibratedRGB"/>
+                                <inset key="insetFor6xAndEarlier" minX="0.0" minY="0.0" maxX="0.0" maxY="-20"/>
                             </view>
                             <view contentMode="scaleToFill" id="nzO-5h-cpo" customClass="JMSwitchMenu">
                                 <rect key="frame" x="-1" y="74" width="771" height="48"/>
@@ -385,7 +387,6 @@ Please Wait...</string>
             <objects>
                 <navigationController storyboardIdentifier="MasterLibraryTableViewController" definesPresentationContext="YES" navigationBarHidden="YES" id="cy0-SY-qOX" sceneMemberID="viewController">
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="163" height="852"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="WZn-ni-ZZ8">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -395,12 +396,12 @@ Please Wait...</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k2j-DI-eEz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="329" y="2579"/>
+            <point key="canvasLocation" x="335" y="2433"/>
         </scene>
-        <!--Master Library Table View Controller - Jaspersoft-->
+        <!--Master Table View Controller - Jaspersoft-->
         <scene sceneID="hqa-5K-zCJ">
             <objects>
-                <tableViewController clearsSelectionOnViewWillAppear="NO" id="vqx-FJ-rML" customClass="JMMasterLibraryTableViewController" sceneMemberID="viewController">
+                <tableViewController clearsSelectionOnViewWillAppear="NO" id="vqx-FJ-rML" customClass="JMMasterTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="44" sectionFooterHeight="1" id="umq-4H-7tK">
                         <rect key="frame" x="0.0" y="0.0" width="163" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -478,11 +479,10 @@ Please Wait...</string>
                     </tableView>
                     <navigationItem key="navigationItem" title="Jaspersoft" id="s7J-D7-4yS"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="163" height="852"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rXI-y1-mFi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="630" y="2579"/>
+            <point key="canvasLocation" x="1202" y="2487"/>
         </scene>
         <!--Home Collection View Controller-->
         <scene sceneID="RYN-RT-9vD">

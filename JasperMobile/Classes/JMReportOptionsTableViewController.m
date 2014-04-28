@@ -203,7 +203,7 @@ inject_default_rotation()
 
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:nil];
 
-    __weak JMReportOptionsTableViewController *reportOptions = self;
+    __weak JMReportOptionsTableViewController *weakSelf = self;
 
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         BOOL isValid = YES;
@@ -211,7 +211,7 @@ inject_default_rotation()
         for (JSInputControlState *state in result.objects) {
             if (!state.error.length) continue;
 
-            for (JMInputControlCell *cell in reportOptions.inputControls) {
+            for (JMInputControlCell *cell in weakSelf.inputControls) {
                 if ([cell.inputControlDescriptor.uuid isEqualToString:state.uuid]) {
                     cell.errorMessage = state.error;
                     isValid = NO;
@@ -221,7 +221,7 @@ inject_default_rotation()
 
         if (!isValid) {
             [JMRequestDelegate setFinalBlock:^{
-                [reportOptions.tableView reloadData];
+                [weakSelf.tableView reloadData];
             }];
         } else {
             NSMutableDictionary *parametersToUpdate = [NSMutableDictionary dictionary];
@@ -232,10 +232,10 @@ inject_default_rotation()
                 }
             }
 
-            [self.reportOptionsUtil updateReportOptions:parametersToUpdate forReport:reportOptions.resourceLookup.uri];
+            [self.reportOptionsUtil updateReportOptions:parametersToUpdate forReport:weakSelf.resourceLookup.uri];
 
             id params = self.resourceClient.serverProfile.serverInfo.versionAsInteger >= self.constants.VERSION_CODE_EMERALD_V2 ? parameters : parametersToUpdate;
-            [reportOptions performSegueWithIdentifier:kJMShowReportViewerSegue sender:params];
+            [weakSelf performSegueWithIdentifier:kJMShowReportViewerSegue sender:params];
         }
     }];
 

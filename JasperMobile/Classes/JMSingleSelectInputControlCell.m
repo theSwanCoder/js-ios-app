@@ -93,10 +93,10 @@
     [super setInputControlDescriptor:inputControlDescriptor];
     [self setInputControlState:inputControlDescriptor.state];
     
-    __weak JMSingleSelectInputControlCell *cell = self;
+    __weak JMSingleSelectInputControlCell *weakSelf = self;
     
     self.updateSlaveDependenciesBlock = ^{
-        [cell updatedInputControlsValues];
+        [weakSelf updatedInputControlsValues];
     };
 }
 
@@ -109,11 +109,11 @@
         return;
     }
 
-    __weak JMSingleSelectInputControlCell *cell = self;
+    __weak JMSingleSelectInputControlCell *weakSelf = self;
     
     // TODO: change logic to select previous values instead dismissing view. And check network status!
     [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.reportClient cancelBlock:^{
-        [[cell.delegate navigationController] popViewControllerAnimated:YES];
+        [[weakSelf.delegate navigationController] popViewControllerAnimated:YES];
     }];
     
     NSMutableArray *selectedValues = [NSMutableArray array];
@@ -129,7 +129,7 @@
 
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         for (JSInputControlState *state in result.objects) {
-            for (id inputControl in cell.delegate.inputControls) {
+            for (id inputControl in weakSelf.delegate.inputControls) {
                 if ([state.uuid isEqualToString:[inputControl inputControlDescriptor].uuid]) {
                     [inputControl setInputControlState:state];
                 }

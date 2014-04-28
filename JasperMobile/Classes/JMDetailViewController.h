@@ -27,10 +27,11 @@
 
 #import <UIKit/UIKit.h>
 #import "JMResourceClientHolder.h"
-#import "JMResourcesDataManager.h"
-#import "JMPaginable.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
 @interface JMDetailViewController : UIViewController
+
+@property (nonatomic, weak) NSArray *resources;
+@property (nonatomic, assign) BOOL hasNextPage;
 
 @end

@@ -28,6 +28,8 @@
 #import "JMDetailViewController.h"
 #import "JMSwitchMenu.h"
 #import "JMConstants.h"
+#import "JMPaginationData.h"
+#import "JMRefreshable.h"
 
 typedef enum {
     JMViewControllerTypeHorizontal,
@@ -39,7 +41,7 @@ static NSString * const kJMVerticalList = @"ResourcesTableViewController";
 
 @interface JMDetailViewController ()
 @property (nonatomic, assign) JMViewControllerType viewControllerType;
-@property (nonatomic, weak) UIViewController *activeDetailViewController;
+@property (nonatomic, weak) UIViewController <JMRefreshable> *activeDetailViewController;
 @property (nonatomic, weak) IBOutlet UIView *containerView;
 @property (nonatomic, weak) IBOutlet JMSwitchMenu *switchBar;
 @end
@@ -53,9 +55,17 @@ static NSString * const kJMVerticalList = @"ResourcesTableViewController";
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
     self.containerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_patter.png"]];
-
+    self.resources = [NSMutableArray array];
     self.viewControllerType = JMViewControllerTypeHorizontal;
     [self instantiateAndSetAsActiveViewControllerOfType:self.viewControllerType];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:kJMPageLoaded object:nil queue:nil usingBlock:^(NSNotification *note) {
+        JMPaginationData *paginationData = [note.userInfo objectForKey:kJMPaginationData];
+        self.resources = paginationData.resources;
+        self.hasNextPage = paginationData.hasNextPage;
+        self.activeDetailViewController.needsToResetScroll = paginationData.isNewResourcesType;
+        [self.activeDetailViewController refresh];
+    }];
 }
 
 #pragma mark - UIViewControllerRotation
@@ -88,7 +98,7 @@ static NSString * const kJMVerticalList = @"ResourcesTableViewController";
 
 #pragma mark - Private
 
-- (void)setActiveViewController:(UIViewController *)viewController
+- (void)setActiveViewController:(UIViewController <JMRefreshable> *)viewController
 {
     // Remove from parent view
     if (self.activeDetailViewController) {
@@ -121,7 +131,7 @@ static NSString * const kJMVerticalList = @"ResourcesTableViewController";
             identifier = kJMHorizontalList;
     }
     
-    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+    UIViewController <JMRefreshable> *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
     if ([viewController respondsToSelector:@selector(setDelegate:)]) {
         [viewController performSelector:@selector(setDelegate:) withObject:self];
     }

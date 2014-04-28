@@ -1,5 +1,5 @@
 //
-//  JMMasterLibraryTableViewController.h
+//  JMMasterTableViewController.h
 //  JasperMobile
 //
 //  Created by Vlad Zavadsky on 3/18/14.
@@ -7,15 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JMPaginable.h"
 #import "JMResourceClientHolder.h"
 
-@interface JMMasterLibraryTableViewController : UITableViewController <JMResourceClientHolder, JMPaginable>
+// TODO: make universal view controller. Extend it for Library usage
+@interface JMMasterTableViewController : UITableViewController <JMResourceClientHolder>
 
 @property (nonatomic, strong) NSString *folderUri;
 @property (nonatomic, strong) NSMutableArray *resources;
 @property (nonatomic, readonly) NSArray *resourcesType;
 @property (nonatomic, weak) JSConstants *constants;
+// Pagination properties
+@property (nonatomic, assign) NSInteger totalCount;
+@property (nonatomic, assign) NSInteger offset;
 
 @end
 

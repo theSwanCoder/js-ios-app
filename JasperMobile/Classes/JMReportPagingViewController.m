@@ -166,18 +166,18 @@ inject_default_rotation()
 {
     [JMCancelRequestPopup dismiss];
 
-    __weak JMReportPagingViewController *reportPagingViewController = self;
+    __weak JMReportPagingViewController *weakSelf = self;
 
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
         JSExportExecution *export = [response.exports objectAtIndex:0];
 
-        reportPagingViewController.totalPages = [response.totalPages integerValue];
-        reportPagingViewController.requestId = response.requestId;
-        reportPagingViewController.exportId = export.uuid;
+        weakSelf.totalPages = [response.totalPages integerValue];
+        weakSelf.requestId = response.requestId;
+        weakSelf.exportId = export.uuid;
 
         JMReportViewerViewController *viewController1 = [self instantiateReportViewerViewControllerWithPageToDisplay:1];
-        [reportPagingViewController.pageViewController setViewControllers:@[viewController1]
+        [weakSelf.pageViewController setViewControllers:@[viewController1]
                                                                 direction:UIPageViewControllerNavigationDirectionForward
                                                                  animated:NO
                                                                completion:nil];

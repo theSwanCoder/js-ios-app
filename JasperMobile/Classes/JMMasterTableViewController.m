@@ -1,17 +1,18 @@
 //
-//  JMMasterLibraryTableViewController.m
+//  JMMasterTableViewController.m
 //  JasperMobile
 //
 //  Created by Vlad Zavadsky on 3/18/14.
 //  Copyright (c) 2014 com.jaspersoft. All rights reserved.
 //
 
-#import "JMMasterLibraryTableViewController.h"
+#import "JMMasterTableViewController.h"
 #import "JMMenuSectionView.h"
 #import "JMLocalization.h"
 #import "JMCancelRequestPopup.h"
 #import "JMRequestDelegate.h"
-#import "JMResourcesDataManager.h"
+#import "JMConstants.h"
+#import "JMPaginationData.h"
 #import <Objection-iOS/Objection.h>
 
 #define kJMResourcesSection 0
@@ -41,6 +42,7 @@ typedef NS_ENUM(NSInteger, JMTool) {
     JMToolRefresh = 0
 };
 
+// TODO: ask what value it should be
 static NSInteger const kJMLimit = 15;
 
 static NSString * const kJMTitleKey = @"title";
@@ -51,12 +53,13 @@ static UIColor *selectedCellColor;
 static NSString *defaultCircleImageName;
 static NSString *selectedCircleImageName;
 
-@interface JMMasterLibraryTableViewController ()
+@interface JMMasterTableViewController ()
 @property (nonatomic, strong) NSDictionary *cellsAndSectionsProperties;
 @property (nonatomic, assign) JMResourcesType resourcesTypeEnum;
+@property (nonatomic, assign) BOOL isResourcesTypeChanged;
 @end
 
-@implementation JMMasterLibraryTableViewController
+@implementation JMMasterTableViewController
 objection_requires(@"resourceClient", @"constants")
 
 @synthesize resourceClient = _resourcesClient;
@@ -77,16 +80,6 @@ objection_requires(@"resourceClient", @"constants")
             return @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD];
     }
 }
-
-#pragma mark - Initialization
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    [[JSObjection defaultInjector] injectDependencies:self];
-}
-
-#pragma mark - Accessors
 
 - (NSDictionary *)cellsAndSectionsProperties
 {
@@ -129,6 +122,16 @@ objection_requires(@"resourceClient", @"constants")
     return color / 255.0f;
 }
 
+#pragma mark - Initialization
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [[JSObjection defaultInjector] injectDependencies:self];
+}
+
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -144,10 +147,14 @@ objection_requires(@"resourceClient", @"constants")
     defaultCircleImageName = @"circle.png";
     selectedCircleImageName = @"circle_selected.png";
 
-    // TODO: make offset global
-//    [JMCancelRequestPopup offset:CGPointMake(70, 0)];
-//    [JMCancelRequestPopup presentInViewController:self.splitViewController.viewControllers[1] message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
+    self.resources = [NSMutableArray array];
 
+    // TODO: show downloading progress
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadNextPage)
+                                                 name:kJMLoadNextPage
+                                               object:nil];
     [self loadNextPage];
 }
 
@@ -164,16 +171,7 @@ objection_requires(@"resourceClient", @"constants")
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc
-{
-    defaultCellColor = nil;
-    selectedCellColor = nil;
-    defaultCircleImageName = nil;
-    selectedCircleImageName = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    // TODO: add cleaning logic
 }
 
 #pragma mark - Table view data source
@@ -238,6 +236,10 @@ objection_requires(@"resourceClient", @"constants")
     switch (indexPath.section) {
         case kJMResourcesSection:
             self.resourcesTypeEnum = (JMResourcesType) indexPath.row;
+            [self.resources removeAllObjects];
+            self.totalCount = 0;
+            self.offset = 0;
+            self.isResourcesTypeChanged = YES;
             [self loadNextPage];
 
             // Load resources special type
@@ -263,41 +265,56 @@ objection_requires(@"resourceClient", @"constants")
     }
 }
 
-#pragma mark - JMPaginable
+#pragma mark - NSObject
+
+- (void)dealloc
+{
+    defaultCellColor = nil;
+    selectedCellColor = nil;
+    defaultCircleImageName = nil;
+    selectedCircleImageName = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Private
+
+#pragma mark - Pagination
 
 - (void)loadNextPage
 {
-    __weak JMMasterLibraryTableViewController *masterTableViewController = self;
+    __weak JMMasterTableViewController *weakSelf = self;
 
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        if (!masterTableViewController.totalCount) {
-            masterTableViewController.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
+        if (!weakSelf.totalCount) {
+            weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
         }
 
-        masterTableViewController.resources = [result.objects mutableCopy];
-        // Post notification here?
+        [weakSelf.resources addObjectsFromArray:result.objects];
 
-        // TODO: refactor
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"reload" object:nil userInfo: @{
-                @"resources" : masterTableViewController.resources,
-                @"hasNextPage" : @(self.hasNextPage)
+        JMPaginationData *paginationData = [[JMPaginationData alloc] init];
+        paginationData.resources = weakSelf.resources;
+        paginationData.totalCount = weakSelf.totalCount;
+        paginationData.isNewResourcesType = weakSelf.isResourcesTypeChanged;
+        paginationData.hasNextPage = weakSelf.hasNextPage;
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMPageLoaded object:nil userInfo: @{
+                kJMPaginationData : paginationData
         }];
+
+        weakSelf.isResourcesTypeChanged = NO;
     } errorBlock:^(JSOperationResult *result) {
-        masterTableViewController.offset -= kJMLimit;
-        // TODO: add failed case check
+        weakSelf.offset -= kJMLimit;
+        // TODO: add error handler
     }];
 
     [self.resourceClient resourceLookups:self.folderUri query:nil types:self.resourcesType recursive:YES offset:self.offset limit:kJMLimit delegate:delegate];
-
-//    self.offset += kJMLimit;
+    self.offset += kJMLimit;
 }
 
 - (BOOL)hasNextPage
 {
     return self.offset < self.totalCount;
 }
-
-#pragma mark - Private
 
 #pragma mark - Localization
 

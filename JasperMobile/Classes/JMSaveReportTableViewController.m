@@ -248,7 +248,7 @@ inject_default_rotation()
     // Clear any errors
     [self.tableView reloadData];
 
-    __weak JMSaveReportTableViewController *reportSaver = self;
+    __weak JMSaveReportTableViewController *weakSelf = self;
 
     [JMCancelRequestPopup presentInViewController:self message:@"status.saving" restClient:self.reportClient cancelBlock:^{
         [[NSFileManager defaultManager] removeItemAtPath:reportDirectory error:nil];
@@ -256,7 +256,7 @@ inject_default_rotation()
     
     JSRequestFinishedBlock checkErrorBlock = ^(JSOperationResult *result) {
         if (result.isSuccessful) return;
-        [reportSaver.reportClient cancelAllRequests];
+        [weakSelf.reportClient cancelAllRequests];
         [[NSFileManager defaultManager] removeItemAtPath:reportDirectory error:nil];
     };
 
@@ -266,11 +266,11 @@ inject_default_rotation()
         NSString *requestId = response.requestId;
 
         NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", reportDirectory, kJMReportFilename, self.selectedReportFormat];
-        [reportSaver.reportClient saveReportOutput:requestId exportOutput:export.uuid path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
+        [weakSelf.reportClient saveReportOutput:requestId exportOutput:export.uuid path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
 
         for (JSReportOutputResource *attachment in export.attachments) {
             NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", reportDirectory, kJMAttachmentPrefix, attachment.fileName];
-            [reportSaver.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
+            [weakSelf.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
                 request.delegate = [JMRequestDelegate requestDelegateForFinishBlock:nil];
                 request.finishedBlock = checkErrorBlock;
             }];
@@ -278,8 +278,8 @@ inject_default_rotation()
     }];
 
     [JMRequestDelegate setFinalBlock:^{
-        [reportSaver.navigationController popViewControllerAnimated:YES];
-        [ALToastView toastInView:reportSaver.delegate.view withText:JMCustomLocalizedString(@"savereport.saved", nil)];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [ALToastView toastInView:weakSelf.delegate.view withText:JMCustomLocalizedString(@"savereport.saved", nil)];
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMClearSavedReportsListNotification object:nil];
     }];
 

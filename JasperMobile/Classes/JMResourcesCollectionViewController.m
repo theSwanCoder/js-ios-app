@@ -26,33 +26,19 @@
 //
 
 #import "JMResourcesCollectionViewController.h"
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JMConstants.h"
 
 static NSString * kJMResourceCellIdentifier = @"ResourceCell";
 static NSString * kJMLoadingCellIdentifier = @"LoadingCell";
 static NSInteger const kJMPaginationTreshoald = 3;
 
-// TODO: OOP Part: Needs to be implemented in a proper way. REMOVE CODE DUPLICATION
-#import <Objection-iOS/Objection.h>
-#import "JMResourcesDataManager.h"
-
 @interface JMResourcesCollectionViewController()
-//@property (nonatomic, weak) JMResourcesDataManager *resourceDataSource;
 @property (nonatomic, assign) BOOL needsToUpdateScrollPosition;
-@property (nonatomic, assign) BOOL hasNextPage;
-@property (nonatomic, weak) NSArray *resources;
 @end
 
 @implementation JMResourcesCollectionViewController
-//objection_requires(@"resourceDataSource")
 
-#pragma mark - Initialization
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    [[JSObjection defaultInjector] injectDependencies:self];
-}
+@synthesize needsToResetScroll = _needsToResetScroll;
 
 #pragma mark - UIViewController
 
@@ -63,17 +49,7 @@ static NSInteger const kJMPaginationTreshoald = 3;
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor clearColor];
     self.needsToUpdateScrollPosition = YES;
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reload:) name:@"reload" object:nil];
 }
-
-- (void)reload:(NSNotification *)notification
-{
-    self.resources = notification.userInfo[@"resources"];
-    self.hasNextPage = [notification.userInfo[@"hasNextPage"] boolValue];
-    [self.collectionView reloadData];
-}
-
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -101,8 +77,8 @@ static NSInteger const kJMPaginationTreshoald = 3;
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    NSInteger count = self.resources.count;
-//    if ([self.delegate hasNextPage]) count++;
+    NSInteger count = self.delegate.resources.count;
+    if ([self.delegate hasNextPage]) count++;
 
     return count;
 }
@@ -111,7 +87,7 @@ static NSInteger const kJMPaginationTreshoald = 3;
 {
     UICollectionViewCell *cell;
 
-    if (indexPath.row == self.resources.count) {
+    if (indexPath.row == self.delegate.resources.count) {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:kJMLoadingCellIdentifier forIndexPath:indexPath];
         
         // TODO: Set translated text
@@ -121,7 +97,10 @@ static NSInteger const kJMPaginationTreshoald = 3;
     }
 
     cell = [collectionView dequeueReusableCellWithReuseIdentifier:kJMResourceCellIdentifier forIndexPath:indexPath];
-    JSResourceLookup *lookup = [self.resources objectAtIndex:indexPath.row];
+    // Save check cause "delegate.resources" is a weak reference
+    if (!self.delegate.resources.count) return cell;
+
+    JSResourceLookup *lookup = [self.delegate.resources objectAtIndex:indexPath.row];
     
     UILabel *resourceLabel = (UILabel *) [cell viewWithTag:2];
     CGSize labelSize = [lookup.label sizeWithFont:resourceLabel.font constrainedToSize:CGSizeMake(300, 80) lineBreakMode:NSLineBreakByWordWrapping];
@@ -143,8 +122,8 @@ static NSInteger const kJMPaginationTreshoald = 3;
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.hasNextPage && indexPath.row + kJMPaginationTreshoald == self.resources.count) {
-//        [self.delegate loadNextPage];
+    if (self.delegate.hasNextPage && indexPath.row + kJMPaginationTreshoald == self.delegate.resources.count) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadNextPage object:nil];
     }
 }
 
@@ -152,6 +131,9 @@ static NSInteger const kJMPaginationTreshoald = 3;
 
 - (void)refresh
 {
+    if (self.needsToResetScroll) {
+        self.collectionView.contentOffset = CGPointZero;
+    }
     [self.collectionView reloadData];
 }
 

@@ -280,10 +280,10 @@ inject_default_rotation()
 
 - (void)refreshResourceDescriptor
 {
-    __weak JMResourceTableViewController *resourceViewController = self;
+    __weak JMResourceTableViewController *weakSelf = self;
 
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
-        [resourceViewController.navigationController popViewControllerAnimated:YES];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
     }];
 
     [self.resourceClient resource:self.resourceLookup.uri delegate:[JMRequestDelegate checkRequestResultForDelegate:self viewControllerToDismiss:self]];

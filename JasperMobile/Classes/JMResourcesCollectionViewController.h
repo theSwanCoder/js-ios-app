@@ -27,7 +27,7 @@
 
 #import <UIKit/UIKit.h>
 #import "JMRefreshable.h"
-#import "JMPaginable.h"
+#import "JMDetailViewController.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
@@ -35,6 +35,6 @@
 */
 @interface JMResourcesCollectionViewController : UICollectionViewController <JMRefreshable>
 
-@property (nonatomic, weak) id <JMPaginable> delegate;
+@property (nonatomic, weak) JMDetailViewController *delegate;
 
 @end

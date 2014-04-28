@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "JMRefreshable.h"
-#import "JMPaginable.h"
 
 @interface JMResourcesTableViewController : UITableViewController <JMRefreshable>
 
-@property (nonatomic, weak) id <JMPaginable> delegate;
+ @property (nonatomic, weak) id delegate;
 
 @end

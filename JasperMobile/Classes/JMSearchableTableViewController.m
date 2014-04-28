@@ -95,15 +95,15 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 - (JMCancelRequestBlock)cancelBlock
 {
     if (!_cancelBlock) {
-        __weak JMSearchableTableViewController *search = self;
+        __weak JMSearchableTableViewController *weakSelf = self;
         _cancelBlock = ^{
-            search.searchQuery = nil;
-            search.isRefreshing = NO;
+            weakSelf.searchQuery = nil;
+            weakSelf.isRefreshing = NO;
             
-            UINavigationController *navigationController = [search navigationController];
+            UINavigationController *navigationController = [weakSelf navigationController];
             UIViewController *topController = [navigationController.viewControllers objectAtIndex:0];
             
-            if (topController == search) {
+            if (topController == weakSelf) {
                 NSDictionary *userInfo = @{
                     kJMMenuTag : @kJMServersMenuTag
                 };
@@ -112,7 +112,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
                                                                     object:nil
                                                                   userInfo:userInfo];
             } else {
-                [[search navigationController] popViewControllerAnimated:YES];
+                [[weakSelf navigationController] popViewControllerAnimated:YES];
             }
         };
     }

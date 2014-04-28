@@ -27,7 +27,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import "JMResourcesDataManager.h"
 #import "JMResourceClientHolder.h"
 #import "JMHomeCollectionViewController.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
