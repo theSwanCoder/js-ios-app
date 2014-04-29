@@ -58,11 +58,6 @@ typedef enum {
     JMMenuItemServerProfiles,
 } JMMenuItem;
 
-#define JMMenuItemArray @[\
-    @"library", @"savedreports", @"settings",\
-    @"repository", @"favorites", @"serverprofiles"\
-]
-
 @protocol JMHomeCollectionViewControllerDelegate <NSObject>
 @required
 @property (nonatomic, assign) JMMenuItem selectedItem;

@@ -32,12 +32,6 @@ typedef NS_ENUM(NSInteger, JMSortBy) {
     JMSortByCreator
 };
 
-typedef NS_ENUM(NSInteger, JMCategory) {
-    JMCategoryAll = 0,
-    JMCategorySales,
-    JMCategoryMarketing
-};
-
 typedef NS_ENUM(NSInteger, JMTool) {
     JMToolRefresh = 0
 };
@@ -96,19 +90,7 @@ objection_requires(@"resourceClient", @"constants")
             @kJMSortSection : @{
                 kJMTitleKey : @"sortby",
                 kJMRowsKey : @[
-                  @"name", @"date", @"creator"
-                ]
-            },
-            @kJMCategoriesSection : @{
-                kJMTitleKey : @"category",
-                kJMRowsKey : @[
-                    @"all", @"sales", @"marketing"
-                ]
-            },
-            @kJMToolsSection : @{
-                kJMTitleKey : @"tools",
-                kJMRowsKey : @[
-                    @"refresh"
+                    @"name", @"date", @"creator"
                 ]
             }
         };
@@ -153,7 +135,7 @@ objection_requires(@"resourceClient", @"constants")
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadNextPage)
-                                                 name:kJMLoadNextPage
+                                                 name:kJMLoadNextPageNotification
                                                object:nil];
     [self loadNextPage];
 }
@@ -297,7 +279,7 @@ objection_requires(@"resourceClient", @"constants")
         paginationData.isNewResourcesType = weakSelf.isResourcesTypeChanged;
         paginationData.hasNextPage = weakSelf.hasNextPage;
 
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMPageLoaded object:nil userInfo: @{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMPageLoadedNotification object:nil userInfo:@{
                 kJMPaginationData : paginationData
         }];
 

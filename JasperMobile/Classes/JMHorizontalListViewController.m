@@ -21,22 +21,18 @@
  */
 
 //
-//  JMResourcesCollectionViewController.m
+//  JMHorizontalListViewController.m
 //  Jaspersoft Corporation
 //
 
-#import "JMResourcesCollectionViewController.h"
+#import "JMHorizontalListViewController.h"
 #import "JMConstants.h"
 
 static NSString * kJMResourceCellIdentifier = @"ResourceCell";
 static NSString * kJMLoadingCellIdentifier = @"LoadingCell";
 static NSInteger const kJMPaginationTreshoald = 3;
 
-@interface JMResourcesCollectionViewController()
-@property (nonatomic, assign) BOOL needsToUpdateScrollPosition;
-@end
-
-@implementation JMResourcesCollectionViewController
+@implementation JMHorizontalListViewController
 
 @synthesize needsToResetScroll = _needsToResetScroll;
 
@@ -45,27 +41,15 @@ static NSInteger const kJMPaginationTreshoald = 3;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor clearColor];
-    self.needsToUpdateScrollPosition = YES;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-//    if (self.isNeedsToUpdateScrollPosition &&
-//            self.resourceDataSource.firstVisibleResourceIndex > 0) {
-//        NSIndexPath *firstVisibile = [NSIndexPath indexPathForItem:self.resourceDataSource.firstVisibleResourceIndex inSection:0];
-//        [self.collectionView scrollToItemAtIndexPath:firstVisibile atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-//        self.isNeedsToUpdateScrollPosition = NO;
-//    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     NSIndexPath *firstVisible = [self.collectionView.indexPathsForVisibleItems firstObject];
-//    self.resourceDataSource.firstVisibleResourceIndex = firstVisible.row;
+    self.delegate.firstVisibleResourceIndex = firstVisible.row;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -97,7 +81,8 @@ static NSInteger const kJMPaginationTreshoald = 3;
     }
 
     cell = [collectionView dequeueReusableCellWithReuseIdentifier:kJMResourceCellIdentifier forIndexPath:indexPath];
-    // Save check cause "delegate.resources" is a weak reference
+
+    // Preventing NPE because "delegate.resources" is a weak reference
     if (!self.delegate.resources.count) return cell;
 
     JSResourceLookup *lookup = [self.delegate.resources objectAtIndex:indexPath.row];
@@ -123,7 +108,7 @@ static NSInteger const kJMPaginationTreshoald = 3;
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate.hasNextPage && indexPath.row + kJMPaginationTreshoald == self.delegate.resources.count) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadNextPage object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadNextPageNotification object:nil];
     }
 }
 
@@ -131,9 +116,15 @@ static NSInteger const kJMPaginationTreshoald = 3;
 
 - (void)refresh
 {
+    // Reset scroll position for a new resources type
     if (self.needsToResetScroll) {
         self.collectionView.contentOffset = CGPointZero;
+    // Or scroll to first visible resource after switching list representation
+    } else if (self.delegate.firstVisibleResourceIndex > 1) {
+        NSIndexPath *firstVisibile = [NSIndexPath indexPathForItem:self.delegate.firstVisibleResourceIndex inSection:0];
+        [self.collectionView scrollToItemAtIndexPath:firstVisibile atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
     }
+
     [self.collectionView reloadData];
 }
 

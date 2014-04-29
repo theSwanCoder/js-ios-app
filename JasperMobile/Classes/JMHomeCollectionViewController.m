@@ -33,7 +33,7 @@ static NSString * const kJMMenuItemLocalizationPrefix = @"home.menuitem";
 
 @interface JMHomeCollectionViewController ()
 @property (nonatomic, assign) UIInterfaceOrientation toInterfaceOrientation;
-@property (nonatomic, strong) NSArray *menuItems;
+@property (nonatomic, strong) NSDictionary *menuItems;
 @end
 
 @implementation JMHomeCollectionViewController
@@ -43,13 +43,21 @@ static NSString * const kJMMenuItemLocalizationPrefix = @"home.menuitem";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     // Check if iOS 7 or higher
     if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
         self.collectionView.contentInset = UIEdgeInsetsMake(20.0f, 0, 0, 0);
     }
 
-    self.menuItems = JMMenuItemArray;
+    self.menuItems = @{
+        @(JMMenuItemLibrary) : @"library",
+        @(JMMenuItemSavedReports) : @"savedreports",
+        @(JMMenuItemSettings) : @"settings",
+        @(JMMenuItemRepository) : @"repository",
+        @(JMMenuItemFavorites) : @"favorites",
+        @(JMMenuItemServerProfiles) : @"serverprofiles"
+    };
+
     self.toInterfaceOrientation = self.interfaceOrientation;
     self.collectionView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
 }
@@ -80,12 +88,15 @@ static NSString * const kJMMenuItemLocalizationPrefix = @"home.menuitem";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     JMMenuItemCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kJMMenuItemIdentifier forIndexPath:indexPath];
-    NSString *menuItem = [self.menuItems objectAtIndex:indexPath.row];
+
+    JMMenuItem menuItem = (JMMenuItem) indexPath.row;
+    NSString *menuItemIdentifier = [self.menuItems objectForKey:@(menuItem)];
+
     // TODO: select right font for iOS 6 because it's missing "Apple SD Gothic Neo" one
-    cell.label.text = JMCustomLocalizedString([NSString stringWithFormat:@"%@.%@.label", kJMMenuItemLocalizationPrefix, menuItem], nil);
-    cell.desc.text = JMCustomLocalizedString([NSString stringWithFormat:@"%@.%@.description", kJMMenuItemLocalizationPrefix, menuItem], nil);
+    cell.label.text = JMCustomLocalizedString([NSString stringWithFormat:@"%@.%@.label", kJMMenuItemLocalizationPrefix, menuItemIdentifier], nil);
+    cell.desc.text = JMCustomLocalizedString([NSString stringWithFormat:@"%@.%@.description", kJMMenuItemLocalizationPrefix, menuItemIdentifier], nil);
     [cell.desc sizeToFit];
-    cell.imageView.image = [UIImage imageNamed:menuItem];
+    cell.imageView.image = [UIImage imageNamed:menuItemIdentifier];
     return cell;
 }
 

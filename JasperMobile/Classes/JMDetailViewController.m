@@ -26,24 +26,22 @@
 //
 
 #import "JMDetailViewController.h"
-#import "JMSwitchMenu.h"
 #import "JMConstants.h"
 #import "JMPaginationData.h"
 #import "JMRefreshable.h"
 
 typedef enum {
-    JMViewControllerTypeHorizontal,
-    JMViewControllerTypeVertical
+    JMViewControllerTypeGrid = 1,
+    JMViewControllerTypeHorizontal = 2,
+    JMViewControllerTypeVertical = 3
 } JMViewControllerType;
-
-static NSString * const kJMHorizontalList = @"ResourcesCollectionViewController";
-static NSString * const kJMVerticalList = @"ResourcesTableViewController";
 
 @interface JMDetailViewController ()
 @property (nonatomic, assign) JMViewControllerType viewControllerType;
-@property (nonatomic, weak) UIViewController <JMRefreshable> *activeDetailViewController;
+@property (nonatomic, weak) UINavigationController *activeDetailViewController;
 @property (nonatomic, weak) IBOutlet UIView *containerView;
-@property (nonatomic, weak) IBOutlet JMSwitchMenu *switchBar;
+@property (nonatomic, strong) NSMutableArray *switchButtons;
+@property (nonatomic, strong) NSDictionary *viewControllerTypes;
 @end
 
 @implementation JMDetailViewController
@@ -54,17 +52,32 @@ static NSString * const kJMVerticalList = @"ResourcesTableViewController";
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
-    self.containerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_patter.png"]];
+    self.containerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
     self.resources = [NSMutableArray array];
+
+    self.viewControllerTypes = @{
+        @(JMViewControllerTypeGrid) : @"GridViewController",
+        @(JMViewControllerTypeHorizontal) : @"ResourcesHorizontalListViewController",
+        @(JMViewControllerTypeVertical) : @"ResourcesVerticalListViewController"
+    };
+
+    self.switchButtons = [NSMutableArray array];
+    for (NSNumber *viewControllerType in self.viewControllerTypes.allKeys) {
+        UIButton *switchButton = (UIButton *) [self.view viewWithTag:viewControllerType.integerValue];
+        [self.switchButtons addObject:switchButton];
+    }
+
     self.viewControllerType = JMViewControllerTypeHorizontal;
+    [[self.switchButtons objectAtIndex:self.viewControllerType] setEnabled:NO];
     [self instantiateAndSetAsActiveViewControllerOfType:self.viewControllerType];
 
-    [[NSNotificationCenter defaultCenter] addObserverForName:kJMPageLoaded object:nil queue:nil usingBlock:^(NSNotification *note) {
+    [[NSNotificationCenter defaultCenter] addObserverForName:kJMPageLoadedNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         JMPaginationData *paginationData = [note.userInfo objectForKey:kJMPaginationData];
         self.resources = paginationData.resources;
         self.hasNextPage = paginationData.hasNextPage;
-        self.activeDetailViewController.needsToResetScroll = paginationData.isNewResourcesType;
-        [self.activeDetailViewController refresh];
+        UIViewController <JMRefreshable> *baseRepositoryViewController = self.activeDetailViewController.viewControllers.firstObject;
+        baseRepositoryViewController.needsToResetScroll = paginationData.isNewResourcesType;
+        [baseRepositoryViewController refresh];
     }];
 }
 
@@ -80,26 +93,25 @@ static NSString * const kJMVerticalList = @"ResourcesTableViewController";
 
 #pragma mark - Actions
 
-- (IBAction)switchRepresentation:(id)sender
+- (IBAction)changeRepresentation:(id)sender
 {
-    switch ([sender selectedSegmentIndex]) {
-        case 0:
-            self.viewControllerType = JMViewControllerTypeHorizontal;
-            break;
-            
-        case 1:
-        default:
-            self.viewControllerType = JMViewControllerTypeVertical;
-            break;
+    for (UIButton *switchButton in self.switchButtons) {
+        switchButton.enabled = YES;
     }
-    
+    [sender setEnabled:NO];
+
+    self.viewControllerType = (JMViewControllerType) [sender tag];
     [self instantiateAndSetAsActiveViewControllerOfType:self.viewControllerType];
 }
 
 #pragma mark - Private
 
-- (void)setActiveViewController:(UIViewController <JMRefreshable> *)viewController
+- (void)instantiateAndSetAsActiveViewControllerOfType:(JMViewControllerType)type
 {
+    NSString *identifier = [self.viewControllerTypes objectForKey:@(type)];
+
+    UINavigationController *navigationController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+
     // Remove from parent view
     if (self.activeDetailViewController) {
         [self.activeDetailViewController willMoveToParentViewController:nil];
@@ -109,33 +121,19 @@ static NSString * const kJMVerticalList = @"ResourcesTableViewController";
 
     CGSize containerViewSize = self.containerView.frame.size;
     CGRect frame = CGRectMake(0, 0, containerViewSize.width, containerViewSize.height);
-    viewController.view.frame = frame;
-    [self addChildViewController:viewController];
-    [self.containerView addSubview:viewController.view];
-    [viewController didMoveToParentViewController:self];
+    navigationController.view.frame = frame;
+    [self addChildViewController:navigationController];
+    [self.containerView addSubview:navigationController.view];
+    [navigationController didMoveToParentViewController:self];
 
-    self.activeDetailViewController = viewController;
-}
+    self.activeDetailViewController = navigationController;
 
-- (void)instantiateAndSetAsActiveViewControllerOfType:(JMViewControllerType)type
-{
-    NSString *identifier;
-    
-    switch (type) {
-        case JMViewControllerTypeVertical:
-            identifier = kJMVerticalList;
-            break;
-            
-        case JMViewControllerTypeHorizontal:
-        default:
-            identifier = kJMHorizontalList;
+    UIViewController <JMRefreshable> *baseRepositoryViewController = [navigationController.viewControllers firstObject];
+    if ([baseRepositoryViewController respondsToSelector:@selector(setDelegate:)]) {
+        [baseRepositoryViewController performSelector:@selector(setDelegate:) withObject:self];
     }
-    
-    UIViewController <JMRefreshable> *viewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
-    if ([viewController respondsToSelector:@selector(setDelegate:)]) {
-        [viewController performSelector:@selector(setDelegate:) withObject:self];
-    }
-    [self setActiveViewController:viewController];
+
+    [baseRepositoryViewController refresh];
 }
 
 // Fixes rounded corners for split view controller

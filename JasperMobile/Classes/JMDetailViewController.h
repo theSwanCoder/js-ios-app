@@ -32,6 +32,7 @@
 @interface JMDetailViewController : UIViewController
 
 @property (nonatomic, weak) NSArray *resources;
+@property (nonatomic, assign) NSInteger firstVisibleResourceIndex;
 @property (nonatomic, assign) BOOL hasNextPage;
 
 @end

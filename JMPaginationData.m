@@ -8,9 +8,4 @@
 
 @implementation JMPaginationData
 
-- (void)dealloc
-{
-    NSLog(@"123");
-}
-
 @end

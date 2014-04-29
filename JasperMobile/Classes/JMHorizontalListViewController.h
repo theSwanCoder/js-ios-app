@@ -21,7 +21,7 @@
  */
 
 //
-//  JMResourcesCollectionViewController.h
+//  JMHorizontalListViewController.h
 //  Jaspersoft Corporation
 //
 
@@ -33,7 +33,7 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.9
 */
-@interface JMResourcesCollectionViewController : UICollectionViewController <JMRefreshable>
+@interface JMHorizontalListViewController : UICollectionViewController <JMRefreshable>
 
 @property (nonatomic, weak) JMDetailViewController *delegate;
 
