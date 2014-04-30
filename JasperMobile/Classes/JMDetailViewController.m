@@ -31,9 +31,9 @@
 #import "JMRefreshable.h"
 
 typedef enum {
-    JMViewControllerTypeGrid = 1,
-    JMViewControllerTypeHorizontal = 2,
-    JMViewControllerTypeVertical = 3
+    JMViewControllerTypeGrid = 2,
+    JMViewControllerTypeHorizontal = 3,
+    JMViewControllerTypeVertical = 4
 } JMViewControllerType;
 
 @interface JMDetailViewController ()
@@ -61,14 +61,16 @@ typedef enum {
         @(JMViewControllerTypeVertical) : @"ResourcesVerticalListViewController"
     };
 
+    self.viewControllerType = JMViewControllerTypeHorizontal;
     self.switchButtons = [NSMutableArray array];
     for (NSNumber *viewControllerType in self.viewControllerTypes.allKeys) {
         UIButton *switchButton = (UIButton *) [self.view viewWithTag:viewControllerType.integerValue];
         [self.switchButtons addObject:switchButton];
+        if (viewControllerType.integerValue == self.viewControllerType) {
+            switchButton.enabled = NO;
+        }
     }
 
-    self.viewControllerType = JMViewControllerTypeHorizontal;
-    [[self.switchButtons objectAtIndex:self.viewControllerType] setEnabled:NO];
     [self instantiateAndSetAsActiveViewControllerOfType:self.viewControllerType];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:kJMPageLoadedNotification object:nil queue:nil usingBlock:^(NSNotification *note) {

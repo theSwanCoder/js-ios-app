@@ -1,72 +1,74 @@
-/*
- * JasperMobile for iOS
- * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
- * http://community.jaspersoft.com/project/jaspermobile-ios
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
- */
-
 //
-//  JMHorizontalListViewController.m
-//  Jaspersoft Corporation
+//  JMGridViewController.m
+//  JasperMobile
+//
+//  Created by Vlad Zavadsky on 4/30/14.
+//  Copyright (c) 2014 com.jaspersoft. All rights reserved.
 //
 
-#import "JMHorizontalListViewController.h"
+#import "JMGridViewController.h"
 #import "JMConstants.h"
 
 static NSString * kJMResourceCellIdentifier = @"ResourceCell";
 static NSString * kJMLoadingCellIdentifier = @"LoadingCell";
-static NSInteger const kJMPaginationTreshoald = 5;
+static NSInteger const kJMPaginationTreshoald = 8;
 
-@implementation JMHorizontalListViewController
+@interface JMGridViewController()
+@property (nonatomic, assign) UIInterfaceOrientation toInterfaceOrientation;
+@end
+
+@implementation JMGridViewController
 
 @synthesize needsToResetScroll = _needsToResetScroll;
-
-#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor clearColor];
+    self.toInterfaceOrientation = self.interfaceOrientation;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    NSIndexPath *firstVisible = self.collectionView.indexPathsForVisibleItems[1];
-    self.delegate.firstVisibleResourceIndex = firstVisible.item;
+    // TODO: implement scroll position saving for grid view
+    NSArray *indexPaths = self.collectionView.indexPathsForVisibleItems;
+    NSArray *sortedIndexPaths = [indexPaths sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1 compare:obj2];
+    }];
+    self.delegate.firstVisibleResourceIndex = [(NSIndexPath *)sortedIndexPaths.firstObject item];
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    self.toInterfaceOrientation = toInterfaceOrientation;
+    if ([self respondsToSelector:@selector(collectionViewLayout)]) {
+        [self.collectionViewLayout invalidateLayout];
+    } else {
+        [self.collectionView reloadData];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
+    // TODO: figure out what to do with scroll position in grid view...
     // Reset scroll position for a new resources type
     if (self.needsToResetScroll) {
         self.collectionView.contentOffset = CGPointZero;
         // Or scroll to first visible resource after switching list representation
     } else if (self.delegate.firstVisibleResourceIndex > 1) {
         NSIndexPath *firstVisible = [NSIndexPath indexPathForItem:self.delegate.firstVisibleResourceIndex inSection:0];
-        [self.collectionView scrollToItemAtIndexPath:firstVisible atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        [self.collectionView scrollToItemAtIndexPath:firstVisible atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+        CGFloat inset = UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ? 18.0f : 17.0f;
+        self.collectionView.contentOffset = CGPointMake(0, self.collectionView.contentOffset.y - inset);
     }
 }
 
-#pragma mark - UICollectionViewDataSource
+#pragma mark - UICollectionViewControllerDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
@@ -85,12 +87,12 @@ static NSInteger const kJMPaginationTreshoald = 5;
 {
     UICollectionViewCell *cell;
 
-    if (indexPath.row == self.delegate.resources.count) {
+    if (indexPath.item == self.delegate.resources.count) {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:kJMLoadingCellIdentifier forIndexPath:indexPath];
-        
+
         // TODO: Set translated text
         // TODO: transform (or create custom) activity indicator
-        
+
         return cell;
     }
 
@@ -101,28 +103,32 @@ static NSInteger const kJMPaginationTreshoald = 5;
     if (!self.delegate.resources.count) return cell;
 
     JSResourceLookup *lookup = [self.delegate.resources objectAtIndex:indexPath.row];
-    
-    UILabel *resourceLabel = (UILabel *) [cell viewWithTag:2];
-    CGSize labelSize = [lookup.label sizeWithFont:resourceLabel.font constrainedToSize:CGSizeMake(300, 80) lineBreakMode:NSLineBreakByWordWrapping];
+
+    UILabel *resourceLabel = (UILabel *) [cell viewWithTag:1];
+    CGSize labelSize = [lookup.label sizeWithFont:resourceLabel.font constrainedToSize:CGSizeMake(236, 51) lineBreakMode:NSLineBreakByWordWrapping];
     resourceLabel.frame = CGRectMake(resourceLabel.frame.origin.x, resourceLabel.frame.origin.y, labelSize.width, labelSize.height);
     resourceLabel.text = lookup.label;
 
-    UILabel *creationDate = (UILabel *) [cell viewWithTag:3];
-    creationDate.text = lookup.creationDate;
-
-    UILabel *description = (UILabel *) [cell viewWithTag:4];
-    CGSize descriptionSize = [lookup.resourceDescription sizeWithFont:description.font constrainedToSize:CGSizeMake(300, 50) lineBreakMode:NSLineBreakByWordWrapping];
-    description.frame = CGRectMake(description.frame.origin.x, description.frame.origin.y, descriptionSize.width, descriptionSize.height);
-    description.text = lookup.resourceDescription;
-
     return cell;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    CGFloat inset;
+    if (UIInterfaceOrientationIsLandscape(self.toInterfaceOrientation)) {
+        inset = 19.0f;
+    } else {
+        inset = 30.0f;
+    }
+
+    return UIEdgeInsetsMake(inset, inset, inset, inset);
 }
 
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate.hasNextPage && indexPath.row + kJMPaginationTreshoald >= self.delegate.resources.count) {
+    if (self.delegate.hasNextPage && indexPath.item + kJMPaginationTreshoald >= self.delegate.resources.count) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadNextPageNotification object:nil];
     }
 }

@@ -29,8 +29,23 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    NSIndexPath *firstVisible = self.tableView.indexPathsForVisibleRows[1];
+    NSIndexPath *firstVisible = [self.tableView.indexPathsForVisibleRows firstObject];
     self.delegate.firstVisibleResourceIndex = firstVisible.row;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    // TODO: remove if "Restore last visible list representation (horizontal or vertical) feature will be skipped
+    // Reset scroll position for a new resources type
+    if (self.needsToResetScroll) {
+        self.tableView.contentOffset = CGPointZero;
+        // Or scroll to first visible resource after switching list representation
+    } else if (self.delegate.firstVisibleResourceIndex > 1) {
+        NSIndexPath *firstVisible = [NSIndexPath indexPathForItem:self.delegate.firstVisibleResourceIndex inSection:0];
+        [self.tableView scrollToRowAtIndexPath:firstVisible atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
 }
 
 #pragma mark - Table view data source
@@ -91,20 +106,10 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
     }
 }
 
-#pragma mark - JMRefreshable protocol
+#pragma mark - JMRefreshable
 
 - (void)refresh
 {
-    // TODO: remove if "Restore last visible list representation (horizontal or vertical) feature will be skipped
-    // Reset scroll position for a new resources type
-    if (self.needsToResetScroll) {
-        self.tableView.contentOffset = CGPointZero;
-    // Or scroll to first visible resource after switching list representation
-    } else if (self.delegate.firstVisibleResourceIndex > 1) {
-        NSIndexPath *firstVisible = [NSIndexPath indexPathForItem:self.delegate.firstVisibleResourceIndex inSection:0];
-        [self.tableView scrollToRowAtIndexPath:firstVisible atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    }
-
     [self.tableView reloadData];
 }
 

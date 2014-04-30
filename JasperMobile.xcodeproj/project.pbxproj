@@ -48,6 +48,8 @@
 		F539A72917F1A06A00310D72 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A72817F1A06A00310D72 /* Default-Landscape~ipad.png */; };
 		F539A72B17F1A0A500310D72 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A72A17F1A0A500310D72 /* Default-Landscape@2x~ipad.png */; };
 		F53C0AD217B50C080063AE90 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F53C0AD017B50C080063AE90 /* MainStoryboard_iPhone.storyboard */; };
+		F546AFA31910EE7600EC9777 /* grid_res_type_report.png in Resources */ = {isa = PBXBuildFile; fileRef = F546AFA21910EE7600EC9777 /* grid_res_type_report.png */; };
+		F546AFA91910EEB400EC9777 /* JMGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F546AFA81910EEB400EC9777 /* JMGridViewController.m */; };
 		F54936FD17C4F1F50009F321 /* JMInputControlFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F54936FC17C4F1F40009F321 /* JMInputControlFactory.m */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
@@ -308,6 +310,9 @@
 		F539A72817F1A06A00310D72 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		F539A72A17F1A0A500310D72 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
 		F53C0AD117B50C080063AE90 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		F546AFA21910EE7600EC9777 /* grid_res_type_report.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grid_res_type_report.png; sourceTree = "<group>"; };
+		F546AFA71910EEB400EC9777 /* JMGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMGridViewController.h; path = Classes/JMGridViewController.h; sourceTree = "<group>"; };
+		F546AFA81910EEB400EC9777 /* JMGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMGridViewController.m; path = Classes/JMGridViewController.m; sourceTree = "<group>"; };
 		F54936FB17C4F1F40009F321 /* JMInputControlFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMInputControlFactory.h; path = Classes/JMInputControlFactory.h; sourceTree = "<group>"; };
 		F54936FC17C4F1F40009F321 /* JMInputControlFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMInputControlFactory.m; path = Classes/JMInputControlFactory.m; sourceTree = "<group>"; };
 		F54BE94117D7E41B00437EA9 /* JMInputControlsHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMInputControlsHolder.h; path = JasperMobile/Classes/JMInputControlsHolder.h; sourceTree = "<group>"; };
@@ -551,10 +556,12 @@
 		37455C1A234AC9CE06850D27 /* Resources View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				37455D1ADE7FC69BF15D7EC5 /* JMHorizontalListViewController.m */,
 				3745534F59FDB32585D36209 /* JMHorizontalListViewController.h */,
-				3745557476B80F77F4851774 /* JMVerticalListViewController.m */,
+				37455D1ADE7FC69BF15D7EC5 /* JMHorizontalListViewController.m */,
 				37455ED43FC6052F413CF4FA /* JMVerticalListViewController.h */,
+				3745557476B80F77F4851774 /* JMVerticalListViewController.m */,
+				F546AFA71910EEB400EC9777 /* JMGridViewController.h */,
+				F546AFA81910EEB400EC9777 /* JMGridViewController.m */,
 			);
 			name = "Resources View Controllers";
 			sourceTree = "<group>";
@@ -868,6 +875,7 @@
 				F576FAE21907E9A100503CB1 /* home_logo.png */,
 				F576FAE41907E9A100503CB1 /* list_background_pattern.png */,
 				F576FAE51907E9A100503CB1 /* report_prototype_image.png */,
+				F546AFA21910EE7600EC9777 /* grid_res_type_report.png */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -1291,6 +1299,7 @@
 				F58EF6C217F487A800C9EBA8 /* cancel_button@2x.png in Resources */,
 				F58EF6F817F4884C00C9EBA8 /* settings_bar_item@2x.png in Resources */,
 				F58EF6BF17F487A800C9EBA8 /* add_favorite_button.png in Resources */,
+				F546AFA31910EE7600EC9777 /* grid_res_type_report.png in Resources */,
 				F5FA4C45190FC06D00001999 /* grid_button.png in Resources */,
 				F58EF6CC17F487A800C9EBA8 /* blue_button_highlighted@2x.png in Resources */,
 				F58EF6A117F483D300C9EBA8 /* Icon-144.png in Resources */,
@@ -1397,6 +1406,7 @@
 				F59FD9C017B1014A00331BD8 /* JMFavoritesUtil.m in Sources */,
 				F5C72FDE17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m in Sources */,
 				F553F5DD17C40CD9007625DF /* JMInputControlCell.m in Sources */,
+				F546AFA91910EEB400EC9777 /* JMGridViewController.m in Sources */,
 				F54936FD17C4F1F50009F321 /* JMInputControlFactory.m in Sources */,
 				F5E4FB5F17C6053900A69FCC /* JMDateInputControlCell.m in Sources */,
 				F5E4FB6517C6058500A69FCC /* JMDateTimeInputControlCell.m in Sources */,

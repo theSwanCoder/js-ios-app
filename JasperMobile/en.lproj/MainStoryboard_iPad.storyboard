@@ -158,7 +158,7 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="5Di-e9-81d">
+                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="5Di-e9-81d">
                                         <rect key="frame" x="606" y="0.0" width="54" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <state key="normal" image="grid_button.png">
@@ -172,7 +172,7 @@
                                             <action selector="changeRepresentation:" destination="uEu-f3-0Rw" eventType="touchUpInside" id="2ms-hn-754"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="AnL-1M-Zip">
+                                    <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="AnL-1M-Zip">
                                         <rect key="frame" x="661" y="0.0" width="54" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <state key="normal" image="horizontal_list_button.png">
@@ -186,7 +186,7 @@
                                             <action selector="changeRepresentation:" destination="uEu-f3-0Rw" eventType="touchUpInside" id="5g1-lx-nUL"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="y13-hg-OSd">
+                                    <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="y13-hg-OSd">
                                         <rect key="frame" x="716" y="0.0" width="54" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <state key="normal" image="vertical_list_button.png">
@@ -305,6 +305,83 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rbS-pP-Lg5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2725" y="3502"/>
+        </scene>
+        <!--Grid View Controller-->
+        <scene sceneID="TsI-QO-7GL">
+            <objects>
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="nKt-Zw-KOs" customClass="JMGridViewController" sceneMemberID="viewController">
+                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="Io6-AL-mel">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="18" id="QHS-SX-DBR">
+                            <size key="itemSize" width="261" height="254"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="18" minY="18" maxX="18" maxY="18"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ResourceCell" id="1WW-Si-Qgo">
+                                <rect key="frame" x="18" y="18" width="261" height="254"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="261" height="254"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="grid_res_type_report.png" id="9pr-Ga-PIJ">
+                                            <rect key="frame" x="0.0" y="0.0" width="261" height="182"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </imageView>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vJJ-Yb-Cho">
+                                            <rect key="frame" x="13" y="190" width="236" height="51"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <string key="text">Report 
+Name</string>
+                                            <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LoadingCell" id="rgV-6c-DQ7">
+                                <rect key="frame" x="489" y="18" width="261" height="254"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="261" height="254"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GON-LA-7BM" userLabel="Label - Loading,  Please Wait...">
+                                            <rect key="frame" x="46" y="80" width="300" height="93"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                            <string key="text">Loading, 
+Please Wait...</string>
+                                            <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="34"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <activityIndicatorView opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" id="xDR-1X-JzR">
+                                            <rect key="frame" x="1" y="108" width="37" height="37"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <color key="color" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        </activityIndicatorView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="nKt-Zw-KOs" id="J9T-p9-Nkz"/>
+                            <outlet property="delegate" destination="nKt-Zw-KOs" id="nnh-H0-8sW"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="dUM-oh-Kvp"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="duF-0n-mkv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2725" y="2349"/>
         </scene>
         <!--Horizontal List View Controller-->
         <scene sceneID="lxD-FM-XUq">
@@ -627,6 +704,24 @@ Please Wait...</string>
             </objects>
             <point key="canvasLocation" x="1879" y="3502"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="C3y-6L-4u3">
+            <objects>
+                <navigationController storyboardIdentifier="GridViewController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="VIw-3v-vC9" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="xfN-be-sQt">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="nKt-Zw-KOs" kind="relationship" relationship="rootViewController" id="hlh-CS-caI"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rmv-Qn-XuW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1879" y="2349"/>
+        </scene>
     </scenes>
     <resources>
         <image name="blue_button.png" width="152" height="45"/>
@@ -635,6 +730,7 @@ Please Wait...</string>
         <image name="dot.png" width="6" height="5"/>
         <image name="grid_button.png" width="54" height="48"/>
         <image name="grid_button_selected.png" width="54" height="48"/>
+        <image name="grid_res_type_report.png" width="262" height="182"/>
         <image name="home_logo.png" width="114" height="21"/>
         <image name="horizontal_list_button.png" width="54" height="48"/>
         <image name="horizontal_list_button_selected.png" width="54" height="48"/>
