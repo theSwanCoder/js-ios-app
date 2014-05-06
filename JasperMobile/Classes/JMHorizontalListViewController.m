@@ -26,23 +26,18 @@
 //
 
 #import "JMHorizontalListViewController.h"
-#import "JMConstants.h"
-
-static NSString * kJMResourceCellIdentifier = @"ResourceCell";
-static NSString * kJMLoadingCellIdentifier = @"LoadingCell";
-static NSInteger const kJMPaginationTreshoald = 5;
 
 @implementation JMHorizontalListViewController
-
-@synthesize needsToResetScroll = _needsToResetScroll;
 
 #pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.collectionView.backgroundColor = [UIColor clearColor];
-    self.view.backgroundColor = [UIColor clearColor];
+    self.edgesLandscapeInset = 19.0f;
+    self.edgesPortraitInset = 30.0f;
+    self.scrollPosition = UICollectionViewScrollPositionCenteredHorizontally;
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -52,53 +47,12 @@ static NSInteger const kJMPaginationTreshoald = 5;
     self.delegate.firstVisibleResourceIndex = firstVisible.item;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    // Reset scroll position for a new resources type
-    if (self.needsToResetScroll) {
-        self.collectionView.contentOffset = CGPointZero;
-        // Or scroll to first visible resource after switching list representation
-    } else if (self.delegate.firstVisibleResourceIndex > 1) {
-        NSIndexPath *firstVisible = [NSIndexPath indexPathForItem:self.delegate.firstVisibleResourceIndex inSection:0];
-        [self.collectionView scrollToItemAtIndexPath:firstVisible atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-    }
-}
-
 #pragma mark - UICollectionViewDataSource
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return 1;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    NSInteger count = self.delegate.resources.count;
-    if ([self.delegate hasNextPage]) count++;
-
-    return count;
-}
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell *cell;
-
-    if (indexPath.row == self.delegate.resources.count) {
-        cell = [collectionView dequeueReusableCellWithReuseIdentifier:kJMLoadingCellIdentifier forIndexPath:indexPath];
-        
-        // TODO: Set translated text
-        // TODO: transform (or create custom) activity indicator
-        
-        return cell;
-    }
-
-    // TODO: make separate class for UICollectionViewCell (i.e. JMResourcesCollectionViewCell). Try to reuse it for "Grid" and "Horizontal List" views
-    cell = [collectionView dequeueReusableCellWithReuseIdentifier:kJMResourceCellIdentifier forIndexPath:indexPath];
-
-    // Preventing NPE because "delegate.resources" is a weak reference
-    if (!self.delegate.resources.count) return cell;
+    UICollectionViewCell *cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    if (!self.delegate.resources.count || [self isLoadingCell:cell]) return cell;
 
     JSResourceLookup *lookup = [self.delegate.resources objectAtIndex:indexPath.row];
     
@@ -116,22 +70,6 @@ static NSInteger const kJMPaginationTreshoald = 5;
     description.text = lookup.resourceDescription;
 
     return cell;
-}
-
-#pragma mark - UICollectionViewDelegate
-
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (self.delegate.hasNextPage && indexPath.row + kJMPaginationTreshoald >= self.delegate.resources.count) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadNextPageNotification object:nil];
-    }
-}
-
-#pragma mark - JMRefreshable
-
-- (void)refresh
-{
-    [self.collectionView reloadData];
 }
 
 @end

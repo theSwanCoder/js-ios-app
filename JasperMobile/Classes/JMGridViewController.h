@@ -7,12 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JMRefreshable.h"
-#import "JMDetailViewController.h"
+#import "JMBaseResourcesCollectionViewController.h"
 
-// TODO: create base CollectionViewController to avoid code duplications (if still will be needed)
-@interface JMGridViewController : UICollectionViewController <JMRefreshable>
-
-@property (nonatomic, weak) JMDetailViewController *delegate;
+@interface JMGridViewController : JMBaseResourcesCollectionViewController
 
 @end

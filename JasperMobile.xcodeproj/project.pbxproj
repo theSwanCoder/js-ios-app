@@ -180,6 +180,7 @@
 		F5F1B40917F197F900EB2587 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F1B40317F197F900EB2587 /* Icon-Small@2x.png */; };
 		F5F1B40A17F197F900EB2587 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F1B40417F197F900EB2587 /* Icon.png */; };
 		F5F1B41217F198A600EB2587 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F1B41117F198A600EB2587 /* Icon-72.png */; };
+		F5F21DF0191794C2007F78DB /* JMBaseResourcesCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F21DEF191794C2007F78DB /* JMBaseResourcesCollectionViewController.m */; };
 		F5F8B7C3179DA3720096C61A /* JMAskPasswordDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F8B7C2179DA3720096C61A /* JMAskPasswordDialog.m */; };
 		F5FA4C44190FC06D00001999 /* grid_button_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = F5FA4C3E190FC06D00001999 /* grid_button_selected.png */; };
 		F5FA4C45190FC06D00001999 /* grid_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5FA4C3F190FC06D00001999 /* grid_button.png */; };
@@ -280,6 +281,7 @@
 		37455F137529CFC566FDB02C /* JMResourceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceCell.m; path = Classes/JMResourceCell.m; sourceTree = "<group>"; };
 		37455F8C7426E010A3709C6E /* JMRepositoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMRepositoryTableViewController.m; path = Classes/JMRepositoryTableViewController.m; sourceTree = "<group>"; };
 		37455FD2D6FB5FA2FE8756C6 /* JMReportPagingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportPagingViewController.m; path = Classes/JMReportPagingViewController.m; sourceTree = "<group>"; };
+		37455FEFF04D2B4157C386CF /* JMPaginableListUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPaginableListUtil.h; sourceTree = "<group>"; };
 		37455FF022F117F112A3BB4E /* JMSearchFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSearchFilterTableViewController.h; path = Classes/JMSearchFilterTableViewController.h; sourceTree = "<group>"; };
 		F50F5B5B17CCF14300582196 /* JMSingleSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSingleSelectTableViewController.h; path = Classes/JMSingleSelectTableViewController.h; sourceTree = "<group>"; };
 		F50F5B5C17CCF14300582196 /* JMSingleSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSingleSelectTableViewController.m; path = Classes/JMSingleSelectTableViewController.m; sourceTree = "<group>"; };
@@ -486,6 +488,8 @@
 		F5F1B40317F197F900EB2587 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
 		F5F1B40417F197F900EB2587 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		F5F1B41117F198A600EB2587 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../Icons/Icon-72.png"; sourceTree = "<group>"; };
+		F5F21DEE191794C2007F78DB /* JMBaseResourcesCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseResourcesCollectionViewController.h; path = Classes/JMBaseResourcesCollectionViewController.h; sourceTree = "<group>"; };
+		F5F21DEF191794C2007F78DB /* JMBaseResourcesCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseResourcesCollectionViewController.m; path = Classes/JMBaseResourcesCollectionViewController.m; sourceTree = "<group>"; };
 		F5F8B7C1179DA3720096C61A /* JMAskPasswordDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMAskPasswordDialog.h; path = Classes/JMAskPasswordDialog.h; sourceTree = "<group>"; };
 		F5F8B7C2179DA3720096C61A /* JMAskPasswordDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMAskPasswordDialog.m; path = Classes/JMAskPasswordDialog.m; sourceTree = "<group>"; };
 		F5FA4C3E190FC06D00001999 /* grid_button_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grid_button_selected.png; sourceTree = "<group>"; };
@@ -556,6 +560,8 @@
 		37455C1A234AC9CE06850D27 /* Resources View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				F5F21DEE191794C2007F78DB /* JMBaseResourcesCollectionViewController.h */,
+				F5F21DEF191794C2007F78DB /* JMBaseResourcesCollectionViewController.m */,
 				3745534F59FDB32585D36209 /* JMHorizontalListViewController.h */,
 				37455D1ADE7FC69BF15D7EC5 /* JMHorizontalListViewController.m */,
 				37455ED43FC6052F413CF4FA /* JMVerticalListViewController.h */,
@@ -979,6 +985,7 @@
 				F57364EA17B91BB500A10588 /* JMRefreshable.h */,
 				F5EAA2681797FF350091BA43 /* JMReportClientHolder.h */,
 				F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */,
+				37455FEFF04D2B4157C386CF /* JMPaginableListUtil.h */,
 			);
 			name = Protocols;
 			path = ..;
@@ -1436,6 +1443,7 @@
 				374552EC43D4F1F21EEBD8CF /* JMSavedReportViewerViewController.m in Sources */,
 				374557A7C15F38DCAD8F7872 /* JMSavedReportInfoViewController.m in Sources */,
 				374553767F604A9882578ADA /* JMSearchableTableViewController.m in Sources */,
+				F5F21DF0191794C2007F78DB /* JMBaseResourcesCollectionViewController.m in Sources */,
 				37455E77D1C81B7B1B7ACB6A /* JMSavedReportsTableViewController.m in Sources */,
 				37455F3F2BC76A52420EA150 /* JMResourceCell.m in Sources */,
 				37455494CB2251F939AA0836 /* JMSplitViewController.m in Sources */,

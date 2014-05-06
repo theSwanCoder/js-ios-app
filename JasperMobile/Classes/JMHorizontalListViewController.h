@@ -26,15 +26,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JMRefreshable.h"
-#import "JMDetailViewController.h"
+#import "JMBaseResourcesCollectionViewController.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.9
 */
-@interface JMHorizontalListViewController : UICollectionViewController <JMRefreshable>
-
-@property (nonatomic, weak) JMDetailViewController *delegate;
+@interface JMHorizontalListViewController : JMBaseResourcesCollectionViewController
 
 @end
