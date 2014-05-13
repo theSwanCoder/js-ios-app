@@ -46,9 +46,10 @@ extern NSString * const kJMChangeServerProfileNotification;
 extern NSString * const kJMResetApplicationNotification;
 extern NSString * const kJMSelectMenuNotification;
 extern NSString * const kJMClearSavedReportsListNotification;
+extern NSString * const kJMShowResourcesListInMaster;
+extern NSString * const kJMShowResourcesListInDetail;
 // Pagination Notifications
-extern NSString * const kJMLoadNextPageNotification;
-extern NSString * const kJMPageLoadedNotification;
+extern NSString * const kJMLoadResources;
 
 // Some shared keys for dictionary
 extern NSString * const kJMMenuTag;

@@ -28,6 +28,12 @@ static NSInteger const kJMPaginationTreshoald = 8;
 
 #pragma mark - UIViewController
 
+// TODO: refactor, move to another view controller
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    [self.delegate showResourcesListInMaster];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -61,7 +67,7 @@ static NSInteger const kJMPaginationTreshoald = 8;
         [self.collectionView scrollToItemAtIndexPath:firstVisible atScrollPosition:self.scrollPosition animated:NO];
 
         if (self.yLandscapeOffset || self.yPortraitOffset) {
-            // Adjust offset after scrolling
+            // Adjust offset after scrollings
             CGFloat offset = UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ? self.yLandscapeOffset : self.yPortraitOffset;
             self.collectionView.contentOffset = CGPointMake(0, self.collectionView.contentOffset.y - offset);
         }
@@ -115,7 +121,7 @@ static NSInteger const kJMPaginationTreshoald = 8;
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate.hasNextPage && indexPath.item + kJMPaginationTreshoald >= self.delegate.resources.count) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadNextPageNotification object:nil];
+        [self.delegate loadNextPage:NO];
     }
 }
 

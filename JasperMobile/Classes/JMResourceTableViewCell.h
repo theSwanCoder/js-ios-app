@@ -10,7 +10,7 @@
 
 #define kJMResourceCellIdentifier @"ResourceCell"
 
-@interface JMResourceCell : UITableViewCell
+@interface JMResourceTableViewCell : UITableViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel *label;
 @property (nonatomic, weak) IBOutlet UILabel *desc;

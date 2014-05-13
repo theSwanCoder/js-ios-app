@@ -9,9 +9,8 @@
 @interface JMPaginationData : NSObject
 
 @property (nonatomic, weak) NSArray *resources;
+@property (nonatomic, strong) NSArray *resourcesTypes;
+@property (nonatomic, assign) NSInteger offset;
 @property (nonatomic, assign) NSInteger totalCount;
-// Indicates if resources type was changed for this request
-@property (nonatomic, assign) BOOL isNewResourcesType;
-@property (nonatomic, assign) BOOL hasNextPage;
 
 @end

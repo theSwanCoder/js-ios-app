@@ -31,8 +31,13 @@
 
 @interface JMDetailViewController : UIViewController
 
-@property (nonatomic, weak) NSArray *resources;
+@property (nonatomic, weak) JSRESTResource *resourceClient;
+@property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, assign) NSInteger firstVisibleResourceIndex;
-@property (nonatomic, assign) BOOL hasNextPage;
+@property (nonatomic, strong) NSMutableArray *resources;
+
+- (void)loadNextPage:(BOOL)resetState;
+- (BOOL)hasNextPage;
+- (void)showResourcesListInMaster;
 
 @end

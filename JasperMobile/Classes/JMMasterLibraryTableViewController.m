@@ -1,15 +1,15 @@
 //
-//  JMMasterTableViewController.m
+//  JMMasterLibraryTableViewController.m
 //  JasperMobile
 //
 //  Created by Vlad Zavadsky on 3/18/14.
 //  Copyright (c) 2014 com.jaspersoft. All rights reserved.
 //
 
-#import "JMMasterTableViewController.h"
+#import "JMMasterLibraryTableViewController.h"
+#import "JMLibraryTableViewCell.h"
 #import "JMMenuSectionView.h"
 #import "JMLocalization.h"
-#import "JMCancelRequestPopup.h"
 #import "JMRequestDelegate.h"
 #import "JMConstants.h"
 #import "JMPaginationData.h"
@@ -32,37 +32,22 @@ typedef NS_ENUM(NSInteger, JMSortBy) {
     JMSortByCreator
 };
 
-typedef NS_ENUM(NSInteger, JMTool) {
-    JMToolRefresh = 0
-};
-
-// TODO: ask what value it should be
-static NSInteger const kJMLimit = 15;
-
 static NSString * const kJMTitleKey = @"title";
 static NSString * const kJMRowsKey = @"rows";
 
-static UIColor *defaultCellColor;
-static UIColor *selectedCellColor;
-static NSString *defaultCircleImageName;
-static NSString *selectedCircleImageName;
-
-@interface JMMasterTableViewController ()
+@interface JMMasterLibraryTableViewController ()
 @property (nonatomic, strong) NSDictionary *cellsAndSectionsProperties;
 @property (nonatomic, assign) JMResourcesType resourcesTypeEnum;
-@property (nonatomic, assign) BOOL isResourcesTypeChanged;
 @end
 
-@implementation JMMasterTableViewController
+@implementation JMMasterLibraryTableViewController
 objection_requires(@"resourceClient", @"constants")
 
 @synthesize resourceClient = _resourcesClient;
-@synthesize totalCount = _totalCount;
-@synthesize offset = _offset;
 
 #pragma mark - Accessors
 
-- (NSArray *)resourcesType
+- (NSArray *)resourcesTypes
 {
     switch (self.resourcesTypeEnum) {
         case JMResourceTypeReport:
@@ -79,29 +64,24 @@ objection_requires(@"resourceClient", @"constants")
 {
     if (!_cellsAndSectionsProperties) {
         _cellsAndSectionsProperties = @{
-            @kJMResourcesSection : @{
-                kJMTitleKey : @"resources",
-                // Temp solution
-                // TODO: refactor / re-implement
-                kJMRowsKey : @[
-                    @"all", @"reportUnit", @"dashboard"
-                ]
-            },
-            @kJMSortSection : @{
-                kJMTitleKey : @"sortby",
-                kJMRowsKey : @[
-                    @"name", @"date", @"creator"
-                ]
-            }
+                @kJMResourcesSection : @{
+                        kJMTitleKey : @"resources",
+                        // Temp solution
+                        // TODO: refactor / re-implement
+                        kJMRowsKey : @[
+                                @"all", @"reportUnit", @"dashboard"
+                        ]
+                },
+                @kJMSortSection : @{
+                        kJMTitleKey : @"sortby",
+                        kJMRowsKey : @[
+                                @"name", @"date", @"creator"
+                        ]
+                }
         };
     }
 
     return _cellsAndSectionsProperties;
-}
-
-- (CGFloat)rgbComponent:(CGFloat)color
-{
-    return color / 255.0f;
 }
 
 #pragma mark - Initialization
@@ -118,42 +98,33 @@ objection_requires(@"resourceClient", @"constants")
 {
     [super viewDidLoad];
 
-    defaultCellColor = [UIColor colorWithRed:[self rgbComponent:50.0f]
-                                       green:[self rgbComponent:52.0f]
-                                        blue:[self rgbComponent:59.0f]
-                                       alpha:1.0f];
-    selectedCellColor = [UIColor colorWithRed:[self rgbComponent:72.0f]
-                                        green:[self rgbComponent:79.0f]
-                                         blue:[self rgbComponent:89.0f]
-                                        alpha:1.0f];
-    defaultCircleImageName = @"circle.png";
-    selectedCircleImageName = @"circle_selected.png";
-
-    self.resources = [NSMutableArray array];
-
-    // TODO: show downloading progress
-
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(loadNextPage)
-                                                 name:kJMLoadNextPageNotification
+                                             selector:@selector(showResourcesListInMaster:)
+                                                 name:kJMShowResourcesListInMaster
                                                object:nil];
-    [self loadNextPage];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
+    
     for (NSInteger i = [self.cellsAndSectionsProperties count] - 2; i >= 0; i--) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:i];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
 }
 
-- (void)didReceiveMemoryWarning
+
+- (void)showResourcesListInMaster:(NSNotification *)notification
 {
-    [super didReceiveMemoryWarning];
-    // TODO: add cleaning logic
+    // TODO: refactor. Move segue to const string
+    [self performSegueWithIdentifier:@"ShowResources" sender:[notification.userInfo objectForKey:kJMPaginationData]];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"ShowResources"]) {
+        JMPaginationData *paginationData = sender;
+        id destinationViewController = segue.destinationViewController;
+        [destinationViewController setTotalCount:paginationData.totalCount];
+        [destinationViewController setResources:paginationData.resources];
+        [destinationViewController setOffset:paginationData.offset];
+    }
 }
 
 #pragma mark - Table view data source
@@ -191,7 +162,7 @@ objection_requires(@"resourceClient", @"constants")
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIdentifier = @"MenuCell";
-    JMMenuTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    JMLibraryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.title.text = [self localizedRowTitle:indexPath.row forSection:indexPath.section];
 
     if (indexPath.section != kJMSortSection && indexPath.section != kJMToolsSection) {
@@ -205,36 +176,23 @@ objection_requires(@"resourceClient", @"constants")
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMMenuTableViewCell *cell = (JMMenuTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
+    JMLibraryTableViewCell *cell = (JMLibraryTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
     if (cell.isSelected) return nil;
     return indexPath;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMMenuTableViewCell *cell = (JMMenuTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
+    JMLibraryTableViewCell *cell = (JMLibraryTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
     cell.selected = YES;
-    
+
     switch (indexPath.section) {
         case kJMResourcesSection:
             self.resourcesTypeEnum = (JMResourcesType) indexPath.row;
-            [self.resources removeAllObjects];
-            self.totalCount = 0;
-            self.offset = 0;
-            self.isResourcesTypeChanged = YES;
-            [self loadNextPage];
-
-            // Load resources special type
+            [self loadResources];
             break;
 
         case kJMSortSection:
-            break;
-
-        case kJMCategoriesSection:
-            // TODO: get some info about what categories are
-            break;
-
-        case kJMToolsSection:
             break;
     }
 
@@ -242,7 +200,7 @@ objection_requires(@"resourceClient", @"constants")
     for (NSInteger i = [self.tableView numberOfRowsInSection:indexPath.section] - 1; i >= 0; i--) {
         if (i == indexPath.row) continue;
         NSIndexPath *cellToDeselect = [NSIndexPath indexPathForRow:i inSection:indexPath.section];
-        cell = (JMMenuTableViewCell *) [self.tableView cellForRowAtIndexPath:cellToDeselect];
+        cell = (JMLibraryTableViewCell *) [self.tableView cellForRowAtIndexPath:cellToDeselect];
         cell.selected = NO;
     }
 }
@@ -251,51 +209,21 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)dealloc
 {
-    defaultCellColor = nil;
-    selectedCellColor = nil;
-    defaultCircleImageName = nil;
-    selectedCircleImageName = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - Private
+#pragma mark - Private -
 
-#pragma mark - Pagination
-
-- (void)loadNextPage
+- (void)loadResources
 {
-    __weak JMMasterTableViewController *weakSelf = self;
-
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        if (!weakSelf.totalCount) {
-            weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
-        }
-
-        [weakSelf.resources addObjectsFromArray:result.objects];
-
-        JMPaginationData *paginationData = [[JMPaginationData alloc] init];
-        paginationData.resources = weakSelf.resources;
-        paginationData.totalCount = weakSelf.totalCount;
-        paginationData.isNewResourcesType = weakSelf.isResourcesTypeChanged;
-        paginationData.hasNextPage = weakSelf.hasNextPage;
-
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMPageLoadedNotification object:nil userInfo:@{
-                kJMPaginationData : paginationData
-        }];
-
-        weakSelf.isResourcesTypeChanged = NO;
-    } errorBlock:^(JSOperationResult *result) {
-        weakSelf.offset -= kJMLimit;
-        // TODO: add error handler
-    }];
-
-    [self.resourceClient resourceLookups:self.folderUri query:nil types:self.resourcesType recursive:YES offset:self.offset limit:kJMLimit delegate:delegate];
-    self.offset += kJMLimit;
-}
-
-- (BOOL)hasNextPage
-{
-    return self.offset < self.totalCount;
+    JMPaginationData *paginationData = [[JMPaginationData alloc] init];
+    paginationData.resourcesTypes = self.resourcesTypes;
+    NSDictionary *userInfo = @{
+            kJMPaginationData : paginationData
+    };
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResources
+                                                        object:nil
+                                                      userInfo:userInfo];
 }
 
 #pragma mark - Localization
@@ -314,23 +242,6 @@ objection_requires(@"resourceClient", @"constants")
     NSDictionary *properties = [self.cellsAndSectionsProperties objectForKey:[NSNumber numberWithInteger:section]];
     NSString *localizationKey = [NSString stringWithFormat:@"master.%@.title", [properties objectForKey:kJMTitleKey]];
     return JMCustomLocalizedString(localizationKey, nil);
-}
-
-@end
-
-@implementation JMMenuTableViewCell
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-    
-    if (selected) {
-        self.contentView.backgroundColor = selectedCellColor;
-        [self.circleImageView setImage:[UIImage imageNamed:selectedCircleImageName]];
-    } else {
-        self.contentView.backgroundColor = defaultCellColor;
-        [self.circleImageView setImage:[UIImage imageNamed:defaultCircleImageName]];
-    }
 }
 
 @end

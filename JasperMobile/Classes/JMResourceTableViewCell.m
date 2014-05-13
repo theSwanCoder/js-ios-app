@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 com.jaspersoft. All rights reserved.
 //
 
-#import "JMResourceCell.h"
+#import "JMResourceTableViewCell.h"
 
-@implementation JMResourceCell
+@implementation JMResourceTableViewCell
 
 - (void)layoutSubviews
 {

@@ -29,6 +29,10 @@
 #import "JMConstants.h"
 #import "JMPaginationData.h"
 #import "JMRefreshable.h"
+#import "JMRequestDelegate.h"
+#import <Objection-iOS/Objection.h>
+
+static NSInteger const kJMLimit = 15;
 
 typedef enum {
     JMViewControllerTypeGrid = 2,
@@ -37,14 +41,28 @@ typedef enum {
 } JMViewControllerType;
 
 @interface JMDetailViewController ()
+@property (nonatomic, strong) NSDictionary *viewControllerTypes;
 @property (nonatomic, assign) JMViewControllerType viewControllerType;
-@property (nonatomic, weak) UINavigationController *activeDetailViewController;
+@property (nonatomic, weak) UINavigationController *activeResourcesViewController;
 @property (nonatomic, weak) IBOutlet UIView *containerView;
 @property (nonatomic, strong) NSMutableArray *switchButtons;
-@property (nonatomic, strong) NSDictionary *viewControllerTypes;
+@property (nonatomic, strong) NSArray *resourcesTypes;
+
+// Pagination properties
+@property (nonatomic, assign) NSInteger totalCount;
+@property (nonatomic, assign) NSInteger offset;
 @end
 
 @implementation JMDetailViewController
+objection_requires(@"resourceClient", @"constants")
+
+#pragma mark - Initialization
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [[JSObjection defaultInjector] injectDependencies:self];
+}
 
 #pragma mark - UIViewController
 
@@ -53,7 +71,9 @@ typedef enum {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
     self.containerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
+    
     self.resources = [NSMutableArray array];
+    self.resourcesTypes = @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD];
 
     self.viewControllerTypes = @{
         @(JMViewControllerTypeGrid) : @"GridViewController",
@@ -72,15 +92,13 @@ typedef enum {
     }
 
     [self instantiateAndSetAsActiveViewControllerOfType:self.viewControllerType];
-
-    [[NSNotificationCenter defaultCenter] addObserverForName:kJMPageLoadedNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
-        JMPaginationData *paginationData = [note.userInfo objectForKey:kJMPaginationData];
-        self.resources = paginationData.resources;
-        self.hasNextPage = paginationData.hasNextPage;
-        UIViewController <JMRefreshable> *baseRepositoryViewController = self.activeDetailViewController.viewControllers.firstObject;
-        baseRepositoryViewController.needsToResetScroll = paginationData.isNewResourcesType;
-        [baseRepositoryViewController refresh];
-    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadNextPageObserver:)
+                                                 name:kJMLoadResources
+                                               object:nil];
+    
+    [self loadNextPage:YES];
 }
 
 #pragma mark - UIViewControllerRotation
@@ -106,7 +124,73 @@ typedef enum {
     [self instantiateAndSetAsActiveViewControllerOfType:self.viewControllerType];
 }
 
+#pragma mark - Pagination
+
+- (void)loadNextPage:(BOOL)resetState;
+{
+    // Multiple calls protection
+    static BOOL isLoading = NO;
+    if (isLoading) return;
+    
+    __weak JMDetailViewController *weakSelf = self;
+    
+    if (resetState) {
+        self.totalCount = 0;
+        self.offset = 0;
+        [self.resources removeAllObjects];
+    }
+
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        isLoading = NO;
+        
+        if (!weakSelf.totalCount) {
+            weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
+        }
+
+        [weakSelf.resources addObjectsFromArray:result.objects];
+
+        UIViewController <JMRefreshable> *baseRepositoryViewController = weakSelf.activeResourcesViewController.viewControllers.firstObject;
+        baseRepositoryViewController.needsToResetScroll = resetState;
+        [baseRepositoryViewController refresh];
+    } errorBlock:^(JSOperationResult *result) {
+        isLoading = NO;
+        weakSelf.offset -= kJMLimit;
+        // TODO: add error handler
+    }];
+
+    [self.resourceClient resourceLookups:nil query:nil types:self.resourcesTypes recursive:YES offset:self.offset limit:kJMLimit delegate:delegate];
+    
+    isLoading = YES;
+    self.offset += kJMLimit;
+}
+
+- (BOOL)hasNextPage
+{
+    return self.offset < self.totalCount;
+}
+
+- (void)showResourcesListInMaster
+{
+    JMPaginationData *paginationData = [[JMPaginationData alloc] init];
+    paginationData.resources = self.resources;
+    paginationData.totalCount = self.totalCount;
+    paginationData.offset = self.offset;
+    NSDictionary *userInfo = @{
+            kJMPaginationData : paginationData
+    };
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
+                                                        object:nil
+                                                      userInfo:userInfo];
+}
+
 #pragma mark - Private
+
+- (void)loadNextPageObserver:(NSNotification *)notification
+{
+    JMPaginationData *paginationData = [notification.userInfo objectForKey:kJMPaginationData];
+    self.resourcesTypes = paginationData.resourcesTypes;
+    [self loadNextPage:YES];
+}
 
 - (void)instantiateAndSetAsActiveViewControllerOfType:(JMViewControllerType)type
 {
@@ -115,10 +199,10 @@ typedef enum {
     UINavigationController *navigationController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
 
     // Remove from parent view
-    if (self.activeDetailViewController) {
-        [self.activeDetailViewController willMoveToParentViewController:nil];
-        [[self.activeDetailViewController view] removeFromSuperview];
-        [self.activeDetailViewController removeFromParentViewController];
+    if (self.activeResourcesViewController) {
+        [self.activeResourcesViewController willMoveToParentViewController:nil];
+        [[self.activeResourcesViewController view] removeFromSuperview];
+        [self.activeResourcesViewController removeFromParentViewController];
     }
 
     CGSize containerViewSize = self.containerView.frame.size;
@@ -128,7 +212,7 @@ typedef enum {
     [self.containerView addSubview:navigationController.view];
     [navigationController didMoveToParentViewController:self];
 
-    self.activeDetailViewController = navigationController;
+    self.activeResourcesViewController = navigationController;
 
     UIViewController <JMRefreshable> *baseRepositoryViewController = [navigationController.viewControllers firstObject];
     if ([baseRepositoryViewController respondsToSelector:@selector(setDelegate:)]) {

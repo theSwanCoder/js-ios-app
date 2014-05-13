@@ -43,8 +43,11 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    NSIndexPath *firstVisible = self.collectionView.indexPathsForVisibleItems[1];
-    self.delegate.firstVisibleResourceIndex = firstVisible.item;
+    NSArray *indexPathsForVisibleItems = self.collectionView.indexPathsForVisibleItems;
+    if (indexPathsForVisibleItems.count) {
+        NSIndexPath *firstVisible = [indexPathsForVisibleItems objectAtIndex:1];
+        self.delegate.firstVisibleResourceIndex = firstVisible.item;
+    }
 }
 
 #pragma mark - UICollectionViewDataSource

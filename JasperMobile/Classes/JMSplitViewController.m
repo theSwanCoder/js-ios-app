@@ -38,6 +38,10 @@ static CGFloat const kMasterViewWidth = 163.0f;
     
     JMHomeCollectionViewController *homeView = [self.viewControllers objectAtIndex:1];
     homeView.delegate = self;
+    
+    UIViewController *masterViewController = [self.viewControllers objectAtIndex:0];
+    UIButton *button = (UIButton *)[masterViewController.view viewWithTag:3];
+    [button addTarget:self action:@selector(backToHomeScreen:) forControlEvents:UIControlEventTouchUpInside];
 
     // TODO: refactor
 //    UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(kMasterViewWidth, 112.0f, 0, self.view.frame.size.height)];
@@ -124,7 +128,7 @@ static CGFloat const kMasterViewWidth = 163.0f;
         }
         
         UIViewController *master = [self.viewControllers objectAtIndex:0];
-        UIViewController *detail;
+        id detail;
         
         if (_selectedItem != JMMenuItemHomeView) {
             UIView *masterContainer = [master.view viewWithTag:1];
@@ -143,6 +147,7 @@ static CGFloat const kMasterViewWidth = 163.0f;
             detail = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
         } else {
             detail = [self.storyboard instantiateViewControllerWithIdentifier:@"HomeCollectionViewController"];
+            [detail setDelegate:self];
         }
         
         self.viewControllers = @[master, detail];
@@ -150,6 +155,13 @@ static CGFloat const kMasterViewWidth = 163.0f;
         // Forces to call splitViewController:shouldHideViewController:inOrientation: method
         [self willRotateToInterfaceOrientation:self.interfaceOrientation duration:0];
     }
+}
+
+#pragma mark - Actions
+
+- (IBAction)backToHomeScreen:(id)sender
+{
+    self.selectedItem = JMMenuItemHomeView;
 }
 
 @end

@@ -43,9 +43,10 @@ NSString * const kJMChangeServerProfileNotification = @"changeServerProfile";
 NSString * const kJMResetApplicationNotification = @"resetApplication";
 NSString * const kJMSelectMenuNotification = @"selectMenu";
 NSString * const kJMClearSavedReportsListNotification = @"clearSavedReports";
+NSString * const kJMShowResourcesListInMaster = @"showResourcesListInMaster";
+NSString * const kJMShowResourcesListInDetail = @"showResourcesListInDetail";
 // Pagination Notifications
-NSString * const kJMLoadNextPageNotification = @"loadNextPage";
-NSString * const kJMPageLoadedNotification = @"pageLoaded";
+NSString * const kJMLoadResources = @"loadResources";
 
 // Some shared keys for dictionary
 NSString * const kJMMenuTag = @"menuTag";
