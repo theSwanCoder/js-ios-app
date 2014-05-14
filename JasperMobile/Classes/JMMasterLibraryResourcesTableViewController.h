@@ -14,8 +14,4 @@
 
 @property (nonatomic, weak) NSMutableArray *resources;
 
-// Pagination properties
-@property (nonatomic, assign) NSInteger totalCount;
-@property (nonatomic, assign) NSInteger offset;
-
 @end

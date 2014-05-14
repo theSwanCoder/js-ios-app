@@ -4,10 +4,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 @interface JMPaginationData : NSObject
 
+@property (nonatomic, weak) JSResourceLookup *currentFolder;
 @property (nonatomic, weak) NSArray *resources;
 @property (nonatomic, strong) NSArray *resourcesTypes;
 @property (nonatomic, assign) NSInteger offset;

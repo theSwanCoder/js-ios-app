@@ -95,10 +95,8 @@ objection_requires(@"resourceClient", @"constants")
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadNextPageObserver:)
-                                                 name:kJMLoadResources
+                                                 name:kJMLoadResourcesInDetail
                                                object:nil];
-    
-    [self loadNextPage:YES];
 }
 
 #pragma mark - UIViewControllerRotation
@@ -158,7 +156,7 @@ objection_requires(@"resourceClient", @"constants")
         // TODO: add error handler
     }];
 
-    [self.resourceClient resourceLookups:nil query:nil types:self.resourcesTypes recursive:YES offset:self.offset limit:kJMLimit delegate:delegate];
+    [self.resourceClient resourceLookups:self.folderUri query:nil types:self.resourcesTypes recursive:YES offset:self.offset limit:kJMLimit delegate:delegate];
     
     isLoading = YES;
     self.offset += kJMLimit;
@@ -188,7 +186,10 @@ objection_requires(@"resourceClient", @"constants")
 - (void)loadNextPageObserver:(NSNotification *)notification
 {
     JMPaginationData *paginationData = [notification.userInfo objectForKey:kJMPaginationData];
-    self.resourcesTypes = paginationData.resourcesTypes;
+    if (paginationData.resourcesTypes) {
+        self.resourcesTypes = paginationData.resourcesTypes;
+    }
+    self.folderUri = paginationData.currentFolder.uri;
     [self loadNextPage:YES];
 }
 

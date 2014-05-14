@@ -107,6 +107,8 @@ objection_requires(@"resourceClient", @"constants")
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:i];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResourcesInDetail object:nil];
 }
 
 
@@ -221,7 +223,7 @@ objection_requires(@"resourceClient", @"constants")
     NSDictionary *userInfo = @{
             kJMPaginationData : paginationData
     };
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResources
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResourcesInDetail
                                                         object:nil
                                                       userInfo:userInfo];
 }

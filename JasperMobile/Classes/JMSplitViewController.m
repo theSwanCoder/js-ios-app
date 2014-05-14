@@ -107,6 +107,7 @@ static CGFloat const kMasterViewWidth = 163.0f;
                 break;
 
             case JMMenuItemRepository:
+                subMasterIdentifier = @"MasterRepositoryTableViewController";
                 break;
 
             case JMMenuItemFavorites:
