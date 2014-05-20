@@ -36,6 +36,7 @@
 @property (nonatomic, assign) NSInteger firstVisibleResourceIndex;
 @property (nonatomic, strong) NSString *folderUri;
 @property (nonatomic, strong) NSMutableArray *resources;
+@property (nonatomic, assign) BOOL loadRecursively;
 
 - (void)loadNextPage:(BOOL)resetState;
 - (BOOL)hasNextPage;

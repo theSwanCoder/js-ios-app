@@ -13,5 +13,6 @@
 @property (nonatomic, strong) NSArray *resourcesTypes;
 @property (nonatomic, assign) NSInteger offset;
 @property (nonatomic, assign) NSInteger totalCount;
+@property (nonatomic, assign) BOOL loadRecursively;
 
 @end

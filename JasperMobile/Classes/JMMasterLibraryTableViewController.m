@@ -220,6 +220,7 @@ objection_requires(@"resourceClient", @"constants")
 {
     JMPaginationData *paginationData = [[JMPaginationData alloc] init];
     paginationData.resourcesTypes = self.resourcesTypes;
+    paginationData.loadRecursively = YES;
     NSDictionary *userInfo = @{
             kJMPaginationData : paginationData
     };

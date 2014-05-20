@@ -12,7 +12,7 @@
 #import "JMConstants.h"
 #import <Objection-iOS/Objection.h>
 
-static NSInteger const kJMLimit = 15;
+static NSInteger const kJMLimit = 25;
 static NSInteger const kJMRootFolderCell = 0;
 
 @interface JMMasterRepositoryTableViewController ()
@@ -38,15 +38,13 @@ objection_requires(@"resourceClient", @"constants")
 {
     [super viewDidLoad];
     
-    self.folders = [NSMutableArray array];
-    
     if (!self.currentFolder) {
         self.currentFolder = [[JSResourceLookup alloc] init];
         // TODO: localize
         self.currentFolder.label = @"Root";
         // TODO: find prop value
         self.currentFolder.uri = @"/";
-        
+
         self.backView.hidden = YES;
         self.backView.frame = CGRectZero;
     } else {
@@ -54,25 +52,10 @@ objection_requires(@"resourceClient", @"constants")
         [self.backView addGestureRecognizer:tapGestureRecognizer];
     }
     
-    __weak  JMMasterRepositoryTableViewController *weakSelf = self;
+    self.folders = [NSMutableArray array];
+    [self.folders addObject:self.currentFolder];
     
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        if (weakSelf.totalCount) {
-            weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
-        }
-        
-        [weakSelf.folders addObject:weakSelf.currentFolder];
-        [weakSelf.folders addObjectsFromArray:result.objects];
-        [weakSelf.tableView reloadData];
-        [weakSelf loadResourcesIntoDetailViewController];
-    }];
-    
-    [self.resourceClient resourceLookups:self.currentFolder.uri query:nil types:@[self.constants.WS_TYPE_FOLDER] recursive:NO offset:self.offset limit:kJMLimit delegate:delegate];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
+    [self loadNextPage];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -99,13 +82,25 @@ objection_requires(@"resourceClient", @"constants")
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    if (indexPath.row == self.folders.count) {
+        return [tableView dequeueReusableCellWithIdentifier:@"LoadingCell" forIndexPath:indexPath];
+    }
+
     NSString *cellIdentifier = (indexPath.row == kJMRootFolderCell) ? @"RootCell" : @"FolderCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     UILabel *label = (UILabel *) [cell viewWithTag:1];
     label.text = [[self.folders objectAtIndex:indexPath.row] label];
     
     return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.offset < self.totalCount && indexPath.row == self.folders.count) {
+        [self loadNextPage];
+    }
 }
 
 #pragma mark - JMMasterRepositoryTableViewController
@@ -114,6 +109,7 @@ objection_requires(@"resourceClient", @"constants")
 {
     JMPaginationData *paginationData = [[JMPaginationData alloc] init];
     paginationData.currentFolder = self.currentFolder;
+    paginationData.loadRecursively = NO;
     NSDictionary *userInfo = @{
         kJMPaginationData : paginationData
     };
@@ -129,6 +125,26 @@ objection_requires(@"resourceClient", @"constants")
 {
     [self.navigationController popViewControllerAnimated:YES];
     [self.delegate loadResourcesIntoDetailViewController];
+}
+
+#pragma mark - Private
+
+
+- (void)loadNextPage
+{
+    __weak  JMMasterRepositoryTableViewController *weakSelf = self;
+    
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        if (!weakSelf.totalCount) {
+            weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
+        }
+        weakSelf.offset += kJMLimit;
+        [weakSelf.folders addObjectsFromArray:result.objects];
+        [weakSelf.tableView reloadData];
+        [weakSelf loadResourcesIntoDetailViewController];
+    }];
+    
+    [self.resourceClient resourceLookups:self.currentFolder.uri query:nil types:@[self.constants.WS_TYPE_FOLDER] recursive:NO offset:self.offset limit:kJMLimit delegate:delegate];
 }
 
 @end

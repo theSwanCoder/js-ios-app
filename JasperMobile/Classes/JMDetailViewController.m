@@ -156,7 +156,7 @@ objection_requires(@"resourceClient", @"constants")
         // TODO: add error handler
     }];
 
-    [self.resourceClient resourceLookups:self.folderUri query:nil types:self.resourcesTypes recursive:YES offset:self.offset limit:kJMLimit delegate:delegate];
+    [self.resourceClient resourceLookups:self.folderUri query:nil types:self.resourcesTypes recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
     
     isLoading = YES;
     self.offset += kJMLimit;
@@ -189,6 +189,7 @@ objection_requires(@"resourceClient", @"constants")
     if (paginationData.resourcesTypes) {
         self.resourcesTypes = paginationData.resourcesTypes;
     }
+    self.loadRecursively = paginationData.loadRecursively;
     self.folderUri = paginationData.currentFolder.uri;
     [self loadNextPage:YES];
 }
