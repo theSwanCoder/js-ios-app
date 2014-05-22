@@ -17,8 +17,6 @@
 
 #define kJMResourcesSection 0
 #define kJMSortSection 1
-#define kJMCategoriesSection 2
-#define kJMToolsSection 3
 
 typedef NS_ENUM(NSInteger, JMResourcesType) {
     JMResourceTypeAll = 0,
@@ -32,6 +30,7 @@ typedef NS_ENUM(NSInteger, JMSortBy) {
     JMSortByCreator
 };
 
+static NSString * const kJMShowResourcesSegue = @"ShowResources";
 static NSString * const kJMTitleKey = @"title";
 static NSString * const kJMRowsKey = @"rows";
 
@@ -75,7 +74,7 @@ objection_requires(@"resourceClient", @"constants")
                 @kJMSortSection : @{
                         kJMTitleKey : @"sortby",
                         kJMRowsKey : @[
-                                @"name", @"date", @"creator"
+                                @"name", @"date"
                         ]
                 }
         };
@@ -102,30 +101,32 @@ objection_requires(@"resourceClient", @"constants")
                                              selector:@selector(showResourcesListInMaster:)
                                                  name:kJMShowResourcesListInMaster
                                                object:nil];
-    
+
     for (NSInteger i = [self.cellsAndSectionsProperties count] - 2; i >= 0; i--) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:i];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResourcesInDetail object:nil];
+    [self loadResources];
 }
 
 
 - (void)showResourcesListInMaster:(NSNotification *)notification
 {
-    // TODO: refactor. Move segue to const string
-    [self performSegueWithIdentifier:@"ShowResources" sender:[notification.userInfo objectForKey:kJMPaginationData]];
+    [self performSegueWithIdentifier:kJMShowResourcesSegue
+                              sender:[notification.userInfo objectForKey:kJMPaginationData]];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"ShowResources"]) {
+    if ([segue.identifier isEqualToString:kJMShowResourcesSegue]) {
         JMPaginationData *paginationData = sender;
         id destinationViewController = segue.destinationViewController;
         [destinationViewController setTotalCount:paginationData.totalCount];
         [destinationViewController setResources:paginationData.resources];
         [destinationViewController setOffset:paginationData.offset];
+        [destinationViewController setResourceLookup:paginationData.resourceLookup];
+        [destinationViewController setResourcesTypes:self.resourcesTypes];
     }
 }
 
@@ -146,7 +147,7 @@ objection_requires(@"resourceClient", @"constants")
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"JMMenuSectionView" owner:self.tableView options:nil];
     JMMenuSectionView *view = [nib objectAtIndex:0];
     view.frame = CGRectMake(0, 0, 163, 10.0f);
-    view.title.text = section != kJMToolsSection ? [self localizedSectionTitle:section] : @"";
+    view.title.text = [self localizedSectionTitle:section];
     return view;
 }
 
@@ -166,12 +167,6 @@ objection_requires(@"resourceClient", @"constants")
     static NSString *cellIdentifier = @"MenuCell";
     JMLibraryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.title.text = [self localizedRowTitle:indexPath.row forSection:indexPath.section];
-
-    if (indexPath.section != kJMSortSection && indexPath.section != kJMToolsSection) {
-
-    } else {
-        cell.numberOfResources.text = @"";
-    }
 
     return cell;
 }

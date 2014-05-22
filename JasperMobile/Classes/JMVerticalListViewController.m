@@ -9,7 +9,7 @@
 #import "JMVerticalListViewController.h"
 
 // TODO: OOP Part: Needs to be implemented in a proper way. REMOVE CODE DUPLICATION
-#import "JMResourceTableViewCell.h"
+#import "JMVerticalListResourceTableViewCell.h"
 #import "JMConstants.h"
 
 static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
@@ -69,7 +69,7 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMResourceTableViewCell *cell;
+    JMVerticalListResourceTableViewCell *cell;
     
     if (indexPath.row == self.delegate.resources.count) {
         cell = [tableView dequeueReusableCellWithIdentifier:kJMLoadingCellIdentifier forIndexPath:indexPath];
@@ -102,7 +102,7 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([self.delegate hasNextPage] && indexPath.row == self.delegate.resources.count) {
-        [self.delegate loadNextPage:NO];
+        [self.delegate loadNextPage];
     }
 }
 

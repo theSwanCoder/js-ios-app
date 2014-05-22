@@ -27,19 +27,16 @@
 
 #import <UIKit/UIKit.h>
 #import "JMResourceClientHolder.h"
+#import "JMPagination.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
-@interface JMDetailViewController : UIViewController
-;
-@property (nonatomic, weak) JSRESTResource *resourceClient;
+@interface JMDetailViewController : UIViewController <JMPagination, JMResourceClientHolder>
+
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, assign) NSInteger firstVisibleResourceIndex;
-@property (nonatomic, strong) NSString *folderUri;
 @property (nonatomic, strong) NSMutableArray *resources;
 @property (nonatomic, assign) BOOL loadRecursively;
 
-- (void)loadNextPage:(BOOL)resetState;
-- (BOOL)hasNextPage;
-- (void)showResourcesListInMaster;
+- (void)showResourcesListInMaster:(JSResourceLookup *)resourceLookup;
 
 @end

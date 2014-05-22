@@ -48,6 +48,7 @@ extern NSString * const kJMSelectMenuNotification;
 extern NSString * const kJMClearSavedReportsListNotification;
 // Notifications used to connect master and detail view controllers
 extern NSString * const kJMShowResourcesListInMaster;
+extern NSString * const kJMShowResourcesListInDetail;
 extern NSString * const kJMLoadResourcesInDetail;
 
 // Some shared keys for dictionary

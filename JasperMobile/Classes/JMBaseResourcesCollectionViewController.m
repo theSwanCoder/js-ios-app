@@ -31,7 +31,8 @@ static NSInteger const kJMPaginationTreshoald = 8;
 // TODO: refactor, move to another view controller
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    [self.delegate showResourcesListInMaster];
+    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+    [self.delegate showResourcesListInMaster:[self.delegate.resources objectAtIndex:indexPath.row]];
 }
 
 - (void)viewDidLoad
@@ -121,7 +122,7 @@ static NSInteger const kJMPaginationTreshoald = 8;
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.delegate.hasNextPage && indexPath.item + kJMPaginationTreshoald >= self.delegate.resources.count) {
-        [self.delegate loadNextPage:NO];
+        [self.delegate loadNextPage];
     }
 }
 

@@ -8,15 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JMPagination.h"
+#import "JMResourceClientHolder.h"
 
-@interface JMMasterRepositoryTableViewController : UITableViewController
+@interface JMMasterRepositoryTableViewController : UITableViewController <JMPagination, JMResourceClientHolder>
 
-@property (nonatomic, strong) JSResourceLookup *currentFolder;
 @property (nonatomic, strong) NSMutableArray *folders;
-@property (nonatomic, weak) JSRESTResource *resourceClient;
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, weak) JMMasterRepositoryTableViewController *delegate;
-
-- (void)loadResourcesIntoDetailViewController;
 
 @end

@@ -5,14 +5,13 @@
 
 #import <Foundation/Foundation.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JMPagination.h"
 
-@interface JMPaginationData : NSObject
+@interface JMPaginationData : NSObject <JMPagination>
 
-@property (nonatomic, weak) JSResourceLookup *currentFolder;
 @property (nonatomic, weak) NSArray *resources;
+@property (nonatomic, strong) JSResourceLookup *resourceLookup;
 @property (nonatomic, strong) NSArray *resourcesTypes;
-@property (nonatomic, assign) NSInteger offset;
-@property (nonatomic, assign) NSInteger totalCount;
 @property (nonatomic, assign) BOOL loadRecursively;
 
 @end

@@ -1,5 +1,5 @@
 //
-//  JMMasterLibraryResourcesTableViewController.h
+//  JMMasterResourcesTableViewController.h
 //  JasperMobile
 //
 //  Created by Vlad Zavadsky on 5/7/14.
@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JMPagination.h"
+#import "JMResourceClientHolder.h"
 
 // TODO: refactor, remove code duplications. Create Base View Controller and extends from it
-@interface JMMasterLibraryResourcesTableViewController : UITableViewController
+@interface JMMasterResourcesTableViewController : UITableViewController <JMPagination, JMResourceClientHolder>
 
 @property (nonatomic, weak) NSMutableArray *resources;
+@property (nonatomic, weak) NSArray *resourcesTypes;
 
 @end

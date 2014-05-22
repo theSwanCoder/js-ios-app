@@ -5,7 +5,9 @@
 
 #import "JMPaginationData.h"
 
-
 @implementation JMPaginationData
+
+@synthesize offset = _offset;
+@synthesize totalCount = _totalCount;
 
 @end

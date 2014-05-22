@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JMResourceTableViewCell.h"
 
-@interface JMLibraryTableViewCell : UITableViewCell
+@interface JMLibraryTableViewCell : JMResourceTableViewCell
 
-@property (nonatomic, weak) IBOutlet UILabel *title;
-@property (nonatomic, weak) IBOutlet UILabel *numberOfResources;
-@property (nonatomic, weak) IBOutlet UIImageView *circleImageView;
+@property (nonatomic, weak) IBOutlet UIImageView *img;
 
 @end

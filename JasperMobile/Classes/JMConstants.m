@@ -26,6 +26,7 @@
 //
 
 #import "JMConstants.h"
+#import "UIColor+RGBComponent.h"
 
 // Constants for NSUserDefaults
 NSString * const kJMDefaultsActiveServer = @"jaspersoft.server.active";
@@ -43,8 +44,9 @@ NSString * const kJMChangeServerProfileNotification = @"changeServerProfile";
 NSString * const kJMResetApplicationNotification = @"resetApplication";
 NSString * const kJMSelectMenuNotification = @"selectMenu";
 NSString * const kJMClearSavedReportsListNotification = @"clearSavedReports";
+// Notifications used to connect master and detail view controllers
 NSString * const kJMShowResourcesListInMaster = @"showResourcesListInMaster";
-// Pagination Notifications
+NSString * const kJMShowResourcesListInDetail = @"showResourcesListInDetail";
 NSString * const kJMLoadResourcesInDetail = @"loadResourcesInDetail";
 
 // Some shared keys for dictionary

@@ -28,7 +28,7 @@
 		37455E1F0F6355F8AC0B0BA3 /* JMDashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455709824125A9E63E9EBA /* JMDashboardViewController.m */; };
 		37455E77D1C81B7B1B7ACB6A /* JMSavedReportsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3745548577A868BC32D8B736 /* JMSavedReportsTableViewController.m */; };
 		37455F1B1917DAB9102E4DEB /* JMReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3745586994A8B8AF91152678 /* JMReportViewerViewController.m */; };
-		37455F3F2BC76A52420EA150 /* JMResourceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455F137529CFC566FDB02C /* JMResourceTableViewCell.m */; };
+		37455F3F2BC76A52420EA150 /* JMVerticalListResourceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455F137529CFC566FDB02C /* JMVerticalListResourceTableViewCell.m */; };
 		37455F9B15AA2F30D3C0B33B /* JMServerSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3745527ED036319DCD1B38D5 /* JMServerSettingsTableViewController.m */; };
 		37455FBB87A3A4E135165A3D /* JMMasterLibraryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 374559DAFB5779322B7E616B /* JMMasterLibraryTableViewController.m */; };
 		F50F5B5D17CCF14300582196 /* JMSingleSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50F5B5C17CCF14300582196 /* JMSingleSelectTableViewController.m */; };
@@ -57,7 +57,7 @@
 		F54C91A91752FAC20009E2BE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A81752FAC20009E2BE /* QuartzCore.framework */; };
 		F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91AA1752FAC90009E2BE /* libxml2.dylib */; };
 		F54C91B41752FCA70009E2BE /* JMBaseModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F54C91B31752FCA70009E2BE /* JMBaseModule.m */; };
-		F54C9D10191A336D00484769 /* JMMasterLibraryResourcesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F54C9D0F191A336D00484769 /* JMMasterLibraryResourcesTableViewController.m */; };
+		F54C9D10191A336D00484769 /* JMMasterResourcesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F54C9D0F191A336D00484769 /* JMMasterResourcesTableViewController.m */; };
 		F55043581851D18600DA6D33 /* res_type_all.png in Resources */ = {isa = PBXBuildFile; fileRef = F55043561851D18600DA6D33 /* res_type_all.png */; };
 		F55043591851D18600DA6D33 /* res_type_all@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F55043571851D18600DA6D33 /* res_type_all@2x.png */; };
 		F550435F1851E00600DA6D33 /* list_options.png in Resources */ = {isa = PBXBuildFile; fileRef = F550435D1851E00600DA6D33 /* list_options.png */; };
@@ -92,6 +92,7 @@
 		F57972ED18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = F57972EC18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m */; };
 		F57972F518A92D3900BD16B9 /* edit_name_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F57972F418A92D3900BD16B9 /* edit_name_button.png */; };
 		F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */; };
+		F588F1F1192CE2D800727E05 /* JMResourceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F588F1F0192CE2D800727E05 /* JMResourceTableViewCell.m */; };
 		F5894FD71887EC1400FD8C00 /* saved_reports.png in Resources */ = {isa = PBXBuildFile; fileRef = F5894FD51887EC1400FD8C00 /* saved_reports.png */; };
 		F5894FD81887EC1400FD8C00 /* saved_reports@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5894FD61887EC1400FD8C00 /* saved_reports@2x.png */; };
 		F5894FDB1887ECF200FD8C00 /* res_type_pdf.png in Resources */ = {isa = PBXBuildFile; fileRef = F5894FD91887ECF200FD8C00 /* res_type_pdf.png */; };
@@ -260,7 +261,7 @@
 		374559D18F5E095C919ABC96 /* JMFavoritesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMFavoritesTableViewController.m; path = Classes/JMFavoritesTableViewController.m; sourceTree = "<group>"; };
 		374559DAFB5779322B7E616B /* JMMasterLibraryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMasterLibraryTableViewController.m; path = Classes/JMMasterLibraryTableViewController.m; sourceTree = "<group>"; };
 		37455AD47DB8D49E50F8770D /* JMLibraryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMLibraryTableViewController.m; path = Classes/JMLibraryTableViewController.m; sourceTree = "<group>"; };
-		37455AE3FF931401929043DC /* JMResourceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourceTableViewCell.h; path = Classes/JMResourceTableViewCell.h; sourceTree = "<group>"; };
+		37455AE3FF931401929043DC /* JMVerticalListResourceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMVerticalListResourceTableViewCell.h; path = Classes/JMVerticalListResourceTableViewCell.h; sourceTree = "<group>"; };
 		37455B7D2EB5F99AF0846ACD /* JMHomeCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMHomeCollectionViewController.m; path = Classes/JMHomeCollectionViewController.m; sourceTree = "<group>"; };
 		37455BB958BD04AEE5131EB6 /* JMDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailViewController.m; path = Classes/JMDetailViewController.m; sourceTree = "<group>"; };
 		37455BC9062C2B827901FD7C /* JMSaveReportTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSaveReportTableViewController.h; path = Classes/JMSaveReportTableViewController.h; sourceTree = "<group>"; };
@@ -280,7 +281,7 @@
 		37455EA085CEBE01B8F89825 /* JMReportViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMReportViewerViewController.h; path = Classes/JMReportViewerViewController.h; sourceTree = "<group>"; };
 		37455ED43FC6052F413CF4FA /* JMVerticalListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMVerticalListViewController.h; path = Classes/JMVerticalListViewController.h; sourceTree = "<group>"; };
 		37455EE2B232289C6F597487 /* JMSearchableTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSearchableTableViewController.m; path = Classes/JMSearchableTableViewController.m; sourceTree = "<group>"; };
-		37455F137529CFC566FDB02C /* JMResourceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceTableViewCell.m; path = Classes/JMResourceTableViewCell.m; sourceTree = "<group>"; };
+		37455F137529CFC566FDB02C /* JMVerticalListResourceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMVerticalListResourceTableViewCell.m; path = Classes/JMVerticalListResourceTableViewCell.m; sourceTree = "<group>"; };
 		37455F8C7426E010A3709C6E /* JMRepositoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMRepositoryTableViewController.m; path = Classes/JMRepositoryTableViewController.m; sourceTree = "<group>"; };
 		37455FD2D6FB5FA2FE8756C6 /* JMReportPagingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportPagingViewController.m; path = Classes/JMReportPagingViewController.m; sourceTree = "<group>"; };
 		37455FF022F117F112A3BB4E /* JMSearchFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSearchFilterTableViewController.h; path = Classes/JMSearchFilterTableViewController.h; sourceTree = "<group>"; };
@@ -312,6 +313,7 @@
 		F539A72617F1A03900310D72 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
 		F539A72817F1A06A00310D72 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		F539A72A17F1A0A500310D72 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
+		F53B38E4192B7DCF003B1867 /* JMPagination.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMPagination.h; path = JasperMobile/Classes/JMPagination.h; sourceTree = "<group>"; };
 		F53C0AD117B50C080063AE90 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		F546AFA21910EE7600EC9777 /* grid_res_type_report.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grid_res_type_report.png; sourceTree = "<group>"; };
 		F546AFA71910EEB400EC9777 /* JMGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMGridViewController.h; path = Classes/JMGridViewController.h; sourceTree = "<group>"; };
@@ -327,8 +329,8 @@
 		F54C91AA1752FAC90009E2BE /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		F54C91B21752FCA70009E2BE /* JMBaseModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseModule.h; path = Classes/JMBaseModule.h; sourceTree = "<group>"; };
 		F54C91B31752FCA70009E2BE /* JMBaseModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseModule.m; path = Classes/JMBaseModule.m; sourceTree = "<group>"; };
-		F54C9D0E191A336D00484769 /* JMMasterLibraryResourcesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMasterLibraryResourcesTableViewController.h; path = Classes/JMMasterLibraryResourcesTableViewController.h; sourceTree = "<group>"; };
-		F54C9D0F191A336D00484769 /* JMMasterLibraryResourcesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMasterLibraryResourcesTableViewController.m; path = Classes/JMMasterLibraryResourcesTableViewController.m; sourceTree = "<group>"; };
+		F54C9D0E191A336D00484769 /* JMMasterResourcesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMasterResourcesTableViewController.h; path = Classes/JMMasterResourcesTableViewController.h; sourceTree = "<group>"; };
+		F54C9D0F191A336D00484769 /* JMMasterResourcesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMasterResourcesTableViewController.m; path = Classes/JMMasterResourcesTableViewController.m; sourceTree = "<group>"; };
 		F55043561851D18600DA6D33 /* res_type_all.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = res_type_all.png; sourceTree = "<group>"; };
 		F55043571851D18600DA6D33 /* res_type_all@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "res_type_all@2x.png"; sourceTree = "<group>"; };
 		F550435D1851E00600DA6D33 /* list_options.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list_options.png; sourceTree = "<group>"; };
@@ -379,6 +381,8 @@
 		F57972F418A92D3900BD16B9 /* edit_name_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_name_button.png; sourceTree = "<group>"; };
 		F585FB6C176753460079D89C /* UITableViewController+CellRelativeHeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewController+CellRelativeHeight.h"; path = "JasperMobile/Classes/UITableViewController+CellRelativeHeight.h"; sourceTree = "<group>"; };
 		F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableViewController+CellRelativeHeight.m"; path = "JasperMobile/Classes/UITableViewController+CellRelativeHeight.m"; sourceTree = "<group>"; };
+		F588F1EF192CE2D800727E05 /* JMResourceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourceTableViewCell.h; path = Classes/JMResourceTableViewCell.h; sourceTree = "<group>"; };
+		F588F1F0192CE2D800727E05 /* JMResourceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceTableViewCell.m; path = Classes/JMResourceTableViewCell.m; sourceTree = "<group>"; };
 		F5894FD51887EC1400FD8C00 /* saved_reports.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = saved_reports.png; sourceTree = "<group>"; };
 		F5894FD61887EC1400FD8C00 /* saved_reports@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "saved_reports@2x.png"; sourceTree = "<group>"; };
 		F5894FD91887ECF200FD8C00 /* res_type_pdf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = res_type_pdf.png; sourceTree = "<group>"; };
@@ -554,7 +558,7 @@
 		3745511E7FBC4699D30B0F8B /* Pad */ = {
 			isa = PBXGroup;
 			children = (
-				37455E6B7AA5C2070DA8D572 /* View Cells */,
+				37455E6B7AA5C2070DA8D572 /* Table View Cells */,
 				37455C1A234AC9CE06850D27 /* Resources View Controllers */,
 				37455D6AC38244727ECF2B15 /* JMSplitViewController.h */,
 				37455E43899B72F2AE5A7601 /* JMSplitViewController.m */,
@@ -562,8 +566,8 @@
 				37455B7D2EB5F99AF0846ACD /* JMHomeCollectionViewController.m */,
 				374558D8A8DF26456D0B6975 /* JMDetailViewController.h */,
 				37455BB958BD04AEE5131EB6 /* JMDetailViewController.m */,
-				F54C9D0E191A336D00484769 /* JMMasterLibraryResourcesTableViewController.h */,
-				F54C9D0F191A336D00484769 /* JMMasterLibraryResourcesTableViewController.m */,
+				F54C9D0E191A336D00484769 /* JMMasterResourcesTableViewController.h */,
+				F54C9D0F191A336D00484769 /* JMMasterResourcesTableViewController.m */,
 				37455E5750BF6BD9FE006163 /* JMMasterLibraryTableViewController.h */,
 				374559DAFB5779322B7E616B /* JMMasterLibraryTableViewController.m */,
 				F554B1B419221F3800E0E860 /* JMMasterRepositoryTableViewController.h */,
@@ -587,15 +591,17 @@
 			name = "Resources View Controllers";
 			sourceTree = "<group>";
 		};
-		37455E6B7AA5C2070DA8D572 /* View Cells */ = {
+		37455E6B7AA5C2070DA8D572 /* Table View Cells */ = {
 			isa = PBXGroup;
 			children = (
-				37455AE3FF931401929043DC /* JMResourceTableViewCell.h */,
-				37455F137529CFC566FDB02C /* JMResourceTableViewCell.m */,
+				37455AE3FF931401929043DC /* JMVerticalListResourceTableViewCell.h */,
+				37455F137529CFC566FDB02C /* JMVerticalListResourceTableViewCell.m */,
 				F55E4676191B810D00716726 /* JMLibraryTableViewCell.h */,
 				F55E4677191B810D00716726 /* JMLibraryTableViewCell.m */,
+				F588F1EF192CE2D800727E05 /* JMResourceTableViewCell.h */,
+				F588F1F0192CE2D800727E05 /* JMResourceTableViewCell.m */,
 			);
-			name = "View Cells";
+			name = "Table View Cells";
 			sourceTree = "<group>";
 		};
 		F514E68F1754E48100C9F61E /* Utils */ = {
@@ -1003,6 +1009,7 @@
 				F57364EA17B91BB500A10588 /* JMRefreshable.h */,
 				F5EAA2681797FF350091BA43 /* JMReportClientHolder.h */,
 				F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */,
+				F53B38E4192B7DCF003B1867 /* JMPagination.h */,
 			);
 			name = Protocols;
 			path = ..;
@@ -1423,7 +1430,7 @@
 				F554B1BC19221F8C00E0E860 /* UIColor+RGBComponent.m in Sources */,
 				F5D97FA2179587100059C761 /* JasperMobile.xcdatamodeld in Sources */,
 				F5D97FA3179587100059C761 /* JMReportOptions.m in Sources */,
-				F54C9D10191A336D00484769 /* JMMasterLibraryResourcesTableViewController.m in Sources */,
+				F54C9D10191A336D00484769 /* JMMasterResourcesTableViewController.m in Sources */,
 				F5C737631886DE9E00203175 /* ALToastView.m in Sources */,
 				F5D97FA4179587100059C761 /* JMServerProfile.m in Sources */,
 				F5D97FA5179587100059C761 /* JMServerProfile+Helpers.m in Sources */,
@@ -1468,13 +1475,14 @@
 				F5F21DF0191794C2007F78DB /* JMBaseResourcesCollectionViewController.m in Sources */,
 				F554B1B619221F3800E0E860 /* JMMasterRepositoryTableViewController.m in Sources */,
 				37455E77D1C81B7B1B7ACB6A /* JMSavedReportsTableViewController.m in Sources */,
-				37455F3F2BC76A52420EA150 /* JMResourceTableViewCell.m in Sources */,
+				37455F3F2BC76A52420EA150 /* JMVerticalListResourceTableViewCell.m in Sources */,
 				37455494CB2251F939AA0836 /* JMSplitViewController.m in Sources */,
 				37455C36DA7AADB10B567B01 /* JMHomeCollectionViewController.m in Sources */,
 				37455786919E8A15CD6CA210 /* JMDetailViewController.m in Sources */,
 				37455FBB87A3A4E135165A3D /* JMMasterLibraryTableViewController.m in Sources */,
 				37455B22C092BC4EE1E60E7F /* JMHorizontalListViewController.m in Sources */,
 				374555E5494A2200DE46A815 /* JMVerticalListViewController.m in Sources */,
+				F588F1F1192CE2D800727E05 /* JMResourceTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1666,7 +1674,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "56C6E500-8F3B-4BA4-AA88-DF765974ACA6";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";

@@ -47,14 +47,15 @@ typedef enum {
 @property (nonatomic, weak) IBOutlet UIView *containerView;
 @property (nonatomic, strong) NSMutableArray *switchButtons;
 @property (nonatomic, strong) NSArray *resourcesTypes;
-
-// Pagination properties
-@property (nonatomic, assign) NSInteger totalCount;
-@property (nonatomic, assign) NSInteger offset;
 @end
 
 @implementation JMDetailViewController
 objection_requires(@"resourceClient", @"constants")
+
+@synthesize resourceClient = _resourceClient;
+@synthesize resourceLookup = _resourceLookup;
+@synthesize offset = _offset;
+@synthesize totalCount = _totalCount;
 
 #pragma mark - Initialization
 
@@ -92,9 +93,8 @@ objection_requires(@"resourceClient", @"constants")
     }
 
     [self instantiateAndSetAsActiveViewControllerOfType:self.viewControllerType];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(loadNextPageObserver:)
+                                             selector:@selector(loadResourcesInDetail:)
                                                  name:kJMLoadResourcesInDetail
                                                object:nil];
 }
@@ -124,31 +124,25 @@ objection_requires(@"resourceClient", @"constants")
 
 #pragma mark - Pagination
 
-- (void)loadNextPage:(BOOL)resetState;
+- (void)loadNextPage
 {
     // Multiple calls protection
     static BOOL isLoading = NO;
     if (isLoading) return;
     
     __weak JMDetailViewController *weakSelf = self;
-    
-    if (resetState) {
-        self.totalCount = 0;
-        self.offset = 0;
-        [self.resources removeAllObjects];
-    }
 
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         isLoading = NO;
+
+        UIViewController <JMRefreshable> *baseRepositoryViewController = weakSelf.activeResourcesViewController.viewControllers.firstObject;
+        baseRepositoryViewController.needsToResetScroll = weakSelf.resources.count == 0;
         
         if (!weakSelf.totalCount) {
             weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
         }
-
         [weakSelf.resources addObjectsFromArray:result.objects];
-
-        UIViewController <JMRefreshable> *baseRepositoryViewController = weakSelf.activeResourcesViewController.viewControllers.firstObject;
-        baseRepositoryViewController.needsToResetScroll = resetState;
+        
         [baseRepositoryViewController refresh];
     } errorBlock:^(JSOperationResult *result) {
         isLoading = NO;
@@ -156,9 +150,9 @@ objection_requires(@"resourceClient", @"constants")
         // TODO: add error handler
     }];
 
-    [self.resourceClient resourceLookups:self.folderUri query:nil types:self.resourcesTypes recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
+    [self.resourceClient resourceLookups:self.resourceLookup.uri query:nil types:self.resourcesTypes recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
     
-    isLoading = YES;
+    isLoading = YES; 
     self.offset += kJMLimit;
 }
 
@@ -167,12 +161,13 @@ objection_requires(@"resourceClient", @"constants")
     return self.offset < self.totalCount;
 }
 
-- (void)showResourcesListInMaster
+- (void)showResourcesListInMaster:(JSResourceLookup *)resourceLookup
 {
     JMPaginationData *paginationData = [[JMPaginationData alloc] init];
     paginationData.resources = self.resources;
     paginationData.totalCount = self.totalCount;
     paginationData.offset = self.offset;
+    paginationData.resourceLookup = resourceLookup;
     NSDictionary *userInfo = @{
             kJMPaginationData : paginationData
     };
@@ -181,18 +176,26 @@ objection_requires(@"resourceClient", @"constants")
                                                       userInfo:userInfo];
 }
 
-#pragma mark - Private
+#pragma mark - Observer Methods
 
-- (void)loadNextPageObserver:(NSNotification *)notification
+- (void)loadResourcesInDetail:(NSNotification *)notification
 {
+    // Reset state
+    self.totalCount = 0;
+    self.offset = 0;
+    [self.resources removeAllObjects];
+
     JMPaginationData *paginationData = [notification.userInfo objectForKey:kJMPaginationData];
     if (paginationData.resourcesTypes) {
         self.resourcesTypes = paginationData.resourcesTypes;
     }
     self.loadRecursively = paginationData.loadRecursively;
-    self.folderUri = paginationData.currentFolder.uri;
-    [self loadNextPage:YES];
+    self.resourceLookup = paginationData.resourceLookup;
+
+    [self loadNextPage];
 }
+
+#pragma mark - Private
 
 - (void)instantiateAndSetAsActiveViewControllerOfType:(JMViewControllerType)type
 {

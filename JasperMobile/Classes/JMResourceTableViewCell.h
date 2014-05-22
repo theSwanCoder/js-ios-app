@@ -1,20 +1,18 @@
 //
-//  JMResourceCell.h
+//  JMResourceTableViewCell.h
 //  JasperMobile
 //
-//  Created by Vlad Zavadsky on 3/28/14.
+//  Created by Vlad Zavadsky on 5/21/14.
 //  Copyright (c) 2014 com.jaspersoft. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-#define kJMResourceCellIdentifier @"ResourceCell"
-
 @interface JMResourceTableViewCell : UITableViewCell
 
-@property (nonatomic, weak) IBOutlet UILabel *label;
-@property (nonatomic, weak) IBOutlet UILabel *desc;
-@property (nonatomic, weak) IBOutlet UILabel *creationDate;
-@property (nonatomic, readonly, weak) IBOutlet UIImageView *imageView;
++ (UIColor *)defaultColor;
++ (UIColor *)selectedColor;
+
+@property (nonatomic, weak) IBOutlet UILabel *title;
 
 @end
