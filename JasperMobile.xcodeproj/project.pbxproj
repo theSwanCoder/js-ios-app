@@ -83,6 +83,7 @@
 		F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A321752FA5C007978BE /* CFNetwork.framework */; };
 		F57186C3183658DD0013B6EB /* JSRESTBase+updateServerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F57186C2183658DD0013B6EB /* JSRESTBase+updateServerInfo.m */; };
 		F572814717C77048000B192D /* JMRequestDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F572814617C77048000B192D /* JMRequestDelegate.m */; };
+		F573ADB7192E42FD00D3C018 /* JMBackHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F573ADB6192E42FD00D3C018 /* JMBackHeaderView.m */; };
 		F576FAE71907E9A100503CB1 /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = F576FADF1907E9A100503CB1 /* circle.png */; };
 		F576FAE81907E9A100503CB1 /* circle_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = F576FAE01907E9A100503CB1 /* circle_selected.png */; };
 		F576FAE91907E9A100503CB1 /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = F576FAE11907E9A100503CB1 /* dot.png */; };
@@ -92,7 +93,7 @@
 		F57972ED18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = F57972EC18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m */; };
 		F57972F518A92D3900BD16B9 /* edit_name_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F57972F418A92D3900BD16B9 /* edit_name_button.png */; };
 		F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */; };
-		F588F1F1192CE2D800727E05 /* JMResourceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F588F1F0192CE2D800727E05 /* JMResourceTableViewCell.m */; };
+		F588F1F1192CE2D800727E05 /* JMBaseResourceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F588F1F0192CE2D800727E05 /* JMBaseResourceTableViewCell.m */; };
 		F5894FD71887EC1400FD8C00 /* saved_reports.png in Resources */ = {isa = PBXBuildFile; fileRef = F5894FD51887EC1400FD8C00 /* saved_reports.png */; };
 		F5894FD81887EC1400FD8C00 /* saved_reports@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5894FD61887EC1400FD8C00 /* saved_reports@2x.png */; };
 		F5894FDB1887ECF200FD8C00 /* res_type_pdf.png in Resources */ = {isa = PBXBuildFile; fileRef = F5894FD91887ECF200FD8C00 /* res_type_pdf.png */; };
@@ -370,6 +371,8 @@
 		F572814517C77047000B192D /* JMRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRequestDelegate.h; path = JasperMobile/Classes/JMRequestDelegate.h; sourceTree = "<group>"; };
 		F572814617C77048000B192D /* JMRequestDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMRequestDelegate.m; path = JasperMobile/Classes/JMRequestDelegate.m; sourceTree = "<group>"; };
 		F57364EA17B91BB500A10588 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRefreshable.h; path = JasperMobile/Classes/JMRefreshable.h; sourceTree = "<group>"; };
+		F573ADB5192E42FD00D3C018 /* JMBackHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBackHeaderView.h; path = Classes/JMBackHeaderView.h; sourceTree = "<group>"; };
+		F573ADB6192E42FD00D3C018 /* JMBackHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBackHeaderView.m; path = Classes/JMBackHeaderView.m; sourceTree = "<group>"; };
 		F576FADF1907E9A100503CB1 /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
 		F576FAE01907E9A100503CB1 /* circle_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle_selected.png; sourceTree = "<group>"; };
 		F576FAE11907E9A100503CB1 /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
@@ -381,8 +384,8 @@
 		F57972F418A92D3900BD16B9 /* edit_name_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_name_button.png; sourceTree = "<group>"; };
 		F585FB6C176753460079D89C /* UITableViewController+CellRelativeHeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewController+CellRelativeHeight.h"; path = "JasperMobile/Classes/UITableViewController+CellRelativeHeight.h"; sourceTree = "<group>"; };
 		F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableViewController+CellRelativeHeight.m"; path = "JasperMobile/Classes/UITableViewController+CellRelativeHeight.m"; sourceTree = "<group>"; };
-		F588F1EF192CE2D800727E05 /* JMResourceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourceTableViewCell.h; path = Classes/JMResourceTableViewCell.h; sourceTree = "<group>"; };
-		F588F1F0192CE2D800727E05 /* JMResourceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourceTableViewCell.m; path = Classes/JMResourceTableViewCell.m; sourceTree = "<group>"; };
+		F588F1EF192CE2D800727E05 /* JMBaseResourceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseResourceTableViewCell.h; path = Classes/JMBaseResourceTableViewCell.h; sourceTree = "<group>"; };
+		F588F1F0192CE2D800727E05 /* JMBaseResourceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseResourceTableViewCell.m; path = Classes/JMBaseResourceTableViewCell.m; sourceTree = "<group>"; };
 		F5894FD51887EC1400FD8C00 /* saved_reports.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = saved_reports.png; sourceTree = "<group>"; };
 		F5894FD61887EC1400FD8C00 /* saved_reports@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "saved_reports@2x.png"; sourceTree = "<group>"; };
 		F5894FD91887ECF200FD8C00 /* res_type_pdf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = res_type_pdf.png; sourceTree = "<group>"; };
@@ -598,8 +601,8 @@
 				37455F137529CFC566FDB02C /* JMVerticalListResourceTableViewCell.m */,
 				F55E4676191B810D00716726 /* JMLibraryTableViewCell.h */,
 				F55E4677191B810D00716726 /* JMLibraryTableViewCell.m */,
-				F588F1EF192CE2D800727E05 /* JMResourceTableViewCell.h */,
-				F588F1F0192CE2D800727E05 /* JMResourceTableViewCell.m */,
+				F588F1EF192CE2D800727E05 /* JMBaseResourceTableViewCell.h */,
+				F588F1F0192CE2D800727E05 /* JMBaseResourceTableViewCell.m */,
 			);
 			name = "Table View Cells";
 			sourceTree = "<group>";
@@ -984,6 +987,8 @@
 				F5E249DB18DA1DF700F83C3C /* JMMenuSectionView.h */,
 				F5E249DC18DA1DF700F83C3C /* JMMenuSectionView.m */,
 				F5E249D818DA1B1A00F83C3C /* JMMenuSectionView.xib */,
+				F573ADB5192E42FD00D3C018 /* JMBackHeaderView.h */,
+				F573ADB6192E42FD00D3C018 /* JMBackHeaderView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1464,6 +1469,7 @@
 				374555DB062C6D92B960560D /* JMResourceTableViewController.m in Sources */,
 				37455A91FB76F9CC73079B2E /* JMReportPagingViewController.m in Sources */,
 				37455F9B15AA2F30D3C0B33B /* JMServerSettingsTableViewController.m in Sources */,
+				F573ADB7192E42FD00D3C018 /* JMBackHeaderView.m in Sources */,
 				37455D6BDB88905BED2C79A0 /* JMSearchFilterTableViewController.m in Sources */,
 				37455E1F0F6355F8AC0B0BA3 /* JMDashboardViewController.m in Sources */,
 				37455256B3656246AF66CA29 /* JMRepositoryTableViewController.m in Sources */,
@@ -1482,7 +1488,7 @@
 				37455FBB87A3A4E135165A3D /* JMMasterLibraryTableViewController.m in Sources */,
 				37455B22C092BC4EE1E60E7F /* JMHorizontalListViewController.m in Sources */,
 				374555E5494A2200DE46A815 /* JMVerticalListViewController.m in Sources */,
-				F588F1F1192CE2D800727E05 /* JMResourceTableViewCell.m in Sources */,
+				F588F1F1192CE2D800727E05 /* JMBaseResourceTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -102,7 +102,7 @@ objection_requires(@"resourceClient", @"constants")
                                                  name:kJMShowResourcesListInMaster
                                                object:nil];
 
-    for (NSInteger i = [self.cellsAndSectionsProperties count] - 2; i >= 0; i--) {
+    for (NSInteger i = [self.cellsAndSectionsProperties count] - 1; i >= 0; i--) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:i];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
@@ -113,8 +113,7 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)showResourcesListInMaster:(NSNotification *)notification
 {
-    [self performSegueWithIdentifier:kJMShowResourcesSegue
-                              sender:[notification.userInfo objectForKey:kJMPaginationData]];
+    [self performSegueWithIdentifier:kJMShowResourcesSegue sender:[notification.userInfo objectForKey:kJMPaginationData]];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -131,16 +130,6 @@ objection_requires(@"resourceClient", @"constants")
 }
 
 #pragma mark - Table view data source
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0.0f;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 44.0f;
-}
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -166,7 +155,7 @@ objection_requires(@"resourceClient", @"constants")
 {
     static NSString *cellIdentifier = @"MenuCell";
     JMLibraryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-    cell.title.text = [self localizedRowTitle:indexPath.row forSection:indexPath.section];
+    cell.label.text = [self localizedRowTitle:indexPath.row forSection:indexPath.section];
 
     return cell;
 }

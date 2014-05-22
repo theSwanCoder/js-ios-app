@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "JMResourceClientHolder.h"
 
-// TODO: make universal view controller. Extend it for Library usage
+// TODO: make universal view controller
 @interface JMMasterLibraryTableViewController : UITableViewController <JMResourceClientHolder>
 
 @property (nonatomic, weak) JSConstants *constants;

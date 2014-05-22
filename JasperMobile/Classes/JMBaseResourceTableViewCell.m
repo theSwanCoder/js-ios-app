@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 com.jaspersoft. All rights reserved.
 //
 
-#import "JMResourceTableViewCell.h"
+#import "JMBaseResourceTableViewCell.h"
 #import "UIColor+RGBComponent.h"
 
-@implementation JMResourceTableViewCell
+@implementation JMBaseResourceTableViewCell
 
 + (UIColor *)defaultColor
 {

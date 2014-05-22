@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JMResourceTableViewCell.h"
+#import "JMBaseResourceTableViewCell.h"
 
-@interface JMLibraryTableViewCell : JMResourceTableViewCell
+@interface JMLibraryTableViewCell : JMBaseResourceTableViewCell
 
-@property (nonatomic, weak) IBOutlet UIImageView *img;
+@property (nonatomic, weak) IBOutlet UIView *leftSideView;
 
 @end

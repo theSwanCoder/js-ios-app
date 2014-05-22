@@ -14,12 +14,7 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
-    if (selected) {
-        [self.img setImage:[UIImage imageNamed:@"circle_selected.png"]];
-    } else {
-        [self.img setImage:[UIImage imageNamed:@"circle.png"]];
-    }
+    self.leftSideView.hidden = !selected;
 }
 
 @end

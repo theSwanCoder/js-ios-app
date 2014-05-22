@@ -10,12 +10,17 @@
 #import <Objection-iOS/Objection.h>
 #import "JMMasterResourcesTableViewController.h"
 #import "JMRequestDelegate.h"
+#import "JMBackHeaderView.h"
 #import "JMPaginationData.h"
 #import "JMConstants.h"
 
 static NSInteger const kJMLimit = 15;
 static NSString * const kJMResourceCell = @"ResourceCell";
 static NSString * const kJMLoadingCell = @"LoadingCell";
+
+@interface JMMasterResourcesTableViewController()
+@property (nonatomic, assign) NSInteger selectedResourceIndex;
+@end
 
 @implementation JMMasterResourcesTableViewController
 objection_requires(@"resourceClient")
@@ -38,15 +43,12 @@ objection_requires(@"resourceClient")
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(back:)];
-    [self.tableView.tableHeaderView addGestureRecognizer:tapGestureRecognizer];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.resources indexOfObject:self.resourceLookup] inSection:0];
-    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
+    JMBackHeaderView *backView = (JMBackHeaderView *) self.tableView.tableHeaderView;
+    [backView setOnTapGestureCallback:^(UITapGestureRecognizer *recognizer) {
+        [self.navigationController popViewControllerAnimated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInDetail object:nil];
+    }];
+    self.selectedResourceIndex = [self.resources indexOfObject:self.resourceLookup];
 }
 
 #pragma mark - Table view data source
@@ -71,7 +73,8 @@ objection_requires(@"resourceClient")
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kJMResourceCell forIndexPath:indexPath];
     UILabel *label = (UILabel *)[cell viewWithTag:1];
-    label.text = [[self.resources objectAtIndex:indexPath.row] label];
+    JSResourceLookup *resourceLookup = [self.resources objectAtIndex:indexPath.row];
+    label.text = resourceLookup.label;
 
     return cell;
 }
@@ -80,9 +83,11 @@ objection_requires(@"resourceClient")
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSResourceLookup *resourceLookup = [self.resources objectAtIndex:indexPath.row];
-    self.resourceLookup = resourceLookup;
-    // TODO: post notification to update report
+    self.resourceLookup = [self.resources objectAtIndex:indexPath.row];
+    UITableViewCell *previousSelectedCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:0]];
+    previousSelectedCell.selected = NO;
+    self.selectedResourceIndex = indexPath.row;
+    // TODO: post notification to update report view
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -90,14 +95,9 @@ objection_requires(@"resourceClient")
     if (self.hasNextPage && indexPath.row == self.resources.count) {
         [self loadNextPage];
     }
-}
-
-#pragma mark - Actions
-
-- (IBAction)back:(UITapGestureRecognizer *)recognizer
-{
-    [self.navigationController popViewControllerAnimated:YES];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInDetail object:nil];
+    if (indexPath.row == self.selectedResourceIndex ) {
+        cell.selected = YES;
+    }
 }
 
 #pragma mark - Pagination

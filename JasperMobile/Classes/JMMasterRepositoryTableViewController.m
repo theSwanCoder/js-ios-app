@@ -1,4 +1,4 @@
-//
+ //
 //  JMMasterRepositoryTableViewController.m
 //  JasperMobile
 //
@@ -7,6 +7,7 @@
 //
 
 #import "JMMasterRepositoryTableViewController.h"
+#import "JMBackHeaderView.h"
 #import "JMRequestDelegate.h"
 #import "JMPaginationData.h"
 #import "JMConstants.h"
@@ -47,8 +48,11 @@ objection_requires(@"resourceClient", @"constants")
         self.tableView.tableHeaderView.hidden = YES;
         self.tableView.tableHeaderView.frame = CGRectZero;
     } else {
-        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(back:)];
-        [self.tableView.tableHeaderView addGestureRecognizer:tapGestureRecognizer];
+        JMBackHeaderView *backView = (JMBackHeaderView *) self.tableView.tableHeaderView;
+        [backView setOnTapGestureCallback:^(UITapGestureRecognizer *recognizer) {
+            [self.navigationController popViewControllerAnimated:YES];
+            [self.delegate loadResourcesIntoDetailViewController];
+        }];
     }
     
     self.folders = [NSMutableArray array];
@@ -116,14 +120,6 @@ objection_requires(@"resourceClient", @"constants")
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResourcesInDetail
                                                         object:nil
                                                       userInfo:userInfo];
-}
-
-#pragma mark - Actions
-
-- (IBAction)back:(UITapGestureRecognizer *)recognizer
-{
-    [self.navigationController popViewControllerAnimated:YES];
-    [self.delegate loadResourcesIntoDetailViewController];
 }
 
 #pragma mark - JMPagination

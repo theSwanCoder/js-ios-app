@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface JMResourceTableViewCell : UITableViewCell
+@interface JMBaseResourceTableViewCell : UITableViewCell
 
 + (UIColor *)defaultColor;
 + (UIColor *)selectedColor;
 
-@property (nonatomic, weak) IBOutlet UILabel *title;
+@property (nonatomic, weak) IBOutlet UILabel *label;
 
 @end
