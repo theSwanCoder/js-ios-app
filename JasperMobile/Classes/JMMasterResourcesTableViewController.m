@@ -13,11 +13,13 @@
 #import "JMBackHeaderView.h"
 #import "JMPaginationData.h"
 #import "JMConstants.h"
+#import "JMPadModule.h"
 
 static NSInteger const kJMLimit = 15;
 static NSString * const kJMResourceCell = @"ResourceCell";
 static NSString * const kJMLoadingCell = @"LoadingCell";
 
+// TODO: fixe odd selection bugs
 @interface JMMasterResourcesTableViewController()
 @property (nonatomic, assign) NSInteger selectedResourceIndex;
 @end
@@ -46,9 +48,19 @@ objection_requires(@"resourceClient")
     JMBackHeaderView *backView = (JMBackHeaderView *) self.tableView.tableHeaderView;
     [backView setOnTapGestureCallback:^(UITapGestureRecognizer *recognizer) {
         [self.navigationController popViewControllerAnimated:YES];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInDetail object:nil];
+        // TODO: make single holder instance to store pagination data, instead of duplication it between all view controllers depends on that data
+        JMPaginationData *paginationData = [[JMPaginationData alloc] init];
+        paginationData.offset = self.offset;
+        NSDictionary *userInfo = @{
+                kJMPaginationData : paginationData
+        };
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInDetail object:nil userInfo:userInfo];
     }];
     self.selectedResourceIndex = [self.resources indexOfObject:self.resourceLookup];
+    [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:0]
+                                animated:NO
+                          scrollPosition:UITableViewScrollPositionMiddle];
+    
 }
 
 #pragma mark - Table view data source
@@ -84,8 +96,7 @@ objection_requires(@"resourceClient")
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.resourceLookup = [self.resources objectAtIndex:indexPath.row];
-    UITableViewCell *previousSelectedCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:0]];
-    previousSelectedCell.selected = NO;
+    [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:0] animated:NO];
     self.selectedResourceIndex = indexPath.row;
     // TODO: post notification to update report view
 }
@@ -95,7 +106,7 @@ objection_requires(@"resourceClient")
     if (self.hasNextPage && indexPath.row == self.resources.count) {
         [self loadNextPage];
     }
-    if (indexPath.row == self.selectedResourceIndex ) {
+    if (indexPath.row == self.selectedResourceIndex) {
         cell.selected = YES;
     }
 }

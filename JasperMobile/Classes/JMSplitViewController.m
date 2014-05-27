@@ -94,10 +94,13 @@ static CGFloat const kMasterViewWidth = 163.0f;
         _selectedItem = selectedItem;
 
         NSString *subMasterIdentifier; // TODO: do we will need a detail here?
+        NSString *menuTitle;
+        
         // TODO: instantiate all view controllers
         switch (_selectedItem) {
             case JMMenuItemLibrary:
                 subMasterIdentifier = @"MasterLibraryTableViewController";
+                menuTitle = @"< Library";
                 break;
 
             case JMMenuItemSavedReports:
@@ -108,6 +111,7 @@ static CGFloat const kMasterViewWidth = 163.0f;
 
             case JMMenuItemRepository:
                 subMasterIdentifier = @"MasterRepositoryTableViewController";
+                menuTitle = @"< Repository";
                 break;
 
             case JMMenuItemFavorites:
@@ -129,6 +133,9 @@ static CGFloat const kMasterViewWidth = 163.0f;
         }
         
         UIViewController *master = [self.viewControllers objectAtIndex:0];
+        UILabel *label = (UILabel *) [master.view viewWithTag:2];
+        label.text = menuTitle;        
+        
         id detail;
         
         if (_selectedItem != JMMenuItemHomeView) {

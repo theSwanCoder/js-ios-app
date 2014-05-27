@@ -37,6 +37,4 @@
 @property (nonatomic, strong) NSMutableArray *resources;
 @property (nonatomic, assign) BOOL loadRecursively;
 
-- (void)showResourcesListInMaster:(JSResourceLookup *)resourceLookup;
-
 @end

@@ -232,25 +232,31 @@
             </objects>
             <point key="canvasLocation" x="2725" y="3502"/>
         </scene>
-        <!--View Controller-->
+        <!--Detail Report Viewer View Controller-->
         <scene sceneID="OiD-yo-611">
             <objects>
-                <viewController id="IIN-lT-dCk" sceneMemberID="viewController">
+                <viewController id="IIN-lT-dCk" customClass="JMDetailReportViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qeX-UR-rGS">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report Representation" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="KWj-5X-M9F">
-                                <rect key="frame" x="235" y="423" width="298" height="178"/>
+                            <webView contentMode="scaleToFill" id="hek-4Y-qPb">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </webView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="s0Z-IF-dc5">
+                                <rect key="frame" x="374" y="502" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="9dZ-To-wB7"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="s0Z-IF-dc5" id="sdT-jX-aAO"/>
+                        <outlet property="webView" destination="hek-4Y-qPb" id="F8T-yb-hWF"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rdT-N5-F3g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -490,7 +496,7 @@ Please Wait...</string>
                                     <outlet property="leftSideView" destination="wOn-oV-uXa" id="ZVX-u5-rwA"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="llp-hd-Jiu" style="IBUITableViewCellStyleDefault" id="jdx-JQ-adZ" customClass="JMLibraryTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="llp-hd-Jiu" style="IBUITableViewCellStyleDefault" id="jdx-JQ-adZ">
                                 <rect key="frame" x="0.0" y="115" width="163" height="48"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jdx-JQ-adZ" id="E7C-B7-ztM">
@@ -603,7 +609,7 @@ Please Wait...</string>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9VI-WW-jbf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-38" y="3880"/>
+            <point key="canvasLocation" x="-38" y="3884"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="kfL-Gd-N4V">
@@ -786,6 +792,28 @@ Please Wait...</string>
                                 <color key="backgroundColor" red="0.15686274510000001" green="0.16862745100000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="DZV-4z-a7X" style="IBUITableViewCellStyleDefault" id="jy4-3e-T0i">
+                                <rect key="frame" x="0.0" y="193" width="163" height="48"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jy4-3e-T0i" id="18x-DA-S6R">
+                                    <rect key="frame" x="0.0" y="0.0" width="130" height="48"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Segue Connection" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DZV-4z-a7X">
+                                            <rect key="frame" x="15" y="0.0" width="113" height="48"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <segue destination="5p7-bZ-3nY" kind="push" identifier="ShowResources1" id="4bi-W0-e3q"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="wZD-nJ-clE" id="Vs8-2R-zqm"/>
@@ -804,7 +832,7 @@ Please Wait...</string>
         <scene sceneID="PcH-MB-typ">
             <objects>
                 <tableViewController storyboardIdentifier="BaseRepositoryTableViewController" id="5p7-bZ-3nY" customClass="JMMasterResourcesTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="48" sectionHeaderHeight="1" sectionFooterHeight="1" id="bgd-sZ-tav">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsMultipleSelection="YES" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="48" sectionHeaderHeight="1" sectionFooterHeight="1" id="bgd-sZ-tav">
                         <rect key="frame" x="0.0" y="0.0" width="163" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.16078431369999999" green="0.16862745100000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -889,7 +917,7 @@ Please Wait...</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mTY-M4-vnl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="969" y="1780"/>
+            <point key="canvasLocation" x="1054" y="2293"/>
         </scene>
     </scenes>
     <resources>
@@ -913,5 +941,6 @@ Please Wait...</string>
     <inferredMetricsTieBreakers>
         <segue reference="09k-kp-74u"/>
         <segue reference="6bh-0c-71r"/>
+        <segue reference="4bi-W0-e3q"/>
     </inferredMetricsTieBreakers>
 </document>

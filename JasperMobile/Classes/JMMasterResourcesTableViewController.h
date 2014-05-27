@@ -15,6 +15,6 @@
 @interface JMMasterResourcesTableViewController : UITableViewController <JMPagination, JMResourceClientHolder>
 
 @property (nonatomic, weak) NSMutableArray *resources;
-@property (nonatomic, weak) NSArray *resourcesTypes;
+@property (nonatomic, strong) NSArray *resourcesTypes;
 
 @end

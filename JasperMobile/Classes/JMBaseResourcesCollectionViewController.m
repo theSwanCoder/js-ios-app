@@ -32,7 +32,7 @@ static NSInteger const kJMPaginationTreshoald = 8;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-    [self.delegate showResourcesListInMaster:[self.delegate.resources objectAtIndex:indexPath.row]];
+    [self.delegate prepareForSegue:segue sender:indexPath];
 }
 
 - (void)viewDidLoad

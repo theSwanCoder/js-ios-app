@@ -97,6 +97,26 @@ objection_requires(@"resourceClient", @"constants")
                                              selector:@selector(loadResourcesInDetail:)
                                                  name:kJMLoadResourcesInDetail
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showResourcesListInDetail:)
+                                                 name:kJMShowResourcesListInDetail
+                                               object:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    JSResourceLookup *resourceLookup = [self.resources objectAtIndex:[sender row]];
+    [self showResourcesListInMaster:resourceLookup];
+    
+    // TODO: temp implementation, fix this
+    JSRESTReport *reportClient = [[JSObjection defaultInjector] getObject:[JSRESTReport class]];
+    
+    NSURL *reportURL = [NSURL URLWithString:[reportClient generateReportUrl:resourceLookup.uri
+                                                               reportParams:nil
+                                                                       page:0
+                                                                     format:self.constants.CONTENT_TYPE_PDF]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:reportURL];
+    [segue.destinationViewController setRequest:request];
 }
 
 #pragma mark - UIViewControllerRotation
@@ -161,21 +181,6 @@ objection_requires(@"resourceClient", @"constants")
     return self.offset < self.totalCount;
 }
 
-- (void)showResourcesListInMaster:(JSResourceLookup *)resourceLookup
-{
-    JMPaginationData *paginationData = [[JMPaginationData alloc] init];
-    paginationData.resources = self.resources;
-    paginationData.totalCount = self.totalCount;
-    paginationData.offset = self.offset;
-    paginationData.resourceLookup = resourceLookup;
-    NSDictionary *userInfo = @{
-            kJMPaginationData : paginationData
-    };
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
-                                                        object:nil
-                                                      userInfo:userInfo];
-}
-
 #pragma mark - Observer Methods
 
 - (void)loadResourcesInDetail:(NSNotification *)notification
@@ -193,6 +198,13 @@ objection_requires(@"resourceClient", @"constants")
     self.resourceLookup = paginationData.resourceLookup;
 
     [self loadNextPage];
+}
+
+// TODO: remove because this method is redudant
+- (void)showResourcesListInDetail:(NSNotification *)notification
+{
+    JMPaginationData *paginationData = [notification.userInfo objectForKey:kJMPaginationData];
+    self.offset = paginationData.offset;
 }
 
 #pragma mark - Private
@@ -245,6 +257,21 @@ objection_requires(@"resourceClient", @"constants")
             [self explode:subview level:@(level.integerValue + 1)];
         }
     }
+}
+
+- (void)showResourcesListInMaster:(JSResourceLookup *)resourceLookup
+{
+    JMPaginationData *paginationData = [[JMPaginationData alloc] init];
+    paginationData.resources = self.resources;
+    paginationData.totalCount = self.totalCount;
+    paginationData.offset = self.offset;
+    paginationData.resourceLookup = resourceLookup;
+    NSDictionary *userInfo = @{
+                               kJMPaginationData : paginationData
+                               };
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
+                                                        object:nil
+                                                      userInfo:userInfo];
 }
 
 @end

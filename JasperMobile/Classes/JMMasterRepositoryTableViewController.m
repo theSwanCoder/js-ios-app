@@ -13,6 +13,7 @@
 #import "JMConstants.h"
 #import <Objection-iOS/Objection.h>
 
+static NSString * const kJMShowResourcesSegue = @"ShowResources1";
 static NSInteger const kJMLimit = 25;
 static NSInteger const kJMRootFolderCell = 0;
 
@@ -61,12 +62,43 @@ objection_requires(@"resourceClient", @"constants")
     [self loadNextPage];
 }
 
+// TODO: remove duplications
+- (void)showResourcesListInMaster:(NSNotification *)notification
+{
+    [self performSegueWithIdentifier:kJMShowResourcesSegue sender:[notification.userInfo objectForKey:kJMPaginationData]];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showResourcesListInMaster:)
+                                                 name:kJMShowResourcesListInMaster
+                                               object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-    JSResourceLookup *selectedFolder = [self.folders objectAtIndex:indexPath.row];
-    [segue.destinationViewController setResourceLookup:selectedFolder];
-    [segue.destinationViewController setDelegate:self];
+    if ([segue.identifier isEqualToString:kJMShowResourcesSegue]) {
+        JMPaginationData *paginationData = sender;
+        id destinationViewController = segue.destinationViewController;
+        [destinationViewController setTotalCount:paginationData.totalCount];
+        [destinationViewController setResources:paginationData.resources];
+        [destinationViewController setOffset:paginationData.offset];
+        [destinationViewController setResourceLookup:paginationData.resourceLookup];
+        [destinationViewController setResourcesTypes:@[self.constants.WS_TYPE_FOLDER]];
+    } else {
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        JSResourceLookup *selectedFolder = [self.folders objectAtIndex:indexPath.row];
+        [segue.destinationViewController setResourceLookup:selectedFolder];
+        [segue.destinationViewController setDelegate:self];
+    }
 }
 
 #pragma mark - Table view data source

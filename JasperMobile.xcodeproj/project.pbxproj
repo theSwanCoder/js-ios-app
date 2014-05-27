@@ -35,6 +35,7 @@
 		F514E69C175575AE00C9F61E /* UIAlertView+LocalizedAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F514E69B175575AE00C9F61E /* UIAlertView+LocalizedAlert.m */; };
 		F514E69D175575C800C9F61E /* JMLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = F514E6911754E4C200C9F61E /* JMLocalization.m */; };
 		F51D6A82178472870079AE50 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F51D6A80178472870079AE50 /* Localizable.strings */; };
+		F5322724192F640F004B4283 /* JMDetailReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5322723192F640F004B4283 /* JMDetailReportViewerViewController.m */; };
 		F5339A1617CE0F0F005073EE /* JMMultiSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5339A1517CE0F0E005073EE /* JMMultiSelectTableViewController.m */; };
 		F539124F18D7139B001BDDBE /* JMBaseRepositoryPagingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F539124E18D7139B001BDDBE /* JMBaseRepositoryPagingViewController.m */; };
 		F539125218D73170001BDDBE /* JMResourcePageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F539125118D73170001BDDBE /* JMResourcePageContentViewController.m */; };
@@ -300,6 +301,8 @@
 		F51D6A87178473D00079AE50 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F51D6A88178473E70079AE50 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F51D6A89178474030079AE50 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5322722192F640F004B4283 /* JMDetailReportViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailReportViewerViewController.h; path = Classes/JMDetailReportViewerViewController.h; sourceTree = "<group>"; };
+		F5322723192F640F004B4283 /* JMDetailReportViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailReportViewerViewController.m; path = Classes/JMDetailReportViewerViewController.m; sourceTree = "<group>"; };
 		F5339A1417CE0F0E005073EE /* JMMultiSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMultiSelectTableViewController.h; path = Classes/JMMultiSelectTableViewController.h; sourceTree = "<group>"; };
 		F5339A1517CE0F0E005073EE /* JMMultiSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMultiSelectTableViewController.m; path = Classes/JMMultiSelectTableViewController.m; sourceTree = "<group>"; };
 		F539124D18D7139B001BDDBE /* JMBaseRepositoryPagingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseRepositoryPagingViewController.h; path = Classes/JMBaseRepositoryPagingViewController.h; sourceTree = "<group>"; };
@@ -575,6 +578,8 @@
 				374559DAFB5779322B7E616B /* JMMasterLibraryTableViewController.m */,
 				F554B1B419221F3800E0E860 /* JMMasterRepositoryTableViewController.h */,
 				F554B1B519221F3800E0E860 /* JMMasterRepositoryTableViewController.m */,
+				F5322722192F640F004B4283 /* JMDetailReportViewerViewController.h */,
+				F5322723192F640F004B4283 /* JMDetailReportViewerViewController.m */,
 			);
 			name = Pad;
 			sourceTree = "<group>";
@@ -1463,6 +1468,7 @@
 				F5339A1617CE0F0F005073EE /* JMMultiSelectTableViewController.m in Sources */,
 				374557203C4B4894864CE759 /* JMLibraryTableViewController.m in Sources */,
 				3745594E2ED2E1EDD4881447 /* JMBaseRepositoryTableViewController.m in Sources */,
+				F5322724192F640F004B4283 /* JMDetailReportViewerViewController.m in Sources */,
 				37455A96A7B31E653BE86426 /* JMReportOptionsTableViewController.m in Sources */,
 				3745556D589570C0F70DE21E /* JMFavoritesTableViewController.m in Sources */,
 				374556813A6B65E857339B9B /* JMSaveReportTableViewController.m in Sources */,
