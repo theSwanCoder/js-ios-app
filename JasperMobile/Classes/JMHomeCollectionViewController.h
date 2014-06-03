@@ -29,7 +29,7 @@
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.9 // TODO: or 2.0 release?
+ @since 2.0
  */
 
 @protocol JMHomeCollectionViewControllerDelegate;
@@ -40,23 +40,15 @@
 
 @end
 
-@interface JMMenuItemCell : UICollectionViewCell
-
-@property (nonatomic, weak) IBOutlet UILabel *label;
-@property (nonatomic, weak) IBOutlet UILabel *desc;
-@property (nonatomic, weak) IBOutlet UIImageView *imageView;
-
-@end
-
-typedef enum {
-    JMMenuItemHomeView = -1, // State when "Home View" is presented on the screen as Detail view controller and Master is hidden
+typedef NS_ENUM(NSInteger, JMMenuItem) {
+    JMMenuItemHomeView = -1, // State when "Home View" is presented on the screen as Detail view controller while Master is hidden
     JMMenuItemLibrary = 0,
     JMMenuItemSavedReports = 1,
     JMMenuItemSettings,
     JMMenuItemRepository,
     JMMenuItemFavorites,
     JMMenuItemServerProfiles,
-} JMMenuItem;
+};
 
 @protocol JMHomeCollectionViewControllerDelegate <NSObject>
 @required

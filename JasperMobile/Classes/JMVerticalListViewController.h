@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "JMRefreshable.h"
-#import "JMDetailViewController.h"
+#import "JMDetailRootViewController.h"
 
 @interface JMVerticalListViewController : UITableViewController <JMRefreshable>
 
-@property (nonatomic, weak) JMDetailViewController *delegate;
+@property (nonatomic, weak) JMDetailRootViewController *delegate;
 
 @end

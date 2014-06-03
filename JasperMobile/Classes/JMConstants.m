@@ -49,11 +49,16 @@ NSString * const kJMShowResourcesListInMaster = @"showResourcesListInMaster";
 NSString * const kJMShowResourcesListInDetail = @"showResourcesListInDetail";
 NSString * const kJMLoadResourcesInDetail = @"loadResourcesInDetail";
 
-// Some shared keys for dictionary
+// Shared keys for NSDictionary
 NSString * const kJMMenuTag = @"menuTag";
 NSString * const kJMNotUpdateMenuKey = @"ignoreMenuUpdates";
 NSString * const kJMServerProfileKey = @"serverProfile";
-NSString * const kJMPaginationData = @"paginationData";
+NSString * const kJMResources = @"resources";
+NSString * const kJMResourceLookup = @"resourceLookup";
+NSString * const kJMLoadRecursively = @"loadRecursively";
+NSString * const kJMResourcesTypes = @"resourcesTypes";
+NSString * const kJMTotalCount = @"totalCount";
+NSString * const kJMOffset = @"offset";
 
 // Directory to store downloaded reports
 NSString * const kJMReportsDirectory = @"reports";

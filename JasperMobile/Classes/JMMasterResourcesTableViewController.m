@@ -11,9 +11,7 @@
 #import "JMMasterResourcesTableViewController.h"
 #import "JMRequestDelegate.h"
 #import "JMBackHeaderView.h"
-#import "JMPaginationData.h"
 #import "JMConstants.h"
-#import "JMPadModule.h"
 
 static NSInteger const kJMLimit = 15;
 static NSString * const kJMResourceCell = @"ResourceCell";
@@ -45,22 +43,21 @@ objection_requires(@"resourceClient")
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     JMBackHeaderView *backView = (JMBackHeaderView *) self.tableView.tableHeaderView;
     [backView setOnTapGestureCallback:^(UITapGestureRecognizer *recognizer) {
         [self.navigationController popViewControllerAnimated:YES];
-        // TODO: make single holder instance to store pagination data, instead of duplication it between all view controllers depends on that data
-        JMPaginationData *paginationData = [[JMPaginationData alloc] init];
-        paginationData.offset = self.offset;
+
         NSDictionary *userInfo = @{
-                kJMPaginationData : paginationData
+                kJMOffset : @(self.offset)
         };
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInDetail object:nil userInfo:userInfo];
     }];
+
     self.selectedResourceIndex = [self.resources indexOfObject:self.resourceLookup];
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:0]
                                 animated:NO
                           scrollPosition:UITableViewScrollPositionMiddle];
-    
 }
 
 #pragma mark - Table view data source

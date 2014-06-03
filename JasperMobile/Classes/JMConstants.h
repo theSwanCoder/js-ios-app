@@ -55,7 +55,12 @@ extern NSString * const kJMLoadResourcesInDetail;
 extern NSString * const kJMMenuTag;
 extern NSString * const kJMNotUpdateMenuKey;
 extern NSString * const kJMServerProfileKey;
-extern NSString * const kJMPaginationData;
+extern NSString * const kJMResources;
+extern NSString * const kJMResourceLookup;
+extern NSString * const kJMLoadRecursively;
+extern NSString * const kJMResourcesTypes;
+extern NSString * const kJMTotalCount;
+extern NSString * const kJMOffset;
 
 // Report directory
 extern NSString * const kJMReportsDirectory;

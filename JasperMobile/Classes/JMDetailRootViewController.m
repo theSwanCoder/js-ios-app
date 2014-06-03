@@ -21,13 +21,12 @@
  */
 
 //
-//  JMDetailViewController.m
+//  JMDetailRootViewController.m
 //  Jaspersoft Corporation
 //
 
-#import "JMDetailViewController.h"
+#import "JMDetailRootViewController.h"
 #import "JMConstants.h"
-#import "JMPaginationData.h"
 #import "JMRefreshable.h"
 #import "JMRequestDelegate.h"
 #import <Objection-iOS/Objection.h>
@@ -40,16 +39,17 @@ typedef enum {
     JMViewControllerTypeVertical = 4
 } JMViewControllerType;
 
-@interface JMDetailViewController ()
+@interface JMDetailRootViewController ()
 @property (nonatomic, strong) NSDictionary *viewControllerTypes;
+// TODO: Replace list of buttons with UISwitch component
+@property (nonatomic, strong) NSMutableArray *switchButtons;
+@property (nonatomic, strong) NSArray *resourcesTypes;
 @property (nonatomic, assign) JMViewControllerType viewControllerType;
 @property (nonatomic, weak) UINavigationController *activeResourcesViewController;
 @property (nonatomic, weak) IBOutlet UIView *containerView;
-@property (nonatomic, strong) NSMutableArray *switchButtons;
-@property (nonatomic, strong) NSArray *resourcesTypes;
 @end
 
-@implementation JMDetailViewController
+@implementation JMDetailRootViewController
 objection_requires(@"resourceClient", @"constants")
 
 @synthesize resourceClient = _resourceClient;
@@ -71,7 +71,8 @@ objection_requires(@"resourceClient", @"constants")
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
-    self.containerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
+    self.containerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage
+            imageNamed:@"list_background_pattern.png"]];
     
     self.resources = [NSMutableArray array];
     self.resourcesTypes = @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD];
@@ -150,7 +151,7 @@ objection_requires(@"resourceClient", @"constants")
     static BOOL isLoading = NO;
     if (isLoading) return;
     
-    __weak JMDetailViewController *weakSelf = self;
+    __weak JMDetailRootViewController *weakSelf = self;
 
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         isLoading = NO;
@@ -170,7 +171,8 @@ objection_requires(@"resourceClient", @"constants")
         // TODO: add error handler
     }];
 
-    [self.resourceClient resourceLookups:self.resourceLookup.uri query:nil types:self.resourcesTypes recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
+    [self.resourceClient resourceLookups:self.resourceLookup.uri query:nil types:self.resourcesTypes
+                               recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
     
     isLoading = YES; 
     self.offset += kJMLimit;
@@ -190,21 +192,27 @@ objection_requires(@"resourceClient", @"constants")
     self.offset = 0;
     [self.resources removeAllObjects];
 
-    JMPaginationData *paginationData = [notification.userInfo objectForKey:kJMPaginationData];
-    if (paginationData.resourcesTypes) {
-        self.resourcesTypes = paginationData.resourcesTypes;
+    NSDictionary *userInfo = notification.userInfo;
+    if ([userInfo objectForKey:kJMResourcesTypes]) {
+        self.resourcesTypes = [userInfo objectForKey:kJMResourcesTypes];
     }
-    self.loadRecursively = paginationData.loadRecursively;
-    self.resourceLookup = paginationData.resourceLookup;
+    self.loadRecursively = [[userInfo objectForKey:kJMLoadRecursively] boolValue];
+    self.resourceLookup = [userInfo objectForKey:kJMResourceLookup];
 
     [self loadNextPage];
 }
 
-// TODO: remove because this method is redudant
 - (void)showResourcesListInDetail:(NSNotification *)notification
 {
-    JMPaginationData *paginationData = [notification.userInfo objectForKey:kJMPaginationData];
-    self.offset = paginationData.offset;
+    NSDictionary *userInfo = notification.userInfo;
+    self.offset = [[userInfo objectForKey:kJMOffset] integerValue];
+}
+
+#pragma mark - NSObject
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Private
@@ -261,14 +269,12 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)showResourcesListInMaster:(JSResourceLookup *)resourceLookup
 {
-    JMPaginationData *paginationData = [[JMPaginationData alloc] init];
-    paginationData.resources = self.resources;
-    paginationData.totalCount = self.totalCount;
-    paginationData.offset = self.offset;
-    paginationData.resourceLookup = resourceLookup;
     NSDictionary *userInfo = @{
-                               kJMPaginationData : paginationData
-                               };
+            kJMResources : self.resources,
+            kJMTotalCount : @(self.totalCount),
+            kJMOffset : @(self.offset),
+            kJMResourceLookup : resourceLookup
+    };
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
                                                         object:nil
                                                       userInfo:userInfo];

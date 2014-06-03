@@ -7,13 +7,13 @@
 //
 
 #import "JMMasterRepositoryTableViewController.h"
+#import "JMMasterResourcesTableViewController.h"
 #import "JMBackHeaderView.h"
 #import "JMRequestDelegate.h"
-#import "JMPaginationData.h"
 #import "JMConstants.h"
 #import <Objection-iOS/Objection.h>
 
-static NSString * const kJMShowResourcesSegue = @"ShowResources1";
+static NSString * const kJMShowResourcesSegue = @"ShowResources";
 static NSInteger const kJMLimit = 25;
 static NSInteger const kJMRootFolderCell = 0;
 
@@ -65,7 +65,7 @@ objection_requires(@"resourceClient", @"constants")
 // TODO: remove duplications
 - (void)showResourcesListInMaster:(NSNotification *)notification
 {
-    [self performSegueWithIdentifier:kJMShowResourcesSegue sender:[notification.userInfo objectForKey:kJMPaginationData]];
+    [self performSegueWithIdentifier:kJMShowResourcesSegue sender:notification.userInfo];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -86,13 +86,12 @@ objection_requires(@"resourceClient", @"constants")
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:kJMShowResourcesSegue]) {
-        JMPaginationData *paginationData = sender;
+        NSDictionary *userInfo = sender;
         id destinationViewController = segue.destinationViewController;
-        [destinationViewController setTotalCount:paginationData.totalCount];
-        [destinationViewController setResources:paginationData.resources];
-        [destinationViewController setOffset:paginationData.offset];
-        [destinationViewController setResourceLookup:paginationData.resourceLookup];
-        [destinationViewController setResourcesTypes:@[self.constants.WS_TYPE_FOLDER]];
+        [destinationViewController setTotalCount:[[userInfo objectForKey:kJMTotalCount] integerValue]];
+        [destinationViewController setOffset:[[userInfo objectForKey:kJMOffset] integerValue]];
+        [destinationViewController setResources:[userInfo objectForKey:kJMResources]];
+        [destinationViewController setResourceLookup:[userInfo objectForKey:kJMResourceLookup]];
     } else {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         JSResourceLookup *selectedFolder = [self.folders objectAtIndex:indexPath.row];
@@ -142,13 +141,10 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)loadResourcesIntoDetailViewController
 {
-    JMPaginationData *paginationData = [[JMPaginationData alloc] init];
-    paginationData.resourceLookup = self.resourceLookup;
-    paginationData.loadRecursively = NO;
     NSDictionary *userInfo = @{
-        kJMPaginationData : paginationData
+            kJMResourceLookup : self.resourceLookup,
+            kJMLoadRecursively : @(NO)
     };
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResourcesInDetail
                                                         object:nil
                                                       userInfo:userInfo];
@@ -158,7 +154,7 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)loadNextPage
 {
-    __weak  JMMasterRepositoryTableViewController *weakSelf = self;
+    __weak JMMasterRepositoryTableViewController *weakSelf = self;
 
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         if (!weakSelf.totalCount) {

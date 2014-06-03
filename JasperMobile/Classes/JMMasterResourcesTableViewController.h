@@ -14,7 +14,7 @@
 // TODO: refactor, remove code duplications. Create Base View Controller and extends from it
 @interface JMMasterResourcesTableViewController : UITableViewController <JMPagination, JMResourceClientHolder>
 
-@property (nonatomic, weak) NSMutableArray *resources;
+@property (nonatomic, copy) NSMutableArray *resources;
 @property (nonatomic, strong) NSArray *resourcesTypes;
 
 @end

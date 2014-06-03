@@ -31,6 +31,7 @@
 #import "JMHomeCollectionViewController.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
-@interface JMSplitViewController : UISplitViewController <UISplitViewControllerDelegate, JMHomeCollectionViewControllerDelegate>
+@interface JMSplitViewController : UISplitViewController <UISplitViewControllerDelegate,
+        JMHomeCollectionViewControllerDelegate>
 
 @end

@@ -12,7 +12,7 @@
 #import "JMLocalization.h"
 #import "JMRequestDelegate.h"
 #import "JMConstants.h"
-#import "JMPaginationData.h"
+#import "JMMasterResourcesTableViewController.h"
 #import <Objection-iOS/Objection.h>
 
 #define kJMResourcesSection 0
@@ -110,21 +110,20 @@ objection_requires(@"resourceClient", @"constants")
     [self loadResources];
 }
 
-
 - (void)showResourcesListInMaster:(NSNotification *)notification
 {
-    [self performSegueWithIdentifier:kJMShowResourcesSegue sender:[notification.userInfo objectForKey:kJMPaginationData]];
+    [self performSegueWithIdentifier:kJMShowResourcesSegue sender:notification.userInfo];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:kJMShowResourcesSegue]) {
-        JMPaginationData *paginationData = sender;
+        NSDictionary *userInfo = sender;
         id destinationViewController = segue.destinationViewController;
-        [destinationViewController setTotalCount:paginationData.totalCount];
-        [destinationViewController setResources:paginationData.resources];
-        [destinationViewController setOffset:paginationData.offset];
-        [destinationViewController setResourceLookup:paginationData.resourceLookup];
+        [destinationViewController setTotalCount:[[userInfo objectForKey:kJMTotalCount] integerValue]];
+        [destinationViewController setOffset:[[userInfo objectForKey:kJMTotalCount] integerValue]];
+        [destinationViewController setResourceLookup:[userInfo objectForKey:kJMResourceLookup]];
+        [destinationViewController setResources:[userInfo objectForKey:kJMResources]];
         [destinationViewController setResourcesTypes:self.resourcesTypes];
     }
 }
@@ -202,11 +201,9 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)loadResources
 {
-    JMPaginationData *paginationData = [[JMPaginationData alloc] init];
-    paginationData.resourcesTypes = self.resourcesTypes;
-    paginationData.loadRecursively = YES;
     NSDictionary *userInfo = @{
-            kJMPaginationData : paginationData
+            kJMResourcesTypes : self.resourcesTypes,
+            kJMLoadRecursively : @(YES)
     };
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResourcesInDetail
                                                         object:nil

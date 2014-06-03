@@ -7,6 +7,7 @@
 //
 
 #import "JMSplitViewController.h"
+#import "JMMasterRootViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
 static CGFloat const kMasterViewWidth = 163.0f;
@@ -35,13 +36,9 @@ static CGFloat const kMasterViewWidth = 163.0f;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    JMHomeCollectionViewController *homeView = [self.viewControllers objectAtIndex:1];
-    homeView.delegate = self;
-    
-    UIViewController *masterViewController = [self.viewControllers objectAtIndex:0];
-    UIButton *button = (UIButton *)[masterViewController.view viewWithTag:3];
-    [button addTarget:self action:@selector(backToHomeScreen:) forControlEvents:UIControlEventTouchUpInside];
+    for (id viewController in self.viewControllers) {
+        [viewController setDelegate:self];
+    }
 
     // TODO: refactor
 //    UIView *shadow = [[UIView alloc] initWithFrame:CGRectMake(kMasterViewWidth, 112.0f, 0, self.view.frame.size.height)];
@@ -58,8 +55,8 @@ static CGFloat const kMasterViewWidth = 163.0f;
 {
     [super viewDidLayoutSubviews];
     
-    UIViewController *masterViewController = [self.viewControllers objectAtIndex:0];
-    UIViewController *detailViewController = [self.viewControllers objectAtIndex:1];
+    UIViewController *masterViewController = [self.viewControllers firstObject];
+    UIViewController *detailViewController = [self.viewControllers lastObject];
     
     if (detailViewController.view.frame.origin.x > 0.0) {
         // Adjust the width of the master view
@@ -81,7 +78,9 @@ static CGFloat const kMasterViewWidth = 163.0f;
 
 #pragma mark - UISplitViewControllerDelegate
 
-- (BOOL)splitViewController:(UISplitViewController *)svc shouldHideViewController:(UIViewController *)vc inOrientation:(UIInterfaceOrientation)orientation
+- (BOOL)splitViewController:(UISplitViewController *)svc
+   shouldHideViewController:(UIViewController *)vc
+              inOrientation:(UIInterfaceOrientation)orientation
 {
     return self.selectedItem == JMMenuItemHomeView;
 }
@@ -93,14 +92,14 @@ static CGFloat const kMasterViewWidth = 163.0f;
     if (_selectedItem != selectedItem) {
         _selectedItem = selectedItem;
 
+        NSString *title;
         NSString *subMasterIdentifier; // TODO: do we will need a detail here?
-        NSString *menuTitle;
-        
-        // TODO: instantiate all view controllers
+
+        // TODO: instantiate all required view controllers
         switch (_selectedItem) {
             case JMMenuItemLibrary:
                 subMasterIdentifier = @"MasterLibraryTableViewController";
-                menuTitle = @"< Library";
+                title = @"Library";
                 break;
 
             case JMMenuItemSavedReports:
@@ -111,7 +110,7 @@ static CGFloat const kMasterViewWidth = 163.0f;
 
             case JMMenuItemRepository:
                 subMasterIdentifier = @"MasterRepositoryTableViewController";
-                menuTitle = @"< Repository";
+                title = @"Repository";
                 break;
 
             case JMMenuItemFavorites:
@@ -124,52 +123,25 @@ static CGFloat const kMasterViewWidth = 163.0f;
             default:
                 break;
         }
-        
-        // Remove previous detail view controller
-        if (self.subMaster) {
-            [self.subMaster willMoveToParentViewController:nil];
-            [self.subMaster.view removeFromSuperview];
-            [self.subMaster removeFromParentViewController];
-        }
-        
-        UIViewController *master = [self.viewControllers objectAtIndex:0];
-        UILabel *label = (UILabel *) [master.view viewWithTag:2];
-        label.text = menuTitle;        
-        
+
+        JMMasterRootViewController *master = [self.viewControllers firstObject];
+        master.titleLabel.text = title;
+        [master removeSubMasterViewController];
+
         id detail;
-        
         if (_selectedItem != JMMenuItemHomeView) {
-            UIView *masterContainer = [master.view viewWithTag:1];
-            CGRect masterContainerFrame = masterContainer.frame;
-        
-            UIViewController *subMaster = [self.storyboard instantiateViewControllerWithIdentifier:subMasterIdentifier];
-            CGRect subMasterFrame = CGRectMake(0, 0, masterContainerFrame.size.width, masterContainerFrame.size.height);
-            subMaster.view.frame = subMasterFrame;
-            
-            [master addChildViewController:subMaster];
-            [masterContainer addSubview:subMaster.view];
-            [subMaster didMoveToParentViewController:master];
-            
-            self.subMaster = subMaster;
-            
-            detail = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailViewController"];
+            [master instantiateSubMasterViewControllerWithIdentifier:subMasterIdentifier];
+            detail = [self.storyboard instantiateViewControllerWithIdentifier:@"DetailRootViewController"];
         } else {
             detail = [self.storyboard instantiateViewControllerWithIdentifier:@"HomeCollectionViewController"];
             [detail setDelegate:self];
         }
-        
+
         self.viewControllers = @[master, detail];
         
         // Forces to call splitViewController:shouldHideViewController:inOrientation: method
         [self willRotateToInterfaceOrientation:self.interfaceOrientation duration:0];
     }
-}
-
-#pragma mark - Actions
-
-- (IBAction)backToHomeScreen:(id)sender
-{
-    self.selectedItem = JMMenuItemHomeView;
 }
 
 @end

@@ -26,6 +26,7 @@
 //
 
 #import "JMHomeCollectionViewController.h"
+#import "JMMenuItemCell.h"
 #import "JMLocalization.h"
 
 static NSString * const kJMMenuItemIdentifier = @"MenuItem";
@@ -137,7 +138,4 @@ static NSString * const kJMMenuItemLocalizationPrefix = @"home.menuitem";
     return UIInterfaceOrientationIsLandscape(self.toInterfaceOrientation) ? 20.0f : 11.0f;
 }
 
-@end
-
-@implementation JMMenuItemCell
 @end

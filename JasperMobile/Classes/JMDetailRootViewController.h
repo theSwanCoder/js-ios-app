@@ -21,7 +21,7 @@
  */
 
 //
-//  JMDetailViewController.h
+//  JMDetailRootViewController.h
 //  Jaspersoft Corporation
 //
 
@@ -30,11 +30,11 @@
 #import "JMPagination.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
-@interface JMDetailViewController : UIViewController <JMPagination, JMResourceClientHolder>
+@interface JMDetailRootViewController : UIViewController <JMPagination, JMResourceClientHolder>
 
 @property (nonatomic, weak) JSConstants *constants;
-@property (nonatomic, assign) NSInteger firstVisibleResourceIndex;
 @property (nonatomic, strong) NSMutableArray *resources;
+@property (nonatomic, assign) NSInteger firstVisibleResourceIndex;
 @property (nonatomic, assign) BOOL loadRecursively;
 
 @end
