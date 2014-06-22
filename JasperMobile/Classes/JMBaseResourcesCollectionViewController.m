@@ -11,11 +11,8 @@
 
 static NSString * kJMResourceCellIdentifier = @"ResourceCell";
 static NSString * kJMLoadingCellIdentifier = @"LoadingCell";
-static NSInteger const kJMPaginationTreshoald = 8;
 
-@interface JMBaseResourcesCollectionViewController ()
-@property (nonatomic, assign) UIInterfaceOrientation toInterfaceOrientation;
-@end
+static NSInteger const kJMPaginationTreshoald = 8;
 
 @implementation JMBaseResourcesCollectionViewController
 
@@ -28,25 +25,16 @@ static NSInteger const kJMPaginationTreshoald = 8;
 
 #pragma mark - UIViewController
 
-// TODO: refactor, move to another view controller
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-    [self.delegate prepareForSegue:segue sender:indexPath];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.collectionView.backgroundColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor clearColor];
-    self.toInterfaceOrientation = self.interfaceOrientation;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    self.toInterfaceOrientation = toInterfaceOrientation;
     if ([self respondsToSelector:@selector(collectionViewLayout)]) {
         [self.collectionViewLayout invalidateLayout];
     } else {
@@ -61,18 +49,14 @@ static NSInteger const kJMPaginationTreshoald = 8;
     // Reset scroll position for a new resources type
     if (self.needsToResetScroll) {
         self.collectionView.contentOffset = CGPointZero;
-
-    // Or scroll to first visible resource
-    } else if (self.delegate.firstVisibleResourceIndex > 1) {
-        NSIndexPath *firstVisible = [NSIndexPath indexPathForItem:self.delegate.firstVisibleResourceIndex inSection:0];
-        [self.collectionView scrollToItemAtIndexPath:firstVisible atScrollPosition:self.scrollPosition animated:NO];
-
-        if (self.yLandscapeOffset || self.yPortraitOffset) {
-            // Adjust offset after scrollings
-            CGFloat offset = UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ? self.yLandscapeOffset : self.yPortraitOffset;
-            self.collectionView.contentOffset = CGPointMake(0, self.collectionView.contentOffset.y - offset);
-        }
     }
+}
+
+// TODO: refactor, move to another view controller
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
+    [self.delegate prepareForSegue:segue sender:indexPath];
 }
 
 #pragma mark - UICollectionViewControllerDataSource
@@ -108,7 +92,7 @@ static NSInteger const kJMPaginationTreshoald = 8;
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     CGFloat inset;
-    if (UIInterfaceOrientationIsLandscape(self.toInterfaceOrientation)) {
+    if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
         inset = self.edgesLandscapeInset;
     } else {
         inset = self.edgesPortraitInset;
@@ -136,6 +120,13 @@ static NSInteger const kJMPaginationTreshoald = 8;
     }
     
     [self.collectionView reloadData];
+}
+
+#pragma mark - JMActionBarProvider
+
+- (id)actionBar
+{
+    return [self.delegate actionBar];
 }
 
 @end

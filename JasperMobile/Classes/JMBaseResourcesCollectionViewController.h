@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "JMRefreshable.h"
-#import "JMDetailRootViewController.h"
+#import "JMResourceClientHolder.h"
+#import "JMPagination.h"
+#import "JMActionBarProvider.h"
 
-@interface JMBaseResourcesCollectionViewController : UICollectionViewController <JMRefreshable>
+@interface JMBaseResourcesCollectionViewController : UICollectionViewController <JMRefreshable, JMActionBarProvider>
 
-@property (nonatomic, weak) JMDetailRootViewController *delegate;
+@property (nonatomic, weak) UIViewController <JMPagination, JMResourceClientHolder, JMActionBarProvider> *delegate;
 @property (nonatomic, assign) CGFloat yLandscapeOffset;
 @property (nonatomic, assign) CGFloat yPortraitOffset;
 @property (nonatomic, assign) CGFloat edgesLandscapeInset;

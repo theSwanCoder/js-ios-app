@@ -1,61 +1,49 @@
-/*
- * JasperMobile for iOS
- * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
- * http://community.jaspersoft.com/project/jaspermobile-ios
- *
- * Unless you have purchased a commercial license agreement from Jaspersoft,
- * the following license terms apply:
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
- */
-
 //
-//  JMDetailRootViewController.m
-//  Jaspersoft Corporation
+//  JMDetailNavigationViewController.m
+//  JasperMobile
+//
+//  Created by Vlad Zavadskii on 6/16/14.
+//  Copyright (c) 2014 com.jaspersoft. All rights reserved.
 //
 
 #import "JMDetailRootViewController.h"
-#import "JMConstants.h"
-#import "JMRefreshable.h"
 #import "JMRequestDelegate.h"
+#import "JMRefreshable.h"
+#import "JMConstants.h"
+#import <Objection-iOS/JSObjection.h>
 #import <Objection-iOS/Objection.h>
 
 static NSInteger const kJMLimit = 15;
 
-typedef enum {
-    JMViewControllerTypeGrid = 2,
-    JMViewControllerTypeHorizontal = 3,
-    JMViewControllerTypeVertical = 4
-} JMViewControllerType;
-
 @interface JMDetailRootViewController ()
-@property (nonatomic, strong) NSDictionary *viewControllerTypes;
-// TODO: Replace list of buttons with UISwitch component
-@property (nonatomic, strong) NSMutableArray *switchButtons;
+@property (nonatomic, weak) JSConstants *constants;
+@property (nonatomic, strong) NSDictionary *representationTypeToSegue;
 @property (nonatomic, strong) NSArray *resourcesTypes;
-@property (nonatomic, assign) JMViewControllerType viewControllerType;
-@property (nonatomic, weak) UINavigationController *activeResourcesViewController;
-@property (nonatomic, weak) IBOutlet UIView *containerView;
+@property (nonatomic, weak) UIViewController <JMRefreshable> *activeRepresentationViewController;
+@property (nonatomic, strong) JMResourcesRepresentationSwitcherActionBarView *actionBarView;
 @end
 
 @implementation JMDetailRootViewController
 objection_requires(@"resourceClient", @"constants")
 
-@synthesize resourceClient = _resourceClient;
+@synthesize resources = _resources;
 @synthesize resourceLookup = _resourceLookup;
-@synthesize offset = _offset;
+@synthesize resourceClient = _resourceClient;
 @synthesize totalCount = _totalCount;
+@synthesize offset = _offset;
+
+#pragma mark - Accessors 
+
+- (void)setRepresentationType:(JMResourcesRepresentationType)representationType
+{
+    if (_representationType != representationType) {
+        if (_representationType) {
+            [self.navigationController popViewControllerAnimated:NO];
+        }
+        _representationType = representationType;
+        [self performSegueWithIdentifier:[self.representationTypeToSegue objectForKey:@(self.representationType)] sender:self];
+    }
+}
 
 #pragma mark - Initialization
 
@@ -70,30 +58,22 @@ objection_requires(@"resourceClient", @"constants")
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor clearColor];
-    self.containerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage
-            imageNamed:@"list_background_pattern.png"]];
+
+    self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
     
     self.resources = [NSMutableArray array];
     self.resourcesTypes = @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD];
-
-    self.viewControllerTypes = @{
-        @(JMViewControllerTypeGrid) : @"GridViewController",
-        @(JMViewControllerTypeHorizontal) : @"ResourcesHorizontalListViewController",
-        @(JMViewControllerTypeVertical) : @"ResourcesVerticalListViewController"
+    self.representationTypeToSegue = @{
+            @(JMResourcesRepresentationTypeGrid) : @"GridViewController",
+            @(JMResourcesRepresentationTypeHorizontalList) : @"HorizontalListViewController",
+            @(JMResourcesRepresentationTypeVerticalList) : @"VerticalListViewController"
     };
-
-    self.viewControllerType = JMViewControllerTypeHorizontal;
-    self.switchButtons = [NSMutableArray array];
-    for (NSNumber *viewControllerType in self.viewControllerTypes.allKeys) {
-        UIButton *switchButton = (UIButton *) [self.view viewWithTag:viewControllerType.integerValue];
-        [self.switchButtons addObject:switchButton];
-        if (viewControllerType.integerValue == self.viewControllerType) {
-            switchButton.enabled = NO;
-        }
+    
+    if (!self.representationType) {
+        // Will show horizontal list view controller
+        self.representationType = JMResourcesRepresentationTypeHorizontalList;
     }
-
-    [self instantiateAndSetAsActiveViewControllerOfType:self.viewControllerType];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadResourcesInDetail:)
                                                  name:kJMLoadResourcesInDetail
@@ -104,43 +84,29 @@ objection_requires(@"resourceClient", @"constants")
                                                object:nil];
 }
 
+#pragma mark - Navigation
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    JSResourceLookup *resourceLookup = [self.resources objectAtIndex:[sender row]];
-    [self showResourcesListInMaster:resourceLookup];
-    
-    // TODO: temp implementation, fix this
-    JSRESTReport *reportClient = [[JSObjection defaultInjector] getObject:[JSRESTReport class]];
-    
-    NSURL *reportURL = [NSURL URLWithString:[reportClient generateReportUrl:resourceLookup.uri
-                                                               reportParams:nil
-                                                                       page:0
-                                                                     format:self.constants.CONTENT_TYPE_PDF]];
-    NSURLRequest *request = [NSURLRequest requestWithURL:reportURL];
-    [segue.destinationViewController setRequest:request];
-}
+    if ([self.representationTypeToSegue.allValues indexOfObject:segue.identifier] != NSNotFound) {
+        id destinationViewController = [segue destinationViewController];
+        [destinationViewController setDelegate:self];
+        [destinationViewController refresh];
+        self.activeRepresentationViewController = destinationViewController;
+    } else {
+        JSResourceLookup *resourceLookup = [self.resources objectAtIndex:[sender row]];
+        [self showResourcesListInMaster:[sender row]];
 
-#pragma mark - UIViewControllerRotation
+        // TODO: temp implementation, fix this
+        JSRESTReport *reportClient = [[JSObjection defaultInjector] getObject:[JSRESTReport class]];
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    // Check if iOS 6 (edgesForExtendedLayout was added in iOS 7)
-    if (![self.view respondsToSelector:@selector(edgesForExtendedLayout)]) {
-        [self performSelector:@selector(fixRoundedSplitViewCorner) withObject:nil afterDelay:0];
+        NSURL *reportURL = [NSURL URLWithString:[reportClient generateReportUrl:resourceLookup.uri
+                                                                   reportParams:nil
+                                                                           page:0
+                                                                         format:self.constants.CONTENT_TYPE_PDF]];
+        NSURLRequest *request = [NSURLRequest requestWithURL:reportURL];
+        [segue.destinationViewController setRequest:request];
     }
-}
-
-#pragma mark - Actions
-
-- (IBAction)changeRepresentation:(id)sender
-{
-    for (UIButton *switchButton in self.switchButtons) {
-        switchButton.enabled = YES;
-    }
-    [sender setEnabled:NO];
-
-    self.viewControllerType = (JMViewControllerType) [sender tag];
-    [self instantiateAndSetAsActiveViewControllerOfType:self.viewControllerType];
 }
 
 #pragma mark - Pagination
@@ -150,32 +116,30 @@ objection_requires(@"resourceClient", @"constants")
     // Multiple calls protection
     static BOOL isLoading = NO;
     if (isLoading) return;
-    
+
     __weak JMDetailRootViewController *weakSelf = self;
 
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         isLoading = NO;
 
-        UIViewController <JMRefreshable> *baseRepositoryViewController = weakSelf.activeResourcesViewController.viewControllers.firstObject;
-        baseRepositoryViewController.needsToResetScroll = weakSelf.resources.count == 0;
-        
+        weakSelf.activeRepresentationViewController.needsToResetScroll = !weakSelf.totalCount;
+
         if (!weakSelf.totalCount) {
             weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
         }
         [weakSelf.resources addObjectsFromArray:result.objects];
-        
-        [baseRepositoryViewController refresh];
+        weakSelf.offset += kJMLimit;
+
+        [weakSelf.activeRepresentationViewController refresh];
     } errorBlock:^(JSOperationResult *result) {
         isLoading = NO;
-        weakSelf.offset -= kJMLimit;
-        // TODO: add error handler
+        // TODO: add an error handler
     }];
 
     [self.resourceClient resourceLookups:self.resourceLookup.uri query:nil types:self.resourcesTypes
                                recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
-    
-    isLoading = YES; 
-    self.offset += kJMLimit;
+
+    isLoading = YES;
 }
 
 - (BOOL)hasNextPage
@@ -198,7 +162,7 @@ objection_requires(@"resourceClient", @"constants")
     }
     self.loadRecursively = [[userInfo objectForKey:kJMLoadRecursively] boolValue];
     self.resourceLookup = [userInfo objectForKey:kJMResourceLookup];
-
+    
     [self loadNextPage];
 }
 
@@ -206,78 +170,44 @@ objection_requires(@"resourceClient", @"constants")
 {
     NSDictionary *userInfo = notification.userInfo;
     self.offset = [[userInfo objectForKey:kJMOffset] integerValue];
+    self.resources = [userInfo objectForKey:kJMResources];
+    [self.activeRepresentationViewController refresh];
+}
+
+- (void)showResourcesListInMaster:(NSInteger)selectedResourceIndex
+{
+    NSDictionary *userInfo = @{
+            kJMResources : self.resources,
+            kJMTotalCount : @(self.totalCount),
+            kJMOffset : @(self.offset),
+            kJMSelectedResourceIndex : @(selectedResourceIndex)
+    };
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
+                                                        object:nil
+                                                      userInfo:userInfo];
+}
+
+#pragma mark - JMActionBarProvider
+
+- (id)actionBar
+{
+    if (!self.actionBarView) {
+        self.actionBarView = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass
+                              ([JMResourcesRepresentationSwitcherActionBarView class])
+                                                           owner:self
+                                                         options:nil].firstObject;
+        self.actionBarView.delegate = self;
+    }
+    
+    return self.actionBarView;
 }
 
 #pragma mark - NSObject
 
 - (void)dealloc
 {
+    self.actionBarView = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-#pragma mark - Private
-
-- (void)instantiateAndSetAsActiveViewControllerOfType:(JMViewControllerType)type
-{
-    NSString *identifier = [self.viewControllerTypes objectForKey:@(type)];
-
-    UINavigationController *navigationController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
-
-    // Remove from parent view
-    if (self.activeResourcesViewController) {
-        [self.activeResourcesViewController willMoveToParentViewController:nil];
-        [[self.activeResourcesViewController view] removeFromSuperview];
-        [self.activeResourcesViewController removeFromParentViewController];
-    }
-
-    CGSize containerViewSize = self.containerView.frame.size;
-    CGRect frame = CGRectMake(0, 0, containerViewSize.width, containerViewSize.height);
-    navigationController.view.frame = frame;
-    [self addChildViewController:navigationController];
-    [self.containerView addSubview:navigationController.view];
-    [navigationController didMoveToParentViewController:self];
-
-    self.activeResourcesViewController = navigationController;
-
-    UIViewController <JMRefreshable> *baseRepositoryViewController = [navigationController.viewControllers firstObject];
-    if ([baseRepositoryViewController respondsToSelector:@selector(setDelegate:)]) {
-        [baseRepositoryViewController performSelector:@selector(setDelegate:) withObject:self];
-    }
-
-    [baseRepositoryViewController refresh];
-}
-
-// Fixes rounded corners for split view controller
-// Thanks to abs for the solution ( http://stackoverflow.com/a/2651876 )
-- (void)fixRoundedSplitViewCorner
-{
-    [self explode:[[UIApplication sharedApplication] keyWindow] level:0];
-}
-
-- (void)explode:(id)view level:(NSNumber *)level
-{
-    if ([view isKindOfClass:[UIImageView class]]) {
-        UIImageView *roundedCornerImage = (UIImageView *)view;
-        roundedCornerImage.hidden = YES;
-    }
-    if (level.integerValue < 2) {
-        for (UIView *subview in [view subviews]) {
-            [self explode:subview level:@(level.integerValue + 1)];
-        }
-    }
-}
-
-- (void)showResourcesListInMaster:(JSResourceLookup *)resourceLookup
-{
-    NSDictionary *userInfo = @{
-            kJMResources : self.resources,
-            kJMTotalCount : @(self.totalCount),
-            kJMOffset : @(self.offset),
-            kJMResourceLookup : resourceLookup
-    };
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
-                                                        object:nil
-                                                      userInfo:userInfo];
 }
 
 @end

@@ -32,26 +32,6 @@
  @since 2.0
  */
 
-@protocol JMHomeCollectionViewControllerDelegate;
-
 @interface JMHomeCollectionViewController : UICollectionViewController
-
-@property (nonatomic, weak) id <JMHomeCollectionViewControllerDelegate> delegate;
-
-@end
-
-typedef NS_ENUM(NSInteger, JMMenuItem) {
-    JMMenuItemHomeView = -1, // State when "Home View" is presented on the screen as Detail view controller while Master is hidden
-    JMMenuItemLibrary = 0,
-    JMMenuItemSavedReports = 1,
-    JMMenuItemSettings,
-    JMMenuItemRepository,
-    JMMenuItemFavorites,
-    JMMenuItemServerProfiles,
-};
-
-@protocol JMHomeCollectionViewControllerDelegate <NSObject>
-@required
-@property (nonatomic, assign) JMMenuItem selectedItem;
 
 @end

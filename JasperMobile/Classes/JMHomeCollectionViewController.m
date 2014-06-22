@@ -28,16 +28,33 @@
 #import "JMHomeCollectionViewController.h"
 #import "JMMenuItemCell.h"
 #import "JMLocalization.h"
+#import "JMCustomSplitViewController.h"
+
+// Localization keys defined as lowercase version of MenuItem identifier (e.g library, saveditems etc)
+static NSString * const kJMMenuItemLibrary = @"Library";
+static NSString * const kJMMenuItemSavedItems = @"SavedItems";
+static NSString * const kJMMenuItemSettings = @"Settings";
+static NSString * const kJMMenuItemRepository = @"Repository";
+static NSString * const kJMMenuItemFavorites = @"Favorites";
+static NSString * const kJMMenuItemServers = @"Servers";
 
 static NSString * const kJMMenuItemIdentifier = @"MenuItem";
-static NSString * const kJMMenuItemLocalizationPrefix = @"home.menuitem";
 
-@interface JMHomeCollectionViewController ()
-@property (nonatomic, assign) UIInterfaceOrientation toInterfaceOrientation;
-@property (nonatomic, strong) NSDictionary *menuItems;
+@interface JMHomeCollectionViewController () {
+    NSArray *_portraitMenuItems;
+    NSArray *_landscapeMenuItems;
+}
+- (NSArray *)menuItems;
 @end
 
 @implementation JMHomeCollectionViewController
+
+#pragma mark - Accessors
+
+- (NSArray *)menuItems
+{
+    return UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ? _portraitMenuItems : _landscapeMenuItems;
+}
 
 #pragma mark - UIViewController
 
@@ -45,33 +62,49 @@ static NSString * const kJMMenuItemLocalizationPrefix = @"home.menuitem";
 {
     [super viewDidLoad];
 
-    // Check if iOS 7 or higher
-    if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
-        self.collectionView.contentInset = UIEdgeInsetsMake(20.0f, 0, 0, 0);
+    // Check if iOS 6 or earlier
+    if (![self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]) {
+        self.collectionView.contentInset = UIEdgeInsetsMake(-20.0f, 0, 0, 0);
     }
 
-    self.menuItems = @{
-        @(JMMenuItemLibrary) : @"library",
-        @(JMMenuItemSavedReports) : @"savedreports",
-        @(JMMenuItemSettings) : @"settings",
-        @(JMMenuItemRepository) : @"repository",
-        @(JMMenuItemFavorites) : @"favorites",
-        @(JMMenuItemServerProfiles) : @"serverprofiles"
-    };
-
-    self.toInterfaceOrientation = self.interfaceOrientation;
+    _portraitMenuItems = @[
+            kJMMenuItemLibrary,
+            kJMMenuItemSavedItems,
+            kJMMenuItemRepository,
+            kJMMenuItemFavorites,
+            kJMMenuItemSettings,
+            kJMMenuItemServers
+    ];
+    
+    _landscapeMenuItems = @[
+            kJMMenuItemLibrary,
+            kJMMenuItemSavedItems,
+            kJMMenuItemSettings,
+            kJMMenuItemRepository,
+            kJMMenuItemFavorites,
+            kJMMenuItemServers
+    ];
+    
     self.collectionView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    self.toInterfaceOrientation = toInterfaceOrientation;
-    if ([self respondsToSelector:@selector(collectionViewLayout)]) {
-        [self.collectionViewLayout invalidateLayout];
-    } else {
-        [self.collectionView reloadData];
-    }
+    [self.collectionView reloadData];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.collectionView reloadData];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Will force to load destination's view
+    [segue.destinationViewController view];
+    [segue.destinationViewController menuLabel].text = sender;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -89,15 +122,13 @@ static NSString * const kJMMenuItemLocalizationPrefix = @"home.menuitem";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     JMMenuItemCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kJMMenuItemIdentifier forIndexPath:indexPath];
-
-    JMMenuItem menuItem = (JMMenuItem) indexPath.row;
-    NSString *menuItemIdentifier = [self.menuItems objectForKey:@(menuItem)];
-
-    // TODO: select right font for iOS 6 because it's missing "Apple SD Gothic Neo" one
-    cell.label.text = JMCustomLocalizedString([NSString stringWithFormat:@"%@.%@.label", kJMMenuItemLocalizationPrefix, menuItemIdentifier], nil);
-    cell.desc.text = JMCustomLocalizedString([NSString stringWithFormat:@"%@.%@.description", kJMMenuItemLocalizationPrefix, menuItemIdentifier], nil);
+    NSString *menuItem = [[self.menuItems objectAtIndex:indexPath.row] lowercaseString];
+    
+    cell.imageView.image = [UIImage imageNamed:menuItem];
+    cell.label.text = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.label", menuItem], nil);
+    cell.desc.text = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.description", menuItem], nil);
     [cell.desc sizeToFit];
-    cell.imageView.image = [UIImage imageNamed:menuItemIdentifier];
+    
     return cell;
 }
 
@@ -114,14 +145,15 @@ static NSString * const kJMMenuItemLocalizationPrefix = @"home.menuitem";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.delegate setSelectedItem:(JMMenuItem) indexPath.row];
+    NSString *menuItem = [self.menuItems objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:[NSString stringWithFormat:@"Show%@", menuItem] sender:menuItem];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout protocol
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    if (UIInterfaceOrientationIsLandscape(self.toInterfaceOrientation)) {
+    if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
         return UIEdgeInsetsMake(30.0f, 23.0f, 30.0f, 23.0f);
     } else {
         return UIEdgeInsetsMake(10.0f, 66.0f, 0.0f, 66.0f);
@@ -130,12 +162,12 @@ static NSString * const kJMMenuItemLocalizationPrefix = @"home.menuitem";
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
-    return UIInterfaceOrientationIsLandscape(self.toInterfaceOrientation) ? 20.0f : 11.0f;
+    return UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ? 20.0f : 11.0f;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
-    return UIInterfaceOrientationIsLandscape(self.toInterfaceOrientation) ? 20.0f : 11.0f;
+    return UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ? 20.0f : 11.0f;
 }
 
 @end

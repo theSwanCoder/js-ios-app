@@ -10,11 +10,16 @@
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import "JMPagination.h"
 #import "JMResourceClientHolder.h"
+#import "JMBackHeaderView.h"
 
-@interface JMMasterRepositoryTableViewController : UITableViewController <JMPagination, JMResourceClientHolder>
+@interface JMMasterRepositoryTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, JMPagination, JMResourceClientHolder>
 
 @property (nonatomic, strong) NSMutableArray *folders;
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, weak) JMMasterRepositoryTableViewController *delegate;
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) IBOutlet JMBackHeaderView *backView;
+@property (nonatomic, weak) IBOutlet UILabel *rootFolderLabel;
+@property (nonatomic, weak) IBOutlet UIView *rootFolderView;
 
 @end

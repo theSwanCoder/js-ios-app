@@ -13,14 +13,9 @@
 #import "JMBackHeaderView.h"
 #import "JMConstants.h"
 
-static NSInteger const kJMLimit = 15;
+static NSInteger const kJMLimit = 20;
 static NSString * const kJMResourceCell = @"ResourceCell";
 static NSString * const kJMLoadingCell = @"LoadingCell";
-
-// TODO: fixe odd selection bugs
-@interface JMMasterResourcesTableViewController()
-@property (nonatomic, assign) NSInteger selectedResourceIndex;
-@end
 
 @implementation JMMasterResourcesTableViewController
 objection_requires(@"resourceClient")
@@ -29,6 +24,7 @@ objection_requires(@"resourceClient")
 @synthesize resourceLookup = _resourceLookup;
 @synthesize totalCount = _totalCount;
 @synthesize offset = _offset;
+@synthesize resources = _resources;
 
 #pragma mark - Initialization
 
@@ -43,18 +39,20 @@ objection_requires(@"resourceClient")
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    JMBackHeaderView *backView = (JMBackHeaderView *) self.tableView.tableHeaderView;
-    [backView setOnTapGestureCallback:^(UITapGestureRecognizer *recognizer) {
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
+    [self.backView setOnTapGestureCallback:^(UITapGestureRecognizer *recognizer) {
         [self.navigationController popViewControllerAnimated:YES];
-
+        
         NSDictionary *userInfo = @{
-                kJMOffset : @(self.offset)
+                kJMOffset : @(self.offset),
+                kJMResources : self.resources
         };
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInDetail object:nil userInfo:userInfo];
     }];
-
-    self.selectedResourceIndex = [self.resources indexOfObject:self.resourceLookup];
+    
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:0]
                                 animated:NO
                           scrollPosition:UITableViewScrollPositionMiddle];
@@ -70,7 +68,7 @@ objection_requires(@"resourceClient")
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger count = self.resources.count;
-    if (self.hasNextPage) count++;
+    if (count > 0 && self.hasNextPage) count++;
     return count;
 }
 
@@ -84,7 +82,7 @@ objection_requires(@"resourceClient")
     UILabel *label = (UILabel *)[cell viewWithTag:1];
     JSResourceLookup *resourceLookup = [self.resources objectAtIndex:indexPath.row];
     label.text = resourceLookup.label;
-
+    
     return cell;
 }
 
@@ -92,7 +90,6 @@ objection_requires(@"resourceClient")
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.resourceLookup = [self.resources objectAtIndex:indexPath.row];
     [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:0] animated:NO];
     self.selectedResourceIndex = indexPath.row;
     // TODO: post notification to update report view
@@ -113,7 +110,7 @@ objection_requires(@"resourceClient")
 - (void)loadNextPage
 {
     __weak JMMasterResourcesTableViewController *weakSelf = self;
-
+    
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         [weakSelf.resources addObjectsFromArray:result.objects];
         [weakSelf.tableView reloadData];
@@ -121,14 +118,25 @@ objection_requires(@"resourceClient")
         weakSelf.offset -= kJMLimit;
         // TODO: add error handler
     }];
-
-    [self.resourceClient resourceLookups:nil query:nil types:self.resourcesTypes recursive:YES offset:self.offset limit:kJMLimit delegate:delegate];
+    
+    [self.resourceClient resourceLookups:self.resourceLookup.uri query:nil types:self.resourcesTypes recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
+    
     self.offset += kJMLimit;
 }
 
 - (BOOL)hasNextPage
 {
     return self.offset < self.totalCount;
+}
+
+#pragma mark - Actions
+
+- (IBAction)refresh:(id)sender
+{
+    self.offset = 0;
+    [self.resources removeAllObjects];
+    [self.tableView reloadData];
+    [self loadNextPage];
 }
 
 @end

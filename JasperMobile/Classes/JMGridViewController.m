@@ -28,16 +28,6 @@
     self.scrollPosition = UICollectionViewScrollPositionTop;
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    NSArray *indexPaths = self.collectionView.indexPathsForVisibleItems;
-    NSArray *sortedIndexPaths = [indexPaths sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        return [obj1 compare:obj2];
-    }];
-    self.delegate.firstVisibleResourceIndex = [(NSIndexPath *)sortedIndexPaths.firstObject item];
-}
-
 #pragma mark - UICollectionViewControllerDataSource
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath

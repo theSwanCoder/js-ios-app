@@ -26,25 +26,13 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    NSIndexPath *firstVisible = [self.tableView.indexPathsForVisibleRows firstObject];
-    self.delegate.firstVisibleResourceIndex = firstVisible.row;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
-    // TODO: remove if "Restore last visible list representation (horizontal or vertical) feature will be skipped
     // Reset scroll position for a new resources type
     if (self.needsToResetScroll) {
         self.tableView.contentOffset = CGPointZero;
-        // Or scroll to first visible resource after switching list representation
-    } else if (self.delegate.firstVisibleResourceIndex > 1) {
-        NSIndexPath *firstVisible = [NSIndexPath indexPathForItem:self.delegate.firstVisibleResourceIndex inSection:0];
-        [self.tableView scrollToRowAtIndexPath:firstVisible atScrollPosition:UITableViewScrollPositionTop animated:NO];
     }
 }
 
@@ -64,6 +52,7 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
 {
     NSInteger count = self.delegate.resources.count;
     if ([self.delegate hasNextPage]) count++;
+    
     return count;
 }
 
@@ -111,6 +100,13 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
 - (void)refresh
 {
     [self.tableView reloadData];
+}
+
+#pragma mark - JMActionBarProvider
+
+- (id)actionBar
+{
+    return [self.delegate actionBar];
 }
 
 @end

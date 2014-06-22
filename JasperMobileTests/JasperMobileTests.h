@@ -25,12 +25,12 @@
 //  Jaspersoft Corporation
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JasperMobileTests : SenTestCase
+@interface JasperMobileTests : XCTestCase
 
 @end

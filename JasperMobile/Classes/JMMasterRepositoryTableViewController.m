@@ -1,4 +1,4 @@
- //
+//
 //  JMMasterRepositoryTableViewController.m
 //  JasperMobile
 //
@@ -13,9 +13,12 @@
 #import "JMConstants.h"
 #import <Objection-iOS/Objection.h>
 
+static NSString * const kJMFolderCellIdentifier = @"FolderCell";
+static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
+
 static NSString * const kJMShowResourcesSegue = @"ShowResources";
-static NSInteger const kJMLimit = 25;
-static NSInteger const kJMRootFolderCell = 0;
+
+static NSInteger const kJMLimit = 15;
 
 @implementation JMMasterRepositoryTableViewController
 objection_requires(@"resourceClient", @"constants")
@@ -39,25 +42,32 @@ objection_requires(@"resourceClient", @"constants")
 {
     [super viewDidLoad];
     
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
     if (!self.resourceLookup) {
         self.resourceLookup = [[JSResourceLookup alloc] init];
-        // TODO: localize
         self.resourceLookup.label = @"Root";
-        // TODO: find prop value
         self.resourceLookup.uri = @"/";
-
-        self.tableView.tableHeaderView.hidden = YES;
-        self.tableView.tableHeaderView.frame = CGRectZero;
+        
+        CGRect frame = self.tableView.frame;
+        frame = CGRectMake(0, self.rootFolderView.frame.size.height, frame.size.width, frame.size.height + self.backView.frame.size.height);
+        self.tableView.frame = frame;
+        
+        frame = self.rootFolderView.frame;
+        self.rootFolderView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
+        
+        self.backView.hidden = YES;
+        self.backView.frame = CGRectZero;
     } else {
-        JMBackHeaderView *backView = (JMBackHeaderView *) self.tableView.tableHeaderView;
-        [backView setOnTapGestureCallback:^(UITapGestureRecognizer *recognizer) {
+        [self.backView setOnTapGestureCallback:^(UITapGestureRecognizer *recognizer) {
             [self.navigationController popViewControllerAnimated:YES];
             [self.delegate loadResourcesIntoDetailViewController];
         }];
     }
     
+    self.rootFolderLabel.text = self.resourceLookup.label;
     self.folders = [NSMutableArray array];
-    [self.folders addObject:self.resourceLookup];
     
     [self loadNextPage];
 }
@@ -75,6 +85,7 @@ objection_requires(@"resourceClient", @"constants")
                                              selector:@selector(showResourcesListInMaster:)
                                                  name:kJMShowResourcesListInMaster
                                                object:nil];
+    [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -90,8 +101,8 @@ objection_requires(@"resourceClient", @"constants")
         id destinationViewController = segue.destinationViewController;
         [destinationViewController setTotalCount:[[userInfo objectForKey:kJMTotalCount] integerValue]];
         [destinationViewController setOffset:[[userInfo objectForKey:kJMOffset] integerValue]];
-        [destinationViewController setResources:[userInfo objectForKey:kJMResources]];
-        [destinationViewController setResourceLookup:[userInfo objectForKey:kJMResourceLookup]];
+        [destinationViewController setResources:[[userInfo objectForKey:kJMResources] mutableCopy]];
+        [destinationViewController setResourceLookup:self.resourceLookup];
     } else {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         JSResourceLookup *selectedFolder = [self.folders objectAtIndex:indexPath.row];
@@ -110,18 +121,17 @@ objection_requires(@"resourceClient", @"constants")
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger count = self.folders.count;
-    if (self.hasNextPage) count++;
+    if (count > 0 && self.hasNextPage) count++;
     return count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == self.folders.count) {
-        return [tableView dequeueReusableCellWithIdentifier:@"LoadingCell" forIndexPath:indexPath];
+        return [tableView dequeueReusableCellWithIdentifier:kJMLoadingCellIdentifier forIndexPath:indexPath];
     }
-
-    NSString *cellIdentifier = (indexPath.row == kJMRootFolderCell) ? @"RootCell" : @"FolderCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kJMFolderCellIdentifier forIndexPath:indexPath];
     UILabel *label = (UILabel *) [cell viewWithTag:1];
     label.text = [[self.folders objectAtIndex:indexPath.row] label];
     
@@ -155,7 +165,7 @@ objection_requires(@"resourceClient", @"constants")
 - (void)loadNextPage
 {
     __weak JMMasterRepositoryTableViewController *weakSelf = self;
-
+    
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         if (!weakSelf.totalCount) {
             weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
@@ -165,13 +175,24 @@ objection_requires(@"resourceClient", @"constants")
         [weakSelf.tableView reloadData];
         [weakSelf loadResourcesIntoDetailViewController];
     }];
-
+    
     [self.resourceClient resourceLookups:self.resourceLookup.uri query:nil types:@[self.constants.WS_TYPE_FOLDER] recursive:NO offset:self.offset limit:kJMLimit delegate:delegate];
 }
 
 - (BOOL)hasNextPage
 {
     return self.offset < self.totalCount;
+}
+
+#pragma mark - Actions
+
+- (IBAction)refresh:(id)sender
+{
+    self.offset = 0;
+    [self.folders removeAllObjects];
+    [self.tableView reloadData];
+    [self loadNextPage];
+    [self loadResourcesIntoDetailViewController];
 }
 
 @end

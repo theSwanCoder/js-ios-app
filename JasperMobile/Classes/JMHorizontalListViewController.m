@@ -34,20 +34,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.edgesLandscapeInset = 19.0f;
+    self.edgesLandscapeInset = 30.0f;
     self.edgesPortraitInset = 30.0f;
-    self.scrollPosition = UICollectionViewScrollPositionCenteredHorizontally;
 
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    NSArray *indexPathsForVisibleItems = self.collectionView.indexPathsForVisibleItems;
-    if (indexPathsForVisibleItems.count) {
-        NSIndexPath *firstVisible = [indexPathsForVisibleItems objectAtIndex:1];
-        self.delegate.firstVisibleResourceIndex = firstVisible.item;
-    }
 }
 
 #pragma mark - UICollectionViewDataSource

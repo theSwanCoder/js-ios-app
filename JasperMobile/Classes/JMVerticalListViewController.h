@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "JMRefreshable.h"
-#import "JMDetailRootViewController.h"
+#import "JMPagination.h"
+#import "JMResourceClientHolder.h"
+#import "JMActionBarProvider.h"
 
-@interface JMVerticalListViewController : UITableViewController <JMRefreshable>
+@interface JMVerticalListViewController : UITableViewController <JMRefreshable>//, JMActionBarProvider>
 
-@property (nonatomic, weak) JMDetailRootViewController *delegate;
+@property (nonatomic, weak) id <JMPagination, JMResourceClientHolder, JMActionBarProvider> delegate;
 
 @end

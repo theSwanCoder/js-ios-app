@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+    <dependencies>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JMCustomSplitViewController">
+            <connections>
+                <outlet property="actionBarPlaceholderView" destination="CJ9-v3-3XE" id="KP7-9c-pFh"/>
+                <outlet property="detailView" destination="xcJ-3t-g6F" id="FPn-6R-MRW"/>
+                <outlet property="logoView" destination="qTi-Jt-Jiu" id="cPX-m6-FKw"/>
+                <outlet property="masterView" destination="b8R-yY-srt" id="OfI-UI-SUL"/>
+                <outlet property="menuLabel" destination="JMn-Yc-WXw" id="Oce-zP-ENK"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" id="qTi-Jt-Jiu">
+                    <rect key="frame" x="0.0" y="0.0" width="163" height="74"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_logo.png" id="WO8-Cc-nPl">
+                            <rect key="frame" x="16" y="36" width="114" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <inset key="insetFor6xAndEarlier" minX="0.0" minY="6" maxX="0.0" maxY="-6"/>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0039215686269999999" green="0.52156862749999999" blue="0.76470588240000004" alpha="1" colorSpace="calibratedRGB"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="0.0" maxX="0.0" maxY="-20"/>
+                </view>
+                <view contentMode="scaleToFill" id="YKf-0P-v6W" userLabel="Header View">
+                    <rect key="frame" x="163" y="0.0" width="605" height="74"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.20392156862745098" green="0.2196078431372549" blue="0.25490196078431371" alpha="1" colorSpace="calibratedRGB"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="0.0" maxX="0.0" maxY="-20"/>
+                </view>
+                <containerView contentMode="scaleToFill" id="b8R-yY-srt">
+                    <rect key="frame" x="0.0" y="122" width="163" height="902"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
+                </containerView>
+                <view contentMode="scaleToFill" id="gwZ-aA-SPs">
+                    <rect key="frame" x="0.0" y="74" width="163" height="48"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JMn-Yc-WXw" userLabel="Menu Label">
+                            <rect key="frame" x="14" y="13" width="129" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.043137254899999998" green="0.47843137250000001" blue="0.68235294120000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
+                </view>
+                <containerView contentMode="scaleToFill" id="xcJ-3t-g6F">
+                    <rect key="frame" x="163" y="122" width="605" height="902"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
+                </containerView>
+                <view contentMode="scaleToFill" id="CJ9-v3-3XE" userLabel="Action Bar Panel View">
+                    <rect key="frame" x="163" y="74" width="605" height="48"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.14901960780000001" green="0.15686274510000001" blue="0.1764705882" alpha="1" colorSpace="calibratedRGB"/>
+                    <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="home_logo.png" width="114" height="21"/>
+    </resources>
+</document>

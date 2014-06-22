@@ -10,8 +10,9 @@
 #import "JMResourceClientHolder.h"
 
 // TODO: make universal view controller
-@interface JMMasterLibraryTableViewController : UITableViewController <JMResourceClientHolder>
+@interface JMMasterLibraryTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, JMResourceClientHolder>
 
 @property (nonatomic, weak) JSConstants *constants;
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
 
 @end

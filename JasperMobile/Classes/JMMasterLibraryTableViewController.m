@@ -21,7 +21,7 @@
 typedef NS_ENUM(NSInteger, JMResourcesType) {
     JMResourceTypeAll = 0,
     JMResourceTypeReport,
-    JMResourceTypeDashboard,
+    JMResourceTypeDashboard
 };
 
 typedef NS_ENUM(NSInteger, JMSortBy) {
@@ -96,6 +96,9 @@ objection_requires(@"resourceClient", @"constants")
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(showResourcesListInMaster:)
@@ -107,7 +110,7 @@ objection_requires(@"resourceClient", @"constants")
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
 
-    [self loadResources];
+    [self loadResourcesInDetail];
 }
 
 - (void)showResourcesListInMaster:(NSNotification *)notification
@@ -121,10 +124,11 @@ objection_requires(@"resourceClient", @"constants")
         NSDictionary *userInfo = sender;
         id destinationViewController = segue.destinationViewController;
         [destinationViewController setTotalCount:[[userInfo objectForKey:kJMTotalCount] integerValue]];
-        [destinationViewController setOffset:[[userInfo objectForKey:kJMTotalCount] integerValue]];
-        [destinationViewController setResourceLookup:[userInfo objectForKey:kJMResourceLookup]];
-        [destinationViewController setResources:[userInfo objectForKey:kJMResources]];
+        [destinationViewController setOffset:[[userInfo objectForKey:kJMOffset] integerValue]];
+        [destinationViewController setSelectedResourceIndex:[[userInfo objectForKey:kJMSelectedResourceIndex] integerValue]];
+        [destinationViewController setResources:[[userInfo objectForKey:kJMResources] mutableCopy]];
         [destinationViewController setResourcesTypes:self.resourcesTypes];
+        [destinationViewController setLoadRecursively:YES];
     }
 }
 
@@ -174,7 +178,7 @@ objection_requires(@"resourceClient", @"constants")
     switch (indexPath.section) {
         case kJMResourcesSection:
             self.resourcesTypeEnum = (JMResourcesType) indexPath.row;
-            [self loadResources];
+            [self loadResourcesInDetail];
             break;
 
         case kJMSortSection:
@@ -190,6 +194,13 @@ objection_requires(@"resourceClient", @"constants")
     }
 }
 
+#pragma mark - Actions
+
+- (IBAction)refresh:(id)sender
+{
+    [self loadResourcesInDetail];
+}
+
 #pragma mark - NSObject
 
 - (void)dealloc
@@ -199,7 +210,7 @@ objection_requires(@"resourceClient", @"constants")
 
 #pragma mark - Private -
 
-- (void)loadResources
+- (void)loadResourcesInDetail
 {
     NSDictionary *userInfo = @{
             kJMResourcesTypes : self.resourcesTypes,

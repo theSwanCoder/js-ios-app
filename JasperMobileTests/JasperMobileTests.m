@@ -45,7 +45,7 @@
 
 - (void)testExample
 {
-    STFail(@"Unit tests are not implemented yet in JasperMobileTests");
+    XCTFail(@"Unit tests are not implemented yet in JasperMobileTests");
 }
 
 @end

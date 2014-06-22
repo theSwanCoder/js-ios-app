@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+    <dependencies>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="cy0-0i-j5P" customClass="JMResourcesRepresentationSwitcherActionBarView">
+            <rect key="frame" x="0.0" y="0.0" width="771" height="48"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="kkF-ex-nf8">
+                    <rect key="frame" x="607" y="0.0" width="54" height="48"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="grid_button.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="disabled" image="grid_button_selected.png"/>
+                    <state key="highlighted" image="grid_button_selected.png">
+                        <color key="titleShadowColor" red="0.72941176470000002" green="0.72941176470000002" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="changeRepresentation:" destination="cy0-0i-j5P" eventType="touchUpInside" id="Hxm-3G-IXc"/>
+                    </connections>
+                </button>
+                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="suN-rd-7Lc">
+                    <rect key="frame" x="662" y="0.0" width="54" height="48"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="horizontal_list_button.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="disabled" image="horizontal_list_button_selected.png"/>
+                    <state key="highlighted" image="horizontal_list_button_selected.png">
+                        <color key="titleShadowColor" red="0.72941176470000002" green="0.72941176470000002" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="changeRepresentation:" destination="cy0-0i-j5P" eventType="touchUpInside" id="75X-xn-3Rv"/>
+                    </connections>
+                </button>
+                <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="QlF-AC-e2g">
+                    <rect key="frame" x="717" y="0.0" width="54" height="48"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="vertical_list_button.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="disabled" image="vertical_list_button_selected.png"/>
+                    <state key="highlighted" image="vertical_list_button_selected.png">
+                        <color key="titleShadowColor" red="0.72941176470000002" green="0.72941176470000002" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="changeRepresentation:" destination="cy0-0i-j5P" eventType="touchUpInside" id="czN-mP-vSv"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.14901960780000001" green="0.15686274510000001" blue="0.1764705882" alpha="1" colorSpace="calibratedRGB"/>
+            <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="grid_button.png" width="54" height="48"/>
+        <image name="grid_button_selected.png" width="54" height="48"/>
+        <image name="horizontal_list_button.png" width="54" height="48"/>
+        <image name="horizontal_list_button_selected.png" width="54" height="48"/>
+        <image name="vertical_list_button.png" width="53" height="48"/>
+        <image name="vertical_list_button_selected.png" width="53" height="48"/>
+    </resources>
+</document>

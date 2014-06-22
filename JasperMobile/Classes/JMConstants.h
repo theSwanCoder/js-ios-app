@@ -58,6 +58,7 @@ extern NSString * const kJMServerProfileKey;
 extern NSString * const kJMResources;
 extern NSString * const kJMResourceLookup;
 extern NSString * const kJMLoadRecursively;
+extern NSString * const kJMSelectedResourceIndex;
 extern NSString * const kJMResourcesTypes;
 extern NSString * const kJMTotalCount;
 extern NSString * const kJMOffset;

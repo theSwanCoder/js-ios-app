@@ -125,19 +125,19 @@
 
 // Labels
 "home.menuitem.library.label" = "Library";
-"home.menuitem.savedreports.label" = "Saved Items";
+"home.menuitem.saveditems.label" = "Saved Items";
 "home.menuitem.settings.label" = "Settings";
 "home.menuitem.repository.label" = "Repository";
 "home.menuitem.favorites.label" = "Favorites";
-"home.menuitem.serverprofiles.label" = "Server Profiles";
+"home.menuitem.servers.label" = "Servers";
 
 // Descriptions
 "home.menuitem.library.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
-"home.menuitem.savedreports.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
+"home.menuitem.saveditems.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
 "home.menuitem.settings.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
 "home.menuitem.repository.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
 "home.menuitem.favorites.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
-"home.menuitem.serverprofiles.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
+"home.menuitem.servers.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
 
 /* Master view (Pad) */
 

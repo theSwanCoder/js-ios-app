@@ -82,6 +82,8 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
         
         NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
         [NSURLCache setSharedURLCache:sharedCache];
+        
+        self.rootViewControllers = [NSMutableArray array];
     }
     
     return self;
@@ -96,16 +98,6 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
         [[JMAskPasswordDialog askPasswordDialogForServerProfile:serverProfile] performSelector:@selector(show) withObject:nil afterDelay:0.0];
     } else {
         [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
-    }
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad &&
-        [[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-        UIView *addStatusBar = [[UIView alloc] init];
-        addStatusBar.frame = CGRectMake(0, 0, self.window.frame.size.width, 20);
-        addStatusBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        addStatusBar.backgroundColor = [UIColor colorWithRed:20.0f / 255.0f green:23.0f / 255.0f blue:26.0f / 255.0f alpha:1];
-        [self.window.rootViewController.view addSubview:addStatusBar];
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     }
     
     return YES;

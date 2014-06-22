@@ -39,4 +39,7 @@
 @property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+// Root view controllers stack
+@property (nonatomic, strong) NSMutableArray *rootViewControllers;
+
 @end

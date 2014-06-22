@@ -42,5 +42,6 @@
 @optional
 @property (nonatomic, strong) JSResourceLookup *resourceLookup;
 @property (nonatomic, strong) JSResourceDescriptor *resourceDescriptor;
+@property (nonatomic, strong) NSMutableArray *resources;
 
 @end
