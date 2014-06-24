@@ -14,15 +14,6 @@
 static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
 
-@interface JMCustomSplitViewController()
-// Returns visible master view controller from stack of UINavigationViewController or
-// returns first child view controller (if exists)
-- (id)visibleMasterViewController;
-// Returns visible detail view controller from stack of UINavigationViewController or
-// returns first detail view controller (if exists)
-- (id)visibleDetailViewController;
-@end
-
 @implementation JMCustomSplitViewController
 
 #pragma mark - UIViewController
@@ -36,6 +27,11 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     tapGestureRecognizer.numberOfTapsRequired = 1;
     tapGestureRecognizer.numberOfTouchesRequired = 1;
     [self.logoView addGestureRecognizer:tapGestureRecognizer];
+    
+    self.searchTextField.delegate = self;
+    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 7.0f, 0)];
+    self.searchTextField.leftView = paddingView;
+    self.searchTextField.leftViewMode = UITextFieldViewModeAlways;
     
     @try {
         [self performSegueWithIdentifier:kJMMasterViewControllerSegue sender:self];
@@ -69,6 +65,8 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     
     if ([destinationViewController isKindOfClass:[UINavigationController class]]) {
         [destinationViewController setDelegate:self];
+    } else if ([self isViewControllerSearchable:destinationViewController]) {
+        [self searchHidden:NO];
     }
     
     [destinationViewController view].frame = CGRectMake(0, 0, container.frame.size.width,
@@ -91,15 +89,42 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
                     animated:(BOOL)animated
 {
     [self showActionBarForViewController:viewController];
+    
+    __block BOOL isSearchHidden = YES;
+    [self performActionOnSearchableViewControllers:^(UIViewController <JMSearchable> *viewController) {
+        isSearchHidden = NO;
+    }];
+    [self searchHidden:isSearchHidden];
 }
 
-//- (IBAction)search:(id)sender
-//{
-//    NSString *query = [sender textLabel].text;
-//    for (id viewController in self.prese) {
-//        
-//    }
-//}
+- (IBAction)search:(id)sender
+{
+    NSString *query = self.searchTextField.text;
+    [self.searchTextField resignFirstResponder];
+    [self performActionOnSearchableViewControllers:^(UIViewController <JMSearchable> *viewController) {
+        [viewController searchWithQuery:query];
+    }];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField
+{
+    [self performActionOnSearchableViewControllers:^(UIViewController <JMSearchable> *viewController) {
+        [viewController clearSearch];
+    }];
+    
+    textField.text = @"";
+    [textField resignFirstResponder];
+    
+    return NO;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self search:nil];
+    return YES;
+}
 
 #pragma mark - Private
 
@@ -124,11 +149,32 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     }
 }
 
-- (id)visibleMasterViewController
+- (void)performActionOnSearchableViewControllers:(void (^)(UIViewController <JMSearchable> *viewController))action
 {
-    id masterViewController = [self.childViewControllers firstObject];
-    if ([masterViewController isKindOfClass:[UINavigationController class]]) masterViewController = [masterViewController visibleViewController];
-    return masterViewController;
+    for (id viewController in self.childViewControllers) {
+        id visibleViewController;
+        
+        if ([viewController isKindOfClass:[UINavigationController class]]) {
+            visibleViewController = [viewController visibleViewController];
+        } else {
+            visibleViewController = viewController;
+        }
+        
+        if ([self isViewControllerSearchable:visibleViewController]) {
+            action((UIViewController <JMSearchable> *)[viewController visibleViewController]);
+        }
+    }
+}
+
+- (void)searchHidden:(BOOL)hidden
+{
+    self.searchTextField.hidden = hidden;
+    self.searchButton.hidden = hidden;
+}
+
+- (BOOL)isViewControllerSearchable:(id)viewController
+{
+    return [viewController conformsToProtocol:@protocol(JMSearchable)];
 }
 
 @end

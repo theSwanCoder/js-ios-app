@@ -20,6 +20,11 @@ static NSString * const kJMShowResourcesSegue = @"ShowResources";
 
 static NSInteger const kJMLimit = 15;
 
+@interface JMMasterRepositoryTableViewController()
+@property (nonatomic, strong) NSString *searchQuery;
+@property (nonatomic, weak) JSConstants *constants;
+@end
+
 @implementation JMMasterRepositoryTableViewController
 objection_requires(@"resourceClient", @"constants")
 
@@ -153,7 +158,8 @@ objection_requires(@"resourceClient", @"constants")
 {
     NSDictionary *userInfo = @{
             kJMResourceLookup : self.resourceLookup,
-            kJMLoadRecursively : @(NO)
+            kJMLoadRecursively : @(NO),
+            kJMSearchQuery : self.searchQuery ?: @""
     };
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResourcesInDetail
                                                         object:nil
@@ -182,6 +188,22 @@ objection_requires(@"resourceClient", @"constants")
 - (BOOL)hasNextPage
 {
     return self.offset < self.totalCount;
+}
+
+#pragma mark - JMSearchable
+
+- (void)searchWithQuery:(NSString *)query
+{
+    self.searchQuery = query;
+    [self loadResourcesIntoDetailViewController];
+}
+
+- (void)clearSearch
+{
+    if (self.searchQuery.length) {
+        self.searchQuery = nil;
+        [self loadResourcesIntoDetailViewController];
+    }
 }
 
 #pragma mark - Actions

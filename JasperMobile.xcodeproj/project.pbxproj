@@ -68,6 +68,7 @@
 		F554B1B619221F3800E0E860 /* JMMasterRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F554B1B519221F3800E0E860 /* JMMasterRepositoryTableViewController.m */; };
 		F554B1BC19221F8C00E0E860 /* UIColor+RGBComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = F554B1BB19221F8C00E0E860 /* UIColor+RGBComponent.m */; };
 		F556B60A194EF5C80052CBC7 /* JMManualTransitionSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = F556B609194EF5C70052CBC7 /* JMManualTransitionSegue.m */; };
+		F55894BB19587667005AFE64 /* tmp_arrow_back.png in Resources */ = {isa = PBXBuildFile; fileRef = F55894BA19587667005AFE64 /* tmp_arrow_back.png */; };
 		F55CC333174CFFCE00CEB39E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC332174CFFCE00CEB39E /* UIKit.framework */; };
 		F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC334174CFFCE00CEB39E /* Foundation.framework */; };
 		F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */; };
@@ -84,8 +85,6 @@
 		F57186C3183658DD0013B6EB /* JSRESTBase+updateServerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F57186C2183658DD0013B6EB /* JSRESTBase+updateServerInfo.m */; };
 		F572814717C77048000B192D /* JMRequestDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F572814617C77048000B192D /* JMRequestDelegate.m */; };
 		F573ADB7192E42FD00D3C018 /* JMBackHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F573ADB6192E42FD00D3C018 /* JMBackHeaderView.m */; };
-		F576FAE71907E9A100503CB1 /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = F576FADF1907E9A100503CB1 /* circle.png */; };
-		F576FAE81907E9A100503CB1 /* circle_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = F576FAE01907E9A100503CB1 /* circle_selected.png */; };
 		F576FAE91907E9A100503CB1 /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = F576FAE11907E9A100503CB1 /* dot.png */; };
 		F576FAEA1907E9A100503CB1 /* home_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F576FAE21907E9A100503CB1 /* home_logo.png */; };
 		F576FAEC1907E9A100503CB1 /* list_background_pattern.png in Resources */ = {isa = PBXBuildFile; fileRef = F576FAE41907E9A100503CB1 /* list_background_pattern.png */; };
@@ -159,6 +158,7 @@
 		F5B23F5A1860463000FC9D76 /* JMBaseRepositoryTableViewController+fetchInputControls.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B23F591860463000FC9D76 /* JMBaseRepositoryTableViewController+fetchInputControls.m */; };
 		F5C2531D1954A5130090A5E0 /* refresh_button_background_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C2531B1954A5130090A5E0 /* refresh_button_background_highlighted.png */; };
 		F5C2531E1954A5130090A5E0 /* refresh_button_background.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C2531C1954A5130090A5E0 /* refresh_button_background.png */; };
+		F5C2532A19571B980090A5E0 /* search_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C2532919571B980090A5E0 /* search_button.png */; };
 		F5C72FDE17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C72FDD17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m */; };
 		F5C737631886DE9E00203175 /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C737611886DE9E00203175 /* ALToastView.m */; };
 		F5C78CE619518B270082AFDE /* JMCustomSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C78CE419518B270082AFDE /* JMCustomSplitViewController.m */; };
@@ -355,6 +355,7 @@
 		F554B1BB19221F8C00E0E860 /* UIColor+RGBComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+RGBComponent.m"; path = "JasperMobile/Classes/UIColor+RGBComponent.m"; sourceTree = "<group>"; };
 		F556B608194EF5C70052CBC7 /* JMManualTransitionSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMManualTransitionSegue.h; path = Classes/JMManualTransitionSegue.h; sourceTree = "<group>"; };
 		F556B609194EF5C70052CBC7 /* JMManualTransitionSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMManualTransitionSegue.m; path = Classes/JMManualTransitionSegue.m; sourceTree = "<group>"; };
+		F55894BA19587667005AFE64 /* tmp_arrow_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tmp_arrow_back.png; sourceTree = "<group>"; };
 		F55CC32F174CFFCE00CEB39E /* JasperMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JasperMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F55CC332174CFFCE00CEB39E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F55CC334174CFFCE00CEB39E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -381,8 +382,6 @@
 		F57364EA17B91BB500A10588 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMRefreshable.h; path = JasperMobile/Classes/JMRefreshable.h; sourceTree = "<group>"; };
 		F573ADB5192E42FD00D3C018 /* JMBackHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBackHeaderView.h; path = Classes/JMBackHeaderView.h; sourceTree = "<group>"; };
 		F573ADB6192E42FD00D3C018 /* JMBackHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBackHeaderView.m; path = Classes/JMBackHeaderView.m; sourceTree = "<group>"; };
-		F576FADF1907E9A100503CB1 /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
-		F576FAE01907E9A100503CB1 /* circle_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle_selected.png; sourceTree = "<group>"; };
 		F576FAE11907E9A100503CB1 /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
 		F576FAE21907E9A100503CB1 /* home_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_logo.png; sourceTree = "<group>"; };
 		F576FAE41907E9A100503CB1 /* list_background_pattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list_background_pattern.png; sourceTree = "<group>"; };
@@ -469,6 +468,7 @@
 		F5B23F591860463000FC9D76 /* JMBaseRepositoryTableViewController+fetchInputControls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "JMBaseRepositoryTableViewController+fetchInputControls.m"; path = "JasperMobile/Classes/JMBaseRepositoryTableViewController+fetchInputControls.m"; sourceTree = "<group>"; };
 		F5C2531B1954A5130090A5E0 /* refresh_button_background_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh_button_background_highlighted.png; sourceTree = "<group>"; };
 		F5C2531C1954A5130090A5E0 /* refresh_button_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh_button_background.png; sourceTree = "<group>"; };
+		F5C2532919571B980090A5E0 /* search_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_button.png; sourceTree = "<group>"; };
 		F5C72FDC17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewCell+SetSeparators.h"; path = "JasperMobile/Classes/UITableViewCell+SetSeparators.h"; sourceTree = "<group>"; };
 		F5C72FDD17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableViewCell+SetSeparators.m"; path = "JasperMobile/Classes/UITableViewCell+SetSeparators.m"; sourceTree = "<group>"; };
 		F5C737601886DE9E00203175 /* ALToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALToastView.h; sourceTree = "<group>"; };
@@ -947,8 +947,7 @@
 		F576FADE1907E9A100503CB1 /* Others */ = {
 			isa = PBXGroup;
 			children = (
-				F576FADF1907E9A100503CB1 /* circle.png */,
-				F576FAE01907E9A100503CB1 /* circle_selected.png */,
+				F55894BA19587667005AFE64 /* tmp_arrow_back.png */,
 				F576FAE11907E9A100503CB1 /* dot.png */,
 				F576FAE21907E9A100503CB1 /* home_logo.png */,
 				F576FAE41907E9A100503CB1 /* list_background_pattern.png */,
@@ -983,6 +982,7 @@
 		F58FF2EC1760A0AC0021CC8B /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				F5C2532919571B980090A5E0 /* search_button.png */,
 				F5C2531B1954A5130090A5E0 /* refresh_button_background_highlighted.png */,
 				F5C2531C1954A5130090A5E0 /* refresh_button_background.png */,
 				F5FA4C2E190FBFC900001999 /* Representation Switcher */,
@@ -1377,12 +1377,12 @@
 				F58EF6CB17F487A800C9EBA8 /* blue_button_highlighted.png in Resources */,
 				F58EF6F717F4884C00C9EBA8 /* settings_bar_item.png in Resources */,
 				F58EF6CD17F487A800C9EBA8 /* blue_button.png in Resources */,
+				F5C2532A19571B980090A5E0 /* search_button.png in Resources */,
 				F5924EA118FCA1DF00691286 /* servers.png in Resources */,
 				F5FA4C47190FC06D00001999 /* horizontal_list_button.png in Resources */,
 				F58EF6A617F484D600C9EBA8 /* Icon-80.png in Resources */,
 				F58EF6C417F487A800C9EBA8 /* delete_button_highlighted@2x.png in Resources */,
 				F5C78CE719518B270082AFDE /* JMCustomSplitViewController~ipad.xib in Resources */,
-				F576FAE81907E9A100503CB1 /* circle_selected.png in Resources */,
 				F58EF6C317F487A800C9EBA8 /* delete_button_highlighted.png in Resources */,
 				F550435F1851E00600DA6D33 /* list_options.png in Resources */,
 				F58EF6C017F487A800C9EBA8 /* add_favorite_button@2x.png in Resources */,
@@ -1422,6 +1422,7 @@
 				F539A72B17F1A0A500310D72 /* Default-Landscape@2x~ipad.png in Resources */,
 				F5FA4C44190FC06D00001999 /* grid_button_selected.png in Resources */,
 				F58EF6F117F4884C00C9EBA8 /* favorites_bar_item.png in Resources */,
+				F55894BB19587667005AFE64 /* tmp_arrow_back.png in Resources */,
 				F58EF6C517F487A800C9EBA8 /* delete_button.png in Resources */,
 				F58EF6F517F4884C00C9EBA8 /* repository_bar_item.png in Resources */,
 				F5894FD81887EC1400FD8C00 /* saved_reports@2x.png in Resources */,
@@ -1429,7 +1430,6 @@
 				F5E87CD317F1A9DD007FC6A7 /* iTunesArtwork in Resources */,
 				F5C2531E1954A5130090A5E0 /* refresh_button_background.png in Resources */,
 				F5894FDF1887ED1400FD8C00 /* res_type_html@2x.png in Resources */,
-				F576FAE71907E9A100503CB1 /* circle.png in Resources */,
 				F58EF6C817F487A800C9EBA8 /* remove_favorite_button_highlighted@2x.png in Resources */,
 				F58B5C8818A2506000223763 /* JMSavedReportModifyPopup.xib in Resources */,
 				F58EF6E517F4882800C9EBA8 /* res_type_unknown.png in Resources */,

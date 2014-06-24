@@ -58,6 +58,7 @@ NSString * const kJMResourceLookup = @"resourceLookup";
 NSString * const kJMLoadRecursively = @"loadRecursively";
 NSString * const kJMSelectedResourceIndex = @"selectedResourceIndex";
 NSString * const kJMResourcesTypes = @"resourcesTypes";
+NSString * const kJMSearchQuery = @"searchQuery";
 NSString * const kJMTotalCount = @"totalCount";
 NSString * const kJMOffset = @"offset";
 

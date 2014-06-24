@@ -37,6 +37,7 @@ static NSString * const kJMRowsKey = @"rows";
 @interface JMMasterLibraryTableViewController ()
 @property (nonatomic, strong) NSDictionary *cellsAndSectionsProperties;
 @property (nonatomic, assign) JMResourcesType resourcesTypeEnum;
+@property (nonatomic, strong) NSString *searchQuery;
 @end
 
 @implementation JMMasterLibraryTableViewController
@@ -100,17 +101,12 @@ objection_requires(@"resourceClient", @"constants")
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(showResourcesListInMaster:)
-                                                 name:kJMShowResourcesListInMaster
-                                               object:nil];
-
     for (NSInteger i = [self.cellsAndSectionsProperties count] - 1; i >= 0; i--) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:i];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
 
-    [self loadResourcesInDetail];
+    [self loadResourcesIntoDetailViewController];
 }
 
 - (void)showResourcesListInMaster:(NSNotification *)notification
@@ -130,6 +126,21 @@ objection_requires(@"resourceClient", @"constants")
         [destinationViewController setResourcesTypes:self.resourcesTypes];
         [destinationViewController setLoadRecursively:YES];
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(showResourcesListInMaster:)
+                                                 name:kJMShowResourcesListInMaster
+                                               object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Table view data source
@@ -178,7 +189,7 @@ objection_requires(@"resourceClient", @"constants")
     switch (indexPath.section) {
         case kJMResourcesSection:
             self.resourcesTypeEnum = (JMResourcesType) indexPath.row;
-            [self loadResourcesInDetail];
+            [self loadResourcesIntoDetailViewController];
             break;
 
         case kJMSortSection:
@@ -198,23 +209,33 @@ objection_requires(@"resourceClient", @"constants")
 
 - (IBAction)refresh:(id)sender
 {
-    [self loadResourcesInDetail];
+    [self loadResourcesIntoDetailViewController];
 }
 
-#pragma mark - NSObject
+#pragma mark - JMSearchable
 
-- (void)dealloc
+- (void)searchWithQuery:(NSString *)query
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    self.searchQuery = query;
+    [self loadResourcesIntoDetailViewController];
+}
+
+- (void)clearSearch
+{
+    if (self.searchQuery.length) {
+        self.searchQuery = nil;
+        [self loadResourcesIntoDetailViewController];
+    }
 }
 
 #pragma mark - Private -
 
-- (void)loadResourcesInDetail
+- (void)loadResourcesIntoDetailViewController
 {
     NSDictionary *userInfo = @{
             kJMResourcesTypes : self.resourcesTypes,
-            kJMLoadRecursively : @(YES)
+            kJMLoadRecursively : @(YES),
+            kJMSearchQuery : self.searchQuery ?: @""
     };
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResourcesInDetail
                                                         object:nil

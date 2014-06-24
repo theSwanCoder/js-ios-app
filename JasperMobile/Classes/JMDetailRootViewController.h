@@ -12,9 +12,21 @@
 #import "JMResourceClientHolder.h"
 #import "JMPagination.h"
 
+@class JMDetailActivityIndicatorView;
+@class JMDetailNoResultsView;
+
 @interface JMDetailRootViewController : UIViewController <JMActionBarProvider, JMResourceClientHolder, JMPagination>
 
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
 @property (nonatomic, assign) BOOL loadRecursively;
+@property (nonatomic, weak) IBOutlet JMDetailActivityIndicatorView *activityIndicatorView;
 
+@end
+
+@interface JMDetailActivityIndicatorView : UIView
+@property (nonatomic, weak) IBOutlet UILabel *label;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
+@end
+
+@interface JMDetailNoResultsView : UIView
 @end

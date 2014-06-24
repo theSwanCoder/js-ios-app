@@ -151,13 +151,10 @@
 "master.sortby.title" = "Sort";
 "master.sortby.type.name" = "Name";
 "master.sortby.type.date" = "Date";
-"master.sortby.type.creator" = "Creator";
 
-// Categories
-"master.category.title" = "Category";
-"master.category.type.all" = "All";
-"master.category.type.sales" = "Sales";
-"master.category.type.marketing" = "Marketing";
+/* Detail view view (Pad) */
+
+"detail.resourcesloading.msg" = "Loading. Please Wait...";
 
 // Tools
 "master.tools.type.refresh" = "Refresh";

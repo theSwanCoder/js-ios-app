@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "JMReportViewerViewController.h"
+#import "JMActionBarProvider.h"
 
-@interface JMDetailReportViewerViewController : JMReportViewerViewController
+@interface JMDetailReportViewerViewController : JMReportViewerViewController <JMActionBarProvider>
 
 @end

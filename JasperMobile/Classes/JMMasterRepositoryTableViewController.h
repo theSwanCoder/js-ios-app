@@ -11,11 +11,13 @@
 #import "JMPagination.h"
 #import "JMResourceClientHolder.h"
 #import "JMBackHeaderView.h"
+#import "JMSearchable.h"
 
-@interface JMMasterRepositoryTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, JMPagination, JMResourceClientHolder>
+// TODO: make universal view controller (extends from base JMMasterRootTableViewController)
+@interface JMMasterRepositoryTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate,
+        JMPagination, JMResourceClientHolder, JMSearchable>
 
 @property (nonatomic, strong) NSMutableArray *folders;
-@property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, weak) JMMasterRepositoryTableViewController *delegate;
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet JMBackHeaderView *backView;

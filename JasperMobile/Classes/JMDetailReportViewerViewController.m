@@ -24,6 +24,12 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (id)actionBar
+{
+    // Will remove action bar
+    return nil;
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

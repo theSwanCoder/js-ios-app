@@ -11,5 +11,6 @@
 @protocol JMSearchable <NSObject>
 @required
 - (void)searchWithQuery:(NSString *)query;
+- (void)clearSearch;
 
 @end

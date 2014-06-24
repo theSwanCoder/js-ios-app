@@ -10,6 +10,7 @@
 #import "JMRequestDelegate.h"
 #import "JMRefreshable.h"
 #import "JMConstants.h"
+#import "JMLocalization.h"
 #import <Objection-iOS/JSObjection.h>
 #import <Objection-iOS/Objection.h>
 
@@ -19,6 +20,7 @@ static NSInteger const kJMLimit = 15;
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, strong) NSDictionary *representationTypeToSegue;
 @property (nonatomic, strong) NSArray *resourcesTypes;
+@property (nonatomic, strong) NSString *searchQuery;
 @property (nonatomic, weak) UIViewController <JMRefreshable> *activeRepresentationViewController;
 @property (nonatomic, strong) JMResourcesRepresentationSwitcherActionBarView *actionBarView;
 @end
@@ -60,6 +62,12 @@ objection_requires(@"resourceClient", @"constants")
     [super viewDidLoad];
 
     self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
+    self.activityIndicatorView.center = self.navigationController.view.center;
+    self.activityIndicatorView.hidden = YES;
+    [self.navigationController.view addSubview:self.activityIndicatorView];
+    
+    // TODO: investigate universal storyboard localization
+    self.activityIndicatorView.label.text = JMCustomLocalizedString(@"detail.resourcesloading.msg", nil);
     
     self.resources = [NSMutableArray array];
     self.resourcesTypes = @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD];
@@ -117,11 +125,17 @@ objection_requires(@"resourceClient", @"constants")
     static BOOL isLoading = NO;
     if (isLoading) return;
 
+    // Show only when Detail view controller is empty
+    if (!self.resources.count) {
+        self.activityIndicatorView.hidden = NO;
+    }
+
     __weak JMDetailRootViewController *weakSelf = self;
 
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         isLoading = NO;
-
+        
+        weakSelf.activityIndicatorView.hidden = YES;
         weakSelf.activeRepresentationViewController.needsToResetScroll = !weakSelf.totalCount;
 
         if (!weakSelf.totalCount) {
@@ -133,12 +147,11 @@ objection_requires(@"resourceClient", @"constants")
         [weakSelf.activeRepresentationViewController refresh];
     } errorBlock:^(JSOperationResult *result) {
         isLoading = NO;
-        // TODO: add an error handler
+//        // TODO: add an error handler
     }];
 
-    [self.resourceClient resourceLookups:self.resourceLookup.uri query:nil types:self.resourcesTypes
+    [self.resourceClient resourceLookups:self.resourceLookup.uri query:self.searchQuery types:self.resourcesTypes
                                recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
-
     isLoading = YES;
 }
 
@@ -154,7 +167,9 @@ objection_requires(@"resourceClient", @"constants")
     // Reset state
     self.totalCount = 0;
     self.offset = 0;
+    
     [self.resources removeAllObjects];
+    [self.activeRepresentationViewController refresh];
 
     NSDictionary *userInfo = notification.userInfo;
     if ([userInfo objectForKey:kJMResourcesTypes]) {
@@ -162,6 +177,7 @@ objection_requires(@"resourceClient", @"constants")
     }
     self.loadRecursively = [[userInfo objectForKey:kJMLoadRecursively] boolValue];
     self.resourceLookup = [userInfo objectForKey:kJMResourceLookup];
+    self.searchQuery = [userInfo objectForKey:kJMSearchQuery];
     
     [self loadNextPage];
 }
@@ -207,7 +223,21 @@ objection_requires(@"resourceClient", @"constants")
 - (void)dealloc
 {
     self.actionBarView = nil;
+    [self.activityIndicatorView removeFromSuperview];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+@end
+
+@implementation JMDetailActivityIndicatorView
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        // TODO: customize UIActivityIndicatorView or use a custom 3-d party implementation. Localize label
+    }
+    
+    return self;
 }
 
 @end
