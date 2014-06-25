@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol JMSearchable <NSObject>
-@required
+@protocol JMHeaderBarAdditions <NSObject>
+@optional
+- (NSString *)barTitle;
 - (void)searchWithQuery:(NSString *)query;
 - (void)clearSearch;
 

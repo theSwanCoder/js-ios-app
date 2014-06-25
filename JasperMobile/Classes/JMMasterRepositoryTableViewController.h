@@ -11,11 +11,11 @@
 #import "JMPagination.h"
 #import "JMResourceClientHolder.h"
 #import "JMBackHeaderView.h"
-#import "JMSearchable.h"
+#import "JMHeaderBarAdditions.h"
 
 // TODO: make universal view controller (extends from base JMMasterRootTableViewController)
 @interface JMMasterRepositoryTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate,
-        JMPagination, JMResourceClientHolder, JMSearchable>
+        JMPagination, JMResourceClientHolder, JMHeaderBarAdditions>
 
 @property (nonatomic, strong) NSMutableArray *folders;
 @property (nonatomic, weak) JMMasterRepositoryTableViewController *delegate;

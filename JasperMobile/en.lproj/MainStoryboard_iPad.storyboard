@@ -409,12 +409,12 @@ Please Wait...</string>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <color key="color" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </activityIndicatorView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8fd-wV-wgg" userLabel="Label - Loading,  Please Wait...">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8fd-wV-wgg" userLabel="Label">
                                         <rect key="frame" x="65" y="-1" width="230" height="93"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <string key="text">Loading, 
 Please Wait...</string>
-                                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="36"/>
+                                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="30"/>
                                         <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -425,23 +425,26 @@ Please Wait...</string>
                                     <outlet property="label" destination="8fd-wV-wgg" id="jJ9-zY-yr3"/>
                                 </connections>
                             </view>
-                            <view contentMode="scaleToFill" id="hKx-jw-FbC" customClass="JMDetailNoResourcesView">
-                                <rect key="frame" x="59" y="467" width="595" height="90"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" id="hKx-jw-FbC" customClass="JMDetailNoResultsView">
+                                <rect key="frame" x="55" y="467" width="595" height="90"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results. Please Make Another Selection..." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ynH-ih-ZWF" userLabel="Label - Loading,  Please Wait...">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results. Please Make Another Selection..." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ynH-ih-ZWF" userLabel="Label">
                                         <rect key="frame" x="46" y="-5" width="558" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="36"/>
+                                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="30"/>
                                         <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tmp_arrow_back.png" id="Kbd-MU-cim">
-                                        <rect key="frame" x="5" y="23" width="26" height="45"/>
+                                        <rect key="frame" x="5" y="22" width="26" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="label" destination="ynH-ih-ZWF" id="ufO-8P-Evr"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -449,6 +452,7 @@ Please Wait...</string>
                     <navigationItem key="navigationItem" id="doG-fE-TeS"/>
                     <connections>
                         <outlet property="activityIndicatorView" destination="SxD-nY-TU0" id="gpm-bY-y8k"/>
+                        <outlet property="noResultsView" destination="hKx-jw-FbC" id="ORr-ZW-Bwg"/>
                         <segue destination="8AC-P2-zJu" kind="custom" identifier="HorizontalListViewController" customClass="JMNoAnimationPushSegue" id="L72-3C-NVv"/>
                         <segue destination="RY1-vc-XhP" kind="custom" identifier="VerticalListViewController" customClass="JMNoAnimationPushSegue" id="zWH-xT-YHI"/>
                         <segue destination="bar-1q-ZA3" kind="custom" identifier="GridViewController" customClass="JMNoAnimationPushSegue" id="3iy-bf-DzE"/>
@@ -577,7 +581,7 @@ Please Wait...</string>
                                         <rect key="frame" x="5" y="4" width="152" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Refresh" backgroundImage="refresh_button_background.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="selected" backgroundImage="refresh_button_background_highlighted.png">
@@ -624,7 +628,7 @@ Please Wait...</string>
                                         <rect key="frame" x="6" y="4" width="152" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Refresh" backgroundImage="refresh_button_background.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="selected" backgroundImage="refresh_button_background_highlighted.png">
@@ -843,7 +847,7 @@ Please Wait...</string>
                                         <rect key="frame" x="6" y="4" width="152" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Refresh" backgroundImage="refresh_button_background.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="selected" backgroundImage="refresh_button_background_highlighted.png">
@@ -891,9 +895,9 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="8yl-3J-q43"/>
         <segue reference="ruh-Jy-ETv"/>
-        <segue reference="M6P-vN-9lH"/>
+        <segue reference="8yl-3J-q43"/>
         <segue reference="0bD-K8-B5D"/>
+        <segue reference="M6P-vN-9lH"/>
     </inferredMetricsTieBreakers>
 </document>

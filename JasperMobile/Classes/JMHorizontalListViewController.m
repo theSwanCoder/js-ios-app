@@ -34,8 +34,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.edgesLandscapeInset = 30.0f;
-    self.edgesPortraitInset = 30.0f;
+    self.edgesLandscapeInset = 35.0f;
+    self.edgesPortraitInset = 35.0f;
 
 }
 

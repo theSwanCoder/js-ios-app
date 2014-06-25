@@ -154,7 +154,8 @@
 
 /* Detail view view (Pad) */
 
-"detail.resourcesloading.msg" = "Loading. Please Wait...";
+"detail.resourcesloading.msg" = "Loading.\nPlease Wait...";
+"detail.noresults.msg" = "No Results.\nPlease Make Another Selection...";
 
 // Tools
 "master.tools.type.refresh" = "Refresh";

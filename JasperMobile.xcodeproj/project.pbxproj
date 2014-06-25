@@ -477,7 +477,7 @@
 		F5C78CE419518B270082AFDE /* JMCustomSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMCustomSplitViewController.m; path = Classes/JMCustomSplitViewController.m; sourceTree = "<group>"; };
 		F5C78CE519518B270082AFDE /* JMCustomSplitViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "JMCustomSplitViewController~ipad.xib"; path = "Classes/JMCustomSplitViewController~ipad.xib"; sourceTree = "<group>"; };
 		F5C78CF419528F320082AFDE /* JMActionBarProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMActionBarProvider.h; path = JasperMobile/Classes/JMActionBarProvider.h; sourceTree = "<group>"; };
-		F5C78CF519528F730082AFDE /* JMSearchable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMSearchable.h; path = JasperMobile/Classes/JMSearchable.h; sourceTree = "<group>"; };
+		F5C78CF519528F730082AFDE /* JMHeaderBarAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMHeaderBarAdditions.h; path = JasperMobile/Classes/JMHeaderBarAdditions.h; sourceTree = "<group>"; };
 		F5C78CF61952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourcesRepresentationSwitcherActionBarView.h; path = Classes/JMResourcesRepresentationSwitcherActionBarView.h; sourceTree = "<group>"; };
 		F5C78CF71952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourcesRepresentationSwitcherActionBarView.m; path = Classes/JMResourcesRepresentationSwitcherActionBarView.m; sourceTree = "<group>"; };
 		F5C78CFA1952DED90082AFDE /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "en.lproj/JMResourcesRepresentationSwitcherActionBarView~ipad.xib"; sourceTree = "<group>"; };
@@ -1070,7 +1070,7 @@
 				F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */,
 				F53B38E4192B7DCF003B1867 /* JMPagination.h */,
 				F5C78CF419528F320082AFDE /* JMActionBarProvider.h */,
-				F5C78CF519528F730082AFDE /* JMSearchable.h */,
+				F5C78CF519528F730082AFDE /* JMHeaderBarAdditions.h */,
 			);
 			name = Protocols;
 			path = ..;
@@ -1675,7 +1675,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1690,7 +1691,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "56C6E500-8F3B-4BA4-AA88-DF765974ACA6";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "i386 armv7";
@@ -1752,7 +1753,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "56C6E500-8F3B-4BA4-AA88-DF765974ACA6";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";

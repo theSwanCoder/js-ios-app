@@ -8,7 +8,7 @@
 
 #import "JMCustomSplitViewController.h"
 #import "JMActionBarProvider.h"
-#import "JMSearchable.h"
+#import "JMHeaderBarAdditions.h"
 #import <QuartzCore/QuartzCore.h>
 
 static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
@@ -32,6 +32,9 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 7.0f, 0)];
     self.searchTextField.leftView = paddingView;
     self.searchTextField.leftViewMode = UITextFieldViewModeAlways;
+    [self searchHidden:YES];
+    
+    self.headerBarLabel.text = @"";
     
     @try {
         [self performSegueWithIdentifier:kJMMasterViewControllerSegue sender:self];
@@ -65,7 +68,8 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     
     if ([destinationViewController isKindOfClass:[UINavigationController class]]) {
         [destinationViewController setDelegate:self];
-    } else if ([self isViewControllerSearchable:destinationViewController]) {
+    } else if ([destinationViewController conformsToProtocol:@protocol(JMHeaderBarAdditions)] &&
+               [destinationViewController respondsToSelector:@selector(searchWithQuery:)]) {
         [self searchHidden:NO];
     }
     
@@ -91,9 +95,16 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     [self showActionBarForViewController:viewController];
     
     __block BOOL isSearchHidden = YES;
-    [self performActionOnSearchableViewControllers:^(UIViewController <JMSearchable> *viewController) {
-        isSearchHidden = NO;
-    }];
+    __weak JMCustomSplitViewController *weakSelf = self;
+    
+    [self performActionOnVisibleViewControllers:^(id viewController) {
+        if ([viewController respondsToSelector:@selector(searchWithQuery:)]) {
+            isSearchHidden = NO;
+        }
+        if ([viewController respondsToSelector:@selector(barTitle)]) {
+            weakSelf.headerBarLabel.text = [viewController barTitle];
+        }
+    } conformsToProtocol:@protocol(JMHeaderBarAdditions)];
     [self searchHidden:isSearchHidden];
 }
 
@@ -101,18 +112,22 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
 {
     NSString *query = self.searchTextField.text;
     [self.searchTextField resignFirstResponder];
-    [self performActionOnSearchableViewControllers:^(UIViewController <JMSearchable> *viewController) {
-        [viewController searchWithQuery:query];
-    }];
+    [self performActionOnVisibleViewControllers:^(id viewController) {
+        if ([viewController respondsToSelector:@selector(searchWithQuery:)]) {
+            [viewController searchWithQuery:query];
+        }
+    } conformsToProtocol:@protocol(JMHeaderBarAdditions)];
 }
 
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
 {
-    [self performActionOnSearchableViewControllers:^(UIViewController <JMSearchable> *viewController) {
-        [viewController clearSearch];
-    }];
+    [self performActionOnVisibleViewControllers:^(id viewController) {
+        if ([viewController respondsToSelector:@selector(clearSearch)]) {
+            [viewController clearSearch];
+        }
+    } conformsToProtocol:@protocol(JMHeaderBarAdditions)];
     
     textField.text = @"";
     [textField resignFirstResponder];
@@ -149,7 +164,7 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     }
 }
 
-- (void)performActionOnSearchableViewControllers:(void (^)(UIViewController <JMSearchable> *viewController))action
+- (void)performActionOnVisibleViewControllers:(void (^)(id viewController))action conformsToProtocol:(Protocol *)protocol
 {
     for (id viewController in self.childViewControllers) {
         id visibleViewController;
@@ -160,8 +175,8 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
             visibleViewController = viewController;
         }
         
-        if ([self isViewControllerSearchable:visibleViewController]) {
-            action((UIViewController <JMSearchable> *)[viewController visibleViewController]);
+        if (!protocol || [visibleViewController conformsToProtocol:protocol]) {
+            action(visibleViewController);
         }
     }
 }
@@ -170,11 +185,6 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
 {
     self.searchTextField.hidden = hidden;
     self.searchButton.hidden = hidden;
-}
-
-- (BOOL)isViewControllerSearchable:(id)viewController
-{
-    return [viewController conformsToProtocol:@protocol(JMSearchable)];
 }
 
 @end

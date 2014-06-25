@@ -15,13 +15,14 @@
 #import <Objection-iOS/Objection.h>
 
 static NSInteger const kJMLimit = 15;
+static CGFloat const yOffset = 25;
 
 @interface JMDetailRootViewController ()
 @property (nonatomic, weak) JSConstants *constants;
+@property (nonatomic, weak) UIViewController <JMRefreshable> *activeRepresentationViewController;
 @property (nonatomic, strong) NSDictionary *representationTypeToSegue;
 @property (nonatomic, strong) NSArray *resourcesTypes;
 @property (nonatomic, strong) NSString *searchQuery;
-@property (nonatomic, weak) UIViewController <JMRefreshable> *activeRepresentationViewController;
 @property (nonatomic, strong) JMResourcesRepresentationSwitcherActionBarView *actionBarView;
 @end
 
@@ -60,14 +61,20 @@ objection_requires(@"resourceClient", @"constants")
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
+    CGPoint center = CGPointMake(self.navigationController.view.center.x, self.navigationController.view.center.y - yOffset);
     self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
-    self.activityIndicatorView.center = self.navigationController.view.center;
+    self.activityIndicatorView.center = center;
     self.activityIndicatorView.hidden = YES;
     [self.navigationController.view addSubview:self.activityIndicatorView];
     
+    self.noResultsView.center = CGPointMake(self.noResultsView.center.x, center.y);
+    self.noResultsView.hidden = YES;
+    [self.navigationController.view addSubview:self.noResultsView];
+    
     // TODO: investigate universal storyboard localization
     self.activityIndicatorView.label.text = JMCustomLocalizedString(@"detail.resourcesloading.msg", nil);
+    self.noResultsView.label.text = JMCustomLocalizedString(@"detail.noresults.msg", nil);
     
     self.resources = [NSMutableArray array];
     self.resourcesTypes = @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD];
@@ -124,10 +131,10 @@ objection_requires(@"resourceClient", @"constants")
     // Multiple calls protection
     static BOOL isLoading = NO;
     if (isLoading) return;
-
-    // Show only when Detail view controller is empty
+    
     if (!self.resources.count) {
         self.activityIndicatorView.hidden = NO;
+        self.noResultsView.hidden = YES;
     }
 
     __weak JMDetailRootViewController *weakSelf = self;
@@ -135,14 +142,15 @@ objection_requires(@"resourceClient", @"constants")
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         isLoading = NO;
         
-        weakSelf.activityIndicatorView.hidden = YES;
-        weakSelf.activeRepresentationViewController.needsToResetScroll = !weakSelf.totalCount;
-
         if (!weakSelf.totalCount) {
+            weakSelf.activeRepresentationViewController.needsToResetScroll = YES;
             weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
         }
         [weakSelf.resources addObjectsFromArray:result.objects];
         weakSelf.offset += kJMLimit;
+        
+        weakSelf.activityIndicatorView.hidden = YES;
+        weakSelf.noResultsView.hidden = weakSelf.resources.count > 0;
 
         [weakSelf.activeRepresentationViewController refresh];
     } errorBlock:^(JSOperationResult *result) {
@@ -223,21 +231,13 @@ objection_requires(@"resourceClient", @"constants")
 - (void)dealloc
 {
     self.actionBarView = nil;
-    [self.activityIndicatorView removeFromSuperview];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
 
 @implementation JMDetailActivityIndicatorView
+@end
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder]) {
-        // TODO: customize UIActivityIndicatorView or use a custom 3-d party implementation. Localize label
-    }
-    
-    return self;
-}
-
+@implementation JMDetailNoResultsView
 @end
