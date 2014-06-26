@@ -101,8 +101,8 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
         if ([viewController respondsToSelector:@selector(searchWithQuery:)]) {
             isSearchHidden = NO;
         }
-        if ([viewController respondsToSelector:@selector(barTitle)]) {
-            weakSelf.headerBarLabel.text = [viewController barTitle];
+        if ([viewController respondsToSelector:@selector(setBarTitle:)]) {
+            [viewController setBarTitle:weakSelf.headerBarLabel];
         }
     } conformsToProtocol:@protocol(JMHeaderBarAdditions)];
     [self searchHidden:isSearchHidden];

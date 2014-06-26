@@ -37,7 +37,9 @@ static NSString * const kJMRowsKey = @"rows";
 @interface JMMasterLibraryTableViewController ()
 @property (nonatomic, strong) NSDictionary *cellsAndSectionsProperties;
 @property (nonatomic, assign) JMResourcesType resourcesTypeEnum;
+@property (nonatomic, assign) JMSortBy sortByEnum;
 @property (nonatomic, strong) NSString *searchQuery;
+@property (nonatomic, weak) UILabel *headerBarLabel;
 @end
 
 @implementation JMMasterLibraryTableViewController
@@ -193,8 +195,11 @@ objection_requires(@"resourceClient", @"constants")
             break;
 
         case kJMSortSection:
+            self.sortByEnum = (JMSortBy) indexPath.row;
             break;
     }
+    
+    [self setBarTitle:self.headerBarLabel];
 
     // Deselect other rows
     for (NSInteger i = [self.tableView numberOfRowsInSection:indexPath.section] - 1; i >= 0; i--) {
@@ -212,7 +217,7 @@ objection_requires(@"resourceClient", @"constants")
     [self loadResourcesIntoDetailViewController];
 }
 
-#pragma mark - JMSearchable
+#pragma mark - JMHeaderBarAdditions
 
 - (void)searchWithQuery:(NSString *)query
 {
@@ -226,6 +231,16 @@ objection_requires(@"resourceClient", @"constants")
         self.searchQuery = nil;
         [self loadResourcesIntoDetailViewController];
     }
+}
+
+- (void)setBarTitle:(__weak UILabel *)label
+{
+    if (!self.headerBarLabel) self.headerBarLabel = label;
+    
+    NSString *resourceType = [self localizedRowTitle:self.resourcesTypeEnum forSection:kJMResourcesSection];
+    NSString *sortBy = [self localizedRowTitle:self.sortByEnum forSection:kJMSortSection];
+    // TODO: localize result string
+    label.text = [NSString stringWithFormat:@"%@, By %@", resourceType, sortBy];
 }
 
 #pragma mark - Private -

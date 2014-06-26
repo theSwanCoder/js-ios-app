@@ -155,7 +155,7 @@ objection_requires(@"resourceClient", @"constants")
         [weakSelf.activeRepresentationViewController refresh];
     } errorBlock:^(JSOperationResult *result) {
         isLoading = NO;
-//        // TODO: add an error handler
+        // TODO: add an error handler
     }];
 
     [self.resourceClient resourceLookups:self.resourceLookup.uri query:self.searchQuery types:self.resourcesTypes

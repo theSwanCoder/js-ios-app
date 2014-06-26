@@ -10,7 +10,7 @@
 
 @protocol JMHeaderBarAdditions <NSObject>
 @optional
-- (NSString *)barTitle;
+- (void)setBarTitle:(__weak UILabel *)label;
 - (void)searchWithQuery:(NSString *)query;
 - (void)clearSearch;
 
