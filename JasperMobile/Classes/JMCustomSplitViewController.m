@@ -125,7 +125,7 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
 {
     [self performActionOnVisibleViewControllers:^(id viewController) {
         if ([viewController respondsToSelector:@selector(clearSearch)]) {
-            [viewController clearSearch];
+            [viewController didClearSearch];
         }
     } conformsToProtocol:@protocol(JMHeaderBarAdditions)];
     

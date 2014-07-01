@@ -198,7 +198,7 @@ objection_requires(@"resourceClient", @"constants")
     [self loadResourcesIntoDetailViewController];
 }
 
-- (void)clearSearch
+- (void)didClearSearch
 {
     if (self.searchQuery.length) {
         self.searchQuery = nil;

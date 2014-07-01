@@ -36,6 +36,12 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
     }
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+    [self.delegate prepareForSegue:segue sender:indexPath];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -45,6 +51,10 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row == self.delegate.resources.count) {
+        return 102.0f;
+    }
+    
     return 80.0f;
 }
 

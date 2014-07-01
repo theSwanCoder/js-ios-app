@@ -12,8 +12,8 @@
 #import "JMResourceClientHolder.h"
 #import "JMActionBarProvider.h"
 
-@interface JMVerticalListViewController : UITableViewController <JMRefreshable>//, JMActionBarProvider>
+@interface JMVerticalListViewController : UITableViewController <JMRefreshable, JMActionBarProvider>
 
-@property (nonatomic, weak) id <JMPagination, JMResourceClientHolder, JMActionBarProvider> delegate;
+@property (nonatomic, weak) UIViewController <JMPagination, JMResourceClientHolder, JMActionBarProvider> *delegate;
 
 @end

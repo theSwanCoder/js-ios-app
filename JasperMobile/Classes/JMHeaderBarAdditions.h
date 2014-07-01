@@ -12,6 +12,6 @@
 @optional
 - (void)setBarTitle:(__weak UILabel *)label;
 - (void)searchWithQuery:(NSString *)query;
-- (void)clearSearch;
+- (void)didClearSearch;
 
 @end
