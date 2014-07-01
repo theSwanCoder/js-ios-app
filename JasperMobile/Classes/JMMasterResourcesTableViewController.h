@@ -16,6 +16,7 @@
 @interface JMMasterResourcesTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, JMPagination, JMResourceClientHolder>
 
 @property (nonatomic, strong) NSArray *resourcesTypes;
+@property (nonatomic, strong) NSString *sortBy;
 @property (nonatomic, assign) BOOL loadRecursively;
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet JMBackHeaderView *backView;

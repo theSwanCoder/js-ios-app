@@ -23,6 +23,8 @@ static CGFloat const yOffset = 25;
 @property (nonatomic, strong) NSDictionary *representationTypeToSegue;
 @property (nonatomic, strong) NSArray *resourcesTypes;
 @property (nonatomic, strong) NSString *searchQuery;
+@property (nonatomic, strong) NSString *sortBy;
+@property (nonatomic, assign) BOOL loadRecursively;
 @property (nonatomic, strong) JMResourcesRepresentationSwitcherActionBarView *actionBarView;
 @end
 
@@ -159,7 +161,7 @@ objection_requires(@"resourceClient", @"constants")
     }];
 
     [self.resourceClient resourceLookups:self.resourceLookup.uri query:self.searchQuery types:self.resourcesTypes
-                               recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
+                                  sortBy:self.sortBy recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
     isLoading = YES;
 }
 
@@ -186,6 +188,7 @@ objection_requires(@"resourceClient", @"constants")
     self.loadRecursively = [[userInfo objectForKey:kJMLoadRecursively] boolValue];
     self.resourceLookup = [userInfo objectForKey:kJMResourceLookup];
     self.searchQuery = [userInfo objectForKey:kJMSearchQuery];
+    self.sortBy = [userInfo objectForKey:kJMSortBy];
     
     [self loadNextPage];
 }

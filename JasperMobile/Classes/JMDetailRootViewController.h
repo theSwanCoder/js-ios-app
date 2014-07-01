@@ -18,7 +18,6 @@
 @interface JMDetailRootViewController : UIViewController <JMActionBarProvider, JMResourceClientHolder, JMPagination>
 
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
-@property (nonatomic, assign) BOOL loadRecursively;
 @property (nonatomic, weak) IBOutlet JMDetailActivityIndicatorView *activityIndicatorView;
 @property (nonatomic, weak) IBOutlet JMDetailNoResultsView *noResultsView;
 

@@ -119,7 +119,8 @@ objection_requires(@"resourceClient")
         // TODO: add error handler
     }];
     
-    [self.resourceClient resourceLookups:self.resourceLookup.uri query:nil types:self.resourcesTypes recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
+    [self.resourceClient resourceLookups:self.resourceLookup.uri query:nil types:self.resourcesTypes sortBy:self.sortBy
+                               recursive:self.loadRecursively offset:self.offset limit:kJMLimit delegate:delegate];
     
     self.offset += kJMLimit;
 }

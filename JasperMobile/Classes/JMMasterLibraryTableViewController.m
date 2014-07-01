@@ -27,7 +27,6 @@ typedef NS_ENUM(NSInteger, JMResourcesType) {
 typedef NS_ENUM(NSInteger, JMSortBy) {
     JMSortByName = 0,
     JMSortByDate,
-    JMSortByCreator
 };
 
 static NSString * const kJMShowResourcesSegue = @"ShowResources";
@@ -47,8 +46,6 @@ objection_requires(@"resourceClient", @"constants")
 
 @synthesize resourceClient = _resourcesClient;
 
-#pragma mark - Accessors
-
 - (NSArray *)resourcesTypes
 {
     switch (self.resourcesTypeEnum) {
@@ -59,6 +56,17 @@ objection_requires(@"resourceClient", @"constants")
         case JMResourceTypeAll:
         default:
             return @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD];
+    }
+}
+
+- (NSString *)sortBy
+{
+    switch (self.sortByEnum) {
+        case JMSortByName:
+            return @"name";
+        case JMSortByDate:
+        default:
+            return @"date";
     }
 }
 
@@ -126,6 +134,7 @@ objection_requires(@"resourceClient", @"constants")
         [destinationViewController setSelectedResourceIndex:[[userInfo objectForKey:kJMSelectedResourceIndex] integerValue]];
         [destinationViewController setResources:[[userInfo objectForKey:kJMResources] mutableCopy]];
         [destinationViewController setResourcesTypes:self.resourcesTypes];
+        [destinationViewController setSortBy:self.sortBy];
         [destinationViewController setLoadRecursively:YES];
     }
 }
@@ -191,7 +200,6 @@ objection_requires(@"resourceClient", @"constants")
     switch (indexPath.section) {
         case kJMResourcesSection:
             self.resourcesTypeEnum = (JMResourcesType) indexPath.row;
-            [self loadResourcesIntoDetailViewController];
             break;
 
         case kJMSortSection:
@@ -199,6 +207,7 @@ objection_requires(@"resourceClient", @"constants")
             break;
     }
     
+    [self loadResourcesIntoDetailViewController];
     [self setBarTitle:self.headerBarLabel];
 
     // Deselect other rows
@@ -250,7 +259,8 @@ objection_requires(@"resourceClient", @"constants")
     NSDictionary *userInfo = @{
             kJMResourcesTypes : self.resourcesTypes,
             kJMLoadRecursively : @(YES),
-            kJMSearchQuery : self.searchQuery ?: @""
+            kJMSearchQuery : self.searchQuery ?: @"",
+            kJMSortBy : self.sortBy
     };
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResourcesInDetail
                                                         object:nil

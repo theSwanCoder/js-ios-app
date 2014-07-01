@@ -51,7 +51,7 @@ extern NSString * const kJMShowResourcesListInMaster;
 extern NSString * const kJMShowResourcesListInDetail;
 extern NSString * const kJMLoadResourcesInDetail;
 
-// Some shared keys for dictionary
+// Shared keys for dictionary
 extern NSString * const kJMMenuTag;
 extern NSString * const kJMNotUpdateMenuKey;
 extern NSString * const kJMServerProfileKey;
@@ -61,6 +61,7 @@ extern NSString * const kJMLoadRecursively;
 extern NSString * const kJMSelectedResourceIndex;
 extern NSString * const kJMResourcesTypes;
 extern NSString * const kJMSearchQuery;
+extern NSString * const kJMSortBy;
 extern NSString * const kJMTotalCount;
 extern NSString * const kJMOffset;
 
