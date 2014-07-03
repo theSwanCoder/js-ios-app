@@ -26,12 +26,14 @@
 //
 
 #import "JMBaseRepositoryTableViewController.h"
-#import "JMBaseRepositoryTableViewController+fetchInputControls.h"
+#import "UIViewController+fetchInputControls.h"
 #import "JMConstants.h"
 #import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "JMLocalization.h"
+#import "JMCancelRequestPopup.h"
+#import "JMReportOptionsTableViewController.h"
 #import <Objection-iOS/Objection.h>
 
 NSInteger const kJMResourcesLimit = 40;
@@ -136,8 +138,13 @@ inject_default_rotation()
 {
     id destinationViewController = segue.destinationViewController;
     
-    if ([self isReportSegue:segue]) {
-        [self setResults:sender toDestinationViewController:destinationViewController];
+    if ([self isReportSegue:segue]) {        
+        NSDictionary *data = sender;
+        JSResourceLookup *resourceLookup = [data objectForKey:kJMResourceLookup];
+        NSMutableArray *inputControls = [data objectForKey:kJMInputControls];
+        
+        [destinationViewController setResourceLookup:resourceLookup];
+        if (inputControls.count) [destinationViewController setInputControls:inputControls];
     } else  if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         JSResourceLookup *resourceLookup = [self resourceLookupForIndexPath:indexPath];
@@ -190,7 +197,7 @@ inject_default_rotation()
     if (![supportedResources containsObject:resourceLookup.resourceType]) {
         [self tableView:self.tableView accessoryButtonTappedForRowWithIndexPath:indexPath];
     } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
-        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];        
         [self fetchInputControlsForReport:resourceLookup];
     }
 }

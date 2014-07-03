@@ -106,7 +106,7 @@
     if (widthTable <= 400.0f) return (10.0f);
     if (widthTable <= 546.0f) return (31.0f);
     if (widthTable >= 720.0f) return (45.0f);
-    return (31.0f + ceilf((widthTable - 547.0f) / 13.0f));
+    return 31.0f + ceilf((widthTable - 547.0f) / 13.0f);
 }
 
 - (CGFloat)contentWidthForTableViewCell:(UITableViewCell *)cell;

@@ -7,16 +7,25 @@
 //
 
 #import "JMVerticalListViewController.h"
-
-// TODO: OOP Part: Needs to be implemented in a proper way. REMOVE CODE DUPLICATION
 #import "JMVerticalListResourceTableViewCell.h"
 #import "JMConstants.h"
+#import "UIViewController+FetchInputControls.h"
+#import <Objection-iOS/Objection.h>
 
 static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
 
 @implementation JMVerticalListViewController
+objection_requires(@"constants")
 
 @synthesize needsToResetScroll = _needsToResetScroll;
+
+#pragma mark - Initialization
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [[JSObjection defaultInjector] injectDependencies:self];
+}
 
 #pragma mark - UIViewController
 
@@ -38,8 +47,25 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-    [self.delegate prepareForSegue:segue sender:indexPath];
+    NSInteger row;
+    [self.delegate prepareForSegue:segue sender:nil];
+    
+    if ([self isReportSegue:segue]) {
+        JSResourceLookup *resourcesLookup = [sender objectForKey:kJMResourceLookup];
+        row = [self.delegate.resources indexOfObject:resourcesLookup];
+    } else {
+        row = [[self.tableView indexPathForCell:sender] row];
+    }
+    
+    NSDictionary *userInfo = @{
+                   kJMResources : self.delegate.resources,
+                   kJMTotalCount : @(self.delegate.totalCount),
+                   kJMOffset : @(self.delegate.offset),
+                   kJMSelectedResourceIndex : @(row)
+    };
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
+                                                        object:nil
+                                                      userInfo:userInfo];
 }
 
 #pragma mark - Table view data source
@@ -102,6 +128,21 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
 {
     if ([self.delegate hasNextPage] && indexPath.row == self.delegate.resources.count) {
         [self.delegate loadNextPage];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    JSResourceLookup *resourceLookup = [self.delegate.resources objectAtIndex:indexPath.row];
+    if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
+        [self fetchInputControlsForReport:resourceLookup];
+    } else {
+        NSDictionary *data = @{
+                   kJMResourceLookup : resourceLookup
+        };
+        [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
     }
 }
 

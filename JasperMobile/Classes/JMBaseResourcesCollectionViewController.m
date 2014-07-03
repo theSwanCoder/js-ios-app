@@ -8,6 +8,8 @@
 
 #import "JMBaseResourcesCollectionViewController.h"
 #import "JMConstants.h"
+#import "UIViewController+fetchInputControls.h"
+#import <Objection-iOS/Objection.h>
 
 static NSString * kJMResourceCellIdentifier = @"ResourceCell";
 static NSString * kJMLoadingCellIdentifier = @"LoadingCell";
@@ -15,12 +17,23 @@ static NSString * kJMLoadingCellIdentifier = @"LoadingCell";
 static NSInteger const kJMPaginationTreshoald = 8;
 
 @implementation JMBaseResourcesCollectionViewController
+objection_requires(@"constants")
 
 @synthesize needsToResetScroll = _needsToResetScroll;
+
+#pragma mark - Accessors
 
 - (BOOL)isLoadingCell:(UICollectionViewCell *)cell
 {
     return [cell.reuseIdentifier isEqualToString:kJMLoadingCellIdentifier];
+}
+
+#pragma mark - Initialization
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [[JSObjection defaultInjector] injectDependencies:self];
 }
 
 #pragma mark - UIViewController
@@ -52,11 +65,26 @@ static NSInteger const kJMPaginationTreshoald = 8;
     }
 }
 
-// TODO: refactor, move to another view controller
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSIndexPath *indexPath = [self.collectionView indexPathForCell:sender];
-    [self.delegate prepareForSegue:segue sender:indexPath];
+    NSInteger row;
+    
+    if ([self isReportSegue:segue]) {
+        JSResourceLookup *resourcesLookup = [sender objectForKey:kJMResourceLookup];
+        row = [self.delegate.resources indexOfObject:resourcesLookup];
+    } else {
+        row = [[self.collectionView indexPathForCell:sender] row];
+    }
+    
+    NSDictionary *userInfo = @{
+               kJMResources : self.delegate.resources,
+               kJMTotalCount : @(self.delegate.totalCount),
+               kJMOffset : @(self.delegate.offset),
+               kJMSelectedResourceIndex : @(row)
+    };
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
+                                                        object:nil
+                                                      userInfo:userInfo];
 }
 
 #pragma mark - UICollectionViewControllerDataSource
@@ -85,7 +113,6 @@ static NSInteger const kJMPaginationTreshoald = 8;
         return cell;
     }
 
-    // TODO: make separate class for UICollectionViewCell (i.e. JMResourcesCollectionViewCell). Try to reuse it for "Grid" and "Horizontal List" views
     return [collectionView dequeueReusableCellWithReuseIdentifier:kJMResourceCellIdentifier forIndexPath:indexPath];
 }
 
@@ -107,6 +134,19 @@ static NSInteger const kJMPaginationTreshoald = 8;
 {
     if (self.delegate.hasNextPage && indexPath.item + kJMPaginationTreshoald >= self.delegate.resources.count) {
         [self.delegate loadNextPage];
+    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSResourceLookup *resourceLookup = [self.delegate.resources objectAtIndex:indexPath.row];
+    if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
+        [self fetchInputControlsForReport:resourceLookup];
+    } else {
+        NSDictionary *data = @{
+                   kJMResourceLookup : resourceLookup
+        };
+        [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
     }
 }
 

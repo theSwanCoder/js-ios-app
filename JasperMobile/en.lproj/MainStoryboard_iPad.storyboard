@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="H7M-pU-pTq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="H7M-pU-pTq">
     <dependencies>
         <deployment version="1536" defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -145,7 +145,6 @@
                                     <outlet property="desc" destination="8PO-Zd-jho" id="82E-Qo-Je1"/>
                                     <outlet property="imageView" destination="LZe-HL-6hm" id="ls3-To-vcc"/>
                                     <outlet property="label" destination="KIH-PQ-nCL" id="x7d-fb-sAv"/>
-                                    <segue destination="1j7-lS-aWh" kind="push" id="BeL-ai-Mdr"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="LoadingCell" rowHeight="102" id="lr8-fj-xzS" customClass="JMVerticalListResourceTableViewCell">
@@ -180,10 +179,38 @@ Please Wait...</string>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="ekZ-qz-y5w"/>
+                    <connections>
+                        <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="uB6-Z0-ugx"/>
+                        <segue destination="5ET-d1-APX" kind="push" identifier="ShowReportOptions" id="bB2-jL-oxA"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vzd-xb-lie" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2225" y="4641"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="RcC-P7-rcB">
+            <objects>
+                <viewController id="5ET-d1-APX" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7th-fM-noG">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Input Controls" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="uo2-hJ-Z6a">
+                                <rect key="frame" x="329" y="502" width="109" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="a5K-Dg-tGA"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RdM-89-BNz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3511" y="5229"/>
         </scene>
         <!--Detail Report Viewer View Controller-->
         <scene sceneID="g4p-L1-pik">
@@ -213,7 +240,7 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xr4-oY-Rss" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3231" y="4603"/>
+            <point key="canvasLocation" x="3511" y="4040"/>
         </scene>
         <!--Grid View Controller-->
         <scene sceneID="ccm-gZ-eU5">
@@ -254,9 +281,6 @@ Name</string>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <segue destination="1j7-lS-aWh" kind="push" identifier="" id="r1R-Df-qGn"/>
-                                </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LoadingCell" id="CXC-sa-QGF">
                                 <rect key="frame" x="489" y="18" width="261" height="254"/>
@@ -291,6 +315,10 @@ Please Wait...</string>
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" id="MNT-Yk-MNt"/>
+                    <connections>
+                        <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="bOO-lz-c7Q"/>
+                        <segue destination="5ET-d1-APX" kind="push" identifier="ShowReportOptions" id="m8A-K9-OCJ"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zpA-4R-7QK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -349,9 +377,6 @@ Please Wait...</string>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <segue destination="1j7-lS-aWh" kind="push" id="M6P-vN-9lH"/>
-                                </connections>
                             </collectionViewCell>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LoadingCell" id="x8R-DE-psI">
                                 <rect key="frame" x="425" y="227" width="355" height="570"/>
@@ -386,6 +411,10 @@ Please Wait...</string>
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" id="CSg-dw-k14"/>
+                    <connections>
+                        <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="lYY-aM-b9e"/>
+                        <segue destination="5ET-d1-APX" kind="push" identifier="ShowReportOptions" id="hVs-Iz-65g"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sQc-6H-aK5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -910,9 +939,10 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="lYY-aM-b9e"/>
         <segue reference="ruh-Jy-ETv"/>
         <segue reference="0bD-K8-B5D"/>
         <segue reference="h0e-Up-0Pa"/>
-        <segue reference="BeL-ai-Mdr"/>
+        <segue reference="bB2-jL-oxA"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -57,6 +57,7 @@ extern NSString * const kJMNotUpdateMenuKey;
 extern NSString * const kJMServerProfileKey;
 extern NSString * const kJMResources;
 extern NSString * const kJMResourceLookup;
+extern NSString * const kJMInputControls;
 extern NSString * const kJMLoadRecursively;
 extern NSString * const kJMSelectedResourceIndex;
 extern NSString * const kJMResourcesTypes;

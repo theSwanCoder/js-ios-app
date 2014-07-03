@@ -105,24 +105,12 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    // if changed representation type
     if ([self.representationTypeToSegue.allValues indexOfObject:segue.identifier] != NSNotFound) {
         id destinationViewController = [segue destinationViewController];
         [destinationViewController setDelegate:self];
         [destinationViewController refresh];
         self.activeRepresentationViewController = destinationViewController;
-    } else {
-        JSResourceLookup *resourceLookup = [self.resources objectAtIndex:[sender row]];
-        [self showResourcesListInMaster:[sender row]];
-
-        // TODO: temp implementation, fix this
-        JSRESTReport *reportClient = [[JSObjection defaultInjector] getObject:[JSRESTReport class]];
-
-        NSURL *reportURL = [NSURL URLWithString:[reportClient generateReportUrl:resourceLookup.uri
-                                                                   reportParams:nil
-                                                                           page:0
-                                                                         format:self.constants.CONTENT_TYPE_PDF]];
-        NSURLRequest *request = [NSURLRequest requestWithURL:reportURL];
-        [segue.destinationViewController setRequest:request];
     }
 }
 
@@ -199,19 +187,6 @@ objection_requires(@"resourceClient", @"constants")
     self.offset = [[userInfo objectForKey:kJMOffset] integerValue];
     self.resources = [userInfo objectForKey:kJMResources];
     [self.activeRepresentationViewController refresh];
-}
-
-- (void)showResourcesListInMaster:(NSInteger)selectedResourceIndex
-{
-    NSDictionary *userInfo = @{
-            kJMResources : self.resources,
-            kJMTotalCount : @(self.totalCount),
-            kJMOffset : @(self.offset),
-            kJMSelectedResourceIndex : @(selectedResourceIndex)
-    };
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
-                                                        object:nil
-                                                      userInfo:userInfo];
 }
 
 #pragma mark - JMActionBarProvider

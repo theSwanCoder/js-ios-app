@@ -55,6 +55,7 @@ NSString * const kJMNotUpdateMenuKey = @"ignoreMenuUpdates";
 NSString * const kJMServerProfileKey = @"serverProfile";
 NSString * const kJMResources = @"resources";
 NSString * const kJMResourceLookup = @"resourceLookup";
+NSString * const kJMInputControls = @"inputControls";
 NSString * const kJMLoadRecursively = @"loadRecursively";
 NSString * const kJMSelectedResourceIndex = @"selectedResourceIndex";
 NSString * const kJMResourcesTypes = @"resourcesTypes";

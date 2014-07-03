@@ -12,8 +12,10 @@
 #import "JMResourceClientHolder.h"
 #import "JMActionBarProvider.h"
 
+// TODO: make universal view controller or avoid code duplications in other way
 @interface JMVerticalListViewController : UITableViewController <JMRefreshable, JMActionBarProvider>
 
 @property (nonatomic, weak) UIViewController <JMPagination, JMResourceClientHolder, JMActionBarProvider> *delegate;
+@property (nonatomic, weak) JSConstants *constants;
 
 @end

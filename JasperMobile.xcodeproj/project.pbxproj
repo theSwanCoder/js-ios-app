@@ -47,6 +47,7 @@
 		F539A72717F1A03900310D72 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A72617F1A03900310D72 /* Default-Portrait@2x~ipad.png */; };
 		F539A72917F1A06A00310D72 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A72817F1A06A00310D72 /* Default-Landscape~ipad.png */; };
 		F539A72B17F1A0A500310D72 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F539A72A17F1A0A500310D72 /* Default-Landscape@2x~ipad.png */; };
+		F53B9B9419657C7B005470B9 /* UIViewController+FetchInputControls.m in Sources */ = {isa = PBXBuildFile; fileRef = F53B9B9319657C7B005470B9 /* UIViewController+FetchInputControls.m */; };
 		F53C0AD217B50C080063AE90 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F53C0AD017B50C080063AE90 /* MainStoryboard_iPhone.storyboard */; };
 		F546AFA31910EE7600EC9777 /* grid_res_type_report.png in Resources */ = {isa = PBXBuildFile; fileRef = F546AFA21910EE7600EC9777 /* grid_res_type_report.png */; };
 		F546AFA91910EEB400EC9777 /* JMGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F546AFA81910EEB400EC9777 /* JMGridViewController.m */; };
@@ -155,7 +156,6 @@
 		F59FD9C017B1014A00331BD8 /* JMFavoritesUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F59FD9BF17B1014A00331BD8 /* JMFavoritesUtil.m */; };
 		F5AD3C5817F4A90D00F16D3C /* input_control_text_field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5AD3C5717F4A90D00F16D3C /* input_control_text_field@2x.png */; };
 		F5AE62531906AC6600954192 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5AE62511906AC6600954192 /* MainStoryboard_iPad.storyboard */; };
-		F5B23F5A1860463000FC9D76 /* JMBaseRepositoryTableViewController+fetchInputControls.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B23F591860463000FC9D76 /* JMBaseRepositoryTableViewController+fetchInputControls.m */; };
 		F5C2531D1954A5130090A5E0 /* refresh_button_background_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C2531B1954A5130090A5E0 /* refresh_button_background_highlighted.png */; };
 		F5C2531E1954A5130090A5E0 /* refresh_button_background.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C2531C1954A5130090A5E0 /* refresh_button_background.png */; };
 		F5C2532A19571B980090A5E0 /* search_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C2532919571B980090A5E0 /* search_button.png */; };
@@ -324,6 +324,8 @@
 		F539A72817F1A06A00310D72 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		F539A72A17F1A0A500310D72 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
 		F53B38E4192B7DCF003B1867 /* JMPagination.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMPagination.h; path = JasperMobile/Classes/JMPagination.h; sourceTree = "<group>"; };
+		F53B9B9319657C7B005470B9 /* UIViewController+FetchInputControls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+FetchInputControls.m"; path = "JasperMobile/Classes/UIViewController+FetchInputControls.m"; sourceTree = "<group>"; };
+		F53B9B9519657C8C005470B9 /* UIViewController+FetchInputControls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIViewController+FetchInputControls.h"; path = "JasperMobile/Classes/UIViewController+FetchInputControls.h"; sourceTree = "<group>"; };
 		F53C0AD117B50C080063AE90 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		F546AFA21910EE7600EC9777 /* grid_res_type_report.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grid_res_type_report.png; sourceTree = "<group>"; };
 		F546AFA71910EEB400EC9777 /* JMGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMGridViewController.h; path = Classes/JMGridViewController.h; sourceTree = "<group>"; };
@@ -464,8 +466,6 @@
 		F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMResourceClientHolder.h; path = JasperMobile/Classes/JMResourceClientHolder.h; sourceTree = "<group>"; };
 		F5AD3C5717F4A90D00F16D3C /* input_control_text_field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "input_control_text_field@2x.png"; sourceTree = "<group>"; };
 		F5AE62521906AC6600954192 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		F5B23F581860463000FC9D76 /* JMBaseRepositoryTableViewController+fetchInputControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "JMBaseRepositoryTableViewController+fetchInputControls.h"; path = "JasperMobile/Classes/JMBaseRepositoryTableViewController+fetchInputControls.h"; sourceTree = "<group>"; };
-		F5B23F591860463000FC9D76 /* JMBaseRepositoryTableViewController+fetchInputControls.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "JMBaseRepositoryTableViewController+fetchInputControls.m"; path = "JasperMobile/Classes/JMBaseRepositoryTableViewController+fetchInputControls.m"; sourceTree = "<group>"; };
 		F5C2531B1954A5130090A5E0 /* refresh_button_background_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh_button_background_highlighted.png; sourceTree = "<group>"; };
 		F5C2531C1954A5130090A5E0 /* refresh_button_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh_button_background.png; sourceTree = "<group>"; };
 		F5C2532919571B980090A5E0 /* search_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_button.png; sourceTree = "<group>"; };
@@ -966,8 +966,8 @@
 				F585FB6D176753460079D89C /* UITableViewController+CellRelativeHeight.m */,
 				F5C72FDC17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.h */,
 				F5C72FDD17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m */,
-				F5B23F581860463000FC9D76 /* JMBaseRepositoryTableViewController+fetchInputControls.h */,
-				F5B23F591860463000FC9D76 /* JMBaseRepositoryTableViewController+fetchInputControls.m */,
+				F53B9B9519657C8C005470B9 /* UIViewController+FetchInputControls.h */,
+				F53B9B9319657C7B005470B9 /* UIViewController+FetchInputControls.m */,
 				F5D97F9F179587100059C761 /* JMServerProfile+Helpers.h */,
 				F5D97FA0179587100059C761 /* JMServerProfile+Helpers.m */,
 				F57186C1183658DD0013B6EB /* JSRESTBase+updateServerInfo.h */,
@@ -1474,7 +1474,6 @@
 				F55CC343174CFFCE00CEB39E /* JasperMobileAppDelegate.m in Sources */,
 				F54C91B41752FCA70009E2BE /* JMBaseModule.m in Sources */,
 				F514E69D175575C800C9F61E /* JMLocalization.m in Sources */,
-				F5B23F5A1860463000FC9D76 /* JMBaseRepositoryTableViewController+fetchInputControls.m in Sources */,
 				F5C78CF81952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.m in Sources */,
 				F5C78CE619518B270082AFDE /* JMCustomSplitViewController.m in Sources */,
 				F514E69C175575AE00C9F61E /* UIAlertView+LocalizedAlert.m in Sources */,
@@ -1529,6 +1528,7 @@
 				F5322724192F640F004B4283 /* JMDetailReportViewerViewController.m in Sources */,
 				37455A96A7B31E653BE86426 /* JMReportOptionsTableViewController.m in Sources */,
 				3745556D589570C0F70DE21E /* JMFavoritesTableViewController.m in Sources */,
+				F53B9B9419657C7B005470B9 /* UIViewController+FetchInputControls.m in Sources */,
 				374556813A6B65E857339B9B /* JMSaveReportTableViewController.m in Sources */,
 				374555DB062C6D92B960560D /* JMResourceTableViewController.m in Sources */,
 				37455A91FB76F9CC73079B2E /* JMReportPagingViewController.m in Sources */,

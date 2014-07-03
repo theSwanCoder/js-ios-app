@@ -25,29 +25,29 @@
 //  Jaspersoft Corporation
 //
 
-static NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
-static NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
-static NSString * const kJMInputControls = @"inputControls";
-static NSString * const kJMResourceLookup = @"resourceLookup";
+NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
+NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
 
 #import <Objection-iOS/JSObjection.h>
-#import "JMBaseRepositoryTableViewController+fetchInputControls.h"
+#import "UIViewController+fetchInputControls.h"
 #import "JMCancelRequestPopup.h"
 #import "JMInputControlsHolder.h"
 #import "JMRequestDelegate.h"
 #import "JMReportOptionsUtil.h"
+#import "JMConstants.h"
 
-@implementation JMBaseRepositoryTableViewController (fetchInputControls)
+@implementation UIViewController (FetchInputControls)
+
+@dynamic resourceClient;
 
 - (void)fetchInputControlsForReport:(JSResourceLookup *)resourceLookup
 {
-    __weak JMBaseRepositoryTableViewController *weakSelf = self;
+    __weak UIViewController *weakSelf = self;
 
     JSObjectionInjector *objectionInjector = [JSObjection defaultInjector];
     JSRESTReport *report = [objectionInjector getObject:JSRESTReport.class];
     
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:nil cancelBlock:^{
-        [weakSelf.resourceClient cancelAllRequests];
         [report cancelAllRequests];
     }];
 
@@ -81,16 +81,6 @@ static NSString * const kJMResourceLookup = @"resourceLookup";
     } viewControllerToDismiss:nil];
 
     [report inputControlsForReport:resourceLookup.uri ids:nil selectedValues:reportParameters delegate:delegate];
-}
-
-- (void)setResults:(id)sender toDestinationViewController:(id)viewController
-{
-    NSDictionary *data = sender;
-    JSResourceLookup *resourceLookup = [data objectForKey:kJMResourceLookup];
-    NSMutableArray *inputControls = [data objectForKey:kJMInputControls];
-
-    [viewController setResourceLookup:resourceLookup];
-    if (inputControls.count) [viewController setInputControls:inputControls];
 }
 
 - (BOOL)isReportSegue:(UIStoryboardSegue *)segue;

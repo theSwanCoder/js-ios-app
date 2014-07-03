@@ -28,29 +28,25 @@
 extern NSString * const kJMShowReportOptionsSegue;
 extern NSString * const kJMShowReportViewerSegue;
 
-#import "JMBaseRepositoryTableViewController.h"
+#import <jaspersoft-sdk/JaspersoftSDK.h>
+#import "JMResourceClientHolder.h"
 
 /**
- Adds possibility to get list of input controls for report directly in repository
+ Adds possibility to get list of input controls for report
  
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.8
  */
-@interface JMBaseRepositoryTableViewController (fetchInputControls)
+@interface UIViewController (FetchInputControls) <JMResourceClientHolder>
 
 /**
- Gets input controls for specified report and calls segue depending on a request result
+ Gets input controls for specified report and performs segue depending on a request result
  */
+// TODO: refactor. Make API more user-friendly
 - (void)fetchInputControlsForReport:(JSResourceLookup *)resourceLookup;
 
 /**
- Sets resource lookup and (if exists) fetched input controls to destination view controller. Destination could
- be <b>JMReportOptionsTableViewController</b> or <b>JMReportViewerViewController</b> view controller
- */
-- (void)setResults:(id)sender toDestinationViewController:(id)viewController;
-
-/**
- Indicates if segue has a "ShowReportOptions" or "ShowReportViewer" identifier
+ Indicates if segue identifier equals to "ShowReportOptions" or "ShowReportViewer"
  */
 - (BOOL)isReportSegue:(UIStoryboardSegue *)segue;
 
