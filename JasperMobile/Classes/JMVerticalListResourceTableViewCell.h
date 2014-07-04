@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define kJMResourceCellIdentifier @"ResourceCell"
-
 @interface JMVerticalListResourceTableViewCell : UITableViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel *label;

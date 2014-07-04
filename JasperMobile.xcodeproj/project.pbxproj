@@ -150,6 +150,7 @@
 		F5924EA118FCA1DF00691286 /* servers.png in Resources */ = {isa = PBXBuildFile; fileRef = F5924E9B18FCA1DF00691286 /* servers.png */; };
 		F5924EA218FCA1DF00691286 /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = F5924E9C18FCA1DF00691286 /* settings.png */; };
 		F59AFBAC17CB58F300F168CE /* JMReportOptionsUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F59AFBAB17CB58F300F168CE /* JMReportOptionsUtil.m */; };
+		F59BDB0E1966B00F004FDC5B /* JMBaseResourcesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F59BDB0D1966B00F004FDC5B /* JMBaseResourcesViewController.m */; };
 		F59BF2EC1757EE980091EB88 /* JMPhoneModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F59BF2EB1757EE980091EB88 /* JMPhoneModule.m */; };
 		F59BF2EF1757F1960091EB88 /* JMPadModule.m in Sources */ = {isa = PBXBuildFile; fileRef = F59BF2EE1757F1960091EB88 /* JMPadModule.m */; };
 		F59BF2FF1758164E0091EB88 /* JMRotationBase.m in Sources */ = {isa = PBXBuildFile; fileRef = F59BF2FE1758164E0091EB88 /* JMRotationBase.m */; };
@@ -455,6 +456,8 @@
 		F5924E9C18FCA1DF00691286 /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		F59AFBAA17CB58F300F168CE /* JMReportOptionsUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMReportOptionsUtil.h; path = JasperMobile/Classes/JMReportOptionsUtil.h; sourceTree = "<group>"; };
 		F59AFBAB17CB58F300F168CE /* JMReportOptionsUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportOptionsUtil.m; path = JasperMobile/Classes/JMReportOptionsUtil.m; sourceTree = "<group>"; };
+		F59BDB0C1966B00F004FDC5B /* JMBaseResourcesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseResourcesViewController.h; path = Classes/JMBaseResourcesViewController.h; sourceTree = "<group>"; };
+		F59BDB0D1966B00F004FDC5B /* JMBaseResourcesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseResourcesViewController.m; path = Classes/JMBaseResourcesViewController.m; sourceTree = "<group>"; };
 		F59BF2EA1757EE980091EB88 /* JMPhoneModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMPhoneModule.h; path = Classes/JMPhoneModule.h; sourceTree = "<group>"; };
 		F59BF2EB1757EE980091EB88 /* JMPhoneModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMPhoneModule.m; path = Classes/JMPhoneModule.m; sourceTree = "<group>"; };
 		F59BF2ED1757F1960091EB88 /* JMPadModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMPadModule.h; path = Classes/JMPadModule.h; sourceTree = "<group>"; };
@@ -602,6 +605,8 @@
 		37455C1A234AC9CE06850D27 /* Resources View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				F59BDB0C1966B00F004FDC5B /* JMBaseResourcesViewController.h */,
+				F59BDB0D1966B00F004FDC5B /* JMBaseResourcesViewController.m */,
 				F5F21DEE191794C2007F78DB /* JMBaseResourcesCollectionViewController.h */,
 				F5F21DEF191794C2007F78DB /* JMBaseResourcesCollectionViewController.m */,
 				3745534F59FDB32585D36209 /* JMHorizontalListViewController.h */,
@@ -1520,6 +1525,7 @@
 				F539124F18D7139B001BDDBE /* JMBaseRepositoryPagingViewController.m in Sources */,
 				F572814717C77048000B192D /* JMRequestDelegate.m in Sources */,
 				F59AFBAC17CB58F300F168CE /* JMReportOptionsUtil.m in Sources */,
+				F59BDB0E1966B00F004FDC5B /* JMBaseResourcesViewController.m in Sources */,
 				F50F5B5D17CCF14300582196 /* JMSingleSelectTableViewController.m in Sources */,
 				F5339A1617CE0F0F005073EE /* JMMultiSelectTableViewController.m in Sources */,
 				F513FD9C194F1256000D172B /* JMDetailRootViewController.m in Sources */,

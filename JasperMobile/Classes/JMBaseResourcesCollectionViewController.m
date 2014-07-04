@@ -11,15 +11,10 @@
 #import "UIViewController+fetchInputControls.h"
 #import <Objection-iOS/Objection.h>
 
-static NSString * kJMResourceCellIdentifier = @"ResourceCell";
-static NSString * kJMLoadingCellIdentifier = @"LoadingCell";
-
 static NSInteger const kJMPaginationTreshoald = 8;
 
 @implementation JMBaseResourcesCollectionViewController
 objection_requires(@"constants")
-
-@synthesize needsToResetScroll = _needsToResetScroll;
 
 #pragma mark - Accessors
 
@@ -28,31 +23,20 @@ objection_requires(@"constants")
     return [cell.reuseIdentifier isEqualToString:kJMLoadingCellIdentifier];
 }
 
-#pragma mark - Initialization
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    [[JSObjection defaultInjector] injectDependencies:self];
-}
-
 #pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
     self.collectionView.backgroundColor = [UIColor clearColor];
-    self.view.backgroundColor = [UIColor clearColor];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    if ([self respondsToSelector:@selector(collectionViewLayout)]) {
-        [self.collectionViewLayout invalidateLayout];
-    } else {
-        [self.collectionView reloadData];
-    }
+    [self.collectionView.collectionViewLayout invalidateLayout];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -65,41 +49,16 @@ objection_requires(@"constants")
     }
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    NSInteger row;
-    
-    if ([self isReportSegue:segue]) {
-        JSResourceLookup *resourcesLookup = [sender objectForKey:kJMResourceLookup];
-        row = [self.delegate.resources indexOfObject:resourcesLookup];
-    } else {
-        row = [[self.collectionView indexPathForCell:sender] row];
-    }
-    
-    NSDictionary *userInfo = @{
-               kJMResources : self.delegate.resources,
-               kJMTotalCount : @(self.delegate.totalCount),
-               kJMOffset : @(self.delegate.offset),
-               kJMSelectedResourceIndex : @(row)
-    };
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
-                                                        object:nil
-                                                      userInfo:userInfo];
-}
-
 #pragma mark - UICollectionViewControllerDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    return [super numberOfSections];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    NSInteger count = self.delegate.resources.count;
-    if ([self.delegate hasNextPage]) count++;
-
-    return count;
+    return [super numberOfResourcesInSection:section];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -139,15 +98,7 @@ objection_requires(@"constants")
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSResourceLookup *resourceLookup = [self.delegate.resources objectAtIndex:indexPath.row];
-    if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
-        [self fetchInputControlsForReport:resourceLookup];
-    } else {
-        NSDictionary *data = @{
-                   kJMResourceLookup : resourceLookup
-        };
-        [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
-    }
+    [super didSelectResourceAtIndexPath:indexPath];
 }
 
 #pragma mark - JMRefreshable
@@ -160,13 +111,6 @@ objection_requires(@"constants")
     }
     
     [self.collectionView reloadData];
-}
-
-#pragma mark - JMActionBarProvider
-
-- (id)actionBar
-{
-    return [self.delegate actionBar];
 }
 
 @end

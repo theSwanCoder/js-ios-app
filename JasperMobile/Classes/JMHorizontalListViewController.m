@@ -36,7 +36,6 @@
     [super viewDidLoad];
     self.edgesLandscapeInset = 35.0f;
     self.edgesPortraitInset = 35.0f;
-
 }
 
 #pragma mark - UICollectionViewDataSource

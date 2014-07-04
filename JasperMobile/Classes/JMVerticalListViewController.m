@@ -12,26 +12,15 @@
 #import "UIViewController+FetchInputControls.h"
 #import <Objection-iOS/Objection.h>
 
-static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
-
 @implementation JMVerticalListViewController
-objection_requires(@"constants")
-
-@synthesize needsToResetScroll = _needsToResetScroll;
-
-#pragma mark - Initialization
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    [[JSObjection defaultInjector] injectDependencies:self];
-}
 
 #pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
@@ -43,29 +32,6 @@ objection_requires(@"constants")
     if (self.needsToResetScroll) {
         self.tableView.contentOffset = CGPointZero;
     }
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    NSInteger row;
-    [self.delegate prepareForSegue:segue sender:nil];
-    
-    if ([self isReportSegue:segue]) {
-        JSResourceLookup *resourcesLookup = [sender objectForKey:kJMResourceLookup];
-        row = [self.delegate.resources indexOfObject:resourcesLookup];
-    } else {
-        row = [[self.tableView indexPathForCell:sender] row];
-    }
-    
-    NSDictionary *userInfo = @{
-                   kJMResources : self.delegate.resources,
-                   kJMTotalCount : @(self.delegate.totalCount),
-                   kJMOffset : @(self.delegate.offset),
-                   kJMSelectedResourceIndex : @(row)
-    };
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
-                                                        object:nil
-                                                      userInfo:userInfo];
 }
 
 #pragma mark - Table view data source
@@ -98,6 +64,10 @@ objection_requires(@"constants")
     
     if (indexPath.row == self.delegate.resources.count) {
         cell = [tableView dequeueReusableCellWithIdentifier:kJMLoadingCellIdentifier forIndexPath:indexPath];
+        
+        // TODO: Set translated text
+        // TODO: transform (or create custom) activity indicator
+        
         UIActivityIndicatorView *indicator = (UIActivityIndicatorView *) [cell viewWithTag:1];
         [indicator startAnimating];
         return cell;
@@ -134,16 +104,7 @@ objection_requires(@"constants")
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
-    JSResourceLookup *resourceLookup = [self.delegate.resources objectAtIndex:indexPath.row];
-    if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
-        [self fetchInputControlsForReport:resourceLookup];
-    } else {
-        NSDictionary *data = @{
-                   kJMResourceLookup : resourceLookup
-        };
-        [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
-    }
+    [super didSelectResourceAtIndexPath:indexPath];
 }
 
 #pragma mark - JMRefreshable

@@ -11,17 +11,15 @@
 #import "JMResourceClientHolder.h"
 #import "JMPagination.h"
 #import "JMActionBarProvider.h"
+#import "JMBaseResourcesViewController.h"
 
-// TODO: make universal view controller or avoid code duplications in other way
-@interface JMBaseResourcesCollectionViewController : UICollectionViewController <JMRefreshable, JMActionBarProvider>
+@interface JMBaseResourcesCollectionViewController : JMBaseResourcesViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 
-@property (nonatomic, weak) UIViewController <JMPagination, JMResourceClientHolder, JMActionBarProvider> *delegate;
+@property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, assign) CGFloat yLandscapeOffset;
 @property (nonatomic, assign) CGFloat yPortraitOffset;
 @property (nonatomic, assign) CGFloat edgesLandscapeInset;
 @property (nonatomic, assign) CGFloat edgesPortraitInset;
-@property (nonatomic, assign) UICollectionViewScrollPosition scrollPosition;
-@property (nonatomic, weak) JSConstants *constants;
 
 - (BOOL)isLoadingCell:(UICollectionViewCell *)cell;
 

@@ -25,7 +25,6 @@
     self.yPortraitOffset = 17.0f;
     self.edgesLandscapeInset = 19.0f;
     self.edgesPortraitInset = 30.0f;
-    self.scrollPosition = UICollectionViewScrollPositionTop;
 }
 
 #pragma mark - UICollectionViewControllerDataSource

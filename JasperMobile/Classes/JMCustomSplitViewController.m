@@ -124,7 +124,7 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
 - (BOOL)textFieldShouldClear:(UITextField *)textField
 {
     [self performActionOnVisibleViewControllers:^(id viewController) {
-        if ([viewController respondsToSelector:@selector(clearSearch)]) {
+        if ([viewController respondsToSelector:@selector(didClearSearch)]) {
             [viewController didClearSearch];
         }
     } conformsToProtocol:@protocol(JMHeaderBarAdditions)];
