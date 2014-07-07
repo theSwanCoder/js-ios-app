@@ -249,14 +249,19 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
     JMServerProfile *serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
     
     serverProfile.alias = @"Jaspersoft Mobile Demo";
-    serverProfile.username = @"phoneuser";
-    serverProfile.password = @"phoneuser";
+    serverProfile.username = @"jasperadmin";
+    serverProfile.password = @"jasperadmin";
     serverProfile.organization = @"organization_1";
     serverProfile.serverUrl = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
     serverProfile.askPassword = [NSNumber numberWithBool:NO];
     
     [self.managedObjectContext save:nil];
     [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:serverProfile.profileID];
+    
+    // TODO: Temp fix. REMOVE
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setURL:[serverProfile.objectID URIRepresentation] forKey:kJMDefaultsActiveServer];
+    [defaults synchronize];
 }
 
 - (void)changeServerProfile:(NSNotification *)notification
