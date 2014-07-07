@@ -55,19 +55,19 @@ NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
     NSArray *reportParameters = [reportOptionsUtil reportOptionsAsParametersForReport:resourceLookup.uri];
 
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        NSMutableDictionary *data = [NSMutableDictionary dictionary];
+        [data setObject:resourceLookup forKey:kJMResourceLookup];
+        
         NSMutableArray *invisibleInputControls = [NSMutableArray array];
+        BOOL hasMandatoryInputControls = NO;
         for (JSInputControlDescriptor *inputControl in result.objects) {
             if (!inputControl.visible.boolValue) {
                 [invisibleInputControls addObject:inputControl];
+            } else if (inputControl.mandatory.boolValue) {
+                hasMandatoryInputControls = YES;
             }
         }
-
-        NSMutableDictionary *data = [NSMutableDictionary dictionary];
-        [data setObject:resourceLookup forKey:kJMResourceLookup];
-
-        if (result.objects.count - invisibleInputControls.count == 0) {
-            [weakSelf performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
-        } else {
+        if (result.objects.count - invisibleInputControls.count != 0) {
             if (invisibleInputControls.count) {
                 NSMutableArray *inputControls = [result.objects mutableCopy];
                 [inputControls removeObjectsInArray:invisibleInputControls];
@@ -75,9 +75,10 @@ NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
             } else {
                 [data setObject:result.objects forKey:kJMInputControls];
             }
-
-            [weakSelf performSegueWithIdentifier:kJMShowReportOptionsSegue sender:data];
         }
+        
+        NSString *identifier = hasMandatoryInputControls ? kJMShowReportOptionsSegue : kJMShowReportViewerSegue;
+        [weakSelf performSegueWithIdentifier:identifier sender:data];
     } viewControllerToDismiss:nil];
 
     [report inputControlsForReport:resourceLookup.uri ids:nil selectedValues:reportParameters delegate:delegate];
