@@ -9,6 +9,8 @@
 #import "JMBaseResourcesViewController.h"
 #import "UIViewController+FetchInputControls.h"
 #import "JMConstants.h"
+#import "JMDetailReportViewerViewController.h"
+#import "JMDetailReportOptionsViewController.h"
 #import <Objection-iOS/Objection.h>
 
 NSString * kJMResourceCellIdentifier = @"ResourceCell";
@@ -16,8 +18,6 @@ NSString * kJMLoadingCellIdentifier = @"LoadingCell";
 
 @implementation JMBaseResourcesViewController
 objection_requires(@"constants")
-
-@synthesize needsToResetScroll = _needsToResetScroll;
 
 - (NSInteger)numberOfSections
 {
@@ -69,6 +69,14 @@ objection_requires(@"constants")
     if ([self isReportSegue:segue]) {
         JSResourceLookup *resourcesLookup = [sender objectForKey:kJMResourceLookup];
         row = [self.delegate.resources indexOfObject:resourcesLookup];
+        
+        if ([segue.identifier isEqualToString:kJMShowReportOptionsSegue]) {
+            NSArray *inputControls = [sender objectForKey:kJMInputControls];
+            BOOL hasMandatoryInputControls = [[sender objectForKey:kJMHasMandatoryInputControls] boolValue];
+            id destinationViewController = segue.destinationViewController;
+            [destinationViewController setInputControls:[inputControls mutableCopy]];
+            [destinationViewController setHasMandatoryInputControls:hasMandatoryInputControls];
+        }
     } else {
         row = [sender row];
     }

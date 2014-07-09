@@ -111,7 +111,7 @@
 
     __weak JMSingleSelectInputControlCell *weakSelf = self;
     
-    // TODO: change logic to select previous values instead dismissing view. And check network status!
+    // TODO: change loading progress
     [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.reportClient cancelBlock:^{
         [[weakSelf.delegate navigationController] popViewControllerAnimated:YES];
     }];
@@ -138,7 +138,7 @@
     } viewControllerToDismiss:self.delegate];
     
     [JMRequestDelegate setFinalBlock:^{
-        [self.delegate.tableView reloadData];
+        [self.tableView reloadData];
     }];
     
     [self.reportClient updatedInputControlsValues:self.resourceLookup.uri

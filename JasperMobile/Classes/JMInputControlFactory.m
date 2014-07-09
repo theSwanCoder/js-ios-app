@@ -46,10 +46,11 @@ static NSString * const kJMSingleSelectCellIdentifier = @"SingleSelectCell";
 @implementation JMInputControlFactory
 objection_requires(@"constants")
 
-- (id)initWithTableViewController:(UITableViewController <JMInputControlsHolder> *)tableViewController
+- (id)initWithViewController:(UIViewController<JMInputControlsHolder> *)viewController andTableView:(UITableView *)tableView
 {
     if (self = [self init]) {
-        self.tableViewController = tableViewController;
+        self.viewController = viewController;
+        self.tableView = tableView;
         [[JSObjection defaultInjector] injectDependencies:self];
     }
     
@@ -62,11 +63,12 @@ objection_requires(@"constants")
     
     NSString *cellIdentifier = [self.types objectForKey:inputControl.type];
     
-    id cell = [self.tableViewController.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    id cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     [cell setInputControlDescriptor:inputControl];
 
     if ([cell respondsToSelector:@selector(setDelegate:)]) {
-        [cell setDelegate:self.tableViewController];
+        [cell setDelegate:self.viewController];
+        [cell setTableView:self.tableView];
     }
 
     return cell;

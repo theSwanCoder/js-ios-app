@@ -100,6 +100,8 @@ static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
         [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
     }
     
+    [application setStatusBarStyle:UIStatusBarStyleLightContent];
+    
     return YES;
 }
 							

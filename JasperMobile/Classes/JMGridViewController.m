@@ -14,8 +14,6 @@
 
 @implementation JMGridViewController
 
-@synthesize needsToResetScroll = _needsToResetScroll;
-
 #pragma mark - UIViewController
 
 - (void)viewDidLoad

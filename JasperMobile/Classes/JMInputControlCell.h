@@ -40,7 +40,8 @@
 
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
 @property (nonatomic, strong) NSString *errorMessage;
-@property (nonatomic, weak) UITableViewController <JMInputControlsHolder> *delegate;
+@property (nonatomic, weak) UIViewController <JMInputControlsHolder> *delegate;
+@property (nonatomic, weak) UITableView *tableView;
 
 /**
  Contains value for the Input Control. Can be NSString, NSDate or

@@ -66,9 +66,9 @@
         NSInteger row = [self.delegate.inputControls indexOfObject:self];
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
         
-        [self.delegate.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [self.delegate.tableView beginUpdates];
-        [self.delegate.tableView endUpdates];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
         return YES;
     }
     

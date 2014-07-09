@@ -133,7 +133,6 @@ objection_requires(@"resourceClient", @"constants")
         isLoading = NO;
         
         if (!weakSelf.totalCount) {
-            weakSelf.activeRepresentationViewController.needsToResetScroll = YES;
             weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
         }
         [weakSelf.resources addObjectsFromArray:result.objects];

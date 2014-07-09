@@ -37,15 +37,17 @@
  */
 @interface JMInputControlFactory : NSObject
 
-@property (nonatomic, weak) UITableViewController <JMInputControlsHolder> *tableViewController;
+@property (nonatomic, weak) UIViewController <JMInputControlsHolder> *viewController;
+@property (nonatomic, weak) UITableView *tableView;
 
 /**
  Initialize a new factory
  
- @param tableViewController A table view controller which is required to get prototype cells
+ @param viewController A view controller which conforms to JMInputControlsHolder protocol. Needed to update IC cascades
+ @param tableView A tableView used to get prototype cells
  @return An initialized factory
  */
-- (id)initWithTableViewController:(UITableViewController <JMInputControlsHolder> *)tableViewController;
+- (id)initWithViewController:(UIViewController <JMInputControlsHolder> *)viewController andTableView:(UITableView *)tableView;
 
 /**
  Creates the input control cell

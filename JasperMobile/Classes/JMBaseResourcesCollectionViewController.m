@@ -39,16 +39,6 @@ objection_requires(@"constants")
     [self.collectionView.collectionViewLayout invalidateLayout];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    // Reset scroll position for a new resources type
-    if (self.needsToResetScroll) {
-        self.collectionView.contentOffset = CGPointZero;
-    }
-}
-
 #pragma mark - UICollectionViewControllerDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -104,12 +94,7 @@ objection_requires(@"constants")
 #pragma mark - JMRefreshable
 
 - (void)refresh
-{
-    // Reset scroll position for a new resources type
-    if (self.needsToResetScroll) {
-        self.collectionView.contentOffset = CGPointZero;
-    }
-    
+{    
     [self.collectionView reloadData];
 }
 

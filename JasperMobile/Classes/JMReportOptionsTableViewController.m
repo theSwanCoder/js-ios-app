@@ -67,7 +67,7 @@ inject_default_rotation()
 - (JMInputControlFactory *)inputControlFactory
 {
     if (!_inputControlFactory) {
-        _inputControlFactory = [[JMInputControlFactory alloc] initWithTableViewController:self];
+        _inputControlFactory = [[JMInputControlFactory alloc] initWithViewController:self andTableView:self.tableView];
     }
     
     return _inputControlFactory;

@@ -40,6 +40,5 @@
 
 @optional
 @property (nonatomic, assign) BOOL isRefreshing;
-@property (nonatomic, assign) BOOL needsToResetScroll;
 
 @end
