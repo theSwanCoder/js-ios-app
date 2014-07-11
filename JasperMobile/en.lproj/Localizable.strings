@@ -156,6 +156,11 @@
 
 "detail.resourcesloading.msg" = "Loading.\nPlease Wait...";
 "detail.noresults.msg" = "No Results.\nPlease Make Another Selection...";
+"detail.settings.title" = "Connection settings";
+"detail.settings.item.connection.timeout" = "Connection timeout (in seconds)";
+"detail.settings.item.data.read.timeout" = "Data read timeout (in seconds)";
+"detail.settings.settings.saved" = "Settings saved successfully!\n Do you want to exit from settings?";
+
 
 // Tools
 "master.tools.type.refresh" = "Refresh";

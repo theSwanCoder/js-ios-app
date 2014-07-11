@@ -36,6 +36,9 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     
     self.headerBarLabel.text = @"";
     
+    
+    [self showMasterView:NO];
+
     @try {
         [self performSegueWithIdentifier:kJMMasterViewControllerSegue sender:self];
     } @catch (NSException *exception) {
@@ -59,6 +62,7 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     UIView *container;
     
     if ([segue.identifier isEqualToString:kJMMasterViewControllerSegue]) {
+        [self showMasterView:YES];
         container = self.masterView;
         [destinationViewController view].autoresizingMask = UIViewAutoresizingFlexibleHeight;
     } else if ([segue.identifier isEqualToString:kJMDetailViewControllerSegue]) {
@@ -77,6 +81,18 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
                                                         container.frame.size.height);
     [container addSubview:[destinationViewController view]];
     [destinationViewController didMoveToParentViewController:self];
+}
+
+- (void)showMasterView:(BOOL)show
+{
+    CGRect masterViewFrame = self.masterView.frame;
+    masterViewFrame.size.width = show * kJMMasterViewWidth;
+    self.masterView.frame = masterViewFrame;
+    
+    CGRect detailsViewFrame = self.detailView.frame;
+    detailsViewFrame.origin.x = masterViewFrame.size.width;
+    detailsViewFrame.size.width = self.view.bounds.size.width - masterViewFrame.size.width;
+    self.detailView.frame = detailsViewFrame;
 }
 
 #pragma mark - Actions

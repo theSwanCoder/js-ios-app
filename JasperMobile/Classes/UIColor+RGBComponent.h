@@ -15,4 +15,9 @@
  */
 + (CGFloat)rgbComponent:(CGFloat)color;
 
+/**
+ Returns an color from hex string. Assumes input like "#00FF00" (#RRGGBB).
+ */
++ (UIColor *)colorFromHexString:(NSString *)hexString;
+
 @end

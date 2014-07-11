@@ -29,6 +29,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UIColor+RGBComponent.h"
 
 // Constants for NSUserDefaults
 extern NSString * const kJMDefaultsActiveServer;
@@ -67,6 +68,10 @@ extern NSString * const kJMSortBy;
 extern NSString * const kJMTotalCount;
 extern NSString * const kJMOffset;
 
+// Settings keys
+extern NSString * const kJMDefaultRequestTimeout;
+extern NSString * const kJMReportRequestTimeout;
+
 // Report directory
 extern NSString * const kJMReportsDirectory;
 
@@ -80,3 +85,9 @@ extern NSString * const kJMReportFilename;
 #define kJMFavoritesMenuTag 2
 #define kJMSavedReportsMenuTag 3
 #define kJMServersMenuTag 4
+
+
+#define kJMMasterViewWidth 163
+#define kJMDetailViewLightBackgroundColor       [UIColor colorFromHexString:@"#E5E9EB"]
+#define kJMDetailViewLightTextColor             [UIColor colorFromHexString:@"#8F8F8F"]
+#define kJMDetailActionBarItemsBackgroundColor  [UIColor colorFromHexString:@"#2D3036"]

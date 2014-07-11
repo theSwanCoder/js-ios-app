@@ -65,6 +65,11 @@ NSString * const kJMSortBy = @"sortBy";
 NSString * const kJMTotalCount = @"totalCount";
 NSString * const kJMOffset = @"offset";
 
+// Settings keys
+NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";
+NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
+
+
 // Directory to store downloaded reports
 NSString * const kJMReportsDirectory = @"reports";
 

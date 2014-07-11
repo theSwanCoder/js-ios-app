@@ -76,6 +76,12 @@
 
 "status.loading" = "Загрузка...";
 
+/* Detail view view (Pad) */
+
+"detail.settings.title" = "Параметры соединения";
+"detail.settings.item.connection.timeout" = "Таймуат соединения (в секундах)";
+"detail.settings.item.data.read.timeout" = "Таймаут чтения данных (в секундах)";
+
 /* Error messages */
 
 "error.general.dialog.msg" = "Ошибка";

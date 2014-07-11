@@ -38,8 +38,6 @@
 #import "JMUtils.h"
 
 static NSString * const kJMProductName = @"JasperMobile";
-static NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";
-static NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
 
 @interface JasperMobileAppDelegate() <JMResourceClientHolder, JMReportClientHolder>
 @property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;

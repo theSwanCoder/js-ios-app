@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		085E3D6419704CAF005F8E2E /* JMDetailSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5B19704CAF005F8E2E /* JMDetailSettings.m */; };
+		085E3D6519704CAF005F8E2E /* JMDetailSettingsActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5D19704CAF005F8E2E /* JMDetailSettingsActionBarView.m */; };
+		085E3D6619704CAF005F8E2E /* JMDetailSettingsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5F19704CAF005F8E2E /* JMDetailSettingsItem.m */; };
+		085E3D6719704CAF005F8E2E /* JMDetailSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D6119704CAF005F8E2E /* JMDetailSettingsTableViewCell.m */; };
+		085E3D6819704CAF005F8E2E /* JMDetailSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D6319704CAF005F8E2E /* JMDetailSettingsViewController.m */; };
+		085E3D7119704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 085E3D7019704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib */; };
 		37455034AFBCA2439CBD503E /* JMServersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455C6224E8AF787AF468C9 /* JMServersTableViewController.m */; };
 		3745506335AE18D1886CCED1 /* JMMenuItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455DD5605F6B0D51E05F27 /* JMMenuItemCell.m */; };
 		37455256B3656246AF66CA29 /* JMRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455F8C7426E010A3709C6E /* JMRepositoryTableViewController.m */; };
@@ -247,6 +253,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		085E3D5A19704CAF005F8E2E /* JMDetailSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettings.h; path = Classes/JMDetailSettings.h; sourceTree = "<group>"; };
+		085E3D5B19704CAF005F8E2E /* JMDetailSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailSettings.m; path = Classes/JMDetailSettings.m; sourceTree = "<group>"; };
+		085E3D5C19704CAF005F8E2E /* JMDetailSettingsActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettingsActionBarView.h; path = Classes/JMDetailSettingsActionBarView.h; sourceTree = "<group>"; };
+		085E3D5D19704CAF005F8E2E /* JMDetailSettingsActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailSettingsActionBarView.m; path = Classes/JMDetailSettingsActionBarView.m; sourceTree = "<group>"; };
+		085E3D5E19704CAF005F8E2E /* JMDetailSettingsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettingsItem.h; path = Classes/JMDetailSettingsItem.h; sourceTree = "<group>"; };
+		085E3D5F19704CAF005F8E2E /* JMDetailSettingsItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailSettingsItem.m; path = Classes/JMDetailSettingsItem.m; sourceTree = "<group>"; };
+		085E3D6019704CAF005F8E2E /* JMDetailSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettingsTableViewCell.h; path = Classes/JMDetailSettingsTableViewCell.h; sourceTree = "<group>"; };
+		085E3D6119704CAF005F8E2E /* JMDetailSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailSettingsTableViewCell.m; path = Classes/JMDetailSettingsTableViewCell.m; sourceTree = "<group>"; };
+		085E3D6219704CAF005F8E2E /* JMDetailSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettingsViewController.h; path = Classes/JMDetailSettingsViewController.h; sourceTree = "<group>"; };
+		085E3D6319704CAF005F8E2E /* JMDetailSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailSettingsViewController.m; path = Classes/JMDetailSettingsViewController.m; sourceTree = "<group>"; };
+		085E3D7019704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "JMDetailSettingsActionBarView~ipad.xib"; path = "Classes/JMDetailSettingsActionBarView~ipad.xib"; sourceTree = "<group>"; };
 		37455108E52B31C8C8F3EEA0 /* JMSavedReportViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSavedReportViewerViewController.m; path = Classes/JMSavedReportViewerViewController.m; sourceTree = "<group>"; };
 		3745519D17A1453668F7C56A /* JMMenuItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMenuItemCell.h; path = Classes/JMMenuItemCell.h; sourceTree = "<group>"; };
 		374551CAFD2324CE12990919 /* JMLibraryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMLibraryTableViewController.h; path = Classes/JMLibraryTableViewController.h; sourceTree = "<group>"; };
@@ -583,6 +600,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		085E3D6C19704CB5005F8E2E /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				085E3D6D19704CBD005F8E2E /* Cell */,
+				085E3D6E19704CC7005F8E2E /* DetailSettings */,
+				085E3D6F19704CD3005F8E2E /* ActionBar */,
+				085E3D6219704CAF005F8E2E /* JMDetailSettingsViewController.h */,
+				085E3D6319704CAF005F8E2E /* JMDetailSettingsViewController.m */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		085E3D6D19704CBD005F8E2E /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				085E3D6019704CAF005F8E2E /* JMDetailSettingsTableViewCell.h */,
+				085E3D6119704CAF005F8E2E /* JMDetailSettingsTableViewCell.m */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
+		085E3D6E19704CC7005F8E2E /* DetailSettings */ = {
+			isa = PBXGroup;
+			children = (
+				085E3D5A19704CAF005F8E2E /* JMDetailSettings.h */,
+				085E3D5B19704CAF005F8E2E /* JMDetailSettings.m */,
+				085E3D5E19704CAF005F8E2E /* JMDetailSettingsItem.h */,
+				085E3D5F19704CAF005F8E2E /* JMDetailSettingsItem.m */,
+			);
+			name = DetailSettings;
+			sourceTree = "<group>";
+		};
+		085E3D6F19704CD3005F8E2E /* ActionBar */ = {
+			isa = PBXGroup;
+			children = (
+				085E3D5C19704CAF005F8E2E /* JMDetailSettingsActionBarView.h */,
+				085E3D5D19704CAF005F8E2E /* JMDetailSettingsActionBarView.m */,
+				085E3D7019704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib */,
+			);
+			name = ActionBar;
+			sourceTree = "<group>";
+		};
 		3745511E7FBC4699D30B0F8B /* Pad */ = {
 			isa = PBXGroup;
 			children = (
@@ -603,6 +662,7 @@
 				F554B1B519221F3800E0E860 /* JMMasterRepositoryTableViewController.m */,
 				F5C78CE319518B270082AFDE /* JMCustomSplitViewController.h */,
 				F5C78CE419518B270082AFDE /* JMCustomSplitViewController.m */,
+				085E3D6C19704CB5005F8E2E /* Settings */,
 			);
 			name = Pad;
 			sourceTree = "<group>";
@@ -1278,10 +1338,10 @@
 		F55CC327174CFFCE00CEB39E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = JasperMobile;
+				CLASSPREFIX = JM;
 				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = com.jaspersoft;
+				ORGANIZATIONNAME = JasperMobile;
 				TargetAttributes = {
 					F55CC32E174CFFCE00CEB39E = {
 						DevelopmentTeam = HD6C6SELJN;
@@ -1352,6 +1412,7 @@
 				F5894FDB1887ECF200FD8C00 /* res_type_pdf.png in Resources */,
 				F57972F518A92D3900BD16B9 /* edit_name_button.png in Resources */,
 				F58EF6BE17F487A800C9EBA8 /* add_favorite_button_highlighted@2x.png in Resources */,
+				085E3D7119704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib in Resources */,
 				F58EF6C617F487A800C9EBA8 /* delete_button@2x.png in Resources */,
 				F5C2531D1954A5130090A5E0 /* refresh_button_background_highlighted.png in Resources */,
 				F55CC33D174CFFCE00CEB39E /* InfoPlist.strings in Resources */,
@@ -1500,6 +1561,7 @@
 				F58FF2F91760A1090021CC8B /* JMCancelRequestPopup.m in Sources */,
 				F55048D917622B8C0067304B /* JMUtils.m in Sources */,
 				F539125218D73170001BDDBE /* JMResourcePageContentViewController.m in Sources */,
+				085E3D6419704CAF005F8E2E /* JMDetailSettings.m in Sources */,
 				F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */,
 				F57186C3183658DD0013B6EB /* JSRESTBase+updateServerInfo.m in Sources */,
 				F5D97FA1179587100059C761 /* JMFavorites.m in Sources */,
@@ -1507,7 +1569,9 @@
 				F5D97FA2179587100059C761 /* JasperMobile.xcdatamodeld in Sources */,
 				F5D97FA3179587100059C761 /* JMReportOptions.m in Sources */,
 				F54C9D10191A336D00484769 /* JMMasterResourcesTableViewController.m in Sources */,
+				085E3D6819704CAF005F8E2E /* JMDetailSettingsViewController.m in Sources */,
 				F5C737631886DE9E00203175 /* ALToastView.m in Sources */,
+				085E3D6719704CAF005F8E2E /* JMDetailSettingsTableViewCell.m in Sources */,
 				F5D97FA4179587100059C761 /* JMServerProfile.m in Sources */,
 				F5D97FA5179587100059C761 /* JMServerProfile+Helpers.m in Sources */,
 				F5D97FAA179587CF0059C761 /* SSKeychain.m in Sources */,
@@ -1525,10 +1589,12 @@
 				F5E4FB6A17C61A5300A69FCC /* JMTextInputControlCell.m in Sources */,
 				F5E4FB6D17C61AA900A69FCC /* JMNumberInputControlCell.m in Sources */,
 				F5E4FB7017C61B7700A69FCC /* JMSingleSelectInputControlCell.m in Sources */,
+				085E3D6619704CAF005F8E2E /* JMDetailSettingsItem.m in Sources */,
 				F5E4FB7317C61BBF00A69FCC /* JMMultiSelectInputControlCell.m in Sources */,
 				F5E4FB7F17C61DE500A69FCC /* JMBooleanInputControlCell.m in Sources */,
 				F539124F18D7139B001BDDBE /* JMBaseRepositoryPagingViewController.m in Sources */,
 				F572814717C77048000B192D /* JMRequestDelegate.m in Sources */,
+				085E3D6519704CAF005F8E2E /* JMDetailSettingsActionBarView.m in Sources */,
 				F59AFBAC17CB58F300F168CE /* JMReportOptionsUtil.m in Sources */,
 				F59BDB0E1966B00F004FDC5B /* JMBaseResourcesViewController.m in Sources */,
 				F50F5B5D17CCF14300582196 /* JMSingleSelectTableViewController.m in Sources */,
