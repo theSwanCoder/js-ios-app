@@ -44,18 +44,17 @@ objection_requires(@"resourceClient")
     self.tableView.dataSource = self;
     
     [self.backView setOnTapGestureCallback:^(UITapGestureRecognizer *recognizer) {
-        [self.navigationController popViewControllerAnimated:YES];
-        
-        NSDictionary *userInfo = @{
-                kJMOffset : @(self.offset),
-                kJMResources : self.resources
-        };
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInDetail object:nil userInfo:userInfo];
+        [self back];
     }];
     
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:0]
                                 animated:NO
                           scrollPosition:UITableViewScrollPositionMiddle];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(back)
+                                                 name:kJMShowRootMaster
+                                               object:nil];
 }
 
 #pragma mark - Table view data source
@@ -138,6 +137,24 @@ objection_requires(@"resourceClient")
     [self.resources removeAllObjects];
     [self.tableView reloadData];
     [self loadNextPage];
+}
+
+- (void)back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    
+    NSDictionary *userInfo = @{
+                               kJMOffset : @(self.offset),
+                               kJMResources : self.resources
+                               };
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInDetail object:nil userInfo:userInfo];
+}
+
+#pragma mark - NSObject
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

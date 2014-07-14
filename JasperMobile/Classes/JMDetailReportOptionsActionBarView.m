@@ -24,7 +24,7 @@
 
 - (IBAction)cancel:(id)sender
 {
-    [self.delegate cancel];
+    [self.delegate cancel:nil];
 }
 
 - (IBAction)updateInputControls:(id)sender

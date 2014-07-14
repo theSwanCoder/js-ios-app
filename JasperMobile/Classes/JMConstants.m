@@ -48,6 +48,7 @@ NSString * const kJMClearSavedReportsListNotification = @"clearSavedReports";
 NSString * const kJMShowResourcesListInMaster = @"showResourcesListInMaster";
 NSString * const kJMShowResourcesListInDetail = @"showResourcesListInDetail";
 NSString * const kJMLoadResourcesInDetail = @"loadResourcesInDetail";
+NSString * const kJMShowRootMaster = @"showRootMaster";
 
 // Shared keys for NSDictionary
 NSString * const kJMMenuTag = @"menuTag";

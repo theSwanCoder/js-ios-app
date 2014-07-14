@@ -12,12 +12,14 @@
 #import "JMReportClientHolder.h"
 #import "JMActionBarProvider.h"
 
-@interface JMDetailReportOptionsViewController : UIViewController <JMReportClientHolder, JMResourceClientHolder, JMInputControlsHolder, JMActionBarProvider, UITableViewDelegate, UITableViewDataSource>
+@interface JMDetailReportOptionsViewController : UIViewController <JMReportClientHolder, JMResourceClientHolder, JMInputControlsHolder,
+    JMActionBarProvider, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) id <JMReportClientHolder, JMResourceClientHolder, JMInputControlsHolder> delegate;
 @property (nonatomic, assign) BOOL hasMandatoryInputControls;
 
 - (void)updateInputControls;
-- (void)cancel;
+- (void)cancel:(NSNotification *)notification;
 
 @end

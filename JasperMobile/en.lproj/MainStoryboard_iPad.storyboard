@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="H7M-pU-pTq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="H7M-pU-pTq">
     <dependencies>
         <deployment version="1536" defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -1107,12 +1107,12 @@ Please Wait...</string>
         <!--Custom Split View Controller-->
         <scene sceneID="zFm-Nu-pne">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Rn9-H5-h5F" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="Vo4-fX-xDb" customClass="JMCustomSplitViewController" sceneMemberID="viewController">
                     <connections>
                         <segue destination="Yj5-5Y-eFZ" kind="custom" identifier="DetailViewController" customClass="JMManualTransitionSegue" id="r6y-rd-p7a"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rn9-H5-h5F" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-731" y="6313"/>
         </scene>

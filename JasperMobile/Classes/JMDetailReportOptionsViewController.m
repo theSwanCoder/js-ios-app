@@ -32,11 +32,23 @@ objection_requires(@"resourceClient", @"reportClient")
     return _inputControlFactory;
 }
 
-- (void)cancel
-{}
+- (void)cancel:(NSNotification *)notification
+{
+    // TODO: make universal method (if needed)
+    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1]
+                                          animated:YES];
+    if (!notification) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowRootMaster object:nil];
+    }
+}
 
 - (void)updateInputControls
 {}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 #pragma mark - Initialization
 
@@ -77,6 +89,11 @@ objection_requires(@"resourceClient", @"reportClient")
         
         [self.inputControls addObject:cell];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cancel:)
+                                                 name:kJMShowResourcesListInDetail
+                                               object:nil];
 }
 
 #pragma mark - Table view data source
