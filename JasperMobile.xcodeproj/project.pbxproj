@@ -40,6 +40,8 @@
 		F513FD9C194F1256000D172B /* JMDetailRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F513FD9B194F1256000D172B /* JMDetailRootViewController.m */; };
 		F514E69C175575AE00C9F61E /* UIAlertView+LocalizedAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = F514E69B175575AE00C9F61E /* UIAlertView+LocalizedAlert.m */; };
 		F514E69D175575C800C9F61E /* JMLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = F514E6911754E4C200C9F61E /* JMLocalization.m */; };
+		F51A148C19740F3400C3A3A0 /* JMDetailReportOptionsActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = F51A148B19740F3400C3A3A0 /* JMDetailReportOptionsActionBarView.m */; };
+		F51A149219740F6500C3A3A0 /* JMDetailReportOptionsActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F51A149019740F6500C3A3A0 /* JMDetailReportOptionsActionBarView~ipad.xib */; };
 		F51D6A82178472870079AE50 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F51D6A80178472870079AE50 /* Localizable.strings */; };
 		F5322724192F640F004B4283 /* JMDetailReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5322723192F640F004B4283 /* JMDetailReportViewerViewController.m */; };
 		F5339A1617CE0F0F005073EE /* JMMultiSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5339A1517CE0F0E005073EE /* JMMultiSelectTableViewController.m */; };
@@ -163,8 +165,8 @@
 		F59FD9C017B1014A00331BD8 /* JMFavoritesUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F59FD9BF17B1014A00331BD8 /* JMFavoritesUtil.m */; };
 		F5AD3C5817F4A90D00F16D3C /* input_control_text_field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F5AD3C5717F4A90D00F16D3C /* input_control_text_field@2x.png */; };
 		F5AE62531906AC6600954192 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5AE62511906AC6600954192 /* MainStoryboard_iPad.storyboard */; };
-		F5C2531D1954A5130090A5E0 /* refresh_button_background_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C2531B1954A5130090A5E0 /* refresh_button_background_highlighted.png */; };
-		F5C2531E1954A5130090A5E0 /* refresh_button_background.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C2531C1954A5130090A5E0 /* refresh_button_background.png */; };
+		F5C2531D1954A5130090A5E0 /* gray_button_background_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C2531B1954A5130090A5E0 /* gray_button_background_highlighted.png */; };
+		F5C2531E1954A5130090A5E0 /* gray_button_background.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C2531C1954A5130090A5E0 /* gray_button_background.png */; };
 		F5C2532A19571B980090A5E0 /* search_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C2532919571B980090A5E0 /* search_button.png */; };
 		F5C72FDE17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C72FDD17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m */; };
 		F5C737631886DE9E00203175 /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C737611886DE9E00203175 /* ALToastView.m */; };
@@ -318,6 +320,9 @@
 		F514E6911754E4C200C9F61E /* JMLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMLocalization.m; path = JasperMobile/Classes/JMLocalization.m; sourceTree = "<group>"; };
 		F514E69A175575AE00C9F61E /* UIAlertView+LocalizedAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+LocalizedAlert.h"; path = "JasperMobile/Classes/UIAlertView+LocalizedAlert.h"; sourceTree = "<group>"; };
 		F514E69B175575AE00C9F61E /* UIAlertView+LocalizedAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIAlertView+LocalizedAlert.m"; path = "JasperMobile/Classes/UIAlertView+LocalizedAlert.m"; sourceTree = "<group>"; };
+		F51A148A19740F3400C3A3A0 /* JMDetailReportOptionsActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailReportOptionsActionBarView.h; path = Classes/JMDetailReportOptionsActionBarView.h; sourceTree = "<group>"; };
+		F51A148B19740F3400C3A3A0 /* JMDetailReportOptionsActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailReportOptionsActionBarView.m; path = Classes/JMDetailReportOptionsActionBarView.m; sourceTree = "<group>"; };
+		F51A149119740F6500C3A3A0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "en.lproj/JMDetailReportOptionsActionBarView~ipad.xib"; sourceTree = "<group>"; };
 		F51D6A81178472870079AE50 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F51D6A83178473330079AE50 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F51D6A841784737D0079AE50 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -487,8 +492,8 @@
 		F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMResourceClientHolder.h; path = JasperMobile/Classes/JMResourceClientHolder.h; sourceTree = "<group>"; };
 		F5AD3C5717F4A90D00F16D3C /* input_control_text_field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "input_control_text_field@2x.png"; sourceTree = "<group>"; };
 		F5AE62521906AC6600954192 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		F5C2531B1954A5130090A5E0 /* refresh_button_background_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh_button_background_highlighted.png; sourceTree = "<group>"; };
-		F5C2531C1954A5130090A5E0 /* refresh_button_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh_button_background.png; sourceTree = "<group>"; };
+		F5C2531B1954A5130090A5E0 /* gray_button_background_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray_button_background_highlighted.png; sourceTree = "<group>"; };
+		F5C2531C1954A5130090A5E0 /* gray_button_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray_button_background.png; sourceTree = "<group>"; };
 		F5C2532919571B980090A5E0 /* search_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_button.png; sourceTree = "<group>"; };
 		F5C72FDC17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewCell+SetSeparators.h"; path = "JasperMobile/Classes/UITableViewCell+SetSeparators.h"; sourceTree = "<group>"; };
 		F5C72FDD17FC46EC00C60FC2 /* UITableViewCell+SetSeparators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableViewCell+SetSeparators.m"; path = "JasperMobile/Classes/UITableViewCell+SetSeparators.m"; sourceTree = "<group>"; };
@@ -831,6 +836,7 @@
 			children = (
 				F5C78CE519518B270082AFDE /* JMCustomSplitViewController~ipad.xib */,
 				F5C78CF91952DED90082AFDE /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib */,
+				F51A149019740F6500C3A3A0 /* JMDetailReportOptionsActionBarView~ipad.xib */,
 			);
 			name = Pad;
 			sourceTree = "<group>";
@@ -1052,10 +1058,10 @@
 		F58FF2EC1760A0AC0021CC8B /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
-				F5C2532919571B980090A5E0 /* search_button.png */,
-				F5C2531B1954A5130090A5E0 /* refresh_button_background_highlighted.png */,
-				F5C2531C1954A5130090A5E0 /* refresh_button_background.png */,
 				F5FA4C2E190FBFC900001999 /* Representation Switcher */,
+				F5C2532919571B980090A5E0 /* search_button.png */,
+				F5C2531B1954A5130090A5E0 /* gray_button_background_highlighted.png */,
+				F5C2531C1954A5130090A5E0 /* gray_button_background.png */,
 				F58EF6AB17F487A700C9EBA8 /* add_favorite_button_highlighted.png */,
 				F58EF6AC17F487A800C9EBA8 /* add_favorite_button_highlighted@2x.png */,
 				F58EF6AD17F487A800C9EBA8 /* add_favorite_button.png */,
@@ -1113,6 +1119,8 @@
 				F573ADB6192E42FD00D3C018 /* JMBackHeaderView.m */,
 				F5C78CF61952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.h */,
 				F5C78CF71952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.m */,
+				F51A148A19740F3400C3A3A0 /* JMDetailReportOptionsActionBarView.h */,
+				F51A148B19740F3400C3A3A0 /* JMDetailReportOptionsActionBarView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1414,10 +1422,11 @@
 				F58EF6BE17F487A800C9EBA8 /* add_favorite_button_highlighted@2x.png in Resources */,
 				085E3D7119704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib in Resources */,
 				F58EF6C617F487A800C9EBA8 /* delete_button@2x.png in Resources */,
-				F5C2531D1954A5130090A5E0 /* refresh_button_background_highlighted.png in Resources */,
+				F5C2531D1954A5130090A5E0 /* gray_button_background_highlighted.png in Resources */,
 				F55CC33D174CFFCE00CEB39E /* InfoPlist.strings in Resources */,
 				F5AD3C5817F4A90D00F16D3C /* input_control_text_field@2x.png in Resources */,
 				F58EF6DC17F4882800C9EBA8 /* res_type_dashboard@2x.png in Resources */,
+				F51A149219740F6500C3A3A0 /* JMDetailReportOptionsActionBarView~ipad.xib in Resources */,
 				F55043581851D18600DA6D33 /* res_type_all.png in Resources */,
 				F58FF3041760A1600021CC8B /* JMCancelRequestPopup.xib in Resources */,
 				F58EF6DD17F4882800C9EBA8 /* res_type_folder.png in Resources */,
@@ -1499,7 +1508,7 @@
 				F5894FD81887EC1400FD8C00 /* saved_reports@2x.png in Resources */,
 				F5924EA218FCA1DF00691286 /* settings.png in Resources */,
 				F5E87CD317F1A9DD007FC6A7 /* iTunesArtwork in Resources */,
-				F5C2531E1954A5130090A5E0 /* refresh_button_background.png in Resources */,
+				F5C2531E1954A5130090A5E0 /* gray_button_background.png in Resources */,
 				F5894FDF1887ED1400FD8C00 /* res_type_html@2x.png in Resources */,
 				F58EF6C817F487A800C9EBA8 /* remove_favorite_button_highlighted@2x.png in Resources */,
 				F58B5C8818A2506000223763 /* JMSavedReportModifyPopup.xib in Resources */,
@@ -1603,6 +1612,7 @@
 				374557203C4B4894864CE759 /* JMLibraryTableViewController.m in Sources */,
 				3745594E2ED2E1EDD4881447 /* JMBaseRepositoryTableViewController.m in Sources */,
 				F5322724192F640F004B4283 /* JMDetailReportViewerViewController.m in Sources */,
+				F51A148C19740F3400C3A3A0 /* JMDetailReportOptionsActionBarView.m in Sources */,
 				37455A96A7B31E653BE86426 /* JMReportOptionsTableViewController.m in Sources */,
 				3745556D589570C0F70DE21E /* JMFavoritesTableViewController.m in Sources */,
 				F53B9B9419657C7B005470B9 /* UIViewController+fetchInputControls.m in Sources */,
@@ -1658,6 +1668,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		F51A149019740F6500C3A3A0 /* JMDetailReportOptionsActionBarView~ipad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F51A149119740F6500C3A3A0 /* en */,
+			);
+			name = "JMDetailReportOptionsActionBarView~ipad.xib";
+			sourceTree = "<group>";
+		};
 		F51D6A80178472870079AE50 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

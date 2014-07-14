@@ -53,5 +53,6 @@
 - (CGFloat)height;
 - (BOOL)dismissError;
 - (void)disableCell;
+- (BOOL)isValid;
 
 @end

@@ -209,6 +209,7 @@
 "dialog.button.ok" = "OK";
 "dialog.button.edit" = "Edit";
 "dialog.button.cancel" = "Cancel";
+"dialog.button.continue" = "Continue";
 "dialog.button.retry" = "Retry";
 "dialog.button.run.report" = "Run Report";
 "dialog.button.info" = "Info";

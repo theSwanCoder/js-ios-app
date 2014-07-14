@@ -10,10 +10,14 @@
 #import "JMInputControlsHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMReportClientHolder.h"
+#import "JMActionBarProvider.h"
 
-@interface JMDetailReportOptionsViewController : UIViewController <JMReportClientHolder, JMResourceClientHolder, JMInputControlsHolder, UITableViewDelegate, UITableViewDataSource>
+@interface JMDetailReportOptionsViewController : UIViewController <JMReportClientHolder, JMResourceClientHolder, JMInputControlsHolder, JMActionBarProvider, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, assign) BOOL hasMandatoryInputControls;
+
+- (void)updateInputControls;
+- (void)cancel;
 
 @end

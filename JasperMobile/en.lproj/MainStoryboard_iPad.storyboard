@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="H7M-pU-pTq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="H7M-pU-pTq">
     <dependencies>
         <deployment version="1536" defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -806,14 +806,14 @@ Please Wait...</string>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FhP-gd-KLB">
                                         <rect key="frame" x="5" y="4" width="152" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Refresh" backgroundImage="refresh_button_background.png">
+                                        <state key="normal" title="Refresh" backgroundImage="gray_button_background.png">
                                             <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="selected" backgroundImage="refresh_button_background_highlighted.png">
+                                        <state key="selected" backgroundImage="gray_button_background_highlighted.png">
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="highlighted" backgroundImage="refresh_button_background_highlighted.png">
+                                        <state key="highlighted" backgroundImage="gray_button_background_highlighted.png">
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -853,14 +853,14 @@ Please Wait...</string>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="nf0-SO-5lg">
                                         <rect key="frame" x="6" y="4" width="152" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Refresh" backgroundImage="refresh_button_background.png">
+                                        <state key="normal" title="Refresh" backgroundImage="gray_button_background.png">
                                             <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="selected" backgroundImage="refresh_button_background_highlighted.png">
+                                        <state key="selected" backgroundImage="gray_button_background_highlighted.png">
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="highlighted" backgroundImage="refresh_button_background_highlighted.png">
+                                        <state key="highlighted" backgroundImage="gray_button_background_highlighted.png">
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -1072,14 +1072,14 @@ Please Wait...</string>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="loI-n6-aPL">
                                         <rect key="frame" x="6" y="4" width="152" height="48"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Refresh" backgroundImage="refresh_button_background.png">
+                                        <state key="normal" title="Refresh" backgroundImage="gray_button_background.png">
                                             <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="selected" backgroundImage="refresh_button_background_highlighted.png">
+                                        <state key="selected" backgroundImage="gray_button_background_highlighted.png">
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="highlighted" backgroundImage="refresh_button_background_highlighted.png">
+                                        <state key="highlighted" backgroundImage="gray_button_background_highlighted.png">
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -1107,12 +1107,12 @@ Please Wait...</string>
         <!--Custom Split View Controller-->
         <scene sceneID="zFm-Nu-pne">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rn9-H5-h5F" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="Vo4-fX-xDb" customClass="JMCustomSplitViewController" sceneMemberID="viewController">
                     <connections>
                         <segue destination="Yj5-5Y-eFZ" kind="custom" identifier="DetailViewController" customClass="JMManualTransitionSegue" id="r6y-rd-p7a"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Rn9-H5-h5F" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-731" y="6313"/>
         </scene>
@@ -1171,11 +1171,11 @@ Please Wait...</string>
     </scenes>
     <resources>
         <image name="dot.png" width="6" height="5"/>
+        <image name="gray_button_background.png" width="1" height="1"/>
+        <image name="gray_button_background_highlighted.png" width="1" height="1"/>
         <image name="grid_res_type_report.png" width="262" height="182"/>
         <image name="home_logo.png" width="114" height="21"/>
         <image name="input_control_text_field.png" width="247" height="31"/>
-        <image name="refresh_button_background.png" width="1" height="1"/>
-        <image name="refresh_button_background_highlighted.png" width="1" height="1"/>
         <image name="report_prototype_image.png" width="108" height="80"/>
         <image name="resource_pad.png" width="54" height="48"/>
         <image name="tmp_arrow_back.png" width="15" height="30"/>
@@ -1186,10 +1186,10 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ruh-Jy-ETv"/>
         <segue reference="pEh-6g-cpr"/>
-        <segue reference="93t-XO-Vl3"/>
+        <segue reference="ruh-Jy-ETv"/>
         <segue reference="0bD-K8-B5D"/>
         <segue reference="h0e-Up-0Pa"/>
+        <segue reference="93t-XO-Vl3"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -130,6 +130,18 @@
     self.mandatoryLabel.textColor = self.label.textColor;
 }
 
+- (BOOL)isValid
+{
+    JSValidationRules *validationRules = self.inputControlDescriptor.validationRules;
+    if (validationRules.mandatoryValidationRule && self.value == nil) {
+        self.errorMessage = validationRules.mandatoryValidationRule.errorMessage;
+        
+        return NO;
+    }
+    
+    return YES;
+}
+
 #pragma mark - Private
 
 - (UILabel *)errorLabel

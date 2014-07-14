@@ -9,6 +9,7 @@
 #import "JMDetailReportOptionsViewController.h"
 #import "JMInputControlFactory.h"
 #import "JMRequestDelegate.h"
+#import "JMDetailReportOptionsActionBarView.h"
 #import <Objection-iOS/Objection.h>
 
 @interface JMDetailReportOptionsViewController ()
@@ -31,11 +32,21 @@ objection_requires(@"resourceClient", @"reportClient")
     return _inputControlFactory;
 }
 
+- (void)cancel
+{}
+
+- (void)updateInputControls
+{}
+
+#pragma mark - Initialization
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
     [[JSObjection defaultInjector] injectDependencies:self];
 }
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
@@ -68,6 +79,8 @@ objection_requires(@"resourceClient", @"reportClient")
     }
 }
 
+#pragma mark - Table view data source
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -81,6 +94,18 @@ objection_requires(@"resourceClient", @"reportClient")
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return [self.inputControls objectAtIndex:indexPath.row];
+}
+
+#pragma mark - JMActionBarProvider
+
+- (id)actionBar
+{
+    JMDetailReportOptionsActionBarView *actionBar = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass
+                                                     ([JMDetailReportOptionsActionBarView class])
+                                                                                  owner:self
+                                                                                options:nil].firstObject;
+    actionBar.delegate = self;
+    return actionBar;
 }
 
 @end
