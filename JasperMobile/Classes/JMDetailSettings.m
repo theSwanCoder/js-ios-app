@@ -11,16 +11,29 @@
 #import "JMLocalization.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import <Objection-iOS/Objection.h>
+#import "JMReportClientHolder.h"
+#import "JMResourceClientHolder.h"
 
 
-@interface JMDetailSettings ()
-
+@interface JMDetailSettings () <JMReportClientHolder, JMResourceClientHolder>
 @property (nonatomic, readwrite, strong) NSArray *itemsArray;
 
 @end
 
 
 @implementation JMDetailSettings
+objection_requires(@"resourceClient", @"reportClient")
+
+@synthesize resourceClient = _resourceClient;
+@synthesize reportClient = _reportClient;
+
+- (id)init{
+    self = [super init];
+    if (self) {
+        [[JSObjection defaultInjector] injectDependencies:self];
+    }
+    return self;
+}
 
 - (NSArray *)itemsArray{
     if (!_itemsArray) {
@@ -32,14 +45,9 @@
 - (void)createItemsArray
 {
     NSMutableArray *itemsArray = [NSMutableArray array];
-    JSObjectionInjector *injector = [JSObjection defaultInjector];
-    // Inject resource and report clients
-    JSRESTResource *resourceClient = [injector getObject:[JSRESTResource class]];
-    JSRESTReport *reportClient = [injector getObject:[JSRESTReport class]];
-
     NSArray *itemsSourceArray =
-    @[@{@"title" : JMCustomLocalizedString(@"detail.settings.item.connection.timeout", nil), @"settingsKey" : kJMDefaultRequestTimeout, @"value" : @(resourceClient.timeoutInterval)},
-      @{@"title" : JMCustomLocalizedString(@"detail.settings.item.data.read.timeout", nil),  @"settingsKey" : kJMReportRequestTimeout,  @"value" : @(reportClient.timeoutInterval)}];
+    @[@{@"title" : JMCustomLocalizedString(@"detail.settings.item.connection.timeout", nil), @"settingsKey" : kJMDefaultRequestTimeout, @"value" : @(self.resourceClient.timeoutInterval)},
+    @{@"title" : JMCustomLocalizedString(@"detail.settings.item.data.read.timeout", nil),  @"settingsKey" : kJMReportRequestTimeout,  @"value" : @(self.reportClient.timeoutInterval)}];
     
     for (NSDictionary *itemData in itemsSourceArray) {
         JMDetailSettingsItem *item = [[JMDetailSettingsItem alloc] init];
@@ -56,13 +64,8 @@
 {
     [self.itemsArray makeObjectsPerformSelector:@selector(saveSettings)];
 
-    JSObjectionInjector *injector = [JSObjection defaultInjector];
-    // Inject resource and report clients
-    JSRESTResource *resourceClient = [injector getObject:[JSRESTResource class]];
-    JSRESTReport *reportClient = [injector getObject:[JSRESTReport class]];
-
-    resourceClient.timeoutInterval = [[[self.itemsArray objectAtIndex:0] valueString] floatValue];
-    reportClient.timeoutInterval   = [[[self.itemsArray objectAtIndex:1] valueString] floatValue];
+    self.resourceClient.timeoutInterval = [[[self.itemsArray objectAtIndex:0] valueString] floatValue];
+    self.reportClient.timeoutInterval   = [[[self.itemsArray objectAtIndex:1] valueString] floatValue];
 }
 
 @end
