@@ -275,6 +275,7 @@
                     <size key="freeformSize" width="768" height="1024"/>
                     <connections>
                         <outlet property="tableView" destination="Qmi-RR-ioM" id="DNa-8V-e2y"/>
+                        <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="QIH-Uk-XKN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RdM-89-BNz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -511,11 +512,12 @@ Please Wait...</string>
                     <connections>
                         <outlet property="activityIndicator" destination="tEP-nc-fxs" id="X3Z-vx-XMe"/>
                         <outlet property="webView" destination="ahI-Oj-dmd" id="I64-sm-zGW"/>
+                        <segue destination="5ET-d1-APX" kind="push" identifier="ShowReportOptions" id="yOc-W8-lgs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xr4-oY-Rss" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3511" y="4040"/>
+            <point key="canvasLocation" x="3503" y="4048"/>
         </scene>
         <!--Grid View Controller-->
         <scene sceneID="fRm-yb-iFx">
@@ -1186,10 +1188,10 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="pEh-6g-cpr"/>
         <segue reference="ruh-Jy-ETv"/>
         <segue reference="0bD-K8-B5D"/>
         <segue reference="h0e-Up-0Pa"/>
-        <segue reference="93t-XO-Vl3"/>
+        <segue reference="QIH-Uk-XKN"/>
+        <segue reference="yOc-W8-lgs"/>
     </inferredMetricsTieBreakers>
 </document>

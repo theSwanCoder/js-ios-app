@@ -11,24 +11,32 @@
 
 @implementation JMDetailReportViewerViewController
 
+@synthesize inputControls = _inputControls; // A mutable array of "JSInputControlDescriptor" objects
+@synthesize resourceLookup = _resourceLookup;
+
+#pragma mark - UIViewController
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(back:)
-                                                 name:kJMShowResourcesListInDetail
-                                               object:nil];
+
 }
 
-- (IBAction)back:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
+#pragma mark - JMActionBarProvider
 
 - (id)actionBar
 {
-    // Will remove action bar
+    // TODO: implement
     return nil;
 }
+
+#pragma mark - JMRefreshable
+
+- (void)refresh
+{
+    
+}
+
+#pragma mark - NSObject
 
 - (void)dealloc
 {

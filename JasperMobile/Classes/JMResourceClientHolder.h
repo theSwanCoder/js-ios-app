@@ -36,10 +36,8 @@
  @since 1.6
  */
 @protocol JMResourceClientHolder <NSObject>
-@required
-@property (nonatomic, strong) JSRESTResource *resourceClient;
-
 @optional
+@property (nonatomic, strong) JSRESTResource *resourceClient;
 @property (nonatomic, strong) JSResourceLookup *resourceLookup;
 @property (nonatomic, strong) JSResourceDescriptor *resourceDescriptor;
 @property (nonatomic, strong) NSMutableArray *resources;

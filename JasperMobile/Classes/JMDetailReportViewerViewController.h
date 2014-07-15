@@ -9,7 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "JMReportViewerViewController.h"
 #import "JMActionBarProvider.h"
+#import "JMRefreshable.h"
+#import "JMInputControlsHolder.h"
+#import "JMResourceClientHolder.h"
 
-@interface JMDetailReportViewerViewController : JMReportViewerViewController <JMActionBarProvider>
+@interface JMDetailReportViewerViewController : JMReportViewerViewController <JMActionBarProvider, JMResourceClientHolder,
+    JMInputControlsHolder, JMRefreshable>
 
 @end

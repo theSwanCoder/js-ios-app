@@ -72,10 +72,8 @@ objection_requires(@"constants")
         
         if ([segue.identifier isEqualToString:kJMShowReportOptionsSegue]) {
             NSArray *inputControls = [sender objectForKey:kJMInputControls];
-            BOOL hasMandatoryInputControls = [[sender objectForKey:kJMHasMandatoryInputControls] boolValue];
             id destinationViewController = segue.destinationViewController;
             [destinationViewController setInputControls:[inputControls mutableCopy]];
-            [destinationViewController setHasMandatoryInputControls:hasMandatoryInputControls];
         }
     } else {
         row = [sender row];

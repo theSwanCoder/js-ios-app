@@ -182,10 +182,16 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)showResourcesListInDetail:(NSNotification *)notification
 {
+    if (self.navigationController.viewControllers.lastObject != self.activeRepresentationViewController) {
+        [self.navigationController popToViewController:self.activeRepresentationViewController animated:YES];
+    }
+    
     NSDictionary *userInfo = notification.userInfo;
-    self.offset = [[userInfo objectForKey:kJMOffset] integerValue];
-    self.resources = [userInfo objectForKey:kJMResources];
-    [self.activeRepresentationViewController refresh];
+    if (userInfo.count) {
+        self.offset = [[userInfo objectForKey:kJMOffset] integerValue];
+        self.resources = [userInfo objectForKey:kJMResources];
+        [self.activeRepresentationViewController refresh];
+    }
 }
 
 #pragma mark - JMActionBarProvider

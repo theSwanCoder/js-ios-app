@@ -10,6 +10,7 @@
 #import "JMInputControlFactory.h"
 #import "JMRequestDelegate.h"
 #import "JMDetailReportOptionsActionBarView.h"
+#import "UIViewController+FetchInputControls.h"
 #import <Objection-iOS/Objection.h>
 
 @interface JMDetailReportOptionsViewController ()
@@ -24,6 +25,8 @@ objection_requires(@"resourceClient", @"reportClient")
 @synthesize resourceLookup = _resourceLookup;
 @synthesize inputControls = _inputControls;
 
+#pragma mark - Accessors
+
 - (JMInputControlFactory *)inputControlFactory
 {
     if (!_inputControlFactory) {
@@ -32,22 +35,28 @@ objection_requires(@"resourceClient", @"reportClient")
     return _inputControlFactory;
 }
 
-- (void)cancel:(NSNotification *)notification
+#pragma mark - JMDetailReportOptionsViewController
+
+- (void)cancel
 {
-    // TODO: make universal method (if needed)
-    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1]
-                                          animated:YES];
-    if (!notification) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowRootMaster object:nil];
-    }
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center postNotificationName:kJMShowRootMaster object:nil];
+    [center postNotificationName:kJMShowResourcesListInDetail object:nil];
 }
 
-- (void)updateInputControls
-{}
-
-- (void)dealloc
+- (void)runReport
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    NSMutableArray *inputControlDescriptors = [NSMutableArray array];
+    for (JMInputControlCell *cell in self.inputControls) {
+        [inputControlDescriptors addObject:cell.inputControlDescriptor];
+    }
+
+    if (!self.delegate) {
+        [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:inputControlDescriptors];
+    } else {
+        [self.delegate setInputControls:inputControlDescriptors];
+        [self.delegate refresh];
+    }
 }
 
 #pragma mark - Initialization
@@ -63,7 +72,7 @@ objection_requires(@"resourceClient", @"reportClient")
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     // Remove extra separators
@@ -77,23 +86,28 @@ objection_requires(@"resourceClient", @"reportClient")
 
     for (JSInputControlDescriptor *inputControlDescriptor in inputControlsData) {
         id cell = [self.inputControlFactory inputControlWithInputControlDescriptor:inputControlDescriptor];
-        
+
         if ([cell conformsToProtocol:@protocol(JMResourceClientHolder)]) {
             [cell setResourceClient:self.resourceClient];
             [cell setResourceLookup:self.resourceLookup];
         }
-        
+
         if ([cell conformsToProtocol:@protocol(JMReportClientHolder)]) {
             [cell setReportClient:self.reportClient];
         }
-        
+
         [self.inputControls addObject:cell];
     }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(cancel:)
-                                                 name:kJMShowResourcesListInDetail
-                                               object:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([self isReportSegue:segue]) {
+        id destinationViewController = segue.destinationViewController;
+        [destinationViewController setResourceLookup:self.resourceLookup];
+        [destinationViewController setInputControls:sender];
+        self.delegate = destinationViewController;
+    }
 }
 
 #pragma mark - Table view data source
@@ -118,7 +132,7 @@ objection_requires(@"resourceClient", @"reportClient")
 - (id)actionBar
 {
     JMDetailReportOptionsActionBarView *actionBar = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass
-                                                     ([JMDetailReportOptionsActionBarView class])
+            ([JMDetailReportOptionsActionBarView class])
                                                                                   owner:self
                                                                                 options:nil].firstObject;
     actionBar.delegate = self;

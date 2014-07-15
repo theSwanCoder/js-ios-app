@@ -21,7 +21,7 @@
                     <state key="selected" backgroundImage="gray_button_background_highlighted.png"/>
                     <state key="highlighted" backgroundImage="gray_button_background_highlighted.png"/>
                     <connections>
-                        <action selector="updateInputControls:" destination="9ph-6e-4zo" eventType="touchUpInside" id="tr0-q7-l0h"/>
+                        <action selector="runReport:" destination="9ph-6e-4zo" eventType="touchUpInside" id="LdW-Um-CPt"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" id="EnO-Rc-pjP">

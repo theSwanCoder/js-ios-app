@@ -11,15 +11,15 @@
 #import "JMResourceClientHolder.h"
 #import "JMReportClientHolder.h"
 #import "JMActionBarProvider.h"
+#import "JMRefreshable.h"
 
 @interface JMDetailReportOptionsViewController : UIViewController <JMReportClientHolder, JMResourceClientHolder, JMInputControlsHolder,
-    JMActionBarProvider, UITableViewDelegate, UITableViewDataSource>
+        JMActionBarProvider, UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
-@property (nonatomic, weak) id <JMReportClientHolder, JMResourceClientHolder, JMInputControlsHolder> delegate;
-@property (nonatomic, assign) BOOL hasMandatoryInputControls;
+@property (nonatomic, weak) id <JMReportClientHolder, JMInputControlsHolder, JMResourceClientHolder, JMRefreshable> delegate;
 
-- (void)updateInputControls;
-- (void)cancel:(NSNotification *)notification;
+- (void)runReport;
+- (void)cancel;
 
 @end

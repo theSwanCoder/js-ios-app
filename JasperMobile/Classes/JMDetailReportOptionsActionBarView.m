@@ -24,12 +24,12 @@
 
 - (IBAction)cancel:(id)sender
 {
-    [self.delegate cancel:nil];
+    [self.delegate cancel];
 }
 
-- (IBAction)updateInputControls:(id)sender
+- (IBAction)runReport:(id)sender
 {
-    [self.delegate updateInputControls];
+    [self.delegate runReport];
 }
 
 @end
