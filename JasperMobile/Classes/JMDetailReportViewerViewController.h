@@ -12,8 +12,9 @@
 #import "JMRefreshable.h"
 #import "JMInputControlsHolder.h"
 #import "JMResourceClientHolder.h"
+#import "JMReportClientHolder.h"
 
-@interface JMDetailReportViewerViewController : JMReportViewerViewController <JMActionBarProvider, JMResourceClientHolder,
+@interface JMDetailReportViewerViewController : JMReportViewerViewController <JMActionBarProvider, JMResourceClientHolder, JMReportClientHolder, 
     JMInputControlsHolder, JMRefreshable>
 
 @end

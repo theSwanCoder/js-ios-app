@@ -57,8 +57,6 @@ inject_default_rotation()
     self.webView.scrollView.bounces = NO;
     self.webView.delegate = self;
     self.webView.suppressesIncrementalRendering = YES;
-    [self.webView loadHTMLString:@"" baseURL:nil];
-    [self.activityIndicator startAnimating];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -82,20 +80,33 @@ inject_default_rotation()
     [JMUtils hideNetworkActivityIndicator];
 }
 
-#pragma mark - UIWebViewDelegate
+- (void)dealloc
+{
+    [self.webView loadHTMLString:@"" baseURL:nil];
+}
 
+#pragma mark - UIWebViewDelegate
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
+    [self.activityIndicator startAnimating];
     [JMUtils showNetworkActivityIndicator];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
+    [self loadingDidFinished];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [self loadingDidFinished];
+}
+
+- (void)loadingDidFinished
+{
     [JMUtils hideNetworkActivityIndicator];
-    if (![webView.request.URL.description isEqual:@"about:blank"]) {
-        [self.activityIndicator stopAnimating];
-        self.isRequestLoaded = YES;
-    }
+    [self.activityIndicator stopAnimating];
+    self.isRequestLoaded = YES;
 }
 
 @end

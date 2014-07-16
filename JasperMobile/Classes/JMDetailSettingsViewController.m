@@ -27,6 +27,7 @@
 @end
 
 @implementation JMDetailSettingsViewController
+inject_default_rotation()
 
 - (void)viewDidLoad
 {

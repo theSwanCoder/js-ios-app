@@ -74,6 +74,7 @@ objection_requires(@"constants")
             NSArray *inputControls = [sender objectForKey:kJMInputControls];
             id destinationViewController = segue.destinationViewController;
             [destinationViewController setInputControls:[inputControls mutableCopy]];
+            [destinationViewController setResourceLookup:resourcesLookup];
         }
     } else {
         row = [sender row];
