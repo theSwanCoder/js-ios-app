@@ -9,20 +9,66 @@
 #import "JMDetailMultiSelectTableViewController.h"
 
 @interface JMDetailMultiSelectTableViewController ()
-
+@property (nonatomic, strong) NSSet *previousSelectedValues;
 @end
 
 @implementation JMDetailMultiSelectTableViewController
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+@synthesize cell = _cell;
+
+#pragma mark - Accessors
+
+- (void)setCell:(JMSingleSelectInputControlCell *)cell
 {
-    return [self initWithNibName:NSStringFromClass(JMDetailSingleSelectTableViewController.class) bundle:nil];
+    _cell = cell;
+    
+    for (JSInputControlOption *option in cell.listOfValues) {
+        if (option.selected.boolValue) {
+            [self.selectedValues addObject:option];
+        }
+    }
 }
 
-- (void)viewDidLoad
+#pragma mark - Initialization
+
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    return [self initWithNibName:NSStringFromClass([JMDetailSingleSelectTableViewController class]) bundle:nil];
+}
+
+#pragma mark - UITableViewController
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.previousSelectedValues = [self.selectedValues copy];
+}
+
+- (void)willMoveToParentViewController:(UIViewController *)parent
+{
+    if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
+        [self.cell updateWithParameters:[self.selectedValues allObjects]];
+    }
+}
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSInputControlOption *option = [self.cell.listOfValues objectAtIndex:indexPath.row];
+    option.selected = [JSConstants stringFromBOOL:!option.selected.boolValue];
+    
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if (option.selected.boolValue) {
+        [self.selectedValues addObject:option];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        if ([self.selectedValues containsObject:option]) {
+            [self.selectedValues removeObject:option];
+        }
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
 }
 
 @end

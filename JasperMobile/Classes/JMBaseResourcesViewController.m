@@ -45,7 +45,6 @@ objection_requires(@"constants")
     }
 }
 
-
 #pragma mark - Initialization
 
 - (void)awakeFromNib

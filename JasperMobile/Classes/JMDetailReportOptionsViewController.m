@@ -10,6 +10,7 @@
 #import "JMInputControlFactory.h"
 #import "JMRequestDelegate.h"
 #import "JMDetailReportOptionsActionBarView.h"
+#import "JMDetailSingleSelectTableViewController.h"
 #import "UIViewController+FetchInputControls.h"
 #import <Objection-iOS/Objection.h>
 
@@ -75,6 +76,7 @@ objection_requires(@"resourceClient", @"reportClient")
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
@@ -102,11 +104,14 @@ objection_requires(@"resourceClient", @"reportClient")
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    id destinationViewController = segue.destinationViewController;
+    
     if ([self isReportSegue:segue]) {
-        id destinationViewController = segue.destinationViewController;
         [destinationViewController setResourceLookup:self.resourceLookup];
         [destinationViewController setInputControls:sender];
         self.delegate = destinationViewController;
+    } else {
+        [destinationViewController setCell:sender];
     }
 }
 

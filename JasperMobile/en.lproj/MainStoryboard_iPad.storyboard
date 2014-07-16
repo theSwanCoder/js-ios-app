@@ -149,7 +149,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="LcZ-38-AAI" kind="push" id="cWS-oE-4Q0"/>
+                                            <segue destination="O3L-Ib-kiX" kind="push" id="zXE-gF-hUY"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DateCell" id="PXZ-VK-a2p" customClass="JMDateInputControlCell">
@@ -288,10 +288,10 @@
             </objects>
             <point key="canvasLocation" x="3503" y="5219"/>
         </scene>
-        <!--Detail Multi Select Table View Controller-->
+        <!--Detail Single Select Table View Controller-->
         <scene sceneID="W0B-X7-veC">
             <objects>
-                <viewController id="LcZ-38-AAI" customClass="JMDetailMultiSelectTableViewController" sceneMemberID="viewController">
+                <viewController id="LcZ-38-AAI" customClass="JMDetailSingleSelectTableViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="4qw-ld-4aU"/>
                     <size key="freeformSize" width="768" height="1024"/>
                 </viewController>
@@ -1187,6 +1187,17 @@ Please Wait...</string>
             </objects>
             <point key="canvasLocation" x="1229" y="6313"/>
         </scene>
+        <!--Detail Multi Select Table View Controller-->
+        <scene sceneID="hqQ-Py-wdl">
+            <objects>
+                <viewController id="O3L-Ib-kiX" customClass="JMDetailMultiSelectTableViewController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="sWr-eb-Pna"/>
+                    <size key="freeformSize" width="768" height="1024"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zE8-BY-OdC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4617" y="4039"/>
+        </scene>
     </scenes>
     <resources>
         <image name="dot.png" width="6" height="5"/>
@@ -1205,11 +1216,10 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="yOc-W8-lgs"/>
+        <segue reference="QIH-Uk-XKN"/>
         <segue reference="ruh-Jy-ETv"/>
         <segue reference="0bD-K8-B5D"/>
         <segue reference="h0e-Up-0Pa"/>
-        <segue reference="1jO-hY-A1B"/>
-        <segue reference="yOc-W8-lgs"/>
-        <segue reference="QIH-Uk-XKN"/>
     </inferredMetricsTieBreakers>
 </document>
