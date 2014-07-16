@@ -124,7 +124,7 @@ objection_requires(@"resourceClient", @"reportClient")
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [JMRequestDelegate isRequestPoolEmpty] ? self.inputControls.count : 0;
+    return self.inputControls.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

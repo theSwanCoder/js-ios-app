@@ -63,10 +63,10 @@ objection_requires(@"resourceClient", @"constants")
 {
     switch (self.sortByEnum) {
         case JMSortByName:
-            return @"name";
+            return @"label";
         case JMSortByDate:
         default:
-            return @"date";
+            return @"creationDate";
     }
 }
 

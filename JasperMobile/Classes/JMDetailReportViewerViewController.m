@@ -74,7 +74,7 @@ inject_default_rotation()
     }
 
     [self.reportClient runReportExecution:self.resourceLookup.uri async:YES outputFormat:self.constants.CONTENT_TYPE_HTML
-                              interactive:YES freshData:YES saveDataSnapshot:NO ignorePagination:NO transformerKey:nil
+                              interactive:YES freshData:YES saveDataSnapshot:NO ignorePagination:YES transformerKey:nil
                                     pages:nil attachmentsPrefix:nil parameters:parameters delegate:delegate];
 }
 

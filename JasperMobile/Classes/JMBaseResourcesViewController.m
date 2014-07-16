@@ -69,12 +69,10 @@ objection_requires(@"constants")
         JSResourceLookup *resourcesLookup = [sender objectForKey:kJMResourceLookup];
         row = [self.delegate.resources indexOfObject:resourcesLookup];
         
-        if ([segue.identifier isEqualToString:kJMShowReportOptionsSegue]) {
-            NSArray *inputControls = [sender objectForKey:kJMInputControls];
-            id destinationViewController = segue.destinationViewController;
-            [destinationViewController setInputControls:[inputControls mutableCopy]];
-            [destinationViewController setResourceLookup:resourcesLookup];
-        }
+        NSArray *inputControls = [sender objectForKey:kJMInputControls];
+        id destinationViewController = segue.destinationViewController;
+        [destinationViewController setInputControls:[inputControls mutableCopy]];
+        [destinationViewController setResourceLookup:resourcesLookup];
     } else {
         row = [sender row];
     }

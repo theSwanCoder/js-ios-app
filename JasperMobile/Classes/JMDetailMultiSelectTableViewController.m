@@ -44,7 +44,7 @@
     self.previousSelectedValues = [self.selectedValues copy];
 }
 
-- (void)willMoveToParentViewController:(UIViewController *)parent
+- (void)didMoveToParentViewController:(UIViewController *)parent
 {
     if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
         [self.cell updateWithParameters:[self.selectedValues allObjects]];
