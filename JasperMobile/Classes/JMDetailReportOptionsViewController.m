@@ -127,6 +127,11 @@ objection_requires(@"resourceClient", @"reportClient")
     return [self.inputControls objectAtIndex:indexPath.row];
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
 #pragma mark - JMActionBarProvider
 
 - (id)actionBar

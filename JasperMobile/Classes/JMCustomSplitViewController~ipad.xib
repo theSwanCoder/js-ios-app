@@ -53,7 +53,7 @@
                             <rect key="frame" x="559" y="30" width="33" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <inset key="insetFor6xAndEarlier" minX="0.0" minY="4" maxX="0.0" maxY="-4"/>
-                            <state key="normal" backgroundImage="search_button.png">
+                            <state key="normal" backgroundImage="white_search_button.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -112,6 +112,6 @@
     </objects>
     <resources>
         <image name="home_logo.png" width="114" height="21"/>
-        <image name="search_button.png" width="33" height="32"/>
+        <image name="white_search_button.png" width="33" height="32"/>
     </resources>
 </document>
