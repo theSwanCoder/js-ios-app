@@ -121,6 +121,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="LcZ-38-AAI" kind="push" id="1jO-hY-A1B"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MultiSelectCell" id="lOP-0t-Jza" customClass="JMMultiSelectInputControlCell">
                                         <rect key="frame" x="0.0" y="66" width="722" height="44"/>
@@ -145,6 +148,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="LcZ-38-AAI" kind="push" id="cWS-oE-4Q0"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DateCell" id="PXZ-VK-a2p" customClass="JMDateInputControlCell">
                                         <rect key="frame" x="0.0" y="110" width="722" height="44"/>
@@ -281,6 +287,17 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RdM-89-BNz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3503" y="5219"/>
+        </scene>
+        <!--Detail Multi Select Table View Controller-->
+        <scene sceneID="W0B-X7-veC">
+            <objects>
+                <viewController id="LcZ-38-AAI" customClass="JMDetailMultiSelectTableViewController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="4qw-ld-4aU"/>
+                    <size key="freeformSize" width="768" height="1024"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0kZ-u0-I87" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4601" y="5219"/>
         </scene>
         <!--Vertical List View Controller-->
         <scene sceneID="41n-eC-45h">
@@ -1191,7 +1208,8 @@ Please Wait...</string>
         <segue reference="ruh-Jy-ETv"/>
         <segue reference="0bD-K8-B5D"/>
         <segue reference="h0e-Up-0Pa"/>
-        <segue reference="QIH-Uk-XKN"/>
+        <segue reference="1jO-hY-A1B"/>
         <segue reference="yOc-W8-lgs"/>
+        <segue reference="QIH-Uk-XKN"/>
     </inferredMetricsTieBreakers>
 </document>
