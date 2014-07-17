@@ -55,7 +55,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSInputControlOption *option = [self.cell.listOfValues objectAtIndex:indexPath.row];
+    JSInputControlOption *option = [self.listOfValues objectAtIndex:indexPath.row];
     option.selected = [JSConstants stringFromBOOL:!option.selected.boolValue];
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];

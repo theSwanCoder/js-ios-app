@@ -19,5 +19,6 @@
 @property (nonatomic, weak) IBOutlet UILabel *searchLabel;
 @property (nonatomic, weak) JMSingleSelectInputControlCell *cell;
 @property (nonatomic, strong) NSMutableSet *selectedValues;
+@property (nonatomic, readonly) NSArray *listOfValues;
 
 @end

@@ -142,7 +142,7 @@ objection_requires(@"resourceClient", @"reportClient")
 - (id)actionBar
 {
     JMDetailReportOptionsActionBarView *actionBar = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass
-            ([JMDetailReportOptionsActionBarView class])
+                                                     ([JMDetailReportOptionsActionBarView class])
                                                                                   owner:self
                                                                                 options:nil].firstObject;
     actionBar.delegate = self;

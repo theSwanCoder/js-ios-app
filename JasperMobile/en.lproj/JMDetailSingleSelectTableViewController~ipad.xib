@@ -10,6 +10,7 @@
                 <outlet property="backLabel" destination="Vhv-B2-doI" id="vS2-pB-1g8"/>
                 <outlet property="leftArrowImageView" destination="h9T-aL-fGY" id="9I3-Ka-XNX"/>
                 <outlet property="searchButton" destination="qHO-FN-FcU" id="V0X-VF-bOQ"/>
+                <outlet property="searchDisplayController" destination="Wbb-Ki-Byb" id="hTg-0y-n52"/>
                 <outlet property="searchLabel" destination="IdP-Uw-R5d" id="kA9-TN-72v"/>
                 <outlet property="searchTextField" destination="BiY-8D-wgU" id="d9Y-XG-n6f"/>
                 <outlet property="tableView" destination="uw4-l2-id2" id="l75-UZ-a3X"/>
@@ -47,11 +48,11 @@
                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="BiY-8D-wgU">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="always" id="BiY-8D-wgU">
                     <rect key="frame" x="584" y="12" width="128" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
                 </textField>
@@ -61,6 +62,9 @@
                     <state key="normal" backgroundImage="gray_search_button.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="search:" destination="-1" eventType="touchUpInside" id="2Kl-ji-S7y"/>
+                    </connections>
                 </button>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="uw4-l2-id2">
                     <rect key="frame" x="23" y="57" width="722" height="947"/>
@@ -92,6 +96,14 @@
                 </subviews>
             </tableViewCellContentView>
         </tableViewCell>
+        <searchDisplayController id="Wbb-Ki-Byb">
+            <connections>
+                <outlet property="delegate" destination="-1" id="Cim-HP-4cg"/>
+                <outlet property="searchContentsController" destination="-1" id="91O-9F-37G"/>
+                <outlet property="searchResultsDataSource" destination="-1" id="o5N-0I-aoT"/>
+                <outlet property="searchResultsDelegate" destination="-1" id="c4i-cP-3jN"/>
+            </connections>
+        </searchDisplayController>
     </objects>
     <resources>
         <image name="gray_search_button.png" width="33" height="32"/>
