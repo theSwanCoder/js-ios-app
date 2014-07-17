@@ -7,12 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JMDetailReportOptionsViewController.h"
+#import "JMBaseActionBarView.h"
 
-@interface JMDetailReportOptionsActionBarView : UIView
-
-@property (nonatomic, weak) JMDetailReportOptionsViewController *delegate;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UIButton *continueButton;
+@interface JMDetailReportOptionsActionBarView : JMBaseActionBarView
 
 @end

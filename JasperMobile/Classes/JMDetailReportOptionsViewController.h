@@ -19,7 +19,4 @@
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) id <JMReportClientHolder, JMInputControlsHolder, JMResourceClientHolder, JMRefreshable> delegate;
 
-- (void)runReport;
-- (void)cancel;
-
 @end

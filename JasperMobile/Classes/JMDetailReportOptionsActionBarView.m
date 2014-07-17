@@ -9,6 +9,13 @@
 #import "JMDetailReportOptionsActionBarView.h"
 #import "JMLocalization.h"
 
+@interface JMDetailReportOptionsActionBarView ()
+
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *continueButton;
+
+@end
+
 @implementation JMDetailReportOptionsActionBarView
 
 #pragma mark - Initialization
@@ -16,20 +23,20 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.cancelButton.titleLabel.text = JMCustomLocalizedString(@"dialog.button.cancel", nil);
-    self.continueButton.titleLabel.text = JMCustomLocalizedString(@"dialog.button.continue", nil);
+    self.cancelButton.titleLabel.text = JMCustomLocalizedString(@"action.button.cancel", nil);
+    self.continueButton.titleLabel.text = JMCustomLocalizedString(@"action.button.continue", nil);
 }
 
 #pragma mark - Actions
 
 - (IBAction)cancel:(id)sender
 {
-    [self.delegate cancel];
+    [self.delegate actionView:self didSelectAction:JMBaseActionBarViewAction_Cancel];
 }
 
 - (IBAction)runReport:(id)sender
 {
-    [self.delegate runReport];
+    [self.delegate actionView:self didSelectAction:JMBaseActionBarViewAction_Run];
 }
 
 @end

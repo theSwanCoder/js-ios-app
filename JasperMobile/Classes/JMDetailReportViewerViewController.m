@@ -11,11 +11,16 @@
 #import <Objection-iOS/Objection.h>
 #import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"
+#import "JMDetailReportViewerActionBarView.h"
+#import "UIViewController+FetchInputControls.h"
 
-@interface JMDetailReportViewerViewController ()
+@interface JMDetailReportViewerViewController () <JMBaseActionBarViewDelegate>
 
 @property (nonatomic, weak) JSConstants *constants;
+@property (nonatomic, strong) JMDetailReportViewerActionBarView *actionBarView;
 
+@property (nonatomic, strong) NSString *requestId;
+@property (nonatomic, strong) NSString *uuid;
 @end
 
 
@@ -44,27 +49,25 @@ inject_default_rotation()
     [self runReportExecution];
 }
 
-- (void)runReportExecution
+- (void) runReportExecution
 {
     __weak typeof(self) weakSelf = self;
-
+    
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
     }];
-
+    
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        [JMCancelRequestPopup dismiss];
         JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
         JSExportExecution *export = [response.exports objectAtIndex:0];
+        weakSelf.uuid = export.uuid;
+        weakSelf.requestId = response.requestId;
         
-        
-        NSString *fullExportId = [NSString stringWithFormat:@"%@", export.uuid];
-        NSString *reportUrl = [self.reportClient generateReportOutputUrl:response.requestId exportOutput:fullExportId];
+        NSString *reportUrl = [self.reportClient generateReportOutputUrl:weakSelf.requestId exportOutput:weakSelf.uuid];
         weakSelf.request = [NSURLRequest requestWithURL:[NSURL URLWithString:reportUrl]];
         
-    } errorBlock:^(JSOperationResult *result) {
-        [weakSelf.navigationController popViewControllerAnimated:YES];
-    } viewControllerToDismiss:self];
+    } errorBlock: nil
+                                                           viewControllerToDismiss:self];
     
     NSMutableArray *parameters = [NSMutableArray array];
     for (JSInputControlDescriptor *inputControlDescriptor in self.inputControls) {
@@ -72,7 +75,7 @@ inject_default_rotation()
                                                                                value:inputControlDescriptor.selectedValues];
         [parameters addObject:reportParameter];
     }
-
+    
     [self.reportClient runReportExecution:self.resourceLookup.uri async:YES outputFormat:self.constants.CONTENT_TYPE_HTML
                               interactive:YES freshData:YES saveDataSnapshot:NO ignorePagination:YES transformerKey:nil
                                     pages:nil attachmentsPrefix:nil parameters:parameters delegate:delegate];
@@ -82,15 +85,54 @@ inject_default_rotation()
 
 - (id)actionBar
 {
-    // TODO: implement
-    return nil;
+    if (!self.actionBarView) {
+        self.actionBarView = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([JMDetailReportViewerActionBarView class])
+                                                           owner:self
+                                                         options:nil].firstObject;
+        self.actionBarView.delegate = self;
+    }
+    
+    return self.actionBarView;
 }
+
+#pragma mark - JMBaseActionBarViewDelegate
+- (void)actionView:(JMBaseActionBarView *)actionView didSelectAction:(JMBaseActionBarViewAction)action{
+    switch (action) {
+        case JMBaseActionBarViewAction_Refresh:
+            [self runReportExecution];
+            break;
+        case JMBaseActionBarViewAction_Share:
+            break;
+        case JMBaseActionBarViewAction_Edit:
+            [self edit];
+            break;
+        case JMBaseActionBarViewAction_Delete:
+            break;
+        default:
+            // Unsupported actions
+            break;
+    }
+}
+
+- (void) edit{
+    [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    id destinationViewController = segue.destinationViewController;
+    [destinationViewController setInputControls:[self.inputControls mutableCopy]];
+    [destinationViewController setResourceLookup:self.resourceLookup];
+    [destinationViewController setDelegate:self];
+}
+
 
 #pragma mark - JMRefreshable
 
 - (void)refresh
 {
-    
+    [self.navigationController popToViewController:self animated:YES];
+    [self runReportExecution];
 }
 
 #pragma mark - NSObject

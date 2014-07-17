@@ -31,7 +31,6 @@
 
 @interface JMReportViewerViewController() <UIGestureRecognizerDelegate>
 @property (nonatomic, assign) BOOL isRequestLoaded;
-@property (nonatomic, assign) BOOL isVisible;
 @end
 
 @implementation  JMReportViewerViewController
@@ -43,9 +42,8 @@ inject_default_rotation()
 {
     if (request != _request) {
         _request = request;
-        if (self.isVisible && !self.isRequestLoaded) {
-            [self.webView loadRequest:request];
-        }
+        [self.webView loadRequest:request];
+        self.isRequestLoaded = NO;
     }
 }
 
@@ -66,18 +64,13 @@ inject_default_rotation()
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    self.isVisible = YES;
-}
-
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    self.isVisible = NO;
-    [self.webView stopLoading];
-    [JMUtils hideNetworkActivityIndicator];
+    if (self.webView.loading) {
+        [self.webView stopLoading];
+        [self loadingDidFinished];
+    }
 }
 
 - (void)dealloc
@@ -95,18 +88,19 @@ inject_default_rotation()
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [self loadingDidFinished];
+    self.isRequestLoaded = YES;
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     [self loadingDidFinished];
+    self.isRequestLoaded = NO;
 }
 
 - (void)loadingDidFinished
 {
     [JMUtils hideNetworkActivityIndicator];
     [self.activityIndicator stopAnimating];
-    self.isRequestLoaded = YES;
 }
 
 @end

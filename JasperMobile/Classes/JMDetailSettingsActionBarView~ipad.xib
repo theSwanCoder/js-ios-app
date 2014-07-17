@@ -41,8 +41,10 @@
             <color key="backgroundColor" red="0.14901960780000001" green="0.15686274510000001" blue="0.1764705882" alpha="1" colorSpace="calibratedRGB"/>
             <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
             <connections>
-                <outletCollection property="actionButtonColections" destination="hM9-F7-cw1" id="otG-dm-9zZ"/>
-                <outletCollection property="actionButtonColections" destination="BVG-pK-61c" id="jOe-59-U7O"/>
+                <outlet property="cancelButton" destination="BVG-pK-61c" id="aph-5o-UBC"/>
+                <outlet property="saveButton" destination="hM9-F7-cw1" id="bbL-tP-KJe"/>
+                <outletCollection property="_actionBarButtons" destination="hM9-F7-cw1" id="s8a-Mu-fgZ"/>
+                <outletCollection property="_actionBarButtons" destination="BVG-pK-61c" id="X3Z-qa-ENg"/>
             </connections>
         </view>
     </objects>

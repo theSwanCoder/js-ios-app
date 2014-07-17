@@ -14,7 +14,7 @@
 #import "UIViewController+FetchInputControls.h"
 #import <Objection-iOS/Objection.h>
 
-@interface JMDetailReportOptionsViewController ()
+@interface JMDetailReportOptionsViewController () <JMBaseActionBarViewDelegate>
 @property (nonatomic, strong) JMInputControlFactory *inputControlFactory;
 @end
 
@@ -147,6 +147,21 @@ objection_requires(@"resourceClient", @"reportClient")
                                                                                 options:nil].firstObject;
     actionBar.delegate = self;
     return actionBar;
+}
+
+#pragma mark - JMBaseActionBarViewDelegate
+- (void)actionView:(JMBaseActionBarView *)actionView didSelectAction:(JMBaseActionBarViewAction)action{
+    switch (action) {
+        case JMBaseActionBarViewAction_Cancel:
+            [self cancel];
+            break;
+        case JMBaseActionBarViewAction_Run:
+            [self runReport];
+            break;
+        default:
+            // Unsupported actions
+            break;
+    }
 }
 
 @end

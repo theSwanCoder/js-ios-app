@@ -7,14 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@class JMDetailSettingsActionBarView;
+#import "JMBaseActionBarView.h"
 
-@protocol JMDetailSettingsActionBarViewDelegate <NSObject>
-@required
-- (void) cancelButtonTappedInActionView:(JMDetailSettingsActionBarView *)actionView;
-- (void) saveButtonTappedInActionView:(JMDetailSettingsActionBarView *)actionView;
-@end
-
-@interface JMDetailSettingsActionBarView : UIView
-@property (nonatomic, weak) id <JMDetailSettingsActionBarViewDelegate> delegate;
+@interface JMDetailSettingsActionBarView : JMBaseActionBarView
 @end

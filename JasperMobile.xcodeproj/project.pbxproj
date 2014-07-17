@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08132B161977CFD200578CEC /* JMDetailReportViewerActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08132B151977CFD200578CEC /* JMDetailReportViewerActionBarView.m */; };
+		08132B1B1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08132B1A1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib */; };
+		08132B1E1977D94300578CEC /* JMBaseActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08132B1D1977D94300578CEC /* JMBaseActionBarView.m */; };
 		085E3D6419704CAF005F8E2E /* JMDetailSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5B19704CAF005F8E2E /* JMDetailSettings.m */; };
 		085E3D6519704CAF005F8E2E /* JMDetailSettingsActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5D19704CAF005F8E2E /* JMDetailSettingsActionBarView.m */; };
 		085E3D6619704CAF005F8E2E /* JMDetailSettingsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5F19704CAF005F8E2E /* JMDetailSettingsItem.m */; };
@@ -262,6 +265,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		08132B141977CFD200578CEC /* JMDetailReportViewerActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailReportViewerActionBarView.h; path = Classes/JMDetailReportViewerActionBarView.h; sourceTree = "<group>"; };
+		08132B151977CFD200578CEC /* JMDetailReportViewerActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailReportViewerActionBarView.m; path = Classes/JMDetailReportViewerActionBarView.m; sourceTree = "<group>"; };
+		08132B1A1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMDetailReportViewerActionBarView~ipad.xib"; sourceTree = "<group>"; };
+		08132B1C1977D94300578CEC /* JMBaseActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseActionBarView.h; path = Classes/JMBaseActionBarView.h; sourceTree = "<group>"; };
+		08132B1D1977D94300578CEC /* JMBaseActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseActionBarView.m; path = Classes/JMBaseActionBarView.m; sourceTree = "<group>"; };
 		085E3D5A19704CAF005F8E2E /* JMDetailSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettings.h; path = Classes/JMDetailSettings.h; sourceTree = "<group>"; };
 		085E3D5B19704CAF005F8E2E /* JMDetailSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailSettings.m; path = Classes/JMDetailSettings.m; sourceTree = "<group>"; };
 		085E3D5C19704CAF005F8E2E /* JMDetailSettingsActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettingsActionBarView.h; path = Classes/JMDetailSettingsActionBarView.h; sourceTree = "<group>"; };
@@ -877,9 +885,10 @@
 			isa = PBXGroup;
 			children = (
 				F5C78CE519518B270082AFDE /* JMCustomSplitViewController~ipad.xib */,
+				F57262191976A19600DFEF77 /* JMDetailSingleSelectTableViewController~ipad.xib */,
 				F5C78CF91952DED90082AFDE /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib */,
 				F51A149019740F6500C3A3A0 /* JMDetailReportOptionsActionBarView~ipad.xib */,
-				F57262191976A19600DFEF77 /* JMDetailSingleSelectTableViewController~ipad.xib */,
+				08132B1A1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib */,
 			);
 			name = Pad;
 			sourceTree = "<group>";
@@ -1164,6 +1173,10 @@
 				F5C78CF71952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.m */,
 				F51A148A19740F3400C3A3A0 /* JMDetailReportOptionsActionBarView.h */,
 				F51A148B19740F3400C3A3A0 /* JMDetailReportOptionsActionBarView.m */,
+				08132B141977CFD200578CEC /* JMDetailReportViewerActionBarView.h */,
+				08132B151977CFD200578CEC /* JMDetailReportViewerActionBarView.m */,
+				08132B1C1977D94300578CEC /* JMBaseActionBarView.h */,
+				08132B1D1977D94300578CEC /* JMBaseActionBarView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1495,6 +1508,7 @@
 				F5924E9E18FCA1DF00691286 /* library.png in Resources */,
 				F5AE62531906AC6600954192 /* MainStoryboard_iPad.storyboard in Resources */,
 				F58EF6F617F4884C00C9EBA8 /* repository_bar_item@2x.png in Resources */,
+				08132B1B1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib in Resources */,
 				F58EF6CE17F487A800C9EBA8 /* blue_button@2x.png in Resources */,
 				F5FA4C46190FC06D00001999 /* horizontal_list_button_selected.png in Resources */,
 				F53C0AD217B50C080063AE90 /* MainStoryboard_iPhone.storyboard in Resources */,
@@ -1664,6 +1678,7 @@
 				F51A148C19740F3400C3A3A0 /* JMDetailReportOptionsActionBarView.m in Sources */,
 				37455A96A7B31E653BE86426 /* JMReportOptionsTableViewController.m in Sources */,
 				3745556D589570C0F70DE21E /* JMFavoritesTableViewController.m in Sources */,
+				08132B161977CFD200578CEC /* JMDetailReportViewerActionBarView.m in Sources */,
 				F53B9B9419657C7B005470B9 /* UIViewController+fetchInputControls.m in Sources */,
 				374556813A6B65E857339B9B /* JMSaveReportTableViewController.m in Sources */,
 				374555DB062C6D92B960560D /* JMResourceTableViewController.m in Sources */,
@@ -1690,6 +1705,7 @@
 				37455B22C092BC4EE1E60E7F /* JMHorizontalListViewController.m in Sources */,
 				374555E5494A2200DE46A815 /* JMVerticalListViewController.m in Sources */,
 				F588F1F1192CE2D800727E05 /* JMBaseResourceTableViewCell.m in Sources */,
+				08132B1E1977D94300578CEC /* JMBaseActionBarView.m in Sources */,
 				3745506335AE18D1886CCED1 /* JMMenuItemCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

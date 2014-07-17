@@ -91,3 +91,5 @@ extern NSString * const kJMReportFilename;
 #define kJMDetailViewLightBackgroundColor       [UIColor colorFromHexString:@"#E5E9EB"]
 #define kJMDetailViewLightTextColor             [UIColor colorFromHexString:@"#8F8F8F"]
 #define kJMDetailActionBarItemsBackgroundColor  [UIColor colorFromHexString:@"#2D3036"]
+#define kJMDetailActionBarItemsTextColor        [UIColor colorFromHexString:@"#D4D4D4"]
+
