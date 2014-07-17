@@ -9,6 +9,11 @@
 #import "JMDetailSingleSelectTableViewController.h"
 #import "JMListValueTableViewCell.h"
 
+@interface JMDetailSingleSelectTableViewController()
+@property (nonatomic, assign) BOOL isSearching;
+@property (nonatomic, strong) NSArray *filteredListOfValues;
+@end
+
 @implementation JMDetailSingleSelectTableViewController
 
 #pragma mark - Accessors
@@ -20,6 +25,11 @@
     }
     
     return _selectedValues;
+}
+
+- (NSArray *)listOfValues
+{
+    return self.isSearching ? self.filteredListOfValues : self.cell.listOfValues;
 }
 
 - (void)setCell:(JMSingleSelectInputControlCell *)cell
@@ -66,14 +76,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.cell.listOfValues.count;
+    return self.listOfValues.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JMListValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kJMListValueTableViewCellIdentifier];
     
-    JSInputControlOption *option = [self.cell.listOfValues objectAtIndex:indexPath.row];
+    JSInputControlOption *option = [self.listOfValues objectAtIndex:indexPath.row];
     cell.valueLabel.text = option.label;
     cell.accessoryType = option.selected.boolValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 
@@ -84,7 +94,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSInputControlOption *selectedOption = [self.cell.listOfValues objectAtIndex:indexPath.row];
+    JSInputControlOption *selectedOption = [self.listOfValues objectAtIndex:indexPath.row];
     JSInputControlOption *previousSelectedOption = [self.selectedValues anyObject];
     
     if (previousSelectedOption != selectedOption) {
@@ -103,11 +113,49 @@
     return YES;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString *searchQuery = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    if (searchQuery.length) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.label beginswith[cd] %@", searchQuery];
+        if (self.isSearching && string.length) {
+            self.filteredListOfValues = [self.filteredListOfValues filteredArrayUsingPredicate:predicate];
+        } else {
+            self.filteredListOfValues = [self.cell.listOfValues filteredArrayUsingPredicate:predicate];
+        }
+        
+        self.isSearching = YES;
+    } else {
+        self.isSearching = NO;
+        self.filteredListOfValues = nil;
+    }
+    
+    [self.tableView reloadData];
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField
+{
+    self.isSearching = NO;
+    self.filteredListOfValues = nil;
+    self.searchTextField.text = nil;
+    [self.tableView reloadData];
+    
+    return YES;
+}
+
 #pragma mark - Actions
 
 - (IBAction)back:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)search:(id)sender
+{
+    [self.searchTextField resignFirstResponder];
 }
 
 @end
