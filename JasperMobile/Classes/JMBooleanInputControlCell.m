@@ -29,6 +29,12 @@
 
 @implementation JMBooleanInputControlCell
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [self.uiSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+}
+
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
