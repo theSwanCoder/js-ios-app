@@ -62,8 +62,9 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     self.searchTextField.delegate = self;
-    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 7.0f, 0)];
+    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 14.0f, 0)];
     self.searchTextField.leftView = paddingView;
+    self.searchTextField.rightView = paddingView;
     self.searchTextField.leftViewMode = UITextFieldViewModeAlways;
 }
 

@@ -76,6 +76,7 @@ objection_requires(@"resourceClient", @"reportClient")
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.layer.cornerRadius = 4;
     
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
