@@ -79,6 +79,7 @@
                         <segue destination="Suc-Z9-Bw2" kind="modal" identifier="ShowLibrary" id="nly-OM-MvT"/>
                         <segue destination="SR5-HG-sN2" kind="modal" identifier="ShowRepository" id="da8-nO-vYl"/>
                         <segue destination="Vo4-fX-xDb" kind="modal" identifier="ShowSettings" id="mvD-Eg-GVz"/>
+                        <segue destination="jK9-x7-p1D" kind="modal" identifier="ShowServers" customClass="JMManualTransitionSegue" id="e7t-c5-BGh"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9VI-WW-jbf" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -213,7 +214,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="96R-0u-1CH">
-                                                    <rect key="frame" x="531" y="7" width="171" height="30"/>
+                                                    <rect key="frame" x="531.00000035762787" y="7" width="171" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -287,6 +288,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RdM-89-BNz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3503" y="5219"/>
+        </scene>
+        <!--Custom Split View Controller-->
+        <scene sceneID="6fm-c7-5px">
+            <objects>
+                <viewController id="jK9-x7-p1D" customClass="JMCustomSplitViewController" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JZD-41-jzo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-731" y="7649"/>
         </scene>
         <!--Detail Single Select Table View Controller-->
         <scene sceneID="W0B-X7-veC">
