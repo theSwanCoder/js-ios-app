@@ -12,9 +12,10 @@
 #import "JMDetailReportOptionsActionBarView.h"
 #import "JMDetailSingleSelectTableViewController.h"
 #import "UIViewController+FetchInputControls.h"
+#import "JMFullScreenButtonProvider.h"
 #import <Objection-iOS/Objection.h>
 
-@interface JMDetailReportOptionsViewController () <JMBaseActionBarViewDelegate>
+@interface JMDetailReportOptionsViewController () <JMBaseActionBarViewDelegate, JMFullScreenButtonProvider>
 @property (nonatomic, strong) JMInputControlFactory *inputControlFactory;
 @end
 
@@ -76,7 +77,7 @@ objection_requires(@"resourceClient", @"reportClient")
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
+    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
@@ -164,4 +165,9 @@ objection_requires(@"resourceClient", @"reportClient")
     }
 }
 
+#pragma mark - JMFullScreenButtonProvider
+- (BOOL)shouldDisplayFullScreenButton
+{
+    return YES;
+}
 @end

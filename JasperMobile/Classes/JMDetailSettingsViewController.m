@@ -17,7 +17,7 @@
 #import "UIAlertView+LocalizedAlert.h"
 
 
-@interface JMDetailSettingsViewController () <JMActionBarProvider, JMBaseActionBarViewDelegate, UIAlertViewDelegate>
+@interface JMDetailSettingsViewController () <JMActionBarProvider, JMBaseActionBarViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *settingsTableView;
 @property (weak, nonatomic) IBOutlet UILabel *settingsTitleLabel;
@@ -74,25 +74,10 @@ inject_default_rotation()
 
 #pragma mark - JMDetailSettingsActionBarViewDelegate
 - (void)actionView:(JMBaseActionBarView *)actionView didSelectAction:(JMBaseActionBarViewAction)action{
-    switch (action) {
-        case JMBaseActionBarViewAction_Save:
-            [self.detailSettings saveSettings];
-            [[UIAlertView localizedAlertWithTitle:nil message:JMCustomLocalizedString(@"detail.settings.settings.saved", nil) delegate:self cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil) otherButtonTitles:JMCustomLocalizedString(@"dialog.button.cancel", nil), nil] show];
-            break;
-        case JMBaseActionBarViewAction_Cancel:
-            [self dismissViewControllerAnimated:YES completion:nil];
-            break;
-        default:
-            // Unsupported actions
-            break;
+    if (action == JMBaseActionBarViewAction_Save) {
+        [self.detailSettings saveSettings];
     }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == alertView.cancelButtonIndex) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
-}
 @end

@@ -8,8 +8,10 @@
 
 #import "JMDetailSingleSelectTableViewController.h"
 #import "JMListValueTableViewCell.h"
+#import "JMFullScreenButtonProvider.h"
 
-@interface JMDetailSingleSelectTableViewController()
+
+@interface JMDetailSingleSelectTableViewController() <JMFullScreenButtonProvider>
 @property (nonatomic, assign) BOOL isSearching;
 @property (nonatomic, strong) NSArray *filteredListOfValues;
 @end
@@ -57,7 +59,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
+    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
@@ -158,4 +160,9 @@
     [self.searchTextField resignFirstResponder];
 }
 
+#pragma mark - JMFullScreenButtonProvider
+- (BOOL)shouldDisplayFullScreenButton
+{
+    return YES;
+}
 @end

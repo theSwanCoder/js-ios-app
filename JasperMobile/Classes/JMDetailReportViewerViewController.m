@@ -13,8 +13,10 @@
 #import "JMCancelRequestPopup.h"
 #import "JMDetailReportViewerActionBarView.h"
 #import "UIViewController+FetchInputControls.h"
+#import "JMFullScreenButtonProvider.h"
 
-@interface JMDetailReportViewerViewController () <JMBaseActionBarViewDelegate>
+
+@interface JMDetailReportViewerViewController () <JMBaseActionBarViewDelegate, JMFullScreenButtonProvider>
 
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, strong) JMDetailReportViewerActionBarView *actionBarView;
@@ -90,6 +92,7 @@ inject_default_rotation()
                                                            owner:self
                                                          options:nil].firstObject;
         self.actionBarView.delegate = self;
+        self.actionBarView.titleLabel.text = self.resourceLookup.label;
     }
     
     return self.actionBarView;
@@ -124,6 +127,12 @@ inject_default_rotation()
     [destinationViewController setInputControls:[self.inputControls mutableCopy]];
     [destinationViewController setResourceLookup:self.resourceLookup];
     [destinationViewController setDelegate:self];
+}
+
+#pragma mark - JMFullScreenButtonProvider
+- (BOOL)shouldDisplayFullScreenButton
+{
+    return YES;
 }
 
 

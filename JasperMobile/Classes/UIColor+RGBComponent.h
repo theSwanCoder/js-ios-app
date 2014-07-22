@@ -20,4 +20,6 @@
  */
 + (UIColor *)colorFromHexString:(NSString *)hexString;
 
++ (UIColor *)highlitedColorForColor:(UIColor *)color;
+
 @end

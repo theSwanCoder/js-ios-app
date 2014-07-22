@@ -13,5 +13,6 @@
     #import <Foundation/Foundation.h>
     #import "JMRotationBase.h"
     #import "JMConstants.h"
+    #import "JMUtils.h"
 
 #endif

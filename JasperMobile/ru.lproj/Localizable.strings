@@ -81,7 +81,6 @@
 "detail.settings.title" = "Параметры соединения";
 "detail.settings.item.connection.timeout" = "Таймуат соединения (в секундах)";
 "detail.settings.item.data.read.timeout" = "Таймаут чтения данных (в секундах)";
-"detail.settings.settings.saved" = "Параметры успешно сохранены!\n Хотите ли Вы выйти из настроек?";
 
 // Action bar buttons
 "action.button.refresh" = "Обновить";

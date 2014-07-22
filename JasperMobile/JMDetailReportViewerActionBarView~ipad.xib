@@ -67,6 +67,13 @@
                         <action selector="deleteButtonTapped:" destination="kNb-q1-FQz" eventType="touchUpInside" id="qkH-hf-xJ8"/>
                     </connections>
                 </button>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EWM-ZV-K8O">
+                    <rect key="frame" x="20" y="13" width="546" height="21"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.14901960780000001" green="0.15686274510000001" blue="0.1764705882" alpha="1" colorSpace="calibratedRGB"/>
             <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
@@ -75,6 +82,7 @@
                 <outlet property="editButton" destination="MxV-fR-pjR" id="WDd-yU-hhv"/>
                 <outlet property="refreshButton" destination="Cnx-0e-sz3" id="pnU-bz-TT6"/>
                 <outlet property="shareButton" destination="Mwn-IE-Hdn" id="wK0-ez-EzC"/>
+                <outlet property="titleLabel" destination="EWM-ZV-K8O" id="grp-Dp-wch"/>
                 <outletCollection property="_actionBarButtons" destination="sDo-u2-ZQA" id="NAg-yC-iEE"/>
                 <outletCollection property="_actionBarButtons" destination="Mwn-IE-Hdn" id="NB8-qm-7qZ"/>
                 <outletCollection property="_actionBarButtons" destination="Cnx-0e-sz3" id="P1R-xw-Y7k"/>

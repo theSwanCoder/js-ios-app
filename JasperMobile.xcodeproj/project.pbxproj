@@ -10,12 +10,18 @@
 		08132B161977CFD200578CEC /* JMDetailReportViewerActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08132B151977CFD200578CEC /* JMDetailReportViewerActionBarView.m */; };
 		08132B1B1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08132B1A1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib */; };
 		08132B1E1977D94300578CEC /* JMBaseActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08132B1D1977D94300578CEC /* JMBaseActionBarView.m */; };
+		08326A71197D29DE00801AE0 /* defaultScreenMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 08326A6D197D29DE00801AE0 /* defaultScreenMode.png */; };
+		08326A72197D29DE00801AE0 /* defaultScreenMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08326A6E197D29DE00801AE0 /* defaultScreenMode@2x.png */; };
+		08326A73197D29DE00801AE0 /* fullScreenMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 08326A6F197D29DE00801AE0 /* fullScreenMode.png */; };
+		08326A74197D29DE00801AE0 /* fullScreenMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08326A70197D29DE00801AE0 /* fullScreenMode@2x.png */; };
 		085E3D6419704CAF005F8E2E /* JMDetailSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5B19704CAF005F8E2E /* JMDetailSettings.m */; };
 		085E3D6519704CAF005F8E2E /* JMDetailSettingsActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5D19704CAF005F8E2E /* JMDetailSettingsActionBarView.m */; };
 		085E3D6619704CAF005F8E2E /* JMDetailSettingsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5F19704CAF005F8E2E /* JMDetailSettingsItem.m */; };
 		085E3D6719704CAF005F8E2E /* JMDetailSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D6119704CAF005F8E2E /* JMDetailSettingsTableViewCell.m */; };
 		085E3D6819704CAF005F8E2E /* JMDetailSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D6319704CAF005F8E2E /* JMDetailSettingsViewController.m */; };
 		085E3D7119704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 085E3D7019704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib */; };
+		08A7AA43197EBA7D00DB7636 /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7AA42197EBA7D00DB7636 /* UIImage+Additions.m */; };
+		08A7AA49197EBF9600DB7636 /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7AA48197EBF9600DB7636 /* UIView+Additions.m */; };
 		37455034AFBCA2439CBD503E /* JMServersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455C6224E8AF787AF468C9 /* JMServersTableViewController.m */; };
 		3745506335AE18D1886CCED1 /* JMMenuItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455DD5605F6B0D51E05F27 /* JMMenuItemCell.m */; };
 		37455256B3656246AF66CA29 /* JMRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455F8C7426E010A3709C6E /* JMRepositoryTableViewController.m */; };
@@ -270,6 +276,11 @@
 		08132B1A1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMDetailReportViewerActionBarView~ipad.xib"; sourceTree = "<group>"; };
 		08132B1C1977D94300578CEC /* JMBaseActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseActionBarView.h; path = Classes/JMBaseActionBarView.h; sourceTree = "<group>"; };
 		08132B1D1977D94300578CEC /* JMBaseActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseActionBarView.m; path = Classes/JMBaseActionBarView.m; sourceTree = "<group>"; };
+		08326A6D197D29DE00801AE0 /* defaultScreenMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultScreenMode.png; sourceTree = "<group>"; };
+		08326A6E197D29DE00801AE0 /* defaultScreenMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defaultScreenMode@2x.png"; sourceTree = "<group>"; };
+		08326A6F197D29DE00801AE0 /* fullScreenMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullScreenMode.png; sourceTree = "<group>"; };
+		08326A70197D29DE00801AE0 /* fullScreenMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fullScreenMode@2x.png"; sourceTree = "<group>"; };
+		08326A7C197D366B00801AE0 /* JMFullScreenButtonProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMFullScreenButtonProvider.h; path = JasperMobile/Classes/JMFullScreenButtonProvider.h; sourceTree = "<group>"; };
 		085E3D5A19704CAF005F8E2E /* JMDetailSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettings.h; path = Classes/JMDetailSettings.h; sourceTree = "<group>"; };
 		085E3D5B19704CAF005F8E2E /* JMDetailSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailSettings.m; path = Classes/JMDetailSettings.m; sourceTree = "<group>"; };
 		085E3D5C19704CAF005F8E2E /* JMDetailSettingsActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettingsActionBarView.h; path = Classes/JMDetailSettingsActionBarView.h; sourceTree = "<group>"; };
@@ -281,6 +292,10 @@
 		085E3D6219704CAF005F8E2E /* JMDetailSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettingsViewController.h; path = Classes/JMDetailSettingsViewController.h; sourceTree = "<group>"; };
 		085E3D6319704CAF005F8E2E /* JMDetailSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailSettingsViewController.m; path = Classes/JMDetailSettingsViewController.m; sourceTree = "<group>"; };
 		085E3D7019704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "JMDetailSettingsActionBarView~ipad.xib"; path = "Classes/JMDetailSettingsActionBarView~ipad.xib"; sourceTree = "<group>"; };
+		08A7AA41197EBA7D00DB7636 /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Additions.h"; path = "JasperMobile/Classes/UIImage+Additions.h"; sourceTree = "<group>"; };
+		08A7AA42197EBA7D00DB7636 /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Additions.m"; path = "JasperMobile/Classes/UIImage+Additions.m"; sourceTree = "<group>"; };
+		08A7AA47197EBF9600DB7636 /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Additions.h"; path = "JasperMobile/Classes/UIView+Additions.h"; sourceTree = "<group>"; };
+		08A7AA48197EBF9600DB7636 /* UIView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Additions.m"; path = "JasperMobile/Classes/UIView+Additions.m"; sourceTree = "<group>"; };
 		37455108E52B31C8C8F3EEA0 /* JMSavedReportViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSavedReportViewerViewController.m; path = Classes/JMSavedReportViewerViewController.m; sourceTree = "<group>"; };
 		3745519D17A1453668F7C56A /* JMMenuItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMenuItemCell.h; path = Classes/JMMenuItemCell.h; sourceTree = "<group>"; };
 		374551CAFD2324CE12990919 /* JMLibraryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMLibraryTableViewController.h; path = Classes/JMLibraryTableViewController.h; sourceTree = "<group>"; };
@@ -630,6 +645,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		08326A6C197D29DE00801AE0 /* fullScreenMode */ = {
+			isa = PBXGroup;
+			children = (
+				08326A6D197D29DE00801AE0 /* defaultScreenMode.png */,
+				08326A6E197D29DE00801AE0 /* defaultScreenMode@2x.png */,
+				08326A6F197D29DE00801AE0 /* fullScreenMode.png */,
+				08326A70197D29DE00801AE0 /* fullScreenMode@2x.png */,
+			);
+			path = fullScreenMode;
+			sourceTree = "<group>";
+		};
 		085E3D6C19704CB5005F8E2E /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1101,6 +1127,10 @@
 				F57186C2183658DD0013B6EB /* JSRESTBase+updateServerInfo.m */,
 				F554B1BA19221F8C00E0E860 /* UIColor+RGBComponent.h */,
 				F554B1BB19221F8C00E0E860 /* UIColor+RGBComponent.m */,
+				08A7AA41197EBA7D00DB7636 /* UIImage+Additions.h */,
+				08A7AA42197EBA7D00DB7636 /* UIImage+Additions.m */,
+				08A7AA47197EBF9600DB7636 /* UIView+Additions.h */,
+				08A7AA48197EBF9600DB7636 /* UIView+Additions.m */,
 			);
 			name = Categories;
 			path = ..;
@@ -1109,6 +1139,7 @@
 		F58FF2EC1760A0AC0021CC8B /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				08326A6C197D29DE00801AE0 /* fullScreenMode */,
 				F5FA4C2E190FBFC900001999 /* Representation Switcher */,
 				F5C2532919571B980090A5E0 /* white_search_button.png */,
 				F53941741975F03900EE2329 /* gray_search_button.png */,
@@ -1204,6 +1235,7 @@
 				F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */,
 				F53B38E4192B7DCF003B1867 /* JMPagination.h */,
 				F5C78CF419528F320082AFDE /* JMActionBarProvider.h */,
+				08326A7C197D366B00801AE0 /* JMFullScreenButtonProvider.h */,
 				F5C78CF519528F730082AFDE /* JMHeaderBarAdditions.h */,
 			);
 			name = Protocols;
@@ -1475,6 +1507,7 @@
 				F55043601851E00600DA6D33 /* list_options@2x.png in Resources */,
 				F5894FDB1887ECF200FD8C00 /* res_type_pdf.png in Resources */,
 				F57972F518A92D3900BD16B9 /* edit_name_button.png in Resources */,
+				08326A73197D29DE00801AE0 /* fullScreenMode.png in Resources */,
 				F58EF6BE17F487A800C9EBA8 /* add_favorite_button_highlighted@2x.png in Resources */,
 				085E3D7119704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib in Resources */,
 				F58EF6C617F487A800C9EBA8 /* delete_button@2x.png in Resources */,
@@ -1503,6 +1536,7 @@
 				F5FA4C49190FC06D00001999 /* vertical_list_button.png in Resources */,
 				F58EF6C717F487A800C9EBA8 /* remove_favorite_button_highlighted.png in Resources */,
 				F58EF6DE17F4882800C9EBA8 /* res_type_folder@2x.png in Resources */,
+				08326A72197D29DE00801AE0 /* defaultScreenMode@2x.png in Resources */,
 				F58EF6CA17F487A800C9EBA8 /* remove_favorite_button@2x.png in Resources */,
 				F5EAA2671797F5970091BA43 /* Settings.bundle in Resources */,
 				F5924E9E18FCA1DF00691286 /* library.png in Resources */,
@@ -1539,10 +1573,12 @@
 				F58EF6CC17F487A800C9EBA8 /* blue_button_highlighted@2x.png in Resources */,
 				F58EF6A117F483D300C9EBA8 /* Icon-144.png in Resources */,
 				F5F1B40817F197F900EB2587 /* Icon-Small.png in Resources */,
+				08326A71197D29DE00801AE0 /* defaultScreenMode.png in Resources */,
 				F5F1B40917F197F900EB2587 /* Icon-Small@2x.png in Resources */,
 				F5F1B40A17F197F900EB2587 /* Icon.png in Resources */,
 				F53941731975EC6100EE2329 /* left_blue_arrow.png in Resources */,
 				F5F1B41217F198A600EB2587 /* Icon-72.png in Resources */,
+				08326A74197D29DE00801AE0 /* fullScreenMode@2x.png in Resources */,
 				F539A6FA17F1992000310D72 /* Icon-114.png in Resources */,
 				F576FAEA1907E9A100503CB1 /* home_logo.png in Resources */,
 				F58EF6C917F487A800C9EBA8 /* remove_favorite_button.png in Resources */,
@@ -1631,6 +1667,7 @@
 				F58FF2F51760A0B50021CC8B /* UIViewController+MJPopupViewController.m in Sources */,
 				F58FF2F91760A1090021CC8B /* JMCancelRequestPopup.m in Sources */,
 				F55048D917622B8C0067304B /* JMUtils.m in Sources */,
+				08A7AA49197EBF9600DB7636 /* UIView+Additions.m in Sources */,
 				F539125218D73170001BDDBE /* JMResourcePageContentViewController.m in Sources */,
 				085E3D6419704CAF005F8E2E /* JMDetailSettings.m in Sources */,
 				F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */,
@@ -1707,6 +1744,7 @@
 				F588F1F1192CE2D800727E05 /* JMBaseResourceTableViewCell.m in Sources */,
 				08132B1E1977D94300578CEC /* JMBaseActionBarView.m in Sources */,
 				3745506335AE18D1886CCED1 /* JMMenuItemCell.m in Sources */,
+				08A7AA43197EBA7D00DB7636 /* UIImage+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,6 +10,10 @@
 #import "JMActionBarProvider.h"
 #import "JMHeaderBarAdditions.h"
 #import <QuartzCore/QuartzCore.h>
+#import "JMFullScreenButtonProvider.h"
+
+#import "UIView+Additions.h"
+#import "UIImage+Additions.h"
 
 static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
@@ -72,6 +76,9 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     
     if ([destinationViewController isKindOfClass:[UINavigationController class]]) {
         [destinationViewController setDelegate:self];
+        if ([segue.identifier isEqualToString:kJMDetailViewControllerSegue]) {
+            self.detailNavigationController = destinationViewController;
+        }
     } else if ([destinationViewController conformsToProtocol:@protocol(JMHeaderBarAdditions)] &&
                [destinationViewController respondsToSelector:@selector(searchWithQuery:)]) {
         [self searchHidden:NO];
@@ -83,23 +90,32 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     [destinationViewController didMoveToParentViewController:self];
 }
 
-- (void)showMasterView:(BOOL)show
-{
-    CGRect masterViewFrame = self.masterView.frame;
-    masterViewFrame.size.width = show * kJMMasterViewWidth;
-    self.masterView.frame = masterViewFrame;
-    
-    CGRect detailsViewFrame = self.detailView.frame;
-    detailsViewFrame.origin.x = masterViewFrame.size.width;
-    detailsViewFrame.size.width = self.view.bounds.size.width - masterViewFrame.size.width;
-    self.detailView.frame = detailsViewFrame;
-}
-
 #pragma mark - Actions
 
 - (IBAction)back:(UITapGestureRecognizer *)recognizer
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)fullScreenButtonTapped:(id)sender
+{
+    self.fullScreenButton.selected = !self.fullScreenButton.selected;
+    [UIView animateWithDuration:0.15 animations:^{
+        if (self.fullScreenButton.selected) {
+            CGRect viewRect = self.view.bounds;
+            CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
+            viewRect.origin.y += MIN(statusBarFrame.size.height, statusBarFrame.size.width);
+            viewRect.size.height -= MIN(statusBarFrame.size.height, statusBarFrame.size.width);
+            self.mainDetailsView.frame = viewRect;
+        } else {
+            CGRect viewRect = [self getFrameForDetailView];
+            viewRect.size.height = self.view.bounds.size.height;
+            viewRect.origin.y = self.logoView.frame.size.height;
+            viewRect.size.height -= self.logoView.frame.size.height;
+            self.mainDetailsView.frame = viewRect;
+        }
+        self.logoView.alpha = !self.fullScreenButton.selected;
+    }];
 }
 
 #pragma mark - UINavigationControllerDelegate
@@ -108,7 +124,9 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
       willShowViewController:(UIViewController *)viewController
                     animated:(BOOL)animated
 {
-    [self showActionBarForViewController:viewController];
+    if ([navigationController isEqual:self.detailNavigationController]) {
+        [self showActionBarForViewController:viewController];
+    }
     
     __block BOOL isSearchHidden = YES;
     __weak JMCustomSplitViewController *weakSelf = self;
@@ -122,6 +140,15 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
         }
     } conformsToProtocol:@protocol(JMHeaderBarAdditions)];
     [self searchHidden:isSearchHidden];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController
+       didShowViewController:(UIViewController *)viewController
+                    animated:(BOOL)animated
+{
+    if ([navigationController isEqual:self.detailNavigationController]) {
+        [self showFullScreenButtonForViewController:viewController];
+    }
 }
 
 - (IBAction)search:(id)sender
@@ -178,6 +205,59 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
             [self.actionBarPlaceholderView addSubview:actionBar];
         }
     }
+}
+
+- (void)showMasterView:(BOOL)show
+{
+    CGRect masterViewFrame = self.masterView.frame;
+    masterViewFrame.size.width = show * kJMMasterViewWidth;
+    self.masterView.frame = masterViewFrame;
+    
+    self.mainDetailsView.frame = [self getFrameForDetailView];
+}
+
+- (void) showFullScreenButtonForViewController:(id)viewController
+{
+    [UIView beginAnimations:nil context:nil];
+    if ([viewController respondsToSelector:@selector(shouldDisplayFullScreenButton)]) {
+        self.fullScreenButton.alpha = [viewController shouldDisplayFullScreenButton] ? 1 : 0;
+        [self.mainDetailsView bringSubviewToFront:self.fullScreenButton];
+    } else {
+        self.fullScreenButton.alpha = 0;
+    }
+    if (self.fullScreenButton.alpha) {
+        UIColor *fullScreenButtonImageColor = nil;
+        if ([viewController respondsToSelector:@selector(fullScreenButtonImageColor)]) {
+            fullScreenButtonImageColor = [viewController fullScreenButtonImageColor];
+        } else {
+            fullScreenButtonImageColor = [[viewController view] colorOfPoint:self.fullScreenButton.center];
+            fullScreenButtonImageColor = [UIColor highlitedColorForColor:fullScreenButtonImageColor];
+        }
+        
+        UIImage *normalImage = [[UIImage imageNamed:@"fullScreenMode.png"] colorizeImageWithColor:fullScreenButtonImageColor];
+        UIImage *selectedImage = [[UIImage imageNamed:@"defaultScreenMode.png"] colorizeImageWithColor:fullScreenButtonImageColor];
+        [self.fullScreenButton setImage:normalImage forState:UIControlStateNormal];
+        [self.fullScreenButton setImage:selectedImage forState:UIControlStateSelected];
+    }
+    [UIView commitAnimations];
+}
+
+- (CGRect) getFrameForDetailView{
+    CGRect masterViewFrame = self.masterView.frame;
+    
+    CGRect mainDetailsViewFrame = self.view.bounds;
+    mainDetailsViewFrame.origin.x = masterViewFrame.size.width;
+    mainDetailsViewFrame.origin.y = self.logoView.frame.size.height;
+    mainDetailsViewFrame.size.width -= masterViewFrame.size.width;
+    mainDetailsViewFrame.size.height -= self.logoView.frame.size.height;
+
+    if (![JMUtils isFoundationNumber7OrHigher]) {
+        CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
+        mainDetailsViewFrame.origin.y += MIN(statusBarFrame.size.height, statusBarFrame.size.width);
+        mainDetailsViewFrame.size.height -= MIN(statusBarFrame.size.height, statusBarFrame.size.width);
+    }
+    
+    return mainDetailsViewFrame;
 }
 
 - (void)performActionOnVisibleViewControllers:(void (^)(id viewController))action conformsToProtocol:(Protocol *)protocol

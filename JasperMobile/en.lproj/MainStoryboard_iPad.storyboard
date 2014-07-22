@@ -433,7 +433,7 @@ Please Wait...</string>
                                             <rect key="frame" x="0.0" y="0.0" width="355" height="570"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="resource_pad.png" id="UNi-hf-q3e">
+                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="grid_res_type_report.png" id="UNi-hf-q3e">
                                                     <rect key="frame" x="0.0" y="0.0" width="355" height="263"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1207,7 +1207,6 @@ Please Wait...</string>
         <image name="home_logo.png" width="114" height="21"/>
         <image name="input_control_text_field.png" width="247" height="31"/>
         <image name="report_prototype_image.png" width="108" height="80"/>
-        <image name="resource_pad.png" width="54" height="48"/>
         <image name="tmp_arrow_back.png" width="15" height="30"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -1216,10 +1215,10 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="yOc-W8-lgs"/>
-        <segue reference="QIH-Uk-XKN"/>
+        <segue reference="BsZ-qb-f2m"/>
         <segue reference="ruh-Jy-ETv"/>
         <segue reference="0bD-K8-B5D"/>
         <segue reference="h0e-Up-0Pa"/>
+        <segue reference="QIH-Uk-XKN"/>
     </inferredMetricsTieBreakers>
 </document>

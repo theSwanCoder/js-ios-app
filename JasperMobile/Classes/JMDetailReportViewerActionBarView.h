@@ -10,4 +10,7 @@
 #import "JMBaseActionBarView.h"
 
 @interface JMDetailReportViewerActionBarView : JMBaseActionBarView
+
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+
 @end
