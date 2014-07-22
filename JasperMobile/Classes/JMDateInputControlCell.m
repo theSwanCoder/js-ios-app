@@ -143,6 +143,13 @@ static UIDatePicker *datePicker;
     return datePickerToolbar;
 }
 
+#pragma mark - NSObject
+
+- (void)dealloc
+{
+    [self.datePicker removeTarget:nil action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
+}
+
 #pragma mark - Actions
 
 - (void)done:(id)sender
