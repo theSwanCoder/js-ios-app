@@ -214,6 +214,16 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     self.masterView.frame = masterViewFrame;
     
     self.mainDetailsView.frame = [self getFrameForDetailView];
+    
+    CGRect actionBarPlaceholderFrame = self.actionBarPlaceholderView.frame;
+    if (!show) {
+        actionBarPlaceholderFrame.origin.x += kJMMasterViewWidth;
+        actionBarPlaceholderFrame.size.width -= kJMMasterViewWidth;
+    } else {
+        actionBarPlaceholderFrame.origin.x = 0;
+        actionBarPlaceholderFrame.size.width = self.mainDetailsView.frame.size.width;
+    }
+    self.actionBarPlaceholderView.frame = actionBarPlaceholderFrame;
 }
 
 - (void) showFullScreenButtonForViewController:(id)viewController
