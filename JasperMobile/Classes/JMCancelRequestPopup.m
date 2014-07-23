@@ -49,17 +49,18 @@ static CGPoint popupOffset;
 
 + (void)presentInViewController:(UIViewController *)viewController message:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock
 {
-    instance = [[JMCancelRequestPopup alloc] initWithNibName:@"JMCancelRequestPopup" bundle:nil];
+    if (!instance) {
+        instance = [[JMCancelRequestPopup alloc] initWithNibName:@"JMCancelRequestPopup" bundle:nil];
+        instance.view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
+        UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+        [viewController presentPopupViewController:instance animationType:MJPopupViewAnimationFade];
+    }
     instance.restClient = client;
     instance.delegate = viewController;
     instance.cancelBlock = cancelBlock;
-    [instance.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
     instance.progressLabel.text = JMCustomLocalizedString(message, nil);
-    instance.view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
-            UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-    
-    [viewController presentPopupViewController:instance animationType:MJPopupViewAnimationFade];
-    
+    [instance.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
+
     [self applyOffset];
 }
 

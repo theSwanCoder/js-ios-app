@@ -251,12 +251,6 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     mainDetailsViewFrame.size.width -= masterViewFrame.size.width;
     mainDetailsViewFrame.size.height -= self.logoView.frame.size.height;
 
-    if (![JMUtils isFoundationNumber7OrHigher]) {
-        CGRect statusBarFrame = [UIApplication sharedApplication].statusBarFrame;
-        mainDetailsViewFrame.origin.y += MIN(statusBarFrame.size.height, statusBarFrame.size.width);
-        mainDetailsViewFrame.size.height -= MIN(statusBarFrame.size.height, statusBarFrame.size.width);
-    }
-    
     return mainDetailsViewFrame;
 }
 
