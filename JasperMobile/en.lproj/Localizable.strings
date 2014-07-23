@@ -168,7 +168,7 @@
 "action.button.save" = "Save";
 "action.button.cancel" = "Cancel";
 "action.button.continue" = "Continue";
-
+"action.button.newserver" = "New Server";
 
 // Tools
 "master.tools.type.refresh" = "Refresh";

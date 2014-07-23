@@ -9,11 +9,15 @@
 #import "JMServersGridViewController.h"
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMActionBarProvider.h"
+#import "JMServersActionBarView.h"
+#import "JMLocalization.h"
 #import <Objection-iOS/Objection.h>
 
-@interface JMServersGridViewController ()
+@interface JMServersGridViewController () <JMActionBarProvider, JMBaseActionBarViewDelegate>
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSMutableArray *servers;
+@property (nonatomic, strong) JMServersActionBarView *actionBarView;
 @end
 
 @implementation JMServersGridViewController
@@ -65,6 +69,29 @@ objection_requires(@"managedObjectContext")
     url.text = serverProfile.serverUrl;
     
     return cell;
+}
+
+#pragma mark - JMActionBarProvider
+
+- (id)actionBar
+{
+    if (!self.actionBarView) {
+        self.actionBarView = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([JMServersActionBarView class])
+                                                           owner:self
+                                                         options:nil].firstObject;
+        self.actionBarView.delegate = self;
+    }
+    
+    return self.actionBarView;
+}
+
+#pragma mark - JMBaseActionBarViewDelegate
+
+- (void)actionView:(JMBaseActionBarView *)actionView didSelectAction:(JMBaseActionBarViewAction)action
+{
+    if (action == JMBaseActionBarViewAction_Create) {
+        // TODO: perform "New Server" segue
+    }
 }
 
 @end

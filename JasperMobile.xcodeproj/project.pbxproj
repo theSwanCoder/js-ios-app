@@ -223,6 +223,8 @@
 		F5F1B40A17F197F900EB2587 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F1B40417F197F900EB2587 /* Icon.png */; };
 		F5F1B41217F198A600EB2587 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = F5F1B41117F198A600EB2587 /* Icon-72.png */; };
 		F5F21DF0191794C2007F78DB /* JMBaseResourcesCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F21DEF191794C2007F78DB /* JMBaseResourcesCollectionViewController.m */; };
+		F5F291EA198023C700346825 /* JMServersActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F291E9198023C700346825 /* JMServersActionBarView.m */; };
+		F5F291F01980256A00346825 /* JMServersActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F5F291EE1980256A00346825 /* JMServersActionBarView~ipad.xib */; };
 		F5F8B7C3179DA3720096C61A /* JMAskPasswordDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F8B7C2179DA3720096C61A /* JMAskPasswordDialog.m */; };
 		F5FA4C44190FC06D00001999 /* grid_button_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = F5FA4C3E190FC06D00001999 /* grid_button_selected.png */; };
 		F5FA4C45190FC06D00001999 /* grid_button.png in Resources */ = {isa = PBXBuildFile; fileRef = F5FA4C3F190FC06D00001999 /* grid_button.png */; };
@@ -603,6 +605,9 @@
 		F5F1B41117F198A600EB2587 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../Icons/Icon-72.png"; sourceTree = "<group>"; };
 		F5F21DEE191794C2007F78DB /* JMBaseResourcesCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseResourcesCollectionViewController.h; path = Classes/JMBaseResourcesCollectionViewController.h; sourceTree = "<group>"; };
 		F5F21DEF191794C2007F78DB /* JMBaseResourcesCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseResourcesCollectionViewController.m; path = Classes/JMBaseResourcesCollectionViewController.m; sourceTree = "<group>"; };
+		F5F291E8198023C700346825 /* JMServersActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServersActionBarView.h; path = Classes/JMServersActionBarView.h; sourceTree = "<group>"; };
+		F5F291E9198023C700346825 /* JMServersActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMServersActionBarView.m; path = Classes/JMServersActionBarView.m; sourceTree = "<group>"; };
+		F5F291EF1980256A00346825 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "en.lproj/JMServersActionBarView~ipad.xib"; sourceTree = "<group>"; };
 		F5F8B7C1179DA3720096C61A /* JMAskPasswordDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMAskPasswordDialog.h; path = Classes/JMAskPasswordDialog.h; sourceTree = "<group>"; };
 		F5F8B7C2179DA3720096C61A /* JMAskPasswordDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMAskPasswordDialog.m; path = Classes/JMAskPasswordDialog.m; sourceTree = "<group>"; };
 		F5FA4C3E190FC06D00001999 /* grid_button_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grid_button_selected.png; sourceTree = "<group>"; };
@@ -924,6 +929,7 @@
 				F5C78CF91952DED90082AFDE /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib */,
 				F51A149019740F6500C3A3A0 /* JMDetailReportOptionsActionBarView~ipad.xib */,
 				08132B1A1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib */,
+				F5F291EE1980256A00346825 /* JMServersActionBarView~ipad.xib */,
 			);
 			name = Pad;
 			sourceTree = "<group>";
@@ -1218,6 +1224,8 @@
 				08132B151977CFD200578CEC /* JMDetailReportViewerActionBarView.m */,
 				08132B1C1977D94300578CEC /* JMBaseActionBarView.h */,
 				08132B1D1977D94300578CEC /* JMBaseActionBarView.m */,
+				F5F291E8198023C700346825 /* JMServersActionBarView.h */,
+				F5F291E9198023C700346825 /* JMServersActionBarView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1563,6 +1571,7 @@
 				F58EF6CD17F487A800C9EBA8 /* blue_button.png in Resources */,
 				F5C2532A19571B980090A5E0 /* white_search_button.png in Resources */,
 				F5924EA118FCA1DF00691286 /* servers.png in Resources */,
+				F5F291F01980256A00346825 /* JMServersActionBarView~ipad.xib in Resources */,
 				F5FA4C47190FC06D00001999 /* horizontal_list_button.png in Resources */,
 				F58EF6A617F484D600C9EBA8 /* Icon-80.png in Resources */,
 				F527DA3D197FB0C600B94BA0 /* server.png in Resources */,
@@ -1671,6 +1680,7 @@
 				F55E4678191B810D00716726 /* JMLibraryTableViewCell.m in Sources */,
 				F5FE06DF1757383800030331 /* JMMenuTabBarController.m in Sources */,
 				F5FE06E517574D8200030331 /* JMPhoneRotation.m in Sources */,
+				F5F291EA198023C700346825 /* JMServersActionBarView.m in Sources */,
 				F5FE06E817574D9700030331 /* JMPadRotation.m in Sources */,
 				F5CF8ECE1953B4E200282BB7 /* JMNoAnimationPushSegue.m in Sources */,
 				F59BF2EC1757EE980091EB88 /* JMPhoneModule.m in Sources */,
@@ -1880,6 +1890,14 @@
 			);
 			name = JMMenuSectionView.xib;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		F5F291EE1980256A00346825 /* JMServersActionBarView~ipad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F5F291EF1980256A00346825 /* en */,
+			);
+			name = "JMServersActionBarView~ipad.xib";
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
