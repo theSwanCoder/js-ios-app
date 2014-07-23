@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="H7M-pU-pTq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="H7M-pU-pTq">
     <dependencies>
         <deployment version="1536" defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -292,7 +292,11 @@
         <!--Custom Split View Controller-->
         <scene sceneID="6fm-c7-5px">
             <objects>
-                <viewController id="jK9-x7-p1D" customClass="JMCustomSplitViewController" sceneMemberID="viewController"/>
+                <viewController id="jK9-x7-p1D" customClass="JMCustomSplitViewController" sceneMemberID="viewController">
+                    <connections>
+                        <segue destination="ZZ1-Df-Klf" kind="custom" identifier="DetailViewController" customClass="JMManualTransitionSegue" id="AXd-IC-749"/>
+                    </connections>
+                </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JZD-41-jzo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-731" y="7649"/>
@@ -442,7 +446,7 @@ Please Wait...</string>
                                             <rect key="frame" x="0.0" y="0.0" width="355" height="570"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="grid_res_type_report.png" id="UNi-hf-q3e">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="resource_pad.png" id="UNi-hf-q3e">
                                                     <rect key="frame" x="0.0" y="0.0" width="355" height="263"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1159,6 +1163,70 @@ Please Wait...</string>
             </objects>
             <point key="canvasLocation" x="261" y="6313"/>
         </scene>
+        <!--Servers Grid View Controller-->
+        <scene sceneID="Nas-uM-Q5U">
+            <objects>
+                <viewController id="UcF-nV-bLD" customClass="JMServersGridViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ehh-1M-6Wc">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="oQd-Gz-gGy">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="18" id="uha-jF-NiW">
+                                    <size key="itemSize" width="232" height="224"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="18" minY="18" maxX="18" maxY="18"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ServerCell" id="cxq-0K-L1Q">
+                                        <rect key="frame" x="18" y="18" width="232" height="224"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="232" height="224"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="server.png" id="eu8-PP-uWZ">
+                                                    <rect key="frame" x="0.0" y="0.0" width="232" height="127"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mobile Demo" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="uo6-aQ-R1a">
+                                                    <rect key="frame" x="17" y="135" width="199" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="20"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="http://mobiledemo.jaspersoft.com/jasperserver-pro " lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8Do-pk-awp">
+                                                    <rect key="frame" x="17" y="169" width="199" height="35"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="13"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="customSize" width="232" height="224"/>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="hoh-cH-RPE"/>
+                    <connections>
+                        <outlet property="collectionView" destination="oQd-Gz-gGy" id="9ue-Nr-hRd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bFn-QD-r0N" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1229" y="7649"/>
+        </scene>
         <!--Detail Settings View Controller-->
         <scene sceneID="pBY-GU-ZdQ">
             <objects>
@@ -1207,6 +1275,21 @@ Please Wait...</string>
             </objects>
             <point key="canvasLocation" x="4617" y="4039"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="s4q-9s-ri3">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="ZZ1-Df-Klf" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Xwh-ci-Fgh">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="UcF-nV-bLD" kind="relationship" relationship="rootViewController" id="XOy-Ww-ZPg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ezy-p3-I2H" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="261" y="7649"/>
+        </scene>
     </scenes>
     <resources>
         <image name="dot.png" width="6" height="5"/>
@@ -1216,6 +1299,8 @@ Please Wait...</string>
         <image name="grid_res_type_report.png" width="262" height="182"/>
         <image name="home_logo.png" width="114" height="21"/>
         <image name="report_prototype_image.png" width="108" height="80"/>
+        <image name="resource_pad.png" width="54" height="48"/>
+        <image name="server.png" width="232" height="129"/>
         <image name="tmp_arrow_back.png" width="15" height="30"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -1224,10 +1309,10 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="BsZ-qb-f2m"/>
+        <segue reference="h2P-Au-XGR"/>
         <segue reference="ruh-Jy-ETv"/>
         <segue reference="0bD-K8-B5D"/>
         <segue reference="h0e-Up-0Pa"/>
-        <segue reference="QIH-Uk-XKN"/>
+        <segue reference="kZl-CG-pAE"/>
     </inferredMetricsTieBreakers>
 </document>
