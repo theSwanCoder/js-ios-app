@@ -28,6 +28,13 @@
 
 }
 
+- (void)setDisabledAction:(JMBaseActionBarViewAction)disabledAction{
+    [super setDisabledAction:disabledAction];
+    if (disabledAction & JMBaseActionBarViewAction_Edit) {
+        self.editButton.enabled = NO;
+    }
+}
+
 - (IBAction)refreshButtonTapped:(id)sender
 {
     [self.delegate actionView:self didSelectAction:JMBaseActionBarViewAction_Refresh];

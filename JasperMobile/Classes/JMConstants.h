@@ -52,6 +52,7 @@ extern NSString * const kJMShowResourcesListInMaster;
 extern NSString * const kJMShowResourcesListInDetail;
 extern NSString * const kJMLoadResourcesInDetail;
 extern NSString * const kJMShowRootMaster;
+extern NSString * const kJMShowReportInDetail;
 
 // Shared keys for dictionary
 extern NSString * const kJMMenuTag;

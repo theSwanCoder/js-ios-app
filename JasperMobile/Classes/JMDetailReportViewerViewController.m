@@ -91,6 +91,9 @@ inject_default_rotation()
         self.actionBarView = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([JMDetailReportViewerActionBarView class])
                                                            owner:self
                                                          options:nil].firstObject;
+        if (!self.inputControls || [self.inputControls count] == 0) {
+            self.actionBarView.disabledAction = JMBaseActionBarViewAction_Edit;
+        }
         self.actionBarView.delegate = self;
         self.actionBarView.titleLabel.text = self.resourceLookup.label;
     }

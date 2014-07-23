@@ -13,12 +13,21 @@
 #import "JMBackHeaderView.h"
 #import "JMConstants.h"
 
+#import "UIViewController+fetchInputControls.h"
+
+
 static NSInteger const kJMLimit = 20;
 static NSString * const kJMResourceCell = @"ResourceCell";
 static NSString * const kJMLoadingCell = @"LoadingCell";
 
+@interface JMMasterResourcesTableViewController ()
+@property (nonatomic, weak) JSConstants *constants;
+
+@end
+
+
 @implementation JMMasterResourcesTableViewController
-objection_requires(@"resourceClient")
+objection_requires(@"resourceClient", @"constants")
 
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceLookup = _resourceLookup;
@@ -52,16 +61,19 @@ objection_requires(@"resourceClient")
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInDetail object:nil userInfo:userInfo];
     }];
     
-    [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:0]
-                                animated:NO
-                          scrollPosition:UITableViewScrollPositionMiddle];
-    
     [[NSNotificationCenter defaultCenter] addObserverForName:kJMShowRootMaster
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
         [self.navigationController popViewControllerAnimated:YES];
     }];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:0]
+                                animated:NO
+                          scrollPosition:UITableViewScrollPositionMiddle];
 }
 
 #pragma mark - Table view data source
@@ -96,9 +108,13 @@ objection_requires(@"resourceClient")
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:0] animated:NO];
-    self.selectedResourceIndex = indexPath.row;
-    // TODO: post notification to update report view
+    if (indexPath.row != self.selectedResourceIndex) {
+        [tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:self.selectedResourceIndex inSection:indexPath.section] animated:YES];
+        self.selectedResourceIndex = indexPath.row;
+        
+        JSResourceLookup *resourceLookup = [self.resources objectAtIndex:self.selectedResourceIndex];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowReportInDetail object:resourceLookup];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

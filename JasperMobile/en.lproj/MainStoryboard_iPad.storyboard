@@ -1044,7 +1044,7 @@ Please Wait...</string>
                                 </subviews>
                                 <color key="backgroundColor" red="0.18039215689999999" green="0.19215686269999999" blue="0.21960784310000001" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsMultipleSelection="YES" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="48" sectionHeaderHeight="1" sectionFooterHeight="1" id="AUY-Ub-hbn">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="48" sectionHeaderHeight="1" sectionFooterHeight="1" id="AUY-Ub-hbn">
                                 <rect key="frame" x="0.0" y="48" width="163" height="748"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.16078431369999999" green="0.16862745100000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -1308,10 +1308,10 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="0bD-K8-B5D"/>
         <segue reference="ruh-Jy-ETv"/>
-        <segue reference="GBb-Nt-o83"/>
-        <segue reference="BsZ-qb-f2m"/>
+        <segue reference="h2P-Au-XGR"/>
+        <segue reference="kZl-CG-pAE"/>
+        <segue reference="0bD-K8-B5D"/>
         <segue reference="h0e-Up-0Pa"/>
     </inferredMetricsTieBreakers>
 </document>

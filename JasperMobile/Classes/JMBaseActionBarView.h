@@ -30,5 +30,6 @@ typedef NS_ENUM(NSInteger, JMBaseActionBarViewAction) {
 }
 
 @property (nonatomic, weak) id <JMBaseActionBarViewDelegate> delegate;
+@property (nonatomic, assign) JMBaseActionBarViewAction disabledAction;
 
 @end

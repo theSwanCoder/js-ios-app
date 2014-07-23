@@ -15,6 +15,8 @@
         [actionButton setBackgroundColor:kJMDetailActionBarItemsBackgroundColor];
         [actionButton setTitleColor:kJMDetailActionBarItemsTextColor forState:UIControlStateNormal];
         [actionButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+        [actionButton setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
+
         actionButton.titleLabel.font = [UIFont systemFontOfSize:17];
     }
 }

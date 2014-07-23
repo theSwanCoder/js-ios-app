@@ -19,6 +19,7 @@ NSString * kJMLoadingCellIdentifier = @"LoadingCell";
 @implementation JMBaseResourcesViewController
 objection_requires(@"constants")
 
+
 - (NSInteger)numberOfSections
 {
     return 1;
@@ -32,17 +33,23 @@ objection_requires(@"constants")
     return count;
 }
 
-- (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
+- (void)didSelectResource:(JSResourceLookup *)resourceLookup
 {
-    JSResourceLookup *resourceLookup = [self.delegate.resources objectAtIndex:indexPath.row];
     if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
         [self fetchInputControlsForReport:resourceLookup];
     } else {
         NSDictionary *data = @{
-                       kJMResourceLookup : resourceLookup
-        };
+                               kJMResourceLookup : resourceLookup
+                               };
         [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
     }
+}
+
+
+- (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSResourceLookup *resourceLookup = [self.delegate.resources objectAtIndex:indexPath.row];
+    [self didSelectResource:resourceLookup];
 }
 
 #pragma mark - Initialization
@@ -59,6 +66,15 @@ objection_requires(@"constants")
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
+
+    __weak typeof(self) weakSelf = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:kJMShowReportInDetail object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf.navigationController popToViewController:strongSelf animated:NO];
+            [strongSelf didSelectResource:note.object];
+        }
+    }];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -86,6 +102,11 @@ objection_requires(@"constants")
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
                                                         object:nil
                                                       userInfo:userInfo];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - JMRefreshable
