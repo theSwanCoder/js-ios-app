@@ -70,15 +70,25 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
 
 + (NSManagedObjectID *)activeServerID
 {
-    JSObjectionInjector *injector = [JSObjection defaultInjector];
-    NSManagedObjectContext *managedObjectContext = [injector getObject:[NSManagedObjectContext class]];
-    
-    if (!managedObjectContext) return nil;
+    if (!self.managedObjectContext) return nil;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSURL *url = [defaults URLForKey:kJMDefaultsActiveServer];
-    NSManagedObjectID *activeServerID = [managedObjectContext.persistentStoreCoordinator managedObjectIDForURIRepresentation:url];
+    NSManagedObjectID *activeServerID = [self.managedObjectContext.persistentStoreCoordinator managedObjectIDForURIRepresentation:url];
     
     return activeServerID;
+}
+
++ (JMServerProfile *)activeServerProfile
+{
+    NSManagedObjectID *activeServerID = [JMServerProfile activeServerID];
+    if (!activeServerID || !self.managedObjectContext) return nil;
+    
+    JMServerProfile *serverProfile = (JMServerProfile *) [self.managedObjectContext existingObjectWithID:activeServerID error:nil];
+    if (serverProfile) {
+        [serverProfile setPasswordAsPrimitive:[JMServerProfile passwordFromKeychain:serverProfile.profileID]];
+    }
+    
+    return serverProfile;
 }
 
 - (NSString *)profileID
@@ -89,6 +99,14 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
 - (void)setPasswordAsPrimitive:(NSString *)password
 {
     [self setPrimitiveValue:password forKey:@"password"];
+}
+
+#pragma mark - Private
+
++ (NSManagedObjectContext *)managedObjectContext
+{
+    JSObjectionInjector *injector = [JSObjection defaultInjector];
+    return [injector getObject:[NSManagedObjectContext class]];
 }
 
 @end

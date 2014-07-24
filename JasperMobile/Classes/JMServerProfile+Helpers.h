@@ -75,6 +75,13 @@
 + (NSManagedObjectID *)activeServerID;
 
 /**
+ Returns an active server profile
+ 
+ @return A server profile instance
+ */
++ (JMServerProfile *)activeServerProfile;
+
+/**
  Returns encoded profile id
  */
 - (NSString *)profileID;

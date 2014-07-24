@@ -130,6 +130,7 @@
 "home.menuitem.repository.label" = "Repository";
 "home.menuitem.favorites.label" = "Favorites";
 "home.menuitem.servers.label" = "Servers";
+"home.menuitem.activeserver.label" = "Server: %@";
 
 // Descriptions
 "home.menuitem.library.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";

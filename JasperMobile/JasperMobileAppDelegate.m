@@ -89,7 +89,7 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    JMServerProfile *serverProfile = [self activeServerProfile];
+    JMServerProfile *serverProfile = [JMServerProfile activeServerProfile];
     
     if (serverProfile.askPassword.boolValue) {
         // Using performSelector to fix warning: "Applications are expected to have a root view controller at the end of application launch"
@@ -326,22 +326,6 @@ static NSString * const kJMProductName = @"JasperMobile";
     // Update db with latest app version and demo profile
     [JMAppUpdater updateAppVersionTo:[JMAppUpdater latestAppVersion]];
     [self coreDataInit];
-}
-
-- (JMServerProfile *)activeServerProfile
-{
-    NSManagedObjectID *activeServerID = [JMServerProfile activeServerID];
-    
-    if (activeServerID) {
-        JMServerProfile *serverProfile = (JMServerProfile *) [self.managedObjectContext existingObjectWithID:activeServerID error:nil];
-        if (serverProfile) {
-            [serverProfile setPasswordAsPrimitive:[JMServerProfile passwordFromKeychain:serverProfile.profileID]];
-        }
-        
-        return serverProfile;
-    }
-    
-    return nil;
 }
 
 @end
