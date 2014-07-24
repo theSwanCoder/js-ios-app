@@ -14,6 +14,9 @@
 #import "JMLocalization.h"
 #import <Objection-iOS/Objection.h>
 
+
+static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
+
 @interface JMServersGridViewController () <JMActionBarProvider, JMBaseActionBarViewDelegate>
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSMutableArray *servers;
@@ -90,7 +93,7 @@ objection_requires(@"managedObjectContext")
 - (void)actionView:(JMBaseActionBarView *)actionView didSelectAction:(JMBaseActionBarViewAction)action
 {
     if (action == JMBaseActionBarViewAction_Create) {
-        // TODO: perform "New Server" segue
+        [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:nil];
     }
 }
 

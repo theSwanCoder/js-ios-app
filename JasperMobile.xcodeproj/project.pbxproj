@@ -14,6 +14,15 @@
 		08326A72197D29DE00801AE0 /* defaultScreenMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08326A6E197D29DE00801AE0 /* defaultScreenMode@2x.png */; };
 		08326A73197D29DE00801AE0 /* fullScreenMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 08326A6F197D29DE00801AE0 /* fullScreenMode.png */; };
 		08326A74197D29DE00801AE0 /* fullScreenMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08326A70197D29DE00801AE0 /* fullScreenMode@2x.png */; };
+		0855E21B198117FE0057C575 /* JMServerOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0855E21A198117FE0057C575 /* JMServerOptionsViewController.m */; };
+		0855E21E19812AD40057C575 /* JMServerOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0855E21D19812AD40057C575 /* JMServerOptions.m */; };
+		0855E22619812FF50057C575 /* JMServerOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 0855E22519812FF50057C575 /* JMServerOption.m */; };
+		0855E22919814ACC0057C575 /* JMTextServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0855E22819814ACC0057C575 /* JMTextServerOptionCell.m */; };
+		0855E22D19814B020057C575 /* JMSecureTextServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0855E22C19814B020057C575 /* JMSecureTextServerOptionCell.m */; };
+		0855E23019814B140057C575 /* JMBooleanServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0855E22F19814B140057C575 /* JMBooleanServerOptionCell.m */; };
+		0855E23319814E6F0057C575 /* JMServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0855E23219814E6F0057C575 /* JMServerOptionCell.m */; };
+		0855E236198157130057C575 /* JMServerOptionsActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0855E235198157130057C575 /* JMServerOptionsActionBarView.m */; };
+		0855E2391981579C0057C575 /* JMServerOptionsActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0855E2381981579C0057C575 /* JMServerOptionsActionBarView~ipad.xib */; };
 		085E3D6419704CAF005F8E2E /* JMDetailSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5B19704CAF005F8E2E /* JMDetailSettings.m */; };
 		085E3D6519704CAF005F8E2E /* JMDetailSettingsActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5D19704CAF005F8E2E /* JMDetailSettingsActionBarView.m */; };
 		085E3D6619704CAF005F8E2E /* JMDetailSettingsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5F19704CAF005F8E2E /* JMDetailSettingsItem.m */; };
@@ -286,6 +295,23 @@
 		08326A6F197D29DE00801AE0 /* fullScreenMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullScreenMode.png; sourceTree = "<group>"; };
 		08326A70197D29DE00801AE0 /* fullScreenMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fullScreenMode@2x.png"; sourceTree = "<group>"; };
 		08326A7C197D366B00801AE0 /* JMFullScreenButtonProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMFullScreenButtonProvider.h; path = JasperMobile/Classes/JMFullScreenButtonProvider.h; sourceTree = "<group>"; };
+		0855E219198117FE0057C575 /* JMServerOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServerOptionsViewController.h; path = Classes/JMServerOptionsViewController.h; sourceTree = "<group>"; };
+		0855E21A198117FE0057C575 /* JMServerOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMServerOptionsViewController.m; path = Classes/JMServerOptionsViewController.m; sourceTree = "<group>"; };
+		0855E21C19812AD40057C575 /* JMServerOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServerOptions.h; path = Classes/JMServerOptions.h; sourceTree = "<group>"; };
+		0855E21D19812AD40057C575 /* JMServerOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMServerOptions.m; path = Classes/JMServerOptions.m; sourceTree = "<group>"; };
+		0855E22419812FF50057C575 /* JMServerOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServerOption.h; path = Classes/JMServerOption.h; sourceTree = "<group>"; };
+		0855E22519812FF50057C575 /* JMServerOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMServerOption.m; path = Classes/JMServerOption.m; sourceTree = "<group>"; };
+		0855E22719814ACC0057C575 /* JMTextServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMTextServerOptionCell.h; path = Classes/JMTextServerOptionCell.h; sourceTree = "<group>"; };
+		0855E22819814ACC0057C575 /* JMTextServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMTextServerOptionCell.m; path = Classes/JMTextServerOptionCell.m; sourceTree = "<group>"; };
+		0855E22B19814B020057C575 /* JMSecureTextServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSecureTextServerOptionCell.h; path = Classes/JMSecureTextServerOptionCell.h; sourceTree = "<group>"; };
+		0855E22C19814B020057C575 /* JMSecureTextServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSecureTextServerOptionCell.m; path = Classes/JMSecureTextServerOptionCell.m; sourceTree = "<group>"; };
+		0855E22E19814B140057C575 /* JMBooleanServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBooleanServerOptionCell.h; path = Classes/JMBooleanServerOptionCell.h; sourceTree = "<group>"; };
+		0855E22F19814B140057C575 /* JMBooleanServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBooleanServerOptionCell.m; path = Classes/JMBooleanServerOptionCell.m; sourceTree = "<group>"; };
+		0855E23119814E6F0057C575 /* JMServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServerOptionCell.h; path = Classes/JMServerOptionCell.h; sourceTree = "<group>"; };
+		0855E23219814E6F0057C575 /* JMServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMServerOptionCell.m; path = Classes/JMServerOptionCell.m; sourceTree = "<group>"; };
+		0855E234198157130057C575 /* JMServerOptionsActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServerOptionsActionBarView.h; path = Classes/JMServerOptionsActionBarView.h; sourceTree = "<group>"; };
+		0855E235198157130057C575 /* JMServerOptionsActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMServerOptionsActionBarView.m; path = Classes/JMServerOptionsActionBarView.m; sourceTree = "<group>"; };
+		0855E2381981579C0057C575 /* JMServerOptionsActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMServerOptionsActionBarView~ipad.xib"; sourceTree = "<group>"; };
 		085E3D5A19704CAF005F8E2E /* JMDetailSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettings.h; path = Classes/JMDetailSettings.h; sourceTree = "<group>"; };
 		085E3D5B19704CAF005F8E2E /* JMDetailSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailSettings.m; path = Classes/JMDetailSettings.m; sourceTree = "<group>"; };
 		085E3D5C19704CAF005F8E2E /* JMDetailSettingsActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettingsActionBarView.h; path = Classes/JMDetailSettingsActionBarView.h; sourceTree = "<group>"; };
@@ -668,6 +694,56 @@
 			path = fullScreenMode;
 			sourceTree = "<group>";
 		};
+		0855E214198117A90057C575 /* Servers */ = {
+			isa = PBXGroup;
+			children = (
+				0855E22A19814AD00057C575 /* Cells */,
+				0855E21F19812AD80057C575 /* JMServerOptions */,
+				0855E237198157170057C575 /* ActionBar */,
+				0855E219198117FE0057C575 /* JMServerOptionsViewController.h */,
+				0855E21A198117FE0057C575 /* JMServerOptionsViewController.m */,
+				F555A101197EB54C0008052E /* JMServersGridViewController.h */,
+				F555A102197EB54C0008052E /* JMServersGridViewController.m */,
+			);
+			name = Servers;
+			sourceTree = "<group>";
+		};
+		0855E21F19812AD80057C575 /* JMServerOptions */ = {
+			isa = PBXGroup;
+			children = (
+				0855E22419812FF50057C575 /* JMServerOption.h */,
+				0855E22519812FF50057C575 /* JMServerOption.m */,
+				0855E21C19812AD40057C575 /* JMServerOptions.h */,
+				0855E21D19812AD40057C575 /* JMServerOptions.m */,
+			);
+			name = JMServerOptions;
+			sourceTree = "<group>";
+		};
+		0855E22A19814AD00057C575 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				0855E23119814E6F0057C575 /* JMServerOptionCell.h */,
+				0855E23219814E6F0057C575 /* JMServerOptionCell.m */,
+				0855E22719814ACC0057C575 /* JMTextServerOptionCell.h */,
+				0855E22819814ACC0057C575 /* JMTextServerOptionCell.m */,
+				0855E22B19814B020057C575 /* JMSecureTextServerOptionCell.h */,
+				0855E22C19814B020057C575 /* JMSecureTextServerOptionCell.m */,
+				0855E22E19814B140057C575 /* JMBooleanServerOptionCell.h */,
+				0855E22F19814B140057C575 /* JMBooleanServerOptionCell.m */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		0855E237198157170057C575 /* ActionBar */ = {
+			isa = PBXGroup;
+			children = (
+				0855E234198157130057C575 /* JMServerOptionsActionBarView.h */,
+				0855E235198157130057C575 /* JMServerOptionsActionBarView.m */,
+				0855E2381981579C0057C575 /* JMServerOptionsActionBarView~ipad.xib */,
+			);
+			name = ActionBar;
+			sourceTree = "<group>";
+		};
 		085E3D6C19704CB5005F8E2E /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -730,8 +806,7 @@
 				F554B1B519221F3800E0E860 /* JMMasterRepositoryTableViewController.m */,
 				F5C78CE319518B270082AFDE /* JMCustomSplitViewController.h */,
 				F5C78CE419518B270082AFDE /* JMCustomSplitViewController.m */,
-				F555A101197EB54C0008052E /* JMServersGridViewController.h */,
-				F555A102197EB54C0008052E /* JMServersGridViewController.m */,
+				0855E214198117A90057C575 /* Servers */,
 				085E3D6C19704CB5005F8E2E /* Settings */,
 			);
 			name = Pad;
@@ -1614,6 +1689,7 @@
 				F539A70517F19AA100310D72 /* Default.png in Resources */,
 				F539A72517F1A01400310D72 /* Default-Portrait~ipad.png in Resources */,
 				F5924EA018FCA1DF00691286 /* saveditems.png in Resources */,
+				0855E2391981579C0057C575 /* JMServerOptionsActionBarView~ipad.xib in Resources */,
 				F539A72717F1A03900310D72 /* Default-Portrait@2x~ipad.png in Resources */,
 				F576FAEC1907E9A100503CB1 /* list_background_pattern.png in Resources */,
 				F5E249DA18DA1B1A00F83C3C /* JMMenuSectionView.xib in Resources */,
@@ -1690,11 +1766,14 @@
 				F58FF2F51760A0B50021CC8B /* UIViewController+MJPopupViewController.m in Sources */,
 				F58FF2F91760A1090021CC8B /* JMCancelRequestPopup.m in Sources */,
 				F55048D917622B8C0067304B /* JMUtils.m in Sources */,
+				0855E21E19812AD40057C575 /* JMServerOptions.m in Sources */,
 				08A7AA49197EBF9600DB7636 /* UIView+Additions.m in Sources */,
 				F539125218D73170001BDDBE /* JMResourcePageContentViewController.m in Sources */,
 				085E3D6419704CAF005F8E2E /* JMDetailSettings.m in Sources */,
+				0855E23319814E6F0057C575 /* JMServerOptionCell.m in Sources */,
 				F585FB6E176753460079D89C /* UITableViewController+CellRelativeHeight.m in Sources */,
 				F57186C3183658DD0013B6EB /* JSRESTBase+updateServerInfo.m in Sources */,
+				0855E22D19814B020057C575 /* JMSecureTextServerOptionCell.m in Sources */,
 				F5D97FA1179587100059C761 /* JMFavorites.m in Sources */,
 				F554B1BC19221F8C00E0E860 /* UIColor+RGBComponent.m in Sources */,
 				F5D97FA2179587100059C761 /* JasperMobile.xcdatamodeld in Sources */,
@@ -1703,6 +1782,7 @@
 				085E3D6819704CAF005F8E2E /* JMDetailSettingsViewController.m in Sources */,
 				F5C737631886DE9E00203175 /* ALToastView.m in Sources */,
 				085E3D6719704CAF005F8E2E /* JMDetailSettingsTableViewCell.m in Sources */,
+				0855E236198157130057C575 /* JMServerOptionsActionBarView.m in Sources */,
 				F5D97FA4179587100059C761 /* JMServerProfile.m in Sources */,
 				F5D97FA5179587100059C761 /* JMServerProfile+Helpers.m in Sources */,
 				F5D97FAA179587CF0059C761 /* SSKeychain.m in Sources */,
@@ -1754,11 +1834,14 @@
 				374552EC43D4F1F21EEBD8CF /* JMSavedReportViewerViewController.m in Sources */,
 				374557A7C15F38DCAD8F7872 /* JMSavedReportInfoViewController.m in Sources */,
 				374553767F604A9882578ADA /* JMSearchableTableViewController.m in Sources */,
+				0855E22619812FF50057C575 /* JMServerOption.m in Sources */,
 				F5F21DF0191794C2007F78DB /* JMBaseResourcesCollectionViewController.m in Sources */,
 				F554B1B619221F3800E0E860 /* JMMasterRepositoryTableViewController.m in Sources */,
 				F5C8DDC8196ABE0600248227 /* JMDetailReportOptionsViewController.m in Sources */,
+				0855E21B198117FE0057C575 /* JMServerOptionsViewController.m in Sources */,
 				37455E77D1C81B7B1B7ACB6A /* JMSavedReportsTableViewController.m in Sources */,
 				37455F3F2BC76A52420EA150 /* JMVerticalListResourceTableViewCell.m in Sources */,
+				0855E22919814ACC0057C575 /* JMTextServerOptionCell.m in Sources */,
 				37455C36DA7AADB10B567B01 /* JMHomeCollectionViewController.m in Sources */,
 				37455FBB87A3A4E135165A3D /* JMMasterLibraryTableViewController.m in Sources */,
 				F539416B1975E00800EE2329 /* JMDetailMultiSelectTableViewController.m in Sources */,
@@ -1766,6 +1849,7 @@
 				374555E5494A2200DE46A815 /* JMVerticalListViewController.m in Sources */,
 				F588F1F1192CE2D800727E05 /* JMBaseResourceTableViewCell.m in Sources */,
 				08132B1E1977D94300578CEC /* JMBaseActionBarView.m in Sources */,
+				0855E23019814B140057C575 /* JMBooleanServerOptionCell.m in Sources */,
 				F555A103197EB54C0008052E /* JMServersGridViewController.m in Sources */,
 				3745506335AE18D1886CCED1 /* JMMenuItemCell.m in Sources */,
 				08A7AA43197EBA7D00DB7636 /* UIImage+Additions.m in Sources */,

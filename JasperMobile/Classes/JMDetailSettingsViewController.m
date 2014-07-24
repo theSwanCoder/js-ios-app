@@ -74,6 +74,7 @@ inject_default_rotation()
 
 #pragma mark - JMDetailSettingsActionBarViewDelegate
 - (void)actionView:(JMBaseActionBarView *)actionView didSelectAction:(JMBaseActionBarViewAction)action{
+    [self.view endEditing:YES];
     if (action == JMBaseActionBarViewAction_Save) {
         [self.detailSettings saveSettings];
     }
