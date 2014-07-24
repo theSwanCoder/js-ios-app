@@ -28,6 +28,7 @@
 #import "JMHomeCollectionViewController.h"
 #import "JMMenuItemCell.h"
 #import "JMLocalization.h"
+#import "JMServerProfile+Helpers.h"
 #import "JMCustomSplitViewController.h"
 
 // Localization keys defined as lowercase version of MenuItem identifier (e.g library, saveditems etc)
@@ -135,7 +136,17 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     if (kind == UICollectionElementKindSectionHeader) {
-        return [self.collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
+        UICollectionReusableView *headerView = [self.collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
+        UILabel *serverLabel = (UILabel *) [headerView viewWithTag:1];
+        
+        JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
+        if (activeServerProfile) {
+            NSString *format = JMCustomLocalizedString(@"home.menuitem.activeserver.label" , nil);
+            serverLabel.hidden = NO;
+            serverLabel.text = [NSString stringWithFormat:format, activeServerProfile.alias];
+        }
+        
+        return headerView;
     }
 
     return nil;
