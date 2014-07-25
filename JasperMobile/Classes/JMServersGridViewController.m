@@ -13,11 +13,12 @@
 #import "JMServersActionBarView.h"
 #import "JMLocalization.h"
 #import <Objection-iOS/Objection.h>
+#import "JMServerOptionsViewController.h"
 
 
 static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
 
-@interface JMServersGridViewController () <JMActionBarProvider, JMBaseActionBarViewDelegate>
+@interface JMServersGridViewController () <JMActionBarProvider, JMBaseActionBarViewDelegate, JMServerOptionsViewControllerDelegate>
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSMutableArray *servers;
 @property (nonatomic, strong) JMServersActionBarView *actionBarView;
@@ -45,11 +46,28 @@ objection_requires(@"managedObjectContext")
     
     self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
     
+    [self refreshDatasource];
+}
+
+- (void) refreshDatasource
+{
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
-    self.servers = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
+    NSManagedObjectContext *context = [[JSObjection defaultInjector] getObject:[NSManagedObjectContext class]];
+    
+    self.servers = [[context executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
     
     for (JMServerProfile *serverProfile in self.servers) {
         [serverProfile setPasswordAsPrimitive:[JMServerProfile passwordFromKeychain:serverProfile.profileID]];
+    }
+    [self.collectionView reloadData];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    id destinationViewController = segue.destinationViewController;
+    [destinationViewController setDelegate: self];
+    if (sender) {
+        [destinationViewController setServerProfile:sender];
     }
 }
 
@@ -74,6 +92,12 @@ objection_requires(@"managedObjectContext")
     return cell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    JMServerProfile *serverProfile = [self.servers objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:serverProfile];
+}
+
 #pragma mark - JMActionBarProvider
 
 - (id)actionBar
@@ -95,6 +119,12 @@ objection_requires(@"managedObjectContext")
     if (action == JMBaseActionBarViewAction_Create) {
         [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:nil];
     }
+}
+
+#pragma mark - JMServerOptionsViewControllerDelegate
+
+-(void)serverOptionsDidChanged{
+    [self refreshDatasource];
 }
 
 @end

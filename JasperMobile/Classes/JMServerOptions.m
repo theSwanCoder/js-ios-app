@@ -9,6 +9,7 @@
 #import "JMServerOptions.h"
 #import <Objection-iOS/Objection.h>
 #import "JMLocalization.h"
+#import "JMServerProfile+Helpers.h"
 
 static NSString * const kJMBooleanCellIdentifier = @"BooleanCell";
 static NSString * const kJMTextCellIdentifier = @"TextEditCell";
@@ -38,7 +39,7 @@ objection_requires(@"managedObjectContext")
     return self;
 }
 
-- (void)saveChanges
+- (BOOL)saveChanges
 {
     self.serverProfile.alias        = [[self.optionsArray objectAtIndex:0] optionValue];
     self.serverProfile.serverUrl    = [[self.optionsArray objectAtIndex:1] optionValue];
@@ -47,7 +48,13 @@ objection_requires(@"managedObjectContext")
     self.serverProfile.password     = [[self.optionsArray objectAtIndex:4] optionValue];
     self.serverProfile.askPassword  = [[self.optionsArray objectAtIndex:5] optionValue];
 
-    [self.managedObjectContext save:nil];
+    if ([self.managedObjectContext hasChanges]) {
+        NSError *error = nil;
+        [self.managedObjectContext save:&error];
+        [JMServerProfile storePasswordInKeychain:self.serverProfile.password profileID:self.serverProfile.profileID];
+        return YES;
+    }
+    return NO;
 }
 
 - (void)discardChanges
@@ -76,7 +83,7 @@ objection_requires(@"managedObjectContext")
     for (NSDictionary *optionData in optionsSourceArray) {
         JMServerOption *option = [[JMServerOption alloc] init];
         option.titleString      = [optionData objectForKey:@"title"];
-        option.optionValue      = [optionData objectForKey:@"settingsKey"];
+        option.optionValue      = [optionData objectForKey:@"value"];
         option.cellIdentifier   = [optionData objectForKey:@"cellIdentifier"];
 
         [optionsArray addObject:option];

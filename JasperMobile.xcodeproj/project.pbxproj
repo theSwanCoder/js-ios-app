@@ -31,6 +31,10 @@
 		085E3D7119704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 085E3D7019704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib */; };
 		08A7AA43197EBA7D00DB7636 /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7AA42197EBA7D00DB7636 /* UIImage+Additions.m */; };
 		08A7AA49197EBF9600DB7636 /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7AA48197EBF9600DB7636 /* UIView+Additions.m */; };
+		08F0C220198265B50074F6C6 /* checked_checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F0C21C198265B50074F6C6 /* checked_checkbox.png */; };
+		08F0C221198265B50074F6C6 /* checked_checkbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F0C21D198265B50074F6C6 /* checked_checkbox@2x.png */; };
+		08F0C222198265B50074F6C6 /* unchecked_checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F0C21E198265B50074F6C6 /* unchecked_checkbox.png */; };
+		08F0C223198265B50074F6C6 /* unchecked_checkbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F0C21F198265B50074F6C6 /* unchecked_checkbox@2x.png */; };
 		37455034AFBCA2439CBD503E /* JMServersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455C6224E8AF787AF468C9 /* JMServersTableViewController.m */; };
 		3745506335AE18D1886CCED1 /* JMMenuItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455DD5605F6B0D51E05F27 /* JMMenuItemCell.m */; };
 		37455256B3656246AF66CA29 /* JMRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455F8C7426E010A3709C6E /* JMRepositoryTableViewController.m */; };
@@ -327,6 +331,10 @@
 		08A7AA42197EBA7D00DB7636 /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Additions.m"; path = "JasperMobile/Classes/UIImage+Additions.m"; sourceTree = "<group>"; };
 		08A7AA47197EBF9600DB7636 /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Additions.h"; path = "JasperMobile/Classes/UIView+Additions.h"; sourceTree = "<group>"; };
 		08A7AA48197EBF9600DB7636 /* UIView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Additions.m"; path = "JasperMobile/Classes/UIView+Additions.m"; sourceTree = "<group>"; };
+		08F0C21C198265B50074F6C6 /* checked_checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked_checkbox.png; sourceTree = "<group>"; };
+		08F0C21D198265B50074F6C6 /* checked_checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checked_checkbox@2x.png"; sourceTree = "<group>"; };
+		08F0C21E198265B50074F6C6 /* unchecked_checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unchecked_checkbox.png; sourceTree = "<group>"; };
+		08F0C21F198265B50074F6C6 /* unchecked_checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unchecked_checkbox@2x.png"; sourceTree = "<group>"; };
 		37455108E52B31C8C8F3EEA0 /* JMSavedReportViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSavedReportViewerViewController.m; path = Classes/JMSavedReportViewerViewController.m; sourceTree = "<group>"; };
 		3745519D17A1453668F7C56A /* JMMenuItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMenuItemCell.h; path = Classes/JMMenuItemCell.h; sourceTree = "<group>"; };
 		374551CAFD2324CE12990919 /* JMLibraryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMLibraryTableViewController.h; path = Classes/JMLibraryTableViewController.h; sourceTree = "<group>"; };
@@ -786,6 +794,17 @@
 			name = ActionBar;
 			sourceTree = "<group>";
 		};
+		08F0C21B198265B50074F6C6 /* checkBoxButton */ = {
+			isa = PBXGroup;
+			children = (
+				08F0C21C198265B50074F6C6 /* checked_checkbox.png */,
+				08F0C21D198265B50074F6C6 /* checked_checkbox@2x.png */,
+				08F0C21E198265B50074F6C6 /* unchecked_checkbox.png */,
+				08F0C21F198265B50074F6C6 /* unchecked_checkbox@2x.png */,
+			);
+			path = checkBoxButton;
+			sourceTree = "<group>";
+		};
 		3745511E7FBC4699D30B0F8B /* Pad */ = {
 			isa = PBXGroup;
 			children = (
@@ -1230,6 +1249,7 @@
 		F58FF2EC1760A0AC0021CC8B /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				08F0C21B198265B50074F6C6 /* checkBoxButton */,
 				08326A6C197D29DE00801AE0 /* fullScreenMode */,
 				F5FA4C2E190FBFC900001999 /* Representation Switcher */,
 				F5C2532919571B980090A5E0 /* white_search_button.png */,
@@ -1604,6 +1624,7 @@
 				08326A73197D29DE00801AE0 /* fullScreenMode.png in Resources */,
 				F58EF6BE17F487A800C9EBA8 /* add_favorite_button_highlighted@2x.png in Resources */,
 				085E3D7119704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib in Resources */,
+				08F0C222198265B50074F6C6 /* unchecked_checkbox.png in Resources */,
 				F58EF6C617F487A800C9EBA8 /* delete_button@2x.png in Resources */,
 				F5C2531D1954A5130090A5E0 /* gray_button_background_highlighted.png in Resources */,
 				F55CC33D174CFFCE00CEB39E /* InfoPlist.strings in Resources */,
@@ -1626,6 +1647,7 @@
 				F5D6373117909D3C005BA5CD /* jaspersoft-sdk-resources.bundle in Resources */,
 				F58EF6E117F4882800C9EBA8 /* res_type_report.png in Resources */,
 				F58EF6F317F4884C00C9EBA8 /* library_bar_item.png in Resources */,
+				08F0C220198265B50074F6C6 /* checked_checkbox.png in Resources */,
 				F5C78CFB1952DED90082AFDE /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib in Resources */,
 				F5FA4C49190FC06D00001999 /* vertical_list_button.png in Resources */,
 				F58EF6C717F487A800C9EBA8 /* remove_favorite_button_highlighted.png in Resources */,
@@ -1654,6 +1676,7 @@
 				F5C78CE719518B270082AFDE /* JMCustomSplitViewController~ipad.xib in Resources */,
 				F58EF6C317F487A800C9EBA8 /* delete_button_highlighted.png in Resources */,
 				F550435F1851E00600DA6D33 /* list_options.png in Resources */,
+				08F0C223198265B50074F6C6 /* unchecked_checkbox@2x.png in Resources */,
 				F58EF6C017F487A800C9EBA8 /* add_favorite_button@2x.png in Resources */,
 				F5EB25DC17E3579800B56FC2 /* input_control_text_field.png in Resources */,
 				F5924E9D18FCA1DF00691286 /* favorites.png in Resources */,
@@ -1680,6 +1703,7 @@
 				F58EF6C917F487A800C9EBA8 /* remove_favorite_button.png in Resources */,
 				F5FA4C48190FC06D00001999 /* vertical_list_button_selected.png in Resources */,
 				F572621B1976A19600DFEF77 /* JMDetailSingleSelectTableViewController~ipad.xib in Resources */,
+				08F0C221198265B50074F6C6 /* checked_checkbox@2x.png in Resources */,
 				F539A70117F19A4F00310D72 /* Default-568h@2x.png in Resources */,
 				F539A70317F19A4F00310D72 /* Default@2x.png in Resources */,
 				F58EF6BD17F487A800C9EBA8 /* add_favorite_button_highlighted.png in Resources */,

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="H7M-pU-pTq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="H7M-pU-pTq">
     <dependencies>
         <deployment version="1536" defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -1322,17 +1322,21 @@ Please Wait...</string>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="Grb-Fs-fag">
-                                                    <rect key="frame" x="669" y="6" width="51" height="31"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="dyl-sX-z1O">
+                                                    <rect key="frame" x="681.99999992657411" y="4" width="36" height="36"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                    <state key="normal" backgroundImage="unchecked_checkbox.png">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <state key="selected" backgroundImage="checked_checkbox.png"/>
                                                     <connections>
-                                                        <action selector="switchChanged:" destination="kbb-sq-BLM" eventType="valueChanged" id="De8-Sx-9pP"/>
+                                                        <action selector="checkButtonTapped:" destination="kbb-sq-BLM" eventType="touchUpInside" id="OGi-hF-ChK"/>
                                                     </connections>
-                                                </switch>
+                                                </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="switchView" destination="Grb-Fs-fag" id="htc-zv-2cV"/>
+                                            <outlet property="checkBoxButton" destination="dyl-sX-z1O" id="m1p-kH-bqj"/>
                                             <outlet property="titleLabel" destination="cAQ-Vf-FlA" id="hsH-gw-yVH"/>
                                         </connections>
                                     </tableViewCell>
@@ -1419,6 +1423,7 @@ Please Wait...</string>
         </scene>
     </scenes>
     <resources>
+        <image name="checked_checkbox.png" width="36" height="36"/>
         <image name="dot.png" width="6" height="5"/>
         <image name="gray_button_background.png" width="1" height="1"/>
         <image name="gray_button_background_highlighted.png" width="1" height="1"/>
@@ -1428,6 +1433,7 @@ Please Wait...</string>
         <image name="report_prototype_image.png" width="108" height="80"/>
         <image name="server.png" width="232" height="129"/>
         <image name="tmp_arrow_back.png" width="15" height="30"/>
+        <image name="unchecked_checkbox.png" width="36" height="36"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

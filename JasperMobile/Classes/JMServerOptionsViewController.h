@@ -9,8 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "JMServerProfile.h"
 
+@protocol JMServerOptionsViewControllerDelegate <NSObject>
+
+@required
+- (void) serverOptionsDidChanged;
+
+@end
+
 @interface JMServerOptionsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, retain) JMServerProfile *serverProfile;
-
+@property (nonatomic, weak) id <JMServerOptionsViewControllerDelegate> delegate;
 @end

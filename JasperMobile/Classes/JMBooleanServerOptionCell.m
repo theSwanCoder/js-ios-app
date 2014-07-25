@@ -9,7 +9,7 @@
 #import "JMBooleanServerOptionCell.h"
 
 @interface JMBooleanServerOptionCell ()
-@property (weak, nonatomic) IBOutlet UISwitch *switchView;
+@property (weak, nonatomic) IBOutlet UIButton *checkBoxButton;
 
 @end
 
@@ -17,13 +17,14 @@
 -(void)setServerOption:(JMServerOption *)serverOption
 {
     [super setServerOption:serverOption];
-    self.switchView.on = [serverOption.optionValue boolValue];
+    self.checkBoxButton.selected = [serverOption.optionValue boolValue];
 }
 
 #pragma mark - Actions
-
-- (IBAction)switchChanged:(id)sender
+- (IBAction)checkButtonTapped:(id)sender
 {
-    self.serverOption.optionValue = [NSNumber numberWithBool:self.switchView.on];
+    self.checkBoxButton.selected = !self.checkBoxButton.selected;
+    self.serverOption.optionValue = [NSNumber numberWithBool:self.checkBoxButton.selected];
 }
+
 @end

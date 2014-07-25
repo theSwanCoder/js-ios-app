@@ -79,12 +79,14 @@
             [self.serverOptions discardChanges];
             break;
         case JMBaseActionBarViewAction_Save:
-            [self.serverOptions saveChanges];
+            if ([self.serverOptions saveChanges]) {
+                [self.delegate serverOptionsDidChanged];
+            }
             break;
         default:
             //Unsupported actions
             break;
     }    
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 @end

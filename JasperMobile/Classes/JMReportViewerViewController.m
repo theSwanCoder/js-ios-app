@@ -42,6 +42,9 @@ inject_default_rotation()
 {
     if (request != _request) {
         _request = request;
+        if (self.webView.isLoading) {
+            [self.webView stopLoading];
+        }
         [self.webView loadRequest:request];
         self.isRequestLoaded = NO;
     }
@@ -55,6 +58,7 @@ inject_default_rotation()
     self.webView.scrollView.bounces = NO;
     self.webView.delegate = self;
     self.webView.suppressesIncrementalRendering = YES;
+    [self.webView loadHTMLString:@"" baseURL:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -73,11 +77,6 @@ inject_default_rotation()
     }
 }
 
-- (void)dealloc
-{
-    [self.webView loadHTMLString:@"" baseURL:nil];
-}
-
 #pragma mark - UIWebViewDelegate
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
@@ -88,7 +87,9 @@ inject_default_rotation()
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [self loadingDidFinished];
-    self.isRequestLoaded = YES;
+    if (self.request) {
+        self.isRequestLoaded = YES;
+    }
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
