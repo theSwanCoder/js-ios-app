@@ -77,16 +77,16 @@
     switch (action) {
         case JMBaseActionBarViewAction_Cancel:
             [self.serverOptions discardChanges];
+            [self.navigationController popViewControllerAnimated:YES];
             break;
         case JMBaseActionBarViewAction_Save:
             if ([self.serverOptions saveChanges]) {
-                [self.delegate serverOptionsDidChanged];
+                [self.navigationController popViewControllerAnimated:YES];
             }
             break;
         default:
             //Unsupported actions
             break;
     }    
-    [self.navigationController popViewControllerAnimated:YES];
 }
 @end
