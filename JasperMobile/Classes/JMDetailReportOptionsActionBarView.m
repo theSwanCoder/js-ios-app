@@ -23,8 +23,8 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.cancelButton.titleLabel.text = JMCustomLocalizedString(@"action.button.cancel", nil);
-    self.continueButton.titleLabel.text = JMCustomLocalizedString(@"action.button.continue", nil);
+    [self.cancelButton setTitle:JMCustomLocalizedString(@"action.button.cancel", nil) forState:UIControlStateNormal];
+    [self.continueButton setTitle:JMCustomLocalizedString(@"action.button.continue", nil) forState:UIControlStateNormal];
 }
 
 #pragma mark - Actions

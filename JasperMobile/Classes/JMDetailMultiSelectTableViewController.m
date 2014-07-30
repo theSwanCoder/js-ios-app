@@ -14,19 +14,12 @@
 
 @implementation JMDetailMultiSelectTableViewController
 
-@synthesize cell = _cell;
 
 #pragma mark - Accessors
-
 - (void)setCell:(JMSingleSelectInputControlCell *)cell
 {
-    _cell = cell;
-    
-    for (JSInputControlOption *option in cell.listOfValues) {
-        if (option.selected.boolValue) {
-            [self.selectedValues addObject:option];
-        }
-    }
+    [super setCell:cell];
+    self.previousSelectedValues = [self.selectedValues copy];
 }
 
 #pragma mark - Initialization
@@ -38,13 +31,7 @@
 
 #pragma mark - UITableViewController
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    self.previousSelectedValues = [self.selectedValues copy];
-}
-
-- (void)didMoveToParentViewController:(UIViewController *)parent
+- (void)willMoveToParentViewController:(UIViewController *)parent
 {
     if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
         [self.cell updateWithParameters:[self.selectedValues allObjects]];

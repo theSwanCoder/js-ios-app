@@ -11,6 +11,7 @@
 
 @interface JMDetailSingleSelectTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
+
 @property (nonatomic, weak) IBOutlet UIImageView *leftArrowImageView;
 @property (nonatomic, weak) IBOutlet UILabel *backLabel;
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
@@ -18,7 +19,8 @@
 @property (nonatomic, weak) IBOutlet UITextField *searchTextField;
 @property (nonatomic, weak) IBOutlet UILabel *searchLabel;
 @property (nonatomic, weak) JMSingleSelectInputControlCell *cell;
-@property (nonatomic, strong) NSMutableSet *selectedValues;
 @property (nonatomic, readonly) NSArray *listOfValues;
+
+@property (nonatomic, strong) NSMutableSet *selectedValues;
 
 @end

@@ -161,6 +161,9 @@
 "detail.settings.item.connection.timeout" = "Connection timeout (in seconds)";
 "detail.settings.item.data.read.timeout" = "Data read timeout (in seconds)";
 
+"detail.servers.newserver" = "New Server";
+"detail.servers.editserver" = "Edit Server";
+
 // Action bar buttons
 "action.button.refresh" = "Refresh";
 "action.button.share" = "Share";
@@ -170,6 +173,7 @@
 "action.button.cancel" = "Cancel";
 "action.button.continue" = "Continue";
 "action.button.newserver" = "New Server";
+"action.button.apply" = "Apply";
 
 // Tools
 "master.tools.type.refresh" = "Refresh";

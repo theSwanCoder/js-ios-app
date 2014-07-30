@@ -21,11 +21,10 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.refreshButton.titleLabel.text  = JMCustomLocalizedString(@"action.button.refresh", nil);
-    self.shareButton.titleLabel.text    = JMCustomLocalizedString(@"action.button.share", nil);
-    self.editButton.titleLabel.text     = JMCustomLocalizedString(@"action.button.edit", nil);
-    self.deleteButton.titleLabel.text   = JMCustomLocalizedString(@"action.button.delete", nil);
-
+    [self.refreshButton setTitle:JMCustomLocalizedString(@"action.button.refresh", nil) forState:UIControlStateNormal];
+    [self.shareButton setTitle:JMCustomLocalizedString(@"action.button.share", nil) forState:UIControlStateNormal];
+    [self.editButton setTitle:JMCustomLocalizedString(@"action.button.edit", nil) forState:UIControlStateNormal];
+    [self.deleteButton setTitle:JMCustomLocalizedString(@"action.button.delete", nil) forState:UIControlStateNormal];
 }
 
 - (void)setDisabledAction:(JMBaseActionBarViewAction)disabledAction{

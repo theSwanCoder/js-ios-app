@@ -62,6 +62,16 @@ objection_requires(@"managedObjectContext")
     [self.managedObjectContext reset];
 }
 
+- (void) deleteServerProfile
+{
+    [self.managedObjectContext deleteObject:self.serverProfile];
+}
+
+- (void) setServerProfileActive
+{
+    
+}
+
 - (NSArray *)optionsArray{
     if (!_optionsArray) {
         [self createOptionsArray];

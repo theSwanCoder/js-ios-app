@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		08132B161977CFD200578CEC /* JMDetailReportViewerActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08132B151977CFD200578CEC /* JMDetailReportViewerActionBarView.m */; };
-		08132B1B1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08132B1A1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib */; };
 		08132B1E1977D94300578CEC /* JMBaseActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08132B1D1977D94300578CEC /* JMBaseActionBarView.m */; };
 		08326A71197D29DE00801AE0 /* defaultScreenMode.png in Resources */ = {isa = PBXBuildFile; fileRef = 08326A6D197D29DE00801AE0 /* defaultScreenMode.png */; };
 		08326A72197D29DE00801AE0 /* defaultScreenMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08326A6E197D29DE00801AE0 /* defaultScreenMode@2x.png */; };
@@ -22,7 +21,6 @@
 		0855E23019814B140057C575 /* JMBooleanServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0855E22F19814B140057C575 /* JMBooleanServerOptionCell.m */; };
 		0855E23319814E6F0057C575 /* JMServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0855E23219814E6F0057C575 /* JMServerOptionCell.m */; };
 		0855E236198157130057C575 /* JMServerOptionsActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0855E235198157130057C575 /* JMServerOptionsActionBarView.m */; };
-		0855E2391981579C0057C575 /* JMServerOptionsActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0855E2381981579C0057C575 /* JMServerOptionsActionBarView~ipad.xib */; };
 		085E3D6419704CAF005F8E2E /* JMDetailSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5B19704CAF005F8E2E /* JMDetailSettings.m */; };
 		085E3D6519704CAF005F8E2E /* JMDetailSettingsActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5D19704CAF005F8E2E /* JMDetailSettingsActionBarView.m */; };
 		085E3D6619704CAF005F8E2E /* JMDetailSettingsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D5F19704CAF005F8E2E /* JMDetailSettingsItem.m */; };
@@ -31,6 +29,8 @@
 		085E3D7119704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 085E3D7019704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib */; };
 		08A7AA43197EBA7D00DB7636 /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7AA42197EBA7D00DB7636 /* UIImage+Additions.m */; };
 		08A7AA49197EBF9600DB7636 /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7AA48197EBF9600DB7636 /* UIView+Additions.m */; };
+		08B46B711988056900953EB7 /* JMServerOptionsActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08B46B701988056900953EB7 /* JMServerOptionsActionBarView~ipad.xib */; };
+		08B46B73198805D800953EB7 /* JMDetailReportViewerActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08B46B72198805D800953EB7 /* JMDetailReportViewerActionBarView~ipad.xib */; };
 		08F0C220198265B50074F6C6 /* checked_checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F0C21C198265B50074F6C6 /* checked_checkbox.png */; };
 		08F0C221198265B50074F6C6 /* checked_checkbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F0C21D198265B50074F6C6 /* checked_checkbox@2x.png */; };
 		08F0C222198265B50074F6C6 /* unchecked_checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F0C21E198265B50074F6C6 /* unchecked_checkbox.png */; };
@@ -291,7 +291,6 @@
 /* Begin PBXFileReference section */
 		08132B141977CFD200578CEC /* JMDetailReportViewerActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailReportViewerActionBarView.h; path = Classes/JMDetailReportViewerActionBarView.h; sourceTree = "<group>"; };
 		08132B151977CFD200578CEC /* JMDetailReportViewerActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailReportViewerActionBarView.m; path = Classes/JMDetailReportViewerActionBarView.m; sourceTree = "<group>"; };
-		08132B1A1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMDetailReportViewerActionBarView~ipad.xib"; sourceTree = "<group>"; };
 		08132B1C1977D94300578CEC /* JMBaseActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBaseActionBarView.h; path = Classes/JMBaseActionBarView.h; sourceTree = "<group>"; };
 		08132B1D1977D94300578CEC /* JMBaseActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBaseActionBarView.m; path = Classes/JMBaseActionBarView.m; sourceTree = "<group>"; };
 		08326A6D197D29DE00801AE0 /* defaultScreenMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultScreenMode.png; sourceTree = "<group>"; };
@@ -315,7 +314,6 @@
 		0855E23219814E6F0057C575 /* JMServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMServerOptionCell.m; path = Classes/JMServerOptionCell.m; sourceTree = "<group>"; };
 		0855E234198157130057C575 /* JMServerOptionsActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMServerOptionsActionBarView.h; path = Classes/JMServerOptionsActionBarView.h; sourceTree = "<group>"; };
 		0855E235198157130057C575 /* JMServerOptionsActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMServerOptionsActionBarView.m; path = Classes/JMServerOptionsActionBarView.m; sourceTree = "<group>"; };
-		0855E2381981579C0057C575 /* JMServerOptionsActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMServerOptionsActionBarView~ipad.xib"; sourceTree = "<group>"; };
 		085E3D5A19704CAF005F8E2E /* JMDetailSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettings.h; path = Classes/JMDetailSettings.h; sourceTree = "<group>"; };
 		085E3D5B19704CAF005F8E2E /* JMDetailSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailSettings.m; path = Classes/JMDetailSettings.m; sourceTree = "<group>"; };
 		085E3D5C19704CAF005F8E2E /* JMDetailSettingsActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettingsActionBarView.h; path = Classes/JMDetailSettingsActionBarView.h; sourceTree = "<group>"; };
@@ -331,6 +329,9 @@
 		08A7AA42197EBA7D00DB7636 /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Additions.m"; path = "JasperMobile/Classes/UIImage+Additions.m"; sourceTree = "<group>"; };
 		08A7AA47197EBF9600DB7636 /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Additions.h"; path = "JasperMobile/Classes/UIView+Additions.h"; sourceTree = "<group>"; };
 		08A7AA48197EBF9600DB7636 /* UIView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+Additions.m"; path = "JasperMobile/Classes/UIView+Additions.m"; sourceTree = "<group>"; };
+		08B46B701988056900953EB7 /* JMServerOptionsActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "JMServerOptionsActionBarView~ipad.xib"; path = "Classes/JMServerOptionsActionBarView~ipad.xib"; sourceTree = "<group>"; };
+		08B46B72198805D800953EB7 /* JMDetailReportViewerActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "JMDetailReportViewerActionBarView~ipad.xib"; path = "Classes/JMDetailReportViewerActionBarView~ipad.xib"; sourceTree = "<group>"; };
+		08DDDB50198648A000BCBA5E /* JMTitleProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JMTitleProvider.h; path = JasperMobile/Classes/JMTitleProvider.h; sourceTree = "<group>"; };
 		08F0C21C198265B50074F6C6 /* checked_checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked_checkbox.png; sourceTree = "<group>"; };
 		08F0C21D198265B50074F6C6 /* checked_checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checked_checkbox@2x.png"; sourceTree = "<group>"; };
 		08F0C21E198265B50074F6C6 /* unchecked_checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unchecked_checkbox.png; sourceTree = "<group>"; };
@@ -747,7 +748,7 @@
 			children = (
 				0855E234198157130057C575 /* JMServerOptionsActionBarView.h */,
 				0855E235198157130057C575 /* JMServerOptionsActionBarView.m */,
-				0855E2381981579C0057C575 /* JMServerOptionsActionBarView~ipad.xib */,
+				08B46B701988056900953EB7 /* JMServerOptionsActionBarView~ipad.xib */,
 			);
 			name = ActionBar;
 			sourceTree = "<group>";
@@ -1022,8 +1023,8 @@
 				F57262191976A19600DFEF77 /* JMDetailSingleSelectTableViewController~ipad.xib */,
 				F5C78CF91952DED90082AFDE /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib */,
 				F51A149019740F6500C3A3A0 /* JMDetailReportOptionsActionBarView~ipad.xib */,
-				08132B1A1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib */,
 				F5F291EE1980256A00346825 /* JMServersActionBarView~ipad.xib */,
+				08B46B72198805D800953EB7 /* JMDetailReportViewerActionBarView~ipad.xib */,
 			);
 			name = Pad;
 			sourceTree = "<group>";
@@ -1348,6 +1349,7 @@
 				F5A5F555176220C70018FEFC /* JMResourceClientHolder.h */,
 				F53B38E4192B7DCF003B1867 /* JMPagination.h */,
 				F5C78CF419528F320082AFDE /* JMActionBarProvider.h */,
+				08DDDB50198648A000BCBA5E /* JMTitleProvider.h */,
 				08326A7C197D366B00801AE0 /* JMFullScreenButtonProvider.h */,
 				F5C78CF519528F730082AFDE /* JMHeaderBarAdditions.h */,
 			);
@@ -1658,7 +1660,7 @@
 				F5924E9E18FCA1DF00691286 /* library.png in Resources */,
 				F5AE62531906AC6600954192 /* MainStoryboard_iPad.storyboard in Resources */,
 				F58EF6F617F4884C00C9EBA8 /* repository_bar_item@2x.png in Resources */,
-				08132B1B1977CFF700578CEC /* JMDetailReportViewerActionBarView~ipad.xib in Resources */,
+				08B46B711988056900953EB7 /* JMServerOptionsActionBarView~ipad.xib in Resources */,
 				F58EF6CE17F487A800C9EBA8 /* blue_button@2x.png in Resources */,
 				F5FA4C46190FC06D00001999 /* horizontal_list_button_selected.png in Resources */,
 				F53C0AD217B50C080063AE90 /* MainStoryboard_iPhone.storyboard in Resources */,
@@ -1685,6 +1687,7 @@
 				F58EF6E217F4882800C9EBA8 /* res_type_report@2x.png in Resources */,
 				F576FAED1907E9A100503CB1 /* report_prototype_image.png in Resources */,
 				F58EF6C217F487A800C9EBA8 /* cancel_button@2x.png in Resources */,
+				08B46B73198805D800953EB7 /* JMDetailReportViewerActionBarView~ipad.xib in Resources */,
 				F58EF6F817F4884C00C9EBA8 /* settings_bar_item@2x.png in Resources */,
 				F58EF6BF17F487A800C9EBA8 /* add_favorite_button.png in Resources */,
 				F546AFA31910EE7600EC9777 /* grid_res_type_report.png in Resources */,
@@ -1713,7 +1716,6 @@
 				F539A70517F19AA100310D72 /* Default.png in Resources */,
 				F539A72517F1A01400310D72 /* Default-Portrait~ipad.png in Resources */,
 				F5924EA018FCA1DF00691286 /* saveditems.png in Resources */,
-				0855E2391981579C0057C575 /* JMServerOptionsActionBarView~ipad.xib in Resources */,
 				F539A72717F1A03900310D72 /* Default-Portrait@2x~ipad.png in Resources */,
 				F576FAEC1907E9A100503CB1 /* list_background_pattern.png in Resources */,
 				F5E249DA18DA1B1A00F83C3C /* JMMenuSectionView.xib in Resources */,
@@ -2038,7 +2040,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2095,7 +2097,7 @@
 				INFOPLIST_FILE = "JasperMobile/JasperMobile-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -2113,8 +2115,8 @@
 		F55CC377174CFFCF00CEB39E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/JasperMobile/Vendor\"",

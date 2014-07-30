@@ -32,7 +32,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
-        baseHeight = self.frame.size.height;
+        baseHeight = self.contentView.frame.size.height;
     }
 
     return self;
@@ -50,12 +50,23 @@
 {
     _errorMessage = errorMessage;
     
+    [UIView beginAnimations:nil context:nil];
+    
     UILabel *errorLabel = self.errorLabel;
     errorLabel.text = errorMessage;
-    errorLabel.hidden = errorMessage.length == 0;
-    if (!errorLabel.hidden) {
+    errorLabel.alpha = (errorMessage.length == 0) ? 0 : 1;
+    if (errorMessage.length != 0) {
+        CGRect labelFrame = self.label.frame;
+        labelFrame.origin.y = 6;
+        self.label.frame = labelFrame;
+
+        CGRect mandatoryLabelFrame = self.mandatoryLabel.frame;
+        mandatoryLabelFrame.origin.y = 6;
+        self.mandatoryLabel.frame = mandatoryLabelFrame;
+        
         [errorLabel sizeToFit];
     }
+    [UIView commitAnimations];
 }
 
 - (BOOL)dismissError
@@ -69,6 +80,18 @@
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         [self.tableView beginUpdates];
         [self.tableView endUpdates];
+        
+        [UIView beginAnimations:nil context:nil];
+        CGRect labelFrame = self.label.frame;
+        labelFrame.origin.y = 14;
+        self.label.frame = labelFrame;
+        
+        CGRect mandatoryLabelFrame = self.mandatoryLabel.frame;
+        mandatoryLabelFrame.origin.y = 14;
+        self.mandatoryLabel.frame = mandatoryLabelFrame;
+
+        [UIView commitAnimations];
+
         return YES;
     }
     
@@ -80,7 +103,7 @@
     [super layoutSubviews];
 
     UILabel *errorLabel = self.errorLabel;
-    if (!errorLabel.hidden) {
+    if (self.errorMessage.length != 0) {
         CGRect oldFrame = errorLabel.frame;
         CGRect frame = CGRectMake(oldFrame.origin.x,
                                   oldFrame.origin.y,
@@ -117,7 +140,7 @@
 
 - (CGFloat)height
 {
-    if (!self.errorLabel.hidden) {
+    if (self.errorMessage.length != 0) {
         return baseHeight + self.errorLabel.frame.size.height;
     }
     

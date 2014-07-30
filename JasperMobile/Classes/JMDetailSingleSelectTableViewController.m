@@ -9,9 +9,11 @@
 #import "JMDetailSingleSelectTableViewController.h"
 #import "JMListValueTableViewCell.h"
 #import "JMFullScreenButtonProvider.h"
+#import "JMActionBarProvider.h"
 
 
-@interface JMDetailSingleSelectTableViewController() <JMFullScreenButtonProvider>
+@interface JMDetailSingleSelectTableViewController() <JMFullScreenButtonProvider, JMActionBarProvider>
+
 @property (nonatomic, assign) BOOL isSearching;
 @property (nonatomic, strong) NSArray *filteredListOfValues;
 @end
@@ -41,10 +43,12 @@
     for (JSInputControlOption *option in cell.listOfValues) {
         if (option.selected.boolValue) {
             [self.selectedValues addObject:option];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[cell.listOfValues indexOfObject:option] inSection:0];
-            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle  animated:YES];
-            break;
         }
+    }
+    
+    if ([self.selectedValues count] == 1) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[cell.listOfValues indexOfObject:[self.selectedValues anyObject]] inSection:0];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle  animated:YES];
     }
 }
 
@@ -166,4 +170,12 @@
 {
     return YES;
 }
+
+#pragma mark - JMActionBarProvider
+
+- (id)actionBar
+{
+    return nil;
+}
+
 @end

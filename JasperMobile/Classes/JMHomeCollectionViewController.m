@@ -105,7 +105,7 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 {
     // Will force to load destination's view
     [segue.destinationViewController view];
-    [segue.destinationViewController menuLabel].text = sender;
+    [segue.destinationViewController setMenuTitle:sender];
 }
 
 #pragma mark - UICollectionViewDataSource

@@ -21,13 +21,13 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.saveButton.titleLabel.text   = JMCustomLocalizedString(@"action.button.save", nil);
-    self.cancelButton.titleLabel.text   = JMCustomLocalizedString(@"action.button.cancel", nil);
+    [self.saveButton setTitle:JMCustomLocalizedString(@"action.button.apply", nil) forState:UIControlStateNormal];
+    [self.cancelButton setTitle:JMCustomLocalizedString(@"action.button.cancel", nil) forState:UIControlStateNormal];
 }
 
 - (IBAction)saveButtonTapped:(id)sender
 {
-    [self.delegate actionView:self didSelectAction:JMBaseActionBarViewAction_Save];
+    [self.delegate actionView:self didSelectAction:JMBaseActionBarViewAction_Apply];
 }
 
 - (IBAction)cancelButtonTapped:(id)sender

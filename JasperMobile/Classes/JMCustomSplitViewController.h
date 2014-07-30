@@ -19,6 +19,8 @@
 @property (nonatomic, weak) IBOutlet UITextField *searchTextField;
 @property (nonatomic, weak) IBOutlet UIButton *searchButton;
 
+@property (nonatomic, strong) NSString *menuTitle;
+
 @property (nonatomic, weak) UINavigationController *detailNavigationController;
 
 // Provided by child view controllers

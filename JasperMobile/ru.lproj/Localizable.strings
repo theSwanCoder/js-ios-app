@@ -82,6 +82,9 @@
 "detail.settings.item.connection.timeout" = "Таймуат соединения (в секундах)";
 "detail.settings.item.data.read.timeout" = "Таймаут чтения данных (в секундах)";
 
+"detail.servers.newserver" = "Новый сервер";
+"detail.servers.editserver" = "Редактировать сервер";
+
 // Action bar buttons
 "action.button.refresh" = "Обновить";
 "action.button.share" = "Поделиться";
@@ -90,6 +93,8 @@
 "action.button.save" = "Сохранить";
 "action.button.cancel" = "Отменить";
 "action.button.continue" = "Далее";
+"action.button.apply" = "Применить";
+
 
 /* Error messages */
 

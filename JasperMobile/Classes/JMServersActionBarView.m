@@ -18,7 +18,7 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.createServerButton.titleLabel.text = JMCustomLocalizedString(@"action.button.newserver", nil);
+    [self.createServerButton setTitle:JMCustomLocalizedString(@"action.button.newserver", nil) forState:UIControlStateNormal];
 }
 
 - (IBAction)newServer:(id)sender

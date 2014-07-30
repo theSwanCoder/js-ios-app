@@ -48,16 +48,23 @@ objection_requires(@"resourceClient", @"reportClient")
 
 - (void)runReport
 {
+    BOOL allDataIsValid = YES;
     NSMutableArray *inputControlDescriptors = [NSMutableArray array];
     for (JMInputControlCell *cell in self.inputControls) {
-        [inputControlDescriptors addObject:cell.inputControlDescriptor];
+        if (cell.isValid) {
+            [inputControlDescriptors addObject:cell.inputControlDescriptor];
+        } else {
+            allDataIsValid = NO;
+        }
     }
 
-    if (!self.delegate) {
-        [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:inputControlDescriptors];
-    } else {
-        [self.delegate setInputControls:inputControlDescriptors];
-        [self.delegate refresh];
+    if (allDataIsValid) {
+        if (!self.delegate) {
+            [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:inputControlDescriptors];
+        } else {
+            [self.delegate setInputControls:inputControlDescriptors];
+            [self.delegate refresh];
+        }
     }
 }
 

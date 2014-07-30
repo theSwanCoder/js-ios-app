@@ -12,11 +12,13 @@
 #import "JMServerOptionsActionBarView.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMServerOptions.h"
+#import "JMTitleProvider.h"
 
 #import "UITableViewCell+SetSeparators.h"
 #import "JMServerOptionCell.h"
+#import "JMLocalization.h"
 
-@interface JMServerOptionsViewController () <JMActionBarProvider, JMBaseActionBarViewDelegate>
+@interface JMServerOptionsViewController () <JMActionBarProvider, JMBaseActionBarViewDelegate, JMTitleProvider>
 @property (weak, nonatomic) IBOutlet UITableView *optionsTableView;
 @property (nonatomic, strong) JMServerOptions *serverOptions;
 
@@ -79,7 +81,7 @@
             [self.serverOptions discardChanges];
             [self.navigationController popViewControllerAnimated:YES];
             break;
-        case JMBaseActionBarViewAction_Save:
+        case JMBaseActionBarViewAction_Apply:
             if ([self.serverOptions saveChanges]) {
                 [self.navigationController popViewControllerAnimated:YES];
             }
@@ -88,5 +90,12 @@
             //Unsupported actions
             break;
     }    
+}
+
+#pragma mark - JMTitleProvider
+- (NSString *)titleForMenuLabel
+{
+    NSString *keyString = self.serverProfile ? @"detail.servers.editserver" : @"detail.servers.newserver";
+    return JMCustomLocalizedString(keyString, nil);
 }
 @end

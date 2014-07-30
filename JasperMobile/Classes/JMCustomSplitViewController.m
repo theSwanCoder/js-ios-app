@@ -8,6 +8,7 @@
 
 #import "JMCustomSplitViewController.h"
 #import "JMActionBarProvider.h"
+#import "JMTitleProvider.h"
 #import "JMHeaderBarAdditions.h"
 #import <QuartzCore/QuartzCore.h>
 #import "JMFullScreenButtonProvider.h"
@@ -17,6 +18,7 @@
 
 static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
+
 
 @implementation JMCustomSplitViewController
 
@@ -90,6 +92,12 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     [destinationViewController didMoveToParentViewController:self];
 }
 
+- (void)setMenuTitle:(NSString *)menuTitle
+{
+    _menuTitle = menuTitle;
+    self.menuLabel.text = menuTitle;
+}
+
 #pragma mark - Actions
 
 - (IBAction)back:(UITapGestureRecognizer *)recognizer
@@ -148,6 +156,7 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
 {
     if ([navigationController isEqual:self.detailNavigationController]) {
         [self showFullScreenButtonForViewController:viewController];
+        [self showMenuLabelTitleForViewController:viewController];
     }
 }
 
@@ -250,6 +259,15 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
         [self.fullScreenButton setImage:selectedImage forState:UIControlStateSelected];
     }
     [UIView commitAnimations];
+}
+
+- (void) showMenuLabelTitleForViewController:(id)viewController
+{
+    if (viewController && [viewController respondsToSelector:@selector(titleForMenuLabel)]) {
+        self.menuLabel.text = [viewController titleForMenuLabel];
+    } else {
+        self.menuLabel.text = self.menuTitle;
+    }
 }
 
 - (CGRect) getFrameForDetailView{

@@ -19,4 +19,7 @@
 
 - (BOOL) saveChanges;
 - (void) discardChanges;
+- (void) deleteServerProfile;
+- (void) setServerProfileActive;
+
 @end
