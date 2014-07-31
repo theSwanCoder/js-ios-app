@@ -49,6 +49,11 @@
 "servers.profile.configure.tips" = "\n\nВы можете добавить свой собственный профиль сервера или выбрать демо-сервер для быстрого ознакомления с приложением";
 "servers.profile.configure.help" = "Пожалуйста добавьте профиль сервера с помощью кнопки \"Правка\"";
 
+"servers.activeserver.label" = "Активный сервер";
+"servers.activeserver.delete.errormessage" = "Активный сервер не может быть удален. Сделайте активным другой сервер перед удалением этого.";
+"servers.activeserver.makeactive.errormessage" = "Этот сервер уже активен";
+
+
 "servers.new.account.title" = "Новый профиль сервера";
 
 "servers.askpassword.label" = "Всегда спрашивать пароль";
@@ -94,6 +99,7 @@
 "action.button.cancel" = "Отменить";
 "action.button.continue" = "Далее";
 "action.button.apply" = "Применить";
+"action.button.makeactive" = "Сделать Активным";
 
 
 /* Error messages */

@@ -65,11 +65,13 @@ objection_requires(@"managedObjectContext")
 - (void) deleteServerProfile
 {
     [self.managedObjectContext deleteObject:self.serverProfile];
+    NSError *error = nil;
+    [self.managedObjectContext save:&error];
 }
 
 - (void) setServerProfileActive
 {
-    
+    [self.serverProfile setServerProfileIsActive:YES];
 }
 
 - (NSArray *)optionsArray{
@@ -80,7 +82,7 @@ objection_requires(@"managedObjectContext")
 }
 
 - (void)createOptionsArray
-{
+{    
     NSMutableArray *optionsArray = [NSMutableArray array];
     NSArray *optionsSourceArray =
     @[@{@"title" : JMCustomLocalizedString(@"servers.name.label", nil),         @"value" : self.serverProfile.alias         ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
@@ -88,7 +90,8 @@ objection_requires(@"managedObjectContext")
       @{@"title" : JMCustomLocalizedString(@"servers.orgid.label", nil),        @"value" : self.serverProfile.organization  ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"servers.username.label", nil),     @"value" : self.serverProfile.username      ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"servers.password.label", nil),     @"value" : self.serverProfile.password      ? : @"", @"cellIdentifier" : kJMSecureTextCellIdentifier},
-      @{@"title" : JMCustomLocalizedString(@"servers.askpassword.label", nil),  @"value" : self.serverProfile.askPassword   ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier}];
+      @{@"title" : JMCustomLocalizedString(@"servers.askpassword.label", nil),  @"value" : self.serverProfile.askPassword   ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier},
+      @{@"title" : JMCustomLocalizedString(@"servers.activeserver.label", nil), @"value" : @(self.serverProfile.serverProfileIsActive), @"cellIdentifier" : kJMBooleanCellIdentifier}];
     
     for (NSDictionary *optionData in optionsSourceArray) {
         JMServerOption *option = [[JMServerOption alloc] init];
@@ -98,6 +101,7 @@ objection_requires(@"managedObjectContext")
 
         [optionsArray addObject:option];
     }
+    [[optionsArray lastObject] setOptionReadOnly:YES];
     
     self.optionsArray = optionsArray;
 }

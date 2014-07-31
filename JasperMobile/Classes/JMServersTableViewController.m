@@ -190,7 +190,7 @@ inject_default_rotation()
         // Check if profile to delete is an active
         if ([serverProfileID isEqual:activeProfileID]) {
             // Sets server profile to nil
-            [JMUtils sendChangeServerProfileNotificationWithProfile:nil];
+            [JMUtils sendChangeServerProfileNotificationWithProfile:nil  withParams:nil];
         }
     }
 }
@@ -228,7 +228,7 @@ inject_default_rotation()
             serverProfile.password = nil;
             [[JMAskPasswordDialog askPasswordDialogForServerProfile:serverProfile] show];
         } else {
-            [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
+            [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile withParams:nil];
         }
     }
 }

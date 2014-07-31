@@ -66,7 +66,7 @@ __weak static JMServerProfile * serverProfile;
 {
     if (buttonIndex != alertView.cancelButtonIndex && serverProfile) {
         [serverProfile setPasswordAsPrimitive:[alertView textFieldAtIndex:0].text ?: @""];
-        [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
+        [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile withParams:nil];
         serverProfile = nil;
     }
 }

@@ -96,8 +96,10 @@ extern CGFloat kJMNoEdgesInset;
  Sends "changeServerProfile" notification to defaultCenter
  
  @param serverProfile A profile that will be provided to receiver via userInfo dictionary (kJMServerProfileKey key)
+ @param params Params that will be provided to receiver via userInfo dictionary (kJMServerProfileKey key)
+
  */
-+ (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile;
++ (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile withParams:(NSDictionary *)params;
 
 /**
  Shows network activity indicator

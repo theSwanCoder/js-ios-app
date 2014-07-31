@@ -18,7 +18,8 @@ typedef NS_ENUM(NSInteger, JMBaseActionBarViewAction) {
     JMBaseActionBarViewAction_Save,
     JMBaseActionBarViewAction_Cancel,
     JMBaseActionBarViewAction_Apply,
-    JMBaseActionBarViewAction_Run
+    JMBaseActionBarViewAction_Run,
+    JMBaseActionBarViewAction_MakeActive
 };
 
 @protocol JMBaseActionBarViewDelegate <NSObject>

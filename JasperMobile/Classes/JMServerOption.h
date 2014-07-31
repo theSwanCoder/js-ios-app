@@ -13,5 +13,6 @@
 @property (nonatomic, strong) NSString *titleString;
 @property (nonatomic, strong) id        optionValue;
 @property (nonatomic, strong) NSString *cellIdentifier;
+@property (nonatomic, assign) BOOL      optionReadOnly;
 
 @end

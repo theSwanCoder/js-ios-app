@@ -94,4 +94,9 @@
  */
 - (void)setPasswordAsPrimitive:(NSString *)password;
 
+/**
+ Returns YES if server profile is active
+ */
+@property (nonatomic, assign) BOOL serverProfileIsActive;
+
 @end

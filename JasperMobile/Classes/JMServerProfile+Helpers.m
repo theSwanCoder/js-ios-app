@@ -101,6 +101,25 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
     [self setPrimitiveValue:password forKey:@"password"];
 }
 
+- (BOOL)serverProfileIsActive
+{
+    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
+    NSManagedObjectID *activeID = activeServerProfile.objectID;
+    NSManagedObjectID *selfID = self.objectID;
+    
+    return [activeID isEqual:selfID];
+}
+
+- (void)setServerProfileIsActive:(BOOL)serverProfileIsActive
+{
+    if (!self.serverProfileIsActive) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setURL:[self.objectID URIRepresentation] forKey:kJMDefaultsActiveServer];
+        [defaults synchronize];
+        
+        [JMUtils sendChangeServerProfileNotificationWithProfile:self withParams:nil];
+    }
+}
 #pragma mark - Private
 
 + (NSManagedObjectContext *)managedObjectContext

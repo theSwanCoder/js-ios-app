@@ -95,7 +95,7 @@ static NSString * const kJMProductName = @"JasperMobile";
         // Using performSelector to fix warning: "Applications are expected to have a root view controller at the end of application launch"
         [[JMAskPasswordDialog askPasswordDialogForServerProfile:serverProfile] performSelector:@selector(show) withObject:nil afterDelay:0.0];
     } else {
-        [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile];
+        [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile withParams:nil];
     }
     
     [application setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -258,10 +258,7 @@ static NSString * const kJMProductName = @"JasperMobile";
     [self.managedObjectContext save:nil];
     [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:serverProfile.profileID];
     
-    // TODO: Temp fix. REMOVE
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setURL:[serverProfile.objectID URIRepresentation] forKey:kJMDefaultsActiveServer];
-    [defaults synchronize];
+    [serverProfile setServerProfileIsActive:YES];
 }
 
 - (void)changeServerProfile:(NSNotification *)notification

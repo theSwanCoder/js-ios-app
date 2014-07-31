@@ -18,6 +18,7 @@
 {
     [super setServerOption:serverOption];
     self.checkBoxButton.selected = [serverOption.optionValue boolValue];
+    self.checkBoxButton.userInteractionEnabled = !serverOption.optionReadOnly;
 }
 
 #pragma mark - Actions

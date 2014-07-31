@@ -25,6 +25,7 @@
 
 //
 //  Modified by Vlad Zavadskii vzavadskii@jaspersoft.com on 14.02.14.
+//  Modified by Aleksey Gubarev agubarev@jaspersoft.com on 14.02.14.
 //
 
 #import <QuartzCore/QuartzCore.h>
@@ -47,7 +48,7 @@ static NSMutableArray *toasts;
 @property (nonatomic, readonly) UILabel *textLabel;
 
 - (void)fadeToastOut;
-+ (void)nextToastInView:(UIView *)parentView;
++ (void)nextToast;
 
 @end
 
@@ -66,7 +67,7 @@ static NSMutableArray *toasts;
 - (id)initWithText:(NSString *)text {
 	if ((self = [self initWithFrame:CGRectZero])) {
 		// Add corner radius
-		self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.6];
+		self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.8];
 		self.layer.cornerRadius = 5;
 		self.autoresizingMask = UIViewAutoresizingNone;
 		self.autoresizesSubviews = NO;
@@ -74,22 +75,18 @@ static NSMutableArray *toasts;
 		// Init and add label
 		_textLabel = [[UILabel alloc] init];
 		_textLabel.text = text;
-		_textLabel.minimumScaleFactor = 14;
-		_textLabel.font = [UIFont systemFontOfSize:14];
+		_textLabel.font = [UIFont systemFontOfSize:15];
 		_textLabel.textColor = [UIColor whiteColor];
 		_textLabel.adjustsFontSizeToFitWidth = NO;
 		_textLabel.backgroundColor = [UIColor clearColor];
 		[_textLabel sizeToFit];
-		
+
 		[self addSubview:_textLabel];
 		_textLabel.frame = CGRectOffset(_textLabel.frame, 10, 5);
 	}
 	
 	return self;
 }
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Public
@@ -104,20 +101,18 @@ static NSMutableArray *toasts;
 	CGFloat pHeight = parentView.frame.size.height;
 	
 	// Change toastview frame
-	view.frame = CGRectMake((pWidth - lWidth - 20) / 2., pHeight - lHeight - 60, lWidth + 20, lHeight + 10);
+    view.frame = CGRectMake(ceil((pWidth - lWidth - 20) / 2), pHeight - lHeight - 60, lWidth + 20, lHeight + 10);
 	view.alpha = 0.0f;
 	
-	if (toasts == nil) {
-		toasts = [[NSMutableArray alloc] initWithCapacity:1];
-		[toasts addObject:view];
-		[ALToastView nextToastInView:parentView];
-	}
-	else {
-		[toasts addObject:view];
-	}
-	
-}
+    if (!toasts) {
+        toasts = [[NSMutableArray alloc] initWithCapacity:1];
+    }
+    [toasts addObject:@{@"view": view, @"parentView": parentView}];
 
+	if ([toasts count] == 1) {
+		[ALToastView nextToast];
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Private
@@ -125,38 +120,37 @@ static NSMutableArray *toasts;
 - (void)fadeToastOut {
 	// Fade in parent view
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction
-     
                      animations:^{
                          self.alpha = 0.f;
-                     } 
+                     }
                      completion:^(BOOL finished){
-                         UIView *parentView = self.superview;
+                         // Remove current view
                          [self removeFromSuperview];
-                         _textLabel = nil;
-                         // Remove current view from array
-                         [toasts removeObject:self];
-                         if ([toasts count] == 0) {
-                             toasts = nil;
-                         }
-                         else
-                             [ALToastView nextToastInView:parentView];
+                         [toasts removeObjectAtIndex:0];
+                         // Show next toast
+                         [ALToastView nextToast];
                      }];
 }
 
-
-+ (void)nextToastInView:(UIView *)parentView {
++ (void)nextToast{
 	if ([toasts count] > 0) {
-        ALToastView *view = [toasts objectAtIndex:0];
+        ALToastView *view = [[toasts objectAtIndex:0] objectForKey:@"view"];
+        UIView *parentView = [[toasts objectAtIndex:0] objectForKey:@"parentView"];
         
-		// Fade into parent view
-		[parentView addSubview:view];
-        [UIView animateWithDuration:.5  delay:0 options:UIViewAnimationOptionAllowUserInteraction
-                         animations:^{
-                             view.alpha = 1.0;
-                         } completion:^(BOOL finished){}];
-        
-        // Start timer for fade out
-        [view performSelector:@selector(fadeToastOut) withObject:nil afterDelay:kDuration];
+        if (parentView.superview) {
+            // Fade into parent view
+            [parentView addSubview:view];
+            [UIView animateWithDuration:.5  delay:0 options:UIViewAnimationOptionAllowUserInteraction
+                             animations:^{
+                                 view.alpha = 1.0;
+                             } completion:^(BOOL finished){}];
+            
+            // Start timer for fade out
+            [view performSelector:@selector(fadeToastOut) withObject:nil afterDelay:kDuration];
+        } else {
+            // Show next toast
+            [view performSelector:@selector(fadeToastOut) withObject:nil afterDelay:0];
+        }
     }
 }
 

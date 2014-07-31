@@ -433,14 +433,7 @@ objection_requires(@"managedObjectContext", @"favoritesUtil")
     // Do not send notification if updated serverToEdit profile is not active
     if (![serverToEditID isEqual:activeServerID]) return;
 
-    NSDictionary *userInfo = @{
-        kJMServerProfileKey : self.serverToEdit,
-        kJMNotUpdateMenuKey : @YES
-    };
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
-                                                        object:nil
-                                                      userInfo:userInfo];
+    [JMUtils sendChangeServerProfileNotificationWithProfile:self.serverToEdit withParams:@{kJMNotUpdateMenuKey : @YES}];
 }
 
 - (NSInteger)tagForCell:(NSInteger)cell

@@ -14,6 +14,8 @@
 #import "JMServerOptions.h"
 #import "JMTitleProvider.h"
 
+#import "ALToastView.h"
+
 #import "UITableViewCell+SetSeparators.h"
 #import "JMServerOptionCell.h"
 #import "JMLocalization.h"
@@ -64,7 +66,12 @@
 - (id)actionBar
 {
     if (!self.actionBarView) {
-        self.actionBarView = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([JMServerOptionsActionBarView class])
+        NSString *actinBarNibName = NSStringFromClass([JMServerOptionsActionBarView class]);
+        if (!self.serverProfile) {
+            actinBarNibName = @"JMNewServerOptionsActionBarView";
+        }
+        
+        self.actionBarView = [[NSBundle mainBundle] loadNibNamed:actinBarNibName
                                                            owner:self
                                                          options:nil].firstObject;
         self.actionBarView.delegate = self;
@@ -83,6 +90,22 @@
             break;
         case JMBaseActionBarViewAction_Apply:
             if ([self.serverOptions saveChanges]) {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            break;
+        case JMBaseActionBarViewAction_Delete:
+            if (self.serverProfile.serverProfileIsActive) {
+                [ALToastView toastInView:self.view withText:JMCustomLocalizedString(@"servers.activeserver.delete.errormessage", nil)];
+            } else {
+                [self.serverOptions deleteServerProfile];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            break;
+        case JMBaseActionBarViewAction_MakeActive:
+            if (self.serverProfile.serverProfileIsActive) {
+                [ALToastView toastInView:self.view withText:JMCustomLocalizedString(@"servers.activeserver.makeactive.errormessage", nil)];
+            } else {
+                [self.serverOptions setServerProfileActive];
                 [self.navigationController popViewControllerAnimated:YES];
             }
             break;

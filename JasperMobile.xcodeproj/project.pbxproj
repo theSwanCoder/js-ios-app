@@ -27,6 +27,7 @@
 		085E3D6719704CAF005F8E2E /* JMDetailSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D6119704CAF005F8E2E /* JMDetailSettingsTableViewCell.m */; };
 		085E3D6819704CAF005F8E2E /* JMDetailSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E3D6319704CAF005F8E2E /* JMDetailSettingsViewController.m */; };
 		085E3D7119704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 085E3D7019704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib */; };
+		089576E519893F9700989AC8 /* JMNewServerOptionsActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 089576E319893F9700989AC8 /* JMNewServerOptionsActionBarView~ipad.xib */; };
 		08A7AA43197EBA7D00DB7636 /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7AA42197EBA7D00DB7636 /* UIImage+Additions.m */; };
 		08A7AA49197EBF9600DB7636 /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7AA48197EBF9600DB7636 /* UIView+Additions.m */; };
 		08B46B711988056900953EB7 /* JMServerOptionsActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08B46B701988056900953EB7 /* JMServerOptionsActionBarView~ipad.xib */; };
@@ -325,6 +326,7 @@
 		085E3D6219704CAF005F8E2E /* JMDetailSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMDetailSettingsViewController.h; path = Classes/JMDetailSettingsViewController.h; sourceTree = "<group>"; };
 		085E3D6319704CAF005F8E2E /* JMDetailSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMDetailSettingsViewController.m; path = Classes/JMDetailSettingsViewController.m; sourceTree = "<group>"; };
 		085E3D7019704CF9005F8E2E /* JMDetailSettingsActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "JMDetailSettingsActionBarView~ipad.xib"; path = "Classes/JMDetailSettingsActionBarView~ipad.xib"; sourceTree = "<group>"; };
+		089576E319893F9700989AC8 /* JMNewServerOptionsActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "JMNewServerOptionsActionBarView~ipad.xib"; path = "Classes/JMNewServerOptionsActionBarView~ipad.xib"; sourceTree = "<group>"; };
 		08A7AA41197EBA7D00DB7636 /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Additions.h"; path = "JasperMobile/Classes/UIImage+Additions.h"; sourceTree = "<group>"; };
 		08A7AA42197EBA7D00DB7636 /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Additions.m"; path = "JasperMobile/Classes/UIImage+Additions.m"; sourceTree = "<group>"; };
 		08A7AA47197EBF9600DB7636 /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+Additions.h"; path = "JasperMobile/Classes/UIView+Additions.h"; sourceTree = "<group>"; };
@@ -749,6 +751,7 @@
 				0855E234198157130057C575 /* JMServerOptionsActionBarView.h */,
 				0855E235198157130057C575 /* JMServerOptionsActionBarView.m */,
 				08B46B701988056900953EB7 /* JMServerOptionsActionBarView~ipad.xib */,
+				089576E319893F9700989AC8 /* JMNewServerOptionsActionBarView~ipad.xib */,
 			);
 			name = ActionBar;
 			sourceTree = "<group>";
@@ -1706,6 +1709,7 @@
 				F58EF6C917F487A800C9EBA8 /* remove_favorite_button.png in Resources */,
 				F5FA4C48190FC06D00001999 /* vertical_list_button_selected.png in Resources */,
 				F572621B1976A19600DFEF77 /* JMDetailSingleSelectTableViewController~ipad.xib in Resources */,
+				089576E519893F9700989AC8 /* JMNewServerOptionsActionBarView~ipad.xib in Resources */,
 				08F0C221198265B50074F6C6 /* checked_checkbox@2x.png in Resources */,
 				F539A70117F19A4F00310D72 /* Default-568h@2x.png in Resources */,
 				F539A70317F19A4F00310D72 /* Default@2x.png in Resources */,

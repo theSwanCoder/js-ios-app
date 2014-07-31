@@ -249,8 +249,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
             // After moving to SQLite database we need to change @"jaspersoft.server.active" key representation.
             // Idea is to store object id as url (as there are no other primary key and adding a new "active" field to database is not so clean solution also).
             // We need to get object id after object was saved
-            NSURL *activeObjectIDURIRepresentation = [[activeServeProfile objectID] URIRepresentation];
-            [defaults setURL:activeObjectIDURIRepresentation forKey:kJMDefaultsActiveServer];
+            [activeServeProfile setServerProfileIsActive:YES];
         }
         
         return [defaults synchronize];

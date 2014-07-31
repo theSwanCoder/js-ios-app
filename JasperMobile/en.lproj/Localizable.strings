@@ -64,8 +64,12 @@
 "servers.askpassword.serverprofile" = "Server Profile: ";
 "servers.askpassword.username" = "Username: ";
 
+"servers.activeserver.label" = "Active Server";
+
 "servers.title.new" = "New Server Profile";
 "servers.title.edit" = "Edit Server Profile";
+
+
 
 "search.resources.placeholder" = "Search Resources";
 
@@ -163,6 +167,8 @@
 
 "detail.servers.newserver" = "New Server";
 "detail.servers.editserver" = "Edit Server";
+"servers.activeserver.delete.errormessage" = "The active server cannot be deleted. Please make another aerver active before deleting this server.";
+"servers.activeserver.makeactive.errormessage" = "This server is already the active server.";
 
 // Action bar buttons
 "action.button.refresh" = "Refresh";
@@ -174,7 +180,7 @@
 "action.button.continue" = "Continue";
 "action.button.newserver" = "New Server";
 "action.button.apply" = "Apply";
-
+"action.button.makeactive" = "Make Active";
 // Tools
 "master.tools.type.refresh" = "Refresh";
 

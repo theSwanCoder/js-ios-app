@@ -132,11 +132,12 @@ CGFloat kJMNoEdgesInset = -1;
     return floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1;
 }
 
-+ (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile
++ (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile withParams:(NSDictionary *)params
 {
-    NSDictionary *userInfo = serverProfile ? @{
-        kJMServerProfileKey : serverProfile
-    } : nil;
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:params];
+    if (serverProfile) {
+        [userInfo setObject:serverProfile forKey:kJMServerProfileKey];
+    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMChangeServerProfileNotification
                                                         object:nil

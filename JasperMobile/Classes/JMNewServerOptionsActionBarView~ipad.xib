@@ -37,44 +37,14 @@
                         <action selector="cancelButtonTapped:" destination="v10-Dg-arT" eventType="touchUpInside" id="b1J-Ac-eWJ"/>
                     </connections>
                 </button>
-                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gt5-uh-kOO">
-                    <rect key="frame" x="284" y="0.0" width="180" height="48"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                    <state key="normal" title="Make Active">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <state key="highlighted">
-                        <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="makeActiveButtonTapped:" destination="v10-Dg-arT" eventType="touchUpInside" id="0Jj-Jq-2a9"/>
-                    </connections>
-                </button>
-                <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4dJ-s0-yb3">
-                    <rect key="frame" x="466" y="0.0" width="100" height="48"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                    <state key="normal" title="Delete">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <state key="highlighted">
-                        <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="deleteButtonTapped:" destination="v10-Dg-arT" eventType="touchUpInside" id="tcI-cm-DSC"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="backgroundColor" red="0.14901960780000001" green="0.15686274510000001" blue="0.1764705882" alpha="1" colorSpace="calibratedRGB"/>
             <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
             <connections>
                 <outlet property="cancelButton" destination="1DO-Fn-0zq" id="Y9G-0s-w3E"/>
-                <outlet property="deleteButton" destination="4dJ-s0-yb3" id="qPF-B7-KvB"/>
-                <outlet property="makeActiveButton" destination="gt5-uh-kOO" id="uIi-uL-nGH"/>
                 <outlet property="saveButton" destination="vPX-ib-n4b" id="pXi-gC-n56"/>
                 <outletCollection property="_actionBarButtons" destination="vPX-ib-n4b" id="nNk-tU-Zvx"/>
                 <outletCollection property="_actionBarButtons" destination="1DO-Fn-0zq" id="2Fh-UM-QOO"/>
-                <outletCollection property="_actionBarButtons" destination="4dJ-s0-yb3" id="eco-SE-bZx"/>
-                <outletCollection property="_actionBarButtons" destination="gt5-uh-kOO" id="a7D-CY-Hu9"/>
             </connections>
         </view>
     </objects>
