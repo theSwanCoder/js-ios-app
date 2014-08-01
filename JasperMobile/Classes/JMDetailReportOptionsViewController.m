@@ -41,9 +41,13 @@ objection_requires(@"resourceClient", @"reportClient")
 
 - (void)cancel
 {
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center postNotificationName:kJMShowRootMaster object:nil];
-    [center postNotificationName:kJMShowResourcesListInDetail object:nil];
+    if (!self.delegate) {
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center postNotificationName:kJMShowRootMaster object:nil];
+        [center postNotificationName:kJMShowResourcesListInDetail object:nil];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)runReport
