@@ -49,6 +49,8 @@
 "servers.profile.configure.tips" = "\n\nВы можете добавить свой собственный профиль сервера или выбрать демо-сервер для быстрого ознакомления с приложением";
 "servers.profile.configure.help" = "Пожалуйста добавьте профиль сервера с помощью кнопки \"Правка\"";
 
+"servers.profile.delete.message" = "Пожалуйста, подтвердите удаление сервера.";
+
 "servers.activeserver.label" = "Активный сервер";
 "servers.activeserver.delete.errormessage" = "Активный сервер не может быть удален. Сделайте активным другой сервер перед удалением этого.";
 "servers.activeserver.makeactive.errormessage" = "Этот сервер уже активен";

@@ -53,6 +53,7 @@
 "servers.profile.title" = "JasperReports Server profiles";
 "servers.profile.configure.tips" = "\n\nYou can add and configure your own server by tapping Edit, or you can select the demo server provided by Jaspersoft to quickly try out how the app works";
 "servers.profile.configure.help" = "Please add and configure a JasperReports Server account by tapping Edit";
+"servers.profile.delete.message" = "Please, confirm deleting server.";
 
 "servers.new.label" = "Add server profile";
 "servers.new.account.title" = "New server account";
@@ -235,3 +236,4 @@
 "dialog.button.addfavorite" = "Add Favorite";
 "dialog.button.removefavorite" = "Remove Favorite";
 "dialog.button.save" = "Save";
+"dialog.button.delete" = "Delete";

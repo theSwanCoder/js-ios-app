@@ -69,7 +69,7 @@ inject_default_rotation()
         weakSelf.request = [NSURLRequest requestWithURL:[NSURL URLWithString:reportUrl]];
         
     } errorBlock: nil
-                                                           viewControllerToDismiss:self];
+      viewControllerToDismiss:(!self.requestId) ? self : nil];
     
     NSMutableArray *parameters = [NSMutableArray array];
     for (JSInputControlDescriptor *inputControlDescriptor in self.inputControls) {

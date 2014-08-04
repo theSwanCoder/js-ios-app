@@ -19,8 +19,10 @@
 #import "UITableViewCell+SetSeparators.h"
 #import "JMServerOptionCell.h"
 #import "JMLocalization.h"
+#import "UIAlertView+LocalizedAlert.h"
 
-@interface JMServerOptionsViewController () <JMActionBarProvider, JMBaseActionBarViewDelegate, JMTitleProvider>
+
+@interface JMServerOptionsViewController () <JMActionBarProvider, JMBaseActionBarViewDelegate, JMTitleProvider, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *optionsTableView;
 @property (nonatomic, strong) JMServerOptions *serverOptions;
 
@@ -97,8 +99,11 @@
             if (self.serverProfile.serverProfileIsActive) {
                 [ALToastView toastInView:self.view withText:JMCustomLocalizedString(@"servers.activeserver.delete.errormessage", nil)];
             } else {
-                [self.serverOptions deleteServerProfile];
-                [self.navigationController popViewControllerAnimated:YES];
+                [[UIAlertView localizedAlertWithTitle:nil
+                                              message:@"servers.profile.delete.message"
+                                             delegate:self
+                                    cancelButtonTitle:@"dialog.button.cancel"
+                                    otherButtonTitles:@"dialog.button.delete", nil] show];
             }
             break;
         case JMBaseActionBarViewAction_MakeActive:
@@ -113,6 +118,15 @@
             //Unsupported actions
             break;
     }    
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.cancelButtonIndex != buttonIndex) {
+        [self.serverOptions deleteServerProfile];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark - JMTitleProvider

@@ -130,6 +130,11 @@ static UIDatePicker *datePicker;
     }
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    return NO;
+}
+
 #pragma mark - UIResponder
 
 - (UIView *)inputAccessoryView
