@@ -28,7 +28,6 @@
 #import "JMSaveReportTableViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
-#import "JMLocalization.h"
 #import "JMRequestDelegate.h"
 #import "JMRotationBase.h"
 #import "JMUtils.h"

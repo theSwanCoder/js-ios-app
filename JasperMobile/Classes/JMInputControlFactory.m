@@ -27,7 +27,6 @@
 
 #import "JMInputControlFactory.h"
 #import "JMSingleSelectInputControlCell.h"
-#import "JMLocalization.h"
 #import <Objection-iOS/Objection.h>
 
 static NSString * const kJMBooleanCellIdentifier = @"BooleanCell";

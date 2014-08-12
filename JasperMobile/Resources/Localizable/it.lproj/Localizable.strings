@@ -1,0 +1,130 @@
+/*
+ * JasperMobile for iOS
+ * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
+ * http://community.jaspersoft.com/project/jaspermobile-ios
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
+//
+//  Localizable.strings
+//  Jaspersoft Corporation
+//
+
+/* Server Profiles view */
+
+"servers.info" = "Jaspersoft Mobile v %@\n\nStrumento di gestione e visualizzatore di report per JasperReports Server 5.0 e versioni superiori.\n\nPer ulteriori informazioni visitare:\nwww.jasperforge.org/projects/mobile\n\n(c) 2011 - 2014 Jaspersoft Corp.";
+
+"servers.url.label" = "URL";
+"servers.url.tip" = "http://example.com/jasperserver";
+"servers.url.errmsg" = "Specificare un URL valido";
+
+"servers.name.label" = "Nome";
+"servers.name.tip" = "nome server personale";
+"servers.name.errmsg.empty" = "Specificare un nome profilo valido";
+"servers.name.errmsg.exists" = "Il nome profilo esiste già. Specificare un altro nome per il profilo";
+
+"servers.orgid.label" = "Organizzazione";
+"servers.orgid.tip" = "id organizzazione";
+
+"servers.username.label" = "Nome utente";
+"servers.username.tip" = "nome utente personale";
+"servers.username.errmsg.empty" = "Specificare un nome utente valido";
+
+"servers.password.label" = "Password";
+"servers.password.tip" = "password personale";
+
+"servers.profile.details.title" = "Server Profilo Dettagli";
+"servers.profile.title" = "Server Profili";
+"servers.profile.configure.tips" = "\n\nÈ possibile aggiungere e configurare il proprio server toccando Edit, oppure è possibile selezionare il server demo fornito da Jaspersoft per provare rapidamente come l'applicazione funziona";
+"servers.profile.configure.help" = "Si prega di aggiungere e configurare un server JasperReports conto toccando Edit";
+"servers.profile.exists" = "Esiste già un profilo server contenente questo URL, nome utente e ID organizzazione. Modificare il profilo server";
+
+"servers.new.account.title" = "Server di Nuovo account";
+"servers.new.label" = "Aggiungi profilo server...";
+"servers.askpassword.label" = "Chiedi sempre password";
+"servers.askpassword.dialog.title" = "Immetti password";
+
+"servers.myserver.label" = "Il mio server";
+
+"servers.askpassword.label" = "Chiedi sempre la password";
+"servers.askpassword.dialog.title" = "Immettere la password";
+
+/* Navigation and view labels */
+
+"view.servers"= "Server";
+"view.repository" = "Archivio";
+"view.search" = "Cerca";
+"view.favorites" = "Preferiti";
+
+"resource.properties.title" = "Proprietà delle risorse";
+"resource.nestedproperties.title" = "Risorse nidificati";
+"resource.name.title" = "Nome:";
+"resource.label.title" = "Etichetta:";
+"resource.description.title" = "Descrizione:";
+"resource.type.title" = "Tipo:";
+
+"report.output.format" = "Formato del report";
+"view.library" = "Libreria";
+
+"delete.dialog.title" = "Cancellare delle risorse";
+"delete.dialog.msg" = "Sei sicuro di voler cancellare questa risorsa?";
+
+"status.loading" = "Caricamento...";
+
+/* Error messages */
+
+"error.readingresponse.dialog.msg" = "Errore durante la lettura della risposta";
+"error.incorrectrequest.dialog.msg" = "La richiesta è sintatticamente corretto";
+
+"error.noconnection.dialog.title" = "Nessuna connessione";
+"error.noconnection.dialog.msg" = "Verificare le impostazioni della rete mobile e riprovare";
+
+"error.authenication.dialog.title" = "Autenticazione necessaria";
+"error.authenication.dialog.msg" = "Verificare le credenziali del server";
+
+"error.unknownhost.dialog.title" = "Server sconosciuto";
+"error.unknownhost.dialog.msg" = "Impossibile trovare un server con il nome host specificato";
+
+"error.resourcedelete.dialog.title" = "Errore durante l'eliminazione della risorsa";
+
+"error.reportissue.dialog.title" = "La relazione ha avuto alcuni problemi";
+"error.reportempty.dialog.title" = "La relazione è vuoto";
+
+/* HTTP error messages */
+
+"error.http.400" = "400 - Richiesta non valida. La richiesta non è valida";
+"error.http.403" = "403 - Autorizzazione negata. La richiesta è capito, ma è stato rifiutato";
+"error.http.404" = "404 - Non trovato. L'URI richiesto non è valido o la risorsa richiesta non esiste";
+"error.http.500" = "500 - Errore del server interno";
+"error.http.502" = "502 - Bad Gateway";
+"error.http.503" = "503 - Servizio non disponibile";
+"error.http.504" = "504 - Timeout del gateway";
+
+/* Buttons */
+
+"dialog.button.ok" = "OK";
+"dialog.button.done" = "Terminato";
+"dialog.button.edit" = "Modifica";
+"dialog.button.retry" = "Riprova";
+"dialog.button.yes" = "Si";
+"dialog.button.save" = "Memorizzare";
+"dialog.button.info" = "Info";
+"dialog.button.delete" = "Annullare";
+"dialog.button.addfavorite" = "Aggiungi a Preferiti";
+"dialog.button.removefavorite" = "Rimuovi dai preferiti";
+"dialog.button.cancel" = "Annulla";

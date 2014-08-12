@@ -28,7 +28,6 @@
 #import "JMResourceTableViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMFavoritesUtil.h"
-#import "JMLocalization.h"
 #import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UITableViewCell+SetSeparators.h"

@@ -29,7 +29,6 @@
 #import "JMCancelRequestPopup.h"
 #import "JMInputControlCell.h"
 #import "JMInputControlFactory.h"
-#import "JMLocalization.h"
 #import "JMSingleSelectTableViewController.h"
 #import "JMRequestDelegate.h"
 #import "JMRotationBase.h"

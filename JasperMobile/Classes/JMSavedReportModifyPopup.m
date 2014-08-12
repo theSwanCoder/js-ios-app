@@ -27,7 +27,6 @@
 
 #import "JMSavedReportModifyPopup.h"
 #import "JMConstants.h"
-#import "JMLocalization.h"
 #import "JMUtils.h"
 #import "UIViewController+MJPopupViewController.h"
 

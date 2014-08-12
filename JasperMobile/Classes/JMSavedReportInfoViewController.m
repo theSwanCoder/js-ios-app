@@ -26,7 +26,6 @@
 //
 
 #import "JMSavedReportInfoViewController.h"
-#import "JMLocalization.h"
 #import "JMSavedReportModifyPopup.h"
 #import "JMUtils.h"
 #import <QuartzCore/QuartzCore.h>

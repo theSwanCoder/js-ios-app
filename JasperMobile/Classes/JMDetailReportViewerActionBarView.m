@@ -7,7 +7,6 @@
 //
 
 #import "JMDetailReportViewerActionBarView.h"
-#import "JMLocalization.h"
 
 @interface JMDetailReportViewerActionBarView ()
 @property (weak, nonatomic) IBOutlet UIButton *refreshButton;

@@ -31,7 +31,6 @@
 #import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
-#import "JMLocalization.h"
 #import "JMCancelRequestPopup.h"
 #import "JMReportOptionsTableViewController.h"
 #import <Objection-iOS/Objection.h>

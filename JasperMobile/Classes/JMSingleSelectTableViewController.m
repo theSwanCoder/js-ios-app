@@ -27,7 +27,6 @@
 
 #import "JMSingleSelectTableViewController.h"
 #import "JMRotationBase.h"
-#import "JMLocalization.h"
 
 @implementation JMSingleSelectTableViewController
 inject_default_rotation()

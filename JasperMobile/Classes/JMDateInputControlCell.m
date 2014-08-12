@@ -29,7 +29,6 @@ static UIToolbar *datePickerToolbar;
 static UIDatePicker *datePicker;
 
 #import "JMDateInputControlCell.h"
-#import "JMLocalization.h"
 
 @implementation JMDateInputControlCell
 

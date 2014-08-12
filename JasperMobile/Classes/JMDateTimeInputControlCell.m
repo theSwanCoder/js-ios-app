@@ -26,7 +26,6 @@
 //
 
 #import "JMDateTimeInputControlCell.h"
-#import "JMLocalization.h"
 
 static UIToolbar *dateTimePickerToolbar;
 

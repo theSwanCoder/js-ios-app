@@ -26,7 +26,6 @@
 //
 
 #import "JMAskPasswordDialog.h"
-#import "JMLocalization.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 

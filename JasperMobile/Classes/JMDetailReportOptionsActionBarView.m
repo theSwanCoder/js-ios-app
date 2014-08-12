@@ -7,7 +7,6 @@
 //
 
 #import "JMDetailReportOptionsActionBarView.h"
-#import "JMLocalization.h"
 
 @interface JMDetailReportOptionsActionBarView ()
 

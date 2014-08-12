@@ -27,7 +27,6 @@
 
 #import "JMSearchableTableViewController.h"
 #import "JMConstants.h"
-#import "JMLocalization.h"
 #import "JMLibraryTableViewController.h"
 #import "JMUtils.h"
 

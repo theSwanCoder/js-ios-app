@@ -26,7 +26,6 @@
 //
 
 #import "JMCancelRequestPopup.h"
-#import "JMLocalization.h"
 #import "JMUtils.h"
 #import "UIViewController+MJPopupViewController.h"
 #import "JMRequestDelegate.h"
