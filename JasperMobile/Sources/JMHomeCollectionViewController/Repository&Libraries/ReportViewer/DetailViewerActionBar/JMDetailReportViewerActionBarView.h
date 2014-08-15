@@ -11,6 +11,7 @@
 
 @interface JMDetailReportViewerActionBarView : JMBaseActionBarView
 
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (nonatomic, assign) NSInteger countOfPages;
+@property (nonatomic, assign) NSInteger currentPage;
 
 @end

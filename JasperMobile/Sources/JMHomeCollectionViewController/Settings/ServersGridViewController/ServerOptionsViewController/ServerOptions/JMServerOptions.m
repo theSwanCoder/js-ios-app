@@ -52,6 +52,9 @@ objection_requires(@"managedObjectContext")
         [self.managedObjectContext save:&error];
         [JMServerProfile storePasswordInKeychain:self.serverProfile.password profileID:self.serverProfile.profileID];
     }
+    if (self.serverProfile.serverProfileIsActive) {
+        [self setServerProfileActive];
+    }
 }
 
 - (void)discardChanges

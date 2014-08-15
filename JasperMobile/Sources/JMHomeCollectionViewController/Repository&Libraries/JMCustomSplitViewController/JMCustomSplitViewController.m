@@ -8,7 +8,7 @@
 
 #import "JMCustomSplitViewController.h"
 #import "JMActionBarProvider.h"
-#import "JMHeaderBarAdditions.h"
+#import "JMSearchBarAdditions.h"
 #import <QuartzCore/QuartzCore.h>
 #import "JMFullScreenButtonProvider.h"
 #import "JMSearchBar.h"
@@ -121,7 +121,7 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
 {
     NSString *query = searchBar.text;
     id visibleViewController = self.masterNavigationController.visibleViewController;
-    if ([visibleViewController conformsToProtocol:@protocol(JMHeaderBarAdditions)]) {
+    if ([visibleViewController conformsToProtocol:@protocol(JMSearchBarAdditions)]) {
         if (![[visibleViewController currentQuery] isEqualToString:query]) {
             [visibleViewController searchWithQuery:query];
         }
@@ -131,7 +131,7 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
 - (void)searchBarClearButtonClicked:(JMSearchBar *)searchBar
 {
     id visibleViewController = self.masterNavigationController.visibleViewController;
-    if ([visibleViewController conformsToProtocol:@protocol(JMHeaderBarAdditions)]) {
+    if ([visibleViewController conformsToProtocol:@protocol(JMSearchBarAdditions)]) {
         [visibleViewController didClearSearch];
     }
     
@@ -172,10 +172,8 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     if ([navigationController isEqual:self.detailNavigationController]) {
         [self showFullScreenButtonForViewController:viewController];
         [self showActionBarForViewController:viewController];
-    } else {
-        BOOL isSearchVisible = [viewController conformsToProtocol:@protocol(JMHeaderBarAdditions)] & [viewController respondsToSelector:@selector(searchWithQuery:)];
-        [self setSearchVisible:isSearchVisible];
     }
+    [self showNavigationItems];
 }
 
 #pragma mark - Private
@@ -188,11 +186,10 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
             actionBar.frame = self.actionBarPlaceHolder.bounds;
             [self.actionBarPlaceHolder addSubview:actionBar];
         }
-        
-        [UIView beginAnimations:nil context:nil];
-        self.detailView.frame = [self getDetailsViewFrame];
-        [UIView commitAnimations];
     }
+    [UIView beginAnimations:nil context:nil];
+    self.detailView.frame = [self getDetailsViewFrame];
+    [UIView commitAnimations];
 }
 
 - (void) showFullScreenButtonForViewController:(id)viewController
@@ -221,6 +218,26 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
     [UIView commitAnimations];
 }
 
+- (void) showNavigationItems
+{
+    [self.navigationItem setRightBarButtonItems:nil animated:YES];
+    BOOL isSearchVisible = [self.masterNavigationController.visibleViewController conformsToProtocol:@protocol(JMSearchBarAdditions)];
+    if (isSearchVisible) {
+        [self setSearchBarHidden:YES];
+    }
+    
+
+    UIViewController *visibleDetailsViewController = self.detailNavigationController.visibleViewController;
+    NSMutableArray *itemsArray = [visibleDetailsViewController.navigationItem.rightBarButtonItems mutableCopy];
+    if ([itemsArray count]) {
+        [itemsArray addObjectsFromArray:self.navigationItem.rightBarButtonItems];
+        self.navigationItem.rightBarButtonItems = itemsArray;
+    }
+    if (visibleDetailsViewController.title && [visibleDetailsViewController.title length]) {
+        self.navigationItem.title = visibleDetailsViewController.navigationItem.title;
+    }
+}
+
 - (CGRect) getDetailsViewFrame
 {
     CGRect detailsViewFrame = self.detailView.frame;
@@ -233,15 +250,6 @@ static NSString * const kJMDetailViewControllerSegue = @"DetailViewController";
         detailsViewFrame.size.height = self.view.bounds.size.height;
     }
     return detailsViewFrame;
-}
-
-- (void)setSearchVisible:(BOOL)visible
-{
-    if (visible) {
-        [self setSearchBarHidden:YES];
-    } else {
-        [self.navigationItem setRightBarButtonItem:nil animated:YES];
-    }
 }
 
 @end

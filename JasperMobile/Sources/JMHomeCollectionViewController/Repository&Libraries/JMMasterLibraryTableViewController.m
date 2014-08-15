@@ -224,7 +224,7 @@ objection_requires(@"resourceClient", @"constants")
     [self loadResourcesIntoDetailViewController];
 }
 
-#pragma mark - JMHeaderBarAdditions
+#pragma mark - JMSearchBarAdditions
 
 - (void)searchWithQuery:(NSString *)query
 {

@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "JMResourceClientHolder.h"
-#import "JMHeaderBarAdditions.h"
+#import "JMSearchBarAdditions.h"
 
 // TODO: make universal view controller (extends from base JMMasterRootTableViewController)
 @interface JMMasterLibraryTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate,
-        JMResourceClientHolder, JMHeaderBarAdditions>
+        JMResourceClientHolder, JMSearchBarAdditions>
 
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, weak) IBOutlet UITableView *tableView;

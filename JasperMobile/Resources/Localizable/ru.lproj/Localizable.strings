@@ -102,6 +102,10 @@
 "detail.servers.newserver" = "Новый сервер";
 "detail.servers.editserver" = "Редактировать сервер";
 
+"detail.report.options.title" = "Параметры Отчета";
+"detail.report.viewer.emptyreport.message" = "Отчет пустой";
+
+
 // Action bar buttons
 "action.button.refresh" = "Обновить";
 "action.button.share" = "Поделиться";
@@ -111,7 +115,8 @@
 "action.button.cancel" = "Отменить";
 "action.button.continue" = "Далее";
 "action.button.apply" = "Применить";
-
+"action.report.viewer.page" = "Страница";
+"action.report.viewer.pagecount" = "из %d";
 
 /* Error messages */
 

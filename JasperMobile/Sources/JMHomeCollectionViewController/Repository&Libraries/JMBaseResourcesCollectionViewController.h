@@ -10,7 +10,6 @@
 #import "JMRefreshable.h"
 #import "JMResourceClientHolder.h"
 #import "JMPagination.h"
-#import "JMActionBarProvider.h"
 #import "JMBaseResourcesViewController.h"
 
 @interface JMBaseResourcesCollectionViewController : JMBaseResourcesViewController <UICollectionViewDelegate, UICollectionViewDataSource>

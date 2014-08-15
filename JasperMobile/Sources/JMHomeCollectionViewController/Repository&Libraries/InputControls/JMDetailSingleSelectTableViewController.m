@@ -9,10 +9,8 @@
 #import "JMDetailSingleSelectTableViewController.h"
 #import "JMListValueTableViewCell.h"
 #import "JMFullScreenButtonProvider.h"
-#import "JMActionBarProvider.h"
 
-
-@interface JMDetailSingleSelectTableViewController() <JMFullScreenButtonProvider, JMActionBarProvider>
+@interface JMDetailSingleSelectTableViewController() <JMFullScreenButtonProvider>
 
 @property (nonatomic, assign) BOOL isSearching;
 @property (nonatomic, strong) NSArray *filteredListOfValues;
@@ -169,13 +167,6 @@
 - (BOOL)shouldDisplayFullScreenButton
 {
     return YES;
-}
-
-#pragma mark - JMActionBarProvider
-
-- (id)actionBar
-{
-    return nil;
 }
 
 @end

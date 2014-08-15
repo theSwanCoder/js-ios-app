@@ -365,6 +365,7 @@
                     <size key="freeformSize" width="768" height="1024"/>
                     <connections>
                         <outlet property="tableView" destination="Qmi-RR-ioM" id="DNa-8V-e2y"/>
+                        <outlet property="titleLabel" destination="8Pl-md-ure" id="Mi8-Bm-R1x"/>
                         <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="QIH-Uk-XKN"/>
                     </connections>
                 </viewController>

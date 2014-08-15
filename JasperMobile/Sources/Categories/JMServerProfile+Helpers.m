@@ -112,13 +112,11 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
 
 - (void)setServerProfileIsActive:(BOOL)serverProfileIsActive
 {
-    if (!self.serverProfileIsActive) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setURL:[self.objectID URIRepresentation] forKey:kJMDefaultsActiveServer];
-        [defaults synchronize];
-        
-        [JMUtils sendChangeServerProfileNotificationWithProfile:self withParams:nil];
-    }
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setURL:[self.objectID URIRepresentation] forKey:kJMDefaultsActiveServer];
+    [defaults synchronize];
+    
+    [JMUtils sendChangeServerProfileNotificationWithProfile:self withParams:nil];
 }
 #pragma mark - Private
 

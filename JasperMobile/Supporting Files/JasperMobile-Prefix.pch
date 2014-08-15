@@ -15,7 +15,6 @@
     #import "JMConstants.h"
     #import "JMUtils.h"
 
-    #import "UIViewController+JMMainNavigationItem.h"
     #import "JMLocalization.h"
 
 #endif

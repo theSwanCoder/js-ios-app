@@ -190,7 +190,7 @@ objection_requires(@"resourceClient", @"constants")
     return self.offset < self.totalCount;
 }
 
-#pragma mark - JMHeaderBarAdditions
+#pragma mark - JMSearchBarAdditions
 
 - (void)searchWithQuery:(NSString *)query
 {

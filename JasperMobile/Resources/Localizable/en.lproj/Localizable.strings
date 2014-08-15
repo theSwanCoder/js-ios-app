@@ -181,6 +181,9 @@
 "servers.activeserver.delete.errormessage" = "The active server cannot be deleted. Please make another aerver active before deleting this server.";
 "servers.activeserver.makeactive.errormessage" = "This server is already the active server.";
 
+"detail.report.options.title" = "Report Options";
+"detail.report.viewer.emptyreport.message" = "Report is empty";
+
 // Action bar buttons
 "action.button.refresh" = "Refresh";
 "action.button.share" = "Share";
@@ -191,6 +194,10 @@
 "action.button.continue" = "Continue";
 "action.button.newserver" = "New Server";
 "action.button.apply" = "Apply";
+
+"action.report.viewer.page" = "Page";
+"action.report.viewer.pagecount" = "of %d";
+
 // Tools
 "master.tools.type.refresh" = "Refresh";
 

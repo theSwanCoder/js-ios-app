@@ -29,7 +29,7 @@
 #import "JMRotationBase.h"
 #import "JMUtils.h"
 
-@interface JMReportViewerViewController() <UIGestureRecognizerDelegate>
+@interface JMReportViewerViewController()
 @property (nonatomic, assign) BOOL isRequestLoaded;
 @end
 

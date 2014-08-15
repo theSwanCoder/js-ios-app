@@ -104,11 +104,4 @@
     [self.tableView reloadData];
 }
 
-#pragma mark - JMActionBarProvider
-
-- (id)actionBar
-{
-    return [self.delegate actionBar];
-}
-
 @end

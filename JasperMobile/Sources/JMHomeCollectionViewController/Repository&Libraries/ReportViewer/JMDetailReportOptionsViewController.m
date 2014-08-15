@@ -9,13 +9,14 @@
 #import "JMDetailReportOptionsViewController.h"
 #import "JMInputControlFactory.h"
 #import "JMRequestDelegate.h"
-#import "JMDetailReportOptionsActionBarView.h"
 #import "JMDetailSingleSelectTableViewController.h"
 #import "UIViewController+FetchInputControls.h"
 #import "JMFullScreenButtonProvider.h"
 #import <Objection-iOS/Objection.h>
 
-@interface JMDetailReportOptionsViewController () <JMBaseActionBarViewDelegate, JMFullScreenButtonProvider>
+@interface JMDetailReportOptionsViewController () <JMFullScreenButtonProvider, UITableViewDelegate, UITableViewDataSource>
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (nonatomic, strong) JMInputControlFactory *inputControlFactory;
 @end
 
@@ -37,41 +38,6 @@ objection_requires(@"resourceClient", @"reportClient")
     return _inputControlFactory;
 }
 
-#pragma mark - JMDetailReportOptionsViewController
-
-- (void)cancel
-{
-    if (!self.delegate) {
-        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        [center postNotificationName:kJMShowRootMaster object:nil];
-        [center postNotificationName:kJMShowResourcesListInDetail object:nil];
-    } else {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-}
-
-- (void)runReport
-{
-    BOOL allDataIsValid = YES;
-    NSMutableArray *inputControlDescriptors = [NSMutableArray array];
-    for (JMInputControlCell *cell in self.inputControls) {
-        if (cell.isValid) {
-            [inputControlDescriptors addObject:cell.inputControlDescriptor];
-        } else {
-            allDataIsValid = NO;
-        }
-    }
-
-    if (allDataIsValid) {
-        if (!self.delegate) {
-            [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:inputControlDescriptors];
-        } else {
-            [self.delegate setInputControls:inputControlDescriptors];
-            [self.delegate refresh];
-        }
-    }
-}
-
 #pragma mark - Initialization
 
 - (void)awakeFromNib
@@ -86,6 +52,8 @@ objection_requires(@"resourceClient", @"reportClient")
 {
     [super viewDidLoad];
 
+    self.title = JMCustomLocalizedString(@"detail.report.options.title", nil);
+    self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.title", nil);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
@@ -114,6 +82,42 @@ objection_requires(@"resourceClient", @"reportClient")
         }
 
         [self.inputControls addObject:cell];
+    }
+    UIBarButtonItem *runReportButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(runReport)];
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cancel_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:runReportButton, cancelButton, nil];
+}
+
+- (void)cancel
+{
+    if (!self.delegate) {
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center postNotificationName:kJMShowRootMaster object:nil];
+        [center postNotificationName:kJMShowResourcesListInDetail object:nil];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+- (void)runReport
+{
+    BOOL allDataIsValid = YES;
+    NSMutableArray *inputControlDescriptors = [NSMutableArray array];
+    for (JMInputControlCell *cell in self.inputControls) {
+        if (cell.isValid) {
+            [inputControlDescriptors addObject:cell.inputControlDescriptor];
+        } else {
+            allDataIsValid = NO;
+        }
+    }
+    
+    if (allDataIsValid) {
+        if (!self.delegate) {
+            [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:inputControlDescriptors];
+        } else {
+            [self.delegate setInputControls:inputControlDescriptors];
+            [self.delegate refresh];
+        }
     }
 }
 
@@ -150,33 +154,6 @@ objection_requires(@"resourceClient", @"reportClient")
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-}
-
-#pragma mark - JMActionBarProvider
-
-- (id)actionBar
-{
-    JMDetailReportOptionsActionBarView *actionBar = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass
-                                                     ([JMDetailReportOptionsActionBarView class])
-                                                                                  owner:self
-                                                                                options:nil].firstObject;
-    actionBar.delegate = self;
-    return actionBar;
-}
-
-#pragma mark - JMBaseActionBarViewDelegate
-- (void)actionView:(JMBaseActionBarView *)actionView didSelectAction:(JMBaseActionBarViewAction)action{
-    switch (action) {
-        case JMBaseActionBarViewAction_Cancel:
-            [self cancel];
-            break;
-        case JMBaseActionBarViewAction_Run:
-            [self runReport];
-            break;
-        default:
-            // Unsupported actions
-            break;
-    }
 }
 
 #pragma mark - JMFullScreenButtonProvider
