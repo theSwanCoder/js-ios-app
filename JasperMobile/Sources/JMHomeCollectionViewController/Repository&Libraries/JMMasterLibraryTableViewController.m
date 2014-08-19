@@ -14,8 +14,10 @@
 #import "JMMasterResourcesTableViewController.h"
 #import <Objection-iOS/Objection.h>
 
-#define kJMResourcesSection 0
-#define kJMSortSection 1
+typedef NS_ENUM(NSInteger, JMTableViewSection) {
+    JMTableViewSection_ResourceType = 0,
+    JMTableViewSection_SortingType
+};
 
 typedef NS_ENUM(NSInteger, JMResourcesType) {
     JMResourceTypeAll = 0,
@@ -30,11 +32,12 @@ typedef NS_ENUM(NSInteger, JMSortBy) {
 };
 
 static NSString * const kJMShowResourcesSegue = @"ShowResources";
+static NSString * const kJMSettingTypeKey = @"settingsType";
 static NSString * const kJMTitleKey = @"title";
 static NSString * const kJMRowsKey = @"rows";
 
 @interface JMMasterLibraryTableViewController ()
-@property (nonatomic, strong) NSDictionary *cellsAndSectionsProperties;
+@property (nonatomic, strong) NSArray *cellsAndSectionsProperties;
 @property (nonatomic, assign) JMResourcesType resourcesTypeEnum;
 @property (nonatomic, assign) JMSortBy sortByEnum;
 @property (nonatomic, strong) NSString *searchQuery;
@@ -70,25 +73,28 @@ objection_requires(@"resourceClient", @"constants")
     }
 }
 
-- (NSDictionary *)cellsAndSectionsProperties
+- (NSArray *)cellsAndSectionsProperties
 {
     if (!_cellsAndSectionsProperties) {
-        _cellsAndSectionsProperties = @{
-                @kJMResourcesSection : @{
-                        kJMTitleKey : @"resources",
-                        // Temp solution
-                        // TODO: refactor / re-implement
-                        kJMRowsKey : @[
-                                @"all", @"reportUnit", @"dashboard"
-                        ]
-                },
-                @kJMSortSection : @{
-                        kJMTitleKey : @"sortby",
-                        kJMRowsKey : @[
-                                @"name", @"date"
-                        ]
-                }
-        };
+        _cellsAndSectionsProperties = @[
+//                                        TODO: here need uncomment for filtering resource by types: All, Reports, Dashboards.
+//                                        @{
+//                                            kJMSettingTypeKey : @(JMTableViewSection_ResourceType),
+//                                            kJMTitleKey : @"resources",
+//                                            // Temp solution
+//                                            // TODO: refactor / re-implement
+//                                            kJMRowsKey : @[
+//                                                    @"all", @"reportUnit", @"dashboard"
+//                                                    ]
+//                                            },
+                                        @{
+                                            kJMSettingTypeKey : @(JMTableViewSection_SortingType),
+                                            kJMTitleKey : @"sortby",
+                                            kJMRowsKey : @[
+                                                    @"name", @"date"
+                                                    ]
+                                            }
+                                        ];
     }
 
     return _cellsAndSectionsProperties;
@@ -111,11 +117,11 @@ objection_requires(@"resourceClient", @"constants")
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
-    for (NSInteger i = [self.cellsAndSectionsProperties count] - 1; i >= 0; i--) {
+    for (NSInteger i = 0; i < [self.cellsAndSectionsProperties count]; i++) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:i];
-        [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
+        [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
-
+    self.resourcesTypeEnum = JMResourceTypeReport;
     [self loadResourcesIntoDetailViewController];
 }
 
@@ -172,7 +178,7 @@ objection_requires(@"resourceClient", @"constants")
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSDictionary *sectionProperties = [self.cellsAndSectionsProperties objectForKey:[NSNumber numberWithInt:section]];
+    NSDictionary *sectionProperties = [self.cellsAndSectionsProperties objectAtIndex:section];
     return [[sectionProperties objectForKey:kJMRowsKey] count];
 }
 
@@ -196,13 +202,12 @@ objection_requires(@"resourceClient", @"constants")
 {
     JMLibraryTableViewCell *cell = (JMLibraryTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
     cell.selected = YES;
-
-    switch (indexPath.section) {
-        case kJMResourcesSection:
+    JMTableViewSection sectionType = [[[self.cellsAndSectionsProperties objectAtIndex:indexPath.section] objectForKey:kJMSettingTypeKey] integerValue];
+    switch (sectionType) {
+        case JMTableViewSection_ResourceType:
             self.resourcesTypeEnum = (JMResourcesType) indexPath.row;
             break;
-
-        case kJMSortSection:
+        case JMTableViewSection_SortingType:
             self.sortByEnum = (JMSortBy) indexPath.row;
             break;
     }
@@ -264,7 +269,7 @@ objection_requires(@"resourceClient", @"constants")
 
 - (NSString *)localizedRowTitle:(NSInteger)row forSection:(NSInteger)section
 {
-    NSDictionary *properties = [self.cellsAndSectionsProperties objectForKey:[NSNumber numberWithInteger:section]];
+    NSDictionary *properties = [self.cellsAndSectionsProperties objectAtIndex:section];
     NSString *sectionTitle = [properties objectForKey:kJMTitleKey];
     NSString *rowTitle = [[properties objectForKey:kJMRowsKey] objectAtIndex:row];
     NSString *localizationKey = [NSString stringWithFormat:@"master.%@.type.%@", sectionTitle, rowTitle];
@@ -273,7 +278,7 @@ objection_requires(@"resourceClient", @"constants")
 
 - (NSString *)localizedSectionTitle:(NSInteger)section
 {
-    NSDictionary *properties = [self.cellsAndSectionsProperties objectForKey:[NSNumber numberWithInteger:section]];
+    NSDictionary *properties = [self.cellsAndSectionsProperties objectAtIndex:section];
     NSString *localizationKey = [NSString stringWithFormat:@"master.%@.title", [properties objectForKey:kJMTitleKey]];
     return JMCustomLocalizedString(localizationKey, nil);
 }

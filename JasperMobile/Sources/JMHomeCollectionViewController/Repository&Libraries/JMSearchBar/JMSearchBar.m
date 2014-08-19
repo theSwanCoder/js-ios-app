@@ -61,6 +61,7 @@
         [self.cancelButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
         [self.cancelButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        [self.cancelButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
         [self addSubview:self.cancelButton];
         [self addSubview:self.textField];
     }
