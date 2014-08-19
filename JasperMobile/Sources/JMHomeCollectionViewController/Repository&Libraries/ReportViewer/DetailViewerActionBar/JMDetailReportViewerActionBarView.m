@@ -105,8 +105,10 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     if ([textField.text integerValue]) {
         self.currentPage = [textField.text integerValue];
+        [self.delegate actionView:self didSelectAction:JMBaseActionBarViewAction_PageChanged];
+    } else {
+        self.currentPageField.text = [NSString stringWithFormat:@"%d", self.currentPage];
     }
-    [self.delegate actionView:self didSelectAction:JMBaseActionBarViewAction_PageChanged];
 }
 
 @end

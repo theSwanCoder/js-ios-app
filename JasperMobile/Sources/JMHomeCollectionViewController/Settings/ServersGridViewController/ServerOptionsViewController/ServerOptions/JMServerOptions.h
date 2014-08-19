@@ -17,7 +17,7 @@
 
 - (id)initWithServerProfile:(JMServerProfile *)serverProfile;
 
-- (void) saveChanges;
+- (BOOL) saveChanges;
 - (void) discardChanges;
 - (void) deleteServerProfile;
 - (void) setServerProfileActive;

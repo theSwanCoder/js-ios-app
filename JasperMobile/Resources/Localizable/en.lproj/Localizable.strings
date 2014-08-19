@@ -47,6 +47,7 @@
 
 "servers.password.label" = "Password";
 "servers.password.tip" = "my password";
+"servers.password.errmsg.empty" = "Please specify a valid password";
 
 "servers.profile.exists" = "Server profile with this url, username and organization_id already exists. Please modify server profile";
 "servers.profile.details.title" = "Server Profile Details";
@@ -178,7 +179,7 @@
 
 "detail.servers.newserver" = "New Server";
 "detail.servers.editserver" = "Edit Server";
-"servers.activeserver.delete.errormessage" = "The active server cannot be deleted. Please make another aerver active before deleting this server.";
+"servers.activeserver.delete.errormessage" = "The active server cannot be deleted. Please make another server active before deleting this server.";
 "servers.activeserver.makeactive.errormessage" = "This server is already the active server.";
 
 "detail.report.options.title" = "Report Options";

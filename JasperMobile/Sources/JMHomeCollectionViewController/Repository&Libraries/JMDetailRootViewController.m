@@ -142,6 +142,7 @@ objection_requires(@"resourceClient", @"constants")
 
         [weakSelf.activeRepresentationViewController refresh];
     } errorBlock:^(JSOperationResult *result) {
+        weakSelf.activityIndicatorView.hidden = YES;
         isLoading = NO;
         // TODO: add an error handler
     }];

@@ -10,4 +10,10 @@
 
 @implementation JMServerOption
 
+- (void)setOptionValue:(id)optionValue
+{
+    _optionValue = optionValue;
+    self.errorString = nil;
+}
+
 @end

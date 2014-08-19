@@ -8,7 +8,7 @@
 
 #import "JMTextServerOptionCell.h"
 
-@interface JMTextServerOptionCell ()
+@interface JMTextServerOptionCell () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 
 @end
@@ -30,6 +30,13 @@
 }
 
 #pragma mark - UITextFieldDelegate
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    self.serverOption.errorString = nil;
+    [self updateDisplayingOfErrorMessage];
+    return YES;
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {

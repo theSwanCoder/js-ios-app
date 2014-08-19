@@ -38,13 +38,58 @@ objection_requires(@"managedObjectContext")
     return self;
 }
 
-- (void)saveChanges
+- (BOOL)saveChanges
 {
-    self.serverProfile.alias        = [[self.optionsArray objectAtIndex:0] optionValue];
-    self.serverProfile.serverUrl    = [[self.optionsArray objectAtIndex:1] optionValue];
+    JMServerOption *serverOption = [self.optionsArray objectAtIndex:0];
+    if (serverOption.optionValue && [serverOption.optionValue length]) {
+        // Check if alias is unique
+        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K == %@", @"alias", serverOption.optionValue]];
+        NSArray *servers = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+
+        if (servers && [servers count] && ![[servers lastObject] isEqual:self.serverProfile]) {
+            serverOption.errorString = JMCustomLocalizedString(@"servers.name.errmsg.exists", nil);
+        } else {
+            self.serverProfile.alias = serverOption.optionValue;
+        }
+    } else {
+        serverOption.errorString = JMCustomLocalizedString(@"servers.name.errmsg.empty", nil);
+    }
+    
+    serverOption = [self.optionsArray objectAtIndex:1];
+    if (serverOption.optionValue && [serverOption.optionValue length]) {
+        NSString *urlRegEx = @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
+        NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
+        if ([urlTest evaluateWithObject:serverOption.optionValue]) {
+            self.serverProfile.serverUrl = serverOption.optionValue;
+        } else {
+            serverOption.errorString = JMCustomLocalizedString(@"servers.url.errmsg", nil);
+        }
+    } else {
+        serverOption.errorString = JMCustomLocalizedString(@"servers.url.errmsg", nil);
+    }
+    
+    serverOption = [self.optionsArray objectAtIndex:3];
+    if (serverOption.optionValue && [serverOption.optionValue length]) {
+        self.serverProfile.username = serverOption.optionValue;
+    } else {
+        serverOption.errorString = JMCustomLocalizedString(@"servers.username.errmsg.empty", nil);
+    }
+    
+    serverOption = [self.optionsArray objectAtIndex:4];
+    if (serverOption.optionValue && [serverOption.optionValue length]) {
+        self.serverProfile.password = serverOption.optionValue;
+    } else {
+        serverOption.errorString = JMCustomLocalizedString(@"servers.password.errmsg.empty", nil);
+    }
+    
+    for (JMServerOption *option in self.optionsArray) {
+        if (option.errorString) {
+            return NO;
+        }
+    }
+
     self.serverProfile.organization = [[self.optionsArray objectAtIndex:2] optionValue];
-    self.serverProfile.username     = [[self.optionsArray objectAtIndex:3] optionValue];
-    self.serverProfile.password     = [[self.optionsArray objectAtIndex:4] optionValue];
     self.serverProfile.askPassword  = [[self.optionsArray objectAtIndex:5] optionValue];
 
     if ([self.managedObjectContext hasChanges]) {
@@ -55,6 +100,8 @@ objection_requires(@"managedObjectContext")
     if (self.serverProfile.serverProfileIsActive) {
         [self setServerProfileActive];
     }
+
+    return YES;
 }
 
 - (void)discardChanges
@@ -65,8 +112,7 @@ objection_requires(@"managedObjectContext")
 - (void) deleteServerProfile
 {
     [self.managedObjectContext deleteObject:self.serverProfile];
-    NSError *error = nil;
-    [self.managedObjectContext save:&error];
+    [self.managedObjectContext save:nil];
 }
 
 - (void) setServerProfileActive

@@ -11,6 +11,7 @@
 @interface JMServerOption : NSObject
 
 @property (nonatomic, strong) NSString *titleString;
+@property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) id        optionValue;
 @property (nonatomic, strong) NSString *cellIdentifier;
 

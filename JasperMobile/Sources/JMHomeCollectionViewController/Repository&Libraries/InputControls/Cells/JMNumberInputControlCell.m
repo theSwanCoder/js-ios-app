@@ -29,4 +29,14 @@
 
 @implementation JMNumberInputControlCell
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"1234567890"] invertedSet];
+    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+    
+    if ([string isEqualToString:filtered]) {
+        return [super textField:textField shouldChangeCharactersInRange:range replacementString:string];
+    }
+    return NO;
+}
+
 @end

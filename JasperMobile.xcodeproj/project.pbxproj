@@ -226,7 +226,6 @@
 		08FF130C1992982F0082265D /* JMServerOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF13021992982F0082265D /* JMServerOption.m */; };
 		08FF130D1992982F0082265D /* JMServerOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF13041992982F0082265D /* JMServerOptions.m */; };
 		08FF131619929B080082265D /* JMBooleanServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF131119929B080082265D /* JMBooleanServerOptionCell.m */; };
-		08FF131719929B080082265D /* JMSecureTextServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF131319929B080082265D /* JMSecureTextServerOptionCell.m */; };
 		08FF131819929B080082265D /* JMTextServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF131519929B080082265D /* JMTextServerOptionCell.m */; };
 		37455256B3656246AF66CA29 /* JMRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455F8C7426E010A3709C6E /* JMRepositoryTableViewController.m */; };
 		374552EC43D4F1F21EEBD8CF /* JMSavedReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455108E52B31C8C8F3EEA0 /* JMSavedReportViewerViewController.m */; };
@@ -629,8 +628,6 @@
 		08FF13041992982F0082265D /* JMServerOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptions.m; sourceTree = "<group>"; };
 		08FF131019929B080082265D /* JMBooleanServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBooleanServerOptionCell.h; sourceTree = "<group>"; };
 		08FF131119929B080082265D /* JMBooleanServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBooleanServerOptionCell.m; sourceTree = "<group>"; };
-		08FF131219929B080082265D /* JMSecureTextServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSecureTextServerOptionCell.h; sourceTree = "<group>"; };
-		08FF131319929B080082265D /* JMSecureTextServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSecureTextServerOptionCell.m; sourceTree = "<group>"; };
 		08FF131419929B080082265D /* JMTextServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextServerOptionCell.h; sourceTree = "<group>"; };
 		08FF131519929B080082265D /* JMTextServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextServerOptionCell.m; sourceTree = "<group>"; };
 		37455108E52B31C8C8F3EEA0 /* JMSavedReportViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSavedReportViewerViewController.m; path = Classes/JMSavedReportViewerViewController.m; sourceTree = "<group>"; };
@@ -1294,14 +1291,14 @@
 		08E87F80199B8FFA007C8BA4 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				08E87F87199B8FFA007C8BA4 /* JMInputControlCell.h */,
+				08E87F88199B8FFA007C8BA4 /* JMInputControlCell.m */,
 				08E87F81199B8FFA007C8BA4 /* JMBooleanInputControlCell.h */,
 				08E87F82199B8FFA007C8BA4 /* JMBooleanInputControlCell.m */,
 				08E87F83199B8FFA007C8BA4 /* JMDateInputControlCell.h */,
 				08E87F84199B8FFA007C8BA4 /* JMDateInputControlCell.m */,
 				08E87F85199B8FFA007C8BA4 /* JMDateTimeInputControlCell.h */,
 				08E87F86199B8FFA007C8BA4 /* JMDateTimeInputControlCell.m */,
-				08E87F87199B8FFA007C8BA4 /* JMInputControlCell.h */,
-				08E87F88199B8FFA007C8BA4 /* JMInputControlCell.m */,
 				08E87F89199B8FFA007C8BA4 /* JMMultiSelectInputControlCell.h */,
 				08E87F8A199B8FFA007C8BA4 /* JMMultiSelectInputControlCell.m */,
 				08E87F8B199B8FFA007C8BA4 /* JMNumberInputControlCell.h */,
@@ -1409,8 +1406,6 @@
 				08FF12FC1992982F0082265D /* JMServerOptionCell.m */,
 				08FF131019929B080082265D /* JMBooleanServerOptionCell.h */,
 				08FF131119929B080082265D /* JMBooleanServerOptionCell.m */,
-				08FF131219929B080082265D /* JMSecureTextServerOptionCell.h */,
-				08FF131319929B080082265D /* JMSecureTextServerOptionCell.m */,
 				08FF131419929B080082265D /* JMTextServerOptionCell.h */,
 				08FF131519929B080082265D /* JMTextServerOptionCell.m */,
 				088893751994DFF300916A6F /* JMMakeActiveServerOptionCell.h */,
@@ -2055,7 +2050,6 @@
 				08FF130C1992982F0082265D /* JMServerOption.m in Sources */,
 				08025CE11995231E00A6063B /* JMDetailRootViewController.m in Sources */,
 				08FF130D1992982F0082265D /* JMServerOptions.m in Sources */,
-				08FF131719929B080082265D /* JMSecureTextServerOptionCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

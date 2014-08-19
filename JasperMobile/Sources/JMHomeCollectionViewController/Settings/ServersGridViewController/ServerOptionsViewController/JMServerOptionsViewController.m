@@ -33,7 +33,7 @@
     [super viewDidLoad];
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(saveButtonTapped:)];
     
-    if (self.serverProfile) {
+    if (self.serverProfile && !self.serverProfile.serverProfileIsActive) {
         self.title = self.serverProfile.alias;
         UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(deleteButtonTapped:)];
         self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:saveButton, deleteButton, nil];
@@ -71,25 +71,24 @@
 
 #pragma mark - Actions
 
-- (IBAction)saveButtonTapped:(id)sender
+- (void)saveButtonTapped:(id)sender
 {
     [self.view endEditing:YES];
-    [self.serverOptions saveChanges];
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self.serverOptions saveChanges]) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [self.optionsTableView reloadData];
+    }
 }
 
-- (IBAction)deleteButtonTapped:(id)sender
+- (void)deleteButtonTapped:(id)sender
 {
     [self.view endEditing:YES];
-    if (self.serverProfile.serverProfileIsActive) {
-        [ALToastView toastInView:self.view withText:JMCustomLocalizedString(@"servers.activeserver.delete.errormessage", nil)];
-    } else {
-        [[UIAlertView localizedAlertWithTitle:nil
-                                      message:@"servers.profile.delete.message"
-                                     delegate:self
-                            cancelButtonTitle:@"dialog.button.cancel"
-                            otherButtonTitles:@"dialog.button.delete", nil] show];
-    }
+    [[UIAlertView localizedAlertWithTitle:nil
+                                  message:@"servers.profile.delete.message"
+                                 delegate:self
+                        cancelButtonTitle:@"dialog.button.cancel"
+                        otherButtonTitles:@"dialog.button.delete", nil] show];
 }
 
 #pragma mark - JMServerOptionCellDelegate

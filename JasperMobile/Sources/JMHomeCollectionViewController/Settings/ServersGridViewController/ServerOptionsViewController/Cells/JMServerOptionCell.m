@@ -14,5 +14,19 @@
 {
     _serverOption = serverOption;
     self.titleLabel.text = serverOption.titleString;
+    [self updateDisplayingOfErrorMessage];
 }
+
+- (void) updateDisplayingOfErrorMessage
+{
+    self.errorLabel.text = self.serverOption.errorString;
+    [UIView beginAnimations:nil context:nil];
+    self.errorLabel.alpha = (self.serverOption.errorString.length == 0) ? 0 : 1;
+    CGRect titleLabelFrame = self.titleLabel.frame;
+    titleLabelFrame.origin.y = (self.serverOption.errorString.length == 0) ? 14 :6;
+    self.titleLabel.frame = titleLabelFrame;
+    [UIView commitAnimations];
+}
+
+
 @end
