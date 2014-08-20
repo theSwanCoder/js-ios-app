@@ -21,7 +21,7 @@
  */
 
 //
-//  JMBaseRepositoryTableViewController+fetchInputControls.m
+//  UIViewController+fetchInputControls.m
 //  Jaspersoft Corporation
 //
 

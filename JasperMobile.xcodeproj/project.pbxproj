@@ -7,17 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		08025CD91995231E00A6063B /* JMBaseResourcesCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CBD1995231E00A6063B /* JMBaseResourcesCollectionViewController.m */; };
-		08025CDA1995231E00A6063B /* JMBaseResourcesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CBF1995231E00A6063B /* JMBaseResourcesViewController.m */; };
 		08025CE11995231E00A6063B /* JMDetailRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CCA1995231E00A6063B /* JMDetailRootViewController.m */; };
-		08025CE21995231E00A6063B /* JMDetailSingleSelectTableViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08025CCB1995231E00A6063B /* JMDetailSingleSelectTableViewController~ipad.xib */; };
-		08025CE31995231E00A6063B /* JMGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CCD1995231E00A6063B /* JMGridViewController.m */; };
-		08025CE41995231E00A6063B /* JMHorizontalListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CCF1995231E00A6063B /* JMHorizontalListViewController.m */; };
 		08025CE51995231E00A6063B /* JMMasterLibraryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CD11995231E00A6063B /* JMMasterLibraryTableViewController.m */; };
 		08025CE61995231E00A6063B /* JMMasterRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CD31995231E00A6063B /* JMMasterRepositoryTableViewController.m */; };
-		08025CE71995231E00A6063B /* JMMasterResourcesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CD51995231E00A6063B /* JMMasterResourcesTableViewController.m */; };
-		08025CE81995231E00A6063B /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08025CD61995231E00A6063B /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib */; };
-		08025CE91995231E00A6063B /* JMVerticalListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CD81995231E00A6063B /* JMVerticalListViewController.m */; };
 		08025CF61995237E00A6063B /* JMBaseResourceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CEC1995237E00A6063B /* JMBaseResourceTableViewCell.m */; };
 		08025CF71995237E00A6063B /* JMLibraryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CEE1995237E00A6063B /* JMLibraryTableViewCell.m */; };
 		08025CF81995237E00A6063B /* JMListValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08025CF01995237E00A6063B /* JMListValueTableViewCell.m */; };
@@ -58,6 +50,15 @@
 		088893771994DFF300916A6F /* JMMakeActiveServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 088893761994DFF300916A6F /* JMMakeActiveServerOptionCell.m */; };
 		0888937D199506E900916A6F /* back_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 0888937B199506E900916A6F /* back_item.png */; };
 		0888937E199506E900916A6F /* back_item@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0888937C199506E900916A6F /* back_item@2x.png */; };
+		08C816C819A4B14800371604 /* JMDetailSingleSelectTableViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08C816C719A4B14800371604 /* JMDetailSingleSelectTableViewController~ipad.xib */; };
+		08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */; };
+		08C816DC19A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C816D319A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView.m */; };
+		08C816DD19A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08C816D419A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib */; };
+		08C816DE19A4C67300371604 /* JMGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C816D719A4C67300371604 /* JMGridViewController.m */; };
+		08C816DF19A4C67300371604 /* JMHorizontalListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C816D919A4C67300371604 /* JMHorizontalListViewController.m */; };
+		08C816E019A4C67300371604 /* JMVerticalListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C816DB19A4C67300371604 /* JMVerticalListViewController.m */; };
+		08C816E519A4C72000371604 /* JMBaseResourcesCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C816E219A4C72000371604 /* JMBaseResourcesCollectionViewController.m */; };
+		08C816E619A4C72000371604 /* JMBaseResourcesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C816E419A4C72000371604 /* JMBaseResourcesViewController.m */; };
 		08D6921F19929DB300C87A33 /* JMTextSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D6921E19929DB300C87A33 /* JMTextSettingsTableViewCell.m */; };
 		08E62C7119922A750081CA83 /* JMCancelRequestPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08E62C6E19922A750081CA83 /* JMCancelRequestPopup.xib */; };
 		08E62C7219922A750081CA83 /* JMMenuSectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08E62C6F19922A750081CA83 /* JMMenuSectionView.xib */; };
@@ -161,7 +162,6 @@
 		08E62D6A19922BA40081CA83 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E62CF619922BA40081CA83 /* iTunesArtwork.png */; };
 		08E62D6B19922BA40081CA83 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08E62CF819922BA40081CA83 /* Localizable.strings */; };
 		08E62D6C19922BA40081CA83 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 08E62D0119922BA40081CA83 /* Settings.bundle */; };
-		08E62D6D19922BA40081CA83 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08E62D0319922BA40081CA83 /* MainStoryboard_iPad.storyboard */; };
 		08E62D6E19922BA40081CA83 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08E62D0419922BA40081CA83 /* MainStoryboard_iPhone.storyboard */; };
 		08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 08E62D7019922F5A0081CA83 /* JasperMobile.xcdatamodeld */; };
 		08E86397199248FC007CF257 /* navBarBackgroundImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E86396199248FC007CF257 /* navBarBackgroundImage.png */; };
@@ -267,7 +267,6 @@
 		F58FF2F51760A0B50021CC8B /* UIViewController+MJPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F58FF2F31760A0B50021CC8B /* UIViewController+MJPopupViewController.m */; };
 		F58FF2F91760A1090021CC8B /* JMCancelRequestPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = F58FF2F71760A1090021CC8B /* JMCancelRequestPopup.m */; };
 		F5C737631886DE9E00203175 /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C737611886DE9E00203175 /* ALToastView.m */; };
-		F5C78CF81952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C78CF71952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.m */; };
 		F5D6373117909D3C005BA5CD /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */; };
 		F5D6373217909D8F005BA5CD /* libjaspersoft-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D6372817909B1D005BA5CD /* libjaspersoft-sdk.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		F5D97FAA179587CF0059C761 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97FA9179587CF0059C761 /* SSKeychain.m */; };
@@ -315,26 +314,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		08025CBC1995231E00A6063B /* JMBaseResourcesCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseResourcesCollectionViewController.h; sourceTree = "<group>"; };
-		08025CBD1995231E00A6063B /* JMBaseResourcesCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourcesCollectionViewController.m; sourceTree = "<group>"; };
-		08025CBE1995231E00A6063B /* JMBaseResourcesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseResourcesViewController.h; sourceTree = "<group>"; };
-		08025CBF1995231E00A6063B /* JMBaseResourcesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourcesViewController.m; sourceTree = "<group>"; };
 		08025CC91995231E00A6063B /* JMDetailRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDetailRootViewController.h; sourceTree = "<group>"; };
 		08025CCA1995231E00A6063B /* JMDetailRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDetailRootViewController.m; sourceTree = "<group>"; };
-		08025CCB1995231E00A6063B /* JMDetailSingleSelectTableViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMDetailSingleSelectTableViewController~ipad.xib"; sourceTree = "<group>"; };
-		08025CCC1995231E00A6063B /* JMGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMGridViewController.h; sourceTree = "<group>"; };
-		08025CCD1995231E00A6063B /* JMGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMGridViewController.m; sourceTree = "<group>"; };
-		08025CCE1995231E00A6063B /* JMHorizontalListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMHorizontalListViewController.h; sourceTree = "<group>"; };
-		08025CCF1995231E00A6063B /* JMHorizontalListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMHorizontalListViewController.m; sourceTree = "<group>"; };
 		08025CD01995231E00A6063B /* JMMasterLibraryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterLibraryTableViewController.h; sourceTree = "<group>"; };
 		08025CD11995231E00A6063B /* JMMasterLibraryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMasterLibraryTableViewController.m; sourceTree = "<group>"; };
 		08025CD21995231E00A6063B /* JMMasterRepositoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterRepositoryTableViewController.h; sourceTree = "<group>"; };
 		08025CD31995231E00A6063B /* JMMasterRepositoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMasterRepositoryTableViewController.m; sourceTree = "<group>"; };
-		08025CD41995231E00A6063B /* JMMasterResourcesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterResourcesTableViewController.h; sourceTree = "<group>"; };
-		08025CD51995231E00A6063B /* JMMasterResourcesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMasterResourcesTableViewController.m; sourceTree = "<group>"; };
-		08025CD61995231E00A6063B /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMResourcesRepresentationSwitcherActionBarView~ipad.xib"; sourceTree = "<group>"; };
-		08025CD71995231E00A6063B /* JMVerticalListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVerticalListViewController.h; sourceTree = "<group>"; };
-		08025CD81995231E00A6063B /* JMVerticalListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVerticalListViewController.m; sourceTree = "<group>"; };
 		08025CEB1995237E00A6063B /* JMBaseResourceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseResourceTableViewCell.h; sourceTree = "<group>"; };
 		08025CEC1995237E00A6063B /* JMBaseResourceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourceTableViewCell.m; sourceTree = "<group>"; };
 		08025CED1995237E00A6063B /* JMLibraryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLibraryTableViewCell.h; sourceTree = "<group>"; };
@@ -386,6 +371,21 @@
 		088893761994DFF300916A6F /* JMMakeActiveServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMakeActiveServerOptionCell.m; sourceTree = "<group>"; };
 		0888937B199506E900916A6F /* back_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back_item.png; sourceTree = "<group>"; };
 		0888937C199506E900916A6F /* back_item@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_item@2x.png"; sourceTree = "<group>"; };
+		08C816C719A4B14800371604 /* JMDetailSingleSelectTableViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMDetailSingleSelectTableViewController~ipad.xib"; sourceTree = "<group>"; };
+		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		08C816D219A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourcesRepresentationSwitcherActionBarView.h; sourceTree = "<group>"; };
+		08C816D319A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesRepresentationSwitcherActionBarView.m; sourceTree = "<group>"; };
+		08C816D419A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMResourcesRepresentationSwitcherActionBarView~ipad.xib"; sourceTree = "<group>"; };
+		08C816D619A4C67300371604 /* JMGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMGridViewController.h; sourceTree = "<group>"; };
+		08C816D719A4C67300371604 /* JMGridViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMGridViewController.m; sourceTree = "<group>"; };
+		08C816D819A4C67300371604 /* JMHorizontalListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMHorizontalListViewController.h; sourceTree = "<group>"; };
+		08C816D919A4C67300371604 /* JMHorizontalListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMHorizontalListViewController.m; sourceTree = "<group>"; };
+		08C816DA19A4C67300371604 /* JMVerticalListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVerticalListViewController.h; sourceTree = "<group>"; };
+		08C816DB19A4C67300371604 /* JMVerticalListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVerticalListViewController.m; sourceTree = "<group>"; };
+		08C816E119A4C72000371604 /* JMBaseResourcesCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseResourcesCollectionViewController.h; sourceTree = "<group>"; };
+		08C816E219A4C72000371604 /* JMBaseResourcesCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourcesCollectionViewController.m; sourceTree = "<group>"; };
+		08C816E319A4C72000371604 /* JMBaseResourcesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseResourcesViewController.h; sourceTree = "<group>"; };
+		08C816E419A4C72000371604 /* JMBaseResourcesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourcesViewController.m; sourceTree = "<group>"; };
 		08D6921D19929DB300C87A33 /* JMTextSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextSettingsTableViewCell.h; sourceTree = "<group>"; };
 		08D6921E19929DB300C87A33 /* JMTextSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextSettingsTableViewCell.m; sourceTree = "<group>"; };
 		08E4D76D1998DDCC003D78AE /* JMActionBarProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMActionBarProvider.h; sourceTree = "<group>"; };
@@ -501,7 +501,6 @@
 		08E62CFF19922BA40081CA83 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		08E62D0019922BA40081CA83 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/Localizable.strings; sourceTree = "<group>"; };
 		08E62D0119922BA40081CA83 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		08E62D0319922BA40081CA83 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		08E62D0419922BA40081CA83 /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		08E62D7119922F5A0081CA83 /* JasperMobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile.xcdatamodel; sourceTree = "<group>"; };
 		08E86396199248FC007CF257 /* navBarBackgroundImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navBarBackgroundImage.png; sourceTree = "<group>"; };
@@ -697,8 +696,6 @@
 		F58FF2F71760A1090021CC8B /* JMCancelRequestPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMCancelRequestPopup.m; path = Classes/JMCancelRequestPopup.m; sourceTree = "<group>"; };
 		F5C737601886DE9E00203175 /* ALToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALToastView.h; sourceTree = "<group>"; };
 		F5C737611886DE9E00203175 /* ALToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALToastView.m; sourceTree = "<group>"; };
-		F5C78CF61952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMResourcesRepresentationSwitcherActionBarView.h; path = Classes/JMResourcesRepresentationSwitcherActionBarView.h; sourceTree = "<group>"; };
-		F5C78CF71952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMResourcesRepresentationSwitcherActionBarView.m; path = Classes/JMResourcesRepresentationSwitcherActionBarView.m; sourceTree = "<group>"; };
 		F5D6372017909B1D005BA5CD /* jaspersoft-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jaspersoft-sdk.xcodeproj"; path = "JasperMobile/Vendor/jaspersoft-sdk/jaspersoft-sdk.xcodeproj"; sourceTree = "<group>"; };
 		F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "jaspersoft-sdk-resources.bundle"; path = "../Vendor/jaspersoft-sdk/jaspersoft-sdk-resources.bundle"; sourceTree = "<group>"; };
 		F5D97FA8179587CF0059C761 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
@@ -746,31 +743,19 @@
 		08025C971995197100A6063B /* Repository&Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				08C816D119A4C67300371604 /* RepresentationSwitcherActionBarView */,
+				08C816D519A4C67300371604 /* ResourceRepresentationViews */,
 				08E87F7F199B8FFA007C8BA4 /* InputControls */,
 				0881967B199A1703008CF79B /* JMSearchBar */,
 				0881967F199A172D008CF79B /* JMCustomSplitViewController */,
 				08025CEA1995237E00A6063B /* Table : Collection View cells */,
 				08E87FAA199BA30E007C8BA4 /* ReportViewer */,
-				08025CBC1995231E00A6063B /* JMBaseResourcesCollectionViewController.h */,
-				08025CBD1995231E00A6063B /* JMBaseResourcesCollectionViewController.m */,
-				08025CBE1995231E00A6063B /* JMBaseResourcesViewController.h */,
-				08025CBF1995231E00A6063B /* JMBaseResourcesViewController.m */,
 				08025CC91995231E00A6063B /* JMDetailRootViewController.h */,
 				08025CCA1995231E00A6063B /* JMDetailRootViewController.m */,
-				08025CCB1995231E00A6063B /* JMDetailSingleSelectTableViewController~ipad.xib */,
-				08025CCC1995231E00A6063B /* JMGridViewController.h */,
-				08025CCD1995231E00A6063B /* JMGridViewController.m */,
-				08025CCE1995231E00A6063B /* JMHorizontalListViewController.h */,
-				08025CCF1995231E00A6063B /* JMHorizontalListViewController.m */,
 				08025CD01995231E00A6063B /* JMMasterLibraryTableViewController.h */,
 				08025CD11995231E00A6063B /* JMMasterLibraryTableViewController.m */,
 				08025CD21995231E00A6063B /* JMMasterRepositoryTableViewController.h */,
 				08025CD31995231E00A6063B /* JMMasterRepositoryTableViewController.m */,
-				08025CD41995231E00A6063B /* JMMasterResourcesTableViewController.h */,
-				08025CD51995231E00A6063B /* JMMasterResourcesTableViewController.m */,
-				08025CD61995231E00A6063B /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib */,
-				08025CD71995231E00A6063B /* JMVerticalListViewController.h */,
-				08025CD81995231E00A6063B /* JMVerticalListViewController.m */,
 			);
 			path = "Repository&Libraries";
 			sourceTree = "<group>";
@@ -873,6 +858,33 @@
 				08856DD519938A560027DF56 /* JMServerCollectionViewCell.m */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		08C816D119A4C67300371604 /* RepresentationSwitcherActionBarView */ = {
+			isa = PBXGroup;
+			children = (
+				08C816D219A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView.h */,
+				08C816D319A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView.m */,
+				08C816D419A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib */,
+			);
+			path = RepresentationSwitcherActionBarView;
+			sourceTree = "<group>";
+		};
+		08C816D519A4C67300371604 /* ResourceRepresentationViews */ = {
+			isa = PBXGroup;
+			children = (
+				08C816E119A4C72000371604 /* JMBaseResourcesCollectionViewController.h */,
+				08C816E219A4C72000371604 /* JMBaseResourcesCollectionViewController.m */,
+				08C816E319A4C72000371604 /* JMBaseResourcesViewController.h */,
+				08C816E419A4C72000371604 /* JMBaseResourcesViewController.m */,
+				08C816D619A4C67300371604 /* JMGridViewController.h */,
+				08C816D719A4C67300371604 /* JMGridViewController.m */,
+				08C816D819A4C67300371604 /* JMHorizontalListViewController.h */,
+				08C816D919A4C67300371604 /* JMHorizontalListViewController.m */,
+				08C816DA19A4C67300371604 /* JMVerticalListViewController.h */,
+				08C816DB19A4C67300371604 /* JMVerticalListViewController.m */,
+			);
+			path = ResourceRepresentationViews;
 			sourceTree = "<group>";
 		};
 		08E62C7C19922B0B0081CA83 /* Supporting Files */ = {
@@ -1100,7 +1112,7 @@
 			isa = PBXGroup;
 			children = (
 				08E62D0419922BA40081CA83 /* MainStoryboard_iPhone.storyboard */,
-				08E62D0319922BA40081CA83 /* MainStoryboard_iPad.storyboard */,
+				08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -1282,6 +1294,7 @@
 				08E87F92199B8FFA007C8BA4 /* JMDetailMultiSelectTableViewController.m */,
 				08E87F93199B8FFA007C8BA4 /* JMDetailSingleSelectTableViewController.h */,
 				08E87F94199B8FFA007C8BA4 /* JMDetailSingleSelectTableViewController.m */,
+				08C816C719A4B14800371604 /* JMDetailSingleSelectTableViewController~ipad.xib */,
 				08E87F95199B8FFA007C8BA4 /* JMInputControlFactory.h */,
 				08E87F96199B8FFA007C8BA4 /* JMInputControlFactory.m */,
 			);
@@ -1573,8 +1586,6 @@
 				08E62C6F19922A750081CA83 /* JMMenuSectionView.xib */,
 				F573ADB5192E42FD00D3C018 /* JMBackHeaderView.h */,
 				F573ADB6192E42FD00D3C018 /* JMBackHeaderView.m */,
-				F5C78CF61952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.h */,
-				F5C78CF71952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.m */,
 				08132B1C1977D94300578CEC /* JMBaseActionBarView.h */,
 				08132B1D1977D94300578CEC /* JMBaseActionBarView.m */,
 			);
@@ -1774,7 +1785,6 @@
 				08E62D3E19922BA40081CA83 /* library.png in Resources */,
 				08E62D3419922BA40081CA83 /* Icon-Small@2x.png in Resources */,
 				08E87F7D199B6D6D007C8BA4 /* cancel_item.png in Resources */,
-				08025CE81995231E00A6063B /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib in Resources */,
 				08E62D4419922BA40081CA83 /* grid_res_type_report.png in Resources */,
 				088510861994D6C8007D66DC /* delete_item.png in Resources */,
 				0881968D199A2FA2008CF79B /* clear_button@2x.png in Resources */,
@@ -1796,6 +1806,7 @@
 				08E62D1E19922BA40081CA83 /* gray_search_button.png in Resources */,
 				08E62D6319922BA40081CA83 /* saved_reports.png in Resources */,
 				08E62D5219922BA40081CA83 /* res_type_html@2x.png in Resources */,
+				08C816C819A4B14800371604 /* JMDetailSingleSelectTableViewController~ipad.xib in Resources */,
 				08819689199A2512008CF79B /* search_button@2x.png in Resources */,
 				08E87F7E199B6D6D007C8BA4 /* cancel_item@2x.png in Resources */,
 				08E87FA8199B9D82007C8BA4 /* filter_item.png in Resources */,
@@ -1830,6 +1841,7 @@
 				08E62D1719922BA40081CA83 /* edit_name_button.png in Resources */,
 				08E87FA4199B9B01007C8BA4 /* refresh_item@2x.png in Resources */,
 				08E62D4219922BA40081CA83 /* settings.png in Resources */,
+				08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */,
 				08E62D5619922BA40081CA83 /* res_type_pdf@2x.png in Resources */,
 				08E62D4E19922BA40081CA83 /* res_type_dashboard@2x.png in Resources */,
 				085B081A199E52FA0021BD52 /* first_action_item@2x.png in Resources */,
@@ -1840,7 +1852,6 @@
 				08E62D3119922BA40081CA83 /* Icon-80.png in Resources */,
 				08E62D0519922BA40081CA83 /* add_favorite_button.png in Resources */,
 				08E62D0D19922BA40081CA83 /* cancel_button.png in Resources */,
-				08E62D6D19922BA40081CA83 /* MainStoryboard_iPad.storyboard in Resources */,
 				08E62D4719922BA40081CA83 /* list_background_pattern.png in Resources */,
 				08E62D0719922BA40081CA83 /* add_favorite_button_highlighted.png in Resources */,
 				08E62D3619922BA40081CA83 /* Default-568h@2x.png in Resources */,
@@ -1867,7 +1878,6 @@
 				085B081B199E52FA0021BD52 /* last_action_item.png in Resources */,
 				08E62D4519922BA40081CA83 /* home_logo.png in Resources */,
 				08E62D1019922BA40081CA83 /* checked_checkbox@2x.png in Resources */,
-				08025CE21995231E00A6063B /* JMDetailSingleSelectTableViewController~ipad.xib in Resources */,
 				08E62D3819922BA40081CA83 /* Default-Landscape~ipad.png in Resources */,
 				08E62D6A19922BA40081CA83 /* iTunesArtwork.png in Resources */,
 				08E62D0F19922BA40081CA83 /* checked_checkbox.png in Resources */,
@@ -1888,6 +1898,7 @@
 				08E62D3219922BA40081CA83 /* Icon-Small-50.png in Resources */,
 				08E62D1619922BA40081CA83 /* delete_button_highlighted@2x.png in Resources */,
 				0888937E199506E900916A6F /* back_item@2x.png in Resources */,
+				08C816DD19A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView~ipad.xib in Resources */,
 				085B081C199E52FA0021BD52 /* last_action_item@2x.png in Resources */,
 				08E62D6219922BA40081CA83 /* repository_bar_item@2x.png in Resources */,
 				08E62D5D19922BA40081CA83 /* favorites_bar_item.png in Resources */,
@@ -1944,8 +1955,6 @@
 			files = (
 				08025CE51995231E00A6063B /* JMMasterLibraryTableViewController.m in Sources */,
 				F5E249DD18DA1DF700F83C3C /* JMMenuSectionView.m in Sources */,
-				08025CE91995231E00A6063B /* JMVerticalListViewController.m in Sources */,
-				F5C78CF81952DEBA0082AFDE /* JMResourcesRepresentationSwitcherActionBarView.m in Sources */,
 				08FF12EA199297FE0082265D /* JMSettings.m in Sources */,
 				08E864131992564A007CF257 /* UIImage+Additions.m in Sources */,
 				08E864261992564A007CF257 /* JMFavoritesUtil.m in Sources */,
@@ -1968,13 +1977,11 @@
 				F5D97FAA179587CF0059C761 /* SSKeychain.m in Sources */,
 				08E864271992564A007CF257 /* JMLocalization.m in Sources */,
 				F57972ED18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m in Sources */,
-				08025CDA1995231E00A6063B /* JMBaseResourcesViewController.m in Sources */,
 				F5F8B7C3179DA3720096C61A /* JMAskPasswordDialog.m in Sources */,
 				08819683199A172D008CF79B /* JMCustomSplitViewController.m in Sources */,
 				08FF131619929B080082265D /* JMBooleanServerOptionCell.m in Sources */,
 				08E87F9B199B8FFA007C8BA4 /* JMMultiSelectInputControlCell.m in Sources */,
 				08E864161992564A007CF257 /* UIView+Additions.m in Sources */,
-				08025CD91995231E00A6063B /* JMBaseResourcesCollectionViewController.m in Sources */,
 				08025CF71995237E00A6063B /* JMLibraryTableViewCell.m in Sources */,
 				08E87FB5199BA30E007C8BA4 /* JMDetailReportViewerViewController.m in Sources */,
 				088893771994DFF300916A6F /* JMMakeActiveServerOptionCell.m in Sources */,
@@ -1986,28 +1993,32 @@
 				08E87FB2199BA30E007C8BA4 /* JMDetailReportOptionsViewController.m in Sources */,
 				F50F5B5D17CCF14300582196 /* JMSingleSelectTableViewController.m in Sources */,
 				08E8642C1992564A007CF257 /* JMPhoneRotation.m in Sources */,
+				08C816E619A4C72000371604 /* JMBaseResourcesViewController.m in Sources */,
 				08E87FBA199BA361007C8BA4 /* JMDetailReportViewerActionBarView.m in Sources */,
 				08E864201992564A007CF257 /* JMPadModule.m in Sources */,
 				08E87F98199B8FFA007C8BA4 /* JMDateInputControlCell.m in Sources */,
 				08FF12DF199297FE0082265D /* JMSettingsTableViewCell.m in Sources */,
 				08E864151992564A007CF257 /* UITableViewController+CellRelativeHeight.m in Sources */,
+				08C816DC19A4C67300371604 /* JMResourcesRepresentationSwitcherActionBarView.m in Sources */,
 				F5339A1617CE0F0F005073EE /* JMMultiSelectTableViewController.m in Sources */,
 				08E864211992564A007CF257 /* JMPhoneModule.m in Sources */,
+				08C816E019A4C67300371604 /* JMVerticalListViewController.m in Sources */,
 				374557203C4B4894864CE759 /* JMLibraryTableViewController.m in Sources */,
 				3745594E2ED2E1EDD4881447 /* JMBaseRepositoryTableViewController.m in Sources */,
-				08025CE31995231E00A6063B /* JMGridViewController.m in Sources */,
 				08E864101992564A007CF257 /* JSRESTBase+updateServerInfo.m in Sources */,
 				08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */,
 				08E864281992564A007CF257 /* JMReportOptionsUtil.m in Sources */,
 				08E864171992564A007CF257 /* UIViewController+fetchInputControls.m in Sources */,
 				08E87FA0199B8FFA007C8BA4 /* JMDetailSingleSelectTableViewController.m in Sources */,
+				08C816DE19A4C67300371604 /* JMGridViewController.m in Sources */,
 				08025CF61995237E00A6063B /* JMBaseResourceTableViewCell.m in Sources */,
+				08C816E519A4C72000371604 /* JMBaseResourcesCollectionViewController.m in Sources */,
 				08E864231992564A007CF257 /* JMNoAnimationPushSegue.m in Sources */,
-				08025CE41995231E00A6063B /* JMHorizontalListViewController.m in Sources */,
 				08E87F9E199B8FFA007C8BA4 /* JMTextInputControlCell.m in Sources */,
 				37455A96A7B31E653BE86426 /* JMReportOptionsTableViewController.m in Sources */,
 				3745556D589570C0F70DE21E /* JMFavoritesTableViewController.m in Sources */,
 				08E864251992564A007CF257 /* JMConstants.m in Sources */,
+				08C816DF19A4C67300371604 /* JMHorizontalListViewController.m in Sources */,
 				374556813A6B65E857339B9B /* JMSaveReportTableViewController.m in Sources */,
 				374555DB062C6D92B960560D /* JMResourceTableViewController.m in Sources */,
 				37455A91FB76F9CC73079B2E /* JMReportPagingViewController.m in Sources */,
@@ -2044,7 +2055,6 @@
 				08D6921F19929DB300C87A33 /* JMTextSettingsTableViewCell.m in Sources */,
 				08E87F9F199B8FFA007C8BA4 /* JMDetailMultiSelectTableViewController.m in Sources */,
 				08E864221992564A007CF257 /* JMManualTransitionSegue.m in Sources */,
-				08025CE71995231E00A6063B /* JMMasterResourcesTableViewController.m in Sources */,
 				08132B1E1977D94300578CEC /* JMBaseActionBarView.m in Sources */,
 				08E8641D1992564A007CF257 /* JMHomeCollectionViewController.m in Sources */,
 				08FF130C1992982F0082265D /* JMServerOption.m in Sources */,

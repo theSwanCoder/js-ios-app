@@ -92,16 +92,6 @@ objection_requires(@"constants")
     } else {
         row = [sender row];
     }
-    
-    NSDictionary *userInfo = @{
-                   kJMResources : self.delegate.resources,
-                   kJMTotalCount : @(self.delegate.totalCount),
-                   kJMOffset : @(self.delegate.offset),
-                   kJMSelectedResourceIndex : @(row)
-    };
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMShowResourcesListInMaster
-                                                        object:nil
-                                                      userInfo:userInfo];
 }
 
 - (void)dealloc

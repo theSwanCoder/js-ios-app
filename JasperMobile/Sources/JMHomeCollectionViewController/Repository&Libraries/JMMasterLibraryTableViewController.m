@@ -11,7 +11,6 @@
 #import "JMMenuSectionView.h"
 #import "JMRequestDelegate.h"
 #import "JMConstants.h"
-#import "JMMasterResourcesTableViewController.h"
 #import <Objection-iOS/Objection.h>
 
 typedef NS_ENUM(NSInteger, JMTableViewSection) {
@@ -31,7 +30,6 @@ typedef NS_ENUM(NSInteger, JMSortBy) {
     JMSortByCreator
 };
 
-static NSString * const kJMShowResourcesSegue = @"ShowResources";
 static NSString * const kJMSettingTypeKey = @"settingsType";
 static NSString * const kJMTitleKey = @"title";
 static NSString * const kJMRowsKey = @"rows";
@@ -77,16 +75,15 @@ objection_requires(@"resourceClient", @"constants")
 {
     if (!_cellsAndSectionsProperties) {
         _cellsAndSectionsProperties = @[
-//                                        TODO: here need uncomment for filtering resource by types: All, Reports, Dashboards.
-//                                        @{
-//                                            kJMSettingTypeKey : @(JMTableViewSection_ResourceType),
-//                                            kJMTitleKey : @"resources",
-//                                            // Temp solution
-//                                            // TODO: refactor / re-implement
-//                                            kJMRowsKey : @[
-//                                                    @"all", @"reportUnit", @"dashboard"
-//                                                    ]
-//                                            },
+                                        @{
+                                            kJMSettingTypeKey : @(JMTableViewSection_ResourceType),
+                                            kJMTitleKey : @"resources",
+                                            // Temp solution
+                                            // TODO: refactor / re-implement
+                                            kJMRowsKey : @[
+                                                    @"all", @"reportUnit", @"dashboard"
+                                                    ]
+                                            },
                                         @{
                                             kJMSettingTypeKey : @(JMTableViewSection_SortingType),
                                             kJMTitleKey : @"sortby",
@@ -121,43 +118,7 @@ objection_requires(@"resourceClient", @"constants")
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:i];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
-    self.resourcesTypeEnum = JMResourceTypeReport;
     [self loadResourcesIntoDetailViewController];
-}
-
-- (void)showResourcesListInMaster:(NSNotification *)notification
-{
-    [self performSegueWithIdentifier:kJMShowResourcesSegue sender:notification.userInfo];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:kJMShowResourcesSegue]) {
-        NSDictionary *userInfo = sender;
-        id destinationViewController = segue.destinationViewController;
-        [destinationViewController setTotalCount:[[userInfo objectForKey:kJMTotalCount] integerValue]];
-        [destinationViewController setOffset:[[userInfo objectForKey:kJMOffset] integerValue]];
-        [destinationViewController setSelectedResourceIndex:[[userInfo objectForKey:kJMSelectedResourceIndex] integerValue]];
-        [destinationViewController setResources:[[userInfo objectForKey:kJMResources] mutableCopy]];
-        [destinationViewController setResourcesTypes:self.resourcesTypes];
-        [destinationViewController setSortBy:self.sortBy];
-        [destinationViewController setLoadRecursively:YES];
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(showResourcesListInMaster:)
-                                                 name:kJMShowResourcesListInMaster
-                                               object:nil];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Table view data source
