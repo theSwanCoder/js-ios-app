@@ -28,7 +28,6 @@
 #import "JMHomeCollectionViewController.h"
 #import "JMMenuItemCell.h"
 #import "JMServerProfile+Helpers.h"
-#import "JMCustomSplitViewController.h"
 
 // Localization keys defined as lowercase version of MenuItem identifier (e.g library, saveditems etc)
 static NSString * const kJMMenuItemLibrary = @"Library";

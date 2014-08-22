@@ -11,15 +11,20 @@
 #import <Objection-iOS/Objection.h>
 #import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"
-#import "JMDetailReportViewerActionBarView.h"
+#import "JMReportViewerToolBar.h"
 #import "UIViewController+FetchInputControls.h"
-#import "JMFullScreenButtonProvider.h"
 #import "ALToastView.h"
 
-@interface JMDetailReportViewerViewController () <JMBaseActionBarViewDelegate, JMFullScreenButtonProvider>
+@interface JMDetailReportViewerViewController () <UIWebViewDelegate, JMReportViewerToolBarDelegate>
+@property (nonatomic, weak) IBOutlet UIWebView *webView;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
+
+@property (nonatomic, weak) JMReportViewerToolBar *toolbar;
+
+@property (nonatomic, assign) BOOL isRequestLoaded;
 
 @property (nonatomic, weak) JSConstants *constants;
-@property (nonatomic, strong) JMDetailReportViewerActionBarView *actionBarView;
+@property (nonatomic, strong) NSURLRequest *request;
 
 @property (nonatomic, strong) NSString *requestId;
 @property (nonatomic, strong) NSString *exportId;
@@ -48,6 +53,11 @@ inject_default_rotation()
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.webView.scrollView.bounces = NO;
+    self.webView.delegate = self;
+    self.webView.suppressesIncrementalRendering = YES;
+    [self.webView loadHTMLString:@"" baseURL:nil];
+
     self.title = self.resourceLookup.label;
     UIBarButtonItem *refreshItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(refreshButtonTapped:)];
     NSMutableArray *itemsArray = [NSMutableArray arrayWithObject:refreshItem];
@@ -60,9 +70,20 @@ inject_default_rotation()
     [self runReportExecution];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (!self.isRequestLoaded && self.request) {
+        [self.webView loadRequest:self.request];
+    }
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self.navigationController setToolbarHidden:!(self.toolbar.countOfPages > 1) animated:YES];
+
     __weak typeof(self) weakSelf = self;
     if (![JMRequestDelegate isRequestPoolEmpty]) {
         [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
@@ -71,9 +92,51 @@ inject_default_rotation()
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.webView.loading) {
+        [self.webView stopLoading];
+        [self loadingDidFinished];
+    }
+    [self.navigationController setToolbarHidden:YES animated:YES];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    id destinationViewController = segue.destinationViewController;
+    [destinationViewController setInputControls:[self.inputControls mutableCopy]];
+    [destinationViewController setResourceLookup:self.resourceLookup];
+    [destinationViewController setDelegate:self];
+}
+
+#pragma mark - Actions
+
+- (void)refreshButtonTapped:(id) sender
+{
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
+    [self runReportExecution];
+}
+
+- (void) editButtonTapped:(id) sender{
+    [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
+}
+
+- (void)setRequest:(NSURLRequest *)request
+{
+    if (request != _request) {
+        _request = request;
+        if (self.webView.isLoading) {
+            [self.webView stopLoading];
+        }
+        [self.webView loadRequest:request];
+        self.isRequestLoaded = NO;
+    }
+}
+
 - (void) runReportExecution
 {
-    self.actionBarView.currentPage = 1;
+    self.toolbar.currentPage = 1;
     
     __weak typeof(self) weakSelf = self;
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
@@ -82,8 +145,9 @@ inject_default_rotation()
         weakSelf.exportId = export.uuid;
         weakSelf.requestId = response.requestId;
         
-        weakSelf.actionBarView.countOfPages = [response.totalPages integerValue];
+        weakSelf.toolbar.countOfPages = [response.totalPages integerValue];
         [weakSelf displayCurrentPageOfReport];
+        [weakSelf.navigationController setToolbarHidden:!(self.toolbar.countOfPages > 1) animated:YES];
     } errorBlock: nil
       viewControllerToDismiss:(!self.requestId) ? self : nil];
     
@@ -100,8 +164,8 @@ inject_default_rotation()
 
 - (void) displayCurrentPageOfReport
 {
-    if (self.actionBarView.countOfPages) {
-        NSString *fullExportId = [NSString stringWithFormat:@"%@;pages=%i", self.exportId, self.actionBarView.currentPage];
+    if (self.toolbar.countOfPages) {
+        NSString *fullExportId = [NSString stringWithFormat:@"%@;pages=%i", self.exportId, self.toolbar.currentPage];
         NSString *reportUrl = [self.reportClient generateReportOutputUrl:self.requestId exportOutput:fullExportId];
         
         self.request = [NSURLRequest requestWithURL:[NSURL URLWithString:reportUrl]];
@@ -110,41 +174,19 @@ inject_default_rotation()
     }
 }
 
-- (void)refreshButtonTapped:(id) sender
+- (JMReportViewerToolBar *)toolbar
 {
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
-    [self runReportExecution];
-}
-
-- (void) editButtonTapped:(id) sender{
-    [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    id destinationViewController = segue.destinationViewController;
-    [destinationViewController setInputControls:[self.inputControls mutableCopy]];
-    [destinationViewController setResourceLookup:self.resourceLookup];
-    [destinationViewController setDelegate:self];
-}
-
-
-#pragma mark - JMActionBarProvider
-
-- (id)actionBar
-{
-    if (!self.actionBarView) {
-        self.actionBarView = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([JMDetailReportViewerActionBarView class])
-                                                           owner:self
-                                                         options:nil].firstObject;
-        self.actionBarView.delegate = self;
+    if (!_toolbar) {
+        _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportViewerToolBar" owner:self options:nil] lastObject];
+        _toolbar.toolbarDelegate = self;
+        _toolbar.frame = self.navigationController.toolbar.bounds;
+        [self.navigationController.toolbar addSubview: _toolbar];
     }
-    
-    return self.actionBarView;
+    return _toolbar;
 }
 
-#pragma mark - JMBaseActionBarViewDelegate
-- (void)actionView:(JMBaseActionBarView *)actionView didSelectAction:(JMBaseActionBarViewAction)action
+#pragma mark - JMReportViewerToolBarDelegate
+- (void)pageDidChangedOnToolbar
 {
     [self displayCurrentPageOfReport];
 }
@@ -164,4 +206,30 @@ inject_default_rotation()
     [self runReportExecution];
 }
 
+#pragma mark - UIWebViewDelegate
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    [self.activityIndicator startAnimating];
+    [JMUtils showNetworkActivityIndicator];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [self loadingDidFinished];
+    if (self.request) {
+        self.isRequestLoaded = YES;
+    }
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [self loadingDidFinished];
+    self.isRequestLoaded = NO;
+}
+
+- (void)loadingDidFinished
+{
+    [JMUtils hideNetworkActivityIndicator];
+    [self.activityIndicator stopAnimating];
+}
 @end

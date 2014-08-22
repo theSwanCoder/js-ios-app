@@ -48,7 +48,6 @@ extern NSString * const kJMResetApplicationNotification;
 extern NSString * const kJMSelectMenuNotification;
 extern NSString * const kJMClearSavedReportsListNotification;
 // Notifications used to connect master and detail view controllers
-extern NSString * const kJMShowResourcesListInDetail;
 extern NSString * const kJMLoadResourcesInDetail;
 extern NSString * const kJMShowRootMaster;
 extern NSString * const kJMShowReportInDetail;
@@ -80,11 +79,13 @@ extern NSString * const kJMReportFilename;
 
 // Tags for menus. Declared as define constants because they can be used
 // in switch-case structure
-#define kJMRepositoryMenuTag 0
-#define kJMLibraryMenuTag 1
-#define kJMFavoritesMenuTag 2
-#define kJMSavedReportsMenuTag 3
-#define kJMServersMenuTag 4
+#define kJMRepositoryMenuTag    0
+#define kJMLibraryMenuTag       1
+#define kJMFavoritesMenuTag     2
+#define kJMSavedReportsMenuTag  3
+#define kJMServersMenuTag       4
+
+#define kJMResourceLimit        15
 
 
 #define kJMMasterViewWidth 163

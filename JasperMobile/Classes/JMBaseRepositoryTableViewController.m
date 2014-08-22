@@ -32,7 +32,6 @@
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "JMCancelRequestPopup.h"
-#import "JMReportOptionsTableViewController.h"
 #import <Objection-iOS/Objection.h>
 
 NSInteger const kJMResourcesLimit = 40;
@@ -140,10 +139,7 @@ inject_default_rotation()
     if ([self isReportSegue:segue]) {        
         NSDictionary *data = sender;
         JSResourceLookup *resourceLookup = [data objectForKey:kJMResourceLookup];
-        NSMutableArray *inputControls = [data objectForKey:kJMInputControls];
-        
         [destinationViewController setResourceLookup:resourceLookup];
-        if (inputControls.count) [destinationViewController setInputControls:inputControls];
     } else  if ([destinationViewController conformsToProtocol:@protocol(JMResourceClientHolder)]) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         JSResourceLookup *resourceLookup = [self resourceLookupForIndexPath:indexPath];

@@ -23,10 +23,15 @@
     if ([self.navigationBar respondsToSelector:@selector(setBarTintColor:)]) {
         [[UINavigationBar appearance] setBarTintColor: kJMMainNavigationBarBackgroundColor];
         [self.navigationBar setTintColor: [UIColor whiteColor]];
+        
+        [[UIToolbar appearance] setBarTintColor: kJMMainNavigationBarBackgroundColor];
+        [self.toolbar setTintColor: [UIColor whiteColor]];
+        self.toolbar.translucent = NO;
         textTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [UIFont boldSystemFontOfSize:17], NSFontAttributeName, nil];
         barButtonTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor lightGrayColor], NSForegroundColorAttributeName, [UIFont systemFontOfSize:17], NSFontAttributeName, nil];
     } else {
         [self.navigationBar setTintColor: kJMMainNavigationBarBackgroundColor];
+        [self.toolbar setTintColor: kJMMainNavigationBarBackgroundColor];
         [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(0, -3) forBarMetrics:UIBarMetricsDefault];
         textTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys: [UIColor whiteColor], UITextAttributeTextColor, [UIFont boldSystemFontOfSize:17], UITextAttributeFont, [UIColor clearColor], UITextAttributeTextShadowColor, nil];
         barButtonTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:17], UITextAttributeFont, nil];
