@@ -144,11 +144,7 @@
 
 - (NSDictionary *)attributesForPlaceholder
 {
-    if ([JMUtils isFoundationNumber7OrHigher]) {
-        return [NSDictionary dictionaryWithObjectsAndKeys:[UIColor darkGrayColor], NSForegroundColorAttributeName, self.textField.font, NSFontAttributeName, nil];
-    } else {
-        return [NSDictionary dictionaryWithObjectsAndKeys: [UIColor darkGrayColor], UITextAttributeTextColor, self.textField.font, UITextAttributeFont, nil];
-    }
+    return [NSDictionary dictionaryWithObjectsAndKeys:[UIColor darkGrayColor], NSForegroundColorAttributeName, self.textField.font, NSFontAttributeName, nil];
 }
 
 @end

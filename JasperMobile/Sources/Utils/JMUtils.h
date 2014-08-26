@@ -88,11 +88,6 @@ extern CGFloat kJMNoEdgesInset;
 + (NSString *)documentsReportDirectoryPath;
 
 /**
- Checks if iOS version (foundation number) is 7 or higher
-*/
-+ (BOOL)isFoundationNumber7OrHigher;
-
-/**
  Sends "changeServerProfile" notification to defaultCenter
  
  @param serverProfile A profile that will be provided to receiver via userInfo dictionary (kJMServerProfileKey key)

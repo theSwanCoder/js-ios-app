@@ -8,7 +8,7 @@
 
 #import "JMReportViewerToolBar.h"
 
-@interface JMReportViewerToolBar () <UITextFieldDelegate>
+@interface JMReportViewerToolBar () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *pageTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pageCountLabel;
 @property (weak, nonatomic) IBOutlet UITextField *currentPageField;
@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *lastButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *nextButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *previousButton;
+@property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
+
 
 @end
 
@@ -29,6 +31,8 @@
     self.currentPageField.backgroundColor = kJMMainNavigationBarBackgroundColor;
     self.countOfPages = 1;
     self.currentPage = 1;
+    self.currentPageField.inputView = self.pickerView;
+    self.currentPageField.inputAccessoryView = [self pickerToolbar];
 }
 
 #pragma mark - Properties
@@ -89,29 +93,65 @@
 }
 
 #pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
-    return NO;
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    [self.pickerView selectRow:self.currentPage - 1 inComponent:0 animated:NO];
+    return YES;
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"1234567890"] invertedSet];
-    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+#pragma mark - UIPickerViewDataSource
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return self.countOfPages;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return [NSString stringWithFormat:@"%d", row + 1];
+}
+
+- (UIToolbar *)pickerToolbar
+{
+    UIToolbar *pickerToolbar = [[UIToolbar alloc] init];
+    pickerToolbar.barStyle = UIBarStyleDefault;
+    pickerToolbar.translucent = NO;
     
-    NSMutableString *newString = [NSMutableString stringWithString:textField.text];
-    [newString replaceCharactersInRange:range withString:string];
-    NSInteger currentValue = [newString integerValue];
-
-    return (([string isEqualToString:filtered]) && (NSLocationInRange(currentValue, self.availableRange)));
+    pickerToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [pickerToolbar sizeToFit];
+    
+    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [pickerToolbar setItems:@[flexibleSpace, cancel, done]];
+    
+    return pickerToolbar;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField{
-    if ([textField.text integerValue]) {
-        self.currentPage = [textField.text integerValue];
-        [self.toolbarDelegate pageDidChangedOnToolbar];
-    } else {
-        self.currentPageField.text = [NSString stringWithFormat:@"%d", self.currentPage];
-    }
+#pragma mark - Actions
+
+- (void)done:(id)sender
+{
+    self.currentPage = [self.pickerView selectedRowInComponent:0] + 1;
+    [self.toolbarDelegate pageDidChangedOnToolbar];
+
+    [self hidePicker];
+}
+
+- (void)cancel:(id)sender
+{
+    [self hidePicker];
+}
+
+#pragma mark - Private
+
+- (void)hidePicker
+{
+    [self.currentPageField resignFirstResponder];
 }
 
 @end

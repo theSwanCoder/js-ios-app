@@ -54,7 +54,7 @@
 
 - (BOOL)isSeparatorNeeded:(UITableViewStyle)style
 {
-    return [JMUtils isFoundationNumber7OrHigher] || style != UITableViewStyleGrouped;
+    return style != UITableViewStyleGrouped;
 }
 
 @end

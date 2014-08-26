@@ -85,9 +85,18 @@
                 <outlet property="nextButton" destination="YJF-w5-XJG" id="Dn4-a7-Ovy"/>
                 <outlet property="pageCountLabel" destination="Kl2-SI-lLo" id="2yL-rl-BAC"/>
                 <outlet property="pageTitleLabel" destination="jGA-8I-23P" id="icd-1s-nfy"/>
+                <outlet property="pickerView" destination="bRC-Kt-Zq0" id="2b8-Ib-0MY"/>
                 <outlet property="previousButton" destination="IAj-fn-ea7" id="rK2-OO-XqL"/>
             </connections>
         </toolbar>
+        <pickerView contentMode="scaleToFill" id="bRC-Kt-Zq0">
+            <rect key="frame" x="0.0" y="0.0" width="777" height="216"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+            <connections>
+                <outlet property="dataSource" destination="eZp-DG-v9G" id="iXK-0g-Y0Z"/>
+                <outlet property="delegate" destination="eZp-DG-v9G" id="Vtk-7g-Cec"/>
+            </connections>
+        </pickerView>
     </objects>
     <resources>
         <image name="first_action_item.png" width="30" height="30"/>

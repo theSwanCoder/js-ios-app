@@ -271,11 +271,7 @@ static NSString * const kJMShowSearchFilterSegue = @"ShowSearchFilter";
 
 - (CGPoint)defaultContentOffset
 {
-    if ([JMUtils isFoundationNumber7OrHigher]) {
-        return CGPointMake(0, -20.0f);
-    } else {
-        return CGPointMake(0, self.searchBar.frame.size.height);
-    }
+    return CGPointMake(0, -20.0f);
 }
 
 - (void)resetSearchState

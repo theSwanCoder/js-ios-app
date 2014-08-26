@@ -127,11 +127,6 @@ CGFloat kJMNoEdgesInset = -1;
     return reportDirectory;
 }
 
-+ (BOOL)isFoundationNumber7OrHigher
-{
-    return floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1;
-}
-
 + (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile withParams:(NSDictionary *)params
 {
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:params];

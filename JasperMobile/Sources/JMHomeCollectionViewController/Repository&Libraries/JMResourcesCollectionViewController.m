@@ -120,6 +120,9 @@ objection_requires(@"resourceClient", @"constants")
                                              selector:@selector(loadResourcesInDetail:)
                                                  name:kJMLoadResourcesInDetail
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserverForName:kJMReportShouldBeClousedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+        [self.navigationController popToViewController:self animated:YES];
+    }];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

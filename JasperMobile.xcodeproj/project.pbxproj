@@ -40,6 +40,14 @@
 		080F23C619A78013008758FA /* search_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 080F23C419A78013008758FA /* search_item.png */; };
 		080F23C719A78013008758FA /* search_item@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 080F23C519A78013008758FA /* search_item@2x.png */; };
 		0837375819A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0837375719A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib */; };
+		0851DFC919ACE24400DC6EDE /* JMBackHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFC419ACE24400DC6EDE /* JMBackHeaderView.m */; };
+		0851DFCA19ACE24400DC6EDE /* JMMenuSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFC719ACE24400DC6EDE /* JMMenuSectionView.m */; };
+		0851DFCB19ACE24400DC6EDE /* JMMenuSectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0851DFC819ACE24400DC6EDE /* JMMenuSectionView.xib */; };
+		0851DFD719ACE27800DC6EDE /* JMAskPasswordDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFCE19ACE27800DC6EDE /* JMAskPasswordDialog.m */; };
+		0851DFD819ACE27800DC6EDE /* JMCancelRequestPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFD119ACE27800DC6EDE /* JMCancelRequestPopup.m */; };
+		0851DFD919ACE27800DC6EDE /* JMCancelRequestPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0851DFD219ACE27800DC6EDE /* JMCancelRequestPopup.xib */; };
+		0851DFDA19ACE27800DC6EDE /* JMSavedReportModifyPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFD519ACE27800DC6EDE /* JMSavedReportModifyPopup.m */; };
+		0851DFDB19ACE27800DC6EDE /* JMSavedReportModifyPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0851DFD619ACE27800DC6EDE /* JMSavedReportModifyPopup.xib */; };
 		085B0819199E52FA0021BD52 /* first_action_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 085B080A199E52FA0021BD52 /* first_action_item.png */; };
 		085B081A199E52FA0021BD52 /* first_action_item@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 085B080B199E52FA0021BD52 /* first_action_item@2x.png */; };
 		085B081B199E52FA0021BD52 /* last_action_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 085B080C199E52FA0021BD52 /* last_action_item.png */; };
@@ -74,9 +82,6 @@
 		08944A8019A7478200A77A7B /* vertical_list_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08944A7D19A7478200A77A7B /* vertical_list_button@2x.png */; };
 		08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */; };
 		08D6921F19929DB300C87A33 /* JMTextSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D6921E19929DB300C87A33 /* JMTextSettingsTableViewCell.m */; };
-		08E62C7119922A750081CA83 /* JMCancelRequestPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08E62C6E19922A750081CA83 /* JMCancelRequestPopup.xib */; };
-		08E62C7219922A750081CA83 /* JMMenuSectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08E62C6F19922A750081CA83 /* JMMenuSectionView.xib */; };
-		08E62C7319922A750081CA83 /* JMSavedReportModifyPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08E62C7019922A750081CA83 /* JMSavedReportModifyPopup.xib */; };
 		08E62C8319922B0B0081CA83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E62C8019922B0B0081CA83 /* main.m */; };
 		08E62D0519922BA40081CA83 /* add_favorite_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E62C8719922BA40081CA83 /* add_favorite_button.png */; };
 		08E62D0619922BA40081CA83 /* add_favorite_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E62C8819922BA40081CA83 /* add_favorite_button@2x.png */; };
@@ -259,17 +264,12 @@
 		F55CC372174CFFCF00CEB39E /* JasperMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F55CC371174CFFCF00CEB39E /* JasperMobileTests.m */; };
 		F5663A311752F9D0007978BE /* Objection-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A2E1752F9D0007978BE /* Objection-iOS.framework */; };
 		F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A321752FA5C007978BE /* CFNetwork.framework */; };
-		F573ADB7192E42FD00D3C018 /* JMBackHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F573ADB6192E42FD00D3C018 /* JMBackHeaderView.m */; };
-		F57972ED18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = F57972EC18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m */; };
 		F58FF2F41760A0B50021CC8B /* MJPopupBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = F58FF2F11760A0B50021CC8B /* MJPopupBackgroundView.m */; };
 		F58FF2F51760A0B50021CC8B /* UIViewController+MJPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F58FF2F31760A0B50021CC8B /* UIViewController+MJPopupViewController.m */; };
-		F58FF2F91760A1090021CC8B /* JMCancelRequestPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = F58FF2F71760A1090021CC8B /* JMCancelRequestPopup.m */; };
 		F5C737631886DE9E00203175 /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C737611886DE9E00203175 /* ALToastView.m */; };
 		F5D6373117909D3C005BA5CD /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */; };
 		F5D6373217909D8F005BA5CD /* libjaspersoft-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D6372817909B1D005BA5CD /* libjaspersoft-sdk.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		F5D97FAA179587CF0059C761 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F5D97FA9179587CF0059C761 /* SSKeychain.m */; };
-		F5E249DD18DA1DF700F83C3C /* JMMenuSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E249DC18DA1DF700F83C3C /* JMMenuSectionView.m */; };
-		F5F8B7C3179DA3720096C61A /* JMAskPasswordDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = F5F8B7C2179DA3720096C61A /* JMAskPasswordDialog.m */; };
 		F5FE06DF1757383800030331 /* JMMenuTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FE06DE1757383800030331 /* JMMenuTabBarController.m */; };
 /* End PBXBuildFile section */
 
@@ -367,6 +367,19 @@
 		080F23C419A78013008758FA /* search_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_item.png; sourceTree = "<group>"; };
 		080F23C519A78013008758FA /* search_item@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_item@2x.png"; sourceTree = "<group>"; };
 		0837375719A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMResourcesCollectionViewController~ipad.xib"; sourceTree = "<group>"; };
+		0851DFC319ACE24400DC6EDE /* JMBackHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBackHeaderView.h; sourceTree = "<group>"; };
+		0851DFC419ACE24400DC6EDE /* JMBackHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBackHeaderView.m; sourceTree = "<group>"; };
+		0851DFC619ACE24400DC6EDE /* JMMenuSectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMenuSectionView.h; sourceTree = "<group>"; };
+		0851DFC719ACE24400DC6EDE /* JMMenuSectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMenuSectionView.m; sourceTree = "<group>"; };
+		0851DFC819ACE24400DC6EDE /* JMMenuSectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMMenuSectionView.xib; sourceTree = "<group>"; };
+		0851DFCD19ACE27800DC6EDE /* JMAskPasswordDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAskPasswordDialog.h; sourceTree = "<group>"; };
+		0851DFCE19ACE27800DC6EDE /* JMAskPasswordDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAskPasswordDialog.m; sourceTree = "<group>"; };
+		0851DFD019ACE27800DC6EDE /* JMCancelRequestPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCancelRequestPopup.h; sourceTree = "<group>"; };
+		0851DFD119ACE27800DC6EDE /* JMCancelRequestPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMCancelRequestPopup.m; sourceTree = "<group>"; };
+		0851DFD219ACE27800DC6EDE /* JMCancelRequestPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMCancelRequestPopup.xib; sourceTree = "<group>"; };
+		0851DFD419ACE27800DC6EDE /* JMSavedReportModifyPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedReportModifyPopup.h; sourceTree = "<group>"; };
+		0851DFD519ACE27800DC6EDE /* JMSavedReportModifyPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedReportModifyPopup.m; sourceTree = "<group>"; };
+		0851DFD619ACE27800DC6EDE /* JMSavedReportModifyPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMSavedReportModifyPopup.xib; sourceTree = "<group>"; };
 		085B080A199E52FA0021BD52 /* first_action_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first_action_item.png; sourceTree = "<group>"; };
 		085B080B199E52FA0021BD52 /* first_action_item@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first_action_item@2x.png"; sourceTree = "<group>"; };
 		085B080C199E52FA0021BD52 /* last_action_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = last_action_item.png; sourceTree = "<group>"; };
@@ -406,9 +419,6 @@
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		08D6921D19929DB300C87A33 /* JMTextSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextSettingsTableViewCell.h; sourceTree = "<group>"; };
 		08D6921E19929DB300C87A33 /* JMTextSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextSettingsTableViewCell.m; sourceTree = "<group>"; };
-		08E62C6E19922A750081CA83 /* JMCancelRequestPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = JMCancelRequestPopup.xib; path = Classes/JMCancelRequestPopup.xib; sourceTree = "<group>"; };
-		08E62C6F19922A750081CA83 /* JMMenuSectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = JMMenuSectionView.xib; path = Classes/JMMenuSectionView.xib; sourceTree = "<group>"; };
-		08E62C7019922A750081CA83 /* JMSavedReportModifyPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = JMSavedReportModifyPopup.xib; path = Classes/JMSavedReportModifyPopup.xib; sourceTree = "<group>"; };
 		08E62C7D19922B0B0081CA83 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		08E62C7E19922B0B0081CA83 /* JasperMobile-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "JasperMobile-Info.plist"; sourceTree = "<group>"; };
 		08E62C7F19922B0B0081CA83 /* JasperMobile-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JasperMobile-Prefix.pch"; sourceTree = "<group>"; };
@@ -669,26 +679,16 @@
 		F55CC371174CFFCF00CEB39E /* JasperMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JasperMobileTests.m; sourceTree = "<group>"; };
 		F5663A2E1752F9D0007978BE /* Objection-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Objection-iOS.framework"; path = "JasperMobile/Vendor/Objection-iOS.framework"; sourceTree = "<group>"; };
 		F5663A321752FA5C007978BE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		F573ADB5192E42FD00D3C018 /* JMBackHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMBackHeaderView.h; path = Classes/JMBackHeaderView.h; sourceTree = "<group>"; };
-		F573ADB6192E42FD00D3C018 /* JMBackHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMBackHeaderView.m; path = Classes/JMBackHeaderView.m; sourceTree = "<group>"; };
-		F57972EB18A8F5D700BD16B9 /* JMSavedReportModifyPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSavedReportModifyPopup.h; path = Classes/JMSavedReportModifyPopup.h; sourceTree = "<group>"; };
-		F57972EC18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSavedReportModifyPopup.m; path = Classes/JMSavedReportModifyPopup.m; sourceTree = "<group>"; };
 		F58FF2F01760A0B50021CC8B /* MJPopupBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPopupBackgroundView.h; sourceTree = "<group>"; };
 		F58FF2F11760A0B50021CC8B /* MJPopupBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPopupBackgroundView.m; sourceTree = "<group>"; };
 		F58FF2F21760A0B50021CC8B /* UIViewController+MJPopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MJPopupViewController.h"; sourceTree = "<group>"; };
 		F58FF2F31760A0B50021CC8B /* UIViewController+MJPopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MJPopupViewController.m"; sourceTree = "<group>"; };
-		F58FF2F61760A1090021CC8B /* JMCancelRequestPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMCancelRequestPopup.h; path = Classes/JMCancelRequestPopup.h; sourceTree = "<group>"; };
-		F58FF2F71760A1090021CC8B /* JMCancelRequestPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMCancelRequestPopup.m; path = Classes/JMCancelRequestPopup.m; sourceTree = "<group>"; };
 		F5C737601886DE9E00203175 /* ALToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALToastView.h; sourceTree = "<group>"; };
 		F5C737611886DE9E00203175 /* ALToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALToastView.m; sourceTree = "<group>"; };
 		F5D6372017909B1D005BA5CD /* jaspersoft-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jaspersoft-sdk.xcodeproj"; path = "JasperMobile/Vendor/jaspersoft-sdk/jaspersoft-sdk.xcodeproj"; sourceTree = "<group>"; };
 		F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "jaspersoft-sdk-resources.bundle"; path = "../Vendor/jaspersoft-sdk/jaspersoft-sdk-resources.bundle"; sourceTree = "<group>"; };
 		F5D97FA8179587CF0059C761 /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		F5D97FA9179587CF0059C761 /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
-		F5E249DB18DA1DF700F83C3C /* JMMenuSectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMenuSectionView.h; path = Classes/JMMenuSectionView.h; sourceTree = "<group>"; };
-		F5E249DC18DA1DF700F83C3C /* JMMenuSectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMenuSectionView.m; path = Classes/JMMenuSectionView.m; sourceTree = "<group>"; };
-		F5F8B7C1179DA3720096C61A /* JMAskPasswordDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMAskPasswordDialog.h; path = Classes/JMAskPasswordDialog.h; sourceTree = "<group>"; };
-		F5F8B7C2179DA3720096C61A /* JMAskPasswordDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMAskPasswordDialog.m; path = Classes/JMAskPasswordDialog.m; sourceTree = "<group>"; };
 		F5FE06DD1757383800030331 /* JMMenuTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMMenuTabBarController.h; path = Classes/JMMenuTabBarController.h; sourceTree = "<group>"; };
 		F5FE06DE1757383800030331 /* JMMenuTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMMenuTabBarController.m; path = Classes/JMMenuTabBarController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -791,6 +791,8 @@
 		080F238219A77E06008758FA /* MasterViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				0851DFC219ACE24400DC6EDE /* JMBackHeaderView */,
+				0851DFC519ACE24400DC6EDE /* JMMenuSectionView */,
 				080F238319A77E06008758FA /* Cells */,
 				080F238C19A77E06008758FA /* JMMasterLibraryTableViewController.h */,
 				080F238D19A77E06008758FA /* JMMasterLibraryTableViewController.m */,
@@ -864,6 +866,64 @@
 				080F23AB19A77E6B008758FA /* JMTextInputControlCell.m */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		0851DFB419ACE1F500DC6EDE /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				0851DFCC19ACE27800DC6EDE /* JMAskPasswordDialog */,
+				0851DFCF19ACE27800DC6EDE /* JMCancelRequestPopup */,
+				0851DFD319ACE27800DC6EDE /* JMSavedReportModifyPopup */,
+			);
+			path = CustomViews;
+			sourceTree = "<group>";
+		};
+		0851DFC219ACE24400DC6EDE /* JMBackHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				0851DFC319ACE24400DC6EDE /* JMBackHeaderView.h */,
+				0851DFC419ACE24400DC6EDE /* JMBackHeaderView.m */,
+			);
+			path = JMBackHeaderView;
+			sourceTree = "<group>";
+		};
+		0851DFC519ACE24400DC6EDE /* JMMenuSectionView */ = {
+			isa = PBXGroup;
+			children = (
+				0851DFC619ACE24400DC6EDE /* JMMenuSectionView.h */,
+				0851DFC719ACE24400DC6EDE /* JMMenuSectionView.m */,
+				0851DFC819ACE24400DC6EDE /* JMMenuSectionView.xib */,
+			);
+			path = JMMenuSectionView;
+			sourceTree = "<group>";
+		};
+		0851DFCC19ACE27800DC6EDE /* JMAskPasswordDialog */ = {
+			isa = PBXGroup;
+			children = (
+				0851DFCD19ACE27800DC6EDE /* JMAskPasswordDialog.h */,
+				0851DFCE19ACE27800DC6EDE /* JMAskPasswordDialog.m */,
+			);
+			path = JMAskPasswordDialog;
+			sourceTree = "<group>";
+		};
+		0851DFCF19ACE27800DC6EDE /* JMCancelRequestPopup */ = {
+			isa = PBXGroup;
+			children = (
+				0851DFD019ACE27800DC6EDE /* JMCancelRequestPopup.h */,
+				0851DFD119ACE27800DC6EDE /* JMCancelRequestPopup.m */,
+				0851DFD219ACE27800DC6EDE /* JMCancelRequestPopup.xib */,
+			);
+			path = JMCancelRequestPopup;
+			sourceTree = "<group>";
+		};
+		0851DFD319ACE27800DC6EDE /* JMSavedReportModifyPopup */ = {
+			isa = PBXGroup;
+			children = (
+				0851DFD419ACE27800DC6EDE /* JMSavedReportModifyPopup.h */,
+				0851DFD519ACE27800DC6EDE /* JMSavedReportModifyPopup.m */,
+				0851DFD619ACE27800DC6EDE /* JMSavedReportModifyPopup.xib */,
+			);
+			path = JMSavedReportModifyPopup;
 			sourceTree = "<group>";
 		};
 		085B0809199E52FA0021BD52 /* actionBarItems */ = {
@@ -1181,7 +1241,6 @@
 		08E62D76199232780081CA83 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				F58FF2FB1760A1180021CC8B /* Views */,
 				F54C91AE1752FB270009E2BE /* View Controllers */,
 			);
 			name = Classes;
@@ -1196,6 +1255,7 @@
 				08E863DC1992564A007CF257 /* JMHomeCollectionViewController */,
 				08E863BE1992564A007CF257 /* Categories */,
 				08E863D31992564A007CF257 /* CoreDataEntities */,
+				0851DFB419ACE1F500DC6EDE /* CustomViews */,
 				08E863E21992564A007CF257 /* ObjectionModules */,
 				08E863E91992564A007CF257 /* Protocols */,
 				08E863F41992564A007CF257 /* Segues */,
@@ -1583,27 +1643,6 @@
 			path = MJPopupViewController;
 			sourceTree = "<group>";
 		};
-		F58FF2FB1760A1180021CC8B /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				F5F8B7C1179DA3720096C61A /* JMAskPasswordDialog.h */,
-				F5F8B7C2179DA3720096C61A /* JMAskPasswordDialog.m */,
-				F58FF2F61760A1090021CC8B /* JMCancelRequestPopup.h */,
-				F58FF2F71760A1090021CC8B /* JMCancelRequestPopup.m */,
-				08E62C6E19922A750081CA83 /* JMCancelRequestPopup.xib */,
-				F57972EB18A8F5D700BD16B9 /* JMSavedReportModifyPopup.h */,
-				F57972EC18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m */,
-				08E62C7019922A750081CA83 /* JMSavedReportModifyPopup.xib */,
-				F5E249DB18DA1DF700F83C3C /* JMMenuSectionView.h */,
-				F5E249DC18DA1DF700F83C3C /* JMMenuSectionView.m */,
-				08E62C6F19922A750081CA83 /* JMMenuSectionView.xib */,
-				F573ADB5192E42FD00D3C018 /* JMBackHeaderView.h */,
-				F573ADB6192E42FD00D3C018 /* JMBackHeaderView.m */,
-			);
-			name = Views;
-			path = ..;
-			sourceTree = "<group>";
-		};
 		F5A2E784175CD49000CBA00E /* Phone */ = {
 			isa = PBXGroup;
 			children = (
@@ -1785,6 +1824,7 @@
 				08944A7E19A7478200A77A7B /* grid_button@2x.png in Resources */,
 				08E62D1419922BA40081CA83 /* delete_button@2x.png in Resources */,
 				08E62D3719922BA40081CA83 /* Default-Landscape@2x~ipad.png in Resources */,
+				0851DFD919ACE27800DC6EDE /* JMCancelRequestPopup.xib in Resources */,
 				08E62D5419922BA40081CA83 /* res_type_image@2x.png in Resources */,
 				080F235819A77B23008758FA /* JMVerticalLoadingCollectionViewCell~ipad.xib in Resources */,
 				0888937D199506E900916A6F /* back_item.png in Resources */,
@@ -1813,10 +1853,10 @@
 				08E62D5219922BA40081CA83 /* res_type_html@2x.png in Resources */,
 				08944A8019A7478200A77A7B /* vertical_list_button@2x.png in Resources */,
 				08819689199A2512008CF79B /* search_button@2x.png in Resources */,
+				0851DFDB19ACE27800DC6EDE /* JMSavedReportModifyPopup.xib in Resources */,
 				08E87F7E199B6D6D007C8BA4 /* cancel_item@2x.png in Resources */,
 				08E87FA8199B9D82007C8BA4 /* filter_item.png in Resources */,
 				088510841994D6C8007D66DC /* apply_item.png in Resources */,
-				08E62C7319922A750081CA83 /* JMSavedReportModifyPopup.xib in Resources */,
 				08E62D4119922BA40081CA83 /* servers.png in Resources */,
 				08E62D4D19922BA40081CA83 /* res_type_dashboard.png in Resources */,
 				085B0823199E52FA0021BD52 /* horizontal_list_button.png in Resources */,
@@ -1832,7 +1872,6 @@
 				08E62D5F19922BA40081CA83 /* library_bar_item.png in Resources */,
 				08E62D1819922BA40081CA83 /* defaultScreenMode.png in Resources */,
 				08E62D3C19922BA40081CA83 /* Default@2x.png in Resources */,
-				08E62C7119922A750081CA83 /* JMCancelRequestPopup.xib in Resources */,
 				08856DD819938C6A0027DF56 /* server_active.png in Resources */,
 				08E62D0C19922BA40081CA83 /* blue_button_highlighted@2x.png in Resources */,
 				08E62D5B19922BA40081CA83 /* res_type_unknown.png in Resources */,
@@ -1895,7 +1934,6 @@
 				08E62D5C19922BA40081CA83 /* res_type_unknown@2x.png in Resources */,
 				08E62D1F19922BA40081CA83 /* list_options.png in Resources */,
 				08E62D5519922BA40081CA83 /* res_type_pdf.png in Resources */,
-				08E62C7219922A750081CA83 /* JMMenuSectionView.xib in Resources */,
 				08E62D6E19922BA40081CA83 /* MainStoryboard_iPhone.storyboard in Resources */,
 				08E62D6419922BA40081CA83 /* saved_reports@2x.png in Resources */,
 				08E62D5319922BA40081CA83 /* res_type_image.png in Resources */,
@@ -1912,6 +1950,7 @@
 				0888937E199506E900916A6F /* back_item@2x.png in Resources */,
 				085B081C199E52FA0021BD52 /* last_action_item@2x.png in Resources */,
 				08E62D6219922BA40081CA83 /* repository_bar_item@2x.png in Resources */,
+				0851DFCB19ACE24400DC6EDE /* JMMenuSectionView.xib in Resources */,
 				08E62D5D19922BA40081CA83 /* favorites_bar_item.png in Resources */,
 				08E62D2219922BA40081CA83 /* remove_favorite_button@2x.png in Resources */,
 				08E62D5719922BA40081CA83 /* res_type_report.png in Resources */,
@@ -1965,7 +2004,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5E249DD18DA1DF700F83C3C /* JMMenuSectionView.m in Sources */,
 				08FF12EA199297FE0082265D /* JMSettings.m in Sources */,
 				08E864131992564A007CF257 /* UIImage+Additions.m in Sources */,
 				08E864261992564A007CF257 /* JMFavoritesUtil.m in Sources */,
@@ -1976,8 +2014,8 @@
 				F58FF2F41760A0B50021CC8B /* MJPopupBackgroundView.m in Sources */,
 				F58FF2F51760A0B50021CC8B /* UIViewController+MJPopupViewController.m in Sources */,
 				080F23BB19A77E6B008758FA /* JMMultiSelectInputControlCell.m in Sources */,
+				0851DFD819ACE27800DC6EDE /* JMCancelRequestPopup.m in Sources */,
 				08E864191992564A007CF257 /* JMFavorites.m in Sources */,
-				F58FF2F91760A1090021CC8B /* JMCancelRequestPopup.m in Sources */,
 				F539125218D73170001BDDBE /* JMResourcePageContentViewController.m in Sources */,
 				080F239419A77E06008758FA /* JMMasterLibraryTableViewController.m in Sources */,
 				080F235519A77B23008758FA /* JMLoadingCollectionViewCell.m in Sources */,
@@ -1991,8 +2029,6 @@
 				F5C737631886DE9E00203175 /* ALToastView.m in Sources */,
 				F5D97FAA179587CF0059C761 /* SSKeychain.m in Sources */,
 				08E864271992564A007CF257 /* JMLocalization.m in Sources */,
-				F57972ED18A8F5D700BD16B9 /* JMSavedReportModifyPopup.m in Sources */,
-				F5F8B7C3179DA3720096C61A /* JMAskPasswordDialog.m in Sources */,
 				08FF131619929B080082265D /* JMBooleanServerOptionCell.m in Sources */,
 				08E864161992564A007CF257 /* UIView+Additions.m in Sources */,
 				080F23B719A77E6B008758FA /* JMDateTimeInputControlCell.m in Sources */,
@@ -2005,11 +2041,14 @@
 				080F23B519A77E6B008758FA /* JMBooleanInputControlCell.m in Sources */,
 				F539124F18D7139B001BDDBE /* JMBaseRepositoryPagingViewController.m in Sources */,
 				08E62C8319922B0B0081CA83 /* main.m in Sources */,
+				0851DFDA19ACE27800DC6EDE /* JMSavedReportModifyPopup.m in Sources */,
 				F50F5B5D17CCF14300582196 /* JMSingleSelectTableViewController.m in Sources */,
 				08E8642C1992564A007CF257 /* JMPhoneRotation.m in Sources */,
+				0851DFC919ACE24400DC6EDE /* JMBackHeaderView.m in Sources */,
 				08E87FBA199BA361007C8BA4 /* JMReportViewerToolBar.m in Sources */,
 				08E864201992564A007CF257 /* JMPadModule.m in Sources */,
 				08FF12DF199297FE0082265D /* JMSettingsTableViewCell.m in Sources */,
+				0851DFCA19ACE24400DC6EDE /* JMMenuSectionView.m in Sources */,
 				08E864151992564A007CF257 /* UITableViewController+CellRelativeHeight.m in Sources */,
 				080F23B819A77E6B008758FA /* JMInputControlCell.m in Sources */,
 				F5339A1617CE0F0F005073EE /* JMMultiSelectTableViewController.m in Sources */,
@@ -2035,12 +2074,12 @@
 				08E8640F1992564A007CF257 /* JMServerProfile+Helpers.m in Sources */,
 				08E864111992564A007CF257 /* UIAlertView+LocalizedAlert.m in Sources */,
 				08E864241992564A007CF257 /* JMAppUpdater.m in Sources */,
-				F573ADB7192E42FD00D3C018 /* JMBackHeaderView.m in Sources */,
 				37455D6BDB88905BED2C79A0 /* JMSearchFilterTableViewController.m in Sources */,
 				08856DCD199370A30027DF56 /* JMServerSelectTableViewCell.m in Sources */,
 				080F235919A77B23008758FA /* JMResourceCollectionViewCell.m in Sources */,
 				0881967E199A1703008CF79B /* JMSearchBar.m in Sources */,
 				080F23C319A77E6B008758FA /* JMDetailReportOptionsViewController.m in Sources */,
+				0851DFD719ACE27800DC6EDE /* JMAskPasswordDialog.m in Sources */,
 				37455E1F0F6355F8AC0B0BA3 /* JMDashboardViewController.m in Sources */,
 				37455256B3656246AF66CA29 /* JMRepositoryTableViewController.m in Sources */,
 				08E8641E1992564A007CF257 /* JMMainNavigationController.m in Sources */,
@@ -2142,7 +2181,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -2170,7 +2209,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";

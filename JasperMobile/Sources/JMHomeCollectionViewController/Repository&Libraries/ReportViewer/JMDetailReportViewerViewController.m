@@ -67,6 +67,8 @@ inject_default_rotation()
     }
     self.navigationItem.rightBarButtonItems = itemsArray;
     
+    [self addBackButton];
+    
     [self runReportExecution];
 }
 
@@ -81,7 +83,7 @@ inject_default_rotation()
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+
     [self.navigationController setToolbarHidden:!(self.toolbar.countOfPages > 1) animated:YES];
 
     __weak typeof(self) weakSelf = self;
@@ -118,8 +120,25 @@ inject_default_rotation()
     [self runReportExecution];
 }
 
-- (void) editButtonTapped:(id) sender{
+- (void) editButtonTapped:(id) sender
+{
     [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
+}
+
+- (void) backButtonTapped:(id) sender
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMReportShouldBeClousedNotification object:nil userInfo:nil];
+}
+
+- (void) addBackButton
+{
+    NSString *title = [[self.navigationController.viewControllers objectAtIndex:1] title];
+    UIImage *backButtonImage = [UIImage imageNamed:@"back_item.png"];
+    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTapped:)];
+    [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    
+    self.navigationItem.leftBarButtonItem = backItem;
 }
 
 - (void)setRequest:(NSURLRequest *)request
@@ -177,7 +196,7 @@ inject_default_rotation()
 - (JMReportViewerToolBar *)toolbar
 {
     if (!_toolbar) {
-        _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportViewerToolBar" owner:self options:nil] lastObject];
+        _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportViewerToolBar" owner:self options:nil] firstObject];
         _toolbar.toolbarDelegate = self;
         _toolbar.frame = self.navigationController.toolbar.bounds;
         [self.navigationController.toolbar addSubview: _toolbar];
