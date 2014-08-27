@@ -182,7 +182,8 @@
 "servers.activeserver.delete.errormessage" = "The active server cannot be deleted. Please make another server active before deleting this server.";
 "servers.activeserver.makeactive.errormessage" = "This server is already the active server.";
 
-"detail.report.options.title" = "Report Options";
+"detail.report.options.title" = "Filter Options";
+"detail.report.options.titlelabel.title" = "Current Filters";
 "detail.report.viewer.emptyreport.message" = "Report is empty";
 
 // Action bar buttons

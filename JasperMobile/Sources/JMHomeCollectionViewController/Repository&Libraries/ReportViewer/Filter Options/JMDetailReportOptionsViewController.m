@@ -52,7 +52,7 @@ objection_requires(@"resourceClient", @"reportClient")
     [super viewDidLoad];
 
     self.title = JMCustomLocalizedString(@"detail.report.options.title", nil);
-    self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.title", nil);
+    self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.titlelabel.title", nil);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
@@ -82,19 +82,7 @@ objection_requires(@"resourceClient", @"reportClient")
 
         [self.inputControls addObject:cell];
     }
-    UIBarButtonItem *runReportButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(runReport)];
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cancel_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(cancel)];
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:runReportButton, cancelButton, nil];
-}
-
-- (void)cancel
-{
-    if (!self.delegate) {
-        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        [center postNotificationName:kJMShowRootMaster object:nil];
-    } else {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(runReport)];
 }
 
 - (void)runReport

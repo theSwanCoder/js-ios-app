@@ -55,6 +55,8 @@
 {
     [super viewDidLoad];
     
+    self.title = self.cell.inputControlDescriptor.label;
+    
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([JMListValueTableViewCell class]) bundle:nil]
          forCellReuseIdentifier:kJMListValueTableViewCellIdentifier];
     

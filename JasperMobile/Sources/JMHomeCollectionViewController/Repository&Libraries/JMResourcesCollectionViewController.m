@@ -120,8 +120,9 @@ objection_requires(@"resourceClient", @"constants")
                                              selector:@selector(loadResourcesInDetail:)
                                                  name:kJMLoadResourcesInDetail
                                                object:nil];
+    __weak typeof(self) weakself = self;
     [[NSNotificationCenter defaultCenter] addObserverForName:kJMReportShouldBeClousedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        [self.navigationController popToViewController:self animated:YES];
+        [weakself.navigationController popToViewController:weakself animated:YES];
     }];
 }
 
