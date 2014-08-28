@@ -184,6 +184,10 @@
 
 "detail.report.options.title" = "Filter Options";
 "detail.report.options.titlelabel.title" = "Current Filters";
+"detail.report.options.singleselect.titlelabel.title" = "Select a single item";
+"detail.report.options.multiselect.titlelabel.title" = "Select one or more items";
+
+
 "detail.report.viewer.emptyreport.message" = "Report is empty";
 
 // Action bar buttons

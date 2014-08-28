@@ -53,8 +53,8 @@ objection_requires(@"resourceClient", @"reportClient")
 
     self.title = JMCustomLocalizedString(@"detail.report.options.title", nil);
     self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.titlelabel.title", nil);
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+    self.titleLabel.textColor = kJMDetailViewLightTextColor;
+    self.tableView.layer.cornerRadius = 4;
     
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.tableView.layer.cornerRadius = 4;

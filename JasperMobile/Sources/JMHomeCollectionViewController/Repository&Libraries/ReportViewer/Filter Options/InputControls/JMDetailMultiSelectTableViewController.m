@@ -13,6 +13,11 @@
 @end
 
 @implementation JMDetailMultiSelectTableViewController
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.multiselect.titlelabel.title", nil);
+}
 
 
 #pragma mark - Accessors

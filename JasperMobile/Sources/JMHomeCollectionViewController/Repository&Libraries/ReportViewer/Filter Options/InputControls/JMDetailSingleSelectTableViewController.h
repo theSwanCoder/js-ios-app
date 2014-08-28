@@ -10,6 +10,7 @@
 #import "JMSingleSelectInputControlCell.h"
 
 @interface JMDetailSingleSelectTableViewController : UIViewController
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 
 @property (nonatomic, weak) JMSingleSelectInputControlCell *cell;
 @property (nonatomic, readonly) NSArray *listOfValues;

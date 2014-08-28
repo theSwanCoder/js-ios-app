@@ -7,13 +7,13 @@
 //
 
 #import "JMDetailSingleSelectTableViewController.h"
-#import "JMListValueTableViewCell.h"
+#import "JMSearchBar.h"
 
-@interface JMDetailSingleSelectTableViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@interface JMDetailSingleSelectTableViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, JMSearchBarDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 
-@property (nonatomic, assign) BOOL isSearching;
+@property (strong, nonatomic) JMSearchBar *searchBar;
+
 @property (nonatomic, strong) NSArray *filteredListOfValues;
 @end
 
@@ -32,7 +32,7 @@
 
 - (NSArray *)listOfValues
 {
-    return self.isSearching ? self.filteredListOfValues : self.cell.listOfValues;
+    return self.filteredListOfValues ? self.filteredListOfValues : self.cell.listOfValues;
 }
 
 - (void)setCell:(JMSingleSelectInputControlCell *)cell
@@ -58,15 +58,14 @@
     [super viewDidLoad];
     
     self.title = self.cell.inputControlDescriptor.label;
+    self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.singleselect.titlelabel.title", nil);
+    self.titleLabel.textColor = kJMDetailViewLightTextColor;
+    self.tableView.layer.cornerRadius = 4;
     
-    [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([JMListValueTableViewCell class]) bundle:nil]
-         forCellReuseIdentifier:kJMListValueTableViewCellIdentifier];
-    
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self showNavigationItems];
 }
 
 #pragma mark - Table view data source
@@ -83,10 +82,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMListValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kJMListValueTableViewCellIdentifier];
+    static NSString *cellIdentifier = @"ListCell";
+
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
     
     JSInputControlOption *option = [self.listOfValues objectAtIndex:indexPath.row];
-    cell.valueLabel.text = option.label;
+    cell.textLabel.text = option.label;
     cell.accessoryType = option.selected.boolValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 
     return cell;
@@ -108,44 +114,55 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - UITextFieldDelegate
+#pragma mark - Actions
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+- (void)searchButtonTapped:(id)sender
 {
-    return YES;
+    if (!self.searchBar) {
+        self.searchBar = [[JMSearchBar alloc] initWithFrame:CGRectMake(0, 0, 300, 34)];
+        self.searchBar.delegate = self;
+        self.searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
+    }
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+- (void) showNavigationItems
 {
-    NSString *searchQuery = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    
-    if (searchQuery.length) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.label beginswith[cd] %@", searchQuery];
-        if (self.isSearching && string.length) {
-            self.filteredListOfValues = [self.filteredListOfValues filteredArrayUsingPredicate:predicate];
-        } else {
-            self.filteredListOfValues = [self.cell.listOfValues filteredArrayUsingPredicate:predicate];
-        }
-        
-        self.isSearching = YES;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchButtonTapped:)];
+}
+
+#pragma mark - JMSearchBarDelegate
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBarClearButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+    self.filteredListOfValues = nil;
+    [self.tableView reloadData];
+
+    [self showNavigationItems];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
+{    [searchBar resignFirstResponder];
+    if ([searchBar.text length] == 0) {
+        [self showNavigationItems];
+    }
+}
+
+- (void)searchBarDidChangeText:(JMSearchBar *)searchBar
+{
+    if (searchBar.text.length) {
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.label beginswith[cd] %@", searchBar.text];
+        self.filteredListOfValues = [self.cell.listOfValues filteredArrayUsingPredicate:predicate];
     } else {
-        self.isSearching = NO;
         self.filteredListOfValues = nil;
     }
     
     [self.tableView reloadData];
-    
-    return YES;
-}
-
-- (BOOL)textFieldShouldClear:(UITextField *)textField
-{
-    self.isSearching = NO;
-    self.filteredListOfValues = nil;
-    textField.text = nil;
-    [self.tableView reloadData];
-    
-    return YES;
 }
 
 @end

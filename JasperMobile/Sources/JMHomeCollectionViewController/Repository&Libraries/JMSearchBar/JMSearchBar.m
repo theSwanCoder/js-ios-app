@@ -10,6 +10,9 @@
 
 #define kJMSearchBarCancelButtonWidth       100.f
 
+static NSString * const JMReplacingTextString = @"ReplacingTextString";
+static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
+
 @interface JMSearchBar () <UITextFieldDelegate>
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UIButton *cancelButton;
@@ -88,6 +91,11 @@
     } else {
         self.textField.rightViewMode = UITextFieldViewModeNever;
     }
+    
+    if ([self.delegate respondsToSelector:@selector(searchBarDidChangeText:)]) {
+        [((NSObject *)self.delegate) performSelector:@selector(searchBarDidChangeText:) withObject:self afterDelay: 0.1];
+    }
+
     return YES;
 }
 

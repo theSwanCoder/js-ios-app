@@ -16,6 +16,7 @@
 - (void)searchBarSearchButtonClicked:(JMSearchBar *)searchBar;
 - (void)searchBarClearButtonClicked:(JMSearchBar *)searchBar;
 - (void)searchBarCancelButtonClicked:(JMSearchBar *) searchBar;
+- (void)searchBarDidChangeText:(JMSearchBar *) searchBar;
 
 @end
 
