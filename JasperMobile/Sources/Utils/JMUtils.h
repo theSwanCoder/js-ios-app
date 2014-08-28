@@ -106,4 +106,11 @@ extern CGFloat kJMNoEdgesInset;
  */
 + (void)hideNetworkActivityIndicator;
 
+/**
+ Checks if current device is iPhone
+ 
+ @return YES if current device is iPhone
+ */
++ (BOOL)isIphone;
+
 @end

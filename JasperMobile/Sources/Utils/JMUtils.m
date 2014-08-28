@@ -155,4 +155,10 @@ CGFloat kJMNoEdgesInset = -1;
     }
 }
 
++ (BOOL)isIphone
+{
+    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
+
+}
+
 @end

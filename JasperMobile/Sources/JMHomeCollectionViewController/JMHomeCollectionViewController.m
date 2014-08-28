@@ -59,7 +59,7 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     NSString *serverString = nil;
     if (activeServerProfile) {
-        serverString = [NSString stringWithFormat:JMCustomLocalizedString(@"home.menuitem.activeserver.label" , nil), activeServerProfile.alias];
+        serverString = activeServerProfile.alias;
     } 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:serverString style:UIBarButtonItemStyleBordered target:nil action:nil];
     self.navigationItem.rightBarButtonItem.enabled = NO;
@@ -117,11 +117,18 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
-        return UIEdgeInsetsMake(30.0f, 23.0f, 30.0f, 23.0f);
-    } else {
-        return UIEdgeInsetsMake(30.0f, 46.0f, 30.0f, 46.0f);
+    UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
+    
+    NSInteger countOfCellsInRow = 1;
+    while (((countOfCellsInRow * flowLayout.itemSize.width) + (countOfCellsInRow + 1) * flowLayout.minimumInteritemSpacing) < collectionView.frame.size.width) {
+        countOfCellsInRow ++;
     }
+    countOfCellsInRow --;
+    
+    CGFloat horizontalInset = floor((collectionView.frame.size.width - countOfCellsInRow * flowLayout.itemSize.width) / (countOfCellsInRow + 1));
+    UIEdgeInsets insets = UIEdgeInsetsMake(flowLayout.sectionInset.top, horizontalInset, flowLayout.sectionInset.bottom, horizontalInset);
+    
+    return insets;
 }
 
 @end
