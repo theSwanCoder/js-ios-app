@@ -9,15 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "JMSingleSelectInputControlCell.h"
 
-@interface JMDetailSingleSelectTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+@interface JMDetailSingleSelectTableViewController : UIViewController
 
-
-@property (nonatomic, weak) IBOutlet UIImageView *leftArrowImageView;
-@property (nonatomic, weak) IBOutlet UILabel *backLabel;
-@property (nonatomic, weak) IBOutlet UITableView *tableView;
-@property (nonatomic, weak) IBOutlet UIButton *searchButton;
-@property (nonatomic, weak) IBOutlet UITextField *searchTextField;
-@property (nonatomic, weak) IBOutlet UILabel *searchLabel;
 @property (nonatomic, weak) JMSingleSelectInputControlCell *cell;
 @property (nonatomic, readonly) NSArray *listOfValues;
 

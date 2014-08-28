@@ -9,7 +9,9 @@
 #import "JMDetailSingleSelectTableViewController.h"
 #import "JMListValueTableViewCell.h"
 
-@interface JMDetailSingleSelectTableViewController()
+@interface JMDetailSingleSelectTableViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
 
 @property (nonatomic, assign) BOOL isSearching;
 @property (nonatomic, strong) NSArray *filteredListOfValues;
@@ -65,12 +67,6 @@
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
-    self.searchTextField.delegate = self;
-    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 14.0f, 0)];
-    self.searchTextField.leftView = paddingView;
-    self.searchTextField.rightView = paddingView;
-    self.searchTextField.leftViewMode = UITextFieldViewModeAlways;
 }
 
 #pragma mark - Table view data source
@@ -146,22 +142,10 @@
 {
     self.isSearching = NO;
     self.filteredListOfValues = nil;
-    self.searchTextField.text = nil;
+    textField.text = nil;
     [self.tableView reloadData];
     
     return YES;
-}
-
-#pragma mark - Actions
-
-- (IBAction)back:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (IBAction)search:(id)sender
-{
-    [self.searchTextField resignFirstResponder];
 }
 
 @end
