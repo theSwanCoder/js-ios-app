@@ -10,5 +10,8 @@
 #import "JMServerOptionCell.h"
 
 @interface JMBooleanServerOptionCell : JMServerOptionCell
+@property (weak, nonatomic) IBOutlet UIButton *checkBoxButton;
+
+- (IBAction)checkButtonTapped:(id)sender;
 
 @end

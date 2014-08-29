@@ -26,10 +26,8 @@
 //
 
 #import "JMSingleSelectTableViewController.h"
-#import "JMRotationBase.h"
 
 @implementation JMSingleSelectTableViewController
-inject_default_rotation()
 
 - (void)setCell:(JMSingleSelectInputControlCell *)cell
 {

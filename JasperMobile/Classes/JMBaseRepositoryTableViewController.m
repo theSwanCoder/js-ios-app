@@ -28,7 +28,6 @@
 #import "JMBaseRepositoryTableViewController.h"
 #import "UIViewController+fetchInputControls.h"
 #import "JMConstants.h"
-#import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "JMCancelRequestPopup.h"
@@ -48,7 +47,6 @@ static NSString * const kJMUnknownCell = @"UnknownCell";
 
 @implementation JMBaseRepositoryTableViewController
 objection_requires(@"resourceClient", @"constants")
-inject_default_rotation()
 
 @synthesize constants = _constants;
 @synthesize resourceClient = _resourceClient;

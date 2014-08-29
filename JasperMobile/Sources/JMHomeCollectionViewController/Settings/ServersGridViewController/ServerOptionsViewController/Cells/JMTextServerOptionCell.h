@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "JMServerOptionCell.h"
 
-@interface JMTextServerOptionCell : JMServerOptionCell
+@interface JMTextServerOptionCell : JMServerOptionCell 
 
 @end

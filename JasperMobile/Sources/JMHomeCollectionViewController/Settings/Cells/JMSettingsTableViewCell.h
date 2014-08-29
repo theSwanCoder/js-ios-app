@@ -12,6 +12,5 @@
 @interface JMSettingsTableViewCell : UITableViewCell
 
 @property (nonatomic, strong) JMSettingsItem *settingsItem;
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 
 @end

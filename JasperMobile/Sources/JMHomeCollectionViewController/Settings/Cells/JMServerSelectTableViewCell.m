@@ -8,17 +8,11 @@
 
 #import "JMServerSelectTableViewCell.h"
 
-@interface JMServerSelectTableViewCell()
-@property (weak, nonatomic) IBOutlet UILabel *valueLabel;
-
-@end
-
-
 @implementation JMServerSelectTableViewCell
 
 -(void)setSettingsItem:(JMSettingsItem *)settingsItem
 {
     [super setSettingsItem:settingsItem];
-    self.valueLabel.text = settingsItem.valueSettings;
+    self.detailTextLabel.text = settingsItem.valueSettings;
 }
 @end

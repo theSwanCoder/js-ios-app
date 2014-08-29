@@ -26,7 +26,6 @@
 //
 
 #import "JMUtils.h"
-#import "JMRotationBase.h"
 #import "JMSearchFilterTableViewController.h"
 #import "UITableViewCell+SetSeparators.h"
 #import <Objection-iOS/Objection.h>
@@ -44,7 +43,6 @@ static NSString * const kJMCellText = @"text";
 
 @implementation JMSearchFilterTableViewController
 objection_requires(@"constants")
-inject_default_rotation()
 
 @synthesize resourceTypes = _resourceTypes;
 

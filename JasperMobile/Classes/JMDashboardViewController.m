@@ -26,11 +26,9 @@
 //
 
 #import "JMDashboardViewController.h"
-#import "JMRotationBase.h"
 #import "JMUtils.h"
 
 @implementation JMDashboardViewController
-inject_default_rotation()
 
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceLookup = _resourceLookup;

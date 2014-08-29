@@ -29,7 +29,6 @@
 #import "JMCancelRequestPopup.h"
 #import "JMConstants.h"
 #import "JMRequestDelegate.h"
-#import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UITableViewCell+SetSeparators.h"
 #import "UITableViewController+CellRelativeHeight.h"
@@ -57,7 +56,6 @@ static NSString * const kJMAttachmentPrefix = @"_";
 
 @implementation JMSaveReportTableViewController
 objection_requires(@"reportClient", @"constants")
-inject_default_rotation()
 
 @synthesize reportClient = _reportClient;
 @synthesize resourceClient = _resourceClient;

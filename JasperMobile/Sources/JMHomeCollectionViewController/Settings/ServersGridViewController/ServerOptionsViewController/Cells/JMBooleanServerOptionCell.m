@@ -8,15 +8,11 @@
 
 #import "JMBooleanServerOptionCell.h"
 
-@interface JMBooleanServerOptionCell ()
-@property (weak, nonatomic) IBOutlet UIButton *checkBoxButton;
-
-@end
-
 @implementation JMBooleanServerOptionCell
 -(void)setServerOption:(JMServerOption *)serverOption
 {
     [super setServerOption:serverOption];
+    self.checkBoxButton.userInteractionEnabled = serverOption.editable;
     self.checkBoxButton.selected = [serverOption.optionValue boolValue];
 }
 

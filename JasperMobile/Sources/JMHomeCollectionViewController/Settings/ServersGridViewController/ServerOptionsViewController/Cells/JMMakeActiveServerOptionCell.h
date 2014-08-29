@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 JasperMobile. All rights reserved.
 //
 
-#import "JMServerOptionCell.h"
+#import "JMBooleanServerOptionCell.h"
 
-@interface JMMakeActiveServerOptionCell : JMServerOptionCell
+@interface JMMakeActiveServerOptionCell : JMBooleanServerOptionCell
 
 @end

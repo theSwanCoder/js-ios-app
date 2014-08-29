@@ -33,7 +33,6 @@
 
 @implementation JMDetailReportViewerViewController
 objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"constants")
-inject_default_rotation()
 
 @synthesize resourceClient = _resourceClient;
 @synthesize reportClient   = _reportClient;

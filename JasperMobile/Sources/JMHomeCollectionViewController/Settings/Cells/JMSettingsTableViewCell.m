@@ -9,9 +9,18 @@
 #import "JMSettingsTableViewCell.h"
 
 @implementation JMSettingsTableViewCell
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.detailTextLabel.font = [JMFont tableViewCellDetailFont];
+    self.textLabel.font = [JMFont tableViewCellTitleFont];
+    self.textLabel.textColor = [UIColor darkGrayColor];
+    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
+}
+
 - (void)setSettingsItem:(JMSettingsItem *)settingsItem{
     _settingsItem = settingsItem;
-    self.titleLabel.text = settingsItem.titleString;
+    self.textLabel.text = settingsItem.titleString;
 }
 
 @end

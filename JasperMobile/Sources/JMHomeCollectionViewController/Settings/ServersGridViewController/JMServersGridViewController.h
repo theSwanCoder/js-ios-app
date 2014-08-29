@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface JMServersGridViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
-
-@property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
+@interface JMServersGridViewController : UICollectionViewController
 
 @end

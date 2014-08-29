@@ -23,8 +23,6 @@
 @end
 
 @implementation JMSettingsViewController
-inject_default_rotation()
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];

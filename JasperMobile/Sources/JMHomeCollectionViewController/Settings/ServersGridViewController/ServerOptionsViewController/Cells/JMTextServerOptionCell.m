@@ -17,24 +17,30 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 14.0f, 0)];
-    self.textField.leftView = paddingView;
-    self.textField.leftViewMode = UITextFieldViewModeAlways;
     self.textField.background = [self.textField.background resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10.0f, 0, 10.0f)];
+    [self setNeedsLayout];
 }
 
 -(void)setServerOption:(JMServerOption *)serverOption
 {
     [super setServerOption:serverOption];
+    self.textField.enabled = serverOption.editable;
     self.textField.text = serverOption.optionValue;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
 }
 
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    self.serverOption.errorString = nil;
-    [self updateDisplayingOfErrorMessage];
+    if (self.serverOption.errorString) {
+        self.serverOption.errorString = nil;
+        [self updateDisplayingOfErrorMessage];
+    }
     return YES;
 }
 

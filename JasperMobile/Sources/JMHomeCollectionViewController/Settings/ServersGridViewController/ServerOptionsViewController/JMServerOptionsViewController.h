@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "JMServerProfile.h"
 
-@interface JMServerOptionsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface JMServerOptionsViewController : UIViewController 
 
 @property (nonatomic, retain) JMServerProfile *serverProfile;
 @end

@@ -28,7 +28,6 @@
 #import "JMResourceTableViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMFavoritesUtil.h"
-#import "JMRotationBase.h"
 #import "JMUtils.h"
 #import "UITableViewCell+SetSeparators.h"
 #import "UITableViewController+CellRelativeHeight.h"
@@ -57,7 +56,6 @@ static NSString * const kJMValueKey = @"value";
 
 @implementation JMResourceTableViewController
 objection_requires(@"resourceClient", @"favoritesUtil")
-inject_default_rotation()
 
 #pragma mark - Accessors
 

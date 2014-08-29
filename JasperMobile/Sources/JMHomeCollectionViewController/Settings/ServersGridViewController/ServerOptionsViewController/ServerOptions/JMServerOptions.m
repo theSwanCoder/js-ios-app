@@ -13,7 +13,7 @@
 static NSString * const kJMBooleanCellIdentifier = @"BooleanCell";
 static NSString * const kJMTextCellIdentifier = @"TextEditCell";
 static NSString * const kJMSecureTextCellIdentifier = @"SecureTextEditCell";
-static NSString * const kJMMakeActiveServerCellIdentifier = @"MakeActiveServerCell";
+static NSString * const kJMMakeActiveCellIdentifier = @"MakeActiveCell";
 @interface JMServerOptions ()
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, readwrite, strong) NSArray *optionsArray;
@@ -58,9 +58,7 @@ objection_requires(@"managedObjectContext")
     
     serverOption = [self.optionsArray objectAtIndex:1];
     if (serverOption.optionValue && [serverOption.optionValue length]) {
-        NSString *urlRegEx = @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
-        NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
-        if ([urlTest evaluateWithObject:serverOption.optionValue]) {
+        if ([NSURL URLWithString:serverOption.optionValue]) {
             self.serverProfile.serverUrl = serverOption.optionValue;
         } else {
             serverOption.errorString = JMCustomLocalizedString(@"servers.url.errmsg", nil);
@@ -140,7 +138,7 @@ objection_requires(@"managedObjectContext")
     
     if (self.isExistingServerProfile) {
         [optionsSourceArray addObject:
-         @{@"title" : JMCustomLocalizedString(@"servers.activeserver.label", nil), @"value" : @(self.serverProfile.serverProfileIsActive), @"cellIdentifier" : kJMMakeActiveServerCellIdentifier}];
+         @{@"title" : JMCustomLocalizedString(@"servers.activeserver.label", nil), @"value" : @(self.serverProfile.serverProfileIsActive), @"cellIdentifier" : kJMMakeActiveCellIdentifier}];
     }
     
     for (NSDictionary *optionData in optionsSourceArray) {
@@ -149,6 +147,10 @@ objection_requires(@"managedObjectContext")
         option.optionValue      = [optionData objectForKey:@"value"];
         option.cellIdentifier   = [optionData objectForKey:@"cellIdentifier"];
         [optionsArray addObject:option];
+    }
+    
+    if (self.isExistingServerProfile) {
+        [[optionsArray lastObject] setEditable:!self.serverProfile.serverProfileIsActive];
     }
     
     self.optionsArray = optionsArray;

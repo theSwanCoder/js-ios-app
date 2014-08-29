@@ -18,7 +18,7 @@
 #import "UIAlertView+LocalizedAlert.h"
 
 
-@interface JMServerOptionsViewController () <UIAlertViewDelegate, JMServerOptionCellDelegate>
+@interface JMServerOptionsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, JMServerOptionCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *optionsTableView;
 @property (nonatomic, strong) JMServerOptions *serverOptions;
 
@@ -31,14 +31,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(saveButtonTapped:)];
     
-    if (self.serverProfile && !self.serverProfile.serverProfileIsActive) {
+    if (self.serverProfile) {
         self.title = self.serverProfile.alias;
+    } else {
+        self.title = JMCustomLocalizedString(@"servers.title.new", nil);
+    }
+
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(saveButtonTapped:)];
+    if (self.serverProfile && !self.serverProfile.serverProfileIsActive) {
         UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(deleteButtonTapped:)];
         self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:saveButton, deleteButton, nil];
     } else {
-        self.title = JMCustomLocalizedString(@"servers.title.new", nil);
         self.navigationItem.rightBarButtonItem = saveButton;
     }
     

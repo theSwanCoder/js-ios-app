@@ -152,15 +152,13 @@ objection_requires(@"resourceClient", @"constants")
 - (void)viewWillLayoutSubviews;
 {
     [super viewWillLayoutSubviews];
-    if (self.representationType == JMResourcesRepresentationTypeHorizontalList) {
-        UICollectionView *collectionView = [self.collectionViews objectAtIndex:self.representationType];
-        UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
-        
-        CGFloat width = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
-        flowLayout.itemSize = CGSizeMake(width, flowLayout.itemSize.height);
-        
-        [flowLayout invalidateLayout]; //force the elements to get laid out again with the new size
-    }
+    UICollectionView *collectionView = [self.collectionViews objectAtIndex:JMResourcesRepresentationTypeHorizontalList];
+    UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
+    
+    CGFloat width = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
+    flowLayout.itemSize = CGSizeMake(width, flowLayout.itemSize.height);
+    
+    [flowLayout invalidateLayout]; //force the elements to get laid out again with the new size
 }
 
 #pragma mark - Actions

@@ -30,8 +30,7 @@
 #import "JMAskPasswordDialog.h"
 #import "JMConstants.h"
 #import "JMFavoritesUtil.h"
-#import "JMPadModule.h"
-#import "JMPhoneModule.h"
+#import "JMBaseModule.h"
 #import "JMReportClientHolder.h"
 #import "JMReportOptionsUtil.h"
 #import "JMResourceClientHolder.h"
@@ -225,13 +224,7 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (void)initObjectionModules
 {
-    JMBaseModule *module;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        module = [[JMPadModule alloc] init];
-    } else {
-        module = [[JMPhoneModule alloc] init];
-    }
-    
+    JMBaseModule *module = [[JMBaseModule alloc] init];
     module.managedObjectContext = self.managedObjectContext;
     
     JSObjectionInjector *injector = [JSObjection createInjector:module];

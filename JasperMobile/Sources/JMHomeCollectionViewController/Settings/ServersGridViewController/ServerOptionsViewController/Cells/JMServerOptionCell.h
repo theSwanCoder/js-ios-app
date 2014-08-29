@@ -18,9 +18,9 @@
 
 @interface JMServerOptionCell : UITableViewCell
 @property (nonatomic, strong) JMServerOption *serverOption;
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
-@property (nonatomic, weak) IBOutlet UILabel *errorLabel;
+
 @property (nonatomic, weak) IBOutlet id <JMServerOptionCellDelegate> delegate;
+
 
 - (void) updateDisplayingOfErrorMessage;
 

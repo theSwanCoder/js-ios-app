@@ -11,9 +11,9 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-    #import "JMRotationBase.h"
     #import "JMConstants.h"
     #import "JMUtils.h"
+    #import "JMFont.h"
 
     #import "JMLocalization.h"
 

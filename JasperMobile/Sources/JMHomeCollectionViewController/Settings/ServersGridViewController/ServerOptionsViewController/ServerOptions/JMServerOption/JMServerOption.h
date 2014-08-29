@@ -14,5 +14,6 @@
 @property (nonatomic, strong) NSString *errorString;
 @property (nonatomic, strong) id        optionValue;
 @property (nonatomic, strong) NSString *cellIdentifier;
+@property (nonatomic, assign) BOOL      editable;       // By default YES
 
 @end
