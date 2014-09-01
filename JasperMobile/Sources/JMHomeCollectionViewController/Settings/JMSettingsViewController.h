@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface JMSettingsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+#import "JMEditabledViewController.h"
+@interface JMSettingsViewController : JMEditabledViewController 
 
 @end

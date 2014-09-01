@@ -16,7 +16,7 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
 @interface JMSearchBar () <UITextFieldDelegate>
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UIButton *cancelButton;
-
+@property (nonatomic, strong) UIButton *clearButton;
 @end
 
 @implementation JMSearchBar
@@ -48,13 +48,13 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
         self.textField.leftView = leftView;
         self.textField.leftViewMode = UITextFieldViewModeAlways;
 
-        UIButton *clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        clearButton.frame = CGRectMake(0, 0, frame.size.height, frame.size.height);
-        clearButton.backgroundColor = [UIColor clearColor];
-        [clearButton addTarget:self action:@selector(clearButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [clearButton setImage:[UIImage imageNamed:@"clear_button.png"] forState:UIControlStateNormal];
-        [clearButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        self.textField.rightView = clearButton;
+        self.clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.clearButton.frame = CGRectMake(0, 0, frame.size.height, frame.size.height);
+        self.clearButton.backgroundColor = [UIColor clearColor];
+        [self.clearButton addTarget:self action:@selector(clearButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [self.clearButton setImage:[UIImage imageNamed:@"clear_button.png"] forState:UIControlStateNormal];
+        [self.clearButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        self.textField.rightView = self.clearButton;
         self.textField.rightViewMode = UITextFieldViewModeNever;
         
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -104,15 +104,13 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
 {
     self.textField.text = @"";
     self.textField.rightViewMode = UITextFieldViewModeNever;
-    [self.textField resignFirstResponder];
-    if ([self.delegate respondsToSelector:@selector(searchBarClearButtonClicked:)]) {
-        [self.delegate searchBarClearButtonClicked:self];
-    }
 }
 
 - (void)cancelButtonTapped:(id)sender
 {
     [self.textField resignFirstResponder];
+    [self clearButtonTapped:self.clearButton];
+    
     if ([self.delegate respondsToSelector:@selector(searchBarCancelButtonClicked:)]) {
         [self.delegate searchBarCancelButtonClicked:self];
     }

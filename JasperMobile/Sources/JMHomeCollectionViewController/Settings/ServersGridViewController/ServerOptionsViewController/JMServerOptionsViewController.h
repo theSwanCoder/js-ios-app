@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "JMServerProfile.h"
+#import "JMEditabledViewController.h"
 
-@interface JMServerOptionsViewController : UIViewController 
+@interface JMServerOptionsViewController : JMEditabledViewController
 
 @property (nonatomic, retain) JMServerProfile *serverProfile;
 @end

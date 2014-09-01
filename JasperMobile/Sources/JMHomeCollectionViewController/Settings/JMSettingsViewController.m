@@ -14,7 +14,7 @@
 #import "UIAlertView+LocalizedAlert.h"
 
 
-@interface JMSettingsViewController ()
+@interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *settingsTableView;
 @property (weak, nonatomic) IBOutlet UILabel *settingsTitleLabel;

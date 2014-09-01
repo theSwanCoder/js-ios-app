@@ -41,7 +41,7 @@ objection_requires(@"managedObjectContext")
 - (BOOL)saveChanges
 {
     JMServerOption *serverOption = [self.optionsArray objectAtIndex:0];
-    if (serverOption.optionValue && [serverOption.optionValue length]) {
+    if (serverOption.optionValue && [[serverOption.optionValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
         // Check if alias is unique
         NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
         [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K == %@", @"alias", serverOption.optionValue]];
@@ -58,11 +58,19 @@ objection_requires(@"managedObjectContext")
     
     serverOption = [self.optionsArray objectAtIndex:1];
     if (serverOption.optionValue && [serverOption.optionValue length]) {
-        if ([NSURL URLWithString:serverOption.optionValue]) {
-            self.serverProfile.serverUrl = serverOption.optionValue;
+        NSURL *url = [NSURL URLWithString:serverOption.optionValue];
+        if (!url || !url.scheme || !url.host) {
+            serverOption.errorString = JMCustomLocalizedString(@"servers.url.errmsg", nil);;
         } else {
-            serverOption.errorString = JMCustomLocalizedString(@"servers.url.errmsg", nil);
+            self.serverProfile.serverUrl = serverOption.optionValue;
         }
+//        NSString *regex = @"(http|https)://[\\w-_]+(.[\\w-_]+)+([\\w-.,@?^=%&:/~+#]* [\\w-\\@?^=%&/~+#])?";
+//        NSPredicate *regextest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+//        if ([regextest evaluateWithObject: serverOption.optionValue] == YES) {
+//            self.serverProfile.serverUrl = serverOption.optionValue;
+//        } else {
+//            serverOption.errorString = JMCustomLocalizedString(@"servers.url.errmsg", nil);
+//        }
     } else {
         serverOption.errorString = JMCustomLocalizedString(@"servers.url.errmsg", nil);
     }

@@ -321,23 +321,14 @@ objection_requires(@"resourceClient", @"constants")
     }
 }
 
-- (void)searchBarClearButtonClicked:(JMSearchBar *)searchBar
+- (void)searchBarCancelButtonClicked:(JMSearchBar *) searchBar
 {
     id visibleViewController = self.masterNavigationController.visibleViewController;
     if ([visibleViewController conformsToProtocol:@protocol(JMSearchBarAdditions)]) {
         [visibleViewController didClearSearch];
     }
-
-    if ([searchBar.text length] == 0) {
-        [self showNavigationItems];
-    }
-}
-
-- (void)searchBarCancelButtonClicked:(JMSearchBar *) searchBar
-{
-    if ([searchBar.text length] == 0) {
-        [self showNavigationItems];
-    }
+    
+    [self showNavigationItems];
 }
 
 #pragma mark - Utils

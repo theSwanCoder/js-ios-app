@@ -137,20 +137,12 @@
     [searchBar resignFirstResponder];
 }
 
-- (void)searchBarClearButtonClicked:(UISearchBar *)searchBar
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
 {
     [searchBar resignFirstResponder];
+    [self showNavigationItems];
     self.filteredListOfValues = nil;
     [self.tableView reloadData];
-
-    [self showNavigationItems];
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
-{    [searchBar resignFirstResponder];
-    if ([searchBar.text length] == 0) {
-        [self showNavigationItems];
-    }
 }
 
 - (void)searchBarDidChangeText:(JMSearchBar *)searchBar

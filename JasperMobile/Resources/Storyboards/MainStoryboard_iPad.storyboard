@@ -827,7 +827,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="nhO-YI-grs">
-                                                    <rect key="frame" x="470" y="10" width="250" height="30"/>
+                                                    <rect key="frame" x="469.99999931335446" y="10" width="250" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -864,7 +864,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Z4W-hL-1an">
-                                                    <rect key="frame" x="470" y="10" width="250" height="30"/>
+                                                    <rect key="frame" x="469.99999931335446" y="10" width="250" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
@@ -958,6 +958,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="optionsTableView" destination="3VI-aI-RUF" id="DFA-Az-6UW"/>
+                        <outlet property="scrollView" destination="3VI-aI-RUF" id="5he-dX-CQr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l3l-WC-agW" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1053,6 +1054,7 @@
                     <navigationItem key="navigationItem" id="6jC-Qf-31M"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
+                        <outlet property="scrollView" destination="79B-sY-Jc3" id="EtW-Gj-0dz"/>
                         <outlet property="settingsTableView" destination="79B-sY-Jc3" id="XIE-BZ-l1Z"/>
                         <outlet property="settingsTitleLabel" destination="OzV-IA-zVa" id="b1j-0o-VfM"/>
                     </connections>
