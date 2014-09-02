@@ -62,9 +62,6 @@ objection_requires(@"resourceClient", @"reportClient")
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
-    // TODO: refactor, remove isKindOfClass: method usage
-    if ([self.inputControls.firstObject isKindOfClass:JMInputControlCell.class]) return;
-
     NSArray *inputControlsData = [self.inputControls copy];
     [self.inputControls removeAllObjects];
 

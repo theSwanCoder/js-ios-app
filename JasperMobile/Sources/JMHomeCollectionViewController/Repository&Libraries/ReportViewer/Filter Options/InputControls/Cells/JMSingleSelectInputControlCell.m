@@ -67,23 +67,12 @@
     }
 }
 
-- (void)enabled:(BOOL)enabled
+- (void)setEnabledCell:(BOOL)enabled
 {
-    if (enabled) {
-        self.selectionStyle = UITableViewCellSelectionStyleBlue;
-    } else {
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
-
-    self.label.enabled = enabled;
+    [super setEnabledCell:enabled];
+    self.selectionStyle = enabled ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
     // Enable / Disable calls for didSelectRowAtIndexPath: method
     self.userInteractionEnabled = enabled;
-}
-
-- (void)disableCell
-{
-    [super disableCell];
-    [self enabled:NO];
 }
 
 #pragma mark - REST v2 -
@@ -105,7 +94,6 @@
 - (void)updatedInputControlsValues
 {
     if (!self.inputControlDescriptor.slaveDependencies.count) {
-        [self dismissError];
         return;
     }
 
@@ -149,7 +137,6 @@
 
 - (void)setInputControlState:(JSInputControlState *)state
 {
-    self.inputControlDescriptor.state = state;
     self.listOfValues = [state.options mutableCopy];
     
     NSMutableArray *selectedValues = [NSMutableArray array];
@@ -160,9 +147,6 @@
     }
     
     self.value = selectedValues;
-    if (selectedValues.count) {
-        self.errorMessage = nil;
-    }
 }
 
 @end

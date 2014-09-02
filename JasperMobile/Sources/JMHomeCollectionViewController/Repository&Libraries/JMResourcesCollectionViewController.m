@@ -29,7 +29,6 @@ typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
 };
 
 static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
-static NSInteger const kJMPaginationTreshoald = 8;
 
 @interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, JMSearchBarDelegate>
 
@@ -220,6 +219,9 @@ objection_requires(@"resourceClient", @"constants")
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.item == self.resources.count) {
+        if (self.hasNextPage) {
+            [self loadNextPage];
+        }
         return [collectionView dequeueReusableCellWithReuseIdentifier:kJMLoadingCellIdentifier forIndexPath:indexPath];
     }
 
@@ -229,14 +231,6 @@ objection_requires(@"resourceClient", @"constants")
 }
 
 #pragma mark - UICollectionViewDelegate
-
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (self.hasNextPage && indexPath.item + kJMPaginationTreshoald >= self.resources.count) {
-        [self loadNextPage];
-    }
-}
-
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     [self didSelectResourceAtIndexPath:indexPath];

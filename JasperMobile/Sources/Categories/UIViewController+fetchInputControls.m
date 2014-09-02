@@ -31,7 +31,6 @@ NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
 #import <Objection-iOS/JSObjection.h>
 #import "UIViewController+fetchInputControls.h"
 #import "JMCancelRequestPopup.h"
-#import "JMInputControlsHolder.h"
 #import "JMRequestDelegate.h"
 #import "JMReportOptionsUtil.h"
 #import "JMConstants.h"

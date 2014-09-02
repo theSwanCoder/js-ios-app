@@ -32,7 +32,6 @@
  @since 1.6
  */
 @interface JMTextInputControlCell : JMInputControlCell <UITextFieldDelegate>
-
-- (UITextField *)textField;
+@property (nonatomic, weak) IBOutlet UITextField *textField;
 
 @end

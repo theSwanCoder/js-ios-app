@@ -27,31 +27,23 @@
 
 #import "JMBooleanInputControlCell.h"
 
-@implementation JMBooleanInputControlCell
+@interface JMBooleanInputControlCell ()
+@property (nonatomic, weak) IBOutlet UISwitch *uiSwitch;
+@end
 
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    [self.uiSwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
-}
+@implementation JMBooleanInputControlCell
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
-
     self.value = inputControlDescriptor.state.value;
     self.uiSwitch.on = [self.value boolValue];
 }
 
-- (UISwitch *)uiSwitch
+- (void)setEnabledCell:(BOOL)enabled
 {
-    return (UISwitch *) [self viewWithTag:2];
-}
-
-- (void)disableCell
-{
-    [super disableCell];
-    self.uiSwitch.enabled = NO;
+    [super setEnabledCell:enabled];
+    self.uiSwitch.enabled = enabled;
 }
 
 #pragma mark - Actions

@@ -32,13 +32,15 @@
  @since 1.6
  */
 @interface JMDateInputControlCell : JMTextInputControlCell
+@property (nonatomic, strong) UIToolbar *datePickerToolbar;
+@property (nonatomic, strong) UIDatePicker *datePicker;
+
 
 @property (nonatomic, strong) NSDate *date;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
-- (UIDatePicker *)datePicker;
-- (UIToolbar *)pickerToolbar;
-- (void)setSelfAsDelegateForPickerToolbar:(UIToolbar *)pickerToolbar;
+- (NSArray *)toolbarItems;
+
 - (void)dateChanged:(id)sender;
 - (void)done:(id)sender;
 

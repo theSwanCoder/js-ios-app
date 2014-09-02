@@ -33,6 +33,4 @@
  */
 @interface JMBooleanInputControlCell : JMInputControlCell
 
-- (UISwitch *)uiSwitch;
-
 @end

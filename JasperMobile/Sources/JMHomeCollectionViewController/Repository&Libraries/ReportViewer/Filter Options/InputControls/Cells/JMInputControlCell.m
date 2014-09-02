@@ -29,89 +29,22 @@
 
 @implementation JMInputControlCell
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (void)awakeFromNib
 {
-    if (self = [super initWithCoder:aDecoder]) {
-        baseHeight = self.contentView.frame.size.height;
-    }
-
-    return self;
-}
-
-- (void)setValue:(id)value
-{
-    _value = value;
-    if (self.inputControlDescriptor) {
-        self.inputControlDescriptor.state.value = value;
-    }
-}
-
-- (void)setErrorMessage:(NSString *)errorMessage
-{
-    _errorMessage = errorMessage;
+    [super awakeFromNib];
+    self.textLabel.font = [JMFont tableViewCellTitleFont];
     
+    self.detailTextLabel.font = [JMFont tableViewCellDetailErrorFont];
+    self.detailTextLabel.textColor = [UIColor redColor];
+    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
+}
+
+- (void) updateDisplayingOfErrorMessage:(NSString *)errorMessage
+{
+    self.detailTextLabel.text = errorMessage;
     [UIView beginAnimations:nil context:nil];
-    
-    UILabel *errorLabel = self.errorLabel;
-    errorLabel.text = errorMessage;
-    errorLabel.alpha = (errorMessage.length == 0) ? 0 : 1;
-    if (errorMessage.length != 0) {
-        CGRect labelFrame = self.label.frame;
-        labelFrame.origin.y = 6;
-        self.label.frame = labelFrame;
-
-        CGRect mandatoryLabelFrame = self.mandatoryLabel.frame;
-        mandatoryLabelFrame.origin.y = 6;
-        self.mandatoryLabel.frame = mandatoryLabelFrame;
-        
-        [errorLabel sizeToFit];
-    }
+    self.detailTextLabel.alpha = (errorMessage.length == 0) ? 0 : 1;
     [UIView commitAnimations];
-}
-
-- (BOOL)dismissError
-{
-    if (self.errorMessage.length) {
-        self.errorMessage = nil;
-        
-        NSInteger row = [self.delegate.inputControls indexOfObject:self];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-        
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView beginUpdates];
-        [self.tableView endUpdates];
-        
-        [UIView beginAnimations:nil context:nil];
-        CGRect labelFrame = self.label.frame;
-        labelFrame.origin.y = 14;
-        self.label.frame = labelFrame;
-        
-        CGRect mandatoryLabelFrame = self.mandatoryLabel.frame;
-        mandatoryLabelFrame.origin.y = 14;
-        self.mandatoryLabel.frame = mandatoryLabelFrame;
-
-        [UIView commitAnimations];
-
-        return YES;
-    }
-    
-    return NO;
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-
-    UILabel *errorLabel = self.errorLabel;
-    if (self.errorMessage.length != 0) {
-        CGRect oldFrame = errorLabel.frame;
-        CGRect frame = CGRectMake(oldFrame.origin.x,
-                                  oldFrame.origin.y,
-                                  self.label.frame.size.width,
-                                  oldFrame.size.height);
-        errorLabel.frame = frame;
-        [errorLabel sizeToFit];
-    }
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
@@ -121,60 +54,36 @@
     if (!inputControlDescriptor.visible.boolValue) {
         self.hidden = YES;
     } else {
+        [self setEnabledCell:(!inputControlDescriptor.readOnly.boolValue)];
+        [self updateDisplayingOfErrorMessage:nil];
+        
         if (inputControlDescriptor.mandatory.boolValue) {
-            self.mandatoryLabel.hidden = NO;
+            self.textLabel.text = [NSString stringWithFormat:@"* %@",inputControlDescriptor.label];
+        } else {
+            self.textLabel.text = inputControlDescriptor.label;
         }
-
-        if (inputControlDescriptor.readOnly.boolValue) {
-            [self disableCell];
-        }
-
-        self.label.text = inputControlDescriptor.label;
     }
 }
 
-- (UILabel *)label
+- (void)setEnabledCell:(BOOL)enabled
 {
-    return (UILabel *) [self viewWithTag:1];
-}
-
-- (CGFloat)height
-{
-    if (self.errorMessage.length != 0) {
-        return baseHeight + self.errorLabel.frame.size.height;
+    if (enabled) {
+        self.textLabel.textColor = [UIColor darkGrayColor];
+    } else {
+        self.textLabel.textColor = [UIColor lightGrayColor];
     }
-    
-    return baseHeight;
-}
-
-- (void)disableCell
-{
-    self.label.textColor = [UIColor grayColor];
-    self.mandatoryLabel.textColor = self.label.textColor;
 }
 
 - (BOOL)isValid
 {
     JSValidationRules *validationRules = self.inputControlDescriptor.validationRules;
     if (validationRules.mandatoryValidationRule && self.value == nil) {
-        self.errorMessage = validationRules.mandatoryValidationRule.errorMessage;
-        
+        [self updateDisplayingOfErrorMessage:validationRules.mandatoryValidationRule.errorMessage];
         return NO;
     }
     
+    self.inputControlDescriptor.state.value = self.value;
     return YES;
-}
-
-#pragma mark - Private
-
-- (UILabel *)errorLabel
-{
-    return (UILabel *) [self viewWithTag:3];
-}
-
-- (UILabel *)mandatoryLabel
-{
-    return (UILabel *) [self viewWithTag:4];
 }
 
 @end

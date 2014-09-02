@@ -33,13 +33,9 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMInputControlCell : UITableViewCell {
-@protected
-    CGFloat baseHeight;
-}
+@interface JMInputControlCell : UITableViewCell 
 
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
-@property (nonatomic, strong) NSString *errorMessage;
 @property (nonatomic, weak) UIViewController <JMInputControlsHolder> *delegate;
 @property (nonatomic, weak) UITableView *tableView;
 
@@ -49,10 +45,10 @@
  */
 @property (nonatomic, strong) id value;
 
-- (UILabel *)label;
-- (CGFloat)height;
-- (BOOL)dismissError;
-- (void)disableCell;
+- (void) updateDisplayingOfErrorMessage:(NSString *)errorMessage;
+
+- (void)setEnabledCell:(BOOL) enabled;
+
 - (BOOL)isValid;
 
 @end

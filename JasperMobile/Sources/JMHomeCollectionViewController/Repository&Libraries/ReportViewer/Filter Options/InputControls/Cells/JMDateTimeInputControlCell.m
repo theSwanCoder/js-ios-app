@@ -27,92 +27,34 @@
 
 #import "JMDateTimeInputControlCell.h"
 
-static UIToolbar *dateTimePickerToolbar;
-
-typedef enum {
-    kJMDateType,
-    kJMTimeType
-} JMDatePickerType;
-
 @interface JMDateTimeInputControlCell()
-@property (nonatomic, assign) JMDatePickerType datePickerType;
 @property (nonatomic, weak) UIBarButtonItem *datePickerSwitcher;
 @end
 
 @implementation JMDateTimeInputControlCell
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder]) {
-        self.datePickerType = kJMDateType;
-    }
-
-    return self;
-}
-
-- (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
-{
-    [super setInputControlDescriptor:inputControlDescriptor];
-    self.time = self.date;
-}
+@synthesize datePickerToolbar = _datePickerToolbar;
 
 #pragma mark - UIResponder
 
-- (UIView *)inputAccessoryView
+- (NSArray *)toolbarItems
 {
-    if (!dateTimePickerToolbar) {
-        dateTimePickerToolbar = [self pickerToolbar];
-
-        NSMutableArray *items = [dateTimePickerToolbar.items mutableCopy];
-        UIBarButtonItem *datePickerSwitcher = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"ic.title.time", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(datePickerSwitched:)];
-
-        [items insertObject:datePickerSwitcher atIndex:items.count - 1];
-        dateTimePickerToolbar.items = items;
-
-        self.datePickerSwitcher = datePickerSwitcher;
-    } else {
-        [self setSelfAsDelegateForPickerToolbar:dateTimePickerToolbar];
-    }
-
-    return dateTimePickerToolbar;
+    NSMutableArray *items = [[super toolbarItems] mutableCopy];
+    UIBarButtonItem *datePickerSwitcher = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"ic.title.time", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(datePickerSwitched:)];
+    [items insertObject:datePickerSwitcher atIndex:items.count - 1];
+    return items;
 }
 
 #pragma mark - Actions
 
-- (void)done:(id)sender
+- (void)datePickerSwitched:(UIBarButtonItem *)sender
 {
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    NSDateComponents *time = [calendar components:NSHourCalendarUnit | NSMinuteCalendarUnit fromDate:self.time];
-    NSDateComponents *date = [calendar components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit fromDate:self.date];
-
-    date.hour = time.hour;
-    date.minute = time.minute;
-
-    self.date = [calendar dateFromComponents:date];
-    [super done:sender];
-}
-
-- (void)datePickerSwitched:(id)sender
-{
-    if (self.datePickerType == kJMDateType) {
-        self.datePicker.date = self.time;
+    self.datePicker.date = self.date;
+    if (self.datePicker.datePickerMode == UIDatePickerModeDate) {
         self.datePicker.datePickerMode = UIDatePickerModeTime;
-        self.datePickerType = kJMTimeType;
-        self.datePickerSwitcher.title = JMCustomLocalizedString(@"ic.title.date", nil);
+        sender.title = JMCustomLocalizedString(@"ic.title.date", nil);
     } else {
-        self.datePicker.date = self.date;
         self.datePicker.datePickerMode = UIDatePickerModeDate;
-        self.datePickerType = kJMDateType;
-        self.datePickerSwitcher.title = JMCustomLocalizedString(@"ic.title.time", nil);
-    }
-}
-
-- (void)dateChanged:(id)sender
-{
-    if (self.datePickerType == kJMDateType) {
-        self.date = self.datePicker.date;
-    } else {
-        self.time = self.datePicker.date;
+        sender.title = JMCustomLocalizedString(@"ic.title.time", nil);
     }
 }
 

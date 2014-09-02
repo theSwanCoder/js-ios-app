@@ -384,6 +384,7 @@
 		085B0813199E52FA0021BD52 /* grid_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grid_button.png; sourceTree = "<group>"; };
 		085B0815199E52FA0021BD52 /* horizontal_list_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = horizontal_list_button.png; sourceTree = "<group>"; };
 		085B0817199E52FA0021BD52 /* vertical_list_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vertical_list_button.png; sourceTree = "<group>"; };
+		0867B5B419B5E6A4008F2A74 /* JMInputControlsHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMInputControlsHolder.h; sourceTree = "<group>"; };
 		0879E3CC19B0D46300DFE769 /* JMMakeActiveServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMakeActiveServerOptionCell.h; sourceTree = "<group>"; };
 		0879E3CD19B0D46300DFE769 /* JMMakeActiveServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMakeActiveServerOptionCell.m; sourceTree = "<group>"; };
 		0881967C199A1703008CF79B /* JMSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSearchBar.h; sourceTree = "<group>"; };
@@ -554,7 +555,6 @@
 		08E863E01992564A007CF257 /* JMMainNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMainNavigationController.h; sourceTree = "<group>"; };
 		08E863E11992564A007CF257 /* JMMainNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMainNavigationController.m; sourceTree = "<group>"; };
 		08E863EC1992564A007CF257 /* JMSearchBarAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSearchBarAdditions.h; sourceTree = "<group>"; };
-		08E863ED1992564A007CF257 /* JMInputControlsHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMInputControlsHolder.h; sourceTree = "<group>"; };
 		08E863EE1992564A007CF257 /* JMPagination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPagination.h; sourceTree = "<group>"; };
 		08E863EF1992564A007CF257 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRefreshable.h; sourceTree = "<group>"; };
 		08E863F01992564A007CF257 /* JMReportClientHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportClientHolder.h; sourceTree = "<group>"; };
@@ -838,18 +838,18 @@
 				080F23A019A77E6B008758FA /* JMInputControlCell.m */,
 				080F239919A77E6B008758FA /* JMBooleanInputControlCell.h */,
 				080F239A19A77E6B008758FA /* JMBooleanInputControlCell.m */,
+				080F23AA19A77E6B008758FA /* JMTextInputControlCell.h */,
+				080F23AB19A77E6B008758FA /* JMTextInputControlCell.m */,
+				080F23A619A77E6B008758FA /* JMNumberInputControlCell.h */,
+				080F23A719A77E6B008758FA /* JMNumberInputControlCell.m */,
 				080F239B19A77E6B008758FA /* JMDateInputControlCell.h */,
 				080F239C19A77E6B008758FA /* JMDateInputControlCell.m */,
 				080F239D19A77E6B008758FA /* JMDateTimeInputControlCell.h */,
 				080F239E19A77E6B008758FA /* JMDateTimeInputControlCell.m */,
-				080F23A419A77E6B008758FA /* JMMultiSelectInputControlCell.h */,
-				080F23A519A77E6B008758FA /* JMMultiSelectInputControlCell.m */,
-				080F23A619A77E6B008758FA /* JMNumberInputControlCell.h */,
-				080F23A719A77E6B008758FA /* JMNumberInputControlCell.m */,
 				080F23A819A77E6B008758FA /* JMSingleSelectInputControlCell.h */,
 				080F23A919A77E6B008758FA /* JMSingleSelectInputControlCell.m */,
-				080F23AA19A77E6B008758FA /* JMTextInputControlCell.h */,
-				080F23AB19A77E6B008758FA /* JMTextInputControlCell.m */,
+				080F23A419A77E6B008758FA /* JMMultiSelectInputControlCell.h */,
+				080F23A519A77E6B008758FA /* JMMultiSelectInputControlCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1338,8 +1338,8 @@
 		08E863E91992564A007CF257 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				0867B5B419B5E6A4008F2A74 /* JMInputControlsHolder.h */,
 				08E863EC1992564A007CF257 /* JMSearchBarAdditions.h */,
-				08E863ED1992564A007CF257 /* JMInputControlsHolder.h */,
 				08E863EE1992564A007CF257 /* JMPagination.h */,
 				08E863EF1992564A007CF257 /* JMRefreshable.h */,
 				08E863F01992564A007CF257 /* JMReportClientHolder.h */,

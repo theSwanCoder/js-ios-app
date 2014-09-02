@@ -54,6 +54,7 @@
         CGSize contentSize = self.scrollView.contentSize;
         contentSize.height += [self getKeyboardHeightFromUserInfo:info key:UIKeyboardFrameEndUserInfoKey];
         self.scrollView.contentSize = contentSize;
+        self.scrollView.scrollEnabled = YES;
     }
 }
 
@@ -84,9 +85,9 @@
 - (CGFloat) getKeyboardHeightFromUserInfo:(NSDictionary *)userInfo key:(NSString *)key
 {
     if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-        return [[userInfo objectForKey:key] CGRectValue].origin.y;
+        return [[userInfo objectForKey:key] CGRectValue].size.height;
     } else {
-        return [[userInfo objectForKey:key] CGRectValue].origin.x;
+        return [[userInfo objectForKey:key] CGRectValue].size.width;
     }
 }
 @end

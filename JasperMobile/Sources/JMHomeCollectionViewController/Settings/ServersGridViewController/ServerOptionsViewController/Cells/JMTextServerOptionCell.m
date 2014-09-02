@@ -28,11 +28,6 @@
     self.textField.text = serverOption.optionValue;
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

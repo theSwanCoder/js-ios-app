@@ -25,9 +25,6 @@
 //  Jaspersoft Corporation
 //
 
-static UIToolbar *datePickerToolbar;
-static UIDatePicker *datePicker;
-
 #import "JMDateInputControlCell.h"
 
 @implementation JMDateInputControlCell
@@ -36,79 +33,72 @@ static UIDatePicker *datePicker;
 {
     if (self = [super initWithCoder:aDecoder]) {
         [self datePicker].datePickerMode = UIDatePickerModeDate;
-        UITextField *textField = self.textField;
-        textField.inputView = [self datePicker];
-        textField.leftView = nil;
+        self.textField.inputView = self.datePicker;
+        self.textField.inputAccessoryView = self.datePickerToolbar;
     }
 
     return self;
 }
 
-- (UIDatePicker *)datePicker
+- (void)setValue:(id)value
 {
-    if (!datePicker) {
-        datePicker = [[UIDatePicker alloc] init];
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            datePicker.autoresizingMask = UIViewAutoresizingNone;
+    if (value && [value length]) {
+        if ([self.dateFormatter dateFromString:value]) {
+            [super setValue:value];
+            self.date = [self.dateFormatter dateFromString:value];
         } else {
-            datePicker.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+            self.value = [self.dateFormatter stringFromDate:[NSDate date]];
         }
-        
-        [datePicker sizeToFit];
     }
-
-    return datePicker;
-}
-
-- (NSDateFormatter *)dateFormatter
-{
-    if (!_dateFormatter) _dateFormatter = [[NSDateFormatter alloc] init];
-    return _dateFormatter;
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
-    [super setInputControlDescriptor:inputControlDescriptor];
+    self.dateFormatter = [[NSDateFormatter alloc] init];
     self.dateFormatter.dateFormat = inputControlDescriptor.validationRules.dateTimeFormatValidationRule.format;
+    [super setInputControlDescriptor:inputControlDescriptor];
+}
 
-    if ([self.value length]) {
-        self.date = [self.dateFormatter dateFromString:self.value];
-
-        if (!self.date) {
-            self.date = [NSDate date];
-            self.value = [self.dateFormatter stringFromDate:self.date];
-            self.textField.text = self.value;
+- (UIDatePicker *)datePicker
+{
+    if (!_datePicker) {
+        _datePicker = [[UIDatePicker alloc] init];
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            _datePicker.autoresizingMask = UIViewAutoresizingNone;
+        } else {
+            _datePicker.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         }
-    } else {
-        self.date = [NSDate date];
+        [_datePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
+        [_datePicker sizeToFit];
     }
+
+    return _datePicker;
 }
 
-- (void)setSelfAsDelegateForPickerToolbar:(UIToolbar *)pickerToolbar
+- (UIToolbar *)datePickerToolbar
 {
-    for (UIBarButtonItem *item in pickerToolbar.items) {
-        item.target = self;
+    if (_datePickerToolbar) {
+        _datePickerToolbar = [[UIToolbar alloc] init];
+        _datePickerToolbar.barStyle = UIBarStyleBlackOpaque;
+        _datePickerToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [_datePickerToolbar sizeToFit];
+        
+        [_datePickerToolbar setItems:[self toolbarItems]];
     }
+    return _datePickerToolbar;
 }
 
-- (UIToolbar *)pickerToolbar
+- (NSArray *)toolbarItems
 {
-    UIToolbar *pickerToolbar = [[UIToolbar alloc] init];
-    pickerToolbar.barStyle = UIBarStyleBlackOpaque;
-    pickerToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [pickerToolbar sizeToFit];
-
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
     UIBarButtonItem *unset = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"ic.title.unset", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(unset:)];
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
-
+    
     // Used only for adding flexible space between buttons
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
-    [pickerToolbar setItems:@[cancel, unset, flexibleSpace, done]];
-
-    return pickerToolbar;
+    return @[cancel, unset, flexibleSpace, done];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -116,42 +106,11 @@ static UIDatePicker *datePicker;
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     self.datePicker.date = self.date;
-    
-    self.datePicker.frame = CGRectMake(0, 0, self.datePicker.frame.size.width, self.datePicker.frame.size.height);
-
-    // Check if this IC is not a target of DatePicker
-    if ([self.datePicker allTargets].anyObject != self) {
-        SEL dateChangedSelector = @selector(dateChanged:);
-        // If yes then remove all previously added targets
-        [self.datePicker removeTarget:nil action:dateChangedSelector forControlEvents:UIControlEventValueChanged];
-        // And add self as a new one
-        [self.datePicker addTarget:self action:dateChangedSelector forControlEvents:UIControlEventValueChanged];
-    }
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     return NO;
-}
-
-#pragma mark - UIResponder
-
-- (UIView *)inputAccessoryView
-{
-    if (!datePickerToolbar) {
-        datePickerToolbar = [self pickerToolbar];
-    } else {
-        [self setSelfAsDelegateForPickerToolbar:datePickerToolbar];
-    }
-
-    return datePickerToolbar;
-}
-
-#pragma mark - NSObject
-
-- (void)dealloc
-{
-    [self.datePicker removeTarget:nil action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
 #pragma mark - Actions
@@ -161,7 +120,7 @@ static UIDatePicker *datePicker;
     self.textField.text = [self.dateFormatter stringFromDate:self.date];
     self.value = self.textField.text;
 
-    [self dismissError];
+    [self updateDisplayingOfErrorMessage:nil];
     [self hideDatePicker];
 }
 
