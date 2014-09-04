@@ -37,18 +37,9 @@
 
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
 @property (nonatomic, weak) UIViewController <JMInputControlsHolder> *delegate;
-@property (nonatomic, weak) UITableView *tableView;
-
-/**
- Contains value for the Input Control. Can be NSString, NSDate or
- NSArray type
- */
-@property (nonatomic, strong) id value;
 
 - (void) updateDisplayingOfErrorMessage:(NSString *)errorMessage;
 
 - (void)setEnabledCell:(BOOL) enabled;
-
-- (BOOL)isValid;
 
 @end

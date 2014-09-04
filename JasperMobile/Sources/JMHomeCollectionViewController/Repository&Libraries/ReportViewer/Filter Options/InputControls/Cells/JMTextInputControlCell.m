@@ -32,8 +32,7 @@
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
-    self.value = inputControlDescriptor.state.value;
-    self.textField.text = self.value;
+    self.textField.text = inputControlDescriptor.state.value;
 }
 
 - (void)setEnabledCell:(BOOL)enabled
@@ -51,9 +50,11 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    if ([self.detailTextLabel.text length]) {
+        [self updateDisplayingOfErrorMessage:nil];
+    }
     NSString *value = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    self.value = value.length ? value : nil;
-    [self updateDisplayingOfErrorMessage:nil];
+    self.inputControlDescriptor.state.value = value.length ? value : nil;
 
     return YES;
 }

@@ -37,7 +37,6 @@ objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"con
 @synthesize resourceClient = _resourceClient;
 @synthesize reportClient   = _reportClient;
 @synthesize resourceLookup = _resourceLookup;
-@synthesize inputControls  = _inputControls; // A mutable array of "JSInputControlDescriptor" objects
 
 #pragma mark - Initialization
 
@@ -106,7 +105,7 @@ objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"con
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     id destinationViewController = segue.destinationViewController;
-    [destinationViewController setInputControls:[self.inputControls mutableCopy]];
+    [destinationViewController setInputControls:[[NSMutableArray alloc] initWithArray:self.inputControls copyItems:YES]];
     [destinationViewController setResourceLookup:self.resourceLookup];
     [destinationViewController setDelegate:self];
 }

@@ -15,6 +15,8 @@
 @property (strong, nonatomic) JMSearchBar *searchBar;
 
 @property (nonatomic, strong) NSArray *filteredListOfValues;
+@property (nonatomic, strong) NSMutableSet *previousSelectedValues;
+
 @end
 
 @implementation JMDetailSingleSelectTableViewController
@@ -32,23 +34,24 @@
 
 - (NSArray *)listOfValues
 {
-    return self.filteredListOfValues ? self.filteredListOfValues : self.cell.listOfValues;
+    return self.filteredListOfValues ? self.filteredListOfValues : self.cell.inputControlDescriptor.state.options;
 }
 
 - (void)setCell:(JMSingleSelectInputControlCell *)cell
 {
     _cell = cell;
     
-    for (JSInputControlOption *option in cell.listOfValues) {
+    for (JSInputControlOption *option in cell.inputControlDescriptor.state.options) {
         if (option.selected.boolValue) {
             [self.selectedValues addObject:option];
         }
     }
     
     if ([self.selectedValues count] == 1) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[cell.listOfValues indexOfObject:[self.selectedValues anyObject]] inSection:0];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.cell.inputControlDescriptor.state.options indexOfObject:[self.selectedValues anyObject]] inSection:0];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle  animated:YES];
     }
+    self.previousSelectedValues = [self.selectedValues mutableCopy];
 }
 
 #pragma mark - UIViewController
@@ -68,6 +71,13 @@
     [self showNavigationItems];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
+        [self.cell updateWithParameters:[self.selectedValues allObjects]];
+    }
+}
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -104,13 +114,18 @@
 {
     JSInputControlOption *selectedOption = [self.listOfValues objectAtIndex:indexPath.row];
     JSInputControlOption *previousSelectedOption = [self.selectedValues anyObject];
-    
+
     if (previousSelectedOption != selectedOption) {
         selectedOption.selected = [JSConstants stringFromBOOL:YES];
         previousSelectedOption.selected = [JSConstants stringFromBOOL:NO];
-        [self.cell updateWithParameters:@[selectedOption]];
+
+        [self.previousSelectedValues removeAllObjects];
+        [self.previousSelectedValues addObject:previousSelectedOption];
+
+        [self.selectedValues removeAllObjects];
+        [self.selectedValues addObject:selectedOption];
     }
-    
+
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -149,7 +164,7 @@
 {
     if (searchBar.text.length) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.label beginswith[cd] %@", searchBar.text];
-        self.filteredListOfValues = [self.cell.listOfValues filteredArrayUsingPredicate:predicate];
+        self.filteredListOfValues = [self.cell.inputControlDescriptor.state.options filteredArrayUsingPredicate:predicate];
     } else {
         self.filteredListOfValues = nil;
     }

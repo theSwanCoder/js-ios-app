@@ -36,8 +36,7 @@
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
-    self.value = inputControlDescriptor.state.value;
-    self.uiSwitch.on = [self.value boolValue];
+    self.uiSwitch.on = [inputControlDescriptor.state.value boolValue];
 }
 
 - (void)setEnabledCell:(BOOL)enabled
@@ -50,7 +49,7 @@
 
 - (IBAction)switchChanged:(id)sender
 {
-    self.value = [JSConstants stringFromBOOL:[sender isOn]];
+    self.inputControlDescriptor.state.value = [JSConstants stringFromBOOL:[sender isOn]];
 }
 
 @end

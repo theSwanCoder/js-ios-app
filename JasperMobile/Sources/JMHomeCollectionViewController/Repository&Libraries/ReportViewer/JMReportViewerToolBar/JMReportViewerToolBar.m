@@ -118,10 +118,6 @@
 - (UIToolbar *)pickerToolbar
 {
     UIToolbar *pickerToolbar = [[UIToolbar alloc] init];
-    pickerToolbar.barStyle = UIBarStyleDefault;
-    pickerToolbar.translucent = NO;
-    
-    pickerToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [pickerToolbar sizeToFit];
     
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];

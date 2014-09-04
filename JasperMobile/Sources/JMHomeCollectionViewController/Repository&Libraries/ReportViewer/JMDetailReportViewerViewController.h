@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "JMRefreshable.h"
-#import "JMInputControlsHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMReportClientHolder.h"
 
-@interface JMDetailReportViewerViewController : UIViewController <JMResourceClientHolder, JMReportClientHolder, JMInputControlsHolder, JMRefreshable>
+@interface JMDetailReportViewerViewController : UIViewController <JMResourceClientHolder, JMReportClientHolder, JMRefreshable>
 
+@property (nonatomic, strong) NSMutableArray *inputControls;
 @end

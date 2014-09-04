@@ -29,34 +29,5 @@
 
 @implementation JMMultiSelectInputControlCell
 
-@synthesize value = _value;
-
-- (void)setValue:(id)value
-{
-    NSInteger numberOfValues = [value count];
-    NSArray *allValues = [value allObjects];
-
-    allValues = [allValues sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        return [[obj1 label] compare:[obj2 label]];
-    }];
-
-    if (numberOfValues > 0) {
-        JSInputControlOption *firstOption = [allValues objectAtIndex:0];
-        NSMutableString *valuesAsStrings = [NSMutableString stringWithFormat:@"%@", firstOption.label];
-        NSMutableArray *selectedValues = [NSMutableArray arrayWithObject:firstOption.value];
-        
-        for (NSUInteger i = 1; i < numberOfValues; i++) {
-            JSInputControlOption *option = [allValues objectAtIndex:i];
-            [valuesAsStrings appendFormat:@", %@", option.label];
-            [selectedValues addObject:option.value];
-        }
-
-        _value = selectedValues;
-        self.detailLabel.text = valuesAsStrings;
-    } else {
-        _value = nil;
-        self.detailLabel.text = JS_IC_NOTHING_SUBSTITUTE_LABEL;
-    }
-}
 
 @end

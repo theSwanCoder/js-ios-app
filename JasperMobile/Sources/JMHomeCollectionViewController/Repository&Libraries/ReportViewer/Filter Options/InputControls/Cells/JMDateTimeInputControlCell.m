@@ -27,15 +27,7 @@
 
 #import "JMDateTimeInputControlCell.h"
 
-@interface JMDateTimeInputControlCell()
-@property (nonatomic, weak) UIBarButtonItem *datePickerSwitcher;
-@end
-
 @implementation JMDateTimeInputControlCell
-@synthesize datePickerToolbar = _datePickerToolbar;
-
-#pragma mark - UIResponder
-
 - (NSArray *)toolbarItems
 {
     NSMutableArray *items = [[super toolbarItems] mutableCopy];
@@ -48,7 +40,6 @@
 
 - (void)datePickerSwitched:(UIBarButtonItem *)sender
 {
-    self.datePicker.date = self.date;
     if (self.datePicker.datePickerMode == UIDatePickerModeDate) {
         self.datePicker.datePickerMode = UIDatePickerModeTime;
         sender.title = JMCustomLocalizedString(@"ic.title.date", nil);

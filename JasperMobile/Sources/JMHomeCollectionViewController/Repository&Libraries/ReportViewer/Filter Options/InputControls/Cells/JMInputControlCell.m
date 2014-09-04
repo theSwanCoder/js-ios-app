@@ -42,26 +42,18 @@
 - (void) updateDisplayingOfErrorMessage:(NSString *)errorMessage
 {
     self.detailTextLabel.text = errorMessage;
-    [UIView beginAnimations:nil context:nil];
-    self.detailTextLabel.alpha = (errorMessage.length == 0) ? 0 : 1;
-    [UIView commitAnimations];
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     _inputControlDescriptor = inputControlDescriptor;
 
-    if (!inputControlDescriptor.visible.boolValue) {
-        self.hidden = YES;
+    [self setEnabledCell:(!inputControlDescriptor.readOnly.boolValue)];
+    
+    if (inputControlDescriptor.mandatory.boolValue) {
+        self.textLabel.text = [NSString stringWithFormat:@"* %@",inputControlDescriptor.label];
     } else {
-        [self setEnabledCell:(!inputControlDescriptor.readOnly.boolValue)];
-        [self updateDisplayingOfErrorMessage:nil];
-        
-        if (inputControlDescriptor.mandatory.boolValue) {
-            self.textLabel.text = [NSString stringWithFormat:@"* %@",inputControlDescriptor.label];
-        } else {
-            self.textLabel.text = inputControlDescriptor.label;
-        }
+        self.textLabel.text = inputControlDescriptor.label;
     }
 }
 
@@ -72,18 +64,6 @@
     } else {
         self.textLabel.textColor = [UIColor lightGrayColor];
     }
-}
-
-- (BOOL)isValid
-{
-    JSValidationRules *validationRules = self.inputControlDescriptor.validationRules;
-    if (validationRules.mandatoryValidationRule && self.value == nil) {
-        [self updateDisplayingOfErrorMessage:validationRules.mandatoryValidationRule.errorMessage];
-        return NO;
-    }
-    
-    self.inputControlDescriptor.state.value = self.value;
-    return YES;
 }
 
 @end

@@ -27,35 +27,42 @@
 
 #import "JMDateInputControlCell.h"
 
+@interface JMDateInputControlCell()
+
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
+@end
+
 @implementation JMDateInputControlCell
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (void)awakeFromNib
 {
-    if (self = [super initWithCoder:aDecoder]) {
-        [self datePicker].datePickerMode = UIDatePickerModeDate;
-        self.textField.inputView = self.datePicker;
-        self.textField.inputAccessoryView = self.datePickerToolbar;
-    }
+    [super awakeFromNib];
+    self.textField.inputView = self.datePicker;
+    
+    UIToolbar *datePickerToolbar = [[UIToolbar alloc] init];
+    datePickerToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [datePickerToolbar setItems:[self toolbarItems]];
+    [datePickerToolbar sizeToFit];
 
-    return self;
-}
-
-- (void)setValue:(id)value
-{
-    if (value && [value length]) {
-        if ([self.dateFormatter dateFromString:value]) {
-            [super setValue:value];
-            self.date = [self.dateFormatter dateFromString:value];
-        } else {
-            self.value = [self.dateFormatter stringFromDate:[NSDate date]];
-        }
-    }
+    self.textField.inputAccessoryView = datePickerToolbar;
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     self.dateFormatter = [[NSDateFormatter alloc] init];
     self.dateFormatter.dateFormat = inputControlDescriptor.validationRules.dateTimeFormatValidationRule.format;
+    
+    NSString *value = inputControlDescriptor.state.value;
+    if (value && [value length]) {
+        if ([self.dateFormatter dateFromString:value]) {
+            self.datePicker.date = [self.dateFormatter dateFromString:value];
+        } else {
+            self.datePicker.date = [NSDate date];
+            inputControlDescriptor.state.value = [self.dateFormatter stringFromDate:self.datePicker.date];
+        }
+    }
+
     [super setInputControlDescriptor:inputControlDescriptor];
 }
 
@@ -63,30 +70,9 @@
 {
     if (!_datePicker) {
         _datePicker = [[UIDatePicker alloc] init];
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            _datePicker.autoresizingMask = UIViewAutoresizingNone;
-        } else {
-            _datePicker.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        }
-        [_datePicker addTarget:self action:@selector(dateChanged:) forControlEvents:UIControlEventValueChanged];
-        [_datePicker sizeToFit];
+        _datePicker.datePickerMode = UIDatePickerModeDate;
     }
-
     return _datePicker;
-}
-
-- (UIToolbar *)datePickerToolbar
-{
-    if (_datePickerToolbar) {
-        _datePickerToolbar = [[UIToolbar alloc] init];
-        _datePickerToolbar.barStyle = UIBarStyleBlackOpaque;
-        _datePickerToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [_datePickerToolbar sizeToFit];
-        
-        [_datePickerToolbar setItems:[self toolbarItems]];
-    }
-    return _datePickerToolbar;
 }
 
 - (NSArray *)toolbarItems
@@ -94,19 +80,11 @@
     UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
     UIBarButtonItem *unset = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"ic.title.unset", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(unset:)];
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
-    
-    // Used only for adding flexible space between buttons
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-
     return @[cancel, unset, flexibleSpace, done];
 }
 
 #pragma mark - UITextFieldDelegate
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    self.datePicker.date = self.date;
-}
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
@@ -117,17 +95,19 @@
 
 - (void)done:(id)sender
 {
-    self.textField.text = [self.dateFormatter stringFromDate:self.date];
-    self.value = self.textField.text;
-
-    [self updateDisplayingOfErrorMessage:nil];
+    self.textField.text = [self.dateFormatter stringFromDate:self.datePicker.date];
+    self.inputControlDescriptor.state.value = self.textField.text;
+    
+    if ([self.detailTextLabel.text length]) {
+        [self updateDisplayingOfErrorMessage:nil];
+    }
     [self hideDatePicker];
 }
 
 - (void)unset:(id)sender
 {
-    self.value = nil;
     self.textField.text = nil;
+    self.inputControlDescriptor.state.value = self.textField.text;
     [self hideDatePicker];
 }
 
@@ -135,13 +115,6 @@
 {
     [self hideDatePicker];
 }
-
-- (void)dateChanged:(id)sender
-{
-    self.date = self.datePicker.date;
-}
-
-#pragma mark - Private
 
 - (void)hideDatePicker
 {

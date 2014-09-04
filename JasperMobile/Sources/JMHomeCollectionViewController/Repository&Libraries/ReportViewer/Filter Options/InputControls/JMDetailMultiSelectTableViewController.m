@@ -8,10 +8,6 @@
 
 #import "JMDetailMultiSelectTableViewController.h"
 
-@interface JMDetailMultiSelectTableViewController ()
-@property (nonatomic, strong) NSSet *previousSelectedValues;
-@end
-
 @implementation JMDetailMultiSelectTableViewController
 - (void)viewDidLoad
 {
@@ -19,28 +15,11 @@
     self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.multiselect.titlelabel.title", nil);
 }
 
-
-#pragma mark - Accessors
-- (void)setCell:(JMSingleSelectInputControlCell *)cell
-{
-    [super setCell:cell];
-    self.previousSelectedValues = [self.selectedValues copy];
-}
-
 #pragma mark - Initialization
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     return [self initWithNibName:NSStringFromClass([JMDetailSingleSelectTableViewController class]) bundle:nil];
-}
-
-#pragma mark - UITableViewController
-
-- (void)willMoveToParentViewController:(UIViewController *)parent
-{
-    if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
-        [self.cell updateWithParameters:[self.selectedValues allObjects]];
-    }
 }
 
 #pragma mark - Table view delegate

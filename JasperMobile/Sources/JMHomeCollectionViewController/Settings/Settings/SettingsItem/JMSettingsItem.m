@@ -12,7 +12,7 @@
 - (id)init{
     self = [super init];
     if (self) {
-        self.availableRange = NSMakeRange(0, 1000);
+        self.availableRange = NSMakeRange(0, INT32_MAX);
     }
     return self;
 }

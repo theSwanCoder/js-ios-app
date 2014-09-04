@@ -38,4 +38,5 @@
 @required
 @property (nonatomic, strong) NSMutableArray *inputControls;
 
+- (UITableView *)tableView;
 @end

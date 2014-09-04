@@ -36,15 +36,6 @@
  */
 @interface JMSingleSelectInputControlCell : JMInputControlCell <JMResourceClientHolder, JMReportClientHolder>
 
-@property (nonatomic, assign) BOOL disableUnsetFunctional;
-@property (nonatomic, strong) NSMutableArray *listOfValues;
-@property (nonatomic, strong) JSConstants *constants;
-
-/**
- Returns detail label for IC
- */
-- (UILabel *)detailLabel;
-
 /**
  Forces to reload data for dependent Input Controls (if exists)
  */

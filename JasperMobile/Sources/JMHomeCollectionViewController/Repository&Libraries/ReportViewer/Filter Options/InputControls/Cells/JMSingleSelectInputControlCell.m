@@ -30,63 +30,33 @@
 #import "JMRequestDelegate.h"
 
 @interface JMSingleSelectInputControlCell()
-@property  (nonatomic, copy) void (^updateSlaveDependenciesBlock)(void);
+@property (nonatomic, weak) IBOutlet UILabel *valueLabel;
 @end
 
 @implementation JMSingleSelectInputControlCell
 
-@synthesize value = _value;
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceLookup = _resourceLookup;
 @synthesize reportClient = _reportClient;
 
-- (void)setValue:(id)value
+- (void)setEnabledCell:(BOOL)enabled
 {
-    if ([value count] > 0) {
-        JSInputControlOption *item = [value objectAtIndex:0];
-        _value = item.value;
-        self.detailLabel.text = item.label;
-    } else {
-        _value = nil;
-        self.detailLabel.text = JS_IC_NOTHING_SUBSTITUTE_LABEL;
-    }
-}
-
-- (UILabel *)detailLabel
-{
-    return (UILabel *) [self viewWithTag:2];
+    [super setEnabledCell:enabled];
+    self.userInteractionEnabled = enabled;
 }
 
 - (void)updateWithParameters:(NSArray *)parameters
 {
-    // Set selected value
-    self.value = parameters;
+    [self updateDisplayingOfErrorMessage:nil];
 
-    if (self.updateSlaveDependenciesBlock) {
-        self.updateSlaveDependenciesBlock();
-    }
+    [self updateValueLabelWithParameters:parameters];
+    [self updatedInputControlsValues];
 }
-
-- (void)setEnabledCell:(BOOL)enabled
-{
-    [super setEnabledCell:enabled];
-    self.selectionStyle = enabled ? UITableViewCellSelectionStyleBlue : UITableViewCellSelectionStyleNone;
-    // Enable / Disable calls for didSelectRowAtIndexPath: method
-    self.userInteractionEnabled = enabled;
-}
-
-#pragma mark - REST v2 -
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
     [self setInputControlState:inputControlDescriptor.state];
-    
-    __weak JMSingleSelectInputControlCell *weakSelf = self;
-    
-    self.updateSlaveDependenciesBlock = ^{
-        [weakSelf updatedInputControlsValues];
-    };
 }
 
 #pragma mark Private
@@ -120,13 +90,14 @@
             for (id inputControl in weakSelf.delegate.inputControls) {
                 if ([state.uuid isEqualToString:[inputControl inputControlDescriptor].uuid]) {
                     [inputControl setInputControlState:state];
+                    break;
                 }
             }
         }
     } viewControllerToDismiss:self.delegate];
     
     [JMRequestDelegate setFinalBlock:^{
-        [self.tableView reloadData];
+        [weakSelf.delegate.tableView reloadData];
     }];
     
     [self.reportClient updatedInputControlsValues:self.resourceLookup.uri
@@ -137,16 +108,34 @@
 
 - (void)setInputControlState:(JSInputControlState *)state
 {
-    self.listOfValues = [state.options mutableCopy];
+    self.inputControlDescriptor.state = state;
     
     NSMutableArray *selectedValues = [NSMutableArray array];
-    for (JSInputControlOption *option in self.listOfValues) {
+    for (JSInputControlOption *option in state.options) {
         if (option.selected.boolValue) {
             [selectedValues addObject:option];
         }
     }
-    
-    self.value = selectedValues;
+    [self updateValueLabelWithParameters:selectedValues];
 }
 
+- (void)updateValueLabelWithParameters:(NSArray *)parameters
+{
+    if ([parameters count] > 0) {
+        NSArray *allValues = [parameters sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [[obj1 label] compare:[obj2 label]];
+        }];
+        
+        NSMutableString *valuesAsStrings = [NSMutableString string];
+        for (JSInputControlOption *option in allValues) {
+            NSString *formatString = [valuesAsStrings  length] ? @", %@" : @"%@";
+            [valuesAsStrings appendFormat:formatString, option.label];
+        }
+        self.inputControlDescriptor.state.value = valuesAsStrings;
+        self.valueLabel.text = valuesAsStrings;
+    } else {
+        self.inputControlDescriptor.state.value = nil;
+        self.valueLabel.text = JS_IC_NOTHING_SUBSTITUTE_LABEL;
+    }
+}
 @end
