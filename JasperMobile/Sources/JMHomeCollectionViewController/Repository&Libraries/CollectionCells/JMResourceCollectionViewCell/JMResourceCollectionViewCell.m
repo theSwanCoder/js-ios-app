@@ -7,6 +7,9 @@
 //
 
 #import "JMResourceCollectionViewCell.h"
+#import <Objection-iOS/Objection.h>
+
+
 NSString * kJMResourceCellIdentifier = @"ResourceCell";
 NSString * kJMResourceCellNibKey = @"ResourceCellNibKey";
 
@@ -20,9 +23,23 @@ NSString * kJMGridResourceCellNib = @"JMGridResourceCollectionViewCell";
 @property (nonatomic, weak) IBOutlet UILabel *resourceName;
 @property (nonatomic, weak) IBOutlet UILabel *resourceDescription;
 @property (nonatomic, weak) IBOutlet UILabel *resourceDataCreation;
+
+@property (nonatomic, weak) JSConstants *constants;
+
 @end
 
 @implementation JMResourceCollectionViewCell
+@synthesize constants = _constants;
+
+objection_requires(@"constants")
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [[JSObjection defaultInjector] injectDependencies:self];
+
+    self.resourceImage.backgroundColor = kJMResourcePreviewBackgroundColor;
+}
 
 - (void)setResourceLookup:(JSResourceLookup *)resourceLookup
 {
@@ -30,5 +47,11 @@ NSString * kJMGridResourceCellNib = @"JMGridResourceCollectionViewCell";
     self.resourceName.text = resourceLookup.label;
     self.resourceDescription.text = resourceLookup.resourceDescription;
     self.resourceDataCreation.text = resourceLookup.creationDate;
+    
+    if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
+        self.resourceImage.image = [UIImage imageNamed:@"Report.png"];
+    } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD]) {
+        self.resourceImage.image = [UIImage imageNamed:@"Dashboard.png"];
+    }
 }
 @end

@@ -20,4 +20,6 @@
 
 + (UIFont *)tableViewCellDetailErrorFont;
 
++ (UIFont *)resourcesActivityTitleFont;
+
 @end

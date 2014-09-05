@@ -34,6 +34,5 @@
 @interface JMDateInputControlCell : JMTextInputControlCell
 @property (nonatomic, strong) UIDatePicker *datePicker;
 
-- (NSArray *)toolbarItems;
 
 @end

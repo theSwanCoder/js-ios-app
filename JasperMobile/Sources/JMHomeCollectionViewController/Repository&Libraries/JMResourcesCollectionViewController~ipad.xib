@@ -14,9 +14,9 @@
                 <outlet property="noResultsView" destination="pLE-Bm-20N" id="jAl-78-g4H"/>
                 <outlet property="noResultsViewTitleLabel" destination="4gW-3v-gAB" id="qfa-FB-K4K"/>
                 <outlet property="view" destination="vAk-FG-8ny" id="147-o9-Ndk"/>
-                <outletCollection property="collectionViews" destination="eZO-wS-BFk" id="Z0G-jZ-zTz"/>
-                <outletCollection property="collectionViews" destination="Sc9-1a-8Ah" id="5Ud-sb-k4S"/>
-                <outletCollection property="collectionViews" destination="FpR-Do-E8i" id="YpP-LG-cww"/>
+                <outletCollection property="collectionViews" destination="eZO-wS-BFk" id="31T-LV-Vni"/>
+                <outletCollection property="collectionViews" destination="FpR-Do-E8i" id="qqQ-MQ-rpA"/>
+                <outletCollection property="collectionViews" destination="Sc9-1a-8Ah" id="ylP-qc-wtt"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -74,6 +74,22 @@
                                 <outlet property="delegate" destination="-1" id="hyf-dt-6ib"/>
                             </connections>
                         </collectionView>
+                        <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" id="FpR-Do-E8i">
+                            <rect key="frame" x="0.0" y="0.0" width="603" height="960"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="18" id="zJV-w2-z9m">
+                                <size key="itemSize" width="261" height="254"/>
+                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                <inset key="sectionInset" minX="18" minY="18" maxX="18" maxY="18"/>
+                            </collectionViewFlowLayout>
+                            <cells/>
+                            <connections>
+                                <outlet property="dataSource" destination="-1" id="bXa-Sb-srE"/>
+                                <outlet property="delegate" destination="-1" id="xcR-58-uS7"/>
+                            </connections>
+                        </collectionView>
                         <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" id="Sc9-1a-8Ah">
                             <rect key="frame" x="0.0" y="0.0" width="603" height="960"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -91,22 +107,6 @@
                                 <outlet property="delegate" destination="-1" id="cnD-w0-Vhx"/>
                             </connections>
                         </collectionView>
-                        <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" id="FpR-Do-E8i">
-                            <rect key="frame" x="0.0" y="0.0" width="603" height="960"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="18" minimumInteritemSpacing="18" id="zJV-w2-z9m">
-                                <size key="itemSize" width="261" height="254"/>
-                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                <inset key="sectionInset" minX="18" minY="18" maxX="18" maxY="18"/>
-                            </collectionViewFlowLayout>
-                            <cells/>
-                            <connections>
-                                <outlet property="dataSource" destination="-1" id="bXa-Sb-srE"/>
-                                <outlet property="delegate" destination="-1" id="xcR-58-uS7"/>
-                            </connections>
-                        </collectionView>
                         <view hidden="YES" tag="1" contentMode="scaleToFill" id="Ghp-aQ-igi">
                             <rect key="frame" x="151" y="435" width="300" height="90"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -121,7 +121,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <string key="text">Loading, 
 Please Wait...</string>
-                                    <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="30"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                     <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -135,7 +135,7 @@ Please Wait...</string>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results. Please Make Another Selection..." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4gW-3v-gAB" userLabel="Label">
                                     <rect key="frame" x="46" y="-5" width="558" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="30"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                     <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>

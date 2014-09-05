@@ -53,6 +53,8 @@ static CGPoint popupOffset;
         instance.view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
         UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         [viewController presentPopupViewController:instance animationType:MJPopupViewAnimationFade];
+        instance.view.layer.borderColor = [UIColor whiteColor].CGColor;
+        instance.view.layer.borderWidth = 1;
     }
     instance.restClient = client;
     instance.delegate = viewController;

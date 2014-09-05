@@ -377,6 +377,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <size key="freeformSize" width="768" height="1024"/>
                     <connections>
+                        <outlet property="scrollView" destination="Qmi-RR-ioM" id="DUt-kr-Stc"/>
                         <outlet property="tableView" destination="Qmi-RR-ioM" id="DNa-8V-e2y"/>
                         <outlet property="titleLabel" destination="8Pl-md-ure" id="Mi8-Bm-R1x"/>
                         <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="QIH-Uk-XKN"/>
@@ -405,8 +406,8 @@
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" id="ahI-Oj-dmd">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" id="ahI-Oj-dmd">
+                                <rect key="frame" x="-2" y="-2" width="768" height="960"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </webView>
@@ -834,7 +835,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="nhO-YI-grs">
-                                                    <rect key="frame" x="469.99999860954279" y="10" width="250" height="30"/>
+                                                    <rect key="frame" x="470" y="10" width="250" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -871,7 +872,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Z4W-hL-1an">
-                                                    <rect key="frame" x="469.99999860954279" y="10" width="250" height="30"/>
+                                                    <rect key="frame" x="470" y="10" width="250" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
@@ -1112,8 +1113,8 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="0bD-K8-B5D"/>
         <segue reference="yOc-W8-lgs"/>
         <segue reference="QIH-Uk-XKN"/>
+        <segue reference="0bD-K8-B5D"/>
     </inferredMetricsTieBreakers>
 </document>

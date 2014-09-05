@@ -10,26 +10,30 @@
 
 @implementation JMEditabledViewController
 
-- (void)viewDidLoad{
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShown:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboarDidHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)viewWillDisappear:(BOOL)animated{
+- (void)viewWillDisappear:(BOOL)animated
+{
     [self.view endEditing:YES];
     [super viewWillDisappear:animated];
 }
 
-- (void)dealloc{
+- (void)dealloc
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark -
 #pragma mark - Layout subviews with using keyboard
 // Called when the UIKeyboardWillShowNotification is sent.
-- (void)keyboardWillShown:(NSNotification*)aNotification{
+- (void)keyboardWillShown:(NSNotification*)aNotification
+{
     UIView *activeView = [self getFirstResponderForView:self.view];
     if (activeView) {
         NSDictionary* info = [aNotification userInfo];
@@ -58,7 +62,8 @@
     }
 }
 
-- (void)keyboarDidHide:(NSNotification*)aNotification{
+- (void)keyboarDidHide:(NSNotification*)aNotification
+{
     NSDictionary* info = [aNotification userInfo];
     CGSize contentSize = self.scrollView.contentSize;
     contentSize.height -= [self getKeyboardHeightFromUserInfo:info key:UIKeyboardFrameBeginUserInfoKey];
@@ -68,7 +73,8 @@
     [UIView commitAnimations];
 }
 
-- (UIView *) getFirstResponderForView:(UIView *)view{
+- (UIView *) getFirstResponderForView:(UIView *)view
+{
     if (view.isFirstResponder) {
         return view;
     }

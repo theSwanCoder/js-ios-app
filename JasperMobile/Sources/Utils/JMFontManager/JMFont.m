@@ -35,4 +35,9 @@
     return [JMUtils isIphone] ? [UIFont italicSystemFontOfSize:12] : [UIFont italicSystemFontOfSize:16];
 }
 
++ (UIFont *)resourcesActivityTitleFont
+{
+    return [JMUtils isIphone] ? [UIFont italicSystemFontOfSize:20] : [UIFont italicSystemFontOfSize:30];
+}
+
 @end

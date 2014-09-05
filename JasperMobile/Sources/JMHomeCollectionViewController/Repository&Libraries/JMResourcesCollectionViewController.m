@@ -24,8 +24,8 @@
 
 typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
     JMResourcesRepresentationTypeHorizontalList = 0,
-    JMResourcesRepresentationTypeVerticalList = 1,
-    JMResourcesRepresentationTypeGrid = 2
+    JMResourcesRepresentationTypeGrid,
+    JMResourcesRepresentationTypeVerticalList
 };
 
 static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
@@ -91,18 +91,21 @@ objection_requires(@"resourceClient", @"constants")
     self.activityViewTitleLabel.text = JMCustomLocalizedString(@"detail.resourcesloading.msg", nil);
     self.noResultsViewTitleLabel.text = JMCustomLocalizedString(@"detail.noresults.msg", nil);
     
+    self.activityViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
+    self.noResultsViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
+
     self.resources = [NSMutableArray array];
     
     NSArray *paramsArray = @[
                              @{kJMResourceCellNibKey: kJMHorizontalResourceCellNib,
                                kJMLoadingCellNibKey:  kJMHorizontalLoadingCellNib},
-                             @{kJMResourceCellNibKey: kJMVerticalResourceCellNib,
-                               kJMLoadingCellNibKey:  kJMVerticalLoadingCellNib},
                              @{kJMResourceCellNibKey: kJMGridResourceCellNib,
                                kJMLoadingCellNibKey:  kJMGridLoadingCellNib},
+                             @{kJMResourceCellNibKey: kJMVerticalResourceCellNib,
+                               kJMLoadingCellNibKey:  kJMVerticalLoadingCellNib},
                              ];
     
-    for (int i = 0; i < [paramsArray count]; i++) {
+    for (int i = 0; i < [self.collectionViews count]; i++) {
         UICollectionView *collectionView = [self.collectionViews objectAtIndex:i];
         [collectionView registerNib:[UINib nibWithNibName:[[paramsArray objectAtIndex:i] objectForKey:kJMResourceCellNibKey] bundle:nil] forCellWithReuseIdentifier:kJMResourceCellIdentifier];
         [collectionView registerNib:[UINib nibWithNibName:[[paramsArray objectAtIndex:i] objectForKey:kJMLoadingCellNibKey] bundle:nil] forCellWithReuseIdentifier:kJMLoadingCellIdentifier];
@@ -112,7 +115,7 @@ objection_requires(@"resourceClient", @"constants")
     self.resourcesTypes = @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD];
     
     // Will show horizontal list view controller
-    self.representationType = JMResourcesRepresentationTypeVerticalList;
+    self.representationType = JMResourcesRepresentationTypeHorizontalList;
     [self showNavigationItems];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -344,7 +347,10 @@ objection_requires(@"resourceClient", @"constants")
 
 - (JMResourcesRepresentationType)getNextRepresentationTypeForType:(JMResourcesRepresentationType)currentType
 {
-    if (currentType == JMResourcesRepresentationTypeGrid) {
+    if ([JMUtils isIphone]) {
+        return (currentType == JMResourcesRepresentationTypeGrid) ? JMResourcesRepresentationTypeHorizontalList : JMResourcesRepresentationTypeGrid;
+    }
+    if (currentType == JMResourcesRepresentationTypeVerticalList) {
         return JMResourcesRepresentationTypeHorizontalList;
     }
     return (++currentType);

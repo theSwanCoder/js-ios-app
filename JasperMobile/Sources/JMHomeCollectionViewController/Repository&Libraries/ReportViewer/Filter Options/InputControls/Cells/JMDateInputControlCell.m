@@ -39,13 +39,6 @@
 {
     [super awakeFromNib];
     self.textField.inputView = self.datePicker;
-    
-    UIToolbar *datePickerToolbar = [[UIToolbar alloc] init];
-    datePickerToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [datePickerToolbar setItems:[self toolbarItems]];
-    [datePickerToolbar sizeToFit];
-
-    self.textField.inputAccessoryView = datePickerToolbar;
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
@@ -71,17 +64,23 @@
     if (!_datePicker) {
         _datePicker = [[UIDatePicker alloc] init];
         _datePicker.datePickerMode = UIDatePickerModeDate;
+        [_datePicker addTarget:self action:@selector(dateValueDidChanged:) forControlEvents:UIControlEventValueChanged];
     }
     return _datePicker;
 }
 
-- (NSArray *)toolbarItems
+- (NSArray *)leftInputAccessoryViewToolbarItems
 {
-    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+    NSMutableArray *items = [NSMutableArray arrayWithArray:[super leftInputAccessoryViewToolbarItems]];
     UIBarButtonItem *unset = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"ic.title.unset", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(unset:)];
-    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
-    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    return @[cancel, unset, flexibleSpace, done];
+    [items addObject:unset];
+    return items;
+}
+
+- (void) dateValueDidChanged:(id)sender
+{
+    self.textField.text = [self.dateFormatter stringFromDate:self.datePicker.date];
+    self.inputControlDescriptor.state.value = self.textField.text;
 }
 
 #pragma mark - UITextFieldDelegate
@@ -93,31 +92,16 @@
 
 #pragma mark - Actions
 
-- (void)done:(id)sender
+- (void)doneButtonTapped:(id)sender
 {
     self.textField.text = [self.dateFormatter stringFromDate:self.datePicker.date];
-    self.inputControlDescriptor.state.value = self.textField.text;
-    
-    if ([self.detailTextLabel.text length]) {
-        [self updateDisplayingOfErrorMessage:nil];
-    }
-    [self hideDatePicker];
+    [super doneButtonTapped:sender];
 }
 
 - (void)unset:(id)sender
 {
     self.textField.text = nil;
     self.inputControlDescriptor.state.value = self.textField.text;
-    [self hideDatePicker];
-}
-
-- (void)cancel:(id)sender
-{
-    [self hideDatePicker];
-}
-
-- (void)hideDatePicker
-{
     [self.textField resignFirstResponder];
 }
 

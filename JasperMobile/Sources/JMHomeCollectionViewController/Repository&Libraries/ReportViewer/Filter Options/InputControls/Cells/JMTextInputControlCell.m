@@ -33,6 +33,32 @@
 {
     [super setInputControlDescriptor:inputControlDescriptor];
     self.textField.text = inputControlDescriptor.state.value;
+    UIToolbar *datePickerToolbar = [[UIToolbar alloc] init];
+    datePickerToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [datePickerToolbar setItems:[self inputAccessoryViewToolbarItems]];
+    [datePickerToolbar sizeToFit];
+    
+    self.textField.inputAccessoryView = datePickerToolbar;
+
+}
+
+- (NSArray *)inputAccessoryViewToolbarItems
+{
+    NSMutableArray *items = [NSMutableArray arrayWithArray:[self leftInputAccessoryViewToolbarItems]];
+    [items addObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil]];
+    [items addObjectsFromArray:[self rightInputAccessoryViewToolbarItems]];
+    return items;
+}
+
+- (NSArray *)leftInputAccessoryViewToolbarItems
+{
+    return [NSArray array];
+}
+
+- (NSArray *)rightInputAccessoryViewToolbarItems
+{
+    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTapped:)];
+    return @[done];
 }
 
 - (void)setEnabledCell:(BOOL)enabled
@@ -57,6 +83,18 @@
     self.inputControlDescriptor.state.value = value.length ? value : nil;
 
     return YES;
+}
+
+#pragma mark - Actions
+
+- (void)doneButtonTapped:(id)sender
+{
+    self.inputControlDescriptor.state.value = self.textField.text;
+    
+    if ([self.detailTextLabel.text length]) {
+        [self updateDisplayingOfErrorMessage:nil];
+    }
+    [self.textField resignFirstResponder];
 }
 
 @end

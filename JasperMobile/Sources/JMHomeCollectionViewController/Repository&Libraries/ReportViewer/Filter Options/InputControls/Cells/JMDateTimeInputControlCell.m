@@ -28,9 +28,9 @@
 #import "JMDateTimeInputControlCell.h"
 
 @implementation JMDateTimeInputControlCell
-- (NSArray *)toolbarItems
+- (NSArray *)rightInputAccessoryViewToolbarItems
 {
-    NSMutableArray *items = [[super toolbarItems] mutableCopy];
+    NSMutableArray *items = [NSMutableArray arrayWithArray:[super rightInputAccessoryViewToolbarItems]];
     UIBarButtonItem *datePickerSwitcher = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"ic.title.time", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(datePickerSwitched:)];
     [items insertObject:datePickerSwitcher atIndex:items.count - 1];
     return items;

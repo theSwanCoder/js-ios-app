@@ -125,9 +125,10 @@ objection_requires(@"resourceClient", @"constants")
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"JMMenuSectionView" owner:self.tableView options:nil];
-    JMMenuSectionView *view = [nib objectAtIndex:0];
-    view.frame = CGRectMake(0, 0, 163, 10.0f);
+    JMMenuSectionView *view = [[[NSBundle mainBundle] loadNibNamed:@"JMMenuSectionView" owner:self.tableView options:nil] lastObject];
+    CGRect nibViewFrame = view.bounds;
+    nibViewFrame.size.width = tableView.frame.size.width;
+    view.frame = nibViewFrame;
     view.title.text = [self localizedSectionTitle:section];
     return view;
 }

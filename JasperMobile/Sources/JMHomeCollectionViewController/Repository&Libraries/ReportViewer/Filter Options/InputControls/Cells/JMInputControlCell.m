@@ -33,9 +33,11 @@
 {
     [super awakeFromNib];
     self.textLabel.font = [JMFont tableViewCellTitleFont];
+    self.textLabel.textColor = [UIColor darkGrayColor];
     
     self.detailTextLabel.font = [JMFont tableViewCellDetailErrorFont];
     self.detailTextLabel.textColor = [UIColor redColor];
+
     self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
 }
 

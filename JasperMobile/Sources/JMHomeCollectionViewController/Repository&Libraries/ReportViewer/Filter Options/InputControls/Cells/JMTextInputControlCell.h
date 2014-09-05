@@ -34,4 +34,9 @@
 @interface JMTextInputControlCell : JMInputControlCell <UITextFieldDelegate>
 @property (nonatomic, weak) IBOutlet UITextField *textField;
 
+- (NSArray *)rightInputAccessoryViewToolbarItems;
+- (NSArray *)leftInputAccessoryViewToolbarItems;
+
+- (void)doneButtonTapped:(id)sender;
+
 @end
