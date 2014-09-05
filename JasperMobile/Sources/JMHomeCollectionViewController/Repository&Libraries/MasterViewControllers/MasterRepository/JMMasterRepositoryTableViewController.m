@@ -18,12 +18,16 @@ static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";
 static NSInteger const kJMLimit = 15;
 
 @interface JMMasterRepositoryTableViewController()
-@property (nonatomic, strong) NSString *searchQuery;
-@property (nonatomic, weak) JSConstants *constants;
+@property (nonatomic, weak) IBOutlet JMBackHeaderView *backView;
+@property (nonatomic, weak) IBOutlet UILabel *rootFolderLabel;
+@property (nonatomic, weak) IBOutlet UIView *rootFolderView;
+
+@property (nonatomic, strong) NSMutableArray *folders;
+
 @end
 
 @implementation JMMasterRepositoryTableViewController
-objection_requires(@"resourceClient", @"constants")
+objection_requires(@"resourceClient")
 
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceLookup = _resourceLookup;
@@ -43,9 +47,6 @@ objection_requires(@"resourceClient", @"constants")
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
     
     if (!self.resourceLookup) {
         self.resourceLookup = [[JSResourceLookup alloc] init];
@@ -124,18 +125,13 @@ objection_requires(@"resourceClient", @"constants")
     }
 }
 
-#pragma mark - JMMasterRepositoryTableViewController
-
-- (void)loadResourcesIntoDetailViewController
+- (NSDictionary *)paramsForLoadingResourcesIntoDetailViewController
 {
-    NSDictionary *userInfo = @{
+    return @{
             kJMResourceLookup : self.resourceLookup,
             kJMLoadRecursively : @(NO),
             kJMSearchQuery : self.searchQuery ?: @""
     };
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResourcesInDetail
-                                                        object:nil
-                                                      userInfo:userInfo];
 }
 
 #pragma mark - JMPagination
@@ -162,26 +158,6 @@ objection_requires(@"resourceClient", @"constants")
     return self.offset < self.totalCount;
 }
 
-#pragma mark - JMSearchBarAdditions
-
-- (void)searchWithQuery:(NSString *)query
-{
-    self.searchQuery = query;
-    [self loadResourcesIntoDetailViewController];
-}
-
-- (void)didClearSearch
-{
-    if (self.searchQuery.length) {
-        self.searchQuery = nil;
-        [self loadResourcesIntoDetailViewController];
-    }
-}
-
-- (NSString *)currentQuery
-{
-    return self.searchQuery;
-}
 #pragma mark - Actions
 
 - (IBAction)refresh:(id)sender

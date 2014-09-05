@@ -9,9 +9,6 @@
 #import "JMMasterLibraryTableViewController.h"
 #import "JMLibraryTableViewCell.h"
 #import "JMMenuSectionView.h"
-#import "JMRequestDelegate.h"
-#import "JMConstants.h"
-#import <Objection-iOS/Objection.h>
 
 typedef NS_ENUM(NSInteger, JMTableViewSection) {
     JMTableViewSection_ResourceType = 0,
@@ -38,14 +35,9 @@ static NSString * const kJMRowsKey = @"rows";
 @property (nonatomic, strong) NSArray *cellsAndSectionsProperties;
 @property (nonatomic, assign) JMResourcesType resourcesTypeEnum;
 @property (nonatomic, assign) JMSortBy sortByEnum;
-@property (nonatomic, strong) NSString *searchQuery;
 @end
 
 @implementation JMMasterLibraryTableViewController
-objection_requires(@"resourceClient", @"constants")
-
-@synthesize resourceClient = _resourcesClient;
-
 - (NSArray *)resourcesTypes
 {
     switch (self.resourcesTypeEnum) {
@@ -97,13 +89,6 @@ objection_requires(@"resourceClient", @"constants")
     return _cellsAndSectionsProperties;
 }
 
-#pragma mark - Initialization
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    [[JSObjection defaultInjector] injectDependencies:self];
-}
 
 #pragma mark - UIViewController
 
@@ -111,14 +96,10 @@ objection_requires(@"resourceClient", @"constants")
 {
     [super viewDidLoad];
     
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-
     for (NSInteger i = 0; i < [self.cellsAndSectionsProperties count]; i++) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:i];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
     }
-    [self loadResourcesIntoDetailViewController];
 }
 
 #pragma mark - Table view data source
@@ -191,40 +172,14 @@ objection_requires(@"resourceClient", @"constants")
     [self loadResourcesIntoDetailViewController];
 }
 
-#pragma mark - JMSearchBarAdditions
-
-- (void)searchWithQuery:(NSString *)query
+- (NSDictionary *)paramsForLoadingResourcesIntoDetailViewController
 {
-    self.searchQuery = query;
-    [self loadResourcesIntoDetailViewController];
-}
-
-- (void)didClearSearch
-{
-    if (self.searchQuery.length) {
-        self.searchQuery = nil;
-        [self loadResourcesIntoDetailViewController];
-    }
-}
-
-- (NSString *)currentQuery
-{
-    return self.searchQuery;
-}
-
-#pragma mark - Private -
-
-- (void)loadResourcesIntoDetailViewController
-{
-    NSDictionary *userInfo = @{
+    return @{
             kJMResourcesTypes : self.resourcesTypes,
             kJMLoadRecursively : @(YES),
             kJMSearchQuery : self.searchQuery ?: @"",
             kJMSortBy : self.sortBy
     };
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoadResourcesInDetail
-                                                        object:nil
-                                                      userInfo:userInfo];
 }
 
 #pragma mark - Localization

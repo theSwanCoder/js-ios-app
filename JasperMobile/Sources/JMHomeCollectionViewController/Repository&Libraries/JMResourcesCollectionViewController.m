@@ -16,6 +16,8 @@
 #import "JMDetailReportViewerViewController.h"
 #import "JMDetailReportOptionsViewController.h"
 
+#import "DDSlidingView.h"
+
 #import "JMSearchBarAdditions.h"
 #import "JMSearchBar.h"
 
@@ -32,8 +34,7 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 
 @interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, JMSearchBarDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *masterMenuTitle;
-@property (weak, nonatomic) IBOutlet UIView  *masterContainerView;
+@property (strong, nonatomic) DDSlidingView  *slideContainerView;
 @property (weak, nonatomic) UINavigationController *masterNavigationController;
 
 @property (strong, nonatomic) IBOutletCollection(UICollectionView) NSArray *collectionViews;
@@ -80,7 +81,6 @@ objection_requires(@"resourceClient", @"constants")
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
-    self.masterMenuTitle.text = JMCustomLocalizedString(@"master.base.resources.title", nil);
     
     @try {
         [self performSegueWithIdentifier:kJMMasterViewControllerSegue sender:self];
@@ -124,16 +124,42 @@ objection_requires(@"resourceClient", @"constants")
                                                object:nil];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
+        self.slideContainerView.hidden = YES;
+    }
+    [super viewWillDisappear:animated];
+}
+
+- (DDSlidingView *) slideContainerView
+{
+    if (!_slideContainerView) {
+        UIImage * openImg = [UIImage imageNamed: @"open_panel.png"];
+        UIImage * closeImg = [UIImage imageNamed: @"close_panel.png"];
+        _slideContainerView = [[DDSlidingView alloc] initWithPosition: DDSliderPositionLeft image: openImg length: kJMMasterViewWidth];
+        _slideContainerView.animationDuration = 0.2f;
+        [_slideContainerView attachToView:self.view];
+        
+        _slideContainerView.hideSliderImage = closeImg;
+    }
+    return _slideContainerView;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     id destinationViewController = segue.destinationViewController;
     if ([segue.identifier isEqualToString:kJMMasterViewControllerSegue]) {
-        // TODO: investigate if manually removing child view controllers is needed
+        self.definesPresentationContext = YES;
         [self addChildViewController:destinationViewController];
         
-        [destinationViewController view].frame = self.masterContainerView.bounds;
-        [self.masterContainerView addSubview:[destinationViewController view]];
+        [self.slideContainerView setControllerSubview: [destinationViewController view]];
+        self.slideContainerView.viewController = destinationViewController;
         [destinationViewController didMoveToParentViewController:self];
+        
+        // FIXME = addConstraints
+        self.slideContainerView.clipsToBounds = YES;
+        
         if ([destinationViewController isKindOfClass:[UINavigationController class]]) {
             self.masterNavigationController = destinationViewController;
         }
