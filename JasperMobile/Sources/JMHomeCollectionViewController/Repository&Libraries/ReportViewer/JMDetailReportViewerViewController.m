@@ -125,7 +125,7 @@ objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"con
 
 - (void) backButtonTapped:(id) sender
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMReportShouldBeClousedNotification object:nil userInfo:nil];
+    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
 }
 
 - (void) addBackButton

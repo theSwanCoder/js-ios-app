@@ -26,7 +26,6 @@
 //
 
 #import "JMInputControlCell.h"
-#import "JMInputControlsHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMReportClientHolder.h"
 
@@ -34,7 +33,7 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface JMSingleSelectInputControlCell : JMInputControlCell <JMResourceClientHolder, JMReportClientHolder>
+@interface JMSingleSelectInputControlCell : JMInputControlCell
 
 /**
  Forces to reload data for dependent Input Controls (if exists)

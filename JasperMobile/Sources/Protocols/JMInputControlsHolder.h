@@ -36,7 +36,7 @@
  */
 @protocol JMInputControlsHolder <NSObject>
 @required
-@property (nonatomic, strong) NSMutableArray *inputControls;
+- (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor;
 
-- (UITableView *)tableView;
+
 @end

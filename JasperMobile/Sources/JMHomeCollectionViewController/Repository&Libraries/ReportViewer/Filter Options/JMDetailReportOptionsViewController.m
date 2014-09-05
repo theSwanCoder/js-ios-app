@@ -13,10 +13,20 @@
 #import <Objection-iOS/Objection.h>
 #import "UITableViewCell+SetSeparators.h"
 
-@interface JMDetailReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource>
+#import "JMInputControlsHolder.h"
+#import "JMResourceClientHolder.h"
+#import "JMReportClientHolder.h"
+#import "JMRefreshable.h"
+#import "JMCancelRequestPopup.h"
+#import "JMRequestDelegate.h"
+#import "JMInputControlCell.h"
+
+
+@interface JMDetailReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlsHolder, JMReportClientHolder, JMResourceClientHolder>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (nonatomic, strong) JSConstants *constants;
+@property (weak, nonatomic) IBOutlet UILabel    *titleLabel;
+@property (nonatomic, strong) JSConstants       *constants;
+@property (nonatomic, strong) NSMutableArray    *inputControls;
 
 @end
 
@@ -59,23 +69,20 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (void)runReport
 {
     BOOL allDataIsValid = YES;
-    NSMutableArray *inputControlDescriptors = [NSMutableArray array];
     for (int i = 0; i < [self.inputControls count]; i++) {
         JSInputControlDescriptor *descriptor = [self.inputControls objectAtIndex:i];
         if (descriptor.validationRules.mandatoryValidationRule && descriptor.state.value == nil) {
             JMInputControlCell *cell = (JMInputControlCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
             [cell updateDisplayingOfErrorMessage: descriptor.validationRules.mandatoryValidationRule.errorMessage];
             allDataIsValid = NO;
-        } else {
-            [inputControlDescriptors addObject:descriptor];
         }
     }
     
     if (allDataIsValid) {
         if (!self.delegate) {
-            [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:inputControlDescriptors];
+            [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:self.inputControls];
         } else {
-            [self.delegate setInputControls:inputControlDescriptors];
+            [self.delegate performSelector:@selector(setInputControls:) withObject:self.inputControls];
             [self.delegate refresh];
         }
     } else {
@@ -123,6 +130,45 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
+#pragma mark - JMInputControlsHolder
+- (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor
+{
+    if (!descriptor.slaveDependencies.count) {
+        return;
+    }
+
+    NSMutableArray *selectedValues = [NSMutableArray array];
+    NSMutableArray *allInputControls = [NSMutableArray array];
+    
+    // Get values from Input Controls
+    for (JSInputControlDescriptor *descriptor in self.inputControls) {
+        [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
+                                                                    value:descriptor.selectedValues]];
+        [allInputControls addObject:descriptor.uuid];
+    }
+
+    __weak typeof(self) weakSelf = self;
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:^{
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    }];
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        for (JSInputControlState *state in result.objects) {
+            for (JSInputControlDescriptor *inputControl in weakSelf.inputControls) {
+                if ([state.uuid isEqualToString:inputControl.uuid]) {
+                    inputControl.state = state;
+                    break;
+                }
+            }
+        }
+        [weakSelf.tableView reloadData];
+    } viewControllerToDismiss:self];
+    
+    [self.reportClient updatedInputControlsValues:self.resourceLookup.uri
+                                              ids:allInputControls
+                                   selectedValues:selectedValues
+                                         delegate:delegate];
 }
 
 #pragma mark - Private

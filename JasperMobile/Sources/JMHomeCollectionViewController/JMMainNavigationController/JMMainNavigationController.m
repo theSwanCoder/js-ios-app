@@ -22,11 +22,7 @@
 
     [self.navigationBar setTintColor: [UIColor whiteColor]];
     [self.toolbar setTintColor: [UIColor whiteColor]];
-    
-    if ([JMUtils isIphone]) {
-        [[UIBarButtonItem appearance] setTitlePositionAdjustment:UIOffsetMake(0, 7) forBarMetrics:UIBarMetricsDefault];
-    }
-    
+
     NSDictionary *textTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [JMFont navigationBarTitleFont], NSFontAttributeName, nil];
     [[UINavigationBar appearance] setTitleTextAttributes:textTitleOptions];
 
@@ -34,11 +30,6 @@
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateDisabled];
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateNormal];
     
-//    UIImage *backButtonImage = [UIImage imageNamed:@"back_item.png"];
-//    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width)];
-//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
-
     [self.navigationBar setBarStyle:UIBarStyleDefault];
     
     self.navigationBar.opaque = YES;

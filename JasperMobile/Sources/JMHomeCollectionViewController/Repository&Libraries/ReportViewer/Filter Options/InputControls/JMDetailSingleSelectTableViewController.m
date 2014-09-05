@@ -99,6 +99,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.textLabel.font = [JMFont tableViewCellTitleFont];
     }
     
     JSInputControlOption *option = [self.listOfValues objectAtIndex:indexPath.row];
@@ -147,12 +148,12 @@
 }
 
 #pragma mark - JMSearchBarDelegate
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+- (void)searchBarSearchButtonClicked:(JMSearchBar *)searchBar
 {
     [searchBar resignFirstResponder];
 }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
+- (void)searchBarCancelButtonClicked:(JMSearchBar *) searchBar
 {
     [searchBar resignFirstResponder];
     [self showNavigationItems];

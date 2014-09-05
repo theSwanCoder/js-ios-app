@@ -7,13 +7,11 @@
 //
 
 #import "JMEditabledViewController.h"
-#import "JMInputControlsHolder.h"
-#import "JMResourceClientHolder.h"
-#import "JMReportClientHolder.h"
 #import "JMRefreshable.h"
 
-@interface JMDetailReportOptionsViewController : JMEditabledViewController <JMReportClientHolder, JMResourceClientHolder, JMInputControlsHolder>
 
-@property (nonatomic, weak) id <JMReportClientHolder, JMInputControlsHolder, JMResourceClientHolder, JMRefreshable> delegate;
+@interface JMDetailReportOptionsViewController : JMEditabledViewController
+
+@property (nonatomic, weak) id <JMResourceClientHolder, JMRefreshable> delegate;
 
 @end

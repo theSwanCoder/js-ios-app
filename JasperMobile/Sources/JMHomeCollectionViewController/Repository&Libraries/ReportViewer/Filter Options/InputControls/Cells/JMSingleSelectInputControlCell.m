@@ -26,18 +26,12 @@
 //
 
 #import "JMSingleSelectInputControlCell.h"
-#import "JMCancelRequestPopup.h"
-#import "JMRequestDelegate.h"
 
 @interface JMSingleSelectInputControlCell()
 @property (nonatomic, weak) IBOutlet UILabel *valueLabel;
 @end
 
 @implementation JMSingleSelectInputControlCell
-
-@synthesize resourceClient = _resourceClient;
-@synthesize resourceLookup = _resourceLookup;
-@synthesize reportClient = _reportClient;
 
 - (void)setEnabledCell:(BOOL)enabled
 {
@@ -50,60 +44,13 @@
     [self updateDisplayingOfErrorMessage:nil];
 
     [self updateValueLabelWithParameters:parameters];
-    [self updatedInputControlsValues];
+    [self.delegate updatedInputControlsValuesWithDescriptor:self.inputControlDescriptor];
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
     [self setInputControlState:inputControlDescriptor.state];
-}
-
-#pragma mark Private
-
-- (void)updatedInputControlsValues
-{
-    if (!self.inputControlDescriptor.slaveDependencies.count) {
-        return;
-    }
-
-    __weak JMSingleSelectInputControlCell *weakSelf = self;
-    
-    // TODO: change loading progress
-    [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.reportClient cancelBlock:^{
-        [[weakSelf.delegate navigationController] popViewControllerAnimated:YES];
-    }];
-    
-    NSMutableArray *selectedValues = [NSMutableArray array];
-    NSMutableArray *allInputControls = [NSMutableArray array];
-
-    // Get values from Input Controls
-    for (id inputControlCell in self.delegate.inputControls) {
-        JSInputControlDescriptor *descriptor = [inputControlCell inputControlDescriptor];
-        [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
-                                                                    value:descriptor.selectedValues]];
-        [allInputControls addObject:descriptor.uuid];
-    }
-
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        for (JSInputControlState *state in result.objects) {
-            for (id inputControl in weakSelf.delegate.inputControls) {
-                if ([state.uuid isEqualToString:[inputControl inputControlDescriptor].uuid]) {
-                    [inputControl setInputControlState:state];
-                    break;
-                }
-            }
-        }
-    } viewControllerToDismiss:self.delegate];
-    
-    [JMRequestDelegate setFinalBlock:^{
-        [weakSelf.delegate.tableView reloadData];
-    }];
-    
-    [self.reportClient updatedInputControlsValues:self.resourceLookup.uri
-                                              ids:allInputControls
-                                   selectedValues:selectedValues
-                                         delegate:delegate];
 }
 
 - (void)setInputControlState:(JSInputControlState *)state
