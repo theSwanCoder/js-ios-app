@@ -35,6 +35,7 @@
     self.navigationBar.opaque = YES;
     self.navigationBar.translucent = NO;
     self.toolbar.translucent = NO;
+    self.interactivePopGestureRecognizer.enabled = NO;
 }
 
 @end

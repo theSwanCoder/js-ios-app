@@ -117,7 +117,7 @@ objection_requires(@"resourceClient", @"constants")
     // Will show horizontal list view controller
     self.representationType = JMResourcesRepresentationTypeHorizontalList;
     [self showNavigationItems];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadResourcesInDetail:)
                                                  name:kJMLoadResourcesInDetail

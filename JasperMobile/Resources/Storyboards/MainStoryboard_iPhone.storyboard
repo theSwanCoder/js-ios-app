@@ -519,13 +519,17 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="8DE-hD-j6i" id="XHR-1q-9ga"/>
+                                    <outlet property="delegate" destination="8DE-hD-j6i" id="3Fc-eA-Jm3"/>
+                                </connections>
                             </tableView>
                             <view contentMode="scaleToFill" id="L2g-pw-FQv">
                                 <rect key="frame" x="0.0" y="436" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kob-Pe-WYA">
-                                        <rect key="frame" x="5" y="2.0000000370214757" width="310" height="40"/>
+                                        <rect key="frame" x="5" y="2" width="310" height="40.000000044744873"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                         <state key="normal" title="Refresh" backgroundImage="gray_button_background.png">
                                             <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>

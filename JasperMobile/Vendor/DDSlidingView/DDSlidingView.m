@@ -65,7 +65,6 @@
     }
     
     
-    
     self = [super init];
     [self setTranslatesAutoresizingMaskIntoConstraints:NO];
     
@@ -86,10 +85,7 @@
 }
 
 - (void) setControllerSubview: (UIView*) subview {
-
-    for (UIView* view in self.subviews) {
-        [view removeFromSuperview];
-    }
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     subview.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview: subview];
@@ -148,12 +144,12 @@
             
             [parentView addConstraint:[NSLayoutConstraint
                                        constraintWithItem:self
-                                                attribute:NSLayoutAttributeCenterY
-                                                relatedBy:0
+                                                attribute:NSLayoutAttributeBottom
+                                                relatedBy:NSLayoutRelationEqual
                                                    toItem:_dragButton
-                                                attribute:NSLayoutAttributeCenterY
+                                                attribute:NSLayoutAttributeBottom
                                                multiplier:1.0
-                                                 constant:0]
+                                                 constant:100]
              ];
             break;
         case DDSliderPositionRight:
@@ -273,16 +269,24 @@
     
     _isShown = YES;
     
+    self.hidden = NO;
+    
     _positionConstraint.constant = 0.0f;
     
     [UIView animateWithDuration: time
                           delay: 0.0f
                         options: UIViewAnimationOptionCurveEaseOut
                      animations:^{
+                         UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:self.bounds];
+                         self.layer.masksToBounds = NO;
+                         self.layer.shadowColor = [UIColor blackColor].CGColor;
+                         self.layer.shadowOffset = CGSizeMake(15.0f, 0.0f);
+                         self.layer.shadowOpacity = 0.8f;
+                         self.layer.shadowRadius = 10.0f;
+                         self.layer.shadowPath = shadowPath.CGPath;
                          [self.superview layoutIfNeeded];
                      }
                      completion:^(BOOL finished) {
-                         NSLog(@"SHOWN");
                          [_viewController viewDidAppear:YES];
                          _dragButton.hidden = _dragButtonHiddenWhenSliderShown;
                          if ( !_dragButtonHiddenWhenSliderShown && _hideSliderImage ) {
@@ -314,6 +318,9 @@
                           delay: 0.0f
                         options: UIViewAnimationOptionCurveEaseOut
                      animations:^{
+                         self.layer.shadowOpacity = 0.0f;
+                         self.layer.shadowRadius = 0.0f;
+
                          [self.superview layoutIfNeeded];
                          
                          // don't need it at all,
@@ -321,7 +328,6 @@
                          //[_dragButton layoutIfNeeded];
                      }
                      completion:^(BOOL finished) {
-                         NSLog(@"HIDDEN");
                          [_viewController viewDidDisappear:YES];
                          _dragButton.hidden = _dragButtonHiddenWhenSliderHidden;
                          if ( !_dragButtonHiddenWhenSliderHidden && _showSliderImage ) {
@@ -356,14 +362,14 @@
                 break;
         }
 
-        //NSLog(@"DELTA: %f, TRANS: %f", delta, translation.x);
+        self.hidden = NO;
         if ( delta > _sliderLength) {
             delta = _sliderOffset;
         } else if ( delta < 0) {
             delta = 0;        }
         [gestureRecognizer setTranslation:CGPointZero inView:self.superview];
         _positionConstraint.constant = delta;
-        [self layoutIfNeeded];
+        [self setNeedsLayout];
         [_dragButton layoutIfNeeded];
         
     } else if ([gestureRecognizer state] == UIGestureRecognizerStateEnded) {
@@ -387,8 +393,6 @@
         
         float time = fabs(1.0f/movement*800.0f);
         time = time > 0.4 ? 0.4 : time;
-        
-        // velocity x is either negative (to the left)
         
         if ( movement < 0 ) {
             [self hideSliderWithDuration: time];
