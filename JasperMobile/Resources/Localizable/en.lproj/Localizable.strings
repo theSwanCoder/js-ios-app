@@ -140,10 +140,12 @@
 "home.menuitem.servers.label" = "Servers";
 
 // Descriptions
-"home.menuitem.library.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
+
+"home.menuitem.library.description" = "Browse your JR Server Library.";
+"home.menuitem.settings.description" = "Browse your JR Server Repository.";
+"home.menuitem.repository.description" = "Configure your Jaspersoft Mobile App.";
+
 "home.menuitem.saveditems.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
-"home.menuitem.settings.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
-"home.menuitem.repository.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
 "home.menuitem.favorites.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
 "home.menuitem.servers.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
 

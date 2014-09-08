@@ -209,7 +209,6 @@
 		08E864121992564A007CF257 /* UIColor+RGBComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863C61992564A007CF257 /* UIColor+RGBComponent.m */; };
 		08E864131992564A007CF257 /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863C81992564A007CF257 /* UIImage+Additions.m */; };
 		08E864141992564A007CF257 /* UITableViewCell+SetSeparators.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863CA1992564A007CF257 /* UITableViewCell+SetSeparators.m */; };
-		08E864151992564A007CF257 /* UITableViewController+CellRelativeHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863CC1992564A007CF257 /* UITableViewController+CellRelativeHeight.m */; };
 		08E864161992564A007CF257 /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863CE1992564A007CF257 /* UIView+Additions.m */; };
 		08E864171992564A007CF257 /* UIViewController+fetchInputControls.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863D01992564A007CF257 /* UIViewController+fetchInputControls.m */; };
 		08E864191992564A007CF257 /* JMFavorites.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863D51992564A007CF257 /* JMFavorites.m */; };
@@ -583,8 +582,6 @@
 		08E863C81992564A007CF257 /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Additions.m"; sourceTree = "<group>"; };
 		08E863C91992564A007CF257 /* UITableViewCell+SetSeparators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+SetSeparators.h"; sourceTree = "<group>"; };
 		08E863CA1992564A007CF257 /* UITableViewCell+SetSeparators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+SetSeparators.m"; sourceTree = "<group>"; };
-		08E863CB1992564A007CF257 /* UITableViewController+CellRelativeHeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewController+CellRelativeHeight.h"; sourceTree = "<group>"; };
-		08E863CC1992564A007CF257 /* UITableViewController+CellRelativeHeight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewController+CellRelativeHeight.m"; sourceTree = "<group>"; };
 		08E863CD1992564A007CF257 /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Additions.h"; sourceTree = "<group>"; };
 		08E863CE1992564A007CF257 /* UIView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Additions.m"; sourceTree = "<group>"; };
 		08E863CF1992564A007CF257 /* UIViewController+fetchInputControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+fetchInputControls.h"; sourceTree = "<group>"; };
@@ -1378,8 +1375,6 @@
 				08E863C81992564A007CF257 /* UIImage+Additions.m */,
 				08E863C91992564A007CF257 /* UITableViewCell+SetSeparators.h */,
 				08E863CA1992564A007CF257 /* UITableViewCell+SetSeparators.m */,
-				08E863CB1992564A007CF257 /* UITableViewController+CellRelativeHeight.h */,
-				08E863CC1992564A007CF257 /* UITableViewController+CellRelativeHeight.m */,
 				08E863CD1992564A007CF257 /* UIView+Additions.h */,
 				08E863CE1992564A007CF257 /* UIView+Additions.m */,
 				08E863CF1992564A007CF257 /* UIViewController+fetchInputControls.h */,
@@ -2151,7 +2146,6 @@
 				08E62C8319922B0B0081CA83 /* main.m in Sources */,
 				0851DFDA19ACE27800DC6EDE /* JMSavedReportModifyPopup.m in Sources */,
 				08FF12DF199297FE0082265D /* JMSettingsTableViewCell.m in Sources */,
-				08E864151992564A007CF257 /* UITableViewController+CellRelativeHeight.m in Sources */,
 				080F23B819A77E6B008758FA /* JMInputControlCell.m in Sources */,
 				0885695319A791B100709737 /* JMDetailReportViewerViewController.m in Sources */,
 				374557203C4B4894864CE759 /* JMLibraryTableViewController.m in Sources */,

@@ -31,7 +31,6 @@
 #import "JMRequestDelegate.h"
 #import "JMUtils.h"
 #import "UITableViewCell+SetSeparators.h"
-#import "UITableViewController+CellRelativeHeight.h"
 #import "ALToastView.h"
 #import <Objection-iOS/Objection.h>
 
@@ -151,7 +150,8 @@ objection_requires(@"reportClient", @"constants")
         return height;
 
     }
-    return self.defaultHeightForTableViewCell;
+//    return self.defaultHeightForTableViewCell;
+    return tableView.rowHeight;  
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -10,7 +10,7 @@
 #import "JMConstants.h"
 #import <Objection-iOS/Objection.h>
 
-@interface JMMasterResourceViewController () 
+@interface JMMasterResourceViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *masterMenuTitle;
 
 @end
@@ -30,8 +30,6 @@ objection_requires(@"constants")
 {
     [super viewDidLoad];
     self.masterMenuTitle.text = JMCustomLocalizedString(@"master.base.resources.title", nil);
-
-    [self loadResourcesIntoDetailViewController];
 }
 
 #pragma mark - UITableViewDatasource

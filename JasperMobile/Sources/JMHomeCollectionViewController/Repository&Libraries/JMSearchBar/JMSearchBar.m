@@ -8,7 +8,8 @@
 
 #import "JMSearchBar.h"
 
-#define kJMSearchBarCancelButtonWidth       100.f
+#define kJMSearchBarCancelButtonWidth       80.f
+#define kJMSearchBarPadding                 5.f
 
 static NSString * const JMReplacingTextString = @"ReplacingTextString";
 static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
@@ -22,26 +23,28 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
 @implementation JMSearchBar
 @dynamic text;
 @dynamic placeholder;
-@dynamic textColor;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [super setBackgroundColor:[UIColor clearColor]];
-        CGRect textFieldFrame = frame;
-        textFieldFrame.size.width -= kJMSearchBarCancelButtonWidth;
+        self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        
+        [super setBackgroundColor:kJMMainNavigationBarBackgroundColor];
+        CGRect textFieldFrame = CGRectMake(kJMSearchBarPadding, kJMSearchBarPadding, frame.size.width - kJMSearchBarCancelButtonWidth - kJMSearchBarPadding, frame.size.height - 2 * kJMSearchBarPadding);
         self.textField = [[UITextField alloc] initWithFrame:textFieldFrame];
         self.textField.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.textField.font = [JMFont navigationItemsFont];
         self.textField.borderStyle = UITextBorderStyleRoundedRect;
         self.textField.textAlignment = NSTextAlignmentLeft;
         self.textField.delegate = self;
-        self.textField.textColor = [UIColor lightGrayColor];
+        self.textField.textColor = [UIColor whiteColor];
         self.textField.returnKeyType = UIReturnKeySearch;
         self.textField.backgroundColor = kJMSearchBarBackgroundColor;
         self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.textField.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         
-        UIImageView *leftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, frame.size.height, frame.size.height)];
+        UIImageView *leftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, textFieldFrame.size.height, textFieldFrame.size.height)];
         leftView.image = [UIImage imageNamed:@"search_button.png"];
         leftView.backgroundColor = [UIColor clearColor];
         leftView.contentMode = UIViewContentModeCenter;
@@ -49,7 +52,7 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
         self.textField.leftViewMode = UITextFieldViewModeAlways;
 
         self.clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.clearButton.frame = CGRectMake(0, 0, frame.size.height, frame.size.height);
+        self.clearButton.frame = CGRectMake(0, 0, textFieldFrame.size.height, textFieldFrame.size.height);
         self.clearButton.backgroundColor = [UIColor clearColor];
         [self.clearButton addTarget:self action:@selector(clearButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [self.clearButton setImage:[UIImage imageNamed:@"clear_button.png"] forState:UIControlStateNormal];
@@ -58,13 +61,15 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
         self.textField.rightViewMode = UITextFieldViewModeNever;
         
         self.cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        self.cancelButton.frame = CGRectMake(frame.size.width - kJMSearchBarCancelButtonWidth, 0, kJMSearchBarCancelButtonWidth, frame.size.height);
-        self.cancelButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
+        self.cancelButton.frame = CGRectMake(frame.size.width - kJMSearchBarCancelButtonWidth, kJMSearchBarPadding, kJMSearchBarCancelButtonWidth, textFieldFrame.size.height);
+        self.cancelButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight;
         self.cancelButton.backgroundColor = [UIColor clearColor];
+        self.cancelButton.titleLabel.font = [JMFont navigationItemsFont];
         [self.cancelButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
         [self.cancelButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [self.cancelButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
+        
         [self addSubview:self.cancelButton];
         [self addSubview:self.textField];
     }
@@ -117,16 +122,6 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
 }
 
 #pragma Properties
-- (UIColor *)textColor
-{
-    return self.textField.textColor;
-}
-
-- (void)setTextColor:(UIColor *)textColor
-{
-    self.textField.textColor = textColor;
-}
-
 - (NSString *)text
 {
     return self.textField.text;
@@ -150,7 +145,7 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
 
 - (NSDictionary *)attributesForPlaceholder
 {
-    return [NSDictionary dictionaryWithObjectsAndKeys:[UIColor darkGrayColor], NSForegroundColorAttributeName, self.textField.font, NSFontAttributeName, nil];
+    return [NSDictionary dictionaryWithObjectsAndKeys:[UIColor grayColor], NSForegroundColorAttributeName, self.textField.font, NSFontAttributeName, nil];
 }
 
 @end

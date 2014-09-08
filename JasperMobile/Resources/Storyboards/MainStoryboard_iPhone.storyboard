@@ -459,7 +459,7 @@
             <objects>
                 <viewController id="8DE-hD-j6i" customClass="JMMasterLibraryTableViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ht0-6C-t98">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="G9x-nO-ST8">
@@ -478,7 +478,7 @@
                                 <inset key="insetFor6xAndEarlier" minX="0.0" minY="20" maxX="0.0" maxY="-20"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="50" sectionFooterHeight="1" id="vbx-7j-K1h">
-                                <rect key="frame" x="0.0" y="44" width="320" height="392"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="328"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.14901960780000001" green="0.15686274510000001" blue="0.1764705882" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -525,11 +525,11 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" id="L2g-pw-FQv">
-                                <rect key="frame" x="0.0" y="436" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="372" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kob-Pe-WYA">
-                                        <rect key="frame" x="5" y="2" width="310" height="40.000000044744873"/>
+                                        <rect key="frame" x="5" y="2.000000050598798" width="310" height="40"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                         <state key="normal" title="Refresh" backgroundImage="gray_button_background.png">
                                             <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -552,11 +552,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="5uW-5y-2Jk"/>
-                    <nil key="simulatedStatusBarMetrics"/>
-                    <nil key="simulatedTopBarMetrics"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <size key="freeformSize" width="163" height="852"/>
                     <connections>
                         <outlet property="masterMenuTitle" destination="Laf-hC-aTo" id="el6-Cn-grc"/>
+                        <outlet property="masterMenuTitleView" destination="G9x-nO-ST8" id="Ltx-Eg-JCj"/>
                         <outlet property="tableView" destination="vbx-7j-K1h" id="b8x-vU-xLV"/>
                     </connections>
                 </viewController>
@@ -716,6 +717,10 @@
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="zh5-lP-Y8J" id="jDB-6q-SR6"/>
+                                    <outlet property="delegate" destination="zh5-lP-Y8J" id="oei-9q-ZWg"/>
+                                </connections>
                             </tableView>
                             <view contentMode="scaleToFill" id="e7U-kl-VA4" userLabel="Refresh View">
                                 <rect key="frame" x="0.0" y="372" width="320" height="44"/>
@@ -751,6 +756,7 @@
                     <connections>
                         <outlet property="backView" destination="3TF-Hz-6xc" id="3vc-V0-9Qq"/>
                         <outlet property="masterMenuTitle" destination="1Iv-Xv-xOo" id="WtI-ac-obd"/>
+                        <outlet property="masterMenuTitleView" destination="DQA-fa-zZm" id="56b-Bt-IVs"/>
                         <outlet property="rootFolderLabel" destination="NIN-My-OYS" id="mKY-cm-obp"/>
                         <outlet property="rootFolderView" destination="5yq-ar-0wj" id="BSv-97-Zw3"/>
                         <outlet property="tableView" destination="mqJ-5S-M5n" id="zV0-4M-cee"/>

@@ -114,8 +114,6 @@
     [self removeConstraints: self.constraints];
     [_dragButton removeConstraints: _dragButton.constraints];
     
-    UIApplication *app = [UIApplication sharedApplication];
-    
     [parentView addSubview: self];
     [parentView addSubview: _dragButton];
     
@@ -182,10 +180,7 @@
              ];
             break;
         case DDSliderPositionTop:
-            
             _sliderOffset = _sliderLength;
-            
-            app = [UIApplication sharedApplication];
             
             constraint1 = [NSString stringWithFormat: @"|-(%f)-[self]-(%f)-|", _headPadding, _trailPadding];
             [self addConstraintText:constraint1 toView:parentView withDictionary:viewsDictionary];

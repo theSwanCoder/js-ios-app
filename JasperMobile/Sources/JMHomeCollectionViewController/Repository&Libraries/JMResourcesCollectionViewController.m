@@ -39,8 +39,6 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 
 @property (strong, nonatomic) IBOutletCollection(UICollectionView) NSArray *collectionViews;
 
-@property (strong, nonatomic) JMSearchBar *searchBar;
-
 // Activity View
 @property (nonatomic, weak) IBOutlet UIView *activityView;
 @property (nonatomic, weak) IBOutlet UILabel *activityViewTitleLabel;
@@ -189,13 +187,18 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)searchButtonTapped:(id)sender
 {
-    if (!self.searchBar) {
-        self.searchBar = [[JMSearchBar alloc] initWithFrame:CGRectMake(0, 0, 300, 34)];
-        self.searchBar.delegate = self;
-        self.searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
+    CGRect searchBarFrame = [JMUtils isIphone] ? self.navigationController.navigationBar.bounds : CGRectMake(0, 0, 320, 44);
+    JMSearchBar *searchBar =  [[JMSearchBar alloc] initWithFrame:searchBarFrame];
+    searchBar.delegate = self;
+    searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
+    
+    if ([JMUtils isIphone]) {
+        self.navigationItem.hidesBackButton = YES;
+        [self.navigationController.navigationBar addSubview:searchBar];
+    } else {
+        UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchBar];
+        [self replaceRightNavigationItem:sender withItem:searchItem];
     }
-    UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
-    [self replaceRightNavigationItem:sender withItem:searchItem];
 }
 
 - (void)representationTypeButtonTapped:(id)sender
@@ -346,8 +349,13 @@ objection_requires(@"resourceClient", @"constants")
     if ([visibleViewController conformsToProtocol:@protocol(JMSearchBarAdditions)]) {
         [visibleViewController didClearSearch];
     }
-    
-    [self showNavigationItems];
+
+    if ([JMUtils isIphone]) {
+        [searchBar removeFromSuperview];
+        self.navigationItem.hidesBackButton = NO;
+    } else {
+        [self showNavigationItems];
+    }
 }
 
 #pragma mark - Utils

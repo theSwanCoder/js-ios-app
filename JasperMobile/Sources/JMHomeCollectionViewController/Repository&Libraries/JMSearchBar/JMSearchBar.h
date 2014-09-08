@@ -22,7 +22,6 @@
 @interface JMSearchBar : UIView
 @property (nonatomic, weak) id <JMSearchBarDelegate> delegate;
 
-@property (nonatomic, readwrite) UIColor *textColor;
 @property (nonatomic, readwrite) NSString *text;
 @property (nonatomic, readwrite) NSString *placeholder;
 

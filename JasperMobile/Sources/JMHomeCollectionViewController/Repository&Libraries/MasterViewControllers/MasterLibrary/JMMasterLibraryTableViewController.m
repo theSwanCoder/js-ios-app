@@ -38,6 +38,20 @@ static NSString * const kJMRowsKey = @"rows";
 @end
 
 @implementation JMMasterLibraryTableViewController
+
+#pragma mark - UIViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    for (NSInteger i = 0; i < [self.cellsAndSectionsProperties count]; i++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:i];
+        [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
+    [self loadResourcesIntoDetailViewController];
+}
+
 - (NSArray *)resourcesTypes
 {
     switch (self.resourcesTypeEnum) {
@@ -87,19 +101,6 @@ static NSString * const kJMRowsKey = @"rows";
     }
 
     return _cellsAndSectionsProperties;
-}
-
-
-#pragma mark - UIViewController
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    for (NSInteger i = 0; i < [self.cellsAndSectionsProperties count]; i++) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:i];
-        [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-    }
 }
 
 #pragma mark - Table view data source

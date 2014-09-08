@@ -125,25 +125,26 @@
     NSString *reportName = self.reportNameTextField.text;
     NSString *reportExtension = [self.reportName pathExtension];
     NSString *errorMessage;
-
+    
     if (![reportName isEqualToString:[self.reportName stringByDeletingPathExtension]] &&
-            !([JMUtils validateReportName:reportName extension:reportExtension errorMessage:&errorMessage] &&
-                    [self renameReportDirectoryTo:reportName extension:reportExtension errorMessage:&errorMessage])) {
-        CGSize size = CGSizeMake(self.errorLabelBaseFrame.size.width, CGFLOAT_MAX);
-        CGSize errorMessageSize = [errorMessage sizeWithFont:self.errorLabel.font constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
-        CGRect frame = self.view.frame;
-        frame.size.height = self.baseHeight + errorMessageSize.height;
-        self.view.frame = frame;
-        self.errorLabel.numberOfLines = 0;
-        self.errorLabel.text = errorMessage;
-        self.errorLabel.hidden = NO;
-        // Restore base frame. Without this sizeToFit method doesn't work properly
-        self.errorLabel.frame = self.errorLabelBaseFrame;
-        [self.errorLabel sizeToFit];
-
-        return;
-    }
-
+        !([JMUtils validateReportName:reportName extension:reportExtension errorMessage:&errorMessage] &&
+          [self renameReportDirectoryTo:reportName extension:reportExtension errorMessage:&errorMessage])) {
+            
+            self.errorLabel.numberOfLines = 0;
+            self.errorLabel.text = errorMessage;
+            self.errorLabel.hidden = NO;
+            // Restore base frame. Without this sizeToFit method doesn't work properly
+            self.errorLabel.frame = self.errorLabelBaseFrame;
+            [self.errorLabel sizeToFit];
+            
+            
+            CGRect frame = self.view.frame;
+            frame.size.height = self.baseHeight + self.errorLabel.frame.size.height;
+            self.view.frame = frame;
+            
+            return;
+        }
+    
     [self.delegate updateReportName:reportName];
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMClearSavedReportsListNotification object:nil];
     [self.delegate dismissPopupViewControllerWithanimationType:MJPopupViewAnimationFade];

@@ -53,12 +53,17 @@ objection_requires(@"resourceClient")
         self.resourceLookup.label = @"Root";
         self.resourceLookup.uri = @"/";
         
-        CGRect frame = self.tableView.frame;
-        frame = CGRectMake(0, self.rootFolderView.frame.size.height, frame.size.width, frame.size.height + self.backView.frame.size.height);
+        CGRect frame = self.rootFolderView.frame;
+        frame.origin.y = self.masterMenuTitleView.frame.size.height;
+        self.rootFolderView.frame = frame;
+        
+        frame = self.tableView.frame;
+        frame.origin.y = self.rootFolderView.frame.origin.y + self.rootFolderView.frame.size.height;
+        frame.size.height += self.backView.frame.size.height;
+        
+        CGRectMake(0, self.rootFolderView.frame.size.height, frame.size.width, frame.size.height + self.backView.frame.size.height);
         self.tableView.frame = frame;
         
-        frame = self.rootFolderView.frame;
-        self.rootFolderView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
         
         self.backView.hidden = YES;
         self.backView.frame = CGRectZero;

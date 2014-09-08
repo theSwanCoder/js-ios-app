@@ -30,7 +30,6 @@
 #import "JMFavoritesUtil.h"
 #import "JMUtils.h"
 #import "UITableViewCell+SetSeparators.h"
-#import "UITableViewController+CellRelativeHeight.h"
 #import "JMRequestDelegate.h"
 #import <Objection-iOS/Objection.h>
 
@@ -229,22 +228,23 @@ objection_requires(@"resourceClient", @"favoritesUtil")
 // Calculate height for table view cell according to amount of text inside cell
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger section = indexPath.section;
-    NSString *cellIdentifier = [self cellIdentifierForSection:indexPath.section];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    if (section == kJMToolsSection) {
-        return cell.frame.size.height;
-    }
-    
-    NSString *text,
-             *detailText;    
-    UITableViewCellStyle cellStyle = UITableViewCellStyleValue2;
-    NSDictionary *propertyForIndexPath = [self resourceDescriptorPropertyForIndexPath:indexPath];
-    text = [self localizedTextLabelTitleForProperty:[propertyForIndexPath objectForKey:kJMTitleKey]];
-    detailText = [propertyForIndexPath objectForKey:kJMValueKey];
-        
-    return [self relativeHeightForTableViewCell:cell text:text detailText:detailText cellStyle:cellStyle];
+//    NSInteger section = indexPath.section;
+//    NSString *cellIdentifier = [self cellIdentifierForSection:indexPath.section];
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//    
+//    if (section == kJMToolsSection) {
+//        return cell.frame.size.height;
+//    }
+//    
+//    NSString *text,
+//             *detailText;    
+//    UITableViewCellStyle cellStyle = UITableViewCellStyleValue2;
+//    NSDictionary *propertyForIndexPath = [self resourceDescriptorPropertyForIndexPath:indexPath];
+//    text = [self localizedTextLabelTitleForProperty:[propertyForIndexPath objectForKey:kJMTitleKey]];
+//    detailText = [propertyForIndexPath objectForKey:kJMValueKey];
+//
+//    return [self relativeHeightForTableViewCell:cell text:text detailText:detailText cellStyle:cellStyle];
+    return tableView.rowHeight;
 }
 
 #pragma mark - Actions
