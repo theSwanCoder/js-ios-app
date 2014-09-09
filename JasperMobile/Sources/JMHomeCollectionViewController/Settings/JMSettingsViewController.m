@@ -7,7 +7,7 @@
 //
 
 #import "JMSettingsViewController.h"
-#import "UITableViewCell+SetSeparators.h"
+#import "UITableViewCell+Additions.h"
 #import <QuartzCore/QuartzCore.h>
 #import "JMSettingsTableViewCell.h"
 #import "JMSettings.h"
@@ -16,7 +16,7 @@
 
 @interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UITableView *settingsTableView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *settingsTitleLabel;
 
 @property (nonatomic, strong) JMSettings *detailSettings;
@@ -28,7 +28,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.settingsTitleLabel.textColor = kJMDetailViewLightTextColor;
-    self.settingsTableView.layer.cornerRadius = 4;
+    self.tableView.layer.cornerRadius = 4;
 
     self.settingsTitleLabel.text = [JMCustomLocalizedString(@"detail.settings.title", nil) capitalizedString];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
@@ -43,7 +43,7 @@
 - (void) refreshDataSource
 {
     self.detailSettings = [[JMSettings alloc] init];
-    [self.settingsTableView reloadData];
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate

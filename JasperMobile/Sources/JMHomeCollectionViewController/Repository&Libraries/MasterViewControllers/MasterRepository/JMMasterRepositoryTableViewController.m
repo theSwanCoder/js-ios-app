@@ -163,9 +163,8 @@ objection_requires(@"resourceClient")
     return self.offset < self.totalCount;
 }
 
-#pragma mark - Actions
-
-- (IBAction)refresh:(id)sender
+#pragma mark - JMRefreshable
+- (void)refresh
 {
     self.offset = 0;
     [self.folders removeAllObjects];

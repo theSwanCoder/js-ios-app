@@ -9,6 +9,6 @@
 
 @interface JMEditabledViewController : UIViewController
 
-@property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
+- (UITableView *)tableView;
 
 @end

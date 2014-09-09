@@ -7,6 +7,7 @@
 //
 
 #import "JMTextServerOptionCell.h"
+#import "UITableViewCell+Additions.h"
 
 @interface JMTextServerOptionCell () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *textField;
@@ -18,7 +19,7 @@
 {
     [super awakeFromNib];
     self.textField.background = [self.textField.background resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10.0f, 0, 10.0f)];
-    [self setNeedsLayout];
+    self.textField.inputAccessoryView = [self toolbarForInputAccessoryView];
 }
 
 -(void)setServerOption:(JMServerOption *)serverOption
@@ -47,6 +48,13 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     self.serverOption.optionValue = textField.text;
+}
+
+#pragma mark - Actions
+
+- (void)doneButtonTapped:(id)sender
+{
+    [self.textField resignFirstResponder];
 }
 
 @end

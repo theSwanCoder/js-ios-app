@@ -58,11 +58,14 @@ objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"con
 
     self.title = self.resourceLookup.label;
     UIBarButtonItem *refreshItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(refreshButtonTapped:)];
-    NSMutableArray *itemsArray = [NSMutableArray arrayWithObject:refreshItem];
+    UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"favorite_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(favoriteButtonTapped:)];
+    favoriteItem.tintColor = [UIColor redColor];
+    NSMutableArray *itemsArray = [NSMutableArray arrayWithObjects:refreshItem, favoriteItem, nil];
     if (self.inputControls && [self.inputControls count]) {
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(editButtonTapped:)];
         [itemsArray addObject:editItem];
     }
+    
     self.navigationItem.rightBarButtonItems = itemsArray;
     
     [self addBackButton];
@@ -116,6 +119,11 @@ objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"con
 {
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
     [self runReportExecution];
+}
+
+- (void)favoriteButtonTapped:(id)sender
+{
+    
 }
 
 - (void) editButtonTapped:(id) sender

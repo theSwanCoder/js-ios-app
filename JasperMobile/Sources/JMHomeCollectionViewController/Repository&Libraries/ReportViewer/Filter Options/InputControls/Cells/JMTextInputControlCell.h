@@ -25,18 +25,15 @@
 //  Jaspersoft Corporation
 //
 
-#import "JMInputControlCell.h"
-
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
+
+
+#import "JMInputControlCell.h"
+
 @interface JMTextInputControlCell : JMInputControlCell <UITextFieldDelegate>
 @property (nonatomic, weak) IBOutlet UITextField *textField;
-
-- (NSArray *)rightInputAccessoryViewToolbarItems;
-- (NSArray *)leftInputAccessoryViewToolbarItems;
-
-- (void)doneButtonTapped:(id)sender;
 
 @end

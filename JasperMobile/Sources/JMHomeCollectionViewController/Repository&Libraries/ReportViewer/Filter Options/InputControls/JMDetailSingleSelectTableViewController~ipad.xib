@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JMDetailSingleSelectTableViewController">
             <connections>
+                <outlet property="noResultLabel" destination="0c2-gg-eYG" id="sWb-cJ-38r"/>
                 <outlet property="tableView" destination="uw4-l2-id2" id="l75-UZ-a3X"/>
                 <outlet property="titleLabel" destination="Vhv-B2-doI" id="OwO-Zl-XNB"/>
                 <outlet property="view" destination="125-iB-SMC" id="C1D-pu-GFe"/>
@@ -34,6 +35,13 @@
                         <outlet property="delegate" destination="-1" id="wHB-Ub-ZBj"/>
                     </connections>
                 </tableView>
+                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results. Please Make Another Selection..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0c2-gg-eYG" userLabel="Label">
+                    <rect key="frame" x="15" y="430" width="738" height="100"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                    <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.8980392157" green="0.91372549020000005" blue="0.92156862750000001" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

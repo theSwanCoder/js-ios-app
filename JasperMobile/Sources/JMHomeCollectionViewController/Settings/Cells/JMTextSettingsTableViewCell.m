@@ -7,6 +7,7 @@
 //
 
 #import "JMTextSettingsTableViewCell.h"
+#import "UITableViewCell+Additions.h"
 
 @interface JMTextSettingsTableViewCell ()
 @property (weak, nonatomic) IBOutlet UITextField *textField;
@@ -18,6 +19,7 @@
 {
     [super awakeFromNib];
     self.textField.background = [self.textField.background resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10.0f, 0, 10.0f)];
+    self.textField.inputAccessoryView = [self toolbarForInputAccessoryView];
 }
 
 -(void)setSettingsItem:(JMSettingsItem *)settingsItem
@@ -45,6 +47,13 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     self.settingsItem.valueSettings = textField.text;
+}
+
+#pragma mark - Actions
+
+- (void)doneButtonTapped:(id)sender
+{
+    [self.textField resignFirstResponder];
 }
 
 @end

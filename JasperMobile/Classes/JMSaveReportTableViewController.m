@@ -30,7 +30,7 @@
 #import "JMConstants.h"
 #import "JMRequestDelegate.h"
 #import "JMUtils.h"
-#import "UITableViewCell+SetSeparators.h"
+#import "UITableViewCell+Additions.h"
 #import "ALToastView.h"
 #import <Objection-iOS/Objection.h>
 

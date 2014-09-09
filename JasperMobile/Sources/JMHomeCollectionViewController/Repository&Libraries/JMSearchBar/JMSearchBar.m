@@ -109,6 +109,9 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
 {
     self.textField.text = @"";
     self.textField.rightViewMode = UITextFieldViewModeNever;
+    if ([self.delegate respondsToSelector:@selector(searchBarDidChangeText:)]) {
+        [self.delegate searchBarDidChangeText:self];
+    }
 }
 
 - (void)cancelButtonTapped:(id)sender

@@ -77,4 +77,11 @@ objection_requires(@"constants")
     @throw [NSException exceptionWithName:@"Method implementation is missing" reason:@"You need to implement \"paramsForLoadingResourcesIntoDetailViewController\" method in subclasses" userInfo:nil];
 }
 
+#pragma mark - JMRefreshable
+- (void)refresh
+{
+    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:@"You need to implement \"refresh\" method in subclasses" userInfo:nil];
+}
+
+
 @end

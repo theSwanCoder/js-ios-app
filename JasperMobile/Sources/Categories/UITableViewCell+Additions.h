@@ -21,7 +21,7 @@
  */
 
 //
-//  UITableViewCell+SetSeparators.h
+//  UITableViewCell+Additions.h
 //  Jaspersoft Corporation
 //
 
@@ -33,9 +33,19 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
-@interface UITableViewCell (SetSeparators)
+@interface UITableViewCell (Additions)
 
 - (void)setTopSeparatorWithHeight:(CGFloat)height color:(UIColor *)color tableViewStyle:(UITableViewStyle)style;
 - (void)setBottomSeparatorWithHeight:(CGFloat)height color:(UIColor *)color tableViewStyle:(UITableViewStyle)style;
 
+
+- (UIToolbar *)toolbarForInputAccessoryView;
+
+- (NSArray *)inputAccessoryViewToolbarItems;
+
+- (NSArray *)rightInputAccessoryViewToolbarItems;
+
+- (NSArray *)leftInputAccessoryViewToolbarItems;
+
+- (void)doneButtonTapped:(id)sender;
 @end

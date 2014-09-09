@@ -26,6 +26,7 @@
 //
 
 #import "JMDateInputControlCell.h"
+#import "UITableViewCell+Additions.h"
 
 @interface JMDateInputControlCell()
 

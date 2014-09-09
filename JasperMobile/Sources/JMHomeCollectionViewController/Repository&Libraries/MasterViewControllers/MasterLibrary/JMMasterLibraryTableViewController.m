@@ -166,9 +166,8 @@ static NSString * const kJMRowsKey = @"rows";
     }
 }
 
-#pragma mark - Actions
-
-- (IBAction)refresh:(id)sender
+#pragma mark - JMRefreshable
+- (void)refresh
 {
     [self loadResourcesIntoDetailViewController];
 }

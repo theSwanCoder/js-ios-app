@@ -13,13 +13,13 @@
 
 #import "ALToastView.h"
 
-#import "UITableViewCell+SetSeparators.h"
+#import "UITableViewCell+Additions.h"
 #import "JMServerOptionCell.h"
 #import "UIAlertView+LocalizedAlert.h"
 
 
 @interface JMServerOptionsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, JMServerOptionCellDelegate>
-@property (weak, nonatomic) IBOutlet UITableView *optionsTableView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) JMServerOptions *serverOptions;
 
 @end
@@ -47,7 +47,7 @@
     }
     
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
-    self.optionsTableView.layer.cornerRadius = 4;
+    self.tableView.layer.cornerRadius = 4;
     self.serverOptions = [[JMServerOptions alloc] initWithServerProfile:self.serverProfile];
 }
 
@@ -81,7 +81,7 @@
     if ([self.serverOptions saveChanges]) {
         [self.navigationController popViewControllerAnimated:YES];
     } else {
-        [self.optionsTableView reloadData];
+        [self.tableView reloadData];
     }
 }
 

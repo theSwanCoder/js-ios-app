@@ -207,6 +207,14 @@ objection_requires(@"resourceClient", @"constants")
     [self replaceRightNavigationItem:sender withItem:[self resourceRepresentationItem]];
 }
 
+- (void)refreshButtonTapped:(id)sender
+{
+    id visibleViewController = self.masterNavigationController.visibleViewController;
+    if ([visibleViewController conformsToProtocol:@protocol(JMRefreshable)]) {
+        [visibleViewController refresh];
+    }
+}
+
 - (void)setRepresentationType:(JMResourcesRepresentationType)representationType
 {
     UICollectionView *currentView = [self.collectionViews objectAtIndex:_representationType];
@@ -364,7 +372,9 @@ objection_requires(@"resourceClient", @"constants")
 {
     UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchButtonTapped:)];
     UIBarButtonItem *representationTypeItem = [self resourceRepresentationItem];
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:representationTypeItem, searchItem, nil];
+    UIBarButtonItem *refreshItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(refreshButtonTapped:)];
+
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:refreshItem, representationTypeItem, searchItem, nil];
 }
 
 - (void) replaceRightNavigationItem:(UIBarButtonItem *)oldItem withItem:(UIBarButtonItem *)newItem

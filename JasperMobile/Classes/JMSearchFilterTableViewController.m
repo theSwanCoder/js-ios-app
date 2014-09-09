@@ -27,7 +27,7 @@
 
 #import "JMUtils.h"
 #import "JMSearchFilterTableViewController.h"
-#import "UITableViewCell+SetSeparators.h"
+#import "UITableViewCell+Additions.h"
 #import <Objection-iOS/Objection.h>
 
 static NSInteger const kJMResourceTypesSection = 0;

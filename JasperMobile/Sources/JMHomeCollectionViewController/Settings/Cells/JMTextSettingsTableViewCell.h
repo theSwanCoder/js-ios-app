@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "JMSettingsTableViewCell.h"
 
-@interface JMTextSettingsTableViewCell : JMSettingsTableViewCell
+@interface JMTextSettingsTableViewCell : JMSettingsTableViewCell 
 
 @end

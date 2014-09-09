@@ -11,7 +11,7 @@
 #import "JMDetailSingleSelectTableViewController.h"
 #import "UIViewController+FetchInputControls.h"
 #import <Objection-iOS/Objection.h>
-#import "UITableViewCell+SetSeparators.h"
+#import "UITableViewCell+Additions.h"
 
 #import "JMInputControlsHolder.h"
 #import "JMResourceClientHolder.h"

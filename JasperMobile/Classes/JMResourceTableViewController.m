@@ -29,7 +29,7 @@
 #import "JMCancelRequestPopup.h"
 #import "JMFavoritesUtil.h"
 #import "JMUtils.h"
-#import "UITableViewCell+SetSeparators.h"
+#import "UITableViewCell+Additions.h"
 #import "JMRequestDelegate.h"
 #import <Objection-iOS/Objection.h>
 

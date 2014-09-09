@@ -36,40 +36,31 @@
 {
     UIView *activeView = [self getFirstResponderForView:self.view];
     if (activeView) {
-        NSDictionary* info = [aNotification userInfo];
+        UITableViewCell *cell = (UITableViewCell *)activeView.superview.superview;
+        CGRect activeTableViewRect = [cell convertRect:activeView.frame fromView:cell.contentView];
+        activeTableViewRect = [self.tableView convertRect:activeTableViewRect fromView:cell];
         
-        CGFloat statusBarHeight = 0;
-        CGFloat keyboardOffset = 0;
-        CGFloat navBarHeight = self.navigationController.navigationBar.frame.size.height;
-
-        if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-            statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
-        } else {
-            statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.width;
+        CGRect activeViewRect = [self.view convertRect:activeTableViewRect fromView:self.tableView];
+        
+        CGFloat keyboardHeight = [self getKeyboardHeightFromUserInfo:[aNotification userInfo] key:UIKeyboardFrameEndUserInfoKey];
+        CGFloat visibleAreaHeight = self.view.frame.size.height - keyboardHeight;
+        if ((activeViewRect.origin.y + activeViewRect.size.height) > visibleAreaHeight) {
+            CGFloat offset = activeTableViewRect.origin.y - (visibleAreaHeight - self.tableView.frame.origin.y - activeTableViewRect.size.height);
+            [self.tableView setContentOffset:CGPointMake(0, offset) animated:YES];
         }
-        keyboardOffset = [self getKeyboardHeightFromUserInfo:info key:UIKeyboardFrameEndUserInfoKey] - statusBarHeight - navBarHeight;
-        
-        CGRect activeViewRect = [activeView convertRect:activeView.frame toView:self.scrollView];
-        if ((activeViewRect.origin.y + activeViewRect.size.height + 20 - self.scrollView.contentOffset.y + self.scrollView.frame.origin.y) > keyboardOffset) {
-            CGFloat offset = activeViewRect.origin.y + activeViewRect.size.height + 20 - keyboardOffset + self.scrollView.frame.origin.y;
-            [self.scrollView setContentOffset:CGPointMake(0, offset) animated:YES];
-        }
-        
-        CGSize contentSize = self.scrollView.contentSize;
-        contentSize.height += [self getKeyboardHeightFromUserInfo:info key:UIKeyboardFrameEndUserInfoKey];
-        self.scrollView.contentSize = contentSize;
-        self.scrollView.scrollEnabled = YES;
+        CGSize contentSize = self.tableView.contentSize;
+        contentSize.height += keyboardHeight;
+        self.tableView.contentSize = contentSize;
     }
 }
 
 - (void)keyboarDidHide:(NSNotification*)aNotification
 {
-    NSDictionary* info = [aNotification userInfo];
-    CGSize contentSize = self.scrollView.contentSize;
-    contentSize.height -= [self getKeyboardHeightFromUserInfo:info key:UIKeyboardFrameBeginUserInfoKey];
+    CGSize contentSize = self.tableView.contentSize;
+    contentSize.height -= [self getKeyboardHeightFromUserInfo:[aNotification userInfo] key:UIKeyboardFrameBeginUserInfoKey];
 
     [UIView beginAnimations:nil context:nil];
-    self.scrollView.contentSize = contentSize;
+    self.tableView.contentSize = contentSize;
     [UIView commitAnimations];
 }
 
@@ -95,5 +86,10 @@
     } else {
         return [[userInfo objectForKey:key] CGRectValue].size.width;
     }
+}
+
+- (UITableView *) tableView
+{
+    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:@"You need to implement \"tableView\" method in subclasses" userInfo:nil];
 }
 @end
