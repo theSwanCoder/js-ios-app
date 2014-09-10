@@ -13,8 +13,8 @@
 #import "JMLoadingCollectionViewCell.h"
 #import "UIViewController+fetchInputControls.h"
 
-#import "JMDetailReportViewerViewController.h"
-#import "JMDetailReportOptionsViewController.h"
+#import "JMReportViewerViewController.h"
+#import "JMReportOptionsViewController.h"
 
 #import "DDSlidingView.h"
 
@@ -161,11 +161,9 @@ objection_requires(@"resourceClient", @"constants")
         if ([destinationViewController isKindOfClass:[UINavigationController class]]) {
             self.masterNavigationController = destinationViewController;
         }
-    } else if ([self isReportSegue:segue]) {
+    } else if ([self isResourceSegue:segue]) {
         JSResourceLookup *resourcesLookup = [sender objectForKey:kJMResourceLookup];
-        
         NSArray *inputControls = [sender objectForKey:kJMInputControls];
-        id destinationViewController = segue.destinationViewController;
         [destinationViewController setInputControls:[inputControls mutableCopy]];
         [destinationViewController setResourceLookup:resourcesLookup];
     }
@@ -239,7 +237,7 @@ objection_requires(@"resourceClient", @"constants")
         NSDictionary *data = @{
                                kJMResourceLookup : resourceLookup
                                };
-        [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
+        [self performSegueWithIdentifier:kJMShowDashboardViewerSegue sender:data];
     }
 }
 

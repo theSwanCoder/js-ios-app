@@ -80,6 +80,11 @@ static CGPoint popupOffset;
     instance = nil;
 }
 
++ (BOOL)isVisiblePopup
+{
+    return !!instance;
+}
+
 #pragma mark - UIViewController
 
 - (void)viewDidLoad

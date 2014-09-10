@@ -1,14 +1,14 @@
 //
-//  JMDetailReportOptionsViewController.m
+//  JMReportOptionsViewController.m
 //  JasperMobile
 //
 //  Created by Vlad Zavadskii on 7/7/14.
 //  Copyright (c) 2014 com.jaspersoft. All rights reserved.
 //
 
-#import "JMDetailReportOptionsViewController.h"
+#import "JMReportOptionsViewController.h"
 #import "JMRequestDelegate.h"
-#import "JMDetailSingleSelectTableViewController.h"
+#import "JMSingleSelectTableViewController.h"
 #import "UIViewController+FetchInputControls.h"
 #import <Objection-iOS/Objection.h>
 #import "UITableViewCell+Additions.h"
@@ -22,7 +22,7 @@
 #import "JMInputControlCell.h"
 
 
-@interface JMDetailReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlsHolder, JMReportClientHolder, JMResourceClientHolder>
+@interface JMReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlsHolder, JMReportClientHolder, JMResourceClientHolder>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel    *titleLabel;
 @property (nonatomic, strong) JSConstants       *constants;
@@ -30,7 +30,7 @@
 
 @end
 
-@implementation JMDetailReportOptionsViewController
+@implementation JMReportOptionsViewController
 objection_requires(@"resourceClient", @"reportClient", @"constants")
 
 @synthesize resourceClient = _resourceClient;
@@ -94,7 +94,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 {
     id destinationViewController = segue.destinationViewController;
     
-    if ([self isReportSegue:segue]) {
+    if ([self isResourceSegue:segue]) {
         [destinationViewController setResourceLookup:self.resourceLookup];
         [destinationViewController setInputControls:sender];
         self.delegate = destinationViewController;

@@ -27,6 +27,7 @@
 
 extern NSString * const kJMShowReportOptionsSegue;
 extern NSString * const kJMShowReportViewerSegue;
+extern NSString * const kJMShowDashboardViewerSegue;
 
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 #import "JMResourceClientHolder.h"
@@ -46,8 +47,8 @@ extern NSString * const kJMShowReportViewerSegue;
 - (void)fetchInputControlsForReport:(JSResourceLookup *)resourceLookup;
 
 /**
- Indicates if segue identifier equals to "ShowReportOptions" or "ShowReportViewer"
+ Indicates if segue identifier equals to "ShowReportOptions" or "ShowReportViewer" or "ShowDashboardViewer"
  */
-- (BOOL)isReportSegue:(UIStoryboardSegue *)segue;
+- (BOOL)isResourceSegue:(UIStoryboardSegue *)segue;
 
 @end

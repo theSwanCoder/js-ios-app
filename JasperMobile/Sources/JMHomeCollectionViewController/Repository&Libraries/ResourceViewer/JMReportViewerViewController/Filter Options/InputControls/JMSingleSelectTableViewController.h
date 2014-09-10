@@ -1,5 +1,5 @@
 //
-//  JMDetailSingleSelectTableViewController.h
+//  JMSingleSelectTableViewController.h
 //  JasperMobile
 //
 //  Created by Vlad Zavadskii on 7/16/14.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "JMSingleSelectInputControlCell.h"
 
-@interface JMDetailSingleSelectTableViewController : UIViewController
+@interface JMSingleSelectTableViewController : UIViewController
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 
 @property (nonatomic, weak) JMSingleSelectInputControlCell *cell;

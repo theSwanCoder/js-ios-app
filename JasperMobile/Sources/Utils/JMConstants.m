@@ -47,8 +47,7 @@ NSString * const kJMClearSavedReportsListNotification = @"clearSavedReports";
 
 // Notifications used to connect master and detail view controllers
 NSString * const kJMLoadResourcesInDetail = @"loadResourcesInDetail";
-NSString * const kJMShowRootMaster = @"showRootMaster";
-NSString * const kJMShowReportInDetail = @"showReportInDetail";
+
 
 // Shared keys for NSDictionary
 NSString * const kJMMenuTag = @"menuTag";

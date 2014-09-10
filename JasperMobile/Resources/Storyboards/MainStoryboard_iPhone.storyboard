@@ -18,7 +18,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Vv-dK-Qcm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1856" y="265"/>
+            <point key="canvasLocation" x="-1864" y="-615"/>
         </scene>
         <!--Home Collection View Controller-->
         <scene sceneID="DG1-M8-b8k">
@@ -78,7 +78,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0G8-c2-OAI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1316" y="265"/>
+            <point key="canvasLocation" x="-1324" y="-615"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="Pxq-ub-7j9">
@@ -108,7 +108,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="SsL-u6-ztx">
-                                                    <rect key="frame" x="240.00000036379382" y="7" width="50" height="30"/>
+                                                    <rect key="frame" x="240.00000055515233" y="7" width="50" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -176,7 +176,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4ZJ-X0-S7j" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-779" y="1553"/>
+            <point key="canvasLocation" x="-779" y="769"/>
         </scene>
         <!--Servers Grid View Controller-->
         <scene sceneID="5GV-3W-HWv">
@@ -240,7 +240,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5fg-Za-OVu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-62" y="1553"/>
+            <point key="canvasLocation" x="-237" y="769"/>
         </scene>
         <!--Server Options View Controller-->
         <scene sceneID="SMK-7A-9S1">
@@ -279,7 +279,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="76m-km-THx">
-                                                    <rect key="frame" x="170.00000032285845" y="5" width="120" height="30"/>
+                                                    <rect key="frame" x="170.00000065684998" y="5" width="120" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -318,7 +318,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="qPt-Qz-YWo">
-                                                    <rect key="frame" x="170.00000032285845" y="10" width="120" height="30"/>
+                                                    <rect key="frame" x="170.00000065684998" y="10" width="120" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
@@ -418,7 +418,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gGQ-lj-hOZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="469" y="1553"/>
+            <point key="canvasLocation" x="210" y="769"/>
         </scene>
         <!--Resources Collection View Controller-->
         <scene sceneID="Nky-as-gTQ">
@@ -431,6 +431,7 @@
                         <segue destination="Pnz-Yd-mcg" kind="custom" identifier="MasterViewController" customClass="JMManualTransitionSegue" id="vaa-Eq-Ebp"/>
                         <segue destination="LDD-kF-5Ch" kind="push" identifier="ShowReportViewer" id="UBv-8K-HLV"/>
                         <segue destination="Zu1-8t-uvk" kind="push" identifier="ShowReportOptions" id="Q7I-tX-fdD"/>
+                        <segue destination="8AY-7W-tMT" kind="push" identifier="ShowDashboardViewer" id="hX5-8t-C0i"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zfv-oR-xMr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -550,6 +551,7 @@
                         <segue destination="MbS-QL-Inb" kind="custom" identifier="MasterViewController" customClass="JMManualTransitionSegue" id="6f6-MC-w0c"/>
                         <segue destination="Zu1-8t-uvk" kind="push" identifier="ShowReportOptions" id="jUv-fg-3yZ"/>
                         <segue destination="LDD-kF-5Ch" kind="push" identifier="ShowReportViewer" id="Gbl-v5-h6n"/>
+                        <segue destination="8AY-7W-tMT" kind="push" identifier="ShowDashboardViewer" id="cz6-XB-ApK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NBp-uD-wzS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -716,10 +718,10 @@
             </objects>
             <point key="canvasLocation" x="210" y="36"/>
         </scene>
-        <!--Detail Report Options View Controller-->
+        <!--Report Options View Controller-->
         <scene sceneID="yT8-q7-Eeb">
             <objects>
-                <viewController id="Zu1-8t-uvk" customClass="JMDetailReportOptionsViewController" sceneMemberID="viewController">
+                <viewController id="Zu1-8t-uvk" customClass="JMReportOptionsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hZI-Rh-ix9">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -786,7 +788,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="WbH-FR-T3V">
-                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187.00000030994417" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -823,7 +825,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="wO2-Zp-RXk">
-                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187.00000030994417" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -860,7 +862,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="cyI-ld-frz">
-                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -897,7 +899,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Ab7-h2-DAV">
-                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -1031,10 +1033,10 @@
             </objects>
             <point key="canvasLocation" x="875" y="-308"/>
         </scene>
-        <!--Detail Single Select Table View Controller-->
+        <!--Single Select Table View Controller-->
         <scene sceneID="pCI-XA-TBR">
             <objects>
-                <viewController id="FBW-AF-rdD" customClass="JMDetailSingleSelectTableViewController" sceneMemberID="viewController">
+                <viewController id="FBW-AF-rdD" customClass="JMSingleSelectTableViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="TZv-uK-RSn"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
@@ -1044,10 +1046,10 @@
             </objects>
             <point key="canvasLocation" x="1589" y="-308"/>
         </scene>
-        <!--Detail Report Viewer View Controller-->
+        <!--Report Viewer View Controller-->
         <scene sceneID="awL-Ln-vHg">
             <objects>
-                <viewController id="LDD-kF-5Ch" customClass="JMDetailReportViewerViewController" sceneMemberID="viewController">
+                <viewController id="LDD-kF-5Ch" customClass="JMReportViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="r2h-uK-Jvn">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1056,8 +1058,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="LDD-kF-5Ch" id="D5d-Pz-ywK"/>
+                                </connections>
                             </webView>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="Bd6-3W-WZo">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="Bd6-3W-WZo">
                                 <rect key="frame" x="150" y="198" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
@@ -1077,10 +1082,10 @@
             </objects>
             <point key="canvasLocation" x="875" y="-988"/>
         </scene>
-        <!--Detail Multi Select Table View Controller-->
+        <!--Multi Select Table View Controller-->
         <scene sceneID="MA0-Xs-vyz">
             <objects>
-                <viewController id="8V9-Ow-EC7" customClass="JMDetailMultiSelectTableViewController" sceneMemberID="viewController">
+                <viewController id="8V9-Ow-EC7" customClass="JMMultiSelectTableViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="GF6-mN-wLE"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
@@ -1089,6 +1094,41 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Atm-T3-5r4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1589" y="-988"/>
+        </scene>
+        <!--Dashboards Viewer View Controller-->
+        <scene sceneID="Idq-37-0Ej">
+            <objects>
+                <viewController id="8AY-7W-tMT" customClass="JMDashboardsViewerViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="OrM-B7-y02">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" id="Gbs-Ce-Tuh">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="8AY-7W-tMT" id="w1D-Yp-Cui"/>
+                                </connections>
+                            </webView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="eff-F5-XG6">
+                                <rect key="frame" x="150" y="198" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="CqW-9F-rwO"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="eff-F5-XG6" id="sLv-BW-Val"/>
+                        <outlet property="webView" destination="Gbs-Ce-Tuh" id="Hag-0C-I1W"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BRF-hF-xTq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="875" y="-1740"/>
         </scene>
     </scenes>
     <resources>
@@ -1104,8 +1144,9 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="1Bm-4Z-bZ8"/>
+        <segue reference="UBv-8K-HLV"/>
         <segue reference="25f-vL-F1i"/>
-        <segue reference="KN6-hX-ICt"/>
+        <segue reference="cz6-XB-ApK"/>
+        <segue reference="1Bm-4Z-bZ8"/>
     </inferredMetricsTieBreakers>
 </document>

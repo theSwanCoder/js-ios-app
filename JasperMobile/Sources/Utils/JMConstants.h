@@ -50,8 +50,7 @@ extern NSString * const kJMClearSavedReportsListNotification;
 
 // Notifications used to connect master and detail view controllers
 extern NSString * const kJMLoadResourcesInDetail;
-extern NSString * const kJMShowRootMaster;
-extern NSString * const kJMShowReportInDetail;
+
 
 // Shared keys for dictionary
 extern NSString * const kJMMenuTag;

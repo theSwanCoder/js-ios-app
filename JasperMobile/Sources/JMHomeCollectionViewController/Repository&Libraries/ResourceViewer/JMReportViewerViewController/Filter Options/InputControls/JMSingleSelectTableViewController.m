@@ -1,15 +1,15 @@
 //
-//  JMDetailSingleSelectTableViewController.m
+//  JMSingleSelectTableViewController.m
 //  JasperMobile
 //
 //  Created by Vlad Zavadskii on 7/16/14.
 //  Copyright (c) 2014 JasperMobile. All rights reserved.
 //
 
-#import "JMDetailSingleSelectTableViewController.h"
+#import "JMSingleSelectTableViewController.h"
 #import "JMSearchBar.h"
 
-@interface JMDetailSingleSelectTableViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, JMSearchBarDelegate>
+@interface JMSingleSelectTableViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, JMSearchBarDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UILabel     *noResultLabel;
 
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation JMDetailSingleSelectTableViewController
+@implementation JMSingleSelectTableViewController
 
 #pragma mark - Accessors
 

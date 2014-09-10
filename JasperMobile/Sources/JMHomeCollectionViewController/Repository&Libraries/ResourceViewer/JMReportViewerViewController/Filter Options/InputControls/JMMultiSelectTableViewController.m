@@ -1,14 +1,14 @@
 //
-//  JMDetailMultiSelectTableViewController.m
+//  JMMultiSelectTableViewController.m
 //  JasperMobile
 //
 //  Created by Vlad Zavadskii on 7/16/14.
 //  Copyright (c) 2014 JasperMobile. All rights reserved.
 //
 
-#import "JMDetailMultiSelectTableViewController.h"
+#import "JMMultiSelectTableViewController.h"
 
-@implementation JMDetailMultiSelectTableViewController
+@implementation JMMultiSelectTableViewController
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -19,7 +19,7 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-    return [self initWithNibName:NSStringFromClass([JMDetailSingleSelectTableViewController class]) bundle:nil];
+    return [self initWithNibName:NSStringFromClass([JMSingleSelectTableViewController class]) bundle:nil];
 }
 
 #pragma mark - Table view delegate

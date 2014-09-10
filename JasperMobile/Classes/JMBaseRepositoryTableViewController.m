@@ -134,7 +134,7 @@ objection_requires(@"resourceClient", @"constants")
 {
     id destinationViewController = segue.destinationViewController;
     
-    if ([self isReportSegue:segue]) {        
+    if ([self isResourceSegue:segue]) {        
         NSDictionary *data = sender;
         JSResourceLookup *resourceLookup = [data objectForKey:kJMResourceLookup];
         [destinationViewController setResourceLookup:resourceLookup];

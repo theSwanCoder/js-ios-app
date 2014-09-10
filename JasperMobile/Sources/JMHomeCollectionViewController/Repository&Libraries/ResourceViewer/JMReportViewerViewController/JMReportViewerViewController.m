@@ -1,13 +1,12 @@
 //
-//  JMDetailReportViewerViewController.m
+//  JMReportViewerViewController.m
 //  JasperMobile
 //
 //  Created by Vlad Zavadsky on 5/23/14.
 //  Copyright (c) 2014 com.jaspersoft. All rights reserved.
 //
 
-#import "JMDetailReportViewerViewController.h"
-#import "JMConstants.h"
+#import "JMReportViewerViewController.h"
 #import <Objection-iOS/Objection.h>
 #import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"
@@ -15,70 +14,25 @@
 #import "UIViewController+FetchInputControls.h"
 #import "ALToastView.h"
 
-@interface JMDetailReportViewerViewController () <UIWebViewDelegate, JMReportViewerToolBarDelegate>
-@property (nonatomic, weak) IBOutlet UIWebView *webView;
-@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
-
+@interface JMReportViewerViewController () <JMReportViewerToolBarDelegate>
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 
-@property (nonatomic, assign) BOOL isRequestLoaded;
-
 @property (nonatomic, weak) JSConstants *constants;
-@property (nonatomic, strong) NSURLRequest *request;
 
 @property (nonatomic, strong) NSString *requestId;
 @property (nonatomic, strong) NSString *exportId;
 @end
 
+@implementation JMReportViewerViewController
+objection_requires(@"reportClient", @"constants")
 
-@implementation JMDetailReportViewerViewController
-objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"constants")
-
-@synthesize resourceClient = _resourceClient;
 @synthesize reportClient   = _reportClient;
-@synthesize resourceLookup = _resourceLookup;
-
-#pragma mark - Initialization
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    [[JSObjection defaultInjector] injectDependencies:self];
-}
 
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    self.webView.scrollView.bounces = NO;
-    self.webView.delegate = self;
-    self.webView.suppressesIncrementalRendering = YES;
-    [self.webView loadHTMLString:@"" baseURL:nil];
-
-    self.title = self.resourceLookup.label;
-    UIBarButtonItem *refreshItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(refreshButtonTapped:)];
-    UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"favorite_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(favoriteButtonTapped:)];
-    favoriteItem.tintColor = [UIColor redColor];
-    NSMutableArray *itemsArray = [NSMutableArray arrayWithObjects:refreshItem, favoriteItem, nil];
-    if (self.inputControls && [self.inputControls count]) {
-        UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(editButtonTapped:)];
-        [itemsArray addObject:editItem];
-    }
-    
-    self.navigationItem.rightBarButtonItems = itemsArray;
-    
     [self addBackButton];
-    
-    [self runReportExecution];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (!self.isRequestLoaded && self.request) {
-        [self.webView loadRequest:self.request];
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -98,10 +52,6 @@ objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"con
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    if (self.webView.loading) {
-        [self.webView stopLoading];
-        [self loadingDidFinished];
-    }
     [self.navigationController setToolbarHidden:YES animated:YES];
 }
 
@@ -113,18 +63,17 @@ objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"con
     [destinationViewController setDelegate:self];
 }
 
+- (NSArray *)rightBarButtonItems
+{
+    NSMutableArray *itemsArray = [NSMutableArray arrayWithArray:[super rightBarButtonItems]];
+    if (self.inputControls && [self.inputControls count]) {
+        UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(editButtonTapped:)];
+        [itemsArray addObject:editItem];
+    }
+    return itemsArray;
+}
+
 #pragma mark - Actions
-
-- (void)refreshButtonTapped:(id) sender
-{
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
-    [self runReportExecution];
-}
-
-- (void)favoriteButtonTapped:(id)sender
-{
-    
-}
 
 - (void) editButtonTapped:(id) sender
 {
@@ -147,22 +96,14 @@ objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"con
     self.navigationItem.leftBarButtonItem = backItem;
 }
 
-- (void)setRequest:(NSURLRequest *)request
-{
-    if (request != _request) {
-        _request = request;
-        if (self.webView.isLoading) {
-            [self.webView stopLoading];
-        }
-        [self.webView loadRequest:request];
-        self.isRequestLoaded = NO;
-    }
-}
-
 - (void) runReportExecution
 {
     self.toolbar.currentPage = 1;
     
+    if (self.request) {
+        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
+    }
+
     __weak typeof(self) weakSelf = self;
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
@@ -216,13 +157,6 @@ objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"con
     [self displayCurrentPageOfReport];
 }
 
-#pragma mark - JMFullScreenButtonProvider
-- (BOOL)shouldDisplayFullScreenButton
-{
-    return YES;
-}
-
-
 #pragma mark - JMRefreshable
 
 - (void)refresh
@@ -231,30 +165,4 @@ objection_requires(@"resourceClient", @"reportClient", @"resourceLookup",  @"con
     [self runReportExecution];
 }
 
-#pragma mark - UIWebViewDelegate
-- (void)webViewDidStartLoad:(UIWebView *)webView
-{
-    [self.activityIndicator startAnimating];
-    [JMUtils showNetworkActivityIndicator];
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    [self loadingDidFinished];
-    if (self.request) {
-        self.isRequestLoaded = YES;
-    }
-}
-
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
-{
-    [self loadingDidFinished];
-    self.isRequestLoaded = NO;
-}
-
-- (void)loadingDidFinished
-{
-    [JMUtils hideNetworkActivityIndicator];
-    [self.activityIndicator stopAnimating];
-}
 @end

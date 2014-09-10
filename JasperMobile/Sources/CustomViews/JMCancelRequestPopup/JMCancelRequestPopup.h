@@ -60,5 +60,11 @@ typedef void(^JMCancelRequestBlock)(void);
  */
 + (void)dismiss;
 
+
+/**
+ Return YES if CancelRequestPopup is presented
+ */
++ (BOOL)isVisiblePopup;
+
 @end
 

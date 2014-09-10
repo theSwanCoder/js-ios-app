@@ -27,6 +27,7 @@
 
 NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
 NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
+NSString * const kJMShowDashboardViewerSegue = @"ShowDashboardViewer";
 
 #import <Objection-iOS/JSObjection.h>
 #import "UIViewController+fetchInputControls.h"
@@ -82,10 +83,12 @@ NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
     [report inputControlsForReport:resourceLookup.uri ids:nil selectedValues:reportParameters delegate:delegate];
 }
 
-- (BOOL)isReportSegue:(UIStoryboardSegue *)segue;
+- (BOOL)isResourceSegue:(UIStoryboardSegue *)segue;
 {
     NSString *identifier = segue.identifier;
-    return [identifier isEqualToString:kJMShowReportViewerSegue] || [identifier isEqualToString:kJMShowReportOptionsSegue];
+    return ([identifier isEqualToString:kJMShowReportViewerSegue]  ||
+            [identifier isEqualToString:kJMShowReportOptionsSegue] ||
+            [identifier isEqualToString:kJMShowDashboardViewerSegue]);
 }
 
 @end

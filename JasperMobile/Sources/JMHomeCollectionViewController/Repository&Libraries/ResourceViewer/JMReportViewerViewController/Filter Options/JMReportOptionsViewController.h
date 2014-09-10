@@ -1,5 +1,5 @@
 //
-//  JMDetailReportOptionsViewController.h
+//  JMReportOptionsViewController.h
 //  JasperMobile
 //
 //  Created by Vlad Zavadskii on 7/7/14.
@@ -10,7 +10,7 @@
 #import "JMRefreshable.h"
 
 
-@interface JMDetailReportOptionsViewController : JMEditabledViewController
+@interface JMReportOptionsViewController : JMEditabledViewController
 
 @property (nonatomic, weak) id <JMResourceClientHolder, JMRefreshable> delegate;
 
