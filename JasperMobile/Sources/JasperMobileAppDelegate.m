@@ -29,7 +29,6 @@
 #import "JMAppUpdater.h"
 #import "JMAskPasswordDialog.h"
 #import "JMConstants.h"
-#import "JMFavoritesUtil.h"
 #import "JMBaseModule.h"
 #import "JMReportClientHolder.h"
 #import "JMReportOptionsUtil.h"
@@ -39,7 +38,6 @@
 static NSString * const kJMProductName = @"JasperMobile";
 
 @interface JasperMobileAppDelegate() <JMResourceClientHolder, JMReportClientHolder>
-@property (nonatomic, strong) JMFavoritesUtil *favoritesUtil;
 @property (nonatomic, strong) JMReportOptionsUtil *reportOptionsUtil;
 @end
 
@@ -233,7 +231,6 @@ static NSString * const kJMProductName = @"JasperMobile";
     // Inject resource and report clients
     self.resourceClient = [injector getObject:[JSRESTResource class]];
     self.reportClient = [injector getObject:[JSRESTReport class]];
-    self.favoritesUtil = [injector getObject:[JMFavoritesUtil class]];
     self.reportOptionsUtil = [injector getObject:[JMReportOptionsUtil class]];
 }
 
@@ -274,9 +271,6 @@ static NSString * const kJMProductName = @"JasperMobile";
         // Update report options with active server profile
         self.reportOptionsUtil.serverProfile = serverProfile;
         
-        // Update favorites with active server profile
-        self.favoritesUtil.serverProfile = serverProfile;
-
         // Update timeouts
         [self updateTimeouts];
         

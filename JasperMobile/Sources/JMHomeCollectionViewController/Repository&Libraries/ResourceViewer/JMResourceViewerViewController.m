@@ -8,6 +8,7 @@
 
 #import "JMResourceViewerViewController.h"
 #import <Objection-iOS/Objection.h>
+#import "JMFavorites+Helpers.h"
 
 @implementation JMResourceViewerViewController
 objection_requires(@"resourceClient", @"resourceLookup")
@@ -76,6 +77,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
 {
     UIBarButtonItem *refreshItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(refreshButtonTapped:)];
     UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"favorite_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(favoriteButtonTapped:)];
+    [self updateFavotiteItem:favoriteItem];
     return [NSArray arrayWithObjects:refreshItem, favoriteItem, nil];
 }
 
@@ -87,7 +89,17 @@ objection_requires(@"resourceClient", @"resourceLookup")
 
 - (void)favoriteButtonTapped:(id)sender
 {
-    
+    if ([JMFavorites isResourceInFavorites:self.resourceLookup]) {
+        [JMFavorites removeFromFavorites:self.resourceLookup];
+    } else {
+        [JMFavorites addToFavorites:self.resourceLookup];
+    }
+    [self updateFavotiteItem:sender];
+}
+
+- (void) updateFavotiteItem:(UIBarButtonItem *)item
+{
+    item.tintColor = [JMFavorites isResourceInFavorites:self.resourceLookup] ? [UIColor yellowColor] : [UIColor whiteColor];
 }
 
 -(void) runReportExecution
