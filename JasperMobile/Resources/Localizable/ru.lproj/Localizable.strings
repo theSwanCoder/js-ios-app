@@ -34,7 +34,7 @@
 
 "servers.name.label" = "Имя";
 "servers.name.errmsg.empty" = "Имя профиля не может быть пустым";
-"servers.name.errmsg.exists" = "Профиль с таким именем уже существует. Введите другое имя профиля";
+"servers.name.errmsg.exists" = "Профиль с таким именем уже существует. Введите другое имя";
 
 "servers.orgid.label" = "Организация";
 

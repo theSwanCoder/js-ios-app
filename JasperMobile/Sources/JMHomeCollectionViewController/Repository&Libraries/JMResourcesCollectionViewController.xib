@@ -51,7 +51,7 @@
                         <outlet property="delegate" destination="-1" id="yDT-Mu-IO3"/>
                     </connections>
                 </collectionView>
-                <view hidden="YES" contentMode="scaleToFill" id="VUw-2N-ER9">
+                <view contentMode="scaleToFill" id="VUw-2N-ER9">
                     <rect key="frame" x="0.0" y="163" width="320" height="90"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <subviews>

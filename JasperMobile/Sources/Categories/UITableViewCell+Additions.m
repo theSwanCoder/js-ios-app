@@ -63,9 +63,11 @@
     toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [toolbar setItems:[self inputAccessoryViewToolbarItems]];
     [toolbar sizeToFit];
-    CGRect toolBarRect = toolbar.frame;
-    toolBarRect.size.height = 34;
-    toolbar.frame = toolBarRect;
+    if ([JMUtils isIphone]) {
+        CGRect toolBarRect = toolbar.frame;
+        toolBarRect.size.height = 34;
+        toolbar.frame = toolBarRect;
+    }
     return toolbar;
 }
 

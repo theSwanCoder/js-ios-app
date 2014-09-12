@@ -16,7 +16,6 @@
 #import "JMInputControlsHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMReportClientHolder.h"
-#import "JMRefreshable.h"
 #import "JMCancelRequestPopup.h"
 #import "JMRequestDelegate.h"
 #import "JMInputControlCell.h"

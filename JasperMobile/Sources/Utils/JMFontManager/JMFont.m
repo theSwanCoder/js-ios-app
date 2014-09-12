@@ -32,7 +32,7 @@
 
 + (UIFont *)tableViewCellDetailErrorFont
 {
-    return [JMUtils isIphone] ? [UIFont italicSystemFontOfSize:12] : [UIFont italicSystemFontOfSize:16];
+    return [JMUtils isIphone] ? [UIFont italicSystemFontOfSize:10] : [UIFont italicSystemFontOfSize:16];
 }
 
 + (UIFont *)resourcesActivityTitleFont

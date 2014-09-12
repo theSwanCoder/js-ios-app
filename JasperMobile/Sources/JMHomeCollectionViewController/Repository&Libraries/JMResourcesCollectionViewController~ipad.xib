@@ -71,7 +71,7 @@
                         <outlet property="delegate" destination="-1" id="cnD-w0-Vhx"/>
                     </connections>
                 </collectionView>
-                <view hidden="YES" contentMode="scaleToFill" id="pLE-Bm-20N">
+                <view contentMode="scaleToFill" id="pLE-Bm-20N">
                     <rect key="frame" x="94" y="435" width="580" height="90"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <subviews>

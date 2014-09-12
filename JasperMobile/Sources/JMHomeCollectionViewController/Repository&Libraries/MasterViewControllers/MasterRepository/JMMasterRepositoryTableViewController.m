@@ -47,6 +47,7 @@ objection_requires(@"resourceClient")
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.folders = [NSMutableArray array];
     
     if (!self.resourceLookup) {
         self.resourceLookup = [[JSResourceLookup alloc] init];
@@ -64,20 +65,28 @@ objection_requires(@"resourceClient")
         CGRectMake(0, self.rootFolderView.frame.size.height, frame.size.width, frame.size.height + self.backView.frame.size.height);
         self.tableView.frame = frame;
         
-        
         self.backView.hidden = YES;
         self.backView.frame = CGRectZero;
+        
+        JSResourceLookup *rootResourceLookup = [[JSResourceLookup alloc] init];
+        rootResourceLookup.label = @"Organization";
+        rootResourceLookup.uri = @"/";
+        rootResourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
+        [self.folders addObject:rootResourceLookup];
+        
+        JSResourceLookup *publicResourceLookup = [[JSResourceLookup alloc] init];
+        publicResourceLookup.label = @"Public";
+        publicResourceLookup.uri = @"/public";
+        publicResourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
+        [self.folders addObject:publicResourceLookup];
     } else {
         [self.backView setOnTapGestureCallback:^(UITapGestureRecognizer *recognizer) {
             [self.navigationController popViewControllerAnimated:YES];
             [self.delegate loadResourcesIntoDetailViewController];
         }];
+        [self loadNextPage];
     }
-    
     self.rootFolderLabel.text = self.resourceLookup.label;
-    self.folders = [NSMutableArray array];
-    
-    [self loadNextPage];
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -265,7 +265,6 @@
 		374552EC43D4F1F21EEBD8CF /* JMSavedReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455108E52B31C8C8F3EEA0 /* JMSavedReportViewerViewController.m */; };
 		374556813A6B65E857339B9B /* JMSaveReportTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455CE479AE7BBBDD5E3844 /* JMSaveReportTableViewController.m */; };
 		374557A7C15F38DCAD8F7872 /* JMSavedReportInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455CCABE6FC1DB4112A458 /* JMSavedReportInfoViewController.m */; };
-		37455D6BDB88905BED2C79A0 /* JMSearchFilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37455C3DC2AF14391C6124B3 /* JMSearchFilterTableViewController.m */; };
 		37455E77D1C81B7B1B7ACB6A /* JMSavedReportsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3745548577A868BC32D8B736 /* JMSavedReportsTableViewController.m */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
@@ -681,11 +680,9 @@
 		3745548577A868BC32D8B736 /* JMSavedReportsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSavedReportsTableViewController.m; path = Classes/JMSavedReportsTableViewController.m; sourceTree = "<group>"; };
 		374555B48BEA900E76DF6268 /* JMSavedReportsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSavedReportsTableViewController.h; path = Classes/JMSavedReportsTableViewController.h; sourceTree = "<group>"; };
 		37455BC9062C2B827901FD7C /* JMSaveReportTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSaveReportTableViewController.h; path = Classes/JMSaveReportTableViewController.h; sourceTree = "<group>"; };
-		37455C3DC2AF14391C6124B3 /* JMSearchFilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSearchFilterTableViewController.m; path = Classes/JMSearchFilterTableViewController.m; sourceTree = "<group>"; };
 		37455CCABE6FC1DB4112A458 /* JMSavedReportInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSavedReportInfoViewController.m; path = Classes/JMSavedReportInfoViewController.m; sourceTree = "<group>"; };
 		37455CE479AE7BBBDD5E3844 /* JMSaveReportTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMSaveReportTableViewController.m; path = Classes/JMSaveReportTableViewController.m; sourceTree = "<group>"; };
 		37455D797C80548D30CF8549 /* JMSavedReportInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSavedReportInfoViewController.h; path = Classes/JMSavedReportInfoViewController.h; sourceTree = "<group>"; };
-		37455FF022F117F112A3BB4E /* JMSearchFilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JMSearchFilterTableViewController.h; path = Classes/JMSearchFilterTableViewController.h; sourceTree = "<group>"; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F54C91A21752FAAD0009E2BE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -1768,8 +1765,6 @@
 				37455108E52B31C8C8F3EEA0 /* JMSavedReportViewerViewController.m */,
 				37455BC9062C2B827901FD7C /* JMSaveReportTableViewController.h */,
 				37455CE479AE7BBBDD5E3844 /* JMSaveReportTableViewController.m */,
-				37455FF022F117F112A3BB4E /* JMSearchFilterTableViewController.h */,
-				37455C3DC2AF14391C6124B3 /* JMSearchFilterTableViewController.m */,
 			);
 			name = Phone;
 			sourceTree = "<group>";
@@ -2193,7 +2188,6 @@
 				08E8640F1992564A007CF257 /* JMServerProfile+Helpers.m in Sources */,
 				08E864111992564A007CF257 /* UIAlertView+LocalizedAlert.m in Sources */,
 				08E864241992564A007CF257 /* JMAppUpdater.m in Sources */,
-				37455D6BDB88905BED2C79A0 /* JMSearchFilterTableViewController.m in Sources */,
 				08856DCD199370A30027DF56 /* JMServerSelectTableViewCell.m in Sources */,
 				08DE67D719C05D8B00C25AEA /* JMResourceViewerViewController.m in Sources */,
 				08DE67CE19C05D8B00C25AEA /* JMMultiSelectTableViewController.m in Sources */,

@@ -36,7 +36,7 @@
 "servers.name.label" = "Server Name";
 "servers.name.tip" = "my server name";
 "servers.name.errmsg.empty" = "Please specify a valid profile name";
-"servers.name.errmsg.exists" = "Profile name already exists. Please specify another profile name";
+"servers.name.errmsg.exists" = "Profile name already exists. Please specify another one";
 
 "servers.orgid.label" = "Organization ID";
 "servers.orgid.tip" = "organization id";
