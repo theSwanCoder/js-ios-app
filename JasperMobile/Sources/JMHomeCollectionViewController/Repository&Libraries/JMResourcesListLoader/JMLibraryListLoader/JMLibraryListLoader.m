@@ -22,6 +22,28 @@ objection_requires(@"managedObjectContext")
 
 @synthesize isLoadingNow;
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        __weak typeof(self) weakSelf = self;
+        [[NSNotificationCenter defaultCenter] addObserverForName:kJMFavoritesDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+            typeof(self) strongSelf = weakSelf;
+            if (strongSelf) {
+                if (strongSelf.filterByTag && strongSelf.filterByTag.length) {
+                    [strongSelf setNeedsUpdate];
+                }
+            }
+        }];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void) takeParametersFromNotificationUserInfo:(NSDictionary *)userInfo
 {
     [super takeParametersFromNotificationUserInfo:userInfo];

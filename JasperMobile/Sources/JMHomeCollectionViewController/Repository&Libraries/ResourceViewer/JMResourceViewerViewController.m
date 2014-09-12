@@ -95,6 +95,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
         [JMFavorites addToFavorites:self.resourceLookup];
     }
     [self updateFavotiteItem:sender];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
 - (void) updateFavotiteItem:(UIBarButtonItem *)item

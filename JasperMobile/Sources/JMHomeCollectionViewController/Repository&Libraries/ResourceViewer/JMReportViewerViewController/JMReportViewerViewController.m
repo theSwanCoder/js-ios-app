@@ -87,13 +87,15 @@ objection_requires(@"reportClient", @"constants")
 
 - (void) addBackButton
 {
-    NSString *title = [[self.navigationController.viewControllers objectAtIndex:1] title];
-    UIImage *backButtonImage = [UIImage imageNamed:@"back_item.png"];
-    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTapped:)];
-    [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    
-    self.navigationItem.leftBarButtonItem = backItem;
+    if (self.inputControls && self.inputControls.count) {
+        NSString *title = [[self.navigationController.viewControllers objectAtIndex:1] title];
+        UIImage *backButtonImage = [UIImage imageNamed:@"back_item.png"];
+        UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
+        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTapped:)];
+        [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+        
+        self.navigationItem.leftBarButtonItem = backItem;
+    }
 }
 
 - (void) runReportExecution

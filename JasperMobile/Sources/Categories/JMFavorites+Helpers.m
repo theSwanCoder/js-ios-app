@@ -21,6 +21,8 @@ NSString * const kJMFavorites = @"Favorites";
     favorites.uri = resource.uri;
     favorites.label = resource.label;
     favorites.wsType = resource.resourceType;
+    favorites.creationDate = resource.creationDate;
+    favorites.resourceDescription = resource.resourceDescription;
     favorites.username = activeServerProfile.username;
     favorites.organization = activeServerProfile.organization;
     [activeServerProfile addFavoritesObject:favorites];
@@ -49,6 +51,8 @@ NSString * const kJMFavorites = @"Favorites";
     resource.uri = self.uri;
     resource.label = self.label;
     resource.resourceType = self.wsType;
+    resource.creationDate = self.creationDate;
+    resource.resourceDescription = self.resourceDescription;
     return resource;
 }
 

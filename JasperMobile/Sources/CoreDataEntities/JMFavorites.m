@@ -35,5 +35,7 @@
 @dynamic uri;
 @dynamic wsType;
 @dynamic serverProfile;
+@dynamic creationDate;
+@dynamic resourceDescription;
 
 @end

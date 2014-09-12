@@ -90,6 +90,12 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.resourceListLoader updateIfNeeded];
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {

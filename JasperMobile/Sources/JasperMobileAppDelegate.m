@@ -176,10 +176,19 @@ static NSString * const kJMProductName = @"JasperMobile";
     }
     
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:[kJMProductName stringByAppendingPathExtension:@"sqlite"]];
-    
-    NSError *error = nil;
+
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+    [self addPersistentStoreUrl:storeURL];
+    
+    return _persistentStoreCoordinator;
+}
+
+- (void) addPersistentStoreUrl:(NSURL *)storeURL
+{
+    NSError *error = nil;
+    NSDictionary *options = @{NSMigratePersistentStoresAutomaticallyOption : [NSNumber numberWithBool:YES],
+                              NSInferMappingModelAutomaticallyOption : [NSNumber numberWithBool:YES]};
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
         /*
          Replace this implementation with code to handle the error appropriately.
          
@@ -206,8 +215,6 @@ static NSString * const kJMProductName = @"JasperMobile";
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
-    
-    return _persistentStoreCoordinator;
 }
 
 #pragma mark - Application's Documents directory
@@ -295,16 +302,13 @@ static NSString * const kJMProductName = @"JasperMobile";
     [[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary]
                                                        forName:[[NSBundle mainBundle] bundleIdentifier]];
     NSArray *stores = [self.persistentStoreCoordinator persistentStores];
-    NSMutableArray *storesURLs = [NSMutableArray array];
-    
     for (NSPersistentStore *store in stores) {
-        [storesURLs addObject:store.URL];
         [self.persistentStoreCoordinator removePersistentStore:store error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:nil];
     }
     
-    for (NSURL *storeURL in storesURLs) {
-        [self.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:nil];
+    for (NSURL *storeURL in stores) {
+        [self addPersistentStoreUrl:storeURL];
     }
     
     // Update db with latest app version and demo profile

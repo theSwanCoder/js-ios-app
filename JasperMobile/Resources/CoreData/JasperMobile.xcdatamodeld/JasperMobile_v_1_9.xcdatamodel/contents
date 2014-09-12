@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="JasperMobile_v_1_5" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="JasperMobile_v_1_9" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Favorites" representedClassName="JMFavorites" syncable="YES">
+        <attribute name="creationDate" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="organization" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="resourceDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uri" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="wsType" optional="YES" attributeType="String" syncable="YES"/>
@@ -28,7 +30,7 @@
         <relationship name="reportOptions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReportOptions" inverseName="serverProfile" inverseEntity="ReportOptions" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Favorites" positionX="-200" positionY="-144" width="128" height="135"/>
+        <element name="Favorites" positionX="-290" positionY="-252" width="128" height="163"/>
         <element name="ReportOptions" positionX="187" positionY="-150" width="128" height="150"/>
         <element name="ServerProfile" positionX="-18" positionY="-261" width="128" height="165"/>
     </elements>

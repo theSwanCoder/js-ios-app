@@ -31,7 +31,10 @@
 @property (nonatomic, assign) BOOL loadRecursively;
 @property (nonatomic, strong) NSString *filterByTag;
 
-
 - (void)takeParametersFromNotificationUserInfo: (NSDictionary *)userInfo;
+
+- (void)setNeedsUpdate;
+
+- (void)updateIfNeeded;
 
 @end

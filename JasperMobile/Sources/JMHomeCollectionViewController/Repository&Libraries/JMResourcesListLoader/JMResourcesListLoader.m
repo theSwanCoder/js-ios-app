@@ -15,6 +15,8 @@
 @interface JMResourcesListLoader ()
 
 @property (nonatomic, readwrite) BOOL isLoadingNow;
+@property (nonatomic, assign) BOOL needUpdateData;
+
 @end
 
 
@@ -49,6 +51,19 @@ objection_requires(@"resourceClient", @"constants")
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)setNeedsUpdate
+{
+    self.needUpdateData = YES;
+}
+
+- (void)updateIfNeeded
+{
+    if (self.needUpdateData) {
+        self.needUpdateData = NO;
+        [self loadResources:nil];
+    }
+}
+
 - (void) takeParametersFromNotificationUserInfo:(NSDictionary *)userInfo
 {
     if ([userInfo objectForKey:kJMResourcesTypes]) {
@@ -73,8 +88,9 @@ objection_requires(@"resourceClient", @"constants")
 
     if (!self.isLoadingNow) {
         self.isLoadingNow = YES;
-        
-        [self takeParametersFromNotificationUserInfo:notification.userInfo];
+        if (notification) {
+            [self takeParametersFromNotificationUserInfo:notification.userInfo];
+        }
         [self loadNextPage];
     }
 }
