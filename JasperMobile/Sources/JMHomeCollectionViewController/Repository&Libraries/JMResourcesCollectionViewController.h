@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JMResourceClientHolder.h"
-#import "JMPagination.h"
+#import "JMResourcesListLoader.h"
 
-@interface JMResourcesCollectionViewController : UIViewController <JMResourceClientHolder, JMPagination>
+
+@interface JMResourcesCollectionViewController : UIViewController 
+@property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
 
 @end

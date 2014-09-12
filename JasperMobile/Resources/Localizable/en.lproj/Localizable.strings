@@ -169,6 +169,12 @@
 "master.sortby.type.date" = "Date";
 "master.sortby.type.creator" = "Creator";
 
+// Filter By Tag
+"master.filterbytag.title" = "Tags";
+"master.filterbytag.type.none" = "None";
+"master.filterbytag.type.favorites" = "Favorites";
+
+
 /* Detail view view (Pad) */
 
 "detail.resourcesloading.msg" = "Loading.\nPlease Wait...";

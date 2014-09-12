@@ -61,6 +61,7 @@ NSString * const kJMSelectedResourceIndex = @"selectedResourceIndex";
 NSString * const kJMResourcesTypes = @"resourcesTypes";
 NSString * const kJMSearchQuery = @"searchQuery";
 NSString * const kJMSortBy = @"sortBy";
+NSString * const kJMFilterByTag = @"filterByTag";
 NSString * const kJMTotalCount = @"totalCount";
 NSString * const kJMOffset = @"offset";
 

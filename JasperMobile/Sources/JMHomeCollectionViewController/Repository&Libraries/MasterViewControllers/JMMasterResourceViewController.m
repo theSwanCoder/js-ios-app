@@ -44,7 +44,7 @@ objection_requires(@"constants")
     return 0;
 }
 
-#pragma mark - JMSearchBarAdditions
+#pragma mark - JMSearchable
 
 - (void)searchWithQuery:(NSString *)query
 {

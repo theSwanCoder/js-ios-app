@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JMSearchBarAdditions.h"
+#import "JMSearchable.h"
 #import "JMRefreshable.h"
 
-@interface JMMasterResourceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, JMSearchBarAdditions, JMRefreshable>
+@interface JMMasterResourceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, JMSearchable, JMRefreshable>
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView  *masterMenuTitleView;

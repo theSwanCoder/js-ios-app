@@ -76,6 +76,11 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
     return self;
 }
 
+- (void)didMoveToSuperview
+{
+    [self.textField becomeFirstResponder];
+}
+
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {

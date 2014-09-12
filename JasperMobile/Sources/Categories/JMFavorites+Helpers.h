@@ -7,6 +7,7 @@
 //
 
 #import "JMFavorites.h"
+extern NSString * const kJMFavorites;
 
 @interface JMFavorites (Helpers)
 
@@ -22,8 +23,5 @@
 // Returns wrapper from favorites. Wrapper is a JSResourceLookup
 // with only provided name, label and wsType
 - (JSResourceLookup *)wrapperFromFavorite;
-
-// Returns list of wrappers from favorites.
-+ (NSMutableArray *)wrappersFromFavorites;
 
 @end

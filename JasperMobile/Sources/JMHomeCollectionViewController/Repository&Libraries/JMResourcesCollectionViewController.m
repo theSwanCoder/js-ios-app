@@ -7,7 +7,6 @@
 //
 
 #import "JMResourcesCollectionViewController.h"
-#import "JMRequestDelegate.h"
 #import "JMRefreshable.h"
 #import "JMResourceCollectionViewCell.h"
 #import "JMLoadingCollectionViewCell.h"
@@ -18,11 +17,9 @@
 
 #import "DDSlidingView.h"
 
-#import "JMSearchBarAdditions.h"
+#import "JMSearchable.h"
 #import "JMSearchBar.h"
 
-#import <Objection-iOS/JSObjection.h>
-#import <Objection-iOS/Objection.h>
 
 typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
     JMResourcesRepresentationTypeHorizontalList = 0,
@@ -32,7 +29,7 @@ typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
 
 static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 
-@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, JMSearchBarDelegate>
+@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, JMSearchBarDelegate, JMResourcesListLoaderDelegate>
 
 @property (strong, nonatomic) DDSlidingView  *slideContainerView;
 @property (weak, nonatomic) UINavigationController *masterNavigationController;
@@ -48,30 +45,9 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
 
-// Params for loading request.
-@property (nonatomic, weak) JSConstants *constants;
-@property (nonatomic, strong) NSArray *resourcesTypes;
-@property (nonatomic, strong) NSString *searchQuery;
-@property (nonatomic, strong) NSString *sortBy;
-@property (nonatomic, assign) BOOL loadRecursively;
 @end
 
 @implementation JMResourcesCollectionViewController
-objection_requires(@"resourceClient", @"constants")
-
-@synthesize resources = _resources;
-@synthesize resourceLookup = _resourceLookup;
-@synthesize resourceClient = _resourceClient;
-@synthesize totalCount = _totalCount;
-@synthesize offset = _offset;
-
-#pragma mark - Initialization
-
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    [[JSObjection defaultInjector] injectDependencies:self];
-}
 
 #pragma mark - UIViewController
 
@@ -79,20 +55,12 @@ objection_requires(@"resourceClient", @"constants")
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
-    
-    @try {
-        [self performSegueWithIdentifier:kJMMasterViewControllerSegue sender:self];
-    } @catch (NSException *exception) {
-        NSLog(@"No segue to master view controller");
-    }
-    
+
     self.activityViewTitleLabel.text = JMCustomLocalizedString(@"detail.resourcesloading.msg", nil);
     self.noResultsViewTitleLabel.text = JMCustomLocalizedString(@"detail.noresults.msg", nil);
     
     self.activityViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
     self.noResultsViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
-
-    self.resources = [NSMutableArray array];
     
     NSArray *paramsArray = @[
                              @{kJMResourceCellNibKey: kJMHorizontalResourceCellNib,
@@ -109,17 +77,17 @@ objection_requires(@"resourceClient", @"constants")
         [collectionView registerNib:[UINib nibWithNibName:[[paramsArray objectAtIndex:i] objectForKey:kJMLoadingCellNibKey] bundle:nil] forCellWithReuseIdentifier:kJMLoadingCellIdentifier];
     }
     
-    
-    self.resourcesTypes = @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD];
+    self.resourceListLoader.resourcesTypes = @[self.resourceListLoader.constants.WS_TYPE_REPORT_UNIT, self.resourceListLoader.constants.WS_TYPE_DASHBOARD];
     
     // Will show horizontal list view controller
     self.representationType = JMResourcesRepresentationTypeHorizontalList;
     [self showNavigationItems];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(loadResourcesInDetail:)
-                                                 name:kJMLoadResourcesInDetail
-                                               object:nil];
+    @try {
+        [self performSegueWithIdentifier:kJMMasterViewControllerSegue sender:self];
+    } @catch (NSException *exception) {
+        NSLog(@"No segue to master view controller");
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -181,6 +149,12 @@ objection_requires(@"resourceClient", @"constants")
     [flowLayout invalidateLayout]; //force the elements to get laid out again with the new size
 }
 
+- (void)setResourceListLoader:(JMResourcesListLoader *)resourceListLoader
+{
+    _resourceListLoader = resourceListLoader;
+    self.resourceListLoader.delegate = self;
+}
+
 #pragma mark - Actions
 
 - (void)searchButtonTapped:(id)sender
@@ -229,15 +203,12 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSResourceLookup *resourceLookup = [self.resources objectAtIndex:indexPath.row];
+    JSResourceLookup *resourceLookup = [self.resourceListLoader.resources objectAtIndex:indexPath.row];
     
-    if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
+    if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_REPORT_UNIT]) {
         [self fetchInputControlsForReport:resourceLookup];
     } else {
-        NSDictionary *data = @{
-                               kJMResourceLookup : resourceLookup
-                               };
-        [self performSegueWithIdentifier:kJMShowDashboardViewerSegue sender:data];
+        [self performSegueWithIdentifier:kJMShowDashboardViewerSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
     }
 }
 
@@ -245,22 +216,22 @@ objection_requires(@"resourceClient", @"constants")
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    NSInteger count = self.resources.count;
-    if ([self hasNextPage]) count++;
+    NSInteger count = self.resourceListLoader.resources.count;
+    if ([self.resourceListLoader hasNextPage]) count++;
     return count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.item == self.resources.count) {
-        if (self.hasNextPage) {
-            [self loadNextPage];
+    if (indexPath.item == self.resourceListLoader.resources.count) {
+        if ([self.resourceListLoader hasNextPage]) {
+            [self.resourceListLoader loadNextPage];
         }
         return [collectionView dequeueReusableCellWithReuseIdentifier:kJMLoadingCellIdentifier forIndexPath:indexPath];
     }
 
     JMResourceCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kJMResourceCellIdentifier forIndexPath:indexPath];
-    cell.resourceLookup = [self.resources objectAtIndex:indexPath.row];
+    cell.resourceLookup = [self.resourceListLoader.resources objectAtIndex:indexPath.row];
     return cell;
 }
 
@@ -270,79 +241,13 @@ objection_requires(@"resourceClient", @"constants")
     [self didSelectResourceAtIndexPath:indexPath];
 }
 
-#pragma mark - Pagination
-
-- (void)loadNextPage
-{
-    // Multiple calls protection
-    static BOOL isLoading = NO;
-    if (isLoading) return;
-    
-    if (!self.resources.count) {
-        self.activityView.hidden = NO;
-        self.noResultsView.hidden = YES;
-    }
-
-    __weak JMResourcesCollectionViewController *weakSelf = self;
-
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        isLoading = NO;
-        
-        if (!weakSelf.totalCount) {
-            weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
-        }
-        [weakSelf.resources addObjectsFromArray:result.objects];
-        weakSelf.offset += kJMResourceLimit;
-        
-        weakSelf.activityView.hidden = YES;
-        weakSelf.noResultsView.hidden = weakSelf.resources.count > 0;
-        [weakSelf.collectionViews makeObjectsPerformSelector:@selector(reloadData)];
-    } errorBlock:^(JSOperationResult *result) {
-        weakSelf.activityView.hidden = YES;
-        isLoading = NO;
-        // TODO: add an error handler
-    }];
-
-    [self.resourceClient resourceLookups:self.resourceLookup.uri query:self.searchQuery types:self.resourcesTypes
-                                  sortBy:self.sortBy recursive:self.loadRecursively offset:self.offset limit:kJMResourceLimit delegate:delegate];
-    isLoading = YES;
-}
-
-- (BOOL)hasNextPage
-{
-    return self.offset < self.totalCount;
-}
-
-#pragma mark - Observer Methods
-
-- (void)loadResourcesInDetail:(NSNotification *)notification
-{
-    // Reset state
-    self.totalCount = 0;
-    self.offset = 0;
-    
-    [self.resources removeAllObjects];
-    [self.collectionViews makeObjectsPerformSelector:@selector(reloadData)];
-
-    NSDictionary *userInfo = notification.userInfo;
-    if ([userInfo objectForKey:kJMResourcesTypes]) {
-        self.resourcesTypes = [userInfo objectForKey:kJMResourcesTypes];
-    }
-    self.loadRecursively = [[userInfo objectForKey:kJMLoadRecursively] boolValue];
-    self.resourceLookup = [userInfo objectForKey:kJMResourceLookup];
-    self.searchQuery = [userInfo objectForKey:kJMSearchQuery];
-    self.sortBy = [userInfo objectForKey:kJMSortBy];
-    
-    [self loadNextPage];
-}
-
 #pragma mark - JMSearchBarDelegate
 
 - (void)searchBarSearchButtonClicked:(JMSearchBar *)searchBar
 {
     NSString *query = searchBar.text;
     id visibleViewController = self.masterNavigationController.visibleViewController;
-    if ([visibleViewController conformsToProtocol:@protocol(JMSearchBarAdditions)]) {
+    if ([visibleViewController conformsToProtocol:@protocol(JMSearchable)]) {
         if (![[visibleViewController currentQuery] isEqualToString:query]) {
             [visibleViewController searchWithQuery:query];
         }
@@ -352,7 +257,7 @@ objection_requires(@"resourceClient", @"constants")
 - (void)searchBarCancelButtonClicked:(JMSearchBar *) searchBar
 {
     id visibleViewController = self.masterNavigationController.visibleViewController;
-    if ([visibleViewController conformsToProtocol:@protocol(JMSearchBarAdditions)]) {
+    if ([visibleViewController conformsToProtocol:@protocol(JMSearchable)]) {
         [visibleViewController didClearSearch];
     }
 
@@ -411,11 +316,24 @@ objection_requires(@"resourceClient", @"constants")
     return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName] style:UIBarButtonItemStyleBordered target:self action:@selector(representationTypeButtonTapped:)];
 }
 
-#pragma mark - NSObject
-
-- (void)dealloc
+#pragma mark - JMResourcesListLoaderDelegate
+- (void)resourceListDidStartLoading:(JMResourcesListLoader *)listLoader
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.collectionViews makeObjectsPerformSelector:@selector(reloadData)];
+    self.activityView.hidden = NO;
+    self.noResultsView.hidden = YES;
+}
+
+- (void)resourceListDidLoaded:(JMResourcesListLoader *)listLoader withError:(NSError *)error
+{
+    if (error) {
+        self.activityView.hidden = YES;
+        // TODO: add an error handler
+    } else {
+        self.noResultsView.hidden = listLoader.resources.count > 0;
+        self.activityView.hidden = YES;
+        [self.collectionViews makeObjectsPerformSelector:@selector(reloadData)];
+    }
 }
 
 @end

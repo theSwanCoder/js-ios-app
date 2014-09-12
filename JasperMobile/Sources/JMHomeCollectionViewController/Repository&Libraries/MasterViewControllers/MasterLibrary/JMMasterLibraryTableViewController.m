@@ -12,7 +12,8 @@
 
 typedef NS_ENUM(NSInteger, JMTableViewSection) {
     JMTableViewSection_ResourceType = 0,
-    JMTableViewSection_SortingType
+    JMTableViewSection_SortingType,
+    JMTableViewSection_TagsType
 };
 
 typedef NS_ENUM(NSInteger, JMResourcesType) {
@@ -27,6 +28,11 @@ typedef NS_ENUM(NSInteger, JMSortBy) {
     JMSortByCreator
 };
 
+typedef NS_ENUM(NSInteger, JMFilterByTag) {
+    JMFilterByTag_None = 0,
+    JMFilterByTag_Favourites
+};
+
 static NSString * const kJMSettingTypeKey = @"settingsType";
 static NSString * const kJMTitleKey = @"title";
 static NSString * const kJMRowsKey = @"rows";
@@ -35,6 +41,8 @@ static NSString * const kJMRowsKey = @"rows";
 @property (nonatomic, strong) NSArray *cellsAndSectionsProperties;
 @property (nonatomic, assign) JMResourcesType resourcesTypeEnum;
 @property (nonatomic, assign) JMSortBy sortByEnum;
+@property (nonatomic, assign) JMFilterByTag filterByTagEnum;
+
 @end
 
 @implementation JMMasterLibraryTableViewController
@@ -77,6 +85,16 @@ static NSString * const kJMRowsKey = @"rows";
     }
 }
 
+- (NSString *)filterByTag
+{
+    switch (self.filterByTagEnum) {
+        case JMFilterByTag_Favourites:
+            return @"favorites";
+        default:
+            return nil;
+    }
+}
+
 - (NSArray *)cellsAndSectionsProperties
 {
     if (!_cellsAndSectionsProperties) {
@@ -95,6 +113,13 @@ static NSString * const kJMRowsKey = @"rows";
                                             kJMTitleKey : @"sortby",
                                             kJMRowsKey : @[
                                                     @"name", @"date"
+                                                    ]
+                                            },
+                                        @{
+                                            kJMSettingTypeKey : @(JMTableViewSection_TagsType),
+                                            kJMTitleKey : @"filterbytag",
+                                            kJMRowsKey : @[
+                                                    @"none", @"favorites"
                                                     ]
                                             }
                                         ];
@@ -154,6 +179,9 @@ static NSString * const kJMRowsKey = @"rows";
         case JMTableViewSection_SortingType:
             self.sortByEnum = (JMSortBy) indexPath.row;
             break;
+        case JMTableViewSection_TagsType:
+            self.filterByTagEnum = (JMFilterByTag) indexPath.row;
+            break;
     }
     
     [self loadResourcesIntoDetailViewController];
@@ -174,12 +202,15 @@ static NSString * const kJMRowsKey = @"rows";
 
 - (NSDictionary *)paramsForLoadingResourcesIntoDetailViewController
 {
-    return @{
-            kJMResourcesTypes : self.resourcesTypes,
-            kJMLoadRecursively : @(YES),
-            kJMSearchQuery : self.searchQuery ?: @"",
-            kJMSortBy : self.sortBy
-    };
+    NSMutableDictionary *paramsDictionary = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                             self.resourcesTypes, kJMResourcesTypes,
+                                             @(YES), kJMLoadRecursively,
+                                             self.searchQuery ?: @"", kJMSearchQuery,
+                                             self.sortBy, kJMSortBy, nil];
+    if (self.filterByTag) {
+        [paramsDictionary setObject:self.filterByTag forKey:kJMFilterByTag];
+    }
+    return paramsDictionary;
 }
 
 #pragma mark - Localization

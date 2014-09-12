@@ -28,6 +28,7 @@
 #import "JMHomeCollectionViewController.h"
 #import "JMMenuItemCell.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMResourcesCollectionViewController.h"
 
 // Localization keys defined as lowercase version of MenuItem identifier (e.g library, saveditems etc)
 static NSString * const kJMMenuItemLibrary = @"Library";
@@ -80,9 +81,11 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Will force to load destination's view
-    [segue.destinationViewController view];
-    [segue.destinationViewController setTitle:sender];
+    id viewController = segue.destinationViewController;
+    [viewController setTitle:sender];
+    if ([viewController respondsToSelector:@selector(setResourceListLoader:)]) {
+        [viewController setResourceListLoader:[self resourceListLoaderForSequeIdentifier:segue.identifier]];
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -129,6 +132,16 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     UIEdgeInsets insets = UIEdgeInsetsMake(flowLayout.sectionInset.top, horizontalInset, flowLayout.sectionInset.bottom, horizontalInset);
     
     return insets;
+}
+
+- (JMResourcesListLoader *)resourceListLoaderForSequeIdentifier:(NSString *)identifier
+{
+    if ([identifier isEqualToString:[NSString stringWithFormat:@"Show%@", kJMMenuItemLibrary]]) {
+        return [NSClassFromString(@"JMLibraryListLoader") new];
+    } else if ([identifier isEqualToString:[NSString stringWithFormat:@"Show%@", kJMMenuItemRepository]]) {
+        return [NSClassFromString(@"JMResourcesListLoader") new];
+    }
+    return nil;
 }
 
 @end

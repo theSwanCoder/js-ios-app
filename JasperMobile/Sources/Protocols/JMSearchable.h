@@ -1,5 +1,5 @@
 //
-//  JMSearchBarAdditions.h
+//  JMSearchable.h
 //  JasperMobile
 //
 //  Created by Vlad Zavadskii on 6/19/14.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol JMSearchBarAdditions <NSObject>
+@protocol JMSearchable <NSObject>
 @required
 - (void)searchWithQuery:(NSString *)query;
 - (void)didClearSearch;

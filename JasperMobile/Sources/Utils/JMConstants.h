@@ -64,6 +64,7 @@ extern NSString * const kJMSelectedResourceIndex;
 extern NSString * const kJMResourcesTypes;
 extern NSString * const kJMSearchQuery;
 extern NSString * const kJMSortBy;
+extern NSString * const kJMFilterByTag;
 extern NSString * const kJMTotalCount;
 extern NSString * const kJMOffset;
 
