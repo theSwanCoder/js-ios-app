@@ -55,10 +55,12 @@ objection_requires(@"resourceClient", @"resourceLookup")
         [self.webView stopLoading];
         [self loadingDidFinished];
     }
-    [self.webView stringByEvaluatingJavaScriptFromString:@"document.body.innerHTML='';"];
-    self.webView.delegate = nil;
-    [self.webView removeFromSuperview];
-    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:self.request];
+    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
+        [self.webView stringByEvaluatingJavaScriptFromString:@"document.body.innerHTML='';"];
+        self.webView.delegate = nil;
+        [self.webView removeFromSuperview];
+        [[NSURLCache sharedURLCache] removeCachedResponseForRequest:self.request];
+    }
 }
 
 - (void)setRequest:(NSURLRequest *)request

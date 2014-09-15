@@ -124,8 +124,7 @@ objection_requires(@"resourceClient")
     }
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kJMFolderCellIdentifier forIndexPath:indexPath];
-    UILabel *label = (UILabel *) [cell viewWithTag:1];
-    label.text = [[self.folders objectAtIndex:indexPath.row] label];
+    cell.textLabel.text = [[self.folders objectAtIndex:indexPath.row] label];
     
     return cell;
 }

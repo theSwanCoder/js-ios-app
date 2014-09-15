@@ -195,7 +195,8 @@
 "detail.report.options.multiselect.titlelabel.title" = "Select one or more items";
 
 
-"detail.report.viewer.emptyreport.message" = "Report is empty";
+"detail.report.viewer.emptyreport.title" = "Report is empty";
+"detail.report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options or tap 'Cancel' for returning to old report.";
 
 // Action bar buttons
 "action.button.refresh" = "Refresh";

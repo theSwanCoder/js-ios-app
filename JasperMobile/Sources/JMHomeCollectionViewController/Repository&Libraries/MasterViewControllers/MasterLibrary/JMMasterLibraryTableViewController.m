@@ -155,22 +155,17 @@ static NSString * const kJMRowsKey = @"rows";
 {
     static NSString *cellIdentifier = @"MenuCell";
     JMLibraryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-    cell.label.text = [self localizedRowTitle:indexPath.row forSection:indexPath.section];
-
+    cell.textLabel.text = [self localizedRowTitle:indexPath.row forSection:indexPath.section];
     return cell;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMLibraryTableViewCell *cell = (JMLibraryTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
-    if (cell.isSelected) return nil;
-    return indexPath;
+    return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMLibraryTableViewCell *cell = (JMLibraryTableViewCell *) [self.tableView cellForRowAtIndexPath:indexPath];
-    cell.selected = YES;
     JMTableViewSection sectionType = [[[self.cellsAndSectionsProperties objectAtIndex:indexPath.section] objectForKey:kJMSettingTypeKey] integerValue];
     switch (sectionType) {
         case JMTableViewSection_ResourceType:
@@ -185,12 +180,12 @@ static NSString * const kJMRowsKey = @"rows";
     }
     
     [self loadResourcesIntoDetailViewController];
-    // Deselect other rows
-    for (NSInteger i = [self.tableView numberOfRowsInSection:indexPath.section] - 1; i >= 0; i--) {
-        if (i == indexPath.row) continue;
-        NSIndexPath *cellToDeselect = [NSIndexPath indexPathForRow:i inSection:indexPath.section];
-        cell = (JMLibraryTableViewCell *) [self.tableView cellForRowAtIndexPath:cellToDeselect];
-        cell.selected = NO;
+    
+    
+    for (NSIndexPath *selectedIndexPath in [self.tableView indexPathsForSelectedRows]) {
+        if (selectedIndexPath.section == indexPath.section && indexPath.row != selectedIndexPath.row) {
+            [self.tableView deselectRowAtIndexPath:selectedIndexPath animated:NO];
+        }
     }
 }
 

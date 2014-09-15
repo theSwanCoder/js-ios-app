@@ -93,13 +93,16 @@ extern NSString * const kJMReportFilename;
 #define kJMMasterViewWidth              240.f
 #define kJMMasterViewAnimationDuration  0.2f
 
-#define kJMDetailViewLightBackgroundColor       [UIColor colorFromHexString:@"#E5E9EB"]
-#define kJMDetailViewLightTextColor             [UIColor colorFromHexString:@"#8F8F8F"]
-#define kJMDetailActionBarItemsBackgroundColor  [UIColor colorFromHexString:@"#2D3036"]
-#define kJMDetailActionBarItemsTextColor        [UIColor colorFromHexString:@"#D4D4D4"]
-#define kJMSearchBarBackgroundColor             [UIColor colorFromHexString:@"#26282D"]
+#define kJMDetailViewLightBackgroundColor               [UIColor colorFromHexString:@"#E5E9EB"]
+#define kJMDetailViewLightTextColor                     [UIColor colorFromHexString:@"#8F8F8F"]
+#define kJMDetailActionBarItemsBackgroundColor          [UIColor colorFromHexString:@"#2D3036"]
+#define kJMDetailActionBarItemsTextColor                [UIColor colorFromHexString:@"#D4D4D4"]
+#define kJMSearchBarBackgroundColor                     [UIColor colorFromHexString:@"#26282D"]
 
-#define kJMMainNavigationBarBackgroundColor     [UIColor colorFromHexString:@"#343841"]
-#define kJMMainCollectionViewBackgroundColor    [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]]
+#define kJMMainNavigationBarBackgroundColor             [UIColor colorFromHexString:@"#343841"]
+#define kJMMainCollectionViewBackgroundColor            [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]]
 
-#define kJMResourcePreviewBackgroundColor       [UIColor colorFromHexString:@"#3A90B2"]
+#define kJMResourcePreviewBackgroundColor               [UIColor colorFromHexString:@"#3A90B2"]
+
+#define kJMMasterResourceCellDefaultBackgroundColor     [UIColor colorFromHexString:@"#2E3138"]
+#define kJMMasterResourceCellSelectedBackgroundColor    [UIColor colorFromHexString:@"#484F59"]

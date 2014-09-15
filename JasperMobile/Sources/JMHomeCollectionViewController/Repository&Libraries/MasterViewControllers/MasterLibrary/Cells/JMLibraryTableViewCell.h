@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JMBaseResourceTableViewCell.h"
 
-@interface JMLibraryTableViewCell : JMBaseResourceTableViewCell
+@interface JMLibraryTableViewCell : UITableViewCell
 
 @property (nonatomic, weak) IBOutlet UIView *leftSideView;
 

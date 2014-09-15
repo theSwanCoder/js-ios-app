@@ -7,13 +7,12 @@
 //
 
 #import "JMLibraryTableViewCell.h"
-#import "JMConstants.h"
 
 @implementation JMLibraryTableViewCell
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
+    self.contentView.backgroundColor = selected ? kJMMasterResourceCellSelectedBackgroundColor : kJMMasterResourceCellDefaultBackgroundColor;
     self.leftSideView.hidden = !selected;
 }
 

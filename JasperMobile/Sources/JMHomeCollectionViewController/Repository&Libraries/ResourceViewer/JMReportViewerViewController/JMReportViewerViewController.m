@@ -12,9 +12,10 @@
 #import "JMCancelRequestPopup.h"
 #import "JMReportViewerToolBar.h"
 #import "UIViewController+FetchInputControls.h"
-#import "ALToastView.h"
+#import "UIAlertView+LocalizedAlert.h"
 
-@interface JMReportViewerViewController () <JMReportViewerToolBarDelegate>
+@interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, UIAlertViewDelegate>
+@property (nonatomic, strong) NSUndoManager *icUndoManager;
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 
 @property (nonatomic, weak) JSConstants *constants;
@@ -26,13 +27,14 @@
 @implementation JMReportViewerViewController
 objection_requires(@"reportClient", @"constants")
 
-@synthesize reportClient   = _reportClient;
+@synthesize reportClient    = _reportClient;
 
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self addBackButton];
+    self.icUndoManager = [NSUndoManager new];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -71,6 +73,17 @@ objection_requires(@"reportClient", @"constants")
         [itemsArray addObject:editItem];
     }
     return itemsArray;
+}
+
+- (void)setInputControls:(NSMutableArray *)inputControls
+{
+    if (self.inputControls != inputControls) {
+        if (self.inputControls) {
+            [[self.icUndoManager prepareWithInvocationTarget:self] setInputControls:self.inputControls];
+            [self.icUndoManager setActionName:@"ResetChanges"];
+        }
+        [super setInputControls:inputControls];
+    }
 }
 
 #pragma mark - Actions
@@ -138,7 +151,13 @@ objection_requires(@"reportClient", @"constants")
         
         self.request = [NSURLRequest requestWithURL:[NSURL URLWithString:reportUrl]];
     } else {
-        [ALToastView toastInView:self.view withText:JMCustomLocalizedString(@"detail.report.viewer.emptyreport.message", nil)];
+        UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:@"detail.report.viewer.emptyreport.title" message:nil delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil];
+        if ([self.icUndoManager canUndo]) {
+            alertView.delegate = self;
+            alertView.message = JMCustomLocalizedString(@"detail.report.viewer.emptyreport.message", nil);
+            [alertView addButtonWithTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)];
+        }
+        [alertView show];
     }
 }
 
@@ -165,6 +184,17 @@ objection_requires(@"reportClient", @"constants")
 {
     [self.navigationController popToViewController:self animated:YES];
     [self runReportExecution];
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.cancelButtonIndex == buttonIndex) {
+        [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
+    } else {
+        [self.icUndoManager undo];
+    }
+    [self.icUndoManager removeAllActionsWithTarget:self];
 }
 
 @end

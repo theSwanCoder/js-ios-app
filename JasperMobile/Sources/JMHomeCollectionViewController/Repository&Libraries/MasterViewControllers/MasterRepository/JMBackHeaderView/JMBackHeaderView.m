@@ -7,7 +7,6 @@
 //
 
 #import "JMBackHeaderView.h"
-#import "JMBaseResourceTableViewCell.h"
 
 @interface JMBackHeaderView()
 @property (nonatomic, copy) void (^callback)(UITapGestureRecognizer *);
@@ -33,7 +32,7 @@
 {
     if (self.callback) {
         // TODO: refactor
-        self.backgroundColor = [JMBaseResourceTableViewCell selectedColor];
+        self.backgroundColor = kJMMasterResourceCellSelectedBackgroundColor;
         self.callback(recognizer);
     }
 }

@@ -16,13 +16,11 @@
 		080F235A19A77B23008758FA /* JMGridResourceCollectionViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 080F235219A77B23008758FA /* JMGridResourceCollectionViewCell~ipad.xib */; };
 		080F235B19A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 080F235319A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib */; };
 		080F235C19A77B23008758FA /* JMVerticalResourceCollectionViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 080F235419A77B23008758FA /* JMVerticalResourceCollectionViewCell~ipad.xib */; };
-		080F239019A77E06008758FA /* JMBaseResourceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 080F238519A77E06008758FA /* JMBaseResourceTableViewCell.m */; };
-		080F239119A77E06008758FA /* JMLibraryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 080F238719A77E06008758FA /* JMLibraryTableViewCell.m */; };
-		080F239319A77E06008758FA /* JMVerticalListResourceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 080F238B19A77E06008758FA /* JMVerticalListResourceTableViewCell.m */; };
 		080F23C619A78013008758FA /* search_item.png in Resources */ = {isa = PBXBuildFile; fileRef = 080F23C419A78013008758FA /* search_item.png */; };
 		080F23C719A78013008758FA /* search_item@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 080F23C519A78013008758FA /* search_item@2x.png */; };
 		0810649A19C0A9D40000D7F3 /* JMFavorites+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 0810649919C0A9D40000D7F3 /* JMFavorites+Helpers.m */; };
 		0837375819A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0837375719A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib */; };
+		083EFFB019C70A8E0021BF5E /* JMLibraryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 083EFFAF19C70A8E0021BF5E /* JMLibraryTableViewCell.m */; };
 		08504E6219BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08504E5E19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m */; };
 		08504E6319BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08504E6119BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.m */; };
 		08504E6719BA0F2C00C75F30 /* JMBackHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08504E6619BA0F2C00C75F30 /* JMBackHeaderView.m */; };
@@ -340,17 +338,13 @@
 		080F235219A77B23008758FA /* JMGridResourceCollectionViewCell~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMGridResourceCollectionViewCell~ipad.xib"; sourceTree = "<group>"; };
 		080F235319A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMHorizontalResourceCollectionViewCell~ipad.xib"; sourceTree = "<group>"; };
 		080F235419A77B23008758FA /* JMVerticalResourceCollectionViewCell~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMVerticalResourceCollectionViewCell~ipad.xib"; sourceTree = "<group>"; };
-		080F238419A77E06008758FA /* JMBaseResourceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseResourceTableViewCell.h; sourceTree = "<group>"; };
-		080F238519A77E06008758FA /* JMBaseResourceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourceTableViewCell.m; sourceTree = "<group>"; };
-		080F238619A77E06008758FA /* JMLibraryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLibraryTableViewCell.h; sourceTree = "<group>"; };
-		080F238719A77E06008758FA /* JMLibraryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLibraryTableViewCell.m; sourceTree = "<group>"; };
-		080F238A19A77E06008758FA /* JMVerticalListResourceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVerticalListResourceTableViewCell.h; sourceTree = "<group>"; };
-		080F238B19A77E06008758FA /* JMVerticalListResourceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVerticalListResourceTableViewCell.m; sourceTree = "<group>"; };
 		080F23C419A78013008758FA /* search_item.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_item.png; sourceTree = "<group>"; };
 		080F23C519A78013008758FA /* search_item@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_item@2x.png"; sourceTree = "<group>"; };
 		0810649819C0A9D40000D7F3 /* JMFavorites+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JMFavorites+Helpers.h"; sourceTree = "<group>"; };
 		0810649919C0A9D40000D7F3 /* JMFavorites+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JMFavorites+Helpers.m"; sourceTree = "<group>"; };
 		0837375719A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMResourcesCollectionViewController~ipad.xib"; sourceTree = "<group>"; };
+		083EFFAE19C70A8E0021BF5E /* JMLibraryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLibraryTableViewCell.h; sourceTree = "<group>"; };
+		083EFFAF19C70A8E0021BF5E /* JMLibraryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLibraryTableViewCell.m; sourceTree = "<group>"; };
 		08504E5D19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterLibraryTableViewController.h; sourceTree = "<group>"; };
 		08504E5E19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMasterLibraryTableViewController.m; sourceTree = "<group>"; };
 		08504E6019BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterRepositoryTableViewController.h; sourceTree = "<group>"; };
@@ -818,22 +812,17 @@
 			children = (
 				08504E5C19BA0F0D00C75F30 /* MasterLibrary */,
 				08504E5F19BA0F0D00C75F30 /* MasterRepository */,
-				080F238319A77E06008758FA /* Cells */,
 				08D2A1A119BA095D00A4CF5A /* JMMasterResourceViewController.h */,
 				08D2A1A219BA095D00A4CF5A /* JMMasterResourceViewController.m */,
 			);
 			path = MasterViewControllers;
 			sourceTree = "<group>";
 		};
-		080F238319A77E06008758FA /* Cells */ = {
+		083EFFAD19C70A8E0021BF5E /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				080F238419A77E06008758FA /* JMBaseResourceTableViewCell.h */,
-				080F238519A77E06008758FA /* JMBaseResourceTableViewCell.m */,
-				080F238619A77E06008758FA /* JMLibraryTableViewCell.h */,
-				080F238719A77E06008758FA /* JMLibraryTableViewCell.m */,
-				080F238A19A77E06008758FA /* JMVerticalListResourceTableViewCell.h */,
-				080F238B19A77E06008758FA /* JMVerticalListResourceTableViewCell.m */,
+				083EFFAE19C70A8E0021BF5E /* JMLibraryTableViewCell.h */,
+				083EFFAF19C70A8E0021BF5E /* JMLibraryTableViewCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -841,6 +830,7 @@
 		08504E5C19BA0F0D00C75F30 /* MasterLibrary */ = {
 			isa = PBXGroup;
 			children = (
+				083EFFAD19C70A8E0021BF5E /* Cells */,
 				08504E6819BA0F3300C75F30 /* JMMenuSectionView */,
 				08504E5D19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.h */,
 				08504E5E19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m */,
@@ -2133,6 +2123,7 @@
 				F58FF2F41760A0B50021CC8B /* MJPopupBackgroundView.m in Sources */,
 				F58FF2F51760A0B50021CC8B /* UIViewController+MJPopupViewController.m in Sources */,
 				0851DFD819ACE27800DC6EDE /* JMCancelRequestPopup.m in Sources */,
+				083EFFB019C70A8E0021BF5E /* JMLibraryTableViewCell.m in Sources */,
 				08DE67C919C05D8B00C25AEA /* JMInputControlCell.m in Sources */,
 				08504E6319BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.m in Sources */,
 				08E93B1319AF8AC800B1DF8D /* JMMenuItemCell.m in Sources */,
@@ -2160,7 +2151,6 @@
 				08E8641A1992564A007CF257 /* JMReportOptions.m in Sources */,
 				08E8641B1992564A007CF257 /* JMServerProfile.m in Sources */,
 				08FF130A1992982F0082265D /* JMServerOptionCell.m in Sources */,
-				080F239119A77E06008758FA /* JMLibraryTableViewCell.m in Sources */,
 				08E62C8319922B0B0081CA83 /* main.m in Sources */,
 				0851DFDA19ACE27800DC6EDE /* JMSavedReportModifyPopup.m in Sources */,
 				0810649A19C0A9D40000D7F3 /* JMFavorites+Helpers.m in Sources */,
@@ -2172,8 +2162,6 @@
 				08DE67D319C05D8B00C25AEA /* JMReportViewerToolBar.m in Sources */,
 				08E864101992564A007CF257 /* JSRESTBase+updateServerInfo.m in Sources */,
 				08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */,
-				080F239019A77E06008758FA /* JMBaseResourceTableViewCell.m in Sources */,
-				080F239319A77E06008758FA /* JMVerticalListResourceTableViewCell.m in Sources */,
 				08E864281992564A007CF257 /* JMReportOptionsUtil.m in Sources */,
 				08504E6219BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m in Sources */,
 				08E864171992564A007CF257 /* UIViewController+fetchInputControls.m in Sources */,
@@ -2333,8 +2321,8 @@
 		F55CC376174CFFCF00CEB39E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/JasperMobile/Vendor\"",
@@ -2354,7 +2342,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "cfd9e1c9-5460-4b6d-bb6b-1494f850dd94";
+				"PROVISIONING_PROFILE[sdk=*]" = "df930aaf-6567-44f3-bd6a-981d9935b3e8";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
@@ -2366,8 +2354,8 @@
 		F55CC377174CFFCF00CEB39E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/JasperMobile/Vendor\"",
@@ -2386,8 +2374,8 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "cfd9e1c9-5460-4b6d-bb6b-1494f850dd94";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "cfd9e1c9-5460-4b6d-bb6b-1494f850dd94";
+				PROVISIONING_PROFILE = "df930aaf-6567-44f3-bd6a-981d9935b3e8";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "df930aaf-6567-44f3-bd6a-981d9935b3e8";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
