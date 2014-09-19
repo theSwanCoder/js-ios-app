@@ -75,7 +75,6 @@
 
 // Navigation Bar Titles
 "title.home" = "Домашняя страница";
-"master.resources.title" = "Обзор";
 
 
 "resource.properties.title" = "Свойства ресурса";
@@ -104,7 +103,6 @@
 
 "detail.report.options.title" = "Параметры Фильтра";
 "detail.report.options.titlelabel.title" = "Текущие фильтры";
-"detail.report.viewer.emptyreport.message" = "Отчет пустой";
 
 
 // Action bar buttons

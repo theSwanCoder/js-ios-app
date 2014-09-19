@@ -34,60 +34,6 @@ CGFloat kJMNoEdgesInset = -1;
 
 @implementation JMUtils
 
-+ (void)setTitleForResourceViewController:(UIViewController<JMResourceClientHolder> *)viewController
-{
-    viewController.navigationItem.title = viewController.resourceLookup.label ?: viewController.resourceClient.serverProfile.alias;
-}
-
-+ (void)setBackgroundImagesForButton:(UIButton *)button imageName:(NSString *)imageName highlightedImageName:(NSString *)highlightedImageName edgesInset:(CGFloat)edgesInset
-{
-    UIImage *image = [UIImage imageNamed:imageName];
-    UIImage *highlightedImage = [UIImage imageNamed:highlightedImageName];
-
-    if (edgesInset != kJMNoEdgesInset) {
-        UIEdgeInsets capInsets = UIEdgeInsetsMake(edgesInset, edgesInset, edgesInset, edgesInset);
-        image = [image resizableImageWithCapInsets:capInsets];
-        highlightedImage = [highlightedImage resizableImageWithCapInsets:capInsets];
-    }
-    
-    if (image) {
-        [button setBackgroundImage:image forState:UIControlStateNormal];
-    }
-
-    if (highlightedImage) {
-        [button setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
-    }
-}
-
-+ (NSString *)localizedTitleForMenuItemByTag:(NSInteger)tag {
-    NSString *title;
-    
-    switch (tag) {
-        case kJMLibraryMenuTag:
-            title = @"view.library";
-            break;
-        case kJMRepositoryMenuTag:
-            title = @"view.repository";
-            break;
-        case kJMFavoritesMenuTag:
-            title = @"view.favorites";
-            break;
-        case kJMSavedReportsMenuTag:
-            title = @"view.savedreports";
-            break;
-        case kJMServersMenuTag:
-        default:
-            title = @"view.servers";
-    }
-    
-    return JMCustomLocalizedString(title, nil);
-}
-
-+ (BOOL)isViewControllerVisible:(UIViewController *)viewController
-{
-    return viewController.isViewLoaded && viewController.view.window;
-}
-
 #define kJMNameMin 1
 #define kJMNameMax 250
 #define kJMInvalidCharacters @":/"

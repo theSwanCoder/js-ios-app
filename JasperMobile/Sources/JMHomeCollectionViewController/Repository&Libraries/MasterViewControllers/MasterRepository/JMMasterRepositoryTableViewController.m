@@ -125,7 +125,6 @@ objection_requires(@"resourceClient")
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kJMFolderCellIdentifier forIndexPath:indexPath];
     cell.textLabel.text = [[self.folders objectAtIndex:indexPath.row] label];
-    
     return cell;
 }
 

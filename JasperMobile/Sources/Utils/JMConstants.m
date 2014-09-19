@@ -42,8 +42,6 @@ NSString * const kJMDefaultsServerUsername = @"jaspersoft.server.username.%d";
 // Notifications
 NSString * const kJMChangeServerProfileNotification = @"changeServerProfile";
 NSString * const kJMResetApplicationNotification = @"resetApplication";
-NSString * const kJMSelectMenuNotification = @"selectMenu";
-NSString * const kJMClearSavedReportsListNotification = @"clearSavedReports";
 NSString * const kJMFavoritesDidChangedNotification = @"JMFavoritesDidChangedNotification";
 NSString * const kJMSavedResourcesDidChangedNotification = @"JMSavedResourcesDidChangedNotification";
 
@@ -52,20 +50,14 @@ NSString * const kJMLoadResourcesInDetail = @"loadResourcesInDetail";
 
 
 // Shared keys for NSDictionary
-NSString * const kJMMenuTag = @"menuTag";
-NSString * const kJMNotUpdateMenuKey = @"ignoreMenuUpdates";
 NSString * const kJMServerProfileKey = @"serverProfile";
-NSString * const kJMResources = @"resources";
 NSString * const kJMResourceLookup = @"resourceLookup";
 NSString * const kJMInputControls = @"inputControls";
 NSString * const kJMLoadRecursively = @"loadRecursively";
-NSString * const kJMSelectedResourceIndex = @"selectedResourceIndex";
 NSString * const kJMResourcesTypes = @"resourcesTypes";
 NSString * const kJMSearchQuery = @"searchQuery";
 NSString * const kJMSortBy = @"sortBy";
 NSString * const kJMFilterByTag = @"filterByTag";
-NSString * const kJMTotalCount = @"totalCount";
-NSString * const kJMOffset = @"offset";
 
 // Settings keys
 NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";

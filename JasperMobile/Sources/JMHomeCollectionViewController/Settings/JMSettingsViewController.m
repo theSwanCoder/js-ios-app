@@ -12,7 +12,7 @@
 #import "JMSettingsTableViewCell.h"
 #import "JMSettings.h"
 #import "UIAlertView+LocalizedAlert.h"
-
+#import "JMAppUpdater.h"
 
 @interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -31,7 +31,10 @@
     self.tableView.layer.cornerRadius = 4;
 
     self.settingsTitleLabel.text = [JMCustomLocalizedString(@"detail.settings.title", nil) capitalizedString];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
+    
+    UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(applicationInfo:)];
+    UIBarButtonItem *applyItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
+    self.navigationItem.rightBarButtonItems = @[applyItem, infoItem];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -69,4 +72,12 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)applicationInfo:(id)sender
+{
+    [[UIAlertView localizedAlertWithTitle:nil
+                                  message:[NSString stringWithFormat:JMCustomLocalizedString(@"servers.info", nil), [JMAppUpdater latestAppVersionAsString]]
+                                 delegate:nil
+                        cancelButtonTitle:@"dialog.button.ok"
+                        otherButtonTitles:nil] show];
+}
 @end

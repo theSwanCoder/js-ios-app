@@ -170,7 +170,7 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
     CGRect searchBarFrame = [JMUtils isIphone] ? self.navigationController.navigationBar.bounds : CGRectMake(0, 0, 320, 44);
     JMSearchBar *searchBar =  [[JMSearchBar alloc] initWithFrame:searchBarFrame];
     searchBar.delegate = self;
-    searchBar.placeholder = JMCustomLocalizedString(@"search.resources.placeholder", nil);
+    searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
     
     if ([JMUtils isIphone]) {
         self.navigationItem.hidesBackButton = YES;

@@ -45,8 +45,6 @@ extern NSString * const kJMDefaultsServerUsername;
 // Notifications
 extern NSString * const kJMChangeServerProfileNotification;
 extern NSString * const kJMResetApplicationNotification;
-extern NSString * const kJMSelectMenuNotification;
-extern NSString * const kJMClearSavedReportsListNotification;
 extern NSString * const kJMFavoritesDidChangedNotification;
 extern NSString * const kJMSavedResourcesDidChangedNotification;
 
@@ -55,20 +53,14 @@ extern NSString * const kJMLoadResourcesInDetail;
 
 
 // Shared keys for dictionary
-extern NSString * const kJMMenuTag;
-extern NSString * const kJMNotUpdateMenuKey;
 extern NSString * const kJMServerProfileKey;
-extern NSString * const kJMResources;
 extern NSString * const kJMResourceLookup;
 extern NSString * const kJMInputControls;
 extern NSString * const kJMLoadRecursively;
-extern NSString * const kJMSelectedResourceIndex;
 extern NSString * const kJMResourcesTypes;
 extern NSString * const kJMSearchQuery;
 extern NSString * const kJMSortBy;
 extern NSString * const kJMFilterByTag;
-extern NSString * const kJMTotalCount;
-extern NSString * const kJMOffset;
 
 // Settings keys
 extern NSString * const kJMDefaultRequestTimeout;
@@ -80,24 +72,12 @@ extern NSString * const kJMReportsDirectory;
 // Name of the main report file (outputResource)
 extern NSString * const kJMReportFilename;
 
-// Tags for menus. Declared as define constants because they can be used
-// in switch-case structure
-#define kJMRepositoryMenuTag    0
-#define kJMLibraryMenuTag       1
-#define kJMFavoritesMenuTag     2
-#define kJMSavedReportsMenuTag  3
-#define kJMServersMenuTag       4
-
-#define kJMResourceLimit        15
-
-
-#define kJMMasterViewWidth              240.f
-#define kJMMasterViewAnimationDuration  0.2f
+#define kJMResourceLimit                                15
+#define kJMMasterViewWidth                              240.f
+#define kJMMasterViewAnimationDuration                  0.2f
 
 #define kJMDetailViewLightBackgroundColor               [UIColor colorFromHexString:@"#E5E9EB"]
 #define kJMDetailViewLightTextColor                     [UIColor colorFromHexString:@"#8F8F8F"]
-#define kJMDetailActionBarItemsBackgroundColor          [UIColor colorFromHexString:@"#2D3036"]
-#define kJMDetailActionBarItemsTextColor                [UIColor colorFromHexString:@"#D4D4D4"]
 #define kJMSearchBarBackgroundColor                     [UIColor colorFromHexString:@"#26282D"]
 
 #define kJMMainNavigationBarBackgroundColor             [UIColor colorFromHexString:@"#343841"]

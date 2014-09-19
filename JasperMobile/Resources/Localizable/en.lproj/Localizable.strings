@@ -30,41 +30,24 @@
 "servers.info" = "Jaspersoft Mobile v %@\n\nManagement tool and report viewer for JasperReports Server 5.0 and greater.\n\nFor more information visit:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\n(c) 2011 - 2014 Jaspersoft Corp.";
 
 "servers.url.label" = "Server Address";
-"servers.url.tip" = "http://example.com/jasperserver";
 "servers.url.errmsg" = "Please specify a valid URL";
 
 "servers.name.label" = "Server Name";
-"servers.name.tip" = "my server name";
 "servers.name.errmsg.empty" = "Please specify a valid profile name";
 "servers.name.errmsg.exists" = "Profile name already exists. Please specify another one";
 
 "servers.orgid.label" = "Organization ID";
-"servers.orgid.tip" = "organization id";
 
 "servers.username.label" = "Username";
-"servers.username.tip" = "my username";
 "servers.username.errmsg.empty" = "Please specify a valid username";
 
 "servers.password.label" = "Password";
-"servers.password.tip" = "my password";
 "servers.password.errmsg.empty" = "Please specify a valid password";
 
-"servers.profile.exists" = "Server profile with this url, username and organization_id already exists. Please modify server profile";
-"servers.profile.details.title" = "Server Profile Details";
 "servers.profile.title" = "Server Profiles";
-"servers.profile.configure.tips" = "\n\nYou can add and configure your own server by tapping Edit, or you can select the demo server provided by Jaspersoft to quickly try out how the app works";
-"servers.profile.configure.help" = "Please add and configure a JasperReports Server account by tapping Edit";
 "servers.profile.delete.message" = "Please, confirm deleting server.";
 
-"servers.new.label" = "Add server profile";
-"servers.new.account.title" = "New server account";
-
-"servers.myserver.label" = "My server";
-
 "servers.askpassword.label" = "Always ask for password";
-"servers.askpassword.dialog.title" = "Enter Password";
-"servers.askpassword.serverprofile" = "Server Profile: ";
-"servers.askpassword.username" = "Username: ";
 
 "servers.activeserver.label" = "Active Server";
 
@@ -73,9 +56,6 @@
 
 "servers.gridview.activeserver.label" = "Active";
 "servers.button.makeactive" = "Make Active";
-
-
-"search.resources.placeholder" = "Search Resources";
 
 /* Report Saver view */
 "savereport.title" = "Save Report";
@@ -86,60 +66,23 @@
 "savereport.name.errmsg.notunique" = "This name has been already taken, please choose different name";
 "savereport.name.errmsg.maxlength" = "Should be less than %i symbols";
 "savereport.name.errmsg.characters" = "Characters : / are not allowed";
-
 "savereport.saving.status.title" = "Saving report...";
-
-/* Saved Reports view */
-
-"savedreports.error.reportnotfound.title" = "Cannot open report";
-"savedreports.error.reportnotfound.msg" = "Selected report was not found. Please try to save report again";
-
-/* Saved Report Info view */
-
-"savedreportinfo.title" = "Details";
-"savedreportinfo.sectionheader" = "Info";
-"savedreportinfo.reportname" = "Name";
-"savedreportinfo.date" = "Run Date";
-"savedreportinfo.size" = "Size";
 
 /* Rename Saved Report popup */
 
 "modifysavedreport.title" = "Rename Report";
 "modifysavedreport.reportname" = "Report Name";
 
-/* Navigation and view labels */
-
-"view.servers" = "Servers";
-"view.savedreports" = "Saved Reports";
-"view.repository" = "Repository";
-"view.favorites" = "Favorites";
-"view.library" = "Library";
-
-"resource.name.title" = "Name:";
-"resource.label.title" = "Label:";
-"resource.description.title" = "Desc:";
-"resource.type.title" = "Type:";
-
-"report.output.format" = "Report format";
-
-"status.loading" = "Loading...";
-"status.searching" = "Searching...";
-
 /* Search filter */
+"status.loading" = "Loading...";
 
-"filter.resources.type.all" = "All";
-"filter.resources.type.reportUnit" = "Reports";
-"filter.resources.type.dashboard" = "Dashboards";
-
-/* Home View (Pad) */
+/* Home View */
 
 // Labels
 "home.menuitem.library.label" = "Library";
 "home.menuitem.saveditems.label" = "Saved Items";
 "home.menuitem.settings.label" = "Settings";
 "home.menuitem.repository.label" = "Repository";
-"home.menuitem.favorites.label" = "Favorites";
-"home.menuitem.servers.label" = "Servers";
 
 // Descriptions
 
@@ -148,14 +91,10 @@
 "home.menuitem.settings.description" = "Configure your Jaspersoft Mobile App.";
 "home.menuitem.saveditems.description" = "View Items Saved on this Device. ";
 
-"home.menuitem.favorites.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
-"home.menuitem.servers.description" = "Sample dashboard built on supermart data showing performance and sales data from a variety of sources";
-
 // Navigation Bar Titles
 "title.home" = "Home";
 
-
-/* Master view (Pad) */
+/* Master view */
 
 // Resources
 "master.base.resources.title" = "Browse";
@@ -176,26 +115,22 @@
 "master.filterbytag.type.none" = "None";
 "master.filterbytag.type.favorites" = "Favorites";
 
-
-/* Detail view view (Pad) */
+/* Detail view */
 
 "detail.resourcesloading.msg" = "Loading.\nPlease Wait...";
 "detail.noresults.msg" = "No Results.\nPlease Make Another Selection...";
+"detail.search.resources.placeholder" = "Search Resources";
+
 "detail.settings.title" = "Connection settings";
 "detail.settings.item.connection.timeout" = "Connection timeout (in seconds)";
 "detail.settings.item.data.read.timeout" = "Data read timeout (in seconds)";
 "detail.settings.item.server" = "Server";
 
-"detail.servers.newserver" = "New Server";
-"detail.servers.editserver" = "Edit Server";
-"servers.activeserver.delete.errormessage" = "The active server cannot be deleted. Please make another server active before deleting this server.";
-"servers.activeserver.makeactive.errormessage" = "This server is already the active server.";
-
 "detail.report.options.title" = "Filter Options";
 "detail.report.options.titlelabel.title" = "Current Filters";
 "detail.report.options.singleselect.titlelabel.title" = "Select a single item";
 "detail.report.options.multiselect.titlelabel.title" = "Select one or more items";
-
+"detail.report.options.search.value.placeholder" = "Search Values";
 
 "detail.report.viewer.emptyreport.title" = "Report is empty";
 "detail.report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options or tap 'Cancel' for returning to old report.";
@@ -207,12 +142,8 @@
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
 
-
 "action.report.viewer.page" = "Page";
 "action.report.viewer.pagecount" = "of %d";
-
-// Tools
-"master.tools.type.refresh" = "Refresh";
 
 /* Error messages */
 
@@ -233,9 +164,6 @@
 "error.server.notsupported.title" = "Wrong server version or URL";
 "error.server.notsupported.msg" = "Server version is either older than 5.0 (not supported) or URL is incorrect";
 
-"error.savereport.notavaialble.title" = "Cannot save report";
-"error.savereport.notavaialble.msg" = "This functionality is only available for JasperReports Server 5.2 or higher";
-
 /* HTTP error messages */
 
 "error.http.400" = "400 - Bad Request. The request was invalid";
@@ -251,8 +179,6 @@
 "ic.title.date" = "Date";
 "ic.title.time" = "Time";
 "ic.title.unset" = "Unset";
-"ic.value.yes" = "Yes";
-"ic.value.no" = "No";
 
 /* Buttons */
 

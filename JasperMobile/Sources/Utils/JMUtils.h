@@ -38,40 +38,6 @@ extern CGFloat kJMNoEdgesInset;
 @interface JMUtils : NSObject
 
 /**
- Sets title equal to resource's name or profile's alias if resource is <b>nil</b>
- 
- @param viewController A viewController for which title will be set
- */
-+ (void)setTitleForResourceViewController:(UIViewController <JMResourceClientHolder> *)viewController;
-
-/**
- Sets background images to the button.
- 
- @param button The button for which background images will be set
- @param imageName A name of the image for button's normal state (can be "nil")
- @param highlightedImageName A name of the image for button's highlighted state (can be "nil")
- @param edgesInset An inset for all edges
- */
-+ (void)setBackgroundImagesForButton:(UIButton *)button imageName:(NSString *)imageName highlightedImageName:(NSString *)highlightedImageName edgesInset:(CGFloat)edgesInset;
-
-/**
- Returns localized title for menu item (Library, Repository, Favorites etc) depends
- on item's tag
- 
- @param tag A tag for the item
- @return A localized title for menu item
- */
-+ (NSString *)localizedTitleForMenuItemByTag:(NSInteger)tag;
-
-/**
- Checks if specified view controller is presented on screen
- 
- @param viewController A view controller
- @return YES if view controller is presented on screen, otherwise returns NO
- */
-+ (BOOL)isViewControllerVisible:(UIViewController *)viewController;
-
-/**
  Validates report name and directory to store report
 
  @param reportName A report name to validate. It needs to be unique, without /: characters, not empty, and less or equals than 250 symbols (last 5 are reserved for extension)

@@ -195,7 +195,6 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
             [weakSelf.navigationController popViewControllerAnimated:YES];
             [JMSavedResources addReport:weakSelf.resourceLookup withName:weakSelf.reportName formar:self.selectedReportFormat];
             [ALToastView toastInView:weakSelf.delegate.view withText:JMCustomLocalizedString(@"savereport.saved", nil)];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kJMClearSavedReportsListNotification object:nil];
         }];
 
         [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO freshData:YES saveDataSnapshot:NO
