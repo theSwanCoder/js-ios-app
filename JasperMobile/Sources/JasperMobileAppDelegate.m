@@ -31,14 +31,12 @@
 #import "JMConstants.h"
 #import "JMBaseModule.h"
 #import "JMReportClientHolder.h"
-#import "JMReportOptionsUtil.h"
 #import "JMResourceClientHolder.h"
 #import "JMUtils.h"
 
 static NSString * const kJMProductName = @"JasperMobile";
 
 @interface JasperMobileAppDelegate() <JMResourceClientHolder, JMReportClientHolder>
-@property (nonatomic, strong) JMReportOptionsUtil *reportOptionsUtil;
 @end
 
 @implementation JasperMobileAppDelegate
@@ -238,7 +236,6 @@ static NSString * const kJMProductName = @"JasperMobile";
     // Inject resource and report clients
     self.resourceClient = [injector getObject:[JSRESTResource class]];
     self.reportClient = [injector getObject:[JSRESTReport class]];
-    self.reportOptionsUtil = [injector getObject:[JMReportOptionsUtil class]];
 }
 
 - (void)coreDataInit
@@ -274,9 +271,6 @@ static NSString * const kJMProductName = @"JasperMobile";
         // Set connection details
         self.reportClient.serverProfile = profile;
         self.resourceClient.serverProfile = profile;
-
-        // Update report options with active server profile
-        self.reportOptionsUtil.serverProfile = serverProfile;
         
         // Update timeouts
         [self updateTimeouts];

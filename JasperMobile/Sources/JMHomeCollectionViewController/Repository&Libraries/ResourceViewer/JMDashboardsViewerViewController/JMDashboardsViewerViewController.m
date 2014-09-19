@@ -8,17 +8,7 @@
 
 #import "JMDashboardsViewerViewController.h"
 
-@interface JMDashboardsViewerViewController ()
-
-@end
-
 @implementation JMDashboardsViewerViewController
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
 
 - (void)runReportExecution
 {
@@ -30,4 +20,19 @@
     NSURL *url = [NSURL URLWithString:dashboardUrl];
     self.request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:self.resourceClient.timeoutInterval];
 }
+
+- (JMResourceViewerAction)availableAction
+{
+    return [super availableAction] | JMResourceViewerAction_Refresh;
+}
+
+#pragma mark - JMResourceViewerActionsViewDelegate
+- (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
+{
+    [super actionsView:view didSelectAction:action];
+    if (action == JMResourceViewerAction_Refresh) {
+        [self runReportExecution];
+    }
+}
+
 @end

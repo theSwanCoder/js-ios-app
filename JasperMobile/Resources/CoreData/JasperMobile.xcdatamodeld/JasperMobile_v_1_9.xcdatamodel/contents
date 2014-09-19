@@ -10,14 +10,16 @@
         <attribute name="wsType" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="serverProfile" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ServerProfile" inverseName="favorites" inverseEntity="ServerProfile" syncable="YES"/>
     </entity>
-    <entity name="ReportOptions" representedClassName="JMReportOptions" syncable="YES">
-        <attribute name="isListItem" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+    <entity name="SavedResources" representedClassName="JMSavedResources" syncable="YES">
+        <attribute name="creationDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="format" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="organization" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="reportUri" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="resourceDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uri" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="serverProfile" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="ServerProfile" inverseName="reportOptions" inverseEntity="ServerProfile" syncable="YES"/>
+        <attribute name="wsType" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="serverProfile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ServerProfile" inverseName="savedResources" inverseEntity="ServerProfile" syncable="YES"/>
     </entity>
     <entity name="ServerProfile" representedClassName="JMServerProfile" syncable="YES">
         <attribute name="alias" optional="YES" attributeType="String" syncable="YES"/>
@@ -27,11 +29,11 @@
         <attribute name="serverUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="favorites" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Favorites" inverseName="serverProfile" inverseEntity="Favorites" syncable="YES"/>
-        <relationship name="reportOptions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReportOptions" inverseName="serverProfile" inverseEntity="ReportOptions" syncable="YES"/>
+        <relationship name="savedResources" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SavedResources" inverseName="serverProfile" inverseEntity="SavedResources" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Favorites" positionX="-290" positionY="-252" width="128" height="163"/>
-        <element name="ReportOptions" positionX="187" positionY="-150" width="128" height="150"/>
-        <element name="ServerProfile" positionX="-18" positionY="-261" width="128" height="165"/>
+        <element name="Favorites" positionX="-632" positionY="-432" width="128" height="163"/>
+        <element name="SavedResources" positionX="-207" positionY="-441" width="128" height="178"/>
+        <element name="ServerProfile" positionX="-432" positionY="-423" width="128" height="163"/>
     </elements>
 </model>

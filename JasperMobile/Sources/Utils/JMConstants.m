@@ -45,6 +45,7 @@ NSString * const kJMResetApplicationNotification = @"resetApplication";
 NSString * const kJMSelectMenuNotification = @"selectMenu";
 NSString * const kJMClearSavedReportsListNotification = @"clearSavedReports";
 NSString * const kJMFavoritesDidChangedNotification = @"JMFavoritesDidChangedNotification";
+NSString * const kJMSavedResourcesDidChangedNotification = @"JMSavedResourcesDidChangedNotification";
 
 // Notifications used to connect master and detail view controllers
 NSString * const kJMLoadResourcesInDetail = @"loadResourcesInDetail";

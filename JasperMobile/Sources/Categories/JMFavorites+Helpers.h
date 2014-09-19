@@ -21,7 +21,6 @@ extern NSString * const kJMFavorites;
 + (BOOL)isResourceInFavorites:(JSResourceLookup *)resource;
 
 // Returns wrapper from favorites. Wrapper is a JSResourceLookup
-// with only provided name, label and wsType
 - (JSResourceLookup *)wrapperFromFavorite;
 
 @end

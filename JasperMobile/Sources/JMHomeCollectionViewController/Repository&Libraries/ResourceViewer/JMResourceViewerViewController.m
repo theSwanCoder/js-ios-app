@@ -9,6 +9,13 @@
 #import "JMResourceViewerViewController.h"
 #import <Objection-iOS/Objection.h>
 #import "JMFavorites+Helpers.h"
+#import "PopoverView.h"
+#import "JMSavedResources+Helpers.h"
+
+@interface JMResourceViewerViewController () <PopoverViewDelegate>
+@property (nonatomic, strong) PopoverView *popoverView;
+
+@end
 
 @implementation JMResourceViewerViewController
 objection_requires(@"resourceClient", @"resourceLookup")
@@ -35,7 +42,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
     self.webView.suppressesIncrementalRendering = YES;
     [self.webView loadHTMLString:@"" baseURL:nil];
     
-    self.navigationItem.rightBarButtonItems = [self rightBarButtonItems];
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:[self actionBarButtonItem], [self favoriteBarButtonItem], nil];
     [self runReportExecution];
 }
 
@@ -75,18 +82,41 @@ objection_requires(@"resourceClient", @"resourceLookup")
     }
 }
 
-- (NSArray *)rightBarButtonItems
+- (UIBarButtonItem *) actionBarButtonItem
 {
-    UIBarButtonItem *refreshItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(refreshButtonTapped:)];
-    UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"favorite_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(favoriteButtonTapped:)];
-    [self updateFavotiteItem:favoriteItem];
-    return [NSArray arrayWithObjects:refreshItem, favoriteItem, nil];
+    if ([self availableAction]) {
+        return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
+    }
+    return nil;
+}
+
+- (UIBarButtonItem *) favoriteBarButtonItem
+{
+    if (![JMSavedResources savedReportsFromResourceLookup:self.resourceLookup]) {
+        UIImage *itemImage = [JMFavorites isResourceInFavorites:self.resourceLookup] ? [UIImage imageNamed:@"favorited_item.png"] : [UIImage imageNamed:@"make_favorite_item.png"];
+        UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStyleBordered target:self action:@selector(favoriteButtonTapped:)];
+        favoriteItem.tintColor = [JMFavorites isResourceInFavorites:self.resourceLookup] ? [UIColor yellowColor] : [UIColor whiteColor];
+        return favoriteItem;
+    }
+    return nil;
+}
+
+- (void) replaceRightNavigationItem:(UIBarButtonItem *)oldItem withItem:(UIBarButtonItem *)newItem
+{
+    NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
+    NSInteger index = [rightItems indexOfObject:oldItem];
+    [rightItems replaceObjectAtIndex:index withObject:newItem];
+    self.navigationItem.rightBarButtonItems = rightItems;
 }
 
 #pragma mark - Actions
-- (void)refreshButtonTapped:(id) sender
+- (void)actionButtonClicked:(id) sender
 {
-    [self runReportExecution];
+    JMResourceViewerActionsView *actionsView = [[JMResourceViewerActionsView alloc] initWithFrame:CGRectMake(0, 0, 150, 200)];
+    actionsView.delegate = self;
+    actionsView.availableActions = [self availableAction];
+    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
+    self.popoverView = [PopoverView showPopoverAtPoint:point inView:self.view withTitle:@"Select Action:" withContentView:actionsView delegate:self];
 }
 
 - (void)favoriteButtonTapped:(id)sender
@@ -96,13 +126,13 @@ objection_requires(@"resourceClient", @"resourceLookup")
     } else {
         [JMFavorites addToFavorites:self.resourceLookup];
     }
-    [self updateFavotiteItem:sender];
+    [self replaceRightNavigationItem:sender withItem:[self favoriteBarButtonItem]];
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
-- (void) updateFavotiteItem:(UIBarButtonItem *)item
+- (JMResourceViewerAction)availableAction
 {
-    item.tintColor = [JMFavorites isResourceInFavorites:self.resourceLookup] ? [UIColor yellowColor] : [UIColor whiteColor];
+    return JMResourceViewerAction_None;
 }
 
 -(void) runReportExecution
@@ -135,5 +165,23 @@ objection_requires(@"resourceClient", @"resourceLookup")
 {
     [JMUtils hideNetworkActivityIndicator];
     [self.activityIndicator stopAnimating];
+}
+
+#pragma mark - JMResourceViewerActionsViewDelegate
+- (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
+{
+    [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
+}
+
+#pragma mark - PopoverViewDelegate Methods
+- (void)popoverViewDidDismiss:(PopoverView *)popoverView
+{
+    self.popoverView = nil;
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
+    [self.popoverView animateRotationToNewPoint:point inView:self.view withDuration:duration];
 }
 @end

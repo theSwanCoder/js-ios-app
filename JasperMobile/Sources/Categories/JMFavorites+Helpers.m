@@ -16,7 +16,7 @@ NSString * const kJMFavorites = @"Favorites";
 
 + (void)addToFavorites:(JSResourceLookup *)resource
 {
-    JMServerProfile *activeServerProfile = [JMFavorites activeServerProfile];
+    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     JMFavorites *favorites = [NSEntityDescription insertNewObjectForEntityForName:kJMFavorites inManagedObjectContext:self.managedObjectContext];
     favorites.uri = resource.uri;
     favorites.label = resource.label;
@@ -56,17 +56,6 @@ NSString * const kJMFavorites = @"Favorites";
     return resource;
 }
 
-+ (NSMutableArray *)wrappersFromFavorites
-{
-    NSMutableArray *resources = [NSMutableArray array];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"label" ascending:YES]];
-    for (JMFavorites *favorites in [self.activeServerProfile.favorites sortedArrayUsingDescriptors:sortDescriptors]) {
-        [resources addObject:[favorites wrapperFromFavorite]];
-    }
-    
-    return resources;
-}
-
 #pragma mark - Private
 
 + (NSManagedObjectContext *)managedObjectContext
@@ -75,14 +64,9 @@ NSString * const kJMFavorites = @"Favorites";
     return [injector getObject:[NSManagedObjectContext class]];
 }
 
-+ (JMServerProfile *)activeServerProfile
-{
-    return [JMServerProfile activeServerProfile];
-}
-
 + (NSFetchRequest *)favoritesFetchRequest:(NSString *)resourceUri
 {
-    JMServerProfile *activeServerProfile = [JMFavorites activeServerProfile];
+    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMFavorites];
     NSMutableString *format = [NSMutableString stringWithString:@"(serverProfile == %@) AND (uri like %@) AND (username like %@) AND "];
     

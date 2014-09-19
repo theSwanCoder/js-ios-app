@@ -13,6 +13,8 @@
 #import "JMReportViewerToolBar.h"
 #import "UIViewController+FetchInputControls.h"
 #import "UIAlertView+LocalizedAlert.h"
+#import "JMSaveReportViewController.h"
+#import "ALToastView.h"
 
 @interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, UIAlertViewDelegate>
 @property (nonatomic, strong) NSUndoManager *icUndoManager;
@@ -60,19 +62,18 @@ objection_requires(@"reportClient", @"constants")
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     id destinationViewController = segue.destinationViewController;
-    [destinationViewController setInputControls:[[NSMutableArray alloc] initWithArray:self.inputControls copyItems:YES]];
     [destinationViewController setResourceLookup:self.resourceLookup];
+    [destinationViewController setInputControls:[[NSMutableArray alloc] initWithArray:self.inputControls copyItems:YES]];
     [destinationViewController setDelegate:self];
 }
 
-- (NSArray *)rightBarButtonItems
+- (JMResourceViewerAction)availableAction
 {
-    NSMutableArray *itemsArray = [NSMutableArray arrayWithArray:[super rightBarButtonItems]];
+    JMResourceViewerAction availableAction = [super availableAction] | JMResourceViewerAction_Save | JMResourceViewerAction_Refresh;
     if (self.inputControls && [self.inputControls count]) {
-        UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(editButtonTapped:)];
-        [itemsArray addObject:editItem];
+        availableAction |= JMResourceViewerAction_Filter;
     }
-    return itemsArray;
+    return availableAction;
 }
 
 - (void)setInputControls:(NSMutableArray *)inputControls
@@ -87,12 +88,6 @@ objection_requires(@"reportClient", @"constants")
 }
 
 #pragma mark - Actions
-
-- (void) editButtonTapped:(id) sender
-{
-    [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
-}
-
 - (void) backButtonTapped:(id) sender
 {
     [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
@@ -170,6 +165,24 @@ objection_requires(@"reportClient", @"constants")
         [self.navigationController.toolbar addSubview: _toolbar];
     }
     return _toolbar;
+}
+
+- (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
+{
+    [super actionsView:view didSelectAction:action];
+    switch (action) {
+        case JMResourceViewerAction_Refresh:
+            [self runReportExecution];
+            break;
+        case JMResourceViewerAction_Filter:
+            [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
+            break;
+        case JMResourceViewerAction_Save:
+            [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - JMReportViewerToolBarDelegate

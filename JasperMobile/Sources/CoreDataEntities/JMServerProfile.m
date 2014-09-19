@@ -36,6 +36,6 @@
 @dynamic serverUrl;
 @dynamic username;
 @dynamic favorites;
-@dynamic reportOptions;
+@dynamic savedResources;
 
 @end

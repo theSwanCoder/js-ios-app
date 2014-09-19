@@ -48,6 +48,7 @@ extern NSString * const kJMResetApplicationNotification;
 extern NSString * const kJMSelectMenuNotification;
 extern NSString * const kJMClearSavedReportsListNotification;
 extern NSString * const kJMFavoritesDidChangedNotification;
+extern NSString * const kJMSavedResourcesDidChangedNotification;
 
 // Notifications used to connect master and detail view controllers
 extern NSString * const kJMLoadResourcesInDetail;

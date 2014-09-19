@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "JMResourceClientHolder.h"
+#import "JMResourceViewerActionsView.h"
 
-@interface JMResourceViewerViewController : UIViewController <UIWebViewDelegate, JMResourceClientHolder>
+@interface JMResourceViewerViewController : UIViewController <UIWebViewDelegate, JMResourceClientHolder, JMResourceViewerActionsViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -20,6 +21,6 @@
 
 - (void) runReportExecution;
 
-- (NSArray *)rightBarButtonItems;
+- (JMResourceViewerAction)availableAction;
 
 @end

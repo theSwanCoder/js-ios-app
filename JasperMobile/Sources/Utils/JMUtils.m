@@ -28,6 +28,7 @@
 #import "JMUtils.h"
 #import "JMConstants.h"
 #import "JMLocalization.h"
+#import "JMSavedResources+Helpers.h"
 
 CGFloat kJMNoEdgesInset = -1;
 
@@ -101,14 +102,7 @@ CGFloat kJMNoEdgesInset = -1;
     } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
         *errorMessage = JMCustomLocalizedString(@"savereport.name.errmsg.characters", nil);
     } else {
-        if (extension) {
-            reportName = [reportName stringByAppendingPathExtension:extension];
-        }
-
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString *reportPath = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:reportName];
-
-        if ([fileManager fileExistsAtPath:reportPath]) {
+        if (![JMSavedResources isAvailableReportName:reportName]) {
             *errorMessage = JMCustomLocalizedString(@"savereport.name.errmsg.notunique", nil);
         }
     }

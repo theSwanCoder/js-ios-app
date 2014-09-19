@@ -28,7 +28,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class JMFavorites, JMReportOptions;
+@class JMFavorites, JMSavedResources;
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
@@ -43,7 +43,7 @@
 @property (nonatomic, strong) NSString * serverUrl;
 @property (nonatomic, strong) NSString * username;
 @property (nonatomic, strong) NSSet *favorites;
-@property (nonatomic, strong) NSSet *reportOptions;
+@property (nonatomic, strong) NSSet *savedResources;
 @end
 
 @interface JMServerProfile (CoreDataGeneratedAccessors)
@@ -53,9 +53,9 @@
 - (void)addFavorites:(NSSet *)values;
 - (void)removeFavorites:(NSSet *)values;
 
-- (void)addReportOptionsObject:(JMReportOptions *)value;
-- (void)removeReportOptionsObject:(JMReportOptions *)value;
-- (void)addReportOptions:(NSSet *)values;
-- (void)removeReportOptions:(NSSet *)values;
+- (void)addSavedResourcesObject:(JMSavedResources *)value;
+- (void)removeSavedResourcesObject:(JMSavedResources *)value;
+- (void)addSavedResources:(NSSet *)values;
+- (void)removeSavedResources:(NSSet *)values;
 
 @end

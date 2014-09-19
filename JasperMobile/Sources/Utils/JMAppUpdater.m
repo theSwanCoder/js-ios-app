@@ -29,6 +29,7 @@
 #import "JMConstants.h"
 #import "JMFavorites.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMSavedResources+Helpers.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import <Objection-iOS/Objection.h>
 
@@ -66,7 +67,8 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_2)] forKey:@1.2];
     [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_5)] forKey:@1.5];
     [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_6)] forKey:@1.6];
-    
+    [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_9)] forKey:@1.9];
+
     for (NSNumber *version in versionsToUpdate.allKeys) {
         if (version.doubleValue <= currentAppVersion.doubleValue) continue;
         
@@ -263,6 +265,30 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     [defaults removeObjectForKey:kJMDefaultsNotFirstRun];
     [defaults removeObjectForKey:kJMDefaultsUpdatedVersions];
     
+    return YES;
+}
+
+// Add saved report to CoreData
++ (BOOL)update_1_9
+{
+    NSMutableArray *reports = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:[JMUtils documentsReportDirectoryPath] error:nil] mutableCopy];
+    [reports removeObject:@".DS_Store"];
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    for (NSString *report in reports) {
+        BOOL isReportDirectory = NO;
+        if ([fileManager fileExistsAtPath:[[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:report] isDirectory:&isReportDirectory] && isReportDirectory) {
+            NSRange reportExtensionRange = [report rangeOfString:@"." options:NSBackwardsSearch];
+            NSString *reportExtension = [report substringFromIndex:reportExtensionRange.location];
+            NSString *reportName = [report stringByReplacingOccurrencesOfString:reportExtension withString:@""];
+            
+            JSResourceLookup *resource = [JSResourceLookup new];
+            resource.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
+            
+            [JMSavedResources addReport:resource withName:reportName formar:[reportExtension stringByReplacingOccurrencesOfString:@"." withString:@""]];
+        }
+    }
+
     return YES;
 }
 

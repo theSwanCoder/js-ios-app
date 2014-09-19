@@ -14,6 +14,8 @@
 
 #import "JMReportViewerViewController.h"
 #import "JMReportOptionsViewController.h"
+#import "JMSavedResources+Helpers.h"
+#import "JMSavedResourcesListLoader.h"
 
 #import "DDSlidingView.h"
 
@@ -210,8 +212,9 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 - (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
 {
     JSResourceLookup *resourceLookup = [self.resourceListLoader.resources objectAtIndex:indexPath.row];
-    
-    if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_REPORT_UNIT]) {
+    if ([self.resourceListLoader isKindOfClass:[JMSavedResourcesListLoader class]]) {
+        [self performSegueWithIdentifier:kJMShowSavedRecourcesViewerSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
+    } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_REPORT_UNIT]) {
         [self fetchInputControlsForReport:resourceLookup];
     } else {
         [self performSegueWithIdentifier:kJMShowDashboardViewerSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];

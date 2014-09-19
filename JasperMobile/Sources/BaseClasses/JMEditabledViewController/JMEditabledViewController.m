@@ -36,8 +36,12 @@
 {
     UIView *activeView = [self getFirstResponderForView:self.view];
     if (activeView) {
-        UITableViewCell *cell = (UITableViewCell *)activeView.superview.superview;
-        CGRect activeTableViewRect = [cell convertRect:activeView.frame fromView:cell.contentView];
+        id cell = activeView;
+        while (![cell isKindOfClass:[UITableViewCell class]]) {
+            cell = [cell superview];
+        }
+
+        CGRect activeTableViewRect = [cell convertRect:activeView.frame fromView:[cell contentView]];
         activeTableViewRect = [self.tableView convertRect:activeTableViewRect fromView:cell];
         
         CGRect activeViewRect = [self.view convertRect:activeTableViewRect fromView:self.tableView];

@@ -28,12 +28,12 @@
 NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
 NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
 NSString * const kJMShowDashboardViewerSegue = @"ShowDashboardViewer";
+NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 #import <Objection-iOS/JSObjection.h>
 #import "UIViewController+fetchInputControls.h"
 #import "JMCancelRequestPopup.h"
 #import "JMRequestDelegate.h"
-#import "JMReportOptionsUtil.h"
 #import "JMConstants.h"
 
 @implementation UIViewController (FetchInputControls)
@@ -50,9 +50,6 @@ NSString * const kJMShowDashboardViewerSegue = @"ShowDashboardViewer";
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:nil cancelBlock:^{
         [report cancelAllRequests];
     }];
-    
-    JMReportOptionsUtil *reportOptionsUtil = [objectionInjector getObject:JMReportOptionsUtil.class];
-    NSArray *reportParameters = [reportOptionsUtil reportOptionsAsParametersForReport:resourceLookup.uri];
     
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         NSMutableArray *invisibleInputControls = [NSMutableArray array];
@@ -80,7 +77,7 @@ NSString * const kJMShowDashboardViewerSegue = @"ShowDashboardViewer";
         }
     } viewControllerToDismiss:nil];
     
-    [report inputControlsForReport:resourceLookup.uri ids:nil selectedValues:reportParameters delegate:delegate];
+    [report inputControlsForReport:resourceLookup.uri ids:nil selectedValues:nil delegate:delegate];
 }
 
 - (BOOL)isResourceSegue:(UIStoryboardSegue *)segue;
@@ -88,7 +85,8 @@ NSString * const kJMShowDashboardViewerSegue = @"ShowDashboardViewer";
     NSString *identifier = segue.identifier;
     return ([identifier isEqualToString:kJMShowReportViewerSegue]  ||
             [identifier isEqualToString:kJMShowReportOptionsSegue] ||
-            [identifier isEqualToString:kJMShowDashboardViewerSegue]);
+            [identifier isEqualToString:kJMShowDashboardViewerSegue] ||
+            [identifier isEqualToString:kJMShowSavedRecourcesViewerSegue]);
 }
 
 @end

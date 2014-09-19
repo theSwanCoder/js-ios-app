@@ -34,6 +34,7 @@
 static NSString * const kJMMenuItemLibrary = @"Library";
 static NSString * const kJMMenuItemSettings = @"Settings";
 static NSString * const kJMMenuItemRepository = @"Repository";
+static NSString * const kJMMenuItemSavedItems = @"SavedItems";
 
 static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 
@@ -52,7 +53,8 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     self.menuItems = @[
             kJMMenuItemLibrary,
             kJMMenuItemRepository,
-            kJMMenuItemSettings
+            kJMMenuItemSettings,
+            kJMMenuItemSavedItems
     ];
     
     self.title = JMCustomLocalizedString(@"title.home", nil);
@@ -113,7 +115,7 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *menuItem = [self.menuItems objectAtIndex:indexPath.row];
-    [self performSegueWithIdentifier:[NSString stringWithFormat:@"Show%@", menuItem] sender:menuItem];
+    [self performSegueWithIdentifier:[NSString stringWithFormat:@"Show%@", menuItem] sender:JMCustomLocalizedString([[NSString stringWithFormat:@"home.menuitem.%@.label", menuItem] lowercaseString], nil)];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout protocol
@@ -140,7 +142,10 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
         return [NSClassFromString(@"JMLibraryListLoader") new];
     } else if ([identifier isEqualToString:[NSString stringWithFormat:@"Show%@", kJMMenuItemRepository]]) {
         return [NSClassFromString(@"JMResourcesListLoader") new];
+    } else if ([identifier isEqualToString:[NSString stringWithFormat:@"Show%@", kJMMenuItemSavedItems]]) {
+        return [NSClassFromString(@"JMSavedResourcesListLoader") new];
     }
+
     return nil;
 }
 
