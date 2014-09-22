@@ -64,13 +64,6 @@ objection_requires(@"managedObjectContext")
         } else {
             self.serverProfile.serverUrl = serverOption.optionValue;
         }
-//        NSString *regex = @"(http|https)://[\\w-_]+(.[\\w-_]+)+([\\w-.,@?^=%&:/~+#]* [\\w-\\@?^=%&/~+#])?";
-//        NSPredicate *regextest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-//        if ([regextest evaluateWithObject: serverOption.optionValue] == YES) {
-//            self.serverProfile.serverUrl = serverOption.optionValue;
-//        } else {
-//            serverOption.errorString = JMCustomLocalizedString(@"servers.url.errmsg", nil);
-//        }
     } else {
         serverOption.errorString = JMCustomLocalizedString(@"servers.url.errmsg", nil);
     }

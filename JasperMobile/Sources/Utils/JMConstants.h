@@ -73,7 +73,7 @@ extern NSString * const kJMReportsDirectory;
 extern NSString * const kJMReportFilename;
 
 #define kJMResourceLimit                                15
-#define kJMMasterViewWidth                              240.f
+#define kJMMasterViewWidth                              [JMUtils isIphone] ? 210.f : 240.f
 #define kJMMasterViewAnimationDuration                  0.2f
 
 #define kJMDetailViewLightBackgroundColor               [UIColor colorFromHexString:@"#E5E9EB"]

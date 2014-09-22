@@ -20,6 +20,7 @@
 		0826E52D19C88FDB00179818 /* JMSaveReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0826E52C19C88FDB00179818 /* JMSaveReportViewController.m */; };
 		0837375819A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0837375719A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib */; };
 		083EFFB019C70A8E0021BF5E /* JMLibraryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 083EFFAF19C70A8E0021BF5E /* JMLibraryTableViewCell.m */; };
+		0848F33B19D0613200C8CD9D /* DDSlidingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0848F33A19D0613200C8CD9D /* DDSlidingView.m */; };
 		08504E6219BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08504E5E19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m */; };
 		08504E6319BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08504E6119BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.m */; };
 		08504E6719BA0F2C00C75F30 /* JMBackHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08504E6619BA0F2C00C75F30 /* JMBackHeaderView.m */; };
@@ -185,7 +186,6 @@
 		089C970219C8642B0010C135 /* JMResourceViewerActionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089C970119C8642B0010C135 /* JMResourceViewerActionsView.m */; };
 		08A7058119B488FE00C1B4C6 /* JMEditabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7058019B488FE00C1B4C6 /* JMEditabledViewController.m */; };
 		08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */; };
-		08D2A19D19BA07D200A4CF5A /* DDSlidingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D2A19C19BA07D200A4CF5A /* DDSlidingView.m */; };
 		08D2A1A319BA095D00A4CF5A /* JMMasterResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D2A1A219BA095D00A4CF5A /* JMMasterResourceViewController.m */; };
 		08D6921F19929DB300C87A33 /* JMTextSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D6921E19929DB300C87A33 /* JMTextSettingsTableViewCell.m */; };
 		08DE67C619C05D8B00C25AEA /* JMBooleanInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67A619C05D8A00C25AEA /* JMBooleanInputControlCell.m */; };
@@ -327,6 +327,8 @@
 		0837375719A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMResourcesCollectionViewController~ipad.xib"; sourceTree = "<group>"; };
 		083EFFAE19C70A8E0021BF5E /* JMLibraryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLibraryTableViewCell.h; sourceTree = "<group>"; };
 		083EFFAF19C70A8E0021BF5E /* JMLibraryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLibraryTableViewCell.m; sourceTree = "<group>"; };
+		0848F33919D0613200C8CD9D /* DDSlidingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSlidingView.h; sourceTree = "<group>"; };
+		0848F33A19D0613200C8CD9D /* DDSlidingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDSlidingView.m; sourceTree = "<group>"; };
 		08504E5D19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterLibraryTableViewController.h; sourceTree = "<group>"; };
 		08504E5E19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMasterLibraryTableViewController.m; sourceTree = "<group>"; };
 		08504E6019BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterRepositoryTableViewController.h; sourceTree = "<group>"; };
@@ -516,8 +518,6 @@
 		08A7057F19B488FE00C1B4C6 /* JMEditabledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMEditabledViewController.h; sourceTree = "<group>"; };
 		08A7058019B488FE00C1B4C6 /* JMEditabledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMEditabledViewController.m; sourceTree = "<group>"; };
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		08D2A19B19BA07D200A4CF5A /* DDSlidingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSlidingView.h; sourceTree = "<group>"; };
-		08D2A19C19BA07D200A4CF5A /* DDSlidingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDSlidingView.m; sourceTree = "<group>"; };
 		08D2A1A119BA095D00A4CF5A /* JMMasterResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterResourceViewController.h; sourceTree = "<group>"; };
 		08D2A1A219BA095D00A4CF5A /* JMMasterResourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMasterResourceViewController.m; sourceTree = "<group>"; };
 		08D6921D19929DB300C87A33 /* JMTextSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextSettingsTableViewCell.h; sourceTree = "<group>"; };
@@ -802,6 +802,15 @@
 				083EFFAF19C70A8E0021BF5E /* JMLibraryTableViewCell.m */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		0848F33819D0613200C8CD9D /* DDSlidingView */ = {
+			isa = PBXGroup;
+			children = (
+				0848F33919D0613200C8CD9D /* DDSlidingView.h */,
+				0848F33A19D0613200C8CD9D /* DDSlidingView.m */,
+			);
+			path = DDSlidingView;
 			sourceTree = "<group>";
 		};
 		08504E5C19BA0F0D00C75F30 /* MasterLibrary */ = {
@@ -1236,15 +1245,6 @@
 				08A7058019B488FE00C1B4C6 /* JMEditabledViewController.m */,
 			);
 			path = JMEditabledViewController;
-			sourceTree = "<group>";
-		};
-		08D2A19A19BA07D200A4CF5A /* DDSlidingView */ = {
-			isa = PBXGroup;
-			children = (
-				08D2A19B19BA07D200A4CF5A /* DDSlidingView.h */,
-				08D2A19C19BA07D200A4CF5A /* DDSlidingView.m */,
-			);
-			path = DDSlidingView;
 			sourceTree = "<group>";
 		};
 		08DE67A019C05D8A00C25AEA /* ResourceViewer */ = {
@@ -1704,8 +1704,8 @@
 		F5663A141752F9D0007978BE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				0848F33819D0613200C8CD9D /* DDSlidingView */,
 				089C96F619C862C60010C135 /* PopoverView */,
-				08D2A19A19BA07D200A4CF5A /* DDSlidingView */,
 				F5C7375E1886DE9E00203175 /* ALToastView */,
 				F58FF2EF1760A0B50021CC8B /* MJPopupViewController */,
 				F5D97FA7179587CF0059C761 /* SSKeychain */,
@@ -2107,7 +2107,6 @@
 				0885657A19C1B60100B78B06 /* JMResourcesListLoader.m in Sources */,
 				086B716419CB045200CC25CA /* JMSavedResourceViewerViewController.m in Sources */,
 				08DE67CA19C05D8B00C25AEA /* JMMultiSelectInputControlCell.m in Sources */,
-				08D2A19D19BA07D200A4CF5A /* DDSlidingView.m in Sources */,
 				08DE67D319C05D8B00C25AEA /* JMReportViewerToolBar.m in Sources */,
 				08E864101992564A007CF257 /* JSRESTBase+updateServerInfo.m in Sources */,
 				08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */,
@@ -2135,6 +2134,7 @@
 				08E8641E1992564A007CF257 /* JMMainNavigationController.m in Sources */,
 				08E864291992564A007CF257 /* JMRequestDelegate.m in Sources */,
 				08E8641C1992564A007CF257 /* JasperMobileAppDelegate.m in Sources */,
+				0848F33B19D0613200C8CD9D /* DDSlidingView.m in Sources */,
 				08FF12E0199297FE0082265D /* JMSettingsViewController.m in Sources */,
 				08DE67CB19C05D8B00C25AEA /* JMNumberInputControlCell.m in Sources */,
 				08DE67C619C05D8B00C25AEA /* JMBooleanInputControlCell.m in Sources */,
@@ -2269,7 +2269,7 @@
 		F55CC376174CFFCF00CEB39E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2302,7 +2302,7 @@
 		F55CC377174CFFCF00CEB39E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

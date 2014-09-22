@@ -17,6 +17,9 @@
 #import "JMServerOptionCell.h"
 #import "UIAlertView+LocalizedAlert.h"
 
+#import "JMRequestDelegate.h"
+#import "JMCancelRequestPopup.h"
+
 
 @interface JMServerOptionsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, JMServerOptionCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -25,6 +28,7 @@
 @end
 
 @implementation JMServerOptionsViewController
+@dynamic serverProfile;
 
 #pragma mark - Initialization
 
@@ -48,13 +52,26 @@
     
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.tableView.layer.cornerRadius = 4;
-    self.serverOptions = [[JMServerOptions alloc] initWithServerProfile:self.serverProfile];
+    if (!self.serverProfile) {
+        self.serverOptions = [[JMServerOptions alloc] initWithServerProfile:nil];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self.serverOptions discardChanges];
+}
+
+- (JMServerProfile *)serverProfile
+{
+    return self.serverOptions.serverProfile;
+}
+
+- (void)setServerProfile:(JMServerProfile *)serverProfile
+{
+    self.serverOptions = [[JMServerOptions alloc] initWithServerProfile:serverProfile];
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
@@ -99,8 +116,37 @@
 - (void)makeActiveButtonTappedOnTableViewCell:(JMServerOptionCell *)cell
 {
     [self.view endEditing:YES];
-    [self.serverOptions setServerProfileActive];
-    [self.navigationController popViewControllerAnimated:YES];
+    JSProfile *profile = [[JSProfile alloc] initWithAlias:self.serverProfile.alias
+                                                 username:self.serverProfile.username
+                                                 password:self.serverProfile.password
+                                             organization:self.serverProfile.organization
+                                                serverUrl:self.serverProfile.serverUrl];
+    void(^errorBlock)(JSOperationResult *result) = ^(JSOperationResult *result){
+        [cell performSelector:@selector(discardActivityServer)];
+    };
+    
+    JSRESTBase *restBase = [[JSRESTBase alloc] initWithProfile:profile classesForMappings:nil];
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:restBase cancelBlock:^{
+        errorBlock(nil);
+    }];
+    
+    __weak typeof(self) weakSelf = self;
+    JMRequestDelegate *serverInfoDelegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        NSInteger serverVersion = restBase.serverInfo.versionAsInteger;
+        if (serverVersion >= [JSConstants sharedInstance].VERSION_CODE_EMERALD) {
+            [weakSelf.serverOptions setServerProfileActive];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        } else {
+            errorBlock(result);
+            NSString *title = [NSString stringWithFormat:JMCustomLocalizedString(@"error.server.notsupported.title", nil), serverVersion];
+            [[UIAlertView localizedAlertWithTitle:title
+                                          message:@"error.server.notsupported.msg"
+                                         delegate:nil
+                                cancelButtonTitle:@"dialog.button.ok"
+                                otherButtonTitles:nil] show];
+        }
+    } errorBlock:errorBlock];
+    [restBase serverInfo:serverInfoDelegate];
 }
 
 #pragma mark - UIAlertViewDelegate

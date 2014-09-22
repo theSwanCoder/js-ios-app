@@ -31,11 +31,11 @@ typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
 
 static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 
-@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, JMSearchBarDelegate, JMResourcesListLoaderDelegate>
-
-@property (strong, nonatomic) DDSlidingView  *slideContainerView;
+@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, JMSearchBarDelegate, JMResourcesListLoaderDelegate>
 @property (weak, nonatomic) UINavigationController *masterNavigationController;
 
+@property (strong, nonatomic) DDSlidingView  *slideContainerView;
+@property (weak, nonatomic) IBOutlet UIView *contentContainerView;
 @property (strong, nonatomic) IBOutletCollection(UICollectionView) NSArray *collectionViews;
 
 // Activity View
@@ -90,6 +90,9 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
     } @catch (NSException *exception) {
         NSLog(@"No segue to master view controller");
     }
+    if (![JMUtils isIphone]) {
+        [self.slideContainerView showSlider];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -106,6 +109,13 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
     [super viewWillDisappear:animated];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    UICollectionView *collectionView = [self.collectionViews objectAtIndex:self.representationType];
+    [collectionView reloadData];
+}
+
 - (DDSlidingView *) slideContainerView
 {
     if (!_slideContainerView) {
@@ -115,6 +125,15 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
         _slideContainerView.animationDuration = 0.2f;
         [_slideContainerView attachToView:self.view];
         
+        NSLayoutConstraint *contentViewConstraint = [NSLayoutConstraint
+                                                     constraintWithItem:self.contentContainerView
+                                                     attribute:NSLayoutAttributeLeading
+                                                     relatedBy:NSLayoutRelationEqual
+                                                     toItem:_slideContainerView
+                                                     attribute:NSLayoutAttributeTrailing
+                                                     multiplier:1.0
+                                                     constant:0];
+        [self.view addConstraint:contentViewConstraint];
         _slideContainerView.hideSliderImage = closeImg;
     }
     return _slideContainerView;
@@ -143,18 +162,6 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
         [destinationViewController setInputControls:[inputControls mutableCopy]];
         [destinationViewController setResourceLookup:resourcesLookup];
     }
-}
-
-- (void)viewWillLayoutSubviews;
-{
-    [super viewWillLayoutSubviews];
-    UICollectionView *collectionView = [self.collectionViews objectAtIndex:JMResourcesRepresentationTypeHorizontalList];
-    UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
-    
-    CGFloat width = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
-    flowLayout.itemSize = CGSizeMake(width, flowLayout.itemSize.height);
-    
-    [flowLayout invalidateLayout]; //force the elements to get laid out again with the new size
 }
 
 - (void)setResourceListLoader:(JMResourcesListLoader *)resourceListLoader
@@ -248,6 +255,17 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     [self didSelectResourceAtIndexPath:indexPath];
+}
+
+#pragma mark - UICollectionViewFlowLayoutDelegate
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
+    if (collectionView == [self.collectionViews objectAtIndex:JMResourcesRepresentationTypeHorizontalList]) {
+        CGFloat width = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
+        return CGSizeMake(width, flowLayout.itemSize.height);
+    }
+    return flowLayout.itemSize;
 }
 
 #pragma mark - JMSearchBarDelegate

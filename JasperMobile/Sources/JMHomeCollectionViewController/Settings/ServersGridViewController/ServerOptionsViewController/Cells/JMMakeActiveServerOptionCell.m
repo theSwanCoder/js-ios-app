@@ -13,7 +13,13 @@
 - (void)checkButtonTapped:(id)sender
 {
     [super checkButtonTapped:sender];
-    [((NSObject *)self.delegate) performSelector:@selector(makeActiveButtonTappedOnTableViewCell:) withObject:sender afterDelay:0.5];
+    [((NSObject *)self.delegate) performSelector:@selector(makeActiveButtonTappedOnTableViewCell:) withObject:self afterDelay:0.2];
+}
+
+- (void) discardActivityServer
+{
+    self.checkBoxButton.selected = NO;
+    self.serverOption.optionValue = [NSNumber numberWithBool:NO];
 }
 
 @end

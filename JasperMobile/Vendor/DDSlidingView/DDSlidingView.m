@@ -84,6 +84,23 @@
     
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    if (_isShown) {
+        UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:self.bounds];
+        self.layer.masksToBounds = NO;
+        self.layer.shadowColor = [UIColor blackColor].CGColor;
+        self.layer.shadowOffset = CGSizeMake(15.0f, 0.0f);
+        self.layer.shadowOpacity = 0.8f;
+        self.layer.shadowRadius = 10.0f;
+        self.layer.shadowPath = shadowPath.CGPath;
+    } else {
+        self.layer.shadowOpacity = 0.0f;
+        self.layer.shadowRadius = 0.0f;
+    }
+}
+
 - (void) setControllerSubview: (UIView*) subview {
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
@@ -272,14 +289,7 @@
                           delay: 0.0f
                         options: UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:self.bounds];
-                         self.layer.masksToBounds = NO;
-                         self.layer.shadowColor = [UIColor blackColor].CGColor;
-                         self.layer.shadowOffset = CGSizeMake(15.0f, 0.0f);
-                         self.layer.shadowOpacity = 0.8f;
-                         self.layer.shadowRadius = 10.0f;
-                         self.layer.shadowPath = shadowPath.CGPath;
-                         [self.superview layoutIfNeeded];
+                         [self setNeedsLayout];
                      }
                      completion:^(BOOL finished) {
                          [_viewController viewDidAppear:YES];
@@ -313,14 +323,7 @@
                           delay: 0.0f
                         options: UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         self.layer.shadowOpacity = 0.0f;
-                         self.layer.shadowRadius = 0.0f;
-
-                         [self.superview layoutIfNeeded];
-                         
-                         // don't need it at all,
-                         // actually [self layoutIfNeeded] kills animation !!!!
-                         //[_dragButton layoutIfNeeded];
+                         [self setNeedsLayout];
                      }
                      completion:^(BOOL finished) {
                          [_viewController viewDidDisappear:YES];

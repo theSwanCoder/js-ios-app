@@ -10,4 +10,6 @@
 
 @interface JMMakeActiveServerOptionCell : JMBooleanServerOptionCell
 
+- (void) discardActivityServer;
+
 @end
