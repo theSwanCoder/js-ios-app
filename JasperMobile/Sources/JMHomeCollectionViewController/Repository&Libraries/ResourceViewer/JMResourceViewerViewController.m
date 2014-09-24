@@ -57,7 +57,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
+    [super viewDidDisappear:animated];
     if (self.webView.loading) {
         [self.webView stopLoading];
         [self loadingDidFinished];

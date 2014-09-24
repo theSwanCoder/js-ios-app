@@ -158,13 +158,13 @@
             [parentView addConstraint:_positionConstraint];
             
             [parentView addConstraint:[NSLayoutConstraint
-                                       constraintWithItem:self
-                                                attribute:NSLayoutAttributeBottom
+                                       constraintWithItem:_dragButton
+                                                attribute:NSLayoutAttributeCenterY
                                                 relatedBy:NSLayoutRelationEqual
-                                                   toItem:_dragButton
+                                                   toItem:self
                                                 attribute:NSLayoutAttributeBottom
-                                               multiplier:1.0
-                                                 constant:100]
+                                               multiplier:0.7
+                                                 constant:1]
              ];
             break;
         case DDSliderPositionRight:

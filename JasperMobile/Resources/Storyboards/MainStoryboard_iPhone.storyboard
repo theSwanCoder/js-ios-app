@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="Y6M-IF-MRS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="Y6M-IF-MRS">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
         <!--Main Navigation Controller-->
@@ -109,7 +109,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="SsL-u6-ztx">
-                                                    <rect key="frame" x="240.00000036379382" y="7" width="50" height="30"/>
+                                                    <rect key="frame" x="240.00000055515233" y="7" width="50" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -280,7 +280,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="76m-km-THx">
-                                                    <rect key="frame" x="190" y="5" width="100.00000055515233" height="30"/>
+                                                    <rect key="frame" x="190.0000006975942" y="5" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -319,7 +319,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="qPt-Qz-YWo">
-                                                    <rect key="frame" x="190.00000055515233" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="190.00000075310942" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES"/>
@@ -529,7 +529,6 @@
                     <navigationItem key="navigationItem" id="5uW-5y-2Jk"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <size key="freeformSize" width="163" height="852"/>
                     <connections>
                         <outlet property="masterMenuTitle" destination="Laf-hC-aTo" id="el6-Cn-grc"/>
                         <outlet property="masterMenuTitleView" destination="G9x-nO-ST8" id="Ltx-Eg-JCj"/>
@@ -699,7 +698,6 @@
                     <navigationItem key="navigationItem" id="GTx-u6-whb"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <size key="freeformSize" width="163" height="852"/>
                     <connections>
                         <outlet property="backView" destination="3TF-Hz-6xc" id="3vc-V0-9Qq"/>
                         <outlet property="masterMenuTitle" destination="1Iv-Xv-xOo" id="WtI-ac-obd"/>
@@ -1017,7 +1015,6 @@
                     <navigationItem key="navigationItem" id="SmR-ts-CmR"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <size key="freeformSize" width="768" height="1024"/>
                     <connections>
                         <outlet property="tableView" destination="FFl-Rt-mxS" id="guf-Wg-3VW"/>
                         <outlet property="titleLabel" destination="6SG-9Y-ptV" id="ZpG-wm-JKg"/>
@@ -1035,7 +1032,6 @@
                     <navigationItem key="navigationItem" id="TZv-uK-RSn"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <size key="freeformSize" width="768" height="1024"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tew-lf-EBI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1085,7 +1081,6 @@
                     <navigationItem key="navigationItem" id="GF6-mN-wLE"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-                    <size key="freeformSize" width="768" height="1024"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Atm-T3-5r4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1310,7 +1305,6 @@
                     </view>
                     <navigationItem key="navigationItem" id="JHg-05-GcB"/>
                     <nil key="simulatedStatusBarMetrics"/>
-                    <size key="freeformSize" width="163" height="852"/>
                     <connections>
                         <outlet property="masterMenuTitle" destination="9rX-Xk-x4O" id="LJ1-TQ-vbn"/>
                         <outlet property="masterMenuTitleView" destination="WXC-Dg-fpZ" id="Pq3-v4-t3h"/>
