@@ -9,7 +9,6 @@
 #import "JMLibraryListLoader.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMFavorites+Helpers.h"
-#import <Objection-iOS/Objection.h>
 
 @interface JMLibraryListLoader ()
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;

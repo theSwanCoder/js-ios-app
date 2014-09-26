@@ -10,7 +10,6 @@
 #import "JMRequestDelegate.h"
 #import "JMSingleSelectTableViewController.h"
 #import "UIViewController+FetchInputControls.h"
-#import <Objection-iOS/Objection.h>
 #import "UITableViewCell+Additions.h"
 
 #import "JMInputControlsHolder.h"

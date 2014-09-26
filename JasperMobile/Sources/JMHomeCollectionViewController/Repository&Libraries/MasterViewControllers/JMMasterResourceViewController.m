@@ -8,7 +8,6 @@
 
 #import "JMMasterResourceViewController.h"
 #import "JMConstants.h"
-#import <Objection-iOS/Objection.h>
 
 @interface JMMasterResourceViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *masterMenuTitle;

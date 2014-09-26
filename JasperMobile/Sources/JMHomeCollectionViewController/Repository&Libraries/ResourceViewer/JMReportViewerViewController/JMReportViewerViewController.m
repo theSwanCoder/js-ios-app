@@ -7,7 +7,6 @@
 //
 
 #import "JMReportViewerViewController.h"
-#import <Objection-iOS/Objection.h>
 #import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"
 #import "JMReportViewerToolBar.h"

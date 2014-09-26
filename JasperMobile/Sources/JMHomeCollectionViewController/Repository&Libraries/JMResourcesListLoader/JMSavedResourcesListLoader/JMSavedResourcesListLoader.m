@@ -10,7 +10,6 @@
 
 #import "JMServerProfile+Helpers.h"
 #import "JMSavedResources+Helpers.h"
-#import <Objection-iOS/Objection.h>
 
 @interface JMSavedResourcesListLoader ()
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;

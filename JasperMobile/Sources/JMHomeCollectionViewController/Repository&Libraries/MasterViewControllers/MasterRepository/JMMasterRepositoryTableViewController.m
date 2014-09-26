@@ -10,7 +10,6 @@
 #import "JMBackHeaderView.h"
 #import "JMRequestDelegate.h"
 #import "JMConstants.h"
-#import <Objection-iOS/Objection.h>
 
 static NSString * const kJMFolderCellIdentifier = @"FolderCell";
 static NSString * const kJMLoadingCellIdentifier = @"LoadingCell";

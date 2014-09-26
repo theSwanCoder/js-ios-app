@@ -31,7 +31,6 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMSavedResources+Helpers.h"
 #import "UIAlertView+LocalizedAlert.h"
-#import <Objection-iOS/Objection.h>
 
 // Key for app version
 static NSString * const kJMApplicationVersion = @"CFBundleShortVersionString";

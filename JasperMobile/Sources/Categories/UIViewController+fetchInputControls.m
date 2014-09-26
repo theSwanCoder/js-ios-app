@@ -30,7 +30,6 @@ NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
 NSString * const kJMShowDashboardViewerSegue = @"ShowDashboardViewer";
 NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
-#import <Objection-iOS/JSObjection.h>
 #import "UIViewController+fetchInputControls.h"
 #import "JMCancelRequestPopup.h"
 #import "JMRequestDelegate.h"

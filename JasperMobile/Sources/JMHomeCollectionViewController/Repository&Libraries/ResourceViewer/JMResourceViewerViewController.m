@@ -7,7 +7,6 @@
 //
 
 #import "JMResourceViewerViewController.h"
-#import <Objection-iOS/Objection.h>
 #import "JMFavorites+Helpers.h"
 #import "PopoverView.h"
 #import "JMSavedResources+Helpers.h"

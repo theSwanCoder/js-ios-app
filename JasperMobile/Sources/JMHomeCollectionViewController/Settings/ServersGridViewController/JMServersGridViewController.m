@@ -9,7 +9,6 @@
 #import "JMServersGridViewController.h"
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
-#import <Objection-iOS/Objection.h>
 #import "JMServerCollectionViewCell.h"
 
 static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";

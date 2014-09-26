@@ -9,9 +9,6 @@
 #import "JMResourcesListLoader.h"
 #import "JMRequestDelegate.h"
 
-#import <Objection-iOS/JSObjection.h>
-#import <Objection-iOS/Objection.h>
-
 @interface JMResourcesListLoader ()
 
 @property (nonatomic, readwrite) BOOL isLoadingNow;

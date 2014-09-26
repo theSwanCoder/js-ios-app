@@ -25,7 +25,6 @@
 //  Jaspersoft Corporation
 //
 
-#import <Objection-iOS/Objection.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**

@@ -30,7 +30,6 @@
 #import "SSKeychain.h"
 #import <objc/runtime.h>
 #import <CommonCrypto/CommonDigest.h>
-#import <Objection-iOS/Objection.h>
 
 @implementation JMServerProfile (Helpers)
 

@@ -7,7 +7,6 @@
 //
 
 #import "JMFavorites+Helpers.h"
-#import <Objection-iOS/Objection.h>
 #import "JMServerProfile+Helpers.h"
 
 NSString * const kJMFavorites = @"Favorites";

@@ -7,7 +7,6 @@
 //
 
 #import "JMServerOptions.h"
-#import <Objection-iOS/Objection.h>
 #import "JMServerProfile+Helpers.h"
 
 static NSString * const kJMBooleanCellIdentifier = @"BooleanCell";

@@ -9,7 +9,6 @@
 #import "JMSettings.h"
 #import "JMSettingsItem.h"
 #import <jaspersoft-sdk/JaspersoftSDK.h>
-#import <Objection-iOS/Objection.h>
 #import "JMReportClientHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMServerProfile+Helpers.h"

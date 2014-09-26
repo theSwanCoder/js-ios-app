@@ -7,7 +7,6 @@
 //
 
 #import "JMResourceCollectionViewCell.h"
-#import <Objection-iOS/Objection.h>
 
 
 NSString * kJMResourceCellIdentifier = @"ResourceCell";

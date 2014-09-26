@@ -8,7 +8,6 @@
 
 #import "JMSavedResources+Helpers.h"
 #import "JMServerProfile+Helpers.h"
-#import <Objection-iOS/Objection.h>
 
 NSString * const kJMSavedResources = @"SavedResources";
 

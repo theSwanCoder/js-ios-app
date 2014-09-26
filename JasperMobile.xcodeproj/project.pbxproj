@@ -18,6 +18,7 @@
 		080F235C19A77B23008758FA /* JMVerticalResourceCollectionViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 080F235419A77B23008758FA /* JMVerticalResourceCollectionViewCell~ipad.xib */; };
 		0810649A19C0A9D40000D7F3 /* JMFavorites+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 0810649919C0A9D40000D7F3 /* JMFavorites+Helpers.m */; };
 		0826E52D19C88FDB00179818 /* JMSaveReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0826E52C19C88FDB00179818 /* JMSaveReportViewController.m */; };
+		0830CC4E19D5D41A002B0E89 /* libObjection-StaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0830CC4C19D5D41A002B0E89 /* libObjection-StaticLib.a */; };
 		0837375819A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0837375719A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib */; };
 		083EFFB019C70A8E0021BF5E /* JMLibraryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 083EFFAF19C70A8E0021BF5E /* JMLibraryTableViewCell.m */; };
 		0848F33B19D0613200C8CD9D /* DDSlidingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0848F33A19D0613200C8CD9D /* DDSlidingView.m */; };
@@ -259,7 +260,6 @@
 		F55CC367174CFFCF00CEB39E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC334174CFFCE00CEB39E /* Foundation.framework */; };
 		F55CC36F174CFFCF00CEB39E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F55CC36D174CFFCF00CEB39E /* InfoPlist.strings */; };
 		F55CC372174CFFCF00CEB39E /* JasperMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F55CC371174CFFCF00CEB39E /* JasperMobileTests.m */; };
-		F5663A311752F9D0007978BE /* Objection-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A2E1752F9D0007978BE /* Objection-iOS.framework */; };
 		F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A321752FA5C007978BE /* CFNetwork.framework */; };
 		F58FF2F41760A0B50021CC8B /* MJPopupBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = F58FF2F11760A0B50021CC8B /* MJPopupBackgroundView.m */; };
 		F58FF2F51760A0B50021CC8B /* UIViewController+MJPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F58FF2F31760A0B50021CC8B /* UIViewController+MJPopupViewController.m */; };
@@ -324,6 +324,18 @@
 		0810649919C0A9D40000D7F3 /* JMFavorites+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JMFavorites+Helpers.m"; sourceTree = "<group>"; };
 		0826E52B19C88FDB00179818 /* JMSaveReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSaveReportViewController.h; sourceTree = "<group>"; };
 		0826E52C19C88FDB00179818 /* JMSaveReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSaveReportViewController.m; sourceTree = "<group>"; };
+		0830CC4C19D5D41A002B0E89 /* libObjection-StaticLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libObjection-StaticLib.a"; sourceTree = "<group>"; };
+		0830CC5019D5D535002B0E89 /* JSObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjectFactory.h; sourceTree = "<group>"; };
+		0830CC5119D5D535002B0E89 /* JSObjection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjection.h; sourceTree = "<group>"; };
+		0830CC5219D5D535002B0E89 /* JSObjectionBindingEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjectionBindingEntry.h; sourceTree = "<group>"; };
+		0830CC5319D5D535002B0E89 /* JSObjectionEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjectionEntry.h; sourceTree = "<group>"; };
+		0830CC5419D5D535002B0E89 /* JSObjectionInjector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjectionInjector.h; sourceTree = "<group>"; };
+		0830CC5519D5D535002B0E89 /* JSObjectionInjectorEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjectionInjectorEntry.h; sourceTree = "<group>"; };
+		0830CC5619D5D535002B0E89 /* JSObjectionModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjectionModule.h; sourceTree = "<group>"; };
+		0830CC5719D5D535002B0E89 /* JSObjectionProviderEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjectionProviderEntry.h; sourceTree = "<group>"; };
+		0830CC5819D5D535002B0E89 /* JSObjectionUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjectionUtils.h; sourceTree = "<group>"; };
+		0830CC5919D5D535002B0E89 /* NSObject+Objection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Objection.h"; sourceTree = "<group>"; };
+		0830CC5A19D5D535002B0E89 /* Objection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Objection.h; sourceTree = "<group>"; };
 		0837375719A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMResourcesCollectionViewController~ipad.xib"; sourceTree = "<group>"; };
 		083EFFAE19C70A8E0021BF5E /* JMLibraryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLibraryTableViewCell.h; sourceTree = "<group>"; };
 		083EFFAF19C70A8E0021BF5E /* JMLibraryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLibraryTableViewCell.m; sourceTree = "<group>"; };
@@ -659,7 +671,6 @@
 		F55CC36E174CFFCF00CEB39E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F55CC370174CFFCF00CEB39E /* JasperMobileTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JasperMobileTests.h; sourceTree = "<group>"; };
 		F55CC371174CFFCF00CEB39E /* JasperMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JasperMobileTests.m; sourceTree = "<group>"; };
-		F5663A2E1752F9D0007978BE /* Objection-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Objection-iOS.framework"; path = "JasperMobile/Vendor/Objection-iOS.framework"; sourceTree = "<group>"; };
 		F5663A321752FA5C007978BE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		F58FF2F01760A0B50021CC8B /* MJPopupBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPopupBackgroundView.h; sourceTree = "<group>"; };
 		F58FF2F11760A0B50021CC8B /* MJPopupBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPopupBackgroundView.m; sourceTree = "<group>"; };
@@ -684,11 +695,11 @@
 				F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */,
 				F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */,
 				F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */,
+				0830CC4E19D5D41A002B0E89 /* libObjection-StaticLib.a in Frameworks */,
 				F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */,
 				F55CC333174CFFCE00CEB39E /* UIKit.framework in Frameworks */,
 				F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */,
 				F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */,
-				F5663A311752F9D0007978BE /* Objection-iOS.framework in Frameworks */,
 				F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -793,6 +804,33 @@
 				0826E52C19C88FDB00179818 /* JMSaveReportViewController.m */,
 			);
 			path = JMSaveReportViewController;
+			sourceTree = "<group>";
+		};
+		0830CC4B19D5D41A002B0E89 /* Objection */ = {
+			isa = PBXGroup;
+			children = (
+				0830CC4F19D5D535002B0E89 /* Headers */,
+				0830CC4C19D5D41A002B0E89 /* libObjection-StaticLib.a */,
+			);
+			path = Objection;
+			sourceTree = "<group>";
+		};
+		0830CC4F19D5D535002B0E89 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				0830CC5019D5D535002B0E89 /* JSObjectFactory.h */,
+				0830CC5119D5D535002B0E89 /* JSObjection.h */,
+				0830CC5219D5D535002B0E89 /* JSObjectionBindingEntry.h */,
+				0830CC5319D5D535002B0E89 /* JSObjectionEntry.h */,
+				0830CC5419D5D535002B0E89 /* JSObjectionInjector.h */,
+				0830CC5519D5D535002B0E89 /* JSObjectionInjectorEntry.h */,
+				0830CC5619D5D535002B0E89 /* JSObjectionModule.h */,
+				0830CC5719D5D535002B0E89 /* JSObjectionProviderEntry.h */,
+				0830CC5819D5D535002B0E89 /* JSObjectionUtils.h */,
+				0830CC5919D5D535002B0E89 /* NSObject+Objection.h */,
+				0830CC5A19D5D535002B0E89 /* Objection.h */,
+			);
+			path = Headers;
 			sourceTree = "<group>";
 		};
 		083EFFAD19C70A8E0021BF5E /* Cells */ = {
@@ -1668,7 +1706,6 @@
 			isa = PBXGroup;
 			children = (
 				F54C91AA1752FAC90009E2BE /* libxml2.dylib */,
-				F5663A2E1752F9D0007978BE /* Objection-iOS.framework */,
 				F54C91A81752FAC20009E2BE /* QuartzCore.framework */,
 				F54C91A61752FAB80009E2BE /* SystemConfiguration.framework */,
 				F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */,
@@ -1704,6 +1741,7 @@
 		F5663A141752F9D0007978BE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				0830CC4B19D5D41A002B0E89 /* Objection */,
 				0848F33819D0613200C8CD9D /* DDSlidingView */,
 				089C96F619C862C60010C135 /* PopoverView */,
 				F5C7375E1886DE9E00203175 /* ALToastView */,
@@ -2282,8 +2320,12 @@
 					"\"${BUILD_ROOT}/../\"/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/JasperMobile/Supporting Files/JasperMobile-Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				ONLY_ACTIVE_ARCH = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JasperMobile/Vendor",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/Objection",
+				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -2315,7 +2357,11 @@
 					"\"${BUILD_ROOT}/../\"/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/JasperMobile/Supporting Files/JasperMobile-Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JasperMobile/Vendor",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/Objection",
+				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-ObjC",
