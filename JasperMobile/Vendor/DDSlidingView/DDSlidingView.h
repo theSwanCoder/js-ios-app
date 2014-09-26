@@ -28,7 +28,6 @@ typedef enum {
 
 
 @interface DDSlidingView : UIView {
-    BOOL _isShown;
     NSLayoutConstraint *_positionConstraint;
     float _dragButtonLength; // depend on dragImage
     float _sliderOffset;

@@ -85,11 +85,8 @@
 
 - (CGFloat) getKeyboardHeightFromUserInfo:(NSDictionary *)userInfo key:(NSString *)key
 {
-    if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-        return [[userInfo objectForKey:key] CGRectValue].size.height;
-    } else {
-        return [[userInfo objectForKey:key] CGRectValue].size.width;
-    }
+    CGSize keyboardSize = [[userInfo objectForKey:key] CGRectValue].size;
+    return MIN(keyboardSize.height, keyboardSize.width);    // Fixing bug on iOS 7
 }
 
 - (UITableView *) tableView

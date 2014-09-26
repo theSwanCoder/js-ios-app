@@ -19,6 +19,10 @@
 
 #import "DDSlidingView.h"
 
+@interface DDSlidingView ()
+@property (nonatomic, assign) BOOL isShown;
+@end
+
 @implementation DDSlidingView
 
 - (id)initWithFrame:(CGRect)frame
@@ -84,9 +88,9 @@
     
 }
 
-- (void)layoutSubviews
+- (void)setIsShown:(BOOL)isShown
 {
-    [super layoutSubviews];
+    _isShown = isShown;
     if (_isShown) {
         UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:self.bounds];
         self.layer.masksToBounds = NO;
@@ -276,9 +280,6 @@
 }
 
 -(void) showSliderWithDuration: (float) time {
-    
-    if ( _isShown ) return;
-    
     _isShown = YES;
     
     self.hidden = NO;
@@ -312,9 +313,6 @@
 }
 
 -(void) hideSliderWithDuration: (float) time {
-
-    if ( _isShown == NO ) return;
-    
     _isShown = NO;
     
     _positionConstraint.constant = _sliderOffset;
