@@ -141,7 +141,7 @@ objection_requires(@"reportClient", @"constants")
 - (void) displayCurrentPageOfReport
 {
     if (self.toolbar.countOfPages) {
-        NSString *fullExportId = [NSString stringWithFormat:@"%@;pages=%i", self.exportId, self.toolbar.currentPage];
+        NSString *fullExportId = [NSString stringWithFormat:@"%@;pages=%ld", self.exportId, (long)self.toolbar.currentPage];
         NSString *reportUrl = [self.reportClient generateReportOutputUrl:self.requestId exportOutput:fullExportId];
         
         self.request = [NSURLRequest requestWithURL:[NSURL URLWithString:reportUrl]];

@@ -57,7 +57,7 @@
 {
     NSString *keyString = JMCustomLocalizedString(@"action.report.viewer.pagecount", nil);
     self.pageCountLabel.text = [NSString stringWithFormat:keyString, self.countOfPages];
-    self.currentPageField.text = [NSString stringWithFormat:@"%d", self.currentPage];
+    self.currentPageField.text = [NSString stringWithFormat:@"%ld", (long)self.currentPage];
     
     self.previousButton.enabled = !(self.currentPage <= 1);
     self.firstButton.enabled = !(self.currentPage <= 1);
@@ -112,7 +112,7 @@
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [NSString stringWithFormat:@"%d", row + 1];
+    return [NSString stringWithFormat:@"%ld", row + 1];
 }
 
 - (UIToolbar *)pickerToolbar

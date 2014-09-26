@@ -142,7 +142,7 @@ __weak static UIViewController *viewControllerToDismiss;
 
         if (result.statusCode != 0) {
             title = @"error.readingresponse.dialog.msg";
-            message = [NSString stringWithFormat:@"error.http.%i", result.statusCode];
+            message = [NSString stringWithFormat:@"error.http.%li", (long)result.statusCode];
         } else {
             switch (result.statusCode) {
                 case NSURLErrorUserCancelledAuthentication:
