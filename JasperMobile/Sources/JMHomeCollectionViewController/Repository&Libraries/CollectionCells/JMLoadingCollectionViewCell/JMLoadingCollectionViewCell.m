@@ -10,7 +10,6 @@
 NSString * kJMLoadingCellIdentifier = @"LoadingCell";
 NSString * kJMLoadingCellNibKey = @"LoadingCellNibKey";
 
-NSString * kJMVerticalLoadingCellNib = @"JMVerticalLoadingCollectionViewCell";
 NSString * kJMHorizontalLoadingCellNib = @"JMHorizontalLoadingCollectionViewCell";
 NSString * kJMGridLoadingCellNib = @"JMGridLoadingCollectionViewCell";
 

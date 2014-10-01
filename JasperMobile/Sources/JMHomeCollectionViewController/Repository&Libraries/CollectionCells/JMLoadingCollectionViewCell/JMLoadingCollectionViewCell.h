@@ -10,7 +10,6 @@
 extern NSString * kJMLoadingCellIdentifier;
 extern NSString * kJMLoadingCellNibKey;
 
-extern NSString * kJMVerticalLoadingCellNib;
 extern NSString * kJMHorizontalLoadingCellNib;
 extern NSString * kJMGridLoadingCellNib;
 

@@ -12,7 +12,6 @@
 NSString * kJMResourceCellIdentifier = @"ResourceCell";
 NSString * kJMResourceCellNibKey = @"ResourceCellNibKey";
 
-NSString * kJMVerticalResourceCellNib = @"JMVerticalResourceCollectionViewCell";
 NSString * kJMHorizontalResourceCellNib = @"JMHorizontalResourceCollectionViewCell";
 NSString * kJMGridResourceCellNib = @"JMGridResourceCollectionViewCell";
 

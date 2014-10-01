@@ -25,8 +25,7 @@
 
 typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
     JMResourcesRepresentationTypeHorizontalList = 0,
-    JMResourcesRepresentationTypeGrid,
-    JMResourcesRepresentationTypeVerticalList
+    JMResourcesRepresentationTypeGrid
 };
 
 static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
@@ -70,15 +69,19 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
                              @{kJMResourceCellNibKey: kJMHorizontalResourceCellNib,
                                kJMLoadingCellNibKey:  kJMHorizontalLoadingCellNib},
                              @{kJMResourceCellNibKey: kJMGridResourceCellNib,
-                               kJMLoadingCellNibKey:  kJMGridLoadingCellNib},
-                             @{kJMResourceCellNibKey: kJMVerticalResourceCellNib,
-                               kJMLoadingCellNibKey:  kJMVerticalLoadingCellNib},
+                               kJMLoadingCellNibKey:  kJMGridLoadingCellNib}
                              ];
     
     for (int i = 0; i < [self.collectionViews count]; i++) {
         UICollectionView *collectionView = [self.collectionViews objectAtIndex:i];
         [collectionView registerNib:[UINib nibWithNibName:[[paramsArray objectAtIndex:i] objectForKey:kJMResourceCellNibKey] bundle:nil] forCellWithReuseIdentifier:kJMResourceCellIdentifier];
         [collectionView registerNib:[UINib nibWithNibName:[[paramsArray objectAtIndex:i] objectForKey:kJMLoadingCellNibKey] bundle:nil] forCellWithReuseIdentifier:kJMLoadingCellIdentifier];
+        
+        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+        refreshControl.tintColor = [UIColor whiteColor];
+        [refreshControl addTarget:self action:@selector(refershControlAction:) forControlEvents:UIControlEventValueChanged];
+        [collectionView addSubview:refreshControl];
+        collectionView.alwaysBounceVertical = YES;
     }
     
     self.resourceListLoader.resourcesTypes = @[self.resourceListLoader.constants.WS_TYPE_REPORT_UNIT, self.resourceListLoader.constants.WS_TYPE_DASHBOARD];
@@ -197,7 +200,7 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
     [self replaceRightNavigationItem:sender withItem:[self resourceRepresentationItem]];
 }
 
-- (void)refreshButtonTapped:(id)sender
+- (void)refershControlAction:(id)sender
 {
     id visibleViewController = self.masterNavigationController.visibleViewController;
     if ([visibleViewController conformsToProtocol:@protocol(JMRefreshable)]) {
@@ -348,29 +351,12 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 
 - (JMResourcesRepresentationType)getNextRepresentationTypeForType:(JMResourcesRepresentationType)currentType
 {
-    if ([JMUtils isIphone]) {
-        return (currentType == JMResourcesRepresentationTypeGrid) ? JMResourcesRepresentationTypeHorizontalList : JMResourcesRepresentationTypeGrid;
-    }
-    if (currentType == JMResourcesRepresentationTypeVerticalList) {
-        return JMResourcesRepresentationTypeHorizontalList;
-    }
-    return (++currentType);
+    return (currentType == JMResourcesRepresentationTypeGrid) ? JMResourcesRepresentationTypeHorizontalList : JMResourcesRepresentationTypeGrid;
 }
 
 - (UIBarButtonItem *)resourceRepresentationItem
 {
-    NSString *imageName = nil;
-    switch ([self getNextRepresentationTypeForType:self.representationType]) {
-        case JMResourcesRepresentationTypeVerticalList:
-            imageName = @"vertical_list_button";
-            break;
-        case JMResourcesRepresentationTypeHorizontalList:
-            imageName = @"horizontal_list_button";
-            break;
-        case JMResourcesRepresentationTypeGrid:
-            imageName = @"grid_button";
-            break;
-    }
+    NSString *imageName = ([self getNextRepresentationTypeForType:self.representationType] == JMResourcesRepresentationTypeGrid) ? @"grid_button" : @"horizontal_list_button";
     return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName] style:UIBarButtonItemStyleBordered target:self action:@selector(representationTypeButtonTapped:)];
 }
 

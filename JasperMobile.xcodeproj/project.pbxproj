@@ -11,11 +11,9 @@
 		080F235519A77B23008758FA /* JMLoadingCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 080F234919A77B23008758FA /* JMLoadingCollectionViewCell.m */; };
 		080F235619A77B23008758FA /* JMGridLoadingCollectionViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 080F234B19A77B23008758FA /* JMGridLoadingCollectionViewCell~ipad.xib */; };
 		080F235719A77B23008758FA /* JMHorizontalLoadingCollectionViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 080F234C19A77B23008758FA /* JMHorizontalLoadingCollectionViewCell~ipad.xib */; };
-		080F235819A77B23008758FA /* JMVerticalLoadingCollectionViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 080F234D19A77B23008758FA /* JMVerticalLoadingCollectionViewCell~ipad.xib */; };
 		080F235919A77B23008758FA /* JMResourceCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 080F235019A77B23008758FA /* JMResourceCollectionViewCell.m */; };
 		080F235A19A77B23008758FA /* JMGridResourceCollectionViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 080F235219A77B23008758FA /* JMGridResourceCollectionViewCell~ipad.xib */; };
 		080F235B19A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 080F235319A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib */; };
-		080F235C19A77B23008758FA /* JMVerticalResourceCollectionViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 080F235419A77B23008758FA /* JMVerticalResourceCollectionViewCell~ipad.xib */; };
 		0810649A19C0A9D40000D7F3 /* JMFavorites+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 0810649919C0A9D40000D7F3 /* JMFavorites+Helpers.m */; };
 		0826E52D19C88FDB00179818 /* JMSaveReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0826E52C19C88FDB00179818 /* JMSaveReportViewController.m */; };
 		0830CC4E19D5D41A002B0E89 /* libObjection-StaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0830CC4C19D5D41A002B0E89 /* libObjection-StaticLib.a */; };
@@ -313,12 +311,10 @@
 		080F234919A77B23008758FA /* JMLoadingCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLoadingCollectionViewCell.m; sourceTree = "<group>"; };
 		080F234B19A77B23008758FA /* JMGridLoadingCollectionViewCell~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMGridLoadingCollectionViewCell~ipad.xib"; sourceTree = "<group>"; };
 		080F234C19A77B23008758FA /* JMHorizontalLoadingCollectionViewCell~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMHorizontalLoadingCollectionViewCell~ipad.xib"; sourceTree = "<group>"; };
-		080F234D19A77B23008758FA /* JMVerticalLoadingCollectionViewCell~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMVerticalLoadingCollectionViewCell~ipad.xib"; sourceTree = "<group>"; };
 		080F234F19A77B23008758FA /* JMResourceCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceCollectionViewCell.h; sourceTree = "<group>"; };
 		080F235019A77B23008758FA /* JMResourceCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceCollectionViewCell.m; sourceTree = "<group>"; };
 		080F235219A77B23008758FA /* JMGridResourceCollectionViewCell~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMGridResourceCollectionViewCell~ipad.xib"; sourceTree = "<group>"; };
 		080F235319A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMHorizontalResourceCollectionViewCell~ipad.xib"; sourceTree = "<group>"; };
-		080F235419A77B23008758FA /* JMVerticalResourceCollectionViewCell~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMVerticalResourceCollectionViewCell~ipad.xib"; sourceTree = "<group>"; };
 		0810649819C0A9D40000D7F3 /* JMFavorites+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JMFavorites+Helpers.h"; sourceTree = "<group>"; };
 		0810649919C0A9D40000D7F3 /* JMFavorites+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JMFavorites+Helpers.m"; sourceTree = "<group>"; };
 		0826E52B19C88FDB00179818 /* JMSaveReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSaveReportViewController.h; sourceTree = "<group>"; };
@@ -754,7 +750,6 @@
 			children = (
 				080F234B19A77B23008758FA /* JMGridLoadingCollectionViewCell~ipad.xib */,
 				080F234C19A77B23008758FA /* JMHorizontalLoadingCollectionViewCell~ipad.xib */,
-				080F234D19A77B23008758FA /* JMVerticalLoadingCollectionViewCell~ipad.xib */,
 				088115F819B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib */,
 				088115F619B8C63F00C70170 /* JMHorizontalLoadingCollectionViewCell.xib */,
 			);
@@ -776,7 +771,6 @@
 			children = (
 				080F235219A77B23008758FA /* JMGridResourceCollectionViewCell~ipad.xib */,
 				080F235319A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib */,
-				080F235419A77B23008758FA /* JMVerticalResourceCollectionViewCell~ipad.xib */,
 				088115FA19B8C7E700C70170 /* JMGridResourceCollectionViewCell.xib */,
 				088115FC19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib */,
 			);
@@ -1907,7 +1901,6 @@
 				0851DFD919ACE27800DC6EDE /* JMCancelRequestPopup.xib in Resources */,
 				0895885F19CC6D15002FFF5E /* save_action@2x.png in Resources */,
 				089588CA19CC6D15002FFF5E /* settings_bar_item@2x.png in Resources */,
-				080F235819A77B23008758FA /* JMVerticalLoadingCollectionViewCell~ipad.xib in Resources */,
 				0895889D19CC6D15002FFF5E /* library.png in Resources */,
 				089588C519CC6D15002FFF5E /* repository_bar_item.png in Resources */,
 				088115F919B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib in Resources */,
@@ -1936,7 +1929,6 @@
 				08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */,
 				089588B519CC6D15002FFF5E /* res_type_html.png in Resources */,
 				088115FD19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
-				080F235C19A77B23008758FA /* JMVerticalResourceCollectionViewCell~ipad.xib in Resources */,
 				089588BE19CC6D15002FFF5E /* res_type_text@2x.png in Resources */,
 				0895885D19CC6D15002FFF5E /* refresh_action@2x.png in Resources */,
 				0895888519CC6D15002FFF5E /* open_panel@2x.png in Resources */,

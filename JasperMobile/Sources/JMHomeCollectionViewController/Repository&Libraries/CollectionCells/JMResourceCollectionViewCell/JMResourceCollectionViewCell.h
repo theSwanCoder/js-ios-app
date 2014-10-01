@@ -10,7 +10,6 @@
 extern NSString * kJMResourceCellIdentifier;
 extern NSString * kJMResourceCellNibKey;
 
-extern NSString * kJMVerticalResourceCellNib;
 extern NSString * kJMHorizontalResourceCellNib;
 extern NSString * kJMGridResourceCellNib;
 
