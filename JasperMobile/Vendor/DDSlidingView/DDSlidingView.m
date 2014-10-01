@@ -280,7 +280,7 @@
 }
 
 -(void) showSliderWithDuration: (float) time {
-    _isShown = YES;
+    self.isShown = YES;
     
     self.hidden = NO;
     
@@ -313,7 +313,7 @@
 }
 
 -(void) hideSliderWithDuration: (float) time {
-    _isShown = NO;
+    self.isShown = NO;
     
     _positionConstraint.constant = _sliderOffset;
     

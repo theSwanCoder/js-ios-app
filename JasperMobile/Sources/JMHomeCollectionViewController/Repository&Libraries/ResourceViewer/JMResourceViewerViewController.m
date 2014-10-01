@@ -89,10 +89,15 @@ objection_requires(@"resourceClient", @"resourceLookup")
     return nil;
 }
 
+- (BOOL) favoriteFeatureIsAvailableForCurrentResource
+{
+    return ![self isKindOfClass:NSClassFromString(@"JMSavedResourceViewerViewController")];
+}
+
 - (UIBarButtonItem *) favoriteBarButtonItem
 {
-    if (![JMSavedResources savedReportsFromResourceLookup:self.resourceLookup]) {
-        UIImage *itemImage = [JMFavorites isResourceInFavorites:self.resourceLookup] ? [UIImage imageNamed:@"favorited_item.png"] : [UIImage imageNamed:@"make_favorite_item.png"];
+    if ([self favoriteFeatureIsAvailableForCurrentResource] & ![JMUtils isIphone]) {
+        UIImage *itemImage = [JMFavorites isResourceInFavorites:self.resourceLookup] ? [UIImage imageNamed:@"favorited_item"] : [UIImage imageNamed:@"make_favorite_item"];
         UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStyleBordered target:self action:@selector(favoriteButtonTapped:)];
         favoriteItem.tintColor = [JMFavorites isResourceInFavorites:self.resourceLookup] ? [UIColor yellowColor] : [UIColor whiteColor];
         return favoriteItem;
@@ -111,11 +116,11 @@ objection_requires(@"resourceClient", @"resourceLookup")
 #pragma mark - Actions
 - (void)actionButtonClicked:(id) sender
 {
-    JMResourceViewerActionsView *actionsView = [[JMResourceViewerActionsView alloc] initWithFrame:CGRectMake(0, 0, 150, 200)];
+    JMResourceViewerActionsView *actionsView = [[JMResourceViewerActionsView alloc] initWithFrame:CGRectMake(0, 0, 240, 200)];
     actionsView.delegate = self;
     actionsView.availableActions = [self availableAction];
     CGPoint point = CGPointMake(self.view.frame.size.width, -10);
-    self.popoverView = [PopoverView showPopoverAtPoint:point inView:self.view withTitle:@"Select Action:" withContentView:actionsView delegate:self];
+    self.popoverView = [PopoverView showPopoverAtPoint:point inView:self.view withTitle:nil withContentView:actionsView delegate:self];
 }
 
 - (void)favoriteButtonTapped:(id)sender
@@ -131,6 +136,9 @@ objection_requires(@"resourceClient", @"resourceLookup")
 
 - (JMResourceViewerAction)availableAction
 {
+    if ([self favoriteFeatureIsAvailableForCurrentResource] && ![self favoriteBarButtonItem]) {
+        return [JMFavorites isResourceInFavorites:self.resourceLookup] ? JMResourceViewerAction_MakeUnFavorite : JMResourceViewerAction_MakeFavorite;
+    }
     return JMResourceViewerAction_None;
 }
 
@@ -169,6 +177,11 @@ objection_requires(@"resourceClient", @"resourceLookup")
 #pragma mark - JMResourceViewerActionsViewDelegate
 - (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
 {
+    if (action == JMResourceViewerAction_MakeFavorite) {
+        [JMFavorites addToFavorites:self.resourceLookup];
+    } else if (action == JMResourceViewerAction_MakeUnFavorite) {
+        [JMFavorites removeFromFavorites:self.resourceLookup];
+    }
     [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
 }
 

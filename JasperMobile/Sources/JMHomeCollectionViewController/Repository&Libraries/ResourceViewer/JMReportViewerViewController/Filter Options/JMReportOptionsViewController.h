@@ -13,5 +13,6 @@
 @interface JMReportOptionsViewController : JMEditabledViewController
 
 @property (nonatomic, weak) id <JMResourceClientHolder, JMRefreshable> delegate;
+@property (nonatomic, strong) NSMutableArray *inputControls;
 
 @end

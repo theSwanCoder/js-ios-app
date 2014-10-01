@@ -105,7 +105,6 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     cell.imageView.image = [UIImage imageNamed:menuItem];
     cell.label.text = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.label", menuItem], nil);
     cell.desc.text = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.description", menuItem], nil);
-    [cell.desc sizeToFit];
     
     return cell;
 }

@@ -112,7 +112,7 @@
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [NSString stringWithFormat:@"%ld", row + 1];
+    return [NSString stringWithFormat:@"%zd", row + 1];
 }
 
 - (UIToolbar *)pickerToolbar

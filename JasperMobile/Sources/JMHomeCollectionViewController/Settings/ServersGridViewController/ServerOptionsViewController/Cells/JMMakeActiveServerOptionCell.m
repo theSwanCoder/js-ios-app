@@ -13,7 +13,7 @@
 - (void)checkButtonTapped:(id)sender
 {
     [super checkButtonTapped:sender];
-    [((NSObject *)self.delegate) performSelector:@selector(makeActiveButtonTappedOnTableViewCell:) withObject:self afterDelay:0.2];
+    [self.delegate performSelector:@selector(makeActiveButtonTappedOnTableViewCell:) withObject:self];
 }
 
 - (void) discardActivityServer

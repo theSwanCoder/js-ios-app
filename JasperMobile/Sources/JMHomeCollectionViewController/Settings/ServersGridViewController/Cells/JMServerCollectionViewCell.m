@@ -34,10 +34,10 @@
     
     if ([serverProfile serverProfileIsActive]) {
         self.activeLabel.hidden = NO;
-        self.titleImage.image = [UIImage imageNamed:@"server_active.png"];
+        self.titleImage.image = [UIImage imageNamed:@"server_active"];
     } else {
         self.activeLabel.hidden = YES;
-        self.titleImage.image = [UIImage imageNamed:@"server.png"];
+        self.titleImage.image = [UIImage imageNamed:@"server"];
     }
 }
 @end

@@ -74,11 +74,6 @@
     return NO;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    self.changedReportName = textField.text;
-}
-
 #pragma mark - UIAlertViewDelegate
 
 - (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
@@ -94,8 +89,9 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.cancelButtonIndex != buttonIndex) {
-        [self.savedReports renameReportTo:self.changedReportName];
-        self.title = self.changedReportName;
+        NSString *newName = [alertView textFieldAtIndex:0].text;
+        [self.savedReports renameReportTo:newName];
+        self.title = newName;
     }
 }
 

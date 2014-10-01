@@ -62,22 +62,22 @@
 // BACKGROUND GRADIENT
 
 //bottom color white in gradient bg
-#define kGradientBottomColor kJMDetailViewLightBackgroundColor
+#define kGradientBottomColor [kJMSearchBarBackgroundColor colorWithAlphaComponent:0.9f]
 
 //top color white value in gradient bg
-#define kGradientTopColor kJMDetailViewLightBackgroundColor
+#define kGradientTopColor [kJMSearchBarBackgroundColor colorWithAlphaComponent:0.9f]
 
 
 // TITLE GRADIENT
 
 //bool that turns off/on title gradient
-#define kDrawTitleGradient YES
+#define kDrawTitleGradient NO
 
 //bottom color white value in title gradient bg
-#define kGradientTitleBottomColor [UIColor colorFromHexString:@"#D5D9DB"]
+#define kGradientTitleBottomColor [kJMSearchBarBackgroundColor colorWithAlphaComponent:0.9f]
 
 //top color white value in title gradient bg
-#define kGradientTitleTopColor kJMDetailViewLightBackgroundColor
+#define kGradientTitleTopColor [kJMSearchBarBackgroundColor colorWithAlphaComponent:0.9f]
 
 
 // FONTS
@@ -97,7 +97,7 @@
 #define kTitleFont [UIFont fontWithName:@"HelveticaNeue-Bold" size:16.f]
 
 //title text color
-#define kTitleColor [UIColor colorWithRed:0.329 green:0.341 blue:0.353 alpha:1]
+#define kTitleColor [UIColor whiteColor]
 
 
 // BORDER

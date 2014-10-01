@@ -24,7 +24,6 @@
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel    *titleLabel;
 @property (nonatomic, strong) JSConstants       *constants;
-@property (nonatomic, strong) NSMutableArray    *inputControls;
 
 @end
 
@@ -61,7 +60,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(runReport)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(runReport)];
 }
 
 - (void)runReport

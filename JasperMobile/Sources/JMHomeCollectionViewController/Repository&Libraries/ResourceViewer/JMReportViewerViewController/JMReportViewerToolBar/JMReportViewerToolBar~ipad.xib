@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -40,7 +39,7 @@
                 </barButtonItem>
                 <barButtonItem style="plain" id="JQL-aP-ffR">
                     <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" id="jvR-1q-cc0">
-                        <rect key="frame" x="368" y="7" width="40" height="30"/>
+                        <rect key="frame" x="348" y="7" width="100" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -88,6 +87,7 @@
                 <outlet property="pickerView" destination="bRC-Kt-Zq0" id="2b8-Ib-0MY"/>
                 <outlet property="previousButton" destination="IAj-fn-ea7" id="rK2-OO-XqL"/>
             </connections>
+            <point key="canvasLocation" x="439.5" y="153"/>
         </toolbar>
         <pickerView contentMode="scaleToFill" id="bRC-Kt-Zq0">
             <rect key="frame" x="0.0" y="0.0" width="777" height="216"/>
@@ -104,4 +104,9 @@
         <image name="next_action_item.png" width="30" height="30"/>
         <image name="previous_action_item.png" width="30" height="30"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
 </document>

@@ -7,6 +7,8 @@
 //
 
 #import "UIImage+Additions.h"
+#import "UIColor+RGBComponent.h"
+
 
 @implementation UIImage (Additions)
 

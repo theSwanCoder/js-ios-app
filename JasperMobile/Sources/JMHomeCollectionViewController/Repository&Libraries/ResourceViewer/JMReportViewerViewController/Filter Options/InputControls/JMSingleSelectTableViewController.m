@@ -150,7 +150,7 @@
 
 - (void) showNavigationItems
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchButtonTapped:)];
 }
 
 #pragma mark - JMSearchBarDelegate

@@ -38,6 +38,8 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 @property (weak, nonatomic) IBOutlet UIView *contentContainerView;
 @property (strong, nonatomic) IBOutletCollection(UICollectionView) NSArray *collectionViews;
 
+@property (strong, nonatomic) JMSearchBar *searchBar;
+
 // Activity View
 @property (nonatomic, weak) IBOutlet UIView *activityView;
 @property (nonatomic, weak) IBOutlet UILabel *activityViewTitleLabel;
@@ -56,7 +58,7 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
 
     self.activityViewTitleLabel.text = JMCustomLocalizedString(@"detail.resourcesloading.msg", nil);
     self.noResultsViewTitleLabel.text = JMCustomLocalizedString(@"detail.noresults.msg", nil);
@@ -99,12 +101,23 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 {
     [super viewDidAppear:animated];
     [self.resourceListLoader updateIfNeeded];
+    
+    if ([JMUtils isIphone]) {
+        id visibleViewController = self.masterNavigationController.visibleViewController;
+        if ([visibleViewController conformsToProtocol:@protocol(JMSearchable)] && [visibleViewController currentQuery]) {
+            [self showSearchBarWithText:[visibleViewController currentQuery]];
+        }
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
         self.slideContainerView.hidden = YES;
+    }
+    
+    if ([JMUtils isIphone]) {
+        [self hideSearchBar];
     }
     [super viewWillDisappear:animated];
 }
@@ -119,8 +132,8 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 - (DDSlidingView *) slideContainerView
 {
     if (!_slideContainerView) {
-        UIImage * openImg = [UIImage imageNamed: @"open_panel.png"];
-        UIImage * closeImg = [UIImage imageNamed: @"close_panel.png"];
+        UIImage * openImg = [UIImage imageNamed: @"open_panel"];
+        UIImage * closeImg = [UIImage imageNamed: @"close_panel"];
         _slideContainerView = [[DDSlidingView alloc] initWithPosition: DDSliderPositionLeft image: openImg length: kJMMasterViewWidth];
         _slideContainerView.animationDuration = 0.2f;
         [_slideContainerView attachToView:self.view];
@@ -174,18 +187,8 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 
 - (void)searchButtonTapped:(id)sender
 {
-    CGRect searchBarFrame = [JMUtils isIphone] ? self.navigationController.navigationBar.bounds : CGRectMake(0, 0, 320, 44);
-    JMSearchBar *searchBar =  [[JMSearchBar alloc] initWithFrame:searchBarFrame];
-    searchBar.delegate = self;
-    searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
-    
-    if ([JMUtils isIphone]) {
-        self.navigationItem.hidesBackButton = YES;
-        [self.navigationController.navigationBar addSubview:searchBar];
-    } else {
-        UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchBar];
-        [self replaceRightNavigationItem:sender withItem:searchItem];
-    }
+    [self showSearchBarWithText:nil];
+    [self.searchBar becomeFirstResponder];
 }
 
 - (void)representationTypeButtonTapped:(id)sender
@@ -288,23 +291,51 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
         [visibleViewController didClearSearch];
     }
 
-    if ([JMUtils isIphone]) {
-        [searchBar removeFromSuperview];
-        self.navigationItem.hidesBackButton = NO;
-    } else {
-        [self showNavigationItems];
-    }
+    [self hideSearchBar];
 }
 
 #pragma mark - Utils
 
+- (void) showSearchBarWithText:(NSString *)text
+{
+    if (!self.searchBar) {
+        CGRect searchBarFrame = [JMUtils isIphone] ? self.navigationController.navigationBar.bounds : CGRectMake(0, 0, 320, 44);
+        self.searchBar =  [[JMSearchBar alloc] initWithFrame:searchBarFrame];
+        self.searchBar.delegate = self;
+        self.searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
+        self.searchBar.text = text;
+    }
+
+    if ([JMUtils isIphone]) {
+        self.navigationItem.hidesBackButton = YES;
+        [self.navigationController.navigationBar addSubview:self.searchBar];
+    } else {
+        for (UIBarButtonItem *item in self.navigationItem.rightBarButtonItems) {
+            if (item.action  == @selector(searchButtonTapped:)) {
+                UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
+                [self replaceRightNavigationItem:item withItem:searchItem];
+                break;
+            }
+        }
+    }
+}
+
+- (void) hideSearchBar
+{
+    if ([JMUtils isIphone]) {
+        [self.searchBar removeFromSuperview];
+        self.navigationItem.hidesBackButton = NO;
+    } else {
+        [self showNavigationItems];
+    }
+    self.searchBar = nil;
+}
+
 - (void) showNavigationItems
 {
-    UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchButtonTapped:)];
+    UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchButtonTapped:)];
     UIBarButtonItem *representationTypeItem = [self resourceRepresentationItem];
-    UIBarButtonItem *refreshItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(refreshButtonTapped:)];
-
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:refreshItem, representationTypeItem, searchItem, nil];
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:representationTypeItem, searchItem, nil];
 }
 
 - (void) replaceRightNavigationItem:(UIBarButtonItem *)oldItem withItem:(UIBarButtonItem *)newItem
@@ -331,13 +362,13 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
     NSString *imageName = nil;
     switch ([self getNextRepresentationTypeForType:self.representationType]) {
         case JMResourcesRepresentationTypeVerticalList:
-            imageName = @"vertical_list_button.png";
+            imageName = @"vertical_list_button";
             break;
         case JMResourcesRepresentationTypeHorizontalList:
-            imageName = @"horizontal_list_button.png";
+            imageName = @"horizontal_list_button";
             break;
         case JMResourcesRepresentationTypeGrid:
-            imageName = @"grid_button.png";
+            imageName = @"grid_button";
             break;
     }
     return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName] style:UIBarButtonItemStyleBordered target:self action:@selector(representationTypeButtonTapped:)];

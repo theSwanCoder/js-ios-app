@@ -42,9 +42,9 @@
         self.title = JMCustomLocalizedString(@"servers.title.new", nil);
     }
 
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(saveButtonTapped:)];
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(saveButtonTapped:)];
     if (self.serverProfile && !self.serverProfile.serverProfileIsActive) {
-        UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete_item.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(deleteButtonTapped:)];
+        UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(deleteButtonTapped:)];
         self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:saveButton, deleteButton, nil];
     } else {
         self.navigationItem.rightBarButtonItem = saveButton;
@@ -133,7 +133,7 @@
     __weak typeof(self) weakSelf = self;
     JMRequestDelegate *serverInfoDelegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
         NSInteger serverVersion = restBase.serverInfo.versionAsInteger;
-        if (serverVersion >= [JSConstants sharedInstance].VERSION_CODE_EMERALD) {
+        if (serverVersion >= [JSConstants sharedInstance].VERSION_CODE_EMERALD_TWO) {
             [weakSelf.serverOptions setServerProfileActive];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         } else {

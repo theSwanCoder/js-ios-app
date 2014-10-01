@@ -35,9 +35,9 @@ objection_requires(@"managedObjectContext")
 {
     [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"servers.profile.title", nil);
-    self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]];
+    self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
     self.collectionView.backgroundColor = kJMMainCollectionViewBackgroundColor;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item.png"] style:UIBarButtonItemStyleBordered  target:self action:@selector(addButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(addButtonTapped:)];
 }
 
 - (void)viewWillAppear:(BOOL)animated

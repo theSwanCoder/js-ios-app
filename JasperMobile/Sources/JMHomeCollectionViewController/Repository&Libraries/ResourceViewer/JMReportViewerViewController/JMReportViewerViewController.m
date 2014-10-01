@@ -63,7 +63,7 @@ objection_requires(@"reportClient", @"constants")
     id destinationViewController = segue.destinationViewController;
     [destinationViewController setResourceLookup:self.resourceLookup];
     [destinationViewController setInputControls:[[NSMutableArray alloc] initWithArray:self.inputControls copyItems:YES]];
-    [destinationViewController setDelegate:self];
+    [destinationViewController performSelector:@selector(setDelegate:) withObject:self];
 }
 
 - (JMResourceViewerAction)availableAction
@@ -96,7 +96,7 @@ objection_requires(@"reportClient", @"constants")
 {
     if (self.inputControls && self.inputControls.count) {
         NSString *title = [[self.navigationController.viewControllers objectAtIndex:1] title];
-        UIImage *backButtonImage = [UIImage imageNamed:@"back_item.png"];
+        UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
         UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
         UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTapped:)];
         [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -203,9 +203,8 @@ objection_requires(@"reportClient", @"constants")
 {
     if (alertView.cancelButtonIndex == buttonIndex) {
         [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
-    } else {
-        [self.icUndoManager undo];
     }
+    [self.icUndoManager undo];
     [self.icUndoManager removeAllActionsWithTarget:self];
 }
 

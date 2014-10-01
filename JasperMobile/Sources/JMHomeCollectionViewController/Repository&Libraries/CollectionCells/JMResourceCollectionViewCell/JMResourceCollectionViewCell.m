@@ -48,9 +48,9 @@ objection_requires(@"constants")
     self.resourceDataCreation.text = resourceLookup.creationDate;
     
     if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
-        self.resourceImage.image = [UIImage imageNamed:@"Report.png"];
+        self.resourceImage.image = [UIImage imageNamed:@"Report"];
     } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD]) {
-        self.resourceImage.image = [UIImage imageNamed:@"Dashboard.png"];
+        self.resourceImage.image = [UIImage imageNamed:@"Dashboard"];
     }
 }
 @end

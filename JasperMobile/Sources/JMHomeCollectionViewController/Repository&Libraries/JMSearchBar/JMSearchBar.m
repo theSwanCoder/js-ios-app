@@ -45,7 +45,7 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
         self.textField.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         
         UIImageView *leftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, textFieldFrame.size.height, textFieldFrame.size.height)];
-        leftView.image = [UIImage imageNamed:@"search_button.png"];
+        leftView.image = [UIImage imageNamed:@"search_button"];
         leftView.backgroundColor = [UIColor clearColor];
         leftView.contentMode = UIViewContentModeCenter;
         self.textField.leftView = leftView;
@@ -55,7 +55,7 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
         self.clearButton.frame = CGRectMake(0, 0, textFieldFrame.size.height, textFieldFrame.size.height);
         self.clearButton.backgroundColor = [UIColor clearColor];
         [self.clearButton addTarget:self action:@selector(clearButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        [self.clearButton setImage:[UIImage imageNamed:@"clear_button.png"] forState:UIControlStateNormal];
+        [self.clearButton setImage:[UIImage imageNamed:@"clear_button"] forState:UIControlStateNormal];
         [self.clearButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         self.textField.rightView = self.clearButton;
         self.textField.rightViewMode = UITextFieldViewModeNever;
@@ -76,9 +76,29 @@ static NSString * const JMReplacingTextRange  = @"ReplacingTextRange";
     return self;
 }
 
-- (void)didMoveToSuperview
+- (BOOL)isFirstResponder
 {
-    [self.textField becomeFirstResponder];
+    return self.textField.isFirstResponder;
+}
+
+- (BOOL)becomeFirstResponder
+{
+    return self.textField.becomeFirstResponder;
+}
+
+- (BOOL)resignFirstResponder
+{
+    return self.textField.resignFirstResponder & [super resignFirstResponder];
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return self.textField.canBecomeFirstResponder;
+}
+
+- (BOOL)canResignFirstResponder
+{
+    return self.textField.canResignFirstResponder;
 }
 
 #pragma mark - UITextFieldDelegate

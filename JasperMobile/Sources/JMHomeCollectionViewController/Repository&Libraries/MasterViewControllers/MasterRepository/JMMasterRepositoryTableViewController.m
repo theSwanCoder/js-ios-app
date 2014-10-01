@@ -99,7 +99,7 @@ objection_requires(@"resourceClient")
     NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
     JSResourceLookup *selectedFolder = [self.folders objectAtIndex:indexPath.row];
     [segue.destinationViewController setResourceLookup:selectedFolder];
-    [segue.destinationViewController setDelegate:self];
+    [segue.destinationViewController performSelector:@selector(setDelegate:) withObject:self];
 }
 
 #pragma mark - Table view data source

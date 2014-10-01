@@ -141,6 +141,8 @@
 "action.title.edit" = "Edit";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
+"action.title.markasfavorite" = "Mark as Favorite";
+"action.title.markasunfavorite" = "Remove From Favorites";
 
 "action.report.viewer.page" = "Page";
 "action.report.viewer.pagecount" = "of %d";

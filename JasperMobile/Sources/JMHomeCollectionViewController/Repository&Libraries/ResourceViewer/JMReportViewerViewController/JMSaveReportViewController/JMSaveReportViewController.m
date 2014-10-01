@@ -66,7 +66,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     self.tableView.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.tableView.layer.cornerRadius = 4;
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item.png"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate

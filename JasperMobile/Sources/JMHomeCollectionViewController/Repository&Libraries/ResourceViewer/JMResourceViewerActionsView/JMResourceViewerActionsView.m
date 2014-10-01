@@ -8,7 +8,7 @@
 
 #import "JMResourceViewerActionsView.h"
 #import "UITableViewCell+Additions.h"
-
+#import "UIImage+Additions.h"
 
 @interface JMResourceViewerActionsView () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -26,9 +26,11 @@
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         self.tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
+        self.tableView.backgroundColor = [UIColor clearColor];
+        self.tableView.separatorColor = [UIColor blackColor];
+        self.tableView.backgroundView = nil;
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
-//        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [self addSubview:self.tableView];
     }
     return self;
@@ -72,16 +74,28 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.textLabel.font = [JMFont navigationBarTitleFont];
         cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        cell.textLabel.textColor = [UIColor whiteColor];
         cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         cell.imageView.backgroundColor = [UIColor clearColor];
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+        
+        cell.selectedBackgroundView = [UIView new];
+        cell.selectedBackgroundView.layer.cornerRadius = 4.0f;
+        cell.selectedBackgroundView.backgroundColor = [UIColor darkGrayColor];
     }
     JMResourceViewerAction currentAction = [[self.dataSource objectAtIndex:indexPath.row] integerValue];
     cell.textLabel.text = JMCustomLocalizedString([self titleForAction:currentAction], nil);
     cell.imageView.image = [UIImage imageNamed:[self imageNameForAction:currentAction]];
     return cell;
+}
+
+- (void)tableView: (UITableView*)tableView willDisplayCell: (UITableViewCell*)cell forRowAtIndexPath: (NSIndexPath*)indexPath
+{
+    cell.backgroundColor = [UIColor clearColor];
+    cell.textLabel.backgroundColor = [UIColor clearColor];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -94,6 +108,8 @@
 - (NSString *)titleForAction:(JMResourceViewerAction)action
 {
     switch (action) {
+        case JMResourceViewerAction_None:
+            return nil;
         case JMResourceViewerAction_Filter:
             return @"action.title.edit";
         case JMResourceViewerAction_Refresh:
@@ -104,14 +120,18 @@
             return @"action.title.delete";
         case JMResourceViewerAction_Rename:
             return @"action.title.rename";
-        default:
-            return nil;
+        case JMResourceViewerAction_MakeFavorite:
+            return @"action.title.markasfavorite";
+        case JMResourceViewerAction_MakeUnFavorite:
+            return @"action.title.markasunfavorite";
     }
 }
 
 - (NSString *)imageNameForAction:(JMResourceViewerAction)action
 {
     switch (action) {
+        case JMResourceViewerAction_None:
+            return nil;
         case JMResourceViewerAction_Filter:
             return @"filter_action";
         case JMResourceViewerAction_Refresh:
@@ -122,8 +142,10 @@
             return @"delete_action";
         case JMResourceViewerAction_Rename:
             return @"edit_action";
-        default:
-            return nil;
-    }
+        case JMResourceViewerAction_MakeFavorite:
+            return @"make_favorite_item";
+        case JMResourceViewerAction_MakeUnFavorite:
+            return @"favorited_item";
+        }
 }
 @end

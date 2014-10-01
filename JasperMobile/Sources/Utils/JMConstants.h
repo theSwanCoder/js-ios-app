@@ -81,7 +81,7 @@ extern NSString * const kJMReportFilename;
 #define kJMSearchBarBackgroundColor                     [UIColor colorFromHexString:@"#26282D"]
 
 #define kJMMainNavigationBarBackgroundColor             [UIColor colorFromHexString:@"#343841"]
-#define kJMMainCollectionViewBackgroundColor            [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern.png"]]
+#define kJMMainCollectionViewBackgroundColor            [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]]
 
 #define kJMResourcePreviewBackgroundColor               [UIColor colorFromHexString:@"#3A90B2"]
 
