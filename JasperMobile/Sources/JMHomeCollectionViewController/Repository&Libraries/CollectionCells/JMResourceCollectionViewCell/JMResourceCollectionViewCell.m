@@ -8,12 +8,8 @@
 
 #import "JMResourceCollectionViewCell.h"
 
-
-NSString * kJMResourceCellIdentifier = @"ResourceCell";
-NSString * kJMResourceCellNibKey = @"ResourceCellNibKey";
-
-NSString * kJMHorizontalResourceCellNib = @"JMHorizontalResourceCollectionViewCell";
-NSString * kJMGridResourceCellNib = @"JMGridResourceCollectionViewCell";
+NSString * kJMHorizontalResourceCell = @"JMHorizontalResourceCollectionViewCell";
+NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 
 
 @interface JMResourceCollectionViewCell()

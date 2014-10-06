@@ -9,12 +9,11 @@
             <connections>
                 <outlet property="activityView" destination="GhI-MN-gT8" id="Bhc-Ft-ZlN"/>
                 <outlet property="activityViewTitleLabel" destination="uyI-Iv-1Uy" id="cQF-Vb-uQD"/>
+                <outlet property="collectionView" destination="zOC-lm-3kk" id="xbY-Xf-BvV"/>
                 <outlet property="contentContainerView" destination="sd6-Cn-HSO" id="BBa-ND-H87"/>
-                <outlet property="noResultsView" destination="VUw-2N-ER9" id="TDE-lY-2fn"/>
+                <outlet property="noResultsView" destination="VUw-2N-ER9" id="jSG-ik-wlZ"/>
                 <outlet property="noResultsViewTitleLabel" destination="7tI-XC-BUt" id="FHu-wi-4Q3"/>
                 <outlet property="view" destination="v6C-Rz-mVc" id="P0X-gM-uKp"/>
-                <outletCollection property="collectionViews" destination="eZb-Q7-tYK" id="Sqc-l0-y2Q"/>
-                <outletCollection property="collectionViews" destination="zOC-lm-3kk" id="R1o-YX-YyT"/>
             </connections>
         </placeholder>
         <view contentMode="scaleToFill" id="v6C-Rz-mVc">
@@ -24,22 +23,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sd6-Cn-HSO">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                     <subviews>
-                        <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="eZb-Q7-tYK">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="0.0" id="Yn1-1g-IjP">
-                                <size key="itemSize" width="300" height="80"/>
-                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                <inset key="sectionInset" minX="5" minY="5" maxX="5" maxY="5"/>
-                            </collectionViewFlowLayout>
-                            <cells/>
-                            <connections>
-                                <outlet property="dataSource" destination="-1" id="XSo-w0-zFj"/>
-                                <outlet property="delegate" destination="-1" id="h94-dD-fZ9"/>
-                            </connections>
-                        </collectionView>
-                        <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="zOC-lm-3kk">
+                        <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="zOC-lm-3kk">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="dJr-gV-eN6">
@@ -123,12 +107,8 @@ Please Wait...</string>
                         <constraint firstItem="VUw-2N-ER9" firstAttribute="leading" secondItem="sd6-Cn-HSO" secondAttribute="leading" id="dml-Kg-41n"/>
                         <constraint firstAttribute="trailing" secondItem="VUw-2N-ER9" secondAttribute="trailing" id="gUv-w7-aKy"/>
                         <constraint firstItem="zOC-lm-3kk" firstAttribute="top" secondItem="sd6-Cn-HSO" secondAttribute="top" id="ipQ-TP-C3Z"/>
-                        <constraint firstItem="eZb-Q7-tYK" firstAttribute="top" secondItem="sd6-Cn-HSO" secondAttribute="top" id="j3h-l8-l1e"/>
-                        <constraint firstItem="eZb-Q7-tYK" firstAttribute="leading" secondItem="sd6-Cn-HSO" secondAttribute="leading" id="jUA-HD-O2O"/>
-                        <constraint firstAttribute="trailing" secondItem="eZb-Q7-tYK" secondAttribute="trailing" id="klS-VX-qnu"/>
                         <constraint firstAttribute="centerY" secondItem="GhI-MN-gT8" secondAttribute="centerY" id="mSQ-7B-dfk"/>
                         <constraint firstItem="zOC-lm-3kk" firstAttribute="leading" secondItem="sd6-Cn-HSO" secondAttribute="leading" id="oSu-JL-qWw"/>
-                        <constraint firstAttribute="bottom" secondItem="eZb-Q7-tYK" secondAttribute="bottom" id="xGt-6e-QFF"/>
                         <constraint firstAttribute="trailing" secondItem="GhI-MN-gT8" secondAttribute="trailing" id="zah-l4-Gl0"/>
                     </constraints>
                 </view>

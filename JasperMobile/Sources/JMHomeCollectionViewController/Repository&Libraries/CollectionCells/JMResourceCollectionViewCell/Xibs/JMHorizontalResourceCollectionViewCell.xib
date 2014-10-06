@@ -11,7 +11,7 @@
             <rect key="frame" x="0.0" y="0.0" width="300" height="80"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="grid_res_type_report.png" translatesAutoresizingMaskIntoConstraints="NO" id="Y4i-KP-iYm">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" verticalHuggingPriority="251" image="grid_res_type_report.png" translatesAutoresizingMaskIntoConstraints="NO" id="Y4i-KP-iYm">
                     <rect key="frame" x="0.0" y="0.0" width="100" height="80"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>

@@ -10,17 +10,17 @@
 
 typedef NS_ENUM(NSInteger, JMResourceViewerAction) {
     JMResourceViewerAction_None = 0,
-    JMResourceViewerAction_Refresh = 1 << 0,
-    JMResourceViewerAction_Filter = 1 << 1,
-    JMResourceViewerAction_Save = 1 << 2,
-    JMResourceViewerAction_Delete = 1 << 3,
-    JMResourceViewerAction_Rename = 1 << 4,
-    JMResourceViewerAction_MakeFavorite = 1 << 5,
-    JMResourceViewerAction_MakeUnFavorite = 1 << 6
+    JMResourceViewerAction_MakeFavorite = 1 << 0,
+    JMResourceViewerAction_MakeUnFavorite = 1 << 1,
+    JMResourceViewerAction_Refresh = 1 << 2,
+    JMResourceViewerAction_Filter = 1 << 3,
+    JMResourceViewerAction_Save = 1 << 4,
+    JMResourceViewerAction_Delete = 1 << 5,
+    JMResourceViewerAction_Rename = 1 << 6
 };
 
-static inline JMResourceViewerAction JMResourceViewerActionFirst() { return JMResourceViewerAction_Refresh; }
-static inline JMResourceViewerAction JMResourceViewerActionLast() { return JMResourceViewerAction_MakeUnFavorite; }
+static inline JMResourceViewerAction JMResourceViewerActionFirst() { return JMResourceViewerAction_MakeFavorite; }
+static inline JMResourceViewerAction JMResourceViewerActionLast() { return JMResourceViewerAction_Rename; }
 
 @class JMResourceViewerActionsView;
 

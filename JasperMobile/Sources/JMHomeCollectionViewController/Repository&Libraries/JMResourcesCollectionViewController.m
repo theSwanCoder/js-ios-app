@@ -25,8 +25,11 @@
 
 typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
     JMResourcesRepresentationTypeHorizontalList = 0,
-    JMResourcesRepresentationTypeGrid
+    JMResourcesRepresentationTypeGrid = 1
 };
+
+static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationTypeHorizontalList; }
+static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() { return JMResourcesRepresentationTypeGrid; }
 
 static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 
@@ -35,7 +38,8 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 
 @property (strong, nonatomic) DDSlidingView  *slideContainerView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainerView;
-@property (strong, nonatomic) IBOutletCollection(UICollectionView) NSArray *collectionViews;
+@property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
 
 @property (strong, nonatomic) JMSearchBar *searchBar;
 
@@ -65,24 +69,16 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
     self.activityViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
     self.noResultsViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
     
-    NSArray *paramsArray = @[
-                             @{kJMResourceCellNibKey: kJMHorizontalResourceCellNib,
-                               kJMLoadingCellNibKey:  kJMHorizontalLoadingCellNib},
-                             @{kJMResourceCellNibKey: kJMGridResourceCellNib,
-                               kJMLoadingCellNibKey:  kJMGridLoadingCellNib}
-                             ];
-    
-    for (int i = 0; i < [self.collectionViews count]; i++) {
-        UICollectionView *collectionView = [self.collectionViews objectAtIndex:i];
-        [collectionView registerNib:[UINib nibWithNibName:[[paramsArray objectAtIndex:i] objectForKey:kJMResourceCellNibKey] bundle:nil] forCellWithReuseIdentifier:kJMResourceCellIdentifier];
-        [collectionView registerNib:[UINib nibWithNibName:[[paramsArray objectAtIndex:i] objectForKey:kJMLoadingCellNibKey] bundle:nil] forCellWithReuseIdentifier:kJMLoadingCellIdentifier];
-        
-        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-        refreshControl.tintColor = [UIColor whiteColor];
-        [refreshControl addTarget:self action:@selector(refershControlAction:) forControlEvents:UIControlEventValueChanged];
-        [collectionView addSubview:refreshControl];
-        collectionView.alwaysBounceVertical = YES;
+    for (NSInteger i = JMResourcesRepresentationTypeFirst(); i <= JMResourcesRepresentationTypeLast(); i ++) {
+        [self.collectionView registerNib:[UINib nibWithNibName:[self resourceCellForRepresentationType:i] bundle:nil] forCellWithReuseIdentifier:[self resourceCellForRepresentationType:i]];
+        [self.collectionView registerNib:[UINib nibWithNibName:[self loadingCellForRepresentationType:i] bundle:nil] forCellWithReuseIdentifier:[self loadingCellForRepresentationType:i]];
     }
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self action:@selector(refershControlAction:) forControlEvents:UIControlEventValueChanged];
+    [self.collectionView addSubview:self.refreshControl];
+    self.collectionView.alwaysBounceVertical = YES;
     
     self.resourceListLoader.resourcesTypes = @[self.resourceListLoader.constants.WS_TYPE_REPORT_UNIT, self.resourceListLoader.constants.WS_TYPE_DASHBOARD];
     
@@ -128,8 +124,7 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    UICollectionView *collectionView = [self.collectionViews objectAtIndex:self.representationType];
-    [collectionView reloadData];
+    [self.collectionView reloadData];
 }
 
 - (DDSlidingView *) slideContainerView
@@ -153,6 +148,30 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
         _slideContainerView.hideSliderImage = closeImg;
     }
     return _slideContainerView;
+}
+
+- (NSString *)resourceCellForRepresentationType:(JMResourcesRepresentationType)type
+{
+    switch (type) {
+        case JMResourcesRepresentationTypeHorizontalList:
+            return kJMHorizontalResourceCell;
+        case JMResourcesRepresentationTypeGrid:
+            return kJMGridResourceCell;
+        default:
+            return nil;
+    }
+}
+
+- (NSString *)loadingCellForRepresentationType:(JMResourcesRepresentationType)type
+{
+    switch (type) {
+        case JMResourcesRepresentationTypeHorizontalList:
+            return kJMHorizontalLoadingCell;
+        case JMResourcesRepresentationTypeGrid:
+            return kJMGridLoadingCell;
+        default:
+            return nil;
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -204,22 +223,15 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 {
     id visibleViewController = self.masterNavigationController.visibleViewController;
     if ([visibleViewController conformsToProtocol:@protocol(JMRefreshable)]) {
+        [self.refreshControl performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.2];
         [visibleViewController refresh];
     }
 }
 
 - (void)setRepresentationType:(JMResourcesRepresentationType)representationType
 {
-    UICollectionView *currentView = [self.collectionViews objectAtIndex:_representationType];
-    UICollectionView *nextView = [self.collectionViews objectAtIndex:representationType];
-    [nextView setContentOffset:CGPointMake(0, 0)];
-
-    [UIView beginAnimations:nil context:nil];
-    currentView.alpha = 0;
-    nextView.alpha = 1;
-    [UIView commitAnimations];
-    
     _representationType = representationType;
+    [self.collectionView reloadData];
 }
 
 - (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
@@ -249,10 +261,10 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
         if ([self.resourceListLoader hasNextPage]) {
             [self.resourceListLoader loadNextPage];
         }
-        return [collectionView dequeueReusableCellWithReuseIdentifier:kJMLoadingCellIdentifier forIndexPath:indexPath];
+        return [collectionView dequeueReusableCellWithReuseIdentifier:[self loadingCellForRepresentationType:self.representationType] forIndexPath:indexPath];
     }
 
-    JMResourceCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kJMResourceCellIdentifier forIndexPath:indexPath];
+    JMResourceCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[self resourceCellForRepresentationType:self.representationType] forIndexPath:indexPath];
     cell.resourceLookup = [self.resourceListLoader.resources objectAtIndex:indexPath.row];
     return cell;
 }
@@ -267,9 +279,9 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
-    if (collectionView == [self.collectionViews objectAtIndex:JMResourcesRepresentationTypeHorizontalList]) {
+    if (self.representationType == JMResourcesRepresentationTypeHorizontalList){
         CGFloat width = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
-        return CGSizeMake(width, flowLayout.itemSize.height);
+        return CGSizeMake(width, 80);
     }
     return flowLayout.itemSize;
 }
@@ -363,7 +375,7 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 #pragma mark - JMResourcesListLoaderDelegate
 - (void)resourceListDidStartLoading:(JMResourcesListLoader *)listLoader
 {
-    [self.collectionViews makeObjectsPerformSelector:@selector(reloadData)];
+    [self.collectionView reloadData];
     self.activityView.hidden = NO;
     self.noResultsView.hidden = YES;
 }
@@ -376,7 +388,7 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
     } else {
         self.noResultsView.hidden = listLoader.resources.count > 0;
         self.activityView.hidden = YES;
-        [self.collectionViews makeObjectsPerformSelector:@selector(reloadData)];
+        [self.collectionView reloadData];
     }
 }
 

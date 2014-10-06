@@ -7,11 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-extern NSString * kJMLoadingCellIdentifier;
-extern NSString * kJMLoadingCellNibKey;
-
-extern NSString * kJMHorizontalLoadingCellNib;
-extern NSString * kJMGridLoadingCellNib;
+extern NSString * kJMHorizontalLoadingCell;
+extern NSString * kJMGridLoadingCell;
 
 
 @interface JMLoadingCollectionViewCell : UICollectionViewCell

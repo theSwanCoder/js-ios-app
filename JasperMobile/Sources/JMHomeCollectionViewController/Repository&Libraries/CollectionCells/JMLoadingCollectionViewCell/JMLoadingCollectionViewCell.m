@@ -7,11 +7,8 @@
 //
 
 #import "JMLoadingCollectionViewCell.h"
-NSString * kJMLoadingCellIdentifier = @"LoadingCell";
-NSString * kJMLoadingCellNibKey = @"LoadingCellNibKey";
-
-NSString * kJMHorizontalLoadingCellNib = @"JMHorizontalLoadingCollectionViewCell";
-NSString * kJMGridLoadingCellNib = @"JMGridLoadingCollectionViewCell";
+NSString * kJMHorizontalLoadingCell = @"JMHorizontalLoadingCollectionViewCell";
+NSString * kJMGridLoadingCell = @"JMGridLoadingCollectionViewCell";
 
 @interface JMLoadingCollectionViewCell ()
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;

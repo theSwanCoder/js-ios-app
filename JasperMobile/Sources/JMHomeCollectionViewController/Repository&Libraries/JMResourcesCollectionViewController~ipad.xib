@@ -9,12 +9,11 @@
             <connections>
                 <outlet property="activityView" destination="Ghp-aQ-igi" id="sKg-YA-oTo"/>
                 <outlet property="activityViewTitleLabel" destination="qnt-ka-Zge" id="tp4-1Z-jxB"/>
+                <outlet property="collectionView" destination="FpR-Do-E8i" id="iZU-6t-MP4"/>
                 <outlet property="contentContainerView" destination="6eK-NM-rI1" id="3HC-pV-DQb"/>
                 <outlet property="noResultsView" destination="pLE-Bm-20N" id="jAl-78-g4H"/>
                 <outlet property="noResultsViewTitleLabel" destination="4gW-3v-gAB" id="qfa-FB-K4K"/>
                 <outlet property="view" destination="TzT-ag-HfQ" id="o0a-7w-xsT"/>
-                <outletCollection property="collectionViews" destination="eZO-wS-BFk" id="XOQ-cF-lRZ"/>
-                <outletCollection property="collectionViews" destination="FpR-Do-E8i" id="abw-O4-sln"/>
             </connections>
         </placeholder>
         <view contentMode="scaleToFill" id="TzT-ag-HfQ">
@@ -24,22 +23,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6eK-NM-rI1">
                     <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
                     <subviews>
-                        <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="eZO-wS-BFk">
-                            <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="0.0" id="0UA-Rh-tAE">
-                                <size key="itemSize" width="580" height="80"/>
-                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                <inset key="sectionInset" minX="25" minY="10" maxX="25" maxY="10"/>
-                            </collectionViewFlowLayout>
-                            <cells/>
-                            <connections>
-                                <outlet property="dataSource" destination="-1" id="BqV-hM-Pio"/>
-                                <outlet property="delegate" destination="-1" id="hyf-dt-6ib"/>
-                            </connections>
-                        </collectionView>
-                        <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="FpR-Do-E8i">
+                        <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="FpR-Do-E8i">
                             <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="15" minimumInteritemSpacing="15" id="zJV-w2-z9m">
@@ -116,18 +100,14 @@ Please Wait...</string>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="eZO-wS-BFk" firstAttribute="leading" secondItem="6eK-NM-rI1" secondAttribute="leading" id="0Wq-4R-DSh"/>
                         <constraint firstAttribute="trailing" secondItem="FpR-Do-E8i" secondAttribute="trailing" id="0ZR-5r-dBE"/>
                         <constraint firstItem="Ghp-aQ-igi" firstAttribute="leading" secondItem="6eK-NM-rI1" secondAttribute="leading" constant="10" id="2x3-Yd-z7O"/>
-                        <constraint firstAttribute="trailing" secondItem="eZO-wS-BFk" secondAttribute="trailing" id="3y1-dT-uJk"/>
                         <constraint firstAttribute="trailing" secondItem="pLE-Bm-20N" secondAttribute="trailing" id="5na-xf-856"/>
                         <constraint firstAttribute="trailing" secondItem="Ghp-aQ-igi" secondAttribute="trailing" constant="10" id="9ed-Hr-ysl"/>
                         <constraint firstAttribute="centerY" secondItem="Ghp-aQ-igi" secondAttribute="centerY" id="C6n-5b-Y7W"/>
-                        <constraint firstAttribute="bottom" secondItem="eZO-wS-BFk" secondAttribute="bottom" id="H6p-8W-g9h"/>
                         <constraint firstItem="FpR-Do-E8i" firstAttribute="leading" secondItem="6eK-NM-rI1" secondAttribute="leading" id="Q3F-Vg-fVw"/>
                         <constraint firstItem="pLE-Bm-20N" firstAttribute="leading" secondItem="6eK-NM-rI1" secondAttribute="leading" id="SZg-Z1-VJG"/>
                         <constraint firstAttribute="centerX" secondItem="Ghp-aQ-igi" secondAttribute="centerX" id="SgR-o0-auY"/>
-                        <constraint firstItem="eZO-wS-BFk" firstAttribute="top" secondItem="6eK-NM-rI1" secondAttribute="top" id="azC-hT-buh"/>
                         <constraint firstItem="FpR-Do-E8i" firstAttribute="top" secondItem="6eK-NM-rI1" secondAttribute="top" id="bI5-TM-RCT"/>
                         <constraint firstAttribute="centerY" secondItem="pLE-Bm-20N" secondAttribute="centerY" id="rvx-66-fAc"/>
                         <constraint firstAttribute="bottom" secondItem="FpR-Do-E8i" secondAttribute="bottom" id="xWt-VX-EqV"/>

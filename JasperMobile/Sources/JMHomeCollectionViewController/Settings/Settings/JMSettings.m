@@ -53,7 +53,7 @@ objection_requires(@"resourceClient", @"reportClient")
         JMSettingsItem *item = [[JMSettingsItem alloc] init];
         item.titleString = [itemData objectForKey:@"title"];
         if ([[itemData objectForKey:@"value"] isKindOfClass:[NSNumber class]]) {
-            item.valueSettings = [NSString stringWithFormat:@"%.0f", [[itemData objectForKey:@"value"] floatValue]];
+            item.valueSettings = [NSString stringWithFormat:@"%.0f", [[itemData objectForKey:@"value"] doubleValue]];
         } else {
             item.valueSettings = [itemData objectForKey:@"value"];
         }
@@ -71,8 +71,8 @@ objection_requires(@"resourceClient", @"reportClient")
     [defaults setObject:[[self.itemsArray objectAtIndex:2] valueSettings] forKey:kJMReportRequestTimeout];
     [defaults synchronize];
     
-    self.resourceClient.timeoutInterval = [[[self.itemsArray objectAtIndex:1] valueSettings] floatValue];
-    self.reportClient.timeoutInterval   = [[[self.itemsArray objectAtIndex:2] valueSettings] floatValue];
+    self.resourceClient.timeoutInterval = [[[self.itemsArray objectAtIndex:1] valueSettings] doubleValue];
+    self.reportClient.timeoutInterval   = [[[self.itemsArray objectAtIndex:2] valueSettings] doubleValue];
 }
 
 @end

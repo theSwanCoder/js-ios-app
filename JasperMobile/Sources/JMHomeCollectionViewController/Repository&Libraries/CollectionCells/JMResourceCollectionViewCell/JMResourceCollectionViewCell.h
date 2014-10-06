@@ -7,11 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-extern NSString * kJMResourceCellIdentifier;
-extern NSString * kJMResourceCellNibKey;
-
-extern NSString * kJMHorizontalResourceCellNib;
-extern NSString * kJMGridResourceCellNib;
+extern NSString * kJMHorizontalResourceCell;
+extern NSString * kJMGridResourceCell;
 
 @interface JMResourceCollectionViewCell : UICollectionViewCell
 @property (nonatomic, strong) JSResourceLookup *resourceLookup;
