@@ -66,7 +66,7 @@ objection_requires(@"managedObjectContext")
     
     [predicates addObject:[NSPredicate predicateWithFormat:@"wsType IN %@", self.resourcesTypes]];
     if (self.searchQuery && self.searchQuery.length) {
-        [predicates addObject:[NSPredicate predicateWithFormat:@"label like %@", [NSString stringWithFormat:@"*%@*", self.searchQuery]]];
+        [predicates addObject:[NSPredicate predicateWithFormat:@"label LIKE[cd] %@", [NSString stringWithFormat:@"*%@*", self.searchQuery]]];
     }
     
     fetchRequest.predicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];

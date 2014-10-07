@@ -8,6 +8,7 @@
 
 #import "JMSaveReportViewController.h"
 #import "JMSavedResources+Helpers.h"
+#import "UITableViewCell+Additions.h"
 #import "JMCancelRequestPopup.h"
 #import "JMRequestDelegate.h"
 #import "ALToastView.h"
@@ -67,6 +68,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     self.tableView.layer.cornerRadius = 4;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
+    [self.tableView setRowHeight:44.f];
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
@@ -94,7 +96,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
                                                          options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
                                                       attributes:@{NSFontAttributeName:[JMFont tableViewCellDetailErrorFont]}
                                                          context:nil];
-        return self.tableView.rowHeight + ceil(textRect.size.height);
+        return tableView.rowHeight + ceil(textRect.size.height);
     }
     return tableView.rowHeight;
 }
@@ -104,6 +106,10 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     NSString *cellIdentifier = indexPath.section ? @"FormatSelectionCell" : @"ReportNameCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (indexPath.section) {
+        if (indexPath.row) {
+            [cell setTopSeparatorWithHeight:0.5 color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+        }
+
         NSString *currentFormat = [self.reportFormats objectAtIndex:indexPath.row];
         cell.textLabel.text = currentFormat;
         cell.accessoryType = [self.selectedReportFormat isEqualToString:currentFormat] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;

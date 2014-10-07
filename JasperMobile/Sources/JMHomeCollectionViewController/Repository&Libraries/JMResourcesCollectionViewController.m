@@ -223,7 +223,6 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 {
     id visibleViewController = self.masterNavigationController.visibleViewController;
     if ([visibleViewController conformsToProtocol:@protocol(JMRefreshable)]) {
-        [self.refreshControl performSelector:@selector(endRefreshing) withObject:nil afterDelay:0.2];
         [visibleViewController refresh];
     }
 }
@@ -375,6 +374,7 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 #pragma mark - JMResourcesListLoaderDelegate
 - (void)resourceListDidStartLoading:(JMResourcesListLoader *)listLoader
 {
+    [self.refreshControl endRefreshing];
     [self.collectionView reloadData];
     self.activityView.hidden = NO;
     self.noResultsView.hidden = YES;

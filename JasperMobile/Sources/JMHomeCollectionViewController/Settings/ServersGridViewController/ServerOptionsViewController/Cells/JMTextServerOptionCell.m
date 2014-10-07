@@ -29,6 +29,21 @@
     self.textField.text = serverOption.optionValue;
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    CGFloat textFieldPadding = self.contentView.frame.size.width - self.textField.frame.size.width - self.textField.frame.origin.x;
+    
+    CGRect textLabelFrame = self.textLabel.frame;
+    textLabelFrame.size.width = self.contentView.frame.size.width - self.textField.frame.size.width - textLabelFrame.origin.x - 2 * textFieldPadding;
+    self.textLabel.frame = textLabelFrame;
+    
+    CGRect detailTextLabelFrame = self.detailTextLabel.frame;
+    detailTextLabelFrame.size.width = self.contentView.frame.size.width - self.textField.frame.size.width - detailTextLabelFrame.origin.x - 2 * textFieldPadding;
+    self.detailTextLabel.frame = detailTextLabelFrame;
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

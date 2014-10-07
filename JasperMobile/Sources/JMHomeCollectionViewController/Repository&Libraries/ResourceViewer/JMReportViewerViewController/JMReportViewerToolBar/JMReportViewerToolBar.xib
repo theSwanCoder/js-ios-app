@@ -24,8 +24,8 @@
                 </barButtonItem>
                 <barButtonItem style="plain" id="1OF-y0-Jiw">
                     <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" id="48W-cE-ezs">
-                        <rect key="frame" x="107" y="7" width="80" height="30"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                        <rect key="frame" x="75" y="7" width="80" height="30"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="go"/>
@@ -37,11 +37,11 @@
                 <barButtonItem style="plain" id="JxL-4y-Cto">
                     <view key="customView" contentMode="scaleToFill" id="Jz8-Nn-FSZ">
                         <rect key="frame" x="175" y="0.0" width="80" height="44"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="of 37" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="S2R-WH-Oqu">
                                 <rect key="frame" x="-5" y="11" width="85" height="21"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>

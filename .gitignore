@@ -15,4 +15,7 @@ profile
 DerivedData
 .idea/
 *.hmap
-JasperMobile.xcodeproj/project.xcworkspace/xcshareddata/JasperMobile.xccheckout
+Tibco JasperMobile.xcodeproj/project.xcworkspace
+Tibco JasperMobile.xcodeproj/project.xcworkspace/*
+Tibco JasperMobile.xcodeproj/xcuserdata
+Tibco JasperMobile.xcodeproj/xcuserdata/*

@@ -91,10 +91,10 @@ NSString * const kJMSavedResources = @"SavedResources";
 {
     JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMSavedResources];
-    NSMutableString *format = [NSMutableString stringWithString:@"(serverProfile == %@) AND (label like %@) AND (username like %@) AND "];
+    NSMutableString *format = [NSMutableString stringWithString:@"(serverProfile == %@) AND (label LIKE[cd] %@) AND (username LIKE[cd] %@) AND "];
     
     if (activeServerProfile.organization.length) {
-        [format appendString:@"(organization like %@)"];
+        [format appendString:@"(organization LIKE[cd] %@)"];
     } else {
         [format appendString:@"(organization = %@)"];
     }

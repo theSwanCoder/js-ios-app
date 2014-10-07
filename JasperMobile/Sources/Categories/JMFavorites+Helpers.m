@@ -67,10 +67,10 @@ NSString * const kJMFavorites = @"Favorites";
 {
     JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMFavorites];
-    NSMutableString *format = [NSMutableString stringWithString:@"(serverProfile == %@) AND (uri like %@) AND (username like %@) AND "];
+    NSMutableString *format = [NSMutableString stringWithString:@"(serverProfile == %@) AND (uri LIKE[cd] %@) AND (username LIKE[cd] %@) AND "];
     
     if (activeServerProfile.organization.length) {
-        [format appendString:@"(organization like %@)"];
+        [format appendString:@"(organization LIKE[cd] %@)"];
     } else {
         [format appendString:@"(organization = %@)"];
     }

@@ -37,7 +37,7 @@
                 <barButtonItem style="plain" id="JdS-ct-c8F">
                     <view key="customView" contentMode="scaleToFill" id="xJT-bw-3KK">
                         <rect key="frame" x="423" y="0.0" width="150" height="44"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="of 37" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Kl2-SI-lLo">
                                 <rect key="frame" x="0.0" y="11" width="150" height="21"/>
