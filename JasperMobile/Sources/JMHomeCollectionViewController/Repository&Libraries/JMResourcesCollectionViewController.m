@@ -78,9 +78,9 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self.resourceListLoader updateIfNeeded];
 }
 
-- (void)viewDidLayoutSubviews
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    [super viewDidLayoutSubviews];
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     [self.collectionView reloadData];
 }
 

@@ -173,7 +173,6 @@
 		089588CC19CC6D15002FFF5E /* input_control_text_field.png in Resources */ = {isa = PBXBuildFile; fileRef = 0895884419CC6D15002FFF5E /* input_control_text_field.png */; };
 		089588CD19CC6D15002FFF5E /* input_control_text_field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0895884519CC6D15002FFF5E /* input_control_text_field@2x.png */; };
 		089590FF19E3D514001471DA /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E019E3D514001471DA /* ALToastView.m */; };
-		0895910019E3D514001471DA /* DDSlidingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E319E3D514001471DA /* DDSlidingView.m */; };
 		0895910119E3D514001471DA /* MJPopupBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E619E3D514001471DA /* MJPopupBackgroundView.m */; };
 		0895910219E3D514001471DA /* UIViewController+MJPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E819E3D514001471DA /* UIViewController+MJPopupViewController.m */; };
 		0895910319E3D514001471DA /* libObjection-StaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 089590F619E3D514001471DA /* libObjection-StaticLib.a */; };
@@ -471,8 +470,6 @@
 		0895884519CC6D15002FFF5E /* input_control_text_field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "input_control_text_field@2x.png"; sourceTree = "<group>"; };
 		089590DF19E3D514001471DA /* ALToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALToastView.h; sourceTree = "<group>"; };
 		089590E019E3D514001471DA /* ALToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALToastView.m; sourceTree = "<group>"; };
-		089590E219E3D514001471DA /* DDSlidingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDSlidingView.h; sourceTree = "<group>"; };
-		089590E319E3D514001471DA /* DDSlidingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDSlidingView.m; sourceTree = "<group>"; };
 		089590E519E3D514001471DA /* MJPopupBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPopupBackgroundView.h; sourceTree = "<group>"; };
 		089590E619E3D514001471DA /* MJPopupBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPopupBackgroundView.m; sourceTree = "<group>"; };
 		089590E719E3D514001471DA /* UIViewController+MJPopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MJPopupViewController.h"; sourceTree = "<group>"; };
@@ -1103,15 +1100,6 @@
 			path = "ALToastView-v0.0.1";
 			sourceTree = "<group>";
 		};
-		089590E119E3D514001471DA /* DDSlidingView-v1.0 */ = {
-			isa = PBXGroup;
-			children = (
-				089590E219E3D514001471DA /* DDSlidingView.h */,
-				089590E319E3D514001471DA /* DDSlidingView.m */,
-			);
-			path = "DDSlidingView-v1.0";
-			sourceTree = "<group>";
-		};
 		089590E419E3D514001471DA /* MJPopupViewController-v0.4 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1640,7 +1628,6 @@
 			isa = PBXGroup;
 			children = (
 				089590DE19E3D514001471DA /* ALToastView-v0.0.1 */,
-				089590E119E3D514001471DA /* DDSlidingView-v1.0 */,
 				089590E419E3D514001471DA /* MJPopupViewController-v0.4 */,
 				089590E919E3D514001471DA /* Objection-v1.4 */,
 				089590F719E3D514001471DA /* PopoverView-v0.0.2 */,
@@ -1930,7 +1917,6 @@
 				08E864131992564A007CF257 /* UIImage+Additions.m in Sources */,
 				08DE67CD19C05D8B00C25AEA /* JMTextInputControlCell.m in Sources */,
 				0851DFD819ACE27800DC6EDE /* JMCancelRequestPopup.m in Sources */,
-				0895910019E3D514001471DA /* DDSlidingView.m in Sources */,
 				08DE67C919C05D8B00C25AEA /* JMInputControlCell.m in Sources */,
 				08E93B1319AF8AC800B1DF8D /* JMMenuItemCell.m in Sources */,
 				08F340E919B0DEE90020DE6A /* JMFont.m in Sources */,
