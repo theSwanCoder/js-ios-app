@@ -18,23 +18,28 @@
 
 @end
 
-@interface JMResourcesListLoader : NSObject <JMResourceClientHolder, JMPagination>
+@interface JMResourcesListLoader : NSObject <JMResourceClientHolder, JMPagination> {
+    BOOL _isLoadingNow;
+    BOOL _needUpdateData;
+
+}
 
 @property (nonatomic, weak) id <JMResourcesListLoaderDelegate> delegate;
-@property (nonatomic, readonly) BOOL isLoadingNow;
 
 // Params for loading request.
 @property (nonatomic, weak) JSConstants *constants;
-@property (nonatomic, strong) NSArray *resourcesTypes;
 @property (nonatomic, strong) NSString *searchQuery;
+@property (nonatomic, assign) BOOL      loadRecursively;
+@property (nonatomic, strong) NSArray  *resourcesTypes;
 @property (nonatomic, strong) NSString *sortBy;
-@property (nonatomic, assign) BOOL loadRecursively;
 @property (nonatomic, strong) NSString *filterByTag;
-
-- (void)takeParametersFromNotificationUserInfo: (NSDictionary *)userInfo;
 
 - (void)setNeedsUpdate;
 
 - (void)updateIfNeeded;
+
+- (void)searchWithQuery:(NSString *)query;
+
+- (void)clearSearchResults;
 
 @end

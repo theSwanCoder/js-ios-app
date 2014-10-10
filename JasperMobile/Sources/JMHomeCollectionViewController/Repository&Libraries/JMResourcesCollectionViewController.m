@@ -17,40 +17,24 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMSavedResourcesListLoader.h"
 
-#import "DDSlidingView.h"
-
-#import "JMSearchable.h"
-#import "JMSearchBar.h"
-
-
-typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
-    JMResourcesRepresentationTypeHorizontalList = 0,
-    JMResourcesRepresentationTypeGrid = 1
-};
+NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationTypeHorizontalList; }
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() { return JMResourcesRepresentationTypeGrid; }
 
-static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
-
-@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, JMSearchBarDelegate, JMResourcesListLoaderDelegate>
-@property (weak, nonatomic) UINavigationController *masterNavigationController;
-
-@property (strong, nonatomic) DDSlidingView  *slideContainerView;
-@property (weak, nonatomic) IBOutlet UIView *contentContainerView;
+@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMResourcesListLoaderDelegate>
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 
-@property (strong, nonatomic) JMSearchBar *searchBar;
-
+@property (nonatomic, weak) IBOutlet UINavigationBar *searchBarPlaceholder;
+@property (nonatomic, strong) UISearchBar *searchBar;
 // Activity View
 @property (nonatomic, weak) IBOutlet UIView *activityView;
 @property (nonatomic, weak) IBOutlet UILabel *activityViewTitleLabel;
 // noResults view
-@property (nonatomic, weak) IBOutlet UIView *noResultsView;
 @property (nonatomic, weak) IBOutlet UILabel *noResultsViewTitleLabel;
 
-@property (nonatomic, assign) JMResourcesRepresentationType representationType;
+@property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
 
 @end
 
@@ -62,7 +46,11 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
-
+    
+    if (self.resourceListLoader.resourceLookup) {
+        self.title = self.resourceListLoader.resourceLookup.label;
+    }
+    
     self.activityViewTitleLabel.text = JMCustomLocalizedString(@"detail.resourcesloading.msg", nil);
     self.noResultsViewTitleLabel.text = JMCustomLocalizedString(@"detail.noresults.msg", nil);
     
@@ -79,75 +67,21 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
     [self.refreshControl addTarget:self action:@selector(refershControlAction:) forControlEvents:UIControlEventValueChanged];
     [self.collectionView addSubview:self.refreshControl];
     self.collectionView.alwaysBounceVertical = YES;
-    
-    self.resourceListLoader.resourcesTypes = @[self.resourceListLoader.constants.WS_TYPE_REPORT_UNIT, self.resourceListLoader.constants.WS_TYPE_DASHBOARD];
-    
-    // Will show horizontal list view controller
-    self.representationType = JMResourcesRepresentationTypeHorizontalList;
+        
     [self showNavigationItems];
-    
-    @try {
-        [self performSegueWithIdentifier:kJMMasterViewControllerSegue sender:self];
-    } @catch (NSException *exception) {
-        NSLog(@"No segue to master view controller");
-    }
-    if (![JMUtils isIphone]) {
-        [self.slideContainerView showSlider];
-    }
+    [self.resourceListLoader updateIfNeeded];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self.resourceListLoader updateIfNeeded];
-    
-    if ([JMUtils isIphone]) {
-        id visibleViewController = self.masterNavigationController.visibleViewController;
-        if ([visibleViewController conformsToProtocol:@protocol(JMSearchable)] && [visibleViewController currentQuery]) {
-            [self showSearchBarWithText:[visibleViewController currentQuery]];
-        }
-    }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
-        self.slideContainerView.hidden = YES;
-    }
-    
-    if ([JMUtils isIphone]) {
-        [self hideSearchBar];
-    }
-    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
     [self.collectionView reloadData];
-}
-
-- (DDSlidingView *) slideContainerView
-{
-    if (!_slideContainerView) {
-        UIImage * openImg = [UIImage imageNamed: @"open_panel"];
-        UIImage * closeImg = [UIImage imageNamed: @"close_panel"];
-        _slideContainerView = [[DDSlidingView alloc] initWithPosition: DDSliderPositionLeft image: openImg length: kJMMasterViewWidth];
-        _slideContainerView.animationDuration = 0.2f;
-        [_slideContainerView attachToView:self.view];
-        
-        NSLayoutConstraint *contentViewConstraint = [NSLayoutConstraint
-                                                     constraintWithItem:self.contentContainerView
-                                                     attribute:NSLayoutAttributeLeading
-                                                     relatedBy:NSLayoutRelationEqual
-                                                     toItem:_slideContainerView
-                                                     attribute:NSLayoutAttributeTrailing
-                                                     multiplier:1.0
-                                                     constant:0];
-        [self.view addConstraint:contentViewConstraint];
-        _slideContainerView.hideSliderImage = closeImg;
-    }
-    return _slideContainerView;
 }
 
 - (NSString *)resourceCellForRepresentationType:(JMResourcesRepresentationType)type
@@ -177,42 +111,22 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     id destinationViewController = segue.destinationViewController;
-    if ([segue.identifier isEqualToString:kJMMasterViewControllerSegue]) {
-        self.definesPresentationContext = YES;
-        [self addChildViewController:destinationViewController];
-        
-        [self.slideContainerView setControllerSubview: [destinationViewController view]];
-        self.slideContainerView.viewController = destinationViewController;
-        [destinationViewController didMoveToParentViewController:self];
-        
-        // FIXME = addConstraints
-        self.slideContainerView.clipsToBounds = YES;
-        
-        if ([destinationViewController isKindOfClass:[UINavigationController class]]) {
-            self.masterNavigationController = destinationViewController;
-        }
-    } else if ([self isResourceSegue:segue]) {
-        JSResourceLookup *resourcesLookup = [sender objectForKey:kJMResourceLookup];
+    JSResourceLookup *resourcesLookup = [sender objectForKey:kJMResourceLookup];
+    
+    if ([self isResourceSegue:segue]) {
         NSArray *inputControls = [sender objectForKey:kJMInputControls];
         [destinationViewController setInputControls:[inputControls mutableCopy]];
         [destinationViewController setResourceLookup:resourcesLookup];
+    } else if ([segue.identifier isEqualToString:kJMShowFolderContetnSegue]) {
+        JMResourcesListLoader * listLoader = [NSClassFromString(@"JMRepositoryListLoader") new];
+        listLoader.resourceLookup = resourcesLookup;
+        listLoader.delegate = destinationViewController;
+        [destinationViewController setResourceListLoader:listLoader];
+        [destinationViewController setRepresentationType:self.representationType];
     }
 }
 
-- (void)setResourceListLoader:(JMResourcesListLoader *)resourceListLoader
-{
-    _resourceListLoader = resourceListLoader;
-    self.resourceListLoader.delegate = self;
-}
-
 #pragma mark - Actions
-
-- (void)searchButtonTapped:(id)sender
-{
-    [self showSearchBarWithText:nil];
-    [self.searchBar becomeFirstResponder];
-}
-
 - (void)representationTypeButtonTapped:(id)sender
 {
     self.representationType = [self getNextRepresentationTypeForType:self.representationType];
@@ -221,10 +135,9 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
 
 - (void)refershControlAction:(id)sender
 {
-    id visibleViewController = self.masterNavigationController.visibleViewController;
-    if ([visibleViewController conformsToProtocol:@protocol(JMRefreshable)]) {
-        [visibleViewController refresh];
-    }
+    [self.refreshControl endRefreshing];
+    [self.resourceListLoader setNeedsUpdate];
+    [self.resourceListLoader updateIfNeeded];
 }
 
 - (void)setRepresentationType:(JMResourcesRepresentationType)representationType
@@ -240,8 +153,10 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
         [self performSegueWithIdentifier:kJMShowSavedRecourcesViewerSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
     } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_REPORT_UNIT]) {
         [self fetchInputControlsForReport:resourceLookup];
-    } else {
+    } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_DASHBOARD]) {
         [self performSegueWithIdentifier:kJMShowDashboardViewerSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
+    } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_FOLDER]) {
+        [self performSegueWithIdentifier:kJMShowFolderContetnSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
     }
 }
 
@@ -285,71 +200,88 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
     return flowLayout.itemSize;
 }
 
-#pragma mark - JMSearchBarDelegate
-
-- (void)searchBarSearchButtonClicked:(JMSearchBar *)searchBar
+#pragma mark - UISearchBarDelegate
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
-    NSString *query = searchBar.text;
-    id visibleViewController = self.masterNavigationController.visibleViewController;
-    if ([visibleViewController conformsToProtocol:@protocol(JMSearchable)]) {
-        if (![[visibleViewController currentQuery] isEqualToString:query]) {
-            [visibleViewController searchWithQuery:query];
-        }
-    }
+    searchBar.showsCancelButton = YES;
 }
 
-- (void)searchBarCancelButtonClicked:(JMSearchBar *) searchBar
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
 {
-    id visibleViewController = self.masterNavigationController.visibleViewController;
-    if ([visibleViewController conformsToProtocol:@protocol(JMSearchable)]) {
-        [visibleViewController didClearSearch];
-    }
+    searchBar.showsCancelButton = NO;
+}
 
-    [self hideSearchBar];
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+    [self.resourceListLoader searchWithQuery:searchBar.text];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+    searchBar.text = nil;
+    [self.resourceListLoader clearSearchResults];
 }
 
 #pragma mark - Utils
 
-- (void) showSearchBarWithText:(NSString *)text
+- (UISearchBar *)searchBar
 {
-    if (!self.searchBar) {
-        CGRect searchBarFrame = [JMUtils isIphone] ? self.navigationController.navigationBar.bounds : CGRectMake(0, 0, 320, 44);
-        self.searchBar =  [[JMSearchBar alloc] initWithFrame:searchBarFrame];
-        self.searchBar.delegate = self;
-        self.searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
-        self.searchBar.text = text;
+    if (!_searchBar) {
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(5, 0, 250, 34)];
+        _searchBar.searchBarStyle = UISearchBarStyleMinimal;
+        _searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
+        _searchBar.delegate = self;
     }
-
-    if ([JMUtils isIphone]) {
-        self.navigationItem.hidesBackButton = YES;
-        [self.navigationController.navigationBar addSubview:self.searchBar];
-    } else {
-        for (UIBarButtonItem *item in self.navigationItem.rightBarButtonItems) {
-            if (item.action  == @selector(searchButtonTapped:)) {
-                UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
-                [self replaceRightNavigationItem:item withItem:searchItem];
-                break;
-            }
-        }
-    }
-}
-
-- (void) hideSearchBar
-{
-    if ([JMUtils isIphone]) {
-        [self.searchBar removeFromSuperview];
-        self.navigationItem.hidesBackButton = NO;
-    } else {
-        [self showNavigationItems];
-    }
-    self.searchBar = nil;
+    return _searchBar;
 }
 
 - (void) showNavigationItems
 {
-    UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchButtonTapped:)];
-    UIBarButtonItem *representationTypeItem = [self resourceRepresentationItem];
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:representationTypeItem, searchItem, nil];
+    NSMutableArray *navBarItems = [NSMutableArray arrayWithObject:[self resourceRepresentationItem]];
+    
+    UIBarButtonItem *filterItem;
+    UIBarButtonItem *sortItem;
+    switch (self.resourcesType) {
+        case JMResourcesCollectionViewControllerType_Library:
+            filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:nil];
+        case JMResourcesCollectionViewControllerType_SavedItems:
+            sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"] style:UIBarButtonItemStyleBordered target:self action:nil];
+            break;
+        default:
+            break;
+    }
+    
+    if ([JMUtils isIphone]) {
+        self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        self.searchBarPlaceholder.topItem.titleView = self.searchBar;
+        NSMutableArray *searchBarPlaceholderItems = [NSMutableArray array];
+        if (sortItem) {
+            [searchBarPlaceholderItems addObject:sortItem];
+        }
+
+        if (filterItem) {
+            [searchBarPlaceholderItems addObject:filterItem];
+        }
+        
+        self.searchBarPlaceholder.topItem.rightBarButtonItems = searchBarPlaceholderItems;
+    } else {
+        if (sortItem) {
+            [navBarItems addObject:sortItem];
+        }
+        if (filterItem) {
+            [navBarItems addObject:filterItem];
+        }
+        
+        UIView *contentView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
+        contentView.backgroundColor = [UIColor clearColor];
+        [contentView addSubview:self.searchBar];
+        UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:contentView];
+        [navBarItems addObject:searchItem];
+    }
+    
+    self.navigationItem.rightBarButtonItems = navBarItems;
 }
 
 - (void) replaceRightNavigationItem:(UIBarButtonItem *)oldItem withItem:(UIBarButtonItem *)newItem
@@ -371,13 +303,33 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
     return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName] style:UIBarButtonItemStyleBordered target:self action:@selector(representationTypeButtonTapped:)];
 }
 
+- (JMResourcesListLoader *)resourceListLoader
+{
+    if (!_resourceListLoader) {
+        switch (self.resourcesType) {
+            case JMResourcesCollectionViewControllerType_Library:
+                _resourceListLoader = [NSClassFromString(@"JMLibraryListLoader") new];
+                break;
+            case JMResourcesCollectionViewControllerType_Repository:
+                _resourceListLoader = [NSClassFromString(@"JMRepositoryListLoader") new];
+                break;
+            case JMResourcesCollectionViewControllerType_SavedItems:
+                _resourceListLoader = [NSClassFromString(@"JMSavedResourcesListLoader") new];
+                break;
+            default:
+                break;
+        }
+        _resourceListLoader.delegate = self;
+    }
+    return _resourceListLoader;
+}
+
 #pragma mark - JMResourcesListLoaderDelegate
 - (void)resourceListDidStartLoading:(JMResourcesListLoader *)listLoader
 {
-    [self.refreshControl endRefreshing];
     [self.collectionView reloadData];
     self.activityView.hidden = NO;
-    self.noResultsView.hidden = YES;
+    self.noResultsViewTitleLabel.hidden = YES;
 }
 
 - (void)resourceListDidLoaded:(JMResourcesListLoader *)listLoader withError:(NSError *)error
@@ -386,7 +338,7 @@ static NSString * const kJMMasterViewControllerSegue = @"MasterViewController";
         self.activityView.hidden = YES;
         // TODO: add an error handler
     } else {
-        self.noResultsView.hidden = listLoader.resources.count > 0;
+        self.noResultsViewTitleLabel.hidden = listLoader.resources.count > 0;
         self.activityView.hidden = YES;
         [self.collectionView reloadData];
     }

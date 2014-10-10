@@ -13,15 +13,13 @@ static NSString * const kJMBooleanCellIdentifier = @"BooleanCell";
 static NSString * const kJMTextCellIdentifier = @"TextEditCell";
 static NSString * const kJMSecureTextCellIdentifier = @"SecureTextEditCell";
 static NSString * const kJMMakeActiveCellIdentifier = @"MakeActiveCell";
+
 @interface JMServerOptions ()
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, readwrite, strong) NSArray *optionsArray;
 @property (nonatomic, assign) BOOL isExistingServerProfile;
 @end
 
 @implementation JMServerOptions
-objection_requires(@"managedObjectContext")
-
 - (id)initWithServerProfile:(JMServerProfile *)serverProfile
 {
     self = [super init];
@@ -154,6 +152,11 @@ objection_requires(@"managedObjectContext")
     }
     
     self.optionsArray = optionsArray;
+}
+
+- (NSManagedObjectContext *)managedObjectContext
+{
+    return [JMUtils managedObjectContext];
 }
 
 @end

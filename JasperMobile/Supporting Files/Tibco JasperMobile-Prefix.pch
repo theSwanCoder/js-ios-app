@@ -14,6 +14,7 @@
     #import "Objection.h"
 
     #import "JMConstants.h"
+    #import "weakself.h"
     #import "JMUtils.h"
     #import "JMFont.h"
 

@@ -79,4 +79,11 @@ extern CGFloat kJMNoEdgesInset;
  */
 + (BOOL)isIphone;
 
+/**
+ Returns used in application NSManagedObjectContext
+ 
+ @return used in application NSManagedObjectContext
+ */
++ (NSManagedObjectContext *)managedObjectContext;
+
 @end

@@ -11,9 +11,8 @@
 
 @interface JMResourcesListLoader ()
 
-@property (nonatomic, readwrite) BOOL isLoadingNow;
 @property (nonatomic, assign) BOOL needUpdateData;
-
+@property (nonatomic, assign) BOOL isLoadingNow;
 @end
 
 
@@ -25,6 +24,8 @@ objection_requires(@"resourceClient", @"constants")
 @synthesize resourceClient = _resourceClient;
 @synthesize totalCount = _totalCount;
 @synthesize offset = _offset;
+@synthesize isLoadingNow = _isLoadingNow;
+@synthesize needUpdateData = _needUpdateData;
 
 #pragma mark - NSObject
 
@@ -35,17 +36,9 @@ objection_requires(@"resourceClient", @"constants")
         [[JSObjection defaultInjector] injectDependencies:self];
         self.isLoadingNow = NO;
         self.resources = [NSMutableArray array];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(loadResources:)
-                                                     name:kJMLoadResourcesInDetail
-                                                   object:nil];
+        [self setNeedsUpdate];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)setNeedsUpdate
@@ -55,39 +48,15 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)updateIfNeeded
 {
-    if (self.needUpdateData) {
-        self.needUpdateData = NO;
-        [self loadResources:nil];
-    }
-}
-
-- (void) takeParametersFromNotificationUserInfo:(NSDictionary *)userInfo
-{
-    if ([userInfo objectForKey:kJMResourcesTypes]) {
-        self.resourcesTypes = [userInfo objectForKey:kJMResourcesTypes];
-    }
-    self.loadRecursively = [[userInfo objectForKey:kJMLoadRecursively] boolValue];
-    self.resourceLookup = [userInfo objectForKey:kJMResourceLookup];
-    self.searchQuery = [userInfo objectForKey:kJMSearchQuery];
-    self.sortBy = [userInfo objectForKey:kJMSortBy];
-}
-
-
-#pragma mark - Observer Methods
-- (void)loadResources:(NSNotification *)notification
-{
-    // Reset state
-    self.totalCount = 0;
-    self.offset = 0;
-    
-    [self.resources removeAllObjects];
-    [self.delegate resourceListDidStartLoading:self];
-
-    if (!self.isLoadingNow) {
+    if (self.needUpdateData && !self.isLoadingNow) {
+        // Reset state
+        self.totalCount = 0;
+        self.offset = 0;
+        
+        [self.resources removeAllObjects];
+        [self.delegate resourceListDidStartLoading:self];
+        
         self.isLoadingNow = YES;
-        if (notification) {
-            [self takeParametersFromNotificationUserInfo:notification.userInfo];
-        }
         [self loadNextPage];
     }
 }
@@ -96,21 +65,22 @@ objection_requires(@"resourceClient", @"constants")
 
 - (void)loadNextPage
 {
-    __weak typeof(self)weakSelf = self;
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        if (!weakSelf.totalCount) {
-            weakSelf.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
+    self.needUpdateData = NO;
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+        if (!self.totalCount) {
+            self.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
         }
-        [weakSelf.resources addObjectsFromArray:result.objects];
-        weakSelf.offset += kJMResourceLimit;
+        [self.resources addObjectsFromArray:result.objects];
+        self.offset += kJMResourceLimit;
         
-        weakSelf.isLoadingNow = NO;
-        [weakSelf.delegate resourceListDidLoaded:weakSelf withError:nil];
+        self.isLoadingNow = NO;
+        [self.delegate resourceListDidLoaded:self withError:nil];
         
-    } errorBlock:^(JSOperationResult *result) {
-        weakSelf.isLoadingNow = NO;
-        [weakSelf.delegate resourceListDidLoaded:weakSelf withError:result.error];
-    }];
+    } @weakselfend
+    errorBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+        self.isLoadingNow = NO;
+        [self.delegate resourceListDidLoaded:self withError:result.error];
+    } @weakselfend];
     
     [self.resourceClient resourceLookups:self.resourceLookup.uri query:self.searchQuery types:self.resourcesTypes
                                   sortBy:self.sortBy recursive:self.loadRecursively offset:self.offset limit:kJMResourceLimit delegate:delegate];
@@ -119,6 +89,24 @@ objection_requires(@"resourceClient", @"constants")
 - (BOOL)hasNextPage
 {
     return self.offset < self.totalCount;
+}
+
+- (void)searchWithQuery:(NSString *)query
+{
+    if (![self.searchQuery isEqualToString:query]) {
+        self.searchQuery = query;
+        [self setNeedsUpdate];
+        [self updateIfNeeded];
+    }
+}
+
+- (void)clearSearchResults
+{
+    if (self.searchQuery) {
+        self.searchQuery = nil;
+        [self setNeedsUpdate];
+        [self updateIfNeeded];
+    }
 }
 
 @end

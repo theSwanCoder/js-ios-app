@@ -46,6 +46,8 @@ objection_requires(@"constants")
         self.resourceImage.image = [UIImage imageNamed:@"Report"];
     } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD]) {
         self.resourceImage.image = [UIImage imageNamed:@"Dashboard"];
+    } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_FOLDER]) {
+        self.resourceImage.image = [UIImage imageNamed:@"Folder"];
     }
 }
 @end

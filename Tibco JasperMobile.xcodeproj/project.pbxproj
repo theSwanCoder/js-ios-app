@@ -17,13 +17,6 @@
 		0810649A19C0A9D40000D7F3 /* JMFavorites+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 0810649919C0A9D40000D7F3 /* JMFavorites+Helpers.m */; };
 		0826E52D19C88FDB00179818 /* JMSaveReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0826E52C19C88FDB00179818 /* JMSaveReportViewController.m */; };
 		0837375819A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0837375719A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib */; };
-		083EFFB019C70A8E0021BF5E /* JMLibraryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 083EFFAF19C70A8E0021BF5E /* JMLibraryTableViewCell.m */; };
-		08504E6219BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08504E5E19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m */; };
-		08504E6319BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08504E6119BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.m */; };
-		08504E6719BA0F2C00C75F30 /* JMBackHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08504E6619BA0F2C00C75F30 /* JMBackHeaderView.m */; };
-		08504E6D19BA0F3300C75F30 /* JMMenuSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08504E6A19BA0F3300C75F30 /* JMMenuSectionView.m */; };
-		08504E6E19BA0F3300C75F30 /* JMMenuSectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08504E6B19BA0F3300C75F30 /* JMMenuSectionView.xib */; };
-		08504E6F19BA0F3300C75F30 /* JMMenuSectionView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08504E6C19BA0F3300C75F30 /* JMMenuSectionView~ipad.xib */; };
 		0851DFD719ACE27800DC6EDE /* JMAskPasswordDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFCE19ACE27800DC6EDE /* JMAskPasswordDialog.m */; };
 		0851DFD819ACE27800DC6EDE /* JMCancelRequestPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFD119ACE27800DC6EDE /* JMCancelRequestPopup.m */; };
 		0851DFD919ACE27800DC6EDE /* JMCancelRequestPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0851DFD219ACE27800DC6EDE /* JMCancelRequestPopup.xib */; };
@@ -32,7 +25,6 @@
 		086B715919CAEB5600CC25CA /* JMSavedResources+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 086B715819CAEB5600CC25CA /* JMSavedResources+Helpers.m */; };
 		086B716419CB045200CC25CA /* JMSavedResourceViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086B716319CB045200CC25CA /* JMSavedResourceViewerViewController.m */; };
 		086B716B19CB128600CC25CA /* JMSavedResourcesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 086B716A19CB128600CC25CA /* JMSavedResourcesListLoader.m */; };
-		086B717619CB177B00CC25CA /* JMMasterSavedRecourcesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086B717519CB177B00CC25CA /* JMMasterSavedRecourcesViewController.m */; };
 		0879E3CE19B0D46300DFE769 /* JMMakeActiveServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0879E3CD19B0D46300DFE769 /* JMMakeActiveServerOptionCell.m */; };
 		088115F219B8BB5700C70170 /* JMResourcesCollectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088115F119B8BB5700C70170 /* JMResourcesCollectionViewController.xib */; };
 		088115F719B8C63F00C70170 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088115F619B8C63F00C70170 /* JMHorizontalLoadingCollectionViewCell.xib */; };
@@ -40,6 +32,8 @@
 		088115FB19B8C7E700C70170 /* JMGridResourceCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088115FA19B8C7E700C70170 /* JMGridResourceCollectionViewCell.xib */; };
 		088115FD19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088115FC19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib */; };
 		0881967E199A1703008CF79B /* JMSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0881967D199A1703008CF79B /* JMSearchBar.m */; };
+		0884669A19E7BFE40061AE5E /* Icon-512.png in Resources */ = {isa = PBXBuildFile; fileRef = 0884669819E7BFE40061AE5E /* Icon-512.png */; };
+		0884669B19E7BFE40061AE5E /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 0884669919E7BFE40061AE5E /* Icon-1024.png */; };
 		0885657A19C1B60100B78B06 /* JMResourcesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0885657919C1B60100B78B06 /* JMResourcesListLoader.m */; };
 		08856DCD199370A30027DF56 /* JMServerSelectTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08856DCC199370A30027DF56 /* JMServerSelectTableViewCell.m */; };
 		08856DD619938A560027DF56 /* JMServerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08856DD519938A560027DF56 /* JMServerCollectionViewCell.m */; };
@@ -186,9 +180,13 @@
 		0895910419E3D514001471DA /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590F919E3D514001471DA /* PopoverView.m */; };
 		0895910519E3D514001471DA /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590FE19E3D514001471DA /* SSKeychain.m */; };
 		089C970219C8642B0010C135 /* JMResourceViewerActionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089C970119C8642B0010C135 /* JMResourceViewerActionsView.m */; };
+		08A0924719E7C91F001A2016 /* Folder.png in Resources */ = {isa = PBXBuildFile; fileRef = 08A0924519E7C91F001A2016 /* Folder.png */; };
+		08A0924D19E81634001A2016 /* refresh_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 08A0924C19E81634001A2016 /* refresh_action.png */; };
+		08A0925019E81647001A2016 /* sort_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 08A0924E19E81647001A2016 /* sort_action.png */; };
+		08A0925119E81647001A2016 /* sort_action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08A0924F19E81647001A2016 /* sort_action@2x.png */; };
+		08A43D2019E6F30100C0BA4D /* JMRepositoryListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A43D1F19E6F30100C0BA4D /* JMRepositoryListLoader.m */; };
 		08A7058119B488FE00C1B4C6 /* JMEditabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7058019B488FE00C1B4C6 /* JMEditabledViewController.m */; };
 		08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */; };
-		08D2A1A319BA095D00A4CF5A /* JMMasterResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D2A1A219BA095D00A4CF5A /* JMMasterResourceViewController.m */; };
 		08D6921F19929DB300C87A33 /* JMTextSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D6921E19929DB300C87A33 /* JMTextSettingsTableViewCell.m */; };
 		08DE67C619C05D8B00C25AEA /* JMBooleanInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67A619C05D8A00C25AEA /* JMBooleanInputControlCell.m */; };
 		08DE67C719C05D8B00C25AEA /* JMDateInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67A819C05D8A00C25AEA /* JMDateInputControlCell.m */; };
@@ -210,7 +208,6 @@
 		08DE67D719C05D8B00C25AEA /* JMResourceViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67C519C05D8B00C25AEA /* JMResourceViewerViewController.m */; };
 		08DE67DE19C0659A00C25AEA /* JMDashboardsViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67DD19C0659A00C25AEA /* JMDashboardsViewerViewController.m */; };
 		08E62C8319922B0B0081CA83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E62C8019922B0B0081CA83 /* main.m */; };
-		08E62D6A19922BA40081CA83 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E62CF619922BA40081CA83 /* iTunesArtwork.png */; };
 		08E62D6B19922BA40081CA83 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08E62CF819922BA40081CA83 /* Localizable.strings */; };
 		08E62D6E19922BA40081CA83 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08E62D0419922BA40081CA83 /* MainStoryboard_iPhone.storyboard */; };
 		08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 08E62D7019922F5A0081CA83 /* JasperMobile.xcdatamodeld */; };
@@ -302,18 +299,6 @@
 		0826E52B19C88FDB00179818 /* JMSaveReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSaveReportViewController.h; sourceTree = "<group>"; };
 		0826E52C19C88FDB00179818 /* JMSaveReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSaveReportViewController.m; sourceTree = "<group>"; };
 		0837375719A63E0500F498AD /* JMResourcesCollectionViewController~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMResourcesCollectionViewController~ipad.xib"; sourceTree = "<group>"; };
-		083EFFAE19C70A8E0021BF5E /* JMLibraryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLibraryTableViewCell.h; sourceTree = "<group>"; };
-		083EFFAF19C70A8E0021BF5E /* JMLibraryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLibraryTableViewCell.m; sourceTree = "<group>"; };
-		08504E5D19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterLibraryTableViewController.h; sourceTree = "<group>"; };
-		08504E5E19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMasterLibraryTableViewController.m; sourceTree = "<group>"; };
-		08504E6019BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterRepositoryTableViewController.h; sourceTree = "<group>"; };
-		08504E6119BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMasterRepositoryTableViewController.m; sourceTree = "<group>"; };
-		08504E6519BA0F2C00C75F30 /* JMBackHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBackHeaderView.h; sourceTree = "<group>"; };
-		08504E6619BA0F2C00C75F30 /* JMBackHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBackHeaderView.m; sourceTree = "<group>"; };
-		08504E6919BA0F3300C75F30 /* JMMenuSectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMenuSectionView.h; sourceTree = "<group>"; };
-		08504E6A19BA0F3300C75F30 /* JMMenuSectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMenuSectionView.m; sourceTree = "<group>"; };
-		08504E6B19BA0F3300C75F30 /* JMMenuSectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMMenuSectionView.xib; sourceTree = "<group>"; };
-		08504E6C19BA0F3300C75F30 /* JMMenuSectionView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMMenuSectionView~ipad.xib"; sourceTree = "<group>"; };
 		0851DFCD19ACE27800DC6EDE /* JMAskPasswordDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAskPasswordDialog.h; sourceTree = "<group>"; };
 		0851DFCE19ACE27800DC6EDE /* JMAskPasswordDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAskPasswordDialog.m; sourceTree = "<group>"; };
 		0851DFD019ACE27800DC6EDE /* JMCancelRequestPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCancelRequestPopup.h; sourceTree = "<group>"; };
@@ -332,8 +317,6 @@
 		086B716319CB045200CC25CA /* JMSavedResourceViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedResourceViewerViewController.m; sourceTree = "<group>"; };
 		086B716919CB128600CC25CA /* JMSavedResourcesListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedResourcesListLoader.h; sourceTree = "<group>"; };
 		086B716A19CB128600CC25CA /* JMSavedResourcesListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedResourcesListLoader.m; sourceTree = "<group>"; };
-		086B717419CB177B00CC25CA /* JMMasterSavedRecourcesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterSavedRecourcesViewController.h; sourceTree = "<group>"; };
-		086B717519CB177B00CC25CA /* JMMasterSavedRecourcesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMasterSavedRecourcesViewController.m; sourceTree = "<group>"; };
 		0879E3CC19B0D46300DFE769 /* JMMakeActiveServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMakeActiveServerOptionCell.h; sourceTree = "<group>"; };
 		0879E3CD19B0D46300DFE769 /* JMMakeActiveServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMakeActiveServerOptionCell.m; sourceTree = "<group>"; };
 		088115F119B8BB5700C70170 /* JMResourcesCollectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMResourcesCollectionViewController.xib; sourceTree = "<group>"; };
@@ -343,6 +326,8 @@
 		088115FC19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMHorizontalResourceCollectionViewCell.xib; sourceTree = "<group>"; };
 		0881967C199A1703008CF79B /* JMSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSearchBar.h; sourceTree = "<group>"; };
 		0881967D199A1703008CF79B /* JMSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSearchBar.m; sourceTree = "<group>"; };
+		0884669819E7BFE40061AE5E /* Icon-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-512.png"; sourceTree = "<group>"; };
+		0884669919E7BFE40061AE5E /* Icon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024.png"; sourceTree = "<group>"; };
 		0885657819C1B60100B78B06 /* JMResourcesListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourcesListLoader.h; sourceTree = "<group>"; };
 		0885657919C1B60100B78B06 /* JMResourcesListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesListLoader.m; sourceTree = "<group>"; };
 		08856DCB199370A30027DF56 /* JMServerSelectTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMServerSelectTableViewCell.h; sourceTree = "<group>"; };
@@ -512,11 +497,15 @@
 		089590FE19E3D514001471DA /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		089C970019C8642B0010C135 /* JMResourceViewerActionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceViewerActionsView.h; sourceTree = "<group>"; };
 		089C970119C8642B0010C135 /* JMResourceViewerActionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceViewerActionsView.m; sourceTree = "<group>"; };
+		08A0924519E7C91F001A2016 /* Folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Folder.png; sourceTree = "<group>"; };
+		08A0924C19E81634001A2016 /* refresh_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh_action.png; sourceTree = "<group>"; };
+		08A0924E19E81647001A2016 /* sort_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sort_action.png; sourceTree = "<group>"; };
+		08A0924F19E81647001A2016 /* sort_action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sort_action@2x.png"; sourceTree = "<group>"; };
+		08A43D1E19E6F30100C0BA4D /* JMRepositoryListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRepositoryListLoader.h; sourceTree = "<group>"; };
+		08A43D1F19E6F30100C0BA4D /* JMRepositoryListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRepositoryListLoader.m; sourceTree = "<group>"; };
 		08A7057F19B488FE00C1B4C6 /* JMEditabledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMEditabledViewController.h; sourceTree = "<group>"; };
 		08A7058019B488FE00C1B4C6 /* JMEditabledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMEditabledViewController.m; sourceTree = "<group>"; };
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		08D2A1A119BA095D00A4CF5A /* JMMasterResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMasterResourceViewController.h; sourceTree = "<group>"; };
-		08D2A1A219BA095D00A4CF5A /* JMMasterResourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMasterResourceViewController.m; sourceTree = "<group>"; };
 		08D6921D19929DB300C87A33 /* JMTextSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextSettingsTableViewCell.h; sourceTree = "<group>"; };
 		08D6921E19929DB300C87A33 /* JMTextSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextSettingsTableViewCell.m; sourceTree = "<group>"; };
 		08DE67A519C05D8A00C25AEA /* JMBooleanInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBooleanInputControlCell.h; sourceTree = "<group>"; };
@@ -557,7 +546,6 @@
 		08E62C7E19922B0B0081CA83 /* Tibco JasperMobile-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Tibco JasperMobile-Info.plist"; sourceTree = "<group>"; };
 		08E62C7F19922B0B0081CA83 /* Tibco JasperMobile-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tibco JasperMobile-Prefix.pch"; sourceTree = "<group>"; };
 		08E62C8019922B0B0081CA83 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		08E62CF619922BA40081CA83 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
 		08E62CF919922BA40081CA83 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		08E62CFA19922BA40081CA83 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		08E62CFB19922BA40081CA83 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -594,7 +582,6 @@
 		08E863DE1992564A007CF257 /* JMHomeCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMHomeCollectionViewController.m; sourceTree = "<group>"; };
 		08E863E01992564A007CF257 /* JMMainNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMainNavigationController.h; sourceTree = "<group>"; };
 		08E863E11992564A007CF257 /* JMMainNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMainNavigationController.m; sourceTree = "<group>"; };
-		08E863EC1992564A007CF257 /* JMSearchable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSearchable.h; sourceTree = "<group>"; };
 		08E863EE1992564A007CF257 /* JMPagination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPagination.h; sourceTree = "<group>"; };
 		08E863EF1992564A007CF257 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRefreshable.h; sourceTree = "<group>"; };
 		08E863F01992564A007CF257 /* JMReportClientHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportClientHolder.h; sourceTree = "<group>"; };
@@ -682,7 +669,6 @@
 		08025C971995197100A6063B /* Repository&Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				080F238219A77E06008758FA /* MasterViewControllers */,
 				0881967B199A1703008CF79B /* JMSearchBar */,
 				080F234619A77B23008758FA /* CollectionCells */,
 				08DE67A019C05D8A00C25AEA /* ResourceViewer */,
@@ -746,18 +732,6 @@
 			path = Xibs;
 			sourceTree = "<group>";
 		};
-		080F238219A77E06008758FA /* MasterViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				08504E5C19BA0F0D00C75F30 /* MasterLibrary */,
-				08504E5F19BA0F0D00C75F30 /* MasterRepository */,
-				086B717319CB177B00CC25CA /* MasterSavedRecources */,
-				08D2A1A119BA095D00A4CF5A /* JMMasterResourceViewController.h */,
-				08D2A1A219BA095D00A4CF5A /* JMMasterResourceViewController.m */,
-			);
-			path = MasterViewControllers;
-			sourceTree = "<group>";
-		};
 		0826E52A19C88FDB00179818 /* JMSaveReportViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -765,56 +739,6 @@
 				0826E52C19C88FDB00179818 /* JMSaveReportViewController.m */,
 			);
 			path = JMSaveReportViewController;
-			sourceTree = "<group>";
-		};
-		083EFFAD19C70A8E0021BF5E /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				083EFFAE19C70A8E0021BF5E /* JMLibraryTableViewCell.h */,
-				083EFFAF19C70A8E0021BF5E /* JMLibraryTableViewCell.m */,
-			);
-			path = Cells;
-			sourceTree = "<group>";
-		};
-		08504E5C19BA0F0D00C75F30 /* MasterLibrary */ = {
-			isa = PBXGroup;
-			children = (
-				083EFFAD19C70A8E0021BF5E /* Cells */,
-				08504E6819BA0F3300C75F30 /* JMMenuSectionView */,
-				08504E5D19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.h */,
-				08504E5E19BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m */,
-			);
-			path = MasterLibrary;
-			sourceTree = "<group>";
-		};
-		08504E5F19BA0F0D00C75F30 /* MasterRepository */ = {
-			isa = PBXGroup;
-			children = (
-				08504E6419BA0F2C00C75F30 /* JMBackHeaderView */,
-				08504E6019BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.h */,
-				08504E6119BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.m */,
-			);
-			path = MasterRepository;
-			sourceTree = "<group>";
-		};
-		08504E6419BA0F2C00C75F30 /* JMBackHeaderView */ = {
-			isa = PBXGroup;
-			children = (
-				08504E6519BA0F2C00C75F30 /* JMBackHeaderView.h */,
-				08504E6619BA0F2C00C75F30 /* JMBackHeaderView.m */,
-			);
-			path = JMBackHeaderView;
-			sourceTree = "<group>";
-		};
-		08504E6819BA0F3300C75F30 /* JMMenuSectionView */ = {
-			isa = PBXGroup;
-			children = (
-				08504E6919BA0F3300C75F30 /* JMMenuSectionView.h */,
-				08504E6A19BA0F3300C75F30 /* JMMenuSectionView.m */,
-				08504E6B19BA0F3300C75F30 /* JMMenuSectionView.xib */,
-				08504E6C19BA0F3300C75F30 /* JMMenuSectionView~ipad.xib */,
-			);
-			path = JMMenuSectionView;
 			sourceTree = "<group>";
 		};
 		0851DFB419ACE1F500DC6EDE /* CustomViews */ = {
@@ -872,15 +796,6 @@
 			path = JMSavedResourcesListLoader;
 			sourceTree = "<group>";
 		};
-		086B717319CB177B00CC25CA /* MasterSavedRecources */ = {
-			isa = PBXGroup;
-			children = (
-				086B717419CB177B00CC25CA /* JMMasterSavedRecourcesViewController.h */,
-				086B717519CB177B00CC25CA /* JMMasterSavedRecourcesViewController.m */,
-			);
-			path = MasterSavedRecources;
-			sourceTree = "<group>";
-		};
 		0881967B199A1703008CF79B /* JMSearchBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -893,6 +808,7 @@
 		0885657719C1B60100B78B06 /* JMResourcesListLoader */ = {
 			isa = PBXGroup;
 			children = (
+				08A43D1D19E6F30100C0BA4D /* JMRepositoryListLoader */,
 				086B716819CB128600CC25CA /* JMSavedResourcesListLoader */,
 				08625F6A19C2EE4C0087684E /* JMLibraryListLoader */,
 				0885657819C1B60100B78B06 /* JMResourcesListLoader.h */,
@@ -964,8 +880,11 @@
 				089587C519CC6D14002FFF5E /* previous_action_item@2x~ipad.png */,
 				089587C619CC6D14002FFF5E /* previous_action_item~ipad.png */,
 				089587C819CC6D14002FFF5E /* refresh_action@2x.png */,
+				08A0924C19E81634001A2016 /* refresh_action.png */,
 				089587C919CC6D14002FFF5E /* save_action.png */,
 				089587CA19CC6D14002FFF5E /* save_action@2x.png */,
+				08A0924E19E81647001A2016 /* sort_action.png */,
+				08A0924F19E81647001A2016 /* sort_action@2x.png */,
 			);
 			path = action_Items;
 			sourceTree = "<group>";
@@ -1038,6 +957,8 @@
 		089587F519CC6D14002FFF5E /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				0884669819E7BFE40061AE5E /* Icon-512.png */,
+				0884669919E7BFE40061AE5E /* Icon-1024.png */,
 				089587F619CC6D14002FFF5E /* Icon-114.png */,
 				089587F719CC6D14002FFF5E /* Icon-120.png */,
 				089587F819CC6D14002FFF5E /* Icon-144.png */,
@@ -1102,6 +1023,7 @@
 		0895881519CC6D14002FFF5E /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				08A0924519E7C91F001A2016 /* Folder.png */,
 				0895881619CC6D14002FFF5E /* accessory_arrow.png */,
 				0895881719CC6D14002FFF5E /* accessory_arrow@2x.png */,
 				0895881819CC6D14002FFF5E /* Dashboard.png */,
@@ -1257,6 +1179,15 @@
 			path = JMResourceViewerActionsView;
 			sourceTree = "<group>";
 		};
+		08A43D1D19E6F30100C0BA4D /* JMRepositoryListLoader */ = {
+			isa = PBXGroup;
+			children = (
+				08A43D1E19E6F30100C0BA4D /* JMRepositoryListLoader.h */,
+				08A43D1F19E6F30100C0BA4D /* JMRepositoryListLoader.m */,
+			);
+			path = JMRepositoryListLoader;
+			sourceTree = "<group>";
+		};
 		08A7057D19B488FE00C1B4C6 /* BaseClasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -1382,7 +1313,6 @@
 			isa = PBXGroup;
 			children = (
 				F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */,
-				08E62CF619922BA40081CA83 /* iTunesArtwork.png */,
 				08E62D6F19922F5A0081CA83 /* CoreData */,
 				089587AE19CC6D14002FFF5E /* Images */,
 				08E62CF719922BA40081CA83 /* Localizable */,
@@ -1502,7 +1432,6 @@
 			isa = PBXGroup;
 			children = (
 				0867B5B419B5E6A4008F2A74 /* JMInputControlsHolder.h */,
-				08E863EC1992564A007CF257 /* JMSearchable.h */,
 				08E863EE1992564A007CF257 /* JMPagination.h */,
 				08E863EF1992564A007CF257 /* JMRefreshable.h */,
 				08E863F01992564A007CF257 /* JMReportClientHolder.h */,
@@ -1830,11 +1759,12 @@
 				0895885F19CC6D15002FFF5E /* save_action@2x.png in Resources */,
 				089588CA19CC6D15002FFF5E /* settings_bar_item@2x.png in Resources */,
 				0895889D19CC6D15002FFF5E /* library.png in Resources */,
+				08A0925019E81647001A2016 /* sort_action.png in Resources */,
 				089588C519CC6D15002FFF5E /* repository_bar_item.png in Resources */,
 				088115F919B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib in Resources */,
 				0895887419CC6D15002FFF5E /* make_favorite_item.png in Resources */,
+				08A0924D19E81634001A2016 /* refresh_action.png in Resources */,
 				0895889B19CC6D15002FFF5E /* servers~ipad.png in Resources */,
-				08504E6E19BA0F3300C75F30 /* JMMenuSectionView.xib in Resources */,
 				089588AF19CC6D15002FFF5E /* res_type_all.png in Resources */,
 				089588A819CC6D15002FFF5E /* list_background_pattern.png in Resources */,
 				0895887819CC6D15002FFF5E /* grid_button.png in Resources */,
@@ -1882,6 +1812,7 @@
 				080F235619A77B23008758FA /* JMGridLoadingCollectionViewCell~ipad.xib in Resources */,
 				0895886F19CC6D15002FFF5E /* delete_item@2x.png in Resources */,
 				0895884719CC6D15002FFF5E /* delete_action@2x.png in Resources */,
+				08A0924719E7C91F001A2016 /* Folder.png in Resources */,
 				0895884919CC6D15002FFF5E /* edit_action@2x.png in Resources */,
 				089588C719CC6D15002FFF5E /* saved_reports.png in Resources */,
 				0895888B19CC6D15002FFF5E /* Icon-80.png in Resources */,
@@ -1899,8 +1830,8 @@
 				0895886719CC6D15002FFF5E /* add_item@2x.png in Resources */,
 				089588B219CC6D15002FFF5E /* res_type_dashboard@2x.png in Resources */,
 				089588BA19CC6D15002FFF5E /* res_type_pdf@2x.png in Resources */,
-				08504E6F19BA0F3300C75F30 /* JMMenuSectionView~ipad.xib in Resources */,
 				0895886819CC6D15002FFF5E /* apply_item.png in Resources */,
+				0884669A19E7BFE40061AE5E /* Icon-512.png in Resources */,
 				0895888919CC6D15002FFF5E /* Icon-72.png in Resources */,
 				0895888119CC6D15002FFF5E /* search_item@2x.png in Resources */,
 				0895884E19CC6D15002FFF5E /* first_action_item@2x~ipad.png in Resources */,
@@ -1940,6 +1871,7 @@
 				089588A419CC6D15002FFF5E /* dot.png in Resources */,
 				0895885619CC6D15002FFF5E /* next_action_item@2x~ipad.png in Resources */,
 				0895886919CC6D15002FFF5E /* apply_item@2x.png in Resources */,
+				08A0925119E81647001A2016 /* sort_action@2x.png in Resources */,
 				0895887C19CC6D15002FFF5E /* vertical_list_button.png in Resources */,
 				0895885519CC6D15002FFF5E /* next_action_item@2x.png in Resources */,
 				0895886B19CC6D15002FFF5E /* back_item@2x.png in Resources */,
@@ -1957,10 +1889,10 @@
 				089588C819CC6D15002FFF5E /* saved_reports@2x.png in Resources */,
 				089588B319CC6D15002FFF5E /* res_type_folder.png in Resources */,
 				089588A619CC6D15002FFF5E /* home_logo.png in Resources */,
+				0884669B19E7BFE40061AE5E /* Icon-1024.png in Resources */,
 				089588A919CC6D15002FFF5E /* navBarBackgroundImage.png in Resources */,
 				0895888619CC6D15002FFF5E /* Icon-114.png in Resources */,
 				0895889219CC6D15002FFF5E /* Default-Landscape~ipad.png in Resources */,
-				08E62D6A19922BA40081CA83 /* iTunesArtwork.png in Resources */,
 				08E62D6E19922BA40081CA83 /* MainStoryboard_iPhone.storyboard in Resources */,
 				089588BF19CC6D15002FFF5E /* res_type_unknown.png in Resources */,
 				080F235B19A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib in Resources */,
@@ -1996,13 +1928,10 @@
 				0826E52D19C88FDB00179818 /* JMSaveReportViewController.m in Sources */,
 				08FF12EA199297FE0082265D /* JMSettings.m in Sources */,
 				08E864131992564A007CF257 /* UIImage+Additions.m in Sources */,
-				08504E6D19BA0F3300C75F30 /* JMMenuSectionView.m in Sources */,
 				08DE67CD19C05D8B00C25AEA /* JMTextInputControlCell.m in Sources */,
 				0851DFD819ACE27800DC6EDE /* JMCancelRequestPopup.m in Sources */,
-				083EFFB019C70A8E0021BF5E /* JMLibraryTableViewCell.m in Sources */,
 				0895910019E3D514001471DA /* DDSlidingView.m in Sources */,
 				08DE67C919C05D8B00C25AEA /* JMInputControlCell.m in Sources */,
-				08504E6319BA0F0D00C75F30 /* JMMasterRepositoryTableViewController.m in Sources */,
 				08E93B1319AF8AC800B1DF8D /* JMMenuItemCell.m in Sources */,
 				08F340E919B0DEE90020DE6A /* JMFont.m in Sources */,
 				08E864191992564A007CF257 /* JMFavorites.m in Sources */,
@@ -2011,14 +1940,12 @@
 				086B715919CAEB5600CC25CA /* JMSavedResources+Helpers.m in Sources */,
 				08E864141992564A007CF257 /* UITableViewCell+Additions.m in Sources */,
 				08E8642A1992564A007CF257 /* JMUtils.m in Sources */,
-				086B717619CB177B00CC25CA /* JMMasterSavedRecourcesViewController.m in Sources */,
 				0879E3CE19B0D46300DFE769 /* JMMakeActiveServerOptionCell.m in Sources */,
 				08FF131819929B080082265D /* JMTextServerOptionCell.m in Sources */,
 				08E864121992564A007CF257 /* UIColor+RGBComponent.m in Sources */,
 				08856DD619938A560027DF56 /* JMServerCollectionViewCell.m in Sources */,
 				08FF12EB199297FE0082265D /* JMSettingsItem.m in Sources */,
 				08FF130B1992982F0082265D /* JMServerOptionsViewController.m in Sources */,
-				08504E6719BA0F2C00C75F30 /* JMBackHeaderView.m in Sources */,
 				08DE67D619C05D8B00C25AEA /* JMReportViewerViewController.m in Sources */,
 				08DE67DE19C0659A00C25AEA /* JMDashboardsViewerViewController.m in Sources */,
 				08E864271992564A007CF257 /* JMLocalization.m in Sources */,
@@ -2039,10 +1966,8 @@
 				08E864101992564A007CF257 /* JSRESTBase+updateServerInfo.m in Sources */,
 				08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */,
 				089C970219C8642B0010C135 /* JMResourceViewerActionsView.m in Sources */,
-				08504E6219BA0F0D00C75F30 /* JMMasterLibraryTableViewController.m in Sources */,
 				08E864171992564A007CF257 /* UIViewController+fetchInputControls.m in Sources */,
 				08E864231992564A007CF257 /* JMNoAnimationPushSegue.m in Sources */,
-				08D2A1A319BA095D00A4CF5A /* JMMasterResourceViewController.m in Sources */,
 				08DE67CC19C05D8B00C25AEA /* JMSingleSelectInputControlCell.m in Sources */,
 				0895910119E3D514001471DA /* MJPopupBackgroundView.m in Sources */,
 				0895910419E3D514001471DA /* PopoverView.m in Sources */,
@@ -2075,6 +2000,7 @@
 				08E864221992564A007CF257 /* JMManualTransitionSegue.m in Sources */,
 				08E8641D1992564A007CF257 /* JMHomeCollectionViewController.m in Sources */,
 				08FF130C1992982F0082265D /* JMServerOption.m in Sources */,
+				08A43D2019E6F30100C0BA4D /* JMRepositoryListLoader.m in Sources */,
 				08025CE11995231E00A6063B /* JMResourcesCollectionViewController.m in Sources */,
 				08FF130D1992982F0082265D /* JMServerOptions.m in Sources */,
 			);

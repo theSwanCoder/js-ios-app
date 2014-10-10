@@ -85,8 +85,11 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 {
     id viewController = segue.destinationViewController;
     [viewController setTitle:sender];
-    if ([viewController respondsToSelector:@selector(setResourceListLoader:)]) {
-        [viewController setResourceListLoader:[self resourceListLoaderForSequeIdentifier:segue.identifier]];
+    if ([viewController respondsToSelector:@selector(setResourcesType:)]) {
+        [viewController setResourcesType:[self resourcesTypeForSequeIdentifier:segue.identifier]];
+    }
+    if ([viewController respondsToSelector:@selector(setRepresentationType:)]) {
+        [viewController setRepresentationType:JMResourcesRepresentationTypeHorizontalList];
     }
 }
 
@@ -135,17 +138,17 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     return insets;
 }
 
-- (JMResourcesListLoader *)resourceListLoaderForSequeIdentifier:(NSString *)identifier
+- (JMResourcesCollectionViewControllerType)resourcesTypeForSequeIdentifier:(NSString *)identifier
 {
     if ([identifier isEqualToString:[NSString stringWithFormat:@"Show%@", kJMMenuItemLibrary]]) {
-        return [NSClassFromString(@"JMLibraryListLoader") new];
+        return JMResourcesCollectionViewControllerType_Library;
     } else if ([identifier isEqualToString:[NSString stringWithFormat:@"Show%@", kJMMenuItemRepository]]) {
-        return [NSClassFromString(@"JMResourcesListLoader") new];
+        return JMResourcesCollectionViewControllerType_Repository;
     } else if ([identifier isEqualToString:[NSString stringWithFormat:@"Show%@", kJMMenuItemSavedItems]]) {
-        return [NSClassFromString(@"JMSavedResourcesListLoader") new];
+        return JMResourcesCollectionViewControllerType_SavedItems;
     }
 
-    return nil;
+    return JMResourcesCollectionViewControllerType_None;
 }
 
 @end

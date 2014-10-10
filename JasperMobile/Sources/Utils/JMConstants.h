@@ -48,10 +48,6 @@ extern NSString * const kJMResetApplicationNotification;
 extern NSString * const kJMFavoritesDidChangedNotification;
 extern NSString * const kJMSavedResourcesDidChangedNotification;
 
-// Notifications used to connect master and detail view controllers
-extern NSString * const kJMLoadResourcesInDetail;
-
-
 // Shared keys for dictionary
 extern NSString * const kJMServerProfileKey;
 extern NSString * const kJMResourceLookup;

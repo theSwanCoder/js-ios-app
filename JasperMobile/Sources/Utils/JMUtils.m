@@ -101,4 +101,10 @@ CGFloat kJMNoEdgesInset = -1;
 
 }
 
++ (NSManagedObjectContext *)managedObjectContext
+{
+    JSObjectionInjector *injector = [JSObjection defaultInjector];
+    return [injector getObject:[NSManagedObjectContext class]];
+}
+
 @end

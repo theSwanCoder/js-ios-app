@@ -121,8 +121,7 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
 
 + (NSManagedObjectContext *)managedObjectContext
 {
-    JSObjectionInjector *injector = [JSObjection defaultInjector];
-    return [injector getObject:[NSManagedObjectContext class]];
+    return [JMUtils managedObjectContext];
 }
 
 @end

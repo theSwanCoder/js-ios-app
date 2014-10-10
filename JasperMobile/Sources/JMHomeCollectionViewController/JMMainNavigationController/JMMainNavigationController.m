@@ -20,7 +20,10 @@
     [[UINavigationBar appearance] setBarTintColor: kJMMainNavigationBarBackgroundColor];
     [[UIToolbar appearance] setBarTintColor: kJMMainNavigationBarBackgroundColor];
 
-    [self.navigationBar setTintColor: [UIColor whiteColor]];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor lightTextColor]}];
+    
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    
     [self.toolbar setTintColor: [UIColor whiteColor]];
 
     NSDictionary *textTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [JMFont navigationBarTitleFont], NSFontAttributeName, nil];

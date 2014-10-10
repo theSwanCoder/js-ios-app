@@ -83,8 +83,7 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 + (NSManagedObjectContext *)managedObjectContext
 {
-    JSObjectionInjector *injector = [JSObjection defaultInjector];
-    return [injector getObject:[NSManagedObjectContext class]];
+    return [JMUtils managedObjectContext];
 }
 
 + (NSFetchRequest *)savedReportsFetchRequest:(NSString *)resourceName

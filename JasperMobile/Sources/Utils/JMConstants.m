@@ -45,10 +45,6 @@ NSString * const kJMResetApplicationNotification = @"resetApplication";
 NSString * const kJMFavoritesDidChangedNotification = @"JMFavoritesDidChangedNotification";
 NSString * const kJMSavedResourcesDidChangedNotification = @"JMSavedResourcesDidChangedNotification";
 
-// Notifications used to connect master and detail view controllers
-NSString * const kJMLoadResourcesInDetail = @"loadResourcesInDetail";
-
-
 // Shared keys for NSDictionary
 NSString * const kJMServerProfileKey = @"serverProfile";
 NSString * const kJMResourceLookup = @"resourceLookup";

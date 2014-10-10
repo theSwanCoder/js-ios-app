@@ -59,8 +59,7 @@ NSString * const kJMFavorites = @"Favorites";
 
 + (NSManagedObjectContext *)managedObjectContext
 {
-    JSObjectionInjector *injector = [JSObjection defaultInjector];
-    return [injector getObject:[NSManagedObjectContext class]];
+    return [JMUtils managedObjectContext];
 }
 
 + (NSFetchRequest *)favoritesFetchRequest:(NSString *)resourceUri
