@@ -186,6 +186,11 @@
 		08A43D2019E6F30100C0BA4D /* JMRepositoryListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A43D1F19E6F30100C0BA4D /* JMRepositoryListLoader.m */; };
 		08A7058119B488FE00C1B4C6 /* JMEditabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7058019B488FE00C1B4C6 /* JMEditabledViewController.m */; };
 		08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */; };
+		08D27B7C19EBE4BF00994F08 /* JMFilterOptionsPopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D27B7719EBE4BF00994F08 /* JMFilterOptionsPopupView.m */; };
+		08D27B7D19EBE4BF00994F08 /* JMSortOptionsPopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D27B7A19EBE4BF00994F08 /* JMSortOptionsPopupView.m */; };
+		08D27B7E19EBE4BF00994F08 /* JMSortOptionsPopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08D27B7B19EBE4BF00994F08 /* JMSortOptionsPopupView.xib */; };
+		08D27B8019EBE5EE00994F08 /* JMFilterOptionsPopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08D27B7F19EBE5EE00994F08 /* JMFilterOptionsPopupView.xib */; };
+		08D3E29319EBB82100F37DF4 /* JMPopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D3E29019EBB82100F37DF4 /* JMPopupView.m */; };
 		08D6921F19929DB300C87A33 /* JMTextSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D6921E19929DB300C87A33 /* JMTextSettingsTableViewCell.m */; };
 		08DE67C619C05D8B00C25AEA /* JMBooleanInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67A619C05D8A00C25AEA /* JMBooleanInputControlCell.m */; };
 		08DE67C719C05D8B00C25AEA /* JMDateInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67A819C05D8A00C25AEA /* JMDateInputControlCell.m */; };
@@ -503,6 +508,14 @@
 		08A7057F19B488FE00C1B4C6 /* JMEditabledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMEditabledViewController.h; sourceTree = "<group>"; };
 		08A7058019B488FE00C1B4C6 /* JMEditabledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMEditabledViewController.m; sourceTree = "<group>"; };
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		08D27B7619EBE4BF00994F08 /* JMFilterOptionsPopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFilterOptionsPopupView.h; sourceTree = "<group>"; };
+		08D27B7719EBE4BF00994F08 /* JMFilterOptionsPopupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFilterOptionsPopupView.m; sourceTree = "<group>"; };
+		08D27B7919EBE4BF00994F08 /* JMSortOptionsPopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSortOptionsPopupView.h; sourceTree = "<group>"; };
+		08D27B7A19EBE4BF00994F08 /* JMSortOptionsPopupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSortOptionsPopupView.m; sourceTree = "<group>"; };
+		08D27B7B19EBE4BF00994F08 /* JMSortOptionsPopupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMSortOptionsPopupView.xib; sourceTree = "<group>"; };
+		08D27B7F19EBE5EE00994F08 /* JMFilterOptionsPopupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMFilterOptionsPopupView.xib; sourceTree = "<group>"; };
+		08D3E28F19EBB82100F37DF4 /* JMPopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPopupView.h; sourceTree = "<group>"; };
+		08D3E29019EBB82100F37DF4 /* JMPopupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPopupView.m; sourceTree = "<group>"; };
 		08D6921D19929DB300C87A33 /* JMTextSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextSettingsTableViewCell.h; sourceTree = "<group>"; };
 		08D6921E19929DB300C87A33 /* JMTextSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextSettingsTableViewCell.m; sourceTree = "<group>"; };
 		08DE67A519C05D8A00C25AEA /* JMBooleanInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBooleanInputControlCell.h; sourceTree = "<group>"; };
@@ -741,6 +754,7 @@
 		0851DFB419ACE1F500DC6EDE /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				08D3E28819EBB82100F37DF4 /* JMPopupView */,
 				0851DFCC19ACE27800DC6EDE /* JMAskPasswordDialog */,
 				0851DFCF19ACE27800DC6EDE /* JMCancelRequestPopup */,
 			);
@@ -1191,6 +1205,37 @@
 				08A7058019B488FE00C1B4C6 /* JMEditabledViewController.m */,
 			);
 			path = JMEditabledViewController;
+			sourceTree = "<group>";
+		};
+		08D27B7519EBE4BF00994F08 /* JMFilterOptionsPopupView */ = {
+			isa = PBXGroup;
+			children = (
+				08D27B7619EBE4BF00994F08 /* JMFilterOptionsPopupView.h */,
+				08D27B7719EBE4BF00994F08 /* JMFilterOptionsPopupView.m */,
+				08D27B7F19EBE5EE00994F08 /* JMFilterOptionsPopupView.xib */,
+			);
+			path = JMFilterOptionsPopupView;
+			sourceTree = "<group>";
+		};
+		08D27B7819EBE4BF00994F08 /* JMSortOptionsPopupView */ = {
+			isa = PBXGroup;
+			children = (
+				08D27B7919EBE4BF00994F08 /* JMSortOptionsPopupView.h */,
+				08D27B7A19EBE4BF00994F08 /* JMSortOptionsPopupView.m */,
+				08D27B7B19EBE4BF00994F08 /* JMSortOptionsPopupView.xib */,
+			);
+			path = JMSortOptionsPopupView;
+			sourceTree = "<group>";
+		};
+		08D3E28819EBB82100F37DF4 /* JMPopupView */ = {
+			isa = PBXGroup;
+			children = (
+				08D27B7519EBE4BF00994F08 /* JMFilterOptionsPopupView */,
+				08D27B7819EBE4BF00994F08 /* JMSortOptionsPopupView */,
+				08D3E28F19EBB82100F37DF4 /* JMPopupView.h */,
+				08D3E29019EBB82100F37DF4 /* JMPopupView.m */,
+			);
+			path = JMPopupView;
 			sourceTree = "<group>";
 		};
 		08DE67A019C05D8A00C25AEA /* ResourceViewer */ = {
@@ -1775,6 +1820,7 @@
 				089588B519CC6D15002FFF5E /* res_type_html.png in Resources */,
 				088115FD19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
 				089588BE19CC6D15002FFF5E /* res_type_text@2x.png in Resources */,
+				08D27B8019EBE5EE00994F08 /* JMFilterOptionsPopupView.xib in Resources */,
 				0895885D19CC6D15002FFF5E /* refresh_action@2x.png in Resources */,
 				0895888519CC6D15002FFF5E /* open_panel@2x.png in Resources */,
 				0895887A19CC6D15002FFF5E /* horizontal_list_button.png in Resources */,
@@ -1784,6 +1830,7 @@
 				089588BB19CC6D15002FFF5E /* res_type_report.png in Resources */,
 				0895886619CC6D15002FFF5E /* add_item.png in Resources */,
 				0895887619CC6D15002FFF5E /* refresh_item.png in Resources */,
+				08D27B7E19EBE4BF00994F08 /* JMSortOptionsPopupView.xib in Resources */,
 				0895887719CC6D15002FFF5E /* refresh_item@2x.png in Resources */,
 				0895885319CC6D15002FFF5E /* last_action_item~ipad.png in Resources */,
 				088115F219B8BB5700C70170 /* JMResourcesCollectionViewController.xib in Resources */,
@@ -1940,6 +1987,8 @@
 				0895910219E3D514001471DA /* UIViewController+MJPopupViewController.m in Sources */,
 				08E864161992564A007CF257 /* UIView+Additions.m in Sources */,
 				08E8641B1992564A007CF257 /* JMServerProfile.m in Sources */,
+				08D27B7C19EBE4BF00994F08 /* JMFilterOptionsPopupView.m in Sources */,
+				08D3E29319EBB82100F37DF4 /* JMPopupView.m in Sources */,
 				08FF130A1992982F0082265D /* JMServerOptionCell.m in Sources */,
 				08E62C8319922B0B0081CA83 /* main.m in Sources */,
 				0810649A19C0A9D40000D7F3 /* JMFavorites+Helpers.m in Sources */,
@@ -1955,6 +2004,7 @@
 				08E864171992564A007CF257 /* UIViewController+fetchInputControls.m in Sources */,
 				08E864231992564A007CF257 /* JMNoAnimationPushSegue.m in Sources */,
 				08DE67CC19C05D8B00C25AEA /* JMSingleSelectInputControlCell.m in Sources */,
+				08D27B7D19EBE4BF00994F08 /* JMSortOptionsPopupView.m in Sources */,
 				0895910119E3D514001471DA /* MJPopupBackgroundView.m in Sources */,
 				0895910419E3D514001471DA /* PopoverView.m in Sources */,
 				08E864251992564A007CF257 /* JMConstants.m in Sources */,

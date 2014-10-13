@@ -96,6 +96,9 @@
 
 /* Master view */
 
+"repository.root.organization" = "Organization";
+"repository.root.public" = "Public";
+
 // Resources
 "master.base.resources.title" = "Browse";
 

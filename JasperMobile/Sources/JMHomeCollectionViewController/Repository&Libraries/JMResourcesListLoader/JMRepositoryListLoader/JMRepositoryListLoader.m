@@ -13,11 +13,10 @@
 {
     self = [super init];
     if (self) {
-        self.resourcesTypes = @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD, self.constants.WS_TYPE_FOLDER];
-        self.searchQuery = nil;
-        self.sortBy = @"label";
+        self.resourcesType = JMResourcesListLoaderObjectType_RepositoryAll;
+        self.filterBy = JMResourcesListLoaderFilterBy_None;
+        self.sortBy = JMResourcesListLoaderSortBy_Name;
         self.loadRecursively = NO;
-        self.filterByTag = nil;
     }
     return self;
 }
@@ -27,18 +26,17 @@
     if (self.resourceLookup) {
         [super loadNextPage];
     } else {
-        JSResourceLookup *rootResourceLookup = [[JSResourceLookup alloc] init];
-        rootResourceLookup.label = @"Organization";
-        rootResourceLookup.uri = @"/";
-        rootResourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
-        [self.resources addObject:rootResourceLookup];
-        
-        JSResourceLookup *publicResourceLookup = [[JSResourceLookup alloc] init];
-        publicResourceLookup.label = @"Public";
-        publicResourceLookup.uri = @"/public";
-        publicResourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
-        [self.resources addObject:publicResourceLookup];
-        
+        NSArray *baseFolders = @[@{@"folderName" : JMCustomLocalizedString(@"repository.root.organization", nil), @"folderURI" : @"/"},
+                                 @{@"folderName" : JMCustomLocalizedString(@"repository.root.public", nil), @"folderURI" : @"/public"}];
+        for (NSDictionary *folder in baseFolders) {
+            if (!self.searchQuery || (self.searchQuery && [[folder objectForKey:@"folderName"] rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound)) {
+                JSResourceLookup *rootResourceLookup = [[JSResourceLookup alloc] init];
+                rootResourceLookup.label = [folder objectForKey:@"folderName"];
+                rootResourceLookup.uri = [folder objectForKey:@"folderURI"];
+                rootResourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
+                [self.resources addObject:rootResourceLookup];
+            }
+        }
         _needUpdateData = NO;
         _isLoadingNow = NO;
         [self.delegate resourceListDidLoaded:self withError:nil];

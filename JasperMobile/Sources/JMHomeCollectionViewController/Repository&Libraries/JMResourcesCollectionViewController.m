@@ -17,12 +17,16 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMSavedResourcesListLoader.h"
 
+#import "JMSortOptionsPopupView.h"
+#import "JMFilterOptionsPopupView.h"
+
+
 NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationTypeHorizontalList; }
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() { return JMResourcesRepresentationTypeGrid; }
 
-@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMResourcesListLoaderDelegate>
+@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMResourcesListLoaderDelegate, JMPopupViewDelegate>
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 
@@ -140,6 +144,21 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self.resourceListLoader updateIfNeeded];
 }
 
+- (void)sortByButtonTapped:(id)sender
+{
+    JMSortOptionsPopupView *sortPopup = [[JMSortOptionsPopupView alloc] initWithDelegate:self];
+    sortPopup.sortBy = self.resourceListLoader.sortBy;
+    [sortPopup show];
+}
+
+- (void)filterByButtonTapped:(id)sender
+{
+    JMFilterOptionsPopupView *filterPopup = [[JMFilterOptionsPopupView alloc] initWithDelegate:self];
+    filterPopup.filterBy = self.resourceListLoader.filterBy;
+    filterPopup.objectType = self.resourceListLoader.resourcesType;
+    [filterPopup show];
+}
+
 - (void)setRepresentationType:(JMResourcesRepresentationType)representationType
 {
     _representationType = representationType;
@@ -224,12 +243,31 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self.resourceListLoader clearSearchResults];
 }
 
+#pragma mark -
+#pragma mark - JMPopupDelegate
+- (void)popupViewWillShow:(JMPopupView *)popup
+{
+    [self.view endEditing:YES];
+}
+
+- (void)popupViewDidApplied:(id)popup
+{
+    if ([popup isKindOfClass:[JMSortOptionsPopupView class]]) {
+        self.resourceListLoader.sortBy = [popup sortBy];
+    } else if ([popup isKindOfClass:[JMFilterOptionsPopupView class]]) {
+        self.resourceListLoader.filterBy = [popup filterBy];
+        self.resourceListLoader.resourcesType = [popup objectType];
+    }
+    [self.resourceListLoader setNeedsUpdate];
+    [self.resourceListLoader updateIfNeeded];
+}
+
 #pragma mark - Utils
 
 - (UISearchBar *)searchBar
 {
     if (!_searchBar) {
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(5, 0, 250, 34)];
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 250, 34)];
         _searchBar.searchBarStyle = UISearchBarStyleMinimal;
         _searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
         _searchBar.delegate = self;
@@ -243,11 +281,11 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     
     UIBarButtonItem *filterItem;
     UIBarButtonItem *sortItem;
-    switch (self.resourcesType) {
-        case JMResourcesCollectionViewControllerType_Library:
-            filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:nil];
-        case JMResourcesCollectionViewControllerType_SavedItems:
-            sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"] style:UIBarButtonItemStyleBordered target:self action:nil];
+    switch (self.presentingType) {
+        case JMResourcesCollectionViewControllerPresentingType_Library:
+            filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];
+        case JMResourcesCollectionViewControllerPresentingType_SavedItems:
+            sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortByButtonTapped:)];
             break;
         default:
             break;
@@ -255,7 +293,11 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     
     if ([JMUtils isIphone]) {
         self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.searchBarPlaceholder.topItem.titleView = self.searchBar;
+        UIView *titleView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
+        titleView.backgroundColor = [UIColor clearColor];
+        [titleView addSubview: self.searchBar];
+        self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        self.searchBarPlaceholder.topItem.titleView = titleView;
         NSMutableArray *searchBarPlaceholderItems = [NSMutableArray array];
         if (sortItem) {
             [searchBarPlaceholderItems addObject:sortItem];
@@ -306,14 +348,14 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (JMResourcesListLoader *)resourceListLoader
 {
     if (!_resourceListLoader) {
-        switch (self.resourcesType) {
-            case JMResourcesCollectionViewControllerType_Library:
+        switch (self.presentingType) {
+            case JMResourcesCollectionViewControllerPresentingType_Library:
                 _resourceListLoader = [NSClassFromString(@"JMLibraryListLoader") new];
                 break;
-            case JMResourcesCollectionViewControllerType_Repository:
+            case JMResourcesCollectionViewControllerPresentingType_Repository:
                 _resourceListLoader = [NSClassFromString(@"JMRepositoryListLoader") new];
                 break;
-            case JMResourcesCollectionViewControllerType_SavedItems:
+            case JMResourcesCollectionViewControllerPresentingType_SavedItems:
                 _resourceListLoader = [NSClassFromString(@"JMSavedResourcesListLoader") new];
                 break;
             default:

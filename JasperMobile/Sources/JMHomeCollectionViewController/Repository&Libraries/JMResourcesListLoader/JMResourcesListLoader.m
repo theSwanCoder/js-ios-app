@@ -13,6 +13,7 @@
 
 @property (nonatomic, assign) BOOL needUpdateData;
 @property (nonatomic, assign) BOOL isLoadingNow;
+
 @end
 
 
@@ -35,6 +36,7 @@ objection_requires(@"resourceClient", @"constants")
     if (self) {
         [[JSObjection defaultInjector] injectDependencies:self];
         self.isLoadingNow = NO;
+        self.searchQuery = nil;
         self.resources = [NSMutableArray array];
         [self setNeedsUpdate];
     }
@@ -82,8 +84,8 @@ objection_requires(@"resourceClient", @"constants")
         [self.delegate resourceListDidLoaded:self withError:result.error];
     } @weakselfend];
     
-    [self.resourceClient resourceLookups:self.resourceLookup.uri query:self.searchQuery types:self.resourcesTypes
-                                  sortBy:self.sortBy recursive:self.loadRecursively offset:self.offset limit:kJMResourceLimit delegate:delegate];
+    [self.resourceClient resourceLookups:self.resourceLookup.uri query:self.searchQuery types:self.resourcesTypesParameterForQuery
+                                  sortBy:self.sortByParameterForQuery recursive:self.loadRecursively offset:self.offset limit:kJMResourceLimit delegate:delegate];
 }
 
 - (BOOL)hasNextPage
@@ -107,6 +109,48 @@ objection_requires(@"resourceClient", @"constants")
         [self setNeedsUpdate];
         [self updateIfNeeded];
     }
+}
+
+- (NSString *)sortByParameterForQuery
+{
+    switch (self.sortBy) {
+        case JMResourcesListLoaderSortBy_Name:
+            return @"label";
+        case JMResourcesListLoaderSortBy_Date:
+            return @"creationDate";
+    }
+}
+
+- (NSString *)filterByParameterForQuery
+{
+    switch (self.filterBy) {
+        case JMResourcesListLoaderFilterBy_Favorites:
+            return @"favorites";
+        case JMResourcesListLoaderFilterBy_None:
+            return nil;
+    }
+}
+
+- (NSArray *)resourcesTypesParameterForQuery{
+    NSMutableArray *typesArray = [NSMutableArray array];
+    switch (self.resourcesType) {
+        case JMResourcesListLoaderObjectType_RepositoryAll:
+            [typesArray addObject:self.constants.WS_TYPE_FOLDER];
+        case JMResourcesListLoaderObjectType_LibraryAll:
+            [typesArray addObject:self.constants.WS_TYPE_REPORT_UNIT];
+            [typesArray addObject:self.constants.WS_TYPE_DASHBOARD];
+            break;
+        case JMResourcesListLoaderObjectType_Reports:
+            [typesArray addObject:self.constants.WS_TYPE_REPORT_UNIT];
+            break;
+        case JMResourcesListLoaderObjectType_Dashboards:
+            [typesArray addObject:self.constants.WS_TYPE_DASHBOARD];
+            break;
+        case JMResourcesListLoaderObjectType_Folders:
+            [typesArray addObject:self.constants.WS_TYPE_FOLDER];
+            break;
+    }
+    return typesArray;
 }
 
 @end

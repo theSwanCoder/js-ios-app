@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "JMResourcesListLoader.h"
 
-typedef NS_ENUM(NSInteger, JMResourcesCollectionViewControllerType) {
-    JMResourcesCollectionViewControllerType_None = 0,
-    JMResourcesCollectionViewControllerType_Library,
-    JMResourcesCollectionViewControllerType_Repository,
-    JMResourcesCollectionViewControllerType_SavedItems
+typedef NS_ENUM(NSInteger, JMResourcesCollectionViewControllerPresentingType) {
+    JMResourcesCollectionViewControllerPresentingType_None = 0,
+    JMResourcesCollectionViewControllerPresentingType_Library,
+    JMResourcesCollectionViewControllerPresentingType_Repository,
+    JMResourcesCollectionViewControllerPresentingType_SavedItems
 };
 
 typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
 
 
 @interface JMResourcesCollectionViewController : UIViewController 
-@property (nonatomic, assign) JMResourcesCollectionViewControllerType resourcesType;
+@property (nonatomic, assign) JMResourcesCollectionViewControllerPresentingType presentingType;
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
 
 @end

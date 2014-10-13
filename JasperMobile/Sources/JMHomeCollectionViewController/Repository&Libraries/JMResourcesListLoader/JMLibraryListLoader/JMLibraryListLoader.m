@@ -16,14 +16,13 @@
 {
     self = [super init];
     if (self) {
-        self.resourcesTypes = @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD];
-        self.searchQuery = nil;
-        self.sortBy = @"label";
+        self.resourcesType = JMResourcesListLoaderObjectType_LibraryAll;
+        self.filterBy = JMResourcesListLoaderFilterBy_None;
+        self.sortBy = JMResourcesListLoaderSortBy_Name;
         self.loadRecursively = YES;
-        self.filterByTag = nil;
         
         [[NSNotificationCenter defaultCenter] addObserverForName:kJMFavoritesDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakself(^(NSNotification *note)) {
-            if (self.filterByTag && self.filterByTag.length) {
+            if (self.filterBy != JMResourcesListLoaderFilterBy_None) {
                 [self setNeedsUpdate];
             }
         } @weakselfend];
@@ -37,12 +36,12 @@
 }
 
 - (void)loadNextPage {
-    if (self.filterByTag && [self.filterByTag isEqualToString:@"favorites"]) {
+    if (self.filterBy == JMResourcesListLoaderFilterBy_Favorites) {
         JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
         NSEntityDescription *entity = [NSEntityDescription entityForName:kJMFavorites inManagedObjectContext:[JMUtils managedObjectContext]];
-        if (self.sortBy) {
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:self.sortBy ascending:YES];
+        if (self.sortByParameterForQuery) {
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:self.sortByParameterForQuery ascending:YES];
             [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
         }
 
@@ -55,7 +54,7 @@
         [predicates addObject:[NSPredicate predicateWithFormat:@"username == %@", activeServerProfile.username]];
         [predicates addObject:[NSPredicate predicateWithFormat:@"organization == %@", activeServerProfile.organization]];
         
-        [predicates addObject:[NSPredicate predicateWithFormat:@"wsType IN %@", self.resourcesTypes]];
+        [predicates addObject:[NSPredicate predicateWithFormat:@"wsType IN %@", self.resourcesTypesParameterForQuery]];
         if (self.searchQuery && self.searchQuery.length) {
             NSMutableArray *queryPredicates = [NSMutableArray array];
             [queryPredicates addObject:[NSPredicate predicateWithFormat:@"label LIKE[cd] %@", [NSString stringWithFormat:@"*%@*", self.searchQuery]]];
