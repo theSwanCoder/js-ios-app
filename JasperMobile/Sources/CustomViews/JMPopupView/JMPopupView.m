@@ -33,7 +33,7 @@ static NSMutableArray* visiblePopupsArray = nil;
         _backGroundView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin |UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
         _backGroundView.backgroundColor = [kJMSearchBarBackgroundColor colorWithAlphaComponent:0.98f];
         _backGroundView.layer.borderColor = [UIColor whiteColor].CGColor;
-        _backGroundView.layer.borderWidth = 0.75f;
+        _backGroundView.layer.borderWidth = 1.f;
         _backGroundView.layer.masksToBounds = NO;
         
         UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kJMPopupViewDefaultWidth / 2, kJMPopupViewButtonsHeight)];

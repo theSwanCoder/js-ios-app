@@ -294,9 +294,9 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     if ([JMUtils isIphone]) {
         self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         UIView *titleView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
+        self.searchBar.autoresizingMask = titleView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         titleView.backgroundColor = [UIColor clearColor];
         [titleView addSubview: self.searchBar];
-        self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         self.searchBarPlaceholder.topItem.titleView = titleView;
         NSMutableArray *searchBarPlaceholderItems = [NSMutableArray array];
         if (sortItem) {
