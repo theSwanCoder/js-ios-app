@@ -83,6 +83,8 @@
 
 /**
  Returns encoded profile id
+ 
+ @return A server profile ID
  */
 - (NSString *)profileID;
 
@@ -96,7 +98,23 @@
 
 /**
  Returns YES if server profile is active
+ 
+ @return YES if server profile is active
  */
 @property (nonatomic, assign) BOOL serverProfileIsActive;
+
+/**
+ Returns number of min supported server version
+ 
+ @return number of min supported server version
+ */
++ (NSInteger) minSupportedServerVersion;
+
+/**
+ Returns string representation number of min supported server version
+ 
+ @return string representation number of min supported server version
+ */
++ (NSString *) minSupportedServerVersionStringRepresentation;
 
 @end

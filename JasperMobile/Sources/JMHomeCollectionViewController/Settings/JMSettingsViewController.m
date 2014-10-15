@@ -12,6 +12,8 @@
 #import "JMSettingsTableViewCell.h"
 #import "JMSettings.h"
 #import "UIAlertView+LocalizedAlert.h"
+#import "JMServerProfile+Helpers.h"
+
 #import "JMAppUpdater.h"
 
 @interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -74,8 +76,10 @@
 
 - (void)applicationInfo:(id)sender
 {
+    NSString *appName = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"];
+    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"servers.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersionStringRepresentation]];
     [[UIAlertView localizedAlertWithTitle:nil
-                                  message:[NSString stringWithFormat:JMCustomLocalizedString(@"servers.info", nil), [JMAppUpdater latestAppVersionAsString]]
+                                  message:message
                                  delegate:nil
                         cancelButtonTitle:@"dialog.button.ok"
                         otherButtonTitles:nil] show];

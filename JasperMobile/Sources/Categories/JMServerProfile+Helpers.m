@@ -117,6 +117,25 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
     
     [JMUtils sendChangeServerProfileNotificationWithProfile:self withParams:nil];
 }
+
++ (NSInteger) minSupportedServerVersion
+{
+    return [JSConstants sharedInstance].VERSION_CODE_EMERALD_V2;
+}
+
++ (NSString *) minSupportedServerVersionStringRepresentation
+{
+    NSInteger minSupportedVersion = [self minSupportedServerVersion];
+    NSString *versionString;
+    while (minSupportedVersion) {
+        NSString *currentComponent = [NSString stringWithFormat:@"%zd", minSupportedVersion % 10];
+        versionString = versionString ? [currentComponent stringByAppendingFormat:@".%@",versionString] : currentComponent;
+        minSupportedVersion = minSupportedVersion / 100;
+    }
+    
+    return versionString;
+}
+
 #pragma mark - Private
 
 + (NSManagedObjectContext *)managedObjectContext

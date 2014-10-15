@@ -20,7 +20,7 @@ NSString * const kJMSavedResources = @"SavedResources";
     return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
-+ (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name formar:(NSString *)format
++ (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format
 {
     JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     JMSavedResources *savedReport = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:self.managedObjectContext];

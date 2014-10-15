@@ -27,7 +27,7 @@
 
 /* Server Profiles view */
 
-"servers.info" = "Jaspersoft Mobile v %@\n\nManagement tool and report viewer for JasperReports Server 5.0 and greater.\n\nFor more information visit:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\n(c) 2011 - 2014 Jaspersoft Corp.";
+"servers.info" = "%@ v %@\n\nManagement tool and report viewer for JasperReports Server %@ and greater.\n\nFor more information visit:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\n(c) 2011 - 2014 Tibco Jaspersoft Corp.";
 
 "servers.url.label" = "Server Address";
 "servers.url.errmsg" = "Please specify a valid URL";
@@ -138,6 +138,14 @@
 "detail.report.viewer.emptyreport.title" = "Report is empty";
 "detail.report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options or tap 'Cancel' for returning to old report.";
 
+"resource.label.title" = "Name";
+"resource.description.title" = "Description";
+"resource.type.title" = "Type";
+"resource.uri.title" = "URI";
+"resource.version.title" = "Version";
+"resource.creationDate.title" = "Creation Date";
+
+
 // Action titles
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
@@ -146,6 +154,8 @@
 "action.title.rename" = "Rename";
 "action.title.markasfavorite" = "Mark as Favorite";
 "action.title.markasunfavorite" = "Remove From Favorites";
+"action.title.info" = "Info";
+
 
 "action.report.viewer.page" = "Page";
 "action.report.viewer.pagecount" = "of %d";

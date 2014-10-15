@@ -39,6 +39,5 @@
 @optional
 @property (nonatomic, strong) JSRESTResource *resourceClient;
 @property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, strong) NSMutableArray *resources;
 
 @end

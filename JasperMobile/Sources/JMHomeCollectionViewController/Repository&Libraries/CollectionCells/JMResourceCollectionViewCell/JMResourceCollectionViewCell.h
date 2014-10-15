@@ -10,8 +10,16 @@
 extern NSString * kJMHorizontalResourceCell;
 extern NSString * kJMGridResourceCell;
 
+@class JMResourceCollectionViewCell;
+@protocol JMResourceCollectionViewCellDelegate <NSObject>
+@required
+- (void) infoButtonDidTappedOnCell:(JMResourceCollectionViewCell *)cell;
+
+@end
+
+
 @interface JMResourceCollectionViewCell : UICollectionViewCell
 @property (nonatomic, strong) JSResourceLookup *resourceLookup;
-
+@property (nonatomic, weak) id <JMResourceCollectionViewCellDelegate> delegate;
 
 @end

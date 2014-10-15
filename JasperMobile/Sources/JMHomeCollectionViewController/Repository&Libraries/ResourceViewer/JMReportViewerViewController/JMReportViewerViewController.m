@@ -60,10 +60,12 @@ objection_requires(@"reportClient", @"constants")
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    id destinationViewController = segue.destinationViewController;
-    [destinationViewController setResourceLookup:self.resourceLookup];
-    [destinationViewController setInputControls:[[NSMutableArray alloc] initWithArray:self.inputControls copyItems:YES]];
-    [destinationViewController performSelector:@selector(setDelegate:) withObject:self];
+    [super prepareForSegue:segue sender:sender];
+    if ([segue.identifier isEqualToString:kJMShowReportOptionsSegue] || [segue.identifier isEqualToString:kJMSaveReportViewControllerSegue]) {
+        id destinationViewController = segue.destinationViewController;
+        [destinationViewController setInputControls:[[NSMutableArray alloc] initWithArray:self.inputControls copyItems:YES]];
+        [destinationViewController performSelector:@selector(setDelegate:) withObject:self];
+    }
 }
 
 - (JMResourceViewerAction)availableAction

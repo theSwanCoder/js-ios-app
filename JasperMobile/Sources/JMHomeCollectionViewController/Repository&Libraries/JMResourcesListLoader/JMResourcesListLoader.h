@@ -46,6 +46,8 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderFilterBy) {
 
 @property (nonatomic, weak) id <JMResourcesListLoaderDelegate> delegate;
 
+@property (nonatomic, strong) NSMutableArray *resources;
+
 // Params for loading request.
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, strong) NSString *searchQuery;

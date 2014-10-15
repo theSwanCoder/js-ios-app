@@ -16,7 +16,7 @@ extern NSString * const kJMSavedResources;
 + (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource;
 
 // Adds saved resource with path to CoreData
-+ (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name formar:(NSString *)format;
++ (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format;
 
 // Removes saved resource
 + (void)removeReport:(JSResourceLookup *)resource;

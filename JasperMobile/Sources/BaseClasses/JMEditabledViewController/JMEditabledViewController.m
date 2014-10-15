@@ -53,18 +53,19 @@
             [self.tableView setContentOffset:CGPointMake(0, offset) animated:YES];
         }
         CGSize contentSize = self.tableView.contentSize;
-        contentSize.height += keyboardHeight;
-        self.tableView.contentSize = contentSize;
+        CGSize neededContentSize = [self.tableView sizeThatFits:self.tableView.frame.size];
+
+        if (!(contentSize.height > neededContentSize.height)) {
+            contentSize.height += keyboardHeight;
+            self.tableView.contentSize = contentSize;
+        }
     }
 }
 
 - (void)keyboarDidHide:(NSNotification*)aNotification
 {
-    CGSize contentSize = self.tableView.contentSize;
-    contentSize.height -= [self getKeyboardHeightFromUserInfo:[aNotification userInfo] key:UIKeyboardFrameBeginUserInfoKey];
-
     [UIView beginAnimations:nil context:nil];
-    self.tableView.contentSize = contentSize;
+    self.tableView.contentSize = [self.tableView sizeThatFits:self.tableView.frame.size];
     [UIView commitAnimations];
 }
 

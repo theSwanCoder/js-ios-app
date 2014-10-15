@@ -179,6 +179,7 @@
 		0895910419E3D514001471DA /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590F919E3D514001471DA /* PopoverView.m */; };
 		0895910519E3D514001471DA /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590FE19E3D514001471DA /* SSKeychain.m */; };
 		089C970219C8642B0010C135 /* JMResourceViewerActionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089C970119C8642B0010C135 /* JMResourceViewerActionsView.m */; };
+		089CA29F19EE854300983C82 /* JMResourceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089CA29E19EE854300983C82 /* JMResourceInfoViewController.m */; };
 		08A0924719E7C91F001A2016 /* Folder.png in Resources */ = {isa = PBXBuildFile; fileRef = 08A0924519E7C91F001A2016 /* Folder.png */; };
 		08A0924D19E81634001A2016 /* refresh_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 08A0924C19E81634001A2016 /* refresh_action.png */; };
 		08A0925019E81647001A2016 /* sort_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 08A0924E19E81647001A2016 /* sort_action.png */; };
@@ -499,6 +500,8 @@
 		089590FE19E3D514001471DA /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		089C970019C8642B0010C135 /* JMResourceViewerActionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceViewerActionsView.h; sourceTree = "<group>"; };
 		089C970119C8642B0010C135 /* JMResourceViewerActionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceViewerActionsView.m; sourceTree = "<group>"; };
+		089CA29D19EE854300983C82 /* JMResourceInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceInfoViewController.h; sourceTree = "<group>"; };
+		089CA29E19EE854300983C82 /* JMResourceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceInfoViewController.m; sourceTree = "<group>"; };
 		08A0924519E7C91F001A2016 /* Folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Folder.png; sourceTree = "<group>"; };
 		08A0924C19E81634001A2016 /* refresh_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh_action.png; sourceTree = "<group>"; };
 		08A0924E19E81647001A2016 /* sort_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sort_action.png; sourceTree = "<group>"; };
@@ -681,6 +684,7 @@
 			children = (
 				0881967B199A1703008CF79B /* JMSearchBar */,
 				080F234619A77B23008758FA /* CollectionCells */,
+				089CA29C19EE854300983C82 /* JMResourceInfoViewController */,
 				08DE67A019C05D8A00C25AEA /* ResourceViewer */,
 				0885657719C1B60100B78B06 /* JMResourcesListLoader */,
 				08025CC91995231E00A6063B /* JMResourcesCollectionViewController.h */,
@@ -1179,6 +1183,15 @@
 				089C970119C8642B0010C135 /* JMResourceViewerActionsView.m */,
 			);
 			path = JMResourceViewerActionsView;
+			sourceTree = "<group>";
+		};
+		089CA29C19EE854300983C82 /* JMResourceInfoViewController */ = {
+			isa = PBXGroup;
+			children = (
+				089CA29D19EE854300983C82 /* JMResourceInfoViewController.h */,
+				089CA29E19EE854300983C82 /* JMResourceInfoViewController.m */,
+			);
+			path = JMResourceInfoViewController;
 			sourceTree = "<group>";
 		};
 		08A43D1D19E6F30100C0BA4D /* JMRepositoryListLoader */ = {
@@ -1966,6 +1979,7 @@
 				0851DFD819ACE27800DC6EDE /* JMCancelRequestPopup.m in Sources */,
 				08DE67C919C05D8B00C25AEA /* JMInputControlCell.m in Sources */,
 				08E93B1319AF8AC800B1DF8D /* JMMenuItemCell.m in Sources */,
+				089CA29F19EE854300983C82 /* JMResourceInfoViewController.m in Sources */,
 				08F340E919B0DEE90020DE6A /* JMFont.m in Sources */,
 				08E864191992564A007CF257 /* JMFavorites.m in Sources */,
 				080F235519A77B23008758FA /* JMLoadingCollectionViewCell.m in Sources */,

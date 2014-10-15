@@ -284,7 +284,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
             JSResourceLookup *resource = [JSResourceLookup new];
             resource.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
             
-            [JMSavedResources addReport:resource withName:reportName formar:[reportExtension stringByReplacingOccurrencesOfString:@"." withString:@""]];
+            [JMSavedResources addReport:resource withName:reportName format:[reportExtension stringByReplacingOccurrencesOfString:@"." withString:@""]];
         }
     }
 

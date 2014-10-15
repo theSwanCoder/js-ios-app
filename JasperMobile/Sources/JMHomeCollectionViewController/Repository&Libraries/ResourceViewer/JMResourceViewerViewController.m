@@ -10,6 +10,8 @@
 #import "JMFavorites+Helpers.h"
 #import "PopoverView.h"
 #import "JMSavedResources+Helpers.h"
+#import "JMResourceInfoViewController.h"
+
 
 @interface JMResourceViewerViewController () <PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
@@ -67,6 +69,12 @@ objection_requires(@"resourceClient", @"resourceLookup")
         [self.webView removeFromSuperview];
         [[NSURLCache sharedURLCache] removeCachedResponseForRequest:self.request];
     }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    id destinationViewController = segue.destinationViewController;
+    [destinationViewController setResourceLookup:self.resourceLookup];
 }
 
 - (void)setRequest:(NSURLRequest *)request
@@ -136,10 +144,11 @@ objection_requires(@"resourceClient", @"resourceLookup")
 
 - (JMResourceViewerAction)availableAction
 {
+    JMResourceViewerAction availableAction = JMResourceViewerAction_Info;
     if ([self favoriteFeatureIsAvailableForCurrentResource] && ![self favoriteBarButtonItem]) {
-        return [JMFavorites isResourceInFavorites:self.resourceLookup] ? JMResourceViewerAction_MakeUnFavorite : JMResourceViewerAction_MakeFavorite;
+        availableAction |= [JMFavorites isResourceInFavorites:self.resourceLookup] ? JMResourceViewerAction_MakeUnFavorite : JMResourceViewerAction_MakeFavorite;
     }
-    return JMResourceViewerAction_None;
+    return availableAction;
 }
 
 -(void) runReportExecution
@@ -177,11 +186,20 @@ objection_requires(@"resourceClient", @"resourceLookup")
 #pragma mark - JMResourceViewerActionsViewDelegate
 - (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
 {
-    if (action == JMResourceViewerAction_MakeFavorite) {
-        [JMFavorites addToFavorites:self.resourceLookup];
-    } else if (action == JMResourceViewerAction_MakeUnFavorite) {
-        [JMFavorites removeFromFavorites:self.resourceLookup];
+    switch (action) {
+        case JMResourceViewerAction_Info:
+            [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:nil];
+            break;
+        case JMResourceViewerAction_MakeFavorite:
+            [JMFavorites addToFavorites:self.resourceLookup];
+            break;
+        case JMResourceViewerAction_MakeUnFavorite:
+            [JMFavorites removeFromFavorites:self.resourceLookup];
+            break;
+        default:
+            break;
     }
+
     [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
 }
 

@@ -19,6 +19,7 @@ NSString * kJMGridLoadingCell = @"JMGridLoadingCollectionViewCell";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.titleLabel.text = JMCustomLocalizedString(@"detail.resourcesloading.msg", nil);
 }
 

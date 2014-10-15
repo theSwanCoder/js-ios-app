@@ -42,7 +42,8 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     if (!_reportFormats) {
         _reportFormats = @[
                            self.constants.CONTENT_TYPE_HTML,
-                           self.constants.CONTENT_TYPE_PDF
+                           self.constants.CONTENT_TYPE_PDF,
+                           self.constants.CONTENT_TYPE_XLS
                            ];
     }
     
@@ -198,7 +199,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 
         [JMRequestDelegate setFinalBlock:^{
             [weakSelf.navigationController popViewControllerAnimated:YES];
-            [JMSavedResources addReport:weakSelf.resourceLookup withName:weakSelf.reportName formar:self.selectedReportFormat];
+            [JMSavedResources addReport:weakSelf.resourceLookup withName:weakSelf.reportName format:self.selectedReportFormat];
             [ALToastView toastInView:weakSelf.delegate.view withText:JMCustomLocalizedString(@"savereport.saved", nil)];
         }];
 

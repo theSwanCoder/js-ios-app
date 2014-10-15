@@ -19,14 +19,16 @@
 
 #import "JMSortOptionsPopupView.h"
 #import "JMFilterOptionsPopupView.h"
-
+#import "JMResourceInfoViewController.h"
 
 NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationTypeHorizontalList; }
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() { return JMResourcesRepresentationTypeGrid; }
 
-@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMResourcesListLoaderDelegate, JMPopupViewDelegate>
+@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMResourcesListLoaderDelegate, JMPopupViewDelegate, JMResourceCollectionViewCellDelegate>
+
+
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 
@@ -74,6 +76,15 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         
     [self showNavigationItems];
     [self.resourceListLoader updateIfNeeded];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceOrientationDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
+        [self.collectionView reloadData];
+    } @weakselfend];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -117,10 +128,13 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     id destinationViewController = segue.destinationViewController;
     JSResourceLookup *resourcesLookup = [sender objectForKey:kJMResourceLookup];
     
+    if ([destinationViewController respondsToSelector:@selector(setResourceLookup:)]) {
+        [destinationViewController setResourceLookup:resourcesLookup];
+    }
+    
     if ([self isResourceSegue:segue]) {
         NSArray *inputControls = [sender objectForKey:kJMInputControls];
         [destinationViewController setInputControls:[inputControls mutableCopy]];
-        [destinationViewController setResourceLookup:resourcesLookup];
     } else if ([segue.identifier isEqualToString:kJMShowFolderContetnSegue]) {
         JMResourcesListLoader * listLoader = [NSClassFromString(@"JMRepositoryListLoader") new];
         listLoader.resourceLookup = resourcesLookup;
@@ -199,6 +213,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 
     JMResourceCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[self resourceCellForRepresentationType:self.representationType] forIndexPath:indexPath];
     cell.resourceLookup = [self.resourceListLoader.resources objectAtIndex:indexPath.row];
+    cell.delegate = self;
     return cell;
 }
 
@@ -366,6 +381,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     return _resourceListLoader;
 }
 
+#pragma mark -
 #pragma mark - JMResourcesListLoaderDelegate
 - (void)resourceListDidStartLoading:(JMResourcesListLoader *)listLoader
 {
@@ -386,4 +402,10 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     }
 }
 
+#pragma mark -
+#pragma mark - JMResourceCollectionViewCellDelegate
+- (void)infoButtonDidTappedOnCell:(JMResourceCollectionViewCell *)cell
+{
+    [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:[NSDictionary dictionaryWithObject:cell.resourceLookup forKey:kJMResourceLookup]];
+}
 @end

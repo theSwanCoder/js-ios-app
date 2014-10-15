@@ -92,6 +92,11 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 40;
+}
+
 - (void)tableView: (UITableView*)tableView willDisplayCell: (UITableViewCell*)cell forRowAtIndexPath: (NSIndexPath*)indexPath
 {
     cell.backgroundColor = [UIColor clearColor];
@@ -124,6 +129,8 @@
             return @"action.title.markasfavorite";
         case JMResourceViewerAction_MakeUnFavorite:
             return @"action.title.markasunfavorite";
+        case JMResourceViewerAction_Info:
+            return @"action.title.info";
     }
 }
 
@@ -146,6 +153,8 @@
             return @"make_favorite_item";
         case JMResourceViewerAction_MakeUnFavorite:
             return @"favorited_item";
+        case JMResourceViewerAction_Info:
+            return @"info_item";
         }
 }
 @end
