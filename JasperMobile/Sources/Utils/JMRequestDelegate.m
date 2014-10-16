@@ -1,8 +1,8 @@
 #import "JMRequestDelegate.h"
 
 /*
- * JasperMobile for iOS
- * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
+ * Tibco JasperMobile for iOS
+ * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -24,7 +24,7 @@
 
 //
 //  JMRequestDelegate.m
-//  Jaspersoft Corporation
+//  Tibco JasperMobile
 //
 
 static NSMutableArray *requestDelegatePool;

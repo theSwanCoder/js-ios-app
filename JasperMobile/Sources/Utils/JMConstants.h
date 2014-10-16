@@ -1,6 +1,6 @@
 /*
- * JasperMobile for iOS
- * Copyright (C) 2011 - 2014 Jaspersoft Corporation. All rights reserved.
+ * Tibco JasperMobile for iOS
+ * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,7 +22,7 @@
 
 //
 //  JMConstants.h
-//  Jaspersoft Corporation
+//  Tibco JasperMobile
 //
 //  Created by Vlad Zavadskii vzavadskii@jaspersoft.com
 //  Since 1.6

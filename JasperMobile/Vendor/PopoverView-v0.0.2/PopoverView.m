@@ -135,7 +135,6 @@
 }
 
 
-
 #pragma mark - Display methods
 
 // get the screen size, adjusted for orientation and status bar display

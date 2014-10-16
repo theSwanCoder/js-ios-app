@@ -14,7 +14,6 @@
 @end
 
 
-
 @implementation JMSortOptionsPopupView
 
 - (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type{
