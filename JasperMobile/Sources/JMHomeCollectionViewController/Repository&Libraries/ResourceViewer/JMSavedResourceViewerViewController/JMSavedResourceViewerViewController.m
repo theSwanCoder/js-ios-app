@@ -24,16 +24,13 @@
     if (!_savedReports) {
         _savedReports = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
     }
+    
     return _savedReports;
 }
 
 - (void)runReportExecution
 {
-    NSString *fullReportPath = [JMUtils documentsReportDirectoryPath];
-    for (NSMutableString *name in @[self.savedReports.label, kJMReportFilename]) {
-        fullReportPath = [fullReportPath stringByAppendingPathComponent: [name stringByAppendingPathExtension:self.savedReports.format]];
-    }
-    
+    NSString *fullReportPath = [[JMUtils documentsDirectoryPath] stringByAppendingPathComponent:[JMSavedResources uriForSavedReportWithName:self.savedReports.label format:self.savedReports.format]];
     NSURL *url = [NSURL fileURLWithPath:fullReportPath];
     self.request = [NSURLRequest requestWithURL:url];
 }

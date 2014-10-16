@@ -16,8 +16,14 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 + (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource
 {
-    NSFetchRequest *fetchRequest = [self savedReportsFetchRequest:resource.label];
-    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestField:@"uri" value:resource.uri];
+    
+    NSError *error = nil;
+    NSArray *results = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if (!error && [results count]) {
+        return [results lastObject];
+    }
+    return nil;
 }
 
 + (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format
@@ -25,7 +31,7 @@ NSString * const kJMSavedResources = @"SavedResources";
     JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     JMSavedResources *savedReport = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:self.managedObjectContext];
     savedReport.label = name;
-    savedReport.uri = resource.uri;
+    savedReport.uri = [self uriForSavedReportWithName:name format:format];
     savedReport.wsType = resource.resourceType;
     savedReport.creationDate = [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     savedReport.resourceDescription = resource.resourceDescription;
@@ -40,8 +46,8 @@ NSString * const kJMSavedResources = @"SavedResources";
 + (void)removeReport:(JSResourceLookup *)resource
 {
     JMSavedResources *savedReport = [self savedReportsFromResourceLookup:resource];
-    NSString *pathToReport = [[[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:savedReport.label] stringByAppendingPathExtension:savedReport.format];
-    
+    NSString *pathToReport = [self pathToDirectoryForSavedReportWithName:savedReport.label format:savedReport.format];
+
     [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
     [self.managedObjectContext deleteObject:savedReport];
     [self.managedObjectContext save:nil];
@@ -50,14 +56,14 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 + (BOOL)isAvailableReportName:(NSString *)reportName
 {
-    NSFetchRequest *fetchRequest = [self savedReportsFetchRequest:reportName];
+    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestField:@"label" value:reportName];
     return ([self.managedObjectContext countForFetchRequest:fetchRequest error:nil] == 0);
 }
 
 - (void)renameReportTo:(NSString *)newName
 {
-    NSString *currentPath = [[[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:self.label] stringByAppendingPathExtension:self.format];
-    NSString *newPath = [[[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:newName] stringByAppendingPathExtension:self.format];
+    NSString *currentPath = [JMSavedResources pathToDirectoryForSavedReportWithName:self.label format:self.format];
+    NSString *newPath = [JMSavedResources pathToDirectoryForSavedReportWithName:newName format:self.format];
     
     NSError *error = nil;
     [[NSFileManager defaultManager] moveItemAtPath:currentPath toPath:newPath error:&error];
@@ -79,6 +85,17 @@ NSString * const kJMSavedResources = @"SavedResources";
     return resource;
 }
 
++ (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format
+{
+    NSString *uri = [[self pathToDirectoryForSavedReportWithName:name format:format] stringByAppendingPathComponent:[kJMReportFilename stringByAppendingPathExtension:format]];
+    return [NSString stringWithFormat:@"/%@",uri];
+}
+
++ (NSString *)pathToDirectoryForSavedReportWithName:(NSString *)name format:(NSString *)format
+{
+    return [kJMReportsDirectory stringByAppendingPathComponent:[name stringByAppendingPathExtension:format]];
+}
+
 #pragma mark - Private
 
 + (NSManagedObjectContext *)managedObjectContext
@@ -86,21 +103,20 @@ NSString * const kJMSavedResources = @"SavedResources";
     return [JMUtils managedObjectContext];
 }
 
-+ (NSFetchRequest *)savedReportsFetchRequest:(NSString *)resourceName
++ (NSFetchRequest *)savedReportsFetchRequestField:(NSString *)fieldName value:(NSString *)value
 {
     JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMSavedResources];
-    NSMutableString *format = [NSMutableString stringWithString:@"(serverProfile == %@) AND (label LIKE[cd] %@) AND (username LIKE[cd] %@) AND "];
     
-    if (activeServerProfile.organization.length) {
-        [format appendString:@"(organization LIKE[cd] %@)"];
-    } else {
-        [format appendString:@"(organization = %@)"];
-    }
+    NSMutableArray *predicates = [NSMutableArray array];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"serverProfile == %@", activeServerProfile]];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"username == %@", activeServerProfile.username]];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"organization == %@", activeServerProfile.organization]];
+    NSString *queryFormat = [NSString stringWithFormat:@"%@ LIKE[cd] ", fieldName];
+    [predicates addObject:[NSPredicate predicateWithFormat:[queryFormat stringByAppendingString:@"%@"], value]];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:format, activeServerProfile, resourceName, activeServerProfile.username, activeServerProfile.organization];
-    fetchRequest.predicate = predicate;
-    
+    fetchRequest.predicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
+
     return fetchRequest;
 }
 

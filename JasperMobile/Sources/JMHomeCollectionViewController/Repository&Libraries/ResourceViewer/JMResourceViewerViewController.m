@@ -97,14 +97,9 @@ objection_requires(@"resourceClient", @"resourceLookup")
     return nil;
 }
 
-- (BOOL) favoriteFeatureIsAvailableForCurrentResource
-{
-    return ![self isKindOfClass:NSClassFromString(@"JMSavedResourceViewerViewController")];
-}
-
 - (UIBarButtonItem *) favoriteBarButtonItem
 {
-    if ([self favoriteFeatureIsAvailableForCurrentResource] & ![JMUtils isIphone]) {
+    if (![JMUtils isIphone]) {
         UIImage *itemImage = [JMFavorites isResourceInFavorites:self.resourceLookup] ? [UIImage imageNamed:@"favorited_item"] : [UIImage imageNamed:@"make_favorite_item"];
         UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStyleBordered target:self action:@selector(favoriteButtonTapped:)];
         favoriteItem.tintColor = [JMFavorites isResourceInFavorites:self.resourceLookup] ? [UIColor yellowColor] : [UIColor whiteColor];
@@ -145,7 +140,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
 - (JMResourceViewerAction)availableAction
 {
     JMResourceViewerAction availableAction = JMResourceViewerAction_Info;
-    if ([self favoriteFeatureIsAvailableForCurrentResource] && ![self favoriteBarButtonItem]) {
+    if (![self favoriteBarButtonItem]) {
         availableAction |= [JMFavorites isResourceInFavorites:self.resourceLookup] ? JMResourceViewerAction_MakeUnFavorite : JMResourceViewerAction_MakeFavorite;
     }
     return availableAction;

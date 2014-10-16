@@ -43,7 +43,6 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
         _reportFormats = @[
                            self.constants.CONTENT_TYPE_HTML,
                            self.constants.CONTENT_TYPE_PDF,
-                           self.constants.CONTENT_TYPE_XLS
                            ];
     }
     
@@ -150,7 +149,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (void)saveButtonTapped:(id)sender
 {
     [self.view endEditing:YES];
-    NSString *fullReportDirectory = [[JMUtils documentsReportDirectoryPath] stringByAppendingPathComponent:[self.reportName stringByAppendingPathExtension:self.selectedReportFormat]];
+    NSString *fullReportDirectory = [[JMUtils documentsDirectoryPath] stringByAppendingPathComponent:[JMSavedResources pathToDirectoryForSavedReportWithName:self.reportName format:self.selectedReportFormat]];
     NSString *errorMessage = nil;
     BOOL isValidReportName = ([JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessage] &&
                               [self createReportDirectory:fullReportDirectory errorMessage:&errorMessage]);

@@ -56,14 +56,13 @@ CGFloat kJMNoEdgesInset = -1;
     return [*errorMessage length] == 0;
 }
 
-+ (NSString *)documentsReportDirectoryPath
++ (NSString *)documentsDirectoryPath
 {
     static NSString *reportDirectory;
     if (!reportDirectory) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        reportDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"/%@", kJMReportsDirectory]];
+        reportDirectory = [paths objectAtIndex:0];
     }
-
     return reportDirectory;
 }
 

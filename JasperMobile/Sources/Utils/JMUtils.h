@@ -47,11 +47,11 @@ extern CGFloat kJMNoEdgesInset;
 + (BOOL)validateReportName:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage;
 
 /**
- Returns full path of report directory located in NSDocumentDirectory directory for NSUserDomainMask domain
+ Returns full path of NSDocumentDirectory directory for NSUserDomainMask domain
 
- @return full path of report directory
+ @return full path of document directory
 */
-+ (NSString *)documentsReportDirectoryPath;
++ (NSString *)documentsDirectoryPath;
 
 /**
  Sends "changeServerProfile" notification to defaultCenter
