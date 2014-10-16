@@ -17,13 +17,14 @@ static NSMutableArray* visiblePopupsArray = nil;
 @implementation JMPopupView
 @synthesize contentView = _contentView;
 
-- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate{
+- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type{
     self = [super init];
     if (self) {
         if (!visiblePopupsArray) {
             visiblePopupsArray = [NSMutableArray array];
         }
         self.delegate = delegate;
+        _type = type;
         
         [visiblePopupsArray addObject:self];
         self.backgroundColor = [UIColor clearColor];
@@ -36,34 +37,36 @@ static NSMutableArray* visiblePopupsArray = nil;
         _backGroundView.layer.borderWidth = 1.f;
         _backGroundView.layer.masksToBounds = NO;
         
-        UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kJMPopupViewDefaultWidth / 2, kJMPopupViewButtonsHeight)];
-        [cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
-        cancelButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [cancelButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-        [cancelButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        cancelButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
-        [_backGroundView addSubview:cancelButton];
+        if (type == JMPopupViewType_OkCancelButtons) {
+            UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kJMPopupViewDefaultWidth / 2, kJMPopupViewButtonsHeight)];
+            [cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
+            cancelButton.titleLabel.font = [UIFont systemFontOfSize:15];
+            [cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [cancelButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+            [cancelButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+            cancelButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
+            [_backGroundView addSubview:cancelButton];
+            
+            UIButton *okButton = [[UIButton alloc] initWithFrame:CGRectMake(kJMPopupViewDefaultWidth / 2, 0, kJMPopupViewDefaultWidth / 2, kJMPopupViewButtonsHeight)];
+            [okButton setTitle:JMCustomLocalizedString(@"dialog.button.ok", nil) forState:UIControlStateNormal];
+            okButton.titleLabel.font = [UIFont systemFontOfSize:15];
+            [okButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [okButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+            [okButton addTarget:self action:@selector(okButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+            okButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+            [_backGroundView addSubview:okButton];
+            
+            UIView *horizontalSeparatorView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kJMPopupViewDefaultWidth, 1.f)];
+            horizontalSeparatorView.backgroundColor = [UIColor grayColor];
+            horizontalSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+            [_backGroundView addSubview:horizontalSeparatorView];
+            
+            UIView *verticalSeparatorView = [[UIView alloc] initWithFrame:CGRectMake(kJMPopupViewDefaultWidth / 2, 0, 1.f ,kJMPopupViewButtonsHeight)];
+            verticalSeparatorView.backgroundColor = [UIColor grayColor];
+            verticalSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+            [_backGroundView addSubview:verticalSeparatorView];
+        }
 
-        UIButton *okButton = [[UIButton alloc] initWithFrame:CGRectMake(kJMPopupViewDefaultWidth / 2, 0, kJMPopupViewDefaultWidth / 2, kJMPopupViewButtonsHeight)];
-        [okButton setTitle:JMCustomLocalizedString(@"dialog.button.ok", nil) forState:UIControlStateNormal];
-        okButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [okButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [okButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-        [okButton addTarget:self action:@selector(okButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        okButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-        [_backGroundView addSubview:okButton];
-        
-        UIView *horizontalSeparatorView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kJMPopupViewDefaultWidth, 1.f)];
-        horizontalSeparatorView.backgroundColor = [UIColor grayColor];
-        horizontalSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-        [_backGroundView addSubview:horizontalSeparatorView];
-
-        UIView *verticalSeparatorView = [[UIView alloc] initWithFrame:CGRectMake(kJMPopupViewDefaultWidth / 2, 0, 1.f ,kJMPopupViewButtonsHeight)];
-        verticalSeparatorView.backgroundColor = [UIColor grayColor];
-        verticalSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
-        [_backGroundView addSubview:verticalSeparatorView];
-        
         [self addSubview:_backGroundView];
     }
     return self;
@@ -78,7 +81,14 @@ static NSMutableArray* visiblePopupsArray = nil;
 
 - (void)setContentView:(UIView *)contentView{
     _contentView = contentView;
-    _backGroundView.frame = CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height + kJMPopupViewButtonsHeight);
+    switch (self.type) {
+        case JMPopupViewType_ContentViewOnly:
+            _backGroundView.frame = _contentView.bounds;
+            break;
+        case JMPopupViewType_OkCancelButtons:
+            _backGroundView.frame = CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height + kJMPopupViewButtonsHeight);
+            break;
+    }
     _contentView.center = CGPointMake(contentView.frame.size.width / 2, contentView.frame.size.height / 2);
     [_backGroundView addSubview:_contentView];
 }
@@ -169,6 +179,14 @@ static NSMutableArray* visiblePopupsArray = nil;
     if (!found) {
         [self dismiss:YES];
     }
+}
+
+- (IBAction) dismissByValueChanged
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewValueDidChanged:)]) {
+        [self.delegate popupViewValueDidChanged:self];
+    }
+    [self dismiss:YES];
 }
 
 - (void)dismiss:(BOOL)animated{

@@ -14,7 +14,6 @@
     self = [super init];
     if (self) {
         self.resourcesType = JMResourcesListLoaderObjectType_RepositoryAll;
-        self.filterBy = JMResourcesListLoaderFilterBy_None;
         self.sortBy = JMResourcesListLoaderSortBy_Name;
         self.loadRecursively = NO;
     }

@@ -121,16 +121,6 @@ objection_requires(@"resourceClient", @"constants")
     }
 }
 
-- (NSString *)filterByParameterForQuery
-{
-    switch (self.filterBy) {
-        case JMResourcesListLoaderFilterBy_Favorites:
-            return @"favorites";
-        case JMResourcesListLoaderFilterBy_None:
-            return nil;
-    }
-}
-
 - (NSArray *)resourcesTypesParameterForQuery{
     NSMutableArray *typesArray = [NSMutableArray array];
     switch (self.resourcesType) {

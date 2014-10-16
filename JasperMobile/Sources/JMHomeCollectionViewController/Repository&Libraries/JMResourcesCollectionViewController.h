@@ -10,10 +10,10 @@
 #import "JMResourcesListLoader.h"
 
 typedef NS_ENUM(NSInteger, JMResourcesCollectionViewControllerPresentingType) {
-    JMResourcesCollectionViewControllerPresentingType_None = 0,
-    JMResourcesCollectionViewControllerPresentingType_Library,
-    JMResourcesCollectionViewControllerPresentingType_Repository,
-    JMResourcesCollectionViewControllerPresentingType_SavedItems
+    JMResourcesCollectionViewControllerPresentingType_Library = 1 << 0,
+    JMResourcesCollectionViewControllerPresentingType_Repository = 1 << 1,
+    JMResourcesCollectionViewControllerPresentingType_SavedItems = 1 << 2,
+    JMResourcesCollectionViewControllerPresentingType_Favorites = 1 << 3
 };
 
 typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {

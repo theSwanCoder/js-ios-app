@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, JMPopupViewType) {
+    JMPopupViewType_ContentViewOnly = 0,
+    JMPopupViewType_OkCancelButtons
+};
+
 @class JMPopupView;
 @protocol JMPopupViewDelegate <NSObject>
 
@@ -20,6 +25,9 @@
 
 - (void)popupViewDidApplied:(JMPopupView *)popup;
 - (void)popupViewDidCanceled:(JMPopupView *)popup;
+
+- (void)popupViewValueDidChanged:(JMPopupView *)popup;
+
 @end
 
 @interface JMPopupView : UIView{
@@ -28,10 +36,10 @@
 }
 
 @property (nonatomic, retain) UIView *contentView;
+@property (nonatomic, readonly) JMPopupViewType type;
 @property (nonatomic, weak) id <JMPopupViewDelegate> delegate;
 
-
-- (id) initWithDelegate:(id <JMPopupViewDelegate>)delegate;
+- (id) initWithDelegate:(id <JMPopupViewDelegate>)delegate type:(JMPopupViewType)type;
 
 - (void) show;
 

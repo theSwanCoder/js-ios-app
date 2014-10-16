@@ -1,28 +1,25 @@
 //
-//  JMSavedResourcesListLoader.m
-//  JasperMobile
+//  JMFavoritesListLoader.m
+//  Tibco JasperMobile
 //
-//  Created by Oleksii Gubariev on 9/18/14.
+//  Created by Oleksii Gubariev on 10/16/14.
 //  Copyright (c) 2014 JasperMobile. All rights reserved.
 //
 
-#import "JMSavedResourcesListLoader.h"
-
+#import "JMFavoritesListLoader.h"
 #import "JMServerProfile+Helpers.h"
-#import "JMSavedResources+Helpers.h"
+#import "JMFavorites+Helpers.h"
 
-@implementation JMSavedResourcesListLoader
-
+@implementation JMFavoritesListLoader
 - (id)init
 {
     self = [super init];
     if (self) {
-        
-        self.resourcesType = JMResourcesListLoaderObjectType_LibraryAll;
+        self.resourcesType = JMResourcesListLoaderObjectType_RepositoryAll;
         self.sortBy = JMResourcesListLoaderSortBy_Name;
-        self.loadRecursively = NO;
-
-        [[NSNotificationCenter defaultCenter] addObserverForName:kJMSavedResourcesDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *note)) {
+        self.loadRecursively = YES;
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName:kJMFavoritesDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakself(^(NSNotification *note)) {
             [self setNeedsUpdate];
         } @weakselfend];
     }
@@ -37,7 +34,7 @@
 - (void)loadNextPage {
     JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:kJMSavedResources inManagedObjectContext:[JMUtils managedObjectContext]];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:kJMFavorites inManagedObjectContext:[JMUtils managedObjectContext]];
     if (self.sortByParameterForQuery) {
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:self.sortByParameterForQuery ascending:YES];
         [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
@@ -69,8 +66,8 @@
     if (fetchedObjects == nil) {
         [self.delegate resourceListDidLoaded:self withError:error];
     } else {
-        for(JMSavedResources *resource in fetchedObjects) {
-            [self.resources addObject:[resource wrapperFromSavedReports]];
+        for(JMFavorites *favorite in fetchedObjects) {
+            [self.resources addObject:[favorite wrapperFromFavorite]];
         }
         _needUpdateData = NO;
         _isLoadingNow = NO;

@@ -11,16 +11,14 @@
 @interface JMFilterOptionsPopupView ()
 @property (nonatomic, weak) IBOutlet UILabel *resourceTypeTitleLabel;
 @property (nonatomic, weak) IBOutlet UISegmentedControl *resourceTypeSegmentedControl;
-@property (nonatomic, weak) IBOutlet UILabel *tagTitleLabel;
-@property (nonatomic, weak) IBOutlet UISegmentedControl *tagSegmentedControl;
 
 @end
 
 
 @implementation JMFilterOptionsPopupView
 
-- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate{
-    self = [super initWithDelegate:delegate];
+- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type{
+    self = [super initWithDelegate:delegate type:type];
     if (self) {
         UIView *nibView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] lastObject];
 
@@ -31,24 +29,10 @@
 
         self.resourceTypeSegmentedControl.apportionsSegmentWidthsByContent = YES;
         
-        self.tagTitleLabel.text = JMCustomLocalizedString(@"master.filterbytag.title", nil);
-        [self.tagSegmentedControl setTitle:JMCustomLocalizedString(@"master.filterbytag.type.none", nil) forSegmentAtIndex:0];
-        [self.tagSegmentedControl setTitle:JMCustomLocalizedString(@"master.filterbytag.type.favorites", nil) forSegmentAtIndex:1];
-        
         self.contentView = nibView;
     }
     
     return self;
-}
-
-- (void)setFilterBy:(JMResourcesListLoaderFilterBy)filterBy
-{
-    self.tagSegmentedControl.selectedSegmentIndex = filterBy;
-}
-
-- (JMResourcesListLoaderFilterBy)filterBy
-{
-    return self.tagSegmentedControl.selectedSegmentIndex;
 }
 
 - (void)setObjectType:(JMResourcesListLoaderObjectType)objectType

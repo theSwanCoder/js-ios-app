@@ -24,12 +24,6 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderSortBy) {
     JMResourcesListLoaderSortBy_Date
 };
 
-typedef NS_ENUM(NSInteger, JMResourcesListLoaderFilterBy) {
-    JMResourcesListLoaderFilterBy_None = 0,
-    JMResourcesListLoaderFilterBy_Favorites
-};
-
-
 @class JMResourcesListLoader;
 @protocol JMResourcesListLoaderDelegate <NSObject>
 @required
@@ -54,7 +48,6 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderFilterBy) {
 @property (nonatomic, assign) BOOL      loadRecursively;
 @property (nonatomic, assign) JMResourcesListLoaderObjectType resourcesType;
 @property (nonatomic, assign) JMResourcesListLoaderSortBy sortBy;
-@property (nonatomic, assign) JMResourcesListLoaderFilterBy filterBy;
 
 - (void)setNeedsUpdate;
 
@@ -65,8 +58,6 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderFilterBy) {
 - (void)clearSearchResults;
 
 - (NSString *)sortByParameterForQuery;
-
-- (NSString *)filterByParameterForQuery;
 
 - (NSArray *)resourcesTypesParameterForQuery;
 

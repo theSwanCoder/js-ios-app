@@ -17,13 +17,7 @@ NSString * const kJMSavedResources = @"SavedResources";
 + (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource
 {
     NSFetchRequest *fetchRequest = [self savedReportsFetchRequestField:@"uri" value:resource.uri];
-    
-    NSError *error = nil;
-    NSArray *results = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-    if (!error && [results count]) {
-        return [results lastObject];
-    }
-    return nil;
+    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
 + (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format

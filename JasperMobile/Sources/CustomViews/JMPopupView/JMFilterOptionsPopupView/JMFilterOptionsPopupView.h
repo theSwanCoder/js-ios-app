@@ -11,8 +11,6 @@
 
 @interface JMFilterOptionsPopupView : JMPopupView
 
-@property(nonatomic, assign) JMResourcesListLoaderFilterBy filterBy;
-
 @property(nonatomic, assign) JMResourcesListLoaderObjectType objectType;
 
 @end

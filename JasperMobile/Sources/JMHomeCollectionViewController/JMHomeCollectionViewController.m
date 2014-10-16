@@ -35,6 +35,7 @@ static NSString * const kJMMenuItemLibrary = @"Library";
 static NSString * const kJMMenuItemSettings = @"Settings";
 static NSString * const kJMMenuItemRepository = @"Repository";
 static NSString * const kJMMenuItemSavedItems = @"SavedItems";
+static NSString * const kJMMenuItemFavorites = @"Favorites";
 
 static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 
@@ -53,8 +54,9 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     self.menuItems = @[
             kJMMenuItemLibrary,
             kJMMenuItemRepository,
+            kJMMenuItemFavorites,
+            kJMMenuItemSavedItems,
             kJMMenuItemSettings,
-            kJMMenuItemSavedItems
     ];
     
     self.title = JMCustomLocalizedString(@"title.home", nil);
@@ -104,7 +106,7 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 {
     JMMenuItemCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kJMMenuItemIdentifier forIndexPath:indexPath];
     NSString *menuItem = [[self.menuItems objectAtIndex:indexPath.row] lowercaseString];
-    
+    cell.coloredView.backgroundColor = [menuItem isEqualToString:[kJMMenuItemSettings lowercaseString]] ? kJMMasterResourceCellSelectedBackgroundColor : kJMResourcePreviewBackgroundColor;
     cell.imageView.image = [UIImage imageNamed:menuItem];
     cell.label.text = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.label", menuItem], nil);
     cell.desc.text = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.description", menuItem], nil);
@@ -146,9 +148,11 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
         return JMResourcesCollectionViewControllerPresentingType_Repository;
     } else if ([identifier isEqualToString:[NSString stringWithFormat:@"Show%@", kJMMenuItemSavedItems]]) {
         return JMResourcesCollectionViewControllerPresentingType_SavedItems;
+    } if ([identifier isEqualToString:[NSString stringWithFormat:@"Show%@", kJMMenuItemFavorites]]) {
+        return JMResourcesCollectionViewControllerPresentingType_Favorites;
     }
 
-    return JMResourcesCollectionViewControllerPresentingType_None;
+    return 0;
 }
 
 @end

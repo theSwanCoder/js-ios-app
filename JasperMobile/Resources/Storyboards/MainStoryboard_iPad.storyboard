@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="syl-VF-Xcc">
     <dependencies>
-        <deployment version="1536" identifier="iOS"/>
+        <deployment version="1536" defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -26,10 +26,17 @@
                                     <rect key="frame" x="0.0" y="0.0" width="312" height="305"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="qME-In-lYi">
+                                        <view contentMode="scaleToFill" id="oYH-z1-vWk">
                                             <rect key="frame" x="0.0" y="0.0" width="312" height="167"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </imageView>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="qME-In-lYi">
+                                                    <rect key="frame" x="20" y="20" width="120" height="100"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </view>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="P4f-jl-6k6">
                                             <rect key="frame" x="20" y="175" width="272" height="33"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
@@ -49,6 +56,7 @@
                                 </view>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
+                                    <outlet property="coloredView" destination="oYH-z1-vWk" id="4Dw-y2-WtT"/>
                                     <outlet property="desc" destination="Ha6-FI-hwz" id="hmc-5g-hFO"/>
                                     <outlet property="imageView" destination="qME-In-lYi" id="E8j-tQ-4PB"/>
                                     <outlet property="label" destination="P4f-jl-6k6" id="YAN-SQ-EgC"/>
@@ -63,14 +71,15 @@
                     <navigationItem key="navigationItem" id="KHQ-11-Lts"/>
                     <connections>
                         <segue destination="1sF-AF-S1b" kind="push" identifier="ShowSettings" id="PsR-9h-aIe"/>
-                        <segue destination="ejV-Q1-vJd" kind="push" identifier="ShowLibrary" id="i6O-Oj-0gj"/>
                         <segue destination="5YE-hy-aNi" kind="push" identifier="ShowRepository" id="o8L-4f-fCU"/>
-                        <segue destination="S2Y-Ey-RAC" kind="push" identifier="ShowSavedItems" id="1SQ-tL-rH2"/>
+                        <segue destination="5YE-hy-aNi" kind="push" identifier="ShowSavedItems" id="6Vt-lP-iZu"/>
+                        <segue destination="5YE-hy-aNi" kind="push" identifier="ShowLibrary" id="CyE-bM-pPy"/>
+                        <segue destination="5YE-hy-aNi" kind="push" identifier="ShowFavorites" id="E9g-J6-aMM"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9VI-WW-jbf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1637" y="2141"/>
+            <point key="canvasLocation" x="-1686" y="4013"/>
         </scene>
         <!--Report Options View Controller-->
         <scene sceneID="RcC-P7-rcB">
@@ -135,7 +144,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="aAu-TZ-uTc">
-                                                    <rect key="frame" x="500.00000169873226" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500.00000348968143" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -172,7 +181,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="7lU-wU-f6G">
-                                                    <rect key="frame" x="500.00000169873226" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500.00000348968143" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -209,7 +218,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Z1Q-Mf-9jN">
-                                                    <rect key="frame" x="500.00000348968143" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -246,7 +255,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="4sd-n2-9lB">
-                                                    <rect key="frame" x="500.00000348968143" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -509,22 +518,6 @@
             </objects>
             <point key="canvasLocation" x="1851" y="1261"/>
         </scene>
-        <!--Resources Collection View Controller-->
-        <scene sceneID="Mbp-Wk-xia">
-            <objects>
-                <viewController id="ejV-Q1-vJd" customClass="JMResourcesCollectionViewController" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="ycO-NS-YEJ"/>
-                    <connections>
-                        <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="0pS-52-MKd"/>
-                        <segue destination="5ET-d1-APX" kind="push" identifier="ShowReportOptions" id="rUw-cW-Rru"/>
-                        <segue destination="Op6-2z-h3K" kind="push" identifier="ShowDashboardViewer" id="cr8-hr-ljP"/>
-                        <segue destination="jPP-0J-mqW" kind="push" identifier="ShowResourceInfoSegue" id="8NJ-lw-pVl"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Rm4-Jb-awM" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-731" y="2513"/>
-        </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="UyA-JE-YUt">
             <objects>
@@ -538,7 +531,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ubv-pZ-YSO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2605" y="2141"/>
+            <point key="canvasLocation" x="-2653" y="4023"/>
         </scene>
         <!--Servers Grid View Controller-->
         <scene sceneID="RE2-Ra-Smq">
@@ -648,7 +641,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="nhO-YI-grs">
-                                                    <rect key="frame" x="419.99999868008473" y="10" width="300" height="30"/>
+                                                    <rect key="frame" x="419.99999821793335" y="10" width="300" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -684,7 +677,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Z4W-hL-1an">
-                                                    <rect key="frame" x="419.99999868008473" y="10" width="300" height="30"/>
+                                                    <rect key="frame" x="419.99999821793335" y="10" width="300" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
@@ -894,12 +887,69 @@
         <scene sceneID="Bcn-kq-Stv">
             <objects>
                 <viewController id="5YE-hy-aNi" customClass="JMResourcesCollectionViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="TVd-d9-b8j">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="jPR-xU-RHf">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="15" minimumInteritemSpacing="15" id="xNS-cS-Op6">
+                                    <size key="itemSize" width="310" height="254"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="25" minY="15" maxX="25" maxY="15"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="5YE-hy-aNi" id="18z-kl-KtF"/>
+                                    <outlet property="delegate" destination="5YE-hy-aNi" id="IlB-38-dfs"/>
+                                </connections>
+                            </collectionView>
+                            <view hidden="YES" tag="1" contentMode="scaleToFill" id="e05-9o-hhB">
+                                <rect key="frame" x="10" y="435" width="748" height="90"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" id="VhJ-Cz-wsj">
+                                        <rect key="frame" x="100" y="27" width="37" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                        <color key="color" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </activityIndicatorView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4VW-iR-XBE" userLabel="Label">
+                                        <rect key="frame" x="147" y="0.0" width="591" height="90"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <string key="text">Loading, 
+Please Wait...</string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results. Please Make Another Selection..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GDD-BR-6QN" userLabel="Label">
+                                <rect key="frame" x="29" y="435" width="710" height="90"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </view>
                     <navigationItem key="navigationItem" id="IKA-7z-aGG"/>
                     <connections>
+                        <outlet property="activityView" destination="e05-9o-hhB" id="51U-EC-IxO"/>
+                        <outlet property="activityViewTitleLabel" destination="4VW-iR-XBE" id="D3M-1C-bHI"/>
+                        <outlet property="collectionView" destination="jPR-xU-RHf" id="ZWf-GI-NOW"/>
+                        <outlet property="noResultsViewTitleLabel" destination="GDD-BR-6QN" id="VsS-26-eMf"/>
+                        <outlet property="view" destination="TVd-d9-b8j" id="R24-2e-M0i"/>
                         <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="arU-QU-EiB"/>
                         <segue destination="5ET-d1-APX" kind="push" identifier="ShowReportOptions" id="Q7O-iF-p9q"/>
                         <segue destination="Op6-2z-h3K" kind="push" identifier="ShowDashboardViewer" id="ayQ-6h-tNB"/>
                         <segue destination="jPP-0J-mqW" kind="push" identifier="ShowResourceInfoSegue" id="8iJ-vW-wwo"/>
+                        <segue destination="ya8-xd-T77" kind="push" identifier="ShowSavedRecourcesViewer" id="syF-Kh-jY3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PSW-t6-qRF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -951,20 +1001,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hAU-Uj-ZKi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="577" y="1261"/>
-        </scene>
-        <!--Resources Collection View Controller-->
-        <scene sceneID="Nem-3a-6as">
-            <objects>
-                <viewController id="S2Y-Ey-RAC" customClass="JMResourcesCollectionViewController" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="CP8-xm-Fng"/>
-                    <connections>
-                        <segue destination="ya8-xd-T77" kind="push" identifier="ShowSavedRecourcesViewer" id="mZK-Aw-mxD"/>
-                        <segue destination="jPP-0J-mqW" kind="push" identifier="ShowResourceInfoSegue" id="nlU-R8-4oC"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9wL-gD-WYM" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-731" y="85"/>
         </scene>
         <!--Saved Resource Viewer View Controller-->
         <scene sceneID="lCg-yC-QkV">
@@ -1071,10 +1107,9 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="o8L-4f-fCU"/>
-        <segue reference="Q7O-iF-p9q"/>
         <segue reference="arU-QU-EiB"/>
+        <segue reference="E9g-J6-aMM"/>
         <segue reference="8iJ-vW-wwo"/>
-        <segue reference="ayQ-6h-tNB"/>
+        <segue reference="Q7O-iF-p9q"/>
     </inferredMetricsTieBreakers>
 </document>

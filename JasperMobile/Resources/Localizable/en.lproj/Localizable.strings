@@ -83,6 +83,7 @@
 "home.menuitem.saveditems.label" = "Saved Items";
 "home.menuitem.settings.label" = "Settings";
 "home.menuitem.repository.label" = "Repository";
+"home.menuitem.favorites.label" = "Favorites";
 
 // Descriptions
 
@@ -90,6 +91,7 @@
 "home.menuitem.repository.description" = "Browse your JR Server Repository.";
 "home.menuitem.settings.description" = "Configure your Jaspersoft Mobile App.";
 "home.menuitem.saveditems.description" = "View Items Saved on this Device. ";
+"home.menuitem.favorites.description" = "Browse your Favorites Items.";
 
 // Navigation Bar Titles
 "title.home" = "Home";

@@ -160,15 +160,14 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 
 - (void)sortByButtonTapped:(id)sender
 {
-    JMSortOptionsPopupView *sortPopup = [[JMSortOptionsPopupView alloc] initWithDelegate:self];
+    JMSortOptionsPopupView *sortPopup = [[JMSortOptionsPopupView alloc] initWithDelegate:self type:JMPopupViewType_ContentViewOnly];
     sortPopup.sortBy = self.resourceListLoader.sortBy;
     [sortPopup show];
 }
 
 - (void)filterByButtonTapped:(id)sender
 {
-    JMFilterOptionsPopupView *filterPopup = [[JMFilterOptionsPopupView alloc] initWithDelegate:self];
-    filterPopup.filterBy = self.resourceListLoader.filterBy;
+    JMFilterOptionsPopupView *filterPopup = [[JMFilterOptionsPopupView alloc] initWithDelegate:self type:JMPopupViewType_ContentViewOnly];
     filterPopup.objectType = self.resourceListLoader.resourcesType;
     [filterPopup show];
 }
@@ -182,10 +181,12 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
 {
     JSResourceLookup *resourceLookup = [self.resourceListLoader.resources objectAtIndex:indexPath.row];
-    if ([self.resourceListLoader isKindOfClass:[JMSavedResourcesListLoader class]]) {
-        [self performSegueWithIdentifier:kJMShowSavedRecourcesViewerSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
-    } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_REPORT_UNIT]) {
-        [self fetchInputControlsForReport:resourceLookup];
+    if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_REPORT_UNIT]) {
+        if ([JMSavedResources savedReportsFromResourceLookup:resourceLookup]) {
+            [self performSegueWithIdentifier:kJMShowSavedRecourcesViewerSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
+        } else {
+            [self fetchInputControlsForReport:resourceLookup];
+        }
     } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_DASHBOARD]) {
         [self performSegueWithIdentifier:kJMShowDashboardViewerSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
     } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_FOLDER]) {
@@ -265,12 +266,11 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self.view endEditing:YES];
 }
 
-- (void)popupViewDidApplied:(id)popup
+- (void)popupViewValueDidChanged:(id)popup
 {
     if ([popup isKindOfClass:[JMSortOptionsPopupView class]]) {
         self.resourceListLoader.sortBy = [popup sortBy];
     } else if ([popup isKindOfClass:[JMFilterOptionsPopupView class]]) {
-        self.resourceListLoader.filterBy = [popup filterBy];
         self.resourceListLoader.resourcesType = [popup objectType];
     }
     [self.resourceListLoader setNeedsUpdate];
@@ -373,7 +373,8 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
             case JMResourcesCollectionViewControllerPresentingType_SavedItems:
                 _resourceListLoader = [NSClassFromString(@"JMSavedResourcesListLoader") new];
                 break;
-            default:
+            case JMResourcesCollectionViewControllerPresentingType_Favorites:
+                _resourceListLoader = [NSClassFromString(@"JMFavoritesListLoader") new];
                 break;
         }
         _resourceListLoader.delegate = self;
