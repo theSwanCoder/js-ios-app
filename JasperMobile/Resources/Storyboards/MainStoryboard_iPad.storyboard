@@ -70,7 +70,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9VI-WW-jbf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1701" y="4013"/>
+            <point key="canvasLocation" x="-1637" y="2141"/>
         </scene>
         <!--Report Options View Controller-->
         <scene sceneID="RcC-P7-rcB">
@@ -135,7 +135,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="aAu-TZ-uTc">
-                                                    <rect key="frame" x="500" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500.00000169873226" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -172,7 +172,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="7lU-wU-f6G">
-                                                    <rect key="frame" x="500" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500.00000169873226" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -209,7 +209,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Z1Q-Mf-9jN">
-                                                    <rect key="frame" x="500.00000169873226" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500.00000348968143" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -246,7 +246,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="4sd-n2-9lB">
-                                                    <rect key="frame" x="500.00000169873226" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500.00000348968143" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -384,7 +384,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RdM-89-BNz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1241" y="4013"/>
+            <point key="canvasLocation" x="577" y="4013"/>
         </scene>
         <!--Single Select Table View Controller-->
         <scene sceneID="W0B-X7-veC">
@@ -394,18 +394,18 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0kZ-u0-I87" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2323" y="4981"/>
+            <point key="canvasLocation" x="1851" y="4013"/>
         </scene>
         <!--Report Viewer View Controller-->
         <scene sceneID="g4p-L1-pik">
             <objects>
                 <viewController id="1j7-lS-aWh" customClass="JMReportViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zk0-bX-Hf2">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="64" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" scalesPageToFit="YES" id="ahI-Oj-dmd">
-                                <rect key="frame" x="-6" y="-13" width="768" height="1024"/>
+                                <rect key="frame" x="-9" y="-17" width="768" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -413,7 +413,7 @@
                                 </connections>
                             </webView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="tEP-nc-fxs">
-                                <rect key="frame" x="368" y="497" width="16" height="24"/>
+                                <rect key="frame" x="367" y="495" width="16" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
@@ -425,11 +425,12 @@
                         <outlet property="webView" destination="ahI-Oj-dmd" id="I64-sm-zGW"/>
                         <segue destination="5ET-d1-APX" kind="push" identifier="ShowReportOptions" id="yOc-W8-lgs"/>
                         <segue destination="NDs-R7-Xs2" kind="push" identifier="SaveReportViewControllerSegue" id="aoT-B3-gH2"/>
+                        <segue destination="jPP-0J-mqW" kind="push" identifier="ShowResourceInfoSegue" id="Gyu-oP-z4B"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xr4-oY-Rss" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1241" y="2513"/>
+            <point key="canvasLocation" x="577" y="2513"/>
         </scene>
         <!--Save Report View Controller-->
         <scene sceneID="PWL-DW-niL">
@@ -506,7 +507,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Qf-Ex-18W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2315" y="2513"/>
+            <point key="canvasLocation" x="1851" y="1261"/>
         </scene>
         <!--Resources Collection View Controller-->
         <scene sceneID="Mbp-Wk-xia">
@@ -517,6 +518,7 @@
                         <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="0pS-52-MKd"/>
                         <segue destination="5ET-d1-APX" kind="push" identifier="ShowReportOptions" id="rUw-cW-Rru"/>
                         <segue destination="Op6-2z-h3K" kind="push" identifier="ShowDashboardViewer" id="cr8-hr-ljP"/>
+                        <segue destination="jPP-0J-mqW" kind="push" identifier="ShowResourceInfoSegue" id="8NJ-lw-pVl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rm4-Jb-awM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -536,7 +538,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ubv-pZ-YSO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2669" y="4013"/>
+            <point key="canvasLocation" x="-2605" y="2141"/>
         </scene>
         <!--Servers Grid View Controller-->
         <scene sceneID="RE2-Ra-Smq">
@@ -609,7 +611,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CIH-sB-rTe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1241" y="6789"/>
+            <point key="canvasLocation" x="577" y="5413"/>
         </scene>
         <!--Server Options View Controller-->
         <scene sceneID="Azj-gu-RYl">
@@ -646,7 +648,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="nhO-YI-grs">
-                                                    <rect key="frame" x="419.99999913096411" y="10" width="300" height="30"/>
+                                                    <rect key="frame" x="419.99999868008473" y="10" width="300" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -682,7 +684,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Z4W-hL-1an">
-                                                    <rect key="frame" x="419.99999913096411" y="10" width="300" height="30"/>
+                                                    <rect key="frame" x="419.99999868008473" y="10" width="300" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
@@ -779,7 +781,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l3l-WC-agW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2315" y="6789"/>
+            <point key="canvasLocation" x="1851" y="5413"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="pBY-GU-ZdQ">
@@ -876,7 +878,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lxQ-k4-bzh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-737" y="6789"/>
+            <point key="canvasLocation" x="-737" y="5413"/>
         </scene>
         <!--Multi Select Table View Controller-->
         <scene sceneID="hqQ-Py-wdl">
@@ -886,7 +888,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zE8-BY-OdC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2323" y="3781"/>
+            <point key="canvasLocation" x="1851" y="2513"/>
         </scene>
         <!--Resources Collection View Controller-->
         <scene sceneID="Bcn-kq-Stv">
@@ -897,6 +899,7 @@
                         <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="arU-QU-EiB"/>
                         <segue destination="5ET-d1-APX" kind="push" identifier="ShowReportOptions" id="Q7O-iF-p9q"/>
                         <segue destination="Op6-2z-h3K" kind="push" identifier="ShowDashboardViewer" id="ayQ-6h-tNB"/>
+                        <segue destination="jPP-0J-mqW" kind="push" identifier="ShowResourceInfoSegue" id="8iJ-vW-wwo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PSW-t6-qRF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -942,11 +945,12 @@
                     <connections>
                         <outlet property="activityIndicator" destination="lj1-je-Gsc" id="dqR-Hi-oZf"/>
                         <outlet property="webView" destination="fLp-QL-7Oy" id="8mM-PS-3mP"/>
+                        <segue destination="jPP-0J-mqW" kind="push" identifier="ShowResourceInfoSegue" id="oc5-0i-ifc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hAU-Uj-ZKi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1241" y="1261"/>
+            <point key="canvasLocation" x="577" y="1261"/>
         </scene>
         <!--Resources Collection View Controller-->
         <scene sceneID="Nem-3a-6as">
@@ -955,11 +959,12 @@
                     <navigationItem key="navigationItem" id="CP8-xm-Fng"/>
                     <connections>
                         <segue destination="ya8-xd-T77" kind="push" identifier="ShowSavedRecourcesViewer" id="mZK-Aw-mxD"/>
+                        <segue destination="jPP-0J-mqW" kind="push" identifier="ShowResourceInfoSegue" id="nlU-R8-4oC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9wL-gD-WYM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-731" y="5445"/>
+            <point key="canvasLocation" x="-731" y="85"/>
         </scene>
         <!--Saved Resource Viewer View Controller-->
         <scene sceneID="lCg-yC-QkV">
@@ -988,11 +993,69 @@
                     <connections>
                         <outlet property="activityIndicator" destination="MxI-EN-m3a" id="MKo-Zj-rAt"/>
                         <outlet property="webView" destination="reA-fS-50h" id="SId-hF-r9s"/>
+                        <segue destination="jPP-0J-mqW" kind="push" identifier="ShowResourceInfoSegue" id="jQu-CL-7hV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XHg-io-h9N" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1241" y="5445"/>
+            <point key="canvasLocation" x="577" y="85"/>
+        </scene>
+        <!--Resource Info View Controller-->
+        <scene sceneID="gRj-5g-VME">
+            <objects>
+                <viewController id="jPP-0J-mqW" customClass="JMResourceInfoViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eoi-8m-TPP">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="pW3-5S-Acy">
+                                <rect key="frame" x="10" y="10" width="748" height="940"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="2" indentationWidth="0.0" reuseIdentifier="ResourceAttributeCell" textLabel="cy5-C7-aLY" detailTextLabel="Xj2-qa-Ava" style="IBUITableViewCellStyleValue1" id="ScY-Jh-XxD">
+                                        <rect key="frame" x="0.0" y="119" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ScY-Jh-XxD" id="YSU-yg-ocy">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Attribute" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cy5-C7-aLY">
+                                                    <rect key="frame" x="15" y="16" width="91" height="15"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xj2-qa-Ava">
+                                                    <rect key="frame" x="112" y="13" width="41" height="18"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="jPP-0J-mqW" id="wIW-Cd-j5d"/>
+                                    <outlet property="delegate" destination="jPP-0J-mqW" id="0DS-yd-GrN"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="5RK-46-5MU"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <outlet property="tableView" destination="pW3-5S-Acy" id="fQ3-J6-gdx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rcI-Kq-m4g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1851" y="85"/>
         </scene>
     </scenes>
     <resources>
@@ -1008,9 +1071,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Q7O-iF-p9q"/>
         <segue reference="o8L-4f-fCU"/>
-        <segue reference="ayQ-6h-tNB"/>
+        <segue reference="Q7O-iF-p9q"/>
         <segue reference="arU-QU-EiB"/>
+        <segue reference="8iJ-vW-wwo"/>
+        <segue reference="ayQ-6h-tNB"/>
     </inferredMetricsTieBreakers>
 </document>
