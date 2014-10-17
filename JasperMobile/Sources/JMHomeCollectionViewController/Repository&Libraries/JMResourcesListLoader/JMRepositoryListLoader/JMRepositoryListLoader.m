@@ -40,8 +40,14 @@
     if (self.resourceLookup) {
         [super loadNextPage];
     } else {
-        NSArray *baseFolders = @[@{@"folderName" : JMCustomLocalizedString(@"repository.root.organization", nil), @"folderURI" : @"/"},
-                                 @{@"folderName" : JMCustomLocalizedString(@"repository.root.public", nil), @"folderURI" : @"/public"}];
+        NSArray *baseFolders = nil;
+        if ([self.resourceClient.serverInfo.edition isEqualToString:self.constants.SERVER_EDITION_PRO]) {
+            baseFolders = @[@{@"folderName" : JMCustomLocalizedString(@"repository.root.organization", nil), @"folderURI" : @"/"},
+              @{@"folderName" : JMCustomLocalizedString(@"repository.root.public", nil), @"folderURI" : @"/public"}];
+        } else {
+            baseFolders = @[@{@"folderName" : JMCustomLocalizedString(@"repository.root.root", nil), @"folderURI" : @"/"}];
+        }
+  
         for (NSDictionary *folder in baseFolders) {
             if (!self.searchQuery || (self.searchQuery && [[folder objectForKey:@"folderName"] rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound)) {
                 JSResourceLookup *rootResourceLookup = [[JSResourceLookup alloc] init];

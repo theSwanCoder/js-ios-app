@@ -108,13 +108,6 @@
  
  @return number of min supported server version
  */
-+ (NSInteger) minSupportedServerVersion;
-
-/**
- Returns string representation number of min supported server version
- 
- @return string representation number of min supported server version
- */
-+ (NSString *) minSupportedServerVersionStringRepresentation;
++ (float) minSupportedServerVersion;
 
 @end

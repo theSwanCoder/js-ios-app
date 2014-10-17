@@ -68,6 +68,9 @@ extern NSString * const kJMReportsDirectory;
 // Name of the main report file (outputResource)
 extern NSString * const kJMReportFilename;
 
+// Mint Splunk (Bug Sence) API KEY
+extern NSString * const kJMMintSplunkApiKey;
+
 #define kJMResourceLimit                                15
 #define kJMMasterViewWidth                              [JMUtils isIphone] ? 210.f : 240.f
 #define kJMMasterViewAnimationDuration                  0.2f

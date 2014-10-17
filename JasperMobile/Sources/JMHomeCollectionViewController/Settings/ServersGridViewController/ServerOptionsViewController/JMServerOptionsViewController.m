@@ -147,7 +147,7 @@
     
     __weak typeof(self) weakSelf = self;
     JMRequestDelegate *serverInfoDelegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
-        NSInteger serverVersion = restBase.serverInfo.versionAsInteger;
+        float serverVersion = restBase.serverInfo.versionAsFloat;
         if (serverVersion >= [JMServerProfile minSupportedServerVersion]) {
             [weakSelf.serverOptions setServerProfileActive];
             [weakSelf.navigationController popViewControllerAnimated:YES];

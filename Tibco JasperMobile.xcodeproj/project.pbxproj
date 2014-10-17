@@ -24,6 +24,9 @@
 		086B715919CAEB5600CC25CA /* JMSavedResources+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 086B715819CAEB5600CC25CA /* JMSavedResources+Helpers.m */; };
 		086B716419CB045200CC25CA /* JMSavedResourceViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086B716319CB045200CC25CA /* JMSavedResourceViewerViewController.m */; };
 		086B716B19CB128600CC25CA /* JMSavedResourcesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 086B716A19CB128600CC25CA /* JMSavedResourcesListLoader.m */; };
+		0871503619F1262E00C5875E /* SplunkMint-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503519F1262E00C5875E /* SplunkMint-iOS.framework */; };
+		0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503B19F1265B00C5875E /* CoreTelephony.framework */; };
+		0871503E19F1266900C5875E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503D19F1266900C5875E /* libz.dylib */; };
 		0879E3CE19B0D46300DFE769 /* JMMakeActiveServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0879E3CD19B0D46300DFE769 /* JMMakeActiveServerOptionCell.m */; };
 		088115F719B8C63F00C70170 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088115F619B8C63F00C70170 /* JMHorizontalLoadingCollectionViewCell.xib */; };
 		088115F919B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088115F819B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib */; };
@@ -228,8 +231,6 @@
 		08E8641C1992564A007CF257 /* JasperMobileAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863DB1992564A007CF257 /* JasperMobileAppDelegate.m */; };
 		08E8641D1992564A007CF257 /* JMHomeCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863DE1992564A007CF257 /* JMHomeCollectionViewController.m */; };
 		08E8641E1992564A007CF257 /* JMMainNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863E11992564A007CF257 /* JMMainNavigationController.m */; };
-		08E864221992564A007CF257 /* JMManualTransitionSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863F61992564A007CF257 /* JMManualTransitionSegue.m */; };
-		08E864231992564A007CF257 /* JMNoAnimationPushSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863F81992564A007CF257 /* JMNoAnimationPushSegue.m */; };
 		08E864241992564A007CF257 /* JMAppUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863FB1992564A007CF257 /* JMAppUpdater.m */; };
 		08E864251992564A007CF257 /* JMConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863FD1992564A007CF257 /* JMConstants.m */; };
 		08E864271992564A007CF257 /* JMLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E864011992564A007CF257 /* JMLocalization.m */; };
@@ -320,6 +321,9 @@
 		086B716319CB045200CC25CA /* JMSavedResourceViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedResourceViewerViewController.m; sourceTree = "<group>"; };
 		086B716919CB128600CC25CA /* JMSavedResourcesListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedResourcesListLoader.h; sourceTree = "<group>"; };
 		086B716A19CB128600CC25CA /* JMSavedResourcesListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedResourcesListLoader.m; sourceTree = "<group>"; };
+		0871503519F1262E00C5875E /* SplunkMint-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "SplunkMint-iOS.framework"; sourceTree = "<group>"; };
+		0871503B19F1265B00C5875E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		0871503D19F1266900C5875E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		0879E3CC19B0D46300DFE769 /* JMMakeActiveServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMakeActiveServerOptionCell.h; sourceTree = "<group>"; };
 		0879E3CD19B0D46300DFE769 /* JMMakeActiveServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMakeActiveServerOptionCell.m; sourceTree = "<group>"; };
 		088115F619B8C63F00C70170 /* JMHorizontalLoadingCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMHorizontalLoadingCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -598,10 +602,6 @@
 		08E863EF1992564A007CF257 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRefreshable.h; sourceTree = "<group>"; };
 		08E863F01992564A007CF257 /* JMReportClientHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportClientHolder.h; sourceTree = "<group>"; };
 		08E863F11992564A007CF257 /* JMResourceClientHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceClientHolder.h; sourceTree = "<group>"; };
-		08E863F51992564A007CF257 /* JMManualTransitionSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMManualTransitionSegue.h; sourceTree = "<group>"; };
-		08E863F61992564A007CF257 /* JMManualTransitionSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMManualTransitionSegue.m; sourceTree = "<group>"; };
-		08E863F71992564A007CF257 /* JMNoAnimationPushSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMNoAnimationPushSegue.h; sourceTree = "<group>"; };
-		08E863F81992564A007CF257 /* JMNoAnimationPushSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMNoAnimationPushSegue.m; sourceTree = "<group>"; };
 		08E863FA1992564A007CF257 /* JMAppUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAppUpdater.h; sourceTree = "<group>"; };
 		08E863FB1992564A007CF257 /* JMAppUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAppUpdater.m; sourceTree = "<group>"; };
 		08E863FC1992564A007CF257 /* JMConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMConstants.h; sourceTree = "<group>"; };
@@ -660,6 +660,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0871503E19F1266900C5875E /* libz.dylib in Frameworks */,
+				0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */,
 				F5D6373217909D8F005BA5CD /* libjaspersoft-sdk.a in Frameworks */,
 				F54C91A91752FAC20009E2BE /* QuartzCore.framework in Frameworks */,
 				F54C91A71752FAB80009E2BE /* SystemConfiguration.framework in Frameworks */,
@@ -672,6 +674,7 @@
 				F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */,
 				F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */,
 				F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */,
+				0871503619F1262E00C5875E /* SplunkMint-iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -806,6 +809,14 @@
 				086B716A19CB128600CC25CA /* JMSavedResourcesListLoader.m */,
 			);
 			path = JMSavedResourcesListLoader;
+			sourceTree = "<group>";
+		};
+		0871503419F1262E00C5875E /* SplunkMint-iOS-v4.0.17 */ = {
+			isa = PBXGroup;
+			children = (
+				0871503519F1262E00C5875E /* SplunkMint-iOS.framework */,
+			);
+			path = "SplunkMint-iOS-v4.0.17";
 			sourceTree = "<group>";
 		};
 		0881967B199A1703008CF79B /* JMSearchBar */ = {
@@ -1396,7 +1407,6 @@
 				08E863D31992564A007CF257 /* CoreDataEntities */,
 				0851DFB419ACE1F500DC6EDE /* CustomViews */,
 				08E863E91992564A007CF257 /* Protocols */,
-				08E863F41992564A007CF257 /* Segues */,
 				08E863F91992564A007CF257 /* Utils */,
 			);
 			name = Sources;
@@ -1475,17 +1485,6 @@
 				08E863F11992564A007CF257 /* JMResourceClientHolder.h */,
 			);
 			path = Protocols;
-			sourceTree = "<group>";
-		};
-		08E863F41992564A007CF257 /* Segues */ = {
-			isa = PBXGroup;
-			children = (
-				08E863F51992564A007CF257 /* JMManualTransitionSegue.h */,
-				08E863F61992564A007CF257 /* JMManualTransitionSegue.m */,
-				08E863F71992564A007CF257 /* JMNoAnimationPushSegue.h */,
-				08E863F81992564A007CF257 /* JMNoAnimationPushSegue.m */,
-			);
-			path = Segues;
 			sourceTree = "<group>";
 		};
 		08E863F91992564A007CF257 /* Utils */ = {
@@ -1660,6 +1659,8 @@
 			isa = PBXGroup;
 			children = (
 				F54C91AA1752FAC90009E2BE /* libxml2.dylib */,
+				0871503D19F1266900C5875E /* libz.dylib */,
+				0871503B19F1265B00C5875E /* CoreTelephony.framework */,
 				F54C91A81752FAC20009E2BE /* QuartzCore.framework */,
 				F54C91A61752FAB80009E2BE /* SystemConfiguration.framework */,
 				F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */,
@@ -1676,6 +1677,7 @@
 		F5663A141752F9D0007978BE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				0871503419F1262E00C5875E /* SplunkMint-iOS-v4.0.17 */,
 				089590DE19E3D514001471DA /* ALToastView-v0.0.1 */,
 				089590E419E3D514001471DA /* MJPopupViewController-v0.4 */,
 				089590E919E3D514001471DA /* Objection-v1.4 */,
@@ -2005,7 +2007,6 @@
 				08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */,
 				089C970219C8642B0010C135 /* JMResourceViewerActionsView.m in Sources */,
 				08E864171992564A007CF257 /* UIViewController+fetchInputControls.m in Sources */,
-				08E864231992564A007CF257 /* JMNoAnimationPushSegue.m in Sources */,
 				08DE67CC19C05D8B00C25AEA /* JMSingleSelectInputControlCell.m in Sources */,
 				08D27B7D19EBE4BF00994F08 /* JMSortOptionsPopupView.m in Sources */,
 				0895910119E3D514001471DA /* MJPopupBackgroundView.m in Sources */,
@@ -2037,7 +2038,6 @@
 				086B716B19CB128600CC25CA /* JMSavedResourcesListLoader.m in Sources */,
 				08DE67CF19C05D8B00C25AEA /* JMSingleSelectTableViewController.m in Sources */,
 				08D6921F19929DB300C87A33 /* JMTextSettingsTableViewCell.m in Sources */,
-				08E864221992564A007CF257 /* JMManualTransitionSegue.m in Sources */,
 				08E8641D1992564A007CF257 /* JMHomeCollectionViewController.m in Sources */,
 				08FF130C1992982F0082265D /* JMServerOption.m in Sources */,
 				08A43D2019E6F30100C0BA4D /* JMRepositoryListLoader.m in Sources */,
@@ -2139,9 +2139,11 @@
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JasperMobile/Vendor/jaspersoft-sdk/Vendor/RestKit/Tests/Vendor/OCHamcrest",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/SplunkMint-iOS-v4.0.17",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/Tibco JasperMobile-Prefix.pch";
@@ -2176,9 +2178,11 @@
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JasperMobile/Vendor/jaspersoft-sdk/Vendor/RestKit/Tests/Vendor/OCHamcrest",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/SplunkMint-iOS-v4.0.17",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/Tibco JasperMobile-Prefix.pch";

@@ -92,7 +92,7 @@
 - (void)applicationInfo:(id)sender
 {
     NSString *appName = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"];
-    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"servers.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersionStringRepresentation]];
+    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"servers.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion]];
     [[UIAlertView localizedAlertWithTitle:nil
                                   message:message
                                  delegate:nil

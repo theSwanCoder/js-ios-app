@@ -27,7 +27,7 @@
 
 /* Server Profiles view */
 
-"servers.info" = "%@ v %@\n\nStrumento di gestione e visualizzatore di report per JasperReports Server %@ e versioni superiori.\n\nPer ulteriori informazioni visitare:\nwww.jasperforge.org/projects/mobile\n\n(c) 2011 - 2014 Jaspersoft Corp.";
+"servers.info" = "%@ v %@\n\nStrumento di gestione e visualizzatore di report per JasperReports Server %.1f e versioni superiori.\n\nPer ulteriori informazioni visitare:\nwww.jasperforge.org/projects/mobile\n\n© 2005-2014 TIBCO Software, Inc";
 
 "servers.url.label" = "URL";
 "servers.url.tip" = "http://example.com/jasperserver";

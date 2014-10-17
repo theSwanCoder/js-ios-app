@@ -144,7 +144,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="aAu-TZ-uTc">
-                                                    <rect key="frame" x="500.00000348968143" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -181,7 +181,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="7lU-wU-f6G">
-                                                    <rect key="frame" x="500.00000348968143" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -218,7 +218,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Z1Q-Mf-9jN">
-                                                    <rect key="frame" x="500" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500.00000169873226" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -255,7 +255,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="4sd-n2-9lB">
-                                                    <rect key="frame" x="500" y="10" width="200" height="30"/>
+                                                    <rect key="frame" x="500.00000169873226" y="10" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -410,11 +410,11 @@
             <objects>
                 <viewController id="1j7-lS-aWh" customClass="JMReportViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zk0-bX-Hf2">
-                        <rect key="frame" x="0.0" y="64" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" scalesPageToFit="YES" id="ahI-Oj-dmd">
-                                <rect key="frame" x="-9" y="-17" width="768" height="1024"/>
+                                <rect key="frame" x="-9" y="-17" width="768" height="960"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -422,7 +422,7 @@
                                 </connections>
                             </webView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="tEP-nc-fxs">
-                                <rect key="frame" x="367" y="495" width="16" height="24"/>
+                                <rect key="frame" x="367" y="463" width="16" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
@@ -641,7 +641,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="nhO-YI-grs">
-                                                    <rect key="frame" x="419.99999821793335" y="10" width="300" height="30"/>
+                                                    <rect key="frame" x="420" y="10" width="300" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -677,7 +677,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Z4W-hL-1an">
-                                                    <rect key="frame" x="419.99999821793335" y="10" width="300" height="30"/>
+                                                    <rect key="frame" x="420" y="10" width="300" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
@@ -1107,9 +1107,9 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="arU-QU-EiB"/>
+        <segue reference="QIH-Uk-XKN"/>
+        <segue reference="Q7O-iF-p9q"/>
         <segue reference="E9g-J6-aMM"/>
         <segue reference="8iJ-vW-wwo"/>
-        <segue reference="Q7O-iF-p9q"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -123,7 +123,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
     NSString *cellIdentifier = @"ResourceAttributeCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (indexPath.row) {
-        [cell setTopSeparatorWithHeight:0.5 color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+        [cell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
     }
     
     NSDictionary *item = [self.resourceProperties objectAtIndex:indexPath.row];

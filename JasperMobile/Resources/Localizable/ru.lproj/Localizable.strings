@@ -27,7 +27,7 @@
 
 /* Server Profiles view */
 
-"servers.info" = "%@ v %@\n\nИнструмент управления и просмотра отчетов для сервера JasperReports версии %@ и выше.\n\nДля подробной информации посетите:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\n(c) 2011 - 2014 Jaspersoft Corp.";
+"servers.info" = "%@ v %@\n\nИнструмент управления и просмотра отчетов для сервера JasperReports версии %.1f и выше.\n\nДля подробной информации посетите:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\n© 2005-2014 TIBCO Software, Inc";
 
 "servers.url.label" = "URL";
 "servers.url.errmsg" = "Недопустимый URL";

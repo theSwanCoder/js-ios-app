@@ -27,7 +27,7 @@
 
 /* Server Profiles view */
 
-"servers.info" = "%@ v %@\n\nManagement tool and report viewer for JasperReports Server %@ and greater.\n\nFor more information visit:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\n(c) 2011 - 2014 Tibco Jaspersoft Corp.";
+"servers.info" = "%@ v %@\n\nManagement tool and report viewer for JasperReports Server %.1f and greater.\n\nFor more information visit:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\n© 2005-2014 TIBCO Software, Inc";
 
 "servers.url.label" = "Server Address";
 "servers.url.errmsg" = "Please specify a valid URL";
@@ -99,6 +99,7 @@
 /* Master view */
 
 "repository.root.organization" = "Organization";
+"repository.root.root" = "Root";
 "repository.root.public" = "Public";
 
 // Resources

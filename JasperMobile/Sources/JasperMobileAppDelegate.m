@@ -34,6 +34,10 @@
 #import "JMResourceClientHolder.h"
 #import "JMUtils.h"
 
+
+#import <SplunkMint-iOS/SplunkMint-iOS.h>
+
+
 static NSString * const kJMProductName = @"JasperMobile";
 
 @interface JasperMobileAppDelegate() <JMResourceClientHolder, JMReportClientHolder>
@@ -75,8 +79,6 @@ static NSString * const kJMProductName = @"JasperMobile";
         
         NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
         [NSURLCache setSharedURLCache:sharedCache];
-        
-        self.rootViewControllers = [NSMutableArray array];
     }
     
     return self;
@@ -84,6 +86,9 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [[Mint sharedInstance] initAndStartSession:kJMMintSplunkApiKey];
+    [[Mint sharedInstance] enableLogging:YES];
+    
     JMServerProfile *serverProfile = [JMServerProfile activeServerProfile];
     
     if (serverProfile.askPassword.boolValue) {
@@ -106,11 +111,11 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    if (self.resourceClient.serverProfile.serverInfo.versionAsInteger == 0) {
+    if (self.resourceClient.serverProfile.serverInfo.versionAsFloat == 0) {
         self.resourceClient.serverProfile.serverInfo = nil;
     }
     
-    if (self.reportClient.serverProfile.serverInfo.versionAsInteger == 0) {
+    if (self.reportClient.serverProfile.serverInfo.versionAsFloat == 0) {
         self.reportClient.serverProfile.serverInfo = nil;
     }
 }
