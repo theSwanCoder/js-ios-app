@@ -28,6 +28,7 @@
 #import "JMSettings.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "JMServerProfile+Helpers.h"
+#import <SplunkMint-iOS/SplunkMint-iOS.h>
 
 #import "JMAppUpdater.h"
 
@@ -52,6 +53,7 @@
     UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(applicationInfo:)];
     UIBarButtonItem *applyItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
     self.navigationItem.rightBarButtonItems = @[applyItem, infoItem];
+    [[Mint sharedInstance] logEventAsyncWithTag:@"With last enabled" completionBlock:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -87,6 +89,7 @@
     [self.view endEditing:YES];
     [self.detailSettings saveSettings];
     [self.navigationController popViewControllerAnimated:YES];
+    [[Mint sharedInstance] logEventAsyncWithTag:@"With last disabled" completionBlock:nil];
 }
 
 - (void)applicationInfo:(id)sender

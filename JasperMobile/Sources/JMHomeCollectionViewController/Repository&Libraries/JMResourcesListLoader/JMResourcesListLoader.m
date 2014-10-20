@@ -28,7 +28,9 @@
 
 @property (nonatomic, assign) BOOL needUpdateData;
 @property (nonatomic, assign) BOOL isLoadingNow;
-
+@property (nonatomic, assign, readwrite) BOOL hasNextPage;
+@property (nonatomic, assign, readwrite) NSInteger offset;
+@property (nonatomic, assign) NSInteger totalCount;
 @end
 
 
@@ -38,8 +40,6 @@ objection_requires(@"resourceClient", @"constants")
 @synthesize resources = _resources;
 @synthesize resourceLookup = _resourceLookup;
 @synthesize resourceClient = _resourceClient;
-@synthesize totalCount = _totalCount;
-@synthesize offset = _offset;
 @synthesize isLoadingNow = _isLoadingNow;
 @synthesize needUpdateData = _needUpdateData;
 
@@ -67,9 +67,8 @@ objection_requires(@"resourceClient", @"constants")
 {
     if (self.needUpdateData && !self.isLoadingNow) {
         // Reset state
-        self.totalCount = 0;
         self.offset = 0;
-        
+        self.totalCount = 0;
         [self.resources removeAllObjects];
         [self.delegate resourceListDidStartLoading:self];
         
@@ -84,11 +83,19 @@ objection_requires(@"resourceClient", @"constants")
 {
     self.needUpdateData = NO;
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakselfnotnil(^(JSOperationResult *result)) {
-        if (!self.totalCount) {
-            self.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
-        }
         [self.resources addObjectsFromArray:result.objects];
-        self.offset += kJMResourceLimit;
+
+        if (self.resourceClient.serverInfo.versionAsFloat < self.constants.SERVER_VERSION_CODE_EMERALD_5_6_0) {
+            self.offset += kJMResourceLimit;
+            if (!self.totalCount) {
+                self.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
+            }
+            self.hasNextPage = self.offset < self.totalCount;
+        } else {
+            self.offset = [[result.allHeaderFields objectForKey:@"Next-Offset"] integerValue];
+            self.hasNextPage = [result.objects count] == kJMResourceLimit;
+        }
+        
         
         self.isLoadingNow = NO;
         [self.delegate resourceListDidLoaded:self withError:nil];
@@ -101,11 +108,6 @@ objection_requires(@"resourceClient", @"constants")
     
     [self.resourceClient resourceLookups:self.resourceLookup.uri query:self.searchQuery types:self.resourcesTypesParameterForQuery
                                   sortBy:self.sortByParameterForQuery recursive:self.loadRecursively offset:self.offset limit:kJMResourceLimit delegate:delegate];
-}
-
-- (BOOL)hasNextPage
-{
-    return self.offset < self.totalCount;
 }
 
 - (void)searchWithQuery:(NSString *)query

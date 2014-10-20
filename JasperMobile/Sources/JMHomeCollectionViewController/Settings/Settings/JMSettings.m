@@ -30,6 +30,7 @@
 
 static NSString * const kJMTextCellIdentifier = @"TextCellIdentifier";
 static NSString * const kJMServerCellIdentifier = @"ServerCellIdentifier";
+static NSString * const kJMBooleanCellIdentifier = @"BooleanCellIdentifier";
 
 
 @interface JMSettings () <JMReportClientHolder, JMResourceClientHolder>
@@ -62,7 +63,8 @@ objection_requires(@"resourceClient", @"reportClient")
     NSArray *itemsSourceArray =
     @[@{@"title" : JMCustomLocalizedString(@"detail.settings.item.server", nil), @"value" : serverString, @"cellIdentifier" : kJMServerCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"detail.settings.item.connection.timeout", nil), @"value" : @(self.resourceClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier},
-      @{@"title" : JMCustomLocalizedString(@"detail.settings.item.data.read.timeout", nil), @"value" : @(self.reportClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier}];
+      @{@"title" : JMCustomLocalizedString(@"detail.settings.item.data.read.timeout", nil), @"value" : @(self.reportClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier},
+      @{@"title" : JMCustomLocalizedString(@"detail.settings.crashtracking.title", nil), @"value" : @([JMUtils crashReportsSendingEnable]), @"cellIdentifier" : kJMBooleanCellIdentifier}];
     
     for (NSDictionary *itemData in itemsSourceArray) {
         JMSettingsItem *item = [[JMSettingsItem alloc] init];
@@ -84,10 +86,12 @@ objection_requires(@"resourceClient", @"reportClient")
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[[self.itemsArray objectAtIndex:1] valueSettings] forKey:kJMDefaultRequestTimeout];
     [defaults setObject:[[self.itemsArray objectAtIndex:2] valueSettings] forKey:kJMReportRequestTimeout];
+    [defaults setObject:[[self.itemsArray objectAtIndex:3] valueSettings] forKey:kJMDefaultSendingCrashReport];
     [defaults synchronize];
     
     self.resourceClient.timeoutInterval = [[[self.itemsArray objectAtIndex:1] valueSettings] doubleValue];
     self.reportClient.timeoutInterval   = [[[self.itemsArray objectAtIndex:2] valueSettings] doubleValue];
+    [JMUtils activateCrashReportSendingIfNeeded];
 }
 
 @end

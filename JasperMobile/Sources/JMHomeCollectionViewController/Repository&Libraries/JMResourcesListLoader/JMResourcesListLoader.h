@@ -57,7 +57,7 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderSortBy) {
 
 @end
 
-@interface JMResourcesListLoader : NSObject <JMResourceClientHolder, JMPagination> {
+@interface JMResourcesListLoader : NSObject <JMResourceClientHolder> {
     BOOL _isLoadingNow;
     BOOL _needUpdateData;
 
@@ -73,6 +73,8 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderSortBy) {
 @property (nonatomic, assign) BOOL      loadRecursively;
 @property (nonatomic, assign) JMResourcesListLoaderObjectType resourcesType;
 @property (nonatomic, assign) JMResourcesListLoaderSortBy sortBy;
+@property (nonatomic, readonly) BOOL hasNextPage;
+@property (nonatomic, readonly) NSInteger offset;
 
 - (void)setNeedsUpdate;
 
@@ -81,6 +83,8 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderSortBy) {
 - (void)searchWithQuery:(NSString *)query;
 
 - (void)clearSearchResults;
+
+- (void)loadNextPage;
 
 - (NSString *)sortByParameterForQuery;
 

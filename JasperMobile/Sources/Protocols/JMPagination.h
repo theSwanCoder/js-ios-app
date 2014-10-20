@@ -34,12 +34,5 @@
 #import <Foundation/Foundation.h>
 
 @protocol JMPagination <NSObject>
-@required
-@property (nonatomic, assign) NSInteger offset;
-@property (nonatomic, assign) NSInteger totalCount;
-
-@optional
-- (void)loadNextPage;
-- (BOOL)hasNextPage;
 
 @end

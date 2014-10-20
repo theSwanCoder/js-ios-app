@@ -39,6 +39,7 @@ NSString * const kJMDefaultsServerOrganization = @"jaspersoft.server.organizatio
 NSString * const kJMDefaultsServerPassword = @"jaspersoft.server.password.%d";
 NSString * const kJMDefaultsServerUsername = @"jaspersoft.server.username.%d";
 
+
 // Notifications
 NSString * const kJMChangeServerProfileNotification = @"changeServerProfile";
 NSString * const kJMResetApplicationNotification = @"resetApplication";
@@ -58,6 +59,7 @@ NSString * const kJMFilterByTag = @"filterByTag";
 // Settings keys
 NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";
 NSString * const kJMReportRequestTimeout = @"reportRequestTimeout";
+NSString * const kJMDefaultSendingCrashReport = @"jaspersoft.crashreportsending.enabled";
 
 
 // Directory to store downloaded reports
@@ -67,5 +69,5 @@ NSString * const kJMReportsDirectory = @"reports";
 NSString * const kJMReportFilename = @"report";
 
 // Mint Splunk (Bug Sence) API KEY
-NSString * const kJMMintSplunkApiKey = @"d5619ccb;";
+NSString * const kJMMintSplunkApiKey = @"d5619ccb";
 

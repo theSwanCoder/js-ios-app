@@ -29,8 +29,7 @@
 #import "JMConstants.h"
 #import "JMLocalization.h"
 #import "JMSavedResources+Helpers.h"
-
-CGFloat kJMNoEdgesInset = -1;
+#import <SplunkMint-iOS/SplunkMint-iOS.h>
 
 @implementation JMUtils
 
@@ -106,4 +105,22 @@ CGFloat kJMNoEdgesInset = -1;
     return [injector getObject:[NSManagedObjectContext class]];
 }
 
++ (BOOL)crashReportsSendingEnable
+{
+    id crashReportsSettings = [[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultSendingCrashReport];
+    if (crashReportsSettings) {
+        return [crashReportsSettings boolValue];
+    }
+    return YES;
+}
+
++ (void)activateCrashReportSendingIfNeeded
+{
+    if ([self crashReportsSendingEnable] && ![Mint sharedInstance].isSessionActive) {
+        [[Mint sharedInstance] initAndStartSession:kJMMintSplunkApiKey];
+        [[Mint sharedInstance] enableLogging:YES];
+    } else if (![self crashReportsSendingEnable]) {
+        [[Mint sharedInstance] closeSessionAsyncWithCompletionBlock:nil];
+    }
+}
 @end

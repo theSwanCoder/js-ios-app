@@ -35,9 +35,6 @@
 #import "JMUtils.h"
 
 
-#import <SplunkMint-iOS/SplunkMint-iOS.h>
-
-
 static NSString * const kJMProductName = @"JasperMobile";
 
 @interface JasperMobileAppDelegate() <JMResourceClientHolder, JMReportClientHolder>
@@ -86,8 +83,7 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[Mint sharedInstance] initAndStartSession:kJMMintSplunkApiKey];
-    [[Mint sharedInstance] enableLogging:YES];
+    [JMUtils activateCrashReportSendingIfNeeded];
     
     JMServerProfile *serverProfile = [JMServerProfile activeServerProfile];
     

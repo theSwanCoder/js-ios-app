@@ -42,6 +42,7 @@ extern NSString * const kJMDefaultsServerOrganization;
 extern NSString * const kJMDefaultsServerPassword;
 extern NSString * const kJMDefaultsServerUsername;
 
+
 // Notifications
 extern NSString * const kJMChangeServerProfileNotification;
 extern NSString * const kJMResetApplicationNotification;
@@ -61,6 +62,7 @@ extern NSString * const kJMFilterByTag;
 // Settings keys
 extern NSString * const kJMDefaultRequestTimeout;
 extern NSString * const kJMReportRequestTimeout;
+extern NSString * const kJMDefaultSendingCrashReport;
 
 // Report directory
 extern NSString * const kJMReportsDirectory;

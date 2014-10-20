@@ -25,7 +25,13 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMFavorites+Helpers.h"
 
+@interface JMFavoritesListLoader ()
+@property (nonatomic, assign, readwrite) NSInteger offset;
+@end
+
 @implementation JMFavoritesListLoader
+@synthesize offset;
+
 - (id)init
 {
     self = [super init];
@@ -84,6 +90,7 @@
         for(JMFavorites *favorite in fetchedObjects) {
             [self.resources addObject:[favorite wrapperFromFavorite]];
         }
+        self.offset += kJMResourceLimit;
         _needUpdateData = NO;
         _isLoadingNow = NO;
         [self.delegate resourceListDidLoaded:self withError:nil];

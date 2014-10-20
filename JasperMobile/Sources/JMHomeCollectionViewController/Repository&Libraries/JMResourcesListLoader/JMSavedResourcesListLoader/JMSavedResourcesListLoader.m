@@ -26,7 +26,12 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMSavedResources+Helpers.h"
 
+@interface JMSavedResourcesListLoader ()
+@property (nonatomic, assign, readwrite) NSInteger offset;
+@end
+
 @implementation JMSavedResourcesListLoader
+@synthesize offset;
 
 - (id)init
 {
@@ -87,6 +92,7 @@
         for(JMSavedResources *resource in fetchedObjects) {
             [self.resources addObject:[resource wrapperFromSavedReports]];
         }
+        self.offset += kJMResourceLimit;
         _needUpdateData = NO;
         _isLoadingNow = NO;
         [self.delegate resourceListDidLoaded:self withError:nil];

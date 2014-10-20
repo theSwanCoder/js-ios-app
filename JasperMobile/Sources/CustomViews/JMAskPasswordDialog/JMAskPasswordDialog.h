@@ -30,6 +30,7 @@
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @author Alexey Gubarev agubarev@jaspersoft.com
  @since 1.6
  */
 @interface JMAskPasswordDialog : NSObject <UIAlertViewDelegate>

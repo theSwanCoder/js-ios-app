@@ -29,7 +29,8 @@
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 2.0
+ @author Alexey Gubarev agubarev@jaspersoft.com
+ @since 1.9
  */
 
 @interface JMHomeCollectionViewController : UICollectionViewController

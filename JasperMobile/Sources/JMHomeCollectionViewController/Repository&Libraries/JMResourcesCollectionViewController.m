@@ -38,6 +38,9 @@
 
 NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 
+NSString * const kJMRepresentationTypeDidChangedNotification = @"kJMRepresentationTypeDidChangedNotification";
+NSString * const kJMRepresentationTypeKey = @"kJMRepresentationTypeKey";
+
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationTypeHorizontalList; }
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() { return JMResourcesRepresentationTypeGrid; }
 
@@ -56,6 +59,8 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 @property (nonatomic, weak) IBOutlet UILabel *noResultsViewTitleLabel;
 
 @property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
+
+@property (nonatomic, assign) BOOL needReloadData;
 
 @end
 
@@ -93,7 +98,12 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self.resourceListLoader updateIfNeeded];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceOrientationDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
-        [self.collectionView reloadData];
+        self.needReloadData = YES;
+    } @weakselfend];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:kJMRepresentationTypeDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
+        self.representationType = [[notification.userInfo objectForKey:kJMRepresentationTypeKey] integerValue];
+        self.needReloadData = YES;
     } @weakselfend];
 }
 
@@ -102,16 +112,36 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (self.needReloadData) {
+        [self.collectionView reloadData];
+        self.needReloadData = NO;
+    }
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self.resourceListLoader updateIfNeeded];
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void)setRepresentationType:(JMResourcesRepresentationType)representationType
 {
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self.collectionView reloadData];
+    if (_representationType != representationType) {
+        _representationType = representationType;
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMRepresentationTypeDidChangedNotification object:nil userInfo:@{kJMRepresentationTypeKey: @(representationType)}];
+    }
+}
+
+- (void)setNeedReloadData:(BOOL)needReloadData
+{
+    _needReloadData = needReloadData;
+    if (self.isViewLoaded && self.view.window && needReloadData) {
+        [self.collectionView reloadData];
+        _needReloadData = NO;
+    }
 }
 
 - (NSString *)resourceCellForRepresentationType:(JMResourcesRepresentationType)type
@@ -185,12 +215,6 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     JMFilterOptionsPopupView *filterPopup = [[JMFilterOptionsPopupView alloc] initWithDelegate:self type:JMPopupViewType_ContentViewOnly];
     filterPopup.objectType = self.resourceListLoader.resourcesType;
     [filterPopup show];
-}
-
-- (void)setRepresentationType:(JMResourcesRepresentationType)representationType
-{
-    _representationType = representationType;
-    [self.collectionView reloadData];
 }
 
 - (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
@@ -313,7 +337,9 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     UIBarButtonItem *sortItem;
     switch (self.presentingType) {
         case JMResourcesCollectionViewControllerPresentingType_Library:
-            filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];
+            if([self.resourceListLoader.resourceClient.serverInfo.edition isEqualToString:self.resourceListLoader.constants.SERVER_EDITION_PRO]) {
+                filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];
+            }
         case JMResourcesCollectionViewControllerPresentingType_SavedItems:
             sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortByButtonTapped:)];
             break;
@@ -401,7 +427,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 #pragma mark - JMResourcesListLoaderDelegate
 - (void)resourceListDidStartLoading:(JMResourcesListLoader *)listLoader
 {
-    [self.collectionView reloadData];
+    self.needReloadData = YES;
     self.activityView.hidden = NO;
     self.noResultsViewTitleLabel.hidden = YES;
 }
@@ -414,7 +440,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     } else {
         self.noResultsViewTitleLabel.hidden = listLoader.resources.count > 0;
         self.activityView.hidden = YES;
-        [self.collectionView reloadData];
+        self.needReloadData = YES;
     }
 }
 

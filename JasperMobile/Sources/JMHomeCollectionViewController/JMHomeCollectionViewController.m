@@ -30,6 +30,8 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMResourcesCollectionViewController.h"
 
+#import "ALToastView.h"
+
 // Localization keys defined as lowercase version of MenuItem identifier (e.g library, saveditems etc)
 static NSString * const kJMMenuItemLibrary = @"Library";
 static NSString * const kJMMenuItemSettings = @"Settings";
@@ -81,6 +83,10 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 {
     [super viewWillAppear:animated];
     [self.collectionView reloadData];
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultSendingCrashReport]) {
+        [ALToastView toastInView:self.view withText:JMCustomLocalizedString(@"detail.settings.crashtracking.toast", nil)];
+        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultSendingCrashReport];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

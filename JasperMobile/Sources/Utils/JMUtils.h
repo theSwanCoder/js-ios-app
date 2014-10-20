@@ -29,10 +29,9 @@
 #import "JMResourceClientHolder.h"
 #import "JMServerProfile.h"
 
-extern CGFloat kJMNoEdgesInset;
-
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @author Alexey Gubarev agubarev@jaspersoft.com
  @since 1.6
  */
 @interface JMUtils : NSObject
@@ -86,4 +85,15 @@ extern CGFloat kJMNoEdgesInset;
  */
 + (NSManagedObjectContext *)managedObjectContext;
 
+/**
+ Returns YES if crash reports sending is available
+ 
+ @return YES if crash reports sending is available
+ */
++ (BOOL)crashReportsSendingEnable;
+
+/**
+ Update sending of crash reports
+ */
++ (void)activateCrashReportSendingIfNeeded;
 @end

@@ -73,7 +73,10 @@ static NSMutableArray *toasts;
 		self.autoresizesSubviews = NO;
 		
 		// Init and add label
-		_textLabel = [[UILabel alloc] init];
+        CGFloat maxWidth = [UIScreen mainScreen].applicationFrame.size.width - 10*2;
+		_textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, maxWidth, MAXFLOAT)];
+        _textLabel.numberOfLines = 2;
+        _textLabel.textAlignment = NSTextAlignmentCenter;
 		_textLabel.text = text;
 		_textLabel.font = [UIFont systemFontOfSize:15];
 		_textLabel.textColor = [UIColor whiteColor];
