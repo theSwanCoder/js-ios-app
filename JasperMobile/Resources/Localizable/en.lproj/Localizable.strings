@@ -1,5 +1,5 @@
 /*
- * Tibco JasperMobile for iOS
+ * TIBCO JasperMobile for iOS
  * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
@@ -22,12 +22,13 @@
 
 //
 //  Localizable.strings
-//  Tibco JasperMobile
+//  TIBCO JasperMobile
 //
 
 /* Server Profiles view */
 
-"servers.info" = "%@ v %@\n\nManagement tool and report viewer for JasperReports Server %.1f and greater.\n\nFor more information visit:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\n© 2005-2014 TIBCO Software, Inc";
+"servers.info" = "%@ v %@\n\nManagement tool and report viewer for JasperReports Server %.1f and greater.\n\nFor more information visit:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\nCopyright © 2005-2014 TIBCO Software, Inc.";
+
 
 "servers.url.label" = "Server Address";
 "servers.url.errmsg" = "Please specify a valid URL";
@@ -70,8 +71,10 @@
 
 /* Rename Saved Report popup */
 
-"modifysavedreport.title" = "Rename Report";
-"modifysavedreport.reportname" = "Report Name";
+"savedreport.modify.title" = "Rename Report";
+"savedreport.modify.reportname" = "Report Name";
+"savedreport.delete.confirmation.message" = "Please, confirm deleting report.";
+
 
 /* Search filter */
 "status.loading" = "Loading...";

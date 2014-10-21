@@ -1,5 +1,5 @@
 /*
- * Tibco JasperMobile for iOS
+ * TIBCO JasperMobile for iOS
  * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
@@ -164,7 +164,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (void)saveButtonTapped:(id)sender
 {
     [self.view endEditing:YES];
-    NSString *fullReportDirectory = [[JMUtils documentsDirectoryPath] stringByAppendingPathComponent:[JMSavedResources pathToDirectoryForSavedReportWithName:self.reportName format:self.selectedReportFormat]];
+    NSString *fullReportDirectory = [JMSavedResources pathToReportDirectoryWithName:self.reportName format:self.selectedReportFormat];
     NSString *errorMessage = nil;
     BOOL isValidReportName = ([JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessage] &&
                               [self createReportDirectory:fullReportDirectory errorMessage:&errorMessage]);

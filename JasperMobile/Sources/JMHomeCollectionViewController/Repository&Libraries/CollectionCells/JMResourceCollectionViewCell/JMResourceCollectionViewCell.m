@@ -1,5 +1,5 @@
 /*
- * Tibco JasperMobile for iOS
+ * TIBCO JasperMobile for iOS
  * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
@@ -22,6 +22,7 @@
 
 
 #import "JMResourceCollectionViewCell.h"
+#import "JMSavedResources+Helpers.h"
 
 NSString * kJMHorizontalResourceCell = @"JMHorizontalResourceCollectionViewCell";
 NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
@@ -57,13 +58,27 @@ objection_requires(@"constants")
     self.resourceName.text = resourceLookup.label;
     self.resourceDescription.text = resourceLookup.resourceDescription;
     
+    UIImage *resourceImage = nil;
+    
     if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
-        self.resourceImage.image = [UIImage imageNamed:@"Report"];
+        resourceImage = [UIImage imageNamed:@"res_type_report"];
+        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:resourceLookup];
+        if (savedReport) {
+            if ([savedReport.format isEqualToString:self.constants.CONTENT_TYPE_HTML]) {
+                resourceImage = [UIImage imageNamed:@"res_type_html"];
+            } else if ([savedReport.format isEqualToString:self.constants.CONTENT_TYPE_PDF]) {
+                resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+            }
+        }
     } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD]) {
-        self.resourceImage.image = [UIImage imageNamed:@"Dashboard"];
+        resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
     } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_FOLDER]) {
-        self.resourceImage.image = [UIImage imageNamed:@"Folder"];
+        resourceImage = [UIImage imageNamed:@"res_type_folder"];
     }
+    
+    BOOL shouldCenterImage = ((resourceImage.size.height < self.resourceImage.frame.size.height) || (resourceImage.size.width < self.resourceImage.frame.size.width));
+    self.resourceImage.contentMode = shouldCenterImage ? UIViewContentModeCenter : UIViewContentModeScaleAspectFit;
+    self.resourceImage.image = resourceImage;
 }
 
 - (IBAction)infoButtonDidTapped:(id)sender

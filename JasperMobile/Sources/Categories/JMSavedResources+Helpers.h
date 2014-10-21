@@ -1,5 +1,5 @@
 /*
- * Tibco JasperMobile for iOS
+ * TIBCO JasperMobile for iOS
  * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
@@ -23,7 +23,7 @@
 
 //
 //  JMSavedResources+Helpers.h
-//  Tibco JasperMobile
+//  TIBCO JasperMobile
 //
 
 /**
@@ -57,6 +57,8 @@ extern NSString * const kJMSavedResources;
 
 + (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format;
 
-+ (NSString *)pathToDirectoryForSavedReportWithName:(NSString *)name format:(NSString *)format;
++ (NSString *)pathToReportDirectoryWithName:(NSString *)name format:(NSString *)format;
+
++ (NSString *)pathToReportWithName:(NSString *)name format:(NSString *)format;
 
 @end

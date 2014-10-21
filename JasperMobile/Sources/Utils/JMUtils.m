@@ -1,5 +1,5 @@
 /*
- * Tibco JasperMobile for iOS
+ * TIBCO JasperMobile for iOS
  * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
@@ -22,7 +22,7 @@
 
 //
 //  JMUtils.m
-//  Tibco JasperMobile
+//  TIBCO JasperMobile
 //
 
 #import "JMUtils.h"
@@ -116,6 +116,8 @@
 
 + (void)activateCrashReportSendingIfNeeded
 {
+    NSLog(@"%@", [Mint sharedInstance]);
+    
     if ([self crashReportsSendingEnable] && ![Mint sharedInstance].isSessionActive) {
         [[Mint sharedInstance] initAndStartSession:kJMMintSplunkApiKey];
         [[Mint sharedInstance] enableLogging:YES];

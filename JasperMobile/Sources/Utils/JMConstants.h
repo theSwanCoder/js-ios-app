@@ -1,5 +1,5 @@
 /*
- * Tibco JasperMobile for iOS
+ * TIBCO JasperMobile for iOS
  * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
@@ -22,7 +22,7 @@
 
 //
 //  JMConstants.h
-//  Tibco JasperMobile
+//  TIBCO JasperMobile
 //
 //  Created by Vlad Zavadskii vzavadskii@jaspersoft.com
 //  Since 1.6
@@ -84,7 +84,7 @@ extern NSString * const kJMMintSplunkApiKey;
 #define kJMMainNavigationBarBackgroundColor             [UIColor colorFromHexString:@"#343841"]
 #define kJMMainCollectionViewBackgroundColor            [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]]
 
-#define kJMResourcePreviewBackgroundColor               [UIColor colorFromHexString:@"#3A90B2"]
+#define kJMResourcePreviewBackgroundColor               [UIColor colorFromHexString:@"#3F8CBD"]
 
 #define kJMMasterResourceCellDefaultBackgroundColor     [UIColor colorFromHexString:@"#2E3138"]
 #define kJMMasterResourceCellSelectedBackgroundColor    [UIColor colorFromHexString:@"#484F59"]

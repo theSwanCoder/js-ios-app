@@ -1,5 +1,5 @@
 /*
- * Tibco JasperMobile for iOS
+ * TIBCO JasperMobile for iOS
  * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
@@ -22,7 +22,7 @@
 
 //
 //  JMHomeCollectionViewController.m
-//  Tibco JasperMobile
+//  TIBCO JasperMobile
 //
 
 #import "JMHomeCollectionViewController.h"
@@ -42,7 +42,7 @@ static NSString * const kJMMenuItemFavorites = @"Favorites";
 static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 
 @interface JMHomeCollectionViewController ()
-@property (weak, nonatomic) IBOutlet UITextField *activeServerView;
+@property (nonatomic, strong) UILabel *activeServerLabel;
 @property (nonatomic, strong) NSArray *menuItems;
 @end
 
@@ -62,15 +62,32 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     ];
     
     self.title = JMCustomLocalizedString(@"title.home", nil);
-    
-    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
-    NSString *serverString = nil;
-    if (activeServerProfile) {
-        serverString = activeServerProfile.alias;
-    } 
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:serverString style:UIBarButtonItemStyleBordered target:nil action:nil];
-    self.navigationItem.rightBarButtonItem.enabled = NO;
     self.collectionView.backgroundColor = kJMMainCollectionViewBackgroundColor;
+
+    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
+    if (activeServerProfile) {
+        NSString *serverString = activeServerProfile.alias;
+        CGFloat widthForLabel = [JMUtils isIphone] ? 105.f : 220.f;
+        self.activeServerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, widthForLabel, 30)];
+        self.activeServerLabel.numberOfLines = 1;
+        self.activeServerLabel.textAlignment = NSTextAlignmentRight;
+        self.activeServerLabel.text = serverString;
+        self.activeServerLabel.font = [JMFont navigationItemsFont];
+        self.activeServerLabel.adjustsFontSizeToFitWidth = NO;
+        self.activeServerLabel.backgroundColor = [UIColor clearColor];
+
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activeServerLabel];
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
+    [[NSNotificationCenter defaultCenter] addObserverForName:kJMChangeServerProfileNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
+        JMServerProfile *serverProfile = [[notification userInfo] objectForKey:kJMServerProfileKey];
+        self.activeServerLabel.text = serverProfile.alias;
+    } @weakselfend];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration

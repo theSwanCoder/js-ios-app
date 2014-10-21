@@ -22,7 +22,7 @@
 
 //
 //  JMCancelRequestPopup.m
-//  Tibco JasperMobile
+//  TIBCO JasperMobile
 //
 
 #import "JMCancelRequestPopup.h"

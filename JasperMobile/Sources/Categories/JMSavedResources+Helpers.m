@@ -1,5 +1,5 @@
 /*
- * Tibco JasperMobile for iOS
+ * TIBCO JasperMobile for iOS
  * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
@@ -55,7 +55,7 @@ NSString * const kJMSavedResources = @"SavedResources";
 + (void)removeReport:(JSResourceLookup *)resource
 {
     JMSavedResources *savedReport = [self savedReportsFromResourceLookup:resource];
-    NSString *pathToReport = [self pathToDirectoryForSavedReportWithName:savedReport.label format:savedReport.format];
+    NSString *pathToReport = [self pathToReportWithName:savedReport.label format:savedReport.format];
 
     [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
     [self.managedObjectContext deleteObject:savedReport];
@@ -71,8 +71,8 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 - (void)renameReportTo:(NSString *)newName
 {
-    NSString *currentPath = [JMSavedResources pathToDirectoryForSavedReportWithName:self.label format:self.format];
-    NSString *newPath = [JMSavedResources pathToDirectoryForSavedReportWithName:newName format:self.format];
+    NSString *currentPath = [JMSavedResources pathToReportDirectoryWithName:self.label format:self.format];
+    NSString *newPath = [JMSavedResources pathToReportDirectoryWithName:newName format:self.format];
     
     NSError *error = nil;
     [[NSFileManager defaultManager] moveItemAtPath:currentPath toPath:newPath error:&error];
@@ -96,13 +96,17 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 + (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format
 {
-    NSString *uri = [[self pathToDirectoryForSavedReportWithName:name format:format] stringByAppendingPathComponent:[kJMReportFilename stringByAppendingPathExtension:format]];
+    NSString *uri = [[kJMReportsDirectory stringByAppendingPathComponent:[name stringByAppendingPathExtension:format]] stringByAppendingPathComponent:[kJMReportFilename stringByAppendingPathExtension:format]];
     return [NSString stringWithFormat:@"/%@",uri];
 }
 
-+ (NSString *)pathToDirectoryForSavedReportWithName:(NSString *)name format:(NSString *)format
++ (NSString *)pathToReportDirectoryWithName:(NSString *)name format:(NSString *)format{
+    return [[JMUtils documentsDirectoryPath] stringByAppendingPathComponent:[kJMReportsDirectory stringByAppendingPathComponent:[name stringByAppendingPathExtension:format]]];
+}
+
++ (NSString *)pathToReportWithName:(NSString *)name format:(NSString *)format
 {
-    return [kJMReportsDirectory stringByAppendingPathComponent:[name stringByAppendingPathExtension:format]];
+    return [[JMUtils documentsDirectoryPath] stringByAppendingPathComponent:[self uriForSavedReportWithName:name format:format]];
 }
 
 #pragma mark - Private

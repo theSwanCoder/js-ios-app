@@ -1,5 +1,5 @@
 /*
- * Tibco JasperMobile for iOS
+ * TIBCO JasperMobile for iOS
  * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
@@ -45,7 +45,7 @@
 
 - (void)runReportExecution
 {
-    NSString *fullReportPath = [[JMUtils documentsDirectoryPath] stringByAppendingPathComponent:[JMSavedResources uriForSavedReportWithName:self.savedReports.label format:self.savedReports.format]];
+    NSString *fullReportPath = [JMSavedResources pathToReportWithName:self.savedReports.label format:self.savedReports.format];
     NSURL *url = [NSURL fileURLWithPath:fullReportPath];
     self.request = [NSURLRequest requestWithURL:url];
 }
@@ -60,22 +60,27 @@
 {
     [super actionsView:view didSelectAction:action];
     if (action == JMResourceViewerAction_Rename) {
-        UIAlertView *alertView  = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(@"modifysavedreport.title", nil)
+        UIAlertView *alertView  = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(@"savedreport.modify.title", nil)
                                                      message:nil
                                                     delegate:self
                                            cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
                                            otherButtonTitles:JMCustomLocalizedString(@"dialog.button.ok", nil), nil];
-        
         alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField *textField = [alertView textFieldAtIndex:0];
-        textField.placeholder = JMCustomLocalizedString(@"modifysavedreport.reportname", nil);
+        textField.placeholder = JMCustomLocalizedString(@"savedreport.modify.reportname", nil);
         textField.delegate = self;
         textField.text = [self.savedReports.label copy];
         
+        alertView.tag = action;
         [alertView show];
     } else if(action == JMResourceViewerAction_Delete) {
-        [JMSavedResources removeReport:self.resourceLookup];
-        [self.navigationController popViewControllerAnimated:YES];
+        UIAlertView *alertView  = [UIAlertView localizedAlertWithTitle:nil
+                                                               message:@"savedreport.delete.confirmation.message"
+                                                              delegate:self
+                                                     cancelButtonTitle:@"dialog.button.cancel"
+                                                     otherButtonTitles:@"dialog.button.ok", nil];
+        alertView.tag = action;
+        [alertView show];
     }
 }
 
@@ -101,9 +106,14 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.cancelButtonIndex != buttonIndex) {
-        NSString *newName = [alertView textFieldAtIndex:0].text;
-        [self.savedReports renameReportTo:newName];
-        self.title = newName;
+        if (alertView.tag == JMResourceViewerAction_Rename) {
+                NSString *newName = [alertView textFieldAtIndex:0].text;
+                [self.savedReports renameReportTo:newName];
+                self.title = newName;
+        } else if (alertView.tag == JMResourceViewerAction_Delete) {
+            [JMSavedResources removeReport:self.resourceLookup];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 

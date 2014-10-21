@@ -1,5 +1,5 @@
 /*
- * Tibco JasperMobile for iOS
+ * TIBCO JasperMobile for iOS
  * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
@@ -22,7 +22,7 @@
 
 //
 //  JMHomeCollectionViewController.h
-//  Tibco JasperMobile
+//  TIBCO JasperMobile
 //
 
 #import <UIKit/UIKit.h>
