@@ -45,6 +45,9 @@ extern NSString * const kJMFavorites;
 // Checks if resource was already added to favorites
 + (BOOL)isResourceInFavorites:(JSResourceLookup *)resource;
 
+// Returns favorites report from JSResourceLookup
++ (JMFavorites *)favoritesFromResourceLookup:(JSResourceLookup *)resource;
+
 // Returns wrapper from favorites. Wrapper is a JSResourceLookup
 - (JSResourceLookup *)wrapperFromFavorite;
 

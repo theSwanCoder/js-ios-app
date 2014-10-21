@@ -69,6 +69,7 @@ objection_requires(@"resourceClient", @"constants")
         // Reset state
         self.offset = 0;
         self.totalCount = 0;
+        self.hasNextPage = NO;
         [self.resources removeAllObjects];
         [self.delegate resourceListDidStartLoading:self];
         

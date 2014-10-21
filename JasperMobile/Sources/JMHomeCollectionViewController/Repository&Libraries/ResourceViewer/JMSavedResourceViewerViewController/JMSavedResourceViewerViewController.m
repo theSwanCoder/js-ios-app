@@ -111,7 +111,7 @@
                 [self.savedReports renameReportTo:newName];
                 self.title = newName;
         } else if (alertView.tag == JMResourceViewerAction_Delete) {
-            [JMSavedResources removeReport:self.resourceLookup];
+            [self.savedReports removeReport];
             [self.navigationController popViewControllerAnimated:YES];
         }
     }

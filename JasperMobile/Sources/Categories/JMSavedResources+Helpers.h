@@ -43,14 +43,14 @@ extern NSString * const kJMSavedResources;
 // Adds saved resource with path to CoreData
 + (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format;
 
-// Removes saved resource
-+ (void)removeReport:(JSResourceLookup *)resource;
-
 // Returns YES if report with name reportName is absent
 + (BOOL)isAvailableReportName:(NSString *)reportName;
 
 // Rename saved resource
 - (void)renameReportTo:(NSString *)newName;
+
+// Removes saved resource
+- (void)removeReport;
 
 // Returns wrapper from SavedReports. Wrapper is a JSResourceLookup
 - (JSResourceLookup *)wrapperFromSavedReports;

@@ -23,6 +23,7 @@
 
 #import "JMSavedResources+Helpers.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMFavorites+Helpers.h"
 
 NSString * const kJMSavedResources = @"SavedResources";
 
@@ -52,13 +53,18 @@ NSString * const kJMSavedResources = @"SavedResources";
     [self.managedObjectContext save:nil];
 }
 
-+ (void)removeReport:(JSResourceLookup *)resource
+- (void)removeReport
 {
-    JMSavedResources *savedReport = [self savedReportsFromResourceLookup:resource];
-    NSString *pathToReport = [self pathToReportWithName:savedReport.label format:savedReport.format];
-
+    NSString *pathToReport = [JMSavedResources pathToReportWithName:self.label format:self.format];
     [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
-    [self.managedObjectContext deleteObject:savedReport];
+    
+    JMFavorites *favorites = [JMFavorites favoritesFromResourceLookup:[self wrapperFromSavedReports]];
+    if (favorites) {
+        [self.managedObjectContext deleteObject:favorites];
+        [self.managedObjectContext save:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
+    }
+    [self.managedObjectContext deleteObject:self];
     [self.managedObjectContext save:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
 }
@@ -77,7 +83,16 @@ NSString * const kJMSavedResources = @"SavedResources";
     NSError *error = nil;
     [[NSFileManager defaultManager] moveItemAtPath:currentPath toPath:newPath error:&error];
     if (!error) {
+        JMFavorites *favorites = [JMFavorites favoritesFromResourceLookup:[self wrapperFromSavedReports]];
+        if (favorites) {
+            favorites.label = newName;
+            favorites.uri = [JMSavedResources uriForSavedReportWithName:newName format:self.format];
+            [self.managedObjectContext save:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
+        }
+        
         self.label = newName;
+        self.uri = [JMSavedResources uriForSavedReportWithName:newName format:self.format];
         [self.managedObjectContext save:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
     }

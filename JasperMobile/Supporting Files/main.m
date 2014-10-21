@@ -32,6 +32,11 @@
 int main(int argc, char *argv[])
 {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([JasperMobileAppDelegate class]));
+        @try {
+            return UIApplicationMain(argc, argv, nil, NSStringFromClass([JasperMobileAppDelegate class]));
+        }
+        @catch (NSException *exception) {
+            NSLog(@"\nException name: %@\nException reason: %@", exception.name, exception.reason);
+        }
     }
 }

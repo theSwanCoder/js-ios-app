@@ -46,8 +46,7 @@ NSString * const kJMFavorites = @"Favorites";
 
 + (void)removeFromFavorites:(JSResourceLookup *)resource
 {
-    NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resource.uri];
-    JMFavorites *favorites = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    JMFavorites *favorites = [self favoritesFromResourceLookup:resource];
     [self.managedObjectContext deleteObject:favorites];
     
     [self.managedObjectContext save:nil];
@@ -57,6 +56,12 @@ NSString * const kJMFavorites = @"Favorites";
 {
     NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resource.uri];
     return ([self.managedObjectContext countForFetchRequest:fetchRequest error:nil] > 0);
+}
+
++ (JMFavorites *)favoritesFromResourceLookup:(JSResourceLookup *)resource
+{
+    NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resource.uri];
+    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
 - (JSResourceLookup *)wrapperFromFavorite
