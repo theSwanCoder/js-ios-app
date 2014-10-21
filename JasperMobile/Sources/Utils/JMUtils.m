@@ -116,8 +116,6 @@
 
 + (void)activateCrashReportSendingIfNeeded
 {
-    NSLog(@"%@", [Mint sharedInstance]);
-    
     if ([self crashReportsSendingEnable] && ![Mint sharedInstance].isSessionActive) {
         [[Mint sharedInstance] initAndStartSession:kJMMintSplunkApiKey];
         [[Mint sharedInstance] enableLogging:YES];
