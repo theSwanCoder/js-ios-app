@@ -41,8 +41,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)fetchInputControlsForReport:(JSResourceLookup *)resourceLookup
 {
-    __weak typeof(self) weakSelf = self;
-    
     JSObjectionInjector *objectionInjector = [JSObjection defaultInjector];
     JSRESTReport *report = [objectionInjector getObject:JSRESTReport.class];
     
@@ -50,7 +48,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
         [report cancelAllRequests];
     }];
     
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
         NSMutableArray *invisibleInputControls = [NSMutableArray array];
         for (JSInputControlDescriptor *inputControl in result.objects) {
             if (!inputControl.visible.boolValue) {
@@ -62,7 +60,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
         [data setObject:resourceLookup forKey:kJMResourceLookup];
         
         if (result.objects.count - invisibleInputControls.count == 0) {
-            [weakSelf performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
+            [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
         } else {
             if (invisibleInputControls.count) {
                 NSMutableArray *inputControls = [result.objects mutableCopy];
@@ -72,9 +70,10 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
                 [data setObject:result.objects forKey:kJMInputControls];
             }
             
-            [weakSelf performSegueWithIdentifier:kJMShowReportOptionsSegue sender:data];
+            [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:data];
         }
-    } viewControllerToDismiss:nil];
+    } @weakselfend
+    viewControllerToDismiss:nil];
     
     [report inputControlsForReport:resourceLookup.uri ids:nil selectedValues:nil delegate:delegate];
 }

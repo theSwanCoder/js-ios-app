@@ -28,11 +28,10 @@
 #import "JMSettings.h"
 #import "UIAlertView+LocalizedAlert.h"
 #import "JMServerProfile+Helpers.h"
-#import <SplunkMint-iOS/SplunkMint-iOS.h>
 
 #import "JMAppUpdater.h"
 
-@interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *settingsTitleLabel;
@@ -53,7 +52,6 @@
     UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(applicationInfo:)];
     UIBarButtonItem *applyItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
     self.navigationItem.rightBarButtonItems = @[applyItem, infoItem];
-    [[Mint sharedInstance] logEventAsyncWithTag:@"With last enabled" completionBlock:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -87,9 +85,13 @@
 - (IBAction)saveButtonTapped:(id)sender
 {
     [self.view endEditing:YES];
+    BOOL previousSendingCrashReports = [JMUtils crashReportsSendingEnable];
     [self.detailSettings saveSettings];
-    [self.navigationController popViewControllerAnimated:YES];
-    [[Mint sharedInstance] logEventAsyncWithTag:@"With last disabled" completionBlock:nil];
+    if (previousSendingCrashReports != [JMUtils crashReportsSendingEnable]) {
+        [[UIAlertView localizedAlertWithTitle:@"detail.settings.crashtracking.alert.title" message:@"detail.settings.crashtracking.alert.message" delegate:self cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil] show];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)applicationInfo:(id)sender
@@ -102,4 +104,12 @@
                         cancelButtonTitle:@"dialog.button.ok"
                         otherButtonTitles:nil] show];
 }
+
+#pragma mark - 
+#pragma mrak - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 @end

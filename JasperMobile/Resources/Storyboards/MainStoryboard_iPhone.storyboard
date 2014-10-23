@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="Y6M-IF-MRS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="Y6M-IF-MRS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <scenes>
         <!--Main Navigation Controller-->
@@ -617,7 +618,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="WbH-FR-T3V">
-                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -654,7 +655,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="wO2-Zp-RXk">
-                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -691,7 +692,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="cyI-ld-frz">
-                                                    <rect key="frame" x="187.00000030994417" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -728,7 +729,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Ab7-h2-DAV">
-                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -1142,8 +1143,8 @@ Please Wait...</string>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="hUW-ct-uiE"/>
+        <segue reference="Gbl-v5-h6n"/>
         <segue reference="b4y-hZ-jNZ"/>
         <segue reference="jUv-fg-3yZ"/>
-        <segue reference="Gbl-v5-h6n"/>
     </inferredMetricsTieBreakers>
 </document>

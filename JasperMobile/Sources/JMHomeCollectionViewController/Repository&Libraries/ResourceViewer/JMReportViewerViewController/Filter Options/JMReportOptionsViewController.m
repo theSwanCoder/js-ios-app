@@ -161,21 +161,20 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
         [allInputControls addObject:descriptor.uuid];
     }
 
-    __weak typeof(self) weakSelf = self;
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:^{
-        [weakSelf.navigationController popViewControllerAnimated:YES];
-    }];
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } @weakselfend];
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
         for (JSInputControlState *state in result.objects) {
-            for (JSInputControlDescriptor *inputControl in weakSelf.inputControls) {
+            for (JSInputControlDescriptor *inputControl in self.inputControls) {
                 if ([state.uuid isEqualToString:inputControl.uuid]) {
                     inputControl.state = state;
                     break;
                 }
             }
         }
-        [weakSelf.tableView reloadData];
-    } viewControllerToDismiss:self];
+        [self.tableView reloadData];
+    } @weakselfend viewControllerToDismiss:self];
     
     [self.reportClient updatedInputControlsValues:self.resourceLookup.uri
                                               ids:allInputControls

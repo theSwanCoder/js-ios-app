@@ -84,7 +84,7 @@ extern NSString * const kJMMintSplunkApiKey;
 #define kJMMainNavigationBarBackgroundColor             [UIColor colorFromHexString:@"#343841"]
 #define kJMMainCollectionViewBackgroundColor            [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]]
 
-#define kJMResourcePreviewBackgroundColor               [UIColor colorFromHexString:@"#3F8CBD"]
+#define kJMResourcePreviewBackgroundColor               [UIColor colorFromHexString:@"#428EC0"]
 
 #define kJMMasterResourceCellDefaultBackgroundColor     [UIColor colorFromHexString:@"#2E3138"]
 #define kJMMasterResourceCellSelectedBackgroundColor    [UIColor colorFromHexString:@"#484F59"]

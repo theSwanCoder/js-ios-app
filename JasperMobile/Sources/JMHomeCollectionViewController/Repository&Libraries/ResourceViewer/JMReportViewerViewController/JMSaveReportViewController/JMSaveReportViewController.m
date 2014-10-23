@@ -183,39 +183,38 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
             [parameters addObject:reportParameter];
         }
         
-        __weak typeof(self) weakSelf = self;
         [JMCancelRequestPopup presentInViewController:self message:@"savereport.saving.status.title" restClient:self.reportClient cancelBlock:^{
             [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
         }];
         
-        JSRequestFinishedBlock checkErrorBlock = ^(JSOperationResult *result) {
+        JSRequestFinishedBlock checkErrorBlock = @weakself(^(JSOperationResult *result)) {
             if (result.isSuccessful) return;
-            [weakSelf.reportClient cancelAllRequests];
+            [self.reportClient cancelAllRequests];
             [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
-        };
+        }@weakselfend;
         
-        JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+        JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
             JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
             JSExportExecution *export = [response.exports objectAtIndex:0];
             NSString *requestId = response.requestId;
             
             NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
-            [weakSelf.reportClient saveReportOutput:requestId exportOutput:export.uuid path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
+            [self.reportClient saveReportOutput:requestId exportOutput:export.uuid path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
             
             for (JSReportOutputResource *attachment in export.attachments) {
                 NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
-                [weakSelf.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
+                [self.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
                     request.delegate = [JMRequestDelegate requestDelegateForFinishBlock:nil];
                     request.finishedBlock = checkErrorBlock;
                 }];
             }
-        }];
+        } @weakselfend];
 
-        [JMRequestDelegate setFinalBlock:^{
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-            [JMSavedResources addReport:weakSelf.resourceLookup withName:weakSelf.reportName format:self.selectedReportFormat];
-            [ALToastView toastInView:weakSelf.delegate.view withText:JMCustomLocalizedString(@"savereport.saved", nil)];
-        }];
+        [JMRequestDelegate setFinalBlock:@weakself(^(void)) {
+            [self.navigationController popViewControllerAnimated:YES];
+            [JMSavedResources addReport:self.resourceLookup withName:self.reportName format:self.selectedReportFormat];
+            [ALToastView toastInView:self.delegate.view withText:JMCustomLocalizedString(@"savereport.saved", nil)];
+        } @weakselfend];
 
         [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO freshData:YES saveDataSnapshot:NO
                              ignorePagination:NO transformerKey:nil pages:nil attachmentsPrefix:kJMAttachmentPrefix parameters:parameters usingBlock:^(JSRequest *request) {

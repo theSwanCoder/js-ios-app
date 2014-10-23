@@ -59,11 +59,10 @@ objection_requires(@"reportClient", @"constants")
 
     [self.navigationController setToolbarHidden:!(self.toolbar.countOfPages > 1) animated:YES];
 
-    __weak typeof(self) weakSelf = self;
     if (![JMRequestDelegate isRequestPoolEmpty]) {
-        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-        }];
+        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:@weakself(^(void)) {
+            [self.navigationController popViewControllerAnimated:YES];
+        } @weakselfend ];
     }
 }
 
@@ -130,17 +129,17 @@ objection_requires(@"reportClient", @"constants")
         [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
     }
 
-    __weak typeof(self) weakSelf = self;
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
         JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
         JSExportExecution *export = [response.exports objectAtIndex:0];
-        weakSelf.exportId = export.uuid;
-        weakSelf.requestId = response.requestId;
+        self.exportId = export.uuid;
+        self.requestId = response.requestId;
         
-        weakSelf.toolbar.countOfPages = [response.totalPages integerValue];
-        [weakSelf displayCurrentPageOfReport];
-        [weakSelf.navigationController setToolbarHidden:!(self.toolbar.countOfPages > 1) animated:YES];
-    } errorBlock: nil
+        self.toolbar.countOfPages = [response.totalPages integerValue];
+        [self displayCurrentPageOfReport];
+        [self.navigationController setToolbarHidden:!(self.toolbar.countOfPages > 1) animated:YES];
+    } @weakselfend
+      errorBlock: nil
       viewControllerToDismiss:(!self.requestId) ? self : nil];
     
     NSMutableArray *parameters = [NSMutableArray array];

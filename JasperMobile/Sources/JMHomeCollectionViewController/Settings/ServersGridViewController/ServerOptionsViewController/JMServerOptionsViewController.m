@@ -145,12 +145,11 @@
         errorBlock(nil);
     }];
     
-    __weak typeof(self) weakSelf = self;
-    JMRequestDelegate *serverInfoDelegate = [JMRequestDelegate requestDelegateForFinishBlock:^(JSOperationResult *result) {
+    JMRequestDelegate *serverInfoDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
         float serverVersion = restBase.serverInfo.versionAsFloat;
         if (serverVersion >= [JMServerProfile minSupportedServerVersion]) {
-            [weakSelf.serverOptions setServerProfileActive];
-            [weakSelf.navigationController popViewControllerAnimated:YES];
+            [self.serverOptions setServerProfileActive];
+            [self.navigationController popViewControllerAnimated:YES];
         } else {
             errorBlock(result);
             NSString *title = [NSString stringWithFormat:JMCustomLocalizedString(@"error.server.notsupported.title", nil), serverVersion];
@@ -160,7 +159,8 @@
                                 cancelButtonTitle:@"dialog.button.ok"
                                 otherButtonTitles:nil] show];
         }
-    } errorBlock:errorBlock];
+    } @weakselfend
+     errorBlock:errorBlock];
     [restBase serverInfo:serverInfoDelegate];
 }
 

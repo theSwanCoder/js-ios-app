@@ -267,11 +267,21 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
-    if (self.representationType == JMResourcesRepresentationTypeHorizontalList){
-        CGFloat width = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
-        return CGSizeMake(width, 80);
+    
+    CGFloat itemHeight = 80.f;
+    CGFloat itemWidth = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
+    
+    if (self.representationType == JMResourcesRepresentationTypeGrid) {
+        NSInteger countOfCellsInRow = 1;
+        while (((countOfCellsInRow * flowLayout.itemSize.width) + (countOfCellsInRow + 1) * flowLayout.minimumInteritemSpacing) < collectionView.frame.size.width) {
+            countOfCellsInRow ++;
+        }
+        countOfCellsInRow --;
+        itemHeight = flowLayout.itemSize.height;
+        itemWidth = floor((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
     }
-    return flowLayout.itemSize;
+    
+    return CGSizeMake(itemWidth, itemHeight);
 }
 
 #pragma mark - UISearchBarDelegate

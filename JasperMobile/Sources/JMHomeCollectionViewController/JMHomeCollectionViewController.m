@@ -146,21 +146,17 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout protocol
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
-    
     NSInteger countOfCellsInRow = 1;
     while (((countOfCellsInRow * flowLayout.itemSize.width) + (countOfCellsInRow + 1) * flowLayout.minimumInteritemSpacing) < collectionView.frame.size.width) {
         countOfCellsInRow ++;
     }
     countOfCellsInRow --;
     
-    CGFloat horizontalInset = floor((collectionView.frame.size.width - countOfCellsInRow * flowLayout.itemSize.width) / (countOfCellsInRow + 1));
-    UIEdgeInsets insets = UIEdgeInsetsMake(flowLayout.sectionInset.top, horizontalInset, flowLayout.sectionInset.bottom, horizontalInset);
-    
-    return insets;
+    CGFloat width = floor((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
+    return CGSizeMake(width, flowLayout.itemSize.height);
 }
 
 - (JMResourcesCollectionViewControllerPresentingType)presentingTypeForSequeIdentifier:(NSString *)identifier
