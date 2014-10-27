@@ -27,7 +27,7 @@
 
 /* Server Profiles view */
 
-"servers.info" = "%@ v %@\n\nManagement tool and report viewer for JasperReports Server %.1f and greater.\n\nFor more information visit:\ncommunity.jaspersoft.com/project/\njaspermobile-ios\n\nCopyright © 2005-2014 TIBCO Software, Inc.";
+"servers.info" = "%@™ v %@\n\nManagement tool and report viewer for JasperReports Server %.1f and greater.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-2014 TIBCO Software, Inc.";
 
 
 "servers.url.label" = "Server Address";
@@ -66,7 +66,7 @@
 "savereport.name.errmsg.empty" = "Cannot be empty";
 "savereport.name.errmsg.notunique" = "This name has been already taken, please choose different name";
 "savereport.name.errmsg.maxlength" = "Should be less than %i symbols";
-"savereport.name.errmsg.characters" = "Characters : / are not allowed";
+"savereport.name.errmsg.characters" = "Characters %@ are not allowed";
 "savereport.saving.status.title" = "Saving report...";
 
 /* Rename Saved Report popup */
@@ -160,7 +160,7 @@
 // Action titles
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
-"action.title.edit" = "Edit";
+"action.title.edit" = "Edit Filter Options";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
 "action.title.markasfavorite" = "Mark as Favorite";
@@ -168,7 +168,6 @@
 "action.title.info" = "Info";
 
 
-"action.report.viewer.page" = "Page";
 "action.report.viewer.pagecount" = "of %d";
 
 /* Error messages */

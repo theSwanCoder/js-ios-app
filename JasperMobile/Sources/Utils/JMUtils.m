@@ -35,7 +35,9 @@
 
 #define kJMNameMin 1
 #define kJMNameMax 250
-#define kJMInvalidCharacters @":/"
+#define kJMInvalidCharacters     @"|[]'\"~!#$%^&*+=;:?<>{}\\/"
+
+
 + (BOOL)validateReportName:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage
 {
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
@@ -45,7 +47,20 @@
     } else if (reportName.length > kJMNameMax) {
         *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"savereport.name.errmsg.maxlength", nil), kJMNameMax];
     } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
-        *errorMessage = JMCustomLocalizedString(@"savereport.name.errmsg.characters", nil);
+        NSMutableString *invalidCharsString = [NSMutableString string];
+        
+        NSInteger subLocation = 0;
+        while (subLocation < (reportName.length)) {
+            NSString *subString = [reportName substringWithRange:NSMakeRange(subLocation ++, 1)];
+            if ([kJMInvalidCharacters rangeOfString:subString].location != NSNotFound) {
+                if ([invalidCharsString length]) {
+                    [invalidCharsString appendString:@", "];
+                }
+                [invalidCharsString appendFormat:@"'%@'", subString];
+            }
+
+        }
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"savereport.name.errmsg.characters", nil), invalidCharsString];
     } else {
         if (![JMSavedResources isAvailableReportName:reportName]) {
             *errorMessage = JMCustomLocalizedString(@"savereport.name.errmsg.notunique", nil);

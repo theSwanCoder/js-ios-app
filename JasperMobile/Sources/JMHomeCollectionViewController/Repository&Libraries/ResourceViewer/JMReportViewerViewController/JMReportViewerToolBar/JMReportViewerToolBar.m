@@ -24,16 +24,14 @@
 #import "JMReportViewerToolBar.h"
 
 @interface JMReportViewerToolBar () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
-@property (weak, nonatomic) IBOutlet UILabel *pageTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pageCountLabel;
 @property (weak, nonatomic) IBOutlet UITextField *currentPageField;
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *firstButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *lastButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *nextButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *previousButton;
+@property (weak, nonatomic) IBOutlet UIButton *firstButton;
+@property (weak, nonatomic) IBOutlet UIButton *lastButton;
+@property (weak, nonatomic) IBOutlet UIButton *nextButton;
+@property (weak, nonatomic) IBOutlet UIButton *previousButton;
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
-
 
 @end
 
@@ -42,7 +40,6 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.pageTitleLabel.text = JMCustomLocalizedString(@"action.report.viewer.page", nil);
     self.currentPageField.backgroundColor = kJMMainNavigationBarBackgroundColor;
     self.countOfPages = 1;
     self.currentPage = 1;

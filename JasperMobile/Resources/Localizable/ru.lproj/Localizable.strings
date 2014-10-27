@@ -114,7 +114,6 @@
 "action.button.cancel" = "Отменить";
 "action.button.continue" = "Далее";
 "action.button.apply" = "Применить";
-"action.report.viewer.page" = "Страница";
 "action.report.viewer.pagecount" = "из %d";
 
 /* Error messages */
