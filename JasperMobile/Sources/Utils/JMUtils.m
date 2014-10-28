@@ -35,8 +35,7 @@
 
 #define kJMNameMin 1
 #define kJMNameMax 250
-#define kJMInvalidCharacters     @"|[]'\"~!#$%^&*+=;:?<>{}\\/"
-
+#define kJMInvalidCharacters     @"~!#$%^|`@&*()-+={}[]:;\"'<>,?/|\\"
 
 + (BOOL)validateReportName:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage
 {

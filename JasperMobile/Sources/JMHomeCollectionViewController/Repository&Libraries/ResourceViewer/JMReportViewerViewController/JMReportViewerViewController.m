@@ -32,7 +32,7 @@
 
 @interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, UIAlertViewDelegate>
 @property (nonatomic, strong) NSUndoManager *icUndoManager;
-@property (nonatomic, weak) JMReportViewerToolBar *toolbar;
+@property (nonatomic, strong) JMReportViewerToolBar *toolbar;
 
 @property (nonatomic, weak) JSConstants *constants;
 
@@ -70,6 +70,7 @@ objection_requires(@"reportClient", @"constants")
 {
     [super viewWillDisappear:animated];
     [self.navigationController setToolbarHidden:YES animated:YES];
+    [self.toolbar removeFromSuperview];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -176,6 +177,8 @@ objection_requires(@"reportClient", @"constants")
     if (!_toolbar) {
         _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportViewerToolBar" owner:self options:nil] firstObject];
         _toolbar.toolbarDelegate = self;
+    }
+    if (!_toolbar.superview) {
         _toolbar.frame = self.navigationController.toolbar.bounds;
         [self.navigationController.toolbar addSubview: _toolbar];
     }
