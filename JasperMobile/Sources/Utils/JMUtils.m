@@ -121,6 +121,10 @@
 
 + (BOOL)crashReportsSendingEnable
 {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultSendingCrashReport]) {
+        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultSendingCrashReport];
+    }
+
     id crashReportsSettings = [[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultSendingCrashReport];
     if (crashReportsSettings) {
         return [crashReportsSettings boolValue];

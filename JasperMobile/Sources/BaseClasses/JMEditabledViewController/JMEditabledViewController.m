@@ -68,9 +68,9 @@
             [self.tableView setContentOffset:CGPointMake(0, offset) animated:YES];
         }
         CGSize contentSize = self.tableView.contentSize;
-        CGSize neededContentSize = [self.tableView sizeThatFits:self.tableView.frame.size];
+        CGSize neededContentSize = [self.tableView sizeThatFits:CGSizeMake(self.tableView.frame.size.width, MAXFLOAT)];
 
-        if (!(contentSize.height > neededContentSize.height)) {
+        if (contentSize.height <= neededContentSize.height) {
             contentSize.height += keyboardHeight;
             self.tableView.contentSize = contentSize;
         }
@@ -80,7 +80,7 @@
 - (void)keyboarDidHide:(NSNotification*)aNotification
 {
     [UIView beginAnimations:nil context:nil];
-    self.tableView.contentSize = [self.tableView sizeThatFits:self.tableView.frame.size];
+    self.tableView.contentSize = [self.tableView sizeThatFits:CGSizeMake(self.tableView.frame.size.width, MAXFLOAT)];
     [UIView commitAnimations];
 }
 

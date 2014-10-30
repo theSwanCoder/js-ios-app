@@ -117,7 +117,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="SsL-u6-ztx">
-                                                    <rect key="frame" x="240" y="7" width="50" height="30"/>
+                                                    <rect key="frame" x="240" y="7" width="50.000000178813927" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -618,7 +618,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="WbH-FR-T3V">
-                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187.00000030994417" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -655,10 +655,10 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="wO2-Zp-RXk">
-                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187.00000030994417" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="FuH-Ao-LL4" id="sMy-uu-GE2"/>
                                                     </connections>
@@ -692,7 +692,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="cyI-ld-frz">
-                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -705,6 +705,43 @@ Please Wait...</string>
                                         <connections>
                                             <outlet property="accessoryView" destination="cyI-ld-frz" id="rS6-cO-02L"/>
                                             <outlet property="textField" destination="cyI-ld-frz" id="c9k-FX-yZS"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TimeCell" textLabel="gvb-us-M0r" detailTextLabel="AAF-P7-tEe" style="IBUITableViewCellStyleSubtitle" id="Y1b-sl-hx1" customClass="JMTimeInputControlCell">
+                                        <rect key="frame" x="0.0" y="151" width="300" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Y1b-sl-hx1" id="5bK-QT-dt9">
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gvb-us-M0r">
+                                                    <rect key="frame" x="15" y="7" width="34" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AAF-P7-tEe">
+                                                    <rect key="frame" x="15" y="29" width="43" height="15"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="9pV-Du-4ol">
+                                                    <rect key="frame" x="187.00000030994417" y="10" width="100" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="Y1b-sl-hx1" id="mst-dK-g0I"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="accessoryView" destination="9pV-Du-4ol" id="Mpp-2U-tHt"/>
+                                            <outlet property="textField" destination="9pV-Du-4ol" id="GHa-hR-Xcw"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DateTimeCell" textLabel="SmY-Nm-5Dd" detailTextLabel="HQW-nu-IyM" style="IBUITableViewCellStyleSubtitle" id="7ds-IM-gdc" customClass="JMDateTimeInputControlCell">
@@ -729,7 +766,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Ab7-h2-DAV">
-                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187.00000030994417" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -1143,8 +1180,8 @@ Please Wait...</string>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="hUW-ct-uiE"/>
-        <segue reference="Gbl-v5-h6n"/>
-        <segue reference="b4y-hZ-jNZ"/>
         <segue reference="jUv-fg-3yZ"/>
+        <segue reference="b4y-hZ-jNZ"/>
+        <segue reference="KN6-hX-ICt"/>
     </inferredMetricsTieBreakers>
 </document>

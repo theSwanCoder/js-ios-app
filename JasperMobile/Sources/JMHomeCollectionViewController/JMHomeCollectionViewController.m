@@ -100,10 +100,6 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 {
     [super viewWillAppear:animated];
     [self.collectionView reloadData];
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultSendingCrashReport]) {
-        [ALToastView toastInView:self.view withText:JMCustomLocalizedString(@"detail.settings.crashtracking.toast", nil)];
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultSendingCrashReport];
-    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

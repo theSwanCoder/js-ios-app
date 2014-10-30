@@ -30,7 +30,16 @@
 @implementation JMNumberInputControlCell
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"1234567890"] invertedSet];
+    NSString *decimalSeparator = [[NSLocale currentLocale] objectForKey:NSLocaleDecimalSeparator];
+    
+    if ([string isEqualToString:decimalSeparator]) {
+        if (range.location == 0 || [textField.text rangeOfString:decimalSeparator].location != NSNotFound) {
+            return NO;
+        }
+    }
+    
+    NSString *stringSet = [NSString stringWithFormat:@"1234567890%@", decimalSeparator];
+    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:stringSet] invertedSet];
     NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
     
     if ([string isEqualToString:filtered]) {

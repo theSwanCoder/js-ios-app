@@ -178,8 +178,10 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     }
     
     if ([self isResourceSegue:segue]) {
-        NSArray *inputControls = [sender objectForKey:kJMInputControls];
-        [destinationViewController setInputControls:[inputControls mutableCopy]];
+        if ([destinationViewController respondsToSelector:@selector(setInputControls:)]) {
+            NSArray *inputControls = [sender objectForKey:kJMInputControls];
+            [destinationViewController setInputControls:[inputControls mutableCopy]];
+        }
     } else if ([segue.identifier isEqualToString:kJMShowFolderContetnSegue]) {
         JMResourcesListLoader * listLoader = [NSClassFromString(@"JMRepositoryListLoader") new];
         listLoader.resourceLookup = resourcesLookup;

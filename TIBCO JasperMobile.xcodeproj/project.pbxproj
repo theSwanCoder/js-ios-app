@@ -54,6 +54,7 @@
 		088115FB19B8C7E700C70170 /* JMGridResourceCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088115FA19B8C7E700C70170 /* JMGridResourceCollectionViewCell.xib */; };
 		088115FD19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088115FC19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib */; };
 		0881967E199A1703008CF79B /* JMSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0881967D199A1703008CF79B /* JMSearchBar.m */; };
+		088208891A023EAB00B6559F /* JMTimeInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 088208881A023EAB00B6559F /* JMTimeInputControlCell.m */; };
 		0884669A19E7BFE40061AE5E /* Icon-512.png in Resources */ = {isa = PBXBuildFile; fileRef = 0884669819E7BFE40061AE5E /* Icon-512.png */; };
 		0884669B19E7BFE40061AE5E /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 0884669919E7BFE40061AE5E /* Icon-1024.png */; };
 		0885657A19C1B60100B78B06 /* JMResourcesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0885657919C1B60100B78B06 /* JMResourcesListLoader.m */; };
@@ -351,6 +352,8 @@
 		088115FC19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMHorizontalResourceCollectionViewCell.xib; sourceTree = "<group>"; };
 		0881967C199A1703008CF79B /* JMSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSearchBar.h; sourceTree = "<group>"; };
 		0881967D199A1703008CF79B /* JMSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSearchBar.m; sourceTree = "<group>"; };
+		088208871A023EAB00B6559F /* JMTimeInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTimeInputControlCell.h; sourceTree = "<group>"; };
+		088208881A023EAB00B6559F /* JMTimeInputControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTimeInputControlCell.m; sourceTree = "<group>"; };
 		0884669819E7BFE40061AE5E /* Icon-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-512.png"; sourceTree = "<group>"; };
 		0884669919E7BFE40061AE5E /* Icon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024.png"; sourceTree = "<group>"; };
 		0885657819C1B60100B78B06 /* JMResourcesListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourcesListLoader.h; sourceTree = "<group>"; };
@@ -1309,6 +1312,8 @@
 				08DE67A619C05D8A00C25AEA /* JMBooleanInputControlCell.m */,
 				08DE67A719C05D8A00C25AEA /* JMDateInputControlCell.h */,
 				08DE67A819C05D8A00C25AEA /* JMDateInputControlCell.m */,
+				088208871A023EAB00B6559F /* JMTimeInputControlCell.h */,
+				088208881A023EAB00B6559F /* JMTimeInputControlCell.m */,
 				08DE67A919C05D8A00C25AEA /* JMDateTimeInputControlCell.h */,
 				08DE67AA19C05D8A00C25AEA /* JMDateTimeInputControlCell.m */,
 				08DE67AB19C05D8A00C25AEA /* JMInputControlCell.h */,
@@ -2047,6 +2052,7 @@
 				08E864291992564A007CF257 /* JMRequestDelegate.m in Sources */,
 				08E8641C1992564A007CF257 /* JasperMobileAppDelegate.m in Sources */,
 				08FF12E0199297FE0082265D /* JMSettingsViewController.m in Sources */,
+				088208891A023EAB00B6559F /* JMTimeInputControlCell.m in Sources */,
 				08DE67CB19C05D8B00C25AEA /* JMNumberInputControlCell.m in Sources */,
 				08DE67C619C05D8B00C25AEA /* JMBooleanInputControlCell.m in Sources */,
 				08625F6D19C2EE4C0087684E /* JMLibraryListLoader.m in Sources */,
