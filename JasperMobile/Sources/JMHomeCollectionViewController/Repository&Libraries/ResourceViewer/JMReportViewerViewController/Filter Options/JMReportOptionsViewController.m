@@ -130,7 +130,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
-    
+    NSLog(@"%@", inputControlDescriptor.type);
     NSString *cellIdentifier = [[self inputControlDescriptorTypes] objectForKey:inputControlDescriptor.type];
     JMInputControlCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     [cell setBottomSeparatorWithHeight:1 color:tableView.separatorColor tableViewStyle:tableView.style];
@@ -191,6 +191,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
              self.constants.ICD_TYPE_SINGLE_VALUE_TEXT :      @"TextEditCell",
              self.constants.ICD_TYPE_SINGLE_VALUE_NUMBER :    @"NumberCell",
              self.constants.ICD_TYPE_SINGLE_VALUE_DATE :      @"DateCell",
+             self.constants.ICD_TYPE_SINGLE_VALUE_TIME :      @"TimeCell",
              self.constants.ICD_TYPE_SINGLE_VALUE_DATETIME :  @"DateTimeCell",
              self.constants.ICD_TYPE_SINGLE_SELECT :          @"SingleSelectCell",
              self.constants.ICD_TYPE_SINGLE_SELECT_RADIO :    @"SingleSelectCell",

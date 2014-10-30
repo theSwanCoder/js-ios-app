@@ -22,7 +22,7 @@
 
 
 //
-//  JMResourcesListLoader.h
+//  JMReportViewer.h
 //  TIBCO JasperMobile
 //
 
@@ -31,12 +31,32 @@
  @since 1.9
  */
 
-#import <UIKit/UIKit.h>
-#import "JMResourceViewerViewController.h"
-#import "JMRefreshable.h"
+#import <Foundation/Foundation.h>
 
-@interface JMReportViewerViewController : JMResourceViewerViewController <JMRefreshable>
+@class JMReportViewer;
+@protocol JMReportViewerDelegate <NSObject>
+@required
+- (void) reportViewerDidChangedPagination:(JMReportViewer *)reportViewer;
 
-- (void)setInputControls:(NSMutableArray *)inputControls;
+- (void) reportViewer:(JMReportViewer *)reportViewer loadRequestInWebView:(NSURLRequest *)request;
+
+@end
+
+@interface JMReportViewer : NSObject <JMResourceClientHolder>
+
+@property (nonatomic, weak) UIViewController <JMReportViewerDelegate> *delegate;
+
+@property (nonatomic, strong) NSMutableArray *inputControls;
+
+@property (nonatomic, assign) NSInteger countOfPages;
+@property (nonatomic, assign) NSInteger currentPage;
+
+@property (nonatomic, assign) BOOL multiPageReport;
+
+- (instancetype)initWithResourceLookup:(JSResourceLookup *)resource;
+
+- (void) runReportExecution;
+
+- (void) cancelReport;
 
 @end

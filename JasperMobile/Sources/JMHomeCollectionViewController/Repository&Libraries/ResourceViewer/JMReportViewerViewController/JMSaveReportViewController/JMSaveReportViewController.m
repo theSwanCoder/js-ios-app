@@ -195,7 +195,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
         
         JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
             JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
-            JSExportExecution *export = [response.exports objectAtIndex:0];
+            JSExportExecutionResponse *export = [response.exports objectAtIndex:0];
             NSString *requestId = response.requestId;
             
             NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];

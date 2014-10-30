@@ -24,40 +24,31 @@
 #import "JMReportViewerViewController.h"
 #import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"
+#import "JMReportViewer.h"
 #import "JMReportViewerToolBar.h"
 #import "UIViewController+FetchInputControls.h"
-#import "UIAlertView+LocalizedAlert.h"
 #import "JMSaveReportViewController.h"
-#import "ALToastView.h"
 
-@interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, UIAlertViewDelegate>
-@property (nonatomic, strong) NSUndoManager *icUndoManager;
-@property (nonatomic, strong) JMReportViewerToolBar *toolbar;
+@interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, JMReportViewerDelegate>
+@property (nonatomic, strong) JMReportViewer *reportViewer;
 
-@property (nonatomic, weak) JSConstants *constants;
+@property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 
-@property (nonatomic, strong) NSString *requestId;
-@property (nonatomic, strong) NSString *exportId;
 @end
 
 @implementation JMReportViewerViewController
-objection_requires(@"reportClient", @"constants")
-
-@synthesize reportClient    = _reportClient;
 
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self addBackButton];
-    self.icUndoManager = [NSUndoManager new];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-
-    [self.navigationController setToolbarHidden:!(self.toolbar.countOfPages > 1) animated:YES];
+    [self updateToobarAppearence];
 
     if (![JMRequestDelegate isRequestPoolEmpty]) {
         [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:@weakself(^(void)) {
@@ -78,7 +69,7 @@ objection_requires(@"reportClient", @"constants")
     [super prepareForSegue:segue sender:sender];
     if ([segue.identifier isEqualToString:kJMShowReportOptionsSegue] || [segue.identifier isEqualToString:kJMSaveReportViewControllerSegue]) {
         id destinationViewController = segue.destinationViewController;
-        [destinationViewController setInputControls:[[NSMutableArray alloc] initWithArray:self.inputControls copyItems:YES]];
+        [destinationViewController setInputControls:[[NSMutableArray alloc] initWithArray:self.reportViewer.inputControls copyItems:YES]];
         [destinationViewController performSelector:@selector(setDelegate:) withObject:self];
     }
 }
@@ -86,7 +77,7 @@ objection_requires(@"reportClient", @"constants")
 - (JMResourceViewerAction)availableAction
 {
     JMResourceViewerAction availableAction = [super availableAction] | JMResourceViewerAction_Save | JMResourceViewerAction_Refresh;
-    if (self.inputControls && [self.inputControls count]) {
+    if (self.reportViewer.inputControls && [self.reportViewer.inputControls count]) {
         availableAction |= JMResourceViewerAction_Filter;
     }
     return availableAction;
@@ -94,12 +85,15 @@ objection_requires(@"reportClient", @"constants")
 
 - (void)setInputControls:(NSMutableArray *)inputControls
 {
-    if (self.inputControls != inputControls) {
-        if (self.inputControls) {
-            [[self.icUndoManager prepareWithInvocationTarget:self] setInputControls:self.inputControls];
-            [self.icUndoManager setActionName:@"ResetChanges"];
-        }
-        [super setInputControls:inputControls];
+    self.reportViewer.inputControls = inputControls;
+}
+
+- (void) updateToobarAppearence
+{
+    if (self.reportViewer.multiPageReport && self.toolbar) {
+        [self.navigationController setToolbarHidden:NO animated:YES];
+    } else {
+        [self.navigationController setToolbarHidden:YES animated:YES];
     }
 }
 
@@ -111,7 +105,7 @@ objection_requires(@"reportClient", @"constants")
 
 - (void) addBackButton
 {
-    if (self.inputControls && self.inputControls.count) {
+    if (self.reportViewer.inputControls && [self.reportViewer.inputControls count]) {
         NSString *title = [[self.navigationController.viewControllers objectAtIndex:1] title];
         UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
         UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
@@ -124,52 +118,16 @@ objection_requires(@"reportClient", @"constants")
 
 - (void) runReportExecution
 {
-    self.toolbar.currentPage = 1;
-    
-    if (self.request) {
-        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
-    }
-
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
-        JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
-        JSExportExecution *export = [response.exports objectAtIndex:0];
-        self.exportId = export.uuid;
-        self.requestId = response.requestId;
-        
-        self.toolbar.countOfPages = [response.totalPages integerValue];
-        [self displayCurrentPageOfReport];
-        [self.navigationController setToolbarHidden:!(self.toolbar.countOfPages > 1) animated:YES];
-    } @weakselfend
-      errorBlock: nil
-      viewControllerToDismiss:(!self.requestId) ? self : nil];
-    
-    NSMutableArray *parameters = [NSMutableArray array];
-    for (JSInputControlDescriptor *inputControlDescriptor in self.inputControls) {
-        JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
-                                                                               value:inputControlDescriptor.selectedValues];
-        [parameters addObject:reportParameter];
-    }
-    [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.constants.CONTENT_TYPE_HTML
-                              interactive:YES freshData:YES saveDataSnapshot:NO ignorePagination:NO transformerKey:nil
-                                    pages:nil attachmentsPrefix:nil parameters:parameters delegate:delegate];
+    [self.reportViewer runReportExecution];
 }
 
-- (void) displayCurrentPageOfReport
+- (JMReportViewer *)reportViewer
 {
-    if (self.toolbar.countOfPages) {
-        NSString *fullExportId = [NSString stringWithFormat:@"%@;pages=%ld", self.exportId, (long)self.toolbar.currentPage];
-        NSString *reportUrl = [self.reportClient generateReportOutputUrl:self.requestId exportOutput:fullExportId];
-        
-        self.request = [NSURLRequest requestWithURL:[NSURL URLWithString:reportUrl]];
-    } else {
-        UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:@"detail.report.viewer.emptyreport.title" message:nil delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil];
-        if ([self.icUndoManager canUndo]) {
-            alertView.delegate = self;
-            alertView.message = JMCustomLocalizedString(@"detail.report.viewer.emptyreport.message", nil);
-            [alertView addButtonWithTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)];
-        }
-        [alertView show];
+    if (!_reportViewer) {
+        _reportViewer = [[JMReportViewer alloc] initWithResourceLookup:self.resourceLookup];
+        _reportViewer.delegate = self;
     }
+    return _reportViewer;
 }
 
 - (JMReportViewerToolBar *)toolbar
@@ -177,14 +135,16 @@ objection_requires(@"reportClient", @"constants")
     if (!_toolbar) {
         _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportViewerToolBar" owner:self options:nil] firstObject];
         _toolbar.toolbarDelegate = self;
-    }
-    if (!_toolbar.superview) {
+        _toolbar.currentPage = self.reportViewer.currentPage;
+        _toolbar.countOfPages = self.reportViewer.countOfPages;
         _toolbar.frame = self.navigationController.toolbar.bounds;
         [self.navigationController.toolbar addSubview: _toolbar];
     }
     return _toolbar;
 }
 
+#pragma mark -
+#pragma mark - JMResourceViewerActionsViewDelegate
 - (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
 {
     [super actionsView:view didSelectAction:action];
@@ -203,28 +163,32 @@ objection_requires(@"reportClient", @"constants")
     }
 }
 
-#pragma mark - JMReportViewerToolBarDelegate
-- (void)pageDidChangedOnToolbar
-{
-    [self displayCurrentPageOfReport];
-}
-
+#pragma mark -
 #pragma mark - JMRefreshable
-
 - (void)refresh
 {
     [self.navigationController popToViewController:self animated:YES];
     [self runReportExecution];
 }
 
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+#pragma mark -
+#pragma mark - JMReportViewerToolBarDelegate
+- (void)toolbar:(JMReportViewerToolBar *)toolbar pageDidChanged:(NSInteger)page
 {
-    if (alertView.cancelButtonIndex == buttonIndex) {
-        [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
-    }
-    [self.icUndoManager undo];
-    [self.icUndoManager removeAllActionsWithTarget:self];
+    self.reportViewer.currentPage = page;
 }
 
+#pragma mark -
+#pragma mark - JMReportViewerDelegate
+- (void)reportViewerDidChangedPagination:(JMReportViewer *)reportViewer
+{
+    self.toolbar.currentPage = reportViewer.currentPage;
+    self.toolbar.countOfPages = reportViewer.countOfPages;
+    [self updateToobarAppearence];
+}
+
+- (void)reportViewer:(JMReportViewer *)reportViewer loadRequestInWebView:(NSURLRequest *)request
+{
+    self.request = request;
+}
 @end

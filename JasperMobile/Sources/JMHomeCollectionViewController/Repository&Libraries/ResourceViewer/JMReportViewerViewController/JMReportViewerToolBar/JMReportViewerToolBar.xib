@@ -43,14 +43,18 @@
                                 </connections>
                             </textField>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="of 37" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="p2R-Gd-XE2">
-                                <rect key="frame" x="143" y="7" width="85" height="30"/>
+                                <rect key="frame" x="142.99999866929164" y="7" width="85" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" id="fbB-jp-lCk">
+                                <rect key="frame" x="176" y="11" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                            </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="nTm-ge-Khe">
-                                <rect key="frame" x="228" y="0.0" width="30" height="44"/>
+                                <rect key="frame" x="227.99999866929164" y="0.0" width="30" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 <state key="normal" image="next_action_item.png"/>
                                 <connections>
@@ -76,6 +80,7 @@
                 <outlet property="firstButton" destination="1aA-yU-uFc" id="25U-tZ-0qZ"/>
                 <outlet property="lastButton" destination="yj3-gK-0T9" id="iYu-fK-qF6"/>
                 <outlet property="nextButton" destination="nTm-ge-Khe" id="aem-1p-DUe"/>
+                <outlet property="pageCountActivityIndicator" destination="fbB-jp-lCk" id="mkP-FT-vbX"/>
                 <outlet property="pageCountLabel" destination="p2R-Gd-XE2" id="rE2-rh-GZ6"/>
                 <outlet property="previousButton" destination="ut0-Sx-8hQ" id="aTq-Tk-gyh"/>
             </connections>

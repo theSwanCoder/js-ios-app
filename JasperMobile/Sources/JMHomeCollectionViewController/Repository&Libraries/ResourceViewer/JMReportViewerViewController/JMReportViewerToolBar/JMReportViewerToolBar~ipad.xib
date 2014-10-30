@@ -66,6 +66,10 @@
                                     <action selector="lastButtonTapped:" destination="eZp-DG-v9G" eventType="touchUpInside" id="xHb-fx-8b1"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" id="Txl-7I-uhv">
+                                <rect key="frame" x="296" y="11" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
@@ -78,6 +82,7 @@
                 <outlet property="firstButton" destination="dkL-Df-Eiu" id="bYQ-dl-tnw"/>
                 <outlet property="lastButton" destination="XGD-Dd-k3B" id="Xlt-Gg-5mC"/>
                 <outlet property="nextButton" destination="86H-PC-EGa" id="IAf-Vr-b4h"/>
+                <outlet property="pageCountActivityIndicator" destination="Txl-7I-uhv" id="c4A-tS-Nh3"/>
                 <outlet property="pageCountLabel" destination="Kl2-SI-lLo" id="2yL-rl-BAC"/>
                 <outlet property="pickerView" destination="bRC-Kt-Zq0" id="2b8-Ib-0MY"/>
                 <outlet property="previousButton" destination="neK-ff-gV9" id="ezX-Y0-H8d"/>

@@ -33,10 +33,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class JMReportViewerToolBar;
 @protocol JMReportViewerToolBarDelegate <NSObject>
 
 @optional
-- (void) pageDidChangedOnToolbar;
+- (void) toolbar:(JMReportViewerToolBar *)toolbar pageDidChanged:(NSInteger)page;
 
 @end
 

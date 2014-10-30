@@ -42,7 +42,6 @@
 
 @property (nonatomic, assign) BOOL isRequestLoaded;
 @property (nonatomic, strong) NSURLRequest *request;
-@property (nonatomic, strong) NSMutableArray *inputControls;
 
 - (void) runReportExecution;
 

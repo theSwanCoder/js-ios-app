@@ -20,11 +20,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 #import "JMReportViewerToolBar.h"
 
 @interface JMReportViewerToolBar () <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *pageCountLabel;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *pageCountActivityIndicator;
 @property (weak, nonatomic) IBOutlet UITextField *currentPageField;
 
 @property (weak, nonatomic) IBOutlet UIButton *firstButton;
@@ -41,21 +41,17 @@
 {
     [super awakeFromNib];
     self.currentPageField.backgroundColor = kJMMainNavigationBarBackgroundColor;
-    self.countOfPages = 1;
-    self.currentPage = 1;
     self.currentPageField.inputView = self.pickerView;
     self.currentPageField.inputAccessoryView = [self pickerToolbar];
 }
 
 #pragma mark - Properties
-- (NSRange)availableRange
-{
-    return NSMakeRange(0, self.countOfPages);
-}
 
 - (void)setCountOfPages:(NSInteger)countOfPages
 {
     _countOfPages = countOfPages;
+    self.pageCountLabel.hidden = _countOfPages == kJMCountOfPagesUnknown;
+    self.pageCountActivityIndicator.hidden = _countOfPages != kJMCountOfPagesUnknown;
     [self updatePages];
 }
 
@@ -75,7 +71,7 @@
     self.firstButton.enabled = !(self.currentPage <= 1);
 
     self.nextButton.enabled = !(self.currentPage >= self.countOfPages);
-    self.lastButton.enabled = !(self.currentPage >= self.countOfPages);
+    self.lastButton.enabled = !(self.currentPage >= self.countOfPages) && _countOfPages != kJMCountOfPagesUnknown;
 }
 
 #pragma mark - Actions
@@ -83,25 +79,25 @@
 - (IBAction)firstButtonTapped:(id)sender
 {
     self.currentPage = 1;
-    [self.toolbarDelegate pageDidChangedOnToolbar];
+    [self.toolbarDelegate toolbar:self pageDidChanged:self.currentPage];
 }
 
 - (IBAction)lastButtonTapped:(id)sender
 {
     self.currentPage = self.countOfPages;
-    [self.toolbarDelegate pageDidChangedOnToolbar];
+    [self.toolbarDelegate toolbar:self pageDidChanged:self.currentPage];
 }
 
 - (IBAction)nextButtonTapped:(id)sender
 {
     self.currentPage ++;
-    [self.toolbarDelegate pageDidChangedOnToolbar];
+    [self.toolbarDelegate toolbar:self pageDidChanged:self.currentPage];
 }
 
 - (IBAction)previousButtonTapped:(id)sender
 {
     self.currentPage --;
-    [self.toolbarDelegate pageDidChangedOnToolbar];
+    [self.toolbarDelegate toolbar:self pageDidChanged:self.currentPage];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -145,7 +141,7 @@
 - (void)done:(id)sender
 {
     self.currentPage = [self.pickerView selectedRowInComponent:0] + 1;
-    [self.toolbarDelegate pageDidChangedOnToolbar];
+    [self.toolbarDelegate toolbar:self pageDidChanged:self.currentPage];
 
     [self hidePicker];
 }
