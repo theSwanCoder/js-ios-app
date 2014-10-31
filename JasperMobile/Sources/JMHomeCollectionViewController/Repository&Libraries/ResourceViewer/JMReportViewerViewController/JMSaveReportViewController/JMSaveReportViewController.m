@@ -199,7 +199,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
             NSString *requestId = response.requestId;
             
             NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
-            [self.reportClient saveReportOutput:requestId exportOutput:export.uuid path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
+            [self.reportClient loadReportOutput:requestId exportOutput:export.uuid loadForSaving:YES path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
             
             for (JSReportOutputResource *attachment in export.attachments) {
                 NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];

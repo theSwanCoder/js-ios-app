@@ -20,7 +20,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 #import "JMReportViewer.h"
 #import "JMRequestDelegate.h"
 #import "JMReportClientHolder.h"
@@ -51,6 +50,9 @@ NSString * const kJMRestStatusReady = @"ready";
 
 @property (nonatomic, strong) NSUndoManager *icUndoManager;
 
+@property (nonatomic, readwrite) NSInteger countOfPages;
+@property (nonatomic, readwrite) BOOL multiPageReport;
+
 @end
 
 @implementation JMReportViewer
@@ -80,7 +82,7 @@ objection_requires(@"resourceClient", @"reportClient")
 {
     if (currentPage != _currentPage) {
         _currentPage = currentPage;
-        [self loadCurrentExportForDisplaying:YES];
+        [self runExportExecutionForPage:_currentPage];
         [self.delegate reportViewerDidChangedPagination:self];
     }
 }
@@ -89,7 +91,27 @@ objection_requires(@"resourceClient", @"reportClient")
 {
     if (countOfPages != _countOfPages) {
         _countOfPages = countOfPages;
+        if (self.currentPage > _countOfPages) {
+            self.currentPage = _countOfPages;
+        }
         _multiPageReport = (self.countOfPages > 1) && (self.countOfPages != kJMCountOfPagesUnknown);
+        [self.delegate reportViewerDidChangedPagination:self];
+        if ([self reportIsEmpty]) {
+            UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:@"detail.report.viewer.emptyreport.title" message:nil delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil];
+            if ([self.icUndoManager canUndo]) {
+                alertView.delegate = self;
+                alertView.message = JMCustomLocalizedString(@"detail.report.viewer.emptyreport.message", nil);
+                [alertView addButtonWithTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)];
+            }
+            [alertView show];
+        }
+    }
+}
+
+- (void)setMultiPageReport:(BOOL)multiPageReport
+{
+    if (_multiPageReport != multiPageReport) {
+        _multiPageReport = multiPageReport;
         [self.delegate reportViewerDidChangedPagination:self];
     }
 }
@@ -117,7 +139,7 @@ objection_requires(@"resourceClient", @"reportClient")
 
 - (void) runReportExecution
 {
-    if (self.outputResourceType == JMReportViewerOutputResourceType_AlreadyLoaded) {
+    if (self.outputResourceType & JMReportViewerOutputResourceType_AlreadyLoaded) {
         [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
     }
     
@@ -131,18 +153,10 @@ objection_requires(@"resourceClient", @"reportClient")
             self.countOfPages = [reportExecution.totalPages integerValue];
         } else {
             [self startStatusChecking];
-            self.multiPageReport = YES;
         }
-        if (self.reportExequtingStatusIsReady && self.countOfPages == 0) {
-            UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:@"detail.report.viewer.emptyreport.title" message:nil delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil];
-            if ([self.icUndoManager canUndo]) {
-                alertView.delegate = self;
-                alertView.message = JMCustomLocalizedString(@"detail.report.viewer.emptyreport.message", nil);
-                [alertView addButtonWithTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)];
-            }
-            [alertView show];
-        } else {
-            [self loadCurrentExportForDisplaying:YES];
+        if (![self reportIsEmpty]) {
+            [self runExportExecutionForPage:self.currentPage];
+//            [self runExportExecutionForPage:self.currentPage + 1];
         }
     } @weakselfend
     errorBlock:nil
@@ -158,24 +172,21 @@ objection_requires(@"resourceClient", @"reportClient")
                                     pages:nil attachmentsPrefix:nil parameters:parameters delegate:requestDelegate];
 }
 
-- (void) loadCurrentExportForDisplaying:(BOOL)displaying
+- (void) runExportExecutionForPage:(NSInteger)page
 {
     if (self.requestId) {
-        NSString *exportID = [self.exportIdsDictionary objectForKey:@(self.currentPage)];
-        if (exportID) {
+        if (![self.exportIdsDictionary objectForKey:@(page)]) {
+            [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
 
-        } else {
             JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
                 JSExportExecutionResponse *export = [result.objects objectAtIndex:0];
-                [self.exportIdsDictionary setObject:export.uuid forKey:@(self.currentPage)];
-                if (displaying) {
-                    [self displayOutputResourcesForExportID:export.uuid];
-                }
+                [self.exportIdsDictionary setObject:export.uuid forKey:@(page)];
+                [self loadOutputResourcesForPage:page displayImmediatelly:page == self.currentPage];
             } @weakselfend
             errorBlock:nil
             viewControllerToDismiss:nil];
             
-            NSString *pagesString = [NSString stringWithFormat:@"%zd", self.currentPage];
+            NSString *pagesString = [NSString stringWithFormat:@"%zd", page];
             NSString *attachemntPreffix = [JSConstants sharedInstance].REST_EXPORT_EXECUTION_ATTACHMENTS_PREFIX_URI;
 
             // Fix for JRS version smaller 5.6.0
@@ -183,33 +194,72 @@ objection_requires(@"resourceClient", @"reportClient")
                 attachemntPreffix = nil;
             }
             [self.reportClient runExportExecution:self.requestId outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML pages:pagesString allowInlineScripts:NO attachmentsPrefix:attachemntPreffix delegate:requestDelegate];
+        } else {
+            [self loadOutputResourcesForPage:page displayImmediatelly:page == self.currentPage];
         }
     }
 }
 
-- (void) displayOutputResourcesForExportID:(NSString *)exportID
+- (void) loadOutputResourcesForPage:(NSInteger)page displayImmediatelly:(BOOL)display
 {
-    self.outputResourceType = JMReportViewerOutputResourceType_LoadingNow;
+    NSString *exportID = [self.exportIdsDictionary objectForKey:@(page)];
+    if (display) {
+        self.outputResourceType = JMReportViewerOutputResourceType_LoadingNow;
+    }
 
     // Fix for JRS version smaller 5.6.0
     NSString *fullExportID = exportID;
     if (self.reportClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) {
         fullExportID = [NSString stringWithFormat:@"%@;pages=%zd", exportID, self.currentPage];
     }
-    NSString *reportUrl = [self.reportClient generateReportOutputUrl:self.requestId exportOutput:fullExportID];
-    [NSURLConnection connectionWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:reportUrl]] delegate:self];
+    
+    JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+        if ([result.MIMEType isEqualToString:[JSConstants sharedInstance].REST_SDK_MIMETYPE_USED]) {
+            JSErrorDescriptor *error = [result.objects objectAtIndex:0];
+            if (!display) {
+                [UIAlertView localizedAlertWithTitle:nil message:error.message delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil];
+            } else {
+#warning NEED TEST OTHER ERRORS!!!!!
+                if ([error.errorCode isEqualToString:@"illegal.parameter.value.error"]) {
+                    self.countOfPages = page - 1;
+                }
+            }
+        } else {
+            if (display) {
+                NSString *finalityStatus = [result.allHeaderFields objectForKey:@"output-final"];
+                if (finalityStatus) {
+                    self.outputResourceType = [finalityStatus boolValue] ? JMReportViewerOutputResourceType_Final : JMReportViewerOutputResourceType_NotFinal;
+                } else {
+                    self.outputResourceType = JMReportViewerOutputResourceType_Final;
+                }
+                self.outputResourceType = (finalityStatus && [finalityStatus boolValue]) ? JMReportViewerOutputResourceType_Final : JMReportViewerOutputResourceType_NotFinal;
+                [self.delegate reportViewer:self loadHTMLString:result.bodyAsString baseURL:self.reportClient.serverProfile.serverUrl];
+            }
+            if (page > 1) {
+                self.multiPageReport = YES;
+            }
+        }
+    } @weakselfend
+    errorBlock:nil
+    viewControllerToDismiss: nil];
+    
+    [self.reportClient loadReportOutput:self.requestId exportOutput:fullExportID loadForSaving:NO path:nil delegate:requestDelegate];
+    
+//    NSString *reportUrl = [self.reportClient generateReportOutputUrl:self.requestId exportOutput:fullExportID];
+//    [NSURLConnection connectionWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:reportUrl]] delegate:self];
 }
 
 - (void)startStatusChecking
 {
-    self.statusCheckingTimer = [NSTimer scheduledTimerWithTimeInterval:kJMReportViewerStatusCheckingInterval target:self selector:@selector(checkStatus) userInfo:nil repeats:NO];
+    [self checkStatus];
+    self.statusCheckingTimer = [NSTimer scheduledTimerWithTimeInterval:kJMReportViewerStatusCheckingInterval target:self selector:@selector(checkStatus) userInfo:nil repeats:YES];
 }
 
 - (void)cancelStatusChecking
 {
     [self.statusCheckingTimer invalidate];
     if (self.outputResourceType == JMReportViewerOutputResourceType_NotFinal && self.outputResourceType != JMReportViewerOutputResourceType_LoadingNow) {
-        [self loadCurrentExportForDisplaying:YES];
+        [self runExportExecutionForPage:self.currentPage];
     }
     
     JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
@@ -245,24 +295,9 @@ objection_requires(@"resourceClient", @"reportClient")
     [self.statusCheckingTimer invalidate];
 }
 
-#pragma mark - NSURLConnectionDataDelegate method
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+- (BOOL)reportIsEmpty
 {
-    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-    
-    if (httpResponse.statusCode < 200 || httpResponse.statusCode >= 300) {
-        [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Error" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil] show];
-    } else {
-        [connection cancel];
-        NSString *finalityStatus = [httpResponse.allHeaderFields objectForKey:@"output-final"];
-        self.outputResourceType = (finalityStatus && [finalityStatus boolValue]) ? JMReportViewerOutputResourceType_Final : JMReportViewerOutputResourceType_NotFinal;
-        [self.delegate reportViewer:self loadRequestInWebView:connection.currentRequest];
-    }
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    
+    return (self.reportExequtingStatusIsReady && self.countOfPages == 0);
 }
 
 #pragma mark - UIAlertViewDelegate

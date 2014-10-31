@@ -38,7 +38,7 @@
 @required
 - (void) reportViewerDidChangedPagination:(JMReportViewer *)reportViewer;
 
-- (void) reportViewer:(JMReportViewer *)reportViewer loadRequestInWebView:(NSURLRequest *)request;
+- (void) reportViewer:(JMReportViewer *)reportViewer loadHTMLString:(NSString *)string baseURL:(NSString *)baseURL;
 
 @end
 
@@ -48,10 +48,11 @@
 
 @property (nonatomic, strong) NSMutableArray *inputControls;
 
-@property (nonatomic, assign) NSInteger countOfPages;
 @property (nonatomic, assign) NSInteger currentPage;
 
-@property (nonatomic, assign) BOOL multiPageReport;
+@property (nonatomic, readonly) NSInteger countOfPages;
+
+@property (nonatomic, readonly) BOOL multiPageReport;
 
 - (instancetype)initWithResourceLookup:(JSResourceLookup *)resource;
 

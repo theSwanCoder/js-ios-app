@@ -187,8 +187,12 @@
     [self updateToobarAppearence];
 }
 
-- (void)reportViewer:(JMReportViewer *)reportViewer loadRequestInWebView:(NSURLRequest *)request
+- (void)reportViewer:(JMReportViewer *)reportViewer loadHTMLString:(NSString *)string baseURL:(NSString *)baseURL;
 {
-    self.request = request;
+    if (self.webView.isLoading) {
+        [self.webView stopLoading];
+    }
+    self.isResourceLoaded = NO;
+    [self.webView loadHTMLString:string baseURL:[NSURL URLWithString:baseURL]];
 }
 @end

@@ -40,8 +40,8 @@
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 
-@property (nonatomic, assign) BOOL isRequestLoaded;
-@property (nonatomic, strong) NSURLRequest *request;
+@property (nonatomic, assign) BOOL isResourceLoaded;
+@property (nonatomic, strong) NSURLRequest *resourceRequest;
 
 - (void) runReportExecution;
 

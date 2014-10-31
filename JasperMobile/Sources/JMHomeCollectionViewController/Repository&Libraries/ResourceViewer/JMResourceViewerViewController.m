@@ -66,8 +66,8 @@ objection_requires(@"resourceClient", @"resourceLookup")
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (!self.isRequestLoaded && self.request) {
-        [self.webView loadRequest:self.request];
+    if (!self.isResourceLoaded && self.resourceRequest) {
+        [self.webView loadRequest:self.resourceRequest];
     }
 }
 
@@ -82,7 +82,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
         [self.webView stringByEvaluatingJavaScriptFromString:@"document.body.innerHTML='';"];
         self.webView.delegate = nil;
         [self.webView removeFromSuperview];
-        [[NSURLCache sharedURLCache] removeCachedResponseForRequest:self.request];
+        [[NSURLCache sharedURLCache] removeCachedResponseForRequest:self.resourceRequest];
     }
 }
 
@@ -92,15 +92,15 @@ objection_requires(@"resourceClient", @"resourceLookup")
     [destinationViewController setResourceLookup:self.resourceLookup];
 }
 
-- (void)setRequest:(NSURLRequest *)request
+- (void)setResourceRequest:(NSURLRequest *)resourceRequest
 {
-    if (request != _request) {
-        _request = request;
+    if (resourceRequest != _resourceRequest) {
+        _resourceRequest = resourceRequest;
         if (self.webView.isLoading) {
             [self.webView stopLoading];
         }
-        [self.webView loadRequest:request];
-        self.isRequestLoaded = NO;
+        self.isResourceLoaded = NO;
+        [self.webView loadRequest:resourceRequest];
     }
 }
 
@@ -176,15 +176,15 @@ objection_requires(@"resourceClient", @"resourceLookup")
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     [self loadingDidFinished];
-    if (self.request) {
-        self.isRequestLoaded = YES;
+    if (self.resourceRequest) {
+        self.isResourceLoaded = YES;
     }
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     [self loadingDidFinished];
-    self.isRequestLoaded = NO;
+    self.isResourceLoaded = NO;
 }
 
 - (void)loadingDidFinished

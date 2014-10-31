@@ -130,7 +130,6 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
-    NSLog(@"%@", inputControlDescriptor.type);
     NSString *cellIdentifier = [[self inputControlDescriptorTypes] objectForKey:inputControlDescriptor.type];
     JMInputControlCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     [cell setBottomSeparatorWithHeight:1 color:tableView.separatorColor tableViewStyle:tableView.style];

@@ -103,8 +103,11 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    [self.pickerView selectRow:self.currentPage - 1 inComponent:0 animated:NO];
-    return YES;
+    if (self.countOfPages != kJMCountOfPagesUnknown) {
+        [self.pickerView selectRow:self.currentPage - 1 inComponent:0 animated:NO];
+        return YES;
+    }
+    return NO;
 }
 
 #pragma mark - UIPickerViewDataSource

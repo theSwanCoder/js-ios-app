@@ -33,7 +33,7 @@
                               self.resourceLookup.uri];
     
     NSURL *url = [NSURL URLWithString:dashboardUrl];
-    self.request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:self.resourceClient.timeoutInterval];
+    self.resourceRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:self.resourceClient.timeoutInterval];
 }
 
 - (JMResourceViewerAction)availableAction

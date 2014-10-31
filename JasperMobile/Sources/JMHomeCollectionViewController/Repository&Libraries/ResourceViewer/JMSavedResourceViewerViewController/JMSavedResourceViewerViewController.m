@@ -47,7 +47,7 @@
 {
     NSString *fullReportPath = [JMSavedResources pathToReportWithName:self.savedReports.label format:self.savedReports.format];
     NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-    self.request = [NSURLRequest requestWithURL:url];
+    self.resourceRequest = [NSURLRequest requestWithURL:url];
 }
 
 - (JMResourceViewerAction)availableAction
