@@ -96,6 +96,18 @@ typedef void(^JMRequestDelegateFinalBlock)(void);
 + (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController;
 
 /**
+ Creates new request delegate instance and adds it to the pool.
+ Sets the view controller (for all requests in pool) that will be dismissed if any request will fail
+ 
+ @param finishedBlock
+ @param errorBlock
+ @param viewController A view controller to dismiss
+ @param showAlerts If FALSE, Alerts with error messages will be not appeared
+ @return New request delegate instance
+ */
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController showAlerts:(BOOL)showAlerts;
+
+/**
  Passes a request result to final delegate object if request was successful. Otherwise displays an alert view dialog
  with error message
 

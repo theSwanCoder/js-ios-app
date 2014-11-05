@@ -140,7 +140,9 @@ objection_requires(@"resourceClient", @"reportClient")
 - (void) runReportExecution
 {
     if (self.outputResourceType & JMReportViewerOutputResourceType_AlreadyLoaded) {
-        [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
+        [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.resourceClient cancelBlock:^{
+            [self cancelReport];
+        }];
     }
     
     [self resetReportViewer];
@@ -156,7 +158,6 @@ objection_requires(@"resourceClient", @"reportClient")
         }
         if (![self reportIsEmpty]) {
             [self runExportExecutionForPage:self.currentPage];
-//            [self runExportExecutionForPage:self.currentPage + 1];
         }
     } @weakselfend
     errorBlock:nil
@@ -167,21 +168,33 @@ objection_requires(@"resourceClient", @"reportClient")
         [parameters addObject:[[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid value:inputControlDescriptor.selectedValues]];
     }
     
+    BOOL interactive = !((self.reportClient.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) &&
+                        (self.reportClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0));
+    
     [self.reportClient runReportExecution:self.resourceLookup.uri async:YES outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML
-                              interactive:YES freshData:YES saveDataSnapshot:NO ignorePagination:NO transformerKey:nil
+                              interactive:interactive freshData:YES saveDataSnapshot:NO ignorePagination:NO transformerKey:nil
                                     pages:nil attachmentsPrefix:nil parameters:parameters delegate:requestDelegate];
 }
 
 - (void) runExportExecutionForPage:(NSInteger)page
 {
     if (self.requestId) {
-        if (![self.exportIdsDictionary objectForKey:@(page)]) {
-            [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
+        NSString *exportID = [self.exportIdsDictionary objectForKey:@(page)];
+        if (exportID) {
+            if (exportID.length) {
+                [self loadOutputResourcesForPage:page];
+            }
+        } else if (page <= self.countOfPages) {
+            if (page == self.currentPage) {
+                [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.resourceClient cancelBlock:nil];
+            } else {
+                [self.delegate reportViewerShouldDisplayActivityIndicator:self];
+            }
 
             JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
                 JSExportExecutionResponse *export = [result.objects objectAtIndex:0];
                 [self.exportIdsDictionary setObject:export.uuid forKey:@(page)];
-                [self loadOutputResourcesForPage:page displayImmediatelly:page == self.currentPage];
+                [self loadOutputResourcesForPage:page];
             } @weakselfend
             errorBlock:nil
             viewControllerToDismiss:nil];
@@ -193,65 +206,65 @@ objection_requires(@"resourceClient", @"reportClient")
             if (self.reportClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) {
                 attachemntPreffix = nil;
             }
-            [self.reportClient runExportExecution:self.requestId outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML pages:pagesString allowInlineScripts:NO attachmentsPrefix:attachemntPreffix delegate:requestDelegate];
-        } else {
-            [self loadOutputResourcesForPage:page displayImmediatelly:page == self.currentPage];
+            [self.reportClient runExportExecution:self.requestId outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML pages:pagesString
+                               allowInlineScripts:NO attachmentsPrefix:attachemntPreffix delegate:requestDelegate];
+            [self.exportIdsDictionary setObject:@"" forKey:@(page)];
         }
     }
 }
 
-- (void) loadOutputResourcesForPage:(NSInteger)page displayImmediatelly:(BOOL)display
+- (void) loadOutputResourcesForPage:(NSInteger)page
 {
     NSString *exportID = [self.exportIdsDictionary objectForKey:@(page)];
-    if (display) {
+    if (page == self.currentPage) {
         self.outputResourceType = JMReportViewerOutputResourceType_LoadingNow;
     }
 
     // Fix for JRS version smaller 5.6.0
     NSString *fullExportID = exportID;
     if (self.reportClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) {
-        fullExportID = [NSString stringWithFormat:@"%@;pages=%zd", exportID, self.currentPage];
+        fullExportID = [NSString stringWithFormat:@"%@;pages=%zd", exportID, page];
     }
+    
+    void (^errorHandlerBlock)(NSInteger page, JSOperationResult *result) = ^(NSInteger page, JSOperationResult *result){
+        JSErrorDescriptor *error = [result.objects objectAtIndex:0];
+        if (!page == self.currentPage) {
+            [UIAlertView localizedAlertWithTitle:nil message:error.message delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil];
+        } else {
+            if ([error.errorCode isEqualToString:@"illegal.parameter.value.error"] ||
+                [error.errorCode isEqualToString:@"export.pages.out.of.range"] ||
+                [error.errorCode isEqualToString:@"export.failed"]) {
+                self.countOfPages = page - 1;
+            }
+        }
+    };
     
     JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
         if ([result.MIMEType isEqualToString:[JSConstants sharedInstance].REST_SDK_MIMETYPE_USED]) {
-            JSErrorDescriptor *error = [result.objects objectAtIndex:0];
-            if (!display) {
-                [UIAlertView localizedAlertWithTitle:nil message:error.message delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil];
-            } else {
-#warning NEED TEST OTHER ERRORS!!!!!
-                if ([error.errorCode isEqualToString:@"illegal.parameter.value.error"]) {
-                    self.countOfPages = page - 1;
-                }
-            }
+            errorHandlerBlock(page, result);
         } else {
-            if (display) {
-                NSString *finalityStatus = [result.allHeaderFields objectForKey:@"output-final"];
-                if (finalityStatus) {
-                    self.outputResourceType = [finalityStatus boolValue] ? JMReportViewerOutputResourceType_Final : JMReportViewerOutputResourceType_NotFinal;
-                } else {
-                    self.outputResourceType = JMReportViewerOutputResourceType_Final;
-                }
-                self.outputResourceType = (finalityStatus && [finalityStatus boolValue]) ? JMReportViewerOutputResourceType_Final : JMReportViewerOutputResourceType_NotFinal;
+            if (page == self.currentPage) {
+                self.outputResourceType = [result.allHeaderFields objectForKey:@"output-final"] ? JMReportViewerOutputResourceType_Final : JMReportViewerOutputResourceType_NotFinal;
                 [self.delegate reportViewer:self loadHTMLString:result.bodyAsString baseURL:self.reportClient.serverProfile.serverUrl];
+                [self runExportExecutionForPage:page + 1];
             }
+
             if (page > 1) {
                 self.multiPageReport = YES;
             }
         }
     } @weakselfend
-    errorBlock:nil
-    viewControllerToDismiss: nil];
+    errorBlock:@weakself(^(JSOperationResult *result)) {
+        errorHandlerBlock(page, result);
+    }@weakselfend
+    viewControllerToDismiss: nil
+    showAlerts:NO];
     
     [self.reportClient loadReportOutput:self.requestId exportOutput:fullExportID loadForSaving:NO path:nil delegate:requestDelegate];
-    
-//    NSString *reportUrl = [self.reportClient generateReportOutputUrl:self.requestId exportOutput:fullExportID];
-//    [NSURLConnection connectionWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:reportUrl]] delegate:self];
 }
 
 - (void)startStatusChecking
 {
-    [self checkStatus];
     self.statusCheckingTimer = [NSTimer scheduledTimerWithTimeInterval:kJMReportViewerStatusCheckingInterval target:self selector:@selector(checkStatus) userInfo:nil repeats:YES];
 }
 
@@ -293,6 +306,20 @@ objection_requires(@"resourceClient", @"reportClient")
 - (void) cancelReport
 {
     [self.statusCheckingTimer invalidate];
+//    if (!self.reportExequtingStatusIsReady) {
+//        JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+//            JSExecutionStatus *status = [result.objects objectAtIndex:0];
+//            self.reportExequtingStatusIsReady = [status.status isEqualToString:kJMRestStatusReady];
+//            if (self.reportExequtingStatusIsReady) {
+//                [self cancelStatusChecking];
+//            }
+//        } @weakselfend
+//        errorBlock:^(JSOperationResult *result) {
+//                                                                                       
+//        }
+//        viewControllerToDismiss: nil];
+//        [self.reportClient cancelReportExecution:self.requestId delegate:requestDelegate];
+//    }
 }
 
 - (BOOL)reportIsEmpty

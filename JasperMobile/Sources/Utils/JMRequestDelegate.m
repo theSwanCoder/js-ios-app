@@ -39,18 +39,11 @@ __weak static UIViewController *viewControllerToDismiss;
 @property (nonatomic, copy) JSRequestFinishedBlock finishedBlock;
 @property (nonatomic, copy) JSRequestFinishedBlock errorBlock;
 @property (nonatomic, weak) id <JSRequestDelegate> delegate;
+@property (nonatomic, assign) BOOL showAlerts;
+
 @end
 
 @implementation JMRequestDelegate
-
-- (id)init
-{
-    if (self = [super init]) {
-        self.checkStatusCode = YES;
-    }
-    
-    return self;
-}
 
 #pragma mark - Class Methods
 
@@ -65,35 +58,38 @@ __weak static UIViewController *viewControllerToDismiss;
 }
 
 + (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock
-{    
-    JMRequestDelegate *requestDelegate = [[JMRequestDelegate alloc] init];
-    requestDelegate.finishedBlock = finishedBlock;
-    
-    [requestDelegatePool addObject:requestDelegate];
-    [JMUtils showNetworkActivityIndicator];
-    
-    return requestDelegate;
+{
+    return [self requestDelegateForFinishBlock:finishedBlock errorBlock:nil];
 }
 
 + (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock
 {
-    JMRequestDelegate *requestDelegate = [self requestDelegateForFinishBlock:finishedBlock];
-    requestDelegate.errorBlock = errorBlock;
-
-    return requestDelegate;
+    return [self requestDelegateForFinishBlock:finishedBlock errorBlock:errorBlock viewControllerToDismiss:nil];
 }
 
 + (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock viewControllerToDismiss:(UIViewController *)viewController
 {
-    viewControllerToDismiss = viewController;
-    return [self requestDelegateForFinishBlock:finishedBlock];
+    return [self requestDelegateForFinishBlock:finishedBlock errorBlock:nil viewControllerToDismiss:viewController];
 }
 
 + (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController
 {
-    JMRequestDelegate *requestDelegate = [self requestDelegateForFinishBlock:finishedBlock viewControllerToDismiss:viewController];
-    requestDelegate.errorBlock = errorBlock;
+    return [self requestDelegateForFinishBlock:finishedBlock errorBlock:errorBlock viewControllerToDismiss:viewController showAlerts:YES];
+}
 
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController showAlerts:(BOOL)showAlerts
+{
+    JMRequestDelegate *requestDelegate = [[JMRequestDelegate alloc] init];
+    requestDelegate.finishedBlock = finishedBlock;
+    requestDelegate.errorBlock = errorBlock;
+    requestDelegate.showAlerts = showAlerts;
+    requestDelegate.checkStatusCode = YES;
+
+    viewControllerToDismiss = viewController;
+    
+    [requestDelegatePool addObject:requestDelegate];
+    [JMUtils showNetworkActivityIndicator];
+    
     return requestDelegate;
 }
 
@@ -123,6 +119,7 @@ __weak static UIViewController *viewControllerToDismiss;
 {
     [requestDelegatePool removeAllObjects];
     finalBlock = nil;
+    viewControllerToDismiss = nil;
 }
 
 #pragma mark - JSRequestDelegate
@@ -137,37 +134,38 @@ __weak static UIViewController *viewControllerToDismiss;
         [JMRequestDelegate clearRequestPool];
         [JMCancelRequestPopup dismiss];
 
-        NSString *title;
-        NSString *message;
-
-        if (result.statusCode != 0) {
-            title = @"error.readingresponse.dialog.msg";
-            message = [NSString stringWithFormat:@"error.http.%li", (long)result.statusCode];
-        } else {
-            switch (result.statusCode) {
-                case NSURLErrorUserCancelledAuthentication:
-                case NSURLErrorUserAuthenticationRequired:
-                    title = @"error.authenication.dialog.title";
-                    message = @"error.authenication.dialog.msg";
-                    break;
-
-                case NSURLErrorCannotFindHost:
-                    title = @"error.unknownhost.dialog.title";
-                    message = @"error.unknownhost.dialog.msg" ;
-                    break;
-
-                default:
-                    title = @"error.noconnection.dialog.title";
-                    message = @"error.noconnection.dialog.msg";
+        if (self.showAlerts) {
+            NSString *title;
+            NSString *message;
+            
+            if (result.statusCode != 0) {
+                title = @"error.readingresponse.dialog.msg";
+                message = [NSString stringWithFormat:@"error.http.%li", (long)result.statusCode];
+            } else {
+                switch (result.statusCode) {
+                    case NSURLErrorUserCancelledAuthentication:
+                    case NSURLErrorUserAuthenticationRequired:
+                        title = @"error.authenication.dialog.title";
+                        message = @"error.authenication.dialog.msg";
+                        break;
+                        
+                    case NSURLErrorCannotFindHost:
+                        title = @"error.unknownhost.dialog.title";
+                        message = @"error.unknownhost.dialog.msg" ;
+                        break;
+                        
+                    default:
+                        title = @"error.noconnection.dialog.title";
+                        message = @"error.noconnection.dialog.msg";
+                }
             }
+            
+            [[UIAlertView localizedAlertWithTitle:title
+                                          message:message
+                                         delegate:JMRequestDelegate.class
+                                cancelButtonTitle:@"dialog.button.ok"
+                                otherButtonTitles:nil] show];
         }
-
-        [[UIAlertView localizedAlertWithTitle:title
-                                      message:message
-                                     delegate:JMRequestDelegate.class
-                            cancelButtonTitle:@"dialog.button.ok"
-                            otherButtonTitles:nil] show];
-
     } else if ([requestDelegatePool containsObject:self]) {
         if (self.finishedBlock) {
             self.finishedBlock(result);

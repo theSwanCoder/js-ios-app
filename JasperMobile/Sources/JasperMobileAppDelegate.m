@@ -241,18 +241,41 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (void)coreDataInit
 {
-    JMServerProfile *serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
-    
-    serverProfile.alias = @"Jaspersoft Mobile Demo";
-    serverProfile.username = @"jasperadmin";
-    serverProfile.password = @"jasperadmin";
-    serverProfile.organization = @"organization_1";
-    serverProfile.serverUrl = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
-    serverProfile.askPassword = [NSNumber numberWithBool:NO];
-    
-    [self.managedObjectContext save:nil];
-    [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:serverProfile.profileID];
-    
+#ifdef DEBUG
+    NSString *profilesPath = [[NSBundle mainBundle] pathForResource:@"profiles" ofType:@"json"];
+    NSData *profilesData = [NSData dataWithContentsOfFile:profilesPath];
+    NSArray *profilesArray = [[NSJSONSerialization JSONObjectWithData:profilesData options:NSJSONReadingAllowFragments error:nil] objectForKey:@"profiles"];
+    if (profilesArray && [profilesArray isKindOfClass:[NSArray class]] && profilesArray.count) {
+        for (NSDictionary *profileDictionary in profilesArray) {
+            JMServerProfile *serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
+            
+            serverProfile.alias = [profileDictionary objectForKey:@"mAlias"];
+            serverProfile.username = [profileDictionary objectForKey:@"mUsername"];
+            serverProfile.password = [profileDictionary objectForKey:@"mPassword"];
+            serverProfile.organization = [profileDictionary objectForKey:@"mOrganization"];
+            serverProfile.serverUrl = [profileDictionary objectForKey:@"mServerUrl"];
+            serverProfile.askPassword = [NSNumber numberWithBool:NO];
+            
+            [self.managedObjectContext save:nil];
+            [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:serverProfile.profileID];
+        }
+    }
+#endif
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"serverUrl == %@", @"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
+    JMServerProfile *serverProfile = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] firstObject];
+    if (!serverProfile) {
+        serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
+        serverProfile.alias = @"Jaspersoft Mobile Demo";
+        serverProfile.username = @"jasperadmin";
+        serverProfile.password = @"jasperadmin";
+        serverProfile.organization = @"organization_1";
+        serverProfile.serverUrl = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
+        serverProfile.askPassword = [NSNumber numberWithBool:NO];
+        
+        [self.managedObjectContext save:nil];
+        [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:serverProfile.profileID];
+    }
     [serverProfile setServerProfileIsActive:YES];
 }
 

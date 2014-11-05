@@ -52,16 +52,10 @@
 
     if (![JMRequestDelegate isRequestPoolEmpty]) {
         [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:@weakself(^(void)) {
+            [self.reportViewer cancelReport];
             [self.navigationController popViewControllerAnimated:YES];
         } @weakselfend ];
     }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [self.navigationController setToolbarHidden:YES animated:YES];
-    [self.toolbar removeFromSuperview];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -185,6 +179,11 @@
     self.toolbar.currentPage = reportViewer.currentPage;
     self.toolbar.countOfPages = reportViewer.countOfPages;
     [self updateToobarAppearence];
+}
+
+- (void) reportViewerShouldDisplayActivityIndicator:(JMReportViewer *)reportViewer
+{
+    [self.activityIndicator startAnimating];
 }
 
 - (void)reportViewer:(JMReportViewer *)reportViewer loadHTMLString:(NSString *)string baseURL:(NSString *)baseURL;

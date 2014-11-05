@@ -23,7 +23,7 @@
 
 #import "JMMainNavigationController.h"
 
-@interface JMMainNavigationController ()
+@interface JMMainNavigationController () <UINavigationControllerDelegate>
 
 @end
 
@@ -31,6 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.delegate = self;
     
     [[UINavigationBar appearance] setBarTintColor: kJMMainNavigationBarBackgroundColor];
     [[UIToolbar appearance] setBarTintColor: kJMMainNavigationBarBackgroundColor];
@@ -55,5 +56,11 @@
     self.toolbar.translucent = NO;
     self.interactivePopGestureRecognizer.enabled = NO;
 }
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    [navigationController setToolbarHidden:YES animated:YES];
+}
+
 
 @end

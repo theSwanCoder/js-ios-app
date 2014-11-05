@@ -22,6 +22,14 @@
 
 
 #import "JMRepositoryListLoader.h"
+#import "JMRequestDelegate.h"
+
+@interface JMRepositoryListLoader ()
+
+@property (nonatomic, strong) JSResourceLookup *rootFolder;
+@property (nonatomic, strong) JSResourceLookup *publicFolder;
+
+@end
 
 @implementation JMRepositoryListLoader
 - (id)init
@@ -35,31 +43,63 @@
     return self;
 }
 
+- (BOOL) shouldBeAddedResourceLookup:(JSResourceLookup *)resource
+{
+   return (!self.searchQuery ||
+           (self.searchQuery && resource.label && [resource.label rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound) ||
+           (self.searchQuery && resource.resourceDescription && [resource.resourceDescription rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound));
+}
+
 - (void)loadNextPage
 {
     if (self.resourceLookup) {
         [super loadNextPage];
     } else {
-        NSArray *baseFolders = nil;
-        if ([self.resourceClient.serverInfo.edition isEqualToString:self.constants.SERVER_EDITION_PRO]) {
-            baseFolders = @[@{@"folderName" : JMCustomLocalizedString(@"repository.root.organization", nil), @"folderURI" : @"/"},
-              @{@"folderName" : JMCustomLocalizedString(@"repository.root.public", nil), @"folderURI" : @"/public"}];
-        } else {
-            baseFolders = @[@{@"folderName" : JMCustomLocalizedString(@"repository.root.root", nil), @"folderURI" : @"/"}];
-        }
-  
-        for (NSDictionary *folder in baseFolders) {
-            if (!self.searchQuery || (self.searchQuery && [[folder objectForKey:@"folderName"] rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound)) {
-                JSResourceLookup *rootResourceLookup = [[JSResourceLookup alloc] init];
-                rootResourceLookup.label = [folder objectForKey:@"folderName"];
-                rootResourceLookup.uri = [folder objectForKey:@"folderURI"];
-                rootResourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
-                [self.resources addObject:rootResourceLookup];
-            }
-        }
         _needUpdateData = NO;
-        _isLoadingNow = NO;
-        [self.delegate resourceListDidLoaded:self withError:nil];
+        void(^finishBlock)(void) = ^(void){
+            self->_isLoadingNow = NO;
+            [self.delegate resourceListDidLoaded:self withError:nil];
+        };
+        
+        void(^finishSearchBlock)(void) = ^(void){
+            if (self.rootFolder && self.publicFolder) {
+                if ([self shouldBeAddedResourceLookup:self.rootFolder]) {
+                    [self.resources addObject:self.rootFolder];
+                }
+                if ([self shouldBeAddedResourceLookup:self.publicFolder]) {
+                    [self.resources addObject:self.publicFolder];
+                }
+                
+                self.resources = [NSMutableArray arrayWithArray:[self.resources sortedArrayUsingComparator:^NSComparisonResult(JSResourceLookup * obj1, JSResourceLookup * obj2) {
+                    return [obj1.label compare:obj2.label options:NSCaseInsensitiveSearch];
+                }]];
+                finishBlock();
+            }
+        };
+
+        void(^loadResourceLookupBlock)(NSString *resourceURI, JSResourceLookup * __strong *lookup) = ^(NSString *resourceURI, JSResourceLookup * __strong *lookup){
+            JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                JSResourceLookup *resourceLookup = [result.objects objectAtIndex:0];
+                if (!resourceLookup.resourceType) {
+                    resourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
+                }
+                *lookup = resourceLookup;
+                finishSearchBlock();
+            } @weakselfend
+            errorBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                finishBlock();
+            } @weakselfend
+            viewControllerToDismiss: nil];
+            [self.resourceClient getResourceLookup:resourceURI delegate:requestDelegate];
+
+        };
+        
+        if (!self.rootFolder && !self.publicFolder) {
+            loadResourceLookupBlock(@"/", &_rootFolder);
+            loadResourceLookupBlock(@"/public", &_publicFolder);
+        } else {
+            finishSearchBlock();
+        }
     }
 }
 

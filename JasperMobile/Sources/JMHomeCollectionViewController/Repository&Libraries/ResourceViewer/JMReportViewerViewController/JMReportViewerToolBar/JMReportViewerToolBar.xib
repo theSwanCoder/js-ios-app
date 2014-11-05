@@ -82,6 +82,7 @@
                 <outlet property="nextButton" destination="nTm-ge-Khe" id="aem-1p-DUe"/>
                 <outlet property="pageCountActivityIndicator" destination="fbB-jp-lCk" id="mkP-FT-vbX"/>
                 <outlet property="pageCountLabel" destination="p2R-Gd-XE2" id="rE2-rh-GZ6"/>
+                <outlet property="pickerView" destination="897-OP-VVU" id="O5c-Kc-kh6"/>
                 <outlet property="previousButton" destination="ut0-Sx-8hQ" id="aTq-Tk-gyh"/>
             </connections>
             <point key="canvasLocation" x="426" y="288"/>
@@ -89,6 +90,10 @@
         <pickerView contentMode="scaleToFill" id="897-OP-VVU">
             <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+            <connections>
+                <outlet property="dataSource" destination="Hba-AS-LtT" id="Mgr-gc-pgz"/>
+                <outlet property="delegate" destination="Hba-AS-LtT" id="fxs-LB-ld3"/>
+            </connections>
             <point key="canvasLocation" x="426" y="483"/>
         </pickerView>
     </objects>
