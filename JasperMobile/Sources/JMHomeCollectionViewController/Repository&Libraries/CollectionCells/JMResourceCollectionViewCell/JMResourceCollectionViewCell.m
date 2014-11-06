@@ -32,6 +32,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 @property (nonatomic, weak) IBOutlet UIImageView *resourceImage;
 @property (nonatomic, weak) IBOutlet UILabel *resourceName;
 @property (nonatomic, weak) IBOutlet UILabel *resourceDescription;
+@property (nonatomic, weak) IBOutlet UIButton *infoButton;
 
 @property (nonatomic, weak) JSConstants *constants;
 
@@ -50,6 +51,7 @@ objection_requires(@"constants")
     [[JSObjection defaultInjector] injectDependencies:self];
 
     self.resourceImage.backgroundColor = kJMResourcePreviewBackgroundColor;
+    self.infoButton.tintColor = [UIColor colorFromHexString:@"#909090"];
 }
 
 - (void)setResourceLookup:(JSResourceLookup *)resourceLookup
