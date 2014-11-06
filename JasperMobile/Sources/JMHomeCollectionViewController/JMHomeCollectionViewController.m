@@ -83,17 +83,13 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
         JMServerProfile *serverProfile = [[notification userInfo] objectForKey:kJMServerProfileKey];
         self.activeServerLabel.text = serverProfile.alias;
     } @weakselfend];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self.collectionView selector:@selector(reloadData) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self.collectionView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated

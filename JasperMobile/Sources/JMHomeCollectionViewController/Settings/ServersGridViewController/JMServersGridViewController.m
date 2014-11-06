@@ -53,6 +53,13 @@ objection_requires(@"managedObjectContext")
     self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
     self.collectionView.backgroundColor = kJMMainCollectionViewBackgroundColor;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(addButtonTapped:)];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self.collectionView selector:@selector(reloadData) name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -100,6 +107,13 @@ objection_requires(@"managedObjectContext")
 {
     JMServerProfile *serverProfile = [self.servers objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:serverProfile];
+}
+
+#pragma mark - UICollectionViewFlowLayoutDelegate
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
+    return CGSizeMake(collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right, flowLayout.itemSize.height);
 }
 
 #pragma mark - Actions
