@@ -51,10 +51,9 @@
     [self updateToobarAppearence];
 
     if (![JMRequestDelegate isRequestPoolEmpty]) {
-        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:@weakself(^(void)) {
+        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportViewer.reportClient cancelBlock:@weakself(^(void)) {
             [self.reportViewer cancelReport];
-            [self.navigationController popViewControllerAnimated:YES];
-        } @weakselfend ];
+        } @weakselfend];
     }
 }
 
@@ -174,6 +173,11 @@
 
 #pragma mark -
 #pragma mark - JMReportViewerDelegate
+- (void)reportViewerReportDidCanceled:(JMReportViewer *)reportViewer
+{
+    [self backButtonTapped:nil];
+}
+
 - (void)reportViewerDidChangedPagination:(JMReportViewer *)reportViewer
 {
     self.toolbar.currentPage = reportViewer.currentPage;
