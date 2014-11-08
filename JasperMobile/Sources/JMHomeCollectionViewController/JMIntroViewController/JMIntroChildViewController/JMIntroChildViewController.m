@@ -1,37 +1,45 @@
+/*
+ * TIBCO JasperMobile for iOS
+ * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * http://community.jaspersoft.com/project/jaspermobile-ios
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
 //
-//  JMIntrolChildViewController.m
+//  JMIntroChildViewController.h
 //  TIBCO JasperMobile
 //
-//  Created by Aleksandr Dakhno on 11/7/14.
-//  Copyright (c) 2014 Tibco JasperMobile. All rights reserved.
-//
 
-#import "JMIntrolChildViewController.h"
+#import "JMIntroChildViewController.h"
 
-@interface JMIntrolChildViewController ()
+@interface JMIntroChildViewController ()
 
 @end
 
-@implementation JMIntrolChildViewController
+@implementation JMIntroChildViewController
+
+#pragma mark - LifeCycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+#pragma mark - Methods
 
 @end

@@ -55,9 +55,11 @@ static NSString * const kJMProductName = @"JasperMobile";
 {
     if (self = [super init]) {
         [self initObjectionModules];
-        
+
+        _applicationFirstStart = NO;
         if ([JMAppUpdater isRunningForTheFirstTime]) {
             [JMAppUpdater updateAppVersionTo:[JMAppUpdater latestAppVersion]];
+            _applicationFirstStart = YES;
             [self coreDataInit];
         } else {
             [JMAppUpdater update];

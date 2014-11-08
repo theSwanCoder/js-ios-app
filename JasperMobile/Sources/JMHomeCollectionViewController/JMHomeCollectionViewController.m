@@ -31,6 +31,8 @@
 #import "JMResourcesCollectionViewController.h"
 
 #import "ALToastView.h"
+#import "JasperMobileAppDelegate.h"
+#import "JMIntroViewController.h"
 
 // Localization keys defined as lowercase version of MenuItem identifier (e.g library, saveditems etc)
 static NSString * const kJMMenuItemLibrary = @"Library";
@@ -102,15 +104,31 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     [self.collectionView reloadData];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+//    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+//    if (appDelegate.isApplicationFirstStart) {
+//        appDelegate.applicationFirstStart = NO;
+//        [self showIntroView];
+//    }
+    [self showIntroView];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    id viewController = segue.destinationViewController;
-    [viewController setTitle:sender];
-    if ([viewController respondsToSelector:@selector(setPresentingType:)]) {
-        [viewController setPresentingType:[self presentingTypeForSequeIdentifier:segue.identifier]];
-    }
-    if ([viewController respondsToSelector:@selector(setRepresentationType:)]) {
-        [viewController setRepresentationType:JMResourcesRepresentationTypeHorizontalList];
+    if ([segue.identifier isEqualToString:@"ShowIntroView"]) {
+        JMIntroViewController *introViewController = segue.destinationViewController;
+        introViewController.view.backgroundColor = [UIColor blueColor];
+    } else {
+        id viewController = segue.destinationViewController;
+        [viewController setTitle:sender];
+        if ([viewController respondsToSelector:@selector(setPresentingType:)]) {
+            [viewController setPresentingType:[self presentingTypeForSequeIdentifier:segue.identifier]];
+        }
+        if ([viewController respondsToSelector:@selector(setRepresentationType:)]) {
+            [viewController setRepresentationType:JMResourcesRepresentationTypeHorizontalList];
+        }
     }
 }
 
@@ -168,6 +186,11 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     }
 
     return 0;
+}
+
+#pragma mark - Intro View
+- (void)showIntroView {
+    [self performSegueWithIdentifier:@"ShowIntroView" sender:nil];
 }
 
 @end
