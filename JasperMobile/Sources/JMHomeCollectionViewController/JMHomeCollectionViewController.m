@@ -33,6 +33,7 @@
 #import "ALToastView.h"
 #import "JasperMobileAppDelegate.h"
 #import "JMIntroViewController.h"
+#import "UIView+Additions.h"
 
 // Localization keys defined as lowercase version of MenuItem identifier (e.g library, saveditems etc)
 static NSString * const kJMMenuItemLibrary = @"Library";
@@ -119,7 +120,7 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 {
     if ([segue.identifier isEqualToString:@"ShowIntroView"]) {
         JMIntroViewController *introViewController = segue.destinationViewController;
-        introViewController.view.backgroundColor = [UIColor blueColor];
+        introViewController.view.backgroundColor = [UIColor colorWithPatternImage:[self.view renderedImageForView:self.navigationController.view]];
     } else {
         id viewController = segue.destinationViewController;
         [viewController setTitle:sender];

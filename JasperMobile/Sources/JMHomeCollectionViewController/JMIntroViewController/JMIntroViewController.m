@@ -25,39 +25,39 @@
 //  TIBCO JasperMobile
 //
 
-#import <UIKit/UIKit.h>
 #import "JMIntroViewController.h"
 #import "JMIntroChildViewController.h"
+#import "JMIntroModel.h"
 
-@interface JMIntroViewController () <UIGestureRecognizerDelegate>
+static const CGFloat kDefaultAnimationDuration = 0.4;
+
+@interface JMIntroViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *skipButton;
 @property (weak, nonatomic) IBOutlet UIView *childView;
+@property (weak, nonatomic) IBOutlet UIView *startTopView;
 @property (weak, nonatomic) IBOutlet UIView *controlView;
 @property (weak, nonatomic) JMIntroChildViewController *topChildViewController;
 @property (weak, nonatomic) JMIntroChildViewController *bottomChildViewController;
-@property (nonatomic, copy) NSArray *pageTitles;
+@property (nonatomic, copy) NSArray *pageData;
 @property (nonatomic, assign) CGPoint startPoint;
-@property (nonatomic, assign) NSUInteger topChildViewIndex;
+@property (nonatomic, assign) NSInteger topChildViewIndex;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
 @end
 
 @implementation JMIntroViewController
 
 #pragma mark - LifeCircle
+- (void)awakeFromNib {
+    [super awakeFromNib];
+
+    [self setupModel];
+    self.topChildViewIndex = 0;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [UIApplication sharedApplication].statusBarHidden = YES;
-
-    self.pageTitles = @[
-            @"first",
-            @"second",
-            @"third"
-    ];
-
-    self.topChildViewIndex = 0;
-    [self addTopChildView];
+    //[self addTopChildView];
     [self addBottomChildView];
 
     [self addGestureRecognizer];
@@ -66,11 +66,32 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    [self.skipButton setTitle:@"Skip Intro" forState:UIControlStateNormal];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+
+    [self setButtonTitle:@"Skip Intro"];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 }
 
 #pragma mark - Setup
-
+- (void)setupModel {
+    JMIntroModel *firstPage = [[JMIntroModel alloc] initWithTitle:@"Stay Connected"
+                                                      description:@"JasperMobile keeps you connected to\nyour business wherever you are."
+                                                            image:[UIImage imageNamed:@"stay_connect_image"]];
+    JMIntroModel *secondPage = [[JMIntroModel alloc] initWithTitle:@"Instant Access"
+                                                       description:@"Get access to live interactive reports\ndriven from your operational applications."
+                                                             image:[UIImage imageNamed:@"instant_access_image"]];
+    JMIntroModel *thirdPage = [[JMIntroModel alloc] initWithTitle:@"Seemless Integration"
+                                                      description:@"View and interact with your JasperReports\nServer v5.0 or greater environment."
+                                                            image:[UIImage imageNamed:@"seemless_integration_image"]];
+    self.pageData = @[
+            @"zero", firstPage, secondPage, thirdPage
+    ];
+}
 
 #pragma mark - Gesture Recognizer
 - (void)addGestureRecognizer {
@@ -88,49 +109,91 @@
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         self.startPoint = [gestureRecognizer locationInView:self.childView];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
-
-        CGPoint point = [gestureRecognizer locationInView:self.childView];
-        if (point.y < self.startPoint.y) {
-
-            CGFloat delta = self.startPoint.y - point.y;
-            BOOL isLastPage = self.topChildViewController.pageNumber == [self.pageTitles count] - 1;
+        // changing position of top child view
+        CGPoint currentPoint = [gestureRecognizer locationInView:self.childView];
+        if (currentPoint.y < self.startPoint.y) {
+            // if move up
+            CGFloat delta = self.startPoint.y - currentPoint.y;
+            BOOL isLastPage = (self.topChildViewIndex == [self.pageData count] - 1);
             if (isLastPage) {
-                CGRect childViewFrame = self.childView.frame;
-                childViewFrame.origin = CGPointMake(0.0, -delta);
-                self.childView.frame = childViewFrame;
-//
-//                CGRect childViewFrame = self.topChildViewController.view.frame;
-//                childViewFrame.origin = CGPointMake(0.0, -delta);
-//                self.topChildViewController.view.frame = childViewFrame;
-//
-//                CGRect controlViewFrame = self.controlView.frame;
-//                controlViewFrame.origin = CGPointMake(0.0, controlViewFrame.origin.y - delta);
-//                self.controlView.frame = controlViewFrame;
-//
-//                NSLog(@"controlView y: %f", controlViewFrame.origin.y);
+                [self setOrigin:CGPointMake(0.0, -delta)
+                        forView:self.topChildViewController.view];
 
+                // move control view with child view
+                CGFloat controlViewOriginY = CGRectGetMaxY(self.childView.frame);
+                [self setOrigin:CGPointMake(0.0, controlViewOriginY - delta)
+                        forView:self.controlView];
             } else {
-                CGRect childViewFrame = self.topChildViewController.view.frame;
-                childViewFrame.origin = CGPointMake(0.0, -delta);
-                self.topChildViewController.view.frame = childViewFrame;
+                BOOL isStartPage = (self.topChildViewIndex == 0);
+                if (isStartPage) {
+                    [self setOrigin:CGPointMake(0.0, -delta)
+                            forView:self.startTopView];
+                } else {
+                    [self setOrigin:CGPointMake(0.0, -delta)
+                            forView:self.topChildViewController.view];
+                }
             }
         }
 
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        CGPoint point = [gestureRecognizer locationInView:self.childView];
-        CGFloat delta = self.startPoint.y - point.y;
+        // set end position with animation
+        CGPoint endPoint = [gestureRecognizer locationInView:self.childView];
+        CGFloat delta = self.startPoint.y - endPoint.y;
 
-        BOOL isLastPage = self.topChildViewController.pageNumber == [self.pageTitles count] - 1;
+        BOOL isLastPage = (self.topChildViewIndex == [self.pageData count] - 1);
         if (isLastPage) {
-
-        } else {
             if (delta / CGRectGetHeight(self.childView.bounds) > 0.2) {
-                [self changeTopView];
+                [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                    [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.view.frame))
+                            forView:self.topChildViewController.view];
+
+                    [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.controlView.frame))
+                            forView:self.controlView];
+                } completion:^(BOOL finished) {
+                    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+                }];
             } else {
-                [UIView animateWithDuration:0.4 animations:^{
-                    CGRect frame = self.topChildViewController.view.frame;
-                    frame.origin = CGPointZero;
-                    self.topChildViewController.view.frame = frame;
+                [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                    [self setOrigin:CGPointZero
+                            forView:self.topChildViewController.view];
+
+                    // move control view with child view
+                    CGFloat controlViewOriginY = CGRectGetMaxY(self.childView.frame);
+                    [self setOrigin:CGPointMake(0.0, controlViewOriginY)
+                            forView:self.controlView];
+                }];
+            }
+        } else {
+            BOOL isStartPage = (self.topChildViewIndex == 0);
+            if (delta / CGRectGetHeight(self.childView.bounds) > 0.2) {
+                if (isStartPage) {
+                    NSInteger nextIndex = self.topChildViewIndex;
+                    nextIndex++;
+
+                    [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                        [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.childView.frame))
+                                forView:self.startTopView];
+                    } completion:^(BOOL finished) {
+                        [self.startTopView removeFromSuperview];
+
+                        [self removeBottomChildView];
+
+                        self.topChildViewIndex = nextIndex;
+                        [self addTopChildView];
+                        [self addBottomChildView];
+                    }];
+                } else {
+                    [self changeTopView];
+                }
+            } else {
+                [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                    if (isStartPage) {
+                        [self setOrigin:CGPointZero
+                                forView:self.startTopView];
+                    } else {
+                        [self setOrigin:CGPointZero
+                                forView:self.topChildViewController.view];
+                    }
                 }];
             }
         }
@@ -142,25 +205,17 @@
     }
 }
 
-#pragma mark - UIGestureRecognizerDelegate
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    return YES;
-}
-
-
 #pragma mark - Actions
 - (IBAction)skipAction:(id)sender {
     [self hideIntroView];
 }
 
 #pragma mark - Private methods
-- (JMIntroChildViewController *)childVCForIndex:(NSUInteger)pageIndex {
+- (JMIntroChildViewController *)childViewControllerForIndex:(NSUInteger)pageIndex {
     JMIntroChildViewController *childViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMIntroChildViewController"];
-    childViewController.pageNumber = pageIndex;
 
-    CGFloat childViewHeight = CGRectGetHeight(self.childView.bounds);
-    CGFloat childViewWidth = CGRectGetWidth(self.childView.bounds);
+    CGFloat childViewHeight = CGRectGetHeight(self.childView.frame);
+    CGFloat childViewWidth = CGRectGetWidth(self.childView.frame);
     CGRect childViewFrame = CGRectMake(0, 0, childViewWidth, childViewHeight);
     childViewController.view.frame = childViewFrame;
 
@@ -168,13 +223,13 @@
 }
 
 - (void)addTopChildView {
-    JMIntroChildViewController *childViewController = [self childVCForIndex:self.topChildViewIndex];
+    JMIntroChildViewController *childViewController = [self childViewControllerForIndex:self.topChildViewIndex];
 
     [self addChildViewController:childViewController];
     [self.childView addSubview:childViewController.view];
 
     // setup next child view subviews
-    childViewController.pageLabel.text = self.pageTitles[self.topChildViewIndex];
+    [childViewController setupWithModel:self.pageData[self.topChildViewIndex]];
     [childViewController didMoveToParentViewController:self];
     self.topChildViewController = childViewController;
 }
@@ -186,16 +241,16 @@
 }
 
 - (void)addBottomChildView {
-    NSUInteger bottomIndex = self.topChildViewController.pageNumber;
+    NSInteger bottomIndex = self.self.topChildViewIndex;
     bottomIndex++;
 
-    JMIntroChildViewController *childViewController = [self childVCForIndex:bottomIndex];
+    JMIntroChildViewController *childViewController = [self childViewControllerForIndex:bottomIndex];
 
     [self addChildViewController:childViewController];
-    [self.childView insertSubview:childViewController.view belowSubview:self.topChildViewController.view];
+    [self.childView insertSubview:childViewController.view atIndex:0];
 
     // setup next child view subviews
-    childViewController.pageLabel.text = self.pageTitles[bottomIndex];
+    [childViewController setupWithModel:self.pageData[bottomIndex]];
     [childViewController didMoveToParentViewController:self];
     self.bottomChildViewController = childViewController;
 }
@@ -208,13 +263,12 @@
 
 
 - (void)changeTopView {
-    NSUInteger nextIndex = self.topChildViewController.pageNumber;
+    NSInteger nextIndex = self.topChildViewIndex;
     nextIndex++;
 
-    [UIView animateWithDuration:0.4 animations:^{
-        CGRect frame = self.topChildViewController.view.frame;
-        frame.origin = CGPointMake(0.0, -CGRectGetHeight(self.childView.frame));
-        self.topChildViewController.view.frame = frame;
+    [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+        [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.topChildViewController.view.frame))
+                forView:self.topChildViewController.view];
     } completion:^(BOOL finished) {
         // change current child to next
         [self removeTopChildView];
@@ -222,15 +276,37 @@
 
         self.topChildViewIndex = nextIndex;
         [self addTopChildView];
-        if (nextIndex < [self.pageTitles count] - 1) {
+        BOOL isLastPage = (nextIndex == [self.pageData count] - 1);
+        if (!isLastPage) {
             [self addBottomChildView];
+        } else {
+            [self setButtonTitle:@"Start using JasperMobile"];
         }
     }];
 }
 
 - (void)hideIntroView {
 
-    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+    [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+        [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.view.frame))
+                forView:self.childView];
+
+        [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.controlView.frame))
+                forView:self.controlView];
+
+    } completion:^(BOOL finished) {
+        [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+    }];
+}
+
+- (void)setButtonTitle:(NSString *)buttonTitle {
+    [self.skipButton setTitle:buttonTitle forState:UIControlStateNormal];
+}
+
+- (void)setOrigin:(CGPoint)origin forView:(UIView *)view {
+    CGRect viewFrame = view.frame;
+    viewFrame.origin = origin;
+    view.frame = viewFrame;
 }
 
 @end

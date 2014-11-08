@@ -99,19 +99,54 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="YwB-w5-1BG">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="450"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="430"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" id="DXC-ZF-6Me">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="430"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="jasper_logo" id="mvA-00-v0G">
+                                                <rect key="frame" x="82" y="31" width="155" height="156"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to JasperMobile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5RK-Db-ada">
+                                                <rect key="frame" x="8" y="200" width="304" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="swipe up to begin" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mev-gr-j4l">
+                                                <rect key="frame" x="8" y="264" width="304" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stay_connect_image" id="h2Q-xf-9gO">
+                                                <rect key="frame" x="18" y="296" width="283" height="413"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_up" id="p1G-Sj-bUZ">
+                                                <rect key="frame" x="150" y="246" width="21" height="12"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.95686274510000002" green="0.95686274510000002" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="H4G-2d-Voj">
-                                <rect key="frame" x="0.0" y="450" width="320" height="30"/>
+                                <rect key="frame" x="0.0" y="430" width="320" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HGk-hY-idy">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <state key="normal">
-                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="0.87450980392156863" green="0.87450980392156863" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -119,17 +154,16 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.20392156862745098" green="0.2196078431372549" blue="0.25490196078431371" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
-                    <nil key="simulatedStatusBarMetrics"/>
-                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="childView" destination="YwB-w5-1BG" id="Ur7-wb-aLo"/>
                         <outlet property="controlView" destination="H4G-2d-Voj" id="zdY-aY-HDp"/>
                         <outlet property="skipButton" destination="HGk-hY-idy" id="fm8-n3-BDV"/>
+                        <outlet property="startTopView" destination="DXC-ZF-6Me" id="Yxx-le-oLo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="st8-As-Ov4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -140,29 +174,40 @@
         <scene sceneID="Qr8-9V-Odl">
             <objects>
                 <viewController storyboardIdentifier="JMIntroChildViewController" id="oVk-zs-Xfs" customClass="JMIntroChildViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="SV1-s2-i1s">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="SV1-s2-i1s">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" id="WrF-LC-9Pl">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HxY-nP-VH1">
-                                        <rect key="frame" x="8" y="400" width="304" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_up" id="vee-hn-IK2">
+                                <rect key="frame" x="150" y="27" width="21" height="12"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stay Connected" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8cY-ro-DXp">
+                                <rect key="frame" x="8" y="60" width="304" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1ET-Od-R1H">
+                                <rect key="frame" x="8" y="89" width="304" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <string key="text">JasperMobile keeps you connected to your business wherever you are.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stay_connect_image" id="tQm-Gr-NkK">
+                                <rect key="frame" x="19" y="137" width="283" height="413"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.95686274509803915" green="0.95686274509803915" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <connections>
-                        <outlet property="pageLabel" destination="HxY-nP-VH1" id="ucY-Wl-VQE"/>
+                        <outlet property="descriptionLabel" destination="1ET-Od-R1H" id="3qT-RD-yCn"/>
+                        <outlet property="imageView" destination="tQm-Gr-NkK" id="bzA-jU-Rsl"/>
+                        <outlet property="titleLabel" destination="8cY-ro-DXp" id="8kB-ow-aOA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2JH-To-6HN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -396,7 +441,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="76m-km-THx">
-                                                    <rect key="frame" x="170.00000065684998" y="10" width="120" height="30"/>
+                                                    <rect key="frame" x="170" y="10" width="120" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -434,7 +479,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="qPt-Qz-YWo">
-                                                    <rect key="frame" x="170.00000065684998" y="10" width="120" height="30"/>
+                                                    <rect key="frame" x="170" y="10" width="120" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
@@ -1248,9 +1293,12 @@ Please Wait...</string>
     </scenes>
     <resources>
         <image name="accessory_arrow.png" width="17" height="17"/>
+        <image name="arrow_up" width="21" height="12"/>
         <image name="checked_checkbox.png" width="36" height="36"/>
         <image name="gray_text_field.png" width="1" height="1"/>
+        <image name="jasper_logo" width="155" height="156"/>
         <image name="server.png" width="232" height="129"/>
+        <image name="stay_connect_image" width="283" height="413"/>
         <image name="unchecked_checkbox.png" width="36" height="36"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

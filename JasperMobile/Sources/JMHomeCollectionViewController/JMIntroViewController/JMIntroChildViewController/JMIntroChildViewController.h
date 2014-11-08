@@ -25,6 +25,8 @@
 //  TIBCO JasperMobile
 //
 
+@class JMIntroModel;
+
 /**
 @author Vlad Zavadskii vzavadskii@jaspersoft.com
 @author Alexey Gubarev agubarev@jaspersoft.com
@@ -33,6 +35,5 @@
 
 
 @interface JMIntroChildViewController : UIViewController
-@property (nonatomic, assign) NSUInteger pageNumber;
-@property (weak, nonatomic) IBOutlet UILabel *pageLabel;
+- (void)setupWithModel:(JMIntroModel *)introModel;
 @end

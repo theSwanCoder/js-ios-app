@@ -26,9 +26,12 @@
 //
 
 #import "JMIntroChildViewController.h"
+#import "JMIntroModel.h"
 
 @interface JMIntroChildViewController ()
-
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @end
 
 @implementation JMIntroChildViewController
@@ -41,5 +44,11 @@
 }
 
 #pragma mark - Methods
+- (void)setupWithModel:(JMIntroModel *)introModel {
+    self.titleLabel.text = introModel.pageTitle;
+    self.descriptionLabel.text = introModel.pageDescription;
+    self.imageView.image = introModel.pageImage;
+}
+
 
 @end
