@@ -47,4 +47,26 @@
     return color;
 }
 
+- (UIImage *)renderedImageForView:(UIView *)view
+{
+    CGRect rect = [view bounds];
+    CGSize size = [view bounds].size;
+    CGFloat scale = [UIScreen mainScreen].scale;
+    UIImage *image;
+    UIGraphicsBeginImageContextWithOptions(size, NO, scale);
+
+    BOOL result = [view drawViewHierarchyInRect:rect afterScreenUpdates:YES];
+    if (!result) {
+        [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    }
+    image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
+- (UIImage *)renderedImage
+{
+    return [self renderedImageForView:self];
+}
+
 @end

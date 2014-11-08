@@ -36,4 +36,8 @@
 @interface UIView (Additions)
 
 - (UIColor *) colorOfPoint:(CGPoint)point;
+
+- (UIImage *)renderedImageForView:(UIView *)view;
+
+- (UIImage *)renderedImage;
 @end
