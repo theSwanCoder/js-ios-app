@@ -21,19 +21,18 @@
  */
 
 //
-//  JMIntroModel.h
+//  JMIntroModelManager.h
 //  TIBCO JasperMobile
 //
+
+@class JMIntroModel;
 
 /**
 @since 1.9
 */
 
-@interface JMIntroModel : NSObject
-@property (nonatomic, copy) NSString *pageTitle;
-@property (nonatomic, copy) NSString *pageDescription;
-@property (nonatomic, strong) UIImage *pageImage;
 
-- (instancetype)initWithTitle:(NSString *)title description:(NSString *)description image:(UIImage *)image;
-
+@interface JMIntroModelManager : NSObject
+@property (nonatomic, assign, readonly) BOOL isLastPage;
+- (JMIntroModel *)nextModel;
 @end

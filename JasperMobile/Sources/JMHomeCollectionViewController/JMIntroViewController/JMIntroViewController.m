@@ -28,20 +28,22 @@
 #import "JMIntroViewController.h"
 #import "JMIntroChildViewController.h"
 #import "JMIntroModel.h"
+#import "JMIntroModelManager.h"
 
 static const CGFloat kDefaultAnimationDuration = 0.4;
 
 @interface JMIntroViewController ()
-@property (weak, nonatomic) IBOutlet UIButton *skipButton;
-@property (weak, nonatomic) IBOutlet UIView *childView;
-@property (weak, nonatomic) IBOutlet UIView *startTopView;
+@property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *controlView;
+@property (weak, nonatomic) IBOutlet UIView *startChildView;
+@property (weak, nonatomic) IBOutlet UIButton *skipButton;
 @property (weak, nonatomic) JMIntroChildViewController *topChildViewController;
 @property (weak, nonatomic) JMIntroChildViewController *bottomChildViewController;
-@property (nonatomic, copy) NSArray *pageData;
+@property (nonatomic, strong) JMIntroModelManager *modelManager;
+@property (nonatomic, assign) BOOL isFirstPage;
+@property (nonatomic, assign) BOOL isLastPage;
 @property (nonatomic, assign) CGPoint startPoint;
-@property (nonatomic, assign) NSInteger topChildViewIndex;
-@property (nonatomic, strong) UIPanGestureRecognizer *panGestureRecognizer;
+@property (nonatomic, weak) UIPanGestureRecognizer *panGestureRecognizer;
 @end
 
 @implementation JMIntroViewController
@@ -50,16 +52,17 @@ static const CGFloat kDefaultAnimationDuration = 0.4;
 - (void)awakeFromNib {
     [super awakeFromNib];
 
-    [self setupModel];
-    self.topChildViewIndex = 0;
+    _isFirstPage = YES;
+    _isLastPage = NO;
+    self.modelManager = [JMIntroModelManager new];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    //[self addTopChildView];
-    [self addBottomChildView];
-
+    // after loading view, there is start top view
+    // need add bottom view
+    [self addChildViewController];
     [self addGestureRecognizer];
 }
 
@@ -78,26 +81,13 @@ static const CGFloat kDefaultAnimationDuration = 0.4;
 }
 
 #pragma mark - Setup
-- (void)setupModel {
-    JMIntroModel *firstPage = [[JMIntroModel alloc] initWithTitle:@"Stay Connected"
-                                                      description:@"JasperMobile keeps you connected to\nyour business wherever you are."
-                                                            image:[UIImage imageNamed:@"stay_connect_image"]];
-    JMIntroModel *secondPage = [[JMIntroModel alloc] initWithTitle:@"Instant Access"
-                                                       description:@"Get access to live interactive reports\ndriven from your operational applications."
-                                                             image:[UIImage imageNamed:@"instant_access_image"]];
-    JMIntroModel *thirdPage = [[JMIntroModel alloc] initWithTitle:@"Seemless Integration"
-                                                      description:@"View and interact with your JasperReports\nServer v5.0 or greater environment."
-                                                            image:[UIImage imageNamed:@"seemless_integration_image"]];
-    self.pageData = @[
-            @"zero", firstPage, secondPage, thirdPage
-    ];
-}
 
 #pragma mark - Gesture Recognizer
 - (void)addGestureRecognizer {
-    self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    self.panGestureRecognizer.maximumNumberOfTouches = 1;
-    [self.view addGestureRecognizer:self.panGestureRecognizer];
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    panGestureRecognizer.maximumNumberOfTouches = 1;
+    [self.view addGestureRecognizer:panGestureRecognizer];
+    self.panGestureRecognizer = panGestureRecognizer;
 }
 
 - (void)removeGestureRecognizer {
@@ -107,42 +97,49 @@ static const CGFloat kDefaultAnimationDuration = 0.4;
 - (void)handlePan:(UITapGestureRecognizer *)gestureRecognizer {
 
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        self.startPoint = [gestureRecognizer locationInView:self.childView];
+        self.startPoint = [gestureRecognizer locationInView:self.contentView];
     } else if (gestureRecognizer.state == UIGestureRecognizerStateChanged) {
         // changing position of top child view
-        CGPoint currentPoint = [gestureRecognizer locationInView:self.childView];
+        CGPoint currentPoint = [gestureRecognizer locationInView:self.contentView];
         if (currentPoint.y < self.startPoint.y) {
-            // if move up
+            // move top view up
             CGFloat delta = self.startPoint.y - currentPoint.y;
-            BOOL isLastPage = (self.topChildViewIndex == [self.pageData count] - 1);
-            if (isLastPage) {
+
+            if (self.isFirstPage) {
+                [self setOrigin:CGPointMake(0.0, -delta)
+                        forView:self.startChildView];
+            } else if (self.isLastPage) {
                 [self setOrigin:CGPointMake(0.0, -delta)
                         forView:self.topChildViewController.view];
 
                 // move control view with child view
-                CGFloat controlViewOriginY = CGRectGetMaxY(self.childView.frame);
+                CGFloat controlViewOriginY = CGRectGetMaxY(self.contentView.frame);
                 [self setOrigin:CGPointMake(0.0, controlViewOriginY - delta)
                         forView:self.controlView];
             } else {
-                BOOL isStartPage = (self.topChildViewIndex == 0);
-                if (isStartPage) {
-                    [self setOrigin:CGPointMake(0.0, -delta)
-                            forView:self.startTopView];
-                } else {
-                    [self setOrigin:CGPointMake(0.0, -delta)
-                            forView:self.topChildViewController.view];
-                }
+                [self setOrigin:CGPointMake(0.0, -delta)
+                        forView:self.topChildViewController.view];
             }
         }
 
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        // set end position with animation
-        CGPoint endPoint = [gestureRecognizer locationInView:self.childView];
+        CGPoint endPoint = [gestureRecognizer locationInView:self.contentView];
         CGFloat delta = self.startPoint.y - endPoint.y;
 
-        BOOL isLastPage = (self.topChildViewIndex == [self.pageData count] - 1);
-        if (isLastPage) {
-            if (delta / CGRectGetHeight(self.childView.bounds) > 0.2) {
+        if (delta / CGRectGetHeight(self.contentView.bounds) > 0.2) {
+            // change top view
+            if (self.isFirstPage) {
+                [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                    [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.contentView.frame))
+                            forView:self.startChildView];
+                } completion:^(BOOL finished) {
+                    self.isFirstPage = NO;
+                    [self.startChildView removeFromSuperview];
+
+                    self.topChildViewController = self.bottomChildViewController;
+                    [self addChildViewController];
+                }];
+            } else if (self.isLastPage) {
                 [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
                     [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.view.frame))
                             forView:self.topChildViewController.view];
@@ -153,47 +150,29 @@ static const CGFloat kDefaultAnimationDuration = 0.4;
                     [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
                 }];
             } else {
+                [self changeTopView];
+            }
+        } else {
+            // back to origin position with animation
+            if (self.isFirstPage) {
+                [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                    [self setOrigin:CGPointZero
+                            forView:self.startChildView];
+                }];
+            } else if (self.isLastPage) {
                 [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
                     [self setOrigin:CGPointZero
                             forView:self.topChildViewController.view];
 
                     // move control view with child view
-                    CGFloat controlViewOriginY = CGRectGetMaxY(self.childView.frame);
+                    CGFloat controlViewOriginY = CGRectGetMaxY(self.contentView.frame);
                     [self setOrigin:CGPointMake(0.0, controlViewOriginY)
                             forView:self.controlView];
                 }];
-            }
-        } else {
-            BOOL isStartPage = (self.topChildViewIndex == 0);
-            if (delta / CGRectGetHeight(self.childView.bounds) > 0.2) {
-                if (isStartPage) {
-                    NSInteger nextIndex = self.topChildViewIndex;
-                    nextIndex++;
-
-                    [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                        [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.childView.frame))
-                                forView:self.startTopView];
-                    } completion:^(BOOL finished) {
-                        [self.startTopView removeFromSuperview];
-
-                        [self removeBottomChildView];
-
-                        self.topChildViewIndex = nextIndex;
-                        [self addTopChildView];
-                        [self addBottomChildView];
-                    }];
-                } else {
-                    [self changeTopView];
-                }
             } else {
                 [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                    if (isStartPage) {
-                        [self setOrigin:CGPointZero
-                                forView:self.startTopView];
-                    } else {
-                        [self setOrigin:CGPointZero
-                                forView:self.topChildViewController.view];
-                    }
+                    [self setOrigin:CGPointZero
+                            forView:self.topChildViewController.view];
                 }];
             }
         }
@@ -211,91 +190,46 @@ static const CGFloat kDefaultAnimationDuration = 0.4;
 }
 
 #pragma mark - Private methods
-- (JMIntroChildViewController *)childViewControllerForIndex:(NSUInteger)pageIndex {
+- (JMIntroChildViewController *)createChildViewController {
     JMIntroChildViewController *childViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMIntroChildViewController"];
 
-    CGFloat childViewHeight = CGRectGetHeight(self.childView.frame);
-    CGFloat childViewWidth = CGRectGetWidth(self.childView.frame);
+    CGFloat childViewHeight = CGRectGetHeight(self.contentView.frame);
+    CGFloat childViewWidth = CGRectGetWidth(self.contentView.frame);
     CGRect childViewFrame = CGRectMake(0, 0, childViewWidth, childViewHeight);
     childViewController.view.frame = childViewFrame;
 
     return childViewController;
 }
 
-- (void)addTopChildView {
-    JMIntroChildViewController *childViewController = [self childViewControllerForIndex:self.topChildViewIndex];
+- (void)addChildViewController {
+    self.bottomChildViewController = [self createChildViewController];
+    [self.bottomChildViewController setupWithModel:[self.modelManager nextModel]];
 
-    [self addChildViewController:childViewController];
-    [self.childView addSubview:childViewController.view];
-
-    // setup next child view subviews
-    [childViewController setupWithModel:self.pageData[self.topChildViewIndex]];
-    [childViewController didMoveToParentViewController:self];
-    self.topChildViewController = childViewController;
+    [self addChildViewController:self.bottomChildViewController];
+    [self.contentView insertSubview:self.bottomChildViewController.view atIndex:0];
+    [self.bottomChildViewController didMoveToParentViewController:self];
 }
 
-- (void)removeTopChildView {
+- (void)removeChildViewController {
     [self.topChildViewController willMoveToParentViewController:nil];
     [self.topChildViewController.view removeFromSuperview];
     [self.topChildViewController removeFromParentViewController];
 }
 
-- (void)addBottomChildView {
-    NSInteger bottomIndex = self.self.topChildViewIndex;
-    bottomIndex++;
-
-    JMIntroChildViewController *childViewController = [self childViewControllerForIndex:bottomIndex];
-
-    [self addChildViewController:childViewController];
-    [self.childView insertSubview:childViewController.view atIndex:0];
-
-    // setup next child view subviews
-    [childViewController setupWithModel:self.pageData[bottomIndex]];
-    [childViewController didMoveToParentViewController:self];
-    self.bottomChildViewController = childViewController;
-}
-
-- (void)removeBottomChildView {
-    [self.bottomChildViewController willMoveToParentViewController:nil];
-    [self.bottomChildViewController.view removeFromSuperview];
-    [self.bottomChildViewController removeFromParentViewController];
-}
-
-
 - (void)changeTopView {
-    NSInteger nextIndex = self.topChildViewIndex;
-    nextIndex++;
-
     [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
         [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.topChildViewController.view.frame))
                 forView:self.topChildViewController.view];
     } completion:^(BOOL finished) {
-        // change current child to next
-        [self removeTopChildView];
-        [self removeBottomChildView];
+        [self removeChildViewController];
+        self.topChildViewController = self.bottomChildViewController;
 
-        self.topChildViewIndex = nextIndex;
-        [self addTopChildView];
-        BOOL isLastPage = (nextIndex == [self.pageData count] - 1);
-        if (!isLastPage) {
-            [self addBottomChildView];
-        } else {
+        if (self.modelManager.isLastPage) {
             [self setButtonTitle:@"Start using JasperMobile"];
+            self.isLastPage = YES;
+        } else {
+            [self addChildViewController];
         }
-    }];
-}
-
-- (void)hideIntroView {
-
-    [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-        [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.view.frame))
-                forView:self.childView];
-
-        [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.controlView.frame))
-                forView:self.controlView];
-
-    } completion:^(BOOL finished) {
-        [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
     }];
 }
 
@@ -307,6 +241,20 @@ static const CGFloat kDefaultAnimationDuration = 0.4;
     CGRect viewFrame = view.frame;
     viewFrame.origin = origin;
     view.frame = viewFrame;
+}
+
+- (void)hideIntroView {
+
+    [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+        [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.view.frame))
+                forView:self.contentView];
+
+        [self setOrigin:CGPointMake(0.0, -CGRectGetHeight(self.controlView.frame))
+                forView:self.controlView];
+
+    } completion:^(BOOL finished) {
+        [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+    }];
 }
 
 @end

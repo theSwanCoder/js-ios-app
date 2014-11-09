@@ -134,6 +134,7 @@
 "detail.settings.item.connection.timeout" = "Connection timeout (in seconds)";
 "detail.settings.item.data.read.timeout" = "Data read timeout (in seconds)";
 "detail.settings.item.server" = "Server";
+"detail.settings.item.intro" = "Show intro";
 "detail.settings.crashtracking.toast" = "For changing crash reports settings go to Settings page.";
 "detail.settings.crashtracking.title" = "Send crash reports";
 "detail.settings.crashtracking.alert.title" = "Attention!";

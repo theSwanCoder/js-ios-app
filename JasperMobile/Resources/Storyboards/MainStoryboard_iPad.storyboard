@@ -641,10 +641,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="fZ5-8W-6Op"/>
                     <connections>
-                        <outlet property="childView" destination="xot-Mr-dfN" id="WOe-Wo-2z5"/>
+                        <outlet property="contentView" destination="xot-Mr-dfN" id="WOe-Wo-2z5"/>
                         <outlet property="controlView" destination="fFX-XW-xaq" id="fba-rd-15e"/>
                         <outlet property="skipButton" destination="8zm-Dp-Rq5" id="Qaf-22-IzO"/>
-                        <outlet property="startTopView" destination="UbE-eC-JQE" id="s39-PW-Twf"/>
+                        <outlet property="startChildView" destination="UbE-eC-JQE" id="s39-PW-Twf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ywg-Lv-l2D" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1034,6 +1034,21 @@
                                             <outlet property="accessoryView" destination="dJL-uG-s78" id="Mge-tZ-iTd"/>
                                             <outlet property="valueSwitcher" destination="dJL-uG-s78" id="nyn-O8-jZd"/>
                                         </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BaseCellIdentifier" textLabel="AEX-AS-fAH" style="IBUITableViewCellStyleDefault" id="Sg0-JF-HqX" customClass="JMSettingsTableViewCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="738" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Sg0-JF-HqX" id="zbP-fk-j3V">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AEX-AS-fAH">
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>

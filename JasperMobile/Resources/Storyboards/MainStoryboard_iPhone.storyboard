@@ -125,7 +125,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stay_connect_image" id="h2Q-xf-9gO">
-                                                <rect key="frame" x="18" y="296" width="283" height="413"/>
+                                                <rect key="frame" x="19" y="296" width="283" height="413"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_up" id="p1G-Sj-bUZ">
@@ -160,10 +160,10 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <outlet property="childView" destination="YwB-w5-1BG" id="Ur7-wb-aLo"/>
+                        <outlet property="contentView" destination="YwB-w5-1BG" id="Ur7-wb-aLo"/>
                         <outlet property="controlView" destination="H4G-2d-Voj" id="zdY-aY-HDp"/>
                         <outlet property="skipButton" destination="HGk-hY-idy" id="fm8-n3-BDV"/>
-                        <outlet property="startTopView" destination="DXC-ZF-6Me" id="Yxx-le-oLo"/>
+                        <outlet property="startChildView" destination="DXC-ZF-6Me" id="Yxx-le-oLo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="st8-As-Ov4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -312,6 +312,21 @@ your business wherever you are.</string>
                                             <outlet property="accessoryView" destination="v5l-yY-h5P" id="cjg-9y-CFx"/>
                                             <outlet property="valueSwitcher" destination="v5l-yY-h5P" id="8vA-p4-FGq"/>
                                         </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BaseCellIdentifier" textLabel="WSD-V4-g8Z" style="IBUITableViewCellStyleDefault" id="BsC-H6-tky" customClass="JMSettingsTableViewCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BsC-H6-tky" id="Fhn-H7-Z6O">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WSD-V4-g8Z">
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>
@@ -744,7 +759,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="WbH-FR-T3V">
-                                                    <rect key="frame" x="187" y="10" width="100.00000030994417" height="30"/>
+                                                    <rect key="frame" x="187.00000030994417" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>

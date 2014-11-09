@@ -38,11 +38,6 @@
 
 #pragma mark - LifeCycle
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-}
-
 #pragma mark - Methods
 - (void)setupWithModel:(JMIntroModel *)introModel {
     self.titleLabel.text = introModel.pageTitle;

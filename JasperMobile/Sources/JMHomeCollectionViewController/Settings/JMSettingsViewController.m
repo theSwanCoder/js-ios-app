@@ -30,6 +30,8 @@
 #import "JMServerProfile+Helpers.h"
 
 #import "JMAppUpdater.h"
+#import "JMIntroViewController.h"
+#import "UIView+Additions.h"
 
 @interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
@@ -81,6 +83,16 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    JMSettingsItem *currentItem = [self.detailSettings.itemsArray objectAtIndex:indexPath.row];
+    if ([currentItem.cellIdentifier isEqualToString:kJMBaseCellIdentifier]) {
+        [self showIntroView];
+    }
+}
+
 #pragma mark - Actions
 - (IBAction)saveButtonTapped:(id)sender
 {
@@ -103,6 +115,13 @@
                                  delegate:nil
                         cancelButtonTitle:@"dialog.button.ok"
                         otherButtonTitles:nil] show];
+}
+
+- (void)showIntroView
+{
+    JMIntroViewController *introViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMIntroViewController"];
+    introViewController.view.backgroundColor = [UIColor colorWithPatternImage:[self.view renderedImageForView:self.navigationController.view]];
+    [self presentViewController:introViewController animated:YES completion:nil];
 }
 
 #pragma mark - 
