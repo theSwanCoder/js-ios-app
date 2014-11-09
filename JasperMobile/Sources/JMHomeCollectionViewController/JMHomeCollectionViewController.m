@@ -108,12 +108,11 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-//    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-//    if (appDelegate.isApplicationFirstStart) {
-//        appDelegate.applicationFirstStart = NO;
-//        [self showIntroView];
-//    }
-    [self showIntroView];
+    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    if (appDelegate.isApplicationFirstStart) {
+        appDelegate.applicationFirstStart = NO;
+        [self showIntroView];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
