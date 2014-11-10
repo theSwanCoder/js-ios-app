@@ -61,7 +61,7 @@
         }
         *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"savereport.name.errmsg.characters", nil), invalidCharsString];
     } else {
-        if (![JMSavedResources isAvailableReportName:reportName]) {
+        if (![JMSavedResources isAvailableReportName:reportName format:extension]) {
             *errorMessage = JMCustomLocalizedString(@"savereport.name.errmsg.notunique", nil);
         }
     }

@@ -105,9 +105,6 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     if ([viewController respondsToSelector:@selector(setPresentingType:)]) {
         [viewController setPresentingType:[self presentingTypeForSequeIdentifier:segue.identifier]];
     }
-    if ([viewController respondsToSelector:@selector(setRepresentationType:)]) {
-        [viewController setRepresentationType:JMResourcesRepresentationTypeHorizontalList];
-    }
 }
 
 #pragma mark - UICollectionViewDataSource

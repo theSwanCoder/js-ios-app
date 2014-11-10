@@ -148,7 +148,9 @@ objection_requires(@"resourceClient", @"resourceLookup")
     } else {
         [JMFavorites addToFavorites:self.resourceLookup];
     }
-    [self replaceRightNavigationItem:sender withItem:[self favoriteBarButtonItem]];
+    if (sender) {
+        [self replaceRightNavigationItem:sender withItem:[self favoriteBarButtonItem]];
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
@@ -201,10 +203,8 @@ objection_requires(@"resourceClient", @"resourceLookup")
             [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:nil];
             break;
         case JMResourceViewerAction_MakeFavorite:
-            [JMFavorites addToFavorites:self.resourceLookup];
-            break;
         case JMResourceViewerAction_MakeUnFavorite:
-            [JMFavorites removeFromFavorites:self.resourceLookup];
+            [self favoriteButtonTapped:nil];
             break;
         default:
             break;

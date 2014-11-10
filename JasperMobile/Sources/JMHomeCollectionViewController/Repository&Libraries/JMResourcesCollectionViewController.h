@@ -41,14 +41,7 @@ typedef NS_ENUM(NSInteger, JMResourcesCollectionViewControllerPresentingType) {
     JMResourcesCollectionViewControllerPresentingType_Favorites = 1 << 3
 };
 
-typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
-    JMResourcesRepresentationTypeHorizontalList = 0,
-    JMResourcesRepresentationTypeGrid = 1
-};
-
-
 @interface JMResourcesCollectionViewController : UIViewController 
 @property (nonatomic, assign) JMResourcesCollectionViewControllerPresentingType presentingType;
-@property (nonatomic, assign) JMResourcesRepresentationType representationType;
 
 @end

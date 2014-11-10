@@ -41,8 +41,15 @@ NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 NSString * const kJMRepresentationTypeDidChangedNotification = @"kJMRepresentationTypeDidChangedNotification";
 NSString * const kJMRepresentationTypeKey = @"kJMRepresentationTypeKey";
 
-static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationTypeHorizontalList; }
-static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() { return JMResourcesRepresentationTypeGrid; }
+
+typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
+    JMResourcesRepresentationType_None = 0,
+    JMResourcesRepresentationType_HorizontalList = 1,
+    JMResourcesRepresentationType_Grid = 2
+};
+
+static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationType_HorizontalList; }
+static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() { return JMResourcesRepresentationType_Grid; }
 
 @interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMResourcesListLoaderDelegate, JMPopupViewDelegate, JMResourceCollectionViewCellDelegate>
 
@@ -62,9 +69,12 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 
 @property (nonatomic, assign) BOOL needReloadData;
 
+@property (nonatomic, assign) JMResourcesRepresentationType representationType;
+
 @end
 
 @implementation JMResourcesCollectionViewController
+@dynamic representationType;
 
 #pragma mark - UIViewController
 
@@ -102,7 +112,6 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     } @weakselfend];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:kJMRepresentationTypeDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
-        self.representationType = [[notification.userInfo objectForKey:kJMRepresentationTypeKey] integerValue];
         self.needReloadData = YES;
     } @weakselfend];
 }
@@ -127,11 +136,20 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self.resourceListLoader updateIfNeeded];
 }
 
+- (JMResourcesRepresentationType)representationType
+{
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMRepresentationTypeKey]) {
+        self.representationType = JMResourcesRepresentationTypeFirst();
+    }
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kJMRepresentationTypeKey];
+}
+
 - (void)setRepresentationType:(JMResourcesRepresentationType)representationType
 {
-    if (_representationType != representationType) {
-        _representationType = representationType;
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMRepresentationTypeDidChangedNotification object:nil userInfo:@{kJMRepresentationTypeKey: @(representationType)}];
+    if (self.representationType != representationType) {
+        [[NSUserDefaults standardUserDefaults] setInteger:representationType forKey:kJMRepresentationTypeKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMRepresentationTypeDidChangedNotification object:nil userInfo:nil];
     }
 }
 
@@ -147,9 +165,9 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (NSString *)resourceCellForRepresentationType:(JMResourcesRepresentationType)type
 {
     switch (type) {
-        case JMResourcesRepresentationTypeHorizontalList:
+        case JMResourcesRepresentationType_HorizontalList:
             return kJMHorizontalResourceCell;
-        case JMResourcesRepresentationTypeGrid:
+        case JMResourcesRepresentationType_Grid:
             return kJMGridResourceCell;
         default:
             return nil;
@@ -159,9 +177,9 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (NSString *)loadingCellForRepresentationType:(JMResourcesRepresentationType)type
 {
     switch (type) {
-        case JMResourcesRepresentationTypeHorizontalList:
+        case JMResourcesRepresentationType_HorizontalList:
             return kJMHorizontalLoadingCell;
-        case JMResourcesRepresentationTypeGrid:
+        case JMResourcesRepresentationType_Grid:
             return kJMGridLoadingCell;
         default:
             return nil;
@@ -273,7 +291,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     CGFloat itemHeight = 80.f;
     CGFloat itemWidth = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
     
-    if (self.representationType == JMResourcesRepresentationTypeGrid) {
+    if (self.representationType == JMResourcesRepresentationType_Grid) {
         NSInteger countOfCellsInRow = 1;
         while (((countOfCellsInRow * flowLayout.itemSize.width) + (countOfCellsInRow + 1) * flowLayout.minimumInteritemSpacing) < collectionView.frame.size.width) {
             countOfCellsInRow ++;
@@ -404,12 +422,12 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 
 - (JMResourcesRepresentationType)getNextRepresentationTypeForType:(JMResourcesRepresentationType)currentType
 {
-    return (currentType == JMResourcesRepresentationTypeGrid) ? JMResourcesRepresentationTypeHorizontalList : JMResourcesRepresentationTypeGrid;
+    return (currentType == JMResourcesRepresentationTypeLast()) ? JMResourcesRepresentationTypeFirst() : currentType + 1;
 }
 
 - (UIBarButtonItem *)resourceRepresentationItem
 {
-    NSString *imageName = ([self getNextRepresentationTypeForType:self.representationType] == JMResourcesRepresentationTypeGrid) ? @"grid_button" : @"horizontal_list_button";
+    NSString *imageName = ([self getNextRepresentationTypeForType:self.representationType] == JMResourcesRepresentationType_Grid) ? @"grid_button" : @"horizontal_list_button";
     return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName] style:UIBarButtonItemStyleBordered target:self action:@selector(representationTypeButtonTapped:)];
 }
 

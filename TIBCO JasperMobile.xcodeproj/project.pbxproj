@@ -1758,7 +1758,7 @@
 				CLASSPREFIX = JM;
 				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0610;
-				ORGANIZATIONNAME = "Tibco JasperMobile";
+				ORGANIZATIONNAME = "TIBCO JasperMobile";
 				TargetAttributes = {
 					F55CC32E174CFFCE00CEB39E = {
 						DevelopmentTeam = HD6C6SELJN;

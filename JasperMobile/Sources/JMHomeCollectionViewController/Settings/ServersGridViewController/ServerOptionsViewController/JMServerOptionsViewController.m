@@ -39,7 +39,7 @@
 @interface JMServerOptionsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, JMServerOptionCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) JMServerOptions *serverOptions;
-
+@property (nonatomic, strong) JSRESTBase *restBase;
 @end
 
 @implementation JMServerOptionsViewController
@@ -140,13 +140,13 @@
         [cell performSelector:@selector(discardActivityServer)];
     };
     
-    JSRESTBase *restBase = [[JSRESTBase alloc] initWithProfile:profile classesForMappings:nil];
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:restBase cancelBlock:^{
+    self.restBase = [[JSRESTBase alloc] initWithProfile:profile classesForMappings:nil];
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.restBase cancelBlock:^{
         errorBlock(nil);
     }];
     
     JMRequestDelegate *serverInfoDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
-        float serverVersion = restBase.serverInfo.versionAsFloat;
+        float serverVersion = self.restBase.serverInfo.versionAsFloat;
         if (serverVersion >= [JMServerProfile minSupportedServerVersion]) {
             [self.serverOptions setServerProfileActive];
             [self.navigationController popViewControllerAnimated:YES];
@@ -161,7 +161,7 @@
         }
     } @weakselfend
      errorBlock:errorBlock];
-    [restBase serverInfo:serverInfoDelegate];
+    [self.restBase serverInfo:serverInfoDelegate];
 }
 
 #pragma mark - UIAlertViewDelegate

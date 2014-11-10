@@ -69,10 +69,12 @@ NSString * const kJMSavedResources = @"SavedResources";
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
 }
 
-+ (BOOL)isAvailableReportName:(NSString *)reportName
++ (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat
 {
     NSFetchRequest *fetchRequest = [self savedReportsFetchRequestField:@"label" value:reportName];
-    return ([self.managedObjectContext countForFetchRequest:fetchRequest error:nil] == 0);
+    JMSavedResources *savedReport = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    
+    return (![savedReport.format isEqualToString:reportFormat]);
 }
 
 - (void)renameReportTo:(NSString *)newName
