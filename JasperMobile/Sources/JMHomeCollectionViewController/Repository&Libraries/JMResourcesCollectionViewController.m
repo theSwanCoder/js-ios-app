@@ -364,49 +364,30 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 {
     NSMutableArray *navBarItems = [NSMutableArray arrayWithObject:[self resourceRepresentationItem]];
     
-    UIBarButtonItem *filterItem;
-    UIBarButtonItem *sortItem;
     switch (self.presentingType) {
-        case JMResourcesCollectionViewControllerPresentingType_Library:
+        case JMResourcesCollectionViewControllerPresentingType_Library:{
             if([self.resourceListLoader.resourceClient.serverInfo.edition isEqualToString:self.resourceListLoader.constants.SERVER_EDITION_PRO]) {
-                filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];
+                UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];
+                [navBarItems addObject:filterItem];
             }
-        case JMResourcesCollectionViewControllerPresentingType_SavedItems:
-            sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortByButtonTapped:)];
+        }
+        case JMResourcesCollectionViewControllerPresentingType_SavedItems:{
+            UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortByButtonTapped:)];
+            [navBarItems addObject:sortItem];
             break;
+        }
         default:
             break;
     }
     
+    UIView *searchContainerView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
+    searchContainerView.backgroundColor = [UIColor clearColor];
+    [searchContainerView addSubview: self.searchBar];
     if ([JMUtils isIphone]) {
-        self.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        UIView *titleView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
-        self.searchBar.autoresizingMask = titleView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        titleView.backgroundColor = [UIColor clearColor];
-        [titleView addSubview: self.searchBar];
-        self.searchBarPlaceholder.topItem.titleView = titleView;
-        NSMutableArray *searchBarPlaceholderItems = [NSMutableArray array];
-        if (sortItem) {
-            [searchBarPlaceholderItems addObject:sortItem];
-        }
-
-        if (filterItem) {
-            [searchBarPlaceholderItems addObject:filterItem];
-        }
-        
-        self.searchBarPlaceholder.topItem.rightBarButtonItems = searchBarPlaceholderItems;
+        self.searchBar.autoresizingMask = searchContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        self.searchBarPlaceholder.topItem.titleView = searchContainerView;
     } else {
-        if (sortItem) {
-            [navBarItems addObject:sortItem];
-        }
-        if (filterItem) {
-            [navBarItems addObject:filterItem];
-        }
-        
-        UIView *contentView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
-        contentView.backgroundColor = [UIColor clearColor];
-        [contentView addSubview:self.searchBar];
-        UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:contentView];
+        UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchContainerView];
         [navBarItems addObject:searchItem];
     }
     
