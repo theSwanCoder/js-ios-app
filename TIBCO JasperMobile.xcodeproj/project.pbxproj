@@ -116,6 +116,7 @@
 		9354B5D21A0B8CC10031F751 /* JMIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9354B5D11A0B8CC10031F751 /* JMIntroViewController.m */; };
 		937336111A0DE46D004E6520 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 937336101A0DE46D004E6520 /* Images.xcassets */; };
 		93DCFC021A0CAC01006F2608 /* JMIntroChildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DCFC011A0CAC01006F2608 /* JMIntroChildViewController.m */; };
+		93E0C46C1A12048A00F5B62E /* JMOnboardIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E0C46B1A12048A00F5B62E /* JMOnboardIntroViewController.m */; };
 		A14781B87D0829F0999E054C /* JMIntroModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478CF6C78641C6EE45B5DD /* JMIntroModelManager.m */; };
 		A14789538AEBCBF273F05BD8 /* JMIntroModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478AF70AD4DD5EA23F8997 /* JMIntroModel.m */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
@@ -379,6 +380,8 @@
 		937336101A0DE46D004E6520 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		93DCFC001A0CAC01006F2608 /* JMIntroChildViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMIntroChildViewController.h; sourceTree = "<group>"; };
 		93DCFC011A0CAC01006F2608 /* JMIntroChildViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMIntroChildViewController.m; sourceTree = "<group>"; };
+		93E0C46A1A12048A00F5B62E /* JMOnboardIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMOnboardIntroViewController.h; sourceTree = "<group>"; };
+		93E0C46B1A12048A00F5B62E /* JMOnboardIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMOnboardIntroViewController.m; sourceTree = "<group>"; };
 		A147806986E34AF5DAEF821C /* JMIntroModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMIntroModel.h; sourceTree = "<group>"; };
 		A1478750E42B1BFABE1F0C07 /* JMIntroModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMIntroModelManager.h; sourceTree = "<group>"; };
 		A1478AF70AD4DD5EA23F8997 /* JMIntroModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMIntroModel.m; sourceTree = "<group>"; };
@@ -1167,6 +1170,8 @@
 				A147806986E34AF5DAEF821C /* JMIntroModel.h */,
 				A1478CF6C78641C6EE45B5DD /* JMIntroModelManager.m */,
 				A1478750E42B1BFABE1F0C07 /* JMIntroModelManager.h */,
+				93E0C46A1A12048A00F5B62E /* JMOnboardIntroViewController.h */,
+				93E0C46B1A12048A00F5B62E /* JMOnboardIntroViewController.m */,
 			);
 			path = JMIntroViewController;
 			sourceTree = "<group>";
@@ -1451,6 +1456,7 @@
 				08DE67CE19C05D8B00C25AEA /* JMMultiSelectTableViewController.m in Sources */,
 				080F235919A77B23008758FA /* JMResourceCollectionViewCell.m in Sources */,
 				0895910519E3D514001471DA /* SSKeychain.m in Sources */,
+				93E0C46C1A12048A00F5B62E /* JMOnboardIntroViewController.m in Sources */,
 				0881967E199A1703008CF79B /* JMSearchBar.m in Sources */,
 				0851DFD719ACE27800DC6EDE /* JMAskPasswordDialog.m in Sources */,
 				089590FF19E3D514001471DA /* ALToastView.m in Sources */,

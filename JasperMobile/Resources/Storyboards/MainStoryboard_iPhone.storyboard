@@ -18,14 +18,14 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Vv-dK-Qcm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1844" y="-308"/>
+            <point key="canvasLocation" x="-2560" y="-332"/>
         </scene>
         <!--Home Collection View Controller-->
         <scene sceneID="DG1-M8-b8k">
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="M79-hb-eVV" customClass="JMHomeCollectionViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="3c6-mo-1ky">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="RMq-ux-JPE">
                             <size key="itemSize" width="140" height="140"/>
@@ -84,26 +84,79 @@
                         <segue destination="drB-Kg-Dls" kind="push" identifier="ShowLibrary" id="nPg-eq-o1N"/>
                         <segue destination="drB-Kg-Dls" kind="push" identifier="ShowFavorites" id="hUW-ct-uiE"/>
                         <segue destination="2XW-F6-0Pu" kind="modal" identifier="ShowIntroView" id="EWp-V4-2QL"/>
+                        <segue destination="xn9-yo-qkQ" kind="modal" identifier="showOnboardIntro" id="6ee-kH-UNv"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0G8-c2-OAI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1304" y="-308"/>
+            <point key="canvasLocation" x="-1944" y="-332"/>
+        </scene>
+        <!--Onboard Intro View Controller-->
+        <scene sceneID="ZYg-CP-FCF">
+            <objects>
+                <viewController storyboardIdentifier="JMOnboardIntroViewController" id="xn9-yo-qkQ" customClass="JMOnboardIntroViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7M3-dO-vnS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="zdf-mA-oqg">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="290"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="0.95686274509803915" green="0.95686274509803915" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" id="zN4-7v-hyV">
+                                <rect key="frame" x="0.0" y="290" width="320" height="278"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_screen" id="1mr-P0-acy">
+                                        <rect key="frame" x="19" y="10" width="282" height="470"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="report_screen_ipad" id="TDL-em-KlX">
+                                        <rect key="frame" x="61" y="10" width="198" height="265"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" id="SqA-Kl-2pl">
+                                        <rect key="frame" x="0.0" y="228" width="320" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <color key="backgroundColor" red="0.20392156859999999" green="0.21960784310000001" blue="0.25490196079999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="report_screen_iphone" id="0Ng-wZ-CKB">
+                                        <rect key="frame" x="118" y="10" width="85" height="156"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.95686274509803915" green="0.95686274509803915" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="contentView" destination="zN4-7v-hyV" id="VaO-7W-6Z6"/>
+                        <outlet property="homeScreenImage" destination="1mr-P0-acy" id="x3U-1h-Bvl"/>
+                        <outlet property="reportScreenIpadImage" destination="TDL-em-KlX" id="3T2-5H-E9k"/>
+                        <outlet property="reportScreenIphoneImage" destination="0Ng-wZ-CKB" id="PlB-mQ-Y8Z"/>
+                        <outlet property="titleView" destination="zdf-mA-oqg" id="d5I-eU-YkE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cBr-n4-zHN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2689" y="381"/>
         </scene>
         <!--Intro View Controller-->
         <scene sceneID="hFB-cu-zKC">
             <objects>
                 <viewController storyboardIdentifier="JMIntroViewController" id="2XW-F6-0Pu" customClass="JMIntroViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cdY-6Q-qtn">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="YwB-w5-1BG">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="430"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="518"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" id="DXC-ZF-6Me">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="430"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="518"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="jasper_logo" id="mvA-00-v0G">
@@ -139,7 +192,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="H4G-2d-Voj">
-                                <rect key="frame" x="0.0" y="430" width="320" height="50"/>
+                                <rect key="frame" x="0.0" y="518" width="320" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HGk-hY-idy">
@@ -168,14 +221,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="st8-As-Ov4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1556" y="320"/>
+            <point key="canvasLocation" x="-2217" y="381"/>
         </scene>
         <!--Intro Child View Controller-->
         <scene sceneID="Qr8-9V-Odl">
             <objects>
                 <viewController storyboardIdentifier="JMIntroChildViewController" id="oVk-zs-Xfs" customClass="JMIntroChildViewController" sceneMemberID="viewController">
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="SV1-s2-i1s">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_up" id="vee-hn-IK2">
@@ -213,18 +266,18 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2JH-To-6HN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1172" y="316"/>
+            <point key="canvasLocation" x="-2217" y="1069"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="Pxq-ub-7j9">
             <objects>
                 <viewController id="bdk-e4-trf" customClass="JMSettingsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UfS-fN-Frf">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="rlX-nI-jyN">
-                                <rect key="frame" x="10" y="40" width="300" height="366"/>
+                                <rect key="frame" x="10" y="40" width="300" height="454"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -243,7 +296,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="SsL-u6-ztx">
-                                                    <rect key="frame" x="240" y="7" width="50" height="30"/>
+                                                    <rect key="frame" x="240.00000036379382" y="7" width="50" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -354,14 +407,14 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4ZJ-X0-S7j" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-779" y="325"/>
+            <point key="canvasLocation" x="-1720" y="381"/>
         </scene>
         <!--Servers Grid View Controller-->
         <scene sceneID="5GV-3W-HWv">
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="ofe-oN-NGm" customClass="JMServersGridViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="ojZ-qS-a7T">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="PPd-XO-2gy">
                             <size key="itemSize" width="140" height="140"/>
@@ -418,18 +471,18 @@ your business wherever you are.</string>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5fg-Za-OVu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-237" y="325"/>
+            <point key="canvasLocation" x="-1720" y="1097"/>
         </scene>
         <!--Server Options View Controller-->
         <scene sceneID="SMK-7A-9S1">
             <objects>
                 <viewController id="eqA-kU-IH2" customClass="JMServerOptionsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lLk-xV-p7i">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="1" sectionFooterHeight="1" id="rk9-lM-7ji">
-                                <rect key="frame" x="10" y="10" width="300" height="396"/>
+                                <rect key="frame" x="10" y="10" width="300" height="484"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -457,7 +510,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="76m-km-THx">
-                                                    <rect key="frame" x="170.00000065684998" y="10" width="120" height="30"/>
+                                                    <rect key="frame" x="170" y="10" width="120" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -495,7 +548,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="qPt-Qz-YWo">
-                                                    <rect key="frame" x="170.00000065684998" y="10" width="120" height="30"/>
+                                                    <rect key="frame" x="170" y="10" width="120" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
@@ -594,14 +647,14 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gGQ-lj-hOZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="301" y="325"/>
+            <point key="canvasLocation" x="-1278" y="1097"/>
         </scene>
         <!--Resources Collection View Controller-->
         <scene sceneID="nTy-pl-FKA">
             <objects>
                 <viewController id="drB-Kg-Dls" customClass="JMResourcesCollectionViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7hp-UB-TRo">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translucent="NO" id="lyI-Pl-jII">
@@ -612,7 +665,7 @@ your business wherever you are.</string>
                                 </items>
                             </navigationBar>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="n1T-Fq-7ih">
-                                <rect key="frame" x="0.0" y="44" width="320" height="372"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="460"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="WnX-ao-FeJ">
@@ -628,7 +681,7 @@ your business wherever you are.</string>
                                 </connections>
                             </collectionView>
                             <view hidden="YES" tag="1" contentMode="scaleToFill" id="aBd-ko-PR1">
-                                <rect key="frame" x="10" y="163" width="300" height="90"/>
+                                <rect key="frame" x="10" y="207" width="300" height="90"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" id="dNw-De-vFw">
@@ -649,7 +702,7 @@ Please Wait...</string>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results. Please Make Another Selection..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1PS-M8-M6a" userLabel="Label">
-                                <rect key="frame" x="10" y="163" width="300" height="90"/>
+                                <rect key="frame" x="10" y="207" width="300" height="90"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -687,14 +740,14 @@ Please Wait...</string>
                     </connections>
                 </button>
             </objects>
-            <point key="canvasLocation" x="-779" y="-308"/>
+            <point key="canvasLocation" x="-963" y="-332"/>
         </scene>
         <!--Report Options View Controller-->
         <scene sceneID="yT8-q7-Eeb">
             <objects>
                 <viewController id="Zu1-8t-uvk" customClass="JMReportOptionsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hZI-Rh-ix9">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REPORT OPTIONS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6SG-9Y-ptV">
@@ -705,7 +758,7 @@ Please Wait...</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="1" sectionFooterHeight="1" id="FFl-Rt-mxS">
-                                <rect key="frame" x="10" y="40" width="300" height="366"/>
+                                <rect key="frame" x="10" y="40" width="300" height="454"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -759,7 +812,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="WbH-FR-T3V">
-                                                    <rect key="frame" x="187.00000030994417" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -1038,7 +1091,7 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIY-vr-ZmM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-237" y="-308"/>
+            <point key="canvasLocation" x="-365" y="388"/>
         </scene>
         <!--Single Select Table View Controller-->
         <scene sceneID="pCI-XA-TBR">
@@ -1050,18 +1103,18 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tew-lf-EBI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="301" y="-988"/>
+            <point key="canvasLocation" x="-128" y="1110"/>
         </scene>
         <!--Report Viewer View Controller-->
         <scene sceneID="awL-Ln-vHg">
             <objects>
                 <viewController id="LDD-kF-5Ch" customClass="JMReportViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="r2h-uK-Jvn">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" scalesPageToFit="YES" id="HYR-Xd-KOU">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -1069,7 +1122,7 @@ Please Wait...</string>
                                 </connections>
                             </webView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="Bd6-3W-WZo">
-                                <rect key="frame" x="150" y="198" width="20" height="20"/>
+                                <rect key="frame" x="150" y="242" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
@@ -1088,7 +1141,7 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K3U-4u-nW3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-237" y="-988"/>
+            <point key="canvasLocation" x="21" y="-332"/>
         </scene>
         <!--Multi Select Table View Controller-->
         <scene sceneID="MA0-Xs-vyz">
@@ -1100,18 +1153,18 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Atm-T3-5r4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="301" y="-308"/>
+            <point key="canvasLocation" x="-601" y="1110"/>
         </scene>
         <!--Dashboards Viewer View Controller-->
         <scene sceneID="Idq-37-0Ej">
             <objects>
                 <viewController id="8AY-7W-tMT" customClass="JMDashboardsViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OrM-B7-y02">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" scalesPageToFit="YES" id="Gbs-Ce-Tuh">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -1119,7 +1172,7 @@ Please Wait...</string>
                                 </connections>
                             </webView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="eff-F5-XG6">
-                                <rect key="frame" x="150" y="198" width="20" height="20"/>
+                                <rect key="frame" x="150" y="242" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
@@ -1136,18 +1189,18 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BRF-hF-xTq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-237" y="-1590"/>
+            <point key="canvasLocation" x="-393" y="-1144"/>
         </scene>
         <!--Save Report View Controller-->
         <scene sceneID="aA7-9u-rTZ">
             <objects>
                 <viewController id="R68-a4-2AH" customClass="JMSaveReportViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Fpx-hH-oaz">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="wKZ-kV-qPY">
-                                <rect key="frame" x="10" y="0.0" width="300" height="416"/>
+                                <rect key="frame" x="10" y="0.0" width="300" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
@@ -1213,18 +1266,18 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="31N-Ia-tL4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="301" y="-1590"/>
+            <point key="canvasLocation" x="236" y="381"/>
         </scene>
         <!--Saved Resource Viewer View Controller-->
         <scene sceneID="o6f-Oo-Ck4">
             <objects>
                 <viewController id="xno-v3-xNA" customClass="JMSavedResourceViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="b4R-k0-m3B">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <webView contentMode="scaleToFill" scalesPageToFit="YES" id="sur-YJ-B98">
-                                <rect key="frame" x="-6" y="-13" width="320" height="416"/>
+                                <rect key="frame" x="-6" y="-13" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -1232,7 +1285,7 @@ Please Wait...</string>
                                 </connections>
                             </webView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="ySM-uE-Xj8">
-                                <rect key="frame" x="148" y="194" width="16" height="24"/>
+                                <rect key="frame" x="148" y="238" width="16" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
@@ -1247,18 +1300,18 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nrj-Qs-OHo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-237" y="-2221"/>
+            <point key="canvasLocation" x="-451" y="-1903"/>
         </scene>
         <!--Resource Info View Controller-->
         <scene sceneID="ZQd-Go-0gE">
             <objects>
                 <viewController id="Byl-dV-XDi" customClass="JMResourceInfoViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WfK-vi-SbS">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="acz-Uy-TyH">
-                                <rect key="frame" x="10" y="10" width="300" height="396"/>
+                                <rect key="frame" x="10" y="10" width="300" height="484"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -1304,7 +1357,7 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wTC-Jx-UGz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="301" y="-2221"/>
+            <point key="canvasLocation" x="446" y="-1144"/>
         </scene>
     </scenes>
     <resources>
@@ -1312,7 +1365,10 @@ Please Wait...</string>
         <image name="arrow_up" width="21" height="12"/>
         <image name="checked_checkbox.png" width="36" height="36"/>
         <image name="gray_text_field.png" width="1" height="1"/>
+        <image name="home_screen" width="282" height="470"/>
         <image name="jasper_logo" width="155" height="156"/>
+        <image name="report_screen_ipad" width="198" height="265"/>
+        <image name="report_screen_iphone" width="85" height="156"/>
         <image name="server.png" width="232" height="129"/>
         <image name="stay_connect_image" width="283" height="413"/>
         <image name="unchecked_checkbox.png" width="36" height="36"/>
@@ -1320,12 +1376,12 @@ Please Wait...</string>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="hUW-ct-uiE"/>
-        <segue reference="jUv-fg-3yZ"/>
-        <segue reference="b4y-hZ-jNZ"/>
+        <segue reference="LFp-3W-cdL"/>
         <segue reference="KN6-hX-ICt"/>
+        <segue reference="25f-vL-F1i"/>
     </inferredMetricsTieBreakers>
 </document>

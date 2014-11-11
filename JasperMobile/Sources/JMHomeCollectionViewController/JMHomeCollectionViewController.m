@@ -190,7 +190,8 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 
 #pragma mark - Intro View
 - (void)showIntroView {
-    [self performSegueWithIdentifier:@"ShowIntroView" sender:nil];
+    //[self performSegueWithIdentifier:@"ShowIntroView" sender:nil];
+    [self performSegueWithIdentifier:@"showOnboardIntro" sender:nil];
 }
 
 @end

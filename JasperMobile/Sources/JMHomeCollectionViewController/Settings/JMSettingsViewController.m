@@ -32,6 +32,7 @@
 #import "JMAppUpdater.h"
 #import "JMIntroViewController.h"
 #import "UIView+Additions.h"
+#import "JMOnboardIntroViewController.h"
 
 @interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
@@ -119,7 +120,8 @@
 
 - (void)showIntroView
 {
-    JMIntroViewController *introViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMIntroViewController"];
+//    JMIntroViewController *introViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMIntroViewController"];
+    JMOnboardIntroViewController *introViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
     introViewController.view.backgroundColor = [UIColor colorWithPatternImage:[self.view renderedImageForView:self.navigationController.view]];
     [self presentViewController:introViewController animated:YES completion:nil];
 }
