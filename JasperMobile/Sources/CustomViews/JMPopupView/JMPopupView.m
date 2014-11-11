@@ -14,6 +14,11 @@
 
 static NSMutableArray* visiblePopupsArray = nil;
 
+@interface JMPopupView ()
+
+@property (nonatomic, assign) BOOL animatedNow;
+@end
+
 @implementation JMPopupView
 @synthesize contentView = _contentView;
 
@@ -98,6 +103,9 @@ static NSMutableArray* visiblePopupsArray = nil;
 }
 
 - (void) showFromPoint:(CGPoint)point onView:(UIView*)view{
+    if (self.animatedNow) {
+        return;
+    }
     UIView* topView = [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject];
     self.frame = topView.bounds;
     [topView addSubview:self];
@@ -134,6 +142,7 @@ static NSMutableArray* visiblePopupsArray = nil;
     if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewWillShow:)]) {
         [self.delegate popupViewWillShow:self];
     }
+    self.animatedNow = YES;
     // animate into full size
     [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseInOut animations:^{
         _backGroundView.alpha = 1.f;
@@ -142,6 +151,7 @@ static NSMutableArray* visiblePopupsArray = nil;
         [UIView animateWithDuration:0.08f delay:0.f options:UIViewAnimationOptionCurveEaseInOut animations:^{
             _backGroundView.transform = CGAffineTransformIdentity;
         } completion:^(BOOL finished) {
+            self.animatedNow = NO;
             if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidShow:)]) {
                 [self.delegate popupViewDidShow:self];
             }
@@ -168,7 +178,8 @@ static NSMutableArray* visiblePopupsArray = nil;
     [self dismiss:YES];
 }
 
-- (void)tapped:(UITapGestureRecognizer *)tap{
+- (void)tapped:(UITapGestureRecognizer *)tap
+{
     CGPoint point = [tap locationInView:_backGroundView];
     BOOL found = NO;
     
@@ -189,7 +200,16 @@ static NSMutableArray* visiblePopupsArray = nil;
     [self dismiss:YES];
 }
 
-- (void)dismiss:(BOOL)animated{
+- (void)dismiss
+{
+    [self dismiss:YES];
+}
+
+- (void)dismiss:(BOOL)animated
+{
+    if (self.animatedNow) {
+        return;
+    }
     if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewWillDismissed:)]) {
         [self.delegate popupViewWillDismissed:self];
     }
@@ -199,11 +219,13 @@ static NSMutableArray* visiblePopupsArray = nil;
             [self.delegate popupViewDidDismissed:self];
         }
     } else {
+        self.animatedNow = YES;
         [UIView animateWithDuration:0.3f animations:^{
             _backGroundView.alpha = 0.1f;
             _backGroundView.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
         } completion:^(BOOL finished) {
             [self removeFromSuperview];
+            self.animatedNow = NO;
             if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
                 [self.delegate popupViewDidDismissed:self];
             }

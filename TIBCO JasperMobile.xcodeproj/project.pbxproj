@@ -1322,6 +1322,8 @@
 		08DE67A419C05D8A00C25AEA /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				08DE67AB19C05D8A00C25AEA /* JMInputControlCell.h */,
+				08DE67AC19C05D8A00C25AEA /* JMInputControlCell.m */,
 				08DE67A519C05D8A00C25AEA /* JMBooleanInputControlCell.h */,
 				08DE67A619C05D8A00C25AEA /* JMBooleanInputControlCell.m */,
 				08DE67A719C05D8A00C25AEA /* JMDateInputControlCell.h */,
@@ -1330,8 +1332,6 @@
 				088208881A023EAB00B6559F /* JMTimeInputControlCell.m */,
 				08DE67A919C05D8A00C25AEA /* JMDateTimeInputControlCell.h */,
 				08DE67AA19C05D8A00C25AEA /* JMDateTimeInputControlCell.m */,
-				08DE67AB19C05D8A00C25AEA /* JMInputControlCell.h */,
-				08DE67AC19C05D8A00C25AEA /* JMInputControlCell.m */,
 				08DE67AD19C05D8A00C25AEA /* JMMultiSelectInputControlCell.h */,
 				08DE67AE19C05D8A00C25AEA /* JMMultiSelectInputControlCell.m */,
 				08DE67AF19C05D8A00C25AEA /* JMNumberInputControlCell.h */,

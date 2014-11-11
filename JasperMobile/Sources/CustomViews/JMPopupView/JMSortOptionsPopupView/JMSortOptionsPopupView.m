@@ -29,6 +29,15 @@
     return self;
 }
 
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
+    CGPoint controlPoint = [self convertPoint:point toView:self.sortBySegmentedControl];
+    if (CGRectContainsPoint(self.sortBySegmentedControl.bounds, controlPoint)) {
+        [self performSelector:@selector(dismiss) withObject:nil afterDelay:0.1];
+    }
+    return [super hitTest:point withEvent:event];
+}
+
 - (void)setSortBy:(JMResourcesListLoaderSortBy)sortBy
 {
     self.sortBySegmentedControl.selectedSegmentIndex = sortBy;

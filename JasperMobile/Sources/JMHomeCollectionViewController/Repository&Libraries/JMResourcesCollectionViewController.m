@@ -39,13 +39,11 @@
 NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 
 NSString * const kJMRepresentationTypeDidChangedNotification = @"kJMRepresentationTypeDidChangedNotification";
-NSString * const kJMRepresentationTypeKey = @"kJMRepresentationTypeKey";
 
 
 typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
-    JMResourcesRepresentationType_None = 0,
-    JMResourcesRepresentationType_HorizontalList = 1,
-    JMResourcesRepresentationType_Grid = 2
+    JMResourcesRepresentationType_HorizontalList = 0,
+    JMResourcesRepresentationType_Grid = 1
 };
 
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationType_HorizontalList; }
@@ -138,16 +136,17 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 
 - (JMResourcesRepresentationType)representationType
 {
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMRepresentationTypeKey]) {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:[self getRepresentationTypeKey]]) {
         self.representationType = JMResourcesRepresentationTypeFirst();
     }
-    return [[NSUserDefaults standardUserDefaults] integerForKey:kJMRepresentationTypeKey];
+    return [[NSUserDefaults standardUserDefaults] integerForKey:[self getRepresentationTypeKey]];
 }
 
 - (void)setRepresentationType:(JMResourcesRepresentationType)representationType
 {
-    if (self.representationType != representationType) {
-        [[NSUserDefaults standardUserDefaults] setInteger:representationType forKey:kJMRepresentationTypeKey];
+    BOOL representationTypeAlreadyExist = [[NSUserDefaults standardUserDefaults] objectForKey:[self getRepresentationTypeKey]] ? YES : NO;
+    if (!representationTypeAlreadyExist || (representationTypeAlreadyExist && self.representationType != representationType)) {
+        [[NSUserDefaults standardUserDefaults] setInteger:representationType forKey:[self getRepresentationTypeKey]];
         [[NSUserDefaults standardUserDefaults] synchronize];
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMRepresentationTypeDidChangedNotification object:nil userInfo:nil];
     }
@@ -351,7 +350,9 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (UISearchBar *)searchBar
 {
     if (!_searchBar) {
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 250, 34)];
+        CGFloat searchBarWidth = [JMUtils isIphone] ? self.searchBarPlaceholder.frame.size.width : 250.f;
+        CGFloat searchBarHeight = [JMUtils isIphone] ? self.searchBarPlaceholder.frame.size.height : 34.f;
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, searchBarWidth, searchBarHeight)];
         _searchBar.searchBarStyle = UISearchBarStyleMinimal;
         _searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
         _searchBar.delegate = self;
@@ -423,6 +424,21 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (JMResourcesRepresentationType)getNextRepresentationTypeForType:(JMResourcesRepresentationType)currentType
 {
     return (currentType == JMResourcesRepresentationTypeLast()) ? JMResourcesRepresentationTypeFirst() : currentType + 1;
+}
+
+- (NSString *)getRepresentationTypeKey
+{
+    NSString * keyString = @"RepresentationTypeKey";
+    switch (self.presentingType) {
+        case JMResourcesCollectionViewControllerPresentingType_Library:
+            return [@"Library" stringByAppendingString:keyString];
+        case JMResourcesCollectionViewControllerPresentingType_Repository:
+            return [@"Repository" stringByAppendingString:keyString];
+        case JMResourcesCollectionViewControllerPresentingType_SavedItems:
+            return [@"SavedItems" stringByAppendingString:keyString];
+        case JMResourcesCollectionViewControllerPresentingType_Favorites:
+            return [@"Favorites" stringByAppendingString:keyString];
+    }
 }
 
 - (UIBarButtonItem *)resourceRepresentationItem

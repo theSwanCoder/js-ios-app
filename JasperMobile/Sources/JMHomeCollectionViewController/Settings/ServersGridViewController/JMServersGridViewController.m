@@ -59,7 +59,7 @@ objection_requires(@"managedObjectContext")
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.collectionView];
 }
 
 - (void)viewWillAppear:(BOOL)animated

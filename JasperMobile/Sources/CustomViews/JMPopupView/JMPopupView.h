@@ -45,6 +45,8 @@ typedef NS_ENUM(NSInteger, JMPopupViewType) {
 
 - (void) showFromPoint:(CGPoint)point onView:(UIView*)view;
 
+- (void) dismiss;
+
 - (void) dismiss:(BOOL)animated;
 
 @end

@@ -83,7 +83,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     self.tableView.layer.cornerRadius = 4;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
-    [self.tableView setRowHeight:44.f];
+    [self.tableView setRowHeight:[JMUtils isIphone] ? 44.f : 50.f];
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
