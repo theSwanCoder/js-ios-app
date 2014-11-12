@@ -28,6 +28,8 @@
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (nonatomic, weak) IBOutlet UILabel     *noResultLabel;
 
+@property (nonatomic, strong) JMSearchBar *searchBar;
+
 @property (nonatomic, strong) NSArray *filteredListOfValues;
 @property (nonatomic, strong) NSMutableSet *previousSelectedValues;
 
@@ -93,6 +95,8 @@
     if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
         [self.cell updateWithParameters:[self.selectedValues allObjects]];
     }
+
+    [self hideSearchBar];
 }
 #pragma mark - Table view data source
 
@@ -151,15 +155,15 @@
 - (void)searchButtonTapped:(id)sender
 {
     CGRect searchBarFrame = [JMUtils isIphone] ? self.navigationController.navigationBar.bounds : CGRectMake(0, 0, 320, 44);
-    JMSearchBar *searchBar =  [[JMSearchBar alloc] initWithFrame:searchBarFrame];
-    searchBar.delegate = self;
-    searchBar.placeholder = JMCustomLocalizedString(@"detail.report.options.search.value.placeholder", nil);
+    self.searchBar =  [[JMSearchBar alloc] initWithFrame:searchBarFrame];
+    self.searchBar.delegate = self;
+    self.searchBar.placeholder = JMCustomLocalizedString(@"detail.report.options.search.value.placeholder", nil);
     
     if ([JMUtils isIphone]) {
         self.navigationItem.hidesBackButton = YES;
-        [self.navigationController.navigationBar addSubview:searchBar];
+        [self.navigationController.navigationBar addSubview:self.searchBar];
     } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:searchBar];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
     }
 }
 
@@ -179,12 +183,7 @@
     [searchBar resignFirstResponder];
     self.filteredListOfValues = nil;
     [self.tableView reloadData];
-    if ([JMUtils isIphone]) {
-        [searchBar removeFromSuperview];
-        self.navigationItem.hidesBackButton = NO;
-    } else {
-        [self showNavigationItems];
-    }
+    [self hideSearchBar];
 }
 
 - (void)searchBarDidChangeText:(JMSearchBar *)searchBar
@@ -200,6 +199,17 @@
     self.titleLabel.hidden = !([self.listOfValues count] > 0);
 
     [self.tableView reloadData];
+}
+
+- (void) hideSearchBar
+{
+    if ([JMUtils isIphone]) {
+        [self.searchBar removeFromSuperview];
+        self.navigationItem.hidesBackButton = NO;
+    } else {
+        [self showNavigationItems];
+    }
+    self.searchBar = nil;
 }
 
 @end

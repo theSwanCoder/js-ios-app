@@ -204,7 +204,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         listLoader.resourceLookup = resourcesLookup;
         listLoader.delegate = destinationViewController;
         [destinationViewController setResourceListLoader:listLoader];
-        [destinationViewController setRepresentationType:self.representationType];
+        [destinationViewController setPresentingType:JMResourcesCollectionViewControllerPresentingType_Repository];
     }
 }
 
@@ -412,14 +412,19 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     NSString * keyString = @"RepresentationTypeKey";
     switch (self.presentingType) {
         case JMResourcesCollectionViewControllerPresentingType_Library:
-            return [@"Library" stringByAppendingString:keyString];
+            keyString = [@"Library" stringByAppendingString:keyString];
+            break;
         case JMResourcesCollectionViewControllerPresentingType_Repository:
-            return [@"Repository" stringByAppendingString:keyString];
+            keyString = [@"Repository" stringByAppendingString:keyString];
+            break;
         case JMResourcesCollectionViewControllerPresentingType_SavedItems:
-            return [@"SavedItems" stringByAppendingString:keyString];
+            keyString = [@"SavedItems" stringByAppendingString:keyString];
+            break;
         case JMResourcesCollectionViewControllerPresentingType_Favorites:
-            return [@"Favorites" stringByAppendingString:keyString];
+            keyString = [@"Favorites" stringByAppendingString:keyString];
+            break;
     }
+    return keyString;
 }
 
 - (UIBarButtonItem *)resourceRepresentationItem
