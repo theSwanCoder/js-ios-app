@@ -50,7 +50,7 @@
 
  @return full path of document directory
 */
-+ (NSString *)documentsDirectoryPath;
++ (NSString *)applicationDocumentsDirectory;
 
 /**
  Sends "changeServerProfile" notification to defaultCenter

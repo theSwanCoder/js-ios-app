@@ -118,12 +118,12 @@ NSString * const kJMSavedResources = @"SavedResources";
 }
 
 + (NSString *)pathToReportDirectoryWithName:(NSString *)name format:(NSString *)format{
-    return [[JMUtils documentsDirectoryPath] stringByAppendingPathComponent:[kJMReportsDirectory stringByAppendingPathComponent:[name stringByAppendingPathExtension:format]]];
+    return [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:[kJMReportsDirectory stringByAppendingPathComponent:[name stringByAppendingPathExtension:format]]];
 }
 
 + (NSString *)pathToReportWithName:(NSString *)name format:(NSString *)format
 {
-    return [[JMUtils documentsDirectoryPath] stringByAppendingPathComponent:[self uriForSavedReportWithName:name format:format]];
+    return [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:[self uriForSavedReportWithName:name format:format]];
 }
 
 #pragma mark - Private

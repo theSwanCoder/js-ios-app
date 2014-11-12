@@ -270,7 +270,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 // Add saved report to CoreData
 + (BOOL)update_1_9
 {
-    NSString *reportsDirectory = [[JMUtils documentsDirectoryPath] stringByAppendingPathComponent:kJMReportsDirectory];
+    NSString *reportsDirectory = [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:kJMReportsDirectory];
     NSMutableArray *reports = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:reportsDirectory error:nil] mutableCopy];
     [reports removeObject:@".DS_Store"];
 

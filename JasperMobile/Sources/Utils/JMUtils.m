@@ -69,14 +69,9 @@
     return [*errorMessage length] == 0;
 }
 
-+ (NSString *)documentsDirectoryPath
++ (NSString *)applicationDocumentsDirectory
 {
-    static NSString *reportDirectory;
-    if (!reportDirectory) {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        reportDirectory = [paths objectAtIndex:0];
-    }
-    return reportDirectory;
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
 + (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile withParams:(NSDictionary *)params

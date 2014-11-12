@@ -35,6 +35,7 @@ NSString * const JMLocalizationBundleType = @"lproj";
 + (NSString *)localizedStringForKey:(NSString *)key
 {
     NSString *localizedString = NSLocalizedString(key, nil);
+    NSLog(@"%@", [NSLocale preferredLanguages]);
     if (![[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:JMPreferredLanguage] &&
         [localizedString isEqualToString:key]) {
         NSString *path = [[NSBundle mainBundle] pathForResource:JMPreferredLanguage ofType:JMLocalizationBundleType];
