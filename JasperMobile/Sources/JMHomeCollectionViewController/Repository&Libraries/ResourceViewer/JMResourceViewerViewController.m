@@ -165,7 +165,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
 
 -(void) runReportExecution
 {
-    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:@"You need to implement \"runReportExecution\" method in subclasses" userInfo:nil];
+    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:[NSString stringWithFormat:@"You need to implement \"%@\" method in \"%@\" class", NSStringFromSelector(_cmd), NSStringFromClass(self.class)] userInfo:nil];
 }
 
 #pragma mark - UIWebViewDelegate

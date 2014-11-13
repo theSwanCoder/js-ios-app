@@ -245,7 +245,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         } else {
             [self fetchInputControlsForReport:resourceLookup];
         }
-    } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_DASHBOARD]) {
+    } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_DASHBOARD] || [resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_DASHBOARD_LEGACY]) {
         [self performSegueWithIdentifier:kJMShowDashboardViewerSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
     } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_FOLDER]) {
         [self performSegueWithIdentifier:kJMShowFolderContetnSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];

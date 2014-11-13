@@ -96,4 +96,6 @@
  Update sending of crash reports
  */
 + (void)activateCrashReportSendingIfNeeded;
+
++ (NSArray *)supportedFormatsForReportSaving;
 @end

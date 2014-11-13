@@ -71,7 +71,12 @@
 
 + (NSString *)applicationDocumentsDirectory
 {
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    static NSString *reportDirectory;
+    if (!reportDirectory) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        reportDirectory = [paths objectAtIndex:0];
+    }
+    return reportDirectory;
 }
 
 + (void)sendChangeServerProfileNotificationWithProfile:(JMServerProfile *)serverProfile withParams:(NSDictionary *)params
@@ -135,5 +140,17 @@
     } else if (![self crashReportsSendingEnable]) {
         [[Mint sharedInstance] closeSessionAsyncWithCompletionBlock:nil];
     }
+}
+
++ (NSArray *)supportedFormatsForReportSaving
+{
+    static NSArray *reportFormats;
+    if (!reportFormats) {
+        reportFormats = @[
+                           [JSConstants sharedInstance].CONTENT_TYPE_HTML,
+                           [JSConstants sharedInstance].CONTENT_TYPE_PDF,
+                           ];
+    }
+    return reportFormats;
 }
 @end

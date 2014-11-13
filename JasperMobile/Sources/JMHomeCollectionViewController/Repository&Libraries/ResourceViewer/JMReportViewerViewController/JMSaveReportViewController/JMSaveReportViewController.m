@@ -37,32 +37,18 @@ NSString * const kJMAttachmentPrefix = @"_";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) NSString *selectedReportFormat;
-@property (nonatomic, strong) NSArray *reportFormats;
 @property (nonatomic, strong) NSString *reportName;
 @property (nonatomic, strong) NSString *errorString;
-@property (nonatomic, weak) JSConstants *constants;
 
 @end
 
 
 @implementation JMSaveReportViewController
-objection_requires(@"resourceClient", @"reportClient", @"constants")
+objection_requires(@"resourceClient", @"reportClient")
 
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceLookup = _resourceLookup;
 @synthesize reportClient = _reportClient;
-
-- (NSArray *)reportFormats
-{
-    if (!_reportFormats) {
-        _reportFormats = @[
-                           self.constants.CONTENT_TYPE_HTML,
-                           self.constants.CONTENT_TYPE_PDF,
-                           ];
-    }
-    
-    return _reportFormats;
-}
 
 #pragma mark - Initialization
 - (void)awakeFromNib
@@ -76,7 +62,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     [super viewDidLoad];
     self.title = [JMCustomLocalizedString(@"savereport.title", nil) capitalizedString];
     self.reportName = self.resourceLookup.label;
-    self.selectedReportFormat = [self.reportFormats firstObject];
+    self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] firstObject];
 
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.tableView.backgroundColor = kJMDetailViewLightBackgroundColor;
@@ -94,7 +80,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return section ? self.reportFormats.count : 1;
+    return section ? [JMUtils supportedFormatsForReportSaving].count : 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -125,7 +111,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
             [cell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
         }
 
-        NSString *currentFormat = [self.reportFormats objectAtIndex:indexPath.row];
+        NSString *currentFormat = [[JMUtils supportedFormatsForReportSaving] objectAtIndex:indexPath.row];
         cell.textLabel.text = currentFormat;
         cell.accessoryType = [self.selectedReportFormat isEqualToString:currentFormat] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     } else {
@@ -143,7 +129,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section) {
-        self.selectedReportFormat = [self.reportFormats objectAtIndex:indexPath.row];
+        self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] objectAtIndex:indexPath.row];
         [self.tableView reloadData];
     }
 }

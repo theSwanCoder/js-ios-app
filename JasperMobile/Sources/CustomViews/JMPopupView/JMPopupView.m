@@ -9,8 +9,9 @@
 #import "JMPopupView.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define kJMPopupViewDefaultWidth        260.f
-#define kJMPopupViewButtonsHeight       35.f
+NSInteger const kJMPopupViewContentMaxHeight = 260.f;
+NSInteger const kJMPopupViewDefaultWidth = 260.f;
+NSInteger const kJMPopupViewButtonsHeight = 35.f;
 
 static NSMutableArray* visiblePopupsArray = nil;
 

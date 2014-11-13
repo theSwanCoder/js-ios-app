@@ -72,7 +72,7 @@ objection_requires(@"constants")
                 resourceImage = [UIImage imageNamed:@"res_type_pdf"];
             }
         }
-    } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD]) {
+    } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD] || [resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD_LEGACY]) {
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
     } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_FOLDER]) {
         resourceImage = [UIImage imageNamed:@"res_type_folder"];

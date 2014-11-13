@@ -27,10 +27,14 @@
 
 - (void)runReportExecution
 {
-    NSString *dashboardUrl = [NSString stringWithFormat:@"%@%@%@",
-                              self.resourceClient.serverProfile.serverUrl,
-                              @"/flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=",
-                              self.resourceLookup.uri];
+    NSString *dashboardUrl;
+    
+    if (self.resourceClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0 &&
+        [self.resourceLookup.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD]) {
+        dashboardUrl = [NSString stringWithFormat:@"%@%@%@", self.resourceClient.serverProfile.serverUrl, @"/dashboard/viewer.html?decorate=no#", self.resourceLookup.uri];
+    } else {
+        dashboardUrl = [NSString stringWithFormat:@"%@%@%@", self.resourceClient.serverProfile.serverUrl, @"/flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=", self.resourceLookup.uri];
+    }
     
     NSURL *url = [NSURL URLWithString:dashboardUrl];
     self.resourceRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:self.resourceClient.timeoutInterval];
