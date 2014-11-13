@@ -112,6 +112,7 @@
 "master.resources.type.all" = "全部";
 "master.resources.type.reportUnit" = "报告";
 "master.resources.type.dashboard" = "仪表板";
+"master.resources.type.folder" = "文件夹";
 
 // Sort by
 "master.sortby.title" = "排序选项";

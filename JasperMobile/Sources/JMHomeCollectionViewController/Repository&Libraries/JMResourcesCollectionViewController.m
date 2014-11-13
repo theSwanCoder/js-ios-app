@@ -32,8 +32,7 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMSavedResourcesListLoader.h"
 
-#import "JMSortOptionsPopupView.h"
-#import "JMFilterOptionsPopupView.h"
+#import "JMListOptionsPopupView.h"
 #import "JMResourceInfoViewController.h"
 #import "PopoverView.h"
 
@@ -238,15 +237,17 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 
 - (void)sortByButtonTapped:(id)sender
 {
-    JMSortOptionsPopupView *sortPopup = [[JMSortOptionsPopupView alloc] initWithDelegate:self type:JMPopupViewType_ContentViewOnly];
-    sortPopup.sortBy = self.resourceListLoader.sortBy;
+    JMListOptionsPopupView *sortPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self type:JMPopupViewType_ContentViewOnly items:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOption_Sort]];
+    sortPopup.selectedIndex = self.resourceListLoader.sortBySelectedIndex;
+    sortPopup.option = JMResourcesListLoaderOption_Sort;
     [sortPopup show];
 }
 
 - (void)filterByButtonTapped:(id)sender
 {
-    JMFilterOptionsPopupView *filterPopup = [[JMFilterOptionsPopupView alloc] initWithDelegate:self type:JMPopupViewType_ContentViewOnly];
-    filterPopup.objectType = self.resourceListLoader.resourcesType;
+    JMListOptionsPopupView *filterPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self type:JMPopupViewType_ContentViewOnly items:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOption_Filter]];
+    filterPopup.selectedIndex = self.resourceListLoader.filterBySelectedIndex;
+    filterPopup.option = JMResourcesListLoaderOption_Filter;
     [filterPopup show];
 }
 
@@ -376,12 +377,15 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self.view endEditing:YES];
 }
 
-- (void)popupViewValueDidChanged:(id)popup
+- (void)popupViewValueDidChanged:(JMListOptionsPopupView *)popup
 {
-    if ([popup isKindOfClass:[JMSortOptionsPopupView class]]) {
-        self.resourceListLoader.sortBy = [popup sortBy];
-    } else if ([popup isKindOfClass:[JMFilterOptionsPopupView class]]) {
-        self.resourceListLoader.resourcesType = [popup objectType];
+    switch (popup.option) {
+        case JMResourcesListLoaderOption_Filter:
+            self.resourceListLoader.filterBySelectedIndex = [popup selectedIndex];
+            break;
+        case JMResourcesListLoaderOption_Sort:
+            self.resourceListLoader.sortBySelectedIndex = [popup selectedIndex];
+            break;
     }
     [self.resourceListLoader setNeedsUpdate];
     [self.resourceListLoader updateIfNeeded];

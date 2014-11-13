@@ -112,6 +112,7 @@
 "master.resources.type.all" = "すべて";
 "master.resources.type.reportUnit" = "レポート";
 "master.resources.type.dashboard" = "ダッシュボード";
+"master.resources.type.folder" = "フォルダの";
 
 // Sort by
 "master.sortby.title" = "ソート オプション";

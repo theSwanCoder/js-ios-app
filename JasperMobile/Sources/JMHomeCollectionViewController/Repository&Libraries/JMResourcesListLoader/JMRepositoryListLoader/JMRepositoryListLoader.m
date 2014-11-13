@@ -36,8 +36,6 @@
 {
     self = [super init];
     if (self) {
-        self.resourcesType = JMResourcesListLoaderObjectType_RepositoryAll;
-        self.sortBy = JMResourcesListLoaderSortBy_Name;
         self.rootFolders = [NSMutableArray array];
         self.loadRecursively = NO;
     }
@@ -94,7 +92,9 @@
             if (!resourceLookup.resourceType) {
                 resourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
             }
-            [self.rootFolders addObject:resourceLookup];
+            if (resourceLookup) {
+                [self.rootFolders addObject:resourceLookup];
+            }
         }
         requestDidFinishLoading();
     } @weakselfend
@@ -119,4 +119,17 @@
     _isLoadingNow = NO;
     [self.delegate resourceListDidLoaded:self withError:nil];
 }
+
+- (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option
+{
+    switch (option) {
+        case JMResourcesListLoaderOption_Sort:
+            return [super listItemsWithOption:option];
+        case JMResourcesListLoaderOption_Filter:
+            return @[
+                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"master.resources.type.all", nil),
+                       kJMResourceListLoaderOptionItemValueKey: @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD, self.constants.WS_TYPE_DASHBOARD_LEGACY, self.constants.WS_TYPE_FOLDER]}];
+    }
+}
+
 @end

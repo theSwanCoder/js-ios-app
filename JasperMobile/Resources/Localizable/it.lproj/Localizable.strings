@@ -112,6 +112,7 @@
 "master.resources.type.all" = "Tutti";
 "master.resources.type.reportUnit" = "Report";
 "master.resources.type.dashboard" = "Dashboard";
+"master.resources.type.folder" = "Cartelle";
 
 // Sort by
 "master.sortby.title" = "Opzioni di ordinamento";

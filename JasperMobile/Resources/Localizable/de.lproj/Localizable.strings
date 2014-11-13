@@ -112,6 +112,7 @@
 "master.resources.type.all" = "Alle";
 "master.resources.type.reportUnit" = "Berichte";
 "master.resources.type.dashboard" = "Dashboards";
+"master.resources.type.folder" = "Folders";
 
 // Sort by
 "master.sortby.title" = "Sortierungsoptionen";

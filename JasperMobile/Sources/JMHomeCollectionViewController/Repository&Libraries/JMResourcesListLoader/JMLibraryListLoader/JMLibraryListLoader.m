@@ -29,11 +29,24 @@
 {
     self = [super init];
     if (self) {
-        self.resourcesType = JMResourcesListLoaderObjectType_LibraryAll;
-        self.sortBy = JMResourcesListLoaderSortBy_Name;
         self.loadRecursively = YES;
     }
     return self;
 }
 
+- (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option
+{
+    switch (option) {
+        case JMResourcesListLoaderOption_Sort:
+            return [super listItemsWithOption:option];
+        case JMResourcesListLoaderOption_Filter:
+            return @[
+                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"master.resources.type.all", nil),
+                       kJMResourceListLoaderOptionItemValueKey: @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD, self.constants.WS_TYPE_DASHBOARD_LEGACY]},
+                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"master.resources.type.reportUnit", nil),
+                       kJMResourceListLoaderOptionItemValueKey: @[self.constants.WS_TYPE_REPORT_UNIT]},
+                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"master.resources.type.dashboard", nil),
+                       kJMResourceListLoaderOptionItemValueKey: @[self.constants.WS_TYPE_DASHBOARD, self.constants.WS_TYPE_DASHBOARD_LEGACY]}];
+    }
+}
 @end

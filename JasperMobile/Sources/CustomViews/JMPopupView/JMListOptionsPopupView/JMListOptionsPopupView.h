@@ -22,7 +22,7 @@
 
 
 //
-//  JMFilterOptionsPopupView.h
+//  JMListOptionsPopupView.h
 //  TIBCO JasperMobile
 //
 
@@ -34,8 +34,14 @@
 #import "JMPopupView.h"
 #import "JMResourcesListLoader.h"
 
-@interface JMFilterOptionsPopupView : JMPopupView
+@interface JMListOptionsPopupView : JMPopupView
 
-@property(nonatomic, assign) JMResourcesListLoaderObjectType objectType;
+@property(nonatomic, assign) NSInteger selectedIndex;
+@property(nonatomic, assign) JMResourcesListLoaderOption option;
+
+@property(nonatomic, strong) NSString *titleString;
+
+
+- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type items:(NSArray *)items;
 
 @end
