@@ -147,12 +147,14 @@ objection_requires(@"resourceClient", @"constants")
         case JMResourcesListLoaderObjectType_LibraryAll:
             [typesArray addObject:self.constants.WS_TYPE_REPORT_UNIT];
             [typesArray addObject:self.constants.WS_TYPE_DASHBOARD];
+            [typesArray addObject:self.constants.WS_TYPE_DASHBOARD_LEGACY];
             break;
         case JMResourcesListLoaderObjectType_Reports:
             [typesArray addObject:self.constants.WS_TYPE_REPORT_UNIT];
             break;
         case JMResourcesListLoaderObjectType_Dashboards:
             [typesArray addObject:self.constants.WS_TYPE_DASHBOARD];
+            [typesArray addObject:self.constants.WS_TYPE_DASHBOARD_LEGACY];
             break;
         case JMResourcesListLoaderObjectType_Folders:
             [typesArray addObject:self.constants.WS_TYPE_FOLDER];
