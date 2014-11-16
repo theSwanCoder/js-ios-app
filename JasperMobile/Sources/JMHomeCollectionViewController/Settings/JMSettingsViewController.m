@@ -122,7 +122,7 @@
 {
 //    JMIntroViewController *introViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMIntroViewController"];
     JMOnboardIntroViewController *introViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
-    introViewController.view.backgroundColor = [UIColor colorWithPatternImage:[self.view renderedImageForView:self.navigationController.view]];
+    //introViewController.view.backgroundColor = [UIColor colorWithPatternImage:[self.view renderedImageForView:self.navigationController.view]];
     [self presentViewController:introViewController animated:YES completion:nil];
 }
 

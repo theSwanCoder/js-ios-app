@@ -72,6 +72,11 @@
     }
 }
 
+- (JMIntroModel *)modelAtIndex:(NSUInteger)index {
+    return self.pageData[index];
+}
+
+
 #pragma mark -
 - (BOOL)isLastPage {
     return (self.currentIndex == [self.pageData count]);
