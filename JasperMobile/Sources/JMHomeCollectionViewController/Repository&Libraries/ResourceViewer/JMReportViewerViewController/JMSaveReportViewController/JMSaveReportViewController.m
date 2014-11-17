@@ -128,10 +128,9 @@ objection_requires(@"resourceClient", @"reportClient")
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section) {
-        self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] objectAtIndex:indexPath.row];
-        [self.tableView reloadData];
-    }
+    self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] objectAtIndex:indexPath.row];
+    self.errorString = nil;
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITextFieldDelegate

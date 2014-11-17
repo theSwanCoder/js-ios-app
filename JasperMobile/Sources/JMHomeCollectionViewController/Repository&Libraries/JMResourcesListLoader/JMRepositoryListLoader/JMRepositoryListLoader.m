@@ -90,10 +90,12 @@
     
     JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakselfnotnil(^(JSOperationResult *result)) {
         JSResourceLookup *resourceLookup = [result.objects objectAtIndex:0];
-        if (!resourceLookup.resourceType) {
-            resourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
+        if (resourceLookup) {
+            if (!resourceLookup.resourceType) {
+                resourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
+            }
+            [self.rootFolders addObject:resourceLookup];
         }
-        [self.rootFolders addObject:resourceLookup];
         requestDidFinishLoading();
     } @weakselfend
     errorBlock:@weakselfnotnil(^(JSOperationResult *result)) {

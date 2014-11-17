@@ -75,11 +75,11 @@
     }
 }
 
-- (JMResourceViewerAction)availableAction
+- (JMMenuActionsViewAction)availableAction
 {
-    JMResourceViewerAction availableAction = [super availableAction] | JMResourceViewerAction_Save | JMResourceViewerAction_Refresh;
+    JMMenuActionsViewAction availableAction = [super availableAction] | JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
     if (self.reportViewer.inputControls && [self.reportViewer.inputControls count]) {
-        availableAction |= JMResourceViewerAction_Filter;
+        availableAction |= JMMenuActionsViewAction_Filter;
     }
     return availableAction;
 }
@@ -145,18 +145,18 @@
 }
 
 #pragma mark -
-#pragma mark - JMResourceViewerActionsViewDelegate
-- (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
+#pragma mark - JMMenuActionsViewDelegate
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     [super actionsView:view didSelectAction:action];
     switch (action) {
-        case JMResourceViewerAction_Refresh:
+        case JMMenuActionsViewAction_Refresh:
             [self runReportExecution];
             break;
-        case JMResourceViewerAction_Filter:
+        case JMMenuActionsViewAction_Filter:
             [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
             break;
-        case JMResourceViewerAction_Save:
+        case JMMenuActionsViewAction_Save:
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
         default:

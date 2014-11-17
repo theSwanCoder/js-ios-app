@@ -50,16 +50,16 @@
     self.resourceRequest = [NSURLRequest requestWithURL:url];
 }
 
-- (JMResourceViewerAction)availableAction
+- (JMMenuActionsViewAction)availableAction
 {
-    return [super availableAction] | JMResourceViewerAction_Rename | JMResourceViewerAction_Delete;
+    return [super availableAction] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete;
 }
 
-#pragma mark - JMResourceViewerActionsViewDelegate
-- (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
+#pragma mark - JMMenuActionsViewDelegate
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     [super actionsView:view didSelectAction:action];
-    if (action == JMResourceViewerAction_Rename) {
+    if (action == JMMenuActionsViewAction_Rename) {
         UIAlertView *alertView  = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(@"savedreport.modify.title", nil)
                                                      message:nil
                                                     delegate:self
@@ -73,7 +73,7 @@
         
         alertView.tag = action;
         [alertView show];
-    } else if(action == JMResourceViewerAction_Delete) {
+    } else if(action == JMMenuActionsViewAction_Delete) {
         UIAlertView *alertView  = [UIAlertView localizedAlertWithTitle:nil
                                                                message:@"savedreport.delete.confirmation.message"
                                                               delegate:self
@@ -106,11 +106,11 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.cancelButtonIndex != buttonIndex) {
-        if (alertView.tag == JMResourceViewerAction_Rename) {
+        if (alertView.tag == JMMenuActionsViewAction_Rename) {
                 NSString *newName = [alertView textFieldAtIndex:0].text;
                 [self.savedReports renameReportTo:newName];
                 self.title = newName;
-        } else if (alertView.tag == JMResourceViewerAction_Delete) {
+        } else if (alertView.tag == JMMenuActionsViewAction_Delete) {
             [self.savedReports removeReport];
             [self.navigationController popViewControllerAnimated:YES];
         }

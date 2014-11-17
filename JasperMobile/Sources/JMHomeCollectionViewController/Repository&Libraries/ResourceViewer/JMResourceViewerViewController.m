@@ -134,7 +134,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
 #pragma mark - Actions
 - (void)actionButtonClicked:(id) sender
 {
-    JMResourceViewerActionsView *actionsView = [[JMResourceViewerActionsView alloc] initWithFrame:CGRectMake(0, 0, 240, 200)];
+    JMMenuActionsView *actionsView = [[JMMenuActionsView alloc] initWithFrame:CGRectMake(0, 0, 240, 200)];
     actionsView.delegate = self;
     actionsView.availableActions = [self availableAction];
     CGPoint point = CGPointMake(self.view.frame.size.width, -10);
@@ -154,11 +154,11 @@ objection_requires(@"resourceClient", @"resourceLookup")
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
-- (JMResourceViewerAction)availableAction
+- (JMMenuActionsViewAction)availableAction
 {
-    JMResourceViewerAction availableAction = JMResourceViewerAction_Info;
+    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Info;
     if (![self favoriteBarButtonItem]) {
-        availableAction |= [JMFavorites isResourceInFavorites:self.resourceLookup] ? JMResourceViewerAction_MakeUnFavorite : JMResourceViewerAction_MakeFavorite;
+        availableAction |= [JMFavorites isResourceInFavorites:self.resourceLookup] ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite;
     }
     return availableAction;
 }
@@ -195,15 +195,15 @@ objection_requires(@"resourceClient", @"resourceLookup")
     [self.activityIndicator stopAnimating];
 }
 
-#pragma mark - JMResourceViewerActionsViewDelegate
-- (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
+#pragma mark - JMMenuActionsViewDelegate
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     switch (action) {
-        case JMResourceViewerAction_Info:
+        case JMMenuActionsViewAction_Info:
             [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:nil];
             break;
-        case JMResourceViewerAction_MakeFavorite:
-        case JMResourceViewerAction_MakeUnFavorite:
+        case JMMenuActionsViewAction_MakeFavorite:
+        case JMMenuActionsViewAction_MakeUnFavorite:
             [self favoriteButtonTapped:nil];
             break;
         default:

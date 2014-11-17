@@ -40,16 +40,16 @@
     self.resourceRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:self.resourceClient.timeoutInterval];
 }
 
-- (JMResourceViewerAction)availableAction
+- (JMMenuActionsViewAction)availableAction
 {
-    return [super availableAction] | JMResourceViewerAction_Refresh;
+    return [super availableAction] | JMMenuActionsViewAction_Refresh;
 }
 
-#pragma mark - JMResourceViewerActionsViewDelegate
-- (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
+#pragma mark - JMMenuActionsViewDelegate
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     [super actionsView:view didSelectAction:action];
-    if (action == JMResourceViewerAction_Refresh) {
+    if (action == JMMenuActionsViewAction_Refresh) {
         [self runReportExecution];
     }
 }

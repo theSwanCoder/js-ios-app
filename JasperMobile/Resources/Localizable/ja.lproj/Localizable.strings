@@ -166,6 +166,7 @@
 "action.title.markasfavorite" = "お気に入りとしてマーク";
 "action.title.markasunfavorite" = "お気に入りから削除";
 "action.title.info" = "お知らせ";
+"action.title.sort" = "ソート オプション";
 
 
 "action.report.viewer.pagecount" = "/%d";

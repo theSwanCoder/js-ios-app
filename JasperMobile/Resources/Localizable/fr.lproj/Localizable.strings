@@ -166,6 +166,7 @@
 "action.title.markasfavorite" = "Ajouter aux Favoris";
 "action.title.markasunfavorite" = "Supprimer des Favoris";
 "action.title.info" = "Infos";
+"action.title.sort" = "Options de tri";
 
 
 "action.report.viewer.pagecount" = "sur %d";

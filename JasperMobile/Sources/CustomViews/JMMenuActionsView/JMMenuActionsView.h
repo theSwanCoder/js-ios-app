@@ -22,7 +22,7 @@
 
 
 //
-//  JMResourceViewerActionsView.h
+//  JMMenuActionsView.h
 //  TIBCO JasperMobile
 //
 
@@ -33,31 +33,32 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSInteger, JMResourceViewerAction) {
-    JMResourceViewerAction_None = 0,
-    JMResourceViewerAction_MakeFavorite = 1 << 0,
-    JMResourceViewerAction_MakeUnFavorite = 1 << 1,
-    JMResourceViewerAction_Refresh = 1 << 2,
-    JMResourceViewerAction_Filter = 1 << 3,
-    JMResourceViewerAction_Save = 1 << 4,
-    JMResourceViewerAction_Delete = 1 << 5,
-    JMResourceViewerAction_Rename = 1 << 6,
-    JMResourceViewerAction_Info = 1 << 7
+typedef NS_ENUM(NSInteger, JMMenuActionsViewAction) {
+    JMMenuActionsViewAction_None = 0,
+    JMMenuActionsViewAction_MakeFavorite = 1 << 0,
+    JMMenuActionsViewAction_MakeUnFavorite = 1 << 1,
+    JMMenuActionsViewAction_Refresh = 1 << 2,
+    JMMenuActionsViewAction_Filter = 1 << 3,
+    JMMenuActionsViewAction_Sort = 1 << 4,
+    JMMenuActionsViewAction_Save = 1 << 5,
+    JMMenuActionsViewAction_Delete = 1 << 6,
+    JMMenuActionsViewAction_Rename = 1 << 7,
+    JMMenuActionsViewAction_Info = 1 << 8
 };
 
-static inline JMResourceViewerAction JMResourceViewerActionFirst() { return JMResourceViewerAction_MakeFavorite; }
-static inline JMResourceViewerAction JMResourceViewerActionLast() { return JMResourceViewerAction_Info; }
+static inline JMMenuActionsViewAction JMMenuActionsViewActionFirst() { return JMMenuActionsViewAction_MakeFavorite; }
+static inline JMMenuActionsViewAction JMMenuActionsViewActionLast() { return JMMenuActionsViewAction_Info; }
 
-@class JMResourceViewerActionsView;
+@class JMMenuActionsView;
 
-@protocol JMResourceViewerActionsViewDelegate <NSObject>
+@protocol JMMenuActionsViewDelegate <NSObject>
 @required
-- (void) actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action;
+- (void) actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action;
 
 @end
 
-@interface JMResourceViewerActionsView : UIView
-@property (nonatomic, weak) id <JMResourceViewerActionsViewDelegate> delegate;
-@property (nonatomic, assign) JMResourceViewerAction availableActions;
+@interface JMMenuActionsView : UIView
+@property (nonatomic, weak) id <JMMenuActionsViewDelegate> delegate;
+@property (nonatomic, assign) JMMenuActionsViewAction availableActions;
 
 @end

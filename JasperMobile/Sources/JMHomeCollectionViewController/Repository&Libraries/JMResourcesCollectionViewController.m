@@ -35,6 +35,7 @@
 #import "JMSortOptionsPopupView.h"
 #import "JMFilterOptionsPopupView.h"
 #import "JMResourceInfoViewController.h"
+#import "PopoverView.h"
 
 NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 
@@ -49,7 +50,7 @@ typedef NS_ENUM(NSInteger, JMResourcesRepresentationType) {
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeFirst() { return JMResourcesRepresentationType_HorizontalList; }
 static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() { return JMResourcesRepresentationType_Grid; }
 
-@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMResourcesListLoaderDelegate, JMPopupViewDelegate, JMResourceCollectionViewCellDelegate>
+@interface JMResourcesCollectionViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMResourcesListLoaderDelegate, JMPopupViewDelegate, JMResourceCollectionViewCellDelegate, PopoverViewDelegate, JMMenuActionsViewDelegate>
 
 
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -68,6 +69,8 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 @property (nonatomic, assign) BOOL needReloadData;
 
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
+
+@property (nonatomic, strong) PopoverView *popoverView;
 
 @end
 
@@ -112,6 +115,14 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [[NSNotificationCenter defaultCenter] addObserverForName:kJMRepresentationTypeDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
         self.needReloadData = YES;
     } @weakselfend];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    if ([JMUtils isIphone]) {
+        [self showNavigationItems];
+    }
 }
 
 - (void)dealloc
@@ -234,6 +245,34 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     JMFilterOptionsPopupView *filterPopup = [[JMFilterOptionsPopupView alloc] initWithDelegate:self type:JMPopupViewType_ContentViewOnly];
     filterPopup.objectType = self.resourceListLoader.resourcesType;
     [filterPopup show];
+}
+
+- (void)actionButtonClicked:(id) sender
+{
+    JMMenuActionsView *actionsView = [[JMMenuActionsView alloc] initWithFrame:CGRectMake(0, 0, 240, 200)];
+    actionsView.delegate = self;
+    actionsView.availableActions = [self availableAction];
+    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
+    self.popoverView = [PopoverView showPopoverAtPoint:point inView:self.view withTitle:nil withContentView:actionsView delegate:self];
+}
+
+- (JMMenuActionsViewAction)availableAction
+{
+    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_None;
+    switch (self.presentingType) {
+        case JMResourcesCollectionViewControllerPresentingType_Library:{
+            if([self.resourceListLoader.resourceClient.serverInfo.edition isEqualToString:self.resourceListLoader.constants.SERVER_EDITION_PRO]) {
+                availableAction |= JMMenuActionsViewAction_Filter;
+            }
+        }
+        case JMResourcesCollectionViewControllerPresentingType_SavedItems:{
+            availableAction |= JMMenuActionsViewAction_Sort;
+            break;
+        }
+        default:
+            break;
+    }
+    return availableAction;
 }
 
 - (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
@@ -362,23 +401,23 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 
 - (void) showNavigationItems
 {
-    NSMutableArray *navBarItems = [NSMutableArray arrayWithObject:[self resourceRepresentationItem]];
-    
-    switch (self.presentingType) {
-        case JMResourcesCollectionViewControllerPresentingType_Library:{
-            if([self.resourceListLoader.resourceClient.serverInfo.edition isEqualToString:self.resourceListLoader.constants.SERVER_EDITION_PRO]) {
-                UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];
-                [navBarItems addObject:filterItem];
-            }
-        }
-        case JMResourcesCollectionViewControllerPresentingType_SavedItems:{
-            UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortByButtonTapped:)];
-            [navBarItems addObject:sortItem];
-            break;
-        }
-        default:
-            break;
+    NSMutableArray *navBarItems = [NSMutableArray array];
+    JMMenuActionsViewAction availableAction = [self availableAction];
+    if (availableAction & JMMenuActionsViewAction_Filter) {
+        UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];
+        [navBarItems addObject:filterItem];
     }
+    if (availableAction & JMMenuActionsViewAction_Sort) {
+        UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortByButtonTapped:)];
+        [navBarItems addObject:sortItem];
+    }
+    
+    if ([JMUtils isIphone] && (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation)) && [navBarItems count] > 1) {
+        navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
+    }
+    [navBarItems addObject:[self resourceRepresentationItem]];
+
+    
     
     UIView *searchContainerView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
     searchContainerView.backgroundColor = [UIColor clearColor];
@@ -390,7 +429,6 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchContainerView];
         [navBarItems addObject:searchItem];
     }
-    
     self.navigationItem.rightBarButtonItems = navBarItems;
 }
 
@@ -481,5 +519,34 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (void)infoButtonDidTappedOnCell:(JMResourceCollectionViewCell *)cell
 {
     [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:[NSDictionary dictionaryWithObject:cell.resourceLookup forKey:kJMResourceLookup]];
+}
+
+#pragma mark - PopoverViewDelegate Methods
+- (void)popoverViewDidDismiss:(PopoverView *)popoverView
+{
+    self.popoverView = nil;
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
+    [self.popoverView animateRotationToNewPoint:point inView:self.view withDuration:duration];
+}
+
+
+#pragma mark - JMMenuActionsViewDelegate
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
+{
+    switch (action) {
+        case JMMenuActionsViewAction_Filter:
+            [self filterByButtonTapped:nil];
+            break;
+        case JMMenuActionsViewAction_Sort:
+            [self sortByButtonTapped:nil];
+            break;
+        default:
+            break;
+    }
+    [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
 }
 @end

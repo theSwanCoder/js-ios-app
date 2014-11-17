@@ -175,7 +175,6 @@
 		0895910319E3D514001471DA /* libObjection-StaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 089590F619E3D514001471DA /* libObjection-StaticLib.a */; };
 		0895910419E3D514001471DA /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590F919E3D514001471DA /* PopoverView.m */; };
 		0895910519E3D514001471DA /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590FE19E3D514001471DA /* SSKeychain.m */; };
-		089C970219C8642B0010C135 /* JMResourceViewerActionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089C970119C8642B0010C135 /* JMResourceViewerActionsView.m */; };
 		089CA29F19EE854300983C82 /* JMResourceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089CA29E19EE854300983C82 /* JMResourceInfoViewController.m */; };
 		08A0924D19E81634001A2016 /* refresh_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 08A0924C19E81634001A2016 /* refresh_action.png */; };
 		08A0925019E81647001A2016 /* sort_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 08A0924E19E81647001A2016 /* sort_action.png */; };
@@ -183,6 +182,7 @@
 		08A43D2019E6F30100C0BA4D /* JMRepositoryListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A43D1F19E6F30100C0BA4D /* JMRepositoryListLoader.m */; };
 		08A7058119B488FE00C1B4C6 /* JMEditabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7058019B488FE00C1B4C6 /* JMEditabledViewController.m */; };
 		08B99F6E1A07CD7700E822B0 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
+		08C331601A1A27DC0020CAEA /* JMMenuActionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C3315F1A1A27DC0020CAEA /* JMMenuActionsView.m */; };
 		08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */; };
 		08D108B619EFD28C003EC529 /* JMFavoritesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D108B519EFD28C003EC529 /* JMFavoritesListLoader.m */; };
 		08D27B7C19EBE4BF00994F08 /* JMFilterOptionsPopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D27B7719EBE4BF00994F08 /* JMFilterOptionsPopupView.m */; };
@@ -497,8 +497,6 @@
 		089590FB19E3D514001471DA /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverViewCompatibility.h; sourceTree = "<group>"; };
 		089590FD19E3D514001471DA /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		089590FE19E3D514001471DA /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
-		089C970019C8642B0010C135 /* JMResourceViewerActionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceViewerActionsView.h; sourceTree = "<group>"; };
-		089C970119C8642B0010C135 /* JMResourceViewerActionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceViewerActionsView.m; sourceTree = "<group>"; };
 		089CA29D19EE854300983C82 /* JMResourceInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceInfoViewController.h; sourceTree = "<group>"; };
 		089CA29E19EE854300983C82 /* JMResourceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceInfoViewController.m; sourceTree = "<group>"; };
 		08A0924C19E81634001A2016 /* refresh_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh_action.png; sourceTree = "<group>"; };
@@ -509,6 +507,8 @@
 		08A7057F19B488FE00C1B4C6 /* JMEditabledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMEditabledViewController.h; sourceTree = "<group>"; };
 		08A7058019B488FE00C1B4C6 /* JMEditabledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMEditabledViewController.m; sourceTree = "<group>"; };
 		08B99F6D1A07CD7700E822B0 /* profiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = profiles.json; sourceTree = "<group>"; };
+		08C3315E1A1A27DC0020CAEA /* JMMenuActionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMenuActionsView.h; sourceTree = "<group>"; };
+		08C3315F1A1A27DC0020CAEA /* JMMenuActionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMenuActionsView.m; sourceTree = "<group>"; };
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		08D108B419EFD28C003EC529 /* JMFavoritesListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFavoritesListLoader.h; sourceTree = "<group>"; };
 		08D108B519EFD28C003EC529 /* JMFavoritesListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFavoritesListLoader.m; sourceTree = "<group>"; };
@@ -770,6 +770,7 @@
 		0851DFB419ACE1F500DC6EDE /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				08C3315D1A1A27DC0020CAEA /* JMMenuActionsView */,
 				08D3E28819EBB82100F37DF4 /* JMPopupView */,
 				0851DFCC19ACE27800DC6EDE /* JMAskPasswordDialog */,
 				0851DFCF19ACE27800DC6EDE /* JMCancelRequestPopup */,
@@ -1169,15 +1170,6 @@
 			path = "SSKeychain-v0.1.4";
 			sourceTree = "<group>";
 		};
-		089C96FF19C8642B0010C135 /* JMResourceViewerActionsView */ = {
-			isa = PBXGroup;
-			children = (
-				089C970019C8642B0010C135 /* JMResourceViewerActionsView.h */,
-				089C970119C8642B0010C135 /* JMResourceViewerActionsView.m */,
-			);
-			path = JMResourceViewerActionsView;
-			sourceTree = "<group>";
-		};
 		089CA29C19EE854300983C82 /* JMResourceInfoViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1219,6 +1211,15 @@
 				08B99F6D1A07CD7700E822B0 /* profiles.json */,
 			);
 			path = ServerProfiles;
+			sourceTree = "<group>";
+		};
+		08C3315D1A1A27DC0020CAEA /* JMMenuActionsView */ = {
+			isa = PBXGroup;
+			children = (
+				08C3315E1A1A27DC0020CAEA /* JMMenuActionsView.h */,
+				08C3315F1A1A27DC0020CAEA /* JMMenuActionsView.m */,
+			);
+			path = JMMenuActionsView;
 			sourceTree = "<group>";
 		};
 		08D108B319EFD28C003EC529 /* JMFavoritesListLoader */ = {
@@ -1272,7 +1273,6 @@
 		08DE67A019C05D8A00C25AEA /* ResourceViewer */ = {
 			isa = PBXGroup;
 			children = (
-				089C96FF19C8642B0010C135 /* JMResourceViewerActionsView */,
 				086B716119CB045200CC25CA /* JMSavedResourceViewerViewController */,
 				08DE67DB19C0659A00C25AEA /* JMDashboardsViewerViewController */,
 				08DE67A119C05D8A00C25AEA /* JMReportViewerViewController */,
@@ -1998,7 +1998,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n# Auto Increment Version Script\n# set CFBundleVersion to 1.0.1 first!!!\n# the perl regex splits out the last part of a build number (ie: 1.1.1) and increments it by one\n# if you have a build number that is more than 3 components, add a '\\.\\d+' into the first part of the regex.\n# Increment build number for release builds only!!!.\n\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\nbuildPlist=${INFOPLIST_FILE}\nnewVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.\\d+\\.)(\\d+)/$1.($2+1)/eg'`\n#echo $newVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $newVersion\" \"$buildPlist\"\nfi";
+			shellScript = "#!/bin/sh\n# Auto Increment Version Script\n# set CFBundleVersion to 1.0.1 first!!!\n# the perl regex splits out the last part of a build number (ie: 1.1.1) and increments it by one\n# if you have a build number that is more than 3 components, add a '\\.\\d+' into the first part of the regex.\n# Increment build number for release builds only!!!.\n\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\nbuildPlist=${INFOPLIST_FILE}\nappVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$buildPlist\"`\nbuildAppVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.\\d+)(\\.\\d+)/$1/eg'`\n\n\nif [ \"${appVersion}\" = \"${buildAppVersion}\" ]; then\nbuildVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.\\d+\\.)(\\d+)/($2+1)/eg'`\nelse\nbuildVersion=1\nfi\n\nnewBuildVersion=${appVersion}.${buildVersion}\necho $newBuildVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $newBuildVersion\" \"$buildPlist\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2050,7 +2050,6 @@
 				08E864101992564A007CF257 /* JSRESTBase+updateServerInfo.m in Sources */,
 				084F9DE219F544EA00E78C48 /* JMBooleanSettingsTableViewCell.m in Sources */,
 				08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */,
-				089C970219C8642B0010C135 /* JMResourceViewerActionsView.m in Sources */,
 				08E864171992564A007CF257 /* UIViewController+fetchInputControls.m in Sources */,
 				08DE67CC19C05D8B00C25AEA /* JMSingleSelectInputControlCell.m in Sources */,
 				08ECB0A819FFF30400DDBB33 /* JMReportViewer.m in Sources */,
@@ -2061,6 +2060,7 @@
 				08A7058119B488FE00C1B4C6 /* JMEditabledViewController.m in Sources */,
 				086B715619CAE9E600CC25CA /* JMSavedResources.m in Sources */,
 				08DE67C819C05D8B00C25AEA /* JMDateTimeInputControlCell.m in Sources */,
+				08C331601A1A27DC0020CAEA /* JMMenuActionsView.m in Sources */,
 				08FF13071992982F0082265D /* JMServersGridViewController.m in Sources */,
 				08E8640F1992564A007CF257 /* JMServerProfile+Helpers.m in Sources */,
 				08E864111992564A007CF257 /* UIAlertView+LocalizedAlert.m in Sources */,

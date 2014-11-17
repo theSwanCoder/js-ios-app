@@ -33,9 +33,9 @@
 
 #import <UIKit/UIKit.h>
 #import "JMResourceClientHolder.h"
-#import "JMResourceViewerActionsView.h"
+#import "JMMenuActionsView.h"
 
-@interface JMResourceViewerViewController : UIViewController <UIWebViewDelegate, JMResourceClientHolder, JMResourceViewerActionsViewDelegate>
+@interface JMResourceViewerViewController : UIViewController <UIWebViewDelegate, JMResourceClientHolder, JMMenuActionsViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -45,6 +45,6 @@
 
 - (void) runReportExecution;
 
-- (JMResourceViewerAction)availableAction;
+- (JMMenuActionsViewAction)availableAction;
 
 @end

@@ -21,11 +21,11 @@
  */
 
 
-#import "JMResourceViewerActionsView.h"
+#import "JMMenuActionsView.h"
 #import "UITableViewCell+Additions.h"
 #import "UIImage+Additions.h"
 
-@interface JMResourceViewerActionsView () <UITableViewDataSource, UITableViewDelegate>
+@interface JMMenuActionsView () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray *dataSource;
@@ -33,7 +33,7 @@
 @end
 
 
-@implementation JMResourceViewerActionsView
+@implementation JMMenuActionsView
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -51,7 +51,7 @@
     return self;
 }
 
-- (void)setAvailableActions:(JMResourceViewerAction)availableActions
+- (void)setAvailableActions:(JMMenuActionsViewAction)availableActions
 {
     _availableActions = availableActions;
     [self refreshDatasource];
@@ -60,7 +60,7 @@
 - (void) refreshDatasource
 {
     self.dataSource = [NSMutableArray array];
-    int i = JMResourceViewerActionFirst();
+    int i = JMMenuActionsViewActionFirst();
     while (i <= self.availableActions) {
         if (self.availableActions & i) {
             [self.dataSource addObject:@(i)];
@@ -101,7 +101,7 @@
         cell.selectedBackgroundView.layer.cornerRadius = 4.0f;
         cell.selectedBackgroundView.backgroundColor = [UIColor darkGrayColor];
     }
-    JMResourceViewerAction currentAction = [[self.dataSource objectAtIndex:indexPath.row] integerValue];
+    JMMenuActionsViewAction currentAction = [[self.dataSource objectAtIndex:indexPath.row] integerValue];
     cell.textLabel.text = JMCustomLocalizedString([self titleForAction:currentAction], nil);
     cell.imageView.image = [UIImage imageNamed:[self imageNameForAction:currentAction]];
     return cell;
@@ -121,55 +121,60 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     tableView.allowsSelection = NO;
-    JMResourceViewerAction selectedAction = [[self.dataSource objectAtIndex:indexPath.row] integerValue];
+    JMMenuActionsViewAction selectedAction = [[self.dataSource objectAtIndex:indexPath.row] integerValue];
     [self.delegate actionsView:self didSelectAction:selectedAction];
 }
 
-- (NSString *)titleForAction:(JMResourceViewerAction)action
+- (NSString *)titleForAction:(JMMenuActionsViewAction)action
 {
     switch (action) {
-        case JMResourceViewerAction_None:
+        case JMMenuActionsViewAction_None:
             return nil;
-        case JMResourceViewerAction_Filter:
+        case JMMenuActionsViewAction_Filter:
             return @"action.title.edit";
-        case JMResourceViewerAction_Refresh:
+        case JMMenuActionsViewAction_Refresh:
             return @"action.title.refresh";
-        case JMResourceViewerAction_Save:
+        case JMMenuActionsViewAction_Save:
             return @"action.title.save";
-        case JMResourceViewerAction_Delete:
+        case JMMenuActionsViewAction_Delete:
             return @"action.title.delete";
-        case JMResourceViewerAction_Rename:
+        case JMMenuActionsViewAction_Rename:
             return @"action.title.rename";
-        case JMResourceViewerAction_MakeFavorite:
+        case JMMenuActionsViewAction_MakeFavorite:
             return @"action.title.markasfavorite";
-        case JMResourceViewerAction_MakeUnFavorite:
+        case JMMenuActionsViewAction_MakeUnFavorite:
             return @"action.title.markasunfavorite";
-        case JMResourceViewerAction_Info:
+        case JMMenuActionsViewAction_Info:
             return @"action.title.info";
+        case JMMenuActionsViewAction_Sort:
+            return @"action.title.sort";
     }
 }
 
-- (NSString *)imageNameForAction:(JMResourceViewerAction)action
+- (NSString *)imageNameForAction:(JMMenuActionsViewAction)action
 {
     switch (action) {
-        case JMResourceViewerAction_None:
+        case JMMenuActionsViewAction_None:
             return nil;
-        case JMResourceViewerAction_Filter:
+        case JMMenuActionsViewAction_Filter:
             return @"filter_action";
-        case JMResourceViewerAction_Refresh:
+        case JMMenuActionsViewAction_Refresh:
             return @"refresh_action";
-        case JMResourceViewerAction_Save:
+        case JMMenuActionsViewAction_Save:
             return @"save_action";
-        case JMResourceViewerAction_Delete:
+        case JMMenuActionsViewAction_Delete:
             return @"delete_action";
-        case JMResourceViewerAction_Rename:
+        case JMMenuActionsViewAction_Rename:
             return @"edit_action";
-        case JMResourceViewerAction_MakeFavorite:
+        case JMMenuActionsViewAction_MakeFavorite:
             return @"make_favorite_item";
-        case JMResourceViewerAction_MakeUnFavorite:
+        case JMMenuActionsViewAction_MakeUnFavorite:
             return @"favorited_item";
-        case JMResourceViewerAction_Info:
+        case JMMenuActionsViewAction_Info:
             return @"info_item";
+        case JMMenuActionsViewAction_Sort:
+            return @"sort_action";
+
         }
 }
 @end

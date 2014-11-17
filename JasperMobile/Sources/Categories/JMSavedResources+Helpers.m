@@ -32,7 +32,7 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 + (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource
 {
-    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestField:@"uri" value:resource.uri];
+    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:resource.uri, @"uri", nil];
     return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
@@ -71,7 +71,7 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat
 {
-    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestField:@"label" value:reportName];
+    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:reportName, @"label", reportFormat, @"format", nil];
     JMSavedResources *savedReport = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
     
     return (![savedReport.format isEqualToString:reportFormat]);
@@ -133,7 +133,7 @@ NSString * const kJMSavedResources = @"SavedResources";
     return [JMUtils managedObjectContext];
 }
 
-+ (NSFetchRequest *)savedReportsFetchRequestField:(NSString *)fieldName value:(NSString *)value
++ (NSFetchRequest *)savedReportsFetchRequestWithValuesAndFields:(id)firstValue, ... NS_REQUIRES_NIL_TERMINATION
 {
     JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMSavedResources];
@@ -142,9 +142,16 @@ NSString * const kJMSavedResources = @"SavedResources";
     [predicates addObject:[NSPredicate predicateWithFormat:@"serverProfile == %@", activeServerProfile]];
     [predicates addObject:[NSPredicate predicateWithFormat:@"username == %@", activeServerProfile.username]];
     [predicates addObject:[NSPredicate predicateWithFormat:@"organization == %@", activeServerProfile.organization]];
-    NSString *queryFormat = [NSString stringWithFormat:@"%@ LIKE[cd] ", fieldName];
-    [predicates addObject:[NSPredicate predicateWithFormat:[queryFormat stringByAppendingString:@"%@"], value]];
-    
+
+    va_list args;
+    va_start(args, firstValue);
+    for (NSString *value = firstValue; value != nil; value = va_arg(args, NSString*)) {
+        NSString *queryFormat = [NSString stringWithFormat:@"%@ LIKE[cd] ", va_arg(args,NSString*)];
+        [predicates addObject:[NSPredicate predicateWithFormat:[queryFormat stringByAppendingString:@"%@"], value]];
+    }
+    va_end(args);
+
+
     fetchRequest.predicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
 
     return fetchRequest;
