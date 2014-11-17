@@ -205,6 +205,10 @@ static const CGFloat kDefaultStepValue = 1.0f;
             // now page is
             self.introPage = JMOnboardIntroPageStayConnected;
             [self setButtonTitle:@"Skip Intro"];
+
+            JMIntroModel *model = [self.modelManager modelAtIndex:0];
+            self.titlePageLabel.text = model.pageTitle;
+            self.descriptionPageLabel.text = model.pageDescription;
         }];
     } else if (self.introPage == JMOnboardIntroPageStayConnected) {
         [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
@@ -215,6 +219,10 @@ static const CGFloat kDefaultStepValue = 1.0f;
             // now page is
             self.introPage = JMOnboardIntroPageInstanceAccess;
             [self setButtonTitle:@"Skip Intro"];
+
+            JMIntroModel *model = [self.modelManager modelAtIndex:1];
+            self.titlePageLabel.text = model.pageTitle;
+            self.descriptionPageLabel.text = model.pageDescription;
         }];
     } else if (self.introPage == JMOnboardIntroPageInstanceAccess) {
         [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
@@ -225,6 +233,10 @@ static const CGFloat kDefaultStepValue = 1.0f;
             // now page is
             self.introPage = JMOnboardIntroPageSeemlessIntegration;
             [self setButtonTitle:@"Start using JasperMobile"];
+
+            JMIntroModel *model = [self.modelManager modelAtIndex:2];
+            self.titlePageLabel.text = model.pageTitle;
+            self.descriptionPageLabel.text = model.pageDescription;
         }];
     }
 }
@@ -355,6 +367,14 @@ static const CGFloat kDefaultStepValue = 1.0f;
             } completion:^(BOOL finished) {
                 self.welcomeView.hidden = YES;
                 self.messageView.hidden = NO;
+
+                // titles
+                JMIntroModel *model = [self.modelManager modelAtIndex:0];
+                self.titlePageLabel.text = model.pageTitle;
+                self.descriptionPageLabel.text = model.pageDescription;
+
+                [self setButtonTitle:@"Skip Intro"];
+
                 // now page is
                 self.introPage = JMOnboardIntroPageStayConnected;
             }];
@@ -394,7 +414,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
             CGPoint newOrigin = CGPointMake(newOriginX, newOriginY);
 
             CGFloat newHeight = homeScreenImageSize.height + kDefaultStepValue * (homeScreenImageSizeProportion);
-            CGFloat newWidth = homeScreenImageSize.width + kDefaultStepValue;
+            CGFloat newWidth = homeScreenImageSize.width + kDefaultStepValue - 0.5f;
             CGSize newSize = CGSizeMake(newWidth, newHeight);
             [self.homeScreenImage updateFrameWithOrigin:newOrigin
                                                    size:newSize];
@@ -425,8 +445,9 @@ static const CGFloat kDefaultStepValue = 1.0f;
                 CGFloat newOriginX = self.contentView.frame.size.width / 2 - homeScreenImageSize.width / 2;
                 CGFloat newOriginY = homeScreenImageOrigin.y + kDefaultStepValue;
                 CGPoint newOrigin = CGPointMake(newOriginX, newOriginY);
+
                 CGFloat newHeight = homeScreenImageSize.height - kDefaultStepValue * (homeScreenImageSizeProportion) - 1;
-                CGFloat newWidth = homeScreenImageSize.width - kDefaultStepValue;
+                CGFloat newWidth = homeScreenImageSize.width - kDefaultStepValue - 0.5f;
                 CGSize newSize = CGSizeMake(newWidth, newHeight);
                 [self.homeScreenImage updateFrameWithOrigin:newOrigin
                                                        size:newSize];
@@ -484,6 +505,12 @@ static const CGFloat kDefaultStepValue = 1.0f;
                 [self setupReportScreenIpadImageEndPosition];
                 [self setupReportScreenIphoneImageEndPosition];
             } completion:^(BOOL finished) {
+                // titles
+                JMIntroModel *model = [self.modelManager modelAtIndex:1];
+                self.titlePageLabel.text = model.pageTitle;
+                self.descriptionPageLabel.text = model.pageDescription;
+
+                [self setButtonTitle:@"Skip Intro"];
                 // now page is
                 self.introPage = JMOnboardIntroPageInstanceAccess;
             }];
@@ -580,6 +607,13 @@ static const CGFloat kDefaultStepValue = 1.0f;
                 [self setupReportScreenIphoneImageStartPosition];
                 [self setupHomeScreenImageStartPosition];
             } completion:^(BOOL finished) {
+                // titles
+                JMIntroModel *model = [self.modelManager modelAtIndex:0];
+                self.titlePageLabel.text = model.pageTitle;
+                self.descriptionPageLabel.text = model.pageDescription;
+
+                [self setButtonTitle:@"Skip Intro"];
+
                 self.introPage = JMOnboardIntroPageStayConnected;
             }];
         } else {
@@ -608,6 +642,12 @@ static const CGFloat kDefaultStepValue = 1.0f;
                 [self setupReportScreenIphoneImageStartPosition];
                 [self setupReportScreenIpadImageStartPosition];
             } completion:^(BOOL finished) {
+                // titles
+                JMIntroModel *model = [self.modelManager modelAtIndex:2];
+                self.titlePageLabel.text = model.pageTitle;
+                self.descriptionPageLabel.text = model.pageDescription;
+
+                [self setButtonTitle:@"Start using JasperMobile"];
                 // now page is
                 self.introPage = JMOnboardIntroPageSeemlessIntegration;
             }];
@@ -652,7 +692,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
                 CGPoint newOrigin = CGPointMake(newOriginX, newOriginY);
 
                 CGFloat newHeight = serverScreenImageSize.height - kDefaultStepValue * (serverScreenImageSize.height / serverScreenImageSize.width) - 1;
-                CGFloat newWidth = serverScreenImageSize.width - kDefaultStepValue;
+                CGFloat newWidth = serverScreenImageSize.width - kDefaultStepValue - 0.5f;
                 CGSize newSize = CGSizeMake(newWidth, newHeight);
                 [self.serverScreenImage updateFrameWithOrigin:newOrigin
                                                          size:newSize];
@@ -685,7 +725,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
             CGPoint newOrigin = CGPointMake(newOriginX, newOriginY);
 
             CGFloat newHeight = serverScreenImageSize.height + kDefaultStepValue * (serverScreenImageSize.height / serverScreenImageSize.width);
-            CGFloat newWidth = serverScreenImageSize.width + kDefaultStepValue;
+            CGFloat newWidth = serverScreenImageSize.width + kDefaultStepValue - 0.5f;
             CGSize newSize = CGSizeMake(newWidth, newHeight);
             [self.serverScreenImage updateFrameWithOrigin:newOrigin
                                                      size:newSize];
@@ -723,6 +763,12 @@ static const CGFloat kDefaultStepValue = 1.0f;
                 [self setupReportScreenIpadImageEndPosition];
                 [self setupReportScreenIphoneImageEndPosition];
             } completion:^(BOOL finished) {
+                // titles
+                JMIntroModel *model = [self.modelManager modelAtIndex:1];
+                self.titlePageLabel.text = model.pageTitle;
+                self.descriptionPageLabel.text = model.pageDescription;
+
+                [self setButtonTitle:@"Skip Intro"];
                 self.introPage = JMOnboardIntroPageInstanceAccess;
             }];
         } else {
