@@ -169,7 +169,7 @@
 "action.title.sort" = "Opciones de ordenación";
 
 
-"action.report.viewer.pagecount" = "de %d";
+"detail.report.viewer.pagecount" = "de %d";
 
 /* Error messages */
 

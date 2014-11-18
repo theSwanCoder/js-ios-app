@@ -47,4 +47,8 @@
 
 + (UIFont *)resourcesActivityTitleFont;
 
++ (UIFont *)menuItemTitleFont;
+
++ (UIFont *)menuItemDescriptionFont;
+
 @end

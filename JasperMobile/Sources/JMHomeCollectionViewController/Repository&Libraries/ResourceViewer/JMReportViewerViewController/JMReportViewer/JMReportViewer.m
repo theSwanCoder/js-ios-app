@@ -208,7 +208,7 @@ objection_requires(@"resourceClient", @"reportClient")
                 attachemntPreffix = nil;
             }
             [self.reportClient runExportExecution:self.requestId outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML pages:pagesString
-                               allowInlineScripts:NO attachmentsPrefix:attachemntPreffix delegate:requestDelegate];
+                                attachmentsPrefix:attachemntPreffix delegate:requestDelegate];
             [self.exportIdsDictionary setObject:@"" forKey:@(page)];
         }
     }

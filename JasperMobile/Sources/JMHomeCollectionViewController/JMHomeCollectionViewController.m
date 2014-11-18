@@ -30,15 +30,6 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMResourcesCollectionViewController.h"
 
-#import "ALToastView.h"
-
-// Localization keys defined as lowercase version of MenuItem identifier (e.g library, saveditems etc)
-static NSString * const kJMMenuItemLibrary = @"Library";
-static NSString * const kJMMenuItemSettings = @"Settings";
-static NSString * const kJMMenuItemRepository = @"Repository";
-static NSString * const kJMMenuItemSavedItems = @"SavedItems";
-static NSString * const kJMMenuItemFavorites = @"Favorites";
-
 static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 
 @interface JMHomeCollectionViewController ()
@@ -118,11 +109,7 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 {
     JMMenuItemCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kJMMenuItemIdentifier forIndexPath:indexPath];
     NSString *menuItem = [[self.menuItems objectAtIndex:indexPath.row] lowercaseString];
-    cell.coloredView.backgroundColor = [menuItem isEqualToString:[kJMMenuItemSettings lowercaseString]] ? kJMMasterResourceCellSelectedBackgroundColor : kJMResourcePreviewBackgroundColor;
-    cell.imageView.image = [UIImage imageNamed:menuItem];
-    cell.label.text = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.label", menuItem], nil);
-    cell.desc.text = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.description", menuItem], nil);
-    
+    cell.menuItem = menuItem;
     return cell;
 }
 

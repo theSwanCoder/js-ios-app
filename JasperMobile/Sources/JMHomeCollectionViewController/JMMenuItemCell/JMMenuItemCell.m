@@ -23,6 +23,52 @@
 
 #import "JMMenuItemCell.h"
 
+// Localization keys defined as lowercase version of MenuItem identifier (e.g library, saveditems etc)
+NSString * const kJMMenuItemLibrary = @"Library";
+NSString * const kJMMenuItemSettings = @"Settings";
+NSString * const kJMMenuItemRepository = @"Repository";
+NSString * const kJMMenuItemSavedItems = @"SavedItems";
+NSString * const kJMMenuItemFavorites = @"Favorites";
+
+@interface JMMenuItemCell()
+@property (nonatomic, weak) IBOutlet UITextView *titleView;
+@property (nonatomic, weak) IBOutlet UIImageView *imageView;
+@property (nonatomic, weak) IBOutlet UIView *coloredView;
+
+@end
+
 @implementation JMMenuItemCell
+
+-(void)setMenuItem:(NSString *)menuItem
+{
+    _menuItem = menuItem;
+    self.coloredView.backgroundColor = [menuItem isEqualToString:[kJMMenuItemSettings lowercaseString]] ? kJMMasterResourceCellSelectedBackgroundColor : kJMResourcePreviewBackgroundColor;
+    self.imageView.image = [UIImage imageNamed:menuItem];
+    NSString *titleString = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.label", menuItem], nil);
+    NSMutableAttributedString *titleAttributedString = [[NSMutableAttributedString alloc] initWithString:titleString attributes:self.titleAttributes];
+    if (![JMUtils isIphone]) {
+        NSString *descriptionString = [NSString stringWithFormat:@"\n%@",JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.description", menuItem], nil)];
+        [titleAttributedString appendAttributedString:[[NSAttributedString alloc] initWithString:descriptionString attributes:self.descriptionAttributes]];
+    }
+    self.titleView.attributedText = titleAttributedString;
+    CGSize textSize = [titleAttributedString boundingRectWithSize:self.titleView.bounds.size
+                                                          options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
+                                                          context:nil].size;
+    int verticalInset = (self.titleView.frame.size.height - textSize.height) / 2;
+    
+    if (verticalInset > self.titleView.textContainerInset.top) {
+        self.titleView.textContainerInset = UIEdgeInsetsMake(verticalInset, 0, verticalInset, 0);
+    }
+}
+
+- (NSDictionary *)titleAttributes
+{
+    return @{NSForegroundColorAttributeName:[UIColor darkGrayColor], NSFontAttributeName:[JMFont menuItemTitleFont]};
+}
+
+- (NSDictionary *)descriptionAttributes
+{
+    return @{NSForegroundColorAttributeName:[UIColor lightGrayColor], NSFontAttributeName:[JMFont menuItemDescriptionFont]};
+}
 
 @end

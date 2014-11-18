@@ -169,7 +169,7 @@
 "action.title.sort" = "ソート オプション";
 
 
-"action.report.viewer.pagecount" = "/%d";
+"detail.report.viewer.pagecount" = "/%d";
 
 /* Error messages */
 

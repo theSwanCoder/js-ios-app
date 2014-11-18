@@ -149,6 +149,10 @@
 "detail.report.viewer.emptyreport.title" = "Report is empty";
 "detail.report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options or tap 'Cancel' for returning to old report.";
 
+"detail.report.viewer.pagecount" = "of %d";
+"detail.dashboard.viewer.not.supported" = "Such dashboard's type is not supported now";
+
+
 "resource.label.title" = "Name";
 "resource.description.title" = "Description";
 "resource.type.title" = "Type";
@@ -167,8 +171,6 @@
 "action.title.markasunfavorite" = "Remove From Favorites";
 "action.title.info" = "Info";
 "action.title.sort" = "Sort Options";
-
-"action.report.viewer.pagecount" = "of %d";
 
 /* Error messages */
 

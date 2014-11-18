@@ -51,13 +51,13 @@
                                                 </imageView>
                                             </subviews>
                                         </view>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Saved items" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Uly-YQ-LLF">
-                                            <rect key="frame" x="10" y="110" width="120" height="20"/>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Menu item title" selectable="NO" id="PYw-ZI-Pp6">
+                                            <rect key="frame" x="10" y="100" width="120" height="30"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
+                                        </textView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
@@ -65,7 +65,7 @@
                                 <connections>
                                     <outlet property="coloredView" destination="PuF-vk-BF6" id="nsQ-Zb-c7J"/>
                                     <outlet property="imageView" destination="LXA-dk-Osa" id="oro-0p-qN0"/>
-                                    <outlet property="label" destination="Uly-YQ-LLF" id="N6K-4s-iWi"/>
+                                    <outlet property="titleView" destination="PYw-ZI-Pp6" id="18J-Wt-eO2"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>

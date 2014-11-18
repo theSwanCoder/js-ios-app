@@ -169,7 +169,7 @@
 "action.title.sort" = "排序选项";
 
 
-"action.report.viewer.pagecount" = "/%d";
+"detail.report.viewer.pagecount" = "/%d";
 
 /* Error messages */
 

@@ -29,6 +29,8 @@
 #import "UIViewController+FetchInputControls.h"
 #import "JMSaveReportViewController.h"
 
+#import "JMResourcesCollectionViewController.h"
+
 @interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, JMReportViewerDelegate>
 @property (nonatomic, strong) JMReportViewer *reportViewer;
 
@@ -101,7 +103,14 @@
 #pragma mark - Actions
 - (void) backButtonTapped:(id) sender
 {
-    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
+    NSInteger currentIndex = [self.navigationController.viewControllers indexOfObject:self];
+    for (NSInteger i = currentIndex; i > 0; --i) {
+        UIViewController *controller = [self.navigationController.viewControllers objectAtIndex:i];
+        if ([controller isKindOfClass:[JMResourcesCollectionViewController class]]) {
+            [self.navigationController popToViewController:controller animated:YES];
+            break;
+        }
+    }
 }
 
 - (void) addBackButton

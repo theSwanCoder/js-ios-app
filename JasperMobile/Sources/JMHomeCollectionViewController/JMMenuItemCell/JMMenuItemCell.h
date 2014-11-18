@@ -32,12 +32,13 @@
  */
 
 #import <UIKit/UIKit.h>
+extern NSString * const kJMMenuItemLibrary;
+extern NSString * const kJMMenuItemSettings;
+extern NSString * const kJMMenuItemRepository;
+extern NSString * const kJMMenuItemSavedItems;
+extern NSString * const kJMMenuItemFavorites;
 
 @interface JMMenuItemCell : UICollectionViewCell
 
-@property (nonatomic, weak) IBOutlet UILabel *label;
-@property (nonatomic, weak) IBOutlet UILabel *desc;
-@property (nonatomic, weak) IBOutlet UIImageView *imageView;
-@property (nonatomic, weak) IBOutlet UIView *coloredView;
-
+@property (nonatomic, strong) NSString *menuItem;
 @end
