@@ -19,7 +19,6 @@ typedef NS_ENUM(NSInteger, JMOnboardIntroPage) {
 };
 
 static const CGFloat kDefaultAnimationDuration = 0.4f;
-static const CGFloat kTitleViewMinHeight = 150.0f;
 static const CGFloat kDefaultStepValue = 1.0f;
 
 @interface JMOnboardIntroViewController ()
@@ -27,6 +26,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *welcomeView;
 @property (weak, nonatomic) IBOutlet UIView *messageView;
+@property (weak, nonatomic) IBOutlet UIView *bottomView;
 @property (weak, nonatomic) IBOutlet UIImageView *homeScreenImage;
 @property (weak, nonatomic) IBOutlet UIImageView *reportScreenIphoneImage;
 @property (weak, nonatomic) IBOutlet UIImageView *reportScreenIpadImage;
@@ -64,6 +64,11 @@ static const CGFloat kDefaultStepValue = 1.0f;
 
     [self setButtonTitle:@"Skip Intro"];
 
+    UIImage *homeScreenImage = [UIImage imageNamed:@"home_screen"];
+    self.homeScreenImage.image = homeScreenImage;
+    UIImage *serversScreenImage = [UIImage imageNamed:@"server_screen"];
+    self.serverScreenImage.image = serversScreenImage;
+
     [self setupTitleViewStartPosition];
     [self setupContentViewStartPosition];
 
@@ -90,58 +95,80 @@ static const CGFloat kDefaultStepValue = 1.0f;
 
 #pragma mark - Setup
 - (void)setupTitleViewStartPosition {
-    self.titleView.frame = CGRectMake(0, 0, 320, 290);
+    CGFloat newHeight = CGRectGetHeight(self.welcomeView.frame);
+    [self.titleView updateHeightWithValue:newHeight];
 }
 
 - (void)setupTitleViewEndPosition {
-    [self.titleView updateHeightWithValue:kTitleViewMinHeight];
+    CGFloat newHeight = CGRectGetHeight(self.messageView.frame);
+    [self.titleView updateHeightWithValue:newHeight];
 }
 
 - (void)setupContentViewStartPosition {
-    self.contentView.frame = CGRectMake(0, 290, 320, 480);
+    CGFloat contentViewStartHeight;
+    if ([JMUtils isIphone]) {
+        contentViewStartHeight = 290;
+    } else {
+        contentViewStartHeight = 610;
+    }
+    [self.contentView updateOriginYWithValue:contentViewStartHeight];
 }
 
 - (void)setupContentViewEndPosition {
-    [self.contentView updateOriginWithOrigin:CGPointMake(0, self.titleView.frame.size.height)];
+    CGFloat titleViewHeight = CGRectGetHeight(self.titleView.frame);
+    [self.contentView updateOriginWithOrigin:CGPointMake(0, titleViewHeight)];
 }
 
 - (void)setupHomeScreenImageStartPosition {
     CGFloat homeScreenTopPadding = 10;
 
-    CGFloat homeScreenImageWidth = 282;
-    CGFloat homeScreenImageHeight = 470;
-    CGFloat newOriginX = self.view.bounds.size.width/2 - homeScreenImageWidth/2;
+    UIImage *homeScreenImage = self.homeScreenImage.image;
+    CGFloat homeScreenImageWidth = homeScreenImage.size.width;
+    CGFloat homeScreenImageHeight = homeScreenImage.size.height;
+
+    CGFloat mainViewWidth = CGRectGetWidth(self.view.bounds);
+    CGFloat newOriginX = mainViewWidth/2 - homeScreenImageWidth/2;
     CGFloat newOriginY = homeScreenTopPadding;
     [self.homeScreenImage updateFrameWithOrigin:CGPointMake(newOriginX, newOriginY)
                                            size:CGSizeMake(homeScreenImageWidth, homeScreenImageHeight)];
 }
 
 - (void)setupHomeScreenImageSmallSizeOutScreen {
-    CGFloat bottomViewHeight = 50;
-    CGFloat homeScreenImageWidth = 282;
-    CGFloat homeScreenImageHeight = 470;
-    CGFloat newOriginX = self.contentView.frame.size.width/2 - homeScreenImageWidth/(2*5.0f);
-    CGFloat newOriginY = self.view.bounds.size.height - kTitleViewMinHeight - bottomViewHeight;
+    CGFloat titleViewEndPositionHeight = CGRectGetHeight(self.messageView.frame);
+    CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
+
+    UIImage *homeScreenImage = self.homeScreenImage.image;
+    CGFloat homeScreenImageWidth = homeScreenImage.size.width;
+    CGFloat homeScreenImageHeight = homeScreenImage.size.height;
+
+    CGFloat contentViewWidth = CGRectGetWidth(self.contentView.frame);
+    CGFloat mainViewHeight = CGRectGetHeight(self.view.bounds);
+    CGFloat newOriginX = contentViewWidth/2 - homeScreenImageWidth/(2*5.0f);
+    CGFloat newOriginY = mainViewHeight - titleViewEndPositionHeight - bottomViewHeight;
     [self.homeScreenImage updateFrameWithOrigin:CGPointMake(newOriginX, newOriginY)
                                            size:CGSizeMake(homeScreenImageWidth/5.0f, homeScreenImageHeight/5.0f)];
 }
 
 - (void)setupReportScreenIpadImageStartPosition {
-    CGFloat bottomViewHeight = 50;
-    CGFloat newOriginX = -self.reportScreenIpadImage.frame.size.width;
+    CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
+    CGFloat reportScreenIpadImageWidth = CGRectGetWidth(self.reportScreenIpadImage.frame);
+    CGFloat newOriginX = -reportScreenIpadImageWidth;
     CGFloat newOriginY = bottomViewHeight;
     [self.reportScreenIpadImage updateOriginWithOrigin:CGPointMake(newOriginX, newOriginY)];
 }
 
 - (void)setupReportScreenIpadImageEndPosition {
-    CGFloat bottomViewHeight = 50;
-    CGFloat newOriginX = self.contentView.frame.size.width/2 - self.reportScreenIpadImage.frame.size.width/2;
+    CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
+    CGFloat contentViewWidth = CGRectGetWidth(self.contentView.frame);
+    CGFloat reportScreenIpadImageWidth = CGRectGetWidth(self.reportScreenIpadImage.frame);
+    CGFloat newOriginX = contentViewWidth/2 - reportScreenIpadImageWidth/2;
     CGFloat newOriginY = bottomViewHeight;
     [self.reportScreenIpadImage updateOriginWithOrigin:CGPointMake(newOriginX, newOriginY)];
 }
 
 - (void)setupReportScreenIphoneImageStartPosition {
-    CGFloat newOriginX = self.contentView.frame.size.width;
+    CGFloat contentViewWidth = CGRectGetWidth(self.contentView.frame);
+    CGFloat newOriginX = contentViewWidth;
     CGFloat newOriginY = 170;
     [self.reportScreenIphoneImage updateOriginWithOrigin:CGPointMake(newOriginX, newOriginY)];
 }
@@ -153,20 +180,24 @@ static const CGFloat kDefaultStepValue = 1.0f;
 }
 
 - (void)setupServerScreenImageStartPosition {
-    CGFloat bottomViewHeight = 50;
-    CGFloat serverScreenImageWidth = 282;
-    CGFloat serverScreenImageHeight = 470;
+    CGFloat titleViewEndPositionHeight = CGRectGetHeight(self.messageView.frame);
+    CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
+
+    UIImage *serverScreenImage = self.serverScreenImage.image;
+    CGFloat serverScreenImageWidth = serverScreenImage.size.width;
+    CGFloat serverScreenImageHeight = serverScreenImage.size.height;
 
     CGFloat newOriginX = self.view.bounds.size.width/2 - serverScreenImageWidth/(2*5.0f);
-    CGFloat newOriginY = self.view.bounds.size.height - kTitleViewMinHeight - bottomViewHeight;
+    CGFloat newOriginY = self.view.bounds.size.height - titleViewEndPositionHeight - bottomViewHeight;
     [self.serverScreenImage updateFrameWithOrigin:CGPointMake(newOriginX, newOriginY)
                                              size:CGSizeMake(serverScreenImageWidth/5.0f, serverScreenImageHeight/5.0f)];
 }
 
 - (void)setupServerScreenImageFullSizePosition {
     CGFloat serverScreenImageTopPadding = 10;
-    CGFloat serverScreenImageWidth = 282;
-    CGFloat serverScreenImageHeight = 470;
+    UIImage *serverScreenImage = self.serverScreenImage.image;
+    CGFloat serverScreenImageWidth = serverScreenImage.size.width;
+    CGFloat serverScreenImageHeight = serverScreenImage.size.height;
 
     CGFloat newOriginX = self.view.bounds.size.width/2 - serverScreenImageWidth/2;
     CGFloat newOriginY = serverScreenImageTopPadding;
