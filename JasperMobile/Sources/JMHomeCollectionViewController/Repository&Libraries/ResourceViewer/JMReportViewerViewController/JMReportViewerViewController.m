@@ -59,14 +59,6 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
-        [self.toolbar removeFromSuperview];
-    }
-    [super viewWillDisappear:animated];
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     [super prepareForSegue:segue sender:sender];
@@ -107,6 +99,7 @@
     for (NSInteger i = currentIndex; i > 0; --i) {
         UIViewController *controller = [self.navigationController.viewControllers objectAtIndex:i];
         if ([controller isKindOfClass:[JMResourcesCollectionViewController class]]) {
+            [self.toolbar removeFromSuperview];
             [self.navigationController popToViewController:controller animated:YES];
             break;
         }
@@ -115,15 +108,13 @@
 
 - (void) addBackButton
 {
-    if (self.reportViewer.inputControls && [self.reportViewer.inputControls count]) {
-        NSString *title = [[self.navigationController.viewControllers objectAtIndex:1] title];
-        UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
-        UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
-        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTapped:)];
-        [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-        
-        self.navigationItem.leftBarButtonItem = backItem;
-    }
+    NSString *title = [[self.navigationController.viewControllers objectAtIndex:1] title];
+    UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
+    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTapped:)];
+    [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    
+    self.navigationItem.leftBarButtonItem = backItem;
 }
 
 - (void) runReportExecution
@@ -148,7 +139,10 @@
         _toolbar.currentPage = self.reportViewer.currentPage;
         _toolbar.countOfPages = self.reportViewer.countOfPages;
         _toolbar.frame = self.navigationController.toolbar.bounds;
+        NSLog(@"\n\n%@", self.navigationController.toolbar.subviews);
+
         [self.navigationController.toolbar addSubview: _toolbar];
+        
     }
     return _toolbar;
 }

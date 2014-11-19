@@ -188,7 +188,7 @@
 "error.upgrade.data.msg" = "Um erro ocorreu ao atualizar os dados de usuário (servidores, Favoritos, Valores de filtro e Configurações), durante o processo de atualização. Pressione: \nRepetir - para executar novamente a atualização de dados                                                                                                                                                                                                                                                          Aplicar - para ignorar o erro e continuar com a atualização, você pode PERDER todos os dados do usuário \nCancelar - para cancelar a atualização (isso manterá a versão atual)";
 
 "error.server.notsupported.title" = "Versão do servidor ou URL errado";
-"error.server.notsupported.msg" = "A versão do servidor é mais antiga que 5.0 (não compatível) ou o URL está incorreto";
+"error.server.notsupported.msg" = "A versão do servidor é mais antiga que 5.5 (não compatível) ou o URL está incorreto";
 
 /* HTTP error messages */
 

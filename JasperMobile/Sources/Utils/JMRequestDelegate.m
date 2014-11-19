@@ -138,11 +138,11 @@ __weak static UIViewController *viewControllerToDismiss;
             NSString *title;
             NSString *message;
             
-            if (result.statusCode != 0) {
+            if (result.statusCode) {
                 title = @"error.readingresponse.dialog.msg";
                 message = [NSString stringWithFormat:@"error.http.%li", (long)result.statusCode];
             } else {
-                switch (result.statusCode) {
+                switch (result.error.code) {
                     case NSURLErrorUserCancelledAuthentication:
                     case NSURLErrorUserAuthenticationRequired:
                         title = @"error.authenication.dialog.title";
@@ -159,7 +159,7 @@ __weak static UIViewController *viewControllerToDismiss;
                         message = @"error.noconnection.dialog.msg";
                 }
             }
-            
+        
             [[UIAlertView localizedAlertWithTitle:title
                                           message:message
                                          delegate:JMRequestDelegate.class

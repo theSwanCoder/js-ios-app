@@ -188,7 +188,7 @@
 "error.upgrade.data.msg" = "Beim Aktualisieren der Benutzerdaten (Server, Favoriten, Filterwerte und -einstellungen) im Rahmen des Upgrades ist ein Fehler aufgetreten. Drücken Sie:\n'Wiederholen', um die Datenaktualisierung erneut durchzuführen,\n'Anwenden', um den Fehler zu ignorieren und das Upgrade fortzusetzen, wobei u. U. alle Benutzerdaten VERLOREN GEHEN,\n'Abbrechen', um das Upgrade abzubrechen (wobei die aktuelle Version bestehen bleibt).";
 
 "error.server.notsupported.title" = "Falsche Serverversion oder URL";
-"error.server.notsupported.msg" = "Die Serverversion ist älter als 5.0 (nicht unterstützt), oder die URL ist falsch.";
+"error.server.notsupported.msg" = "Die Serverversion ist älter als 5.5 (nicht unterstützt), oder die URL ist falsch.";
 
 /* HTTP error messages */
 

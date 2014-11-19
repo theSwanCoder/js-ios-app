@@ -276,7 +276,7 @@ static NSString * const kJMProductName = @"JasperMobile";
         [self.managedObjectContext save:nil];
         [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:serverProfile.profileID];
     }
-    [serverProfile setServerProfileIsActive:YES];
+//    [serverProfile setServerProfileIsActive:YES];
 }
 
 - (void)changeServerProfile:(NSNotification *)notification

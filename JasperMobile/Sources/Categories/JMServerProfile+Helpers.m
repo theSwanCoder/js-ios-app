@@ -84,7 +84,10 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
     
     JMServerProfile *serverProfile = (JMServerProfile *) [self.managedObjectContext existingObjectWithID:activeServerID error:nil];
     if (serverProfile) {
-        [serverProfile setPasswordAsPrimitive:[JMServerProfile passwordFromKeychain:serverProfile.profileID]];
+        NSString *passwordString = [JMServerProfile passwordFromKeychain:serverProfile.profileID];
+        if (passwordString) {
+            [serverProfile setPasswordAsPrimitive:passwordString];
+        }
     }
     
     return serverProfile;

@@ -188,7 +188,7 @@
 "error.upgrade.data.msg" = "在升级过程中出现用户数据（服务器、收藏夹、过滤器值和设置）更新错误。请按: \n重试 - 再次重新执行数据更新\n应用 - 忽略错误并继续升级，您可能“丢失”所有用户数据\n取消 - 取消升级（这将保留当前版本）";
 
 "error.server.notsupported.title" = "服务器版本或 URL 错误";
-"error.server.notsupported.msg" = "服务器版本低于 5.0（不受支持）或 URL 不正确";
+"error.server.notsupported.msg" = "服务器版本低于 5.5（不受支持）或 URL 不正确";
 
 /* HTTP error messages */
 

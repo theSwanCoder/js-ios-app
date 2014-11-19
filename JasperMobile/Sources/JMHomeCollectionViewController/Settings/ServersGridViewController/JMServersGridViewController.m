@@ -73,10 +73,6 @@ objection_requires(@"managedObjectContext")
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
     self.servers = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
-    
-    for (JMServerProfile *serverProfile in self.servers) {
-        [serverProfile setPasswordAsPrimitive:[JMServerProfile passwordFromKeychain:serverProfile.profileID]];
-    }
     [self.collectionView reloadData];
 }
 
