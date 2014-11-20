@@ -41,9 +41,9 @@
 
 - (void)updateWithParameters:(NSArray *)parameters
 {
-    [self updateDisplayingOfErrorMessage:nil];
-
     [self updateValueLabelWithParameters:parameters];
+    [self updateDisplayingOfErrorMessage];
+
     [self.delegate updatedInputControlsValuesWithDescriptor:self.inputControlDescriptor];
 }
 
@@ -84,5 +84,6 @@
         self.inputControlDescriptor.state.value = nil;
         self.valueLabel.text = JS_IC_NOTHING_SUBSTITUTE_LABEL;
     }
+    [self updateDisplayingOfErrorMessage];
 }
 @end

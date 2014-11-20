@@ -95,6 +95,7 @@
 #pragma mark - Actions
 - (void) backButtonTapped:(id) sender
 {
+    [self.view endEditing:YES];
     NSInteger currentIndex = [self.navigationController.viewControllers indexOfObject:self];
     for (NSInteger i = currentIndex; i > 0; --i) {
         UIViewController *controller = [self.navigationController.viewControllers objectAtIndex:i];

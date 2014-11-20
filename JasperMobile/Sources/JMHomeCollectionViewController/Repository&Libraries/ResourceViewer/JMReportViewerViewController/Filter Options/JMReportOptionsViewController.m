@@ -81,11 +81,9 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (void)runReport
 {
     BOOL allDataIsValid = YES;
-    for (int i = 0; i < [self.inputControls count]; i++) {
-        JSInputControlDescriptor *descriptor = [self.inputControls objectAtIndex:i];
-        if (descriptor.validationRules.mandatoryValidationRule && descriptor.state.value == nil) {
-            JMInputControlCell *cell = (JMInputControlCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-            [cell updateDisplayingOfErrorMessage: descriptor.validationRules.mandatoryValidationRule.errorMessage];
+    for (int i = 0; i < [self.tableView numberOfRowsInSection:0]; i++) {
+        JMInputControlCell *cell = (JMInputControlCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        if (![cell isValidData]) {
             allDataIsValid = NO;
         }
     }
@@ -116,11 +114,6 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 }
 
 #pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
