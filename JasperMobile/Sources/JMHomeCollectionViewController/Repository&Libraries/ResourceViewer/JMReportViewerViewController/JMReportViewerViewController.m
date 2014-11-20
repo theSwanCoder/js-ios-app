@@ -34,7 +34,7 @@
 @interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, JMReportViewerDelegate>
 @property (nonatomic, strong) JMReportViewer *reportViewer;
 
-@property (nonatomic, weak) JMReportViewerToolBar *toolbar;
+@property (nonatomic, strong) JMReportViewerToolBar *toolbar;
 
 @end
 
@@ -140,10 +140,7 @@
         _toolbar.currentPage = self.reportViewer.currentPage;
         _toolbar.countOfPages = self.reportViewer.countOfPages;
         _toolbar.frame = self.navigationController.toolbar.bounds;
-        NSLog(@"\n\n%@", self.navigationController.toolbar.subviews);
-
         [self.navigationController.toolbar addSubview: _toolbar];
-        
     }
     return _toolbar;
 }
