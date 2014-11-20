@@ -42,4 +42,18 @@
     
     self.titleImage.backgroundColor = [serverProfile serverProfileIsActive] ? kJMResourcePreviewBackgroundColor : kJMMasterResourceCellSelectedBackgroundColor;
 }
+
+- (void) cloneServerProfile:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(cloneServerProfileForCell:)]) {
+        [self.delegate cloneServerProfileForCell:self];
+    }
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    if (action == @selector(cloneServerProfile:)) {
+        return YES;
+    }
+    return NO;
+}
 @end

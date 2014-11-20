@@ -111,4 +111,10 @@
  */
 + (float) minSupportedServerVersion;
 
+/**
+ Create clone for server profile.
+ 
+ @param serverProfile for clonning
+ */
++ (void) cloneServerProfile:(JMServerProfile *)serverProfile;
 @end

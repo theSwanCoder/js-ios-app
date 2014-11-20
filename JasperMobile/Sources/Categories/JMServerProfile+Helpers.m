@@ -126,6 +126,24 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
     return [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_5_0;
 }
 
++ (void) cloneServerProfile:(JMServerProfile *)serverProfile
+{
+    NSString *entityName = [[serverProfile entity] name];
+    
+    //create new object in data store
+    JMServerProfile *newServerProfile = [NSEntityDescription
+                                         insertNewObjectForEntityForName:entityName
+                                         inManagedObjectContext:[self managedObjectContext]];
+    
+    newServerProfile.alias          = [NSString stringWithFormat:JMCustomLocalizedString(@"servers.action.cloned.profile.prefix", nil), serverProfile.alias];
+    newServerProfile.askPassword    = serverProfile.askPassword;
+    newServerProfile.organization   = serverProfile.organization;
+    newServerProfile.password       = serverProfile.password;
+    newServerProfile.serverUrl      = serverProfile.serverUrl;
+    newServerProfile.username       = serverProfile.username;
+    [[self managedObjectContext] save:nil];
+}
+
 #pragma mark - Private
 
 + (NSManagedObjectContext *)managedObjectContext

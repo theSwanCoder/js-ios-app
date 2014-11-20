@@ -58,6 +58,10 @@
 "servers.gridview.activeserver.label" = "Active";
 "servers.button.makeactive" = "Make Active";
 
+"servers.action.clone.profile" = "Clone Profile";
+"servers.action.cloned.profile.prefix" = "Cloned - %@";
+
+
 /* Report Saver view */
 "savereport.title" = "Save Report";
 "savereport.name" = "Report Name";

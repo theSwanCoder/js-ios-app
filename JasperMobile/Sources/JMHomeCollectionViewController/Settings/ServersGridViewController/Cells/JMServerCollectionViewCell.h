@@ -34,6 +34,17 @@
 #import <UIKit/UIKit.h>
 #import "JMServerProfile.h"
 
+@class JMServerCollectionViewCell;
+
+@protocol JMServerCollectionViewCellDelegate <NSObject>
+@optional
+- (void)cloneServerProfileForCell:(JMServerCollectionViewCell *)cell;
+
+@end
+
 @interface JMServerCollectionViewCell : UICollectionViewCell
 @property (nonatomic, strong) JMServerProfile *serverProfile;
+@property (nonatomic, weak) id <JMServerCollectionViewCellDelegate> delegate;
+
+
 @end
