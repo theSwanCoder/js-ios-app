@@ -48,6 +48,12 @@
     self.currentPageField.inputAccessoryView = [self pickerToolbar];
 }
 
+- (void)dealloc
+{
+    self.pickerView.delegate = nil;
+    self.pickerView.dataSource = nil;
+}
+
 #pragma mark - Properties
 
 - (void)setCountOfPages:(NSInteger)countOfPages
