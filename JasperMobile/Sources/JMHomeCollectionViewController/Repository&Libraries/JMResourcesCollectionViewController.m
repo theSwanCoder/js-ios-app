@@ -264,12 +264,13 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 {
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_None;
     switch (self.presentingType) {
-        case JMResourcesCollectionViewControllerPresentingType_Library:{
-            if([self.resourceListLoader.resourceClient.serverInfo.edition isEqualToString:self.resourceListLoader.constants.SERVER_EDITION_PRO]) {
+        case JMResourcesCollectionViewControllerPresentingType_Library:
+        case JMResourcesCollectionViewControllerPresentingType_Favorites:
+        case JMResourcesCollectionViewControllerPresentingType_SavedItems:{
+            if((self.presentingType != JMResourcesCollectionViewControllerPresentingType_Library) ||
+               (self.presentingType == JMResourcesCollectionViewControllerPresentingType_Library && [self.resourceListLoader.resourceClient.serverInfo.edition isEqualToString:self.resourceListLoader.constants.SERVER_EDITION_PRO])) {
                 availableAction |= JMMenuActionsViewAction_Filter;
             }
-        }
-        case JMResourcesCollectionViewControllerPresentingType_SavedItems:{
             availableAction |= JMMenuActionsViewAction_Sort;
             break;
         }

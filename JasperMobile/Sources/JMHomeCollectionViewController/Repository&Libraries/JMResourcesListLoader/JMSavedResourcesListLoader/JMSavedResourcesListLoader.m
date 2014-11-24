@@ -103,6 +103,9 @@
             return [super listItemsWithOption:option];
         case JMResourcesListLoaderOption_Filter: {
             NSMutableArray *filterItems = [NSMutableArray array];
+            [filterItems addObject:@{kJMResourceListLoaderOptionItemTitleKey : JMCustomLocalizedString(@"master.resources.type.all", nil),
+                                     kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
+
             for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
                 [filterItems addObject:
                  @{kJMResourceListLoaderOptionItemTitleKey: [format uppercaseString],

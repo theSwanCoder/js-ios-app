@@ -23,13 +23,15 @@
 
 #import "JMResourceCollectionViewCell.h"
 #import "JMSavedResources+Helpers.h"
+#import "JMLoadingImageView.h"
+#import "JMServerProfile+Helpers.h"
 
 NSString * kJMHorizontalResourceCell = @"JMHorizontalResourceCollectionViewCell";
 NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 
 
 @interface JMResourceCollectionViewCell()
-@property (nonatomic, weak) IBOutlet UIImageView *resourceImage;
+@property (nonatomic, weak) IBOutlet JMLoadingImageView *resourceImage;
 @property (nonatomic, weak) IBOutlet UILabel *resourceName;
 @property (nonatomic, weak) IBOutlet UILabel *resourceDescription;
 @property (nonatomic, weak) IBOutlet UIButton *infoButton;
@@ -50,7 +52,6 @@ objection_requires(@"constants")
     
     [[JSObjection defaultInjector] injectDependencies:self];
 
-    self.resourceImage.backgroundColor = kJMResourcePreviewBackgroundColor;
     self.infoButton.tintColor = [UIColor colorFromHexString:@"#909090"];
 }
 
@@ -78,9 +79,15 @@ objection_requires(@"constants")
         resourceImage = [UIImage imageNamed:@"res_type_folder"];
     }
     
-    BOOL shouldCenterImage = ((resourceImage.size.height < self.resourceImage.frame.size.height) || (resourceImage.size.width < self.resourceImage.frame.size.width));
-    self.resourceImage.contentMode = shouldCenterImage ? UIViewContentModeCenter : UIViewContentModeScaleAspectFit;
     self.resourceImage.image = resourceImage;
+    self.resourceImage.backgroundColor = kJMResourcePreviewBackgroundColor;
+
+    // TO DO: Should be fixed! need replace url generation to SDK!
+    JSObjectionInjector *injector = [JSObjection defaultInjector];
+    JSRESTResource *resourceClient = [injector getObject:[JSRESTResource class]];
+    if (resourceClient.serverInfo.versionAsFloat >= self.constants.SERVER_VERSION_CODE_AMBER_6_0_0) {
+        self.resourceImage.imageUrl = [NSString stringWithFormat:@"%@%@/thumbnails%@?defaultAllowed=false", [JMServerProfile activeServerProfile].serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, resourceLookup.uri];
+    }
 }
 
 - (IBAction)infoButtonDidTapped:(id)sender

@@ -51,6 +51,10 @@
 		08B99F6E1A07CD7700E822B0 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
 		08C331601A1A27DC0020CAEA /* JMMenuActionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C3315F1A1A27DC0020CAEA /* JMMenuActionsView.m */; };
 		08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */; };
+		08C838141A1F57640004BE78 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C837ED1A1F57640004BE78 /* Appirater.m */; };
+		08C838161A1F57640004BE78 /* AppiraterLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08C837F01A1F57640004BE78 /* AppiraterLocalizable.strings */; };
+		08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C838191A1F5A0D0004BE78 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		08C838211A1F70EB0004BE78 /* JMLoadingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C838201A1F70EB0004BE78 /* JMLoadingImageView.m */; };
 		08D108B619EFD28C003EC529 /* JMFavoritesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D108B519EFD28C003EC529 /* JMFavoritesListLoader.m */; };
 		08D3E29319EBB82100F37DF4 /* JMPopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D3E29019EBB82100F37DF4 /* JMPopupView.m */; };
 		08D6921F19929DB300C87A33 /* JMTextSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D6921E19929DB300C87A33 /* JMTextSettingsTableViewCell.m */; };
@@ -405,6 +409,44 @@
 		08C3315E1A1A27DC0020CAEA /* JMMenuActionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMenuActionsView.h; sourceTree = "<group>"; };
 		08C3315F1A1A27DC0020CAEA /* JMMenuActionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMenuActionsView.m; sourceTree = "<group>"; };
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		08C837EC1A1F57640004BE78 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
+		08C837ED1A1F57640004BE78 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Appirater.m; sourceTree = "<group>"; };
+		08C837EF1A1F57640004BE78 /* AppiraterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppiraterDelegate.h; sourceTree = "<group>"; };
+		08C837F11A1F57640004BE78 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837F21A1F57640004BE78 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837F41A1F57640004BE78 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837F51A1F57640004BE78 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837F61A1F57640004BE78 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837F71A1F57640004BE78 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837F81A1F57640004BE78 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837F91A1F57640004BE78 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837FA1A1F57640004BE78 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837FB1A1F57640004BE78 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837FC1A1F57640004BE78 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837FD1A1F57640004BE78 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837FE1A1F57640004BE78 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C837FF1A1F57640004BE78 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C838001A1F57640004BE78 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C838011A1F57640004BE78 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C838021A1F57640004BE78 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C838031A1F57640004BE78 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C838041A1F57640004BE78 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C838051A1F57640004BE78 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C838061A1F57640004BE78 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/AppiraterLocalizable.strings"; sourceTree = "<group>"; };
+		08C838071A1F57640004BE78 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C838091A1F57640004BE78 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C8380A1A1F57640004BE78 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C8380B1A1F57640004BE78 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C8380C1A1F57640004BE78 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C8380D1A1F57640004BE78 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C8380E1A1F57640004BE78 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C8380F1A1F57640004BE78 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C838101A1F57640004BE78 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/AppiraterLocalizable.strings; sourceTree = "<group>"; };
+		08C838111A1F57640004BE78 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppiraterLocalizable.strings"; sourceTree = "<group>"; };
+		08C838121A1F57640004BE78 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/AppiraterLocalizable.strings"; sourceTree = "<group>"; };
+		08C838191A1F5A0D0004BE78 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		08C8381F1A1F70EB0004BE78 /* JMLoadingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLoadingImageView.h; sourceTree = "<group>"; };
+		08C838201A1F70EB0004BE78 /* JMLoadingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLoadingImageView.m; sourceTree = "<group>"; };
 		08D108B419EFD28C003EC529 /* JMFavoritesListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFavoritesListLoader.h; sourceTree = "<group>"; };
 		08D108B519EFD28C003EC529 /* JMFavoritesListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFavoritesListLoader.m; sourceTree = "<group>"; };
 		08D3E28F19EBB82100F37DF4 /* JMPopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPopupView.h; sourceTree = "<group>"; };
@@ -716,6 +758,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */,
+				F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */,
 				0871503E19F1266900C5875E /* libz.dylib in Frameworks */,
 				0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */,
 				F5D6373217909D8F005BA5CD /* libjaspersoft-sdk.a in Frameworks */,
@@ -724,7 +768,6 @@
 				F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */,
 				F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */,
 				F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */,
-				F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */,
 				0895910319E3D514001471DA /* libObjection-StaticLib.a in Frameworks */,
 				F55CC333174CFFCE00CEB39E /* UIKit.framework in Frameworks */,
 				F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */,
@@ -823,6 +866,7 @@
 		0851DFB419ACE1F500DC6EDE /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				08C8381E1A1F70EB0004BE78 /* JMLoadingImageView */,
 				08C3315D1A1A27DC0020CAEA /* JMMenuActionsView */,
 				08D3E28819EBB82100F37DF4 /* JMPopupView */,
 				0851DFCC19ACE27800DC6EDE /* JMAskPasswordDialog */,
@@ -1035,6 +1079,26 @@
 				08C3315F1A1A27DC0020CAEA /* JMMenuActionsView.m */,
 			);
 			path = JMMenuActionsView;
+			sourceTree = "<group>";
+		};
+		08C837EA1A1F57640004BE78 /* Appirater-v2.0.4 */ = {
+			isa = PBXGroup;
+			children = (
+				08C837EC1A1F57640004BE78 /* Appirater.h */,
+				08C837ED1A1F57640004BE78 /* Appirater.m */,
+				08C837EF1A1F57640004BE78 /* AppiraterDelegate.h */,
+				08C837F01A1F57640004BE78 /* AppiraterLocalizable.strings */,
+			);
+			path = "Appirater-v2.0.4";
+			sourceTree = "<group>";
+		};
+		08C8381E1A1F70EB0004BE78 /* JMLoadingImageView */ = {
+			isa = PBXGroup;
+			children = (
+				08C8381F1A1F70EB0004BE78 /* JMLoadingImageView.h */,
+				08C838201A1F70EB0004BE78 /* JMLoadingImageView.m */,
+			);
+			path = JMLoadingImageView;
 			sourceTree = "<group>";
 		};
 		08D108B319EFD28C003EC529 /* JMFavoritesListLoader */ = {
@@ -2177,6 +2241,7 @@
 				F54C91A01752FAA90009E2BE /* CoreData.framework */,
 				F5663A321752FA5C007978BE /* CFNetwork.framework */,
 				F55CC332174CFFCE00CEB39E /* UIKit.framework */,
+				08C838191A1F5A0D0004BE78 /* StoreKit.framework */,
 				F55CC334174CFFCE00CEB39E /* Foundation.framework */,
 				F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */,
 			);
@@ -2186,6 +2251,7 @@
 		F5663A141752F9D0007978BE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				08C837EA1A1F57640004BE78 /* Appirater-v2.0.4 */,
 				08DB677C1A137CD90035F58F /* SplunkMint-iOS-v4.0.22 */,
 				089590DE19E3D514001471DA /* ALToastView-v0.0.1 */,
 				089590E419E3D514001471DA /* MJPopupViewController-v0.4 */,
@@ -2257,6 +2323,31 @@
 				es,
 				it,
 				pt,
+				ar,
+				ca,
+				cs,
+				da,
+				el,
+				fi,
+				he,
+				hu,
+				id,
+				ko,
+				ms,
+				nb,
+				nl,
+				pl,
+				"pt-BR",
+				ro,
+				ru,
+				sk,
+				sv,
+				th,
+				tr,
+				uk,
+				vi,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = F55CC326174CFFCE00CEB39E;
 			productRefGroup = F55CC330174CFFCE00CEB39E /* Products */;
@@ -2378,6 +2469,25 @@
 				9362BA0B1A25FD7D006A6178 /* delete_action@3x.png in Resources */,
 				9362BA961A25FD7E006A6178 /* report_prototype_image.png in Resources */,
 				08DE67D119C05D8B00C25AEA /* JMSingleSelectTableViewController~ipad.xib in Resources */,
+<<<<<<< HEAD
+=======
+				089588BB19CC6D15002FFF5E /* res_type_report.png in Resources */,
+				0895886619CC6D15002FFF5E /* add_item.png in Resources */,
+				08E5DC5419F687B900BB7194 /* res_type_pdf@2x.png in Resources */,
+				0895887619CC6D15002FFF5E /* refresh_item.png in Resources */,
+				0895887719CC6D15002FFF5E /* refresh_item@2x.png in Resources */,
+				0895885319CC6D15002FFF5E /* last_action_item~ipad.png in Resources */,
+				085ACE5A19F93203009A1CEB /* saveditems@2x~ipad.png in Resources */,
+				085ACE5B19F93203009A1CEB /* saveditems~ipad.png in Resources */,
+				0895888019CC6D15002FFF5E /* search_item.png in Resources */,
+				089588B919CC6D15002FFF5E /* res_type_pdf.png in Resources */,
+				08C838161A1F57640004BE78 /* AppiraterLocalizable.strings in Resources */,
+                085ACE4C19F93203009A1CEB /* favorites.png in Resources */,
+				085ACE4F19F93203009A1CEB /* favorites~ipad.png in Resources */,
+				089588AC19CC6D15002FFF5E /* server.png in Resources */,
+				0895886219CC6D15002FFF5E /* checked_checkbox.png in Resources */,
+				0895884F19CC6D15002FFF5E /* first_action_item~ipad.png in Resources */,
+>>>>>>> Add Sort and Filter Functionality to Favorites Page (JM-584)
 				080F235619A77B23008758FA /* JMGridLoadingCollectionViewCell~ipad.xib in Resources */,
 				9362BA951A25FD7E006A6178 /* navBarBackgroundImage.png in Resources */,
 				9362BA6D1A25FD7D006A6178 /* Icon-40.png in Resources */,
@@ -2550,6 +2660,7 @@
 				08E62C8319922B0B0081CA83 /* main.m in Sources */,
 				0810649A19C0A9D40000D7F3 /* JMFavorites+Helpers.m in Sources */,
 				08DE67C719C05D8B00C25AEA /* JMDateInputControlCell.m in Sources */,
+				08C838141A1F57640004BE78 /* Appirater.m in Sources */,
 				08FF12DF199297FE0082265D /* JMSettingsTableViewCell.m in Sources */,
 				0885657A19C1B60100B78B06 /* JMResourcesListLoader.m in Sources */,
 				086B716419CB045200CC25CA /* JMSavedResourceViewerViewController.m in Sources */,
@@ -2560,6 +2671,7 @@
 				08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */,
 				08E864171992564A007CF257 /* UIViewController+fetchInputControls.m in Sources */,
 				08DE67CC19C05D8B00C25AEA /* JMSingleSelectInputControlCell.m in Sources */,
+				08C838211A1F70EB0004BE78 /* JMLoadingImageView.m in Sources */,
 				08ECB0A819FFF30400DDBB33 /* JMReportViewer.m in Sources */,
 				0895910119E3D514001471DA /* MJPopupBackgroundView.m in Sources */,
 				0895910419E3D514001471DA /* PopoverView.m in Sources */,
@@ -2603,6 +2715,45 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		08C837F01A1F57640004BE78 /* AppiraterLocalizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				08C837F11A1F57640004BE78 /* ar */,
+				08C837F21A1F57640004BE78 /* ca */,
+				08C837F41A1F57640004BE78 /* cs */,
+				08C837F51A1F57640004BE78 /* da */,
+				08C837F61A1F57640004BE78 /* de */,
+				08C837F71A1F57640004BE78 /* el */,
+				08C837F81A1F57640004BE78 /* en */,
+				08C837F91A1F57640004BE78 /* es */,
+				08C837FA1A1F57640004BE78 /* fi */,
+				08C837FB1A1F57640004BE78 /* fr */,
+				08C837FC1A1F57640004BE78 /* he */,
+				08C837FD1A1F57640004BE78 /* hu */,
+				08C837FE1A1F57640004BE78 /* id */,
+				08C837FF1A1F57640004BE78 /* it */,
+				08C838001A1F57640004BE78 /* ja */,
+				08C838011A1F57640004BE78 /* ko */,
+				08C838021A1F57640004BE78 /* ms */,
+				08C838031A1F57640004BE78 /* nb */,
+				08C838041A1F57640004BE78 /* nl */,
+				08C838051A1F57640004BE78 /* pl */,
+				08C838061A1F57640004BE78 /* pt-BR */,
+				08C838071A1F57640004BE78 /* pt */,
+				08C838091A1F57640004BE78 /* ro */,
+				08C8380A1A1F57640004BE78 /* ru */,
+				08C8380B1A1F57640004BE78 /* sk */,
+				08C8380C1A1F57640004BE78 /* sv */,
+				08C8380D1A1F57640004BE78 /* th */,
+				08C8380E1A1F57640004BE78 /* tr */,
+				08C8380F1A1F57640004BE78 /* uk */,
+				08C838101A1F57640004BE78 /* vi */,
+				08C838111A1F57640004BE78 /* zh-Hans */,
+				08C838121A1F57640004BE78 /* zh-Hant */,
+			);
+			name = AppiraterLocalizable.strings;
+			sourceTree = "<group>";
+		};
 		08E62CF819922BA40081CA83 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
