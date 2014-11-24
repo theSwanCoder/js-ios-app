@@ -57,7 +57,7 @@
 
 + (UIFont *)menuItemTitleFont
 {
-    return [JMUtils isIphone] ? [UIFont boldSystemFontOfSize:15] : [UIFont systemFontOfSize:27];
+    return [JMUtils isIphone] ? [UIFont boldSystemFontOfSize:15] : [UIFont systemFontOfSize:28];
 }
 
 + (UIFont *)menuItemDescriptionFont

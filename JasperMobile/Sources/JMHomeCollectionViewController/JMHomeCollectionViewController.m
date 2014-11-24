@@ -54,7 +54,9 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     
     self.title = JMCustomLocalizedString(@"title.home", nil);
     self.collectionView.backgroundColor = kJMMainCollectionViewBackgroundColor;
-
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    
     JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     if (activeServerProfile) {
         NSString *serverString = activeServerProfile.alias;
@@ -81,6 +83,8 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self.collectionView];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated

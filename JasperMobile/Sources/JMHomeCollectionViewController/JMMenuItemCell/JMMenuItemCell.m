@@ -31,10 +31,9 @@ NSString * const kJMMenuItemSavedItems = @"SavedItems";
 NSString * const kJMMenuItemFavorites = @"Favorites";
 
 @interface JMMenuItemCell()
-@property (nonatomic, weak) IBOutlet UITextView *titleView;
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic, weak) IBOutlet UIImageView *imageView;
 @property (nonatomic, weak) IBOutlet UIView *coloredView;
-
 @end
 
 @implementation JMMenuItemCell
@@ -44,21 +43,15 @@ NSString * const kJMMenuItemFavorites = @"Favorites";
     _menuItem = menuItem;
     self.coloredView.backgroundColor = [menuItem isEqualToString:[kJMMenuItemSettings lowercaseString]] ? kJMMasterResourceCellSelectedBackgroundColor : kJMResourcePreviewBackgroundColor;
     self.imageView.image = [UIImage imageNamed:menuItem];
-    NSString *titleString = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.label", menuItem], nil);
-    NSMutableAttributedString *titleAttributedString = [[NSMutableAttributedString alloc] initWithString:titleString attributes:self.titleAttributes];
+
+    NSString *titleString = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.label", self.menuItem], nil);
+    NSMutableAttributedString *attributedTitleString = [[NSMutableAttributedString alloc] initWithString:titleString attributes:self.titleAttributes];
     if (![JMUtils isIphone]) {
-        NSString *descriptionString = [NSString stringWithFormat:@"\n%@",JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.description", menuItem], nil)];
-        [titleAttributedString appendAttributedString:[[NSAttributedString alloc] initWithString:descriptionString attributes:self.descriptionAttributes]];
+        NSString *descriptionString = [NSString stringWithFormat:@"\n%@",JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.description", self.menuItem], nil)];
+        [attributedTitleString appendAttributedString:[[NSAttributedString alloc] initWithString:descriptionString attributes:self.descriptionAttributes]];
     }
-    self.titleView.attributedText = titleAttributedString;
-    CGSize textSize = [titleAttributedString boundingRectWithSize:self.titleView.bounds.size
-                                                          options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-                                                          context:nil].size;
-    int verticalInset = (self.titleView.frame.size.height - textSize.height) / 2;
-    
-    if (verticalInset > self.titleView.textContainerInset.top) {
-        self.titleView.textContainerInset = UIEdgeInsetsMake(verticalInset, 0, verticalInset, 0);
-    }
+
+    self.titleLabel.attributedText = attributedTitleString;
 }
 
 - (NSDictionary *)titleAttributes
