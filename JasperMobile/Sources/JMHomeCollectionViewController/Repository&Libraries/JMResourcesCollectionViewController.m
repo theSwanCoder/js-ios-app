@@ -388,8 +388,6 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
             self.resourceListLoader.sortBySelectedIndex = [popup selectedIndex];
             break;
     }
-    [self.resourceListLoader setNeedsUpdate];
-    [self.resourceListLoader updateIfNeeded];
 }
 
 #pragma mark - Utils

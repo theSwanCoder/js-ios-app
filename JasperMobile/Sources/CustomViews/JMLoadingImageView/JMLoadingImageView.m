@@ -50,8 +50,7 @@
 
 - (void) setDefaults
 {
-    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    self.activityIndicator.color = [UIColor highlitedColorForColor:self.backgroundColor];
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     self.activityIndicator.center = self.center;
     [self addSubview:self.activityIndicator];
 }
@@ -79,20 +78,28 @@
             [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 NSURL *url = [NSURL URLWithString:imageUrl];
-                NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReturnCacheDataElseLoad  timeoutInterval:10.0];
-                NSHTTPURLResponse *httpResponse = nil;
-                NSError *error = nil;
-                NSData * loadedData = [NSURLConnection sendSynchronousRequest:request returningResponse:&httpResponse error:&error];
+                NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:10.0];
+                [request addValue:@"image/jpeg" forHTTPHeaderField:kJSRequestResponceType];
                 
-                
+                NSCachedURLResponse *cachedResponce = [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
+                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)[cachedResponce response];
+                NSData *loadedData = nil;
+
+                if (httpResponse && [[httpResponse MIMEType] hasPrefix:@"image"] && httpResponse.statusCode == 200) {
+                    loadedData = [cachedResponce data];
+                } else {
+                    loadedData = [NSURLConnection sendSynchronousRequest:request returningResponse:&httpResponse error:nil];
+                }
+
                 dispatch_async(dispatch_get_main_queue(), @weakself(^(void)) {
                     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                     [self.activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:YES];
-                    if (!error && loadedData && [[httpResponse MIMEType] hasPrefix:@"image"] && httpResponse.statusCode == 200) {
+                    if (loadedData && [[httpResponse MIMEType] hasPrefix:@"image"] && httpResponse.statusCode == 200) {
                         self.image = [[UIImage alloc] initWithData:loadedData];
                         self.backgroundColor = [UIColor clearColor];
-//                        [self performSelectorOnMainThread:@selector(setImage:) withObject:[[UIImage alloc] initWithData:loadedData] waitUntilDone:YES];
-//                        [self performSelectorOnMainThread:@selector(setBackgroundColor:) withObject:[UIColor clearColor] waitUntilDone:YES];
+                        NSCachedURLResponse *loadedCachedResponce = [[NSCachedURLResponse alloc] initWithResponse:httpResponse data:loadedData];
+                        [[NSURLCache sharedURLCache] storeCachedResponse:loadedCachedResponce forRequest:request];
+
                     }
                 }@weakselfend);
             });
