@@ -97,7 +97,11 @@
 {
     NSString *errorMessage = @"";
     UITextField *textField = [alertView textFieldAtIndex:0];
-    BOOL validData = [JMUtils validateReportName:textField.text extension:nil errorMessage:&errorMessage];
+    BOOL validData = [JMUtils validateReportName:textField.text extension:self.savedReports.format errorMessage:&errorMessage];
+    if (validData && ![JMSavedResources isAvailableReportName:textField.text format:self.savedReports.format]) {
+        validData = NO;
+        errorMessage = JMCustomLocalizedString(@"savereport.name.errmsg.notunique", nil);
+    }
     alertView.message = errorMessage;
     
     return validData;

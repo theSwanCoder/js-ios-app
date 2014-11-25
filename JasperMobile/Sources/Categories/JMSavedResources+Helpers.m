@@ -38,17 +38,22 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 + (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format
 {
-    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
-    JMSavedResources *savedReport = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:self.managedObjectContext];
-    savedReport.label = name;
-    savedReport.uri = [self uriForSavedReportWithName:name format:format];
-    savedReport.wsType = resource.resourceType;
+    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:name, @"label", format, @"format", nil];
+    JMSavedResources *savedReport = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    if (!savedReport) {
+        savedReport = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:self.managedObjectContext];
+        savedReport.label = name;
+        savedReport.uri = [self uriForSavedReportWithName:name format:format];
+        savedReport.wsType = resource.resourceType;
+        savedReport.resourceDescription = resource.resourceDescription;
+        savedReport.format = format;
+        JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
+        [activeServerProfile addSavedResourcesObject:savedReport];
+        savedReport.username = activeServerProfile.username;
+        savedReport.organization = activeServerProfile.organization;
+    }
+    
     savedReport.creationDate = [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
-    savedReport.resourceDescription = resource.resourceDescription;
-    savedReport.username = activeServerProfile.username;
-    savedReport.organization = activeServerProfile.organization;
-    savedReport.format = format;
-    [activeServerProfile addSavedResourcesObject:savedReport];
     
     [self.managedObjectContext save:nil];
 }
@@ -74,7 +79,7 @@ NSString * const kJMSavedResources = @"SavedResources";
     NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:reportName, @"label", reportFormat, @"format", nil];
     JMSavedResources *savedReport = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
     
-    return (![savedReport.format isEqualToString:reportFormat]);
+    return (!savedReport);
 }
 
 - (void)renameReportTo:(NSString *)newName

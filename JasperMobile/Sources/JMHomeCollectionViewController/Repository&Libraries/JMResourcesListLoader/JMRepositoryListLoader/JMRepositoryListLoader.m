@@ -37,16 +37,13 @@
     self = [super init];
     if (self) {
         self.rootFolders = [NSMutableArray array];
-        self.loadRecursively = NO;
     }
     return self;
 }
 
-- (BOOL) shouldBeAddedResourceLookup:(JSResourceLookup *)resource
+- (BOOL)loadRecursively
 {
-   return (!self.searchQuery ||
-           (self.searchQuery && resource.label && [resource.label rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound) ||
-           (self.searchQuery && resource.resourceDescription && [resource.resourceDescription rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound));
+    return !!self.searchQuery;
 }
 
 - (void)loadNextPage
@@ -104,6 +101,13 @@
     viewControllerToDismiss: nil];
     
     [self.resourceClient getResourceLookup:resourceURI delegate:requestDelegate];
+}
+
+- (BOOL) shouldBeAddedResourceLookup:(JSResourceLookup *)resource
+{
+    return (!self.searchQuery ||
+            (self.searchQuery && resource.label && [resource.label rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound) ||
+            (self.searchQuery && resource.resourceDescription && [resource.resourceDescription rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound));
 }
 
 - (void)finishLoading

@@ -27,13 +27,13 @@
 #import "JMCancelRequestPopup.h"
 #import "JMRequestDelegate.h"
 #import "ALToastView.h"
-
+#import "UIAlertView+LocalizedAlert.h"
 
 NSString * const kJMSaveReportViewControllerSegue = @"SaveReportViewControllerSegue";
 NSString * const kJMAttachmentPrefix = @"_";
 
 
-@interface JMSaveReportViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface JMSaveReportViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) NSString *selectedReportFormat;
@@ -149,18 +149,29 @@ objection_requires(@"resourceClient", @"reportClient")
 - (void)saveButtonTapped:(id)sender
 {
     [self.view endEditing:YES];
-    NSString *fullReportDirectory = [JMSavedResources pathToReportDirectoryWithName:self.reportName format:self.selectedReportFormat];
-    NSString *errorMessage = nil;
-    BOOL isValidReportName = ([JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessage] &&
-                              [self createReportDirectory:fullReportDirectory errorMessage:&errorMessage]);
     
-    self.errorString = errorMessage;
-    [self.tableView reloadData];
-    
+    NSString *errorMessageString = nil;
+    BOOL isValidReportName = [JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessageString];
+    self.errorString = errorMessageString;
+
     if (!self.errorString && isValidReportName) {
-        // Clear any errors
-        [self.tableView reloadData];
-        
+        if (![JMSavedResources isAvailableReportName:self.reportName format:self.selectedReportFormat]) {
+            self.errorString = JMCustomLocalizedString(@"savereport.name.errmsg.notunique", nil);
+            [[UIAlertView localizedAlertWithTitle:nil message:@"savereport.name.errmsg.notunique.rewrite" delegate:self cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
+        } else {
+            [self saveReport];
+        }
+    }
+    // Clear any errors
+    [self.tableView reloadData];
+}
+
+- (void) saveReport
+{
+    NSString *fullReportDirectory = [JMSavedResources pathToReportDirectoryWithName:self.reportName format:self.selectedReportFormat];
+    NSString *errorMessageString = nil;
+    
+    if ([self createReportDirectory:fullReportDirectory errorMessage:&errorMessageString]) {
         NSMutableArray *parameters = [NSMutableArray array];
         for (JSInputControlDescriptor *inputControlDescriptor in self.inputControls) {
             JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
@@ -194,18 +205,29 @@ objection_requires(@"resourceClient", @"reportClient")
                 }];
             }
         } @weakselfend];
-
+        
         [JMRequestDelegate setFinalBlock:@weakself(^(void)) {
             [self.navigationController popViewControllerAnimated:YES];
             [JMSavedResources addReport:self.resourceLookup withName:self.reportName format:self.selectedReportFormat];
             [ALToastView toastInView:self.delegate.view withText:JMCustomLocalizedString(@"savereport.saved", nil)];
         } @weakselfend];
-
+        
         [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO freshData:YES saveDataSnapshot:NO
                              ignorePagination:NO transformerKey:nil pages:nil attachmentsPrefix:kJMAttachmentPrefix parameters:parameters usingBlock:^(JSRequest *request) {
                                  request.delegate = delegate;
                                  request.finishedBlock = checkErrorBlock;
                              }];
+    } else {
+        self.errorString = errorMessageString;
+        [self.tableView reloadData];
+    }
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.cancelButtonIndex != buttonIndex) {
+        [self saveReport];
     }
 }
 
@@ -213,14 +235,8 @@ objection_requires(@"resourceClient", @"reportClient")
 
 - (BOOL)createReportDirectory:(NSString *)reportDirectory errorMessage:(NSString **)errorMessage
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
     NSError *error;
-    [fileManager createDirectoryAtPath:reportDirectory
-           withIntermediateDirectories:YES
-                            attributes:nil
-                                 error:&error];
-    
+    [[NSFileManager defaultManager] createDirectoryAtPath:reportDirectory withIntermediateDirectories:YES attributes:nil error:&error];
     if (error) *errorMessage = error.localizedDescription;
     return [*errorMessage length] == 0;
 }

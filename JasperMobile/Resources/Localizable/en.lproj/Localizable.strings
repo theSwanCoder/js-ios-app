@@ -69,6 +69,8 @@
 "savereport.saved" = "Report was successfully saved";
 "savereport.name.errmsg.empty" = "Cannot be empty";
 "savereport.name.errmsg.notunique" = "This name has been already taken, please choose different name";
+"savereport.name.errmsg.notunique.rewrite" = "This name has been already taken, do you want to rewrite it?";
+
 "savereport.name.errmsg.maxlength" = "Should be less than %i symbols";
 "savereport.name.errmsg.characters" = "Characters %@ are not allowed";
 "savereport.saving.status.title" = "Saving report...";
