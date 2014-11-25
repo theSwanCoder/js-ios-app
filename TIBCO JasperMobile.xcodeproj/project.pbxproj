@@ -63,6 +63,8 @@
 		0894231E1A249F2900D7406A /* cancel_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0894231C1A249F2900D7406A /* cancel_button.png */; };
 		0894231F1A249F2900D7406A /* cancel_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0894231D1A249F2900D7406A /* cancel_button@2x.png */; };
 		089423251A249F4000D7406A /* gray_text_field.png in Resources */ = {isa = PBXBuildFile; fileRef = 089423241A249F4000D7406A /* gray_text_field.png */; };
+		089423311A24CF7700D7406A /* JMFilterOptionsPopupView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 089423301A24CF7700D7406A /* JMFilterOptionsPopupView~ipad.xib */; };
+		089423371A24CFED00D7406A /* JMSortOptionsPopupView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 089423361A24CFED00D7406A /* JMSortOptionsPopupView~ipad.xib */; };
 		0895884619CC6D15002FFF5E /* delete_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 089587B119CC6D14002FFF5E /* delete_action.png */; };
 		0895884719CC6D15002FFF5E /* delete_action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 089587B219CC6D14002FFF5E /* delete_action@2x.png */; };
 		0895884819CC6D15002FFF5E /* edit_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 089587B319CC6D14002FFF5E /* edit_action.png */; };
@@ -351,6 +353,8 @@
 		0894231C1A249F2900D7406A /* cancel_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel_button.png; sourceTree = "<group>"; };
 		0894231D1A249F2900D7406A /* cancel_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel_button@2x.png"; sourceTree = "<group>"; };
 		089423241A249F4000D7406A /* gray_text_field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gray_text_field.png; sourceTree = "<group>"; };
+		089423301A24CF7700D7406A /* JMFilterOptionsPopupView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMFilterOptionsPopupView~ipad.xib"; sourceTree = "<group>"; };
+		089423361A24CFED00D7406A /* JMSortOptionsPopupView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMSortOptionsPopupView~ipad.xib"; sourceTree = "<group>"; };
 		089587B119CC6D14002FFF5E /* delete_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete_action.png; sourceTree = "<group>"; };
 		089587B219CC6D14002FFF5E /* delete_action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete_action@2x.png"; sourceTree = "<group>"; };
 		089587B319CC6D14002FFF5E /* edit_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit_action.png; sourceTree = "<group>"; };
@@ -1165,6 +1169,7 @@
 				08D27B7619EBE4BF00994F08 /* JMFilterOptionsPopupView.h */,
 				08D27B7719EBE4BF00994F08 /* JMFilterOptionsPopupView.m */,
 				08D27B7F19EBE5EE00994F08 /* JMFilterOptionsPopupView.xib */,
+				089423301A24CF7700D7406A /* JMFilterOptionsPopupView~ipad.xib */,
 			);
 			path = JMFilterOptionsPopupView;
 			sourceTree = "<group>";
@@ -1175,6 +1180,7 @@
 				08D27B7919EBE4BF00994F08 /* JMSortOptionsPopupView.h */,
 				08D27B7A19EBE4BF00994F08 /* JMSortOptionsPopupView.m */,
 				08D27B7B19EBE4BF00994F08 /* JMSortOptionsPopupView.xib */,
+				089423361A24CFED00D7406A /* JMSortOptionsPopupView~ipad.xib */,
 			);
 			path = JMSortOptionsPopupView;
 			sourceTree = "<group>";
@@ -1850,6 +1856,7 @@
 				0895885619CC6D15002FFF5E /* next_action_item@2x~ipad.png in Resources */,
 				085ACE5C19F93203009A1CEB /* settings.png in Resources */,
 				0895886919CC6D15002FFF5E /* apply_item@2x.png in Resources */,
+				089423311A24CF7700D7406A /* JMFilterOptionsPopupView~ipad.xib in Resources */,
 				08A0925119E81647001A2016 /* sort_action@2x.png in Resources */,
 				0895887C19CC6D15002FFF5E /* vertical_list_button.png in Resources */,
 				0895885519CC6D15002FFF5E /* next_action_item@2x.png in Resources */,
@@ -1883,6 +1890,7 @@
 				0895886C19CC6D15002FFF5E /* clear_button.png in Resources */,
 				089588AB19CC6D15002FFF5E /* report_prototype_image.png in Resources */,
 				085ACE5E19F93203009A1CEB /* settings@2x~ipad.png in Resources */,
+				089423371A24CFED00D7406A /* JMSortOptionsPopupView~ipad.xib in Resources */,
 				085ACE5319F93203009A1CEB /* library~ipad.png in Resources */,
 				085ACE4D19F93203009A1CEB /* favorites@2x.png in Resources */,
 				0895888819CC6D15002FFF5E /* Icon-144.png in Resources */,

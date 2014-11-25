@@ -38,9 +38,10 @@ typedef NS_ENUM(NSInteger, JMPopupViewType) {
     JMPopupViewType_OkCancelButtons
 };
 
-extern NSInteger const kJMPopupViewContentMaxHeight;
-extern NSInteger const kJMPopupViewDefaultWidth;
-extern NSInteger const kJMPopupViewButtonsHeight;
+
+#define kJMPopupViewContentMaxHeight        [JMUtils isIphone] ? 260.f : 360.f
+#define kJMPopupViewDefaultWidth            [JMUtils isIphone] ? 260.f : 360.f
+#define kJMPopupViewButtonsHeight           [JMUtils isIphone] ? 35.f  : 44.f
 
 @class JMPopupView;
 @protocol JMPopupViewDelegate <NSObject>

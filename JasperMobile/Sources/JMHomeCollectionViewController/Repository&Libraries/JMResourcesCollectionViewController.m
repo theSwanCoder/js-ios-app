@@ -288,13 +288,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
             [self fetchInputControlsForReport:resourceLookup];
         }
     } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_DASHBOARD] || [resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_DASHBOARD_LEGACY]) {
-        // TO DO: This code should be deleted in next application version
-        if (self.resourceListLoader.resourceClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0 &&
-            [resourceLookup.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD]) {
-            [[UIAlertView localizedAlertWithTitle:nil message:@"detail.dashboard.viewer.not.supported" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
-        } else {
-            [self performSegueWithIdentifier:kJMShowDashboardViewerSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
-        }
+        [self performSegueWithIdentifier:kJMShowDashboardViewerSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
     } else if ([resourceLookup.resourceType isEqualToString:self.resourceListLoader.constants.WS_TYPE_FOLDER]) {
         [self performSegueWithIdentifier:kJMShowFolderContetnSegue sender:[NSDictionary dictionaryWithObject:resourceLookup forKey:kJMResourceLookup]];
     }

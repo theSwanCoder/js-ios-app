@@ -146,21 +146,28 @@ objection_requires(@"resourceClient", @"constants")
             [typesArray addObject:self.constants.WS_TYPE_FOLDER];
         case JMResourcesListLoaderObjectType_LibraryAll:
             [typesArray addObject:self.constants.WS_TYPE_REPORT_UNIT];
-            [typesArray addObject:self.constants.WS_TYPE_DASHBOARD];
-            [typesArray addObject:self.constants.WS_TYPE_DASHBOARD_LEGACY];
+            [typesArray addObjectsFromArray:[self dashboardsTypes]];
             break;
         case JMResourcesListLoaderObjectType_Reports:
             [typesArray addObject:self.constants.WS_TYPE_REPORT_UNIT];
             break;
         case JMResourcesListLoaderObjectType_Dashboards:
-            [typesArray addObject:self.constants.WS_TYPE_DASHBOARD];
-            [typesArray addObject:self.constants.WS_TYPE_DASHBOARD_LEGACY];
+            [typesArray addObjectsFromArray:[self dashboardsTypes]];
             break;
         case JMResourcesListLoaderObjectType_Folders:
             [typesArray addObject:self.constants.WS_TYPE_FOLDER];
             break;
     }
     return typesArray;
+}
+
+- (NSArray *)dashboardsTypes
+{
+    if (self.resourceClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0) {
+        return @[self.constants.WS_TYPE_DASHBOARD_LEGACY];
+    } else {
+        return @[self.constants.WS_TYPE_DASHBOARD];
+    }
 }
 
 @end

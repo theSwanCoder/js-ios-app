@@ -116,7 +116,7 @@
     self.resources = [NSMutableArray arrayWithArray:[self.resources sortedArrayUsingComparator:^NSComparisonResult(JSResourceLookup * obj1, JSResourceLookup * obj2) {
         return [obj1.label compare:obj2.label options:NSCaseInsensitiveSearch];
     }]];
-    self->_isLoadingNow = NO;
+    _isLoadingNow = NO;
     [self.delegate resourceListDidLoaded:self withError:nil];
 }
 @end
