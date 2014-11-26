@@ -113,9 +113,7 @@
 		08FF130D1992982F0082265D /* JMServerOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF13041992982F0082265D /* JMServerOptions.m */; };
 		08FF131619929B080082265D /* JMBooleanServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF131119929B080082265D /* JMBooleanServerOptionCell.m */; };
 		08FF131819929B080082265D /* JMTextServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF131519929B080082265D /* JMTextServerOptionCell.m */; };
-		9354B5D21A0B8CC10031F751 /* JMIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9354B5D11A0B8CC10031F751 /* JMIntroViewController.m */; };
 		937336111A0DE46D004E6520 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 937336101A0DE46D004E6520 /* Images.xcassets */; };
-		93DCFC021A0CAC01006F2608 /* JMIntroChildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DCFC011A0CAC01006F2608 /* JMIntroChildViewController.m */; };
 		93E0C46C1A12048A00F5B62E /* JMOnboardIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E0C46B1A12048A00F5B62E /* JMOnboardIntroViewController.m */; };
 		A14781B87D0829F0999E054C /* JMIntroModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478CF6C78641C6EE45B5DD /* JMIntroModelManager.m */; };
 		A14789538AEBCBF273F05BD8 /* JMIntroModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478AF70AD4DD5EA23F8997 /* JMIntroModel.m */; };
@@ -375,11 +373,7 @@
 		08FF131119929B080082265D /* JMBooleanServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBooleanServerOptionCell.m; sourceTree = "<group>"; };
 		08FF131419929B080082265D /* JMTextServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextServerOptionCell.h; sourceTree = "<group>"; };
 		08FF131519929B080082265D /* JMTextServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextServerOptionCell.m; sourceTree = "<group>"; };
-		9354B5D01A0B8CC10031F751 /* JMIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMIntroViewController.h; sourceTree = "<group>"; };
-		9354B5D11A0B8CC10031F751 /* JMIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMIntroViewController.m; sourceTree = "<group>"; };
 		937336101A0DE46D004E6520 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		93DCFC001A0CAC01006F2608 /* JMIntroChildViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMIntroChildViewController.h; sourceTree = "<group>"; };
-		93DCFC011A0CAC01006F2608 /* JMIntroChildViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMIntroChildViewController.m; sourceTree = "<group>"; };
 		93E0C46A1A12048A00F5B62E /* JMOnboardIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMOnboardIntroViewController.h; sourceTree = "<group>"; };
 		93E0C46B1A12048A00F5B62E /* JMOnboardIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMOnboardIntroViewController.m; sourceTree = "<group>"; };
 		A147806986E34AF5DAEF821C /* JMIntroModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMIntroModel.h; sourceTree = "<group>"; };
@@ -971,7 +965,7 @@
 		08E863DC1992564A007CF257 /* JMHomeCollectionViewController */ = {
 			isa = PBXGroup;
 			children = (
-				9354B5CB1A0B8C930031F751 /* JMIntroViewController */,
+				9354B5CB1A0B8C930031F751 /* OnboardingIntro */,
 				08E863DF1992564A007CF257 /* JMMainNavigationController */,
 				08FF12B7199297FE0082265D /* Settings */,
 				08025C971995197100A6063B /* Repository&Libraries */,
@@ -1160,12 +1154,9 @@
 			path = JMServerOption;
 			sourceTree = "<group>";
 		};
-		9354B5CB1A0B8C930031F751 /* JMIntroViewController */ = {
+		9354B5CB1A0B8C930031F751 /* OnboardingIntro */ = {
 			isa = PBXGroup;
 			children = (
-				93DCFBFB1A0CABEC006F2608 /* JMIntroChildViewController */,
-				9354B5D01A0B8CC10031F751 /* JMIntroViewController.h */,
-				9354B5D11A0B8CC10031F751 /* JMIntroViewController.m */,
 				A1478AF70AD4DD5EA23F8997 /* JMIntroModel.m */,
 				A147806986E34AF5DAEF821C /* JMIntroModel.h */,
 				A1478CF6C78641C6EE45B5DD /* JMIntroModelManager.m */,
@@ -1173,16 +1164,8 @@
 				93E0C46A1A12048A00F5B62E /* JMOnboardIntroViewController.h */,
 				93E0C46B1A12048A00F5B62E /* JMOnboardIntroViewController.m */,
 			);
+			name = OnboardingIntro;
 			path = JMIntroViewController;
-			sourceTree = "<group>";
-		};
-		93DCFBFB1A0CABEC006F2608 /* JMIntroChildViewController */ = {
-			isa = PBXGroup;
-			children = (
-				93DCFC001A0CAC01006F2608 /* JMIntroChildViewController.h */,
-				93DCFC011A0CAC01006F2608 /* JMIntroChildViewController.m */,
-			);
-			path = JMIntroChildViewController;
 			sourceTree = "<group>";
 		};
 		F55CC326174CFFCE00CEB39E = {
@@ -1392,7 +1375,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9354B5D21A0B8CC10031F751 /* JMIntroViewController.m in Sources */,
 				0826E52D19C88FDB00179818 /* JMSaveReportViewController.m in Sources */,
 				08FF12EA199297FE0082265D /* JMSettings.m in Sources */,
 				08E864131992564A007CF257 /* UIImage+Additions.m in Sources */,
@@ -1476,7 +1458,6 @@
 				08FF130C1992982F0082265D /* JMServerOption.m in Sources */,
 				08A43D2019E6F30100C0BA4D /* JMRepositoryListLoader.m in Sources */,
 				08025CE11995231E00A6063B /* JMResourcesCollectionViewController.m in Sources */,
-				93DCFC021A0CAC01006F2608 /* JMIntroChildViewController.m in Sources */,
 				08FF130D1992982F0082265D /* JMServerOptions.m in Sources */,
 				A14789538AEBCBF273F05BD8 /* JMIntroModel.m in Sources */,
 				A14781B87D0829F0999E054C /* JMIntroModelManager.m in Sources */,

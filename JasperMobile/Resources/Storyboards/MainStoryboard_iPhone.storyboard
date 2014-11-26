@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="Y6M-IF-MRS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="Y6M-IF-MRS">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
@@ -83,7 +83,6 @@
                         <segue destination="drB-Kg-Dls" kind="push" identifier="ShowSavedItems" id="1mY-HY-V5i"/>
                         <segue destination="drB-Kg-Dls" kind="push" identifier="ShowLibrary" id="nPg-eq-o1N"/>
                         <segue destination="drB-Kg-Dls" kind="push" identifier="ShowFavorites" id="hUW-ct-uiE"/>
-                        <segue destination="2XW-F6-0Pu" kind="modal" identifier="ShowIntroView" id="EWp-V4-2QL"/>
                         <segue destination="xn9-yo-qkQ" kind="modal" identifier="showOnboardIntro" id="6ee-kH-UNv"/>
                     </connections>
                 </collectionViewController>
@@ -107,7 +106,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="290"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to JasperMobile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="G3k-5e-3qZ">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to TIBCO JasperMobile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="G3k-5e-3qZ">
                                                 <rect key="frame" x="8" y="206" width="304" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
@@ -209,6 +208,7 @@ your business wherever you are.</string>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
                         <outlet property="contentView" destination="zN4-7v-hyV" id="VaO-7W-6Z6"/>
+                        <outlet property="descriptionLabel" destination="T2Z-a3-ZJ1" id="E2W-ag-bIg"/>
                         <outlet property="descriptionPageLabel" destination="qcO-Ra-OsM" id="QZb-WR-aYG"/>
                         <outlet property="homeScreenImage" destination="1mr-P0-acy" id="x3U-1h-Bvl"/>
                         <outlet property="messageView" destination="cHC-rv-ID0" id="6qW-Mk-GYn"/>
@@ -216,6 +216,7 @@ your business wherever you are.</string>
                         <outlet property="reportScreenIphoneImage" destination="0Ng-wZ-CKB" id="PlB-mQ-Y8Z"/>
                         <outlet property="serverScreenImage" destination="hHg-B6-jIB" id="fTT-2O-40W"/>
                         <outlet property="skipButton" destination="szR-Jx-vTG" id="NQY-Bq-xfc"/>
+                        <outlet property="titleLabel" destination="G3k-5e-3qZ" id="9Yi-UI-9VW"/>
                         <outlet property="titlePageLabel" destination="ZXN-zZ-mep" id="o4b-UG-wFr"/>
                         <outlet property="titleView" destination="zdf-mA-oqg" id="d5I-eU-YkE"/>
                         <outlet property="welcomeView" destination="scU-Dt-kru" id="PcU-Rq-Fjm"/>
@@ -223,132 +224,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cBr-n4-zHN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2689" y="381"/>
-        </scene>
-        <!--Intro View Controller-->
-        <scene sceneID="hFB-cu-zKC">
-            <objects>
-                <viewController storyboardIdentifier="JMIntroViewController" id="2XW-F6-0Pu" customClass="JMIntroViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="cdY-6Q-qtn">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" id="YwB-w5-1BG">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="518"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <subviews>
-                                    <view clipsSubviews="YES" contentMode="scaleToFill" id="DXC-ZF-6Me">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="518"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="jasper_logo" id="mvA-00-v0G">
-                                                <rect key="frame" x="82" y="31" width="155" height="156"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to JasperMobile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5RK-Db-ada">
-                                                <rect key="frame" x="8" y="200" width="304" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="swipe up to begin" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mev-gr-j4l">
-                                                <rect key="frame" x="8" y="264" width="304" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_up" id="p1G-Sj-bUZ">
-                                                <rect key="frame" x="150" y="246" width="21" height="12"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                            <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stay_connect_image" id="h2Q-xf-9gO">
-                                                <rect key="frame" x="19" y="296" width="283" height="413"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                        </subviews>
-                                        <color key="backgroundColor" red="0.95686274510000002" green="0.95686274510000002" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" id="H4G-2d-Voj">
-                                <rect key="frame" x="0.0" y="518" width="320" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HGk-hY-idy">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                        <state key="normal">
-                                            <color key="titleColor" red="0.87450980392156863" green="0.87450980392156863" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="skipAction:" destination="2XW-F6-0Pu" eventType="touchUpInside" id="QCM-wN-DZU"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="0.20392156862745098" green="0.2196078431372549" blue="0.25490196078431371" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <outlet property="contentView" destination="YwB-w5-1BG" id="Ur7-wb-aLo"/>
-                        <outlet property="controlView" destination="H4G-2d-Voj" id="zdY-aY-HDp"/>
-                        <outlet property="skipButton" destination="HGk-hY-idy" id="fm8-n3-BDV"/>
-                        <outlet property="startChildView" destination="DXC-ZF-6Me" id="Yxx-le-oLo"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="st8-As-Ov4" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2217" y="381"/>
-        </scene>
-        <!--Intro Child View Controller-->
-        <scene sceneID="Qr8-9V-Odl">
-            <objects>
-                <viewController storyboardIdentifier="JMIntroChildViewController" id="oVk-zs-Xfs" customClass="JMIntroChildViewController" sceneMemberID="viewController">
-                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="SV1-s2-i1s">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_up" id="vee-hn-IK2">
-                                <rect key="frame" x="150" y="27" width="21" height="12"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stay Connected" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8cY-ro-DXp">
-                                <rect key="frame" x="8" y="60" width="304" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1ET-Od-R1H">
-                                <rect key="frame" x="8" y="89" width="304" height="40"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <string key="text">JasperMobile keeps you connected to 
-your business wherever you are.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stay_connect_image" id="tQm-Gr-NkK">
-                                <rect key="frame" x="19" y="137" width="283" height="413"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.95686274509803915" green="0.95686274509803915" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <connections>
-                        <outlet property="descriptionLabel" destination="1ET-Od-R1H" id="3qT-RD-yCn"/>
-                        <outlet property="imageView" destination="tQm-Gr-NkK" id="bzA-jU-Rsl"/>
-                        <outlet property="titleLabel" destination="8cY-ro-DXp" id="8kB-ow-aOA"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2JH-To-6HN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2217" y="1069"/>
+            <point key="canvasLocation" x="-2294" y="381"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="Pxq-ub-7j9">
@@ -378,7 +254,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="SsL-u6-ztx">
-                                                    <rect key="frame" x="240.00000055515233" y="7" width="50" height="30"/>
+                                                    <rect key="frame" x="240.00000075310942" y="7" width="50" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -1453,7 +1329,6 @@ Please Wait...</string>
         <image name="report_screen_iphone" width="85" height="156"/>
         <image name="server.png" width="232" height="129"/>
         <image name="server_screen" width="282" height="470"/>
-        <image name="stay_connect_image" width="283" height="413"/>
         <image name="unchecked_checkbox.png" width="36" height="36"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -34,7 +34,6 @@
 
 @interface JMIntroModelManager()
 @property (nonatomic, copy) NSArray *pageData;
-@property (nonatomic, assign) NSInteger currentIndex;
 @end
 
 @implementation JMIntroModelManager
@@ -43,43 +42,28 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _currentIndex = 0;
         [self setupModel];
     }
     return self;
 }
 
 - (void)setupModel {
-    JMIntroModel *stayConnectedPage = [[JMIntroModel alloc] initWithTitle:@"Stay Connected"
-                                                              description:@"JasperMobile keeps you connected to\nyour business wherever you are."
+    JMIntroModel *stayConnectedPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.firstScreen.title", nil)
+                                                              description:JMCustomLocalizedString(@"intro.model.firstScreen.description", nil)
                                                                     image:[UIImage imageNamed:@"stay_connect_image"]];
-    JMIntroModel *instantAccessPage = [[JMIntroModel alloc] initWithTitle:@"Instant Access"
-                                                              description:@"Get access to live interactive reports\ndriven from your operational applications."
+    JMIntroModel *instantAccessPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.secondScreen.title", nil)
+                                                              description:JMCustomLocalizedString(@"intro.model.secondScreen.description", nil)
                                                                     image:[UIImage imageNamed:@"instant_access_image"]];
-    JMIntroModel *seemlessIntegrationPage = [[JMIntroModel alloc] initWithTitle:@"Seemless Integration"
-                                                                    description:@"View and interact with your JasperReports\nServer v5.0 or greater environment."
+    JMIntroModel *seemlessIntegrationPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.thirdScreen.title", nil)
+                                                                    description:JMCustomLocalizedString(@"intro.model.thirdScreen.description", nil)
                                                                           image:[UIImage imageNamed:@"seemless_integration_image"]];
     self.pageData = @[
             stayConnectedPage, instantAccessPage, seemlessIntegrationPage
     ];
 }
 
-- (JMIntroModel *)nextModel {
-    if (self.currentIndex < [self.pageData count]) {
-        return self.pageData[self.currentIndex++];
-    } else {
-        return nil;
-    }
-}
-
 - (JMIntroModel *)modelAtIndex:(NSUInteger)index {
     return self.pageData[index];
-}
-
-
-#pragma mark -
-- (BOOL)isLastPage {
-    return (self.currentIndex == [self.pageData count]);
 }
 
 @end

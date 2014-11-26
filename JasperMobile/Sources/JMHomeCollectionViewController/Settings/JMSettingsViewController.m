@@ -30,7 +30,6 @@
 #import "JMServerProfile+Helpers.h"
 
 #import "JMAppUpdater.h"
-#import "JMIntroViewController.h"
 #import "UIView+Additions.h"
 #import "JMOnboardIntroViewController.h"
 

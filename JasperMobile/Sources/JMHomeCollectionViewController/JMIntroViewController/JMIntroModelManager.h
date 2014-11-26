@@ -33,7 +33,5 @@
 
 
 @interface JMIntroModelManager : NSObject
-@property (nonatomic, assign, readonly) BOOL isLastPage;
-- (JMIntroModel *)nextModel;
 - (JMIntroModel *)modelAtIndex:(NSUInteger)index;
 @end

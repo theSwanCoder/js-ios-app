@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Tibco JasperMobile. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 
 @interface JMOnboardIntroViewController : UIViewController
-
 @end

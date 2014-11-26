@@ -31,6 +31,8 @@ static const CGFloat kDefaultStepValue = 1.0f;
 @property (weak, nonatomic) IBOutlet UIImageView *reportScreenIphoneImage;
 @property (weak, nonatomic) IBOutlet UIImageView *reportScreenIpadImage;
 @property (weak, nonatomic) IBOutlet UIImageView *serverScreenImage;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (nonatomic, strong) JMIntroModelManager *modelManager;
 @property (weak, nonatomic) IBOutlet UIButton *skipButton;
 @property (weak, nonatomic) IBOutlet UILabel *titlePageLabel;
@@ -62,7 +64,9 @@ static const CGFloat kDefaultStepValue = 1.0f;
 
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 
-    [self setButtonTitle:@"Skip Intro"];
+    [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
+    self.titleLabel.text = JMCustomLocalizedString(@"intro.title", nil);
+    self.descriptionLabel.text = JMCustomLocalizedString(@"intro.description", nil);
 
     UIImage *homeScreenImage = [UIImage imageNamed:@"home_screen"];
     self.homeScreenImage.image = homeScreenImage;
@@ -235,7 +239,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
             self.messageView.hidden = NO;
             // now page is
             self.introPage = JMOnboardIntroPageStayConnected;
-            [self setButtonTitle:@"Skip Intro"];
+            [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
 
             JMIntroModel *model = [self.modelManager modelAtIndex:0];
             self.titlePageLabel.text = model.pageTitle;
@@ -249,7 +253,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
         } completion:^(BOOL finished) {
             // now page is
             self.introPage = JMOnboardIntroPageInstanceAccess;
-            [self setButtonTitle:@"Skip Intro"];
+            [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
 
             JMIntroModel *model = [self.modelManager modelAtIndex:1];
             self.titlePageLabel.text = model.pageTitle;
@@ -263,7 +267,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
         } completion:^(BOOL finished) {
             // now page is
             self.introPage = JMOnboardIntroPageSeemlessIntegration;
-            [self setButtonTitle:@"Start using JasperMobile"];
+            [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.startUsing", nil)];
 
             JMIntroModel *model = [self.modelManager modelAtIndex:2];
             self.titlePageLabel.text = model.pageTitle;
@@ -404,7 +408,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
                 self.titlePageLabel.text = model.pageTitle;
                 self.descriptionPageLabel.text = model.pageDescription;
 
-                [self setButtonTitle:@"Skip Intro"];
+                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
 
                 // now page is
                 self.introPage = JMOnboardIntroPageStayConnected;
@@ -541,7 +545,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
                 self.titlePageLabel.text = model.pageTitle;
                 self.descriptionPageLabel.text = model.pageDescription;
 
-                [self setButtonTitle:@"Skip Intro"];
+                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
                 // now page is
                 self.introPage = JMOnboardIntroPageInstanceAccess;
             }];
@@ -643,7 +647,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
                 self.titlePageLabel.text = model.pageTitle;
                 self.descriptionPageLabel.text = model.pageDescription;
 
-                [self setButtonTitle:@"Skip Intro"];
+                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
 
                 self.introPage = JMOnboardIntroPageStayConnected;
             }];
@@ -678,7 +682,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
                 self.titlePageLabel.text = model.pageTitle;
                 self.descriptionPageLabel.text = model.pageDescription;
 
-                [self setButtonTitle:@"Start using JasperMobile"];
+                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.startUsing", nil)];
                 // now page is
                 self.introPage = JMOnboardIntroPageSeemlessIntegration;
             }];
@@ -799,7 +803,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
                 self.titlePageLabel.text = model.pageTitle;
                 self.descriptionPageLabel.text = model.pageDescription;
 
-                [self setButtonTitle:@"Skip Intro"];
+                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
                 self.introPage = JMOnboardIntroPageInstanceAccess;
             }];
         } else {
