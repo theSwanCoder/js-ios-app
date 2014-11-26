@@ -1113,7 +1113,7 @@
 		08D3E28819EBB82100F37DF4 /* JMPopupView */ = {
 			isa = PBXGroup;
 			children = (
-				089C228A1A263D72002106A9 /* JMListOptionsPopupView */,
+				089C22781A263C46002106A9 /* JMListOptionsPopupView */,
 				08D3E28F19EBB82100F37DF4 /* JMPopupView.h */,
 				08D3E29019EBB82100F37DF4 /* JMPopupView.m */,
 			);
@@ -2415,6 +2415,14 @@
 				088115F919B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib in Resources */,
 				9362BA611A25FD7D006A6178 /* search_item@3x.png in Resources */,
 				9362BAA01A25FD7E006A6178 /* res_type_html@3x.png in Resources */,
+				0895887419CC6D15002FFF5E /* make_favorite_item.png in Resources */,
+				08A0924D19E81634001A2016 /* refresh_action.png in Resources */,
+				085ACE4E19F93203009A1CEB /* favorites@2x~ipad.png in Resources */,
+				089C227D1A263C46002106A9 /* JMListOptionsPopupView.xib in Resources */,
+				089588A819CC6D15002FFF5E /* list_background_pattern.png in Resources */,
+				0895887819CC6D15002FFF5E /* grid_button.png in Resources */,
+				0895885719CC6D15002FFF5E /* next_action_item~ipad.png in Resources */,
+				0895886519CC6D15002FFF5E /* unchecked_checkbox@2x.png in Resources */,
 				F5D6373117909D3C005BA5CD /* jaspersoft-sdk-resources.bundle in Resources */,
 				088115F719B8C63F00C70170 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */,
 				9362BA8B1A25FD7D006A6178 /* settings@3x.png in Resources */,
@@ -2468,9 +2476,10 @@
 				9362BA911A25FD7E006A6178 /* grid_res_type_report.png in Resources */,
 				9362BA0B1A25FD7D006A6178 /* delete_action@3x.png in Resources */,
 				9362BA961A25FD7E006A6178 /* report_prototype_image.png in Resources */,
+				0895885D19CC6D15002FFF5E /* refresh_action@2x.png in Resources */,
+				0895887A19CC6D15002FFF5E /* horizontal_list_button.png in Resources */,
+				0895887B19CC6D15002FFF5E /* horizontal_list_button@2x.png in Resources */,
 				08DE67D119C05D8B00C25AEA /* JMSingleSelectTableViewController~ipad.xib in Resources */,
-<<<<<<< HEAD
-=======
 				089588BB19CC6D15002FFF5E /* res_type_report.png in Resources */,
 				0895886619CC6D15002FFF5E /* add_item.png in Resources */,
 				08E5DC5419F687B900BB7194 /* res_type_pdf@2x.png in Resources */,
@@ -2482,12 +2491,11 @@
 				0895888019CC6D15002FFF5E /* search_item.png in Resources */,
 				089588B919CC6D15002FFF5E /* res_type_pdf.png in Resources */,
 				08C838161A1F57640004BE78 /* AppiraterLocalizable.strings in Resources */,
-                085ACE4C19F93203009A1CEB /* favorites.png in Resources */,
+				085ACE4C19F93203009A1CEB /* favorites.png in Resources */,
 				085ACE4F19F93203009A1CEB /* favorites~ipad.png in Resources */,
 				089588AC19CC6D15002FFF5E /* server.png in Resources */,
 				0895886219CC6D15002FFF5E /* checked_checkbox.png in Resources */,
 				0895884F19CC6D15002FFF5E /* first_action_item~ipad.png in Resources */,
->>>>>>> Add Sort and Filter Functionality to Favorites Page (JM-584)
 				080F235619A77B23008758FA /* JMGridLoadingCollectionViewCell~ipad.xib in Resources */,
 				9362BA951A25FD7E006A6178 /* navBarBackgroundImage.png in Resources */,
 				9362BA6D1A25FD7D006A6178 /* Icon-40.png in Resources */,
@@ -2699,6 +2707,7 @@
 				08FF12E0199297FE0082265D /* JMSettingsViewController.m in Sources */,
 				088208891A023EAB00B6559F /* JMTimeInputControlCell.m in Sources */,
 				08DE67CB19C05D8B00C25AEA /* JMNumberInputControlCell.m in Sources */,
+				089C227C1A263C46002106A9 /* JMListOptionsPopupView.m in Sources */,
 				08DE67C619C05D8B00C25AEA /* JMBooleanInputControlCell.m in Sources */,
 				08625F6D19C2EE4C0087684E /* JMLibraryListLoader.m in Sources */,
 				086B716B19CB128600CC25CA /* JMSavedResourcesListLoader.m in Sources */,
