@@ -42,7 +42,6 @@
 - (void)updateWithParameters:(NSArray *)parameters
 {
     [self updateValueLabelWithParameters:parameters];
-    [self updateDisplayingOfErrorMessage];
 
     [self.delegate updatedInputControlsValuesWithDescriptor:self.inputControlDescriptor];
 }

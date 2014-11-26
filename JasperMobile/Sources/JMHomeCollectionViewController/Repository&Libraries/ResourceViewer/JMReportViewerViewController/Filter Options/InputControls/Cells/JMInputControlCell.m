@@ -55,7 +55,7 @@
 
 - (void) updateDisplayingOfErrorMessage
 {
-    self.detailTextLabel.text = ![self _isValidData] ? self.inputControlDescriptor.validationRules.mandatoryValidationRule.errorMessage : nil;
+    self.detailTextLabel.text = [self errorMessage];
     [self setNeedsLayout];
     [self layoutIfNeeded];
 }
@@ -84,15 +84,20 @@
     }
 }
 
-- (BOOL)_isValidData
+- (NSString *)errorMessage
 {
-    return !(self.inputControlDescriptor.validationRules.mandatoryValidationRule && self.inputControlDescriptor.state.value == nil);
+    if (self.inputControlDescriptor.validationRules.mandatoryValidationRule && self.inputControlDescriptor.state.value == nil) {
+        return self.inputControlDescriptor.validationRules.mandatoryValidationRule.errorMessage;
+    } else if ([self.inputControlDescriptor.state.error length]) {
+        return self.inputControlDescriptor.state.error;
+    }
+    return nil;
 }
 
 - (BOOL)isValidData
 {
     [self updateDisplayingOfErrorMessage];
-    return [self _isValidData];
+    return ![self errorMessage];
 }
 
 @end

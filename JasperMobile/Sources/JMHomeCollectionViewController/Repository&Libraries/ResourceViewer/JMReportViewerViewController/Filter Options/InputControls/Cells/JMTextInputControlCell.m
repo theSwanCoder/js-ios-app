@@ -59,6 +59,8 @@
 {
     NSString *value = [textField.text stringByReplacingCharactersInRange:range withString:string];
     self.inputControlDescriptor.state.value = value.length ? value : nil;
+    self.inputControlDescriptor.state.error = nil;
+    
     [self updateDisplayingOfErrorMessage];
     return YES;
 }
@@ -68,8 +70,6 @@
 - (void)doneButtonTapped:(id)sender
 {
     self.inputControlDescriptor.state.value = self.textField.text;
-    [self updateDisplayingOfErrorMessage];
-
     [self.textField resignFirstResponder];
 }
 
