@@ -102,7 +102,7 @@ static NSMutableArray* visiblePopupsArray = nil;
             _backGroundView.frame = _contentView.bounds;
             break;
         case JMPopupViewType_OkCancelButtons:
-            _backGroundView.frame = CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height + kJMPopupViewButtonsHeight);
+            _backGroundView.frame = CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height + (kJMPopupViewButtonsHeight));
             break;
     }
     _contentView.center = CGPointMake(contentView.frame.size.width / 2, contentView.frame.size.height / 2);
