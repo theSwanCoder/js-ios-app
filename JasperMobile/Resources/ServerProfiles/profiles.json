@@ -3,7 +3,7 @@
 	    {
 			"mAlias" : "PRO 5.5.0 JasperAdmin",
 			"mServerUrl" : "http://192.168.88.44:8084/jasperserver-pro-5.5",
-			"mOrganization" : "",
+			"mOrganization" : "organization_1",
 			"mUsername" : "jasperadmin",
 			"mPassword" : "jasperadmin"
 		},
@@ -17,7 +17,7 @@
 		{
 			"mAlias" : "PRO 5.5.0 Joeuser",
 			"mServerUrl" : "http://192.168.88.44:8084/jasperserver-pro-5.5",
-			"mOrganization" : "",
+			"mOrganization" : "organization_1",
 			"mUsername" : "joeuser",
 			"mPassword" : "joeuser"
 		},
@@ -31,14 +31,14 @@
 		{
 			"mAlias" : "PRO 5.6.0 JasperAdmin",
 			"mServerUrl" : "http://192.168.88.44:8085/jasperserver-pro-5.6.0",
-			"mOrganization" : "",
+			"mOrganization" : "organization_1",
 			"mUsername" : "jasperadmin",
 			"mPassword" : "jasperadmin"
 		},
 		{
 			"mAlias" : "PRO 5.6.0 JoeUser",
 			"mServerUrl" : "http://192.168.88.44:8085/jasperserver-pro-5.6.0",
-			"mOrganization" : "",
+			"mOrganization" : "organization_1",
 			"mUsername" : "joeuser",
 			"mPassword" : "joeuser"
 		},
@@ -52,14 +52,14 @@
 		{
 			"mAlias" : "PRO 5.6.1 JasperAdmin",
 			"mServerUrl" : "http://192.168.88.44:8086/jasperserver-pro-5.6.1",
-			"mOrganization" : "",
+			"mOrganization" : "organization_1",
 			"mUsername" : "jasperadmin",
 			"mPassword" : "jasperadmin"
 		},
 		{
 			"mAlias" : "PRO 5.6.1 JoeUser",
 			"mServerUrl" : "http://192.168.88.44:8086/jasperserver-pro-5.6.1",
-			"mOrganization" : "",
+			"mOrganization" : "organization_1",
 			"mUsername" : "joeuser",
 			"mPassword" : "joeuser"
 		},
@@ -73,14 +73,14 @@
 		{
 			"mAlias" : "PRO Trunk(6.0) JasperAdmin",
 			"mServerUrl" : "http://build-master.jaspersoft.com:5980/jrs-pro-trunk",
-			"mOrganization" : "",
+			"mOrganization" : "organization_1",
 			"mUsername" : "jasperadmin",
 			"mPassword" : "jasperadmin"
 		},
 		{
 			"mAlias" : "PRO Trunk(6.0) JoeUser",
 			"mServerUrl" : "http://build-master.jaspersoft.com:5980/jrs-pro-trunk",
-			"mOrganization" : "",
+			"mOrganization" : "organization_1",
 			"mUsername" : "joeuser",
 			"mPassword" : "joeuser"
 		},
