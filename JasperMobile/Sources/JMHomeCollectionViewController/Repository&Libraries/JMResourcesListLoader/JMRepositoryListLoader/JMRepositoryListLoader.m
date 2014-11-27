@@ -48,7 +48,7 @@
 
 - (void)loadNextPage
 {
-    if (self.resourceLookup) {
+    if (self.resourceLookup || (!self.resourceLookup && [self.searchQuery length])) {
         [super loadNextPage];
     } else {
         _needUpdateData = NO;
