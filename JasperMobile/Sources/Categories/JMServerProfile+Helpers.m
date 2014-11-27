@@ -105,11 +105,7 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
 
 - (BOOL)serverProfileIsActive
 {
-    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
-    NSManagedObjectID *activeID = activeServerProfile.objectID;
-    NSManagedObjectID *selfID = self.objectID;
-    
-    return [activeID isEqual:selfID];
+    return [[JMServerProfile activeServerID] isEqual:self.objectID];
 }
 
 - (void)setServerProfileIsActive:(BOOL)serverProfileIsActive
