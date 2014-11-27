@@ -48,7 +48,9 @@
     if (self.detailTextLabel.text && self.detailTextLabel.text.length) {
         CGFloat accessoryViewPadding = self.contentView.frame.size.width - self.accessoryView.frame.size.width - self.accessoryView.frame.origin.x;
         CGRect detailTextLabelFrame = self.detailTextLabel.frame;
+        detailTextLabelFrame.origin.y = self.textLabel.frame.origin.y + self.textLabel.frame.size.height;
         detailTextLabelFrame.size.width = self.contentView.frame.size.width - 2 * accessoryViewPadding;
+        detailTextLabelFrame.size.height = ceilf(self.detailTextLabel.font.lineHeight);
         self.detailTextLabel.frame = detailTextLabelFrame;
     }
 }

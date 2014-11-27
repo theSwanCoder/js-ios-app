@@ -59,7 +59,6 @@
 "servers.button.makeactive" = "Make Active";
 
 "servers.action.clone.profile" = "Clone Profile";
-"servers.action.cloned.profile.prefix" = "Cloned - %@";
 
 
 /* Report Saver view */

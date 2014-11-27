@@ -80,17 +80,16 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 
 - (void)runReport
 {
+    [self.view endEditing:YES];
     if ([self validateInputControls]) { // Local validation
-        [self updatedInputControlsValuesWithCompletion:@weakself(^(void)) { // Server validation
-            if ([self validateInputControls]) {
+        [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
+            if (dataIsValid) {
                 if (!self.delegate) {
                     [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:self.inputControls];
                 } else {
                     [self.delegate performSelector:@selector(setInputControls:) withObject:self.inputControls];
                     [self.delegate refresh];
                 }
-            } else {
-                [self.tableView reloadData];
             }
         } @weakselfend];
     }
@@ -147,9 +146,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor
 {
     if (descriptor.slaveDependencies.count) {
-        [self updatedInputControlsValuesWithCompletion:@weakself(^(void)){
-            [self.tableView reloadData];
-        } @weakselfend];
+        [self updatedInputControlsValuesWithCompletion:nil];
     }
 }
 
@@ -171,7 +168,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
              };
 }
 
-- (void)updatedInputControlsValuesWithCompletion:(void(^)(void))completion
+- (void)updatedInputControlsValuesWithCompletion:(void(^)(BOOL dataIsValid))completion
 {
     NSMutableArray *selectedValues = [NSMutableArray array];
     NSMutableArray *allInputControls = [NSMutableArray array];
@@ -195,8 +192,16 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
                 }
             }
         }
-        if (completion) {
-            completion();
+        [self.tableView reloadData];
+        if ([self validateInputControls]) {
+            if (completion) {
+                completion(YES);
+            }
+        } else {
+            [self.tableView reloadData];
+            if (completion) {
+                completion(NO);
+            }
         }
     } @weakselfend viewControllerToDismiss:self];
     

@@ -68,11 +68,8 @@ static NSString * const kJMMakeActiveCellIdentifier = @"MakeActiveCell";
     JMServerOption *serverOption = [self.optionsArray objectAtIndex:0];
     if (serverOption.optionValue && [[serverOption.optionValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
         // Check if alias is unique
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
-        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K == %@", @"alias", serverOption.optionValue]];
-        NSArray *servers = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
-        
-        if (servers && [servers count] && ![[servers lastObject] isEqual:self.serverProfile]) {
+        JMServerProfile *serverProfile = [JMServerProfile serverProfileForname:serverOption.optionValue];
+        if (serverProfile && ![serverProfile isEqual:self.serverProfile]) {
             serverOption.errorString = JMCustomLocalizedString(@"servers.name.errmsg.exists", nil);
         } else {
             self.serverProfile.alias = serverOption.optionValue;

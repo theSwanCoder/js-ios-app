@@ -71,18 +71,20 @@ objection_requires(@"resourceClient", @"resourceLookup")
     }
 }
 
+- (void)dealloc
+{
+    self.webView.delegate = nil;
+    [self.webView performSelector:@selector(stringByEvaluatingJavaScriptFromString:) withObject:@"document.body.innerHTML='';" afterDelay:0.25];
+    [self.webView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.25];
+    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:self.resourceRequest];
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     if (self.webView.loading) {
         [self.webView stopLoading];
         [self loadingDidFinished];
-    }
-    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
-        self.webView.delegate = nil;
-        [self.webView performSelector:@selector(stringByEvaluatingJavaScriptFromString:) withObject:@"document.body.innerHTML='';" afterDelay:0.25];
-        [self.webView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.25];
-        [[NSURLCache sharedURLCache] removeCachedResponseForRequest:self.resourceRequest];
     }
 }
 

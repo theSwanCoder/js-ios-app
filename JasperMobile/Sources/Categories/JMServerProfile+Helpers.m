@@ -122,6 +122,13 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
     return [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_5_0;
 }
 
++ (JMServerProfile *)serverProfileForname:(NSString *)serverName
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K == %@", @"alias", serverName]];
+    return [[[self managedObjectContext] executeFetchRequest:fetchRequest error:nil] lastObject];
+}
+
 + (void) cloneServerProfile:(JMServerProfile *)serverProfile
 {
     NSString *entityName = [[serverProfile entity] name];
@@ -130,8 +137,14 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
     JMServerProfile *newServerProfile = [NSEntityDescription
                                          insertNewObjectForEntityForName:entityName
                                          inManagedObjectContext:[self managedObjectContext]];
+
+    NSInteger cloneNumber = 0;
+    NSString *serverName = nil;
+    do {
+        serverName = (cloneNumber++ > 0) ? [serverProfile.alias stringByAppendingFormat:@" %zd", cloneNumber] : serverProfile.alias;
+    } while ([self serverProfileForname:serverName]);
     
-    newServerProfile.alias          = [NSString stringWithFormat:JMCustomLocalizedString(@"servers.action.cloned.profile.prefix", nil), serverProfile.alias];
+    newServerProfile.alias          = serverName;
     newServerProfile.askPassword    = serverProfile.askPassword;
     newServerProfile.organization   = serverProfile.organization;
     newServerProfile.password       = serverProfile.password;
