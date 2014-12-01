@@ -10,6 +10,7 @@
 #import "UIView+Additions.h"
 #import "JMIntroModelManager.h"
 #import "JMIntroModel.h"
+#import "JMIntroImageView.h"
 
 typedef NS_ENUM(NSInteger, JMOnboardIntroPage) {
     JMOnboardIntroPageWelcome,
@@ -20,6 +21,12 @@ typedef NS_ENUM(NSInteger, JMOnboardIntroPage) {
 
 static const CGFloat kDefaultAnimationDuration = 0.4f;
 static const CGFloat kDefaultStepValue = 1.0f;
+static const CGFloat kDefaultMinVelocity = 500.0f;
+
+static NSString * const kPageIdentifierStartPage = @"kPageIdentifierStartPage";
+static NSString * const kPageIdentifierStayConnected = @"kPageIdentifierStayConnected";
+static NSString * const kPageIdentifierInstanceAccess = @"kPageIdentifierInstanceAccess";
+static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSeemlessIntegration";
 
 @interface JMOnboardIntroViewController ()
 @property (weak, nonatomic) IBOutlet UIView *titleView;
@@ -27,10 +34,10 @@ static const CGFloat kDefaultStepValue = 1.0f;
 @property (weak, nonatomic) IBOutlet UIView *welcomeView;
 @property (weak, nonatomic) IBOutlet UIView *messageView;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
-@property (weak, nonatomic) IBOutlet UIImageView *homeScreenImage;
-@property (weak, nonatomic) IBOutlet UIImageView *reportScreenIphoneImage;
-@property (weak, nonatomic) IBOutlet UIImageView *reportScreenIpadImage;
-@property (weak, nonatomic) IBOutlet UIImageView *serverScreenImage;
+@property (weak, nonatomic) IBOutlet JMIntroImageView *homeScreenImage;
+@property (weak, nonatomic) IBOutlet JMIntroImageView *reportScreenIphoneImage;
+@property (weak, nonatomic) IBOutlet JMIntroImageView *reportScreenIpadImage;
+@property (weak, nonatomic) IBOutlet JMIntroImageView *serverScreenImage;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (nonatomic, strong) JMIntroModelManager *modelManager;
@@ -68,18 +75,7 @@ static const CGFloat kDefaultStepValue = 1.0f;
     self.titleLabel.text = JMCustomLocalizedString(@"intro.title", nil);
     self.descriptionLabel.text = JMCustomLocalizedString(@"intro.description", nil);
 
-    UIImage *homeScreenImage = [UIImage imageNamed:@"home_screen"];
-    self.homeScreenImage.image = homeScreenImage;
-    UIImage *serversScreenImage = [UIImage imageNamed:@"server_screen"];
-    self.serverScreenImage.image = serversScreenImage;
-
-    [self setupTitleViewStartPosition];
-    [self setupContentViewStartPosition];
-
-    [self setupHomeScreenImageStartPosition];
-    [self setupReportScreenIphoneImageStartPosition];
-    [self setupReportScreenIpadImageStartPosition];
-    [self setupServerScreenImageStartPosition];
+    [self setupImages];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -91,6 +87,148 @@ static const CGFloat kDefaultStepValue = 1.0f;
 - (BOOL)shouldAutorotate {
     return NO;
 }
+
+#pragma mark - Setup
+- (void)setupImages {
+    [self setupHomeScreenImage];
+    [self setupServerScreenImage];
+
+    [self setupReportScreenIpadImage];
+    [self setupReportScreenIphoneImage];
+
+    [self setupTitleViewStartPosition];
+    [self setupContentViewStartPosition];
+    [self setupStartPositions];
+}
+
+- (void)setupHomeScreenImage {
+    CGFloat homeScreenTopPadding = 10;
+
+    UIImage *homeScreenImage = [UIImage imageNamed:@"home_screen"];
+    CGFloat homeScreenImageWidth = homeScreenImage.size.width;
+    CGFloat homeScreenImageHeight = homeScreenImage.size.height;
+
+    self.homeScreenImage.image = homeScreenImage;
+
+    CGRect imageFrame = CGRectZero;
+
+    CGFloat mainViewWidth = CGRectGetWidth(self.view.bounds);
+    CGFloat newOriginX = mainViewWidth/2 - homeScreenImageWidth/2;
+    CGFloat newOriginY = homeScreenTopPadding;
+
+    imageFrame.origin = CGPointMake(newOriginX, newOriginY);
+    imageFrame.size = homeScreenImage.size;
+    [self.homeScreenImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierStartPage];
+
+    [self.homeScreenImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierStayConnected];
+
+    // small image under bottom of screen
+    CGFloat titleViewEndPositionHeight = CGRectGetHeight(self.messageView.frame);
+    CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
+
+    CGFloat contentViewWidth = CGRectGetWidth(self.contentView.frame);
+    CGFloat mainViewHeight = CGRectGetHeight(self.view.bounds);
+    newOriginX = contentViewWidth/2 - homeScreenImageWidth/(2*5.0f);
+    newOriginY = mainViewHeight - titleViewEndPositionHeight - bottomViewHeight;
+
+    imageFrame.origin = CGPointMake(newOriginX, newOriginY);
+    imageFrame.size = CGSizeMake(homeScreenImageWidth/5.0f, homeScreenImageHeight/5.0f);
+    imageFrame = CGRectIntegral(imageFrame);
+    [self.homeScreenImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierInstanceAccess];
+
+    [self.homeScreenImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierSeemlessIntegration];
+}
+
+- (void)setupServerScreenImage {
+    CGFloat serverScreenImageTopPadding = 10;
+
+    UIImage *serversScreenImage = [UIImage imageNamed:@"server_screen"];
+    CGFloat serverScreenImageWidth = serversScreenImage.size.width;
+    CGFloat serverScreenImageHeight = serversScreenImage.size.height;
+
+    self.serverScreenImage.image = serversScreenImage;
+
+    CGRect imageFrame = CGRectZero;
+
+    CGFloat titleViewEndPositionHeight = CGRectGetHeight(self.messageView.frame);
+    CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
+
+    CGFloat mainViewWidth = CGRectGetWidth(self.view.bounds);
+    CGFloat mainViewHeight = CGRectGetHeight(self.view.bounds);
+    CGFloat newOriginX = mainViewWidth/2 - serverScreenImageWidth/(2*5.0f);
+    CGFloat newOriginY = mainViewHeight - titleViewEndPositionHeight - bottomViewHeight;
+
+    imageFrame.origin = CGPointMake(newOriginX, newOriginY);
+    imageFrame.size = CGSizeMake(serverScreenImageWidth/5.0f, serverScreenImageHeight/5.0f);
+    imageFrame = CGRectIntegral(imageFrame);
+    [self.serverScreenImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierStartPage];
+    [self.serverScreenImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierStayConnected];
+    [self.serverScreenImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierInstanceAccess];
+
+    newOriginX = self.view.bounds.size.width/2 - serverScreenImageWidth/2;
+    newOriginY = serverScreenImageTopPadding;
+    imageFrame.origin = CGPointMake(newOriginX, newOriginY);
+    imageFrame.size = CGSizeMake(serverScreenImageWidth, serverScreenImageHeight);
+    imageFrame = CGRectIntegral(imageFrame);
+    [self.serverScreenImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierSeemlessIntegration];
+}
+
+- (void)setupReportScreenIpadImage {
+    UIImage *reportScreenIpadImage = [UIImage imageNamed:@"report_screen_ipad"];
+    CGFloat reportScreenIpadImageWidth = reportScreenIpadImage.size.width;
+
+    CGRect imageFrame = CGRectZero;
+    imageFrame.size = reportScreenIpadImage.size;
+
+    CGFloat newOriginX = -reportScreenIpadImageWidth;
+    CGFloat newOriginY = 0;
+    imageFrame.origin = CGPointMake(newOriginX, newOriginY);
+    [self.reportScreenIpadImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierStartPage];
+    [self.reportScreenIpadImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierStayConnected];
+
+    CGFloat contentViewWidth = CGRectGetWidth(self.contentView.frame);
+    newOriginX = contentViewWidth/2 - reportScreenIpadImageWidth/2;
+    imageFrame.origin = CGPointMake(newOriginX, newOriginY);
+    [self.reportScreenIpadImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierInstanceAccess];
+
+    newOriginX = -reportScreenIpadImageWidth;
+    imageFrame.origin = CGPointMake(newOriginX, newOriginY);
+    [self.reportScreenIpadImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierSeemlessIntegration];
+}
+
+- (void)setupReportScreenIphoneImage {
+    UIImage *reportScreenIphoneImage = [UIImage imageNamed:@"report_screen_iphone"];
+    CGFloat reportScreenIphoneImageWidth = reportScreenIphoneImage.size.width;
+    CGFloat reportScreenIphoneImageHeight = reportScreenIphoneImage.size.height;
+    CGFloat ipadImageHeigth = self.reportScreenIpadImage.image.size.height;
+    CGFloat ipadImageWidth = self.reportScreenIpadImage.image.size.width;
+
+    CGRect imageFrame = CGRectZero;
+    imageFrame.size = reportScreenIphoneImage.size;
+
+    CGFloat newOriginY = ipadImageHeigth - reportScreenIphoneImageHeight * 3/4;
+    CGFloat contentViewWidth = CGRectGetWidth(self.contentView.frame);
+    CGFloat newOriginX = contentViewWidth;
+    imageFrame.origin = CGPointMake(newOriginX, newOriginY);
+    [self.reportScreenIphoneImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierStartPage];
+    [self.reportScreenIphoneImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierStayConnected];
+
+    newOriginX = contentViewWidth/2 + ipadImageWidth/2 - reportScreenIphoneImageWidth * 3/4;
+    imageFrame.origin = CGPointMake(newOriginX, newOriginY);
+    [self.reportScreenIphoneImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierInstanceAccess];
+
+    newOriginX = contentViewWidth;
+    imageFrame.origin = CGPointMake(newOriginX, newOriginY);
+    [self.reportScreenIphoneImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierSeemlessIntegration];
+}
+
+- (void)setupStartPositions {
+    [self.homeScreenImage updateFrameForPageWithIdentifier:kPageIdentifierStartPage];
+    [self.reportScreenIphoneImage updateFrameForPageWithIdentifier:kPageIdentifierStartPage];
+    [self.reportScreenIpadImage updateFrameForPageWithIdentifier:kPageIdentifierStartPage];
+    [self.serverScreenImage updateFrameForPageWithIdentifier:kPageIdentifierStartPage];
+}
+
 
 #pragma mark - Actions
 - (IBAction)skipAction:(id)sender {
@@ -123,93 +261,113 @@ static const CGFloat kDefaultStepValue = 1.0f;
     [self.contentView updateOriginWithOrigin:CGPointMake(0, titleViewHeight)];
 }
 
-- (void)setupHomeScreenImageStartPosition {
-    CGFloat homeScreenTopPadding = 10;
-
-    UIImage *homeScreenImage = self.homeScreenImage.image;
-    CGFloat homeScreenImageWidth = homeScreenImage.size.width;
-    CGFloat homeScreenImageHeight = homeScreenImage.size.height;
-
-    CGFloat mainViewWidth = CGRectGetWidth(self.view.bounds);
-    CGFloat newOriginX = mainViewWidth/2 - homeScreenImageWidth/2;
-    CGFloat newOriginY = homeScreenTopPadding;
-    [self.homeScreenImage updateFrameWithOrigin:CGPointMake(newOriginX, newOriginY)
-                                           size:CGSizeMake(homeScreenImageWidth, homeScreenImageHeight)];
-}
-
-- (void)setupHomeScreenImageSmallSizeOutScreen {
-    CGFloat titleViewEndPositionHeight = CGRectGetHeight(self.messageView.frame);
-    CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
-
-    UIImage *homeScreenImage = self.homeScreenImage.image;
-    CGFloat homeScreenImageWidth = homeScreenImage.size.width;
-    CGFloat homeScreenImageHeight = homeScreenImage.size.height;
-
-    CGFloat contentViewWidth = CGRectGetWidth(self.contentView.frame);
-    CGFloat mainViewHeight = CGRectGetHeight(self.view.bounds);
-    CGFloat newOriginX = contentViewWidth/2 - homeScreenImageWidth/(2*5.0f);
-    CGFloat newOriginY = mainViewHeight - titleViewEndPositionHeight - bottomViewHeight;
-    [self.homeScreenImage updateFrameWithOrigin:CGPointMake(newOriginX, newOriginY)
-                                           size:CGSizeMake(homeScreenImageWidth/5.0f, homeScreenImageHeight/5.0f)];
-}
-
-- (void)setupReportScreenIpadImageStartPosition {
-    CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
-    CGFloat reportScreenIpadImageWidth = CGRectGetWidth(self.reportScreenIpadImage.frame);
-    CGFloat newOriginX = -reportScreenIpadImageWidth;
-    CGFloat newOriginY = bottomViewHeight;
-    [self.reportScreenIpadImage updateOriginWithOrigin:CGPointMake(newOriginX, newOriginY)];
-}
-
-- (void)setupReportScreenIpadImageEndPosition {
-    CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
-    CGFloat contentViewWidth = CGRectGetWidth(self.contentView.frame);
-    CGFloat reportScreenIpadImageWidth = CGRectGetWidth(self.reportScreenIpadImage.frame);
-    CGFloat newOriginX = contentViewWidth/2 - reportScreenIpadImageWidth/2;
-    CGFloat newOriginY = bottomViewHeight;
-    [self.reportScreenIpadImage updateOriginWithOrigin:CGPointMake(newOriginX, newOriginY)];
-}
-
-- (void)setupReportScreenIphoneImageStartPosition {
-    CGFloat contentViewWidth = CGRectGetWidth(self.contentView.frame);
-    CGFloat newOriginX = contentViewWidth;
-    CGFloat newOriginY = 170;
-    [self.reportScreenIphoneImage updateOriginWithOrigin:CGPointMake(newOriginX, newOriginY)];
-}
-
-- (void)setupReportScreenIphoneImageEndPosition {
-    CGFloat newOriginX = self.contentView.frame.size.width/2 - self.reportScreenIphoneImage.frame.size.width/2 + 100;
-    CGFloat newOriginY = 170;
-    [self.reportScreenIphoneImage updateOriginWithOrigin:CGPointMake(newOriginX, newOriginY)];
-}
-
-- (void)setupServerScreenImageStartPosition {
-    CGFloat titleViewEndPositionHeight = CGRectGetHeight(self.messageView.frame);
-    CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
-
-    UIImage *serverScreenImage = self.serverScreenImage.image;
-    CGFloat serverScreenImageWidth = serverScreenImage.size.width;
-    CGFloat serverScreenImageHeight = serverScreenImage.size.height;
-
-    CGFloat newOriginX = self.view.bounds.size.width/2 - serverScreenImageWidth/(2*5.0f);
-    CGFloat newOriginY = self.view.bounds.size.height - titleViewEndPositionHeight - bottomViewHeight;
-    [self.serverScreenImage updateFrameWithOrigin:CGPointMake(newOriginX, newOriginY)
-                                             size:CGSizeMake(serverScreenImageWidth/5.0f, serverScreenImageHeight/5.0f)];
-}
-
-- (void)setupServerScreenImageFullSizePosition {
-    CGFloat serverScreenImageTopPadding = 10;
-    UIImage *serverScreenImage = self.serverScreenImage.image;
-    CGFloat serverScreenImageWidth = serverScreenImage.size.width;
-    CGFloat serverScreenImageHeight = serverScreenImage.size.height;
-
-    CGFloat newOriginX = self.view.bounds.size.width/2 - serverScreenImageWidth/2;
-    CGFloat newOriginY = serverScreenImageTopPadding;
-    [self.serverScreenImage updateFrameWithOrigin:CGPointMake(newOriginX, newOriginY)
-                                             size:CGSizeMake(serverScreenImageWidth, serverScreenImageHeight)];
-}
-
 #pragma mark - Animations
+- (void)animateMoveToPage:(JMOnboardIntroPage)introPage {
+    switch (introPage) {
+        case JMOnboardIntroPageWelcome: {
+            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                [self setupTitleViewStartPosition];
+                [self setupContentViewStartPosition];
+                [self.homeScreenImage updateFrameForPageWithIdentifier:kPageIdentifierStayConnected];
+            } completion:^(BOOL finished) {
+                self.welcomeView.hidden = NO;
+                self.messageView.hidden = YES;
+                // now page is
+                self.introPage = JMOnboardIntroPageWelcome;
+            }];
+            break;
+        }
+        case JMOnboardIntroPageStayConnected: {
+            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                [self setupTitleViewEndPosition];
+                [self setupContentViewEndPosition];
+                [self.homeScreenImage updateFrameForPageWithIdentifier:kPageIdentifierStayConnected];
+                [self.reportScreenIphoneImage updateFrameForPageWithIdentifier:kPageIdentifierStayConnected];
+                [self.reportScreenIpadImage updateFrameForPageWithIdentifier:kPageIdentifierStayConnected];
+            } completion:^(BOOL finished) {
+                self.welcomeView.hidden = YES;
+                self.messageView.hidden = NO;
+                // now page is
+                self.introPage = JMOnboardIntroPageStayConnected;
+                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
+
+                JMIntroModel *model = [self.modelManager modelAtIndex:0];
+                self.titlePageLabel.text = model.pageTitle;
+                self.descriptionPageLabel.text = model.pageDescription;
+            }];
+            break;
+        }
+        case JMOnboardIntroPageInstanceAccess: {
+            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                [self.homeScreenImage updateFrameForPageWithIdentifier:kPageIdentifierInstanceAccess];
+                [self.reportScreenIphoneImage updateFrameForPageWithIdentifier:kPageIdentifierInstanceAccess];
+                [self.reportScreenIpadImage updateFrameForPageWithIdentifier:kPageIdentifierInstanceAccess];
+                [self.serverScreenImage updateFrameForPageWithIdentifier:kPageIdentifierInstanceAccess];
+            } completion:^(BOOL finished) {
+                // now page is
+                self.introPage = JMOnboardIntroPageInstanceAccess;
+                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
+
+                JMIntroModel *model = [self.modelManager modelAtIndex:1];
+                self.titlePageLabel.text = model.pageTitle;
+                self.descriptionPageLabel.text = model.pageDescription;
+            }];
+            break;
+        }
+        case JMOnboardIntroPageSeemlessIntegration: {
+            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                [self.serverScreenImage updateFrameForPageWithIdentifier:kPageIdentifierSeemlessIntegration];
+                [self.reportScreenIphoneImage updateFrameForPageWithIdentifier:kPageIdentifierSeemlessIntegration];
+                [self.reportScreenIpadImage updateFrameForPageWithIdentifier:kPageIdentifierSeemlessIntegration];
+            } completion:^(BOOL finished) {
+                // now page is
+                self.introPage = JMOnboardIntroPageSeemlessIntegration;
+                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.startUsing", nil)];
+
+                JMIntroModel *model = [self.modelManager modelAtIndex:2];
+                self.titlePageLabel.text = model.pageTitle;
+                self.descriptionPageLabel.text = model.pageDescription;
+            }];
+            break;
+        }
+    }
+}
+
+- (void)animateRestorePage:(JMOnboardIntroPage)introPage {
+    switch (introPage) {
+        case JMOnboardIntroPageWelcome : {
+            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                [self setupContentViewStartPosition];
+            }];
+            break;
+        }
+        case JMOnboardIntroPageStayConnected : {
+            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                [self.homeScreenImage updateFrameForPageWithIdentifier:kPageIdentifierStayConnected];
+                [self.reportScreenIphoneImage updateFrameForPageWithIdentifier:kPageIdentifierStayConnected];
+                [self.reportScreenIpadImage updateFrameForPageWithIdentifier:kPageIdentifierStayConnected];
+            }];
+            break;
+        }
+        case JMOnboardIntroPageInstanceAccess : {
+            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                [self.homeScreenImage updateFrameForPageWithIdentifier:kPageIdentifierInstanceAccess];
+                [self.reportScreenIpadImage updateFrameForPageWithIdentifier:kPageIdentifierInstanceAccess];
+                [self.reportScreenIphoneImage updateFrameForPageWithIdentifier:kPageIdentifierInstanceAccess];
+                [self.serverScreenImage updateFrameForPageWithIdentifier:kPageIdentifierInstanceAccess];
+            }];
+            break;
+        }
+        case JMOnboardIntroPageSeemlessIntegration : {
+            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                [self.reportScreenIpadImage updateFrameForPageWithIdentifier:kPageIdentifierSeemlessIntegration];
+                [self.reportScreenIphoneImage updateFrameForPageWithIdentifier:kPageIdentifierSeemlessIntegration];
+                [self.serverScreenImage updateFrameForPageWithIdentifier:kPageIdentifierSeemlessIntegration];
+            }];
+            break;
+        }
+    }
+}
 
 #pragma mark - Gesture Recognizer
 - (void)addGestureRecognizer {
@@ -231,48 +389,11 @@ static const CGFloat kDefaultStepValue = 1.0f;
 
 - (void)handleTap:(UITapGestureRecognizer *)tapGestureRecognizer {
     if (self.introPage == JMOnboardIntroPageWelcome) {
-        [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-            [self setupTitleViewEndPosition];
-            [self setupContentViewEndPosition];
-        } completion:^(BOOL finished) {
-            self.welcomeView.hidden = YES;
-            self.messageView.hidden = NO;
-            // now page is
-            self.introPage = JMOnboardIntroPageStayConnected;
-            [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
-
-            JMIntroModel *model = [self.modelManager modelAtIndex:0];
-            self.titlePageLabel.text = model.pageTitle;
-            self.descriptionPageLabel.text = model.pageDescription;
-        }];
+        [self animateMoveToPage:JMOnboardIntroPageStayConnected];
     } else if (self.introPage == JMOnboardIntroPageStayConnected) {
-        [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-            [self setupHomeScreenImageSmallSizeOutScreen];
-            [self setupReportScreenIpadImageEndPosition];
-            [self setupReportScreenIphoneImageEndPosition];
-        } completion:^(BOOL finished) {
-            // now page is
-            self.introPage = JMOnboardIntroPageInstanceAccess;
-            [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
-
-            JMIntroModel *model = [self.modelManager modelAtIndex:1];
-            self.titlePageLabel.text = model.pageTitle;
-            self.descriptionPageLabel.text = model.pageDescription;
-        }];
+        [self animateMoveToPage:JMOnboardIntroPageInstanceAccess];
     } else if (self.introPage == JMOnboardIntroPageInstanceAccess) {
-        [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-            [self setupServerScreenImageFullSizePosition];
-            [self setupReportScreenIphoneImageStartPosition];
-            [self setupReportScreenIpadImageStartPosition];
-        } completion:^(BOOL finished) {
-            // now page is
-            self.introPage = JMOnboardIntroPageSeemlessIntegration;
-            [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.startUsing", nil)];
-
-            JMIntroModel *model = [self.modelManager modelAtIndex:2];
-            self.titlePageLabel.text = model.pageTitle;
-            self.descriptionPageLabel.text = model.pageDescription;
-        }];
+        [self animateMoveToPage:JMOnboardIntroPageSeemlessIntegration];
     }
 }
 
@@ -382,42 +503,30 @@ static const CGFloat kDefaultStepValue = 1.0f;
 
 - (void)updateWelcomePageViewsWithVelocity:(CGPoint)velocity {
     CGFloat velocityY = fabsf(velocity.y);
+    CGPoint contentViewOrigin = self.contentView.frame.origin;
+    CGFloat contentViewStartOriginY = 290;
     CGFloat contentViewBeginUpdateOriginY = 230;
 
     if (velocity.y > 0) {
         // move down
+        if (contentViewOrigin.y == contentViewStartOriginY) {
+            self.isUnderRedLine = YES;
+        }
 
         // restore previous state
-        [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-            [self setupContentViewStartPosition];
-        }];
+        [self animateRestorePage:JMOnboardIntroPageWelcome];
     } else {
         // move up
+        if (contentViewOrigin.y == contentViewStartOriginY) {
+            self.isUnderRedLine = NO;
+        }
 
-        if (self.contentView.frame.origin.y < contentViewBeginUpdateOriginY || velocityY > 500) {
-            // begin move to next page
-            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                [self setupTitleViewEndPosition];
-                [self setupContentViewEndPosition];
-            } completion:^(BOOL finished) {
-                self.welcomeView.hidden = YES;
-                self.messageView.hidden = NO;
-
-                // titles
-                JMIntroModel *model = [self.modelManager modelAtIndex:0];
-                self.titlePageLabel.text = model.pageTitle;
-                self.descriptionPageLabel.text = model.pageDescription;
-
-                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
-
-                // now page is
-                self.introPage = JMOnboardIntroPageStayConnected;
-            }];
+        if (self.contentView.frame.origin.y < contentViewBeginUpdateOriginY || (!self.isUnderRedLine && velocityY > kDefaultMinVelocity) ) {
+            // move to next page
+            [self animateMoveToPage:JMOnboardIntroPageStayConnected];
         } else {
             // restore previous state
-            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                [self setupContentViewStartPosition];
-            }];
+            [self animateRestorePage:JMOnboardIntroPageWelcome];
         }
     }
 }
@@ -505,57 +614,36 @@ static const CGFloat kDefaultStepValue = 1.0f;
 
 - (void)updateStayConnectedPageViewsWithVelocity:(CGPoint)velocity {
     CGFloat velocityY = fabsf(velocity.y);
+
+    CGPoint homeScreenImageOrigin = self.homeScreenImage.frame.origin;
+    CGFloat homeScreenImageStartOriginY = 10;
     CGFloat homeScreenImageBeginUpdateOriginY = 70;
 
     if (velocity.y > 0) {
         // move down
+        if (homeScreenImageOrigin.y == homeScreenImageStartOriginY ) {
+            self.isUnderRedLine = YES;
+        }
 
-        if (self.homeScreenImage.frame.origin.y > homeScreenImageBeginUpdateOriginY || velocityY > 500) {
+        if (self.homeScreenImage.frame.origin.y > homeScreenImageBeginUpdateOriginY || (self.isUnderRedLine && velocityY > kDefaultMinVelocity) ) {
             // move to previous page
-            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                [self setupTitleViewStartPosition];
-                [self setupContentViewStartPosition];
-                [self setupHomeScreenImageStartPosition];
-            } completion:^(BOOL finished) {
-                self.welcomeView.hidden = NO;
-                self.messageView.hidden = YES;
-                // now page is
-                self.introPage = JMOnboardIntroPageWelcome;
-            }];
+            [self animateMoveToPage:JMOnboardIntroPageWelcome];
         } else {
             // restore current state
-            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                [self setupReportScreenIpadImageStartPosition];
-                [self setupReportScreenIphoneImageStartPosition];
-                [self setupHomeScreenImageStartPosition];
-            }];
+            [self animateRestorePage:JMOnboardIntroPageStayConnected];
         }
     } else {
         // move up
+        if (homeScreenImageOrigin.y == homeScreenImageStartOriginY) {
+            self.isUnderRedLine = NO;
+        }
 
-        if (self.homeScreenImage.frame.origin.y > homeScreenImageBeginUpdateOriginY || velocityY > 500) {
+        if (self.homeScreenImage.frame.origin.y > homeScreenImageBeginUpdateOriginY || (!self.isUnderRedLine && velocityY > kDefaultMinVelocity) ) {
             // move to next page
-            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                [self setupHomeScreenImageSmallSizeOutScreen];
-                [self setupReportScreenIpadImageEndPosition];
-                [self setupReportScreenIphoneImageEndPosition];
-            } completion:^(BOOL finished) {
-                // titles
-                JMIntroModel *model = [self.modelManager modelAtIndex:1];
-                self.titlePageLabel.text = model.pageTitle;
-                self.descriptionPageLabel.text = model.pageDescription;
-
-                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
-                // now page is
-                self.introPage = JMOnboardIntroPageInstanceAccess;
-            }];
+            [self animateMoveToPage:JMOnboardIntroPageInstanceAccess];
         } else {
             // restore current state
-            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                [self setupReportScreenIpadImageStartPosition];
-                [self setupReportScreenIphoneImageStartPosition];
-                [self setupHomeScreenImageStartPosition];
-            }];
+            [self animateRestorePage:JMOnboardIntroPageStayConnected];
         }
     }
 }
@@ -629,78 +717,36 @@ static const CGFloat kDefaultStepValue = 1.0f;
 
 - (void)updateInstanceAccessPageViewsWithVelocity:(CGPoint)velocity {
     CGFloat velocityY = fabsf(velocity.y);
+
     CGPoint reportScreenIpadImageOrigin = self.reportScreenIpadImage.frame.origin;
+    CGFloat reportScreenIpadImageFrameOriginX = self.contentView.frame.size.width/2 - self.reportScreenIpadImage.frame.size.width/2;
     CGFloat reportScreenIpadImageBeginUpdateOriginX = 20;
 
     if (velocity.y > 0) {
         // move down
+        if (reportScreenIpadImageOrigin.x == reportScreenIpadImageFrameOriginX) {
+            self.isUnderRedLine = YES;
+        }
 
-        if (reportScreenIpadImageOrigin.x < reportScreenIpadImageBeginUpdateOriginX || velocityY > 500) {
+        if (reportScreenIpadImageOrigin.x < reportScreenIpadImageBeginUpdateOriginX || (self.isUnderRedLine && velocityY > kDefaultMinVelocity) ) {
             // move to previous page
-            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                [self setupReportScreenIpadImageStartPosition];
-                [self setupReportScreenIphoneImageStartPosition];
-                [self setupHomeScreenImageStartPosition];
-            } completion:^(BOOL finished) {
-                // titles
-                JMIntroModel *model = [self.modelManager modelAtIndex:0];
-                self.titlePageLabel.text = model.pageTitle;
-                self.descriptionPageLabel.text = model.pageDescription;
-
-                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
-
-                self.introPage = JMOnboardIntroPageStayConnected;
-            }];
+            [self animateMoveToPage:JMOnboardIntroPageStayConnected];
         } else {
             // restore current page
-            if (self.isUnderRedLine) {
-                [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                    [self setupHomeScreenImageSmallSizeOutScreen];
-                    [self setupReportScreenIpadImageEndPosition];
-                    [self setupReportScreenIphoneImageEndPosition];
-                }];
-            } else {
-                [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                    [self setupServerScreenImageStartPosition];
-                    [self setupReportScreenIpadImageEndPosition];
-                    [self setupReportScreenIphoneImageEndPosition];
-                }];
-            }
+            [self animateRestorePage:JMOnboardIntroPageInstanceAccess];
         }
     } else {
         // move up
+        if (reportScreenIpadImageOrigin.x == reportScreenIpadImageFrameOriginX) {
+            self.isUnderRedLine = NO;
+        }
 
-        if (reportScreenIpadImageOrigin.x < reportScreenIpadImageBeginUpdateOriginX || velocityY > 500) {
+        if (reportScreenIpadImageOrigin.x < reportScreenIpadImageBeginUpdateOriginX || (!self.isUnderRedLine && velocityY > kDefaultMinVelocity) ) {
             // move to next page
-            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                [self setupServerScreenImageFullSizePosition];
-                [self setupReportScreenIphoneImageStartPosition];
-                [self setupReportScreenIpadImageStartPosition];
-            } completion:^(BOOL finished) {
-                // titles
-                JMIntroModel *model = [self.modelManager modelAtIndex:2];
-                self.titlePageLabel.text = model.pageTitle;
-                self.descriptionPageLabel.text = model.pageDescription;
-
-                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.startUsing", nil)];
-                // now page is
-                self.introPage = JMOnboardIntroPageSeemlessIntegration;
-            }];
+            [self animateMoveToPage:JMOnboardIntroPageSeemlessIntegration];
         } else {
             // restore current page
-            if (self.isUnderRedLine) {
-                [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                    [self setupHomeScreenImageSmallSizeOutScreen];
-                    [self setupReportScreenIpadImageEndPosition];
-                    [self setupReportScreenIphoneImageEndPosition];
-                }];
-            } else {
-                [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                    [self setupServerScreenImageStartPosition];
-                    [self setupReportScreenIpadImageEndPosition];
-                    [self setupReportScreenIphoneImageEndPosition];
-                }];
-            }
+            [self animateRestorePage:JMOnboardIntroPageInstanceAccess];
         }
     }
 }
@@ -749,7 +795,6 @@ static const CGFloat kDefaultStepValue = 1.0f;
         }
     } else {
         // move up
-
         if (serverScreenImageOrigin.y == serverScreenImageStartOriginY ) {
             self.isUnderRedLine = NO;
         }
@@ -787,42 +832,30 @@ static const CGFloat kDefaultStepValue = 1.0f;
 
 - (void)updateSeemlessIntegrationViewsPageWithVelocity:(CGPoint)velocity {
     CGFloat velocityY = fabsf(velocity.y);
-    CGFloat serverScreenImageBeginUpdateOriginY = 70;
+
+    CGPoint serverScreenImageOrigin = self.serverScreenImage.frame.origin;
+    CGFloat serverScreenImageStartOriginY = 10;
+    CGFloat serverScreenImageBeginUpdateOriginY = 100;
 
     if (velocity.y > 0) {
         // move down
-
-        if (self.serverScreenImage.frame.origin.y > serverScreenImageBeginUpdateOriginY || velocityY > 500) {
-            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                [self setupServerScreenImageStartPosition];
-                [self setupReportScreenIpadImageEndPosition];
-                [self setupReportScreenIphoneImageEndPosition];
-            } completion:^(BOOL finished) {
-                // titles
-                JMIntroModel *model = [self.modelManager modelAtIndex:1];
-                self.titlePageLabel.text = model.pageTitle;
-                self.descriptionPageLabel.text = model.pageDescription;
-
-                [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
-                self.introPage = JMOnboardIntroPageInstanceAccess;
-            }];
-        } else {
-            // restore current state
-            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-                [self setupServerScreenImageFullSizePosition];
-                [self setupReportScreenIphoneImageStartPosition];
-                [self setupReportScreenIpadImageStartPosition];
-            }];
+        if (serverScreenImageOrigin.y == serverScreenImageStartOriginY ) {
+            self.isUnderRedLine = YES;
         }
 
+        if (self.serverScreenImage.frame.origin.y > serverScreenImageBeginUpdateOriginY || (self.isUnderRedLine && velocityY > kDefaultMinVelocity) ) {
+            [self animateMoveToPage:JMOnboardIntroPageInstanceAccess];
+        } else {
+            // restore current state
+            [self animateRestorePage:JMOnboardIntroPageSeemlessIntegration];
+        }
     } else {
         // move up
+        if (serverScreenImageOrigin.y == serverScreenImageStartOriginY ) {
+            self.isUnderRedLine = NO;
+        }
 
-        [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
-            [self setupServerScreenImageFullSizePosition];
-            [self setupReportScreenIphoneImageStartPosition];
-            [self setupReportScreenIpadImageStartPosition];
-        }];
+        [self animateRestorePage:JMOnboardIntroPageSeemlessIntegration];
     }
 }
 

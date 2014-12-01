@@ -12,7 +12,8 @@
     },
     {
       "idiom" : "iphone",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "report_screen_ipad@3x.png"
     },
     {
       "idiom" : "ipad",
@@ -21,7 +22,8 @@
     },
     {
       "idiom" : "ipad",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "report_screen_ipad@2x~ipad.png"
     }
   ],
   "info" : {

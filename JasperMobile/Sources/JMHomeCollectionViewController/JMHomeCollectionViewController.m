@@ -117,18 +117,13 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"showOnboardIntro"]) {
-        JMOnboardIntroViewController *introViewController = segue.destinationViewController;
-        introViewController.view.backgroundColor = [UIColor colorWithPatternImage:[self.view renderedImageForView:self.navigationController.view]];
-    } else {
-        id viewController = segue.destinationViewController;
-        [viewController setTitle:sender];
-        if ([viewController respondsToSelector:@selector(setPresentingType:)]) {
-            [viewController setPresentingType:[self presentingTypeForSequeIdentifier:segue.identifier]];
-        }
-        if ([viewController respondsToSelector:@selector(setRepresentationType:)]) {
-            [viewController setRepresentationType:JMResourcesRepresentationTypeHorizontalList];
-        }
+    id viewController = segue.destinationViewController;
+    [viewController setTitle:sender];
+    if ([viewController respondsToSelector:@selector(setPresentingType:)]) {
+        [viewController setPresentingType:[self presentingTypeForSequeIdentifier:segue.identifier]];
+    }
+    if ([viewController respondsToSelector:@selector(setRepresentationType:)]) {
+        [viewController setRepresentationType:JMResourcesRepresentationTypeHorizontalList];
     }
 }
 

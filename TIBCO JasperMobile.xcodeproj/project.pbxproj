@@ -116,6 +116,7 @@
 		937336111A0DE46D004E6520 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 937336101A0DE46D004E6520 /* Images.xcassets */; };
 		93E0C46C1A12048A00F5B62E /* JMOnboardIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E0C46B1A12048A00F5B62E /* JMOnboardIntroViewController.m */; };
 		A14781B87D0829F0999E054C /* JMIntroModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478CF6C78641C6EE45B5DD /* JMIntroModelManager.m */; };
+		A147854153B3F1C5BA4C5440 /* JMIntroImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478884D0C0C01A7FA13C83 /* JMIntroImageView.m */; };
 		A14789538AEBCBF273F05BD8 /* JMIntroModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478AF70AD4DD5EA23F8997 /* JMIntroModel.m */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
@@ -377,7 +378,9 @@
 		93E0C46A1A12048A00F5B62E /* JMOnboardIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMOnboardIntroViewController.h; sourceTree = "<group>"; };
 		93E0C46B1A12048A00F5B62E /* JMOnboardIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMOnboardIntroViewController.m; sourceTree = "<group>"; };
 		A147806986E34AF5DAEF821C /* JMIntroModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMIntroModel.h; sourceTree = "<group>"; };
+		A1478408C758806245882D70 /* JMIntroImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMIntroImageView.h; sourceTree = "<group>"; };
 		A1478750E42B1BFABE1F0C07 /* JMIntroModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMIntroModelManager.h; sourceTree = "<group>"; };
+		A1478884D0C0C01A7FA13C83 /* JMIntroImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMIntroImageView.m; sourceTree = "<group>"; };
 		A1478AF70AD4DD5EA23F8997 /* JMIntroModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMIntroModel.m; sourceTree = "<group>"; };
 		A1478CF6C78641C6EE45B5DD /* JMIntroModelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMIntroModelManager.m; sourceTree = "<group>"; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -1163,6 +1166,8 @@
 				A1478750E42B1BFABE1F0C07 /* JMIntroModelManager.h */,
 				93E0C46A1A12048A00F5B62E /* JMOnboardIntroViewController.h */,
 				93E0C46B1A12048A00F5B62E /* JMOnboardIntroViewController.m */,
+				A1478884D0C0C01A7FA13C83 /* JMIntroImageView.m */,
+				A1478408C758806245882D70 /* JMIntroImageView.h */,
 			);
 			name = OnboardingIntro;
 			path = JMIntroViewController;
@@ -1461,6 +1466,7 @@
 				08FF130D1992982F0082265D /* JMServerOptions.m in Sources */,
 				A14789538AEBCBF273F05BD8 /* JMIntroModel.m in Sources */,
 				A14781B87D0829F0999E054C /* JMIntroModelManager.m in Sources */,
+				A147854153B3F1C5BA4C5440 /* JMIntroImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
