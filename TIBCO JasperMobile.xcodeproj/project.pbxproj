@@ -115,6 +115,9 @@
 		08FF130D1992982F0082265D /* JMServerOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF13041992982F0082265D /* JMServerOptions.m */; };
 		08FF131619929B080082265D /* JMBooleanServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF131119929B080082265D /* JMBooleanServerOptionCell.m */; };
 		08FF131819929B080082265D /* JMTextServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF131519929B080082265D /* JMTextServerOptionCell.m */; };
+		9320A6E11A2DF49300DDFFA4 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9320A6E01A2DF49300DDFFA4 /* JMServerOptionsTests.m */; };
+		9320A6E21A2DF55600DDFFA4 /* JMServerOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF13041992982F0082265D /* JMServerOptions.m */; };
+		9320A6E31A2DF87800DDFFA4 /* JMServerProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863D91992564A007CF257 /* JMServerProfile.m */; };
 		9362BA091A25FD7D006A6178 /* delete_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 9362B92C1A25FD7D006A6178 /* delete_action.png */; };
 		9362BA0A1A25FD7D006A6178 /* delete_action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9362B92D1A25FD7D006A6178 /* delete_action@2x.png */; };
 		9362BA0B1A25FD7D006A6178 /* delete_action@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9362B92E1A25FD7D006A6178 /* delete_action@3x.png */; };
@@ -296,6 +299,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		9320A6D71A2DF0A000DDFFA4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F55CC327174CFFCE00CEB39E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F55CC32E174CFFCE00CEB39E;
+			remoteInfo = "TIBCO JasperMobile";
+		};
 		F5D6372717909B1D005BA5CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F5D6372017909B1D005BA5CD /* jaspersoft-sdk.xcodeproj */;
@@ -572,6 +582,9 @@
 		08FF131119929B080082265D /* JMBooleanServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBooleanServerOptionCell.m; sourceTree = "<group>"; };
 		08FF131419929B080082265D /* JMTextServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextServerOptionCell.h; sourceTree = "<group>"; };
 		08FF131519929B080082265D /* JMTextServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextServerOptionCell.m; sourceTree = "<group>"; };
+		9320A6D11A2DF09F00DDFFA4 /* TIBCO JasperMobile Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TIBCO JasperMobile Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9320A6D41A2DF0A000DDFFA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9320A6E01A2DF49300DDFFA4 /* JMServerOptionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptionsTests.m; sourceTree = "<group>"; };
 		9362B92C1A25FD7D006A6178 /* delete_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete_action.png; sourceTree = "<group>"; };
 		9362B92D1A25FD7D006A6178 /* delete_action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete_action@2x.png"; sourceTree = "<group>"; };
 		9362B92E1A25FD7D006A6178 /* delete_action@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete_action@3x.png"; sourceTree = "<group>"; };
@@ -754,6 +767,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9320A6CE1A2DF09F00DDFFA4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F55CC32C174CFFCE00CEB39E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1522,6 +1542,23 @@
 			path = JMServerOption;
 			sourceTree = "<group>";
 		};
+		9320A6D21A2DF09F00DDFFA4 /* TIBCO JasperMobile Tests */ = {
+			isa = PBXGroup;
+			children = (
+				9320A6D31A2DF0A000DDFFA4 /* Supporting Files */,
+				9320A6E01A2DF49300DDFFA4 /* JMServerOptionsTests.m */,
+			);
+			path = "TIBCO JasperMobile Tests";
+			sourceTree = "<group>";
+		};
+		9320A6D31A2DF0A000DDFFA4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9320A6D41A2DF0A000DDFFA4 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		9362B9281A25FD7D006A6178 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -2214,6 +2251,7 @@
 				08E863BD1992564A007CF257 /* Sources */,
 				08E62C7C19922B0B0081CA83 /* Supporting Files */,
 				08E62C8419922BA40081CA83 /* Resources */,
+				9320A6D21A2DF09F00DDFFA4 /* TIBCO JasperMobile Tests */,
 				F55CC331174CFFCE00CEB39E /* Frameworks */,
 				F55CC330174CFFCE00CEB39E /* Products */,
 				F5663A141752F9D0007978BE /* Vendor */,
@@ -2224,6 +2262,7 @@
 			isa = PBXGroup;
 			children = (
 				F55CC32F174CFFCE00CEB39E /* TIBCO JasperMobile.app */,
+				9320A6D11A2DF09F00DDFFA4 /* TIBCO JasperMobile Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2276,6 +2315,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		9320A6D01A2DF09F00DDFFA4 /* TIBCO JasperMobile Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9320A6DF1A2DF0A000DDFFA4 /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile Tests" */;
+			buildPhases = (
+				9320A6CD1A2DF09F00DDFFA4 /* Sources */,
+				9320A6CE1A2DF09F00DDFFA4 /* Frameworks */,
+				9320A6CF1A2DF09F00DDFFA4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9320A6D81A2DF0A000DDFFA4 /* PBXTargetDependency */,
+			);
+			name = "TIBCO JasperMobile Tests";
+			productName = "TIBCO JasperMobile Tests";
+			productReference = 9320A6D11A2DF09F00DDFFA4 /* TIBCO JasperMobile Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F55CC32E174CFFCE00CEB39E /* TIBCO JasperMobile */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F55CC375174CFFCF00CEB39E /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile" */;
@@ -2305,6 +2362,10 @@
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "TIBCO JasperMobile";
 				TargetAttributes = {
+					9320A6D01A2DF09F00DDFFA4 = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = F55CC32E174CFFCE00CEB39E;
+					};
 					F55CC32E174CFFCE00CEB39E = {
 						DevelopmentTeam = HD6C6SELJN;
 					};
@@ -2361,6 +2422,7 @@
 			projectRoot = "";
 			targets = (
 				F55CC32E174CFFCE00CEB39E /* TIBCO JasperMobile */,
+				9320A6D01A2DF09F00DDFFA4 /* TIBCO JasperMobile Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -2390,6 +2452,13 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9320A6CF1A2DF09F00DDFFA4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F55CC32D174CFFCE00CEB39E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2603,6 +2672,16 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9320A6CD1A2DF09F00DDFFA4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9320A6E21A2DF55600DDFFA4 /* JMServerOptions.m in Sources */,
+				9320A6E31A2DF87800DDFFA4 /* JMServerProfile.m in Sources */,
+				9320A6E11A2DF49300DDFFA4 /* JMServerOptionsTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F55CC32B174CFFCE00CEB39E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2696,6 +2775,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		9320A6D81A2DF0A000DDFFA4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F55CC32E174CFFCE00CEB39E /* TIBCO JasperMobile */;
+			targetProxy = 9320A6D71A2DF0A000DDFFA4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		08C837F01A1F57640004BE78 /* AppiraterLocalizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -2754,6 +2841,69 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		9320A6D91A2DF0A000DDFFA4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "TIBCO JasperMobile Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "";
+				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
+			};
+			name = Debug;
+		};
+		9320A6DA1A2DF0A000DDFFA4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "TIBCO JasperMobile Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "";
+				VALID_ARCHS = "armv7 armv7s arm64 i386 x86_64";
+			};
+			name = Release;
+		};
 		F55CC373174CFFCF00CEB39E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2899,6 +3049,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9320A6DF1A2DF0A000DDFFA4 /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9320A6D91A2DF0A000DDFFA4 /* Debug */,
+				9320A6DA1A2DF0A000DDFFA4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		F55CC32A174CFFCE00CEB39E /* Build configuration list for PBXProject "TIBCO JasperMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
