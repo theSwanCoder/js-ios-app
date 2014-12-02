@@ -226,7 +226,7 @@
 "intro.title" = "Welcome to TIBCO JasperMobile";
 "intro.description" = "swipe up to begin";
 "intro.button.skip.skip" = "Skip Intro";
-"intro.button.skip.startUsing" = "Start using JasperMobile";
+"intro.button.skip.startUsing" = "Start using TIBCO JasperMobile";
 "intro.model.firstScreen.title" = "Stay Connected";
 "intro.model.firstScreen.description" = "TIBCO JasperMobile keeps you connected to\nyour business wherever you are.";
 "intro.model.secondScreen.title" = "Instant Access";
