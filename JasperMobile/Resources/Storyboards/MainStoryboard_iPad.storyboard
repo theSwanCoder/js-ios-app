@@ -940,8 +940,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <navigationBar contentMode="scaleToFill" translucent="NO" id="sy8-fW-clA">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem id="OeH-T6-d1s"/>
+                                </items>
+                            </navigationBar>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="jPR-xU-RHf">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
+                                <rect key="frame" x="0.0" y="44" width="768" height="916"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="15" minimumInteritemSpacing="15" id="xNS-cS-Op6">
@@ -994,6 +1001,7 @@ Please Wait...</string>
                         <outlet property="activityViewTitleLabel" destination="4VW-iR-XBE" id="D3M-1C-bHI"/>
                         <outlet property="collectionView" destination="jPR-xU-RHf" id="ZWf-GI-NOW"/>
                         <outlet property="noResultsViewTitleLabel" destination="GDD-BR-6QN" id="VsS-26-eMf"/>
+                        <outlet property="searchBarPlaceholder" destination="sy8-fW-clA" id="S8m-dH-hbV"/>
                         <outlet property="view" destination="TVd-d9-b8j" id="R24-2e-M0i"/>
                         <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="arU-QU-EiB"/>
                         <segue destination="5ET-d1-APX" kind="push" identifier="ShowReportOptions" id="Q7O-iF-p9q"/>
@@ -1157,9 +1165,9 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="E9g-J6-aMM"/>
         <segue reference="8iJ-vW-wwo"/>
+        <segue reference="E9g-J6-aMM"/>
+        <segue reference="arU-QU-EiB"/>
         <segue reference="Q7O-iF-p9q"/>
-        <segue reference="QIH-Uk-XKN"/>
     </inferredMetricsTieBreakers>
 </document>

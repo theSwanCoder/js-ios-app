@@ -392,8 +392,8 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (UISearchBar *)searchBar
 {
     if (!_searchBar) {
-        CGFloat searchBarWidth = [JMUtils isIphone] ? self.searchBarPlaceholder.frame.size.width : 250.f;
-        CGFloat searchBarHeight = [JMUtils isIphone] ? self.searchBarPlaceholder.frame.size.height : 34.f;
+        CGFloat searchBarWidth = self.searchBarPlaceholder.frame.size.width;
+        CGFloat searchBarHeight = self.searchBarPlaceholder.frame.size.height;
         _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, searchBarWidth, searchBarHeight)];
         _searchBar.searchBarStyle = UISearchBarStyleMinimal;
         _searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
@@ -419,19 +419,13 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
     }
     [navBarItems addObject:[self resourceRepresentationItem]];
-
-    
     
     UIView *searchContainerView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
     searchContainerView.backgroundColor = [UIColor clearColor];
     [searchContainerView addSubview: self.searchBar];
-    if ([JMUtils isIphone]) {
-        self.searchBar.autoresizingMask = searchContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        self.searchBarPlaceholder.topItem.titleView = searchContainerView;
-    } else {
-        UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchContainerView];
-        [navBarItems addObject:searchItem];
-    }
+
+    self.searchBar.autoresizingMask = searchContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.searchBarPlaceholder.topItem.titleView = searchContainerView;
     self.navigationItem.rightBarButtonItems = navBarItems;
 }
 
