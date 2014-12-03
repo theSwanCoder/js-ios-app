@@ -40,7 +40,7 @@
 + (BOOL)validateReportName:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage
 {
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
-
+    reportName = [reportName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (reportName.length < kJMNameMin) {
         *errorMessage = JMCustomLocalizedString(@"savereport.name.errmsg.empty", nil);
     } else if (reportName.length > kJMNameMax) {

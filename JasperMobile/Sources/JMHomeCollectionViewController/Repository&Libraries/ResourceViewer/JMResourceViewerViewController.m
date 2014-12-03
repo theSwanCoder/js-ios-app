@@ -26,7 +26,7 @@
 #import "PopoverView.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMResourceInfoViewController.h"
-
+#import "ALToastView.h"
 
 @interface JMResourceViewerViewController () <PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
@@ -169,6 +169,20 @@ objection_requires(@"resourceClient", @"resourceLookup")
 }
 
 #pragma mark - UIWebViewDelegate
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSString *serverHost = [NSURL URLWithString:self.resourceClient.serverProfile.serverUrl].host;
+    if (![request.URL.host isEqualToString:serverHost] && navigationType == UIWebViewNavigationTypeLinkClicked) {
+        if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
+            [[UIApplication sharedApplication] openURL:request.URL];
+        } else {
+            [ALToastView toastInView:webView withText:JMCustomLocalizedString(@"detail.resource.viewer.can't.open.link", nil)];
+        }
+        return NO;
+    }
+    return YES;
+}
+
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     [self.activityIndicator startAnimating];

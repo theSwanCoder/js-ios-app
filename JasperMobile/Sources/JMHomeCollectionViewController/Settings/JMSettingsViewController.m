@@ -35,6 +35,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *settingsTitleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *privacyPolicyButton;
 
 @property (nonatomic, strong) JMSettings *detailSettings;
 @end
@@ -43,11 +44,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.settingsTitleLabel.textColor = kJMDetailViewLightTextColor;
     self.tableView.layer.cornerRadius = 4;
 
     self.settingsTitleLabel.text = [JMCustomLocalizedString(@"detail.settings.title", nil) capitalizedString];
+    
+    [self.privacyPolicyButton setTitle:JMCustomLocalizedString(@"detail.settings.privacy.policy.title", nil) forState:UIControlStateNormal];
     
     UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(applicationInfo:)];
     UIBarButtonItem *applyItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];

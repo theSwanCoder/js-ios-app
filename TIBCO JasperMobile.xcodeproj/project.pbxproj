@@ -45,6 +45,7 @@
 		0895910319E3D514001471DA /* libObjection-StaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 089590F619E3D514001471DA /* libObjection-StaticLib.a */; };
 		0895910419E3D514001471DA /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590F919E3D514001471DA /* PopoverView.m */; };
 		0895910519E3D514001471DA /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590FE19E3D514001471DA /* SSKeychain.m */; };
+		089C08141A2E2B9E0009072D /* JMPrivacyPolicyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089C08131A2E2B9E0009072D /* JMPrivacyPolicyViewController.m */; };
 		089CA29F19EE854300983C82 /* JMResourceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089CA29E19EE854300983C82 /* JMResourceInfoViewController.m */; };
 		08A43D2019E6F30100C0BA4D /* JMRepositoryListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A43D1F19E6F30100C0BA4D /* JMRepositoryListLoader.m */; };
 		08A7058119B488FE00C1B4C6 /* JMEditabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08A7058019B488FE00C1B4C6 /* JMEditabledViewController.m */; };
@@ -83,7 +84,6 @@
 		08E62D6E19922BA40081CA83 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08E62D0419922BA40081CA83 /* MainStoryboard_iPhone.storyboard */; };
 		08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 08E62D7019922F5A0081CA83 /* JasperMobile.xcdatamodeld */; };
 		08E8640F1992564A007CF257 /* JMServerProfile+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863C01992564A007CF257 /* JMServerProfile+Helpers.m */; };
-		08E864101992564A007CF257 /* JSRESTBase+updateServerInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863C21992564A007CF257 /* JSRESTBase+updateServerInfo.m */; };
 		08E864111992564A007CF257 /* UIAlertView+LocalizedAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863C41992564A007CF257 /* UIAlertView+LocalizedAlert.m */; };
 		08E864121992564A007CF257 /* UIColor+RGBComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863C61992564A007CF257 /* UIColor+RGBComponent.m */; };
 		08E864131992564A007CF257 /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863C81992564A007CF257 /* UIImage+Additions.m */; };
@@ -398,6 +398,8 @@
 		089590FB19E3D514001471DA /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverViewCompatibility.h; sourceTree = "<group>"; };
 		089590FD19E3D514001471DA /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		089590FE19E3D514001471DA /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
+		089C08121A2E2B9E0009072D /* JMPrivacyPolicyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPrivacyPolicyViewController.h; sourceTree = "<group>"; };
+		089C08131A2E2B9E0009072D /* JMPrivacyPolicyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPrivacyPolicyViewController.m; sourceTree = "<group>"; };
 		089CA29D19EE854300983C82 /* JMResourceInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceInfoViewController.h; sourceTree = "<group>"; };
 		089CA29E19EE854300983C82 /* JMResourceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceInfoViewController.m; sourceTree = "<group>"; };
 		08A43D1E19E6F30100C0BA4D /* JMRepositoryListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRepositoryListLoader.h; sourceTree = "<group>"; };
@@ -471,8 +473,6 @@
 		08E62D7119922F5A0081CA83 /* JasperMobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile.xcdatamodel; sourceTree = "<group>"; };
 		08E863BF1992564A007CF257 /* JMServerProfile+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JMServerProfile+Helpers.h"; sourceTree = "<group>"; };
 		08E863C01992564A007CF257 /* JMServerProfile+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JMServerProfile+Helpers.m"; sourceTree = "<group>"; };
-		08E863C11992564A007CF257 /* JSRESTBase+updateServerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JSRESTBase+updateServerInfo.h"; sourceTree = "<group>"; };
-		08E863C21992564A007CF257 /* JSRESTBase+updateServerInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSRESTBase+updateServerInfo.m"; sourceTree = "<group>"; };
 		08E863C31992564A007CF257 /* UIAlertView+LocalizedAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+LocalizedAlert.h"; sourceTree = "<group>"; };
 		08E863C41992564A007CF257 /* UIAlertView+LocalizedAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+LocalizedAlert.m"; sourceTree = "<group>"; };
 		08E863C51992564A007CF257 /* UIColor+RGBComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+RGBComponent.h"; sourceTree = "<group>"; };
@@ -984,6 +984,15 @@
 			path = "SSKeychain-v0.1.4";
 			sourceTree = "<group>";
 		};
+		089C08111A2E2B9E0009072D /* JMPrivacyPolicyViewController */ = {
+			isa = PBXGroup;
+			children = (
+				089C08121A2E2B9E0009072D /* JMPrivacyPolicyViewController.h */,
+				089C08131A2E2B9E0009072D /* JMPrivacyPolicyViewController.m */,
+			);
+			path = JMPrivacyPolicyViewController;
+			sourceTree = "<group>";
+		};
 		089CA29C19EE854300983C82 /* JMResourceInfoViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -1258,8 +1267,6 @@
 				086B715819CAEB5600CC25CA /* JMSavedResources+Helpers.m */,
 				08E863BF1992564A007CF257 /* JMServerProfile+Helpers.h */,
 				08E863C01992564A007CF257 /* JMServerProfile+Helpers.m */,
-				08E863C11992564A007CF257 /* JSRESTBase+updateServerInfo.h */,
-				08E863C21992564A007CF257 /* JSRESTBase+updateServerInfo.m */,
 				08E863C31992564A007CF257 /* UIAlertView+LocalizedAlert.h */,
 				08E863C41992564A007CF257 /* UIAlertView+LocalizedAlert.m */,
 				08E863C51992564A007CF257 /* UIColor+RGBComponent.h */,
@@ -1382,6 +1389,7 @@
 		08FF12B7199297FE0082265D /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				089C08111A2E2B9E0009072D /* JMPrivacyPolicyViewController */,
 				08FF12EE1992982F0082265D /* ServersGridViewController */,
 				08FF12B8199297FE0082265D /* Cells */,
 				08FF12D5199297FE0082265D /* Settings */,
@@ -2557,6 +2565,7 @@
 				0879E3CE19B0D46300DFE769 /* JMMakeActiveServerOptionCell.m in Sources */,
 				08FF131819929B080082265D /* JMTextServerOptionCell.m in Sources */,
 				08E864121992564A007CF257 /* UIColor+RGBComponent.m in Sources */,
+				089C08141A2E2B9E0009072D /* JMPrivacyPolicyViewController.m in Sources */,
 				08856DD619938A560027DF56 /* JMServerCollectionViewCell.m in Sources */,
 				08FF12EB199297FE0082265D /* JMSettingsItem.m in Sources */,
 				08FF130B1992982F0082265D /* JMServerOptionsViewController.m in Sources */,
@@ -2579,7 +2588,6 @@
 				086B716419CB045200CC25CA /* JMSavedResourceViewerViewController.m in Sources */,
 				08DE67CA19C05D8B00C25AEA /* JMMultiSelectInputControlCell.m in Sources */,
 				08DE67D319C05D8B00C25AEA /* JMReportViewerToolBar.m in Sources */,
-				08E864101992564A007CF257 /* JSRESTBase+updateServerInfo.m in Sources */,
 				084F9DE219F544EA00E78C48 /* JMBooleanSettingsTableViewCell.m in Sources */,
 				08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */,
 				08E864171992564A007CF257 /* UIViewController+fetchInputControls.m in Sources */,

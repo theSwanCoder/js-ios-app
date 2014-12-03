@@ -138,7 +138,7 @@
 "detail.settings.crashtracking.title" = "Send crash reports";
 "detail.settings.crashtracking.alert.title" = "Attention!";
 "detail.settings.crashtracking.alert.message" = "Sending crash reports settings will be applied after restart application.";
-
+"detail.settings.privacy.policy.title" = "Privacy Policy";
 
 "detail.report.options.title" = "Filter Options";
 "detail.report.options.titlelabel.title" = "Current Filters";
@@ -146,9 +146,9 @@
 "detail.report.options.multiselect.titlelabel.title" = "Select one or more items";
 "detail.report.options.search.value.placeholder" = "Search Values";
 
+"detail.resource.viewer.can't.open.link" = "Link can't be opened.";
 "detail.report.viewer.emptyreport.title" = "Report is empty";
 "detail.report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options or tap 'Cancel' for returning to old report.";
-
 "detail.report.viewer.pagecount" = "of %d";
 "detail.dashboard.viewer.not.supported" = "Such dashboard's type is not supported now";
 
