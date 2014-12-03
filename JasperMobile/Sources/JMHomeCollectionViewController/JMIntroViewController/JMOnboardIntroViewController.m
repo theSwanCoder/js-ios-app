@@ -88,6 +88,10 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     return NO;
 }
 
+-(NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortraitUpsideDown;
+}
+
 #pragma mark - Setup
 - (void)setupImages {
     [self setupHomeScreenImage];
@@ -112,7 +116,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 
     CGRect imageFrame = CGRectZero;
 
-    CGFloat mainViewWidth = CGRectGetWidth(self.view.bounds);
+    CGFloat mainViewWidth = CGRectGetWidth([UIApplication sharedApplication].keyWindow.bounds);
+    CGFloat mainViewHeight = CGRectGetHeight([UIApplication sharedApplication].keyWindow.bounds);
     CGFloat newOriginX = mainViewWidth/2 - homeScreenImageWidth/2;
     CGFloat newOriginY = homeScreenTopPadding;
 
@@ -127,7 +132,6 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
 
     CGFloat contentViewWidth = CGRectGetWidth(self.contentView.frame);
-    CGFloat mainViewHeight = CGRectGetHeight(self.view.bounds);
     newOriginX = contentViewWidth/2 - homeScreenImageWidth/(2*5.0f);
     newOriginY = mainViewHeight - titleViewEndPositionHeight - bottomViewHeight;
 
@@ -153,8 +157,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     CGFloat titleViewEndPositionHeight = CGRectGetHeight(self.messageView.frame);
     CGFloat bottomViewHeight = CGRectGetHeight(self.bottomView.frame);
 
-    CGFloat mainViewWidth = CGRectGetWidth(self.view.bounds);
-    CGFloat mainViewHeight = CGRectGetHeight(self.view.bounds);
+    CGFloat mainViewWidth = CGRectGetWidth([UIApplication sharedApplication].keyWindow.bounds);
+    CGFloat mainViewHeight = CGRectGetHeight([UIApplication sharedApplication].keyWindow.bounds);
     CGFloat newOriginX = mainViewWidth/2 - serverScreenImageWidth/(2*5.0f);
     CGFloat newOriginY = mainViewHeight - titleViewEndPositionHeight - bottomViewHeight;
 
@@ -165,7 +169,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     [self.serverScreenImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierStayConnected];
     [self.serverScreenImage setImageFrame:imageFrame forPageIdentifier:kPageIdentifierInstanceAccess];
 
-    newOriginX = self.view.bounds.size.width/2 - serverScreenImageWidth/2;
+    newOriginX = mainViewWidth/2 - serverScreenImageWidth/2;
     newOriginY = serverScreenImageTopPadding;
     imageFrame.origin = CGPointMake(newOriginX, newOriginY);
     imageFrame.size = CGSizeMake(serverScreenImageWidth, serverScreenImageHeight);
@@ -755,6 +759,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 - (void)changeSeemlessIntegrationPageViewsWithVelocity:(CGPoint)velocity {
     CGPoint serverScreenImageOrigin = self.serverScreenImage.frame.origin;
     CGSize serverScreenImageSize = self.serverScreenImage.frame.size;
+    CGFloat mainViewWidth = CGRectGetWidth([UIApplication sharedApplication].keyWindow.bounds);
     CGFloat serverScreenImageStartOriginY = 10;
     CGFloat serverScreenImageUpperValueOriginY = 5;
     CGFloat serverScreenImageBeginUpdateOriginY = 100;
@@ -768,7 +773,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 
         if (self.isUnderRedLine) {
             if (serverScreenImageOrigin.y < serverScreenImageBottomValueOriginY) {
-                CGFloat newOriginX = self.view.bounds.size.width / 2 - serverScreenImageSize.width / 2;
+                CGFloat newOriginX = mainViewWidth / 2 - serverScreenImageSize.width / 2;
                 CGFloat newOriginY = serverScreenImageOrigin.y + kDefaultStepValue;
                 CGPoint newOrigin = CGPointMake(newOriginX, newOriginY);
 
@@ -800,7 +805,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
         }
 
         if (self.isUnderRedLine) {
-            CGFloat newOriginX = self.view.bounds.size.width / 2 - serverScreenImageSize.width / 2;
+            CGFloat newOriginX = mainViewWidth / 2 - serverScreenImageSize.width / 2;
             CGFloat newOriginY = serverScreenImageOrigin.y - kDefaultStepValue;
             CGPoint newOrigin = CGPointMake(newOriginX, newOriginY);
 

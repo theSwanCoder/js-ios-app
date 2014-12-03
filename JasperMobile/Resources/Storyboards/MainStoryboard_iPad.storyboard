@@ -575,7 +575,7 @@
         <scene sceneID="SLf-d7-ah1">
             <objects>
                 <viewController storyboardIdentifier="JMOnboardIntroViewController" id="9n9-rB-opQ" customClass="JMOnboardIntroViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="pOc-jd-74m">
+                    <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="pOc-jd-74m">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
