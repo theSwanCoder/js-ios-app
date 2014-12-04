@@ -26,16 +26,27 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    XCTAssert(YES, @"Pass");
+- (void)testThatReportNameCannotBeEmpty {
+    NSString *reportName = @"";
+    NSString *errorMessage;
+    BOOL isValid = [JMUtils validateReportName:reportName extension:nil errorMessage:&errorMessage];
+    XCTAssertFalse(isValid);
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+- (void)testThatReportNameNotContainsWrongSymbols {
+    NSString *reportName = @"~!#$%^|`@&*()-+={}[]:;\"'<>,?/|\\";
+    NSString *errorMessage;
+    BOOL isValid = [JMUtils validateReportName:reportName extension:nil errorMessage:&errorMessage];
+    XCTAssertFalse(isValid);
 }
+
+- (void)testThatReportNameCorrectlyValidateForNotEmptyReportNameAndWithoutWrongSymbolsInReportName {
+    NSString *reportName = @"ReportName";
+    NSString *errorMessage;
+    BOOL isValid = [JMUtils validateReportName:reportName extension:nil errorMessage:&errorMessage];
+    XCTAssert(isValid);
+}
+
+
 
 @end
