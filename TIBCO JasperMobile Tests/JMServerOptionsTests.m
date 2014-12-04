@@ -29,8 +29,8 @@
 }
 
 - (void)testTest {
-
-    XCTAssert(self.serverProfile.alias, @"");
+    // TODO: create tests
+    //XCTAssert(self.serverProfile.alias, @"");
 }
 
 @end
