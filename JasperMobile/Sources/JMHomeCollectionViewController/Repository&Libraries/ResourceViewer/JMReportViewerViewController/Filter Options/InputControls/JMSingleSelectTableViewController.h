@@ -36,6 +36,7 @@
 
 @interface JMSingleSelectTableViewController : UIViewController
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
 
 @property (nonatomic, weak) JMSingleSelectInputControlCell *cell;
 @property (nonatomic, readonly) NSArray *listOfValues;

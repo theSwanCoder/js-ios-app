@@ -177,6 +177,8 @@
 "action.title.markasunfavorite" = "Remove From Favorites";
 "action.title.info" = "Info";
 "action.title.sort" = "Sort Options";
+"action.title.selectall" = "Select All";
+"action.title.clearselections" = "Clear selections";
 
 /* Error messages */
 

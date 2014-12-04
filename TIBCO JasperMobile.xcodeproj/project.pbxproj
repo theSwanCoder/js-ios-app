@@ -32,7 +32,6 @@
 		088115F919B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088115F819B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib */; };
 		088115FB19B8C7E700C70170 /* JMGridResourceCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088115FA19B8C7E700C70170 /* JMGridResourceCollectionViewCell.xib */; };
 		088115FD19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 088115FC19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib */; };
-		0881967E199A1703008CF79B /* JMSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0881967D199A1703008CF79B /* JMSearchBar.m */; };
 		088208891A023EAB00B6559F /* JMTimeInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 088208881A023EAB00B6559F /* JMTimeInputControlCell.m */; };
 		0885657A19C1B60100B78B06 /* JMResourcesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0885657919C1B60100B78B06 /* JMResourcesListLoader.m */; };
 		08856DCD199370A30027DF56 /* JMServerSelectTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08856DCC199370A30027DF56 /* JMServerSelectTableViewCell.m */; };
@@ -104,6 +103,12 @@
 		08ECB0A819FFF30400DDBB33 /* JMReportViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 08ECB0A719FFF30400DDBB33 /* JMReportViewer.m */; };
 		08F340E919B0DEE90020DE6A /* JMFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 08F340E819B0DEE90020DE6A /* JMFont.m */; };
 		08F340ED19B0E0CC0020DE6A /* JMBaseModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 08F340EC19B0E0CC0020DE6A /* JMBaseModule.m */; };
+		08F839CB1A309B9D00CF42D3 /* clear_selection_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F839C41A309B9D00CF42D3 /* clear_selection_action.png */; };
+		08F839CC1A309B9D00CF42D3 /* clear_selection_action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F839C51A309B9D00CF42D3 /* clear_selection_action@2x.png */; };
+		08F839CD1A309B9D00CF42D3 /* clear_selection_action@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F839C61A309B9D00CF42D3 /* clear_selection_action@3x.png */; };
+		08F839CE1A309B9D00CF42D3 /* select_all_action.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F839C81A309B9D00CF42D3 /* select_all_action.png */; };
+		08F839CF1A309B9D00CF42D3 /* select_all_action@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F839C91A309B9D00CF42D3 /* select_all_action@2x.png */; };
+		08F839D01A309B9D00CF42D3 /* select_all_action@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 08F839CA1A309B9D00CF42D3 /* select_all_action@3x.png */; };
 		08FF12DF199297FE0082265D /* JMSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF12BA199297FE0082265D /* JMSettingsTableViewCell.m */; };
 		08FF12E0199297FE0082265D /* JMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF12BC199297FE0082265D /* JMSettingsViewController.m */; };
 		08FF12EA199297FE0082265D /* JMSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF12D7199297FE0082265D /* JMSettings.m */; };
@@ -372,8 +377,6 @@
 		088115F819B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMGridLoadingCollectionViewCell.xib; sourceTree = "<group>"; };
 		088115FA19B8C7E700C70170 /* JMGridResourceCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMGridResourceCollectionViewCell.xib; sourceTree = "<group>"; };
 		088115FC19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMHorizontalResourceCollectionViewCell.xib; sourceTree = "<group>"; };
-		0881967C199A1703008CF79B /* JMSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSearchBar.h; sourceTree = "<group>"; };
-		0881967D199A1703008CF79B /* JMSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSearchBar.m; sourceTree = "<group>"; };
 		088208871A023EAB00B6559F /* JMTimeInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTimeInputControlCell.h; sourceTree = "<group>"; };
 		088208881A023EAB00B6559F /* JMTimeInputControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTimeInputControlCell.m; sourceTree = "<group>"; };
 		0885657819C1B60100B78B06 /* JMResourcesListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourcesListLoader.h; sourceTree = "<group>"; };
@@ -560,6 +563,12 @@
 		08F340E819B0DEE90020DE6A /* JMFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFont.m; sourceTree = "<group>"; };
 		08F340EB19B0E0CC0020DE6A /* JMBaseModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseModule.h; sourceTree = "<group>"; };
 		08F340EC19B0E0CC0020DE6A /* JMBaseModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseModule.m; sourceTree = "<group>"; };
+		08F839C41A309B9D00CF42D3 /* clear_selection_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear_selection_action.png; sourceTree = "<group>"; };
+		08F839C51A309B9D00CF42D3 /* clear_selection_action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clear_selection_action@2x.png"; sourceTree = "<group>"; };
+		08F839C61A309B9D00CF42D3 /* clear_selection_action@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clear_selection_action@3x.png"; sourceTree = "<group>"; };
+		08F839C81A309B9D00CF42D3 /* select_all_action.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select_all_action.png; sourceTree = "<group>"; };
+		08F839C91A309B9D00CF42D3 /* select_all_action@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "select_all_action@2x.png"; sourceTree = "<group>"; };
+		08F839CA1A309B9D00CF42D3 /* select_all_action@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "select_all_action@3x.png"; sourceTree = "<group>"; };
 		08FF12B9199297FE0082265D /* JMSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSettingsTableViewCell.h; sourceTree = "<group>"; };
 		08FF12BA199297FE0082265D /* JMSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSettingsTableViewCell.m; sourceTree = "<group>"; };
 		08FF12BB199297FE0082265D /* JMSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSettingsViewController.h; sourceTree = "<group>"; };
@@ -803,7 +812,6 @@
 		08025C971995197100A6063B /* Repository&Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				0881967B199A1703008CF79B /* JMSearchBar */,
 				080F234619A77B23008758FA /* CollectionCells */,
 				089CA29C19EE854300983C82 /* JMResourceInfoViewController */,
 				08DE67A019C05D8A00C25AEA /* ResourceViewer */,
@@ -939,15 +947,6 @@
 				086B716A19CB128600CC25CA /* JMSavedResourcesListLoader.m */,
 			);
 			path = JMSavedResourcesListLoader;
-			sourceTree = "<group>";
-		};
-		0881967B199A1703008CF79B /* JMSearchBar */ = {
-			isa = PBXGroup;
-			children = (
-				0881967C199A1703008CF79B /* JMSearchBar.h */,
-				0881967D199A1703008CF79B /* JMSearchBar.m */,
-			);
-			path = JMSearchBar;
 			sourceTree = "<group>";
 		};
 		0885657719C1B60100B78B06 /* JMResourcesListLoader */ = {
@@ -1441,6 +1440,26 @@
 			path = ObjectionModules;
 			sourceTree = "<group>";
 		};
+		08F839C31A309B9D00CF42D3 /* clear_selection_action */ = {
+			isa = PBXGroup;
+			children = (
+				08F839C41A309B9D00CF42D3 /* clear_selection_action.png */,
+				08F839C51A309B9D00CF42D3 /* clear_selection_action@2x.png */,
+				08F839C61A309B9D00CF42D3 /* clear_selection_action@3x.png */,
+			);
+			path = clear_selection_action;
+			sourceTree = "<group>";
+		};
+		08F839C71A309B9D00CF42D3 /* select_all_action */ = {
+			isa = PBXGroup;
+			children = (
+				08F839C81A309B9D00CF42D3 /* select_all_action.png */,
+				08F839C91A309B9D00CF42D3 /* select_all_action@2x.png */,
+				08F839CA1A309B9D00CF42D3 /* select_all_action@3x.png */,
+			);
+			path = select_all_action;
+			sourceTree = "<group>";
+		};
 		08FF12B7199297FE0082265D /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1586,6 +1605,7 @@
 		9362B92A1A25FD7D006A6178 /* action_Items */ = {
 			isa = PBXGroup;
 			children = (
+				08F839C31A309B9D00CF42D3 /* clear_selection_action */,
 				9362B92B1A25FD7D006A6178 /* delete_action */,
 				9362B92F1A25FD7D006A6178 /* edit_action */,
 				9362B9331A25FD7D006A6178 /* filter_action */,
@@ -1595,6 +1615,7 @@
 				9362B9491A25FD7D006A6178 /* previous_action_item */,
 				9362B94F1A25FD7D006A6178 /* refresh_action */,
 				9362B9531A25FD7D006A6178 /* save_action */,
+				08F839C71A309B9D00CF42D3 /* select_all_action */,
 				9362B9571A25FD7D006A6178 /* sort_action */,
 			);
 			path = action_Items;
@@ -2366,9 +2387,6 @@
 						CreatedOnToolsVersion = 6.1;
 						TestTargetID = F55CC32E174CFFCE00CEB39E;
 					};
-					F55CC32E174CFFCE00CEB39E = {
-						DevelopmentTeam = HD6C6SELJN;
-					};
 				};
 			};
 			buildConfigurationList = F55CC32A174CFFCE00CEB39E /* Build configuration list for PBXProject "TIBCO JasperMobile" */;
@@ -2511,12 +2529,14 @@
 				9362BA6F1A25FD7D006A6178 /* favorites.png in Resources */,
 				088115FD19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
 				9362BA471A25FD7D006A6178 /* favorited_item.png in Resources */,
+				08F839D01A309B9D00CF42D3 /* select_all_action@3x.png in Resources */,
 				9362BA761A25FD7D006A6178 /* library@2x~ipad.png in Resources */,
 				9362BAB51A26014F006A6178 /* Default-Portrait@2x~ipad.png in Resources */,
 				9362BA6E1A25FD7D006A6178 /* Icon-80.png in Resources */,
 				9362BA7C1A25FD7D006A6178 /* repository@3x.png in Resources */,
 				9362BA991A25FD7E006A6178 /* tmp_arrow_back.png in Resources */,
 				9362BA151A25FD7D006A6178 /* first_action_item@3x.png in Resources */,
+				08F839CB1A309B9D00CF42D3 /* clear_selection_action.png in Resources */,
 				9362BA9B1A25FD7E006A6178 /* res_type_dashboard@2x.png in Resources */,
 				9362BA431A25FD7D006A6178 /* clear_button@3x.png in Resources */,
 				9362BA481A25FD7D006A6178 /* favorited_item@2x.png in Resources */,
@@ -2529,6 +2549,7 @@
 				9362BA411A25FD7D006A6178 /* clear_button.png in Resources */,
 				9362BA211A25FD7D006A6178 /* previous_action_item.png in Resources */,
 				9362BA341A25FD7D006A6178 /* checked_checkbox@3x.png in Resources */,
+				08F839CC1A309B9D00CF42D3 /* clear_selection_action@2x.png in Resources */,
 				9362BA0D1A25FD7D006A6178 /* edit_action@2x.png in Resources */,
 				9362BA291A25FD7D006A6178 /* save_action.png in Resources */,
 				9362BA171A25FD7D006A6178 /* last_action_item.png in Resources */,
@@ -2541,6 +2562,7 @@
 				08C838161A1F57640004BE78 /* AppiraterLocalizable.strings in Resources */,
 				080F235619A77B23008758FA /* JMGridLoadingCollectionViewCell~ipad.xib in Resources */,
 				9362BA951A25FD7E006A6178 /* navBarBackgroundImage.png in Resources */,
+				08F839CD1A309B9D00CF42D3 /* clear_selection_action@3x.png in Resources */,
 				9362BA6D1A25FD7D006A6178 /* Icon-40.png in Resources */,
 				9362BA3C1A25FD7D006A6178 /* apply_item@2x.png in Resources */,
 				9362BA931A25FD7E006A6178 /* left_blue_arrow.png in Resources */,
@@ -2596,6 +2618,7 @@
 				9362BA4F1A25FD7D006A6178 /* make_favorite_item@3x.png in Resources */,
 				9362BA0C1A25FD7D006A6178 /* edit_action.png in Resources */,
 				9362BA461A25FD7D006A6178 /* delete_item@3x.png in Resources */,
+				08F839CE1A309B9D00CF42D3 /* select_all_action.png in Resources */,
 				9362BA981A25FD7E006A6178 /* server@2x.png in Resources */,
 				9362BA8E1A25FD7D006A6178 /* accessory_arrow@2x.png in Resources */,
 				9362BA1A1A25FD7D006A6178 /* last_action_item@3x.png in Resources */,
@@ -2629,6 +2652,7 @@
 				080F235B19A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib in Resources */,
 				9362BA321A25FD7D006A6178 /* checked_checkbox.png in Resources */,
 				9362BA121A25FD7D006A6178 /* first_action_item.png in Resources */,
+				08F839CF1A309B9D00CF42D3 /* select_all_action@2x.png in Resources */,
 				9362BA661A25FD7D006A6178 /* Icon-152.png in Resources */,
 				08DE67D419C05D8B00C25AEA /* JMReportViewerToolBar.xib in Resources */,
 				9362BA9E1A25FD7E006A6178 /* res_type_html.png in Resources */,
@@ -2750,7 +2774,6 @@
 				08DE67CE19C05D8B00C25AEA /* JMMultiSelectTableViewController.m in Sources */,
 				080F235919A77B23008758FA /* JMResourceCollectionViewCell.m in Sources */,
 				0895910519E3D514001471DA /* SSKeychain.m in Sources */,
-				0881967E199A1703008CF79B /* JMSearchBar.m in Sources */,
 				0851DFD719ACE27800DC6EDE /* JMAskPasswordDialog.m in Sources */,
 				089590FF19E3D514001471DA /* ALToastView.m in Sources */,
 				08D108B619EFD28C003EC529 /* JMFavoritesListLoader.m in Sources */,
@@ -3056,6 +3079,7 @@
 				9320A6DA1A2DF0A000DDFFA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F55CC32A174CFFCE00CEB39E /* Build configuration list for PBXProject "TIBCO JasperMobile" */ = {
 			isa = XCConfigurationList;

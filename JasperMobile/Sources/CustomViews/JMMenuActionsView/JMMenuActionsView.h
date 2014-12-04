@@ -43,11 +43,13 @@ typedef NS_ENUM(NSInteger, JMMenuActionsViewAction) {
     JMMenuActionsViewAction_Save = 1 << 5,
     JMMenuActionsViewAction_Delete = 1 << 6,
     JMMenuActionsViewAction_Rename = 1 << 7,
-    JMMenuActionsViewAction_Info = 1 << 8
+    JMMenuActionsViewAction_Info = 1 << 8,
+    JMMenuActionsViewAction_SelectAll = 1 << 9,
+    JMMenuActionsViewAction_ClearSelections = 1 << 10
 };
 
 static inline JMMenuActionsViewAction JMMenuActionsViewActionFirst() { return JMMenuActionsViewAction_MakeFavorite; }
-static inline JMMenuActionsViewAction JMMenuActionsViewActionLast() { return JMMenuActionsViewAction_Info; }
+static inline JMMenuActionsViewAction JMMenuActionsViewActionLast() { return JMMenuActionsViewAction_ClearSelections; }
 
 @class JMMenuActionsView;
 

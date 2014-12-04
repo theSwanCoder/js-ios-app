@@ -148,6 +148,10 @@
             return @"action.title.info";
         case JMMenuActionsViewAction_Sort:
             return @"action.title.sort";
+        case JMMenuActionsViewAction_SelectAll:
+            return @"action.title.selectall";
+        case JMMenuActionsViewAction_ClearSelections:
+            return @"action.title.clearselections";
     }
 }
 
@@ -174,7 +178,10 @@
             return @"info_item";
         case JMMenuActionsViewAction_Sort:
             return @"sort_action";
-
+        case JMMenuActionsViewAction_SelectAll:
+            return @"select_all_action";
+        case JMMenuActionsViewAction_ClearSelections:
+            return @"clear_selection_action";
         }
 }
 @end

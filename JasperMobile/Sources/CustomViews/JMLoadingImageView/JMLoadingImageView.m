@@ -75,7 +75,7 @@
             self.image = [UIImage imageNamed:_imageUrl];
         } else {
             [self.activityIndicator startAnimating];
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+            [JMUtils showNetworkActivityIndicator];
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 NSURL *url = [NSURL URLWithString:imageUrl];
                 NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:10.0];
@@ -92,7 +92,7 @@
                 }
 
                 dispatch_async(dispatch_get_main_queue(), @weakself(^(void)) {
-                    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+                    [JMUtils hideNetworkActivityIndicator];
                     [self.activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:YES];
                     if (loadedData && [[httpResponse MIMEType] hasPrefix:@"image"] && httpResponse.statusCode == 200) {
                         self.image = [[UIImage alloc] initWithData:loadedData];
