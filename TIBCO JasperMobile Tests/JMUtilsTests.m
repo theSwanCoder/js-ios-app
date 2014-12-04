@@ -1,26 +1,24 @@
 //
-//  JMServerOptionsTests.m
+//  JMUtilsTests.m
 //  TIBCO JasperMobile
 //
-//  Created by Aleksandr Dakhno on 12/2/14.
+//  Created by Aleksandr Dakhno on 12/4/14.
 //  Copyright (c) 2014 TIBCO JasperMobile. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "JMServerOptions.h"
-#import "JMServerProfile.h"
+#import "JMUtils.h"
 
-@interface JMServerOptionsTests : XCTestCase
-@property (strong, nonatomic) JMServerProfile *serverProfile;
+@interface JMUtilsTests : XCTestCase
+
 @end
 
-@implementation JMServerOptionsTests
+@implementation JMUtilsTests
 
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    self.serverProfile = [JMServerProfile new];
 }
 
 - (void)tearDown {
@@ -28,9 +26,16 @@
     [super tearDown];
 }
 
-- (void)testTest {
-    // TODO: create tests
-    //XCTAssert(self.serverProfile.alias, @"");
+- (void)testExample {
+    // This is an example of a functional test case.
+    XCTAssert(YES, @"Pass");
+}
+
+- (void)testPerformanceExample {
+    // This is an example of a performance test case.
+    [self measureBlock:^{
+        // Put the code you want to measure the time of here.
+    }];
 }
 
 @end
