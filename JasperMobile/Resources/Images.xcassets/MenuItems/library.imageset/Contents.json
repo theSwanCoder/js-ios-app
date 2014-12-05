@@ -12,7 +12,8 @@
     },
     {
       "idiom" : "iphone",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "library@3x.png"
     },
     {
       "idiom" : "ipad",

@@ -12,7 +12,8 @@
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "horizontal_list_button@3x.png"
     }
   ],
   "info" : {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="Y6M-IF-MRS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="Y6M-IF-MRS">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <scenes>
         <!--Main Navigation Controller-->
@@ -149,7 +149,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qcO-Ra-OsM">
                                                 <rect key="frame" x="8" y="87" width="304" height="40"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <string key="text">JasperMobile keeps you connected to 
+                                                <string key="text">JasperMobile keeps you connected to
 your business wherever you are.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -254,11 +254,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="SsL-u6-ztx">
-<<<<<<< HEAD
-                                                    <rect key="frame" x="240" y="7" width="50" height="30"/>
-=======
-                                                    <rect key="frame" x="240.00000071483777" y="7" width="50" height="30"/>
->>>>>>> feature/2.0
+                                                    <rect key="frame" x="240.00000036379382" y="7" width="50" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -392,7 +388,7 @@ your business wherever you are.</string>
                                     <rect key="frame" x="0.0" y="0.0" width="310" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="server.png" id="Geb-1B-TP8">
+                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="server" id="Geb-1B-TP8">
                                             <rect key="frame" x="0.0" y="0.0" width="85" height="60"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                         </imageView>
@@ -472,7 +468,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="76m-km-THx">
-                                                    <rect key="frame" x="170" y="10" width="120" height="30"/>
+                                                    <rect key="frame" x="170.00000065684998" y="10" width="120" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -510,7 +506,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="qPt-Qz-YWo">
-                                                    <rect key="frame" x="170" y="10" width="120" height="30"/>
+                                                    <rect key="frame" x="170.00000065684998" y="10" width="120" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
@@ -542,7 +538,7 @@ your business wherever you are.</string>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" id="C4L-2L-0hZ">
                                                     <rect key="frame" x="250" y="7" width="36" height="36"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                                                    <state key="normal" backgroundImage="unchecked_checkbox.png">
+                                                    <state key="normal" backgroundImage="unchecked_checkbox">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <state key="selected" backgroundImage="checked_checkbox.png"/>
@@ -575,7 +571,7 @@ your business wherever you are.</string>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" id="iD7-US-lu5">
                                                     <rect key="frame" x="250" y="7" width="36" height="36"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                                                    <state key="normal" backgroundImage="unchecked_checkbox.png">
+                                                    <state key="normal" backgroundImage="unchecked_checkbox">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <state key="selected" backgroundImage="checked_checkbox.png"/>
@@ -654,7 +650,7 @@ your business wherever you are.</string>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="w8t-yp-RLV" userLabel="Label">
                                         <rect key="frame" x="50" y="0.0" width="270" height="90"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <string key="text">Loading, 
+                                        <string key="text">Loading,
 Please Wait...</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                         <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -719,13 +715,8 @@ Please Wait...</string>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-<<<<<<< HEAD
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="1" sectionFooterHeight="1" id="FFl-Rt-mxS">
-                                <rect key="frame" x="10" y="40" width="300" height="454"/>
-=======
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="FFl-Rt-mxS">
                                 <rect key="frame" x="10" y="40" width="300" height="366"/>
->>>>>>> feature/2.0
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -780,7 +771,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="WbH-FR-T3V">
-                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
+                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -854,11 +845,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="cyI-ld-frz">
-<<<<<<< HEAD
-                                                    <rect key="frame" x="413" y="10" width="221" height="30"/>
-=======
-                                                    <rect key="frame" x="187.00000089017573" y="10" width="100" height="30"/>
->>>>>>> feature/2.0
+                                                    <rect key="frame" x="187.00000030994417" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -932,11 +919,7 @@ Please Wait...</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Ab7-h2-DAV">
-<<<<<<< HEAD
-                                                    <rect key="frame" x="413" y="10" width="221" height="30"/>
-=======
-                                                    <rect key="frame" x="187" y="10" width="100" height="30"/>
->>>>>>> feature/2.0
+                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -983,7 +966,7 @@ Please Wait...</string>
                                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow.png" id="9LN-FW-Cws">
+                                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow" id="9LN-FW-Cws">
                                                             <rect key="frame" x="126" y="3" width="20" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1031,7 +1014,7 @@ Please Wait...</string>
                                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow.png" id="5Ra-kW-EVK">
+                                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow" id="5Ra-kW-EVK">
                                                             <rect key="frame" x="127" y="3" width="20" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1086,16 +1069,11 @@ Please Wait...</string>
             <objects>
                 <viewController id="LDD-kF-5Ch" customClass="JMReportViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="r2h-uK-Jvn">
-<<<<<<< HEAD
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-=======
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask"/>
->>>>>>> feature/2.0
                         <subviews>
                             <webView contentMode="scaleToFill" scalesPageToFit="YES" id="HYR-Xd-KOU">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="592"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -1103,7 +1081,7 @@ Please Wait...</string>
                                 </connections>
                             </webView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="Bd6-3W-WZo">
-                                <rect key="frame" x="150" y="242" width="20" height="20"/>
+                                <rect key="frame" x="150" y="295" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
@@ -1141,16 +1119,11 @@ Please Wait...</string>
             <objects>
                 <viewController id="8AY-7W-tMT" customClass="JMDashboardsViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OrM-B7-y02">
-<<<<<<< HEAD
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-=======
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask"/>
->>>>>>> feature/2.0
                         <subviews>
                             <webView contentMode="scaleToFill" scalesPageToFit="YES" id="Gbs-Ce-Tuh">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="592"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -1158,7 +1131,7 @@ Please Wait...</string>
                                 </connections>
                             </webView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="eff-F5-XG6">
-                                <rect key="frame" x="150" y="242" width="20" height="20"/>
+                                <rect key="frame" x="150" y="295" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
@@ -1259,19 +1232,11 @@ Please Wait...</string>
             <objects>
                 <viewController id="xno-v3-xNA" customClass="JMSavedResourceViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="b4R-k0-m3B">
-<<<<<<< HEAD
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" scalesPageToFit="YES" id="sur-YJ-B98">
-                                <rect key="frame" x="-6" y="-13" width="320" height="504"/>
-=======
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <webView contentMode="scaleToFill" scalesPageToFit="YES" id="sur-YJ-B98">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
->>>>>>> feature/2.0
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -1279,7 +1244,7 @@ Please Wait...</string>
                                 </connections>
                             </webView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="ySM-uE-Xj8">
-                                <rect key="frame" x="148" y="238" width="16" height="24"/>
+                                <rect key="frame" x="148" y="291" width="16" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
                         </subviews>
@@ -1355,21 +1320,17 @@ Please Wait...</string>
         </scene>
     </scenes>
     <resources>
-        <image name="accessory_arrow.png" width="17" height="17"/>
+        <image name="accessory_arrow" width="17" height="17"/>
         <image name="arrow_up" width="21" height="12"/>
         <image name="checked_checkbox.png" width="36" height="36"/>
         <image name="gray_text_field.png" width="1" height="1"/>
-<<<<<<< HEAD
         <image name="home_screen" width="282" height="470"/>
-        <image name="jasper_logo" width="155" height="156"/>
+        <image name="jasper_logo" width="155" height="155"/>
         <image name="report_screen_ipad" width="198" height="265"/>
         <image name="report_screen_iphone" width="85" height="156"/>
-        <image name="server.png" width="232" height="129"/>
+        <image name="server" width="32" height="40"/>
         <image name="server_screen" width="282" height="470"/>
-=======
-        <image name="server.png" width="32" height="40"/>
->>>>>>> feature/2.0
-        <image name="unchecked_checkbox.png" width="36" height="36"/>
+        <image name="unchecked_checkbox" width="36" height="36"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -1377,15 +1338,9 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-<<<<<<< HEAD
-        <segue reference="hUW-ct-uiE"/>
-        <segue reference="LFp-3W-cdL"/>
-=======
-        <segue reference="jUv-fg-3yZ"/>
-        <segue reference="hUW-ct-uiE"/>
-        <segue reference="b4y-hZ-jNZ"/>
->>>>>>> feature/2.0
         <segue reference="KN6-hX-ICt"/>
         <segue reference="25f-vL-F1i"/>
+        <segue reference="hUW-ct-uiE"/>
+        <segue reference="b4y-hZ-jNZ"/>
     </inferredMetricsTieBreakers>
 </document>

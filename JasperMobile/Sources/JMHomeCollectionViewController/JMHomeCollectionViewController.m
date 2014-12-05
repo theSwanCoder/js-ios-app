@@ -29,22 +29,11 @@
 #import "JMMenuItemCell.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMResourcesCollectionViewController.h"
-
-<<<<<<< HEAD
 #import "ALToastView.h"
 #import "JasperMobileAppDelegate.h"
 #import "UIView+Additions.h"
 #import "JMOnboardIntroViewController.h"
 
-// Localization keys defined as lowercase version of MenuItem identifier (e.g library, saveditems etc)
-static NSString * const kJMMenuItemLibrary = @"Library";
-static NSString * const kJMMenuItemSettings = @"Settings";
-static NSString * const kJMMenuItemRepository = @"Repository";
-static NSString * const kJMMenuItemSavedItems = @"SavedItems";
-static NSString * const kJMMenuItemFavorites = @"Favorites";
-
-=======
->>>>>>> feature/2.0
 static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 
 @interface JMHomeCollectionViewController ()

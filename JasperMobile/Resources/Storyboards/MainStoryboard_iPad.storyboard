@@ -1117,7 +1117,7 @@
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4VW-iR-XBE" userLabel="Label">
                                         <rect key="frame" x="147" y="0.0" width="591" height="90"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <string key="text">Loading, 
+                                        <string key="text">Loading,
 Please Wait...</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1298,16 +1298,12 @@ Please Wait...</string>
         <image name="arrow_up" width="42" height="23"/>
         <image name="checked_checkbox.png" width="36" height="36"/>
         <image name="gray_text_field.png" width="1" height="1"/>
-<<<<<<< HEAD
         <image name="home_screen" width="605" height="661"/>
         <image name="jasper_logo" width="260" height="260"/>
         <image name="report_screen_ipad" width="395" height="530"/>
         <image name="report_screen_iphone" width="169" height="312"/>
         <image name="server.png" width="232" height="129"/>
         <image name="server_screen" width="605" height="661"/>
-=======
-        <image name="server.png" width="32" height="40"/>
->>>>>>> feature/2.0
         <image name="unchecked_checkbox.png" width="36" height="36"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
