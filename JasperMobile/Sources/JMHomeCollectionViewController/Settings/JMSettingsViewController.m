@@ -26,7 +26,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "JMSettingsTableViewCell.h"
 #import "JMSettings.h"
-#import "UIAlertView+LocalizedAlert.h"
+#import "UIAlertView+Additions.h"
 #import "JMServerProfile+Helpers.h"
 
 #import "JMAppUpdater.h"

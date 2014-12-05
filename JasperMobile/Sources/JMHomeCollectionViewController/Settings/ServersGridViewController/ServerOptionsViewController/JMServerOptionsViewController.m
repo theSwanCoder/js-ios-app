@@ -30,7 +30,7 @@
 
 #import "UITableViewCell+Additions.h"
 #import "JMServerOptionCell.h"
-#import "UIAlertView+LocalizedAlert.h"
+#import "UIAlertView+Additions.h"
 
 #import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"

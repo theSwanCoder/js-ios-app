@@ -146,6 +146,7 @@
 "detail.report.options.multiselect.titlelabel.title" = "Select one or more items";
 "detail.report.options.search.value.placeholder" = "Search Values";
 
+"detail.resource.viewer.open.link" = "Do you want to open link in external browser?";
 "detail.resource.viewer.can't.open.link" = "Link can't be opened.";
 "detail.report.viewer.emptyreport.title" = "Report is empty";
 "detail.report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options or tap 'Cancel' for returning to old report.";

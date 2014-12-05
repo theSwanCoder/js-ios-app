@@ -24,7 +24,7 @@
 #import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"
 #import "UIViewController+fetchInputControls.h"
-#import "UIAlertView+LocalizedAlert.h"
+#import "UIAlertView+Additions.h"
 
 typedef NS_ENUM(NSInteger, JMReportViewerOutputResourceType) {
     JMReportViewerOutputResourceType_None = 0,

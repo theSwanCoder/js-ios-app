@@ -23,7 +23,7 @@
 
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
-#import "UIAlertView+LocalizedAlert.h"
+#import "UIAlertView+Additions.h"
 
 @interface JMSavedResourceViewerViewController () <UIAlertViewDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;

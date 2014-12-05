@@ -30,7 +30,7 @@
 #import "JMFavorites.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMSavedResources+Helpers.h"
-#import "UIAlertView+LocalizedAlert.h"
+#import "UIAlertView+Additions.h"
 
 // Key for app version
 static NSString * const kJMApplicationVersion = @"CFBundleShortVersionString";

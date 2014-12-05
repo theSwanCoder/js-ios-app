@@ -32,7 +32,7 @@ static JMRequestDelegateFinalBlock finalBlock;
 __weak static UIViewController *viewControllerToDismiss;
 
 #import "JMCancelRequestPopup.h"
-#import "UIAlertView+LocalizedAlert.h"
+#import "UIAlertView+Additions.h"
 #import "JMUtils.h"
 
 @interface JMRequestDelegate()

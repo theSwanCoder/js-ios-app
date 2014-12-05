@@ -37,9 +37,6 @@
 #import "JMResourceInfoViewController.h"
 #import "PopoverView.h"
 
-#import "UIAlertView+LocalizedAlert.h"
-
-
 NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 
 NSString * const kJMRepresentationTypeDidChangedNotification = @"kJMRepresentationTypeDidChangedNotification";
@@ -107,7 +104,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self.refreshControl addTarget:self action:@selector(refershControlAction:) forControlEvents:UIControlEventValueChanged];
     [self.collectionView addSubview:self.refreshControl];
     self.collectionView.alwaysBounceVertical = YES;
-        
+    
     [self showNavigationItems];
     [self.resourceListLoader updateIfNeeded];
     
@@ -120,14 +117,6 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     } @weakselfend];
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    if ([JMUtils isIphone]) {
-        [self showNavigationItems];
-    }
-}
-
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -136,10 +125,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (self.needReloadData) {
-        [self.collectionView reloadData];
-        self.needReloadData = NO;
-    }
+    [self updateIfNeeded];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -170,8 +156,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 {
     _needReloadData = needReloadData;
     if (self.isViewLoaded && self.view.window && needReloadData) {
-        [self.collectionView reloadData];
-        _needReloadData = NO;
+        [self updateIfNeeded];
     }
 }
 
@@ -389,12 +374,21 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 
 #pragma mark - Utils
 
+- (void)updateIfNeeded
+{
+    if (self.needReloadData) {
+        [self.collectionView reloadData];
+        if ([JMUtils isIphone]) {
+            [self showNavigationItems];
+        }
+        self.needReloadData = NO;
+    }
+}
+
 - (UISearchBar *)searchBar
 {
     if (!_searchBar) {
-        CGFloat searchBarWidth = self.searchBarPlaceholder.frame.size.width;
-        CGFloat searchBarHeight = self.searchBarPlaceholder.frame.size.height;
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, searchBarWidth, searchBarHeight)];
+        _searchBar = [[UISearchBar alloc] initWithFrame:self.searchBarPlaceholder.bounds];
         _searchBar.searchBarStyle = UISearchBarStyleMinimal;
         _searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
         _searchBar.delegate = self;
