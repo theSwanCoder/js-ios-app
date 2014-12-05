@@ -40,9 +40,18 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.currentPageField.backgroundColor = kJMMainNavigationBarBackgroundColor;
+    self.currentPageField.layer.cornerRadius = 4.f;
+    self.currentPageField.layer.masksToBounds = YES;
+
+    self.currentPageField.backgroundColor = kJMSearchBarBackgroundColor;
     self.currentPageField.inputView = self.pickerView;
     self.currentPageField.inputAccessoryView = [self pickerToolbar];
+}
+
+- (void)dealloc
+{
+    self.pickerView.delegate = nil;
+    self.pickerView.dataSource = nil;
 }
 
 #pragma mark - Properties
@@ -63,7 +72,7 @@
 
 - (void) updatePages
 {
-    NSString *keyString = JMCustomLocalizedString(@"action.report.viewer.pagecount", nil);
+    NSString *keyString = JMCustomLocalizedString(@"detail.report.viewer.pagecount", nil);
     self.pageCountLabel.text = [NSString stringWithFormat:keyString, self.countOfPages];
     self.currentPageField.text = [NSString stringWithFormat:@"%ld", (long)self.currentPage];
     

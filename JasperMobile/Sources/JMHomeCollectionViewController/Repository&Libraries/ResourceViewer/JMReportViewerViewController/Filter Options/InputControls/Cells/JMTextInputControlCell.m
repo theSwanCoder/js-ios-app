@@ -57,12 +57,11 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if ([self.detailTextLabel.text length]) {
-        [self updateDisplayingOfErrorMessage:nil];
-    }
     NSString *value = [textField.text stringByReplacingCharactersInRange:range withString:string];
     self.inputControlDescriptor.state.value = value.length ? value : nil;
-
+    self.inputControlDescriptor.state.error = nil;
+    
+    [self updateDisplayingOfErrorMessage];
     return YES;
 }
 
@@ -71,10 +70,6 @@
 - (void)doneButtonTapped:(id)sender
 {
     self.inputControlDescriptor.state.value = self.textField.text;
-    
-    if ([self.detailTextLabel.text length]) {
-        [self updateDisplayingOfErrorMessage:nil];
-    }
     [self.textField resignFirstResponder];
 }
 

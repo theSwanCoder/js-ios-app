@@ -50,7 +50,7 @@
 
  @return full path of document directory
 */
-+ (NSString *)documentsDirectoryPath;
++ (NSString *)applicationDocumentsDirectory;
 
 /**
  Sends "changeServerProfile" notification to defaultCenter
@@ -96,4 +96,6 @@
  Update sending of crash reports
  */
 + (void)activateCrashReportSendingIfNeeded;
+
++ (NSArray *)supportedFormatsForReportSaving;
 @end

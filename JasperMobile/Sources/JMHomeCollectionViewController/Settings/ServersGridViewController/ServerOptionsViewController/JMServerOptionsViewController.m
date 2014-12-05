@@ -39,7 +39,7 @@
 @interface JMServerOptionsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, JMServerOptionCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) JMServerOptions *serverOptions;
-
+@property (nonatomic, strong) JSRESTBase *restBase;
 @end
 
 @implementation JMServerOptionsViewController
@@ -110,8 +110,17 @@
 - (void)saveButtonTapped:(id)sender
 {
     [self.view endEditing:YES];
-    if ([self.serverOptions saveChanges]) {
-        [self.navigationController popViewControllerAnimated:YES];
+    if ([self.serverOptions isValidData]) {
+        void (^aplySaving)(void) = @weakself(^(void)){
+            [self.serverOptions saveChanges];
+            [self.navigationController popViewControllerAnimated:YES];
+        }@weakselfend;
+        
+        if (self.serverProfile.serverProfileIsActive) {
+            [self checkServerProfileWithSuccessBlock:aplySaving errorBlock:nil];
+        } else {
+            aplySaving();
+        }
     } else {
         [self.tableView reloadData];
     }
@@ -131,27 +140,40 @@
 - (void)makeActiveButtonTappedOnTableViewCell:(JMServerOptionCell *)cell
 {
     [self.view endEditing:YES];
+    [self checkServerProfileWithSuccessBlock:@weakself(^(void)) {
+        [self.serverOptions setServerProfileActive];
+        [self.navigationController popViewControllerAnimated:YES];
+    } @weakselfend
+    errorBlock:@weakself(^(void)) {
+        [cell performSelector:@selector(discardActivityServer)];
+    } @weakselfend];
+}
+
+- (void) checkServerProfileWithSuccessBlock:(void(^)(void))successBlock errorBlock:(void(^)(void))errorBlock
+{
     JSProfile *profile = [[JSProfile alloc] initWithAlias:self.serverProfile.alias
                                                  username:self.serverProfile.username
                                                  password:self.serverProfile.password
                                              organization:self.serverProfile.organization
                                                 serverUrl:self.serverProfile.serverUrl];
-    void(^errorBlock)(JSOperationResult *result) = ^(JSOperationResult *result){
-        [cell performSelector:@selector(discardActivityServer)];
-    };
-    
-    JSRESTBase *restBase = [[JSRESTBase alloc] initWithProfile:profile classesForMappings:nil];
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:restBase cancelBlock:^{
-        errorBlock(nil);
+
+    self.restBase = [[JSRESTBase alloc] initWithProfile:profile classesForMappings:nil];
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.restBase cancelBlock:^{
+        if (errorBlock) {
+            errorBlock();
+        }
     }];
     
     JMRequestDelegate *serverInfoDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
-        float serverVersion = restBase.serverInfo.versionAsFloat;
+        float serverVersion = self.restBase.serverInfo.versionAsFloat;
         if (serverVersion >= [JMServerProfile minSupportedServerVersion]) {
-            [self.serverOptions setServerProfileActive];
-            [self.navigationController popViewControllerAnimated:YES];
+            if (successBlock) {
+                successBlock();
+            }
         } else {
-            errorBlock(result);
+            if (errorBlock) {
+                errorBlock();
+            }
             NSString *title = [NSString stringWithFormat:JMCustomLocalizedString(@"error.server.notsupported.title", nil), serverVersion];
             [[UIAlertView localizedAlertWithTitle:title
                                           message:@"error.server.notsupported.msg"
@@ -160,8 +182,12 @@
                                 otherButtonTitles:nil] show];
         }
     } @weakselfend
-     errorBlock:errorBlock];
-    [restBase serverInfo:serverInfoDelegate];
+    errorBlock:^(JSOperationResult *result) {
+        if (errorBlock) {
+            errorBlock();
+        }
+    }];
+    [self.restBase serverInfo:serverInfoDelegate];
 }
 
 #pragma mark - UIAlertViewDelegate

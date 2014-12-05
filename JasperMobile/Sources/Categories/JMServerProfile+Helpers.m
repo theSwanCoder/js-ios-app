@@ -84,7 +84,10 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
     
     JMServerProfile *serverProfile = (JMServerProfile *) [self.managedObjectContext existingObjectWithID:activeServerID error:nil];
     if (serverProfile) {
-        [serverProfile setPasswordAsPrimitive:[JMServerProfile passwordFromKeychain:serverProfile.profileID]];
+        NSString *passwordString = [JMServerProfile passwordFromKeychain:serverProfile.profileID];
+        if (passwordString) {
+            [serverProfile setPasswordAsPrimitive:passwordString];
+        }
     }
     
     return serverProfile;
@@ -102,11 +105,7 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
 
 - (BOOL)serverProfileIsActive
 {
-    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
-    NSManagedObjectID *activeID = activeServerProfile.objectID;
-    NSManagedObjectID *selfID = self.objectID;
-    
-    return [activeID isEqual:selfID];
+    return [[JMServerProfile activeServerID] isEqual:self.objectID];
 }
 
 - (void)setServerProfileIsActive:(BOOL)serverProfileIsActive
@@ -121,6 +120,37 @@ static NSString * const kJMKeychainServiceName = @"JasperMobilePasswordStorage";
 + (float) minSupportedServerVersion
 {
     return [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_5_0;
+}
+
++ (JMServerProfile *)serverProfileForname:(NSString *)serverName
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K == %@", @"alias", serverName]];
+    return [[[self managedObjectContext] executeFetchRequest:fetchRequest error:nil] lastObject];
+}
+
++ (void) cloneServerProfile:(JMServerProfile *)serverProfile
+{
+    NSString *entityName = [[serverProfile entity] name];
+    
+    //create new object in data store
+    JMServerProfile *newServerProfile = [NSEntityDescription
+                                         insertNewObjectForEntityForName:entityName
+                                         inManagedObjectContext:[self managedObjectContext]];
+
+    NSInteger cloneNumber = 0;
+    NSString *serverName = nil;
+    do {
+        serverName = (cloneNumber++ > 0) ? [serverProfile.alias stringByAppendingFormat:@" %zd", cloneNumber] : serverProfile.alias;
+    } while ([self serverProfileForname:serverName]);
+    
+    newServerProfile.alias          = serverName;
+    newServerProfile.askPassword    = serverProfile.askPassword;
+    newServerProfile.organization   = serverProfile.organization;
+    newServerProfile.password       = serverProfile.password;
+    newServerProfile.serverUrl      = serverProfile.serverUrl;
+    newServerProfile.username       = serverProfile.username;
+    [[self managedObjectContext] save:nil];
 }
 
 #pragma mark - Private

@@ -46,20 +46,30 @@ static NSString * const kJMMakeActiveCellIdentifier = @"MakeActiveCell";
         } else {
             self.serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
         }
+        [self.serverProfile setPasswordAsPrimitive:[JMServerProfile passwordFromKeychain:self.serverProfile.profileID]];
     }
     return self;
 }
 
-- (BOOL)saveChanges
+- (void)saveChanges
+{
+    if ([self.managedObjectContext hasChanges]) {
+        [JMServerProfile storePasswordInKeychain:self.serverProfile.password profileID:self.serverProfile.profileID];
+        NSError *error = nil;
+        [self.managedObjectContext save:&error];
+    }
+    if (self.serverProfile.serverProfileIsActive) {
+        [self setServerProfileActive];
+    }
+}
+
+- (BOOL)isValidData
 {
     JMServerOption *serverOption = [self.optionsArray objectAtIndex:0];
     if (serverOption.optionValue && [[serverOption.optionValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
         // Check if alias is unique
-        NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
-        [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K == %@", @"alias", serverOption.optionValue]];
-        NSArray *servers = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
-
-        if (servers && [servers count] && ![[servers lastObject] isEqual:self.serverProfile]) {
+        JMServerProfile *serverProfile = [JMServerProfile serverProfileForname:serverOption.optionValue];
+        if (serverProfile && ![serverProfile isEqual:self.serverProfile]) {
             serverOption.errorString = JMCustomLocalizedString(@"servers.name.errmsg.exists", nil);
         } else {
             self.serverProfile.alias = serverOption.optionValue;
@@ -93,25 +103,16 @@ static NSString * const kJMMakeActiveCellIdentifier = @"MakeActiveCell";
     } else {
         serverOption.errorString = JMCustomLocalizedString(@"servers.password.errmsg.empty", nil);
     }
-    
+
+    self.serverProfile.organization = [[self.optionsArray objectAtIndex:2] optionValue];
+    self.serverProfile.askPassword  = [[self.optionsArray objectAtIndex:5] optionValue];
+
     for (JMServerOption *option in self.optionsArray) {
         if (option.errorString) {
             return NO;
         }
     }
-
-    self.serverProfile.organization = [[self.optionsArray objectAtIndex:2] optionValue];
-    self.serverProfile.askPassword  = [[self.optionsArray objectAtIndex:5] optionValue];
-
-    if ([self.managedObjectContext hasChanges]) {
-        NSError *error = nil;
-        [self.managedObjectContext save:&error];
-        [JMServerProfile storePasswordInKeychain:self.serverProfile.password profileID:self.serverProfile.profileID];
-    }
-    if (self.serverProfile.serverProfileIsActive) {
-        [self setServerProfileActive];
-    }
-
+    
     return YES;
 }
 
@@ -139,7 +140,7 @@ static NSString * const kJMMakeActiveCellIdentifier = @"MakeActiveCell";
 }
 
 - (void)createOptionsArray
-{    
+{
     NSMutableArray *optionsArray = [NSMutableArray array];
     NSMutableArray *optionsSourceArray = [NSMutableArray arrayWithArray:
     @[@{@"title" : JMCustomLocalizedString(@"servers.name.label", nil),         @"value" : self.serverProfile.alias         ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},

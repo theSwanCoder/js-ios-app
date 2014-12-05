@@ -60,16 +60,11 @@
 
         }
         *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"savereport.name.errmsg.characters", nil), invalidCharsString];
-    } else {
-        if (![JMSavedResources isAvailableReportName:reportName]) {
-            *errorMessage = JMCustomLocalizedString(@"savereport.name.errmsg.notunique", nil);
-        }
     }
-
     return [*errorMessage length] == 0;
 }
 
-+ (NSString *)documentsDirectoryPath
++ (NSString *)applicationDocumentsDirectory
 {
     static NSString *reportDirectory;
     if (!reportDirectory) {
@@ -140,5 +135,17 @@
     } else if (![self crashReportsSendingEnable]) {
         [[Mint sharedInstance] closeSessionAsyncWithCompletionBlock:nil];
     }
+}
+
++ (NSArray *)supportedFormatsForReportSaving
+{
+    static NSArray *reportFormats;
+    if (!reportFormats) {
+        reportFormats = @[
+                           [JSConstants sharedInstance].CONTENT_TYPE_HTML,
+                           [JSConstants sharedInstance].CONTENT_TYPE_PDF,
+                           ];
+    }
+    return reportFormats;
 }
 @end

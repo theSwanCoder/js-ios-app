@@ -26,8 +26,8 @@
 
 @interface JMRepositoryListLoader ()
 
-@property (nonatomic, strong) JSResourceLookup *rootFolder;
-@property (nonatomic, strong) JSResourceLookup *publicFolder;
+@property (nonatomic, strong) NSMutableArray *rootFolders;
+@property (nonatomic, strong) NSMutableArray *rootFoldersURIs;
 
 @end
 
@@ -36,70 +36,103 @@
 {
     self = [super init];
     if (self) {
-        self.resourcesType = JMResourcesListLoaderObjectType_RepositoryAll;
-        self.sortBy = JMResourcesListLoaderSortBy_Name;
-        self.loadRecursively = NO;
+        self.rootFolders = [NSMutableArray array];
     }
     return self;
 }
 
-- (BOOL) shouldBeAddedResourceLookup:(JSResourceLookup *)resource
+- (BOOL)loadRecursively
 {
-   return (!self.searchQuery ||
-           (self.searchQuery && resource.label && [resource.label rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound) ||
-           (self.searchQuery && resource.resourceDescription && [resource.resourceDescription rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound));
+    return !!self.searchQuery;
 }
 
 - (void)loadNextPage
 {
-    if (self.resourceLookup) {
+    if (self.resourceLookup || (!self.resourceLookup && [self.searchQuery length])) {
         [super loadNextPage];
     } else {
         _needUpdateData = NO;
-        void(^finishBlock)(void) = ^(void){
-            self->_isLoadingNow = NO;
-            [self.delegate resourceListDidLoaded:self withError:nil];
-        };
         
-        void(^finishSearchBlock)(void) = ^(void){
-            if (self.rootFolder && self.publicFolder) {
-                if ([self shouldBeAddedResourceLookup:self.rootFolder]) {
-                    [self.resources addObject:self.rootFolder];
-                }
-                if ([self shouldBeAddedResourceLookup:self.publicFolder]) {
-                    [self.resources addObject:self.publicFolder];
-                }
-                
-                self.resources = [NSMutableArray arrayWithArray:[self.resources sortedArrayUsingComparator:^NSComparisonResult(JSResourceLookup * obj1, JSResourceLookup * obj2) {
-                    return [obj1.label compare:obj2.label options:NSCaseInsensitiveSearch];
-                }]];
-                finishBlock();
-            }
-        };
-
-        void(^loadResourceLookupBlock)(NSString *resourceURI, JSResourceLookup * __strong *lookup) = ^(NSString *resourceURI, JSResourceLookup * __strong *lookup){
-            JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakselfnotnil(^(JSOperationResult *result)) {
-                JSResourceLookup *resourceLookup = [result.objects objectAtIndex:0];
-                if (!resourceLookup.resourceType) {
-                    resourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
-                }
-                *lookup = resourceLookup;
-                finishSearchBlock();
-            } @weakselfend
-            errorBlock:@weakselfnotnil(^(JSOperationResult *result)) {
-                finishBlock();
-            } @weakselfend
-            viewControllerToDismiss: nil];
-            [self.resourceClient getResourceLookup:resourceURI delegate:requestDelegate];
-
-        };
-        
-        if (!self.rootFolder && !self.publicFolder) {
-            loadResourceLookupBlock(@"/", &_rootFolder);
-            loadResourceLookupBlock(@"/public", &_publicFolder);
+        if (![self.rootFolders count]) {
+            [self loadResourceLookup:[self.rootFoldersURIs lastObject]];
         } else {
-            finishSearchBlock();
+            [self finishLoading];
         }
+    }
+}
+
+- (NSMutableArray *)rootFoldersURIs
+{
+    if (!_rootFoldersURIs) {
+        _rootFoldersURIs = [NSMutableArray arrayWithObject:@"/"];
+        if ([self.resourceClient.serverInfo.edition isEqualToString:self.constants.SERVER_EDITION_PRO]) {
+            [_rootFoldersURIs addObject:@"/public"];
+        }
+    }
+    return _rootFoldersURIs;
+}
+
+- (void)loadResourceLookup:(NSString *)resourceURI
+{
+    void (^requestDidFinishLoading)(void) = ^(void){
+        [self.rootFoldersURIs removeObject:resourceURI];
+        if ([self.rootFoldersURIs count]) {
+            [self loadResourceLookup:[self.rootFoldersURIs lastObject]];
+        } else {
+            [self finishLoading];
+        }
+    };
+    
+    JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+        JSResourceLookup *resourceLookup = [result.objects objectAtIndex:0];
+        if (resourceLookup) {
+            if (!resourceLookup.resourceType) {
+                resourceLookup.resourceType = self.constants.WS_TYPE_FOLDER;
+            }
+            if (resourceLookup) {
+                [self.rootFolders addObject:resourceLookup];
+            }
+        }
+        requestDidFinishLoading();
+    } @weakselfend
+    errorBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+        requestDidFinishLoading();
+    } @weakselfend
+    viewControllerToDismiss: nil];
+    
+    [self.resourceClient getResourceLookup:resourceURI delegate:requestDelegate];
+}
+
+- (BOOL) shouldBeAddedResourceLookup:(JSResourceLookup *)resource
+{
+    return (!self.searchQuery ||
+            (self.searchQuery && resource.label && [resource.label rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound) ||
+            (self.searchQuery && resource.resourceDescription && [resource.resourceDescription rangeOfString:self.searchQuery options:NSCaseInsensitiveSearch].location != NSNotFound));
+}
+
+- (void)finishLoading
+{
+    for (JSResourceLookup *lookup in self.rootFolders) {
+        if ([self shouldBeAddedResourceLookup:lookup]) {
+            [self.resources addObject:lookup];
+        }
+    }
+    self.resources = [NSMutableArray arrayWithArray:[self.resources sortedArrayUsingComparator:^NSComparisonResult(JSResourceLookup * obj1, JSResourceLookup * obj2) {
+        return [obj1.label compare:obj2.label options:NSCaseInsensitiveSearch];
+    }]];
+    _isLoadingNow = NO;
+    [self.delegate resourceListDidLoaded:self withError:nil];
+}
+
+- (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option
+{
+    switch (option) {
+        case JMResourcesListLoaderOption_Sort:
+            return [super listItemsWithOption:option];
+        case JMResourcesListLoaderOption_Filter:
+            return @[
+                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"master.resources.type.all", nil),
+                       kJMResourceListLoaderOptionItemValueKey: @[self.constants.WS_TYPE_REPORT_UNIT, self.constants.WS_TYPE_DASHBOARD, self.constants.WS_TYPE_DASHBOARD_LEGACY, self.constants.WS_TYPE_FOLDER]}];
     }
 }
 

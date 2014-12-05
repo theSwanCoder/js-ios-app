@@ -1,18 +1,34 @@
-//
-//  JMPopupView.m
-//  BetterInterviewsAdmin
-//
-//  Created by Gubariev, Oleksii on 4/7/14.
-//  Copyright (c) 2014 SphereConsultingInc. All rights reserved.
-//
+/*
+ * TIBCO JasperMobile for iOS
+ * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * http://community.jaspersoft.com/project/jaspermobile-ios
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
 
 #import "JMPopupView.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define kJMPopupViewDefaultWidth        260.f
-#define kJMPopupViewButtonsHeight       35.f
-
 static NSMutableArray* visiblePopupsArray = nil;
+
+@interface JMPopupView ()
+
+@property (nonatomic, assign) BOOL animatedNow;
+@end
 
 @implementation JMPopupView
 @synthesize contentView = _contentView;
@@ -98,6 +114,9 @@ static NSMutableArray* visiblePopupsArray = nil;
 }
 
 - (void) showFromPoint:(CGPoint)point onView:(UIView*)view{
+    if (self.animatedNow) {
+        return;
+    }
     UIView* topView = [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject];
     self.frame = topView.bounds;
     [topView addSubview:self];
@@ -134,6 +153,7 @@ static NSMutableArray* visiblePopupsArray = nil;
     if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewWillShow:)]) {
         [self.delegate popupViewWillShow:self];
     }
+    self.animatedNow = YES;
     // animate into full size
     [UIView animateWithDuration:0.2f delay:0.f options:UIViewAnimationOptionCurveEaseInOut animations:^{
         _backGroundView.alpha = 1.f;
@@ -142,6 +162,7 @@ static NSMutableArray* visiblePopupsArray = nil;
         [UIView animateWithDuration:0.08f delay:0.f options:UIViewAnimationOptionCurveEaseInOut animations:^{
             _backGroundView.transform = CGAffineTransformIdentity;
         } completion:^(BOOL finished) {
+            self.animatedNow = NO;
             if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidShow:)]) {
                 [self.delegate popupViewDidShow:self];
             }
@@ -168,7 +189,8 @@ static NSMutableArray* visiblePopupsArray = nil;
     [self dismiss:YES];
 }
 
-- (void)tapped:(UITapGestureRecognizer *)tap{
+- (void)tapped:(UITapGestureRecognizer *)tap
+{
     CGPoint point = [tap locationInView:_backGroundView];
     BOOL found = NO;
     
@@ -189,7 +211,16 @@ static NSMutableArray* visiblePopupsArray = nil;
     [self dismiss:YES];
 }
 
-- (void)dismiss:(BOOL)animated{
+- (void)dismiss
+{
+    [self dismiss:YES];
+}
+
+- (void)dismiss:(BOOL)animated
+{
+    if (self.animatedNow) {
+        return;
+    }
     if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewWillDismissed:)]) {
         [self.delegate popupViewWillDismissed:self];
     }
@@ -199,11 +230,13 @@ static NSMutableArray* visiblePopupsArray = nil;
             [self.delegate popupViewDidDismissed:self];
         }
     } else {
+        self.animatedNow = YES;
         [UIView animateWithDuration:0.3f animations:^{
             _backGroundView.alpha = 0.1f;
             _backGroundView.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
         } completion:^(BOOL finished) {
             [self removeFromSuperview];
+            self.animatedNow = NO;
             if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
                 [self.delegate popupViewDidDismissed:self];
             }

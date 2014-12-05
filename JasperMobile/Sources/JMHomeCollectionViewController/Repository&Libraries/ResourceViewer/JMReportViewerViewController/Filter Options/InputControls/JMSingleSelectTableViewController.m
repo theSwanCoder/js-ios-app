@@ -22,11 +22,10 @@
 
 
 #import "JMSingleSelectTableViewController.h"
-#import "JMSearchBar.h"
 
-@interface JMSingleSelectTableViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, JMSearchBarDelegate>
-@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@interface JMSingleSelectTableViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UISearchBarDelegate>
 @property (nonatomic, weak) IBOutlet UILabel     *noResultLabel;
+@property (nonatomic, strong) IBOutlet UISearchBar *icSearchBar;
 
 @property (nonatomic, strong) NSArray *filteredListOfValues;
 @property (nonatomic, strong) NSMutableSet *previousSelectedValues;
@@ -34,6 +33,38 @@
 @end
 
 @implementation JMSingleSelectTableViewController
+
+#pragma mark - UIViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.title = self.cell.inputControlDescriptor.label;
+    self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.singleselect.titlelabel.title", nil);
+    self.noResultLabel.text = JMCustomLocalizedString(@"detail.noresults.msg", nil);
+
+    self.titleLabel.textColor = kJMDetailViewLightTextColor;
+    self.tableView.layer.cornerRadius = 4;
+    // Remove extra separators
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
+    UITextField *txfSearchField = [self.icSearchBar valueForKey:@"_searchField"];
+    txfSearchField.backgroundColor = [UIColor whiteColor];
+    [txfSearchField setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor darkTextColor]}];
+    self.icSearchBar.barTintColor = kJMDetailViewLightBackgroundColor;
+    [self.icSearchBar setBackgroundImage:[UIImage new]];
+    self.icSearchBar.placeholder = JMCustomLocalizedString(@"detail.report.options.search.value.placeholder", nil);
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
+        [self.cell updateWithParameters:[self.selectedValues allObjects]];
+    }
+}
 
 #pragma mark - Accessors
 
@@ -68,38 +99,7 @@
     self.previousSelectedValues = [self.selectedValues mutableCopy];
 }
 
-#pragma mark - UIViewController
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    self.title = self.cell.inputControlDescriptor.label;
-    self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.singleselect.titlelabel.title", nil);
-    self.noResultLabel.text = JMCustomLocalizedString(@"detail.noresults.msg", nil);
-    
-    self.titleLabel.textColor = kJMDetailViewLightTextColor;
-    self.tableView.layer.cornerRadius = 4;
-    
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
-    // Remove extra separators
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self showNavigationItems];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
-        [self.cell updateWithParameters:[self.selectedValues allObjects]];
-    }
-}
 #pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -146,48 +146,10 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - Actions
 
-- (void)searchButtonTapped:(id)sender
-{
-    CGRect searchBarFrame = [JMUtils isIphone] ? self.navigationController.navigationBar.bounds : CGRectMake(0, 0, 320, 44);
-    JMSearchBar *searchBar =  [[JMSearchBar alloc] initWithFrame:searchBarFrame];
-    searchBar.delegate = self;
-    searchBar.placeholder = JMCustomLocalizedString(@"detail.report.options.search.value.placeholder", nil);
-    
-    if ([JMUtils isIphone]) {
-        self.navigationItem.hidesBackButton = YES;
-        [self.navigationController.navigationBar addSubview:searchBar];
-    } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:searchBar];
-    }
-}
+#pragma mark - UISearchBarDelegate
 
-- (void) showNavigationItems
-{
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"search_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(searchButtonTapped:)];
-}
-
-#pragma mark - JMSearchBarDelegate
-- (void)searchBarSearchButtonClicked:(JMSearchBar *)searchBar
-{
-    [searchBar resignFirstResponder];
-}
-
-- (void)searchBarCancelButtonClicked:(JMSearchBar *) searchBar
-{
-    [searchBar resignFirstResponder];
-    self.filteredListOfValues = nil;
-    [self.tableView reloadData];
-    if ([JMUtils isIphone]) {
-        [searchBar removeFromSuperview];
-        self.navigationItem.hidesBackButton = NO;
-    } else {
-        [self showNavigationItems];
-    }
-}
-
-- (void)searchBarDidChangeText:(JMSearchBar *)searchBar
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     if (searchBar.text.length) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.label beginswith[cd] %@", searchBar.text];
@@ -196,10 +158,32 @@
         self.filteredListOfValues = nil;
     }
     self.noResultLabel.hidden = ([self.listOfValues count] > 0);
-    self.tableView.hidden = !([self.listOfValues count] > 0);
-    self.titleLabel.hidden = !([self.listOfValues count] > 0);
-
+    
     [self.tableView reloadData];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
+{
+    searchBar.text = nil;
+    [self searchBar:searchBar textDidChange:nil];
+    [searchBar resignFirstResponder];
+}
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
+{
+    searchBar.showsCancelButton = YES;
+    return YES;
+}
+
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar
+{
+    searchBar.showsCancelButton = NO;
+    return YES;
 }
 
 @end

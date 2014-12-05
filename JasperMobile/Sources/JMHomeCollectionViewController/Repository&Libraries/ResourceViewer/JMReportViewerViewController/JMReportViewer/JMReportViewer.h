@@ -32,10 +32,13 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "JMReportClientHolder.h"
 
 @class JMReportViewer;
 @protocol JMReportViewerDelegate <NSObject>
 @required
+- (void) reportViewerReportDidCanceled:(JMReportViewer *)reportViewer;
+
 - (void) reportViewerDidChangedPagination:(JMReportViewer *)reportViewer;
 
 - (void) reportViewerShouldDisplayActivityIndicator:(JMReportViewer *)reportViewer;
@@ -44,7 +47,7 @@
 
 @end
 
-@interface JMReportViewer : NSObject <JMResourceClientHolder>
+@interface JMReportViewer : NSObject <JMResourceClientHolder, JMReportClientHolder>
 
 @property (nonatomic, weak) UIViewController <JMReportViewerDelegate> *delegate;
 

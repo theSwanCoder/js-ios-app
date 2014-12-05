@@ -1,0 +1,223 @@
+﻿/*
+ * TIBCO JasperMobile for iOS
+ * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * http://community.jaspersoft.com/project/jaspermobile-ios
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
+//
+//  Localizable.strings
+//  TIBCO JasperMobile
+//
+
+/* Server Profiles view */
+
+"servers.info" = "%@™ v %@\n\nFerramenta de gerenciamento e visualizador de relatório para o JasperReports Server %.1f e posterior.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright Â© 2005-2014 TIBCO Software, Inc.";
+
+
+"servers.url.label" = "Endereço do servidor";
+"servers.url.errmsg" = "Especifique um URL válido";
+
+"servers.name.label" = "Nome do servidor";
+"servers.name.errmsg.empty" = "Especifique um nome de perfil válido";
+"servers.name.errmsg.exists" = "O nome do perfil já existe. Especifique outro";
+
+"servers.orgid.label" = "ID da organização";
+
+"servers.username.label" = "Nome do usuário";
+"servers.username.errmsg.empty" = "Especifique um nome de usuário válido";
+
+"servers.password.label" = "Senha";
+"servers.password.errmsg.empty" = "Especifique uma senha válida";
+
+"servers.profile.title" = "Perfis do servidor";
+"servers.profile.delete.message" = "Confirme a exclusão do servidor.";
+
+"servers.askpassword.label" = "Sempre solicite a senha";
+
+"servers.activeserver.label" = "Servidor ativo";
+
+"servers.title.new" = "Novo perfil do servidor";
+"servers.title.edit" = "Editar perfil do servidor";
+
+"servers.gridview.activeserver.label" = "Ativo";
+"servers.button.makeactive" = "Tornar ativo";
+
+/* Report Saver view */
+"savereport.title" = "Salvar relatório";
+"savereport.name" = "Nome do relatório";
+"savereport.format" = "Formato de saída";
+"savereport.saved" = "O relatório foi salvo com sucesso";
+"savereport.name.errmsg.empty" = "Não pode ser vazio";
+"savereport.name.errmsg.notunique" = "Esse nome já existe, escolha outro diferente";
+"savereport.name.errmsg.maxlength" = "Deve ter menos que %i símbolos";
+"savereport.name.errmsg.characters" = "Não são permitidos caracteres %@";
+"savereport.saving.status.title" = "Salvando relatório...";
+
+/* Rename Saved Report popup */
+
+"savedreport.modify.title" = "Renomear relatório";
+"savedreport.modify.reportname" = "Nome do relatório";
+"savedreport.delete.confirmation.message" = "Confirme a exclusão do relatório.";
+
+
+/* Search filter */
+"status.loading" = "Carregando...";
+
+/* Home View */
+
+// Labels
+"home.menuitem.library.label" = "Biblioteca";
+"home.menuitem.saveditems.label" = "Itens salvos";
+"home.menuitem.settings.label" = "Configurações";
+"home.menuitem.repository.label" = "Repositório";
+"home.menuitem.favorites.label" = "Favoritos";
+
+// Descriptions
+
+"home.menuitem.library.description" = "Navegue em sua JR Server Library.";
+"home.menuitem.repository.description" = "Navegue em seu JR Server Repository.";
+"home.menuitem.settings.description" = "Configure o seu Jaspersoft Mobile App.";
+"home.menuitem.saveditems.description" = "Visualize os itens salvos no dispositivo. ";
+"home.menuitem.favorites.description" = "Procure seus itens favoritos.";
+
+// Navigation Bar Titles
+"title.home" = "Página inicial";
+
+/* Master view */
+
+"repository.root.organization" = "Organização";
+"repository.root.root" = "Raiz";
+"repository.root.public" = "Público";
+
+// Resources
+"master.base.resources.title" = "Procurar";
+
+"master.resources.title" = "Tipo de objeto";
+"master.resources.type.all" = "Todos";
+"master.resources.type.reportUnit" = "Relatórios";
+"master.resources.type.dashboard" = "Painéis";
+"master.resources.type.folder" = "Folders";
+
+// Sort by
+"master.sortby.title" = "Opções de classificação";
+"master.sortby.type.name" = "Nome";
+"master.sortby.type.date" = "Data";
+"master.sortby.type.creator" = "Criador";
+
+// Filter By Tag
+"master.filterbytag.title" = "Tags";
+"master.filterbytag.type.none" = "Nenhum";
+"master.filterbytag.type.favorites" = "Favoritos";
+
+/* Detail view */
+
+"detail.resourcesloading.msg" = "Carregando.\nAguarde...";
+"detail.noresults.msg" = "Nenhum resultado.\nFaça outra seleção...";
+"detail.search.resources.placeholder" = "Procurar recursos";
+
+"detail.settings.title" = "Configurações de conexão";
+"detail.settings.item.connection.timeout" = "Tempo limite de conexão (em segundos)";
+"detail.settings.item.data.read.timeout" = "Tempo limite da leitura de dados (em segundos)";
+"detail.settings.item.server" = "Servidor";
+"detail.settings.crashtracking.toast" = "Para alterar as configurações dos relatórios de falhas vá para a página Configurações.";
+"detail.settings.crashtracking.title" = "Enviar relatórios de falhas";
+"detail.settings.crashtracking.alert.title" = "Atenção!";
+"detail.settings.crashtracking.alert.message" = "O envio das configurações dos relatórios de falhas será aplicado após reiniciar o aplicativo.";
+
+
+"detail.report.options.title" = "Opções de filtro";
+"detail.report.options.titlelabel.title" = "Filtros atuais";
+"detail.report.options.singleselect.titlelabel.title" = "Selecione um único item";
+"detail.report.options.multiselect.titlelabel.title" = "Selecione um ou mais itens";
+"detail.report.options.search.value.placeholder" = "Procurar valores";
+
+"detail.report.viewer.emptyreport.title" = "O relatório está vazio";
+"detail.report.viewer.emptyreport.message" = "Toque em 'Ok' se desejar alterar as opções de filtro ou toque em \"Cancelar\" para retornar ao relatório antigo.";
+
+"resource.label.title" = "Nome";
+"resource.description.title" = "Descrição";
+"resource.type.title" = "Tipo";
+"resource.uri.title" = "URI";
+"resource.version.title" = "Versão";
+"resource.creationDate.title" = "Data de criação";
+
+
+// Action titles
+"action.title.refresh" = "Atualizar";
+"action.title.save" = "Salvar";
+"action.title.edit" = "Editar opções de filtro";
+"action.title.delete" = "Excluir";
+"action.title.rename" = "Renomear";
+"action.title.markasfavorite" = "Marcar como favorito";
+"action.title.markasunfavorite" = "Remover dos favoritos";
+"action.title.info" = "Informações";
+"action.title.sort" = "Opções de classificação";
+
+
+"detail.report.viewer.pagecount" = "de %d";
+
+/* Error messages */
+
+"error.readingresponse.dialog.msg" = "Erro ao ler a resposta";
+
+"error.noconnection.dialog.title" = "Sem conexão";
+"error.noconnection.dialog.msg" = "Verifique as configurações de rede móvel e tente novamente";
+
+"error.authenication.dialog.title" = "É necessária a autenticação";
+"error.authenication.dialog.msg" = "Verifique as credenciais do servidor";
+
+"error.unknownhost.dialog.title" = "Servidor desconhecido";
+"error.unknownhost.dialog.msg" = "Um servidor com o nome do host especificado não pode ser encontrado";
+
+"error.upgrade.data.title" = "Erro de atualização - Atualização de dados do usuário";
+"error.upgrade.data.msg" = "Um erro ocorreu ao atualizar os dados de usuário (servidores, Favoritos, Valores de filtro e Configurações), durante o processo de atualização. Pressione: \nRepetir - para executar novamente a atualização de dados                                                                                                                                                                                                                                                          Aplicar - para ignorar o erro e continuar com a atualização, você pode PERDER todos os dados do usuário \nCancelar - para cancelar a atualização (isso manterá a versão atual)";
+
+"error.server.notsupported.title" = "Versão do servidor ou URL errado";
+"error.server.notsupported.msg" = "A versão do servidor é mais antiga que 5.5 (não compatível) ou o URL está incorreto";
+
+/* HTTP error messages */
+
+"error.http.400" = "400 - Solicitação incorreta. A solicitação não era válida.";
+"error.http.403" = "403 - Permissão negada. A solicitação foi enviada, mas foi recusada.";
+"error.http.404" = "404 - Não encontrado. O URI solicitado é inválido ou o recurso solicitado não existe.";
+"error.http.500" = "500 - Erro interno do servidor.";
+"error.http.502" = "502 - Portal incorreto.";
+"error.http.503" = "503 - Serviço indisponível.";
+"error.http.504" = "504 - Tempo limite do portal.";
+
+/* Input control messages */
+
+"ic.title.date" = "Data";
+"ic.title.time" = "Hora";
+"ic.title.unset" = "Não definido";
+
+/* Buttons */
+
+"dialog.button.applyUpdate" = "Aplicar";
+"dialog.button.ok" = "OK";
+"dialog.button.edit" = "Editar";
+"dialog.button.cancel" = "Cancelar";
+"dialog.button.continue" = "Continuar";
+"dialog.button.retry" = "Tentar novamente";
+"dialog.button.run.report" = "Executar relatório";
+"dialog.button.info" = "Informações";
+"dialog.button.addfavorite" = "Adicionar favorito";
+"dialog.button.removefavorite" = "Remover favorito";
+"dialog.button.save" = "Salvar";
+"dialog.button.delete" = "Excluir";

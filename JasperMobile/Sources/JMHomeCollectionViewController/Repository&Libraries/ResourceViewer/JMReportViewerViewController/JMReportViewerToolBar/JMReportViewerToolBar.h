@@ -41,7 +41,7 @@
 
 @end
 
-@interface JMReportViewerToolBar : UIToolbar
+@interface JMReportViewerToolBar : UIView
 
 @property (nonatomic, weak) id <JMReportViewerToolBarDelegate> toolbarDelegate;
 

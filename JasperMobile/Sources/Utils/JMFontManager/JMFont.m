@@ -55,4 +55,13 @@
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:20] : [UIFont systemFontOfSize:30];
 }
 
++ (UIFont *)menuItemTitleFont
+{
+    return [JMUtils isIphone] ? [UIFont boldSystemFontOfSize:15] : [UIFont systemFontOfSize:28];
+}
+
++ (UIFont *)menuItemDescriptionFont
+{
+    return [JMUtils isIphone] ? [UIFont systemFontOfSize:12] : [UIFont systemFontOfSize:15];
+}
 @end

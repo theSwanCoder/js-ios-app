@@ -29,16 +29,10 @@
 @property (weak, nonatomic) IBOutlet UIImageView *titleImage;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *urlLabel;
-@property (weak, nonatomic) IBOutlet UILabel *activeLabel;
 
 @end
 
 @implementation JMServerCollectionViewCell
-
-- (void)awakeFromNib
-{
-    self.activeLabel.text = JMCustomLocalizedString(@"servers.gridview.activeserver.label", nil);
-}
 
 - (void)setServerProfile:(JMServerProfile *)serverProfile
 {
@@ -46,12 +40,20 @@
     self.titleLabel.text = serverProfile.alias;
     self.urlLabel.text = serverProfile.serverUrl;
     
-    if ([serverProfile serverProfileIsActive]) {
-        self.activeLabel.hidden = NO;
-        self.titleImage.image = [UIImage imageNamed:@"server_active"];
-    } else {
-        self.activeLabel.hidden = YES;
-        self.titleImage.image = [UIImage imageNamed:@"server"];
+    self.titleImage.backgroundColor = [serverProfile serverProfileIsActive] ? kJMResourcePreviewBackgroundColor : kJMMasterResourceCellSelectedBackgroundColor;
+}
+
+- (void) cloneServerProfile:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(cloneServerProfileForCell:)]) {
+        [self.delegate cloneServerProfileForCell:self];
     }
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    if (action == @selector(cloneServerProfile:)) {
+        return YES;
+    }
+    return NO;
 }
 @end

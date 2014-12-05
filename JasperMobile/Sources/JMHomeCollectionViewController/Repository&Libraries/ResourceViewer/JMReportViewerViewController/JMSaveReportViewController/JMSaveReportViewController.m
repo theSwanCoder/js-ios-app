@@ -27,42 +27,28 @@
 #import "JMCancelRequestPopup.h"
 #import "JMRequestDelegate.h"
 #import "ALToastView.h"
-
+#import "UIAlertView+LocalizedAlert.h"
 
 NSString * const kJMSaveReportViewControllerSegue = @"SaveReportViewControllerSegue";
 NSString * const kJMAttachmentPrefix = @"_";
 
 
-@interface JMSaveReportViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface JMSaveReportViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) NSString *selectedReportFormat;
-@property (nonatomic, strong) NSArray *reportFormats;
 @property (nonatomic, strong) NSString *reportName;
 @property (nonatomic, strong) NSString *errorString;
-@property (nonatomic, weak) JSConstants *constants;
 
 @end
 
 
 @implementation JMSaveReportViewController
-objection_requires(@"resourceClient", @"reportClient", @"constants")
+objection_requires(@"resourceClient", @"reportClient")
 
 @synthesize resourceClient = _resourceClient;
 @synthesize resourceLookup = _resourceLookup;
 @synthesize reportClient = _reportClient;
-
-- (NSArray *)reportFormats
-{
-    if (!_reportFormats) {
-        _reportFormats = @[
-                           self.constants.CONTENT_TYPE_HTML,
-                           self.constants.CONTENT_TYPE_PDF,
-                           ];
-    }
-    
-    return _reportFormats;
-}
 
 #pragma mark - Initialization
 - (void)awakeFromNib
@@ -76,14 +62,14 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     [super viewDidLoad];
     self.title = [JMCustomLocalizedString(@"savereport.title", nil) capitalizedString];
     self.reportName = self.resourceLookup.label;
-    self.selectedReportFormat = [self.reportFormats firstObject];
+    self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] firstObject];
 
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.tableView.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.tableView.layer.cornerRadius = 4;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
-    [self.tableView setRowHeight:44.f];
+    [self.tableView setRowHeight:[JMUtils isIphone] ? 44.f : 50.f];
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
@@ -94,7 +80,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return section ? self.reportFormats.count : 1;
+    return section ? [JMUtils supportedFormatsForReportSaving].count : 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -125,7 +111,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
             [cell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
         }
 
-        NSString *currentFormat = [self.reportFormats objectAtIndex:indexPath.row];
+        NSString *currentFormat = [[JMUtils supportedFormatsForReportSaving] objectAtIndex:indexPath.row];
         cell.textLabel.text = currentFormat;
         cell.accessoryType = [self.selectedReportFormat isEqualToString:currentFormat] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     } else {
@@ -142,10 +128,9 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section) {
-        self.selectedReportFormat = [self.reportFormats objectAtIndex:indexPath.row];
-        [self.tableView reloadData];
-    }
+    self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] objectAtIndex:indexPath.row];
+    self.errorString = nil;
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -164,18 +149,29 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (void)saveButtonTapped:(id)sender
 {
     [self.view endEditing:YES];
-    NSString *fullReportDirectory = [JMSavedResources pathToReportDirectoryWithName:self.reportName format:self.selectedReportFormat];
-    NSString *errorMessage = nil;
-    BOOL isValidReportName = ([JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessage] &&
-                              [self createReportDirectory:fullReportDirectory errorMessage:&errorMessage]);
     
-    self.errorString = errorMessage;
-    [self.tableView reloadData];
-    
+    NSString *errorMessageString = nil;
+    BOOL isValidReportName = [JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessageString];
+    self.errorString = errorMessageString;
+
     if (!self.errorString && isValidReportName) {
-        // Clear any errors
-        [self.tableView reloadData];
-        
+        if (![JMSavedResources isAvailableReportName:self.reportName format:self.selectedReportFormat]) {
+            self.errorString = JMCustomLocalizedString(@"savereport.name.errmsg.notunique", nil);
+            [[UIAlertView localizedAlertWithTitle:nil message:@"savereport.name.errmsg.notunique.rewrite" delegate:self cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
+        } else {
+            [self saveReport];
+        }
+    }
+    // Clear any errors
+    [self.tableView reloadData];
+}
+
+- (void) saveReport
+{
+    NSString *fullReportDirectory = [JMSavedResources pathToReportDirectoryWithName:self.reportName format:self.selectedReportFormat];
+    NSString *errorMessageString = nil;
+    
+    if ([self createReportDirectory:fullReportDirectory errorMessage:&errorMessageString]) {
         NSMutableArray *parameters = [NSMutableArray array];
         for (JSInputControlDescriptor *inputControlDescriptor in self.inputControls) {
             JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
@@ -209,18 +205,29 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
                 }];
             }
         } @weakselfend];
-
+        
         [JMRequestDelegate setFinalBlock:@weakself(^(void)) {
             [self.navigationController popViewControllerAnimated:YES];
             [JMSavedResources addReport:self.resourceLookup withName:self.reportName format:self.selectedReportFormat];
             [ALToastView toastInView:self.delegate.view withText:JMCustomLocalizedString(@"savereport.saved", nil)];
         } @weakselfend];
-
+        
         [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO freshData:YES saveDataSnapshot:NO
                              ignorePagination:NO transformerKey:nil pages:nil attachmentsPrefix:kJMAttachmentPrefix parameters:parameters usingBlock:^(JSRequest *request) {
                                  request.delegate = delegate;
                                  request.finishedBlock = checkErrorBlock;
                              }];
+    } else {
+        self.errorString = errorMessageString;
+        [self.tableView reloadData];
+    }
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.cancelButtonIndex != buttonIndex) {
+        [self saveReport];
     }
 }
 
@@ -228,14 +235,8 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 
 - (BOOL)createReportDirectory:(NSString *)reportDirectory errorMessage:(NSString **)errorMessage
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
     NSError *error;
-    [fileManager createDirectoryAtPath:reportDirectory
-           withIntermediateDirectories:YES
-                            attributes:nil
-                                 error:&error];
-    
+    [[NSFileManager defaultManager] createDirectoryAtPath:reportDirectory withIntermediateDirectories:YES attributes:nil error:&error];
     if (error) *errorMessage = error.localizedDescription;
     return [*errorMessage length] == 0;
 }

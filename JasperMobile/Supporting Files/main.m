@@ -37,6 +37,9 @@ int main(int argc, char *argv[])
         }
         @catch (NSException *exception) {
             NSLog(@"\nException name: %@\nException reason: %@", exception.name, exception.reason);
+            if (exception.userInfo) {
+                NSLog(@"\nException userInfo: %@", exception.userInfo);
+            }
         }
     }
 }

@@ -35,19 +35,15 @@
 #import "JMResourceClientHolder.h"
 #import "JMPagination.h"
 
-typedef NS_ENUM(NSInteger, JMResourcesListLoaderObjectType) {
-    JMResourcesListLoaderObjectType_Folders = 1 << 0,
-    JMResourcesListLoaderObjectType_Reports = 1 << 1,
-    JMResourcesListLoaderObjectType_Dashboards = 1 << 2,
-    
-    JMResourcesListLoaderObjectType_LibraryAll = (JMResourcesListLoaderObjectType_Reports | JMResourcesListLoaderObjectType_Dashboards),
-    JMResourcesListLoaderObjectType_RepositoryAll = (JMResourcesListLoaderObjectType_LibraryAll | JMResourcesListLoaderObjectType_Folders)
+
+extern NSString * const kJMResourceListLoaderOptionItemTitleKey;
+extern NSString * const kJMResourceListLoaderOptionItemValueKey;
+
+typedef NS_ENUM(NSInteger, JMResourcesListLoaderOption) {
+    JMResourcesListLoaderOption_Filter = 0,
+    JMResourcesListLoaderOption_Sort
 };
 
-typedef NS_ENUM(NSInteger, JMResourcesListLoaderSortBy) {
-    JMResourcesListLoaderSortBy_Name = 0,
-    JMResourcesListLoaderSortBy_Date
-};
 
 @class JMResourcesListLoader;
 @protocol JMResourcesListLoaderDelegate <NSObject>
@@ -71,10 +67,12 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderSortBy) {
 @property (nonatomic, weak) JSConstants *constants;
 @property (nonatomic, strong) NSString *searchQuery;
 @property (nonatomic, assign) BOOL      loadRecursively;
-@property (nonatomic, assign) JMResourcesListLoaderObjectType resourcesType;
-@property (nonatomic, assign) JMResourcesListLoaderSortBy sortBy;
 @property (nonatomic, readonly) BOOL hasNextPage;
 @property (nonatomic, readonly) NSInteger offset;
+
+@property (nonatomic, assign) NSInteger filterBySelectedIndex;
+@property (nonatomic, assign) NSInteger sortBySelectedIndex;
+
 
 - (void)setNeedsUpdate;
 
@@ -86,8 +84,10 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderSortBy) {
 
 - (void)loadNextPage;
 
-- (NSString *)sortByParameterForQuery;
+- (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option;
 
-- (NSArray *)resourcesTypesParameterForQuery;
+- (id)parameterForQueryWithOption:(JMResourcesListLoaderOption)option;
+
+- (NSString *)titleForPopupWithOption:(JMResourcesListLoaderOption)option;
 
 @end

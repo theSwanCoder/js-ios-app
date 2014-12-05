@@ -30,6 +30,7 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMResourcesCollectionViewController.h"
 
+<<<<<<< HEAD
 #import "ALToastView.h"
 #import "JasperMobileAppDelegate.h"
 #import "UIView+Additions.h"
@@ -42,6 +43,8 @@ static NSString * const kJMMenuItemRepository = @"Repository";
 static NSString * const kJMMenuItemSavedItems = @"SavedItems";
 static NSString * const kJMMenuItemFavorites = @"Favorites";
 
+=======
+>>>>>>> feature/2.0
 static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 
 @interface JMHomeCollectionViewController ()
@@ -86,17 +89,15 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
         JMServerProfile *serverProfile = [[notification userInfo] objectForKey:kJMServerProfileKey];
         self.activeServerLabel.text = serverProfile.alias;
     } @weakselfend];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self.collectionView selector:@selector(reloadData) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+    [[NSNotificationCenter defaultCenter] removeObserver:self.collectionView];
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    [self.collectionView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -122,9 +123,6 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     if ([viewController respondsToSelector:@selector(setPresentingType:)]) {
         [viewController setPresentingType:[self presentingTypeForSequeIdentifier:segue.identifier]];
     }
-    if ([viewController respondsToSelector:@selector(setRepresentationType:)]) {
-        [viewController setRepresentationType:JMResourcesRepresentationTypeHorizontalList];
-    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -138,11 +136,7 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 {
     JMMenuItemCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kJMMenuItemIdentifier forIndexPath:indexPath];
     NSString *menuItem = [[self.menuItems objectAtIndex:indexPath.row] lowercaseString];
-    cell.coloredView.backgroundColor = [menuItem isEqualToString:[kJMMenuItemSettings lowercaseString]] ? kJMMasterResourceCellSelectedBackgroundColor : kJMResourcePreviewBackgroundColor;
-    cell.imageView.image = [UIImage imageNamed:menuItem];
-    cell.label.text = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.label", menuItem], nil);
-    cell.desc.text = JMCustomLocalizedString([NSString stringWithFormat:@"home.menuitem.%@.description", menuItem], nil);
-    
+    cell.menuItem = menuItem;
     return cell;
 }
 

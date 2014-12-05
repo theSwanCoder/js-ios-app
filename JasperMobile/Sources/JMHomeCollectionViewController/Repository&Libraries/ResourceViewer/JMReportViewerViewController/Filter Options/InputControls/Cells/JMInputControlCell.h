@@ -39,8 +39,10 @@
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
 @property (nonatomic, weak) UIViewController <JMInputControlsHolder> *delegate;
 
-- (void) updateDisplayingOfErrorMessage:(NSString *)errorMessage;
+- (void) updateDisplayingOfErrorMessage;
 
-- (void)setEnabledCell:(BOOL) enabled;
+- (void) setEnabledCell:(BOOL) enabled;
+
+- (BOOL) isValidData;
 
 @end

@@ -80,26 +80,30 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 
 - (void)runReport
 {
-    BOOL allDataIsValid = YES;
-    for (int i = 0; i < [self.inputControls count]; i++) {
-        JSInputControlDescriptor *descriptor = [self.inputControls objectAtIndex:i];
-        if (descriptor.validationRules.mandatoryValidationRule && descriptor.state.value == nil) {
-            JMInputControlCell *cell = (JMInputControlCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-            [cell updateDisplayingOfErrorMessage: descriptor.validationRules.mandatoryValidationRule.errorMessage];
-            allDataIsValid = NO;
+    [self.view endEditing:YES];
+    if ([self validateInputControls]) { // Local validation
+        [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
+            if (dataIsValid) {
+                if (!self.delegate) {
+                    [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:self.inputControls];
+                } else {
+                    [self.delegate performSelector:@selector(setInputControls:) withObject:self.inputControls];
+                    [self.delegate refresh];
+                }
+            }
+        } @weakselfend];
+    }
+}
+
+- (BOOL) validateInputControls
+{
+    for (int i = 0; i < [self.tableView numberOfRowsInSection:0]; i++) {
+        JMInputControlCell *cell = (JMInputControlCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        if (![cell isValidData]) {
+            return NO;
         }
     }
-    
-    if (allDataIsValid) {
-        if (!self.delegate) {
-            [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:self.inputControls];
-        } else {
-            [self.delegate performSelector:@selector(setInputControls:) withObject:self.inputControls];
-            [self.delegate refresh];
-        }
-    } else {
-        [self.tableView reloadData];
-    }
+    return YES;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -116,11 +120,6 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 }
 
 #pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -146,39 +145,9 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 #pragma mark - JMInputControlsHolder
 - (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor
 {
-    if (!descriptor.slaveDependencies.count) {
-        return;
+    if (descriptor.slaveDependencies.count) {
+        [self updatedInputControlsValuesWithCompletion:nil];
     }
-
-    NSMutableArray *selectedValues = [NSMutableArray array];
-    NSMutableArray *allInputControls = [NSMutableArray array];
-    
-    // Get values from Input Controls
-    for (JSInputControlDescriptor *descriptor in self.inputControls) {
-        [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
-                                                                    value:descriptor.selectedValues]];
-        [allInputControls addObject:descriptor.uuid];
-    }
-
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
-        [self.navigationController popViewControllerAnimated:YES];
-    } @weakselfend];
-    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
-        for (JSInputControlState *state in result.objects) {
-            for (JSInputControlDescriptor *inputControl in self.inputControls) {
-                if ([state.uuid isEqualToString:inputControl.uuid]) {
-                    inputControl.state = state;
-                    break;
-                }
-            }
-        }
-        [self.tableView reloadData];
-    } @weakselfend viewControllerToDismiss:self];
-    
-    [self.reportClient updatedInputControlsValues:self.resourceLookup.uri
-                                              ids:allInputControls
-                                   selectedValues:selectedValues
-                                         delegate:delegate];
 }
 
 #pragma mark - Private
@@ -199,4 +168,46 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
              };
 }
 
+- (void)updatedInputControlsValuesWithCompletion:(void(^)(BOOL dataIsValid))completion
+{
+    NSMutableArray *selectedValues = [NSMutableArray array];
+    NSMutableArray *allInputControls = [NSMutableArray array];
+    
+    // Get values from Input Controls
+    for (JSInputControlDescriptor *descriptor in self.inputControls) {
+        [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
+                                                                    value:descriptor.selectedValues]];
+        [allInputControls addObject:descriptor.uuid];
+    }
+    
+    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } @weakselfend];
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+        for (JSInputControlState *state in result.objects) {
+            for (JSInputControlDescriptor *inputControl in self.inputControls) {
+                if ([state.uuid isEqualToString:inputControl.uuid]) {
+                    inputControl.state = state;
+                    break;
+                }
+            }
+        }
+        [self.tableView reloadData];
+        if ([self validateInputControls]) {
+            if (completion) {
+                completion(YES);
+            }
+        } else {
+            [self.tableView reloadData];
+            if (completion) {
+                completion(NO);
+            }
+        }
+    } @weakselfend viewControllerToDismiss:self];
+    
+    [self.reportClient updatedInputControlsValues:self.resourceLookup.uri
+                                              ids:allInputControls
+                                   selectedValues:selectedValues
+                                         delegate:delegate];
+}
 @end

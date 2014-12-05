@@ -41,10 +41,27 @@
     self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
 }
 
-- (void) updateDisplayingOfErrorMessage:(NSString *)errorMessage
+- (void)layoutSubviews
 {
-    self.detailTextLabel.text = errorMessage;
+    [super layoutSubviews];
+    
+    if (self.detailTextLabel.text && self.detailTextLabel.text.length) {
+        CGFloat accessoryViewPadding = self.contentView.frame.size.width - self.accessoryView.frame.size.width - self.accessoryView.frame.origin.x;
+        CGRect detailTextLabelFrame = self.detailTextLabel.frame;
+        detailTextLabelFrame.origin.y = self.textLabel.frame.origin.y + self.textLabel.frame.size.height;
+        detailTextLabelFrame.size.width = self.contentView.frame.size.width - 2 * accessoryViewPadding;
+        detailTextLabelFrame.size.height = ceilf(self.detailTextLabel.font.lineHeight);
+        self.detailTextLabel.frame = detailTextLabelFrame;
+    }
 }
+
+- (void) updateDisplayingOfErrorMessage
+{
+    self.detailTextLabel.text = [self errorMessage];
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+}
+
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
@@ -57,6 +74,7 @@
     } else {
         self.textLabel.text = inputControlDescriptor.label;
     }
+    [self updateDisplayingOfErrorMessage];
 }
 
 - (void)setEnabledCell:(BOOL)enabled
@@ -66,6 +84,22 @@
     } else {
         self.textLabel.textColor = [UIColor lightGrayColor];
     }
+}
+
+- (NSString *)errorMessage
+{
+    if (self.inputControlDescriptor.validationRules.mandatoryValidationRule && self.inputControlDescriptor.state.value == nil) {
+        return self.inputControlDescriptor.validationRules.mandatoryValidationRule.errorMessage;
+    } else if ([self.inputControlDescriptor.state.error length]) {
+        return self.inputControlDescriptor.state.error;
+    }
+    return nil;
+}
+
+- (BOOL)isValidData
+{
+    [self updateDisplayingOfErrorMessage];
+    return ![self errorMessage];
 }
 
 @end

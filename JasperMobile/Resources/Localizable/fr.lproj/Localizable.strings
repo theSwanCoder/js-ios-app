@@ -1,4 +1,4 @@
-/*
+﻿/*
  * TIBCO JasperMobile for iOS
  * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
@@ -27,49 +27,154 @@
 
 /* Server Profiles view */
 
-"servers.info" = "%@ v %@\n\nOutil de gestion et visionneuse de rapports pour JasperReports Server %.1f et version ultérieure.\n\nPour plus d'informations, rendez-vous sur le site :\nwww.jasperforge.org/projects/mobile\n\n© 2005-2014 TIBCO Software, Inc";
+"servers.info" = "%@™ v %@\n\nOutil de gestion et visionneuse de rapports pour JasperReports Server %.1f et versions ultérieures.\n\nPour plus d'informations, consultez la page :\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright Â© 2005-2014 TIBCO Software, Inc.";
 
-"servers.url.label" = "URL";
-"servers.url.tip" = "http://example.com/jasperserver";
+
+"servers.url.label" = "Adresse du serveur";
 "servers.url.errmsg" = "Veuillez indiquer une URL valide.";
 
-"servers.name.label" = "Nom";
-"servers.name.tip" = "nom de mon serveur";
+"servers.name.label" = "Nom du serveur";
 "servers.name.errmsg.empty" = "Veuillez indiquer un nom de profil valide.";
-"servers.name.errmsg.exists" = "Ce nom de profil existe déjà. Veuillez indiquer un autre nom de profil.";
+"servers.name.errmsg.exists" = "Ce nom de profil existe déjà. Veuillez en indiquer un autre.";
 
-"servers.orgid.label" = "Organisation";
-"servers.orgid.tip" = "ID de l’organisation";
+"servers.orgid.label" = "ID de l’organisation";
 
 "servers.username.label" = "Nom d’utilisateur";
-"servers.username.tip" = "mon nom d'utilisateur";
 "servers.username.errmsg.empty" = "Veuillez indiquer un nom d'utilisateur valide.";
 
 "servers.password.label" = "Mot de passe";
-"servers.password.tip" = "mon mot de passe";
+"servers.password.errmsg.empty" = "Veuillez indiquer un mot de passe valide.";
 
-"servers.profile.exists" = "Un serveur de profil avec cette URL, ce nom d'utilisateur et cet ID d'organisation existe déjà. Veuillez modifier le profil de serveur.";
+"servers.profile.title" = "Profils de serveur";
+"servers.profile.delete.message" = "Veuillez confirmer la suppression du serveur.";
 
-"servers.new.label" = "Ajouter un profil de serveur...";
 "servers.askpassword.label" = "Toujours demander un mot de passe";
-"servers.askpassword.dialog.title" = "Saisir le mot de passe";
 
-/* Navigation and view labels */
+"servers.activeserver.label" = "Serveur actif";
 
-"view.servers"= "Serveurs";
-"view.repository" = "Référentiel";
-"view.search" = "Rechercher";
-"view.favorites" = "Favoris";
-"view.library" = "Bibliothèque";
+"servers.title.new" = "Nouveau profil de serveur";
+"servers.title.edit" = "Modifier le profil de serveur";
 
-"noservers.dialog.title" = "Aucun serveur n'est configuré.";
-"noservers.dialog.msg" = "Vous devez ajouter un profil de serveur avant de pouvoir afficher un référentiel.";
-"noservers.dialog.button.label" = "Configurer les profils de serveur";
+"servers.gridview.activeserver.label" = "Actif";
+"servers.button.makeactive" = "Rendre actif";
+
+/* Report Saver view */
+"savereport.title" = "Enregistrer le rapport";
+"savereport.name" = "Nom du rapport";
+"savereport.format" = "Format de sortie";
+"savereport.saved" = "Le rapport a été enregistré avec succès.";
+"savereport.name.errmsg.empty" = "Ne peut pas être vide.";
+"savereport.name.errmsg.notunique" = "Ce nom est déjà utilisé. Veuillez en choisir un autre.";
+"savereport.name.errmsg.maxlength" = "Doit contenir moins de %i symboles.";
+"savereport.name.errmsg.characters" = "Les caractères %@ ne sont pas autorisés.";
+"savereport.saving.status.title" = "Enregistrement du rapport...";
+
+/* Rename Saved Report popup */
+
+"savedreport.modify.title" = "Renommer le rapport";
+"savedreport.modify.reportname" = "Nom du rapport";
+"savedreport.delete.confirmation.message" = "Veuillez confirmer la suppression du rapport.";
+
+
+/* Search filter */
+"status.loading" = "Chargement...";
+
+/* Home View */
+
+// Labels
+"home.menuitem.library.label" = "Bibliothèque";
+"home.menuitem.saveditems.label" = "Eléments enregistrés";
+"home.menuitem.settings.label" = "Paramètres";
+"home.menuitem.repository.label" = "Référentiel";
+"home.menuitem.favorites.label" = "Favoris";
+
+// Descriptions
+
+"home.menuitem.library.description" = "Parcourez votre bibliothèque JR Server.";
+"home.menuitem.repository.description" = "Parcourez votre référentiel JR Server.";
+"home.menuitem.settings.description" = "Configurez votre application mobile Jaspersoft.";
+"home.menuitem.saveditems.description" = "Affichez les éléments enregistrés sur cet appareil. ";
+"home.menuitem.favorites.description" = "Parcourez vos éléments favoris.";
+
+// Navigation Bar Titles
+"title.home" = "Accueil";
+
+/* Master view */
+
+"repository.root.organization" = "Organisation";
+"repository.root.root" = "Racine";
+"repository.root.public" = "Publique";
+
+// Resources
+"master.base.resources.title" = "Parcourir";
+
+"master.resources.title" = "Type d'objet";
+"master.resources.type.all" = "Tout";
+"master.resources.type.reportUnit" = "Rapports";
+"master.resources.type.dashboard" = "Tableaux de bord";
+"master.resources.type.folder" = "Dossiers";
+
+// Sort by
+"master.sortby.title" = "Options de tri";
+"master.sortby.type.name" = "Nom";
+"master.sortby.type.date" = "Date";
+"master.sortby.type.creator" = "Créateur";
+
+// Filter By Tag
+"master.filterbytag.title" = "Etiquettes";
+"master.filterbytag.type.none" = "Aucun";
+"master.filterbytag.type.favorites" = "Favoris";
+
+/* Detail view */
+
+"detail.resourcesloading.msg" = "Chargement en cours.\nVeuillez patienter...";
+"detail.noresults.msg" = "Aucun résultat.\nVeuillez effectuer une autre sélection...";
+"detail.search.resources.placeholder" = "Ressources de recherche";
+
+"detail.settings.title" = "Paramètres de connexion";
+"detail.settings.item.connection.timeout" = "Délai de connexion (en secondes)";
+"detail.settings.item.data.read.timeout" = "Délai de lecture des données (en secondes)";
+"detail.settings.item.server" = "Serveur";
+"detail.settings.crashtracking.toast" = "Pour modifier les paramètres des rapports d'incidents, rendez-vous sur la page Paramètres.";
+"detail.settings.crashtracking.title" = "Envoyer les rapports d'incidents";
+"detail.settings.crashtracking.alert.title" = "Attention !";
+"detail.settings.crashtracking.alert.message" = "Les paramètres d'envoi des rapports d'incidents seront appliqués après le redémarrage de l'application.";
+
+
+"detail.report.options.title" = "Options de filtre";
+"detail.report.options.titlelabel.title" = "Filtres actuels";
+"detail.report.options.singleselect.titlelabel.title" = "Sélectionnez un seul élément.";
+"detail.report.options.multiselect.titlelabel.title" = "Sélectionnez un ou plusieurs éléments.";
+"detail.report.options.search.value.placeholder" = "Valeurs de recherche";
+
+"detail.report.viewer.emptyreport.title" = "Le rapport est vide.";
+"detail.report.viewer.emptyreport.message" = "Appuyez sur OK si vous souhaitez modifier les options de filtre ou sur Annuler pour revenir à l'ancien rapport.";
+
+"resource.label.title" = "Nom";
+"resource.description.title" = "Description";
+"resource.type.title" = "Type";
+"resource.uri.title" = "URI";
+"resource.version.title" = "Version";
+"resource.creationDate.title" = "Date de création";
+
+
+// Action titles
+"action.title.refresh" = "Actualiser";
+"action.title.save" = "Enregistrer";
+"action.title.edit" = "Modifier les options de filtre";
+"action.title.delete" = "Supprimer";
+"action.title.rename" = "Renommer";
+"action.title.markasfavorite" = "Ajouter aux Favoris";
+"action.title.markasunfavorite" = "Supprimer des Favoris";
+"action.title.info" = "Infos";
+"action.title.sort" = "Options de tri";
+
+
+"detail.report.viewer.pagecount" = "sur %d";
 
 /* Error messages */
 
 "error.readingresponse.dialog.msg" = "Erreur lors de la lecture de la réponse.";
-"error.incorrectrequest.dialog.msg" = "Demande syntaxiquement incorrecte.";
 
 "error.noconnection.dialog.title" = "Aucune connexion";
 "error.noconnection.dialog.msg" = "Veuillez vérifier les paramètres de votre réseau mobile et réessayer.";
@@ -80,9 +185,39 @@
 "error.unknownhost.dialog.title" = "Serveur inconnu";
 "error.unknownhost.dialog.msg" = "Impossible de trouver un serveur portant ce nom d'hôte.";
 
+"error.upgrade.data.title" = "Erreur de mise à niveau - Mise à jour des données utilisateur";
+"error.upgrade.data.msg" = "Une erreur s'est produite lors de la mise à jour des données utilisateur (Serveurs, Favoris, Valeurs de filtrage et Paramètres) pendant le processus de mise à niveau. Appuyez sur :\nRéessayer - pour réexécuter la mise à jour des données.\nAppliquer - pour ignorer l'erreur et poursuivre la mise à niveau (vous pouvez PERDRE toutes les données utilisateur).\nAnnuler - pour annuler la mise à niveau (la version actuelle est conservée).";
+
+"error.server.notsupported.title" = "URL ou version du serveur incorrecte.";
+"error.server.notsupported.msg" = "La version du serveur est antérieure à la 5.5 (elle n'est pas prise en charge) ou l'URL est incorrecte.";
+
+/* HTTP error messages */
+
+"error.http.400" = "400 - Demande incorrecte. La demande n'est pas valide.";
+"error.http.403" = "403 - Autorisation refusée. La demande est comprise mais a été refusée.";
+"error.http.404" = "404 - Introuvable. L'URI demandé n'est pas valide ou la ressource demandée n'existe pas.";
+"error.http.500" = "500 - Erreur interne du serveur.";
+"error.http.502" = "502 - Passerelle incorrecte.";
+"error.http.503" = "503 - Service non disponible.";
+"error.http.504" = "504 - Dépassement du délai de la passerelle.";
+
+/* Input control messages */
+
+"ic.title.date" = "Date";
+"ic.title.time" = "Heure";
+"ic.title.unset" = "Non défini";
+
 /* Buttons */
 
+"dialog.button.applyUpdate" = "Appliquer";
 "dialog.button.ok" = "OK";
-"dialog.button.done" = "Terminé";
 "dialog.button.edit" = "Modifier";
 "dialog.button.cancel" = "Annuler";
+"dialog.button.continue" = "Continuer";
+"dialog.button.retry" = "Réessayer";
+"dialog.button.run.report" = "Exécuter le rapport";
+"dialog.button.info" = "Infos";
+"dialog.button.addfavorite" = "Ajouter un favori";
+"dialog.button.removefavorite" = "Supprimer le favori";
+"dialog.button.save" = "Enregistrer";
+"dialog.button.delete" = "Supprimer";

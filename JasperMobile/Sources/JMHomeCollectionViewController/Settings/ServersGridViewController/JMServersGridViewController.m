@@ -28,7 +28,7 @@
 
 static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
 
-@interface JMServersGridViewController ()
+@interface JMServersGridViewController () <JMServerCollectionViewCellDelegate>
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSMutableArray *servers;
 @end
@@ -53,6 +53,16 @@ objection_requires(@"managedObjectContext")
     self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
     self.collectionView.backgroundColor = kJMMainCollectionViewBackgroundColor;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(addButtonTapped:)];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self.collectionView selector:@selector(reloadData) name:UIDeviceOrientationDidChangeNotification object:nil];
+
+    UIMenuItem *menuItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers.action.clone.profile", nil) action:@selector(cloneServerProfile:)];
+    [[UIMenuController sharedMenuController] setMenuItems:[NSArray arrayWithObject:menuItem]];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self.collectionView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -66,10 +76,6 @@ objection_requires(@"managedObjectContext")
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
     self.servers = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
-    
-    for (JMServerProfile *serverProfile in self.servers) {
-        [serverProfile setPasswordAsPrimitive:[JMServerProfile passwordFromKeychain:serverProfile.profileID]];
-    }
     [self.collectionView reloadData];
 }
 
@@ -81,7 +87,7 @@ objection_requires(@"managedObjectContext")
     }
 }
 
-#pragma mark - Collection view data source
+#pragma mark - UICollectionViewDelegate
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
@@ -93,6 +99,7 @@ objection_requires(@"managedObjectContext")
     static NSString *cellIdentifier = @"ServerCell";
     JMServerCollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.serverProfile = [self.servers objectAtIndex:indexPath.row];
+    cell.delegate = self;
     return cell;
 }
 
@@ -100,6 +107,40 @@ objection_requires(@"managedObjectContext")
 {
     JMServerProfile *serverProfile = [self.servers objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:serverProfile];
+}
+
+// These methods provide support for copy/paste actions on cells.
+// All three should be implemented if any are.
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (action == @selector(cloneServerProfile:)) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    
+}
+
+#pragma mark - UICollectionViewFlowLayoutDelegate
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
+    return CGSizeMake(collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right, flowLayout.itemSize.height);
+}
+
+#pragma mark - JMServerCollectionViewCellDelegate
+- (void)cloneServerProfileForCell:(JMServerCollectionViewCell *)cell
+{
+    [JMServerProfile cloneServerProfile:cell.serverProfile];
+    [self refreshDatasource];
 }
 
 #pragma mark - Actions

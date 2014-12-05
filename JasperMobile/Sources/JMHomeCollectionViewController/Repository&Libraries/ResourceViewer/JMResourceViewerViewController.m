@@ -71,18 +71,20 @@ objection_requires(@"resourceClient", @"resourceLookup")
     }
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)dealloc
 {
-    [super viewDidDisappear:animated];
+    self.webView.delegate = nil;
+    [self.webView performSelector:@selector(stringByEvaluatingJavaScriptFromString:) withObject:@"document.body.innerHTML='';" afterDelay:0.25];
+    [self.webView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.25];
+    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:self.resourceRequest];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
     if (self.webView.loading) {
         [self.webView stopLoading];
         [self loadingDidFinished];
-    }
-    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
-        [self.webView stringByEvaluatingJavaScriptFromString:@"document.body.innerHTML='';"];
-        self.webView.delegate = nil;
-        [self.webView removeFromSuperview];
-        [[NSURLCache sharedURLCache] removeCachedResponseForRequest:self.resourceRequest];
     }
 }
 
@@ -134,7 +136,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
 #pragma mark - Actions
 - (void)actionButtonClicked:(id) sender
 {
-    JMResourceViewerActionsView *actionsView = [[JMResourceViewerActionsView alloc] initWithFrame:CGRectMake(0, 0, 240, 200)];
+    JMMenuActionsView *actionsView = [[JMMenuActionsView alloc] initWithFrame:CGRectMake(0, 0, 240, 200)];
     actionsView.delegate = self;
     actionsView.availableActions = [self availableAction];
     CGPoint point = CGPointMake(self.view.frame.size.width, -10);
@@ -148,22 +150,24 @@ objection_requires(@"resourceClient", @"resourceLookup")
     } else {
         [JMFavorites addToFavorites:self.resourceLookup];
     }
-    [self replaceRightNavigationItem:sender withItem:[self favoriteBarButtonItem]];
+    if (sender) {
+        [self replaceRightNavigationItem:sender withItem:[self favoriteBarButtonItem]];
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
-- (JMResourceViewerAction)availableAction
+- (JMMenuActionsViewAction)availableAction
 {
-    JMResourceViewerAction availableAction = JMResourceViewerAction_Info;
+    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Info;
     if (![self favoriteBarButtonItem]) {
-        availableAction |= [JMFavorites isResourceInFavorites:self.resourceLookup] ? JMResourceViewerAction_MakeUnFavorite : JMResourceViewerAction_MakeFavorite;
+        availableAction |= [JMFavorites isResourceInFavorites:self.resourceLookup] ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite;
     }
     return availableAction;
 }
 
 -(void) runReportExecution
 {
-    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:@"You need to implement \"runReportExecution\" method in subclasses" userInfo:nil];
+    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:[NSString stringWithFormat:@"You need to implement \"%@\" method in \"%@\" class", NSStringFromSelector(_cmd), NSStringFromClass(self.class)] userInfo:nil];
 }
 
 #pragma mark - UIWebViewDelegate
@@ -193,18 +197,16 @@ objection_requires(@"resourceClient", @"resourceLookup")
     [self.activityIndicator stopAnimating];
 }
 
-#pragma mark - JMResourceViewerActionsViewDelegate
-- (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
+#pragma mark - JMMenuActionsViewDelegate
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     switch (action) {
-        case JMResourceViewerAction_Info:
+        case JMMenuActionsViewAction_Info:
             [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:nil];
             break;
-        case JMResourceViewerAction_MakeFavorite:
-            [JMFavorites addToFavorites:self.resourceLookup];
-            break;
-        case JMResourceViewerAction_MakeUnFavorite:
-            [JMFavorites removeFromFavorites:self.resourceLookup];
+        case JMMenuActionsViewAction_MakeFavorite:
+        case JMMenuActionsViewAction_MakeUnFavorite:
+            [self favoriteButtonTapped:nil];
             break;
         default:
             break;

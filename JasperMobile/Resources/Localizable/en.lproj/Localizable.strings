@@ -58,6 +58,9 @@
 "servers.gridview.activeserver.label" = "Active";
 "servers.button.makeactive" = "Make Active";
 
+"servers.action.clone.profile" = "Clone Profile";
+
+
 /* Report Saver view */
 "savereport.title" = "Save Report";
 "savereport.name" = "Report Name";
@@ -65,6 +68,8 @@
 "savereport.saved" = "Report was successfully saved";
 "savereport.name.errmsg.empty" = "Cannot be empty";
 "savereport.name.errmsg.notunique" = "This name has been already taken, please choose different name";
+"savereport.name.errmsg.notunique.rewrite" = "This name has been already taken, do you want to rewrite it?";
+
 "savereport.name.errmsg.maxlength" = "Should be less than %i symbols";
 "savereport.name.errmsg.characters" = "Characters %@ are not allowed";
 "savereport.saving.status.title" = "Saving report...";
@@ -112,6 +117,7 @@
 "master.resources.type.all" = "All";
 "master.resources.type.reportUnit" = "Reports";
 "master.resources.type.dashboard" = "Dashboards";
+"master.resources.type.folder" = "Folders";
 
 // Sort by
 "master.sortby.title" = "Sort Options";
@@ -150,6 +156,10 @@
 "detail.report.viewer.emptyreport.title" = "Report is empty";
 "detail.report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options or tap 'Cancel' for returning to old report.";
 
+"detail.report.viewer.pagecount" = "of %d";
+"detail.dashboard.viewer.not.supported" = "Such dashboard's type is not supported now";
+
+
 "resource.label.title" = "Name";
 "resource.description.title" = "Description";
 "resource.type.title" = "Type";
@@ -167,9 +177,9 @@
 "action.title.markasfavorite" = "Mark as Favorite";
 "action.title.markasunfavorite" = "Remove From Favorites";
 "action.title.info" = "Info";
-
-
-"action.report.viewer.pagecount" = "of %d";
+"action.title.sort" = "Sort Options";
+"action.title.selectall" = "Select All";
+"action.title.clearselections" = "Clear selections";
 
 /* Error messages */
 
@@ -188,7 +198,7 @@
 "error.upgrade.data.msg" = "There was an error updating user data (Servers, Favorites, Filter values & Settings) during the upgrade process. Press:\nRetry - to re-execute the data update again\nApply - to ignore the error and continue with upgrade, you may LOSE all user data\nCancel - to cancel the upgrade (this will leave you at current version)";
 
 "error.server.notsupported.title" = "Wrong server version or URL";
-"error.server.notsupported.msg" = "Server version is either older than 5.0 (not supported) or URL is incorrect";
+"error.server.notsupported.msg" = "Server version is either older than 5.5 (not supported) or URL is incorrect";
 
 /* HTTP error messages */
 

@@ -29,10 +29,12 @@
 #import "UIViewController+FetchInputControls.h"
 #import "JMSaveReportViewController.h"
 
+#import "JMResourcesCollectionViewController.h"
+
 @interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, JMReportViewerDelegate>
 @property (nonatomic, strong) JMReportViewer *reportViewer;
 
-@property (nonatomic, weak) JMReportViewerToolBar *toolbar;
+@property (nonatomic, strong) JMReportViewerToolBar *toolbar;
 
 @end
 
@@ -51,10 +53,9 @@
     [self updateToobarAppearence];
 
     if (![JMRequestDelegate isRequestPoolEmpty]) {
-        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.resourceClient cancelBlock:@weakself(^(void)) {
+        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportViewer.reportClient cancelBlock:@weakself(^(void)) {
             [self.reportViewer cancelReport];
-            [self.navigationController popViewControllerAnimated:YES];
-        } @weakselfend ];
+        } @weakselfend];
     }
 }
 
@@ -68,11 +69,11 @@
     }
 }
 
-- (JMResourceViewerAction)availableAction
+- (JMMenuActionsViewAction)availableAction
 {
-    JMResourceViewerAction availableAction = [super availableAction] | JMResourceViewerAction_Save | JMResourceViewerAction_Refresh;
+    JMMenuActionsViewAction availableAction = [super availableAction] | JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
     if (self.reportViewer.inputControls && [self.reportViewer.inputControls count]) {
-        availableAction |= JMResourceViewerAction_Filter;
+        availableAction |= JMMenuActionsViewAction_Filter;
     }
     return availableAction;
 }
@@ -94,20 +95,27 @@
 #pragma mark - Actions
 - (void) backButtonTapped:(id) sender
 {
-    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:1] animated:YES];
+    [self.view endEditing:YES];
+    NSInteger currentIndex = [self.navigationController.viewControllers indexOfObject:self];
+    for (NSInteger i = currentIndex; i > 0; --i) {
+        UIViewController *controller = [self.navigationController.viewControllers objectAtIndex:i];
+        if ([controller isKindOfClass:[JMResourcesCollectionViewController class]]) {
+            [self.toolbar removeFromSuperview];
+            [self.navigationController popToViewController:controller animated:YES];
+            break;
+        }
+    }
 }
 
 - (void) addBackButton
 {
-    if (self.reportViewer.inputControls && [self.reportViewer.inputControls count]) {
-        NSString *title = [[self.navigationController.viewControllers objectAtIndex:1] title];
-        UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
-        UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
-        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTapped:)];
-        [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-        
-        self.navigationItem.leftBarButtonItem = backItem;
-    }
+    NSString *title = [[self.navigationController.viewControllers objectAtIndex:1] title];
+    UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
+    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTapped:)];
+    [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    
+    self.navigationItem.leftBarButtonItem = backItem;
 }
 
 - (void) runReportExecution
@@ -138,18 +146,18 @@
 }
 
 #pragma mark -
-#pragma mark - JMResourceViewerActionsViewDelegate
-- (void)actionsView:(JMResourceViewerActionsView *)view didSelectAction:(JMResourceViewerAction)action
+#pragma mark - JMMenuActionsViewDelegate
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     [super actionsView:view didSelectAction:action];
     switch (action) {
-        case JMResourceViewerAction_Refresh:
+        case JMMenuActionsViewAction_Refresh:
             [self runReportExecution];
             break;
-        case JMResourceViewerAction_Filter:
+        case JMMenuActionsViewAction_Filter:
             [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
             break;
-        case JMResourceViewerAction_Save:
+        case JMMenuActionsViewAction_Save:
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
         default:
@@ -174,6 +182,11 @@
 
 #pragma mark -
 #pragma mark - JMReportViewerDelegate
+- (void)reportViewerReportDidCanceled:(JMReportViewer *)reportViewer
+{
+    [self backButtonTapped:nil];
+}
+
 - (void)reportViewerDidChangedPagination:(JMReportViewer *)reportViewer
 {
     self.toolbar.currentPage = reportViewer.currentPage;

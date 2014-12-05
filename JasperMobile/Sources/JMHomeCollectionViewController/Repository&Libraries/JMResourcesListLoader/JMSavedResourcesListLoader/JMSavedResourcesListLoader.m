@@ -37,9 +37,6 @@
 {
     self = [super init];
     if (self) {
-        
-        self.resourcesType = JMResourcesListLoaderObjectType_LibraryAll;
-        self.sortBy = JMResourcesListLoaderSortBy_Name;
         self.loadRecursively = NO;
 
         [[NSNotificationCenter defaultCenter] addObserverForName:kJMSavedResourcesDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *note)) {
@@ -58,8 +55,8 @@
     JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:kJMSavedResources inManagedObjectContext:[JMUtils managedObjectContext]];
-    if (self.sortByParameterForQuery) {
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:self.sortByParameterForQuery ascending:YES];
+    if ([self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]) {
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:YES];
         [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
     }
     
@@ -72,7 +69,7 @@
     [predicates addObject:[NSPredicate predicateWithFormat:@"username == %@", activeServerProfile.username]];
     [predicates addObject:[NSPredicate predicateWithFormat:@"organization == %@", activeServerProfile.organization]];
     
-    [predicates addObject:[NSPredicate predicateWithFormat:@"wsType IN %@", self.resourcesTypesParameterForQuery]];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"format IN %@", [self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]]];
     if (self.searchQuery && self.searchQuery.length) {
         NSMutableArray *queryPredicates = [NSMutableArray array];
         [queryPredicates addObject:[NSPredicate predicateWithFormat:@"label LIKE[cd] %@", [NSString stringWithFormat:@"*%@*", self.searchQuery]]];
@@ -98,4 +95,25 @@
         [self.delegate resourceListDidLoaded:self withError:nil];
     }
 }
+
+- (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option
+{
+    switch (option) {
+        case JMResourcesListLoaderOption_Sort:
+            return [super listItemsWithOption:option];
+        case JMResourcesListLoaderOption_Filter: {
+            NSMutableArray *filterItems = [NSMutableArray array];
+            [filterItems addObject:@{kJMResourceListLoaderOptionItemTitleKey : JMCustomLocalizedString(@"master.resources.type.all", nil),
+                                     kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
+
+            for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
+                [filterItems addObject:
+                 @{kJMResourceListLoaderOptionItemTitleKey: [format uppercaseString],
+                   kJMResourceListLoaderOptionItemValueKey: @[format]}];
+            }
+            return filterItems;
+        }
+    }
+}
+
 @end

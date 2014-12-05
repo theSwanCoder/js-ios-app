@@ -22,12 +22,21 @@
 
 
 #import "JMMultiSelectTableViewController.h"
+#import "JMMenuActionsView.h"
+#import "PopoverView.h"
+
+@interface JMMultiSelectTableViewController () <JMMenuActionsViewDelegate, PopoverViewDelegate>
+@property (nonatomic, strong) PopoverView *popoverView;
+
+@end
 
 @implementation JMMultiSelectTableViewController
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.multiselect.titlelabel.title", nil);
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
+
 }
 
 #pragma mark - Initialization
@@ -55,6 +64,46 @@
         }
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
+}
+
+#pragma mark - Actions
+
+- (void)actionButtonClicked:(id) sender
+{
+    JMMenuActionsView *actionsView = [[JMMenuActionsView alloc] initWithFrame:CGRectMake(0, 0, 240, 200)];
+    actionsView.delegate = self;
+    actionsView.availableActions = JMMenuActionsViewAction_SelectAll | JMMenuActionsViewAction_ClearSelections;
+    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
+    self.popoverView = [PopoverView showPopoverAtPoint:point inView:self.view withTitle:nil withContentView:actionsView delegate:self];
+}
+
+#pragma mark - PopoverViewDelegate Methods
+- (void)popoverViewDidDismiss:(PopoverView *)popoverView
+{
+    self.popoverView = nil;
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
+    [self.popoverView animateRotationToNewPoint:point inView:self.view withDuration:duration];
+}
+
+
+#pragma mark - JMMenuActionsViewDelegate
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
+{
+    [self.selectedValues removeAllObjects];
+    if (action == JMMenuActionsViewAction_SelectAll) {
+        [self.selectedValues addObjectsFromArray:self.listOfValues];
+    }
+    
+    for (JSInputControlOption *option in self.listOfValues) {
+        option.selected = [JSConstants stringFromBOOL:(action == JMMenuActionsViewAction_SelectAll)];
+    }
+    [self.tableView reloadData];
+    
+    [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
 }
 
 @end

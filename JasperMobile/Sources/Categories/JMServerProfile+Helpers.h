@@ -111,4 +111,18 @@
  */
 + (float) minSupportedServerVersion;
 
+/**
+ Return server profile by server name
+ 
+ @param serverName Server alias
+ @return server profile with required name
+*/
++ (JMServerProfile *)serverProfileForname:(NSString *)serverName;
+
+/**
+ Create clone for server profile.
+ 
+ @param serverProfile for clonning
+ */
++ (void) cloneServerProfile:(JMServerProfile *)serverProfile;
 @end

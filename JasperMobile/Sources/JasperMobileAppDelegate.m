@@ -34,6 +34,7 @@
 #import "JMResourceClientHolder.h"
 #import "JMUtils.h"
 
+#import "Appirater.h"
 
 static NSString * const kJMProductName = @"JasperMobile";
 
@@ -78,6 +79,18 @@ static NSString * const kJMProductName = @"JasperMobile";
         
         NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
         [NSURLCache setSharedURLCache:sharedCache];
+        
+        // Configure Appirater
+        [Appirater setAppId:@"467317446"];
+        [Appirater setDaysUntilPrompt:0];
+        [Appirater setUsesUntilPrompt:5];
+        [Appirater setTimeBeforeReminding:2];
+        [Appirater setDebug:NO];
+        [Appirater appLaunched:YES];
+        
+        // Configure Url Cache
+        NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
+        [NSURLCache setSharedURLCache:URLCache];
     }
     
     return self;
@@ -243,7 +256,7 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (void)coreDataInit
 {
-#ifdef DEBUG
+//#ifdef DEBUG
     NSString *profilesPath = [[NSBundle mainBundle] pathForResource:@"profiles" ofType:@"json"];
     NSData *profilesData = [NSData dataWithContentsOfFile:profilesPath];
     NSArray *profilesArray = [[NSJSONSerialization JSONObjectWithData:profilesData options:NSJSONReadingAllowFragments error:nil] objectForKey:@"profiles"];
@@ -262,7 +275,7 @@ static NSString * const kJMProductName = @"JasperMobile";
             [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:serverProfile.profileID];
         }
     }
-#endif
+//#endif
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"serverUrl == %@", @"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
     JMServerProfile *serverProfile = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] firstObject];
