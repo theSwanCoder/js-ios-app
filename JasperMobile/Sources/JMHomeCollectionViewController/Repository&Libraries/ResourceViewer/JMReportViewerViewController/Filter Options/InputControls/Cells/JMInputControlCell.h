@@ -43,6 +43,6 @@
 
 - (void) setEnabledCell:(BOOL) enabled;
 
-- (BOOL) isValidData;
++ (BOOL)isValidDataForInputControlDescriptor:(JSInputControlDescriptor *)descriptor;
 
 @end

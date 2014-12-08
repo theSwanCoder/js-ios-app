@@ -68,6 +68,8 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 
 @property (nonatomic, assign) BOOL needReloadData;
 
+@property (nonatomic, assign) BOOL needLayoutUI;
+
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
 
 @property (nonatomic, strong) PopoverView *popoverView;
@@ -109,7 +111,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self.resourceListLoader updateIfNeeded];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceOrientationDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
-        self.needReloadData = YES;
+        self.needLayoutUI = YES;
     } @weakselfend];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:kJMRepresentationTypeDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
@@ -156,6 +158,16 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 {
     _needReloadData = needReloadData;
     if (self.isViewLoaded && self.view.window && needReloadData) {
+        [self updateIfNeeded];
+    }
+}
+
+- (void)setNeedLayoutUI:(BOOL)needLayoutUI
+{
+    _needLayoutUI = needLayoutUI;
+    _needReloadData = needLayoutUI;
+    
+    if (self.isViewLoaded && self.view.window && needLayoutUI) {
         [self updateIfNeeded];
     }
 }
@@ -378,10 +390,13 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 {
     if (self.needReloadData) {
         [self.collectionView reloadData];
+        self.needReloadData = NO;
+    }
+
+    if (self.needLayoutUI) {
         if ([JMUtils isIphone]) {
             [self showNavigationItems];
         }
-        self.needReloadData = NO;
     }
 }
 

@@ -55,7 +55,7 @@
 
 - (void) updateDisplayingOfErrorMessage
 {
-    self.detailTextLabel.text = ![self _isValidData] ? self.inputControlDescriptor.validationRules.mandatoryValidationRule.errorMessage : nil;
+    self.detailTextLabel.text = ![JMInputControlCell isValidDataForInputControlDescriptor:self.inputControlDescriptor] ? self.inputControlDescriptor.validationRules.mandatoryValidationRule.errorMessage : nil;
     [self setNeedsLayout];
     [self layoutIfNeeded];
 }
@@ -84,15 +84,9 @@
     }
 }
 
-- (BOOL)_isValidData
++ (BOOL)isValidDataForInputControlDescriptor:(JSInputControlDescriptor *)descriptor
 {
-    return !(self.inputControlDescriptor.validationRules.mandatoryValidationRule && self.inputControlDescriptor.state.value == nil);
-}
-
-- (BOOL)isValidData
-{
-    [self updateDisplayingOfErrorMessage];
-    return [self _isValidData];
+    return !(descriptor.validationRules.mandatoryValidationRule && descriptor.state.value == nil);
 }
 
 @end

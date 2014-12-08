@@ -75,7 +75,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     } @weakselfend
     viewControllerToDismiss:nil];
     
-    [report inputControlsForReport:resourceLookup.uri ids:nil selectedValues:nil delegate:delegate];
+    [report inputControlsForReport:[resourceLookup.uri stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ids:nil selectedValues:nil delegate:delegate];
 }
 
 - (BOOL)isResourceSegue:(UIStoryboardSegue *)segue;

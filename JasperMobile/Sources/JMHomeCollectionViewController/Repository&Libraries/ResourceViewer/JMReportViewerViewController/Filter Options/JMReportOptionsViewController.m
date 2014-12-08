@@ -82,8 +82,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 {
     BOOL allDataIsValid = YES;
     for (int i = 0; i < [self.tableView numberOfRowsInSection:0]; i++) {
-        JMInputControlCell *cell = (JMInputControlCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        if (![cell isValidData]) {
+        if (![JMInputControlCell isValidDataForInputControlDescriptor:[self.inputControls objectAtIndex:i]]) {
             allDataIsValid = NO;
         }
     }
