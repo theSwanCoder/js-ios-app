@@ -139,6 +139,8 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         [self.collectionView reloadData];
         self.needReloadData = NO;
     }
+
+    self.screenName = self.title;
 }
 
 - (void)viewDidAppear:(BOOL)animated

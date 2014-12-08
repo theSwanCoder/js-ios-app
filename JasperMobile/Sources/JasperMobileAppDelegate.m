@@ -28,15 +28,13 @@
 #import "JasperMobileAppDelegate.h"
 #import "JMAppUpdater.h"
 #import "JMAskPasswordDialog.h"
-#import "JMConstants.h"
 #import "JMBaseModule.h"
 #import "JMReportClientHolder.h"
-#import "JMResourceClientHolder.h"
-#import "JMUtils.h"
 
 #import "Appirater.h"
 
 static NSString * const kJMProductName = @"JasperMobile";
+static NSString * const kJMGAITrackingID = @"UA-57445224-1";
 
 @interface JasperMobileAppDelegate() <JMResourceClientHolder, JMReportClientHolder>
 @end
@@ -108,7 +106,10 @@ static NSString * const kJMProductName = @"JasperMobile";
     } else {
         [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile withParams:nil];
     }
-    
+
+    // Google Analytics
+    [self setupGAI];
+
     [application setStatusBarStyle:UIStatusBarStyleLightContent];
 
     return YES;
@@ -347,6 +348,21 @@ static NSString * const kJMProductName = @"JasperMobile";
     // Update db with latest app version and demo profile
     [JMAppUpdater updateAppVersionTo:[JMAppUpdater latestAppVersion]];
     [self coreDataInit];
+}
+
+#pragma mark - Google Analytics
+- (void)setupGAI {
+    // Optional: automatically send uncaught exceptions to Google Analytics.
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
+
+    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+    [GAI sharedInstance].dispatchInterval = 20;
+
+    // Optional: set Logger to VERBOSE for debug information.
+    [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+
+    // Initialize tracker. Replace with your tracking ID.
+    [[GAI sharedInstance] trackerWithTrackingId:kJMGAITrackingID];
 }
 
 @end

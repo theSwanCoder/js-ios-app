@@ -33,6 +33,7 @@
 
 #import <UIKit/UIKit.h>
 #import "JMResourcesListLoader.h"
+#import "GAITrackedViewController.h"
 
 typedef NS_ENUM(NSInteger, JMResourcesCollectionViewControllerPresentingType) {
     JMResourcesCollectionViewControllerPresentingType_Library = 1 << 0,
@@ -41,7 +42,7 @@ typedef NS_ENUM(NSInteger, JMResourcesCollectionViewControllerPresentingType) {
     JMResourcesCollectionViewControllerPresentingType_Favorites = 1 << 3
 };
 
-@interface JMResourcesCollectionViewController : UIViewController 
+@interface JMResourcesCollectionViewController : GAITrackedViewController
 @property (nonatomic, assign) JMResourcesCollectionViewControllerPresentingType presentingType;
 
 @end

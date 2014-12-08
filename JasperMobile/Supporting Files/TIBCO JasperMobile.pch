@@ -19,5 +19,6 @@
     #import "JMFont.h"
 
     #import "JMLocalization.h"
+    #import "GAI.h"
 
 #endif

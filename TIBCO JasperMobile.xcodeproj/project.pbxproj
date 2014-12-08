@@ -113,6 +113,12 @@
 		08FF130D1992982F0082265D /* JMServerOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF13041992982F0082265D /* JMServerOptions.m */; };
 		08FF131619929B080082265D /* JMBooleanServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF131119929B080082265D /* JMBooleanServerOptionCell.m */; };
 		08FF131819929B080082265D /* JMTextServerOptionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FF131519929B080082265D /* JMTextServerOptionCell.m */; };
+		9348F4501A35BCA5006F5677 /* Changelog.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9348F4181A35BCA5006F5677 /* Changelog.txt */; };
+		9348F46F1A35BCA5006F5677 /* Readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9348F44E1A35BCA5006F5677 /* Readme.txt */; };
+		9348F4E61A35C5DA006F5677 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9348F4E51A35C5DA006F5677 /* libGoogleAnalyticsServices.a */; };
+		9348F4E81A35C616006F5677 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */; };
+		9348F4E91A35C6FA006F5677 /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */; };
+		9348F4EA1A35D103006F5677 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
 		9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */; };
 		9356ECA51A3075F500ACE2C6 /* JMUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */; };
 		937336111A0DE46D004E6520 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 937336101A0DE46D004E6520 /* Images.xcassets */; };
@@ -415,6 +421,20 @@
 		08FF131119929B080082265D /* JMBooleanServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBooleanServerOptionCell.m; sourceTree = "<group>"; };
 		08FF131419929B080082265D /* JMTextServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextServerOptionCell.h; sourceTree = "<group>"; };
 		08FF131519929B080082265D /* JMTextServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextServerOptionCell.m; sourceTree = "<group>"; };
+		9348F4181A35BCA5006F5677 /* Changelog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Changelog.txt; sourceTree = "<group>"; };
+		9348F4441A35BCA5006F5677 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
+		9348F4451A35BCA5006F5677 /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIDictionaryBuilder.h; sourceTree = "<group>"; };
+		9348F4461A35BCA5006F5677 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceFields.h; sourceTree = "<group>"; };
+		9348F4471A35BCA5006F5677 /* GAIEcommerceProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceProduct.h; sourceTree = "<group>"; };
+		9348F4481A35BCA5006F5677 /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommerceProductAction.h; sourceTree = "<group>"; };
+		9348F4491A35BCA5006F5677 /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIEcommercePromotion.h; sourceTree = "<group>"; };
+		9348F44A1A35BCA5006F5677 /* GAIFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAIFields.h; sourceTree = "<group>"; };
+		9348F44B1A35BCA5006F5677 /* GAILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAILogger.h; sourceTree = "<group>"; };
+		9348F44C1A35BCA5006F5677 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
+		9348F44D1A35BCA5006F5677 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
+		9348F44E1A35BCA5006F5677 /* Readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
+		9348F4E51A35C5DA006F5677 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
+		9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		9356EC971A30752800ACE2C6 /* TIBCO JasperMobile Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TIBCO JasperMobile Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9356EC9A1A30752900ACE2C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptionsTests.m; sourceTree = "<group>"; };
@@ -455,6 +475,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9348F4E81A35C616006F5677 /* libsqlite3.0.dylib in Frameworks */,
 				08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */,
 				F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */,
 				0871503E19F1266900C5875E /* libz.dylib in Frameworks */,
@@ -469,6 +490,7 @@
 				F55CC333174CFFCE00CEB39E /* UIKit.framework in Frameworks */,
 				F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */,
 				F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */,
+				9348F4E61A35C5DA006F5677 /* libGoogleAnalyticsServices.a in Frameworks */,
 				F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */,
 				08DB677E1A137CD90035F58F /* SplunkMint-iOS.framework in Frameworks */,
 			);
@@ -1210,6 +1232,42 @@
 			path = JMServerOption;
 			sourceTree = "<group>";
 		};
+		9348F4161A35BCA5006F5677 /* Google */ = {
+			isa = PBXGroup;
+			children = (
+				9348F4171A35BCA5006F5677 /* GoogleAnalytics */,
+			);
+			path = Google;
+			sourceTree = "<group>";
+		};
+		9348F4171A35BCA5006F5677 /* GoogleAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				9348F4E51A35C5DA006F5677 /* libGoogleAnalyticsServices.a */,
+				9348F4181A35BCA5006F5677 /* Changelog.txt */,
+				9348F4431A35BCA5006F5677 /* Library */,
+				9348F44E1A35BCA5006F5677 /* Readme.txt */,
+			);
+			path = GoogleAnalytics;
+			sourceTree = "<group>";
+		};
+		9348F4431A35BCA5006F5677 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				9348F4441A35BCA5006F5677 /* GAI.h */,
+				9348F4451A35BCA5006F5677 /* GAIDictionaryBuilder.h */,
+				9348F4461A35BCA5006F5677 /* GAIEcommerceFields.h */,
+				9348F4471A35BCA5006F5677 /* GAIEcommerceProduct.h */,
+				9348F4481A35BCA5006F5677 /* GAIEcommerceProductAction.h */,
+				9348F4491A35BCA5006F5677 /* GAIEcommercePromotion.h */,
+				9348F44A1A35BCA5006F5677 /* GAIFields.h */,
+				9348F44B1A35BCA5006F5677 /* GAILogger.h */,
+				9348F44C1A35BCA5006F5677 /* GAITrackedViewController.h */,
+				9348F44D1A35BCA5006F5677 /* GAITracker.h */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
 		9354B5CB1A0B8C930031F751 /* OnboardingIntro */ = {
 			isa = PBXGroup;
 			children = (
@@ -1270,6 +1328,7 @@
 		F55CC331174CFFCE00CEB39E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */,
 				F54C91AA1752FAC90009E2BE /* libxml2.dylib */,
 				0871503D19F1266900C5875E /* libz.dylib */,
 				0871503B19F1265B00C5875E /* CoreTelephony.framework */,
@@ -1290,6 +1349,7 @@
 		F5663A141752F9D0007978BE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				9348F4161A35BCA5006F5677 /* Google */,
 				08C837EA1A1F57640004BE78 /* Appirater-v2.0.4 */,
 				08DB677C1A137CD90035F58F /* SplunkMint-iOS-v4.0.22 */,
 				089590DE19E3D514001471DA /* ALToastView-v0.0.1 */,
@@ -1460,9 +1520,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9348F4EA1A35D103006F5677 /* profiles.json in Resources */,
+				9348F4E91A35C6FA006F5677 /* jaspersoft-sdk-resources.bundle in Resources */,
 				0851DFD919ACE27800DC6EDE /* JMCancelRequestPopup.xib in Resources */,
 				088115F919B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib in Resources */,
 				088115F719B8C63F00C70170 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */,
+				9348F4501A35BCA5006F5677 /* Changelog.txt in Resources */,
 				080F235719A77B23008758FA /* JMHorizontalLoadingCollectionViewCell~ipad.xib in Resources */,
 				08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */,
 				088115FD19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
@@ -1484,6 +1547,7 @@
 				08C838161A1F57640004BE78 /* AppiraterLocalizable.strings in Resources */,
 				080F235619A77B23008758FA /* JMGridLoadingCollectionViewCell~ipad.xib in Resources */,
 				08DE67D519C05D8B00C25AEA /* JMReportViewerToolBar~ipad.xib in Resources */,
+				9348F46F1A35BCA5006F5677 /* Readme.txt in Resources */,
 				080F235A19A77B23008758FA /* JMGridResourceCollectionViewCell~ipad.xib in Resources */,
 				08E62D6B19922BA40081CA83 /* Localizable.strings in Resources */,
 				088115FB19B8C7E700C70170 /* JMGridResourceCollectionViewCell.xib in Resources */,
