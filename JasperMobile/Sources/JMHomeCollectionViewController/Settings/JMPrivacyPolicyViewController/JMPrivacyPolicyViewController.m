@@ -46,7 +46,7 @@ objection_requires(@"resourceClient")
 
 - (void) showPrivacyPolicy
 {
-    NSURL *ppURL = self.resourceClient.privacyPolicyURL;
+    NSURL *ppURL = [NSURL URLWithString:kJMPrivacyPolicyURI];
     [self.activityIndicator startAnimating];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     dispatch_async(dispatch_get_global_queue(0, 0), @weakself(^(void)){
@@ -77,11 +77,6 @@ objection_requires(@"resourceClient")
 
 #pragma mark - UIWebViewDelegate
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    return navigationType != UIWebViewNavigationTypeLinkClicked;
-}
-
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     [self.activityIndicator startAnimating];
@@ -89,6 +84,12 @@ objection_requires(@"resourceClient")
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [self.activityIndicator stopAnimating];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
     [self.activityIndicator stopAnimating];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;

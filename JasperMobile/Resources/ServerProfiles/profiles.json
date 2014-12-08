@@ -293,6 +293,13 @@
       "mOrganization": "",
       "mUsername": "joeuser",
       "mPassword": "joeuser"
+    },
+    {
+      "mAlias": "CE 5.6.0 Jasperadmin",
+      "mServerUrl": "http://build-master.jaspersoft.com:4580/jrs-ce-anybranch-ce",
+      "mOrganization": "",
+      "mUsername": "jasperadmin",
+      "mPassword": "jasperadmin"
     }
   ]
 }

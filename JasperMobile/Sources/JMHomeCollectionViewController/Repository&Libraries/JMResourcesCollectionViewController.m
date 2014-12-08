@@ -423,8 +423,8 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortByButtonTapped:)];
         [navBarItems addObject:sortItem];
     }
-    
-    if ([JMUtils isIphone] && (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation)) && [navBarItems count] > 1) {
+
+    if ([JMUtils isIphone] && (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && [navBarItems count] > 1) {
         navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
     }
     [navBarItems addObject:[self resourceRepresentationItem]];

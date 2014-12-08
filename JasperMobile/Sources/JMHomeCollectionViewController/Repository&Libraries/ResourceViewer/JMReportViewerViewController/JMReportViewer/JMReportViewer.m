@@ -170,9 +170,16 @@ objection_requires(@"resourceClient", @"reportClient")
     BOOL interactive = !((self.reportClient.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) &&
                         (self.reportClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0));
     
+    NSString *attachemntPreffix = [JSConstants sharedInstance].REST_EXPORT_EXECUTION_ATTACHMENTS_PREFIX_URI;
+    
+    // Fix for JRS version smaller 5.6.0
+    if (self.reportClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) {
+        attachemntPreffix = nil;
+    }
+
     [self.reportClient runReportExecution:self.resourceLookup.uri async:YES outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML
                               interactive:interactive freshData:YES saveDataSnapshot:NO ignorePagination:NO transformerKey:nil
-                                    pages:nil attachmentsPrefix:nil parameters:parameters delegate:requestDelegate];
+                                    pages:nil attachmentsPrefix:attachemntPreffix parameters:parameters delegate:requestDelegate];
 }
 
 - (void) runExportExecutionForPage:(NSInteger)page
