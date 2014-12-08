@@ -29,6 +29,10 @@
 #import "JMMenuItemCell.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMResourcesCollectionViewController.h"
+#import "ALToastView.h"
+#import "JasperMobileAppDelegate.h"
+#import "UIView+Additions.h"
+#import "JMOnboardIntroViewController.h"
 
 static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 
@@ -91,6 +95,16 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     [self.collectionView reloadData];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    if (appDelegate.isApplicationFirstStart) {
+        appDelegate.applicationFirstStart = NO;
+        [self showIntroView];
+    }
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     id viewController = segue.destinationViewController;
@@ -150,6 +164,11 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     }
 
     return 0;
+}
+
+#pragma mark - Intro View
+- (void)showIntroView {
+    [self performSegueWithIdentifier:@"showOnboardIntro" sender:nil];
 }
 
 @end

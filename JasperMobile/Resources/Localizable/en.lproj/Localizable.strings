@@ -140,6 +140,7 @@
 "detail.settings.item.connection.timeout" = "Connection timeout (in seconds)";
 "detail.settings.item.data.read.timeout" = "Data read timeout (in seconds)";
 "detail.settings.item.server" = "Server";
+"detail.settings.item.intro" = "Show intro";
 "detail.settings.crashtracking.toast" = "For changing crash reports settings go to Settings page.";
 "detail.settings.crashtracking.title" = "Send crash reports";
 "detail.settings.crashtracking.alert.title" = "Attention!";
@@ -229,3 +230,16 @@
 "dialog.button.removefavorite" = "Remove Favorite";
 "dialog.button.save" = "Save";
 "dialog.button.delete" = "Delete";
+
+
+/* Onboarding Intro */
+"intro.title" = "Welcome to TIBCO JasperMobile";
+"intro.description" = "swipe up to begin";
+"intro.button.skip.skip" = "Skip Intro";
+"intro.button.skip.startUsing" = "Start using TIBCO JasperMobile";
+"intro.model.firstScreen.title" = "Stay Connected";
+"intro.model.firstScreen.description" = "TIBCO JasperMobile keeps you connected to\nyour business wherever you are.";
+"intro.model.secondScreen.title" = "Instant Access";
+"intro.model.secondScreen.description" = "Get access to live interactive reports\ndriven from your operational applications.";
+"intro.model.thirdScreen.title" = "Seemless Integration";
+"intro.model.thirdScreen.description" = "View and interact with your TIBCO JasperReports\nServer v5.5 or greater environment.";
