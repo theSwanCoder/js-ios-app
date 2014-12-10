@@ -16,6 +16,8 @@
 		080F235B19A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 080F235319A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib */; };
 		0810649A19C0A9D40000D7F3 /* JMFavorites+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 0810649919C0A9D40000D7F3 /* JMFavorites+Helpers.m */; };
 		0826E52D19C88FDB00179818 /* JMSaveReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0826E52C19C88FDB00179818 /* JMSaveReportViewController.m */; };
+		0834907C1A38A3AA00E04DA0 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 083490791A38A3AA00E04DA0 /* Reachability.m */; };
+		0834907D1A38A3AA00E04DA0 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 0834907B1A38A3AA00E04DA0 /* RNCachingURLProtocol.m */; };
 		084F9DE219F544EA00E78C48 /* JMBooleanSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 084F9DE119F544EA00E78C48 /* JMBooleanSettingsTableViewCell.m */; };
 		0851DFD719ACE27800DC6EDE /* JMAskPasswordDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFCE19ACE27800DC6EDE /* JMAskPasswordDialog.m */; };
 		0851DFD819ACE27800DC6EDE /* JMCancelRequestPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFD119ACE27800DC6EDE /* JMCancelRequestPopup.m */; };
@@ -334,6 +336,10 @@
 		0810649919C0A9D40000D7F3 /* JMFavorites+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JMFavorites+Helpers.m"; sourceTree = "<group>"; };
 		0826E52B19C88FDB00179818 /* JMSaveReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSaveReportViewController.h; sourceTree = "<group>"; };
 		0826E52C19C88FDB00179818 /* JMSaveReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSaveReportViewController.m; sourceTree = "<group>"; };
+		083490781A38A3AA00E04DA0 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		083490791A38A3AA00E04DA0 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		0834907A1A38A3AA00E04DA0 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
+		0834907B1A38A3AA00E04DA0 /* RNCachingURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCachingURLProtocol.m; sourceTree = "<group>"; };
 		084F9DE019F544EA00E78C48 /* JMBooleanSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBooleanSettingsTableViewCell.h; sourceTree = "<group>"; };
 		084F9DE119F544EA00E78C48 /* JMBooleanSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBooleanSettingsTableViewCell.m; sourceTree = "<group>"; };
 		0851DFCD19ACE27800DC6EDE /* JMAskPasswordDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAskPasswordDialog.h; sourceTree = "<group>"; };
@@ -818,6 +824,17 @@
 				0826E52C19C88FDB00179818 /* JMSaveReportViewController.m */,
 			);
 			path = JMSaveReportViewController;
+			sourceTree = "<group>";
+		};
+		083490771A38A3AA00E04DA0 /* RNCachingURLProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				083490781A38A3AA00E04DA0 /* Reachability.h */,
+				083490791A38A3AA00E04DA0 /* Reachability.m */,
+				0834907A1A38A3AA00E04DA0 /* RNCachingURLProtocol.h */,
+				0834907B1A38A3AA00E04DA0 /* RNCachingURLProtocol.m */,
+			);
+			path = RNCachingURLProtocol;
 			sourceTree = "<group>";
 		};
 		084F9DDF19F544EA00E78C48 /* JMBooleanSettingsTableViewCell */ = {
@@ -2216,6 +2233,7 @@
 		F5663A141752F9D0007978BE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				083490771A38A3AA00E04DA0 /* RNCachingURLProtocol */,
 				08DB677C1A137CD90035F58F /* SplunkMint-iOS-v4.0.22 */,
 				089590DE19E3D514001471DA /* ALToastView-v0.0.1 */,
 				089590E419E3D514001471DA /* MJPopupViewController-v0.4 */,
@@ -2627,6 +2645,8 @@
 				08D6921F19929DB300C87A33 /* JMTextSettingsTableViewCell.m in Sources */,
 				08E8641D1992564A007CF257 /* JMHomeCollectionViewController.m in Sources */,
 				08FF130C1992982F0082265D /* JMServerOption.m in Sources */,
+				0834907C1A38A3AA00E04DA0 /* Reachability.m in Sources */,
+				0834907D1A38A3AA00E04DA0 /* RNCachingURLProtocol.m in Sources */,
 				08A43D2019E6F30100C0BA4D /* JMRepositoryListLoader.m in Sources */,
 				08025CE11995231E00A6063B /* JMResourcesCollectionViewController.m in Sources */,
 				08FF130D1992982F0082265D /* JMServerOptions.m in Sources */,

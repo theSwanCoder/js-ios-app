@@ -97,7 +97,7 @@
 {
     NSString *errorMessage = @"";
     UITextField *textField = [alertView textFieldAtIndex:0];
-    BOOL validData = [JMUtils validateReportName:textField.text extension:nil errorMessage:&errorMessage];
+    BOOL validData = [JMUtils validateReportName:textField.text extension:self.savedReports.format errorMessage:&errorMessage];
     alertView.message = errorMessage;
     
     return validData;

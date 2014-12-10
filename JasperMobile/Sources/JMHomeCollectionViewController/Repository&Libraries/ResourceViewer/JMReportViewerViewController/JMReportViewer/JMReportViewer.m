@@ -236,8 +236,8 @@ objection_requires(@"resourceClient", @"reportClient")
     
     void (^errorHandlerBlock)(NSInteger page, JSOperationResult *result) = ^(NSInteger page, JSOperationResult *result){
         JSErrorDescriptor *error = [result.objects objectAtIndex:0];
-        if (!page == self.currentPage) {
-            [UIAlertView localizedAlertWithTitle:nil message:error.message delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil];
+        if (page == self.currentPage) {
+            [[UIAlertView localizedAlertWithTitle:error.errorCode message:error.message delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil] show];
         } else {
             if ([error.errorCode isEqualToString:@"illegal.parameter.value.error"] ||
                 [error.errorCode isEqualToString:@"export.pages.out.of.range"] ||
@@ -285,6 +285,7 @@ objection_requires(@"resourceClient", @"reportClient")
     
     JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
         JSReportExecutionResponse *reportDetails = [result.objects objectAtIndex:0];
+        NSLog(@"%@", result.bodyAsString);
         self.countOfPages = [reportDetails.totalPages integerValue];
     } @weakselfend
     errorBlock:nil

@@ -50,6 +50,7 @@
     [UIView beginAnimations:nil context:nil];
     self.detailTextLabel.alpha = (self.serverOption.errorString.length == 0) ? 0 : 1;
     [UIView commitAnimations];
+    [self.delegate reloadTableViewCell:self];
 }
 
 

@@ -37,6 +37,8 @@
 @class JMServerOptionCell;
 @protocol JMServerOptionCellDelegate <NSObject>
 @required
+- (void) reloadTableViewCell:(JMServerOptionCell *)cell;
+
 - (void) makeActiveButtonTappedOnTableViewCell:(JMServerOptionCell *)cell;
 
 @end

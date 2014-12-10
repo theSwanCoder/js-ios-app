@@ -33,7 +33,7 @@
 #import "JMReportClientHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMUtils.h"
-
+#import "RNCachingURLProtocol.h"
 
 static NSString * const kJMProductName = @"JasperMobile";
 
@@ -74,8 +74,7 @@ static NSString * const kJMProductName = @"JasperMobile";
                                                      name:kJMResetApplicationNotification
                                                    object:nil];
         
-        NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
-        [NSURLCache setSharedURLCache:sharedCache];
+        [NSURLProtocol registerClass:[RNCachingURLProtocol class]];
     }
     
     return self;

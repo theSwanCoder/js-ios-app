@@ -22,12 +22,16 @@
 
 
 #import "JMPrivacyPolicyViewController.h"
+#import "UIAlertView+Additions.h"
+#import "ALToastView.h"
+#import "RNCachingURLProtocol.h"
+#import "Reachability.h"
 
 @interface JMPrivacyPolicyViewController () <UIWebViewDelegate>
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) JSRESTResource *resourceClient;
-
+@property (nonatomic, strong) NSMutableArray *cachedRequestURLs;
 @end
 
 @implementation JMPrivacyPolicyViewController
@@ -40,56 +44,66 @@ objection_requires(@"resourceClient")
     self.webView.scrollView.bounces = NO;
     
     [[JSObjection defaultInjector] injectDependencies:self];
-    
+
     [self showPrivacyPolicy];
 }
 
 - (void) showPrivacyPolicy
 {
     NSURL *ppURL = [NSURL URLWithString:kJMPrivacyPolicyURI];
-    [self.activityIndicator startAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    dispatch_async(dispatch_get_global_queue(0, 0), @weakself(^(void)){
-        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:ppURL cachePolicy:NSURLRequestReloadIgnoringLocalCacheData  timeoutInterval:10.0];
-        
-        NSURLCache *ppCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:10 * 1024 * 1024 diskPath:nil];
-        NSCachedURLResponse *cachedResponce = [ppCache cachedResponseForRequest:request];
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)[cachedResponce response];
-        NSData *loadedData = nil;
-        
-        if (httpResponse) {
-            loadedData = [cachedResponce data];
-        } else {
-            loadedData = [NSURLConnection sendSynchronousRequest:request returningResponse:&httpResponse error:nil];
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), @weakself(^(void)) {
-            NSString *htmlString = [[NSString alloc] initWithData:loadedData encoding:NSUTF8StringEncoding];
-            [self.webView loadHTMLString:htmlString baseURL:ppURL];
-            if (!cachedResponce && httpResponse.statusCode >= 200 && httpResponse.statusCode < 300) {
-                NSCachedURLResponse *loadedCachedResponce = [[NSCachedURLResponse alloc] initWithResponse:httpResponse data:loadedData];
-                [ppCache storeCachedResponse:loadedCachedResponce forRequest:request];
-            }
-        }@weakselfend);
-    }@weakselfend);
+    NSMutableURLRequest *ppRequest = [[NSMutableURLRequest alloc] initWithURL:ppURL cachePolicy:NSURLRequestReturnCacheDataElseLoad  timeoutInterval:10.0];
+    [ppRequest addValue:@"html/text" forHTTPHeaderField:kJSRequestResponceType];
+    
+    NSString *cachePath = [[RNCachingURLProtocol new] cachePathForRequest:ppRequest];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath] && [[Reachability reachabilityWithHostName:[ppURL host]] currentReachabilityStatus] == NotReachable) {
+        [[UIAlertView localizedAlertWithTitle:@"error.noconnection.dialog.title" message:@"error.noconnection.dialog.msg" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
+    } else {
+        [self.webView loadRequest:ppRequest];
+    }
 }
-
 
 #pragma mark - UIWebViewDelegate
 
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+        if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
+            [[UIAlertView localizedAlertWithTitle:nil message:@"detail.resource.viewer.open.link" completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                if (alertView.cancelButtonIndex != buttonIndex) {
+                    [[UIApplication sharedApplication] openURL:request.URL];
+                }
+            } cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
+        } else {
+            [ALToastView toastInView:webView withText:JMCustomLocalizedString(@"detail.resource.viewer.can't.open.link", nil)];
+        }
+        return NO;
+    }
+
+    return YES;
+}
+
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-    [self.activityIndicator startAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self startLoadingAnimating];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    [self.activityIndicator stopAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [self stopLoadingAnimating];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    [self stopLoadingAnimating];
+}
+
+- (void) startLoadingAnimating
+{
+    [self.activityIndicator startAnimating];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
+- (void) stopLoadingAnimating
 {
     [self.activityIndicator stopAnimating];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
