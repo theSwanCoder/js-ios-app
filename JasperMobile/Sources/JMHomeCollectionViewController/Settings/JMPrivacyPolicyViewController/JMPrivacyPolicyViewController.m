@@ -44,8 +44,14 @@ objection_requires(@"resourceClient")
     self.webView.scrollView.bounces = NO;
     
     [[JSObjection defaultInjector] injectDependencies:self];
+    [NSURLProtocol registerClass:[RNCachingURLProtocol class]];
 
     [self showPrivacyPolicy];
+}
+
+- (void)dealloc
+{
+    [NSURLProtocol unregisterClass:[RNCachingURLProtocol class]];
 }
 
 - (void) showPrivacyPolicy

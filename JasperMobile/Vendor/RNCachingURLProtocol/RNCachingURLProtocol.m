@@ -79,7 +79,7 @@ static NSString *RNCachingURLHeader = @"X-RNCache";
 {
   // This stores in the Caches directory, which can be deleted when space is low, but we only use it for offline access
   NSString *cachesPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-  return [cachesPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%zx", [[[aRequest URL] absoluteString] hash]]];
+  return [cachesPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%tu", [[[aRequest URL] absoluteString] hash]]];
 }
 
 - (void)startLoading
