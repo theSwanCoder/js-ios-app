@@ -77,7 +77,6 @@
 		08DE67D719C05D8B00C25AEA /* JMResourceViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67C519C05D8B00C25AEA /* JMResourceViewerViewController.m */; };
 		08DE67DE19C0659A00C25AEA /* JMDashboardsViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67DD19C0659A00C25AEA /* JMDashboardsViewerViewController.m */; };
 		08E62C8319922B0B0081CA83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E62C8019922B0B0081CA83 /* main.m */; };
-		08E62D6B19922BA40081CA83 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08E62CF819922BA40081CA83 /* Localizable.strings */; };
 		08E62D6E19922BA40081CA83 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08E62D0419922BA40081CA83 /* MainStoryboard_iPhone.storyboard */; };
 		08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 08E62D7019922F5A0081CA83 /* JasperMobile.xcdatamodeld */; };
 		08E8640F1992564A007CF257 /* JMServerProfile+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E863C01992564A007CF257 /* JMServerProfile+Helpers.m */; };
@@ -1523,38 +1522,24 @@
 				9348F4EA1A35D103006F5677 /* profiles.json in Resources */,
 				9348F4E91A35C6FA006F5677 /* jaspersoft-sdk-resources.bundle in Resources */,
 				0851DFD919ACE27800DC6EDE /* JMCancelRequestPopup.xib in Resources */,
-				088115F919B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib in Resources */,
-				088115F719B8C63F00C70170 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */,
 				9348F4501A35BCA5006F5677 /* Changelog.txt in Resources */,
-				080F235719A77B23008758FA /* JMHorizontalLoadingCollectionViewCell~ipad.xib in Resources */,
 				08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */,
-				088115FD19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
 				08DE67D119C05D8B00C25AEA /* JMSingleSelectTableViewController~ipad.xib in Resources */,
 				937336111A0DE46D004E6520 /* Images.xcassets in Resources */,
-				080F235619A77B23008758FA /* JMGridLoadingCollectionViewCell~ipad.xib in Resources */,
-				08DE67D519C05D8B00C25AEA /* JMReportViewerToolBar~ipad.xib in Resources */,
-				080F235A19A77B23008758FA /* JMGridResourceCollectionViewCell~ipad.xib in Resources */,
-				08E62D6B19922BA40081CA83 /* Localizable.strings in Resources */,
-				088115FB19B8C7E700C70170 /* JMGridResourceCollectionViewCell.xib in Resources */,
 				089C22971A264090002106A9 /* JMListOptionsPopupView.xib in Resources */,
 				088115F919B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib in Resources */,
 				088115F719B8C63F00C70170 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */,
 				080F235719A77B23008758FA /* JMHorizontalLoadingCollectionViewCell~ipad.xib in Resources */,
 				08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */,
 				088115FD19B8C8DE00C70170 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
-				08DE67D119C05D8B00C25AEA /* JMSingleSelectTableViewController~ipad.xib in Resources */,
-				08DE67D119C05D8B00C25AEA /* JMSingleSelectTableViewController~ipad.xib in Resources */,
 				08C838161A1F57640004BE78 /* AppiraterLocalizable.strings in Resources */,
 				080F235619A77B23008758FA /* JMGridLoadingCollectionViewCell~ipad.xib in Resources */,
 				08DE67D519C05D8B00C25AEA /* JMReportViewerToolBar~ipad.xib in Resources */,
 				9348F46F1A35BCA5006F5677 /* Readme.txt in Resources */,
 				080F235A19A77B23008758FA /* JMGridResourceCollectionViewCell~ipad.xib in Resources */,
-				08E62D6B19922BA40081CA83 /* Localizable.strings in Resources */,
 				088115FB19B8C7E700C70170 /* JMGridResourceCollectionViewCell.xib in Resources */,
 				08E62D6E19922BA40081CA83 /* MainStoryboard_iPhone.storyboard in Resources */,
 				080F235B19A77B23008758FA /* JMHorizontalResourceCollectionViewCell~ipad.xib in Resources */,
-				08DE67D419C05D8B00C25AEA /* JMReportViewerToolBar.xib in Resources */,
-				08DE67D019C05D8B00C25AEA /* JMSingleSelectTableViewController.xib in Resources */,
 				08DE67D419C05D8B00C25AEA /* JMReportViewerToolBar.xib in Resources */,
 				08DE67D019C05D8B00C25AEA /* JMSingleSelectTableViewController.xib in Resources */,
 			);

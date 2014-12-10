@@ -461,10 +461,18 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 #pragma mark - Welcome Page
 - (void)changeWelcomePageViewsWithVelocity:(CGPoint)velocity {
     CGPoint contentViewOrigin = self.contentView.frame.origin;
-    CGFloat contentViewStartOriginY = 290;
-    CGFloat contentViewBeginUpdateOriginY = 230;
-    CGFloat contentViewUpperValueOriginY = 200;
-    CGFloat contentViewBottomValueOriginY = 350;
+
+    CGFloat contentViewStartHeight;
+    if ([JMUtils isIphone]) {
+        contentViewStartHeight = 290;
+    } else {
+        contentViewStartHeight = 610;
+    }
+
+    CGFloat contentViewStartOriginY = contentViewStartHeight;
+    CGFloat contentViewBeginUpdateOriginY = contentViewStartOriginY * 0.8f;
+    CGFloat contentViewUpperValueOriginY = contentViewStartOriginY * 0.7f;
+    CGFloat contentViewBottomValueOriginY = contentViewStartOriginY * 1.2f;
 
     if (velocity.y > 0) {
         // move down
@@ -478,10 +486,10 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             }
         } else {
             [self.contentView updateOriginYWithValue:(contentViewOrigin.y + kDefaultStepValue)];
-            if (contentViewOrigin.y == contentViewBeginUpdateOriginY) {
+            if (contentViewOrigin.y <= contentViewBeginUpdateOriginY) {
                 // update title view
-                self.welcomeView.hidden = !self.welcomeView.hidden;
-                self.messageView.hidden = !self.messageView.hidden;
+                self.welcomeView.hidden = NO;
+                self.messageView.hidden = YES;
             }
         }
     } else {
@@ -495,10 +503,14 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
         } else {
             if (contentViewOrigin.y > contentViewUpperValueOriginY) {
                 [self.contentView updateOriginYWithValue:(contentViewOrigin.y - kDefaultStepValue)];
-                if (contentViewOrigin.y == contentViewBeginUpdateOriginY) {
+                if (contentViewOrigin.y <= contentViewBeginUpdateOriginY) {
                     // update title view
-                    self.welcomeView.hidden = !self.welcomeView.hidden;
-                    self.messageView.hidden = !self.messageView.hidden;
+                    self.welcomeView.hidden = YES;
+                    self.messageView.hidden = NO;
+
+                    JMIntroModel *model = [self.modelManager modelAtIndex:0];
+                    self.titlePageLabel.text = model.pageTitle;
+                    self.descriptionPageLabel.text = model.pageDescription;
                 }
             }
         }
@@ -508,8 +520,16 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 - (void)updateWelcomePageViewsWithVelocity:(CGPoint)velocity {
     CGFloat velocityY = fabsf(velocity.y);
     CGPoint contentViewOrigin = self.contentView.frame.origin;
-    CGFloat contentViewStartOriginY = 290;
-    CGFloat contentViewBeginUpdateOriginY = 230;
+
+    CGFloat contentViewStartHeight;
+    if ([JMUtils isIphone]) {
+        contentViewStartHeight = 290;
+    } else {
+        contentViewStartHeight = 610;
+    }
+
+    CGFloat contentViewStartOriginY = contentViewStartHeight;
+    CGFloat contentViewBeginUpdateOriginY = contentViewStartOriginY * 0.8f;
 
     if (velocity.y > 0) {
         // move down
