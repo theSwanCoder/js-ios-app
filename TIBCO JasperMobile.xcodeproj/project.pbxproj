@@ -19,7 +19,6 @@
 		0834907C1A38A3AA00E04DA0 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 083490791A38A3AA00E04DA0 /* Reachability.m */; };
 		0834907D1A38A3AA00E04DA0 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 0834907B1A38A3AA00E04DA0 /* RNCachingURLProtocol.m */; };
 		084F9DE219F544EA00E78C48 /* JMBooleanSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 084F9DE119F544EA00E78C48 /* JMBooleanSettingsTableViewCell.m */; };
-		0851DFD719ACE27800DC6EDE /* JMAskPasswordDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFCE19ACE27800DC6EDE /* JMAskPasswordDialog.m */; };
 		0851DFD819ACE27800DC6EDE /* JMCancelRequestPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFD119ACE27800DC6EDE /* JMCancelRequestPopup.m */; };
 		0851DFD919ACE27800DC6EDE /* JMCancelRequestPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0851DFD219ACE27800DC6EDE /* JMCancelRequestPopup.xib */; };
 		08625F6D19C2EE4C0087684E /* JMLibraryListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08625F6C19C2EE4C0087684E /* JMLibraryListLoader.m */; };
@@ -342,8 +341,6 @@
 		0834907B1A38A3AA00E04DA0 /* RNCachingURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCachingURLProtocol.m; sourceTree = "<group>"; };
 		084F9DE019F544EA00E78C48 /* JMBooleanSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBooleanSettingsTableViewCell.h; sourceTree = "<group>"; };
 		084F9DE119F544EA00E78C48 /* JMBooleanSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBooleanSettingsTableViewCell.m; sourceTree = "<group>"; };
-		0851DFCD19ACE27800DC6EDE /* JMAskPasswordDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAskPasswordDialog.h; sourceTree = "<group>"; };
-		0851DFCE19ACE27800DC6EDE /* JMAskPasswordDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAskPasswordDialog.m; sourceTree = "<group>"; };
 		0851DFD019ACE27800DC6EDE /* JMCancelRequestPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCancelRequestPopup.h; sourceTree = "<group>"; };
 		0851DFD119ACE27800DC6EDE /* JMCancelRequestPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMCancelRequestPopup.m; sourceTree = "<group>"; };
 		0851DFD219ACE27800DC6EDE /* JMCancelRequestPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMCancelRequestPopup.xib; sourceTree = "<group>"; };
@@ -851,19 +848,9 @@
 			children = (
 				08C3315D1A1A27DC0020CAEA /* JMMenuActionsView */,
 				08D3E28819EBB82100F37DF4 /* JMPopupView */,
-				0851DFCC19ACE27800DC6EDE /* JMAskPasswordDialog */,
 				0851DFCF19ACE27800DC6EDE /* JMCancelRequestPopup */,
 			);
 			path = CustomViews;
-			sourceTree = "<group>";
-		};
-		0851DFCC19ACE27800DC6EDE /* JMAskPasswordDialog */ = {
-			isa = PBXGroup;
-			children = (
-				0851DFCD19ACE27800DC6EDE /* JMAskPasswordDialog.h */,
-				0851DFCE19ACE27800DC6EDE /* JMAskPasswordDialog.m */,
-			);
-			path = JMAskPasswordDialog;
 			sourceTree = "<group>";
 		};
 		0851DFCF19ACE27800DC6EDE /* JMCancelRequestPopup */ = {
@@ -2629,7 +2616,6 @@
 				080F235919A77B23008758FA /* JMResourceCollectionViewCell.m in Sources */,
 				0895910519E3D514001471DA /* SSKeychain.m in Sources */,
 				0881967E199A1703008CF79B /* JMSearchBar.m in Sources */,
-				0851DFD719ACE27800DC6EDE /* JMAskPasswordDialog.m in Sources */,
 				089590FF19E3D514001471DA /* ALToastView.m in Sources */,
 				08D108B619EFD28C003EC529 /* JMFavoritesListLoader.m in Sources */,
 				08E8641E1992564A007CF257 /* JMMainNavigationController.m in Sources */,

@@ -397,6 +397,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         if ([JMUtils isIphone]) {
             [self showNavigationItems];
         }
+        self.needLayoutUI = NO;
     }
 }
 
@@ -424,7 +425,11 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         [navBarItems addObject:sortItem];
     }
 
-    if ([JMUtils isIphone] && (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) && [navBarItems count] > 1) {
+    BOOL shouldConcateItems = ([JMUtils isIphone] && [navBarItems count] > 1) && (UIInterfaceOrientationIsPortrait([UIDevice currentDevice].orientation) ||
+                           (!UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) &&
+                            UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)));
+    
+    if (shouldConcateItems) {
         navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
     }
     [navBarItems addObject:[self resourceRepresentationItem]];

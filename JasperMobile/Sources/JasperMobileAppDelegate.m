@@ -27,12 +27,13 @@
 
 #import "JasperMobileAppDelegate.h"
 #import "JMAppUpdater.h"
-#import "JMAskPasswordDialog.h"
 #import "JMConstants.h"
 #import "JMBaseModule.h"
 #import "JMReportClientHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMUtils.h"
+#import "UIAlertView+Additions.h"
+#import "JMServerProfile+Helpers.h"
 
 static NSString * const kJMProductName = @"JasperMobile";
 
@@ -85,8 +86,24 @@ static NSString * const kJMProductName = @"JasperMobile";
     JMServerProfile *serverProfile = [JMServerProfile activeServerProfile];
     
     if (serverProfile.askPassword.boolValue) {
-        // Using performSelector to fix warning: "Applications are expected to have a root view controller at the end of application launch"
-        [[JMAskPasswordDialog askPasswordDialogForServerProfile:serverProfile] performSelector:@selector(show) withObject:nil afterDelay:0.0];
+        NSString *alias = [NSString stringWithFormat:@"%@ %@", serverProfile.alias, JMCustomLocalizedString(@"servers.password.label", nil)];
+        NSMutableString *credentials = [NSMutableString stringWithString:serverProfile.username];
+        if (serverProfile.organization.length) {
+            [credentials appendFormat:@" | %@", serverProfile.organization];
+        }
+        
+        UIAlertView *askPasswordDialog = [UIAlertView localizedAlertWithTitle:alias message:credentials completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+            if (buttonIndex != alertView.cancelButtonIndex && [alertView textFieldAtIndex:0].text) {
+                [serverProfile setPasswordAsPrimitive:[alertView textFieldAtIndex:0].text];
+            } else {
+                [serverProfile setPasswordAsPrimitive:nil];
+            }
+            [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile withParams:nil];
+        } @weakselfend cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil];
+        askPasswordDialog.alertViewStyle = UIAlertViewStyleSecureTextInput;
+        UITextField *passwordTextField = [askPasswordDialog textFieldAtIndex:0];
+        passwordTextField.placeholder = JMCustomLocalizedString(@"servers.password.label", nil);
+        [askPasswordDialog show];
     } else {
         [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile withParams:nil];
     }

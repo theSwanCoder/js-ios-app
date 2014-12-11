@@ -46,35 +46,49 @@ static NSMutableArray *_showedAlertsCompetionBlocks;
 + (UIAlertView *)localizedAlertWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate
               cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION
 {
-    UIAlertView *view = [self localizedAlertWithTitle:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles, nil];
-    view.delegate = delegate;
-    return view;
+    UIAlertView *alertView = [self alertViewLocalized:YES title:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles, nil];
+    alertView.delegate = delegate;
+    return alertView;
 }
 
 + (UIAlertView *)localizedAlertWithTitle:(NSString *)title message:(NSString *)message completion:(clickedButtonAtIndexCompletion)completion cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION
 {
-    UIAlertView *view = [self localizedAlertWithTitle:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles, nil];
-    view.delegate = view;
+    UIAlertView *alertView = [self alertViewLocalized:YES title:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles, nil];
+    alertView.delegate = alertView;
     [_showedAlertsCompetionBlocks addObject:[completion copy]];
-    view.tag = [_showedAlertsCompetionBlocks count];
-    return view;
+    alertView.tag = [_showedAlertsCompetionBlocks count];
+    return alertView;
 }
 
-+ (UIAlertView *)localizedAlertWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION
++ (UIAlertView *)alertWithTitle:(NSString *)title message:(NSString *)message completion:(clickedButtonAtIndexCompletion)completion cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION
 {
-    UIAlertView *view = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(title, nil)
-                                                   message:JMCustomLocalizedString(message, nil)
+    UIAlertView *alertView = [self alertViewLocalized:NO title:title message:message cancelButtonTitle:cancelButtonTitle otherButtonTitles:otherButtonTitles, nil];
+    alertView.delegate = alertView;
+    [_showedAlertsCompetionBlocks addObject:[completion copy]];
+    alertView.tag = [_showedAlertsCompetionBlocks count];
+    return alertView;
+}
+
++ (UIAlertView *)alertViewLocalized:(BOOL)localized title:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION
+{
+    UIAlertView *view = [[UIAlertView alloc] initWithTitle:[self stringFromString:title localized:localized]
+                                                   message:[self stringFromString:message localized:localized]
                                                   delegate:nil
-                                         cancelButtonTitle:JMCustomLocalizedString(cancelButtonTitle, nil)
+                                         cancelButtonTitle:[self stringFromString:cancelButtonTitle localized:localized]
                                          otherButtonTitles:nil];
     va_list args;
     va_start (args, otherButtonTitles);
     while (otherButtonTitles != nil) {
-        [view addButtonWithTitle:JMCustomLocalizedString(otherButtonTitles, nil)];
+        [view addButtonWithTitle:[self stringFromString:otherButtonTitles localized:localized]];
         otherButtonTitles = va_arg(args, NSString*);
     }
     va_end (args);
     return view;
+}
+
++ (NSString *)stringFromString:(NSString *)sourceString localized:(BOOL)localized
+{
+    return localized ? JMCustomLocalizedString(sourceString, nil) : sourceString;
 }
 
 #pragma mark - UIAlertViewDelegate
