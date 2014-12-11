@@ -347,7 +347,6 @@
 		08625F6B19C2EE4C0087684E /* JMLibraryListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLibraryListLoader.h; sourceTree = "<group>"; };
 		08625F6C19C2EE4C0087684E /* JMLibraryListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLibraryListLoader.m; sourceTree = "<group>"; };
 		08625FB619C328410087684E /* JasperMobile_v_1_9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile_v_1_9.xcdatamodel; sourceTree = "<group>"; };
-		0867B5B419B5E6A4008F2A74 /* JMInputControlsHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMInputControlsHolder.h; sourceTree = "<group>"; };
 		086AA56919E577FE0049DB10 /* weakself.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = weakself.h; sourceTree = "<group>"; };
 		086B715419CAE9E600CC25CA /* JMSavedResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedResources.h; sourceTree = "<group>"; };
 		086B715519CAE9E600CC25CA /* JMSavedResources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedResources.m; sourceTree = "<group>"; };
@@ -1325,7 +1324,6 @@
 		08E863E91992564A007CF257 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				0867B5B419B5E6A4008F2A74 /* JMInputControlsHolder.h */,
 				08E863EE1992564A007CF257 /* JMPagination.h */,
 				08E863EF1992564A007CF257 /* JMRefreshable.h */,
 				08E863F01992564A007CF257 /* JMReportClientHolder.h */,

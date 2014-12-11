@@ -29,6 +29,7 @@
 
 @interface JMSingleSelectInputControlCell()
 @property (nonatomic, weak) IBOutlet UILabel *valueLabel;
+@property (nonatomic, weak) IBOutlet UIView  *valuePlaceHolderView;
 @end
 
 @implementation JMSingleSelectInputControlCell
@@ -39,11 +40,19 @@
     self.userInteractionEnabled = enabled;
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    if ([self.inputControlDescriptor errorString]) {
+        CGRect errorLabelRect = self.detailTextLabel.frame;
+        errorLabelRect.origin.y = 2 * self.valuePlaceHolderView.frame.origin.y + self.valuePlaceHolderView.frame.size.height;
+        self.detailTextLabel.frame = errorLabelRect;
+    }
+}
+
 - (void)updateWithParameters:(NSArray *)parameters
 {
     [self updateValueLabelWithParameters:parameters];
-    [self updateDisplayingOfErrorMessage];
-
     [self.delegate updatedInputControlsValuesWithDescriptor:self.inputControlDescriptor];
 }
 
@@ -56,7 +65,6 @@
 - (void)setInputControlState:(JSInputControlState *)state
 {
     self.inputControlDescriptor.state = state;
-    
     NSMutableArray *selectedValues = [NSMutableArray array];
     for (JSInputControlOption *option in state.options) {
         if (option.selected.boolValue) {
@@ -72,10 +80,9 @@
         NSArray *allValues = [parameters sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             return [[obj1 label] compare:[obj2 label]];
         }];
-        
         NSMutableString *valuesAsStrings = [NSMutableString string];
         for (JSInputControlOption *option in allValues) {
-            NSString *formatString = [valuesAsStrings  length] ? @", %@" : @"%@";
+            NSString *formatString = [valuesAsStrings length] ? @", %@" : @"%@";
             [valuesAsStrings appendFormat:formatString, option.label];
         }
         self.inputControlDescriptor.state.value = valuesAsStrings;
@@ -86,4 +93,5 @@
     }
     [self updateDisplayingOfErrorMessage];
 }
+
 @end

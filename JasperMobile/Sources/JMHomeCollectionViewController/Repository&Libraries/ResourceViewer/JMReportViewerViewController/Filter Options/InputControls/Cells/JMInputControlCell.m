@@ -34,39 +34,21 @@
     [super awakeFromNib];
     self.textLabel.font = [JMFont tableViewCellTitleFont];
     self.textLabel.textColor = [UIColor darkGrayColor];
-    
     self.detailTextLabel.font = [JMFont tableViewCellDetailErrorFont];
     self.detailTextLabel.textColor = [UIColor redColor];
-
     self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-    if (self.detailTextLabel.text && self.detailTextLabel.text.length) {
-        CGFloat accessoryViewPadding = self.contentView.frame.size.width - self.accessoryView.frame.size.width - self.accessoryView.frame.origin.x;
-        CGRect detailTextLabelFrame = self.detailTextLabel.frame;
-        detailTextLabelFrame.size.width = self.contentView.frame.size.width - 2 * accessoryViewPadding;
-        self.detailTextLabel.frame = detailTextLabelFrame;
-    }
 }
 
 - (void) updateDisplayingOfErrorMessage
 {
-    self.detailTextLabel.text = ![JMInputControlCell isValidDataForInputControlDescriptor:self.inputControlDescriptor] ? self.inputControlDescriptor.validationRules.mandatoryValidationRule.errorMessage : nil;
-    [self setNeedsLayout];
-    [self layoutIfNeeded];
+    self.detailTextLabel.text = [self.inputControlDescriptor errorString];
+    [self.delegate reloadTableViewCell:self];
 }
-
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     _inputControlDescriptor = inputControlDescriptor;
-
     [self setEnabledCell:(!inputControlDescriptor.readOnly.boolValue)];
-    
     if (inputControlDescriptor.mandatory.boolValue) {
         self.textLabel.text = [NSString stringWithFormat:@"* %@",inputControlDescriptor.label];
     } else {
@@ -84,9 +66,10 @@
     }
 }
 
-+ (BOOL)isValidDataForInputControlDescriptor:(JSInputControlDescriptor *)descriptor
+- (BOOL)isValidData
 {
-    return !(descriptor.validationRules.mandatoryValidationRule && descriptor.state.value == nil);
+    [self updateDisplayingOfErrorMessage];
+    return ![self.inputControlDescriptor errorString];
 }
 
 @end

@@ -62,11 +62,6 @@
     return [textField resignFirstResponder];
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    
-}
-
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     self.serverOption.optionValue = textField.text ? : nil;

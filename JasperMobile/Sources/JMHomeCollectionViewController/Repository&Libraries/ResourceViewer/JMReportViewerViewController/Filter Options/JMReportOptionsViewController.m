@@ -27,7 +27,6 @@
 #import "UIViewController+FetchInputControls.h"
 #import "UITableViewCell+Additions.h"
 
-#import "JMInputControlsHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMReportClientHolder.h"
 #import "JMCancelRequestPopup.h"
@@ -35,7 +34,7 @@
 #import "JMInputControlCell.h"
 
 
-@interface JMReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlsHolder, JMReportClientHolder, JMResourceClientHolder>
+@interface JMReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportClientHolder, JMResourceClientHolder>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel    *titleLabel;
 @property (nonatomic, strong) JSConstants       *constants;
@@ -59,50 +58,53 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 }
 
 #pragma mark - UIViewController
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     self.title = JMCustomLocalizedString(@"detail.report.options.title", nil);
     self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.titlelabel.title", nil);
     self.titleLabel.textColor = kJMDetailViewLightTextColor;
     self.tableView.layer.cornerRadius = 4;
-    
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.tableView.layer.cornerRadius = 4;
-    
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(runReport)];
+    
+    self.tableView.rowHeight = 50.f;
 }
 
 - (void)runReport
 {
-    BOOL allDataIsValid = YES;
+    [self.view endEditing:YES];
+    if ([self validateInputControls]) { // Local validation
+        [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
+            if (dataIsValid) {
+                if (!self.delegate) {
+                    [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:self.inputControls];
+                } else {
+                    [self.delegate performSelector:@selector(setInputControls:) withObject:self.inputControls];
+                    [self.delegate refresh];
+                }
+            }
+        } @weakselfend];
+    }
+}
+
+- (BOOL) validateInputControls
+{
     for (int i = 0; i < [self.tableView numberOfRowsInSection:0]; i++) {
-        if (![JMInputControlCell isValidDataForInputControlDescriptor:[self.inputControls objectAtIndex:i]]) {
-            allDataIsValid = NO;
+        JMInputControlCell *cell = (JMInputControlCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+        if (![cell isValidData]) {
+            return NO;
         }
     }
-    
-    if (allDataIsValid) {
-        if (!self.delegate) {
-            [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:self.inputControls];
-        } else {
-            [self.delegate performSelector:@selector(setInputControls:) withObject:self.inputControls];
-            [self.delegate refresh];
-        }
-    } else {
-        [self.tableView reloadData];
-    }
+    return YES;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     id destinationViewController = segue.destinationViewController;
-    
     if ([self isResourceSegue:segue]) {
         [destinationViewController setResourceLookup:self.resourceLookup];
         [destinationViewController setInputControls:sender];
@@ -113,10 +115,24 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 }
 
 #pragma mark - Table view data source
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.inputControls.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
+    if ([inputControlDescriptor errorString]) {
+        CGFloat maxWidth = tableView.frame.size.width - 30;
+        CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
+        CGRect textRect = [[inputControlDescriptor errorString] boundingRectWithSize:maximumLabelSize
+                                                                             options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
+                                                                          attributes:@{NSFontAttributeName:[JMFont tableViewCellDetailErrorFont]}
+                                                                             context:nil];
+        return tableView.rowHeight + ceil(textRect.size.height);
+    }
+    return tableView.rowHeight;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -135,23 +151,50 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
-#pragma mark - JMInputControlsHolder
+#pragma mark - JMInputControlCellDelegate
+- (void)reloadTableViewCell:(JMInputControlCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath) {
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
 - (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor
 {
-    if (!descriptor.slaveDependencies.count) {
-        return;
+    if (descriptor.slaveDependencies.count) {
+        [self updatedInputControlsValuesWithCompletion:nil];
     }
+}
 
+#pragma mark - Private
+// Returns input control types
+- (NSDictionary *)inputControlDescriptorTypes
+{
+    return @{
+             self.constants.ICD_TYPE_BOOL : @"BooleanCell",
+             self.constants.ICD_TYPE_SINGLE_VALUE_TEXT : @"TextEditCell",
+             self.constants.ICD_TYPE_SINGLE_VALUE_NUMBER : @"NumberCell",
+             self.constants.ICD_TYPE_SINGLE_VALUE_DATE : @"DateCell",
+             self.constants.ICD_TYPE_SINGLE_VALUE_TIME : @"TimeCell",
+             self.constants.ICD_TYPE_SINGLE_VALUE_DATETIME : @"DateTimeCell",
+             self.constants.ICD_TYPE_SINGLE_SELECT : @"SingleSelectCell",
+             self.constants.ICD_TYPE_SINGLE_SELECT_RADIO : @"SingleSelectCell",
+             self.constants.ICD_TYPE_MULTI_SELECT : @"MultiSelectCell",
+             self.constants.ICD_TYPE_MULTI_SELECT_CHECKBOX : @"MultiSelectCell",
+             };
+}
+
+- (void)updatedInputControlsValuesWithCompletion:(void(^)(BOOL dataIsValid))completion
+{
     NSMutableArray *selectedValues = [NSMutableArray array];
     NSMutableArray *allInputControls = [NSMutableArray array];
-    
     // Get values from Input Controls
     for (JSInputControlDescriptor *descriptor in self.inputControls) {
         [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
                                                                     value:descriptor.selectedValues]];
         [allInputControls addObject:descriptor.uuid];
     }
-
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
         [self.navigationController popViewControllerAnimated:YES];
     } @weakselfend];
@@ -165,30 +208,21 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
             }
         }
         [self.tableView reloadData];
+        if ([self validateInputControls]) {
+            if (completion) {
+                completion(YES);
+            }
+        } else {
+            [self.tableView reloadData];
+            if (completion) {
+                completion(NO);
+            }
+        }
     } @weakselfend viewControllerToDismiss:self];
-    
     [self.reportClient updatedInputControlsValues:self.resourceLookup.uri
                                               ids:allInputControls
                                    selectedValues:selectedValues
                                          delegate:delegate];
-}
-
-#pragma mark - Private
-// Returns input control types
-- (NSDictionary *)inputControlDescriptorTypes
-{
-    return @{
-             self.constants.ICD_TYPE_BOOL :                   @"BooleanCell",
-             self.constants.ICD_TYPE_SINGLE_VALUE_TEXT :      @"TextEditCell",
-             self.constants.ICD_TYPE_SINGLE_VALUE_NUMBER :    @"NumberCell",
-             self.constants.ICD_TYPE_SINGLE_VALUE_DATE :      @"DateCell",
-             self.constants.ICD_TYPE_SINGLE_VALUE_TIME :      @"TimeCell",
-             self.constants.ICD_TYPE_SINGLE_VALUE_DATETIME :  @"DateTimeCell",
-             self.constants.ICD_TYPE_SINGLE_SELECT :          @"SingleSelectCell",
-             self.constants.ICD_TYPE_SINGLE_SELECT_RADIO :    @"SingleSelectCell",
-             self.constants.ICD_TYPE_MULTI_SELECT :           @"MultiSelectCell",
-             self.constants.ICD_TYPE_MULTI_SELECT_CHECKBOX :  @"MultiSelectCell",
-             };
 }
 
 @end
