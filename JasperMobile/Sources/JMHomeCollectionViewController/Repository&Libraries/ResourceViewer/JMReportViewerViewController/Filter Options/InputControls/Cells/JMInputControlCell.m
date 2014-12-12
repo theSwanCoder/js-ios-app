@@ -27,6 +27,10 @@
 
 #import "JMInputControlCell.h"
 
+@interface JMInputControlCell()
+@property (nonatomic, weak) IBOutlet UIView  *valuePlaceHolderView;
+@end
+
 @implementation JMInputControlCell
 
 - (void)awakeFromNib
@@ -38,6 +42,22 @@
     self.detailTextLabel.textColor = [UIColor redColor];
     self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
 }
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+
+    CGRect titleLabelRect = self.textLabel.frame;
+    titleLabelRect.size.width = self.contentView.frame.size.width - 3 * titleLabelRect.origin.x - self.valuePlaceHolderView.frame.size.width;
+    self.textLabel.frame = titleLabelRect;
+    
+    if ([self.inputControlDescriptor errorString]) {
+        CGRect errorLabelRect = self.detailTextLabel.frame;
+        errorLabelRect.origin.y = 2 * self.valuePlaceHolderView.frame.origin.y + self.valuePlaceHolderView.frame.size.height;
+        self.detailTextLabel.frame = errorLabelRect;
+    }
+}
+
 
 - (void) updateDisplayingOfErrorMessage
 {

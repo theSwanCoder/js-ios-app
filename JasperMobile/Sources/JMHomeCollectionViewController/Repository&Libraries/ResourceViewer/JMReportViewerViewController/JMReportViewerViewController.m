@@ -52,11 +52,11 @@
     [super viewDidAppear:animated];
     [self updateToobarAppearence];
 
-    if (![JMRequestDelegate isRequestPoolEmpty]) {
-        [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.reportViewer.reportClient cancelBlock:@weakself(^(void)) {
-            [self.reportViewer cancelReport];
-        } @weakselfend];
-    }
+//    if (![JMRequestDelegate isRequestPoolEmpty]) {
+//        [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.reportViewer.reportClient cancelBlock:@weakself(^(void)) {
+//            [self.reportViewer cancelReport];
+//        } @weakselfend];
+//    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

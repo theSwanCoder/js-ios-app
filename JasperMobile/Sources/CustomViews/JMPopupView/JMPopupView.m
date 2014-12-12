@@ -33,7 +33,8 @@ static NSMutableArray* visiblePopupsArray = nil;
 @implementation JMPopupView
 @synthesize contentView = _contentView;
 
-- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type{
+- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type
+{
     self = [super init];
     if (self) {
         if (!visiblePopupsArray) {
@@ -88,14 +89,16 @@ static NSMutableArray* visiblePopupsArray = nil;
     return self;
 }
 
-+ (BOOL)isShowedPopup{
++ (BOOL)isShowedPopup
+{
     if ([visiblePopupsArray count]) {
         return YES;
     }
     return NO;
 }
 
-- (void)setContentView:(UIView *)contentView{
+- (void)setContentView:(UIView *)contentView
+{
     _contentView = contentView;
     switch (self.type) {
         case JMPopupViewType_ContentViewOnly:
@@ -109,11 +112,13 @@ static NSMutableArray* visiblePopupsArray = nil;
     [_backGroundView addSubview:_contentView];
 }
 
-- (void) show{
+- (void) show
+{
     [self showFromPoint:CGPointZero onView:nil];
 }
 
-- (void) showFromPoint:(CGPoint)point onView:(UIView*)view{
+- (void) showFromPoint:(CGPoint)point onView:(UIView*)view
+{
     if (self.animatedNow) {
         return;
     }
@@ -245,10 +250,21 @@ static NSMutableArray* visiblePopupsArray = nil;
     [visiblePopupsArray removeObject:self];
 }
 
-+ (void)dismissAllVisiblePopups:(BOOL)animated{
++ (void)dismissAllVisiblePopups:(BOOL)animated
+{
     for (JMPopupView* popup in visiblePopupsArray) {
         [popup dismiss:animated];
     }
+}
+
++ (JMPopupView *)displayedPopupViewForClass:(Class)someClass
+{
+    for (JMPopupView* popup in visiblePopupsArray) {
+        if ([popup isKindOfClass:someClass]) {
+            return popup;
+        }
+    }
+    return nil;
 }
 
 - (void)drawRect:(CGRect)rect

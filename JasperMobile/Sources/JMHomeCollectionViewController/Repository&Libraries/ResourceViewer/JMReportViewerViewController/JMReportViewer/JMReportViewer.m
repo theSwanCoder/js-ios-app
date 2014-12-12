@@ -70,7 +70,6 @@ objection_requires(@"resourceClient", @"reportClient")
     if (self) {
         [[JSObjection defaultInjector] injectDependencies:self];
         self.icUndoManager = [NSUndoManager new];
-//        [self resetReportViewer];
         self.resourceLookup = resource;
         self.errorExecutionBlock = @weakself(^(JSOperationResult *result)){
             NSString *title = nil;
@@ -174,11 +173,9 @@ objection_requires(@"resourceClient", @"reportClient")
 
 - (void) runReportExecution
 {
-    if (self.outputResourceType & JMReportViewerOutputResourceType_AlreadyLoaded) {
-        [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
-            [self cancelReport];
-        } @weakselfend];
-    }
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
+        [self cancelReport];
+    } @weakselfend];
 
     [self resetReportViewer];
     
