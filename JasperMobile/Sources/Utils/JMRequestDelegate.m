@@ -119,6 +119,7 @@ __weak static UIViewController *viewControllerToDismiss;
 
 + (void)clearRequestPool
 {
+    [JMUtils hideNetworkActivityIndicator];
     [requestDelegatePool removeAllObjects];
     finalBlock = nil;
     viewControllerToDismiss = nil;
@@ -183,6 +184,7 @@ __weak static UIViewController *viewControllerToDismiss;
         [requestDelegatePool removeObject:self];
         
         if ([JMRequestDelegate isRequestPoolEmpty]) {
+            [JMUtils hideNetworkActivityIndicator];
             [JMCancelRequestPopup dismiss];
             viewControllerToDismiss = nil;
 

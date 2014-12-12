@@ -79,4 +79,7 @@ typedef NS_ENUM(NSInteger, JMPopupViewType) {
 
 - (void) dismiss:(BOOL)animated;
 
++ (void)dismissAllVisiblePopups:(BOOL)animated;
+
++ (JMPopupView *)displayedPopupViewForClass:(Class)someClass;
 @end

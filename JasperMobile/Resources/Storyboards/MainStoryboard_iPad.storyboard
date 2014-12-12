@@ -136,7 +136,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="aAu-TZ-uTc">
-                                                    <rect key="frame" x="499.99999975121534" y="7" width="230" height="30"/>
+                                                    <rect key="frame" x="499.99999924543692" y="7" width="230" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -148,6 +148,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="textField" destination="aAu-TZ-uTc" id="nld-Gf-aPg"/>
+                                            <outlet property="valuePlaceHolderView" destination="aAu-TZ-uTc" id="i9N-pT-znJ"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NumberCell" textLabel="lgf-z4-MQx" detailTextLabel="h7c-ol-QKg" style="IBUITableViewCellStyleSubtitle" id="cSM-Zu-sDB" customClass="JMNumberInputControlCell">
@@ -172,7 +173,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="7lU-wU-f6G">
-                                                    <rect key="frame" x="499.99999975121534" y="7" width="230" height="30"/>
+                                                    <rect key="frame" x="499.99999924543692" y="7" width="230" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
@@ -184,6 +185,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="textField" destination="7lU-wU-f6G" id="Pbd-jh-xSk"/>
+                                            <outlet property="valuePlaceHolderView" destination="7lU-wU-f6G" id="zaN-Py-VUs"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DateCell" textLabel="Fej-83-aRg" detailTextLabel="KXW-yI-bhx" style="IBUITableViewCellStyleSubtitle" id="PXZ-VK-a2p" customClass="JMDateInputControlCell">
@@ -208,7 +210,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Z1Q-Mf-9jN">
-                                                    <rect key="frame" x="499.99999975121534" y="7" width="230" height="30"/>
+                                                    <rect key="frame" x="499.99999924543692" y="7" width="230" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -220,6 +222,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="textField" destination="Z1Q-Mf-9jN" id="Swx-4i-YAe"/>
+                                            <outlet property="valuePlaceHolderView" destination="Z1Q-Mf-9jN" id="CQW-sy-U6g"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TimeCell" textLabel="fEP-1E-myi" detailTextLabel="QHb-Zf-Ac2" style="IBUITableViewCellStyleSubtitle" id="y8K-Hm-P2T" customClass="JMTimeInputControlCell">
@@ -244,7 +247,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="gTU-4j-KuO">
-                                                    <rect key="frame" x="499.99999975121534" y="7" width="230" height="30"/>
+                                                    <rect key="frame" x="499.99999924543692" y="7" width="230" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -256,6 +259,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="textField" destination="gTU-4j-KuO" id="ceq-Eh-XVY"/>
+                                            <outlet property="valuePlaceHolderView" destination="gTU-4j-KuO" id="CSD-32-XFK"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DateTimeCell" textLabel="CKK-DJ-IgP" detailTextLabel="ZH5-Jf-6jA" style="IBUITableViewCellStyleSubtitle" id="R6U-wL-vgB" customClass="JMDateTimeInputControlCell">
@@ -280,7 +284,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="4sd-n2-9lB">
-                                                    <rect key="frame" x="499.99999975121534" y="7" width="230" height="30"/>
+                                                    <rect key="frame" x="499.99999924543692" y="7" width="230" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -292,6 +296,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="textField" destination="4sd-n2-9lB" id="Ne1-XJ-ANg"/>
+                                            <outlet property="valuePlaceHolderView" destination="4sd-n2-9lB" id="8NP-aQ-qCi"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SingleSelectCell" textLabel="ChB-as-vms" detailTextLabel="cG9-Ev-zlE" style="IBUITableViewCellStyleSubtitle" id="dHQ-LR-cm2" customClass="JMSingleSelectInputControlCell">
@@ -315,30 +320,22 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <view contentMode="scaleToFill" id="dGq-SB-HsX">
-                                                    <rect key="frame" x="360" y="7" width="370" height="30"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9Dj-hp-gT5">
+                                                    <rect key="frame" x="485" y="15" width="230" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                                                    <subviews>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hqu-Eu-6qc">
-                                                            <rect key="frame" x="0.0" y="8" width="342" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow.png" id="Rj8-Th-c0r">
-                                                            <rect key="frame" x="350" y="3" width="20" height="24"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </imageView>
-                                                    </subviews>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </view>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow.png" id="GCj-En-Xam">
+                                                    <rect key="frame" x="715" y="0.0" width="20" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="valueLabel" destination="hqu-Eu-6qc" id="7Re-tL-Ram"/>
-                                            <outlet property="valuePlaceHolderView" destination="dGq-SB-HsX" id="KGu-Xp-ew9"/>
+                                            <outlet property="valueLabel" destination="9Dj-hp-gT5" id="EiZ-FB-8xP"/>
+                                            <outlet property="valuePlaceHolderView" destination="9Dj-hp-gT5" id="BiO-0o-UNe"/>
                                             <segue destination="LcZ-38-AAI" kind="push" id="1jO-hY-A1B"/>
                                         </connections>
                                     </tableViewCell>
@@ -363,30 +360,22 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <view contentMode="scaleToFill" id="aRT-pA-wfq">
-                                                    <rect key="frame" x="360" y="7" width="370" height="30"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qG3-sx-gmj">
+                                                    <rect key="frame" x="485" y="15" width="230" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                                                    <subviews>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="op4-qG-Fbk">
-                                                            <rect key="frame" x="0.0" y="8" width="342" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow.png" id="2gN-f9-beI">
-                                                            <rect key="frame" x="350" y="3" width="20" height="24"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </imageView>
-                                                    </subviews>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </view>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow.png" id="IuJ-AU-pNF">
+                                                    <rect key="frame" x="715" y="0.0" width="20" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="valueLabel" destination="op4-qG-Fbk" id="ZOc-wI-dgx"/>
-                                            <outlet property="valuePlaceHolderView" destination="aRT-pA-wfq" id="3YN-dc-a5n"/>
+                                            <outlet property="valueLabel" destination="qG3-sx-gmj" id="JKp-ab-UUr"/>
+                                            <outlet property="valuePlaceHolderView" destination="qG3-sx-gmj" id="F2f-4c-lYK"/>
                                             <segue destination="O3L-Ib-kiX" kind="push" id="zXE-gF-hUY"/>
                                         </connections>
                                     </tableViewCell>

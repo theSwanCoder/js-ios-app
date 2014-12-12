@@ -31,12 +31,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
 
-
-static JMCancelRequestPopup *instance;
-
 @interface JMCancelRequestPopup ()
-@property (nonatomic, strong) NSMutableArray *restClients;
-@property (nonatomic, strong) NSMutableArray *cancelBlocks;
+@property (nonatomic, strong) JSRESTBase *restClient;
+@property (nonatomic, copy) JMCancelRequestBlock cancelBlock;
 @property (nonatomic, weak) IBOutlet UIButton *cancelButton;
 @property (nonatomic, weak) IBOutlet UILabel *progressLabel;
 @end
@@ -46,55 +43,45 @@ static JMCancelRequestPopup *instance;
 #pragma mark - Class Methods
 
 + (void)presentWithMessage:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock {
-    if (!instance) {
-        instance = [[JMCancelRequestPopup alloc] initWithDelegate:nil type:JMPopupViewType_ContentViewOnly];
-        UIView *nibView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] lastObject];
-        instance.contentView = nibView;
+    JMCancelRequestPopup *popup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:[self class]];
+    if (!popup) {
+        popup = [[JMCancelRequestPopup alloc] initWithDelegate:nil type:JMPopupViewType_ContentViewOnly];
+        UIView *nibView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:popup options:nil] lastObject];
+        popup->_backGroundView.layer.cornerRadius = 5.f;
+        popup->_backGroundView.layer.masksToBounds = YES;
+        popup.contentView = nibView;
+        [popup show];
     }
-    instance.progressLabel.text = JMCustomLocalizedString(message, nil);
-    [instance.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
-    if (client) {
-        [instance.restClients addObject:client];
-    }
-    if (cancelBlock) {
-        [instance.cancelBlocks addObject:[cancelBlock copy]];
-    }
-    [instance show];
-}
-
-- (void)showFromPoint:(CGPoint)point onView:(UIView *)view
-{
+    popup.progressLabel.text = JMCustomLocalizedString(message, nil);
+    [popup.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
+    popup.restClient = client;
+    popup.cancelBlock = cancelBlock;
     [JMUtils showNetworkActivityIndicator];
-    [super showFromPoint:point onView:view];
 }
 
 - (void)dismiss:(BOOL)animated
 {
-    [self.restClients removeAllObjects];
-    [self.cancelBlocks removeAllObjects];
     [super dismiss:animated];
+    [JMUtils hideNetworkActivityIndicator];
 }
 
 #pragma mark - Actions
 - (IBAction)cancelRequests:(id)sender
 {
-    for (JSRESTBase *restClient in self.restClients) {
-        [restClient cancelAllRequests];
-    }
+    [self.restClient cancelAllRequests];
 
     [JMRequestDelegate clearRequestPool];
-    [JMUtils hideNetworkActivityIndicator];
-    
-    for (JMCancelRequestBlock block in self.cancelBlocks) {
-        block();
+
+    if (self.cancelBlock) {
+        self.cancelBlock();
     }
     
-    [self dismiss];
+    [self dismiss:YES];
 }
 
 + (void) dismiss
 {
-    [instance dismiss:YES];
+    [JMPopupView dismissAllVisiblePopups:YES];
 }
 
 @end

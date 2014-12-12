@@ -36,16 +36,6 @@
     self.textField.inputAccessoryView = [self toolbarForInputAccessoryView];
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    if ([self.inputControlDescriptor errorString]) {
-        CGRect errorLabelRect = self.detailTextLabel.frame;
-        errorLabelRect.origin.y = 2 * self.textField.frame.origin.y + self.textField.frame.size.height;
-        self.detailTextLabel.frame = errorLabelRect;
-    }
-}
-
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];

@@ -29,7 +29,6 @@
 
 @interface JMSingleSelectInputControlCell()
 @property (nonatomic, weak) IBOutlet UILabel *valueLabel;
-@property (nonatomic, weak) IBOutlet UIView  *valuePlaceHolderView;
 @end
 
 @implementation JMSingleSelectInputControlCell
@@ -38,16 +37,6 @@
 {
     [super setEnabledCell:enabled];
     self.userInteractionEnabled = enabled;
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    if ([self.inputControlDescriptor errorString]) {
-        CGRect errorLabelRect = self.detailTextLabel.frame;
-        errorLabelRect.origin.y = 2 * self.valuePlaceHolderView.frame.origin.y + self.valuePlaceHolderView.frame.size.height;
-        self.detailTextLabel.frame = errorLabelRect;
-    }
 }
 
 - (void)updateWithParameters:(NSArray *)parameters
