@@ -36,7 +36,7 @@
  be performed (which adapts and move data from old to new database structure)
 
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @author Alexey Gubarev agubarev@jaspersoft.com
+ @author Alexey Gubarev ogubarie@tibco.com
 
  @since 1.6
  */

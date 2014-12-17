@@ -27,7 +27,7 @@
 //
 
 /**
- @author Alexey Gubarev agubarev@jaspersoft.com
+ @author Alexey Gubarev ogubarie@tibco.com
  @since 1.9
  */
 
@@ -37,6 +37,8 @@
 @class JMServerOptionCell;
 @protocol JMServerOptionCellDelegate <NSObject>
 @required
+- (void) reloadTableViewCell:(JMServerOptionCell *)cell;
+
 - (void) makeActiveButtonTappedOnTableViewCell:(JMServerOptionCell *)cell;
 
 @end

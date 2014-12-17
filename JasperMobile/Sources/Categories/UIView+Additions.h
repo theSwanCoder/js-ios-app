@@ -27,7 +27,7 @@
 //
 
 /**
- @author Alexey Gubarev agubarev@jaspersoft.com
+ @author Alexey Gubarev ogubarie@tibco.com
  @author Oleksandr Dahno odahno@tibco.com
  @since 1.9
  */

@@ -44,40 +44,18 @@
     self.textField.text = serverOption.optionValue;
 }
 
+
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-
-    CGFloat textFieldPadding = self.contentView.frame.size.width - self.textField.frame.size.width - self.textField.frame.origin.x;
-    
-    CGRect textLabelFrame = self.textLabel.frame;
-    textLabelFrame.size.width = self.contentView.frame.size.width - self.textField.frame.size.width - textLabelFrame.origin.x - 2 * textFieldPadding;
     if (self.serverOption.errorString) {
-        textLabelFrame.origin.y = 5;
+        CGRect errorLabelRect = self.detailTextLabel.frame;
+        errorLabelRect.origin.y = 2 * self.textField.frame.origin.y + self.textField.frame.size.height;
+        self.detailTextLabel.frame = errorLabelRect;
     }
-    self.textLabel.frame = textLabelFrame;
-    
-    CGRect detailTextLabelFrame = self.detailTextLabel.frame;
-    detailTextLabelFrame.origin.y = textLabelFrame.origin.y + textLabelFrame.size.height;
-    detailTextLabelFrame.size.width = self.contentView.frame.size.width - self.textField.frame.size.width - detailTextLabelFrame.origin.x - 2 * textFieldPadding;
-    CGSize errorTextSize = [self.serverOption.errorString boundingRectWithSize:CGSizeMake(detailTextLabelFrame.size.width, CGFLOAT_MAX)
-                                                                       options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-                                                                    attributes:@{NSFontAttributeName:[JMFont tableViewCellDetailErrorFont]}
-                                                                       context:nil].size;
-    detailTextLabelFrame.size.height = errorTextSize.height;
-    self.detailTextLabel.frame = detailTextLabelFrame;
 }
 
 #pragma mark - UITextFieldDelegate
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-    if (self.serverOption.errorString) {
-        self.serverOption.errorString = nil;
-        [self updateDisplayingOfErrorMessage];
-    }
-    return YES;
-}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -86,7 +64,8 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    self.serverOption.optionValue = textField.text;
+    self.serverOption.optionValue = textField.text ? : nil;
+    [self updateDisplayingOfErrorMessage];
 }
 
 #pragma mark - Actions

@@ -42,7 +42,6 @@
 - (void)updateWithParameters:(NSArray *)parameters
 {
     [self updateValueLabelWithParameters:parameters];
-
     [self.delegate updatedInputControlsValuesWithDescriptor:self.inputControlDescriptor];
 }
 
@@ -55,7 +54,6 @@
 - (void)setInputControlState:(JSInputControlState *)state
 {
     self.inputControlDescriptor.state = state;
-    
     NSMutableArray *selectedValues = [NSMutableArray array];
     for (JSInputControlOption *option in state.options) {
         if (option.selected.boolValue) {
@@ -71,10 +69,9 @@
         NSArray *allValues = [parameters sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             return [[obj1 label] compare:[obj2 label]];
         }];
-        
         NSMutableString *valuesAsStrings = [NSMutableString string];
         for (JSInputControlOption *option in allValues) {
-            NSString *formatString = [valuesAsStrings  length] ? @", %@" : @"%@";
+            NSString *formatString = [valuesAsStrings length] ? @", %@" : @"%@";
             [valuesAsStrings appendFormat:formatString, option.label];
         }
         self.inputControlDescriptor.state.value = valuesAsStrings;
@@ -85,4 +82,5 @@
     }
     [self updateDisplayingOfErrorMessage];
 }
+
 @end

@@ -32,8 +32,9 @@ static JMRequestDelegateFinalBlock finalBlock;
 __weak static UIViewController *viewControllerToDismiss;
 
 #import "JMCancelRequestPopup.h"
-#import "UIAlertView+LocalizedAlert.h"
 #import "JMUtils.h"
+#import "RestKit/RKErrors.h"
+
 
 @interface JMRequestDelegate()
 @property (nonatomic, copy) JSRequestFinishedBlock finishedBlock;
@@ -141,6 +142,9 @@ __weak static UIViewController *viewControllerToDismiss;
             if (result.statusCode) {
                 title = @"error.readingresponse.dialog.msg";
                 message = [NSString stringWithFormat:@"error.http.%li", (long)result.statusCode];
+            } else if ([result.error.domain isEqualToString:RKErrorDomain] && result.error.code == RKRequestConnectionTimeoutError) {
+                title = @"error.readingresponse.dialog.msg";
+                message = @"error.http.504";
             } else {
                 switch (result.error.code) {
                     case NSURLErrorUserCancelledAuthentication:
@@ -153,7 +157,7 @@ __weak static UIViewController *viewControllerToDismiss;
                         title = @"error.unknownhost.dialog.title";
                         message = @"error.unknownhost.dialog.msg" ;
                         break;
-                        
+                    
                     default:
                         title = @"error.noconnection.dialog.title";
                         message = @"error.noconnection.dialog.msg";

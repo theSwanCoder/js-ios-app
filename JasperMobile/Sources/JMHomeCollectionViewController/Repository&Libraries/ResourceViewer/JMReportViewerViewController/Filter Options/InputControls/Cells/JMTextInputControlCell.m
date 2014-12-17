@@ -49,10 +49,16 @@
 }
 
 #pragma mark - UITextFieldDelegate
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     return [textField resignFirstResponder];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.inputControlDescriptor.state.value = textField.text ? textField.text : nil;
+    self.inputControlDescriptor.state.error = nil;
+    [self updateDisplayingOfErrorMessage];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -60,17 +66,14 @@
     NSString *value = [textField.text stringByReplacingCharactersInRange:range withString:string];
     self.inputControlDescriptor.state.value = value.length ? value : nil;
     self.inputControlDescriptor.state.error = nil;
-    
     [self updateDisplayingOfErrorMessage];
     return YES;
 }
 
 #pragma mark - Actions
-
 - (void)doneButtonTapped:(id)sender
 {
     self.inputControlDescriptor.state.value = self.textField.text;
     [self.textField resignFirstResponder];
 }
-
 @end

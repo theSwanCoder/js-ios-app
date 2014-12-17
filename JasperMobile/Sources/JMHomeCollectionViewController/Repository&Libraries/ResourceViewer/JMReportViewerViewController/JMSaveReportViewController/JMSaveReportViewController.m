@@ -27,7 +27,6 @@
 #import "JMCancelRequestPopup.h"
 #import "JMRequestDelegate.h"
 #import "ALToastView.h"
-#import "UIAlertView+LocalizedAlert.h"
 
 NSString * const kJMSaveReportViewControllerSegue = @"SaveReportViewControllerSegue";
 NSString * const kJMAttachmentPrefix = @"_";

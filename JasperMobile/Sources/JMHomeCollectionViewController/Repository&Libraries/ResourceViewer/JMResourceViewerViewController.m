@@ -26,7 +26,7 @@
 #import "PopoverView.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMResourceInfoViewController.h"
-
+#import "ALToastView.h"
 
 @interface JMResourceViewerViewController () <PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
@@ -171,6 +171,24 @@ objection_requires(@"resourceClient", @"resourceLookup")
 }
 
 #pragma mark - UIWebViewDelegate
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSString *serverHost = [NSURL URLWithString:self.resourceClient.serverProfile.serverUrl].host;
+    if (![request.URL.host isEqualToString:serverHost] && navigationType == UIWebViewNavigationTypeLinkClicked) {
+        if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
+            [[UIAlertView localizedAlertWithTitle:nil message:@"detail.resource.viewer.open.link" completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                if (alertView.cancelButtonIndex != buttonIndex) {
+                    [[UIApplication sharedApplication] openURL:request.URL];
+                }
+            } cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
+        } else {
+            [ALToastView toastInView:webView withText:JMCustomLocalizedString(@"detail.resource.viewer.can't.open.link", nil)];
+        }
+        return NO;
+    }
+    return YES;
+}
+
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     [self.activityIndicator startAnimating];

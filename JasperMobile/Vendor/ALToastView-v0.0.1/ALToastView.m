@@ -25,7 +25,7 @@
 
 //
 //  Modified by Vlad Zavadskii vzavadskii@jaspersoft.com on 14.02.14.
-//  Modified by Aleksey Gubarev agubarev@jaspersoft.com on 14.02.14.
+//  Modified by Aleksey Gubarev ogubarie@tibco.com on 14.02.14.
 //
 
 #import <QuartzCore/QuartzCore.h>

@@ -34,41 +34,35 @@
     [super awakeFromNib];
     self.textLabel.font = [JMFont tableViewCellTitleFont];
     self.textLabel.textColor = [UIColor darkGrayColor];
-    
     self.detailTextLabel.font = [JMFont tableViewCellDetailErrorFont];
     self.detailTextLabel.textColor = [UIColor redColor];
-
     self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    CGRect titleLabelFrame = self.textLabel.frame;
+    titleLabelFrame.size.width = ceil(self.valuePlaceHolderView.frame.origin.x - titleLabelFrame.origin.x);
+    self.textLabel.frame = titleLabelFrame;
     
-    if (self.detailTextLabel.text && self.detailTextLabel.text.length) {
-        CGFloat accessoryViewPadding = self.contentView.frame.size.width - self.accessoryView.frame.size.width - self.accessoryView.frame.origin.x;
-        CGRect detailTextLabelFrame = self.detailTextLabel.frame;
-        detailTextLabelFrame.origin.y = self.textLabel.frame.origin.y + self.textLabel.frame.size.height;
-        detailTextLabelFrame.size.width = self.contentView.frame.size.width - 2 * accessoryViewPadding;
-        detailTextLabelFrame.size.height = ceilf(self.detailTextLabel.font.lineHeight);
-        self.detailTextLabel.frame = detailTextLabelFrame;
+    if ([self.inputControlDescriptor errorString]) {
+        CGRect errorLabelRect = self.detailTextLabel.frame;
+        errorLabelRect.origin.y = self.valuePlaceHolderView.frame.origin.y + self.valuePlaceHolderView.frame.size.height;
+        self.detailTextLabel.frame = errorLabelRect;
     }
 }
 
 - (void) updateDisplayingOfErrorMessage
 {
-    self.detailTextLabel.text = [self errorMessage];
-    [self setNeedsLayout];
-    [self layoutIfNeeded];
+    self.detailTextLabel.text = [self.inputControlDescriptor errorString];
+    [self.delegate reloadTableViewCell:self];
 }
-
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     _inputControlDescriptor = inputControlDescriptor;
-
     [self setEnabledCell:(!inputControlDescriptor.readOnly.boolValue)];
-    
     if (inputControlDescriptor.mandatory.boolValue) {
         self.textLabel.text = [NSString stringWithFormat:@"* %@",inputControlDescriptor.label];
     } else {
@@ -86,20 +80,10 @@
     }
 }
 
-- (NSString *)errorMessage
-{
-    if (self.inputControlDescriptor.validationRules.mandatoryValidationRule && self.inputControlDescriptor.state.value == nil) {
-        return self.inputControlDescriptor.validationRules.mandatoryValidationRule.errorMessage;
-    } else if ([self.inputControlDescriptor.state.error length]) {
-        return self.inputControlDescriptor.state.error;
-    }
-    return nil;
-}
-
 - (BOOL)isValidData
 {
     [self updateDisplayingOfErrorMessage];
-    return ![self errorMessage];
+    return ![self.inputControlDescriptor errorString];
 }
 
 @end

@@ -24,7 +24,6 @@
 #import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"
 #import "UIViewController+fetchInputControls.h"
-#import "UIAlertView+LocalizedAlert.h"
 
 typedef NS_ENUM(NSInteger, JMReportViewerOutputResourceType) {
     JMReportViewerOutputResourceType_None = 0,
@@ -52,6 +51,7 @@ NSString * const kJMRestStatusReady = @"ready";
 @property (nonatomic, readwrite) NSInteger countOfPages;
 @property (nonatomic, readwrite) BOOL multiPageReport;
 
+@property (nonatomic, copy) JSRequestFinishedBlock errorExecutionBlock;
 @end
 
 @implementation JMReportViewer
@@ -71,6 +71,21 @@ objection_requires(@"resourceClient", @"reportClient")
         self.icUndoManager = [NSUndoManager new];
         [self resetReportViewer];
         self.resourceLookup = resource;
+        self.errorExecutionBlock = @weakself(^(JSOperationResult *result)){
+            NSString *title = nil;
+            NSString *message = nil;
+            if ([result.objects count] && [[result.objects objectAtIndex:0] isKindOfClass:[JSErrorDescriptor class]]){
+                JSErrorDescriptor *error = [result.objects objectAtIndex:0];
+                title = error.errorCode;
+                message = error.message;
+            } else {
+                title = result.error.domain;
+                message = result.error.localizedDescription;
+            }
+            [[UIAlertView alertWithTitle:title message:message completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                [self cancelReport];
+            } @weakselfend cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil) otherButtonTitles:nil] show];
+        }@weakselfend;
     }
     return self;
 }
@@ -159,7 +174,7 @@ objection_requires(@"resourceClient", @"reportClient")
             [self runExportExecutionForPage:self.currentPage];
         }
     } @weakselfend
-    errorBlock:nil
+    errorBlock:self.errorExecutionBlock
     viewControllerToDismiss:(!self.requestId) ? self.delegate : nil];
     
     NSMutableArray *parameters = [NSMutableArray array];
@@ -170,9 +185,16 @@ objection_requires(@"resourceClient", @"reportClient")
     BOOL interactive = !((self.reportClient.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) &&
                         (self.reportClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0));
     
+    NSString *attachemntPreffix = [JSConstants sharedInstance].REST_EXPORT_EXECUTION_ATTACHMENTS_PREFIX_URI;
+    
+    // Fix for JRS version smaller 5.6.0
+    if (self.reportClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) {
+        attachemntPreffix = nil;
+    }
+
     [self.reportClient runReportExecution:self.resourceLookup.uri async:YES outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML
                               interactive:interactive freshData:YES saveDataSnapshot:NO ignorePagination:NO transformerKey:nil
-                                    pages:nil attachmentsPrefix:nil parameters:parameters delegate:requestDelegate];
+                                    pages:nil attachmentsPrefix:attachemntPreffix parameters:parameters delegate:requestDelegate];
 }
 
 - (void) runExportExecutionForPage:(NSInteger)page
@@ -197,7 +219,7 @@ objection_requires(@"resourceClient", @"reportClient")
                 [self.exportIdsDictionary setObject:export.uuid forKey:@(page)];
                 [self loadOutputResourcesForPage:page];
             } @weakselfend
-            errorBlock:nil
+            errorBlock:self.errorExecutionBlock
             viewControllerToDismiss:nil];
             
             NSString *pagesString = [NSString stringWithFormat:@"%zd", page];
@@ -229,8 +251,8 @@ objection_requires(@"resourceClient", @"reportClient")
     
     void (^errorHandlerBlock)(NSInteger page, JSOperationResult *result) = ^(NSInteger page, JSOperationResult *result){
         JSErrorDescriptor *error = [result.objects objectAtIndex:0];
-        if (!page == self.currentPage) {
-            [UIAlertView localizedAlertWithTitle:nil message:error.message delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil];
+        if (page == self.currentPage) {
+            self.errorExecutionBlock(result);
         } else {
             if ([error.errorCode isEqualToString:@"illegal.parameter.value.error"] ||
                 [error.errorCode isEqualToString:@"export.pages.out.of.range"] ||

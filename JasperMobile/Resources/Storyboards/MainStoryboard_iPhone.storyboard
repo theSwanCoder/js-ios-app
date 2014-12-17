@@ -224,7 +224,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cBr-n4-zHN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2294" y="381"/>
+            <point key="canvasLocation" x="-963" y="1139"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="Pxq-ub-7j9">
@@ -235,7 +235,7 @@ your business wherever you are.</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="rlX-nI-jyN">
-                                <rect key="frame" x="10" y="40" width="300" height="454"/>
+                                <rect key="frame" x="10" y="40" width="300" height="427"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -253,8 +253,8 @@ your business wherever you are.</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="SsL-u6-ztx">
-                                                    <rect key="frame" x="240.00000055515233" y="7" width="50" height="30"/>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="SsL-u6-ztx">
+                                                    <rect key="frame" x="240.00000036379382" y="7" width="50" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -338,6 +338,9 @@ your business wherever you are.</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="xn9-yo-qkQ" kind="modal" identifier="showOnboardIntro" id="2oQ-RG-NL8"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>
@@ -353,19 +356,32 @@ your business wherever you are.</string>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="W2c-Br-aZQ">
+                                <rect key="frame" x="16" y="470" width="288" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleColor" red="0.10378349277447298" green="0.21454571892246535" blue="0.65865688131313127" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="HUE-Pz-nie" kind="push" id="fYZ-mM-hrJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <navigationItem key="navigationItem" id="c6G-s2-JXd"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
+                        <outlet property="privacyPolicyButton" destination="W2c-Br-aZQ" id="7Nt-b9-UUH"/>
                         <outlet property="settingsTitleLabel" destination="gHG-rA-RNx" id="2cQ-Fb-PxM"/>
                         <outlet property="tableView" destination="rlX-nI-jyN" id="9Xi-Yn-9wH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4ZJ-X0-S7j" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1720" y="381"/>
+            <point key="canvasLocation" x="-963" y="377"/>
         </scene>
         <!--Servers Grid View Controller-->
         <scene sceneID="5GV-3W-HWv">
@@ -429,7 +445,7 @@ your business wherever you are.</string>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5fg-Za-OVu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1720" y="1097"/>
+            <point key="canvasLocation" x="-361" y="377"/>
         </scene>
         <!--Server Options View Controller-->
         <scene sceneID="SMK-7A-9S1">
@@ -459,7 +475,7 @@ your business wherever you are.</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Zt7-rO-5Rd">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Zt7-rO-5Rd">
                                                     <rect key="frame" x="15" y="27" width="43" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -467,9 +483,9 @@ your business wherever you are.</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="76m-km-THx">
-                                                    <rect key="frame" x="170" y="10" width="120" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="76m-km-THx">
+                                                    <rect key="frame" x="170.00000065684998" y="7" width="120" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                                                     <connections>
@@ -479,6 +495,7 @@ your business wherever you are.</string>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="delegate" destination="eqA-kU-IH2" id="fVp-Nx-13h"/>
                                             <outlet property="textField" destination="76m-km-THx" id="LA6-hR-5IH"/>
                                         </connections>
                                     </tableViewCell>
@@ -497,7 +514,7 @@ your business wherever you are.</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SlX-ty-bsf">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SlX-ty-bsf">
                                                     <rect key="frame" x="15" y="27" width="43" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -505,9 +522,9 @@ your business wherever you are.</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="qPt-Qz-YWo">
-                                                    <rect key="frame" x="170" y="10" width="120" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="qPt-Qz-YWo">
+                                                    <rect key="frame" x="170.00000065684998" y="7" width="120" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
                                                     <connections>
@@ -517,6 +534,7 @@ your business wherever you are.</string>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="delegate" destination="eqA-kU-IH2" id="abQ-go-jWT"/>
                                             <outlet property="textField" destination="qPt-Qz-YWo" id="5Jo-ct-wwQ"/>
                                         </connections>
                                     </tableViewCell>
@@ -551,6 +569,7 @@ your business wherever you are.</string>
                                         <connections>
                                             <outlet property="accessoryView" destination="C4L-2L-0hZ" id="ezs-T4-RWs"/>
                                             <outlet property="checkBoxButton" destination="C4L-2L-0hZ" id="qAs-HQ-Otk"/>
+                                            <outlet property="delegate" destination="eqA-kU-IH2" id="QPj-eE-V0N"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MakeActiveCell" textLabel="gSj-6g-DT1" style="IBUITableViewCellStyleDefault" id="8yv-aa-iKw" customClass="JMMakeActiveServerOptionCell">
@@ -605,7 +624,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gGQ-lj-hOZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1278" y="1097"/>
+            <point key="canvasLocation" x="272" y="377"/>
         </scene>
         <!--Resources Collection View Controller-->
         <scene sceneID="nTy-pl-FKA">
@@ -716,7 +735,7 @@ Please Wait...</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="FFl-Rt-mxS">
-                                <rect key="frame" x="10" y="40" width="300" height="366"/>
+                                <rect key="frame" x="10" y="40" width="300" height="450"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -763,16 +782,16 @@ Please Wait...</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="prW-h7-xYt">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="prW-h7-xYt">
                                                     <rect key="frame" x="15" y="29" width="43" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="WbH-FR-T3V">
-                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="WbH-FR-T3V">
+                                                    <rect key="frame" x="186.00000014185906" y="7" width="100" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                                                     <connections>
@@ -782,8 +801,8 @@ Please Wait...</string>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accessoryView" destination="WbH-FR-T3V" id="vvr-4l-fqZ"/>
                                             <outlet property="textField" destination="WbH-FR-T3V" id="jI6-c1-vsW"/>
+                                            <outlet property="valuePlaceHolderView" destination="WbH-FR-T3V" id="XKT-j7-zOo"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NumberCell" textLabel="LdD-YE-onf" detailTextLabel="XIM-lE-2fd" style="IBUITableViewCellStyleSubtitle" id="FuH-Ao-LL4" customClass="JMNumberInputControlCell">
@@ -800,16 +819,16 @@ Please Wait...</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XIM-lE-2fd">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XIM-lE-2fd">
                                                     <rect key="frame" x="15" y="29" width="43" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="wO2-Zp-RXk">
-                                                    <rect key="frame" x="413" y="10" width="221" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="wO2-Zp-RXk">
+                                                    <rect key="frame" x="186.00000014185906" y="7" width="100" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
                                                     <connections>
@@ -819,8 +838,8 @@ Please Wait...</string>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accessoryView" destination="wO2-Zp-RXk" id="CYd-hU-Q27"/>
                                             <outlet property="textField" destination="wO2-Zp-RXk" id="g8q-LD-FCz"/>
+                                            <outlet property="valuePlaceHolderView" destination="wO2-Zp-RXk" id="7tX-N4-sfM"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DateCell" textLabel="qlq-Tx-Dik" detailTextLabel="7nb-6l-i3X" style="IBUITableViewCellStyleSubtitle" id="Tsm-JU-yRW" customClass="JMDateInputControlCell">
@@ -837,16 +856,16 @@ Please Wait...</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7nb-6l-i3X">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7nb-6l-i3X">
                                                     <rect key="frame" x="15" y="29" width="43" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="cyI-ld-frz">
-                                                    <rect key="frame" x="187.00000030994417" y="10" width="100" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="cyI-ld-frz">
+                                                    <rect key="frame" x="186.00000014185906" y="7" width="100" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
                                                     <connections>
@@ -856,8 +875,8 @@ Please Wait...</string>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accessoryView" destination="cyI-ld-frz" id="rS6-cO-02L"/>
                                             <outlet property="textField" destination="cyI-ld-frz" id="c9k-FX-yZS"/>
+                                            <outlet property="valuePlaceHolderView" destination="cyI-ld-frz" id="ZyV-H0-BcR"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TimeCell" textLabel="gvb-us-M0r" detailTextLabel="AAF-P7-tEe" style="IBUITableViewCellStyleSubtitle" id="Y1b-sl-hx1" customClass="JMTimeInputControlCell">
@@ -874,16 +893,16 @@ Please Wait...</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AAF-P7-tEe">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AAF-P7-tEe">
                                                     <rect key="frame" x="15" y="29" width="43" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="9pV-Du-4ol">
-                                                    <rect key="frame" x="413" y="10" width="221" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="9pV-Du-4ol">
+                                                    <rect key="frame" x="186.00000014185906" y="7" width="100" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
                                                     <connections>
@@ -893,8 +912,8 @@ Please Wait...</string>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accessoryView" destination="9pV-Du-4ol" id="Mpp-2U-tHt"/>
                                             <outlet property="textField" destination="9pV-Du-4ol" id="GHa-hR-Xcw"/>
+                                            <outlet property="valuePlaceHolderView" destination="9pV-Du-4ol" id="eWy-F8-Md4"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DateTimeCell" textLabel="SmY-Nm-5Dd" detailTextLabel="HQW-nu-IyM" style="IBUITableViewCellStyleSubtitle" id="7ds-IM-gdc" customClass="JMDateTimeInputControlCell">
@@ -911,16 +930,16 @@ Please Wait...</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HQW-nu-IyM">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HQW-nu-IyM">
                                                     <rect key="frame" x="15" y="29" width="43" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Ab7-h2-DAV">
-                                                    <rect key="frame" x="187.0000006339277" y="10" width="100" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="Ab7-h2-DAV">
+                                                    <rect key="frame" x="187" y="7" width="100" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
                                                     <connections>
@@ -930,8 +949,8 @@ Please Wait...</string>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accessoryView" destination="Ab7-h2-DAV" id="Iyh-NV-h0B"/>
                                             <outlet property="textField" destination="Ab7-h2-DAV" id="6pX-E7-Wuy"/>
+                                            <outlet property="valuePlaceHolderView" destination="Ab7-h2-DAV" id="AaX-GT-AH3"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SingleSelectCell" textLabel="N35-x2-zg8" detailTextLabel="Y76-oS-7wN" style="IBUITableViewCellStyleSubtitle" id="Fz0-PT-jNB" customClass="JMSingleSelectInputControlCell">
@@ -948,37 +967,30 @@ Please Wait...</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y76-oS-7wN">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y76-oS-7wN">
                                                     <rect key="frame" x="15" y="29" width="43" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <view contentMode="scaleToFill" id="Atb-0e-5rr">
-                                                    <rect key="frame" x="150" y="7" width="146" height="36"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
-                                                    <subviews>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EMp-ZB-qcI">
-                                                            <rect key="frame" x="0.0" y="8" width="126" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow" id="9LN-FW-Cws">
-                                                            <rect key="frame" x="126" y="3" width="20" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </imageView>
-                                                    </subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EMp-ZB-qcI">
+                                                    <rect key="frame" x="176.00000020027159" y="12" width="100" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow" id="9LN-FW-Cws">
+                                                    <rect key="frame" x="273" y="0.0" width="17" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </view>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accessoryView" destination="Atb-0e-5rr" id="Xc6-Ge-2gx"/>
                                             <outlet property="valueLabel" destination="EMp-ZB-qcI" id="3rb-lA-xZI"/>
+                                            <outlet property="valuePlaceHolderView" destination="EMp-ZB-qcI" id="cBz-Cb-Jwt"/>
                                             <segue destination="FBW-AF-rdD" kind="push" id="4P7-aK-eEd"/>
                                         </connections>
                                     </tableViewCell>
@@ -996,37 +1008,30 @@ Please Wait...</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JzB-cd-bjc">
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JzB-cd-bjc">
                                                     <rect key="frame" x="15" y="29" width="43" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <view contentMode="scaleToFill" id="rAk-7Y-SJ9">
-                                                    <rect key="frame" x="148" y="7" width="147" height="36"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
-                                                    <subviews>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZAo-HW-CCR">
-                                                            <rect key="frame" x="0.0" y="8" width="127" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow" id="5Ra-kW-EVK">
-                                                            <rect key="frame" x="127" y="3" width="20" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        </imageView>
-                                                    </subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E8d-7p-sUz">
+                                                    <rect key="frame" x="176" y="12" width="100.0000002002716" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="accessory_arrow" id="JSV-We-xgI">
+                                                    <rect key="frame" x="273" y="0.0" width="17" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </view>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accessoryView" destination="rAk-7Y-SJ9" id="c4A-eE-YoJ"/>
-                                            <outlet property="valueLabel" destination="ZAo-HW-CCR" id="KC8-Yn-AYf"/>
+                                            <outlet property="valueLabel" destination="E8d-7p-sUz" id="vXr-Aj-dEt"/>
+                                            <outlet property="valuePlaceHolderView" destination="E8d-7p-sUz" id="0Uo-Bc-Ktc"/>
                                             <segue destination="8V9-Ow-EC7" kind="push" id="Fub-lP-R6y"/>
                                         </connections>
                                     </tableViewCell>
@@ -1050,7 +1055,7 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIY-vr-ZmM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-365" y="388"/>
+            <point key="canvasLocation" x="-361" y="-332"/>
         </scene>
         <!--Single Select Table View Controller-->
         <scene sceneID="pCI-XA-TBR">
@@ -1062,7 +1067,7 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tew-lf-EBI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-128" y="1110"/>
+            <point key="canvasLocation" x="272" y="-326"/>
         </scene>
         <!--Report Viewer View Controller-->
         <scene sceneID="awL-Ln-vHg">
@@ -1100,7 +1105,7 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K3U-4u-nW3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="21" y="-332"/>
+            <point key="canvasLocation" x="-361" y="-1084"/>
         </scene>
         <!--Multi Select Table View Controller-->
         <scene sceneID="MA0-Xs-vyz">
@@ -1112,7 +1117,7 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Atm-T3-5r4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-601" y="1110"/>
+            <point key="canvasLocation" x="272" y="-1084"/>
         </scene>
         <!--Dashboards Viewer View Controller-->
         <scene sceneID="Idq-37-0Ej">
@@ -1148,7 +1153,7 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BRF-hF-xTq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-393" y="-1144"/>
+            <point key="canvasLocation" x="-361" y="-1788"/>
         </scene>
         <!--Save Report View Controller-->
         <scene sceneID="aA7-9u-rTZ">
@@ -1170,7 +1175,7 @@ Please Wait...</string>
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="XuW-Fd-Wxs">
+                                                <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="XuW-Fd-Wxs">
                                                     <rect key="frame" x="10" y="7" width="280" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1225,7 +1230,7 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="31N-Ia-tL4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="236" y="381"/>
+            <point key="canvasLocation" x="272" y="-1788"/>
         </scene>
         <!--Saved Resource Viewer View Controller-->
         <scene sceneID="o6f-Oo-Ck4">
@@ -1259,7 +1264,7 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nrj-Qs-OHo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-451" y="-1903"/>
+            <point key="canvasLocation" x="-361" y="-2487"/>
         </scene>
         <!--Resource Info View Controller-->
         <scene sceneID="ZQd-Go-0gE">
@@ -1316,14 +1321,49 @@ Please Wait...</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wTC-Jx-UGz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="446" y="-1144"/>
+            <point key="canvasLocation" x="272" y="-2487"/>
+        </scene>
+        <!--Privacy Policy View Controller-->
+        <scene sceneID="woo-Jg-liF">
+            <objects>
+                <viewController id="HUE-Pz-nie" customClass="JMPrivacyPolicyViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6lj-Mk-grV">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" id="rph-PB-7cx">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="HUE-Pz-nie" id="TeK-Ai-CGC"/>
+                                </connections>
+                            </webView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="mLt-Z0-IUj">
+                                <rect key="frame" x="150" y="242" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="TyG-ij-tsr"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="mLt-Z0-IUj" id="bgf-UB-rs8"/>
+                        <outlet property="webView" destination="rph-PB-7cx" id="u3D-eA-v6F"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5xf-yz-7BE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-361" y="1139"/>
         </scene>
     </scenes>
     <resources>
         <image name="accessory_arrow" width="17" height="17"/>
         <image name="arrow_up" width="21" height="12"/>
         <image name="checked_checkbox.png" width="36" height="36"/>
-        <image name="gray_text_field.png" width="1" height="1"/>
+        <image name="gray_text_field" width="1" height="1"/>
         <image name="home_screen" width="282" height="470"/>
         <image name="jasper_logo" width="155" height="155"/>
         <image name="report_screen_ipad" width="198" height="265"/>
@@ -1338,9 +1378,10 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="KN6-hX-ICt"/>
         <segue reference="25f-vL-F1i"/>
+        <segue reference="KN6-hX-ICt"/>
         <segue reference="hUW-ct-uiE"/>
+        <segue reference="2oQ-RG-NL8"/>
         <segue reference="b4y-hZ-jNZ"/>
     </inferredMetricsTieBreakers>
 </document>

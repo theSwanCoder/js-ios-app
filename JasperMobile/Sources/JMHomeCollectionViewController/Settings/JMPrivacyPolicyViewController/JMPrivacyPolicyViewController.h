@@ -20,24 +20,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+
 //
-//  JSRESTBase+updateServerInfo.h
+//  JMPrivacyPolicyViewController.h
 //  TIBCO JasperMobile
 //
 
-#import <jaspersoft-sdk/JaspersoftSDK.h>
-
 /**
- Provides a cached version of "serverInfo" method
- 
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 1.9
  */
-@interface JSRESTBase (updateServerInfo)
 
-/**
- Gets server information details only if this information wasn't requested (is nil)
- */
-- (void)updateServerInfo:(id <JSRequestDelegate>)delegate;
+#import <UIKit/UIKit.h>
+
+@interface JMPrivacyPolicyViewController : UIViewController
 
 @end

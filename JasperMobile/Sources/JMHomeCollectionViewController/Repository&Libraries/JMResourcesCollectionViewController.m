@@ -36,9 +36,6 @@
 #import "JMResourceInfoViewController.h"
 #import "PopoverView.h"
 
-#import "UIAlertView+LocalizedAlert.h"
-
-
 NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 
 NSString * const kJMRepresentationTypeDidChangedNotification = @"kJMRepresentationTypeDidChangedNotification";
@@ -69,6 +66,8 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 @property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
 
 @property (nonatomic, assign) BOOL needReloadData;
+
+@property (nonatomic, assign) BOOL needLayoutUI;
 
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
 
@@ -106,25 +105,17 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self.refreshControl addTarget:self action:@selector(refershControlAction:) forControlEvents:UIControlEventValueChanged];
     [self.collectionView addSubview:self.refreshControl];
     self.collectionView.alwaysBounceVertical = YES;
-        
+    
     [self showNavigationItems];
     [self.resourceListLoader updateIfNeeded];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceOrientationDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
-        self.needReloadData = YES;
+        self.needLayoutUI = YES;
     } @weakselfend];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:kJMRepresentationTypeDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
         self.needReloadData = YES;
     } @weakselfend];
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    if ([JMUtils isIphone]) {
-        [self showNavigationItems];
-    }
 }
 
 - (void)dealloc
@@ -135,12 +126,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (self.needReloadData) {
-        [self.collectionView reloadData];
-        self.needReloadData = NO;
-    }
-
-    self.screenName = self.title;
+    [self updateIfNeeded];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -171,8 +157,17 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 {
     _needReloadData = needReloadData;
     if (self.isViewLoaded && self.view.window && needReloadData) {
-        [self.collectionView reloadData];
-        _needReloadData = NO;
+        [self updateIfNeeded];
+    }
+}
+
+- (void)setNeedLayoutUI:(BOOL)needLayoutUI
+{
+    _needLayoutUI = needLayoutUI;
+    _needReloadData = needLayoutUI;
+    
+    if (self.isViewLoaded && self.view.window && needLayoutUI) {
+        [self updateIfNeeded];
     }
 }
 
@@ -394,12 +389,25 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 
 #pragma mark - Utils
 
+- (void)updateIfNeeded
+{
+    if (self.needReloadData) {
+        [self.collectionView reloadData];
+        self.needReloadData = NO;
+    }
+
+    if (self.needLayoutUI) {
+        if ([JMUtils isIphone]) {
+            [self showNavigationItems];
+        }
+        self.needLayoutUI = NO;
+    }
+}
+
 - (UISearchBar *)searchBar
 {
     if (!_searchBar) {
-        CGFloat searchBarWidth = [JMUtils isIphone] ? self.searchBarPlaceholder.frame.size.width : 250.f;
-        CGFloat searchBarHeight = [JMUtils isIphone] ? self.searchBarPlaceholder.frame.size.height : 34.f;
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, searchBarWidth, searchBarHeight)];
+        _searchBar = [[UISearchBar alloc] initWithFrame:self.searchBarPlaceholder.bounds];
         _searchBar.searchBarStyle = UISearchBarStyleMinimal;
         _searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
         _searchBar.delegate = self;
@@ -419,24 +427,22 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortByButtonTapped:)];
         [navBarItems addObject:sortItem];
     }
+
+    BOOL shouldConcateItems = ([JMUtils isIphone] && [navBarItems count] > 1) && (UIInterfaceOrientationIsPortrait([UIDevice currentDevice].orientation) ||
+                           (!UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) &&
+                            UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)));
     
-    if ([JMUtils isIphone] && (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation)) && [navBarItems count] > 1) {
+    if (shouldConcateItems) {
         navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
     }
     [navBarItems addObject:[self resourceRepresentationItem]];
-
-    
     
     UIView *searchContainerView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
     searchContainerView.backgroundColor = [UIColor clearColor];
     [searchContainerView addSubview: self.searchBar];
-    if ([JMUtils isIphone]) {
-        self.searchBar.autoresizingMask = searchContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        self.searchBarPlaceholder.topItem.titleView = searchContainerView;
-    } else {
-        UIBarButtonItem *searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchContainerView];
-        [navBarItems addObject:searchItem];
-    }
+
+    self.searchBar.autoresizingMask = searchContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.searchBarPlaceholder.topItem.titleView = searchContainerView;
     self.navigationItem.rightBarButtonItems = navBarItems;
 }
 

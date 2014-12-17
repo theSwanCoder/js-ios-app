@@ -36,8 +36,10 @@
 
 - (void)setOptionValue:(id)optionValue
 {
-    _optionValue = optionValue;
-    self.errorString = nil;
+    if (optionValue != _optionValue) {
+        _optionValue = optionValue;
+        self.errorString = nil;
+    }
 }
 
 @end

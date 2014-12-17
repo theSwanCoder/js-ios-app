@@ -111,17 +111,16 @@ objection_requires(@"resourceClient", @"constants")
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakselfnotnil(^(JSOperationResult *result)) {
         [self.resources addObjectsFromArray:result.objects];
 
-        if (self.resourceClient.serverInfo.versionAsFloat < self.constants.SERVER_VERSION_CODE_EMERALD_5_6_0) {
+        if ([result.allHeaderFields objectForKey:@"Next-Offset"]) {
+            self.offset = [[result.allHeaderFields objectForKey:@"Next-Offset"] integerValue];
+            self.hasNextPage = [result.objects count] == kJMResourceLimit;
+        } else {
             self.offset += kJMResourceLimit;
             if (!self.totalCount) {
                 self.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
             }
             self.hasNextPage = self.offset < self.totalCount;
-        } else {
-            self.offset = [[result.allHeaderFields objectForKey:@"Next-Offset"] integerValue];
-            self.hasNextPage = [result.objects count] == kJMResourceLimit;
         }
-        
         
         self.isLoadingNow = NO;
         [self.delegate resourceListDidLoaded:self withError:nil];
@@ -194,6 +193,7 @@ objection_requires(@"resourceClient", @"constants")
         case JMResourcesListLoaderOption_Sort:
             return JMCustomLocalizedString(@"master.sortby.title", nil);
     }
+    return nil;
 }
 
 @end

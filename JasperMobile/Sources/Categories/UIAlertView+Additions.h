@@ -21,7 +21,7 @@
  */
 
 //
-//  UIAlertView+LocalizedAlert.h
+//  UIAlertView+Additions.h
 //  TIBCO JasperMobile
 //
 
@@ -30,10 +30,19 @@
 /**
  @author Giulio Toffoli giulio@jaspersoft.com
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @author Alexey Gubarev ogubarie@tibco.com
  @since 1.3
  */
-@interface UIAlertView (LocalizedAlert)
+
+typedef void(^clickedButtonAtIndexCompletion)(UIAlertView *alertView, NSInteger buttonIndex);
+
+@interface UIAlertView (Additions)
 
 + (UIAlertView *)localizedAlertWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
+
+
++ (UIAlertView *)localizedAlertWithTitle:(NSString *)title message:(NSString *)message completion:(clickedButtonAtIndexCompletion)completion cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
+
++ (UIAlertView *)alertWithTitle:(NSString *)title message:(NSString *)message completion:(clickedButtonAtIndexCompletion)completion cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
 
 @end

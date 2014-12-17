@@ -26,17 +26,16 @@
 #import <QuartzCore/QuartzCore.h>
 #import "JMSettingsTableViewCell.h"
 #import "JMSettings.h"
-#import "UIAlertView+LocalizedAlert.h"
 #import "JMServerProfile+Helpers.h"
 
 #import "JMAppUpdater.h"
 #import "UIView+Additions.h"
-#import "JMOnboardIntroViewController.h"
 
 @interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *settingsTitleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *privacyPolicyButton;
 
 @property (nonatomic, strong) JMSettings *detailSettings;
 @end
@@ -45,11 +44,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.settingsTitleLabel.textColor = kJMDetailViewLightTextColor;
     self.tableView.layer.cornerRadius = 4;
 
     self.settingsTitleLabel.text = [JMCustomLocalizedString(@"detail.settings.title", nil) capitalizedString];
+    
+    [self.privacyPolicyButton setTitle:JMCustomLocalizedString(@"detail.settings.privacy.policy.title", nil) forState:UIControlStateNormal];
     
     UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(applicationInfo:)];
     UIBarButtonItem *applyItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
@@ -86,11 +88,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    JMSettingsItem *currentItem = [self.detailSettings.itemsArray objectAtIndex:indexPath.row];
-    if ([currentItem.cellIdentifier isEqualToString:kJMBaseCellIdentifier]) {
-        [self showIntroView];
-    }
 }
 
 #pragma mark - Actions
@@ -115,14 +112,6 @@
                                  delegate:nil
                         cancelButtonTitle:@"dialog.button.ok"
                         otherButtonTitles:nil] show];
-}
-
-- (void)showIntroView
-{
-//    JMIntroViewController *introViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMIntroViewController"];
-    JMOnboardIntroViewController *introViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
-    //introViewController.view.backgroundColor = [UIColor colorWithPatternImage:[self.view renderedImageForView:self.navigationController.view]];
-    [self presentViewController:introViewController animated:YES completion:nil];
 }
 
 #pragma mark - 

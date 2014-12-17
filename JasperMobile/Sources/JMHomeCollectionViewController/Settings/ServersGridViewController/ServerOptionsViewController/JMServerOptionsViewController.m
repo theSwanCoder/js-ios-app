@@ -30,7 +30,6 @@
 
 #import "UITableViewCell+Additions.h"
 #import "JMServerOptionCell.h"
-#import "UIAlertView+LocalizedAlert.h"
 
 #import "JMRequestDelegate.h"
 #import "JMCancelRequestPopup.h"
@@ -70,12 +69,18 @@
     if (!self.serverProfile) {
         self.serverOptions = [[JMServerOptions alloc] initWithServerProfile:nil];
     }
+    self.tableView.rowHeight = 50.f;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self.serverOptions discardChanges];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [self.tableView reloadData];
 }
 
 - (JMServerProfile *)serverProfile
@@ -105,6 +110,25 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return tableView.rowHeight;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    JMServerOption *option = [self.serverOptions.optionsArray objectAtIndex:indexPath.row];
+    if (option.errorString) {
+        CGFloat maxWidth = tableView.frame.size.width - 30;
+        CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
+        CGRect textRect = [option.errorString boundingRectWithSize:maximumLabelSize
+                                                           options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
+                                                        attributes:@{NSFontAttributeName:[JMFont tableViewCellDetailErrorFont]}
+                                                           context:nil];
+        return tableView.rowHeight + ceil(textRect.size.height);
+    }
+    return tableView.rowHeight;
+}
 #pragma mark - Actions
 
 - (void)saveButtonTapped:(id)sender
@@ -137,6 +161,14 @@
 }
 
 #pragma mark - JMServerOptionCellDelegate
+- (void)reloadTableViewCell:(JMServerOptionCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath) {
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
 - (void)makeActiveButtonTappedOnTableViewCell:(JMServerOptionCell *)cell
 {
     [self.view endEditing:YES];

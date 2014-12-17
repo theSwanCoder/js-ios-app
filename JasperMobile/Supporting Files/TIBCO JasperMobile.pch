@@ -17,8 +17,8 @@
     #import "weakself.h"
     #import "JMUtils.h"
     #import "JMFont.h"
-
     #import "JMLocalization.h"
+    #import "UIAlertView+Additions.h"
     #import "GAI.h"
 
 #endif

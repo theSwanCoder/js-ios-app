@@ -27,7 +27,6 @@
 #import "UIViewController+FetchInputControls.h"
 #import "UITableViewCell+Additions.h"
 
-#import "JMInputControlsHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMReportClientHolder.h"
 #import "JMCancelRequestPopup.h"
@@ -35,7 +34,7 @@
 #import "JMInputControlCell.h"
 
 
-@interface JMReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlsHolder, JMReportClientHolder, JMResourceClientHolder>
+@interface JMReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportClientHolder, JMResourceClientHolder>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel    *titleLabel;
 @property (nonatomic, strong) JSConstants       *constants;
@@ -75,6 +74,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
+    [self.tableView setRowHeight:44.f];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(runReport)];
 }
 
@@ -109,7 +109,6 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     id destinationViewController = segue.destinationViewController;
-    
     if ([self isResourceSegue:segue]) {
         [destinationViewController setResourceLookup:self.resourceLookup];
         [destinationViewController setInputControls:sender];
@@ -120,10 +119,24 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 }
 
 #pragma mark - Table view data source
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.inputControls.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
+    if ([inputControlDescriptor errorString]) {
+        CGFloat maxWidth = tableView.frame.size.width - 30;
+        CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
+        CGRect textRect = [[inputControlDescriptor errorString] boundingRectWithSize:maximumLabelSize
+                                                                             options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
+                                                                          attributes:@{NSFontAttributeName:[JMFont tableViewCellDetailErrorFont]}
+                                                                             context:nil];
+        return tableView.rowHeight + ceil(textRect.size.height);
+    }
+    return tableView.rowHeight;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -142,7 +155,15 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
-#pragma mark - JMInputControlsHolder
+#pragma mark - JMInputControlCellDelegate
+- (void)reloadTableViewCell:(JMInputControlCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath) {
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
 - (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor
 {
     if (descriptor.slaveDependencies.count) {
@@ -172,14 +193,13 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 {
     NSMutableArray *selectedValues = [NSMutableArray array];
     NSMutableArray *allInputControls = [NSMutableArray array];
-    
     // Get values from Input Controls
     for (JSInputControlDescriptor *descriptor in self.inputControls) {
         [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
                                                                     value:descriptor.selectedValues]];
         [allInputControls addObject:descriptor.uuid];
     }
-    
+
     [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
         [self.navigationController popViewControllerAnimated:YES];
     } @weakselfend];
@@ -204,10 +224,10 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
             }
         }
     } @weakselfend viewControllerToDismiss:self];
-    
     [self.reportClient updatedInputControlsValues:self.resourceLookup.uri
                                               ids:allInputControls
                                    selectedValues:selectedValues
                                          delegate:delegate];
 }
+
 @end

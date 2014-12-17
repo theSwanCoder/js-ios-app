@@ -73,6 +73,9 @@ extern NSString * const kJMReportFilename;
 // Mint Splunk (Bug Sence) API KEY
 extern NSString * const kJMMintSplunkApiKey;
 
+// Privacy Policy Link
+extern NSString * const kJMPrivacyPolicyURI;
+
 
 enum {kJMCountOfPagesUnknown = NSIntegerMax};
 

@@ -27,22 +27,29 @@
 
 #import <UIKit/UIKit.h>
 #import <jaspersoft-sdk/JaspersoftSDK.h>
-#import "JMInputControlsHolder.h"
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @author Alexey Gubarev agubarev@jaspersoft.com
+ @author Alexey Gubarev ogubarie@tibco.com
  @since 1.6
  */
+
+@class JMInputControlCell;
+@protocol JMInputControlCellDelegate <NSObject>
+@required
+- (void) reloadTableViewCell:(JMInputControlCell *)cell;
+
+- (void) updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor;
+@end
+
 @interface JMInputControlCell : UITableViewCell 
 
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
-@property (nonatomic, weak) UIViewController <JMInputControlsHolder> *delegate;
+@property (nonatomic, weak) id <JMInputControlCellDelegate> delegate;
+@property (nonatomic, weak) IBOutlet UIView  *valuePlaceHolderView;
 
 - (void) updateDisplayingOfErrorMessage;
-
 - (void) setEnabledCell:(BOOL) enabled;
-
 - (BOOL) isValidData;
 
 @end
