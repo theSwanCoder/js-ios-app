@@ -95,6 +95,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
 
 - (void)setResourceRequest:(NSURLRequest *)resourceRequest
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (resourceRequest != _resourceRequest) {
         _resourceRequest = resourceRequest;
         if (self.webView.isLoading) {
