@@ -162,14 +162,16 @@ objection_requires(@"resourceClient", @"constants")
 
 - (NSArray *)dashboardsTypes
 {
-    if ([self.resourceClient.serverInfo.edition isEqualToString:self.constants.SERVER_EDITION_PRO]) {
-        if (self.resourceClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0) {
-            return @[self.constants.WS_TYPE_DASHBOARD_LEGACY];
-        } else {
-            return @[self.constants.WS_TYPE_DASHBOARD];
-        }
-    }
-    return nil;
+//    if ([self.resourceClient.serverInfo.edition isEqualToString:self.constants.SERVER_EDITION_PRO]) {
+//        if (self.resourceClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0) {
+//            return @[self.constants.WS_TYPE_DASHBOARD_LEGACY];
+//        } else {
+//            return @[self.constants.WS_TYPE_DASHBOARD];
+//        }
+//    }
+//    return nil;
+
+    return @[self.constants.WS_TYPE_DASHBOARD, self.constants.WS_TYPE_DASHBOARD_LEGACY];
 }
 
 @end
