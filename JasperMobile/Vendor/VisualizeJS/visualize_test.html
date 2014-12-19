@@ -25,19 +25,31 @@
     JasperMobile.htmlHandler = {
       changeClicker: function() {
         $(".body > div").click(function() {
-             var title = $(this).find(".innerLabel > p")[0].textContent;
+          var title = $(this).find(".innerLabel > p")[0].textContent;
 
-             var button = $(this).find(".maximizeDashletButton")[0];
-             button.click();
+          var button = $(this).find(".maximizeDashletButton")[0];
+          button.click();
 
-             console.log($(this));
-             console.log( $(button) );
-             console.log( $(button).click );
-             JasperMobile.makeCallback.run("command:maximize&title:"+title);
+          JasperMobile.makeCallback.run("command:maximize&title:"+title);
+          JasperMobile.htmlHandler.setSize("200%", "200%");
+          //JasperMobile.htmlHandler.setInterection(true);
         });
       },
       minimizeDashlet: function() {
-          $(".body > div").find(".minimizeDashlet")[0].click();
+        $(".body > div").find(".minimizeDashlet")[0].click();
+        JasperMobile.htmlHandler.setSize("450%", "450%");
+        //JasperMobile.htmlHandler.setInterection(false);
+      },
+      setSize: function(widht, height) {
+          $("#container").css("width", widht);
+          $("#container").css("height", height);
+      },
+      setInterection: function(enable) {
+        if (enable == true) {
+          $(".dashlet").css("pointer-events", "auto");
+        } else {
+          $(".dashlet").css("pointer-events", "none");
+        }
       }
     };
 
@@ -61,11 +73,6 @@
 
     JasperMobile.makeCallback = {
       run : function(data) {
-//        window.open("http://jaspermobile.callback/" + data);
-//        var location = window.location;
-//        location = "http://jaspermobile.callback/" + data;
-//        location.reload(true);
-
         window.location.href = "http://jaspermobile.callback/" + data;
       }
     };

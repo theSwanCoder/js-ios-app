@@ -43,7 +43,6 @@
 #pragma mark - Methods
 - (void)runReportExecution
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if ([self isServerVersionUp6] && [self isNewDashboard]) {
         [self runWithVisualize];
     } else {
@@ -54,6 +53,13 @@
 - (JMMenuActionsViewAction)availableAction
 {
     return [super availableAction] | JMMenuActionsViewAction_Refresh;
+}
+
+- (void)setResourceRequest:(NSURLRequest *)resourceRequest
+{
+    if ( !([self isServerVersionUp6] && [self isNewDashboard]) ) {
+        [self setResourceRequest:resourceRequest];
+    }
 }
 
 #pragma mark - Actions

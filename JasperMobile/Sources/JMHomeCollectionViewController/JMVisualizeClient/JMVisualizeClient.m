@@ -87,13 +87,10 @@ objection_requires(@"resourceClient", @"resourceLookup")
 
 - (BOOL)isCallbackRequest:(NSURLRequest *)request {
     NSString *requestURLString = request.URL.absoluteString;
-    NSLog(@"request: %@", requestURLString);
     NSRange range = [requestURLString rangeOfString:@"http://jaspermobile.callback/"];
     if (range.length) {
-        NSLog(@"callback");
         NSRange callbackRange = NSMakeRange(range.length, requestURLString.length - range.length);
         NSString *callback = [requestURLString substringWithRange:callbackRange];
-        NSLog(@"callback: %@", callback);
         NSArray *callbackItems = [callback componentsSeparatedByString:@"&"];
 
         NSString *commandItem = callbackItems[0];
@@ -101,13 +98,11 @@ objection_requires(@"resourceClient", @"resourceLookup")
         NSString *command = [commandItem substringWithRange:NSMakeRange(commandRange.length, commandItem.length - commandRange.length)];
 
         if ([command isEqualToString:@"didEndLoading"]) {
-            NSLog(@"did end loading");
             if ([self.delegate respondsToSelector:@selector(visualizeClientDidEndLoading)]) {
                 [self.delegate visualizeClientDidEndLoading];
             }
         } else if ([command isEqualToString:@"maximize"]) {
             NSString *titleItem = callbackItems[1];
-            NSLog(@"title item: %@", titleItem);
             NSRange titleRange = [titleItem rangeOfString:@"title:"];
 
             NSString *title = [titleItem substringWithRange:NSMakeRange(titleRange.length, titleItem.length - titleRange.length)];
@@ -116,7 +111,6 @@ objection_requires(@"resourceClient", @"resourceLookup")
                 [self.delegate visualizeClientDidMaximizeDashletWithTitle:[title stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
             }
         }
-
         return YES;
     }
     return NO;
