@@ -95,7 +95,6 @@ objection_requires(@"resourceClient", @"resourceLookup")
 
 - (void)setResourceRequest:(NSURLRequest *)resourceRequest
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (resourceRequest != _resourceRequest) {
         _resourceRequest = resourceRequest;
         if (self.webView.isLoading) {
@@ -191,12 +190,14 @@ objection_requires(@"resourceClient", @"resourceLookup")
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self.activityIndicator startAnimating];
     [JMUtils showNetworkActivityIndicator];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self loadingDidFinished];
     if (self.resourceRequest) {
         self.isResourceLoaded = YES;
@@ -205,12 +206,14 @@ objection_requires(@"resourceClient", @"resourceLookup")
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self loadingDidFinished];
     self.isResourceLoaded = NO;
 }
 
 - (void)loadingDidFinished
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [JMUtils hideNetworkActivityIndicator];
     [self.activityIndicator stopAnimating];
 }
