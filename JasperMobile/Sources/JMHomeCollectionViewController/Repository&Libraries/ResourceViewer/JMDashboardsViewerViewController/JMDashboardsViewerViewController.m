@@ -21,54 +21,64 @@
  */
 
 
+#import <SplunkMint-iOS/SplunkMint-iOS.h>
 #import "JMDashboardsViewerViewController.h"
 #import "JMVisualizeClient.h"
+#import "JMWebConsole.h"
+#import "JMCancelRequestPopup.h"
 
 @interface JMDashboardsViewerViewController() <JMVisualizeClientDelegate>
 @property (strong, nonatomic) JMVisualizeClient *visualizeClient;
 @property (strong, nonatomic) NSArray *rightButtonItems;
+@property (assign, nonatomic) BOOL isCommandSend;
 @end
 
 @implementation JMDashboardsViewerViewController
 
-#pragma mark - View Cycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    [self setupWebView];
+    [JMWebConsole enable];
+
+    self.visualizeClient = [JMVisualizeClient new];
+    self.visualizeClient.delegate = self;
+    self.visualizeClient.webView = self.webView;
+
     self.rightButtonItems = self.navigationItem.rightBarButtonItems;
 }
 
-#pragma mark - Methods
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    self.webView.backgroundColor = [UIColor whiteColor];
+    self.webView.opaque = NO;
+
+    self.webView.scrollView.maximumZoomScale = 5;
+    self.webView.scrollView.minimumZoomScale = 0.1;
+    [self.webView.scrollView setZoomScale:0.1 animated:NO];
+}
+
 - (void)runReportExecution
 {
-    if ([self isServerVersionUp6] && [self isNewDashboard]) {
-        [self runWithVisualize];
+    self.isCommandSend = NO;
+
+    NSString *dashboardUrl;
+
+    if (self.resourceClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0 &&
+            [self.resourceLookup.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD]) {
+        dashboardUrl = [NSString stringWithFormat:@"%@%@%@", self.resourceClient.serverProfile.serverUrl, @"/dashboard/viewer.html?sessionDecorator=no&decorate=no#", self.resourceLookup.uri];
     } else {
-        [self runWithURL];
+        dashboardUrl = [NSString stringWithFormat:@"%@%@%@", self.resourceClient.serverProfile.serverUrl, @"/flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=", self.resourceLookup.uri];
+        dashboardUrl = [dashboardUrl stringByAppendingString:@"&"];
     }
+    NSURL *url = [NSURL URLWithString:dashboardUrl];
+    self.resourceRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:self.resourceClient.timeoutInterval];
 }
 
 - (JMMenuActionsViewAction)availableAction
 {
     return [super availableAction] | JMMenuActionsViewAction_Refresh;
-}
-
-- (void)setResourceRequest:(NSURLRequest *)resourceRequest
-{
-    if ( !([self isServerVersionUp6] && [self isNewDashboard]) ) {
-        [self setResourceRequest:resourceRequest];
-    }
-}
-
-#pragma mark - Actions
-- (void)minimizeDashboard
-{
-    self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.rightBarButtonItems = self.rightButtonItems;
-    self.navigationItem.title = self.resourceLookup.label;
-    [self.visualizeClient minimizeDashlet];
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -92,28 +102,52 @@
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-    [super webViewDidStartLoad:webView];
     if ([self isServerVersionUp6] && [self isNewDashboard]) {
-        self.webView.backgroundColor = [UIColor lightGrayColor];
+        [self showLoadingPopup];
+    } else {
+        [super webViewDidStartLoad:webView];
     }
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if ([self isServerVersionUp6] && [self isNewDashboard]) {
-        self.webView.scrollView.zoomScale = 0.1f;
-        [self.visualizeClient runDashboard];
+        if (!self.isCommandSend) {
+            self.isCommandSend = YES;
+
+            [self.webView.scrollView setZoomScale:0.1 animated:YES];
+
+            NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"jaspermobile" ofType:@"js"];
+            NSError *error;
+            NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
+            if (jsMobile) {
+                [self.webView stringByEvaluatingJavaScriptFromString:jsMobile];
+            } else {
+                NSLog(@"load jaspermobile.js error: %@", error.localizedDescription);
+            }
+        }
     } else {
         [super webViewDidFinishLoad:webView];
     }
 }
 
+#pragma mark - Actions
+- (void)minimizeDashboard
+{
+    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.rightBarButtonItems = self.rightButtonItems;
+    self.navigationItem.title = self.resourceLookup.label;
+    [self.visualizeClient minimizeDashlet];
+}
+
 #pragma mark - JMVisualizeClientDelegate
 - (void)visualizeClientDidEndLoading
 {
-    self.webView.backgroundColor = [UIColor clearColor];
     [JMUtils hideNetworkActivityIndicator];
     [self.activityIndicator stopAnimating];
+
+
+    [self dissmissLoadingPopup];
 }
 
 - (void)visualizeClientDidMaximizeDashletWithTitle:(NSString *)title
@@ -125,36 +159,19 @@
     self.navigationItem.title = title;
 }
 
-#pragma mark - Private API
-- (void)runWithVisualize
+#pragma mark - Methods
+- (void)showLoadingPopup
 {
-    self.resourceRequest = nil;
-    [self setupVisualize];
+    [JMCancelRequestPopup presentInViewController:self
+                                          message:@"status.loading"
+                                       restClient:nil
+                                      cancelBlock:@weakself(^(void)) {
+                                              [self.navigationController popViewControllerAnimated:YES];
+                                          } @weakselfend];
 }
 
-- (void)runWithURL
-{
-    NSString *dashboardUrl;
-    dashboardUrl = [NSString stringWithFormat:@"%@%@%@", self.resourceClient.serverProfile.serverUrl, @"/flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=", self.resourceLookup.uri];
-    dashboardUrl = [dashboardUrl stringByAppendingString:@"&sessionDecorator=no&decorate=no#"];
-    NSURL *url = [NSURL URLWithString:dashboardUrl];
-    self.resourceRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:self.resourceClient.timeoutInterval];
-}
-
-- (void)setupWebView
-{
-    self.webView.scrollView.maximumZoomScale = 5;
-    self.webView.scrollView.minimumZoomScale = 0.1;
-}
-
-- (void)setupVisualize
-{
-    self.visualizeClient = [JMVisualizeClient new];
-    self.visualizeClient.delegate = self;
-    self.visualizeClient.webView = self.webView;
-    self.visualizeClient.resourceClient = self.resourceClient;
-    self.visualizeClient.resourceLookup = self.resourceLookup;
-    [self.visualizeClient setup];
+- (void)dissmissLoadingPopup {
+    [JMCancelRequestPopup dismiss];
 }
 
 #pragma mark - Utils
