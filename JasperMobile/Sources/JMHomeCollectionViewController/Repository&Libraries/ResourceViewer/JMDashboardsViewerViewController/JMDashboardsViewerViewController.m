@@ -31,6 +31,7 @@
 @property (strong, nonatomic) JMVisualizeClient *visualizeClient;
 @property (strong, nonatomic) NSArray *rightButtonItems;
 @property (assign, nonatomic) BOOL isCommandSend;
+@property (assign, nonatomic) BOOL isPopupVisible;
 @end
 
 @implementation JMDashboardsViewerViewController
@@ -38,6 +39,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self.isCommandSend = NO;
+    self.isPopupVisible = NO;
 
     [JMWebConsole enable];
 
@@ -48,26 +52,27 @@
     self.rightButtonItems = self.navigationItem.rightBarButtonItems;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
 
     self.webView.backgroundColor = [UIColor whiteColor];
     self.webView.opaque = NO;
 
-    self.webView.scrollView.maximumZoomScale = 5;
-    self.webView.scrollView.minimumZoomScale = 0.1;
-    [self.webView.scrollView setZoomScale:0.1 animated:NO];
+    if ([self isServerVersionUp6] && [self isNewDashboard]) {
+        self.webView.scrollView.maximumZoomScale = 5;
+        self.webView.scrollView.minimumZoomScale = 0.1;
+        [self.webView.scrollView setZoomScale:0.1 animated:NO];
+    }
 }
 
 - (void)runReportExecution
 {
-    self.isCommandSend = NO;
-
     NSString *dashboardUrl;
 
     if (self.resourceClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0 &&
             [self.resourceLookup.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD]) {
-        dashboardUrl = [NSString stringWithFormat:@"%@%@%@", self.resourceClient.serverProfile.serverUrl, @"/dashboard/viewer.html?sessionDecorator=no&decorate=no#", self.resourceLookup.uri];
+        dashboardUrl = [NSString stringWithFormat:@"%@%@%@", self.resourceClient.serverProfile.serverUrl, @"/dashboard/viewer.html?_opt=true&sessionDecorator=no&decorate=no#", self.resourceLookup.uri];
     } else {
         dashboardUrl = [NSString stringWithFormat:@"%@%@%@", self.resourceClient.serverProfile.serverUrl, @"/flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=", self.resourceLookup.uri];
         dashboardUrl = [dashboardUrl stringByAppendingString:@"&"];
@@ -102,11 +107,7 @@
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-    if ([self isServerVersionUp6] && [self isNewDashboard]) {
-        [self showLoadingPopup];
-    } else {
-        [super webViewDidStartLoad:webView];
-    }
+    [self showLoadingPopup];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
@@ -127,6 +128,7 @@
             }
         }
     } else {
+        [self dissmissLoadingPopup];
         [super webViewDidFinishLoad:webView];
     }
 }
@@ -143,10 +145,6 @@
 #pragma mark - JMVisualizeClientDelegate
 - (void)visualizeClientDidEndLoading
 {
-    [JMUtils hideNetworkActivityIndicator];
-    [self.activityIndicator stopAnimating];
-
-
     [self dissmissLoadingPopup];
 }
 
@@ -160,14 +158,18 @@
 }
 
 #pragma mark - Methods
-- (void)showLoadingPopup
-{
-    [JMCancelRequestPopup presentInViewController:self
-                                          message:@"status.loading"
-                                       restClient:nil
-                                      cancelBlock:@weakself(^(void)) {
-                                              [self.navigationController popViewControllerAnimated:YES];
-                                          } @weakselfend];
+- (void)showLoadingPopup {
+    if (!self.isPopupVisible) {
+        self.isPopupVisible = YES;
+        [JMCancelRequestPopup presentInViewController:self
+                                              message:@"status.loading"
+                                           restClient:nil
+                                          cancelBlock:@weakself(^(void))
+                                                                              {
+                                                                                  [self.navigationController popViewControllerAnimated:YES];
+                                                                              }
+                                                                              @weakselfend];
+    }
 }
 
 - (void)dissmissLoadingPopup {
