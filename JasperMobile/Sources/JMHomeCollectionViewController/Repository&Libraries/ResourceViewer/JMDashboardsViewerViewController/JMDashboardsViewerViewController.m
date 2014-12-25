@@ -50,6 +50,8 @@
     self.visualizeClient.webView = self.webView;
 
     self.rightButtonItems = self.navigationItem.rightBarButtonItems;
+
+    self.webView.scalesPageToFit = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -78,7 +80,8 @@
         dashboardUrl = [dashboardUrl stringByAppendingString:@"&"];
     }
     NSURL *url = [NSURL URLWithString:dashboardUrl];
-    self.resourceRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:self.resourceClient.timeoutInterval];
+//    self.resourceRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:self.resourceClient.timeoutInterval];
+    self.resourceRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.resourceClient.timeoutInterval];
 }
 
 - (JMMenuActionsViewAction)availableAction
@@ -91,7 +94,8 @@
 {
     [super actionsView:view didSelectAction:action];
     if (action == JMMenuActionsViewAction_Refresh) {
-        [self runReportExecution];
+        self.isCommandSend = NO;
+        [self.webView reload];
     }
 }
 
@@ -151,6 +155,7 @@
 - (void)visualizeClientDidMaximizeDashletWithTitle:(NSString *)title
 {
     [self.webView.scrollView setZoomScale:0.1 animated:YES];
+    //self.webView.scalesPageToFit = YES;
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(minimizeDashboard)];
     self.navigationItem.rightBarButtonItem = barButtonItem;
 
@@ -166,6 +171,8 @@
                                            restClient:nil
                                           cancelBlock:@weakself(^(void))
                                                                               {
+                                                                                  self.isPopupVisible = NO;
+                                                                                  [self.webView stopLoading];
                                                                                   [self.navigationController popViewControllerAnimated:YES];
                                                                               }
                                                                               @weakselfend];
