@@ -21,6 +21,7 @@
  */
 
 
+#import <SplunkMint-iOS/SplunkMint-iOS.h>
 #import "JMResourceViewerViewController.h"
 #import "JMFavorites+Helpers.h"
 #import "PopoverView.h"
@@ -61,6 +62,14 @@ objection_requires(@"resourceClient", @"resourceLookup")
     
     self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:[self actionBarButtonItem], [self favoriteBarButtonItem], nil];
     [self runReportExecution];
+
+    // log events
+    NSString *currentClassName = NSStringFromClass(self.class);
+    [[Mint sharedInstance] logEventAsyncWithTag:currentClassName completionBlock:^(MintLogResult *splunkLogResult)
+    {
+        NSString *logResultState = splunkLogResult.resultState == OKResultState ? @"OK" : @"Error";
+        NSLog(@"Log result: %@", logResultState);
+    }];
 }
 
 

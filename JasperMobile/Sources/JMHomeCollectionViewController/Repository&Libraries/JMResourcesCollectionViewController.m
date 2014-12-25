@@ -21,6 +21,7 @@
  */
 
 
+#import <SplunkMint-iOS/SplunkMint-iOS.h>
 #import "JMResourcesCollectionViewController.h"
 #import "JMRefreshable.h"
 #import "JMResourceCollectionViewCell.h"
@@ -117,6 +118,14 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [[NSNotificationCenter defaultCenter] addObserverForName:kJMRepresentationTypeDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
         self.needReloadData = YES;
     } @weakselfend];
+
+    // log events
+    NSString *currentClassName = NSStringFromClass(self.class);
+    [[Mint sharedInstance] logEventAsyncWithTag:currentClassName completionBlock:^(MintLogResult *splunkLogResult)
+    {
+        NSString *logResultState = splunkLogResult.resultState == OKResultState ? @"OK" : @"Error";
+        NSLog(@"Log result: %@", logResultState);
+    }];
 }
 
 - (void)dealloc

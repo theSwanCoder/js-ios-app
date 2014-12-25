@@ -7,7 +7,8 @@ JasperMobile.htmlHandler = {
       var title = jQuery(this).find(".innerLabel > p")[0].textContent;
 
       JasperMobile.makeCallback.run("command:maximize&title:"+title);
-      JasperMobile.htmlHandler.setSize("#frame", "200%", "200%");
+      //JasperMobile.htmlHandler.setSize("#frame", "200%", "200%");
+      jQuery('.dashlet').css("pointer-events", "auto");
 
       var button = jQuery(jQuery(this).find('div.dashletToolbar > div.content div.buttons > .maximizeDashletButton')[0]);
       button.click();
@@ -17,6 +18,7 @@ JasperMobile.htmlHandler = {
     JasperMobile.logger.log("minimize dashlet");
     jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click();
     JasperMobile.htmlHandler.setSize("#frame", "450%", "450%");
+    jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent()).css("pointer-events", "none");
   },
   setSize: function(el, widht, height) {
     JasperMobile.logger.log("set size " + jQuery(el).toString());
