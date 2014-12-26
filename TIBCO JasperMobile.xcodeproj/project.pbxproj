@@ -19,8 +19,6 @@
 		0834907C1A38A3AA00E04DA0 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 083490791A38A3AA00E04DA0 /* Reachability.m */; };
 		0834907D1A38A3AA00E04DA0 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 0834907B1A38A3AA00E04DA0 /* RNCachingURLProtocol.m */; };
 		084F9DE219F544EA00E78C48 /* JMBooleanSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 084F9DE119F544EA00E78C48 /* JMBooleanSettingsTableViewCell.m */; };
-		0851DFD819ACE27800DC6EDE /* JMCancelRequestPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = 0851DFD119ACE27800DC6EDE /* JMCancelRequestPopup.m */; };
-		0851DFD919ACE27800DC6EDE /* JMCancelRequestPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0851DFD219ACE27800DC6EDE /* JMCancelRequestPopup.xib */; };
 		08625F6D19C2EE4C0087684E /* JMLibraryListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08625F6C19C2EE4C0087684E /* JMLibraryListLoader.m */; };
 		086B715619CAE9E600CC25CA /* JMSavedResources.m in Sources */ = {isa = PBXBuildFile; fileRef = 086B715519CAE9E600CC25CA /* JMSavedResources.m */; };
 		086B715919CAEB5600CC25CA /* JMSavedResources+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 086B715819CAEB5600CC25CA /* JMSavedResources+Helpers.m */; };
@@ -41,8 +39,6 @@
 		089423311A24CF7700D7406A /* JMFilterOptionsPopupView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 089423301A24CF7700D7406A /* JMFilterOptionsPopupView~ipad.xib */; };
 		089423371A24CFED00D7406A /* JMSortOptionsPopupView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 089423361A24CFED00D7406A /* JMSortOptionsPopupView~ipad.xib */; };
 		089590FF19E3D514001471DA /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E019E3D514001471DA /* ALToastView.m */; };
-		0895910119E3D514001471DA /* MJPopupBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E619E3D514001471DA /* MJPopupBackgroundView.m */; };
-		0895910219E3D514001471DA /* UIViewController+MJPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E819E3D514001471DA /* UIViewController+MJPopupViewController.m */; };
 		0895910319E3D514001471DA /* libObjection-StaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 089590F619E3D514001471DA /* libObjection-StaticLib.a */; };
 		0895910419E3D514001471DA /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590F919E3D514001471DA /* PopoverView.m */; };
 		0895910519E3D514001471DA /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590FE19E3D514001471DA /* SSKeychain.m */; };
@@ -298,6 +294,8 @@
 		F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A321752FA5C007978BE /* CFNetwork.framework */; };
 		F5D6373117909D3C005BA5CD /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */; };
 		F5D6373217909D8F005BA5CD /* libjaspersoft-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D6372817909B1D005BA5CD /* libjaspersoft-sdk.a */; settings = {ATTRIBUTES = (Required, ); }; };
+		FE39AFAC1A4DB49400023FC8 /* JMCancelRequestPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = FE39AFAA1A4DB49400023FC8 /* JMCancelRequestPopup.m */; };
+		FE39AFAD1A4DB49400023FC8 /* JMCancelRequestPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE39AFAB1A4DB49400023FC8 /* JMCancelRequestPopup.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -345,9 +343,6 @@
 		0834907B1A38A3AA00E04DA0 /* RNCachingURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCachingURLProtocol.m; sourceTree = "<group>"; };
 		084F9DE019F544EA00E78C48 /* JMBooleanSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBooleanSettingsTableViewCell.h; sourceTree = "<group>"; };
 		084F9DE119F544EA00E78C48 /* JMBooleanSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBooleanSettingsTableViewCell.m; sourceTree = "<group>"; };
-		0851DFD019ACE27800DC6EDE /* JMCancelRequestPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCancelRequestPopup.h; sourceTree = "<group>"; };
-		0851DFD119ACE27800DC6EDE /* JMCancelRequestPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMCancelRequestPopup.m; sourceTree = "<group>"; };
-		0851DFD219ACE27800DC6EDE /* JMCancelRequestPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMCancelRequestPopup.xib; sourceTree = "<group>"; };
 		08625F6B19C2EE4C0087684E /* JMLibraryListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLibraryListLoader.h; sourceTree = "<group>"; };
 		08625F6C19C2EE4C0087684E /* JMLibraryListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLibraryListLoader.m; sourceTree = "<group>"; };
 		08625FB619C328410087684E /* JasperMobile_v_1_9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile_v_1_9.xcdatamodel; sourceTree = "<group>"; };
@@ -382,10 +377,6 @@
 		089423361A24CFED00D7406A /* JMSortOptionsPopupView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMSortOptionsPopupView~ipad.xib"; sourceTree = "<group>"; };
 		089590DF19E3D514001471DA /* ALToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALToastView.h; sourceTree = "<group>"; };
 		089590E019E3D514001471DA /* ALToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALToastView.m; sourceTree = "<group>"; };
-		089590E519E3D514001471DA /* MJPopupBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPopupBackgroundView.h; sourceTree = "<group>"; };
-		089590E619E3D514001471DA /* MJPopupBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPopupBackgroundView.m; sourceTree = "<group>"; };
-		089590E719E3D514001471DA /* UIViewController+MJPopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MJPopupViewController.h"; sourceTree = "<group>"; };
-		089590E819E3D514001471DA /* UIViewController+MJPopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MJPopupViewController.m"; sourceTree = "<group>"; };
 		089590EB19E3D514001471DA /* JSObjectFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjectFactory.h; sourceTree = "<group>"; };
 		089590EC19E3D514001471DA /* JSObjection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjection.h; sourceTree = "<group>"; };
 		089590ED19E3D514001471DA /* JSObjectionBindingEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSObjectionBindingEntry.h; sourceTree = "<group>"; };
@@ -730,6 +721,9 @@
 		F5663A321752FA5C007978BE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		F5D6372017909B1D005BA5CD /* jaspersoft-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jaspersoft-sdk.xcodeproj"; path = "JasperMobile/Vendor/jaspersoft-sdk/jaspersoft-sdk.xcodeproj"; sourceTree = "<group>"; };
 		F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "jaspersoft-sdk-resources.bundle"; path = "../Vendor/jaspersoft-sdk/jaspersoft-sdk-resources.bundle"; sourceTree = "<group>"; };
+		FE39AFA91A4DB49400023FC8 /* JMCancelRequestPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCancelRequestPopup.h; sourceTree = "<group>"; };
+		FE39AFAA1A4DB49400023FC8 /* JMCancelRequestPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMCancelRequestPopup.m; sourceTree = "<group>"; };
+		FE39AFAB1A4DB49400023FC8 /* JMCancelRequestPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMCancelRequestPopup.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -857,19 +851,8 @@
 			children = (
 				08C3315D1A1A27DC0020CAEA /* JMMenuActionsView */,
 				08D3E28819EBB82100F37DF4 /* JMPopupView */,
-				0851DFCF19ACE27800DC6EDE /* JMCancelRequestPopup */,
 			);
 			path = CustomViews;
-			sourceTree = "<group>";
-		};
-		0851DFCF19ACE27800DC6EDE /* JMCancelRequestPopup */ = {
-			isa = PBXGroup;
-			children = (
-				0851DFD019ACE27800DC6EDE /* JMCancelRequestPopup.h */,
-				0851DFD119ACE27800DC6EDE /* JMCancelRequestPopup.m */,
-				0851DFD219ACE27800DC6EDE /* JMCancelRequestPopup.xib */,
-			);
-			path = JMCancelRequestPopup;
 			sourceTree = "<group>";
 		};
 		08625F6A19C2EE4C0087684E /* JMLibraryListLoader */ = {
@@ -937,17 +920,6 @@
 				089590E019E3D514001471DA /* ALToastView.m */,
 			);
 			path = "ALToastView-v0.0.1";
-			sourceTree = "<group>";
-		};
-		089590E419E3D514001471DA /* MJPopupViewController-v0.4 */ = {
-			isa = PBXGroup;
-			children = (
-				089590E519E3D514001471DA /* MJPopupBackgroundView.h */,
-				089590E619E3D514001471DA /* MJPopupBackgroundView.m */,
-				089590E719E3D514001471DA /* UIViewController+MJPopupViewController.h */,
-				089590E819E3D514001471DA /* UIViewController+MJPopupViewController.m */,
-			);
-			path = "MJPopupViewController-v0.4";
 			sourceTree = "<group>";
 		};
 		089590E919E3D514001471DA /* Objection-v1.4 */ = {
@@ -1092,6 +1064,7 @@
 		08D3E28819EBB82100F37DF4 /* JMPopupView */ = {
 			isa = PBXGroup;
 			children = (
+				FE39AFA81A4DB49400023FC8 /* JMCancelRequestPopup */,
 				08D27B7519EBE4BF00994F08 /* JMFilterOptionsPopupView */,
 				08D27B7819EBE4BF00994F08 /* JMSortOptionsPopupView */,
 				08D3E28F19EBB82100F37DF4 /* JMPopupView.h */,
@@ -2253,7 +2226,6 @@
 				083490771A38A3AA00E04DA0 /* RNCachingURLProtocol */,
 				08DB677C1A137CD90035F58F /* SplunkMint-iOS-v4.0.22 */,
 				089590DE19E3D514001471DA /* ALToastView-v0.0.1 */,
-				089590E419E3D514001471DA /* MJPopupViewController-v0.4 */,
 				089590E919E3D514001471DA /* Objection-v1.4 */,
 				089590F719E3D514001471DA /* PopoverView-v0.0.2 */,
 				089590FC19E3D514001471DA /* SSKeychain-v0.1.4 */,
@@ -2270,6 +2242,16 @@
 				F5D6372C17909B1D005BA5CD /* jaspersoft-sdk-resources.bundle */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		FE39AFA81A4DB49400023FC8 /* JMCancelRequestPopup */ = {
+			isa = PBXGroup;
+			children = (
+				FE39AFA91A4DB49400023FC8 /* JMCancelRequestPopup.h */,
+				FE39AFAA1A4DB49400023FC8 /* JMCancelRequestPopup.m */,
+				FE39AFAB1A4DB49400023FC8 /* JMCancelRequestPopup.xib */,
+			);
+			path = JMCancelRequestPopup;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2373,7 +2355,6 @@
 				9362BA221A25FD7D006A6178 /* previous_action_item@2x.png in Resources */,
 				9362BA9F1A25FD7E006A6178 /* res_type_html@2x.png in Resources */,
 				9362BA361A25FD7D006A6178 /* unchecked_checkbox@2x.png in Resources */,
-				0851DFD919ACE27800DC6EDE /* JMCancelRequestPopup.xib in Resources */,
 				9362BA2D1A25FD7D006A6178 /* sort_action@2x.png in Resources */,
 				9362BA181A25FD7D006A6178 /* last_action_item@2x.png in Resources */,
 				9362BA881A25FD7D006A6178 /* settings.png in Resources */,
@@ -2500,6 +2481,7 @@
 				9362BA2B1A25FD7D006A6178 /* save_action@3x.png in Resources */,
 				089423311A24CF7700D7406A /* JMFilterOptionsPopupView~ipad.xib in Resources */,
 				9362BA4F1A25FD7D006A6178 /* make_favorite_item@3x.png in Resources */,
+				FE39AFAD1A4DB49400023FC8 /* JMCancelRequestPopup.xib in Resources */,
 				9362BA0C1A25FD7D006A6178 /* edit_action.png in Resources */,
 				9362BA461A25FD7D006A6178 /* delete_item@3x.png in Resources */,
 				9362BA981A25FD7E006A6178 /* server@2x.png in Resources */,
@@ -2588,7 +2570,6 @@
 				08FF12EA199297FE0082265D /* JMSettings.m in Sources */,
 				08E864131992564A007CF257 /* UIImage+Additions.m in Sources */,
 				08DE67CD19C05D8B00C25AEA /* JMTextInputControlCell.m in Sources */,
-				0851DFD819ACE27800DC6EDE /* JMCancelRequestPopup.m in Sources */,
 				08DE67C919C05D8B00C25AEA /* JMInputControlCell.m in Sources */,
 				08E93B1319AF8AC800B1DF8D /* JMMenuItemCell.m in Sources */,
 				089CA29F19EE854300983C82 /* JMResourceInfoViewController.m in Sources */,
@@ -2610,10 +2591,10 @@
 				08A947451A31D50D008256D1 /* UIAlertView+Additions.m in Sources */,
 				08DE67D619C05D8B00C25AEA /* JMReportViewerViewController.m in Sources */,
 				08DE67DE19C0659A00C25AEA /* JMDashboardsViewerViewController.m in Sources */,
+				FE39AFAC1A4DB49400023FC8 /* JMCancelRequestPopup.m in Sources */,
 				08E864271992564A007CF257 /* JMLocalization.m in Sources */,
 				08F340ED19B0E0CC0020DE6A /* JMBaseModule.m in Sources */,
 				08FF131619929B080082265D /* JMBooleanServerOptionCell.m in Sources */,
-				0895910219E3D514001471DA /* UIViewController+MJPopupViewController.m in Sources */,
 				08E864161992564A007CF257 /* UIView+Additions.m in Sources */,
 				08E8641B1992564A007CF257 /* JMServerProfile.m in Sources */,
 				08D27B7C19EBE4BF00994F08 /* JMFilterOptionsPopupView.m in Sources */,
@@ -2633,7 +2614,6 @@
 				08DE67CC19C05D8B00C25AEA /* JMSingleSelectInputControlCell.m in Sources */,
 				08ECB0A819FFF30400DDBB33 /* JMReportViewer.m in Sources */,
 				08D27B7D19EBE4BF00994F08 /* JMSortOptionsPopupView.m in Sources */,
-				0895910119E3D514001471DA /* MJPopupBackgroundView.m in Sources */,
 				0895910419E3D514001471DA /* PopoverView.m in Sources */,
 				08E864251992564A007CF257 /* JMConstants.m in Sources */,
 				08A7058119B488FE00C1B4C6 /* JMEditabledViewController.m in Sources */,

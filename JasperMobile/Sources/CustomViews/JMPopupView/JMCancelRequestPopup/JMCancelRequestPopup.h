@@ -25,16 +25,16 @@
 //  TIBCO JasperMobile
 //
 
-#import <UIKit/UIKit.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 1.9
+ */
+
+#import "JMPopupView.h"
 
 typedef void(^JMCancelRequestBlock)(void);
 
-/**
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
- @since 1.6
- */
-@interface JMCancelRequestPopup : UIViewController
+@interface JMCancelRequestPopup : JMPopupView
 
 /**
  Presents cancel request popup in view controller
@@ -44,27 +44,10 @@ typedef void(^JMCancelRequestBlock)(void);
  @param restClient A rest client to cancel all requests
  @param cancelBlock A cancelBlock to execute
  */
-+ (void)presentInViewController:(UIViewController *)viewController message:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock;
-
-/**
- Provides a global offset for all popups that will be displayed
-
- @param offset A popup offset
-
- **Default**: CGPointZero (same as CGPointMake(0,0) )
-*/
-+ (void)offset:(CGPoint)offset;
-
-/**
- Dismisses last presented popup
- */
-+ (void)dismiss;
++ (void)presentWithMessage:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock;
 
 
-/**
- Return YES if CancelRequestPopup is presented
- */
-+ (BOOL)isVisiblePopup;
++ (void) dismiss;
 
 @end
 

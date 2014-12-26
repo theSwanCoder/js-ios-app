@@ -166,16 +166,12 @@
 - (void)showLoadingPopup {
     if (!self.isPopupVisible) {
         self.isPopupVisible = YES;
-        [JMCancelRequestPopup presentInViewController:self
-                                              message:@"status.loading"
-                                           restClient:nil
-                                          cancelBlock:@weakself(^(void))
-                                                                              {
-                                                                                  self.isPopupVisible = NO;
-                                                                                  [self.webView stopLoading];
-                                                                                  [self.navigationController popViewControllerAnimated:YES];
-                                                                              }
-                                                                              @weakselfend];
+        [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:nil cancelBlock:@weakself(^(void)){
+             self.isPopupVisible = NO;
+             [self.webView stopLoading];
+             [self.navigationController popViewControllerAnimated:YES];
+         }
+         @weakselfend];
     }
 }
 

@@ -191,7 +191,7 @@
                                                 serverUrl:self.serverProfile.serverUrl];
 
     self.restBase = [[JSRESTBase alloc] initWithProfile:profile classesForMappings:nil];
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.restBase cancelBlock:^{
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.restBase cancelBlock:^{
         if (errorBlock) {
             errorBlock();
         }
