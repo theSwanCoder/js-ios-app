@@ -168,7 +168,7 @@ objection_requires(@"resourceClient", @"reportClient")
             [parameters addObject:reportParameter];
         }
         
-        [JMCancelRequestPopup presentInViewController:self message:@"savereport.saving.status.title" restClient:self.reportClient cancelBlock:^{
+        [JMCancelRequestPopup presentWithMessage:@"savereport.saving.status.title" restClient:self.reportClient cancelBlock:^{
             [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
         }];
         

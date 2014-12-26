@@ -44,7 +44,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     JSObjectionInjector *objectionInjector = [JSObjection defaultInjector];
     JSRESTReport *report = [objectionInjector getObject:JSRESTReport.class];
     
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:nil cancelBlock:^{
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:nil cancelBlock:^{
         [report cancelAllRequests];
     }];
     

@@ -195,7 +195,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
                                                                     value:descriptor.selectedValues]];
         [allInputControls addObject:descriptor.uuid];
     }
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
         [self.navigationController popViewControllerAnimated:YES];
     } @weakselfend];
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {

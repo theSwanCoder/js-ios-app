@@ -53,7 +53,7 @@
     [self updateToobarAppearence];
 
     if (![JMRequestDelegate isRequestPoolEmpty]) {
-        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportViewer.reportClient cancelBlock:@weakself(^(void)) {
+        [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.reportViewer.reportClient cancelBlock:@weakself(^(void)) {
             [self.reportViewer cancelReport];
         } @weakselfend];
     }

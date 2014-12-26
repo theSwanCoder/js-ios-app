@@ -70,7 +70,7 @@ objection_requires(@"resourceClient", @"reportClient")
     if (self) {
         [[JSObjection defaultInjector] injectDependencies:self];
         self.icUndoManager = [NSUndoManager new];
-        [self resetReportViewer];
+//        [self resetReportViewer];
         self.resourceLookup = resource;
         self.errorExecutionBlock = @weakself(^(JSOperationResult *result)){
             NSString *title = nil;
@@ -97,7 +97,9 @@ objection_requires(@"resourceClient", @"reportClient")
 {
     if (currentPage != _currentPage) {
         _currentPage = currentPage;
-        [self runExportExecutionForPage:_currentPage];
+        if (self.currentPage) {
+            [self runExportExecutionForPage:_currentPage];
+        }
         [self.delegate reportViewerDidChangedPagination:self];
     }
 }
@@ -112,9 +114,18 @@ objection_requires(@"resourceClient", @"reportClient")
         _multiPageReport = (self.countOfPages > 1) && (self.countOfPages != kJMCountOfPagesUnknown);
         [self.delegate reportViewerDidChangedPagination:self];
         if ([self reportIsEmpty]) {
-            UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:@"detail.report.viewer.emptyreport.title" message:nil delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil];
+            UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:@"detail.report.viewer.emptyreport.title" message:nil completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                if (alertView.cancelButtonIndex == buttonIndex) {
+                    if (self.inputControls && [self.inputControls count]) {
+                        [self.delegate performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
+                    } else {
+                        [self cancelReport];
+                    }
+                }
+                [self.icUndoManager undo];
+                [self.icUndoManager removeAllActionsWithTarget:self];
+            } cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil];
             if ([self.icUndoManager canUndo]) {
-                alertView.delegate = self;
                 alertView.message = JMCustomLocalizedString(@"detail.report.viewer.emptyreport.message", nil);
                 [alertView addButtonWithTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)];
             }
@@ -134,32 +145,41 @@ objection_requires(@"resourceClient", @"reportClient")
 - (void)setInputControls:(NSMutableArray *)inputControls
 {
     if (self.inputControls != inputControls) {
-        if (self.inputControls) {
-            [[self.icUndoManager prepareWithInvocationTarget:self] setInputControls:self.inputControls];
-            [self.icUndoManager setActionName:@"ResetChanges"];
-        }
         _inputControls = inputControls;
     }
 }
 
 - (void) resetReportViewer
 {
-    self.outputResourceType = JMReportViewerOutputResourceType_None;
-    self.exportIdsDictionary = [NSMutableDictionary dictionary];
-    self.reportExequtingStatusIsReady = NO;
-    self.requestId = nil;
-    self.countOfPages = kJMCountOfPagesUnknown;
-    self.currentPage = 1;
+    if (self.requestId) {
+        [self.icUndoManager removeAllActionsWithTarget:self];
+        [[self.icUndoManager prepareWithInvocationTarget:self] setValues:self.requestId exportIds:self.exportIdsDictionary inputControls:self.inputControls countOfPages:self.countOfPages currentPage:self.currentPage statusIsReady:self.reportExequtingStatusIsReady outputResourceType:self.outputResourceType];
+        [self.icUndoManager setActionName:@"ResetChanges"];
+    }
+    
+    [self setValues:nil exportIds:[NSMutableDictionary dictionary] inputControls:self.inputControls countOfPages:kJMCountOfPagesUnknown currentPage:1 statusIsReady:NO outputResourceType:JMReportViewerOutputResourceType_None];
+}
+
+- (void) setValues:(NSString *)requestID exportIds:(NSMutableDictionary *)exportIds inputControls:(NSMutableArray *)inputControls
+      countOfPages:(NSInteger)countOfPages currentPage:(NSInteger)currentPage statusIsReady:(BOOL)status outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
+{
+    self.outputResourceType = outputResourceType;
+    self.exportIdsDictionary = exportIds;
+    self.reportExequtingStatusIsReady = status;
+    self.requestId = requestID;
+    self.inputControls = inputControls;
+    self.countOfPages = countOfPages;
+    self.currentPage = currentPage;
 }
 
 - (void) runReportExecution
 {
     if (self.outputResourceType & JMReportViewerOutputResourceType_AlreadyLoaded) {
-        [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
+        [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
             [self cancelReport];
         } @weakselfend];
     }
-    
+
     [self resetReportViewer];
     
     JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
@@ -208,7 +228,7 @@ objection_requires(@"resourceClient", @"reportClient")
             }
         } else if (page <= self.countOfPages) {
             if (page == self.currentPage) {
-                [JMCancelRequestPopup presentInViewController:self.delegate message:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
+                [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
                     [self cancelReport];
                 } @weakselfend];
             } else {
@@ -339,16 +359,6 @@ objection_requires(@"resourceClient", @"reportClient")
 - (BOOL)reportIsEmpty
 {
     return (self.reportExequtingStatusIsReady && self.countOfPages == 0);
-}
-
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.cancelButtonIndex == buttonIndex) {
-        [self.delegate performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
-    }
-    [self.icUndoManager undo];
-    [self.icUndoManager removeAllActionsWithTarget:self];
 }
 
 @end
