@@ -2348,7 +2348,6 @@
 				08D27B8019EBE5EE00994F08 /* JMFilterOptionsPopupView.xib in Resources */,
 				9362BAB51A26014F006A6178 /* Default-Portrait@2x~ipad.png in Resources */,
 				9342862D1A42F33A0007FEC2 /* visualize_test.html in Resources */,
-				9362BA6E1A25FD7D006A6178 /* Icon-80.png in Resources */,
 				9362BA7C1A25FD7D006A6178 /* repository@3x.png in Resources */,
 				9362BA991A25FD7E006A6178 /* tmp_arrow_back.png in Resources */,
 				9362BA151A25FD7D006A6178 /* first_action_item@3x.png in Resources */,
@@ -2715,7 +2714,7 @@
 				);
 				PRODUCT_NAME = "TIBCO JasperMobile";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=*]" = "6243e3bc-1b1b-4bb1-9fa9-d888346becad";
+				"PROVISIONING_PROFILE[sdk=*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
