@@ -38,6 +38,7 @@
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel    *titleLabel;
 @property (nonatomic, strong) JSConstants       *constants;
+@property (weak, nonatomic) IBOutlet UIButton *runReportButton;
 
 @end
 
@@ -61,15 +62,17 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"detail.report.options.title", nil);
+    self.navigationItem.title = JMCustomLocalizedString(@"detail.report.options.title", nil);
+    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
+    
     self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.titlelabel.title", nil);
     self.titleLabel.textColor = kJMDetailViewLightTextColor;
-    self.tableView.layer.cornerRadius = 4;
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
-    self.tableView.layer.cornerRadius = 4;
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(runReport)];
+    
+    // setup "Run Report" button
+    self.runReportButton.backgroundColor = kJMResourcePreviewBackgroundColor;
+    [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog.button.run.report", nil) forState:UIControlStateNormal];
     
     self.tableView.rowHeight = 50.f;
 }
@@ -112,6 +115,11 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     } else {
         [destinationViewController setCell:sender];
     }
+}
+
+#pragma mark - Actions
+- (IBAction)runReportAction:(id)sender {
+    [self runReport];
 }
 
 #pragma mark - Table view data source
