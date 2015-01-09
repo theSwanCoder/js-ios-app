@@ -96,9 +96,10 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 
 - (BOOL) validateInputControls
 {
+    // TODO: change this COMPLETLY!
     for (int i = 0; i < [self.tableView numberOfRowsInSection:0]; i++) {
         JMInputControlCell *cell = (JMInputControlCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        if (![cell isValidData]) {
+        if (cell && ![cell isValidData]) {
             return NO;
         }
     }
