@@ -21,22 +21,37 @@
  */
 
 
-#import "JMSettingsTableViewCell.h"
+//
+//  JMSaveReportNameCell.m
+//  TIBCO JasperMobile
+//
 
-@implementation JMSettingsTableViewCell
+/**
+@since 1.9.1
+*/
+
+#import "JMSaveReportNameCell.h"
+
+@implementation JMSaveReportNameCell
+
 - (void)awakeFromNib
 {
-    [super awakeFromNib];
-    self.detailTextLabel.font = [JMFont tableViewCellDetailFont];
-    self.textLabel.font = [JMFont tableViewCellTitleFont];
-    self.textLabel.textColor = [UIColor darkGrayColor];
-    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
+    self.errorLabel.font = [JMFont tableViewCellDetailErrorFont];
+    self.textField.placeholder = JMCustomLocalizedString(@"savereport.name", nil);
 }
 
-- (void)setSettingsItem:(JMSettingsItem *)settingsItem
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    _settingsItem = settingsItem;
-    self.textLabel.text = settingsItem.titleString;
+    [textField resignFirstResponder];
+    return NO;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if ([self.cellDelegate respondsToSelector:@selector(nameCell:didChangeReportName:)]) {
+        [self.cellDelegate nameCell:self didChangeReportName:textField.text];
+    }
 }
 
 @end

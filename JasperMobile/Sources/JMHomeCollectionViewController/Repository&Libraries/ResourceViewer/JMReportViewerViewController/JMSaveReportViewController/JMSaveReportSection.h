@@ -21,22 +21,24 @@
  */
 
 
-#import "JMSettingsTableViewCell.h"
+//
+//  JMSaveReportSection.h
+//  TIBCO JasperMobile
+//
 
-@implementation JMSettingsTableViewCell
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    self.detailTextLabel.font = [JMFont tableViewCellDetailFont];
-    self.textLabel.font = [JMFont tableViewCellTitleFont];
-    self.textLabel.textColor = [UIColor darkGrayColor];
-    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
-}
+/**
+@since 1.9.1
+*/
 
-- (void)setSettingsItem:(JMSettingsItem *)settingsItem
-{
-    _settingsItem = settingsItem;
-    self.textLabel.text = settingsItem.titleString;
-}
+typedef NS_ENUM(NSInteger, JMSaveReportSectionType) {
+    JMSaveReportSectionTypeName,
+    JMSaveReportSectionTypeFormat,
+    JMSaveReportSectionTypePageRange
+};
 
+@interface JMSaveReportSection : NSObject
+@property (nonatomic, assign) JMSaveReportSectionType sectionType;
+@property (nonatomic, copy) NSString *title;
+- (instancetype)initWithSectionType:(JMSaveReportSectionType)sectionType title:(NSString *)title;
++ (JMSaveReportSection *)sectionWithType:(JMSaveReportSectionType)sectionType title:(NSString *)title;
 @end

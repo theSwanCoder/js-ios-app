@@ -21,22 +21,38 @@
  */
 
 
-#import "JMSettingsTableViewCell.h"
+//
+//  JMSaveReportSection.m
+//  TIBCO JasperMobile
+//
 
-@implementation JMSettingsTableViewCell
-- (void)awakeFromNib
+/**
+@since 1.9.1
+*/
+
+#import "JMSaveReportSection.h"
+
+@implementation JMSaveReportSection
+
+- (instancetype)init
 {
-    [super awakeFromNib];
-    self.detailTextLabel.font = [JMFont tableViewCellDetailFont];
-    self.textLabel.font = [JMFont tableViewCellTitleFont];
-    self.textLabel.textColor = [UIColor darkGrayColor];
-    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
+    [NSException raise:@"Init with (- (instancetype)initWithSectionType:(JMSaveReportSectionType)sectionType title:(NSString *)title)"
+                format:@""];
+    return nil;
 }
 
-- (void)setSettingsItem:(JMSettingsItem *)settingsItem
+- (instancetype)initWithSectionType:(JMSaveReportSectionType)sectionType title:(NSString *)title
 {
-    _settingsItem = settingsItem;
-    self.textLabel.text = settingsItem.titleString;
+    self = [super init];
+    if (self) {
+        _sectionType = sectionType;
+        _title = title;
+    }
+    return self;
 }
 
++ (JMSaveReportSection *)sectionWithType:(JMSaveReportSectionType)sectionType title:(NSString *)title
+{
+    return [[self.class alloc] initWithSectionType:sectionType title:title];
+}
 @end

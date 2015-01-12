@@ -62,6 +62,11 @@
 "savereport.title" = "Save Report";
 "savereport.name" = "Report Name";
 "savereport.format" = "Output Format";
+"savereport.pagesRange" = "Range Pages";
+"savereport.pagesRange.fromPage" = "From page:";
+"savereport.pagesRange.toPage" = "To page:";
+"savereport.pagesRange.errorFromPage" = "\"From\" value must be less \"To\" value";
+"savereport.pagesRange.errorToPage" = "\"To\" value must be more \"From\" value";
 "savereport.saved" = "Report was successfully saved";
 "savereport.name.errmsg.empty" = "Cannot be empty";
 "savereport.name.errmsg.notunique" = "This name has been already taken, please choose different name";
@@ -139,6 +144,8 @@
 "detail.settings.crashtracking.alert.title" = "Attention!";
 "detail.settings.crashtracking.alert.message" = "Sending crash reports settings will be applied after restart application.";
 "detail.settings.privacy.policy.title" = "Privacy Policy";
+"detail.settings.feedback" = "Feedback by Email";
+"detail.settings.feedback.errorShowClient" = "Need configure email";
 
 "detail.report.options.title" = "Filter Options";
 "detail.report.options.titlelabel.title" = "Current Filters";

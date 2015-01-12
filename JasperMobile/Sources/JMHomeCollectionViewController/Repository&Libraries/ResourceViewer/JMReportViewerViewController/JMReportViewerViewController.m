@@ -51,12 +51,6 @@
 {
     [super viewDidAppear:animated];
     [self updateToobarAppearence];
-
-//    if (![JMRequestDelegate isRequestPoolEmpty]) {
-//        [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.reportViewer.reportClient cancelBlock:@weakself(^(void)) {
-//            [self.reportViewer cancelReport];
-//        } @weakselfend];
-//    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -66,6 +60,10 @@
         id destinationViewController = segue.destinationViewController;
         [destinationViewController setInputControls:[[NSMutableArray alloc] initWithArray:self.reportViewer.inputControls copyItems:YES]];
         [destinationViewController performSelector:@selector(setDelegate:) withObject:self];
+
+        if ([segue.identifier isEqualToString:kJMSaveReportViewControllerSegue]) {
+            ((JMSaveReportViewController *)destinationViewController).reportViewer = self.reportViewer;
+        }
     }
 }
 

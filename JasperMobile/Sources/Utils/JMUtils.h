@@ -98,4 +98,9 @@
 + (void)activateCrashReportSendingIfNeeded;
 
 + (NSArray *)supportedFormatsForReportSaving;
+
+/**
+ Build Version
+ */
++ (NSString *)buildVersion;
 @end
