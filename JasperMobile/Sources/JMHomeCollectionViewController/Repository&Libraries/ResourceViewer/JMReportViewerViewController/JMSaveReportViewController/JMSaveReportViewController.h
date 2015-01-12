@@ -36,10 +36,13 @@
 #import "JMResourceClientHolder.h"
 #import "JMReportClientHolder.h"
 
+@class JMReportViewer;
+
 extern NSString * const kJMSaveReportViewControllerSegue;
 
 @interface JMSaveReportViewController : JMEditabledViewController <JMResourceClientHolder, JMReportClientHolder>
 @property (nonatomic, strong) NSMutableArray *inputControls;
 @property (nonatomic, weak) UIViewController *delegate;
 
+@property (nonatomic, strong) JMReportViewer *reportViewer;
 @end

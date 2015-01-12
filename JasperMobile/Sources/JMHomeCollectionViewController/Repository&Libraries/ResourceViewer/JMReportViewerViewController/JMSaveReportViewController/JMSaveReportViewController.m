@@ -27,19 +27,32 @@
 #import "JMCancelRequestPopup.h"
 #import "JMRequestDelegate.h"
 #import "ALToastView.h"
+#import "JMSaveReportSection.h"
+#import "JMReportViewer.h"
+#import "JMSaveReportNameCell.h"
+#import "JMSaveReportFormatCell.h"
+#import "JMSaveReportPageRangeCell.h"
 
 
 NSString * const kJMSaveReportViewControllerSegue = @"SaveReportViewControllerSegue";
 NSString * const kJMAttachmentPrefix = @"_";
+NSString * const kJMSavePageFromKey = @"kJMSavePageFromKey";
+NSString * const kJMSavePageToKey = @"kJMSavePageToKey";
+NSString * const kJMSaveReportNameCellIdentifier = @"ReportNameCell";
+NSString * const kJMSaveReportFormatCellIdentifier = @"FormatSelectionCell";
+NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
 
-@interface JMSaveReportViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface JMSaveReportViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, JMSaveReportNameCellDelegate, JMSaveReportPageRangeCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) NSString *selectedReportFormat;
 @property (nonatomic, strong) NSString *reportName;
 @property (nonatomic, strong) NSString *errorString;
 
+@property (nonatomic, copy) NSDictionary *sections;
+@property (nonatomic, strong) NSMutableDictionary *pages;
+@property (nonatomic, copy) NSArray *sectionTypes;
 @end
 
 
@@ -50,7 +63,12 @@ objection_requires(@"resourceClient", @"reportClient")
 @synthesize resourceLookup = _resourceLookup;
 @synthesize reportClient = _reportClient;
 
-#pragma mark - Initialization
+#pragma mark - Lifecycle
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -70,22 +88,73 @@ objection_requires(@"resourceClient", @"reportClient")
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
     [self.tableView setRowHeight:[JMUtils isIphone] ? 44.f : 50.f];
+    
+    [self setupSections];
+}
+
+#pragma mark - Setups
+- (void)setupSections
+{
+    if (self.reportViewer.countOfPages > 1) {
+        self.pages = [@{
+                kJMSavePageFromKey : @1,
+                kJMSavePageToKey : @(self.reportViewer.countOfPages),
+        } mutableCopy];
+
+        self.sectionTypes = @[
+                @(JMSaveReportSectionTypeName),
+                @(JMSaveReportSectionTypeFormat),
+                @(JMSaveReportSectionTypePageRange)
+        ];
+    } else {
+        self.sectionTypes = @[
+                @(JMSaveReportSectionTypeName),
+                @(JMSaveReportSectionTypeFormat)
+        ];
+    }
+    self.sections = @{
+            @(JMSaveReportSectionTypeFormat) : [JMSaveReportSection sectionWithType:JMSaveReportSectionTypeFormat
+                                                                              title:JMCustomLocalizedString(@"savereport.format", nil)],
+            @(JMSaveReportSectionTypeName) : [JMSaveReportSection sectionWithType:JMSaveReportSectionTypeName
+                                                                            title:JMCustomLocalizedString(@"savereport.name", nil)],
+            @(JMSaveReportSectionTypePageRange) : [JMSaveReportSection sectionWithType:JMSaveReportSectionTypePageRange
+                                                                                 title:JMCustomLocalizedString(@"savereport.pagesRange", nil)],
+    };
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return [self.sectionTypes count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return section ? [JMUtils supportedFormatsForReportSaving].count : 1;
+    NSInteger numberOfRows = 0;
+    
+    JMSaveReportSectionType sectionType = (JMSaveReportSectionType)((NSNumber *)self.sectionTypes[section]).integerValue;
+    switch (sectionType) {
+        case JMSaveReportSectionTypeName: {
+            numberOfRows = 1;
+            break;
+        }
+        case JMSaveReportSectionTypeFormat: {
+            numberOfRows = [JMUtils supportedFormatsForReportSaving].count;
+            break;
+        }
+        case JMSaveReportSectionTypePageRange: {
+            numberOfRows = 2;
+            break;
+        }
+    }
+    return numberOfRows;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section ? JMCustomLocalizedString(@"savereport.format", nil) : JMCustomLocalizedString(@"savereport.name", nil);
+    JMSaveReportSectionType sectionType = (JMSaveReportSectionType)((NSNumber *)self.sectionTypes[section]).integerValue;
+    JMSaveReportSection *saveReportSection = (JMSaveReportSection *)self.sections[@(sectionType)];
+    return saveReportSection.title;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -103,110 +172,104 @@ objection_requires(@"resourceClient", @"reportClient")
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSString *cellIdentifier = indexPath.section ? @"FormatSelectionCell" : @"ReportNameCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (indexPath.section) {
-        if (indexPath.row) {
-            [cell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+{    
+    JMSaveReportSectionType sectionType = (JMSaveReportSectionType)((NSNumber *)self.sectionTypes[indexPath.section]).integerValue;
+    switch (sectionType) {
+        case JMSaveReportSectionTypeName: {
+            JMSaveReportNameCell *reportNameCell = [tableView dequeueReusableCellWithIdentifier:kJMSaveReportNameCellIdentifier
+                                                                                   forIndexPath:indexPath];
+            reportNameCell.textField.text = self.reportName;
+            reportNameCell.errorLabel.text = self.errorString;
+            reportNameCell.cellDelegate = self;
+            return reportNameCell;
         }
-
-        NSString *currentFormat = [[JMUtils supportedFormatsForReportSaving] objectAtIndex:indexPath.row];
-        cell.textLabel.text = currentFormat;
-        cell.accessoryType = [self.selectedReportFormat isEqualToString:currentFormat] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-    } else {
-        UITextField *textField = (UITextField *) [cell.contentView viewWithTag:1];
-        textField.text = self.reportName;
-        textField.placeholder = JMCustomLocalizedString(@"savereport.name", nil);
-        
-        UILabel *errorLabel = (UILabel *) [cell.contentView viewWithTag:2];
-        errorLabel.text = self.errorString;
-        errorLabel.font = [JMFont tableViewCellDetailErrorFont];
+        case JMSaveReportSectionTypeFormat: {
+            JMSaveReportFormatCell *formatCell = [tableView dequeueReusableCellWithIdentifier:kJMSaveReportFormatCellIdentifier
+                                                                                 forIndexPath:indexPath];
+            if (indexPath.row) {
+                [formatCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+            }
+            
+            NSString *currentFormat = [JMUtils supportedFormatsForReportSaving][indexPath.row];
+            formatCell.textLabel.text = currentFormat;
+            formatCell.accessoryType = [self.selectedReportFormat isEqualToString:currentFormat] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            return formatCell;
+        }
+        case JMSaveReportSectionTypePageRange: {
+            JMSaveReportPageRangeCell *pageRangeCell = [tableView dequeueReusableCellWithIdentifier:kJMSaveReportPageRangeCellIdentifier
+                                                                                       forIndexPath:indexPath];
+            pageRangeCell.cellDelegate = self;
+            if (indexPath.row == 0) {
+                pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"savereport.pagesRange.fromPage", nil);
+                pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
+            } else if (indexPath.row == 1) {
+                pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"savereport.pagesRange.toPage", nil);
+                pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
+                [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+            }
+            pageRangeCell.pageCount = self.reportViewer.countOfPages;
+            return pageRangeCell;
+        }
     }
-    return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] objectAtIndex:indexPath.row];
-    self.errorString = nil;
-    [self.tableView reloadData];
+    JMSaveReportSectionType sectionType = (JMSaveReportSectionType)((NSNumber *)self.sectionTypes[indexPath.section]).integerValue;
+    switch (sectionType) {
+        case JMSaveReportSectionTypeName:
+        case JMSaveReportSectionTypePageRange:
+            break;
+        case JMSaveReportSectionTypeFormat:{
+            self.selectedReportFormat = [JMUtils supportedFormatsForReportSaving][indexPath.row];
+//            self.errorString = nil;
+//            [self.tableView reloadData];
+            break;
+        };
+    }
 }
 
-#pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+#pragma mark - JMSaveReportNameCellDelegate
+- (void)nameCell:(JMSaveReportNameCell *)cell didChangeReportName:(NSString *)reportName
 {
-    [textField resignFirstResponder];
-    return NO;
+    self.reportName = reportName;
+    // TODO: valid existing name
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
+#pragma mark - JMSaveReportPageRangeCellDelegate
+- (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSNumber *)page
 {
-    self.reportName = textField.text;
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath.row == 0) {
+        if (page.integerValue > ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue) {
+            [self showErrorWithMessage:JMCustomLocalizedString(@"savereport.pagesRange.errorFromPage", nil)];
+        } else {
+            self.pages[kJMSavePageFromKey] = page;
+        }
+    } else if (indexPath.row == 1) {
+        if (page.integerValue < ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue) {
+            [self showErrorWithMessage:JMCustomLocalizedString(@"savereport.pagesRange.errorToPage", nil)];
+        } else {
+            self.pages[kJMSavePageToKey] = page;
+        }
+    }
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)showErrorWithMessage:(NSString *)errorMessage
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:errorMessage
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+    [alertView show];
 }
 
 #pragma mark - Actions
 - (void)saveButtonTapped:(id)sender
 {
-    [self.view endEditing:YES];
-    NSString *fullReportDirectory = [JMSavedResources pathToReportDirectoryWithName:self.reportName format:self.selectedReportFormat];
-    NSString *errorMessage = nil;
-    BOOL isValidReportName = ([JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessage] &&
-                              [self createReportDirectory:fullReportDirectory errorMessage:&errorMessage]);
-    
-    self.errorString = errorMessage;
-    [self.tableView reloadData];
-    
-    if (!self.errorString && isValidReportName) {
-        // Clear any errors
-        [self.tableView reloadData];
-        
-        NSMutableArray *parameters = [NSMutableArray array];
-        for (JSInputControlDescriptor *inputControlDescriptor in self.inputControls) {
-            JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
-                                                                                   value:inputControlDescriptor.selectedValues];
-            [parameters addObject:reportParameter];
-        }
-        
-        [JMCancelRequestPopup presentWithMessage:@"savereport.saving.status.title" restClient:self.reportClient cancelBlock:^{
-            [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
-        }];
-        
-        JSRequestFinishedBlock checkErrorBlock = @weakself(^(JSOperationResult *result)) {
-            if (result.isSuccessful) return;
-            [self.reportClient cancelAllRequests];
-            [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
-        }@weakselfend;
-        
-        JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
-            JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
-            JSExportExecutionResponse *export = [response.exports objectAtIndex:0];
-            NSString *requestId = response.requestId;
-            
-            NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
-            [self.reportClient loadReportOutput:requestId exportOutput:export.uuid loadForSaving:YES path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
-            
-            for (JSReportOutputResource *attachment in export.attachments) {
-                NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
-                [self.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
-                    request.delegate = [JMRequestDelegate requestDelegateForFinishBlock:nil];
-                    request.finishedBlock = checkErrorBlock;
-                }];
-            }
-        } @weakselfend];
-
-        [JMRequestDelegate setFinalBlock:@weakself(^(void)) {
-            [self.navigationController popViewControllerAnimated:YES];
-            [JMSavedResources addReport:self.resourceLookup withName:self.reportName format:self.selectedReportFormat];
-            [ALToastView toastInView:self.delegate.view withText:JMCustomLocalizedString(@"savereport.saved", nil)];
-        } @weakselfend];
-
-        [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO freshData:YES saveDataSnapshot:NO
-                             ignorePagination:NO transformerKey:nil pages:nil attachmentsPrefix:kJMAttachmentPrefix parameters:parameters usingBlock:^(JSRequest *request) {
-                                 request.delegate = delegate;
-                                 request.finishedBlock = checkErrorBlock;
-                             }];
-    }
+    [self runSaveAction];
 }
 
 #pragma mark - Private
@@ -216,12 +279,108 @@ objection_requires(@"resourceClient", @"reportClient")
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     NSError *error;
-    [fileManager createDirectoryAtPath:reportDirectory
-           withIntermediateDirectories:YES
-                            attributes:nil
-                                 error:&error];
+    BOOL isCreated = [fileManager createDirectoryAtPath:reportDirectory
+                            withIntermediateDirectories:YES
+                                             attributes:nil
+                                                  error:&error];
     
-    if (error) *errorMessage = error.localizedDescription;
-    return [*errorMessage length] == 0;
+    if (!isCreated) *errorMessage = error.localizedDescription;
+    return isCreated;
 }
+
+- (void)runSaveAction
+{
+    [self.view endEditing:YES];
+    NSString *fullReportDirectory = [JMSavedResources pathToReportDirectoryWithName:self.reportName format:self.selectedReportFormat];
+    NSString *errorMessage = nil;
+    BOOL isValidReportName = ([JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessage] &&
+            [self createReportDirectory:fullReportDirectory errorMessage:&errorMessage]);
+
+    self.errorString = errorMessage;
+    [self.tableView reloadData];
+
+    if (!self.errorString && isValidReportName) {
+        // Clear any errors
+        [self.tableView reloadData];
+
+        NSMutableArray *parameters = [NSMutableArray array];
+        for (JSInputControlDescriptor *inputControlDescriptor in self.inputControls) {
+            JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
+                                                                                   value:inputControlDescriptor.selectedValues];
+            [parameters addObject:reportParameter];
+        }
+
+        [JMCancelRequestPopup presentWithMessage:@"savereport.saving.status.title" restClient:self.reportClient cancelBlock:^{
+            [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
+        }];
+
+        JSRequestFinishedBlock checkErrorBlock = @weakself(^(JSOperationResult *result)) {
+                if (result.isSuccessful) return;
+                [self.reportClient cancelAllRequests];
+                [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
+            }@weakselfend;
+
+        JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+                JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
+                JSExportExecutionResponse *export = [response.exports objectAtIndex:0];
+                NSString *requestId = response.requestId;
+
+                NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
+                [self.reportClient loadReportOutput:requestId exportOutput:export.uuid loadForSaving:YES path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
+
+                for (JSReportOutputResource *attachment in export.attachments) {
+                    NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
+                    [self.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
+                        request.delegate = [JMRequestDelegate requestDelegateForFinishBlock:nil];
+                        request.finishedBlock = checkErrorBlock;
+                    }];
+                }
+            } @weakselfend];
+
+        [JMRequestDelegate setFinalBlock:@weakself(^(void)) {
+                [self.navigationController popViewControllerAnimated:YES];
+                [JMSavedResources addReport:self.resourceLookup
+                                   withName:self.reportName
+                                     format:self.selectedReportFormat];
+                [ALToastView toastInView:self.delegate.view
+                                withText:JMCustomLocalizedString(@"savereport.saved", nil)];
+            } @weakselfend];
+
+        [self.reportClient runReportExecution:self.resourceLookup.uri
+                                        async:NO
+                                 outputFormat:self.selectedReportFormat
+                                  interactive:NO
+                                    freshData:YES
+                             saveDataSnapshot:NO
+                             ignorePagination:NO
+                               transformerKey:nil
+                                        pages:[self makePagesFormat]
+                            attachmentsPrefix:kJMAttachmentPrefix
+                                   parameters:parameters
+                                   usingBlock:^(JSRequest *request) {
+                                       request.delegate = delegate;
+                                       request.finishedBlock = checkErrorBlock;
+                                   }];
+    }
+}
+
+- (NSString *)makePagesFormat
+{
+    NSString *pagesFormat;
+    NSInteger fromPageNumber = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
+    NSInteger toPageNumber = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
+    if (self.pages) {
+        BOOL isFromPageChanged = fromPageNumber != 1;
+        BOOL isToPageChanged = toPageNumber != self.reportViewer.countOfPages;
+        if (isFromPageChanged || isToPageChanged) {
+            if (fromPageNumber == toPageNumber) {
+                pagesFormat = [NSString stringWithFormat:@"%@", self.pages[kJMSavePageFromKey]];
+            } else {
+                pagesFormat = [NSString stringWithFormat:@"%@-%@", self.pages[kJMSavePageFromKey], self.pages[kJMSavePageToKey]];
+            }
+        }
+    }
+    return pagesFormat;
+}
+
 @end

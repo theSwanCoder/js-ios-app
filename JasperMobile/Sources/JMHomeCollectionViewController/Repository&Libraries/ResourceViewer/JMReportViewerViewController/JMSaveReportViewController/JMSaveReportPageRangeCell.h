@@ -21,22 +21,28 @@
  */
 
 
-#import "JMSettingsTableViewCell.h"
+//
+//  JMSaveReportPageRangeCell.m
+//  TIBCO JasperMobile
+//
 
-@implementation JMSettingsTableViewCell
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    self.detailTextLabel.font = [JMFont tableViewCellDetailFont];
-    self.textLabel.font = [JMFont tableViewCellTitleFont];
-    self.textLabel.textColor = [UIColor darkGrayColor];
-    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
-}
+/**
+@since 1.9.1
+*/
 
-- (void)setSettingsItem:(JMSettingsItem *)settingsItem
-{
-    _settingsItem = settingsItem;
-    self.textLabel.text = settingsItem.titleString;
-}
 
+@protocol JMSaveReportPageRangeCellDelegate;
+
+@interface JMSaveReportPageRangeCell : UITableViewCell
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, assign) NSInteger currentPage;
+@property (nonatomic, assign) NSInteger pageCount;
+@property (nonatomic, weak) id<JMSaveReportPageRangeCellDelegate> cellDelegate;
+
+- (void)updateCurrentPagePosition;
+@end
+
+@protocol JMSaveReportPageRangeCellDelegate <NSObject>
+@optional
+- (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSNumber *)page;
 @end
