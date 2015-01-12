@@ -188,6 +188,8 @@ objection_requires(@"resourceClient", @"reportClient")
                                                                                  forIndexPath:indexPath];
             if (indexPath.row) {
                 [formatCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+            } else {
+                [formatCell removeTopSeparator];
             }
             
             NSString *currentFormat = [JMUtils supportedFormatsForReportSaving][indexPath.row];
@@ -202,6 +204,7 @@ objection_requires(@"resourceClient", @"reportClient")
             if (indexPath.row == 0) {
                 pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"savereport.pagesRange.fromPage", nil);
                 pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
+                [pageRangeCell removeTopSeparator];
             } else if (indexPath.row == 1) {
                 pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"savereport.pagesRange.toPage", nil);
                 pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
@@ -221,9 +224,12 @@ objection_requires(@"resourceClient", @"reportClient")
         case JMSaveReportSectionTypePageRange:
             break;
         case JMSaveReportSectionTypeFormat:{
-            self.selectedReportFormat = [JMUtils supportedFormatsForReportSaving][indexPath.row];
-//            self.errorString = nil;
-//            [self.tableView reloadData];
+            NSString *reportFormat = [JMUtils supportedFormatsForReportSaving][indexPath.row];
+            if (![reportFormat isEqualToString:self.selectedReportFormat]) {
+                self.selectedReportFormat = reportFormat;
+                NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
+                [self.tableView reloadSections:sections withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
             break;
         };
     }
