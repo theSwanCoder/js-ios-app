@@ -36,8 +36,9 @@
 @interface UITableViewCell (Additions)
 
 - (void)setTopSeparatorWithHeight:(CGFloat)height color:(UIColor *)color tableViewStyle:(UITableViewStyle)style;
+- (void)removeTopSeparator;
 - (void)setBottomSeparatorWithHeight:(CGFloat)height color:(UIColor *)color tableViewStyle:(UITableViewStyle)style;
-
+- (void)removeBottomSeparator;
 
 - (UIToolbar *)toolbarForInputAccessoryView;
 

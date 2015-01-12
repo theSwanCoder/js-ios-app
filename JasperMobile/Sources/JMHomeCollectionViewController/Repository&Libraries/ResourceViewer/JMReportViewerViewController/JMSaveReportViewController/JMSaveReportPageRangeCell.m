@@ -56,6 +56,8 @@
     self.pickerView = pickerView;
     self.pickerView.delegate = self;
     self.pickerView.dataSource = self;
+    
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 #pragma mark - Public API
