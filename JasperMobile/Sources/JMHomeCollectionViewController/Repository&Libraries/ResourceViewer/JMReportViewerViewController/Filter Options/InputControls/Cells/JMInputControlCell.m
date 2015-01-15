@@ -41,6 +41,9 @@
     self.detailTextLabel.font = [JMFont tableViewCellDetailErrorFont];
     self.detailTextLabel.textColor = [UIColor redColor];
     self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
+    
+    // TODO: set init value
+    self.detailTextLabel.text = nil;
 }
 
 - (void)layoutSubviews
@@ -61,8 +64,15 @@
 
 - (void) updateDisplayingOfErrorMessage
 {
-    self.detailTextLabel.text = [self.inputControlDescriptor errorString];
-    [self.delegate reloadTableViewCell:self];
+    NSString *errorString = [self.inputControlDescriptor errorString];
+
+    BOOL isInputHasError = (errorString != nil);
+    BOOL hasPreviousError = self.detailTextLabel.text && self.detailTextLabel.text.length > 0;
+    
+    if ( (isInputHasError && !hasPreviousError) || (!isInputHasError && hasPreviousError) ) {
+        self.detailTextLabel.text = errorString;
+        [self.delegate reloadTableViewCell:self];
+    }
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
