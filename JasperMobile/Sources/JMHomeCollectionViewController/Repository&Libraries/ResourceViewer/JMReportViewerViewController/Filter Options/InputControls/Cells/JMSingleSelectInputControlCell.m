@@ -78,7 +78,7 @@
         self.valueLabel.text = valuesAsStrings;
     } else {
         self.inputControlDescriptor.state.value = nil;
-        self.valueLabel.text = JS_IC_NOTHING_SUBSTITUTE_LABEL;
+        self.valueLabel.text = @"---";
     }
     [self updateDisplayingOfErrorMessage];
 }

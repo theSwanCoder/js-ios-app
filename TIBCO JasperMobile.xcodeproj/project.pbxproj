@@ -281,6 +281,7 @@
 		93DFB6D41A604308009F0E4A /* JMSaveReportNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DFB6D31A604308009F0E4A /* JMSaveReportNameCell.m */; };
 		93DFB6D71A604333009F0E4A /* JMSaveReportFormatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DFB6D61A604333009F0E4A /* JMSaveReportFormatCell.m */; };
 		93DFB6DA1A60434C009F0E4A /* JMSaveReportPageRangeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DFB6D91A60434C009F0E4A /* JMSaveReportPageRangeCell.m */; };
+		DEE7EF5C7BAC92E0488D7677 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B6F878B12C7F608D7A77BF4 /* libPods.a */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
 		F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */; };
@@ -291,35 +292,9 @@
 		F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC334174CFFCE00CEB39E /* Foundation.framework */; };
 		F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */; };
 		F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5663A321752FA5C007978BE /* CFNetwork.framework */; };
-		F5D6373117909D3C005BA5CD /* jaspersoft-sdk-resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */; };
-		F5D6373217909D8F005BA5CD /* libjaspersoft-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5D6372817909B1D005BA5CD /* libjaspersoft-sdk.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		FE39AFAC1A4DB49400023FC8 /* JMCancelRequestPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = FE39AFAA1A4DB49400023FC8 /* JMCancelRequestPopup.m */; };
 		FE39AFAD1A4DB49400023FC8 /* JMCancelRequestPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE39AFAB1A4DB49400023FC8 /* JMCancelRequestPopup.xib */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		F5D6372717909B1D005BA5CD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F5D6372017909B1D005BA5CD /* jaspersoft-sdk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F59768BD15E3C75F004165A7;
-			remoteInfo = "jaspersoft-sdk";
-		};
-		F5D6372917909B1D005BA5CD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F5D6372017909B1D005BA5CD /* jaspersoft-sdk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F59768D215E3C777004165A7;
-			remoteInfo = "jaspersoft-sdk-framework";
-		};
-		F5D6372B17909B1D005BA5CD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F5D6372017909B1D005BA5CD /* jaspersoft-sdk.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F5F68E0A15E55EC000270103;
-			remoteInfo = "jaspersoft-sdk-resources";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		08025CC91995231E00A6063B /* JMResourcesCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourcesCollectionViewController.h; sourceTree = "<group>"; };
@@ -540,6 +515,7 @@
 		08FF131119929B080082265D /* JMBooleanServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBooleanServerOptionCell.m; sourceTree = "<group>"; };
 		08FF131419929B080082265D /* JMTextServerOptionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextServerOptionCell.h; sourceTree = "<group>"; };
 		08FF131519929B080082265D /* JMTextServerOptionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextServerOptionCell.m; sourceTree = "<group>"; };
+		2B6F878B12C7F608D7A77BF4 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		93057D3E1A60185A00F385A9 /* JMSaveReportSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSaveReportSection.h; sourceTree = "<group>"; };
 		93057D3F1A60185A00F385A9 /* JMSaveReportSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSaveReportSection.m; sourceTree = "<group>"; };
 		9342862C1A42F33A0007FEC2 /* visualize_test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = visualize_test.html; sourceTree = "<group>"; };
@@ -710,6 +686,7 @@
 		93DFB6D61A604333009F0E4A /* JMSaveReportFormatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSaveReportFormatCell.m; sourceTree = "<group>"; };
 		93DFB6D81A60434C009F0E4A /* JMSaveReportPageRangeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSaveReportPageRangeCell.h; sourceTree = "<group>"; };
 		93DFB6D91A60434C009F0E4A /* JMSaveReportPageRangeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSaveReportPageRangeCell.m; sourceTree = "<group>"; };
+		B636AC664DCF34672AA19BF2 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F54C91A21752FAAD0009E2BE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -721,8 +698,8 @@
 		F55CC334174CFFCE00CEB39E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		F5663A321752FA5C007978BE /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		F5D6372017909B1D005BA5CD /* jaspersoft-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "jaspersoft-sdk.xcodeproj"; path = "JasperMobile/Vendor/jaspersoft-sdk/jaspersoft-sdk.xcodeproj"; sourceTree = "<group>"; };
 		F5D6373017909D3C005BA5CD /* jaspersoft-sdk-resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "jaspersoft-sdk-resources.bundle"; path = "../Vendor/jaspersoft-sdk/jaspersoft-sdk-resources.bundle"; sourceTree = "<group>"; };
+		F768EA36DEA76A9750B55E80 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		FE39AFA91A4DB49400023FC8 /* JMCancelRequestPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCancelRequestPopup.h; sourceTree = "<group>"; };
 		FE39AFAA1A4DB49400023FC8 /* JMCancelRequestPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMCancelRequestPopup.m; sourceTree = "<group>"; };
 		FE39AFAB1A4DB49400023FC8 /* JMCancelRequestPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMCancelRequestPopup.xib; sourceTree = "<group>"; };
@@ -736,7 +713,6 @@
 				93D19DCB1A5FE0D600F54687 /* MessageUI.framework in Frameworks */,
 				0871503E19F1266900C5875E /* libz.dylib in Frameworks */,
 				0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */,
-				F5D6373217909D8F005BA5CD /* libjaspersoft-sdk.a in Frameworks */,
 				F54C91A91752FAC20009E2BE /* QuartzCore.framework in Frameworks */,
 				F54C91A71752FAB80009E2BE /* SystemConfiguration.framework in Frameworks */,
 				F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */,
@@ -749,6 +725,7 @@
 				F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */,
 				F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */,
 				08DB677E1A137CD90035F58F /* SplunkMint-iOS.framework in Frameworks */,
+				DEE7EF5C7BAC92E0488D7677 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1492,6 +1469,15 @@
 			path = JMServerOption;
 			sourceTree = "<group>";
 		};
+		18D5CDCD8B3160D0EF1B62D0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B636AC664DCF34672AA19BF2 /* Pods.debug.xcconfig */,
+				F768EA36DEA76A9750B55E80 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		9342862B1A42F33A0007FEC2 /* VisualizeJS */ = {
 			isa = PBXGroup;
 			children = (
@@ -2163,13 +2149,13 @@
 		F55CC326174CFFCE00CEB39E = {
 			isa = PBXGroup;
 			children = (
-				F5D6372017909B1D005BA5CD /* jaspersoft-sdk.xcodeproj */,
 				08E863BD1992564A007CF257 /* Sources */,
 				08E62C7C19922B0B0081CA83 /* Supporting Files */,
 				08E62C8419922BA40081CA83 /* Resources */,
 				F55CC331174CFFCE00CEB39E /* Frameworks */,
 				F55CC330174CFFCE00CEB39E /* Products */,
 				F5663A141752F9D0007978BE /* Vendor */,
+				18D5CDCD8B3160D0EF1B62D0 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2197,6 +2183,7 @@
 				F55CC332174CFFCE00CEB39E /* UIKit.framework */,
 				F55CC334174CFFCE00CEB39E /* Foundation.framework */,
 				F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */,
+				2B6F878B12C7F608D7A77BF4 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2216,16 +2203,6 @@
 			path = JasperMobile/Vendor;
 			sourceTree = "<group>";
 		};
-		F5D6372117909B1D005BA5CD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				F5D6372817909B1D005BA5CD /* libjaspersoft-sdk.a */,
-				F5D6372A17909B1D005BA5CD /* jaspersoft-sdk.framework */,
-				F5D6372C17909B1D005BA5CD /* jaspersoft-sdk-resources.bundle */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		FE39AFA81A4DB49400023FC8 /* JMCancelRequestPopup */ = {
 			isa = PBXGroup;
 			children = (
@@ -2243,10 +2220,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F55CC375174CFFCF00CEB39E /* Build configuration list for PBXNativeTarget "TIBCO JasperMobile" */;
 			buildPhases = (
+				D2FEEDCA78B55F179C6C9ADD /* Check Pods Manifest.lock */,
 				F55CC32B174CFFCE00CEB39E /* Sources */,
 				F55CC32C174CFFCE00CEB39E /* Frameworks */,
 				0844F14019F694730082C6E5 /* ShellScript */,
 				F55CC32D174CFFCE00CEB39E /* Resources */,
+				2B526D1BAF439EB149A335A3 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2290,42 +2269,12 @@
 			mainGroup = F55CC326174CFFCE00CEB39E;
 			productRefGroup = F55CC330174CFFCE00CEB39E /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = F5D6372117909B1D005BA5CD /* Products */;
-					ProjectRef = F5D6372017909B1D005BA5CD /* jaspersoft-sdk.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				F55CC32E174CFFCE00CEB39E /* TIBCO JasperMobile */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		F5D6372817909B1D005BA5CD /* libjaspersoft-sdk.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libjaspersoft-sdk.a";
-			remoteRef = F5D6372717909B1D005BA5CD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		F5D6372A17909B1D005BA5CD /* jaspersoft-sdk.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = "jaspersoft-sdk.framework";
-			remoteRef = F5D6372917909B1D005BA5CD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		F5D6372C17909B1D005BA5CD /* jaspersoft-sdk-resources.bundle */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "jaspersoft-sdk-resources.bundle";
-			remoteRef = F5D6372B17909B1D005BA5CD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		F55CC32D174CFFCE00CEB39E /* Resources */ = {
@@ -2350,7 +2299,6 @@
 				088115F919B8C70D00C70170 /* JMGridLoadingCollectionViewCell.xib in Resources */,
 				9362BA611A25FD7D006A6178 /* search_item@3x.png in Resources */,
 				9362BAA01A25FD7E006A6178 /* res_type_html@3x.png in Resources */,
-				F5D6373117909D3C005BA5CD /* jaspersoft-sdk-resources.bundle in Resources */,
 				088115F719B8C63F00C70170 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */,
 				9362BA8B1A25FD7D006A6178 /* settings@3x.png in Resources */,
 				9362BA811A25FD7D006A6178 /* saveditems@3x.png in Resources */,
@@ -2534,6 +2482,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/sh\n# Auto Increment Version Script\n# set CFBundleVersion to 1.0.1 first!!!\n# the perl regex splits out the last part of a build number (ie: 1.1.1) and increments it by one\n# if you have a build number that is more than 3 components, add a '\\.\\d+' into the first part of the regex.\n# Increment build number for release builds only!!!.\n\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\nbuildPlist=${INFOPLIST_FILE}\nappVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$buildPlist\"`\nbuildAppVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/([\\d+\\.]*)(\\.\\d+)/$1/eg'`\n\n\nif [ \"${appVersion}\" = \"${buildAppVersion}\" ]; then\nbuildVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/([\\d+\\.]*)(\\d+)/($2+1)/eg'`\nelse\nbuildVersion=1\nfi\n\nnewBuildVersion=${appVersion}.${buildVersion}\necho $newBuildVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $newBuildVersion\" \"$buildPlist\"\nfi";
+		};
+		2B526D1BAF439EB149A335A3 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D2FEEDCA78B55F179C6C9ADD /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2722,6 +2700,7 @@
 		};
 		F55CC376174CFFCF00CEB39E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B636AC664DCF34672AA19BF2 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -2729,14 +2708,14 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/JasperMobile/Vendor/jaspersoft-sdk/Vendor/RestKit/Tests/Vendor/OCHamcrest",
-					"$(PROJECT_DIR)/JasperMobile/Vendor/SplunkMint-iOS-v4.0.22",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
 				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
-					"\"${BUILD_ROOT}/../\"/**",
+					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
+					"${BUILD_ROOT}/../**",
+					"$(inherited)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/JasperMobile/Supporting Files/TIBCO JasperMobile.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -2747,6 +2726,7 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
+					"$(inherited)",
 				);
 				PRODUCT_NAME = "TIBCO JasperMobile";
 				PROVISIONING_PROFILE = "";
@@ -2761,6 +2741,7 @@
 		};
 		F55CC377174CFFCF00CEB39E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F768EA36DEA76A9750B55E80 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaspersoft Corporation (HD6C6SELJN)";
@@ -2768,14 +2749,14 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/JasperMobile/Vendor/jaspersoft-sdk/Vendor/RestKit/Tests/Vendor/OCHamcrest",
-					"$(PROJECT_DIR)/JasperMobile/Vendor/SplunkMint-iOS-v4.0.22",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
 				HEADER_SEARCH_PATHS = (
-					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/**",
-					"\"${BUILD_ROOT}/../\"/**",
+					"$(BUILT_PRODUCTS_DIR)/../../Headers/**",
+					"${BUILD_ROOT}/../**",
+					"$(inherited)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/JasperMobile/Supporting Files/TIBCO JasperMobile.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -2786,6 +2767,7 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
+					"$(inherited)",
 				);
 				PRODUCT_NAME = "TIBCO JasperMobile";
 				PROVISIONING_PROFILE = "19c611e3-5c19-487e-b5de-5ac45a90d20d";

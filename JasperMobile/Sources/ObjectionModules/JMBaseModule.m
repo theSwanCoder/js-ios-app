@@ -40,10 +40,6 @@
 
     JSRESTReport *reportClient = [[JSRESTReport alloc] init];
     JSRESTResource *resourceClient = [[JSRESTResource alloc] init];
-    // Set "continue request" as a default request background policy
-    reportClient.requestBackgroundPolicy = JSRequestBackgroundPolicyContinue;
-    resourceClient.requestBackgroundPolicy = JSRequestBackgroundPolicyContinue;
-
     [self bind:reportClient toClass:[JSRESTReport class]];
     [self bind:resourceClient toClass:[JSRESTResource class]];
     [self bind:[JSConstants sharedInstance] toClass:[JSConstants class]];

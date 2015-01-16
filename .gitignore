@@ -19,3 +19,8 @@ Tibco JasperMobile.xcodeproj/project.xcworkspace
 Tibco JasperMobile.xcodeproj/project.xcworkspace/*
 Tibco JasperMobile.xcodeproj/xcuserdata
 Tibco JasperMobile.xcodeproj/xcuserdata/*
+
+#CocoaPods
+Pods
+Podfile.lock
+TIBCO JasperMobile.xcworkspace

@@ -26,7 +26,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com

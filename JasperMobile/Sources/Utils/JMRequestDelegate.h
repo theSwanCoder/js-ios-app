@@ -26,7 +26,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
  This block which will be invoked after all requests will finished

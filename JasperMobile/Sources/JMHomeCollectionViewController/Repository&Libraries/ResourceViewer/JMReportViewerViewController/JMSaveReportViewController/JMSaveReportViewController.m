@@ -327,46 +327,36 @@ objection_requires(@"resourceClient", @"reportClient")
             }@weakselfend;
 
         JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+            if (!result.isSuccessful) {
+                checkErrorBlock(result);
+            } else {
                 JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
                 JSExportExecutionResponse *export = [response.exports objectAtIndex:0];
                 NSString *requestId = response.requestId;
-
+                
                 NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
                 [self.reportClient loadReportOutput:requestId exportOutput:export.uuid loadForSaving:YES path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
-
+                
                 for (JSReportOutputResource *attachment in export.attachments) {
                     NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
-                    [self.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
-                        request.delegate = [JMRequestDelegate requestDelegateForFinishBlock:nil];
-                        request.finishedBlock = checkErrorBlock;
-                    }];
+                    JMRequestDelegate *attachmentDelegate = [JMRequestDelegate requestDelegateForFinishBlock:checkErrorBlock];
+                    [self.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath delegate:attachmentDelegate];
                 }
-            } @weakselfend];
+            }
+        } @weakselfend];
 
         [JMRequestDelegate setFinalBlock:@weakself(^(void)) {
-                [self.navigationController popViewControllerAnimated:YES];
-                [JMSavedResources addReport:self.resourceLookup
-                                   withName:self.reportName
-                                     format:self.selectedReportFormat];
-                [ALToastView toastInView:self.delegate.view
-                                withText:JMCustomLocalizedString(@"savereport.saved", nil)];
-            } @weakselfend];
+            [self.navigationController popViewControllerAnimated:YES];
+            [JMSavedResources addReport:self.resourceLookup
+                               withName:self.reportName
+                                 format:self.selectedReportFormat];
+            [ALToastView toastInView:self.delegate.view
+                            withText:JMCustomLocalizedString(@"savereport.saved", nil)];
+        } @weakselfend];
 
-        [self.reportClient runReportExecution:self.resourceLookup.uri
-                                        async:NO
-                                 outputFormat:self.selectedReportFormat
-                                  interactive:NO
-                                    freshData:YES
-                             saveDataSnapshot:NO
-                             ignorePagination:NO
-                               transformerKey:nil
-                                        pages:[self makePagesFormat]
-                            attachmentsPrefix:kJMAttachmentPrefix
-                                   parameters:parameters
-                                   usingBlock:^(JSRequest *request) {
-                                       request.delegate = delegate;
-                                       request.finishedBlock = checkErrorBlock;
-                                   }];
+        [self.reportClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO
+                                    freshData:YES saveDataSnapshot:NO ignorePagination:NO transformerKey:nil pages:[self makePagesFormat]
+                            attachmentsPrefix:kJMAttachmentPrefix parameters:parameters delegate:delegate];
     }
 }
 

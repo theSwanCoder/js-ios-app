@@ -29,7 +29,6 @@
 #import "JMUtils.h"
 #import "JMRequestDelegate.h"
 #import <QuartzCore/QuartzCore.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 @interface JMCancelRequestPopup ()
 @property (nonatomic, strong) JSRESTBase *restClient;
