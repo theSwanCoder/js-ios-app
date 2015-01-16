@@ -198,6 +198,8 @@
     }];
     
     JMRequestDelegate *serverInfoDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+        [JMCancelRequestPopup dismiss];
+        
         float serverVersion = self.restBase.serverInfo.versionAsFloat;
         if (serverVersion >= [JMServerProfile minSupportedServerVersion]) {
             if (successBlock) {
