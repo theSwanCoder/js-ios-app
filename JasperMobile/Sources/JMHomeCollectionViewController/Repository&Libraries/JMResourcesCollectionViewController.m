@@ -72,13 +72,18 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
 
 @property (nonatomic, strong) PopoverView *popoverView;
-
+@property (nonatomic, assign) UIDeviceOrientation currentOrientation;
 @end
 
 @implementation JMResourcesCollectionViewController
 @dynamic representationType;
 
 #pragma mark - UIViewController
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)viewDidLoad
 {
@@ -96,8 +101,10 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     self.noResultsViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
     
     for (NSInteger i = JMResourcesRepresentationTypeFirst(); i <= JMResourcesRepresentationTypeLast(); i ++) {
-        [self.collectionView registerNib:[UINib nibWithNibName:[self resourceCellForRepresentationType:i] bundle:nil] forCellWithReuseIdentifier:[self resourceCellForRepresentationType:i]];
-        [self.collectionView registerNib:[UINib nibWithNibName:[self loadingCellForRepresentationType:i] bundle:nil] forCellWithReuseIdentifier:[self loadingCellForRepresentationType:i]];
+        [self.collectionView registerNib:[UINib nibWithNibName:[self resourceCellForRepresentationType:i] bundle:nil]
+              forCellWithReuseIdentifier:[self resourceCellForRepresentationType:i]];
+        [self.collectionView registerNib:[UINib nibWithNibName:[self loadingCellForRepresentationType:i] bundle:nil]
+              forCellWithReuseIdentifier:[self loadingCellForRepresentationType:i]];
     }
     
     self.refreshControl = [[UIRefreshControl alloc] init];
@@ -109,8 +116,12 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self showNavigationItems];
     [self.resourceListLoader updateIfNeeded];
     
+    self.currentOrientation = UIDeviceOrientationUnknown;
+    
     [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceOrientationDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
-        self.needLayoutUI = YES;
+        if ([self isOrientationChanged]) {
+            self.needLayoutUI = YES;
+        }
     } @weakselfend];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:kJMRepresentationTypeDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
@@ -118,9 +129,22 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     } @weakselfend];
 }
 
-- (void)dealloc
+- (BOOL)isOrientationChanged
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    BOOL result = NO;
+    if ( UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) ) {
+        if (self.currentOrientation != UIDeviceOrientationUnknown) {
+            BOOL isOrientationChanged = [UIDevice currentDevice].orientation != self.currentOrientation;
+            if (isOrientationChanged) {
+                self.currentOrientation = [UIDevice currentDevice].orientation;
+                result = YES;
+            }
+        } else {
+            self.currentOrientation = [UIDevice currentDevice].orientation;
+            result = YES;
+        }
+    }
+    return result;
 }
 
 - (void)viewWillAppear:(BOOL)animated

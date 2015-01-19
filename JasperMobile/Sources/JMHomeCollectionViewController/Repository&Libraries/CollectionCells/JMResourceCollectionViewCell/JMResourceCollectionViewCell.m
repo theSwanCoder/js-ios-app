@@ -85,9 +85,13 @@ objection_requires(@"constants")
     // TO DO: Should be fixed! need replace url generation to SDK!
     JSObjectionInjector *injector = [JSObjection defaultInjector];
     JSRESTResource *resourceClient = [injector getObject:[JSRESTResource class]];
-    if (![resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_FOLDER] &&
-        resourceClient.serverInfo.versionAsFloat >= self.constants.SERVER_VERSION_CODE_AMBER_6_0_0) {
-        self.resourceImage.imageUrl = [NSString stringWithFormat:@"%@%@/thumbnails%@?defaultAllowed=false", [JMServerProfile activeServerProfile].serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, resourceLookup.uri];
+    BOOL isFolder = [resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_FOLDER];
+    BOOL isServerUpper6 = resourceClient.serverInfo.versionAsFloat >= self.constants.SERVER_VERSION_CODE_AMBER_6_0_0;
+    if (!isFolder && isServerUpper6) {
+        NSString *serverURL = [JMServerProfile activeServerProfile].serverUrl;
+        NSString *restURI = [JSConstants sharedInstance].REST_SERVICES_V2_URI;
+        NSString *resourceURI = resourceLookup.uri;
+        self.resourceImage.imageUrl = [NSString stringWithFormat:@"%@%@/thumbnails%@?defaultAllowed=false", serverURL, restURI, resourceURI];
     }
 }
 
