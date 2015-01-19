@@ -205,7 +205,8 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
         [allInputControls addObject:descriptor.uuid];
     }
     [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
-        [self.navigationController popViewControllerAnimated:YES];
+        // TODO: no need back to previous screen
+        //[self.navigationController popViewControllerAnimated:YES];
     } @weakselfend];
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
         for (JSInputControlState *state in result.objects) {
