@@ -113,22 +113,7 @@ objection_requires(@"resourceClient", @"reportClient")
         _multiPageReport = (self.countOfPages > 1) && (self.countOfPages != kJMCountOfPagesUnknown);
         [self.delegate reportViewerDidChangedPagination:self];
         if ([self reportIsEmpty]) {
-            UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:@"detail.report.viewer.emptyreport.title" message:nil completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                if (alertView.cancelButtonIndex == buttonIndex) {
-                    if (self.inputControls && [self.inputControls count]) {
-                        [self.delegate performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
-                    } else {
-                        [self cancelReport];
-                    }
-                }
-                [self.icUndoManager undo];
-                [self.icUndoManager removeAllActionsWithTarget:self];
-            } cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil];
-            if ([self.icUndoManager canUndo]) {
-                alertView.message = JMCustomLocalizedString(@"detail.report.viewer.emptyreport.message", nil);
-                [alertView addButtonWithTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)];
-            }
-            [alertView show];
+            [self showAlertEmtpyReport];
         }
     }
 }
@@ -150,17 +135,33 @@ objection_requires(@"resourceClient", @"reportClient")
 
 - (void) resetReportViewer
 {
-    if (self.requestId) {
+    if (self.requestId && ![self reportIsEmpty]) {
         [self.icUndoManager removeAllActionsWithTarget:self];
-        [[self.icUndoManager prepareWithInvocationTarget:self] setValues:self.requestId exportIds:self.exportIdsDictionary inputControls:self.inputControls countOfPages:self.countOfPages currentPage:self.currentPage statusIsReady:self.reportExequtingStatusIsReady outputResourceType:self.outputResourceType];
+        [[self.icUndoManager prepareWithInvocationTarget:self] setValues:self.requestId
+                                                               exportIds:self.exportIdsDictionary
+                                                           inputControls:self.inputControls
+                                                            countOfPages:self.countOfPages
+                                                             currentPage:self.currentPage
+                                                           statusIsReady:self.reportExequtingStatusIsReady
+                                                      outputResourceType:self.outputResourceType];
         [self.icUndoManager setActionName:@"ResetChanges"];
     }
     
-    [self setValues:nil exportIds:[NSMutableDictionary dictionary] inputControls:self.inputControls countOfPages:kJMCountOfPagesUnknown currentPage:1 statusIsReady:NO outputResourceType:JMReportViewerOutputResourceType_None];
+    [self setValues:nil
+          exportIds:[NSMutableDictionary dictionary]
+      inputControls:self.inputControls
+       countOfPages:kJMCountOfPagesUnknown
+        currentPage:1 statusIsReady:NO
+ outputResourceType:JMReportViewerOutputResourceType_None];
 }
 
-- (void) setValues:(NSString *)requestID exportIds:(NSMutableDictionary *)exportIds inputControls:(NSMutableArray *)inputControls
-      countOfPages:(NSInteger)countOfPages currentPage:(NSInteger)currentPage statusIsReady:(BOOL)status outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
+- (void) setValues:(NSString *)requestID
+         exportIds:(NSMutableDictionary *)exportIds
+     inputControls:(NSMutableArray *)inputControls
+      countOfPages:(NSInteger)countOfPages
+       currentPage:(NSInteger)currentPage
+     statusIsReady:(BOOL)status
+outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
 {
     self.outputResourceType = outputResourceType;
     self.exportIdsDictionary = exportIds;
@@ -356,6 +357,34 @@ objection_requires(@"resourceClient", @"reportClient")
 - (BOOL)reportIsEmpty
 {
     return (self.reportExequtingStatusIsReady && self.countOfPages == 0);
+}
+
+- (void)showAlertEmtpyReport
+{
+    void(^alertCompletion)(UIAlertView *alertView, NSInteger buttonIndex) = ^(UIAlertView *alertView, NSInteger buttonIndex) {
+        if (alertView.cancelButtonIndex == buttonIndex) {
+            if (self.inputControls && [self.inputControls count]) {
+                [self.delegate performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
+            } else {
+                [self cancelReport];
+            }
+        }
+        [self.icUndoManager undo];
+        [self.icUndoManager removeAllActionsWithTarget:self];
+    };
+    
+    UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:@"detail.report.viewer.emptyreport.title"
+                                                          message:nil
+                                                       completion:alertCompletion
+                                                cancelButtonTitle:@"dialog.button.ok"
+                                                otherButtonTitles:nil];
+    
+    if ([self.icUndoManager canUndo]) {
+        alertView.message = JMCustomLocalizedString(@"detail.report.viewer.emptyreport.message", nil);
+        [alertView addButtonWithTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)];
+    }
+    
+    [alertView show];
 }
 
 @end
