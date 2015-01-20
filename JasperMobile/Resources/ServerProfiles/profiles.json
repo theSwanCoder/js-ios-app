@@ -1,6 +1,27 @@
 {
     "profiles" : [
                   {
+                  "mAlias" : "PRO 6.0.1 Superuser",
+                  "mServerUrl" : "http://192.168.88.44:8088/jasperserver-pro-6.0.1",
+                  "mOrganization" : "",
+                  "mUsername" : "superuser",
+                  "mPassword" : "superuser"
+                  },
+                  {
+                  "mAlias" : "PRO 6.0.1 Adminuser",
+                  "mServerUrl" : "http://192.168.88.44:8088/jasperserver-pro-6.0.1",
+                  "mOrganization" : "organization_1",
+                  "mUsername" : "jasperadmin",
+                  "mPassword" : "jasperadmin"
+                  },
+                  {
+                  "mAlias" : "PRO 6.0.1 JoeUser",
+                  "mServerUrl" : "http://192.168.88.44:8088/jasperserver-pro-6.0.1",
+                  "mOrganization" : "organization_1",
+                  "mUsername" : "joeuser",
+                  "mPassword" : "joeuser"
+                  },
+                  {
                   "mAlias" : "PRO TRUNK Superuser",
                   "mServerUrl" : "http://build-master.jaspersoft.com:5980/jrs-pro-trunk",
                   "mOrganization" : "",
