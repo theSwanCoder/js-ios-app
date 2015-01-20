@@ -53,6 +53,7 @@ NSString * const kJMRestStatusReady = @"ready";
 @property (nonatomic, readwrite) BOOL multiPageReport;
 
 @property (nonatomic, copy) JSRequestFinishedBlock errorExecutionBlock;
+@property (nonatomic, assign) BOOL isReportRunSuccessful;
 @end
 
 @implementation JMReportViewer
@@ -86,6 +87,8 @@ objection_requires(@"resourceClient", @"reportClient")
                 [self cancelReport];
             } @weakselfend cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil) otherButtonTitles:nil] show];
         }@weakselfend;
+        
+        _isReportRunSuccessful = NO;
     }
     return self;
 }
@@ -145,6 +148,7 @@ objection_requires(@"resourceClient", @"reportClient")
                                                            statusIsReady:self.reportExequtingStatusIsReady
                                                       outputResourceType:self.outputResourceType];
         [self.icUndoManager setActionName:@"ResetChanges"];
+        self.isReportRunSuccessful = YES;
     }
     
     [self setValues:nil
@@ -364,7 +368,11 @@ outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
     void(^alertCompletion)(UIAlertView *alertView, NSInteger buttonIndex) = ^(UIAlertView *alertView, NSInteger buttonIndex) {
         if (alertView.cancelButtonIndex == buttonIndex) {
             if (self.inputControls && [self.inputControls count]) {
-                [self.delegate performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
+                if (self.isReportRunSuccessful) {
+                    [self.delegate performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
+                } else {
+                    [self.delegate.navigationController popViewControllerAnimated:YES];                    
+                }
             } else {
                 [self cancelReport];
             }
@@ -385,6 +393,8 @@ outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
     }
     
     [alertView show];
+    
+    
 }
 
 @end
