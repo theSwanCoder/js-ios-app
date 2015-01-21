@@ -78,7 +78,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 @implementation JMResourcesCollectionViewController
 @dynamic representationType;
 
-#pragma mark - UIViewController
+#pragma mark - Lifecycle
 
 - (void)dealloc
 {
@@ -114,7 +114,6 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     self.collectionView.alwaysBounceVertical = YES;
     
     [self showNavigationItems];
-    [self.resourceListLoader updateIfNeeded];
     
     self.currentOrientation = UIDeviceOrientationUnknown;
     
@@ -129,24 +128,6 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     } @weakselfend];
 }
 
-- (BOOL)isOrientationChanged
-{
-    BOOL result = NO;
-    if ( UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) ) {
-        if (self.currentOrientation != UIDeviceOrientationUnknown) {
-            BOOL isOrientationChanged = [UIDevice currentDevice].orientation != self.currentOrientation;
-            if (isOrientationChanged) {
-                self.currentOrientation = [UIDevice currentDevice].orientation;
-                result = YES;
-            }
-        } else {
-            self.currentOrientation = [UIDevice currentDevice].orientation;
-            result = YES;
-        }
-    }
-    return result;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -157,6 +138,36 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 {
     [super viewDidAppear:animated];
     [self.resourceListLoader updateIfNeeded];
+}
+
+
+#pragma mark - Custom accessors
+- (UIBarButtonItem *)resourceRepresentationItem
+{
+    NSString *imageName = ([self getNextRepresentationTypeForType:self.representationType] == JMResourcesRepresentationType_Grid) ? @"grid_button" : @"horizontal_list_button";
+    return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName] style:UIBarButtonItemStyleBordered target:self action:@selector(representationTypeButtonTapped:)];
+}
+
+- (JMResourcesListLoader *)resourceListLoader
+{
+    if (!_resourceListLoader) {
+        switch (self.presentingType) {
+            case JMResourcesCollectionViewControllerPresentingType_Library:
+                _resourceListLoader = [NSClassFromString(@"JMLibraryListLoader") new];
+                break;
+            case JMResourcesCollectionViewControllerPresentingType_Repository:
+                _resourceListLoader = [NSClassFromString(@"JMRepositoryListLoader") new];
+                break;
+            case JMResourcesCollectionViewControllerPresentingType_SavedItems:
+                _resourceListLoader = [NSClassFromString(@"JMSavedResourcesListLoader") new];
+                break;
+            case JMResourcesCollectionViewControllerPresentingType_Favorites:
+                _resourceListLoader = [NSClassFromString(@"JMFavoritesListLoader") new];
+                break;
+        }
+        _resourceListLoader.delegate = self;
+    }
+    return _resourceListLoader;
 }
 
 - (JMResourcesRepresentationType)representationType
@@ -177,6 +188,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     }
 }
 
+#pragma mark -
 - (void)setNeedReloadData:(BOOL)needReloadData
 {
     _needReloadData = needReloadData;
@@ -288,8 +300,12 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         case JMResourcesCollectionViewControllerPresentingType_Library:
         case JMResourcesCollectionViewControllerPresentingType_Favorites:
         case JMResourcesCollectionViewControllerPresentingType_SavedItems:{
-            if((self.presentingType != JMResourcesCollectionViewControllerPresentingType_Library) ||
-               (self.presentingType == JMResourcesCollectionViewControllerPresentingType_Library && [self.resourceListLoader.resourceClient.serverInfo.edition isEqualToString:self.resourceListLoader.constants.SERVER_EDITION_PRO])) {
+            // get server info (need make network request if serverInfo is missed)
+            JSServerInfo *serverInfo = self.resourceListLoader.resourceClient.serverInfo;
+            
+            BOOL isProVersion = [serverInfo.edition isEqualToString:self.resourceListLoader.constants.SERVER_EDITION_PRO];
+            BOOL isLibrary = self.presentingType == JMResourcesCollectionViewControllerPresentingType_Library;
+            if( !isLibrary || (isLibrary && isProVersion) ) {
                 availableAction |= JMMenuActionsViewAction_Filter;
             }
             availableAction |= JMMenuActionsViewAction_Sort;
@@ -503,32 +519,22 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     return keyString;
 }
 
-- (UIBarButtonItem *)resourceRepresentationItem
+- (BOOL)isOrientationChanged
 {
-    NSString *imageName = ([self getNextRepresentationTypeForType:self.representationType] == JMResourcesRepresentationType_Grid) ? @"grid_button" : @"horizontal_list_button";
-    return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName] style:UIBarButtonItemStyleBordered target:self action:@selector(representationTypeButtonTapped:)];
-}
-
-- (JMResourcesListLoader *)resourceListLoader
-{
-    if (!_resourceListLoader) {
-        switch (self.presentingType) {
-            case JMResourcesCollectionViewControllerPresentingType_Library:
-                _resourceListLoader = [NSClassFromString(@"JMLibraryListLoader") new];
-                break;
-            case JMResourcesCollectionViewControllerPresentingType_Repository:
-                _resourceListLoader = [NSClassFromString(@"JMRepositoryListLoader") new];
-                break;
-            case JMResourcesCollectionViewControllerPresentingType_SavedItems:
-                _resourceListLoader = [NSClassFromString(@"JMSavedResourcesListLoader") new];
-                break;
-            case JMResourcesCollectionViewControllerPresentingType_Favorites:
-                _resourceListLoader = [NSClassFromString(@"JMFavoritesListLoader") new];
-                break;
+    BOOL result = NO;
+    if ( UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) ) {
+        if (self.currentOrientation != UIDeviceOrientationUnknown) {
+            BOOL isOrientationChanged = [UIDevice currentDevice].orientation != self.currentOrientation;
+            if (isOrientationChanged) {
+                self.currentOrientation = [UIDevice currentDevice].orientation;
+                result = YES;
+            }
+        } else {
+            self.currentOrientation = [UIDevice currentDevice].orientation;
+            result = YES;
         }
-        _resourceListLoader.delegate = self;
     }
-    return _resourceListLoader;
+    return result;
 }
 
 #pragma mark -

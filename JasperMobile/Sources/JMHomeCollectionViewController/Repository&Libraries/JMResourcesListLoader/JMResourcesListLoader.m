@@ -28,7 +28,6 @@ NSString * const kJMResourceListLoaderOptionItemTitleKey = @"JMResourceListLoade
 NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoaderFilterItemValueKey";
 
 @interface JMResourcesListLoader ()
-
 @property (nonatomic, assign) BOOL needUpdateData;
 @property (nonatomic, assign) BOOL isLoadingNow;
 @property (nonatomic, assign, readwrite) BOOL hasNextPage;
@@ -36,15 +35,12 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 @property (nonatomic, assign) NSInteger totalCount;
 @end
 
-
 @implementation JMResourcesListLoader
 objection_requires(@"resourceClient", @"constants")
 
 @synthesize resources = _resources;
 @synthesize resourceLookup = _resourceLookup;
 @synthesize resourceClient = _resourceClient;
-@synthesize isLoadingNow = _isLoadingNow;
-@synthesize needUpdateData = _needUpdateData;
 
 #pragma mark - NSObject
 

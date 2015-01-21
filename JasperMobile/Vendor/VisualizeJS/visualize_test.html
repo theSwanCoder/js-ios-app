@@ -1,0 +1,104 @@
+<head xmlns="http://www.w3.org/1999/html">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width; minimum-scale=0.01; maximum-scale=1; user-scalable=yes">
+  <title>TIBCO Jaspersoft</title>
+  <style type="text/css">
+  #container {
+    height: 450%;
+    width: 450%;
+  }
+  .dashlet {
+    pointer-events:none;
+  }
+  .button {
+    /*width: 30px !important;*/
+    /*height: 30px !important;*/
+    /*pointer-events:auto !important;*/
+  }
+  </style>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="VISUALIZE_PATH" type="text/javascript"></script>
+</head>
+<body>
+  <script>
+    var JasperMobile = {};
+    JasperMobile.htmlHandler = {
+      changeClicker: function() {
+        $(".body > div").click(function() {
+          var title = $(this).find(".innerLabel > p")[0].textContent;
+
+          var button = $(this).find(".maximizeDashletButton")[0];
+          button.click();
+
+          JasperMobile.makeCallback.run("command:maximize&title:"+title);
+          JasperMobile.htmlHandler.setSize("200%", "200%");
+          //JasperMobile.htmlHandler.setInterection(true);
+        });
+      },
+      minimizeDashlet: function() {
+        $(".body > div").find(".minimizeDashlet")[0].click();
+        JasperMobile.htmlHandler.setSize("450%", "450%");
+        //JasperMobile.htmlHandler.setInterection(false);
+      },
+      setSize: function(widht, height) {
+          $("#container").css("width", widht);
+          $("#container").css("height", height);
+      },
+      setInterection: function(enable) {
+        if (enable == true) {
+          $(".dashlet").css("pointer-events", "auto");
+        } else {
+          $(".dashlet").css("pointer-events", "none");
+        }
+      }
+    };
+
+    JasperMobile.logger = {
+      log : function (message) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', "http://debugger/" + encodeURIComponent(message));
+        xhr.send(null);
+      }
+    };
+
+    JasperMobile.auth = {
+      name: "",
+      password: "",
+      setCredentials : function(name, password) {
+        JasperMobile.logger.log("set credentials" + " " + name + " " + password);
+        this.name = name;
+        this.password = password;
+      }
+    };
+
+    JasperMobile.makeCallback = {
+      run : function(data) {
+        window.location.href = "http://jaspermobile.callback/" + data;
+      }
+    };
+
+    JasperMobile.dashboard = {
+      run: function(resourcePath) {
+        visualize({
+          auth: {
+            name: JasperMobile.auth.name,
+            password: JasperMobile.auth.password
+          }
+        }, function (v) {
+          v("#container").dashboard({
+            resource: resourcePath,
+            success: function() {
+                JasperMobile.logger.log("end loading");
+                JasperMobile.makeCallback.run("command:didEndLoading");
+                JasperMobile.htmlHandler.changeClicker();
+            },
+            error: function(err) {
+              JasperMobile.logger.log(err);
+            }
+          });
+        });
+      }
+    };
+  </script>
+  <div id="container"></div>
+</body>
