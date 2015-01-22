@@ -119,6 +119,13 @@
 - (void) runReportExecution
 {
     [self.reportViewer runReportExecution];
+   
+    // Load reports with visualize.js
+//    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"visualize_test" ofType:@"html"];
+//    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+//    
+//    NSURL *serverURL = [NSURL URLWithString:self.resourceClient.serverProfile.serverUrl];
+//    [self.webView loadHTMLString:htmlString baseURL:serverURL];
 }
 
 - (JMReportViewer *)reportViewer
