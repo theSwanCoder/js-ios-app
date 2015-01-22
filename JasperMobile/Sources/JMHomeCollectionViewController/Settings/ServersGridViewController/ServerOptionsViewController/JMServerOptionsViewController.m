@@ -190,7 +190,8 @@
                                              organization:self.serverProfile.organization
                                                 serverUrl:self.serverProfile.serverUrl];
 
-    self.restBase = [[JSRESTBase alloc] initWithProfile:profile];
+    self.restBase = [[JSRESTBase alloc] initWithClassesForMappings:nil];
+    self.restBase.serverProfile = profile;
     [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.restBase cancelBlock:^{
         if (errorBlock) {
             errorBlock();
