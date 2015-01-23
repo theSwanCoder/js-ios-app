@@ -38,7 +38,6 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 @implementation JMResourcesListLoader
 objection_requires(@"resourceClient", @"constants")
 
-@synthesize resources = _resources;
 @synthesize resourceLookup = _resourceLookup;
 @synthesize resourceClient = _resourceClient;
 
@@ -49,12 +48,11 @@ objection_requires(@"resourceClient", @"constants")
     self = [super init];
     if (self) {
         [[JSObjection defaultInjector] injectDependencies:self];
-        self.isLoadingNow = NO;
-        self.searchQuery = nil;
-        self.resources = [NSMutableArray array];
-        self.filterBySelectedIndex = 0;
-        self.sortBySelectedIndex = 0;
-        [self setNeedsUpdate];
+        _isLoadingNow = NO;
+        _resources = [NSMutableArray array];
+        _filterBySelectedIndex = 0;
+        _sortBySelectedIndex = 0;
+        _needUpdateData = YES;
     }
     return self;
 }
@@ -127,9 +125,14 @@ objection_requires(@"resourceClient", @"constants")
         [self.delegate resourceListDidLoaded:self withError:result.error];
     } @weakselfend];
     
-    [self.resourceClient resourceLookups:self.resourceLookup.uri query:self.searchQuery types:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]
-                                  sortBy:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] recursive:self.loadRecursively
-                                  offset:self.offset limit:kJMResourceLimit delegate:delegate];
+    [self.resourceClient resourceLookups:self.resourceLookup.uri
+                                   query:self.searchQuery
+                                   types:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]
+                                  sortBy:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]
+                               recursive:self.loadRecursively
+                                  offset:self.offset
+                                   limit:kJMResourceLimit
+                                delegate:delegate];
 }
 
 - (void)searchWithQuery:(NSString *)query

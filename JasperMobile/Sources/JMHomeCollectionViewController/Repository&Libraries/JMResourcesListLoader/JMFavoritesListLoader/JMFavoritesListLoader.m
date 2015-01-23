@@ -78,16 +78,26 @@
     
     fetchRequest.predicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
     
-    NSError *error = nil;
+    NSError *error;
     NSArray *fetchedObjects = [[JMUtils managedObjectContext] executeFetchRequest:fetchRequest error:&error];
     
     _isLoadingNow = NO;
-    if (fetchedObjects == nil) {
+    if (!fetchedObjects) {
         [self.delegate resourceListDidLoaded:self withError:error];
     } else {
+        
+        NSMutableArray *folders = [NSMutableArray array];
+        NSMutableArray *resources = [NSMutableArray array];
         for(JMFavorites *favorite in fetchedObjects) {
-            [self.resources addObject:[favorite wrapperFromFavorite]];
+            if ([favorite.wsType isEqualToString:self.constants.WS_TYPE_FOLDER]) {
+                [folders addObject:[favorite wrapperFromFavorite]];
+            } else {
+                [resources addObject:[favorite wrapperFromFavorite]];
+            }
         }
+        [self.resources addObjectsFromArray:folders];
+        [self.resources addObjectsFromArray:resources];
+        
         self.offset += kJMResourceLimit;
         _needUpdateData = NO;
         _isLoadingNow = NO;
