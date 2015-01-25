@@ -394,8 +394,8 @@ outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
     self.reportExequtingStatusIsReady = status;
     self.requestId = requestID;
     self.inputControls = inputControls;
-    self.countOfPages = countOfPages;
     self.currentPage = currentPage;
+    self.countOfPages = countOfPages;
 }
 
 #pragma mark - Undo methods
