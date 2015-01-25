@@ -28,30 +28,30 @@
 #import "JMReportViewerToolBar.h"
 #import "UIViewController+FetchInputControls.h"
 #import "JMSaveReportViewController.h"
-
 #import "JMResourcesCollectionViewController.h"
+#import "JMReportViewerPaginationToolbar.h"
 
-@interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, JMReportViewerDelegate>
+@interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, JMReportViewerDelegate, JMReportViewerPaginationToolbarDelegate>
 @property (nonatomic, strong) JMReportViewer *reportViewer;
-
-@property (nonatomic, strong) JMReportViewerToolBar *toolbar;
-
+//@property (nonatomic, strong) JMReportViewerToolBar *toolbar;
+@property (nonatomic, weak) JMReportViewerPaginationToolbar *toolbar;
 @end
 
 @implementation JMReportViewerViewController
 
-#pragma mark - UIViewController
+#pragma mark - View Controller Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self addBackButton];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
-    [self updateToobarAppearence];
+    [super viewWillAppear:animated];
+    [self updateToolbarAppearence];
 }
+
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -67,6 +67,8 @@
     }
 }
 
+#pragma mark - Methods
+
 - (JMMenuActionsViewAction)availableAction
 {
     JMMenuActionsViewAction availableAction = [super availableAction] | JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
@@ -81,12 +83,16 @@
     self.reportViewer.inputControls = inputControls;
 }
 
-- (void) updateToobarAppearence
+- (void) updateToolbarAppearence
 {
+    BOOL isToolbarHidden = YES;
     if (self.reportViewer.multiPageReport && self.toolbar) {
-        [self.navigationController setToolbarHidden:NO animated:YES];
-    } else {
-        [self.navigationController setToolbarHidden:YES animated:YES];
+        isToolbarHidden = NO;
+    }
+    
+    if (self.navigationController.toolbarHidden != isToolbarHidden) {
+        [self.navigationController setToolbarHidden:isToolbarHidden
+                                           animated:YES];
     }
 }
 
@@ -137,15 +143,23 @@
     return _reportViewer;
 }
 
-- (JMReportViewerToolBar *)toolbar
+//- (JMReportViewerToolBar *)toolbar
+- (JMReportViewerPaginationToolbar *)toolbar
 {
     if (!_toolbar) {
-        _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportViewerToolBar" owner:self options:nil] firstObject];
-        _toolbar.toolbarDelegate = self;
+        _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportViewerPaginationToolbar" owner:self options:nil] firstObject];
+        _toolbar.toolBarDelegate = self;
         _toolbar.currentPage = self.reportViewer.currentPage;
         _toolbar.countOfPages = self.reportViewer.countOfPages;
+        [self.navigationController.toolbar addSubview:_toolbar];
         _toolbar.frame = self.navigationController.toolbar.bounds;
-        [self.navigationController.toolbar addSubview: _toolbar];
+        
+//        _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportViewerToolBar" owner:self options:nil] firstObject];
+//        _toolbar.toolbarDelegate = self;
+//        _toolbar.currentPage = self.reportViewer.currentPage;
+//        _toolbar.countOfPages = self.reportViewer.countOfPages;
+//        _toolbar.frame = self.navigationController.toolbar.bounds;
+//        [self.navigationController.toolbar addSubview: _toolbar];
     }
     return _toolbar;
 }
@@ -185,6 +199,12 @@
     self.reportViewer.currentPage = page;
 }
 
+#pragma mark - JMReportViewerPaginationDelegate
+- (void)reportViewerPaginationToolbar:(JMReportViewerPaginationToolbar *)toolbar didChangePage:(NSUInteger)page
+{
+    self.reportViewer.currentPage = page;
+}
+
 #pragma mark -
 #pragma mark - JMReportViewerDelegate
 - (void)reportViewerReportDidCanceled:(JMReportViewer *)reportViewer
@@ -196,7 +216,7 @@
 {
     self.toolbar.currentPage = reportViewer.currentPage;
     self.toolbar.countOfPages = reportViewer.countOfPages;
-    [self updateToobarAppearence];
+    [self updateToolbarAppearence];
 }
 
 - (void) reportViewerShouldDisplayActivityIndicator:(JMReportViewer *)reportViewer

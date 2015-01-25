@@ -158,6 +158,7 @@
 "detail.report.viewer.emptyreport.title" = "Report is empty";
 "detail.report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options or tap 'Cancel' for returning to old report.";
 "detail.report.viewer.pagecount" = "of %d";
+"detail.report.viewer.wrongNumberOfCurrentPage" = "Current page can't be more count of pages (%@)";
 "detail.dashboard.viewer.not.supported" = "Such dashboard's type is not supported now";
 
 

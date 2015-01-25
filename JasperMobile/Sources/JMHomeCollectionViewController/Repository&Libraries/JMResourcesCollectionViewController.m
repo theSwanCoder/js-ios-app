@@ -80,7 +80,12 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 @implementation JMResourcesCollectionViewController
 @dynamic representationType;
 
-#pragma mark - UIViewController
+#pragma mark - Lifecycle
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)viewDidLoad
 {
@@ -128,11 +133,6 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     }];
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -144,6 +144,9 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [super viewDidAppear:animated];
     [self.resourceListLoader updateIfNeeded];
 }
+
+
+#pragma mark - Methods
 
 - (JMResourcesRepresentationType)representationType
 {
