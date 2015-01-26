@@ -93,7 +93,7 @@ typedef void(^JMRequestDelegateFinalBlock)(void);
  @param viewController A view controller to dismiss
  @return New request delegate instance
  */
-+ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController;
++ (JMRequestDelegate *)requestDelegateWithCompletionBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController;
 
 /**
  Creates new request delegate instance and adds it to the pool.

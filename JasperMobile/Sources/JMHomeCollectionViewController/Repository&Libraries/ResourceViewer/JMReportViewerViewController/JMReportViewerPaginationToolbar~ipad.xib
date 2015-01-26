@@ -25,23 +25,30 @@
                     </connections>
                 </textField>
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="lCi-Sg-Q6K">
-                    <rect key="frame" x="76" y="8" width="634" height="31"/>
+                    <rect key="frame" x="76" y="8" width="656" height="31"/>
                     <connections>
                         <action selector="sliderDidChangeValue:" destination="iN0-l3-epB" eventType="valueChanged" id="XeE-s1-2A9"/>
                         <action selector="sliderDidFinishChangeValue:" destination="iN0-l3-epB" eventType="touchUpInside" id="flc-75-fte"/>
                     </connections>
                 </slider>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NkX-es-LZm">
-                    <rect key="frame" x="718" y="11" width="42" height="21"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NkX-es-LZm">
+                    <constraints>
+                        <constraint firstAttribute="width" constant="20" id="I8M-vE-hdZ"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="42J-kN-nSX">
+                    <rect key="frame" x="740" y="12" width="20" height="20"/>
+                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="lCi-Sg-Q6K" firstAttribute="leading" secondItem="PkL-ug-GlB" secondAttribute="trailing" constant="10" id="XRD-mp-FfS"/>
+                <constraint firstAttribute="centerY" secondItem="42J-kN-nSX" secondAttribute="centerY" id="YJv-FV-1Ed"/>
                 <constraint firstAttribute="trailing" secondItem="NkX-es-LZm" secondAttribute="trailing" constant="8" id="YP5-4T-xUj"/>
+                <constraint firstAttribute="trailing" secondItem="42J-kN-nSX" secondAttribute="trailing" constant="8" id="aNy-gK-7eU"/>
                 <constraint firstItem="NkX-es-LZm" firstAttribute="leading" secondItem="lCi-Sg-Q6K" secondAttribute="trailing" constant="10" id="c6s-zl-aEp"/>
                 <constraint firstAttribute="centerY" secondItem="PkL-ug-GlB" secondAttribute="centerY" id="fGp-LI-v0x"/>
                 <constraint firstAttribute="centerY" secondItem="lCi-Sg-Q6K" secondAttribute="centerY" constant="-1" id="kgh-Ud-YCP"/>
@@ -51,6 +58,7 @@
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="activityIndicator" destination="42J-kN-nSX" id="81n-Bk-oyj"/>
                 <outlet property="countOfPageLabel" destination="NkX-es-LZm" id="Ou9-0l-RmJ"/>
                 <outlet property="slider" destination="lCi-Sg-Q6K" id="BNr-2r-fUr"/>
                 <outlet property="textField" destination="PkL-ug-GlB" id="m9q-7Z-pyU"/>

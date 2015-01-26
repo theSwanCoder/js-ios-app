@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UISlider *slider;
 @property (weak, nonatomic) IBOutlet UILabel *countOfPageLabel;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @end
 
 @implementation JMReportViewerPaginationToolbar
@@ -39,11 +40,21 @@ const NSInteger inputAccessoryViewEditingTextLabelTag = 10;
     // setup slider
     self.slider.minimumValue = 1;
     self.slider.value = self.currentPage;
+    self.slider.userInteractionEnabled = NO;
+    
+    // activityIndicator
+    [self.activityIndicator startAnimating];
 }
 
 #pragma mark - Properties
 - (void)setCountOfPages:(NSInteger)countOfPages
 {
+    if (countOfPages == NSNotFound || countOfPages == 0) {
+        return;
+    }
+    
+    [self.activityIndicator stopAnimating];
+    self.slider.userInteractionEnabled = YES;
     _countOfPages = countOfPages;
     if (countOfPages) {
         self.countOfPageLabel.text = @(countOfPages).stringValue;
@@ -109,7 +120,7 @@ const NSInteger inputAccessoryViewEditingTextLabelTag = 10;
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
     NSNumber *newNumber = [formatter numberFromString:string];
-    if (!newNumber) {
+    if (!newNumber && string.length) {
         return NO;
     }
     

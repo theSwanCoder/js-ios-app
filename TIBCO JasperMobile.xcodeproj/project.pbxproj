@@ -279,6 +279,9 @@
 		9364C57D1A74BFA50068F151 /* JMReportViewerPaginationToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9364C57C1A74BFA50068F151 /* JMReportViewerPaginationToolbar.m */; };
 		9364C57F1A74C0230068F151 /* JMReportViewerPaginationToolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9364C57E1A74C0230068F151 /* JMReportViewerPaginationToolbar.xib */; };
 		9364C5811A74EE260068F151 /* JMReportViewerPaginationToolbar~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9364C5801A74EE260068F151 /* JMReportViewerPaginationToolbar~ipad.xib */; };
+		9364C5851A74F4070068F151 /* JMReportMultipageViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9364C5841A74F4070068F151 /* JMReportMultipageViewerViewController.m */; };
+		9364C5881A74F4E70068F151 /* JMReportPageViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9364C5871A74F4E70068F151 /* JMReportPageViewerViewController.m */; };
+		9364C58B1A750C5E0068F151 /* JMReportLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9364C58A1A750C5E0068F151 /* JMReportLoader.m */; };
 		93B1795D1A4481DE00B7A181 /* jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = 93B1795C1A4481DE00B7A181 /* jaspermobile.js */; };
 		93D19DCB1A5FE0D600F54687 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93D19DCA1A5FE0D600F54687 /* MessageUI.framework */; };
 		93DFB6D41A604308009F0E4A /* JMSaveReportNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DFB6D31A604308009F0E4A /* JMSaveReportNameCell.m */; };
@@ -709,6 +712,12 @@
 		9364C57C1A74BFA50068F151 /* JMReportViewerPaginationToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JMReportViewerPaginationToolbar.m; path = JMReportViewerPaginationToolbar/JMReportViewerPaginationToolbar.m; sourceTree = "<group>"; };
 		9364C57E1A74C0230068F151 /* JMReportViewerPaginationToolbar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMReportViewerPaginationToolbar.xib; sourceTree = "<group>"; };
 		9364C5801A74EE260068F151 /* JMReportViewerPaginationToolbar~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMReportViewerPaginationToolbar~ipad.xib"; sourceTree = "<group>"; };
+		9364C5831A74F4070068F151 /* JMReportMultipageViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportMultipageViewerViewController.h; sourceTree = "<group>"; };
+		9364C5841A74F4070068F151 /* JMReportMultipageViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportMultipageViewerViewController.m; sourceTree = "<group>"; };
+		9364C5861A74F4E70068F151 /* JMReportPageViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportPageViewerViewController.h; sourceTree = "<group>"; };
+		9364C5871A74F4E70068F151 /* JMReportPageViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportPageViewerViewController.m; sourceTree = "<group>"; };
+		9364C5891A750C5E0068F151 /* JMReportLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportLoader.h; sourceTree = "<group>"; };
+		9364C58A1A750C5E0068F151 /* JMReportLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportLoader.m; sourceTree = "<group>"; };
 		93B1795C1A4481DE00B7A181 /* jaspermobile.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jaspermobile.js; sourceTree = "<group>"; };
 		93D19DCA1A5FE0D600F54687 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		93DFB6D21A604308009F0E4A /* JMSaveReportNameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSaveReportNameCell.h; sourceTree = "<group>"; };
@@ -1119,6 +1128,7 @@
 		08DE67A119C05D8A00C25AEA /* JMReportViewerViewController */ = {
 			isa = PBXGroup;
 			children = (
+				9364C5821A74F3E60068F151 /* JMReportMultipageViewerViewController */,
 				9364C5761A74BF020068F151 /* JMReportViewerPaginationToolbar */,
 				08ECB0A519FFF30400DDBB33 /* JMReportViewer */,
 				0826E52A19C88FDB00179818 /* JMSaveReportViewController */,
@@ -2166,6 +2176,19 @@
 			name = JMReportViewerPaginationToolbar;
 			sourceTree = "<group>";
 		};
+		9364C5821A74F3E60068F151 /* JMReportMultipageViewerViewController */ = {
+			isa = PBXGroup;
+			children = (
+				9364C5831A74F4070068F151 /* JMReportMultipageViewerViewController.h */,
+				9364C5841A74F4070068F151 /* JMReportMultipageViewerViewController.m */,
+				9364C5861A74F4E70068F151 /* JMReportPageViewerViewController.h */,
+				9364C5871A74F4E70068F151 /* JMReportPageViewerViewController.m */,
+				9364C5891A750C5E0068F151 /* JMReportLoader.h */,
+				9364C58A1A750C5E0068F151 /* JMReportLoader.m */,
+			);
+			path = JMReportMultipageViewerViewController;
+			sourceTree = "<group>";
+		};
 		93DFB6CD1A6042C4009F0E4A /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -2564,6 +2587,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0826E52D19C88FDB00179818 /* JMSaveReportViewController.m in Sources */,
+				9364C5881A74F4E70068F151 /* JMReportPageViewerViewController.m in Sources */,
 				08FF12EA199297FE0082265D /* JMSettings.m in Sources */,
 				08E864131992564A007CF257 /* UIImage+Additions.m in Sources */,
 				08DE67CD19C05D8B00C25AEA /* JMTextInputControlCell.m in Sources */,
@@ -2627,6 +2651,7 @@
 				08E8640F1992564A007CF257 /* JMServerProfile+Helpers.m in Sources */,
 				08E864241992564A007CF257 /* JMAppUpdater.m in Sources */,
 				08856DCD199370A30027DF56 /* JMServerSelectTableViewCell.m in Sources */,
+				9364C5851A74F4070068F151 /* JMReportMultipageViewerViewController.m in Sources */,
 				08DE67D719C05D8B00C25AEA /* JMResourceViewerViewController.m in Sources */,
 				08DE67CE19C05D8B00C25AEA /* JMMultiSelectTableViewController.m in Sources */,
 				080F235919A77B23008758FA /* JMResourceCollectionViewCell.m in Sources */,
@@ -2638,6 +2663,7 @@
 				08E864291992564A007CF257 /* JMRequestDelegate.m in Sources */,
 				08E8641C1992564A007CF257 /* JasperMobileAppDelegate.m in Sources */,
 				08FF12E0199297FE0082265D /* JMSettingsViewController.m in Sources */,
+				9364C58B1A750C5E0068F151 /* JMReportLoader.m in Sources */,
 				088208891A023EAB00B6559F /* JMTimeInputControlCell.m in Sources */,
 				08DE67CB19C05D8B00C25AEA /* JMNumberInputControlCell.m in Sources */,
 				08DE67C619C05D8B00C25AEA /* JMBooleanInputControlCell.m in Sources */,

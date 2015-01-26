@@ -104,7 +104,12 @@
     if ([self isServerVersionUp6] && [self isNewDashboard]) {
         return ![self.visualizeClient isCallbackRequest:request];
     } else {
-        return [super webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+        NSString *requestURL = request.URL.absoluteString;
+        if ([requestURL containsString:@"viewReportFlow"] && ![requestURL containsString:@"viewReportFlow&viewAsDashboardFrame=true"]) {
+            return NO;
+        } else {
+            return [super webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+        }
     }
 }
 
