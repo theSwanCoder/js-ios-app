@@ -64,22 +64,31 @@ __weak static UIViewController *viewControllerToDismiss;
     return [self requestDelegateForFinishBlock:finishedBlock errorBlock:nil];
 }
 
-+ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock
+                                          errorBlock:(JSRequestFinishedBlock)errorBlock
 {
-    return [self requestDelegateForFinishBlock:finishedBlock errorBlock:errorBlock viewControllerToDismiss:nil];
+    return [self requestDelegateWithCompletionBlock:finishedBlock errorBlock:errorBlock viewControllerToDismiss:nil];
 }
 
-+ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock viewControllerToDismiss:(UIViewController *)viewController
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock
+                             viewControllerToDismiss:(UIViewController *)viewController
 {
-    return [self requestDelegateForFinishBlock:finishedBlock errorBlock:nil viewControllerToDismiss:viewController];
+    return [self requestDelegateWithCompletionBlock:finishedBlock errorBlock:nil viewControllerToDismiss:viewController];
 }
 
-+ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController
++ (JMRequestDelegate *)requestDelegateWithCompletionBlock:(JSRequestFinishedBlock)finishedBlock
+                                          errorBlock:(JSRequestFinishedBlock)errorBlock
+                             viewControllerToDismiss:(UIViewController *)viewController
 {
-    return [self requestDelegateForFinishBlock:finishedBlock errorBlock:errorBlock viewControllerToDismiss:viewController showAlerts:YES];
+    return [self requestDelegateForFinishBlock:finishedBlock
+                                    errorBlock:errorBlock
+                       viewControllerToDismiss:viewController showAlerts:YES];
 }
 
-+ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController showAlerts:(BOOL)showAlerts
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock
+                                          errorBlock:(JSRequestFinishedBlock)errorBlock
+                             viewControllerToDismiss:(UIViewController *)viewController
+                                          showAlerts:(BOOL)showAlerts
 {
     JMRequestDelegate *requestDelegate = [[JMRequestDelegate alloc] init];
     requestDelegate.finishedBlock = finishedBlock;

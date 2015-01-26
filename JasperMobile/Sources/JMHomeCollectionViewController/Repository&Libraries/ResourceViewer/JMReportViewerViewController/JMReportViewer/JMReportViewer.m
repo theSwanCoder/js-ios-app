@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerOutputResourceType) {
 
 #define kJMReportViewerStatusCheckingInterval       1.f
 
-NSString * const kJMRestStatusReady = @"ready";
+static NSString * const kJMRestStatusReady = @"ready";
 
 @interface JMReportViewer() <UIAlertViewDelegate, NSURLConnectionDataDelegate>
 @property (nonatomic, strong) NSString *requestId;
@@ -146,7 +146,7 @@ objection_requires(@"resourceClient", @"reportClient")
 
     [self resetReportViewer];
     
-    JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+    JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateWithCompletionBlock:@weakself(^(JSOperationResult *result)) {
         JSReportExecutionResponse *reportExecution = [result.objects objectAtIndex:0];
         self.requestId = reportExecution.requestId;
         self.reportExequtingStatusIsReady = [reportExecution.status.status isEqualToString:kJMRestStatusReady];
@@ -214,7 +214,7 @@ objection_requires(@"resourceClient", @"reportClient")
                 [self.delegate reportViewerShouldDisplayActivityIndicator:self];
             }
 
-            JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+            JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateWithCompletionBlock:@weakself(^(JSOperationResult *result)) {
                 JSExportExecutionResponse *export = [result.objects objectAtIndex:0];
                 [self.exportIdsDictionary setObject:export.uuid forKey:@(page)];
                 [self loadOutputResourcesForPage:page];
@@ -298,7 +298,7 @@ objection_requires(@"resourceClient", @"reportClient")
         [self runExportExecutionForPage:self.currentPage];
     }
     
-    JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+    JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateWithCompletionBlock:@weakself(^(JSOperationResult *result)) {
         JSReportExecutionResponse *reportDetails = [result.objects objectAtIndex:0];
         self.countOfPages = [reportDetails.totalPages integerValue];
     } @weakselfend
@@ -311,7 +311,7 @@ objection_requires(@"resourceClient", @"reportClient")
 - (void) checkStatus
 {
     if (!self.reportExequtingStatusIsReady) {
-        JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+        JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateWithCompletionBlock:@weakself(^(JSOperationResult *result)) {
             JSExecutionStatus *status = [result.objects objectAtIndex:0];
             self.reportExequtingStatusIsReady = [status.status isEqualToString:kJMRestStatusReady];
             if (self.reportExequtingStatusIsReady) {

@@ -182,10 +182,7 @@ objection_requires(@"resourceClient", @"resourceLookup")
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     NSString *serverHost = [NSURL URLWithString:self.resourceClient.serverProfile.serverUrl].host;
-    if ([request.URL.absoluteString containsString:@"viewReportFlow&reportUnit"]) {
-        // if we trying to show report in dashbord clicking on link
-        return NO;
-    } else if (![request.URL.host isEqualToString:serverHost] && navigationType == UIWebViewNavigationTypeLinkClicked) {
+    if (![request.URL.host isEqualToString:serverHost] && navigationType == UIWebViewNavigationTypeLinkClicked) {
         if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
             [[UIAlertView localizedAlertWithTitle:nil message:@"detail.resource.viewer.open.link" completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                 if (alertView.cancelButtonIndex != buttonIndex) {
