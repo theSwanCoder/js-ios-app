@@ -21,6 +21,11 @@ const NSInteger inputAccessoryViewEditingTextLabelTag = 10;
 
 #pragma mark - Lifecycle
 
+-(void)dealloc
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
 -(void)awakeFromNib
 {
     [super awakeFromNib];
@@ -46,6 +51,14 @@ const NSInteger inputAccessoryViewEditingTextLabelTag = 10;
     [self.activityIndicator startAnimating];
 }
 
+#pragma mark - Public API
+- (void)updateCurrentPageWithPageNumber:(NSUInteger)pageNumber
+{
+    _currentPage = pageNumber;
+    self.textField.text = @(pageNumber).stringValue;
+    self.slider.value = pageNumber;
+}
+
 #pragma mark - Properties
 - (void)setCountOfPages:(NSInteger)countOfPages
 {
@@ -64,6 +77,10 @@ const NSInteger inputAccessoryViewEditingTextLabelTag = 10;
 
 -(void)setCurrentPage:(NSInteger)currentPage
 {
+    if (_currentPage == currentPage) {
+        return;
+    }
+    
     _currentPage = currentPage;
     
     if ([self.toolBarDelegate respondsToSelector:@selector(reportViewerPaginationToolbar:didChangePage:)]) {

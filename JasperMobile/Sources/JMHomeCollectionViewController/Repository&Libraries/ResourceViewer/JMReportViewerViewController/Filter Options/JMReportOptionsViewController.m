@@ -84,7 +84,8 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
         [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
             if (dataIsValid) {
                 if (!self.delegate) {
-                    [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:self.inputControls];
+                    //[self performSegueWithIdentifier:kJMShowReportViewerSegue sender:self.inputControls];
+                    [self performSegueWithIdentifier:kJMShowMultiPageReportSegue sender:self.inputControls];
                 } else {
                     [self.delegate performSelector:@selector(setInputControls:) withObject:self.inputControls];
                     [self.delegate refresh];
@@ -208,7 +209,10 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
         // TODO: no need back to previous screen
         //[self.navigationController popViewControllerAnimated:YES];
     } @weakselfend];
+    
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+        [JMCancelRequestPopup dismiss];
+        
         for (JSInputControlState *state in result.objects) {
             for (JSInputControlDescriptor *inputControl in self.inputControls) {
                 if ([state.uuid isEqualToString:inputControl.uuid]) {

@@ -80,7 +80,9 @@
         dashboardUrl = [dashboardUrl stringByAppendingString:@"&"];
     }
     NSURL *url = [NSURL URLWithString:dashboardUrl];
-    self.resourceRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.resourceClient.timeoutInterval];
+    self.resourceRequest = [NSURLRequest requestWithURL:url
+                                            cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                        timeoutInterval:self.resourceClient.timeoutInterval];
 }
 
 - (JMMenuActionsViewAction)availableAction

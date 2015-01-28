@@ -8,7 +8,6 @@
 
 #import "JMReportLoader.h"
 #import "UIAlertView+Additions.h"
-#import "JMCancelRequestPopup.h"
 #import "JMRequestDelegate.h"
 #import "UIViewController+fetchInputControls.h"
 
@@ -76,26 +75,37 @@ objection_requires(@"resourceClient", @"reportClient")
 #pragma mark - Properties
 - (void)setCurrentPage:(NSInteger)currentPage
 {
+    if (currentPage == NSNotFound) {
+        return;
+    }
+    
     if (currentPage != _currentPage) {
         _currentPage = currentPage;
-        if (self.currentPage) {
-            [self startExportExecutionForPage:_currentPage];
-        }
-        [self.delegate reportLoaderDidUpdateState:self];
+//        if (self.currentPage) {
+//            [self startExportExecutionForPage:_currentPage];
+//        }
     }
 }
 
 - (void)setCountOfPages:(NSInteger)countOfPages
 {
+    if (countOfPages == NSNotFound) {
+        return;
+    }
+    
+    if (countOfPages == 0) {
+        [self showAlertEmtpyReport];
+        return;
+    }
+    
     if (countOfPages != _countOfPages) {
         _countOfPages = countOfPages;
         if (self.currentPage > _countOfPages) {
             self.currentPage = _countOfPages;
         }
-        _isMultiPageReport = (self.countOfPages > 1) && (self.countOfPages != kJMCountOfPagesUnknown);
-        [self.delegate reportLoaderDidUpdateState:self];
-        if ([self isReportEmpty]) {
-            [self showAlertEmtpyReport];
+        self.isMultiPageReport = (_countOfPages > 1) && (_countOfPages != kJMCountOfPagesUnknown);
+        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveCountOfPages:)]) {
+            [self.delegate reportLoader:self didReceiveCountOfPages:_countOfPages];
         }
     }
 }
@@ -104,7 +114,10 @@ objection_requires(@"resourceClient", @"reportClient")
 {
     if (_isMultiPageReport != multiPageReport) {
         _isMultiPageReport = multiPageReport;
-        [self.delegate reportLoaderDidUpdateState:self];
+        
+        if ([self.delegate respondsToSelector:@selector(reportLoader:didUpdateIsMultipageReportValue:)]) {
+            [self.delegate reportLoader:self didUpdateIsMultipageReportValue:_isMultiPageReport];
+        }
     }
 }
 
@@ -119,10 +132,11 @@ objection_requires(@"resourceClient", @"reportClient")
 
 - (void) runReportExecution
 {
-    [self resetReportViewer];
+    [self restoreDefaultValues];
 
-    [self startShowLoader];
-    [self.delegate reportLoaderDidRunReportExecution:self];
+    if ([self.delegate respondsToSelector:@selector(reportLoaderDidRunReportExecution:)]) {
+        [self.delegate reportLoaderDidRunReportExecution:self];
+    }
     [self.reportClient runReportExecution:self.resourceLookup.uri
                                     async:YES
                              outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML
@@ -139,8 +153,8 @@ objection_requires(@"resourceClient", @"reportClient")
 
 - (void)startLoadPage:(NSInteger)page withCompletion:(void (^)(NSString *, NSString *))completionBlock
 {
-    [self startExportExecutionForPage:page];
     self.loadPageCompletionBlock = completionBlock;
+    [self startExportExecutionForPage:page];
 }
 
 - (void) cancelReport
@@ -150,7 +164,9 @@ objection_requires(@"resourceClient", @"reportClient")
         [self.reportClient cancelReportExecution:self.requestId delegate:nil];
     }
     
-    [self.delegate reportLoaderDidCancel:self];
+    if ([self.delegate respondsToSelector:@selector(reportLoaderDidCancel:)]) {
+        [self.delegate reportLoaderDidCancel:self];
+    }
 }
 
 #pragma mark - Private API
@@ -160,20 +176,19 @@ objection_requires(@"resourceClient", @"reportClient")
         return;
     }
     
-    [self.delegate reportLoaderDidBeginExportExecution:self forPageNumber:page];
+    if ([self.delegate respondsToSelector:@selector(reportLoaderDidBeginExportExecution:forPageNumber:)]) {
+        [self.delegate reportLoaderDidBeginExportExecution:self forPageNumber:page];
+    }
     
     NSString *exportID = self.exportIdsDictionary[@(page)];
     if (exportID) {
         if (exportID.length) [self loadOutputResourcesForPage:page];
     } else if (page <= self.countOfPages) {
-        if (page == self.currentPage) [self startShowLoader];
-        
         [self.reportClient runExportExecution:self.requestId
                                  outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML
                                         pages:@(page).stringValue
                             attachmentsPrefix:[JSConstants sharedInstance].REST_EXPORT_EXECUTION_ATTACHMENTS_PREFIX_URI
                                      delegate:[self requestDelegateExportExecutionForPage:page]];
-        
         self.exportIdsDictionary[@(page)] = @"";
     }
 }
@@ -191,7 +206,9 @@ objection_requires(@"resourceClient", @"reportClient")
         fullExportID = [NSString stringWithFormat:@"%@;pages=%@", exportID, @(page)];
     }
     
-    [self.delegate reportLoaderDidBeginLoadOutputResources:self forPageNumber:page];
+    if ([self.delegate respondsToSelector:@selector(reportLoaderDidBeginLoadOutputResources:forPageNumber:)]) {
+        [self.delegate reportLoaderDidBeginLoadOutputResources:self forPageNumber:page];
+    }
     [self.reportClient loadReportOutput:self.requestId
                            exportOutput:fullExportID
                           loadForSaving:NO
@@ -214,11 +231,11 @@ objection_requires(@"resourceClient", @"reportClient")
 - (void)stopStatusChecking
 {
     [self.statusCheckingTimer invalidate];
-    BOOL isNotFinal = self.outputResourceType == JMReportViewerOutputResourceType_NotFinal;
-    BOOL isLoadingNow = self.outputResourceType == JMReportViewerOutputResourceType_LoadingNow;
-    if (isNotFinal && !isLoadingNow) {
-        //[self runExportExecutionForPage:self.currentPage];
-    }
+//    BOOL isNotFinal = self.outputResourceType == JMReportViewerOutputResourceType_NotFinal;
+//    BOOL isLoadingNow = self.outputResourceType == JMReportViewerOutputResourceType_LoadingNow;
+//    if (isNotFinal && !isLoadingNow) {
+//        [self startExportExecutionForPage:self.currentPage];
+//    }
     
     [self.reportClient getReportExecutionMetadata:self.requestId
                                          delegate:[self requestDelegateStopStatusChecking]];
@@ -240,9 +257,8 @@ objection_requires(@"resourceClient", @"reportClient")
     return (self.isReportExequtingStatusReady && self.countOfPages == 0);
 }
 
-- (void) resetReportViewer
+- (void) restoreDefaultValues
 {
-    // set "default" values
     [self setValues:nil
           exportIds:[NSMutableDictionary dictionary]
       inputControls:self.inputControls
@@ -286,18 +302,6 @@ outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
     return [parameters copy];
 }
 
-- (void)startShowLoader
-{
-    [JMCancelRequestPopup presentWithMessage:@"status.loading"
-                                  restClient:self.reportClient
-                                 cancelBlock:@weakself(^(void)) { [self cancelReport]; }@weakselfend];
-}
-
-- (void)stopShowLoader
-{
-    [JMCancelRequestPopup dismiss];
-}
-
 - (void)showAlertEmtpyReport
 {
     void(^alertCompletion)(UIAlertView *alertView, NSInteger buttonIndex) = ^(UIAlertView *alertView, NSInteger buttonIndex) {
@@ -317,8 +321,8 @@ outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
             }
         } else {
             // show report view
-            [self restoreState];
         }
+        [self restoreState];
     };
     
     UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:@"detail.report.viewer.emptyreport.title"
@@ -335,27 +339,45 @@ outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
     [alertView show];
 }
 
+- (void)handleEndRunReportCompletion
+{
+    self.isReportRunSuccessful = YES;
+    [self saveCurrentState];
+    
+    if ([self.delegate respondsToSelector:@selector(reportLoaderDidEndReportExecution:)]) {
+        [self.delegate reportLoaderDidEndReportExecution:self];
+    }
+}
+
+- (void)handleEmptyReportCompletion
+{
+    if ([self.delegate respondsToSelector:@selector(reportLoaderDidEndWithEmptyReport:)]) {
+        [self.delegate reportLoaderDidEndWithEmptyReport:self];
+    }
+}
+
 #pragma mark - Request delegates
 - (JMRequestDelegate *)requestDelegateRunReport
 {
     
     void(^completionBlock)(JSOperationResult *result) = @weakself(^(JSOperationResult *result)) {
-        [self.delegate reportLoaderDidEndReportExecution:self];
         
         JSReportExecutionResponse *response = result.objects[0];
         self.requestId = response.requestId;
         self.isReportExequtingStatusReady = [response.status.status isEqualToString:kJMRestStatusReady];
         if (self.isReportExequtingStatusReady) {
-            self.countOfPages = [response.totalPages integerValue];
+            NSInteger countOfPages = response.totalPages.integerValue;
+            self.countOfPages = countOfPages;
+            
+            if (countOfPages) {
+                [self handleEndRunReportCompletion];
+                
+                //[self startExportExecutionForPage:self.currentPage];
+            } else {
+                [self handleEmptyReportCompletion];
+            }
         } else {
             [self startStatusChecking];
-        }
-        
-        if (![self isReportEmpty]) {
-            // report successfully executed
-            self.isReportRunSuccessful = YES;
-            [self saveCurrentState];
-            [self startExportExecutionForPage:self.currentPage];
         }
     }@weakselfend;
     
@@ -369,7 +391,9 @@ outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
 - (JMRequestDelegate *)requestDelegateExportExecutionForPage:(NSInteger)page
 {
     void(^completionBlock)(JSOperationResult *result) = @weakself(^(JSOperationResult *result)) {
-        [self.delegate reportLoaderDidEndExportExecution:self forPageNumber:page];
+        if ([self.delegate respondsToSelector:@selector(reportLoaderDidEndExportExecution:forPageNumber:)]) {
+            [self.delegate reportLoaderDidEndExportExecution:self forPageNumber:page];
+        }
         
         JSExportExecutionResponse *export = result.objects[0];
         self.exportIdsDictionary[@(page)] = export.uuid;
@@ -385,18 +409,29 @@ outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
 - (JMRequestDelegate *)requestDelegateLoadOutputResourcesForPage:(NSInteger)page
 {
     void(^completionBlock)(JSOperationResult *result) = @weakself(^(JSOperationResult *result)) {
-        [self.delegate reportLoaderDidEndLoadOutputResources:self forPageNumber:page];
+        if ([self.delegate respondsToSelector:@selector(reportLoaderDidEndLoadOutputResources:forPageNumber:)]) {
+            [self.delegate reportLoaderDidEndLoadOutputResources:self forPageNumber:page];
+        }
         
         if ([result.MIMEType isEqualToString:[JSConstants sharedInstance].REST_SDK_MIMETYPE_USED]) {
             [self handleErrorWithOperationResult:result forPage:page];
         } else {
-            if (page > 1) {
-                self.isMultiPageReport = YES;
+            if (self.isMultiPageReport) {
+                //[self startExportExecutionForPage:page + 1];
             }
             
             self.outputResourceType = result.allHeaderFields[@"output-final"] ? JMReportViewerOutputResourceType_Final : JMReportViewerOutputResourceType_NotFinal;
+        
+            if (self.loadPageCompletionBlock) {
+                self.loadPageCompletionBlock(result.bodyAsString, self.reportClient.serverProfile.serverUrl);
+            }
             
-            self.loadPageCompletionBlock(result.bodyAsString, self.reportClient.serverProfile.serverUrl);
+            if ([self.delegate respondsToSelector:@selector(reportLoader:didLoadHTMLString:withBaseURL:forPageNumber:)]) {
+                [self.delegate reportLoader:self
+                          didLoadHTMLString:result.bodyAsString
+                                withBaseURL:self.reportClient.serverProfile.serverUrl
+                              forPageNumber:page];
+            }
         }
     }@weakselfend;
     
@@ -423,7 +458,10 @@ outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
             self.countOfPages = page - 1;
         }
     }
-    //[self.delegate reportLoader:self didFailedLoadHTMLStringWithError:error forPageNumber:page];
+    
+    if ([self.delegate respondsToSelector:@selector(reportLoader:didFailedLoadHTMLStringWithError:forPageNumber:)]) {
+        [self.delegate reportLoader:self didFailedLoadHTMLStringWithError:error forPageNumber:page];
+    }
 }
 
 - (JMRequestDelegate *)requestDelegateMakeStatusChecking
@@ -446,7 +484,14 @@ outputResourceType:(JMReportViewerOutputResourceType)outputResourceType
 {
     void(^completionBlock)(JSOperationResult *result) = @weakself(^(JSOperationResult *result)) {
         JSReportExecutionResponse *response = result.objects[0];
-        self.countOfPages = response.totalPages.integerValue;
+        NSInteger countOfPages = response.totalPages.integerValue;
+        self.countOfPages = countOfPages;
+        
+        if (countOfPages) {
+            [self handleEndRunReportCompletion];
+        } else {
+            [self handleEmptyReportCompletion];
+        }
     }@weakselfend;
     
     JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateWithCompletionBlock:completionBlock

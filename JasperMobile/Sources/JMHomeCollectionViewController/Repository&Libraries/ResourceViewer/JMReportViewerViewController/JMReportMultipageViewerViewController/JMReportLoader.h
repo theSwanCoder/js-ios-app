@@ -28,6 +28,10 @@
 // run report execution
 - (void)reportLoaderDidRunReportExecution:(JMReportLoader *)reportLoader;
 - (void)reportLoaderDidEndReportExecution:(JMReportLoader *)reportLoader;
+- (void)reportLoaderDidEndWithEmptyReport:(JMReportLoader *)reportLoader;
+// page info
+- (void)reportLoader:(JMReportLoader *)reportLoader didReceiveCountOfPages:(NSUInteger)countOfPages;
+- (void)reportLoader:(JMReportLoader *)reportLoader didUpdateIsMultipageReportValue:(BOOL)isMultipageReport;
 // start export execution
 - (void)reportLoaderDidBeginExportExecution:(JMReportLoader *)reportLoader forPageNumber:(NSInteger)pageNumber;
 - (void)reportLoaderDidEndExportExecution:(JMReportLoader *)loader forPageNumber:(NSInteger)pageNumber;
@@ -36,7 +40,7 @@
 - (void)reportLoaderDidEndLoadOutputResources:(JMReportLoader *)reportLoader forPageNumber:(NSInteger)pageNumber;
 // cancel
 - (void)reportLoaderDidCancel:(JMReportLoader *)reportLoader;
-//- (void)reportLoader:(JMReportLoader *)reportLoader didLoadHTMLString:(NSString *)HTMLString withBaseURL:(NSString *)baseURL forPageNumber:(NSUInteger)pageNumber;
-//- (void)reportLoader:(JMReportLoader *)reportLoader didFailedLoadHTMLStringWithError:(JSErrorDescriptor *)error forPageNumber:(NSInteger)pageNumber;
-- (void)reportLoaderDidUpdateState:(JMReportLoader *)reportLoader;
+// load html
+- (void)reportLoader:(JMReportLoader *)reportLoader didLoadHTMLString:(NSString *)HTMLString withBaseURL:(NSString *)baseURL forPageNumber:(NSUInteger)pageNumber;
+- (void)reportLoader:(JMReportLoader *)reportLoader didFailedLoadHTMLStringWithError:(JSErrorDescriptor *)error forPageNumber:(NSInteger)pageNumber;
 @end

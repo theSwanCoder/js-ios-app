@@ -12,26 +12,39 @@
 #import "JMReportViewerPaginationToolbar.h"
 #import "JMResourcesCollectionViewController.h"
 #import "JMReportLoader.h"
+#import "JMSaveReportViewController.h"
+#import "UIViewController+FetchInputControls.h"
+#import "JMCancelRequestPopup.h"
 
-@interface JMReportMultipageViewerViewController() <JMReportViewerPaginationToolbarDelegate, JMReportLoaderDelegate>
+@interface JMReportMultipageViewerViewController() <JMReportViewerPaginationToolbarDelegate, JMReportLoaderDelegate, UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 @property (nonatomic, strong) UIPageViewController *pageViewController;
 @property (nonatomic, assign) NSInteger countOfPages;
 @property (nonatomic, strong) JMReportLoader *reportLoader;
 @property (nonatomic, weak) JMReportViewerPaginationToolbar *toolbar;
+@property (nonatomic, assign) NSInteger currentPage;
 @end
 
 @implementation JMReportMultipageViewerViewController
 
 #pragma mark - Lifecycle
+-(void)dealloc
+{
+    [_toolbar removeFromSuperview];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    // setups
+    [self addBackButton];
     self.countOfPages = 1;
+    self.currentPage = 1;
     
     // Create page view controller
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
     self.pageViewController.dataSource = self;
+    self.pageViewController.delegate = self;
     
     JMReportPageViewerViewController *startingViewController = (JMReportPageViewerViewController *)[self viewControllerAtIndex:0];
     NSArray *viewControllers = @[startingViewController];
@@ -40,24 +53,35 @@
     // Change the size of page view controller
     self.pageViewController.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     
-    [self addChildViewController:_pageViewController];
-    [self.view addSubview:_pageViewController.view];
+    [self addChildViewController:self.pageViewController];
+    [self.view addSubview:self.pageViewController.view];
     [self.pageViewController didMoveToParentViewController:self];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self updateToolbarAppearence];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    [super prepareForSegue:segue sender:sender];
+    if ([segue.identifier isEqualToString:kJMShowReportOptionsSegue] || [segue.identifier isEqualToString:kJMSaveReportViewControllerSegue]) {
+        id destinationViewController = segue.destinationViewController;
+        [destinationViewController setInputControls:[[NSMutableArray alloc] initWithArray:self.reportLoader.inputControls copyItems:YES]];
+        [destinationViewController performSelector:@selector(setDelegate:) withObject:self];
+        
+        if ([segue.identifier isEqualToString:kJMSaveReportViewControllerSegue]) {
+            ((JMSaveReportViewController *)destinationViewController).reportLoader = self.reportLoader;
+        }
+    }
 }
 
 #pragma mark - Actions
 - (void) backButtonTapped:(id) sender
 {
-    [self.view endEditing:YES];
-    NSInteger currentIndex = [self.navigationController.viewControllers indexOfObject:self];
-    for (NSInteger i = currentIndex; i > 0; --i) {
-        UIViewController *controller = [self.navigationController.viewControllers objectAtIndex:i];
-        if ([controller isKindOfClass:[JMResourcesCollectionViewController class]]) {
-            [self.toolbar removeFromSuperview];
-            [self.navigationController popToViewController:controller animated:YES];
-            break;
-        }
-    }
+    [self cancelReport];
 }
 
 #pragma mark - Public API
@@ -99,19 +123,12 @@
 #pragma mark - Private Methods
 - (JMReportPageViewerViewController *)viewControllerAtIndex:(NSUInteger)index
 {
-    if ( index >= self.countOfPages ) {
+    if ( index > self.countOfPages ) {
         return nil;
     }
     
     JMReportPageViewerViewController *reportPageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMReportPageViewerViewController"];
     reportPageViewController.pageIndex = index;
-    
-    [self.reportLoader startLoadPage:index+1 withCompletion:@weakself(^(NSString *HTMLString, NSString *baseURL)) {
-        
-        [reportPageViewController.webView loadHTMLString:HTMLString
-                                                 baseURL:[NSURL URLWithString:baseURL]];
-        //self.toolbar.currentPage = reportPageViewController.pageIndex;
-    }@weakselfend];
     
     return reportPageViewController;
 }
@@ -129,8 +146,59 @@
     }
 }
 
+- (void) addBackButton
+{
+    NSString *title = [[self.navigationController.viewControllers objectAtIndex:1] title];
+    UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
+    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(backButtonTapped:)];
+    [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    
+    self.navigationItem.leftBarButtonItem = backItem;
+}
+
+- (JMMenuActionsViewAction)availableAction
+{
+    JMMenuActionsViewAction availableAction = [super availableAction] | JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
+    if (self.reportLoader.inputControls && [self.reportLoader.inputControls count]) {
+        availableAction |= JMMenuActionsViewAction_Filter;
+    }
+    return availableAction;
+}
+
+- (void)startShowLoaderWithMessage:(NSString *)message
+{
+    [JMUtils showNetworkActivityIndicator];
+    [JMCancelRequestPopup presentWithMessage:message
+                                  restClient:self.reportLoader.resourceClient
+                                 cancelBlock:@weakself(^(void)) {
+                                     [self.reportLoader cancelReport];
+                                     
+                                     [self cancelReport];
+                                 }@weakselfend];
+}
+
+- (void)stopShowLoader
+{
+    [JMUtils hideNetworkActivityIndicator];
+    [JMCancelRequestPopup dismiss];
+}
+
+- (void)cancelReport
+{
+    [self.view endEditing:YES];
+    NSInteger currentIndex = [self.navigationController.viewControllers indexOfObject:self];
+    for (NSInteger i = currentIndex; i > 0; --i) {
+        UIViewController *controller = [self.navigationController.viewControllers objectAtIndex:i];
+        if ([controller isKindOfClass:[JMResourcesCollectionViewController class]]) {
+            [self.navigationController popToViewController:controller animated:YES];
+            break;
+        }
+    }
+}
+
 #pragma mark - UIPageViewControllerDataSource
--(UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
     NSUInteger index = ((JMReportPageViewerViewController *)viewController).pageIndex;
     if (index == 0 || index == NSNotFound) {
@@ -141,7 +209,7 @@
     return [self viewControllerAtIndex:index];
 }
 
--(UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
     NSUInteger index = ((JMReportPageViewerViewController *) viewController).pageIndex;
     
@@ -156,6 +224,52 @@
     return [self viewControllerAtIndex:index];
 }
 
+#pragma mark - UIPageViewControllerDelegate
+- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray *)pendingViewControllers
+{
+    JMReportPageViewerViewController *nextReportPageViewController = (JMReportPageViewerViewController *)pendingViewControllers.firstObject;
+    if ( fabs(self.currentPage -  nextReportPageViewController.pageIndex) > 2) {
+        if (self.currentPage > nextReportPageViewController.pageIndex) {
+            nextReportPageViewController.pageIndex = self.currentPage - 1;
+        } else {
+            nextReportPageViewController.pageIndex = self.currentPage + 1;
+        }
+        [nextReportPageViewController startLoadReportPageContentWithLoader:self.reportLoader];
+    }
+}
+
+- (void)pageViewController:(UIPageViewController *)pageViewController
+        didFinishAnimating:(BOOL)finished
+   previousViewControllers:(NSArray *)previousViewControllers
+       transitionCompleted:(BOOL)completed
+{
+    if (completed) {
+        JMReportPageViewerViewController *reportPageViewController = (JMReportPageViewerViewController *)pageViewController.viewControllers.firstObject;
+        [reportPageViewController startLoadReportPageContentWithLoader:self.reportLoader];
+        self.currentPage = reportPageViewController.pageIndex;
+        [self.toolbar updateCurrentPageWithPageNumber:(self.currentPage + 1)];
+    }
+}
+
+#pragma mark - JMMenuActionsViewDelegate
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
+{
+    [super actionsView:view didSelectAction:action];
+    switch (action) {
+        case JMMenuActionsViewAction_Refresh:
+            [self runReportExecution];
+            break;
+        case JMMenuActionsViewAction_Filter:
+            [self performSegueWithIdentifier:kJMShowReportOptionsSegue sender:nil];
+            break;
+        case JMMenuActionsViewAction_Save:
+            [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
+            break;
+        default:
+            break;
+    }
+}
+
 #pragma mark - JMRefreshable
 - (void)refresh
 {
@@ -164,85 +278,77 @@
 }
 
 #pragma mark - JMReportLoaderDelegate
-- (void)reportLoaderDidRunReportExecution:(JMReportLoader *)reportLoader
+-(void)reportLoaderDidRunReportExecution:(JMReportLoader *)reportLoader
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self startShowLoaderWithMessage:@"Report Running..."];
 }
 
-- (void)reportLoaderDidEndReportExecution:(JMReportLoader *)reportLoader
+-(void)reportLoaderDidEndReportExecution:(JMReportLoader *)reportLoader
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self stopShowLoader];
+    JMReportPageViewerViewController *reportPageViewController = self.pageViewController.viewControllers[self.currentPage-1];
+    [reportPageViewController startLoadReportPageContentWithLoader:self.reportLoader];
 }
 
-// start export execution
-- (void)reportLoaderDidBeginExportExecution:(JMReportLoader *)reportLoader forPageNumber:(NSInteger)pageNumber
+- (void)reportLoaderDidEndWithEmptyReport:(JMReportLoader *)reportLoader
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self stopShowLoader];
 }
 
-- (void)reportLoaderDidEndExportExecution:(JMReportLoader *)loader forPageNumber:(NSInteger)pageNumber
+-(void)reportLoaderDidBeginExportExecution:(JMReportLoader *)reportLoader forPageNumber:(NSInteger)pageNumber
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    if (!self.reportLoader.isMultiPageReport) {
+        [self startShowLoaderWithMessage:@"Export Execution..."];
+    }
 }
 
-// start load output resources
-- (void)reportLoaderDidBeginLoadOutputResources:(JMReportLoader *)reportLoader forPageNumber:(NSInteger)pageNumber
+-(void)reportLoaderDidEndExportExecution:(JMReportLoader *)loader forPageNumber:(NSInteger)pageNumber
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self stopShowLoader];
 }
 
-- (void)reportLoaderDidEndLoadOutputResources:(JMReportLoader *)reportLoader forPageNumber:(NSInteger)pageNumber
+-(void)reportLoaderDidBeginLoadOutputResources:(JMReportLoader *)reportLoader forPageNumber:(NSInteger)pageNumber
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    if (!self.reportLoader.isMultiPageReport) {
+        [self startShowLoaderWithMessage:@"Getting Resources..."];
+    }
 }
 
-// cancel
-- (void)reportLoaderDidCancel:(JMReportLoader *)reportLoader
+-(void)reportLoaderDidEndLoadOutputResources:(JMReportLoader *)reportLoader forPageNumber:(NSInteger)pageNumber
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self backButtonTapped:nil];
+    [self stopShowLoader];
 }
 
-// show report's page
-- (void)reportLoader:(JMReportLoader *)reportLoader
-   didLoadHTMLString:(NSString *)HTMLString
-         withBaseURL:(NSString *)baseURL
-       forPageNumber:(NSUInteger)pageNumber
+- (void)reportLoader:(JMReportLoader *)reportLoader didReceiveCountOfPages:(NSUInteger)countOfPages
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    
-//    if (pageNumber > self.pageViewController.viewControllers.count) {
-//        return;
-//    }
-//    
-//    JMReportPageViewerViewController *reportPageViewController = [self.pageViewController viewControllers][pageNumber - 1];
-//    if (reportPageViewController.webView.isLoading) {
-//        [reportPageViewController.webView stopLoading];
-//    }
-//    [reportPageViewController.webView loadHTMLString:HTMLString
-//                                             baseURL:[NSURL URLWithString:baseURL]];
-}
-
-- (void)reportLoader:(JMReportLoader *)reportLoader
-didFailedLoadHTMLStringWithError:(JSErrorDescriptor *)error
-       forPageNumber:(NSInteger)pageNumber
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-}
-
--(void)reportLoaderDidUpdateState:(JMReportLoader *)reportLoader
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    self.toolbar.currentPage = reportLoader.currentPage;
-    self.toolbar.countOfPages = reportLoader.countOfPages;
     self.countOfPages = reportLoader.countOfPages;
+}
+
+- (void)reportLoader:(JMReportLoader *)reportLoader didUpdateIsMultipageReportValue:(BOOL)isMultipageReport
+{
     [self updateToolbarAppearence];
 }
 
 #pragma mark - JMReportViewerPaginationToolbarDelegate
 - (void)reportViewerPaginationToolbar:(JMReportViewerPaginationToolbar *)toolbar didChangePage:(NSUInteger)page
 {
-    self.reportLoader.currentPage = page;
+    if ((page - 1) == self.currentPage) {
+        return;
+    }
+    
+    UIPageViewControllerNavigationDirection direction = UIPageViewControllerNavigationDirectionForward;
+    if ( (page - 1) < self.currentPage) {
+        direction = UIPageViewControllerNavigationDirectionReverse;
+    }
+    
+    self.currentPage = page - 1;
+    JMReportPageViewerViewController *reportPageViewController = [self viewControllerAtIndex:self.currentPage];
+    [self.pageViewController setViewControllers:@[reportPageViewController]
+                                      direction:direction
+                                       animated:YES
+                                     completion:@weakself(^(BOOL finished)) {
+                                         [reportPageViewController startLoadReportPageContentWithLoader:self.reportLoader];
+                                     }@weakselfend];
 }
 
 @end
