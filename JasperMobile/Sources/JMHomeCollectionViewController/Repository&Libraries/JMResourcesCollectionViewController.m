@@ -427,6 +427,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (void) showNavigationItems
 {
     NSMutableArray *navBarItems = [NSMutableArray array];
+    // may be network call to get server info
     JMMenuActionsViewAction availableAction = [self availableAction];
     if (availableAction & JMMenuActionsViewAction_Filter) {
         UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];

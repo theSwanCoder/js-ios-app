@@ -9,6 +9,6 @@
 #import "JMResourceViewerViewController.h"
 #import "JMRefreshable.h"
 
-@interface JMReportMultipageViewerViewController : JMResourceViewerViewController <JMRefreshable, UIPageViewControllerDataSource>
+@interface JMReportMultipageViewerViewController : JMResourceViewerViewController <JMRefreshable>
 - (void)setInputControls:(NSMutableArray *)inputControls;
 @end

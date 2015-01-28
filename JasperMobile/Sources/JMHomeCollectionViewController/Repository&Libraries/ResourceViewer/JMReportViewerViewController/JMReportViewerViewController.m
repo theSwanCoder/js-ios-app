@@ -29,12 +29,10 @@
 #import "UIViewController+FetchInputControls.h"
 #import "JMSaveReportViewController.h"
 #import "JMResourcesCollectionViewController.h"
-#import "JMReportViewerPaginationToolbar.h"
 
-@interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, JMReportViewerDelegate, JMReportViewerPaginationToolbarDelegate>
+@interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, JMReportViewerDelegate>
 @property (nonatomic, strong) JMReportViewer *reportViewer;
-//@property (nonatomic, strong) JMReportViewerToolBar *toolbar;
-@property (nonatomic, weak) JMReportViewerPaginationToolbar *toolbar;
+@property (nonatomic, strong) JMReportViewerToolBar *toolbar;
 @end
 
 @implementation JMReportViewerViewController
@@ -143,23 +141,15 @@
     return _reportViewer;
 }
 
-//- (JMReportViewerToolBar *)toolbar
-- (JMReportViewerPaginationToolbar *)toolbar
+- (JMReportViewerToolBar *)toolbar
 {
     if (!_toolbar) {
-        _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportViewerPaginationToolbar" owner:self options:nil] firstObject];
-        _toolbar.toolBarDelegate = self;
+        _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportViewerToolBar" owner:self options:nil] firstObject];
+        _toolbar.toolbarDelegate = self;
         _toolbar.currentPage = self.reportViewer.currentPage;
         _toolbar.countOfPages = self.reportViewer.countOfPages;
-        [self.navigationController.toolbar addSubview:_toolbar];
         _toolbar.frame = self.navigationController.toolbar.bounds;
-        
-//        _toolbar = [[[NSBundle mainBundle] loadNibNamed:@"JMReportViewerToolBar" owner:self options:nil] firstObject];
-//        _toolbar.toolbarDelegate = self;
-//        _toolbar.currentPage = self.reportViewer.currentPage;
-//        _toolbar.countOfPages = self.reportViewer.countOfPages;
-//        _toolbar.frame = self.navigationController.toolbar.bounds;
-//        [self.navigationController.toolbar addSubview: _toolbar];
+        [self.navigationController.toolbar addSubview: _toolbar];
     }
     return _toolbar;
 }
@@ -195,12 +185,6 @@
 #pragma mark -
 #pragma mark - JMReportViewerToolBarDelegate
 - (void)toolbar:(JMReportViewerToolBar *)toolbar pageDidChanged:(NSInteger)page
-{
-    self.reportViewer.currentPage = page;
-}
-
-#pragma mark - JMReportViewerPaginationDelegate
-- (void)reportViewerPaginationToolbar:(JMReportViewerPaginationToolbar *)toolbar didChangePage:(NSUInteger)page
 {
     self.reportViewer.currentPage = page;
 }

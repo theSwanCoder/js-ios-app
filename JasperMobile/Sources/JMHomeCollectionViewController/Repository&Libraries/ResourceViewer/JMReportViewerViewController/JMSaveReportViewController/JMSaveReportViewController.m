@@ -95,10 +95,11 @@ objection_requires(@"resourceClient", @"reportClient")
 #pragma mark - Setups
 - (void)setupSections
 {
-    if (self.reportViewer.countOfPages > 1) {
+    //if (self.reportViewer.countOfPages > 1) {
+    if (self.reportLoader.countOfPages > 1) {
         self.pages = [@{
                 kJMSavePageFromKey : @1,
-                kJMSavePageToKey : @(self.reportViewer.countOfPages),
+                kJMSavePageToKey : @(self.reportLoader.countOfPages),
         } mutableCopy];
 
         self.sectionTypes = @[
@@ -210,7 +211,8 @@ objection_requires(@"resourceClient", @"reportClient")
                 pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
                 [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
             }
-            pageRangeCell.pageCount = self.reportViewer.countOfPages;
+            pageRangeCell.pageCount = self.reportLoader.countOfPages;
+            //pageRangeCell.pageCount = self.reportViewer.countOfPages;
             return pageRangeCell;
         }
     }
@@ -324,24 +326,26 @@ objection_requires(@"resourceClient", @"reportClient")
                 if (result.isSuccessful) return;
                 [self.reportClient cancelAllRequests];
                 [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
-            }@weakselfend;
+        }@weakselfend;
 
         JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
-                JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
-                JSExportExecutionResponse *export = [response.exports objectAtIndex:0];
-                NSString *requestId = response.requestId;
+            [JMCancelRequestPopup dismiss];
+            
+            JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
+            JSExportExecutionResponse *export = [response.exports objectAtIndex:0];
+            NSString *requestId = response.requestId;
 
-                NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
-                [self.reportClient loadReportOutput:requestId exportOutput:export.uuid loadForSaving:YES path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
+            NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
+            [self.reportClient loadReportOutput:requestId exportOutput:export.uuid loadForSaving:YES path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
 
-                for (JSReportOutputResource *attachment in export.attachments) {
-                    NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
-                    [self.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
-                        request.delegate = [JMRequestDelegate requestDelegateForFinishBlock:nil];
-                        request.finishedBlock = checkErrorBlock;
-                    }];
-                }
-            } @weakselfend];
+            for (JSReportOutputResource *attachment in export.attachments) {
+                NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
+                [self.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
+                    request.delegate = [JMRequestDelegate requestDelegateForFinishBlock:nil];
+                    request.finishedBlock = checkErrorBlock;
+                }];
+            }
+        } @weakselfend];
 
         [JMRequestDelegate setFinalBlock:@weakself(^(void)) {
                 [self.navigationController popViewControllerAnimated:YES];
@@ -377,7 +381,8 @@ objection_requires(@"resourceClient", @"reportClient")
     NSInteger toPageNumber = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
     if (self.pages) {
         BOOL isFromPageChanged = fromPageNumber != 1;
-        BOOL isToPageChanged = toPageNumber != self.reportViewer.countOfPages;
+        //BOOL isToPageChanged = toPageNumber != self.reportViewer.countOfPages;
+        BOOL isToPageChanged = toPageNumber != self.reportLoader.countOfPages;
         if (isFromPageChanged || isToPageChanged) {
             if (fromPageNumber == toPageNumber) {
                 pagesFormat = [NSString stringWithFormat:@"%@", self.pages[kJMSavePageFromKey]];

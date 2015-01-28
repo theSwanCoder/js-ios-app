@@ -9,7 +9,7 @@
 #import "JMReportPageViewerViewController.h"
 
 @interface JMReportPageViewerViewController() <UIWebViewDelegate>
-
+@property (nonatomic, assign, getter=isStartLoad) BOOL startLoad;
 @end
 
 @implementation JMReportPageViewerViewController
@@ -18,25 +18,59 @@
 -(void)dealloc
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSLog(@"page: %@", @(self.pageIndex));
 }
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
     
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    self.startLoad = YES;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (self.isStartLoad) {
+        [self startShowLoadProgress];
+    }
+}
+
+#pragma mark - Public API
+- (void)startLoadReportPageContentWithLoader:(JMReportLoader *)reportLoader
+{
+    if (!self.webView.isLoading) {
+        self.startLoad = YES;
+        [reportLoader startLoadPage:(self.pageIndex+1) withCompletion:@weakself(^(NSString *HTMLString, NSString *baseURL)) {
+            self.startLoad = NO;
+            [self.webView loadHTMLString:HTMLString
+                                 baseURL:[NSURL URLWithString:baseURL]];
+        }@weakselfend];
+    }
+}
+
+- (void)startShowLoadProgress
+{
+    [JMUtils showNetworkActivityIndicator];
+    [self.activityIndicator startAnimating];
+}
+
+- (void)stopShowLoadProgress
+{
+    [JMUtils hideNetworkActivityIndicator];
+    [self.activityIndicator stopAnimating];
+}
 
 #pragma mark - UIWebViewDelegate
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
-    [self.activityIndicator startAnimating];
+    // TODO: start load indicator?
 }
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    [self.activityIndicator stopAnimating];
+    [self stopShowLoadProgress];
 }
 
 @end

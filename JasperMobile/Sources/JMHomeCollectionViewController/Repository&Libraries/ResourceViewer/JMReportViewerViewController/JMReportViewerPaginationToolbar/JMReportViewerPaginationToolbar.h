@@ -12,6 +12,7 @@
 @property (nonatomic, weak) id<JMReportViewerPaginationToolbarDelegate>toolBarDelegate;
 @property (nonatomic, assign) NSInteger countOfPages;
 @property (nonatomic, assign) NSInteger currentPage;
+- (void)updateCurrentPageWithPageNumber:(NSUInteger)pageNumber;
 @end
 
 @protocol JMReportViewerPaginationToolbarDelegate <NSObject>
