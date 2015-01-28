@@ -17,7 +17,7 @@ JasperMobile.htmlHandler = {
   minimizeDashlet: function() {
     JasperMobile.logger.log("minimize dashlet");
     jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click();
-    JasperMobile.htmlHandler.setSize("#frame", "450%", "450%");
+    JasperMobile.htmlHandler.setSize("#frame", "300%", "300%");
     jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent()).css("pointer-events", "none");
   },
   setSize: function(el, widht, height) {
@@ -87,7 +87,7 @@ var domLoadedListener = function() {
   var viewPort = document.querySelector("meta[name=viewport]");
   viewPort.setAttribute('content', 'width=device-width; minimum-scale=0.1; maximum-scale=1; user-scalable=yes');
 
-  JasperMobile.htmlHandler.setSize("#frame", "450%", "450%");
+  JasperMobile.htmlHandler.setSize("#frame", "300%", "300%");
 
   var timeInterval = setInterval(function () {
     var dashlets = jQuery('.dashlet');
