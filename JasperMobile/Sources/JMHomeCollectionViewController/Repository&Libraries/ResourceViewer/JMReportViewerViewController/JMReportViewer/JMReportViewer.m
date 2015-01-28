@@ -347,7 +347,7 @@ objection_requires(@"resourceClient", @"reportClient")
 - (void) cancelReport
 {
     [self.statusCheckingTimer invalidate];
-    if (!self.reportExequtingStatusIsReady) {
+    if (!self.reportExequtingStatusIsReady && self.requestId) {
         [self.reportClient cancelReportExecution:self.requestId delegate:nil];
     }
     [self.delegate reportViewerReportDidCanceled:self];
