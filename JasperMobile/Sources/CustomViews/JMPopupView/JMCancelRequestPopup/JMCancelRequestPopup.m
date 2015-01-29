@@ -55,7 +55,6 @@
     [popup.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
     popup.restClient = client;
     popup.cancelBlock = cancelBlock;
-    [JMUtils showNetworkActivityIndicator];
 }
 
 - (void)dismiss:(BOOL)animated

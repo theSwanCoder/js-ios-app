@@ -38,31 +38,19 @@
 @protocol JMReportViewerDelegate <NSObject>
 @required
 - (void) reportViewerReportDidCanceled:(JMReportViewer *)reportViewer;
-
 - (void) reportViewerDidChangedPagination:(JMReportViewer *)reportViewer;
-
 - (void) reportViewerShouldDisplayActivityIndicator:(JMReportViewer *)reportViewer;
-
 - (void) reportViewer:(JMReportViewer *)reportViewer loadHTMLString:(NSString *)string baseURL:(NSString *)baseURL;
-
 @end
 
 @interface JMReportViewer : NSObject <JMResourceClientHolder, JMReportClientHolder>
-
 @property (nonatomic, weak) UIViewController <JMReportViewerDelegate> *delegate;
-
 @property (nonatomic, strong) NSMutableArray *inputControls;
-
 @property (nonatomic, assign) NSInteger currentPage;
-
 @property (nonatomic, readonly) NSInteger countOfPages;
-
 @property (nonatomic, readonly) BOOL multiPageReport;
 
 - (instancetype)initWithResourceLookup:(JSResourceLookup *)resource;
-
 - (void) runReportExecution;
-
 - (void) cancelReport;
-
 @end

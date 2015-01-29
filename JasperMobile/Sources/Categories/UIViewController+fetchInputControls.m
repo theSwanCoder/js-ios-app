@@ -27,6 +27,7 @@
 
 NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
 NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
+NSString * const kJMShowMultiPageReportSegue = @"ShowMultiPageReport";
 NSString * const kJMShowDashboardViewerSegue = @"ShowDashboardViewer";
 NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
@@ -44,11 +45,16 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     JSObjectionInjector *objectionInjector = [JSObjection defaultInjector];
     JSRESTReport *report = [objectionInjector getObject:JSRESTReport.class];
     
+    [JMUtils showNetworkActivityIndicator];
     [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:nil cancelBlock:^{
         [report cancelAllRequests];
     }];
     
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+        
+        [JMUtils hideNetworkActivityIndicator];
+        [JMCancelRequestPopup dismiss];
+        
         NSMutableArray *invisibleInputControls = [NSMutableArray array];
         for (JSInputControlDescriptor *inputControl in result.objects) {
             if (!inputControl.visible.boolValue) {
@@ -60,7 +66,8 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
         [data setObject:resourceLookup forKey:kJMResourceLookup];
         
         if (result.objects.count - invisibleInputControls.count == 0) {
-            [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
+            [self performSegueWithIdentifier:kJMShowMultiPageReportSegue sender:data];
+            //[self performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
         } else {
             if (invisibleInputControls.count) {
                 NSMutableArray *inputControls = [result.objects mutableCopy];
@@ -75,13 +82,17 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     } @weakselfend
     viewControllerToDismiss:nil];
     
-    [report inputControlsForReport:[resourceLookup.uri stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ids:nil selectedValues:nil delegate:delegate];
+    [report inputControlsForReport:[resourceLookup.uri stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
+                               ids:nil
+                    selectedValues:nil
+                          delegate:delegate];
 }
 
 - (BOOL)isResourceSegue:(UIStoryboardSegue *)segue;
 {
     NSString *identifier = segue.identifier;
     return ([identifier isEqualToString:kJMShowReportViewerSegue]  ||
+            [identifier isEqualToString:kJMShowMultiPageReportSegue] ||
             [identifier isEqualToString:kJMShowReportOptionsSegue] ||
             [identifier isEqualToString:kJMShowDashboardViewerSegue] ||
             [identifier isEqualToString:kJMShowSavedRecourcesViewerSegue]);

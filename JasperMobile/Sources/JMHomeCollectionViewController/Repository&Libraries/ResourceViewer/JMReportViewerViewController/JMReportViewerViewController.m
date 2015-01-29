@@ -28,30 +28,28 @@
 #import "JMReportViewerToolBar.h"
 #import "UIViewController+FetchInputControls.h"
 #import "JMSaveReportViewController.h"
-
 #import "JMResourcesCollectionViewController.h"
 
 @interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, JMReportViewerDelegate>
 @property (nonatomic, strong) JMReportViewer *reportViewer;
-
 @property (nonatomic, strong) JMReportViewerToolBar *toolbar;
-
 @end
 
 @implementation JMReportViewerViewController
 
-#pragma mark - UIViewController
+#pragma mark - View Controller Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self addBackButton];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
-    [self updateToobarAppearence];
+    [super viewWillAppear:animated];
+    [self updateToolbarAppearence];
 }
+
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -67,6 +65,8 @@
     }
 }
 
+#pragma mark - Methods
+
 - (JMMenuActionsViewAction)availableAction
 {
     JMMenuActionsViewAction availableAction = [super availableAction] | JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
@@ -81,12 +81,16 @@
     self.reportViewer.inputControls = inputControls;
 }
 
-- (void) updateToobarAppearence
+- (void) updateToolbarAppearence
 {
+    BOOL isToolbarHidden = YES;
     if (self.reportViewer.multiPageReport && self.toolbar) {
-        [self.navigationController setToolbarHidden:NO animated:YES];
-    } else {
-        [self.navigationController setToolbarHidden:YES animated:YES];
+        isToolbarHidden = NO;
+    }
+    
+    if (self.navigationController.toolbarHidden != isToolbarHidden) {
+        [self.navigationController setToolbarHidden:isToolbarHidden
+                                           animated:YES];
     }
 }
 
@@ -119,6 +123,13 @@
 - (void) runReportExecution
 {
     [self.reportViewer runReportExecution];
+   
+    // Load reports with visualize.js
+//    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"visualize_test" ofType:@"html"];
+//    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+//    
+//    NSURL *serverURL = [NSURL URLWithString:self.resourceClient.serverProfile.serverUrl];
+//    [self.webView loadHTMLString:htmlString baseURL:serverURL];
 }
 
 - (JMReportViewer *)reportViewer
@@ -189,7 +200,7 @@
 {
     self.toolbar.currentPage = reportViewer.currentPage;
     self.toolbar.countOfPages = reportViewer.countOfPages;
-    [self updateToobarAppearence];
+    [self updateToolbarAppearence];
 }
 
 - (void) reportViewerShouldDisplayActivityIndicator:(JMReportViewer *)reportViewer

@@ -26,8 +26,8 @@
 static NSMutableArray* visiblePopupsArray = nil;
 
 @interface JMPopupView ()
-
 @property (nonatomic, assign) BOOL animatedNow;
+@property (nonatomic, copy) void (^dismissBlock)(void);
 @end
 
 @implementation JMPopupView
@@ -171,6 +171,9 @@ static NSMutableArray* visiblePopupsArray = nil;
             if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidShow:)]) {
                 [self.delegate popupViewDidShow:self];
             }
+            if (self.dismissBlock) {
+                self.dismissBlock();
+            }
         }];
     }];
 }
@@ -223,31 +226,37 @@ static NSMutableArray* visiblePopupsArray = nil;
 
 - (void)dismiss:(BOOL)animated
 {
-    if (self.animatedNow) {
-        return;
-    }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewWillDismissed:)]) {
-        [self.delegate popupViewWillDismissed:self];
-    }
-    if (!animated) {
-        [self removeFromSuperview];
-        if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
-            [self.delegate popupViewDidDismissed:self];
+    self.dismissBlock = @weakself(^(void)) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewWillDismissed:)]) {
+            [self.delegate popupViewWillDismissed:self];
         }
-    } else {
-        self.animatedNow = YES;
-        [UIView animateWithDuration:0.3f animations:^{
-            _backGroundView.alpha = 0.1f;
-            _backGroundView.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
-        } completion:^(BOOL finished) {
+        if (!animated) {
             [self removeFromSuperview];
-            self.animatedNow = NO;
             if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
                 [self.delegate popupViewDidDismissed:self];
             }
-        }];
+        } else {
+            self.animatedNow = YES;
+            [UIView animateWithDuration:0.3f animations:^{
+                self->_backGroundView.alpha = 0.1f;
+                self->_backGroundView.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
+            } completion:^(BOOL finished) {
+                [self removeFromSuperview];
+                self.animatedNow = NO;
+                if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
+                    [self.delegate popupViewDidDismissed:self];
+                }
+                self.dismissBlock = nil;
+            }];
+        }
+        [visiblePopupsArray removeObject:self];
+    }@weakselfend;
+    
+    if (self.animatedNow) {
+        return;
+    } else {
+        self.dismissBlock();
     }
-    [visiblePopupsArray removeObject:self];
 }
 
 + (void)dismissAllVisiblePopups:(BOOL)animated

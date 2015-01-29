@@ -80,7 +80,12 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 @implementation JMResourcesCollectionViewController
 @dynamic representationType;
 
-#pragma mark - UIViewController
+#pragma mark - Lifecycle
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)viewDidLoad
 {
@@ -128,11 +133,6 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     }];
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -144,6 +144,9 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [super viewDidAppear:animated];
     [self.resourceListLoader updateIfNeeded];
 }
+
+
+#pragma mark - Methods
 
 - (JMResourcesRepresentationType)representationType
 {
@@ -424,6 +427,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (void) showNavigationItems
 {
     NSMutableArray *navBarItems = [NSMutableArray array];
+    // may be network call to get server info
     JMMenuActionsViewAction availableAction = [self availableAction];
     if (availableAction & JMMenuActionsViewAction_Filter) {
         UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];

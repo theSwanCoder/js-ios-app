@@ -80,8 +80,9 @@
         dashboardUrl = [dashboardUrl stringByAppendingString:@"&"];
     }
     NSURL *url = [NSURL URLWithString:dashboardUrl];
-//    self.resourceRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:self.resourceClient.timeoutInterval];
-    self.resourceRequest = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:self.resourceClient.timeoutInterval];
+    self.resourceRequest = [NSURLRequest requestWithURL:url
+                                            cachePolicy:NSURLRequestReloadIgnoringCacheData
+                                        timeoutInterval:self.resourceClient.timeoutInterval];
 }
 
 - (JMMenuActionsViewAction)availableAction
@@ -105,7 +106,12 @@
     if ([self isServerVersionUp6] && [self isNewDashboard]) {
         return ![self.visualizeClient isCallbackRequest:request];
     } else {
-        return [super webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+        NSString *requestURL = request.URL.absoluteString;
+        if ([requestURL containsString:@"viewReportFlow"] && ![requestURL containsString:@"viewReportFlow&viewAsDashboardFrame=true"]) {
+            return NO;
+        } else {
+            return [super webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+        }
     }
 }
 
@@ -155,7 +161,6 @@
 - (void)visualizeClientDidMaximizeDashletWithTitle:(NSString *)title
 {
     [self.webView.scrollView setZoomScale:0.1 animated:YES];
-    //self.webView.scalesPageToFit = YES;
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(minimizeDashboard)];
     self.navigationItem.rightBarButtonItem = barButtonItem;
 
