@@ -27,7 +27,7 @@
 
 /* Server Profiles view */
 
-"servers.info" = "%@™ v %@\n\nManagement tool and report viewer for JasperReports Server %.1f and greater.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-2015 TIBCO Software, Inc.";
+"servers.info" = "%@™ v %@\n\nManagement tool and report viewer for JasperReports Server %.1f and greater.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%@ TIBCO Software, Inc.";
 
 
 "servers.url.label" = "Server Address";

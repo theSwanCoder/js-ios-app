@@ -174,12 +174,21 @@
 - (void)applicationInfo:(id)sender
 {
     NSString *appName = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"];
-    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"servers.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion]];
+    
+    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"servers.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion], [self currentYear]];
     [[UIAlertView localizedAlertWithTitle:nil
                                   message:message
                                  delegate:nil
                         cancelButtonTitle:@"dialog.button.ok"
                         otherButtonTitles:nil] show];
+}
+
+- (NSString *)currentYear
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy"];
+    NSString *year = [formatter stringFromDate:[NSDate date]];
+    return year;
 }
 
 #pragma mark - 
