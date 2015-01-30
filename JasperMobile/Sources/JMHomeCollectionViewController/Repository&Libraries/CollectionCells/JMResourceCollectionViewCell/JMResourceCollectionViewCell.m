@@ -61,9 +61,53 @@ objection_requires(@"constants")
     self.resourceName.text = resourceLookup.label;
     self.resourceDescription.text = resourceLookup.resourceDescription;
     
-    UIImage *resourceImage = nil;
+    [self updateResourceImageWithResourceLookup:resourceLookup];
+
+    // TODO: Should be fixed! need replace url generation to SDK!
     
-    if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT]) {
+    if ([self isServerUpper6] && ![self isFolder]) {
+        // show thumbnail
+        self.resourceImage.imageUrl = [self imageURLString];
+    }
+}
+
+- (IBAction)infoButtonDidTapped:(id)sender
+{
+    [self.delegate infoButtonDidTappedOnCell:self];
+}
+
+- (BOOL)isFolder
+{
+    BOOL isFolder = [self.resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_FOLDER];
+    return isFolder;
+}
+
+- (BOOL)isServerUpper6
+{
+    JSObjectionInjector *injector = [JSObjection defaultInjector];
+    JSRESTResource *resourceClient = [injector getObject:[JSRESTResource class]];
+    BOOL isServerUpper6 = resourceClient.serverInfo.versionAsFloat >= self.constants.SERVER_VERSION_CODE_AMBER_6_0_0;
+    return isServerUpper6;
+}
+
+- (NSString *)imageURLString
+{
+    NSString *serverURL = [JMServerProfile activeServerProfile].serverUrl;
+    NSString *restURI = [JSConstants sharedInstance].REST_SERVICES_V2_URI;
+    NSString *resourceURI = self.resourceLookup.uri;
+    return  [NSString stringWithFormat:@"%@%@/thumbnails%@?defaultAllowed=false", serverURL, restURI, resourceURI];
+}
+
+- (void)updateResourceImageWithResourceLookup:(JSResourceLookup *)resourceLookup
+{
+    UIImage *resourceImage;
+    
+    
+    BOOL isReport = [resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT];
+    BOOL isDashboard = [resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD] || [resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD_LEGACY];
+    BOOL isFolder = [resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_FOLDER];
+    
+    if (isReport) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
         JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:resourceLookup];
         if (savedReport) {
@@ -73,30 +117,14 @@ objection_requires(@"constants")
                 resourceImage = [UIImage imageNamed:@"res_type_pdf"];
             }
         }
-    } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD] || [resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD_LEGACY]) {
+    } else if (isDashboard) {
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
-    } else if ([resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_FOLDER]) {
+    } else if (isFolder) {
         resourceImage = [UIImage imageNamed:@"res_type_folder"];
     }
     
     self.resourceImage.image = resourceImage;
     self.resourceImage.backgroundColor = kJMResourcePreviewBackgroundColor;
-
-    // TO DO: Should be fixed! need replace url generation to SDK!
-    JSObjectionInjector *injector = [JSObjection defaultInjector];
-    JSRESTResource *resourceClient = [injector getObject:[JSRESTResource class]];
-    BOOL isFolder = [resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_FOLDER];
-    BOOL isServerUpper6 = resourceClient.serverInfo.versionAsFloat >= self.constants.SERVER_VERSION_CODE_AMBER_6_0_0;
-    if (!isFolder && isServerUpper6) {
-        NSString *serverURL = [JMServerProfile activeServerProfile].serverUrl;
-        NSString *restURI = [JSConstants sharedInstance].REST_SERVICES_V2_URI;
-        NSString *resourceURI = resourceLookup.uri;
-        self.resourceImage.imageUrl = [NSString stringWithFormat:@"%@%@/thumbnails%@?defaultAllowed=false", serverURL, restURI, resourceURI];
-    }
 }
 
-- (IBAction)infoButtonDidTapped:(id)sender
-{
-    [self.delegate infoButtonDidTappedOnCell:self];
-}
 @end

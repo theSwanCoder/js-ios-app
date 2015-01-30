@@ -53,6 +53,7 @@
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     self.activityIndicator.center = self.center;
     [self addSubview:self.activityIndicator];
+    self.clipsToBounds = YES;
 }
 
 #pragma mark -
@@ -74,8 +75,7 @@
         if ([[_imageUrl lastPathComponent] isEqualToString:_imageUrl]) {
             self.image = [UIImage imageNamed:_imageUrl];
         } else {
-            [self.activityIndicator startAnimating];
-            [JMUtils showNetworkActivityIndicator];
+            [self startShowLoadingIndicator];
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 NSURL *url = [NSURL URLWithString:imageUrl];
                 NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData  timeoutInterval:10.0];
@@ -92,19 +92,48 @@
                 }
 
                 dispatch_async(dispatch_get_main_queue(), @weakself(^(void)) {
-                    [JMUtils hideNetworkActivityIndicator];
-                    [self.activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:YES];
+                    [self stopShowLoadingIndicator];
+                    
                     if (loadedData && [[httpResponse MIMEType] hasPrefix:@"image"] && httpResponse.statusCode == 200) {
-                        self.image = [[UIImage alloc] initWithData:loadedData];
-                        self.backgroundColor = [UIColor clearColor];
                         NSCachedURLResponse *loadedCachedResponce = [[NSCachedURLResponse alloc] initWithResponse:httpResponse data:loadedData];
                         [[NSURLCache sharedURLCache] storeCachedResponse:loadedCachedResponce forRequest:request];
-
+                        self.image = [self imageFitToWidthFromImage:[UIImage imageWithData:loadedData]];
+                        self.contentMode = UIViewContentModeTop;
+                        [self setNeedsDisplay];
                     }
                 }@weakselfend);
             });
         }
     }
+}
+
+#pragma mark - Utils
+
+- (UIImage *)imageFitToWidthFromImage:(UIImage *)image
+{
+    self.backgroundColor = [UIColor clearColor];
+    
+    float ratio = image.size.width / CGRectGetWidth(self.bounds);
+    float height = image.size.height / ratio;
+    CGSize size = CGSizeMake(CGRectGetWidth(self.bounds), height);
+    UIGraphicsBeginImageContextWithOptions(size, YES, 0);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage * newimage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newimage;
+}
+
+- (void)startShowLoadingIndicator
+{
+    [self.activityIndicator startAnimating];
+    [JMUtils showNetworkActivityIndicator];
+}
+
+- (void)stopShowLoadingIndicator
+{
+    [JMUtils hideNetworkActivityIndicator];
+    [self.activityIndicator performSelectorOnMainThread:@selector(stopAnimating) withObject:nil waitUntilDone:YES];
 }
 
 @end
