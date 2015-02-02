@@ -78,8 +78,8 @@ objection_requires(@"constants")
         resourceImage = [UIImage imageNamed:@"res_type_folder"];
     }
     
-    BOOL shouldCenterImage = ((resourceImage.size.height < self.resourceImage.frame.size.height) || (resourceImage.size.width < self.resourceImage.frame.size.width));
-    self.resourceImage.contentMode = shouldCenterImage ? UIViewContentModeCenter : UIViewContentModeScaleAspectFit;
+    BOOL shouldFitImage = ((resourceImage.size.height > self.resourceImage.frame.size.height) || (resourceImage.size.width > self.resourceImage.frame.size.width));
+    self.resourceImage.contentMode = shouldFitImage ? UIViewContentModeScaleAspectFit : UIViewContentModeCenter;
     self.resourceImage.image = resourceImage;
 }
 
