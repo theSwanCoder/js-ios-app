@@ -16,7 +16,7 @@
 
 @implementation JMSortOptionsPopupView
 
-- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type{
+- (instancetype)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type{
     self = [super initWithDelegate:delegate type:type];
     if (self) {
         UIView *nibView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] lastObject];

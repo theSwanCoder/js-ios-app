@@ -33,7 +33,7 @@ static NSMutableArray* visiblePopupsArray = nil;
 @implementation JMPopupView
 @synthesize contentView = _contentView;
 
-- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type
+- (instancetype)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type
 {
     self = [super init];
     if (self) {
@@ -41,6 +41,7 @@ static NSMutableArray* visiblePopupsArray = nil;
             visiblePopupsArray = [NSMutableArray array];
         }
         self.delegate = delegate;
+        self.hideIfBackgroundTapped = YES;
         _type = type;
         
         [visiblePopupsArray addObject:self];
@@ -144,12 +145,13 @@ static NSMutableArray* visiblePopupsArray = nil;
     }
     
     _backGroundView.center = centerPoint;
-    
-    //Add a tap gesture recognizer to the large invisible view (self), which will detect taps anywhere on the screen.
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
-    tap.cancelsTouchesInView = NO; // Allow touches through to a UITableView or other touchable view, as suggested by Dimajp.
-    [self addGestureRecognizer:tap];
-    self.userInteractionEnabled = YES;
+    if (self.hideIfBackgroundTapped) {
+        //Add a tap gesture recognizer to the large invisible view (self), which will detect taps anywhere on the screen.
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
+        tap.cancelsTouchesInView = NO; // Allow touches through to a UITableView or other touchable view, as suggested by Dimajp.
+        [self addGestureRecognizer:tap];
+        self.userInteractionEnabled = YES;
+    }
     
     // Make the view small and transparent before animation
     _backGroundView.alpha = 0.f;

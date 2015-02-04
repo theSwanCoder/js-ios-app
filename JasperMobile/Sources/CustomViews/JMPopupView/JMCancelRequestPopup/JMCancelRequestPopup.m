@@ -41,7 +41,17 @@
 
 #pragma mark - Class Methods
 
-+ (void)presentWithMessage:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock {
+- (instancetype)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type
+{
+    self = [super initWithDelegate:delegate type:type];
+    if (self) {
+        self.hideIfBackgroundTapped = NO;
+    }
+    return self;
+}
+
++ (void)presentWithMessage:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock
+{
     JMCancelRequestPopup *popup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:[self class]];
     if (!popup) {
         popup = [[JMCancelRequestPopup alloc] initWithDelegate:nil type:JMPopupViewType_ContentViewOnly];

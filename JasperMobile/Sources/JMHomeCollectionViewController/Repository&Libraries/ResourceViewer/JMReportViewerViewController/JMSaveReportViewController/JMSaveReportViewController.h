@@ -45,6 +45,5 @@ extern NSString * const kJMSaveReportViewControllerSegue;
 @property (nonatomic, strong) NSMutableArray *inputControls;
 @property (nonatomic, weak) UIViewController *delegate;
 
-@property (nonatomic, strong) JMReportViewer *reportViewer; // old report loader
 @property (nonatomic, strong) JMReportLoader *reportLoader;
 @end

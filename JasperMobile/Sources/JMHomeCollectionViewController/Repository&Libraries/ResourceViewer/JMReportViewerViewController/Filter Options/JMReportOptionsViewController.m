@@ -84,7 +84,6 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
         [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
             if (dataIsValid) {
                 if (!self.delegate) {
-                    //[self performSegueWithIdentifier:kJMShowReportViewerSegue sender:self.inputControls];
                     [self performSegueWithIdentifier:kJMShowMultiPageReportSegue sender:self.inputControls];
                 } else {
                     [self.delegate performSelector:@selector(setInputControls:) withObject:self.inputControls];

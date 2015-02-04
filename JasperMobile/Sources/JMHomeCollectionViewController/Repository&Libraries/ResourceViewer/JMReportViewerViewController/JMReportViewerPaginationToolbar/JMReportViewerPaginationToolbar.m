@@ -8,11 +8,12 @@
 
 #import "JMReportViewerPaginationToolbar.h"
 
-@interface JMReportViewerPaginationToolbar() <UITextFieldDelegate>
+@interface JMReportViewerPaginationToolbar() <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UISlider *slider;
 @property (weak, nonatomic) IBOutlet UILabel *countOfPageLabel;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
 @end
 
 @implementation JMReportViewerPaginationToolbar
@@ -40,8 +41,9 @@ const NSInteger inputAccessoryViewEditingTextLabelTag = 10;
     self.textField.backgroundColor = kJMSearchBarBackgroundColor;
     self.textField.text = @(self.currentPage).stringValue;
     self.textField.keyboardType = UIKeyboardTypeNumberPad;
+    self.textField.inputView = [self inputView];
     self.textField.inputAccessoryView = [self accessoryView];
-    
+
     // setup slider
     self.slider.minimumValue = 1;
     self.slider.value = self.currentPage;
@@ -77,21 +79,20 @@ const NSInteger inputAccessoryViewEditingTextLabelTag = 10;
 
 -(void)setCurrentPage:(NSInteger)currentPage
 {
-    if (_currentPage == currentPage) {
-        return;
-    }
-    
-    _currentPage = currentPage;
-    
-    if ([self.toolBarDelegate respondsToSelector:@selector(reportViewerPaginationToolbar:didChangePage:)]) {
-        [self.toolBarDelegate reportViewerPaginationToolbar:self didChangePage:_currentPage];
+    if (_currentPage != currentPage) {
+        _currentPage = currentPage;
+        [self updateCurrentPageWithPageNumber:currentPage];
+        
+        if ([self.toolBarDelegate respondsToSelector:@selector(reportViewerPaginationToolbar:didChangePage:)]) {
+            [self.toolBarDelegate reportViewerPaginationToolbar:self didChangePage:_currentPage];
+        }
     }
 }
 
 #pragma mark - Actions
 - (IBAction)sliderDidChangeValue:(UISlider *)sender
 {
-    self.textField.text = @(floorf(sender.value)).stringValue;
+    self.currentPage = floorf(sender.value);
 }
 
 - (IBAction)sliderDidFinishChangeValue:(UISlider *)sender
@@ -101,30 +102,22 @@ const NSInteger inputAccessoryViewEditingTextLabelTag = 10;
 
 - (void)cancel:(id)sender
 {
-    self.textField.text = @(self.currentPage).stringValue;
+    [self updateCurrentPageWithPageNumber:self.currentPage];
     [self hideKeyboard];
 }
 
 - (void)done:(id)sender
 {
-    NSInteger newCurrentPage = self.textField.text.integerValue;
-    if (newCurrentPage > self.countOfPages) {
-        NSString *title = [NSString stringWithFormat:JMCustomLocalizedString(@"detail.report.viewer.wrongNumberOfCurrentPage", nil), @(self.countOfPages).stringValue];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:nil delegate:nil cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil) otherButtonTitles: nil];
-        [alert show];
-    } else {
-        self.currentPage = newCurrentPage;
-        self.slider.value = newCurrentPage;
-        [self hideKeyboard];
-    }
+    UIPickerView *pickerView = (UIPickerView *)self.textField.inputView;
+    self.currentPage = [pickerView selectedRowInComponent:0] + 1;
+    [self hideKeyboard];
 }
 
 #pragma mark - UITextFieldDelegate
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    UILabel *label = (UILabel *)[textField.inputAccessoryView viewWithTag:inputAccessoryViewEditingTextLabelTag];
-    label.text = textField.text;
+    UIPickerView *pickerView = (UIPickerView *)self.textField.inputView;
+    [pickerView selectRow:self.currentPage - 1 inComponent:0 animated:NO];
     
     if ([self.toolBarDelegate respondsToSelector:@selector(reportViewerPaginationToolbarWillBeginChangePage:)]) {
         [self.toolBarDelegate reportViewerPaginationToolbarWillBeginChangePage:self];
@@ -132,36 +125,46 @@ const NSInteger inputAccessoryViewEditingTextLabelTag = 10;
     return YES;
 }
 
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+#pragma mark - UIPickerViewDataSource
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    formatter.numberStyle = NSNumberFormatterDecimalStyle;
-    NSNumber *newNumber = [formatter numberFromString:string];
-    if (!newNumber && string.length) {
-        return NO;
-    }
-    
-    UILabel *label = (UILabel *)[textField.inputAccessoryView viewWithTag:inputAccessoryViewEditingTextLabelTag];
-    NSMutableString *currentText = [textField.text mutableCopy];
-    if (range.length) {
-        // remove symbol
-        [currentText replaceCharactersInRange:range withString:@""];
-    } else {
-        // add symbol
-        [currentText appendString:string];
-    }
-    label.text = currentText;
-    
-    return YES;
+    return 1;
 }
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    [textField resignFirstResponder];
-    return YES;
+    return self.countOfPages;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return [NSString stringWithFormat:@"%zd", row + 1];
+}
+
+- (UIToolbar *)pickerToolbar
+{
+    UIToolbar *pickerToolbar = [[UIToolbar alloc] init];
+    [pickerToolbar sizeToFit];
+    
+    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [pickerToolbar setItems:@[flexibleSpace, cancel, done]];
+    
+    return pickerToolbar;
 }
 
 #pragma mark - Private methods
+- (UIView *)inputView
+{
+    UIPickerView *inputView = [UIPickerView new];
+    [inputView sizeToFit];
+    inputView.delegate = self;
+    inputView.dataSource = self;
+    
+    return inputView;
+}
+
 - (UIView *)accessoryView
 {
     UIToolbar *accessoryView = [UIToolbar new];
@@ -171,24 +174,6 @@ const NSInteger inputAccessoryViewEditingTextLabelTag = 10;
     UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
     UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     [accessoryView setItems:@[flexibleSpace, cancel, done]];
-    
-    // setup label that show current page
-    CGRect accessoryViewBounds = accessoryView.bounds;
-    CGFloat textFieldWidth = CGRectGetWidth(self.textField.frame);
-    CGFloat textFieldHeight = CGRectGetHeight(self.textField.frame);
-    CGFloat labelOriginX = 8;
-    CGFloat labelOriginY = accessoryViewBounds.size.height/2 - textFieldHeight/2;
-    CGRect labelFrame = CGRectMake(labelOriginX, labelOriginY, textFieldWidth, textFieldHeight);
-    UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
-    label.layer.cornerRadius = 4.f;
-    label.layer.masksToBounds = YES;
-    label.tag = inputAccessoryViewEditingTextLabelTag;
-    label.backgroundColor = self.textField.backgroundColor;
-    label.text = self.textField.text;
-    label.textColor = self.textField.textColor;
-    label.textAlignment = self.textField.textAlignment;
-    [accessoryView addSubview:label];
-    
     return accessoryView;
 }
 

@@ -28,7 +28,7 @@
 #import "JMLoadingCollectionViewCell.h"
 #import "UIViewController+fetchInputControls.h"
 
-#import "JMReportViewerViewController.h"
+#import "JMMenuActionsView.h"
 #import "JMReportOptionsViewController.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMSavedResourcesListLoader.h"

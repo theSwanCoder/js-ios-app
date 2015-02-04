@@ -8,7 +8,6 @@
 
 #import "JMReportMultipageViewerViewController.h"
 #import "JMReportPageViewerViewController.h"
-#import "JMReportViewer.h"
 #import "JMReportViewerPaginationToolbar.h"
 #import "JMResourcesCollectionViewController.h"
 #import "JMReportLoader.h"

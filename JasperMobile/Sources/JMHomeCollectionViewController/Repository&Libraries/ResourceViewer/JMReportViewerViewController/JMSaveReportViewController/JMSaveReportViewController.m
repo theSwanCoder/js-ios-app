@@ -28,7 +28,6 @@
 #import "JMRequestDelegate.h"
 #import "ALToastView.h"
 #import "JMSaveReportSection.h"
-#import "JMReportViewer.h"
 #import "JMSaveReportNameCell.h"
 #import "JMSaveReportFormatCell.h"
 #import "JMSaveReportPageRangeCell.h"
@@ -95,7 +94,6 @@ objection_requires(@"resourceClient", @"reportClient")
 #pragma mark - Setups
 - (void)setupSections
 {
-    //if (self.reportViewer.countOfPages > 1) {
     if (self.reportLoader.countOfPages > 1) {
         self.pages = [@{
                 kJMSavePageFromKey : @1,
@@ -212,7 +210,6 @@ objection_requires(@"resourceClient", @"reportClient")
                 [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
             }
             pageRangeCell.pageCount = self.reportLoader.countOfPages;
-            //pageRangeCell.pageCount = self.reportViewer.countOfPages;
             return pageRangeCell;
         }
     }
@@ -374,7 +371,6 @@ objection_requires(@"resourceClient", @"reportClient")
     NSInteger toPageNumber = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
     if (self.pages) {
         BOOL isFromPageChanged = fromPageNumber != 1;
-        //BOOL isToPageChanged = toPageNumber != self.reportViewer.countOfPages;
         BOOL isToPageChanged = toPageNumber != self.reportLoader.countOfPages;
         if (isFromPageChanged || isToPageChanged) {
             if (fromPageNumber == toPageNumber) {

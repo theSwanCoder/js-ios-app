@@ -26,7 +26,6 @@
 //
 
 NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
-NSString * const kJMShowReportViewerSegue = @"ShowReportViewer";
 NSString * const kJMShowMultiPageReportSegue = @"ShowMultiPageReport";
 NSString * const kJMShowDashboardViewerSegue = @"ShowDashboardViewer";
 NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
@@ -67,7 +66,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
         
         if (result.objects.count - invisibleInputControls.count == 0) {
             [self performSegueWithIdentifier:kJMShowMultiPageReportSegue sender:data];
-            //[self performSegueWithIdentifier:kJMShowReportViewerSegue sender:data];
         } else {
             if (invisibleInputControls.count) {
                 NSMutableArray *inputControls = [result.objects mutableCopy];
@@ -91,8 +89,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (BOOL)isResourceSegue:(UIStoryboardSegue *)segue;
 {
     NSString *identifier = segue.identifier;
-    return ([identifier isEqualToString:kJMShowReportViewerSegue]  ||
-            [identifier isEqualToString:kJMShowMultiPageReportSegue] ||
+    return ([identifier isEqualToString:kJMShowMultiPageReportSegue] ||
             [identifier isEqualToString:kJMShowReportOptionsSegue] ||
             [identifier isEqualToString:kJMShowDashboardViewerSegue] ||
             [identifier isEqualToString:kJMShowSavedRecourcesViewerSegue]);

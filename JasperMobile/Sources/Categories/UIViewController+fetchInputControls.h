@@ -26,7 +26,6 @@
 //
 
 extern NSString * const kJMShowReportOptionsSegue;
-extern NSString * const kJMShowReportViewerSegue;
 extern NSString * const kJMShowMultiPageReportSegue;
 extern NSString * const kJMShowDashboardViewerSegue;
 extern NSString * const kJMShowSavedRecourcesViewerSegue;
