@@ -130,7 +130,6 @@ __weak static UIViewController *viewControllerToDismiss;
     [JMUtils hideNetworkActivityIndicator];
     [requestDelegatePool removeAllObjects];
     finalBlock = nil;
-    viewControllerToDismiss = nil;
 }
 
 #pragma mark - JSRequestDelegate
@@ -178,8 +177,12 @@ __weak static UIViewController *viewControllerToDismiss;
                                          delegate:JMRequestDelegate.class
                                 cancelButtonTitle:@"dialog.button.ok"
                                 otherButtonTitles:nil] show];
+        } else {
+            [self dissmissViewController];
         }
     } else if ([requestDelegatePool containsObject:self]) {
+        [requestDelegatePool removeObject:self];
+        
         if (self.finishedBlock) {
             self.finishedBlock(result);
         }
@@ -187,8 +190,6 @@ __weak static UIViewController *viewControllerToDismiss;
         if (self.delegate) {
             [self.delegate requestFinished:result];
         }
-
-        [requestDelegatePool removeObject:self];
         
         if ([JMRequestDelegate isRequestPoolEmpty]) {
             viewControllerToDismiss = nil;
@@ -203,12 +204,18 @@ __weak static UIViewController *viewControllerToDismiss;
 
 #pragma mark - UIAlertViewDelegate
 
-+ (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self dissmissViewController];
+}
+
+- (void)dissmissViewController
 {
     if (viewControllerToDismiss.navigationController) {
         [viewControllerToDismiss.navigationController popViewControllerAnimated:YES];
-        viewControllerToDismiss = nil;
+    } else {
+        [viewControllerToDismiss dismissViewControllerAnimated:YES completion:nil];
     }
+    viewControllerToDismiss = nil;
 }
-
 @end

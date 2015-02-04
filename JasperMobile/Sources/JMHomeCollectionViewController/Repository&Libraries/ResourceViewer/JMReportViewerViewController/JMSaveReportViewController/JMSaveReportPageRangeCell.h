@@ -34,7 +34,6 @@
 @protocol JMSaveReportPageRangeCellDelegate;
 
 @interface JMSaveReportPageRangeCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic, assign) NSInteger currentPage;
 @property (nonatomic, assign) NSInteger pageCount;
 @property (nonatomic, weak) id<JMSaveReportPageRangeCellDelegate> cellDelegate;

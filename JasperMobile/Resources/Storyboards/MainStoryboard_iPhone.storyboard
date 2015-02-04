@@ -1120,33 +1120,32 @@ Please Wait...</string>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="PageRangeCell" id="MBo-lr-CuT" customClass="JMSaveReportPageRangeCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="PageRangeCell" textLabel="E5F-sv-KiI" style="IBUITableViewCellStyleDefault" id="MBo-lr-CuT" customClass="JMSaveReportPageRangeCell">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MBo-lr-CuT" id="Wbd-Qv-Y2g">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LSq-wG-b30">
-                                                    <rect key="frame" x="0.0" y="-3" width="298" height="131"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E5F-sv-KiI">
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="sbn-bv-XFz">
-                                                    <rect key="frame" x="1174" y="1" width="316" height="215"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES"/>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field.png" id="Shi-oB-XtQ">
+                                                    <rect key="frame" x="240" y="4" width="50" height="36"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
-                                                        <outlet property="delegate" destination="MBo-lr-CuT" id="YfT-il-8CQ"/>
+                                                        <outlet property="delegate" destination="MBo-lr-CuT" id="aNR-IN-Sn9"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="textField" destination="sbn-bv-XFz" id="Q6q-W9-hln"/>
-                                            <outlet property="titleLabel" destination="LSq-wG-b30" id="C0d-zn-j2i"/>
+                                            <outlet property="accessoryView" destination="Shi-oB-XtQ" id="Pj2-eO-g3e"/>
+                                            <outlet property="textField" destination="Shi-oB-XtQ" id="KjL-Ww-rpi"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

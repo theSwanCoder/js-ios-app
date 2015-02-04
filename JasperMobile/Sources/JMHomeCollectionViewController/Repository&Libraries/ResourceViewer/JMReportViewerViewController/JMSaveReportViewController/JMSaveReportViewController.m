@@ -201,11 +201,11 @@ objection_requires(@"resourceClient", @"reportClient")
                                                                                        forIndexPath:indexPath];
             pageRangeCell.cellDelegate = self;
             if (indexPath.row == 0) {
-                pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"savereport.pagesRange.fromPage", nil);
+                pageRangeCell.textLabel.text = JMCustomLocalizedString(@"savereport.pagesRange.fromPage", nil);
                 pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
                 [pageRangeCell removeTopSeparator];
             } else if (indexPath.row == 1) {
-                pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"savereport.pagesRange.toPage", nil);
+                pageRangeCell.textLabel.text = JMCustomLocalizedString(@"savereport.pagesRange.toPage", nil);
                 pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
                 [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
             }
@@ -343,8 +343,7 @@ objection_requires(@"resourceClient", @"reportClient")
                 
                 for (JSReportOutputResource *attachment in export.attachments) {
                     NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
-                    JMRequestDelegate *attachmentDelegate = [JMRequestDelegate requestDelegateForFinishBlock:checkErrorBlock];
-                    [self.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath delegate:attachmentDelegate];
+                    [self.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:checkErrorBlock]];
                 }
             }
         } @weakselfend];

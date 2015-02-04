@@ -43,18 +43,6 @@
 
 - (void)awakeFromNib
 {
-    CGRect titleLabelFrame;
-    CGRect textfieldFrame;
-    if ([JMUtils isIphone]) {
-        titleLabelFrame = CGRectMake(15, 0, 216, 44);
-        textfieldFrame = CGRectMake(232, 2, 60, 40);
-    } else {
-        titleLabelFrame = CGRectMake(15, 0, 625, 44);
-        textfieldFrame = CGRectMake(635, 2, 90, 40);
-    }
-    self.titleLabel.frame = titleLabelFrame;
-    self.textField.frame = textfieldFrame;
-    
     UIPickerView *pickerView = [UIPickerView new];
 
     self.textField.inputView = pickerView;
