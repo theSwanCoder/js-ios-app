@@ -174,9 +174,9 @@
 - (void)applicationInfo:(id)sender
 {
     NSString *appName = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"];
-
     NSInteger currentYear = [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
     NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"servers.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion], currentYear];
+
     [[UIAlertView localizedAlertWithTitle:nil
                                   message:message
                                  delegate:nil

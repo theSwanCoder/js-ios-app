@@ -29,7 +29,6 @@
 
 "servers.info" = "%@™ v %@\n\nManagement tool and report viewer for JasperReports Server %.1f and greater.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
 
-
 "servers.url.label" = "Server Address";
 "servers.url.errmsg" = "Please specify a valid URL";
 
