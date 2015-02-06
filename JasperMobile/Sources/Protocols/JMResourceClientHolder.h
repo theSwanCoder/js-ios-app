@@ -26,7 +26,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
  This protocol aggregates all the information implementing object should know about 
@@ -35,6 +34,9 @@
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @since 1.6
  */
+
+@class JSRESTResource, JSResourceLookup;
+
 @protocol JMResourceClientHolder <NSObject>
 @optional
 @property (nonatomic, strong) JSRESTResource *resourceClient;

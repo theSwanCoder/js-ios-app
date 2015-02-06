@@ -32,7 +32,6 @@
  */
 
 #import <Foundation/Foundation.h>
-static NSString * const kJMBaseCellIdentifier = @"BaseCellIdentifier";
 
 @interface JMSettings : NSObject
 @property (nonatomic, readonly) NSArray *itemsArray;

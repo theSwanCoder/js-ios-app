@@ -38,6 +38,7 @@
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel    *titleLabel;
 @property (nonatomic, strong) JSConstants       *constants;
+@property (weak, nonatomic) IBOutlet UIButton *runReportButton;
 
 @end
 
@@ -62,7 +63,6 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     self.title = JMCustomLocalizedString(@"detail.report.options.title", nil);
     self.titleLabel.text = JMCustomLocalizedString(@"detail.report.options.titlelabel.title", nil);
     self.titleLabel.textColor = kJMDetailViewLightTextColor;
@@ -74,8 +74,11 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 
-    [self.tableView setRowHeight:44.f];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(runReport)];
+    // setup "Run Report" button
+    self.runReportButton.backgroundColor = kJMResourcePreviewBackgroundColor;
+    [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog.button.run.report", nil) forState:UIControlStateNormal];
+    
+    self.tableView.rowHeight = 50.f;
 }
 
 - (void)runReport
@@ -85,7 +88,7 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
         [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
             if (dataIsValid) {
                 if (!self.delegate) {
-                    [self performSegueWithIdentifier:kJMShowReportViewerSegue sender:self.inputControls];
+                    [self performSegueWithIdentifier:kJMShowMultiPageReportSegue sender:self.inputControls];
                 } else {
                     [self.delegate performSelector:@selector(setInputControls:) withObject:self.inputControls];
                     [self.delegate refresh];
@@ -97,9 +100,10 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
 
 - (BOOL) validateInputControls
 {
+    // TODO: change this COMPLETLY!
     for (int i = 0; i < [self.tableView numberOfRowsInSection:0]; i++) {
         JMInputControlCell *cell = (JMInputControlCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        if (![cell isValidData]) {
+        if (cell && ![cell isValidData]) {
             return NO;
         }
     }
@@ -116,6 +120,11 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
     } else {
         [destinationViewController setCell:sender];
     }
+}
+
+#pragma mark - Actions
+- (IBAction)runReportAction:(id)sender {
+    [self runReport];
 }
 
 #pragma mark - Table view data source
@@ -200,10 +209,14 @@ objection_requires(@"resourceClient", @"reportClient", @"constants")
         [allInputControls addObject:descriptor.uuid];
     }
 
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
-        [self.navigationController popViewControllerAnimated:YES];
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.reportClient cancelBlock:@weakself(^(void)) {
+        // TODO: no need back to previous screen
+        //[self.navigationController popViewControllerAnimated:YES];
     } @weakselfend];
+    
     JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+        [JMCancelRequestPopup dismiss];
+        
         for (JSInputControlState *state in result.objects) {
             for (JSInputControlDescriptor *inputControl in self.inputControls) {
                 if ([state.uuid isEqualToString:inputControl.uuid]) {

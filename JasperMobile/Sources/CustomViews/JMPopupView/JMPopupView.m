@@ -26,20 +26,22 @@
 static NSMutableArray* visiblePopupsArray = nil;
 
 @interface JMPopupView ()
-
 @property (nonatomic, assign) BOOL animatedNow;
+@property (nonatomic, copy) void (^dismissBlock)(void);
 @end
 
 @implementation JMPopupView
 @synthesize contentView = _contentView;
 
-- (id)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type{
+- (instancetype)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type
+{
     self = [super init];
     if (self) {
         if (!visiblePopupsArray) {
             visiblePopupsArray = [NSMutableArray array];
         }
         self.delegate = delegate;
+        self.hideIfBackgroundTapped = YES;
         _type = type;
         
         [visiblePopupsArray addObject:self];
@@ -88,14 +90,16 @@ static NSMutableArray* visiblePopupsArray = nil;
     return self;
 }
 
-+ (BOOL)isShowedPopup{
++ (BOOL)isShowedPopup
+{
     if ([visiblePopupsArray count]) {
         return YES;
     }
     return NO;
 }
 
-- (void)setContentView:(UIView *)contentView{
+- (void)setContentView:(UIView *)contentView
+{
     _contentView = contentView;
     switch (self.type) {
         case JMPopupViewType_ContentViewOnly:
@@ -109,11 +113,13 @@ static NSMutableArray* visiblePopupsArray = nil;
     [_backGroundView addSubview:_contentView];
 }
 
-- (void) show{
+- (void) show
+{
     [self showFromPoint:CGPointZero onView:nil];
 }
 
-- (void) showFromPoint:(CGPoint)point onView:(UIView*)view{
+- (void) showFromPoint:(CGPoint)point onView:(UIView*)view
+{
     if (self.animatedNow) {
         return;
     }
@@ -139,12 +145,13 @@ static NSMutableArray* visiblePopupsArray = nil;
     }
     
     _backGroundView.center = centerPoint;
-    
-    //Add a tap gesture recognizer to the large invisible view (self), which will detect taps anywhere on the screen.
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
-    tap.cancelsTouchesInView = NO; // Allow touches through to a UITableView or other touchable view, as suggested by Dimajp.
-    [self addGestureRecognizer:tap];
-    self.userInteractionEnabled = YES;
+    if (self.hideIfBackgroundTapped) {
+        //Add a tap gesture recognizer to the large invisible view (self), which will detect taps anywhere on the screen.
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
+        tap.cancelsTouchesInView = NO; // Allow touches through to a UITableView or other touchable view, as suggested by Dimajp.
+        [self addGestureRecognizer:tap];
+        self.userInteractionEnabled = YES;
+    }
     
     // Make the view small and transparent before animation
     _backGroundView.alpha = 0.f;
@@ -165,6 +172,9 @@ static NSMutableArray* visiblePopupsArray = nil;
             self.animatedNow = NO;
             if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidShow:)]) {
                 [self.delegate popupViewDidShow:self];
+            }
+            if (self.dismissBlock) {
+                self.dismissBlock();
             }
         }];
     }];
@@ -218,37 +228,54 @@ static NSMutableArray* visiblePopupsArray = nil;
 
 - (void)dismiss:(BOOL)animated
 {
-    if (self.animatedNow) {
-        return;
-    }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewWillDismissed:)]) {
-        [self.delegate popupViewWillDismissed:self];
-    }
-    if (!animated) {
-        [self removeFromSuperview];
-        if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
-            [self.delegate popupViewDidDismissed:self];
+    self.dismissBlock = @weakself(^(void)) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewWillDismissed:)]) {
+            [self.delegate popupViewWillDismissed:self];
         }
-    } else {
-        self.animatedNow = YES;
-        [UIView animateWithDuration:0.3f animations:^{
-            _backGroundView.alpha = 0.1f;
-            _backGroundView.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
-        } completion:^(BOOL finished) {
+        if (!animated) {
             [self removeFromSuperview];
-            self.animatedNow = NO;
             if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
                 [self.delegate popupViewDidDismissed:self];
             }
-        }];
+        } else {
+            self.animatedNow = YES;
+            [UIView animateWithDuration:0.3f animations:^{
+                self->_backGroundView.alpha = 0.1f;
+                self->_backGroundView.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
+            } completion:^(BOOL finished) {
+                [self removeFromSuperview];
+                self.animatedNow = NO;
+                if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
+                    [self.delegate popupViewDidDismissed:self];
+                }
+                self.dismissBlock = nil;
+            }];
+        }
+        [visiblePopupsArray removeObject:self];
+    }@weakselfend;
+    
+    if (self.animatedNow) {
+        return;
+    } else {
+        self.dismissBlock();
     }
-    [visiblePopupsArray removeObject:self];
 }
 
-+ (void)dismissAllVisiblePopups:(BOOL)animated{
++ (void)dismissAllVisiblePopups:(BOOL)animated
+{
     for (JMPopupView* popup in visiblePopupsArray) {
         [popup dismiss:animated];
     }
+}
+
++ (JMPopupView *)displayedPopupViewForClass:(Class)someClass
+{
+    for (JMPopupView* popup in visiblePopupsArray) {
+        if ([popup isKindOfClass:someClass]) {
+            return popup;
+        }
+    }
+    return nil;
 }
 
 - (void)drawRect:(CGRect)rect

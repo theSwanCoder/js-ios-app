@@ -26,7 +26,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
@@ -46,7 +45,6 @@
 
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
 @property (nonatomic, weak) id <JMInputControlCellDelegate> delegate;
-@property (nonatomic, weak) IBOutlet UIView  *valuePlaceHolderView;
 
 - (void) updateDisplayingOfErrorMessage;
 - (void) setEnabledCell:(BOOL) enabled;

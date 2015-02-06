@@ -189,14 +189,17 @@
                                              organization:self.serverProfile.organization
                                                 serverUrl:self.serverProfile.serverUrl];
 
-    self.restBase = [[JSRESTBase alloc] initWithProfile:profile classesForMappings:nil];
-    [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:self.restBase cancelBlock:^{
+    self.restBase = [[JSRESTBase alloc] initWithClassesForMappings:nil];
+    self.restBase.serverProfile = profile;
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:self.restBase cancelBlock:^{
         if (errorBlock) {
             errorBlock();
         }
     }];
     
     JMRequestDelegate *serverInfoDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
+        [JMCancelRequestPopup dismiss];
+        
         float serverVersion = self.restBase.serverInfo.versionAsFloat;
         if (serverVersion >= [JMServerProfile minSupportedServerVersion]) {
             if (successBlock) {

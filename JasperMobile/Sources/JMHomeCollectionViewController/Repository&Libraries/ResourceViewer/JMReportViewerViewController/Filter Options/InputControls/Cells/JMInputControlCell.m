@@ -27,6 +27,10 @@
 
 #import "JMInputControlCell.h"
 
+@interface JMInputControlCell()
+@property (nonatomic, weak) IBOutlet UIView  *valuePlaceHolderView;
+@end
+
 @implementation JMInputControlCell
 
 - (void)awakeFromNib
@@ -37,26 +41,37 @@
     self.detailTextLabel.font = [JMFont tableViewCellDetailErrorFont];
     self.detailTextLabel.textColor = [UIColor redColor];
     self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
+    
+    // TODO: set init value
+    self.detailTextLabel.text = nil;
 }
 
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    CGRect titleLabelFrame = self.textLabel.frame;
-    titleLabelFrame.size.width = ceil(self.valuePlaceHolderView.frame.origin.x - titleLabelFrame.origin.x);
-    self.textLabel.frame = titleLabelFrame;
+
+    CGRect titleLabelRect = self.textLabel.frame;
+    titleLabelRect.size.width = self.contentView.frame.size.width - 3 * titleLabelRect.origin.x - self.valuePlaceHolderView.frame.size.width;
+    self.textLabel.frame = titleLabelRect;
     
     if ([self.inputControlDescriptor errorString]) {
         CGRect errorLabelRect = self.detailTextLabel.frame;
-        errorLabelRect.origin.y = self.valuePlaceHolderView.frame.origin.y + self.valuePlaceHolderView.frame.size.height;
+        errorLabelRect.origin.y = 2 * self.valuePlaceHolderView.frame.origin.y + self.valuePlaceHolderView.frame.size.height;
         self.detailTextLabel.frame = errorLabelRect;
     }
 }
 
 - (void) updateDisplayingOfErrorMessage
 {
-    self.detailTextLabel.text = [self.inputControlDescriptor errorString];
-    [self.delegate reloadTableViewCell:self];
+    NSString *errorString = [self.inputControlDescriptor errorString];
+
+    BOOL isInputHasError = (errorString != nil);
+    BOOL hasPreviousError = self.detailTextLabel.text && self.detailTextLabel.text.length > 0;
+    
+    if ( (isInputHasError && !hasPreviousError) || (!isInputHasError && hasPreviousError) ) {
+        self.detailTextLabel.text = errorString;
+        [self.delegate reloadTableViewCell:self];
+    }
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor

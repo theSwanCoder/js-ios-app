@@ -148,4 +148,16 @@
     }
     return reportFormats;
 }
+
+
++ (NSString *)buildVersion
+{
+    NSDictionary *infoDictionary = [[NSBundle mainBundle]infoDictionary];
+    
+    NSString *build = infoDictionary[(NSString*)kCFBundleVersionKey];
+    //NSString *bundleName = infoDictionary[(NSString *)kCFBundleNameKey];
+    
+    return build;
+}
+
 @end

@@ -35,6 +35,9 @@
 #import "JMEditabledViewController.h"
 #import "JMResourceClientHolder.h"
 #import "JMReportClientHolder.h"
+#import "JMReportLoader.h"
+
+@class JMReportViewer;
 
 extern NSString * const kJMSaveReportViewControllerSegue;
 
@@ -42,4 +45,5 @@ extern NSString * const kJMSaveReportViewControllerSegue;
 @property (nonatomic, strong) NSMutableArray *inputControls;
 @property (nonatomic, weak) UIViewController *delegate;
 
+@property (nonatomic, strong) JMReportLoader *reportLoader;
 @end

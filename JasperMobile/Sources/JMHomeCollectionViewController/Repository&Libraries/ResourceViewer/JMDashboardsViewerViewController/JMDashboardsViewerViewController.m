@@ -21,6 +21,7 @@
  */
 
 
+#import <SplunkMint-iOS/SplunkMint-iOS.h>
 #import "JMDashboardsViewerViewController.h"
 #import "JMVisualizeClient.h"
 #import "JMWebConsole.h"
@@ -59,7 +60,7 @@
     
     self.webView.backgroundColor = [UIColor whiteColor];
     self.webView.opaque = NO;
-    
+
     if ([self isServerVersionUp6] && [self isNewDashboard]) {
         self.webView.scrollView.maximumZoomScale = 5;
         self.webView.scrollView.minimumZoomScale = 0.1;
@@ -166,7 +167,7 @@
 - (void)showLoadingPopup {
     if (!self.isPopupVisible) {
         self.isPopupVisible = YES;
-        [JMCancelRequestPopup presentInViewController:self message:@"status.loading" restClient:nil cancelBlock:@weakself(^(void)){
+        [JMCancelRequestPopup presentWithMessage:@"status.loading" restClient:nil cancelBlock:@weakself(^(void)){
             self.isPopupVisible = NO;
             [self.webView stopLoading];
             [self.navigationController popViewControllerAnimated:YES];
@@ -178,6 +179,7 @@
     [JMCancelRequestPopup dismiss];
 }
 
+#pragma mark - Utils
 - (BOOL)isServerVersionUp6
 {
     return self.resourceClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0;

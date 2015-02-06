@@ -33,7 +33,8 @@
     self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
 }
 
-- (void)setSettingsItem:(JMSettingsItem *)settingsItem{
+- (void)setSettingsItem:(JMSettingsItem *)settingsItem
+{
     _settingsItem = settingsItem;
     self.textLabel.text = settingsItem.titleString;
 }

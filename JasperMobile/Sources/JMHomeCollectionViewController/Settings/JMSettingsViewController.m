@@ -30,8 +30,9 @@
 
 #import "JMAppUpdater.h"
 #import "UIView+Additions.h"
+#import <MessageUI/MessageUI.h>
 
-@interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *settingsTitleLabel;
@@ -85,9 +86,70 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    JMSettingsItem *currentItem = [self.detailSettings.itemsArray objectAtIndex:indexPath.row];
+    if ([currentItem.cellIdentifier isEqualToString:@"FeedbackCellIdentifier"]) {
+        [self sendFeedback];
+    }
+}
+
+#pragma mark - Feedback by email
+- (void)sendFeedback
+{
+#if !TARGET_IPHONE_SIMULATOR
+    if ([MFMailComposeViewController canSendMail]) {
+        // Email Subject
+        NSString *emailTitle = @"JasperMobile (iOS)";
+        // Email Content
+        NSString *messageBody = [NSString stringWithFormat:@"Send from build version: %@", [JMUtils buildVersion]];
+        // To address
+        NSArray *toRecipents = @[@"js.testdevice@gmail.com"];
+        
+        MFMailComposeViewController *mc = [MFMailComposeViewController new];
+        mc.mailComposeDelegate = self;
+        [mc setSubject:emailTitle];
+        [mc setMessageBody:messageBody isHTML:NO];
+        [mc setToRecipients:toRecipents];
+        
+        [self presentViewController:mc animated:YES completion:NULL];
+    } else {
+        [self showErrorWithMessage:@"detail.settings.feedback.errorShowClient"];
+    }
+#endif
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)showErrorWithMessage:(NSString *)errorMessage
+{
+    [[UIAlertView localizedAlertWithTitle:nil
+                                  message:errorMessage
+                                 delegate:self
+                        cancelButtonTitle:@"dialog.button.ok"
+                        otherButtonTitles: nil] show];
 }
 
 #pragma mark - Actions
@@ -97,7 +159,11 @@
     BOOL previousSendingCrashReports = [JMUtils crashReportsSendingEnable];
     [self.detailSettings saveSettings];
     if (previousSendingCrashReports != [JMUtils crashReportsSendingEnable]) {
-        [[UIAlertView localizedAlertWithTitle:@"detail.settings.crashtracking.alert.title" message:@"detail.settings.crashtracking.alert.message" delegate:self cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil] show];
+        [[UIAlertView localizedAlertWithTitle:@"detail.settings.crashtracking.alert.title"
+                                      message:@"detail.settings.crashtracking.alert.message"
+                                     delegate:self
+                            cancelButtonTitle:@"dialog.button.ok"
+                            otherButtonTitles: nil] show];
     } else {
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -106,7 +172,9 @@
 - (void)applicationInfo:(id)sender
 {
     NSString *appName = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"];
-    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"servers.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion]];
+    NSInteger currentYear = [[NSCalendar currentCalendar] component:NSCalendarUnitYear fromDate:[NSDate date]];
+    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"servers.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion], currentYear];
+
     [[UIAlertView localizedAlertWithTitle:nil
                                   message:message
                                  delegate:nil

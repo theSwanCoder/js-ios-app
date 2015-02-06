@@ -83,7 +83,7 @@
         }
     };
     
-    JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+    JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateWithCompletionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
         JSResourceLookup *resourceLookup = [result.objects objectAtIndex:0];
         if (resourceLookup) {
             if (!resourceLookup.resourceType) {

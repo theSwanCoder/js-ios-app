@@ -23,7 +23,6 @@
 
 #import "JMSettings.h"
 #import "JMSettingsItem.h"
-#import <jaspersoft-sdk/JaspersoftSDK.h>
 #import "JMReportClientHolder.h"
 #import "JMResourceClientHolder.h"
 #import "JMServerProfile+Helpers.h"
@@ -31,6 +30,8 @@
 static NSString * const kJMTextCellIdentifier = @"TextCellIdentifier";
 static NSString * const kJMServerCellIdentifier = @"ServerCellIdentifier";
 static NSString * const kJMBooleanCellIdentifier = @"BooleanCellIdentifier";
+static NSString * const kJMFeedbackCellIdentifier = @"FeedbackCellIdentifier";
+static NSString * const kJMIntroCellIdentifier = @"IntroCellIdentifier";
 
 
 
@@ -66,7 +67,8 @@ objection_requires(@"resourceClient", @"reportClient")
       @{@"title" : JMCustomLocalizedString(@"detail.settings.item.connection.timeout", nil), @"value" : @(self.resourceClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"detail.settings.item.data.read.timeout", nil), @"value" : @(self.reportClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"detail.settings.crashtracking.title", nil), @"value" : @([JMUtils crashReportsSendingEnable]), @"cellIdentifier" : kJMBooleanCellIdentifier},
-      @{@"title" : JMCustomLocalizedString(@"detail.settings.item.intro", nil), @"value" : @"", @"cellIdentifier" : kJMBaseCellIdentifier},];
+      @{@"title" : JMCustomLocalizedString(@"detail.settings.item.intro", nil), @"value" : @"", @"cellIdentifier" : kJMIntroCellIdentifier},
+      @{@"title" : JMCustomLocalizedString(@"detail.settings.feedback", nil), @"value" : @"", @"cellIdentifier" : kJMFeedbackCellIdentifier}];
     
     for (NSDictionary *itemData in itemsSourceArray) {
         JMSettingsItem *item = [[JMSettingsItem alloc] init];

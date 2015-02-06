@@ -21,13 +21,14 @@
  */
 
 
+#import <SplunkMint-iOS/SplunkMint-iOS.h>
 #import "JMResourcesCollectionViewController.h"
 #import "JMRefreshable.h"
 #import "JMResourceCollectionViewCell.h"
 #import "JMLoadingCollectionViewCell.h"
 #import "UIViewController+fetchInputControls.h"
 
-#import "JMReportViewerViewController.h"
+#import "JMMenuActionsView.h"
 #import "JMReportOptionsViewController.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMSavedResourcesListLoader.h"
@@ -126,6 +127,14 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [[NSNotificationCenter defaultCenter] addObserverForName:kJMRepresentationTypeDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
         self.needReloadData = YES;
     } @weakselfend];
+
+    // log events
+    NSString *currentClassName = NSStringFromClass(self.class);
+    [[Mint sharedInstance] logEventAsyncWithTag:currentClassName completionBlock:^(MintLogResult *splunkLogResult)
+    {
+        NSString *logResultState = splunkLogResult.resultState == OKResultState ? @"OK" : @"Error";
+        NSLog(@"Log result: %@", logResultState);
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -139,7 +148,6 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [super viewDidAppear:animated];
     [self.resourceListLoader updateIfNeeded];
 }
-
 
 #pragma mark - Custom accessors
 - (UIBarButtonItem *)resourceRepresentationItem
@@ -169,7 +177,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     }
     return _resourceListLoader;
 }
-
+#pragma mark - Methods
 - (JMResourcesRepresentationType)representationType
 {
     if (![[NSUserDefaults standardUserDefaults] objectForKey:[self getRepresentationTypeKey]]) {
@@ -458,6 +466,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (void) showNavigationItems
 {
     NSMutableArray *navBarItems = [NSMutableArray array];
+    // may be network call to get server info
     JMMenuActionsViewAction availableAction = [self availableAction];
     if (availableAction & JMMenuActionsViewAction_Filter) {
         UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];

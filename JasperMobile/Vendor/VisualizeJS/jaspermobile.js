@@ -86,9 +86,7 @@ JasperMobile.dashboard = {
 var domLoadedListener = function() {
   var viewPort = document.querySelector("meta[name=viewport]");
   viewPort.setAttribute('content', 'width=device-width; minimum-scale=0.1; maximum-scale=1; user-scalable=yes');
-
   JasperMobile.htmlHandler.setSize("#frame", "300%", "300%");
-
   var timeInterval = setInterval(function () {
     var dashlets = jQuery('.dashlet');
     if (dashlets.length > 0) {

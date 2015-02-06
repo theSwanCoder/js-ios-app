@@ -25,6 +25,7 @@
 //  TIBCO JasperMobile
 //
 
+#import <SplunkMint-iOS/SplunkMint-iOS.h>
 #import "JMHomeCollectionViewController.h"
 #import "JMMenuItemCell.h"
 #import "JMServerProfile+Helpers.h"
@@ -80,6 +81,14 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
     } @weakselfend];
     
     [[NSNotificationCenter defaultCenter] addObserver:self.collectionView selector:@selector(reloadData) name:UIDeviceOrientationDidChangeNotification object:nil];
+
+    // log events
+    NSString *currentClassName = NSStringFromClass(self.class);
+    [[Mint sharedInstance] logEventAsyncWithTag:currentClassName completionBlock:^(MintLogResult *splunkLogResult)
+    {
+        NSString *logResultState = splunkLogResult.resultState == OKResultState ? @"OK" : @"Error";
+        NSLog(@"Log result: %@", logResultState);
+    }];
 }
 
 - (void)dealloc
@@ -98,7 +107,7 @@ static NSString * const kJMMenuItemIdentifier = @"MenuItem";
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    JasperMobileAppDelegate *appDelegate = (JasperMobileAppDelegate *)[UIApplication sharedApplication].delegate;
     if (appDelegate.isApplicationFirstStart) {
         appDelegate.applicationFirstStart = NO;
         [self showIntroView];

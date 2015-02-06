@@ -25,7 +25,6 @@
 //  TIBCO JasperMobile
 //
 
-#import <jaspersoft-sdk/JaspersoftSDK.h>
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com

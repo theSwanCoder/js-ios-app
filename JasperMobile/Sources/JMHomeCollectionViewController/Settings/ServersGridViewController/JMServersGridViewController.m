@@ -68,8 +68,8 @@ objection_requires(@"managedObjectContext")
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [self refreshDatasource];
-
 }
 
 - (void) refreshDatasource

@@ -33,7 +33,6 @@ __weak static UIViewController *viewControllerToDismiss;
 
 #import "JMCancelRequestPopup.h"
 #import "JMUtils.h"
-#import "RestKit/RKErrors.h"
 
 
 @interface JMRequestDelegate()
@@ -63,22 +62,31 @@ __weak static UIViewController *viewControllerToDismiss;
     return [self requestDelegateForFinishBlock:finishedBlock errorBlock:nil];
 }
 
-+ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock
+                                          errorBlock:(JSRequestFinishedBlock)errorBlock
 {
-    return [self requestDelegateForFinishBlock:finishedBlock errorBlock:errorBlock viewControllerToDismiss:nil];
+    return [self requestDelegateWithCompletionBlock:finishedBlock errorBlock:errorBlock viewControllerToDismiss:nil];
 }
 
-+ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock viewControllerToDismiss:(UIViewController *)viewController
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock
+                             viewControllerToDismiss:(UIViewController *)viewController
 {
-    return [self requestDelegateForFinishBlock:finishedBlock errorBlock:nil viewControllerToDismiss:viewController];
+    return [self requestDelegateWithCompletionBlock:finishedBlock errorBlock:nil viewControllerToDismiss:viewController];
 }
 
-+ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController
++ (JMRequestDelegate *)requestDelegateWithCompletionBlock:(JSRequestFinishedBlock)finishedBlock
+                                          errorBlock:(JSRequestFinishedBlock)errorBlock
+                             viewControllerToDismiss:(UIViewController *)viewController
 {
-    return [self requestDelegateForFinishBlock:finishedBlock errorBlock:errorBlock viewControllerToDismiss:viewController showAlerts:YES];
+    return [self requestDelegateForFinishBlock:finishedBlock
+                                    errorBlock:errorBlock
+                       viewControllerToDismiss:viewController showAlerts:YES];
 }
 
-+ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock errorBlock:(JSRequestFinishedBlock)errorBlock viewControllerToDismiss:(UIViewController *)viewController showAlerts:(BOOL)showAlerts
++ (JMRequestDelegate *)requestDelegateForFinishBlock:(JSRequestFinishedBlock)finishedBlock
+                                          errorBlock:(JSRequestFinishedBlock)errorBlock
+                             viewControllerToDismiss:(UIViewController *)viewController
+                                          showAlerts:(BOOL)showAlerts
 {
     JMRequestDelegate *requestDelegate = [[JMRequestDelegate alloc] init];
     requestDelegate.finishedBlock = finishedBlock;
@@ -89,7 +97,7 @@ __weak static UIViewController *viewControllerToDismiss;
     viewControllerToDismiss = viewController;
     
     [requestDelegatePool addObject:requestDelegate];
-    [JMUtils showNetworkActivityIndicator];
+    //[JMUtils showNetworkActivityIndicator];
     
     return requestDelegate;
 }
@@ -100,7 +108,7 @@ __weak static UIViewController *viewControllerToDismiss;
     requestDelegate.delegate = delegate;
 
     [requestDelegatePool addObject:requestDelegate];
-    [JMUtils showNetworkActivityIndicator];
+    //[JMUtils showNetworkActivityIndicator];
 
     return requestDelegate;
 }
@@ -118,9 +126,9 @@ __weak static UIViewController *viewControllerToDismiss;
 
 + (void)clearRequestPool
 {
+    [JMUtils hideNetworkActivityIndicator];
     [requestDelegatePool removeAllObjects];
     finalBlock = nil;
-    viewControllerToDismiss = nil;
 }
 
 #pragma mark - JSRequestDelegate
@@ -133,18 +141,14 @@ __weak static UIViewController *viewControllerToDismiss;
         }
 
         [JMRequestDelegate clearRequestPool];
-        [JMCancelRequestPopup dismiss];
+        //[JMCancelRequestPopup dismiss];
 
         if (self.showAlerts) {
             NSString *title;
             NSString *message;
-            
             if (result.statusCode) {
                 title = @"error.readingresponse.dialog.msg";
                 message = [NSString stringWithFormat:@"error.http.%li", (long)result.statusCode];
-            } else if ([result.error.domain isEqualToString:RKErrorDomain] && result.error.code == RKRequestConnectionTimeoutError) {
-                title = @"error.readingresponse.dialog.msg";
-                message = @"error.http.504";
             } else {
                 switch (result.error.code) {
                     case NSURLErrorUserCancelledAuthentication:
@@ -157,7 +161,10 @@ __weak static UIViewController *viewControllerToDismiss;
                         title = @"error.unknownhost.dialog.title";
                         message = @"error.unknownhost.dialog.msg" ;
                         break;
-                    
+                    case NSURLErrorTimedOut:
+                        title = @"error.readingresponse.dialog.msg";
+                        message = @"error.http.504";
+                        break;
                     default:
                         title = @"error.noconnection.dialog.title";
                         message = @"error.noconnection.dialog.msg";
@@ -169,8 +176,12 @@ __weak static UIViewController *viewControllerToDismiss;
                                          delegate:JMRequestDelegate.class
                                 cancelButtonTitle:@"dialog.button.ok"
                                 otherButtonTitles:nil] show];
+        } else {
+            [self dissmissViewController];
         }
     } else if ([requestDelegatePool containsObject:self]) {
+        [requestDelegatePool removeObject:self];
+        
         if (self.finishedBlock) {
             self.finishedBlock(result);
         }
@@ -178,11 +189,8 @@ __weak static UIViewController *viewControllerToDismiss;
         if (self.delegate) {
             [self.delegate requestFinished:result];
         }
-
-        [requestDelegatePool removeObject:self];
         
         if ([JMRequestDelegate isRequestPoolEmpty]) {
-            [JMCancelRequestPopup dismiss];
             viewControllerToDismiss = nil;
 
             if (finalBlock) {
@@ -195,12 +203,18 @@ __weak static UIViewController *viewControllerToDismiss;
 
 #pragma mark - UIAlertViewDelegate
 
-+ (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self dissmissViewController];
+}
+
+- (void)dissmissViewController
 {
     if (viewControllerToDismiss.navigationController) {
         [viewControllerToDismiss.navigationController popViewControllerAnimated:YES];
-        viewControllerToDismiss = nil;
+    } else {
+        [viewControllerToDismiss dismissViewControllerAnimated:YES completion:nil];
     }
+    viewControllerToDismiss = nil;
 }
-
 @end

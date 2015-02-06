@@ -68,8 +68,9 @@ typedef NS_ENUM(NSInteger, JMPopupViewType) {
 @property (nonatomic, retain) UIView *contentView;
 @property (nonatomic, readonly) JMPopupViewType type;
 @property (nonatomic, weak) id <JMPopupViewDelegate> delegate;
+@property (nonatomic, assign) BOOL hideIfBackgroundTapped;
 
-- (id) initWithDelegate:(id <JMPopupViewDelegate>)delegate type:(JMPopupViewType)type;
+- (instancetype) initWithDelegate:(id <JMPopupViewDelegate>)delegate type:(JMPopupViewType)type;
 
 - (void) show;
 
@@ -79,4 +80,7 @@ typedef NS_ENUM(NSInteger, JMPopupViewType) {
 
 - (void) dismiss:(BOOL)animated;
 
++ (void)dismissAllVisiblePopups:(BOOL)animated;
+
++ (JMPopupView *)displayedPopupViewForClass:(Class)someClass;
 @end
