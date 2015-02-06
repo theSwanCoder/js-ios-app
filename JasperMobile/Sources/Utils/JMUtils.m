@@ -30,6 +30,7 @@
 #import "JMLocalization.h"
 #import "JMSavedResources+Helpers.h"
 #import <SplunkMint-iOS/SplunkMint-iOS.h>
+#import "AFNetworkActivityIndicatorManager.h"
 
 @implementation JMUtils
 
@@ -88,18 +89,12 @@
 
 + (void)showNetworkActivityIndicator
 {
-    UIApplication *application = [UIApplication sharedApplication];
-    if (!application.networkActivityIndicatorVisible) {
-        application.networkActivityIndicatorVisible = YES;
-    }
+    [[AFNetworkActivityIndicatorManager sharedManager] incrementActivityCount];
 }
 
 + (void)hideNetworkActivityIndicator
 {
-    UIApplication *application = [UIApplication sharedApplication];
-    if (application.networkActivityIndicatorVisible) {
-        application.networkActivityIndicatorVisible = NO;
-    }
+    [[AFNetworkActivityIndicatorManager sharedManager] decrementActivityCount];
 }
 
 + (BOOL)isIphone

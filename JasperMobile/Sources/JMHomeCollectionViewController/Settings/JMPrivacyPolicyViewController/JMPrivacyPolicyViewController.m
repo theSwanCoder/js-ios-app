@@ -106,12 +106,12 @@ objection_requires(@"resourceClient")
 - (void) startLoadingAnimating
 {
     [self.activityIndicator startAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [JMUtils showNetworkActivityIndicator];
 }
 
 - (void) stopLoadingAnimating
 {
     [self.activityIndicator stopAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [JMUtils hideNetworkActivityIndicator];
 }
 @end

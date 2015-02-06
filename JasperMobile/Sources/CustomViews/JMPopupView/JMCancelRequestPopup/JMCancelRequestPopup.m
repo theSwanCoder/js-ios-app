@@ -83,7 +83,7 @@
     if (self.cancelBlock) {
         self.cancelBlock();
     }
-    
+    [JMUtils hideNetworkActivityIndicator];
     [self dismiss:YES];
 }
 

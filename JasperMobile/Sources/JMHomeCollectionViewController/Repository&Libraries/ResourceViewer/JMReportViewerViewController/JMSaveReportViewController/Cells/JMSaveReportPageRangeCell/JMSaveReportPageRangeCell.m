@@ -35,6 +35,7 @@
 @interface JMSaveReportPageRangeCell() <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (weak, nonatomic) UIPickerView *pickerView;
 @property (nonatomic, weak) IBOutlet UITextField *textField;
+@property (nonatomic, assign) NSRange availableRange;
 @end
 
 @implementation JMSaveReportPageRangeCell
@@ -55,14 +56,6 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
-#pragma mark - Public API
-- (void)updateCurrentPagePosition
-{
-    [self.pickerView selectRow:(self.currentPage - 1)
-                   inComponent:0
-                      animated:YES];
-}
-
 #pragma mark - Custom Setters
 - (void)setCurrentPage:(NSInteger)currentPage
 {
@@ -70,6 +63,15 @@
     self.textField.text = @(currentPage).stringValue;
 }
 
+#pragma mark - Private API
+- (void)configurePickerView
+{
+    self.availableRange = [self.cellDelegate availableRangeForPageRangeCell:self];
+    [self.pickerView selectRow:(self.currentPage - self.availableRange.location)
+                   inComponent:0
+                      animated:YES];
+    [self.pickerView reloadAllComponents];
+}
 
 #pragma mark - Picker
 - (UIToolbar *)pickerToolbar
@@ -88,7 +90,7 @@
 - (void)done:(id)sender
 {
     if ([self.cellDelegate respondsToSelector:@selector(pageRangeCell:didSelectPage:)]) {
-        [self.cellDelegate pageRangeCell:self didSelectPage:@([self.pickerView selectedRowInComponent:0] + 1)];
+        [self.cellDelegate pageRangeCell:self didSelectPage:@([self.pickerView selectedRowInComponent:0] + self.availableRange.location)];
     }
     [self hidePicker];
 }
@@ -111,19 +113,19 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return self.pageCount;
+    return self.availableRange.length;
 }
 
 #pragma mark - UIPickerViewDelegate
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [NSString stringWithFormat:@"%@", @(row + 1)];
+    return [NSString stringWithFormat:@"%@", @(self.availableRange.location + row)];
 }
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    [self updateCurrentPagePosition];
+    [self configurePickerView];
     return YES;
 }
 

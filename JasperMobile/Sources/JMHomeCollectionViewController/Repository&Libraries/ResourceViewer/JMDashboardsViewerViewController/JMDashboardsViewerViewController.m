@@ -26,6 +26,8 @@
 #import "JMVisualizeClient.h"
 #import "JMWebConsole.h"
 #import "JMCancelRequestPopup.h"
+#import "RKObjectmanager.h"
+
 
 @interface JMDashboardsViewerViewController() <JMVisualizeClientDelegate>
 @property (strong, nonatomic) JMVisualizeClient *visualizeClient;
@@ -73,16 +75,20 @@
     NSString *dashboardUrl;
     
     if ([self isServerVersionUp6] && [self isNewDashboard]) {
-        dashboardUrl = [NSString stringWithFormat:@"%@%@%@", self.resourceClient.serverProfile.serverUrl, @"/dashboard/viewer.html?_opt=true&sessionDecorator=no&decorate=no#", self.resourceLookup.uri];
+        dashboardUrl = [NSString stringWithFormat:@"%@%@", @"dashboard/viewer.html?_opt=true&sessionDecorator=no&decorate=no#", self.resourceLookup.uri];
     } else {
-        dashboardUrl = [NSString stringWithFormat:@"%@%@%@", self.resourceClient.serverProfile.serverUrl, @"/flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=", self.resourceLookup.uri];
+        dashboardUrl = [NSString stringWithFormat:@"%@%@", @"flow.html?_flowId=dashboardRuntimeFlow&viewAsDashboardFrame=true&dashboardResource=", self.resourceLookup.uri];
         dashboardUrl = [dashboardUrl stringByAppendingString:@"&"];
     }
     
-    NSURL *url = [NSURL URLWithString:dashboardUrl];
-    self.resourceRequest = [NSURLRequest requestWithURL:url
-                                            cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData
-                                        timeoutInterval:self.resourceClient.timeoutInterval];
+    NSMutableURLRequest *dashboardRequest = [self.resourceClient.restKitObjectManager requestWithObject:nil
+                                                                                          method:RKRequestMethodGET
+                                                                                            path:dashboardUrl
+                                                                                      parameters:nil];
+    dashboardRequest.timeoutInterval = self.resourceClient.timeoutInterval;
+    dashboardRequest.cachePolicy = NSURLRequestReloadIgnoringLocalAndRemoteCacheData;
+    self.resourceRequest = dashboardRequest;
+    
 }
 
 - (JMMenuActionsViewAction)availableAction

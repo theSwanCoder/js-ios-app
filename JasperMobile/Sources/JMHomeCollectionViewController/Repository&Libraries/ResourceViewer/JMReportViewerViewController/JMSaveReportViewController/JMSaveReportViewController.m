@@ -208,7 +208,6 @@ objection_requires(@"resourceClient", @"reportClient")
                 pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
                 [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
             }
-            pageRangeCell.pageCount = self.reportLoader.countOfPages;
             return pageRangeCell;
         }
     }
@@ -241,33 +240,26 @@ objection_requires(@"resourceClient", @"reportClient")
 }
 
 #pragma mark - JMSaveReportPageRangeCellDelegate
+- (NSRange)availableRangeForPageRangeCell:(JMSaveReportPageRangeCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath.row == 0) {
+        return NSMakeRange(1, ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue);
+    } else {
+        NSInteger toPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
+        return NSMakeRange(toPage, self.reportLoader.countOfPages - toPage + 1);
+    }
+}
+
 - (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSNumber *)page
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     if (indexPath.row == 0) {
-        if (page.integerValue > ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue) {
-            [self showErrorWithMessage:JMCustomLocalizedString(@"savereport.pagesRange.errorFromPage", nil)];
-        } else {
-            self.pages[kJMSavePageFromKey] = page;
-        }
+        self.pages[kJMSavePageFromKey] = page;
     } else if (indexPath.row == 1) {
-        if (page.integerValue < ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue) {
-            [self showErrorWithMessage:JMCustomLocalizedString(@"savereport.pagesRange.errorToPage", nil)];
-        } else {
-            self.pages[kJMSavePageToKey] = page;
-        }
+        self.pages[kJMSavePageToKey] = page;
     }
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
-- (void)showErrorWithMessage:(NSString *)errorMessage
-{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:errorMessage
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles:nil];
-    [alertView show];
 }
 
 #pragma mark - Actions

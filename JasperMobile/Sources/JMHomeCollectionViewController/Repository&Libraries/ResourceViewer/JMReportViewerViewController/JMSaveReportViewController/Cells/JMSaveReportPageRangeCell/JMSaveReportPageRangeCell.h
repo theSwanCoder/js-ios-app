@@ -35,13 +35,13 @@
 
 @interface JMSaveReportPageRangeCell : UITableViewCell
 @property (nonatomic, assign) NSInteger currentPage;
-@property (nonatomic, assign) NSInteger pageCount;
 @property (nonatomic, weak) id<JMSaveReportPageRangeCellDelegate> cellDelegate;
-
-- (void)updateCurrentPagePosition;
 @end
 
 @protocol JMSaveReportPageRangeCellDelegate <NSObject>
+@required
+- (NSRange)availableRangeForPageRangeCell:(JMSaveReportPageRangeCell *)cell;
+
 @optional
 - (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSNumber *)page;
 @end

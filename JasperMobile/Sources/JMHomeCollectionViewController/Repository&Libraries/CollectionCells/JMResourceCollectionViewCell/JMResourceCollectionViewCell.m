@@ -23,19 +23,21 @@
 
 #import "JMResourceCollectionViewCell.h"
 #import "JMSavedResources+Helpers.h"
-#import "JMLoadingImageView.h"
 #import "JMServerProfile+Helpers.h"
+#import "UIImageView+AFNetworking.h"
+#import "RKObjectManager.h"
+
 
 NSString * kJMHorizontalResourceCell = @"JMHorizontalResourceCollectionViewCell";
 NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 
 
 @interface JMResourceCollectionViewCell()
-@property (nonatomic, weak) IBOutlet JMLoadingImageView *resourceImage;
+@property (nonatomic, weak) IBOutlet UIImageView *resourceImage;
 @property (nonatomic, weak) IBOutlet UILabel *resourceName;
 @property (nonatomic, weak) IBOutlet UILabel *resourceDescription;
 @property (nonatomic, weak) IBOutlet UIButton *infoButton;
-
+@property (nonatomic, weak) JSRESTResource *resourceClient;
 @property (nonatomic, weak) JSConstants *constants;
 
 @end
@@ -43,7 +45,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 @implementation JMResourceCollectionViewCell
 @synthesize constants = _constants;
 
-objection_requires(@"constants")
+objection_requires(@"resourceClient", @"constants")
 
 - (void)awakeFromNib
 {
@@ -62,13 +64,6 @@ objection_requires(@"constants")
     self.resourceDescription.text = resourceLookup.resourceDescription;
     
     [self updateResourceImageWithResourceLookup:resourceLookup];
-
-    // TODO: Should be fixed! need replace url generation to SDK!
-    
-    if ([self isServerUpper6] && ![self isFolder]) {
-        // show thumbnail
-        self.resourceImage.imageUrl = [self imageURLString];
-    }
 }
 
 - (IBAction)infoButtonDidTapped:(id)sender
@@ -84,24 +79,19 @@ objection_requires(@"constants")
 
 - (BOOL)isServerUpper6
 {
-    JSObjectionInjector *injector = [JSObjection defaultInjector];
-    JSRESTResource *resourceClient = [injector getObject:[JSRESTResource class]];
-    BOOL isServerUpper6 = resourceClient.serverInfo.versionAsFloat >= self.constants.SERVER_VERSION_CODE_AMBER_6_0_0;
-    return isServerUpper6;
+    return self.resourceClient.serverInfo.versionAsFloat >= self.constants.SERVER_VERSION_CODE_AMBER_6_0_0;
 }
 
 - (NSString *)imageURLString
 {
-    NSString *serverURL = [JMServerProfile activeServerProfile].serverUrl;
     NSString *restURI = [JSConstants sharedInstance].REST_SERVICES_V2_URI;
     NSString *resourceURI = self.resourceLookup.uri;
-    return  [NSString stringWithFormat:@"%@%@/thumbnails%@?defaultAllowed=false", serverURL, restURI, resourceURI];
+    return  [NSString stringWithFormat:@"%@/thumbnails%@?defaultAllowed=false", restURI, resourceURI];
 }
 
 - (void)updateResourceImageWithResourceLookup:(JSResourceLookup *)resourceLookup
 {
     UIImage *resourceImage;
-    
     
     BOOL isReport = [resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_REPORT_UNIT];
     BOOL isDashboard = [resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD] || [resourceLookup.resourceType isEqualToString:self.constants.WS_TYPE_DASHBOARD_LEGACY];
@@ -125,8 +115,20 @@ objection_requires(@"constants")
     
     BOOL shouldFitImage = ((resourceImage.size.height > self.resourceImage.frame.size.height) || (resourceImage.size.width > self.resourceImage.frame.size.width));
     self.resourceImage.contentMode = shouldFitImage ? UIViewContentModeScaleAspectFit : UIViewContentModeCenter;
-    self.resourceImage.image = resourceImage;
     self.resourceImage.backgroundColor = kJMResourcePreviewBackgroundColor;
+    self.resourceImage.image = resourceImage;
+
+    // TODO: Should be fixed! need replace url generation to SDK!
+    
+    if ([self isServerUpper6] && ![self isFolder]) {
+        // show thumbnail
+        RKObjectManager *objectManager = self.resourceClient.restKitObjectManager;
+        NSURLRequest *imageRequest = [objectManager requestWithObject:nil
+                                                               method:RKRequestMethodGET
+                                                                 path:[self imageURLString]
+                                                           parameters:nil];
+        [self.resourceImage setImageWithURLRequest:imageRequest placeholderImage:self.resourceImage.image success:nil failure:nil];
+    }
 }
 
 @end

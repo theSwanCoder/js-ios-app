@@ -60,7 +60,6 @@
 		08C838141A1F57640004BE78 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C837ED1A1F57640004BE78 /* Appirater.m */; };
 		08C838161A1F57640004BE78 /* AppiraterLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08C837F01A1F57640004BE78 /* AppiraterLocalizable.strings */; };
 		08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C838191A1F5A0D0004BE78 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		08C838211A1F70EB0004BE78 /* JMLoadingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C838201A1F70EB0004BE78 /* JMLoadingImageView.m */; };
 		08D108B619EFD28C003EC529 /* JMFavoritesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D108B519EFD28C003EC529 /* JMFavoritesListLoader.m */; };
 		08D3E29319EBB82100F37DF4 /* JMPopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D3E29019EBB82100F37DF4 /* JMPopupView.m */; };
 		08D6921F19929DB300C87A33 /* JMTextSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D6921E19929DB300C87A33 /* JMTextSettingsTableViewCell.m */; };
@@ -293,8 +292,6 @@
 		08C838111A1F57640004BE78 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/AppiraterLocalizable.strings"; sourceTree = "<group>"; };
 		08C838121A1F57640004BE78 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/AppiraterLocalizable.strings"; sourceTree = "<group>"; };
 		08C838191A1F5A0D0004BE78 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		08C8381F1A1F70EB0004BE78 /* JMLoadingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLoadingImageView.h; sourceTree = "<group>"; };
-		08C838201A1F70EB0004BE78 /* JMLoadingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLoadingImageView.m; sourceTree = "<group>"; };
 		08D108B419EFD28C003EC529 /* JMFavoritesListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFavoritesListLoader.h; sourceTree = "<group>"; };
 		08D108B519EFD28C003EC529 /* JMFavoritesListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFavoritesListLoader.m; sourceTree = "<group>"; };
 		08D3E28F19EBB82100F37DF4 /* JMPopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPopupView.h; sourceTree = "<group>"; };
@@ -680,7 +677,6 @@
 		0851DFB419ACE1F500DC6EDE /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
-				08C8381E1A1F70EB0004BE78 /* JMLoadingImageView */,
 				08C3315D1A1A27DC0020CAEA /* JMMenuActionsView */,
 				08D3E28819EBB82100F37DF4 /* JMPopupView */,
 			);
@@ -863,15 +859,6 @@
 				08C837F01A1F57640004BE78 /* AppiraterLocalizable.strings */,
 			);
 			path = "Appirater-v2.0.4";
-			sourceTree = "<group>";
-		};
-		08C8381E1A1F70EB0004BE78 /* JMLoadingImageView */ = {
-			isa = PBXGroup;
-			children = (
-				08C8381F1A1F70EB0004BE78 /* JMLoadingImageView.h */,
-				08C838201A1F70EB0004BE78 /* JMLoadingImageView.m */,
-			);
-			path = JMLoadingImageView;
 			sourceTree = "<group>";
 		};
 		08D108B319EFD28C003EC529 /* JMFavoritesListLoader */ = {
@@ -1718,7 +1705,6 @@
 				084FA4731A84F9A80059A081 /* JMCancelRequestPopup.m in Sources */,
 				08DE67CC19C05D8B00C25AEA /* JMSingleSelectInputControlCell.m in Sources */,
 				BDABBD1E1A41D73B00EDA100 /* UIAlertView+Additions.m in Sources */,
-				08C838211A1F70EB0004BE78 /* JMLoadingImageView.m in Sources */,
 				0895910419E3D514001471DA /* PopoverView.m in Sources */,
 				08E864251992564A007CF257 /* JMConstants.m in Sources */,
 				084FA4841A84FC830059A081 /* JMReportPageViewerViewController.m in Sources */,

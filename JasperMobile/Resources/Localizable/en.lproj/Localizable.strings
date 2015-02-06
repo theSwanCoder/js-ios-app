@@ -67,8 +67,6 @@
 "savereport.pagesRange" = "Range Pages";
 "savereport.pagesRange.fromPage" = "From page:";
 "savereport.pagesRange.toPage" = "To page:";
-"savereport.pagesRange.errorFromPage" = "\"From\" value must be less \"To\" value";
-"savereport.pagesRange.errorToPage" = "\"To\" value must be more \"From\" value";
 "savereport.saved" = "Report was successfully saved";
 "savereport.name.errmsg.empty" = "Cannot be empty";
 "savereport.name.errmsg.notunique" = "This name has been already taken, please choose different name";
