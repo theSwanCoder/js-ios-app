@@ -218,6 +218,7 @@
         }
     } @weakselfend
     errorBlock:^(JSOperationResult *result) {
+        [JMCancelRequestPopup dismiss];
         if (errorBlock) {
             errorBlock();
         }
