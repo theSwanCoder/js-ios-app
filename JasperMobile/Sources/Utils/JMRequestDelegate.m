@@ -99,7 +99,7 @@ __weak static UIViewController *viewControllerToDismiss;
     viewControllerToDismiss = viewController;
     
     [requestDelegatePool addObject:requestDelegate];
-    //[JMUtils showNetworkActivityIndicator];
+    [JMUtils showNetworkActivityIndicator];
     
     return requestDelegate;
 }
@@ -110,7 +110,7 @@ __weak static UIViewController *viewControllerToDismiss;
     requestDelegate.delegate = delegate;
 
     [requestDelegatePool addObject:requestDelegate];
-    //[JMUtils showNetworkActivityIndicator];
+    [JMUtils showNetworkActivityIndicator];
 
     return requestDelegate;
 }
@@ -144,7 +144,7 @@ __weak static UIViewController *viewControllerToDismiss;
         }
 
         [JMRequestDelegate clearRequestPool];
-        //[JMCancelRequestPopup dismiss];
+        [JMCancelRequestPopup dismiss];
 
         if (self.showAlerts) {
             NSString *title;
@@ -193,6 +193,8 @@ __weak static UIViewController *viewControllerToDismiss;
         [requestDelegatePool removeObject:self];
         
         if ([JMRequestDelegate isRequestPoolEmpty]) {
+            [JMUtils hideNetworkActivityIndicator];
+            [JMCancelRequestPopup dismiss];
             viewControllerToDismiss = nil;
 
             if (finalBlock) {
