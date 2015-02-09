@@ -34,6 +34,8 @@
 #import "JMUtils.h"
 #import "UIAlertView+Additions.h"
 #import "JMServerProfile+Helpers.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 static NSString * const kJMProductName = @"JasperMobile";
 
@@ -109,6 +111,9 @@ static NSString * const kJMProductName = @"JasperMobile";
     }
     
     [application setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    // crashlitics
+    [Fabric with:@[CrashlyticsKit]];
 
     return YES;
 }

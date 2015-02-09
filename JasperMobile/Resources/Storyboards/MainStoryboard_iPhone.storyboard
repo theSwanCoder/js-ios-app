@@ -1286,9 +1286,9 @@ Please Wait...</string>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="25f-vL-F1i"/>
-        <segue reference="KN6-hX-ICt"/>
-        <segue reference="KXx-EL-leu"/>
+        <segue reference="jUv-fg-3yZ"/>
         <segue reference="hUW-ct-uiE"/>
+        <segue reference="KXx-EL-leu"/>
+        <segue reference="KN6-hX-ICt"/>
     </inferredMetricsTieBreakers>
 </document>
