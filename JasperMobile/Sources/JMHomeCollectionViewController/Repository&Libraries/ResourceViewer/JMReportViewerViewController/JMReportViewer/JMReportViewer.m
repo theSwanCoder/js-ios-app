@@ -110,12 +110,12 @@ objection_requires(@"resourceClient", @"reportClient")
 {
     if (countOfPages != _countOfPages) {
         _countOfPages = countOfPages;
-        if (self.currentPage > _countOfPages) {
-            self.currentPage = _countOfPages;
+        if (self.currentPage > countOfPages) {
+            self.currentPage = countOfPages;
         }
-        _multiPageReport = (self.countOfPages > 1) && (self.countOfPages != kJMCountOfPagesUnknown);
+        _multiPageReport = (countOfPages != NSNotFound) && (countOfPages > 1);
         [self.delegate reportViewerDidChangedPagination:self];
-        if ([self isReportEmpty]) {
+        if (self.reportExequtingStatusIsReady && [self isReportEmpty]) {
             [self showAlertEmtpyReport];
         }
     }
@@ -147,11 +147,13 @@ objection_requires(@"resourceClient", @"reportClient")
     [self resetReportViewer];
     
     JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateWithCompletionBlock:@weakself(^(JSOperationResult *result)) {
-        JSReportExecutionResponse *reportExecution = [result.objects objectAtIndex:0];
-        self.requestId = reportExecution.requestId;
-        self.reportExequtingStatusIsReady = [reportExecution.status.status isEqualToString:kJMRestStatusReady];
+        JSReportExecutionResponse *response = result.objects.firstObject;
+        self.requestId = response.requestId;
+        NSLog(@"runReportExecution requestDelegate: response status - %@", response.status.status);
+        self.reportExequtingStatusIsReady = [response.status.status isEqualToString:kJMRestStatusReady];
+        
         if (self.reportExequtingStatusIsReady) {
-            self.countOfPages = [reportExecution.totalPages integerValue];
+            self.countOfPages = [response.totalPages integerValue];
         } else {
             [self startStatusChecking];
         }
@@ -250,7 +252,7 @@ objection_requires(@"resourceClient", @"reportClient")
     }
     
     void (^errorHandlerBlock)(NSInteger page, JSOperationResult *result) = ^(NSInteger page, JSOperationResult *result){
-        JSErrorDescriptor *error = [result.objects objectAtIndex:0];
+        JSErrorDescriptor *error = result.objects.firstObject;
         if (page == self.currentPage) {
             self.errorExecutionBlock(result);
         } else {
@@ -263,12 +265,21 @@ objection_requires(@"resourceClient", @"reportClient")
     };
     
     JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
-        if ([result.MIMEType isEqualToString:[JSConstants sharedInstance].REST_SDK_MIMETYPE_USED]) {
+        JSOperationResult *innerResult = result;
+        
+        if ([innerResult.MIMEType isEqualToString:[JSConstants sharedInstance].REST_SDK_MIMETYPE_USED]) {
             errorHandlerBlock(page, result);
         } else {
             if (page == self.currentPage) {
-                self.outputResourceType = [result.allHeaderFields objectForKey:@"output-final"] ? JMReportViewerOutputResourceType_Final : JMReportViewerOutputResourceType_NotFinal;
-                [self.delegate reportViewer:self loadHTMLString:result.bodyAsString baseURL:self.reportClient.serverProfile.serverUrl];
+                self.outputResourceType = [innerResult.allHeaderFields objectForKey:@"output-final"] ? JMReportViewerOutputResourceType_Final : JMReportViewerOutputResourceType_NotFinal;
+                [self.delegate reportViewer:self
+                             loadHTMLString:innerResult.bodyAsString
+                                    baseURL:self.reportClient.serverProfile.serverUrl];
+                
+                self.isReportRunSuccessful = YES;
+                [self saveCurrentState];
+                
+                // cache next page
                 [self runExportExecutionForPage:page + 1];
             }
 
@@ -277,24 +288,34 @@ objection_requires(@"resourceClient", @"reportClient")
             }
         }
     } @weakselfend
-    errorBlock:@weakself(^(JSOperationResult *result)) {
-        errorHandlerBlock(page, result);
-    }@weakselfend
+    errorBlock:@weakself(^(JSOperationResult *result)) { errorHandlerBlock(page, result); }@weakselfend
     viewControllerToDismiss: nil
     showAlerts:NO];
     
-    [self.reportClient loadReportOutput:self.requestId exportOutput:fullExportID loadForSaving:NO path:nil delegate:requestDelegate];
+    [self.reportClient loadReportOutput:self.requestId
+                           exportOutput:fullExportID
+                          loadForSaving:NO
+                                   path:nil
+                               delegate:requestDelegate];
 }
 
 - (void)startStatusChecking
 {
-    self.statusCheckingTimer = [NSTimer scheduledTimerWithTimeInterval:kJMReportViewerStatusCheckingInterval target:self selector:@selector(checkStatus) userInfo:nil repeats:YES];
+    self.statusCheckingTimer = [NSTimer scheduledTimerWithTimeInterval:kJMReportViewerStatusCheckingInterval
+                                                                target:self
+                                                              selector:@selector(checkStatus)
+                                                              userInfo:nil
+                                                               repeats:YES];
 }
 
-- (void)cancelStatusChecking
+- (void)stopStatusChecking
 {
     [self.statusCheckingTimer invalidate];
-    if (self.outputResourceType == JMReportViewerOutputResourceType_NotFinal && self.outputResourceType != JMReportViewerOutputResourceType_LoadingNow) {
+    BOOL isLoadBegun = self.outputResourceType != JMReportViewerOutputResourceType_None;
+    BOOL isLoading = self.outputResourceType == JMReportViewerOutputResourceType_LoadingNow;
+    BOOL isLoadFinish = self.outputResourceType != JMReportViewerOutputResourceType_NotFinal;
+    
+    if (!isLoadBegun || (!isLoadFinish && isLoading) ) {
         [self runExportExecutionForPage:self.currentPage];
     }
     
@@ -305,24 +326,26 @@ objection_requires(@"resourceClient", @"reportClient")
     errorBlock:nil
     viewControllerToDismiss: nil];
     
-    [self.reportClient getReportExecutionMetadata:self.requestId delegate:requestDelegate];
+    [self.reportClient getReportExecutionMetadata:self.requestId
+                                         delegate:requestDelegate];
 }
 
 - (void) checkStatus
 {
     if (!self.reportExequtingStatusIsReady) {
         JMRequestDelegate *requestDelegate = [JMRequestDelegate requestDelegateWithCompletionBlock:@weakself(^(JSOperationResult *result)) {
-            JSExecutionStatus *status = [result.objects objectAtIndex:0];
+            JSExecutionStatus *status = result.objects.firstObject;
             self.reportExequtingStatusIsReady = [status.status isEqualToString:kJMRestStatusReady];
             if (self.reportExequtingStatusIsReady) {
-                [self cancelStatusChecking];
+                [self stopStatusChecking];
             }
         } @weakselfend
         errorBlock:nil
         viewControllerToDismiss: nil];
-        [self.reportClient getReportExecutionStatus:self.requestId delegate:requestDelegate];
+        [self.reportClient getReportExecutionStatus:self.requestId
+                                           delegate:requestDelegate];
     } else {
-        [self cancelStatusChecking];
+        [self stopStatusChecking];
     }
 }
 
@@ -344,7 +367,7 @@ objection_requires(@"resourceClient", @"reportClient")
                 [self cancelReport];
             }
         } else {
-            // show report view
+            // ressed "Cancel" and show report view
             [self restoreState];
         }
     };
@@ -366,7 +389,8 @@ objection_requires(@"resourceClient", @"reportClient")
 #pragma mark - Helpers
 - (BOOL)isReportEmpty
 {
-    return (self.reportExequtingStatusIsReady && self.countOfPages == 0);
+    BOOL isReportEmpty = (self.countOfPages == 0 || self.countOfPages == NSNotFound);
+    return isReportEmpty;
 }
 
 - (void) resetReportViewer

@@ -32,7 +32,7 @@
 
 @interface JMReportViewerViewController () <JMReportViewerToolBarDelegate, JMReportViewerDelegate>
 @property (nonatomic, strong) JMReportViewer *reportViewer;
-@property (nonatomic, strong) JMReportViewerToolBar *toolbar;
+@property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @end
 
 @implementation JMReportViewerViewController
