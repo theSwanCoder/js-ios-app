@@ -160,13 +160,13 @@
 // Action titles
 "action.title.refresh" = "Aggiorna";
 "action.title.save" = "Salva";
-"action.title.edit" = "Modifica opzioni filtro";
+"action.title.edit" = "Filtra per";
 "action.title.delete" = "Elimina";
 "action.title.rename" = "Rinomina";
 "action.title.markasfavorite" = "Contrassegna come Preferito";
 "action.title.markasunfavorite" = "Rimuovi dai Preferiti";
 "action.title.info" = "Informazioni";
-"action.title.sort" = "Opzioni di ordinamento";
+"action.title.sort" = "Ordina per";
 
 
 "detail.report.viewer.pagecount" = "di %d";

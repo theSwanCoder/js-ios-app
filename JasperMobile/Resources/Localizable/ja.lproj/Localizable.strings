@@ -160,13 +160,13 @@
 // Action titles
 "action.title.refresh" = "更新";
 "action.title.save" = "保存";
-"action.title.edit" = "フィルタオプションの編集";
+"action.title.edit" = "フィルタ基準";
 "action.title.delete" = "削除";
 "action.title.rename" = "名前変更";
 "action.title.markasfavorite" = "お気に入りとしてマーク";
 "action.title.markasunfavorite" = "お気に入りから削除";
 "action.title.info" = "お知らせ";
-"action.title.sort" = "ソート オプション";
+"action.title.sort" = "ソート基準";
 
 
 "detail.report.viewer.pagecount" = "/%d";
