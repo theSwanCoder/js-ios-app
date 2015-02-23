@@ -160,13 +160,13 @@
 // Action titles
 "action.title.refresh" = "刷新";
 "action.title.save" = "保存";
-"action.title.edit" = "编辑过滤器选项";
+"action.title.edit" = "过滤条件";
 "action.title.delete" = "删除";
 "action.title.rename" = "重命名";
 "action.title.markasfavorite" = "标记为收藏项";
 "action.title.markasunfavorite" = "从收藏夹中删除";
 "action.title.info" = "信息";
-"action.title.sort" = "排序选项";
+"action.title.sort" = "排序条件";
 
 
 "detail.report.viewer.pagecount" = "/%d";

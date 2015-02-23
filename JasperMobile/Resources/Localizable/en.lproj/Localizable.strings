@@ -173,13 +173,13 @@
 // Action titles
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
-"action.title.edit" = "Edit Filter Options";
+"action.title.edit" = "Filter by";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
 "action.title.markasfavorite" = "Mark as Favorite";
 "action.title.markasunfavorite" = "Remove From Favorites";
 "action.title.info" = "Info";
-"action.title.sort" = "Sort Options";
+"action.title.sort" = "Sort by";
 
 /* Error messages */
 
