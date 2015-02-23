@@ -66,7 +66,6 @@
 		08D889A11A3B641E0065D1D1 /* AppIcon120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 08D8899E1A3B641E0065D1D1 /* AppIcon120x120.png */; };
 		08D889A21A3B641E0065D1D1 /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 08D8899F1A3B641E0065D1D1 /* Icon-1024.png */; };
 		08D889A31A3B641E0065D1D1 /* Icon-512.png in Resources */ = {isa = PBXBuildFile; fileRef = 08D889A01A3B641E0065D1D1 /* Icon-512.png */; };
-		08DB677E1A137CD90035F58F /* SplunkMint-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DB677D1A137CD90035F58F /* SplunkMint-iOS.framework */; };
 		08DE67C619C05D8B00C25AEA /* JMBooleanInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67A619C05D8A00C25AEA /* JMBooleanInputControlCell.m */; };
 		08DE67C719C05D8B00C25AEA /* JMDateInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67A819C05D8A00C25AEA /* JMDateInputControlCell.m */; };
 		08DE67C819C05D8B00C25AEA /* JMDateTimeInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DE67AA19C05D8A00C25AEA /* JMDateTimeInputControlCell.m */; };
@@ -762,7 +761,6 @@
 				F55CC335174CFFCE00CEB39E /* Foundation.framework in Frameworks */,
 				F55CC337174CFFCE00CEB39E /* CoreGraphics.framework in Frameworks */,
 				F54C91AB1752FAC90009E2BE /* libxml2.dylib in Frameworks */,
-				08DB677E1A137CD90035F58F /* SplunkMint-iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

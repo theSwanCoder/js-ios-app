@@ -21,7 +21,6 @@
  */
 
 
-#import <SplunkMint-iOS/SplunkMint-iOS.h>
 #import "JMResourcesCollectionViewController.h"
 #import "JMRefreshable.h"
 #import "JMResourceCollectionViewCell.h"
@@ -123,19 +122,13 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [[NSNotificationCenter defaultCenter] addObserverForName:kJMRepresentationTypeDidChangedNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
         self.needReloadData = YES;
     } @weakselfend];
-
-    // log events
-    NSString *currentClassName = NSStringFromClass(self.class);
-    [[Mint sharedInstance] logEventAsyncWithTag:currentClassName completionBlock:^(MintLogResult *splunkLogResult)
-    {
-        NSString *logResultState = splunkLogResult.resultState == OKResultState ? @"OK" : @"Error";
-        NSLog(@"Log result: %@", logResultState);
-    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self createSearchBar];
     [self updateIfNeeded];
 }
 
@@ -274,7 +267,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     switch (self.presentingType) {
         case JMResourcesCollectionViewControllerPresentingType_Library:{
             if([self.resourceListLoader.resourceClient.serverInfo.edition isEqualToString:self.resourceListLoader.constants.SERVER_EDITION_PRO]) {
-                availableAction |= JMMenuActionsViewAction_Filter;
+                availableAction |= JMMenuActionsViewAction_FilterBy;
             }
         }
         case JMResourcesCollectionViewControllerPresentingType_SavedItems:{
@@ -413,15 +406,30 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     }
 }
 
-- (UISearchBar *)searchBar
+//- (UISearchBar *)searchBar
+//{
+//    if (!_searchBar) {
+//        _searchBar = [self createSearchBar];
+//    }
+//    return _searchBar;
+//}
+
+- (void)createSearchBar
 {
-    if (!_searchBar) {
-        _searchBar = [[UISearchBar alloc] initWithFrame:self.searchBarPlaceholder.bounds];
-        _searchBar.searchBarStyle = UISearchBarStyleMinimal;
-        _searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
-        _searchBar.delegate = self;
+    if (!self.searchBar) {
+        UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:self.searchBarPlaceholder.bounds];
+        searchBar.searchBarStyle = UISearchBarStyleMinimal;
+        searchBar.placeholder = JMCustomLocalizedString(@"detail.search.resources.placeholder", nil);
+        searchBar.delegate = self;
+        
+        UIView *searchContainerView = [[UIView alloc] initWithFrame:searchBar.bounds];
+        searchContainerView.backgroundColor = [UIColor clearColor];
+        [searchContainerView addSubview: searchBar];
+        
+        searchBar.autoresizingMask = searchContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        self.searchBarPlaceholder.topItem.titleView = searchContainerView;
+        self.searchBar = searchBar;
     }
-    return _searchBar;
 }
 
 - (void) showNavigationItems
@@ -429,7 +437,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     NSMutableArray *navBarItems = [NSMutableArray array];
     // may be network call to get server info
     JMMenuActionsViewAction availableAction = [self availableAction];
-    if (availableAction & JMMenuActionsViewAction_Filter) {
+    if (availableAction & JMMenuActionsViewAction_FilterBy) {
         UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];
         [navBarItems addObject:filterItem];
     }
@@ -438,22 +446,26 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         [navBarItems addObject:sortItem];
     }
 
-    BOOL shouldConcateItems = ([JMUtils isIphone] && [navBarItems count] > 1) && (UIInterfaceOrientationIsPortrait([UIDevice currentDevice].orientation) ||
-                           (!UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) &&
-                            UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)));
+    BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait([UIDevice currentDevice].orientation) ||
+                                (!UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) &&
+                                  UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation));
+                                  
+    BOOL shouldConcateItems = ([JMUtils isIphone] && [navBarItems count] > 1) && isPortraitOrientation;
     
     if (shouldConcateItems) {
         navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
     }
     [navBarItems addObject:[self resourceRepresentationItem]];
-    
-    UIView *searchContainerView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
-    searchContainerView.backgroundColor = [UIColor clearColor];
-    [searchContainerView addSubview: self.searchBar];
-
-    self.searchBar.autoresizingMask = searchContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.searchBarPlaceholder.topItem.titleView = searchContainerView;
     self.navigationItem.rightBarButtonItems = navBarItems;
+    
+//    if (!self.searchBar) {
+//        UIView *searchContainerView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
+//        searchContainerView.backgroundColor = [UIColor clearColor];
+//        [searchContainerView addSubview: self.searchBar];
+//        
+//        self.searchBar.autoresizingMask = searchContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+//        self.searchBarPlaceholder.topItem.titleView = searchContainerView;
+//    }
 }
 
 - (void) replaceRightNavigationItem:(UIBarButtonItem *)oldItem withItem:(UIBarButtonItem *)newItem
@@ -562,7 +574,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     switch (action) {
-        case JMMenuActionsViewAction_Filter:
+        case JMMenuActionsViewAction_FilterBy:
             [self filterByButtonTapped:nil];
             break;
         case JMMenuActionsViewAction_Sort:

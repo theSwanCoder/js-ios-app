@@ -68,8 +68,5 @@ NSString * const kJMReportsDirectory = @"reports";
 // Name of the main report file (outputResource)
 NSString * const kJMReportFilename = @"report";
 
-// Mint Splunk (Bug Sence) API KEY
-NSString * const kJMMintSplunkApiKey = @"d5619ccb";
-
 // Privacy Policy Link
 NSString * const kJMPrivacyPolicyURI = @"http://www.tibco.com/company/privacy-cma";

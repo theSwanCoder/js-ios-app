@@ -29,7 +29,6 @@
 #import "JMConstants.h"
 #import "JMLocalization.h"
 #import "JMSavedResources+Helpers.h"
-#import <SplunkMint-iOS/SplunkMint-iOS.h>
 
 @implementation JMUtils
 
@@ -134,12 +133,13 @@
 
 + (void)activateCrashReportSendingIfNeeded
 {
-    if ([self crashReportsSendingEnable] && ![Mint sharedInstance].isSessionActive) {
-        [[Mint sharedInstance] initAndStartSession:kJMMintSplunkApiKey];
-        [[Mint sharedInstance] enableLogging:YES];
-    } else if (![self crashReportsSendingEnable]) {
-        [[Mint sharedInstance] closeSessionAsyncWithCompletionBlock:nil];
-    }
+    // TODO: replace on new analitycs
+//    if ([self crashReportsSendingEnable] && ![Mint sharedInstance].isSessionActive) {
+//        [[Mint sharedInstance] initAndStartSession:kJMMintSplunkApiKey];
+//        [[Mint sharedInstance] enableLogging:YES];
+//    } else if (![self crashReportsSendingEnable]) {
+//        [[Mint sharedInstance] closeSessionAsyncWithCompletionBlock:nil];
+//    }
 }
 
 + (NSArray *)supportedFormatsForReportSaving

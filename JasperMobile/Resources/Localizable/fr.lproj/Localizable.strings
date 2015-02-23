@@ -160,7 +160,8 @@
 // Action titles
 "action.title.refresh" = "Actualiser";
 "action.title.save" = "Enregistrer";
-"action.title.edit" = "Filtrer par";
+"action.title.edit" = "Afficher les filtres";
+"action.title.filterBy" = "Filtrer par";
 "action.title.delete" = "Supprimer";
 "action.title.rename" = "Renommer";
 "action.title.markasfavorite" = "Ajouter aux Favoris";

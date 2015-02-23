@@ -21,7 +21,6 @@
  */
 
 
-#import <SplunkMint-iOS/SplunkMint-iOS.h>
 #import "JMDashboardsViewerViewController.h"
 #import "JMVisualizeClient.h"
 #import "JMWebConsole.h"

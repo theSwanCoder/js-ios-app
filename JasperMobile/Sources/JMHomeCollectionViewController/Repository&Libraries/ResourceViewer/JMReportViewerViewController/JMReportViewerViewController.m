@@ -39,7 +39,15 @@
 
 #pragma mark - View Controller Lifecycle
 
-- (void)viewDidLoad {
+- (void)dealloc
+{
+    [self.toolbar removeFromSuperview];
+    _toolbar.toolbarDelegate = nil;
+    _toolbar = nil;
+}
+
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     [self addBackButton];
 }
@@ -70,6 +78,7 @@
 - (JMMenuActionsViewAction)availableAction
 {
     JMMenuActionsViewAction availableAction = [super availableAction] | JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
+    
     if (self.reportViewer.inputControls && [self.reportViewer.inputControls count]) {
         availableAction |= JMMenuActionsViewAction_Filter;
     }
@@ -103,6 +112,7 @@
         UIViewController *controller = [self.navigationController.viewControllers objectAtIndex:i];
         if ([controller isKindOfClass:[JMResourcesCollectionViewController class]]) {
             [self.toolbar removeFromSuperview];
+            self.toolbar.toolbarDelegate = nil;
             [self.navigationController popToViewController:controller animated:YES];
             break;
         }

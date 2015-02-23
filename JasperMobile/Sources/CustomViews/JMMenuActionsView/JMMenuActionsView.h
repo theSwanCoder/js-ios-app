@@ -33,17 +33,18 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSInteger, JMMenuActionsViewAction) {
-    JMMenuActionsViewAction_None = 0,
-    JMMenuActionsViewAction_MakeFavorite = 1 << 0,
+typedef NS_OPTIONS(NSInteger, JMMenuActionsViewAction) {
+    JMMenuActionsViewAction_None           = 0,
+    JMMenuActionsViewAction_MakeFavorite   = 1 << 0,
     JMMenuActionsViewAction_MakeUnFavorite = 1 << 1,
-    JMMenuActionsViewAction_Refresh = 1 << 2,
-    JMMenuActionsViewAction_Filter = 1 << 3,
-    JMMenuActionsViewAction_Sort = 1 << 4,
-    JMMenuActionsViewAction_Save = 1 << 5,
-    JMMenuActionsViewAction_Delete = 1 << 6,
-    JMMenuActionsViewAction_Rename = 1 << 7,
-    JMMenuActionsViewAction_Info = 1 << 8
+    JMMenuActionsViewAction_Refresh        = 1 << 2,
+    JMMenuActionsViewAction_Filter         = 1 << 3,
+    JMMenuActionsViewAction_Sort           = 1 << 4,
+    JMMenuActionsViewAction_Save           = 1 << 5,
+    JMMenuActionsViewAction_Delete         = 1 << 6,
+    JMMenuActionsViewAction_Rename         = 1 << 7,
+    JMMenuActionsViewAction_Info           = 1 << 8,
+    JMMenuActionsViewAction_FilterBy       = 1 << 9
 };
 
 static inline JMMenuActionsViewAction JMMenuActionsViewActionFirst() { return JMMenuActionsViewAction_MakeFavorite; }

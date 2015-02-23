@@ -148,6 +148,8 @@
             return @"action.title.info";
         case JMMenuActionsViewAction_Sort:
             return @"action.title.sort";
+        case JMMenuActionsViewAction_FilterBy:
+            return @"action.title.filterBy";
     }
 }
 
@@ -174,6 +176,8 @@
             return @"info_item";
         case JMMenuActionsViewAction_Sort:
             return @"sort_action";
+        case JMMenuActionsViewAction_FilterBy:
+            return @"filter_action";
 
         }
 }
