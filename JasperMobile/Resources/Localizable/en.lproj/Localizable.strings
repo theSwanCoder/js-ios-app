@@ -173,7 +173,8 @@
 // Action titles
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
-"action.title.edit" = "Filter by";
+"action.title.edit" = "Show filters";
+"action.title.filterBy" = "Filter by";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
 "action.title.markasfavorite" = "Mark as Favorite";

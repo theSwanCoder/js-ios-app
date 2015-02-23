@@ -160,7 +160,8 @@
 // Action titles
 "action.title.refresh" = "更新";
 "action.title.save" = "保存";
-"action.title.edit" = "フィルタ基準";
+"action.title.edit" = "フィルタを表示";
+"action.title.filterBy" = "フィルタ基準";
 "action.title.delete" = "削除";
 "action.title.rename" = "名前変更";
 "action.title.markasfavorite" = "お気に入りとしてマーク";

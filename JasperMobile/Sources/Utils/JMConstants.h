@@ -70,9 +70,6 @@ extern NSString * const kJMReportsDirectory;
 // Name of the main report file (outputResource)
 extern NSString * const kJMReportFilename;
 
-// Mint Splunk (Bug Sence) API KEY
-extern NSString * const kJMMintSplunkApiKey;
-
 // Privacy Policy Link
 extern NSString * const kJMPrivacyPolicyURI;
 

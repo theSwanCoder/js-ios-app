@@ -160,7 +160,8 @@
 // Action titles
 "action.title.refresh" = "刷新";
 "action.title.save" = "保存";
-"action.title.edit" = "过滤条件";
+"action.title.edit" = "显示过滤器";
+"action.title.filterBy" = "过滤条件";
 "action.title.delete" = "删除";
 "action.title.rename" = "重命名";
 "action.title.markasfavorite" = "标记为收藏项";
