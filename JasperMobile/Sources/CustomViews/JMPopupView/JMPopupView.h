@@ -68,17 +68,15 @@ typedef NS_ENUM(NSInteger, JMPopupViewType) {
 @property (nonatomic, retain) UIView *contentView;
 @property (nonatomic, readonly) JMPopupViewType type;
 @property (nonatomic, weak) id <JMPopupViewDelegate> delegate;
+@property (nonatomic, assign) BOOL isDissmissWithTapOutOfButton;
 
 - (id) initWithDelegate:(id <JMPopupViewDelegate>)delegate type:(JMPopupViewType)type;
 
-- (void) show;
+- (void)show;
+- (void)showFromPoint:(CGPoint)point onView:(UIView*)view;
 
-- (void) showFromPoint:(CGPoint)point onView:(UIView*)view;
-
-- (void) dismiss;
-
-- (void) dismiss:(BOOL)animated;
-
+- (void)dismiss;
+- (void)dismiss:(BOOL)animated;
 + (void)dismissAllVisiblePopups:(BOOL)animated;
 
 + (JMPopupView *)displayedPopupViewForClass:(Class)someClass;

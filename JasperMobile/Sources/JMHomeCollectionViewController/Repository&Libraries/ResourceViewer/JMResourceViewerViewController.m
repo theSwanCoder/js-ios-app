@@ -135,11 +135,20 @@ objection_requires(@"resourceClient", @"resourceLookup")
 #pragma mark - Actions
 - (void)actionButtonClicked:(id) sender
 {
-    JMMenuActionsView *actionsView = [[JMMenuActionsView alloc] initWithFrame:CGRectMake(0, 0, 240, 200)];
+    JMMenuActionsViewAction availableAction = [self availableAction];
+    
+    CGRect popupViewFrame = CGRectMake(0, 0, 240, 200);
+    JMMenuActionsView *actionsView = [[JMMenuActionsView alloc] initWithFrame:popupViewFrame];
     actionsView.delegate = self;
-    actionsView.availableActions = [self availableAction];
-    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
-    self.popoverView = [PopoverView showPopoverAtPoint:point inView:self.view withTitle:nil withContentView:actionsView delegate:self];
+    actionsView.availableActions = availableAction;
+    
+    CGPoint pointToShowPopup = CGPointMake(self.view.frame.size.width, -10);
+    
+    self.popoverView = [PopoverView showPopoverAtPoint:pointToShowPopup
+                                                inView:self.view
+                                             withTitle:nil
+                                       withContentView:actionsView
+                                              delegate:self];
 }
 
 - (void)favoriteButtonTapped:(id)sender

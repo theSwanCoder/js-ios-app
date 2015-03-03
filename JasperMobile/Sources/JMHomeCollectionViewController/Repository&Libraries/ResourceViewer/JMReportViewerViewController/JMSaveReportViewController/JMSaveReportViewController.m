@@ -299,77 +299,82 @@ objection_requires(@"resourceClient", @"reportClient")
     [self.view endEditing:YES];
     NSString *fullReportDirectory = [JMSavedResources pathToReportDirectoryWithName:self.reportName format:self.selectedReportFormat];
     NSString *errorMessage = nil;
-    BOOL isValidReportName = ([JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessage] &&
-            [self createReportDirectory:fullReportDirectory errorMessage:&errorMessage]);
+    BOOL isValidReportName = [JMUtils validateReportName:self.reportName
+                                                extension:self.selectedReportFormat
+                                             errorMessage:&errorMessage];
 
+    BOOL isFolderCreated = [self createReportDirectory:fullReportDirectory
+                                          errorMessage:&errorMessage];
+    
     self.errorString = errorMessage;
     [self.tableView reloadData];
 
-    if (!self.errorString && isValidReportName) {
-        // Clear any errors
-        [self.tableView reloadData];
-
-        NSMutableArray *parameters = [NSMutableArray array];
-        for (JSInputControlDescriptor *inputControlDescriptor in self.inputControls) {
-            JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
-                                                                                   value:inputControlDescriptor.selectedValues];
-            [parameters addObject:reportParameter];
-        }
-
-        [JMCancelRequestPopup presentWithMessage:@"savereport.saving.status.title" restClient:self.reportClient cancelBlock:^{
-            [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
-        }];
-
-        JSRequestFinishedBlock checkErrorBlock = @weakself(^(JSOperationResult *result)) {
-                if (result.isSuccessful) return;
-                [self.reportClient cancelAllRequests];
-                [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
-        }@weakselfend;
-
-        JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {
-            [JMCancelRequestPopup dismiss];
-            
-            JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
-            JSExportExecutionResponse *export = [response.exports objectAtIndex:0];
-            NSString *requestId = response.requestId;
-
-            NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
-            [self.reportClient loadReportOutput:requestId exportOutput:export.uuid loadForSaving:YES path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
-
-            for (JSReportOutputResource *attachment in export.attachments) {
-                NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
-                [self.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
-                    request.delegate = [JMRequestDelegate requestDelegateForFinishBlock:nil];
-                    request.finishedBlock = checkErrorBlock;
-                }];
-            }
-        } @weakselfend];
-
-        [JMRequestDelegate setFinalBlock:@weakself(^(void)) {
-                [self.navigationController popViewControllerAnimated:YES];
-                [JMSavedResources addReport:self.resourceLookup
-                                   withName:self.reportName
-                                     format:self.selectedReportFormat];
-                [ALToastView toastInView:self.delegate.view
-                                withText:JMCustomLocalizedString(@"savereport.saved", nil)];
-            } @weakselfend];
-
-        [self.reportClient runReportExecution:self.resourceLookup.uri
-                                        async:NO
-                                 outputFormat:self.selectedReportFormat
-                                  interactive:NO
-                                    freshData:YES
-                             saveDataSnapshot:NO
-                             ignorePagination:NO
-                               transformerKey:nil
-                                        pages:[self makePagesFormat]
-                            attachmentsPrefix:kJMAttachmentPrefix
-                                   parameters:parameters
-                                   usingBlock:^(JSRequest *request) {
-                                       request.delegate = delegate;
-                                       request.finishedBlock = checkErrorBlock;
-                                   }];
+    if (self.errorString || !(isValidReportName && isFolderCreated) ) {
+        return;
     }
+    
+    // Clear any errors
+    [self.tableView reloadData];
+    
+    NSMutableArray *parameters = [NSMutableArray array];
+    for (JSInputControlDescriptor *inputControlDescriptor in self.inputControls) {
+        JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
+                                                                               value:inputControlDescriptor.selectedValues];
+        [parameters addObject:reportParameter];
+    }
+    
+    [JMCancelRequestPopup presentWithMessage:@"savereport.saving.status.title" restClient:self.reportClient cancelBlock:^{
+        [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
+    }];
+    
+    JSRequestFinishedBlock checkErrorBlock = @weakself(^(JSOperationResult *result)) {
+        if (result.isSuccessful) return;
+        [self.reportClient cancelAllRequests];
+        [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
+    }@weakselfend;
+    
+    JMRequestDelegate *delegate = [JMRequestDelegate requestDelegateForFinishBlock:@weakself(^(JSOperationResult *result)) {       
+        JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
+        JSExportExecutionResponse *export = [response.exports objectAtIndex:0];
+        NSString *requestId = response.requestId;
+        
+        NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
+        [self.reportClient loadReportOutput:requestId exportOutput:export.uuid loadForSaving:YES path:fullReportPath delegate:[JMRequestDelegate requestDelegateForFinishBlock:nil]];
+        
+        for (JSReportOutputResource *attachment in export.attachments) {
+            NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
+            [self.reportClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath usingBlock:^(JSRequest *request) {
+                request.delegate = [JMRequestDelegate requestDelegateForFinishBlock:nil];
+                request.finishedBlock = checkErrorBlock;
+            }];
+        }
+    } @weakselfend];
+    
+    [JMRequestDelegate setFinalBlock:@weakself(^(void)) {
+        [self.navigationController popViewControllerAnimated:YES];
+        [JMSavedResources addReport:self.resourceLookup
+                           withName:self.reportName
+                             format:self.selectedReportFormat];
+        
+        [ALToastView toastInView:self.delegate.view
+                        withText:JMCustomLocalizedString(@"savereport.saved", nil)];
+    } @weakselfend];
+    
+    [self.reportClient runReportExecution:self.resourceLookup.uri
+                                    async:NO
+                             outputFormat:self.selectedReportFormat
+                              interactive:NO
+                                freshData:YES
+                         saveDataSnapshot:NO
+                         ignorePagination:NO
+                           transformerKey:nil
+                                    pages:[self makePagesFormat]
+                        attachmentsPrefix:kJMAttachmentPrefix
+                               parameters:parameters
+                               usingBlock:^(JSRequest *request) {
+                                   request.delegate = delegate;
+                                   request.finishedBlock = checkErrorBlock;
+                               }];
 }
 
 - (NSString *)makePagesFormat

@@ -84,6 +84,7 @@ static NSMutableArray* visiblePopupsArray = nil;
             [_backGroundView addSubview:verticalSeparatorView];
         }
 
+        _isDissmissWithTapOutOfButton = NO;
         [self addSubview:_backGroundView];
     }
     return self;
@@ -206,7 +207,7 @@ static NSMutableArray* visiblePopupsArray = nil;
         found = YES;
     }
     
-    if (!found) {
+    if (!found && self.isDissmissWithTapOutOfButton) {
         [self dismiss:YES];
     }
 }
