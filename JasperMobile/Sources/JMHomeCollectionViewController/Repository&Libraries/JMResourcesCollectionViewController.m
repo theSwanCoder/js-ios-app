@@ -112,7 +112,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     [self.collectionView addSubview:self.refreshControl];
     self.collectionView.alwaysBounceVertical = YES;
     
-    [self showNavigationItems];
+    [self setupNavigationItems];
     [self.resourceListLoader updateIfNeeded];
     
     [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceOrientationDidChangeNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
@@ -242,23 +242,35 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 {
     JMSortOptionsPopupView *sortPopup = [[JMSortOptionsPopupView alloc] initWithDelegate:self type:JMPopupViewType_ContentViewOnly];
     sortPopup.sortBy = self.resourceListLoader.sortBy;
+    sortPopup.isDissmissWithTapOutOfButton = YES;
     [sortPopup show];
 }
 
 - (void)filterByButtonTapped:(id)sender
 {
-    JMFilterOptionsPopupView *filterPopup = [[JMFilterOptionsPopupView alloc] initWithDelegate:self type:JMPopupViewType_ContentViewOnly];
+    JMFilterOptionsPopupView *filterPopup = [[JMFilterOptionsPopupView alloc] initWithDelegate:self
+                                                                                          type:JMPopupViewType_ContentViewOnly];
     filterPopup.objectType = self.resourceListLoader.resourcesType;
+    filterPopup.isDissmissWithTapOutOfButton = YES;
     [filterPopup show];
 }
 
 - (void)actionButtonClicked:(id) sender
 {
-    JMMenuActionsView *actionsView = [[JMMenuActionsView alloc] initWithFrame:CGRectMake(0, 0, 240, 200)];
+    JMMenuActionsViewAction availableAction = [self availableAction];
+    
+    JMMenuActionsView *actionsView = [JMMenuActionsView new];
     actionsView.delegate = self;
-    actionsView.availableActions = [self availableAction];
-    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
-    self.popoverView = [PopoverView showPopoverAtPoint:point inView:self.view withTitle:nil withContentView:actionsView delegate:self];
+    actionsView.availableActions = availableAction;
+    
+    CGFloat topPadding = -10;
+    CGPoint point = CGPointMake(CGRectGetWidth(self.view.frame), topPadding);
+    
+    self.popoverView = [PopoverView showPopoverAtPoint:point
+                                                inView:self.view
+                                             withTitle:nil
+                                       withContentView:actionsView
+                                              delegate:self];
 }
 
 - (JMMenuActionsViewAction)availableAction
@@ -266,7 +278,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_None;
     switch (self.presentingType) {
         case JMResourcesCollectionViewControllerPresentingType_Library:{
-            if([self.resourceListLoader.resourceClient.serverInfo.edition isEqualToString:self.resourceListLoader.constants.SERVER_EDITION_PRO]) {
+            if([self isProVersion]) {
                 availableAction |= JMMenuActionsViewAction_FilterBy;
             }
         }
@@ -399,8 +411,9 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     }
 
     if (self.needLayoutUI) {
+        [self.popoverView dismiss:YES];
         if ([JMUtils isIphone]) {
-            [self showNavigationItems];
+            [self setupNavigationItems];
         }
         self.needLayoutUI = NO;
     }
@@ -432,40 +445,43 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
     }
 }
 
-- (void) showNavigationItems
+- (void) setupNavigationItems
 {
-    NSMutableArray *navBarItems = [NSMutableArray array];
     // may be network call to get server info
     JMMenuActionsViewAction availableAction = [self availableAction];
-    if (availableAction & JMMenuActionsViewAction_FilterBy) {
-        UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(filterByButtonTapped:)];
-        [navBarItems addObject:filterItem];
-    }
-    if (availableAction & JMMenuActionsViewAction_Sort) {
-        UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"] style:UIBarButtonItemStyleBordered target:self action:@selector(sortByButtonTapped:)];
-        [navBarItems addObject:sortItem];
-    }
-
-    BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait([UIDevice currentDevice].orientation) ||
-                                (!UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) &&
-                                  UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation));
-                                  
-    BOOL shouldConcateItems = ([JMUtils isIphone] && [navBarItems count] > 1) && isPortraitOrientation;
     
-    if (shouldConcateItems) {
-        navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
+    BOOL isShowFilterButton = availableAction & JMMenuActionsViewAction_FilterBy;
+    BOOL isShowSortButton = availableAction & JMMenuActionsViewAction_Sort;
+    BOOL isMultipleButtonAvailable = isShowFilterButton && isShowSortButton;
+    
+    NSMutableArray *navBarItems = [NSMutableArray array];
+    
+    if ([self shouldConcateNavigationItems] && isMultipleButtonAvailable ) {
+        UIBarButtonItem *groupItemsButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                                          target:self
+                                                                                          action:@selector(actionButtonClicked:)];
+        [navBarItems addObject:groupItemsButton];
+    } else {
+        
+        if (isShowFilterButton) {
+            UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"]
+                                                                           style:UIBarButtonItemStyleBordered
+                                                                          target:self
+                                                                          action:@selector(filterByButtonTapped:)];
+            [navBarItems addObject:filterItem];
+        }
+        if (isShowSortButton) {
+            UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"]
+                                                                         style:UIBarButtonItemStyleBordered
+                                                                        target:self
+                                                                        action:@selector(sortByButtonTapped:)];
+            [navBarItems addObject:sortItem];
+        }
     }
+    
     [navBarItems addObject:[self resourceRepresentationItem]];
-    self.navigationItem.rightBarButtonItems = navBarItems;
     
-//    if (!self.searchBar) {
-//        UIView *searchContainerView = [[UIView alloc] initWithFrame:self.searchBar.bounds];
-//        searchContainerView.backgroundColor = [UIColor clearColor];
-//        [searchContainerView addSubview: self.searchBar];
-//        
-//        self.searchBar.autoresizingMask = searchContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-//        self.searchBarPlaceholder.topItem.titleView = searchContainerView;
-//    }
+    self.navigationItem.rightBarButtonItems = navBarItems;
 }
 
 - (void) replaceRightNavigationItem:(UIBarButtonItem *)oldItem withItem:(UIBarButtonItem *)newItem
@@ -504,7 +520,12 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (UIBarButtonItem *)resourceRepresentationItem
 {
     NSString *imageName = ([self getNextRepresentationTypeForType:self.representationType] == JMResourcesRepresentationType_Grid) ? @"grid_button" : @"horizontal_list_button";
-    return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName] style:UIBarButtonItemStyleBordered target:self action:@selector(representationTypeButtonTapped:)];
+    
+    UIBarButtonItem *representationItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
+                                                                           style:UIBarButtonItemStyleBordered
+                                                                          target:self
+                                                                          action:@selector(representationTypeButtonTapped:)];
+    return representationItem;
 }
 
 - (JMResourcesListLoader *)resourceListLoader
@@ -527,6 +548,25 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         _resourceListLoader.delegate = self;
     }
     return _resourceListLoader;
+}
+
+- (BOOL)isProVersion
+{
+    // getting server info can make network calls
+    
+    BOOL isProVersion = [self.resourceListLoader.resourceClient.serverInfo.edition isEqualToString:self.resourceListLoader.constants.SERVER_EDITION_PRO];
+    return isProVersion;
+}
+
+- (BOOL)shouldConcateNavigationItems
+{
+    BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait([UIDevice currentDevice].orientation) ||
+    (!UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) &&
+     UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation));
+    
+    BOOL shouldConcateItems = [JMUtils isIphone] && isPortraitOrientation;
+    
+    return shouldConcateItems;
 }
 
 #pragma mark -
@@ -554,7 +594,10 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 #pragma mark - JMResourceCollectionViewCellDelegate
 - (void)infoButtonDidTappedOnCell:(JMResourceCollectionViewCell *)cell
 {
-    [self performSegueWithIdentifier:kJMShowResourceInfoSegue sender:[NSDictionary dictionaryWithObject:cell.resourceLookup forKey:kJMResourceLookup]];
+    [self performSegueWithIdentifier:kJMShowResourceInfoSegue
+                              sender:[NSDictionary
+                                      dictionaryWithObject:cell.resourceLookup
+                                      forKey:kJMResourceLookup]];
 }
 
 #pragma mark - PopoverViewDelegate Methods
@@ -566,7 +609,9 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     CGPoint point = CGPointMake(self.view.frame.size.width, -10);
-    [self.popoverView animateRotationToNewPoint:point inView:self.view withDuration:duration];
+    [self.popoverView animateRotationToNewPoint:point
+                                         inView:self.view
+                                   withDuration:duration];
 }
 
 
@@ -583,6 +628,8 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
         default:
             break;
     }
+    
+    // TODO: what is reason for delay?
     [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
 }
 @end

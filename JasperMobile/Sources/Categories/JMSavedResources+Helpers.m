@@ -113,6 +113,8 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 + (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format
 {
+    NSAssert(name != nil || format != nil, @"There aren't name and format of saved report");
+    
     NSString *uri = [[kJMReportsDirectory stringByAppendingPathComponent:[name stringByAppendingPathExtension:format]] stringByAppendingPathComponent:[kJMReportFilename stringByAppendingPathExtension:format]];
     return [NSString stringWithFormat:@"/%@",uri];
 }
