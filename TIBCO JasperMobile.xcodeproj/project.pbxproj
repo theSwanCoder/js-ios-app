@@ -52,6 +52,8 @@
 		08B7B7DE1A7BD07D00843B11 /* res_type_pdf@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 08B7B7DC1A7BD07D00843B11 /* res_type_pdf@2x~ipad.png */; };
 		08B7B7DF1A7BD07D00843B11 /* res_type_pdf~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 08B7B7DD1A7BD07D00843B11 /* res_type_pdf~ipad.png */; };
 		08B99F6E1A07CD7700E822B0 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
+		08BCEBA61AA89022007B4C66 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08BCEBA31AA89022007B4C66 /* Crashlytics.framework */; };
+		08BCEBA71AA89022007B4C66 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08BCEBA51AA89022007B4C66 /* Fabric.framework */; };
 		08C331601A1A27DC0020CAEA /* JMMenuActionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C3315F1A1A27DC0020CAEA /* JMMenuActionsView.m */; };
 		08C816D019A4B24D00371604 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */; };
 		08D108B619EFD28C003EC529 /* JMFavoritesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D108B519EFD28C003EC529 /* JMFavoritesListLoader.m */; };
@@ -279,8 +281,6 @@
 		9362BAB61A26014F006A6178 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 9362BAAF1A26014F006A6178 /* Default-Portrait~ipad.png */; };
 		9362BAB71A26014F006A6178 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9362BAB01A26014F006A6178 /* Default.png */; };
 		9362BAB81A26014F006A6178 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9362BAB11A26014F006A6178 /* Default@2x.png */; };
-		936AC84E1A888A7C009ACC80 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 936AC84C1A888A7C009ACC80 /* Crashlytics.framework */; };
-		936AC84F1A888A7C009ACC80 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 936AC84D1A888A7C009ACC80 /* Fabric.framework */; };
 		93B1795D1A4481DE00B7A181 /* jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = 93B1795C1A4481DE00B7A181 /* jaspermobile.js */; };
 		93D19DCB1A5FE0D600F54687 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93D19DCA1A5FE0D600F54687 /* MessageUI.framework */; };
 		93DFB6D41A604308009F0E4A /* JMSaveReportNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93DFB6D31A604308009F0E4A /* JMSaveReportNameCell.m */; };
@@ -414,6 +414,8 @@
 		08B7B7DC1A7BD07D00843B11 /* res_type_pdf@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "res_type_pdf@2x~ipad.png"; sourceTree = "<group>"; };
 		08B7B7DD1A7BD07D00843B11 /* res_type_pdf~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "res_type_pdf~ipad.png"; sourceTree = "<group>"; };
 		08B99F6D1A07CD7700E822B0 /* profiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = profiles.json; sourceTree = "<group>"; };
+		08BCEBA31AA89022007B4C66 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		08BCEBA51AA89022007B4C66 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		08C3315E1A1A27DC0020CAEA /* JMMenuActionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMenuActionsView.h; sourceTree = "<group>"; };
 		08C3315F1A1A27DC0020CAEA /* JMMenuActionsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMenuActionsView.m; sourceTree = "<group>"; };
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
@@ -434,7 +436,6 @@
 		08D8899E1A3B641E0065D1D1 /* AppIcon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon120x120.png; sourceTree = "<group>"; };
 		08D8899F1A3B641E0065D1D1 /* Icon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024.png"; sourceTree = "<group>"; };
 		08D889A01A3B641E0065D1D1 /* Icon-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-512.png"; sourceTree = "<group>"; };
-		08DB677D1A137CD90035F58F /* SplunkMint-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = "SplunkMint-iOS.framework"; sourceTree = "<group>"; };
 		08DB677F1A137E370035F58F /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		08DE67A519C05D8A00C25AEA /* JMBooleanInputControlCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBooleanInputControlCell.h; sourceTree = "<group>"; };
 		08DE67A619C05D8A00C25AEA /* JMBooleanInputControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBooleanInputControlCell.m; sourceTree = "<group>"; };
@@ -747,13 +748,13 @@
 				93D19DCB1A5FE0D600F54687 /* MessageUI.framework in Frameworks */,
 				0871503E19F1266900C5875E /* libz.dylib in Frameworks */,
 				0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */,
+				08BCEBA71AA89022007B4C66 /* Fabric.framework in Frameworks */,
 				F5D6373217909D8F005BA5CD /* libjaspersoft-sdk.a in Frameworks */,
 				F54C91A91752FAC20009E2BE /* QuartzCore.framework in Frameworks */,
-				936AC84F1A888A7C009ACC80 /* Fabric.framework in Frameworks */,
 				F54C91A71752FAB80009E2BE /* SystemConfiguration.framework in Frameworks */,
 				F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */,
 				F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */,
-				936AC84E1A888A7C009ACC80 /* Crashlytics.framework in Frameworks */,
+				08BCEBA61AA89022007B4C66 /* Crashlytics.framework in Frameworks */,
 				F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */,
 				F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */,
 				0895910319E3D514001471DA /* libObjection-StaticLib.a in Frameworks */,
@@ -1039,6 +1040,22 @@
 			path = ServerProfiles;
 			sourceTree = "<group>";
 		};
+		08BCEBA21AA89022007B4C66 /* Crashlytics */ = {
+			isa = PBXGroup;
+			children = (
+				08BCEBA31AA89022007B4C66 /* Crashlytics.framework */,
+			);
+			path = Crashlytics;
+			sourceTree = "<group>";
+		};
+		08BCEBA41AA89022007B4C66 /* Fabric */ = {
+			isa = PBXGroup;
+			children = (
+				08BCEBA51AA89022007B4C66 /* Fabric.framework */,
+			);
+			path = Fabric;
+			sourceTree = "<group>";
+		};
 		08C3315D1A1A27DC0020CAEA /* JMMenuActionsView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1099,14 +1116,6 @@
 				08D889A01A3B641E0065D1D1 /* Icon-512.png */,
 			);
 			path = Icons;
-			sourceTree = "<group>";
-		};
-		08DB677C1A137CD90035F58F /* SplunkMint-iOS-v4.0.22 */ = {
-			isa = PBXGroup;
-			children = (
-				08DB677D1A137CD90035F58F /* SplunkMint-iOS.framework */,
-			);
-			path = "SplunkMint-iOS-v4.0.22";
 			sourceTree = "<group>";
 		};
 		08DE67A019C05D8A00C25AEA /* ResourceViewer */ = {
@@ -2222,9 +2231,10 @@
 		F5663A141752F9D0007978BE /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				08BCEBA21AA89022007B4C66 /* Crashlytics */,
+				08BCEBA41AA89022007B4C66 /* Fabric */,
 				9342862B1A42F33A0007FEC2 /* VisualizeJS */,
 				083490771A38A3AA00E04DA0 /* RNCachingURLProtocol */,
-				08DB677C1A137CD90035F58F /* SplunkMint-iOS-v4.0.22 */,
 				089590DE19E3D514001471DA /* ALToastView-v0.0.1 */,
 				089590E919E3D514001471DA /* Objection-v1.4 */,
 				089590F719E3D514001471DA /* PopoverView-v0.0.2 */,
@@ -2569,7 +2579,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Fabric.framework/run 9a63aa49c0a9ed0e9134fa82dab01ca1c99718a8 73aeeb1fc973ce845d6ee97b0279597de87d6411a1bbe82ba65e104f873d08c8";
+			shellScript = "./JasperMobile/Vendor/Fabric/Fabric.framework/run 9a63aa49c0a9ed0e9134fa82dab01ca1c99718a8 73aeeb1fc973ce845d6ee97b0279597de87d6411a1bbe82ba65e104f873d08c8";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2766,8 +2776,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JasperMobile/Vendor/jaspersoft-sdk/Vendor/RestKit/Tests/Vendor/OCHamcrest",
-					"$(PROJECT_DIR)/JasperMobile/Vendor/SplunkMint-iOS-v4.0.22",
-					"$(PROJECT_DIR)/JasperMobile/Vendor",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/Crashlytics",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/Fabric",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
@@ -2806,8 +2817,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JasperMobile/Vendor/jaspersoft-sdk/Vendor/RestKit/Tests/Vendor/OCHamcrest",
-					"$(PROJECT_DIR)/JasperMobile/Vendor/SplunkMint-iOS-v4.0.22",
-					"$(PROJECT_DIR)/JasperMobile/Vendor",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/Crashlytics",
+					"$(PROJECT_DIR)/JasperMobile/Vendor/Fabric",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile.pch";
