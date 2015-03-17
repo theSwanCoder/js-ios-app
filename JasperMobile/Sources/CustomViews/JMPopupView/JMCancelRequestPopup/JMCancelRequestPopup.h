@@ -36,16 +36,7 @@ typedef void(^JMCancelRequestBlock)(void);
 
 @interface JMCancelRequestPopup : JMPopupView
 
-/**
- Presents cancel request popup in view controller
- 
- @param viewController A view controller inside which popup will be shown
- @param message A message of a progress dialog
- @param restClient A rest client to cancel all requests
- @param cancelBlock A cancelBlock to execute
- */
-+ (void)presentWithMessage:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock;
-
++ (void) presentWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock;
 
 + (void) dismiss;
 

@@ -30,6 +30,9 @@
 
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @author Alexey Gubarev ogubarie@tibco.com
+ @author Aleksandr Dakhno odahno@tibco.com
+
  @since 1.6
  */
 @interface JasperMobileAppDelegate : UIResponder <UIApplicationDelegate>
@@ -38,6 +41,7 @@
 @property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
 @property (nonatomic, assign, getter=isApplicationFirstStart) BOOL applicationFirstStart;
 
 @end

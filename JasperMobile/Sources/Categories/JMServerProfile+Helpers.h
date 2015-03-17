@@ -35,76 +35,6 @@
 @interface JMServerProfile (Helpers)
 
 /**
- Creates encoded (as SHA1) profile from provided server url, username and organization
- 
- @param url The URL of JasperReports Server
- @param username The username, must be a valid account on JasperReports Server
- @param organization The name of organization
- @return profile id
- */
-+ (NSString *)profileIDByServerURL:(NSString *)url username:(NSString *)username organization:(NSString *)organization;
-
-/**
- Stores profile password in Keychain for profile
- 
- @param profileID The Profile id
- @return YES if password was successfully saved, otherwise returns NO
- */
-+ (BOOL)storePasswordInKeychain:(NSString *)password profileID:(NSString *)profileID;
-
-/**
- Returns password from Keychain for profile
- 
- @param profileID The Profile id
- @return password
- */
-+ (NSString *)passwordFromKeychain:(NSString *)profileID;
-
-/**
- Removes password from Keychain for profile
- 
- @param profileID The Profile id
- @return YES if password was successfully removed, otherwise returns NO
- */
-+ (BOOL)deletePasswordFromKeychain:(NSString *)profileID;
-
-/**
- Returns an id of last selected server profile
- 
- @return An id of active server profile
- */
-+ (NSManagedObjectID *)activeServerID;
-
-/**
- Returns an active server profile
- 
- @return A server profile instance
- */
-+ (JMServerProfile *)activeServerProfile;
-
-/**
- Returns encoded profile id
- 
- @return A server profile ID
- */
-- (NSString *)profileID;
-
-/**
- Sets in the receiver's private internal storage the value of a password.
- This method does not invoke the change notification methods (willChangeValueForKey: and didChangeValueForKey:)
- 
- @param password A new password value
- */
-- (void)setPasswordAsPrimitive:(NSString *)password;
-
-/**
- Returns YES if server profile is active
- 
- @return YES if server profile is active
- */
-@property (nonatomic, assign) BOOL serverProfileIsActive;
-
-/**
  Returns number of min supported server version
  
  @return number of min supported server version
@@ -125,4 +55,12 @@
  @param serverProfile for clonning
  */
 + (void) cloneServerProfile:(JMServerProfile *)serverProfile;
+
+/**
+ Check if jasperserver exist and it version is supported by application.
+ 
+ @param completionBlock block of code will be executed after checking. If server exist and supported error will be nil.
+ */
+- (void) checkServerProfileWithCompletionBlock:(void(^)(NSError *error))completionBlock;
+
 @end

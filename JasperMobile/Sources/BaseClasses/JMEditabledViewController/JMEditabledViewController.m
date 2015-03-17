@@ -21,7 +21,6 @@
  */
 
 
-#import <SplunkMint-iOS/SplunkMint-iOS.h>
 #import "JMEditabledViewController.h"
 
 @implementation JMEditabledViewController
@@ -32,14 +31,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShown:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboarDidHide:) name:UIKeyboardWillHideNotification object:nil];
-
-    // log events
-    NSString *currentClassName = NSStringFromClass(self.class);
-    [[Mint sharedInstance] logEventAsyncWithTag:currentClassName completionBlock:^(MintLogResult *splunkLogResult)
-    {
-        NSString *logResultState = splunkLogResult.resultState == OKResultState ? @"OK" : @"Error";
-        NSLog(@"Log result: %@", logResultState);
-    }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

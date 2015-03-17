@@ -41,7 +41,7 @@ static NSMutableArray* visiblePopupsArray = nil;
             visiblePopupsArray = [NSMutableArray array];
         }
         self.delegate = delegate;
-        self.hideIfBackgroundTapped = YES;
+        self.isDissmissWithTapOutOfButton = YES;
         _type = type;
         
         [visiblePopupsArray addObject:self];
@@ -90,6 +90,23 @@ static NSMutableArray* visiblePopupsArray = nil;
     return self;
 }
 
+- (instancetype)initWithMessage:(NSString *)message delegate:(id<JMPopupViewDelegate>)delegate
+{
+    self = [self initWithDelegate:delegate type:JMPopupViewType_ContentWithMessage];
+    if (self) {
+        _message = message;
+        
+        CGRect messageLabelFrame = CGRectMake(0, 0, kJMPopupViewDefaultWidth, kJMPopupViewButtonsHeight);
+        UILabel *messageLabel = [[UILabel alloc] initWithFrame:messageLabelFrame];
+        messageLabel.textAlignment = NSTextAlignmentCenter;
+        messageLabel.textColor = [UIColor whiteColor];
+        messageLabel.text = message;
+        [_backGroundView addSubview:messageLabel];
+    }
+    return self;
+}
+
+
 + (BOOL)isShowedPopup
 {
     if ([visiblePopupsArray count]) {
@@ -108,6 +125,9 @@ static NSMutableArray* visiblePopupsArray = nil;
         case JMPopupViewType_OkCancelButtons:
             _backGroundView.frame = CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height + (kJMPopupViewButtonsHeight));
             break;
+        case JMPopupViewType_ContentWithMessage:
+            _backGroundView.frame = _contentView.bounds;
+            break;
     }
     _contentView.center = CGPointMake(contentView.frame.size.width / 2, contentView.frame.size.height / 2);
     [_backGroundView addSubview:_contentView];
@@ -123,7 +143,8 @@ static NSMutableArray* visiblePopupsArray = nil;
     if (self.animatedNow) {
         return;
     }
-    UIView* topView = [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject];
+    
+    UIView* topView = [[[[[UIApplication sharedApplication] windows] lastObject] subviews] lastObject];
     self.frame = topView.bounds;
     [topView addSubview:self];
     
@@ -145,7 +166,7 @@ static NSMutableArray* visiblePopupsArray = nil;
     }
     
     _backGroundView.center = centerPoint;
-    if (self.hideIfBackgroundTapped) {
+    if (self.isDissmissWithTapOutOfButton) {
         //Add a tap gesture recognizer to the large invisible view (self), which will detect taps anywhere on the screen.
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapped:)];
         tap.cancelsTouchesInView = NO; // Allow touches through to a UITableView or other touchable view, as suggested by Dimajp.

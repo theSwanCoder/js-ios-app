@@ -30,5 +30,9 @@
  */
 
 @interface JMWebConsole : NSURLProtocol
+
 + (void) enable;
+
++ (void) disable;
+
 @end

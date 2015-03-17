@@ -27,16 +27,45 @@
 
 
 #import "JMWebConsole.h"
+
+
 @implementation JMWebConsole
 + (void) enable {
-    [NSURLProtocol registerClass:[JMWebConsole class]];
+    [NSURLProtocol registerClass:self];
+}
+
++ (void) disable {
+    [NSURLProtocol unregisterClass:self];
 }
 
 + (BOOL) canInitWithRequest:(NSURLRequest *)request {
-    if ([[[request URL] host] isEqualToString:@"debugger"]){
+    
+//    if ([request.URL.absoluteString containsString:@"visualize.js"]) {
+//        NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+//        NSLog(@"request absolute path: %@", request.URL.absoluteString);
+//        NSLog(@"request path: %@", request.URL.path);
+//        NSLog(@"request relativePath: %@", request.URL.relativePath);
+//        NSLog(@"request fragment: %@", request.URL.fragment);
+//        NSLog(@"request query: %@", request.URL.query);
+//        NSCachedURLResponse *cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:request];
+//        NSLog(@"cached response:%@", cachedResponse);
+//    }
+    
+    if ([request.URL.host isEqualToString:@"debugger"]){
         NSLog(@"%@", [[[request URL] path] substringFromIndex: 1]);
+    } else {
+        NSString *requestUrl = [request.URL absoluteString];
+        NSString *loginUrlRegex = [NSString stringWithFormat:@"%@/login.html(.+)?", self.restClient.serverProfile.serverUrl];
+        
+        NSPredicate *loginUrlValidator = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", loginUrlRegex];
+        if ([loginUrlValidator evaluateWithObject:requestUrl]) {
+            for (NSHTTPCookie *cookie in self.restClient.cookies) {
+                [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
+            }
+            // TODO: Here need to handle session expired issue
+        }
     }
-
-    return FALSE;
+    return NO;
 }
+
 @end

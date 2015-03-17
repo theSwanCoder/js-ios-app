@@ -35,6 +35,7 @@
 
 typedef NS_ENUM(NSInteger, JMPopupViewType) {
     JMPopupViewType_ContentViewOnly = 0,
+    JMPopupViewType_ContentWithMessage,
     JMPopupViewType_OkCancelButtons
 };
 
@@ -68,9 +69,11 @@ typedef NS_ENUM(NSInteger, JMPopupViewType) {
 @property (nonatomic, retain) UIView *contentView;
 @property (nonatomic, readonly) JMPopupViewType type;
 @property (nonatomic, weak) id <JMPopupViewDelegate> delegate;
-@property (nonatomic, assign) BOOL hideIfBackgroundTapped;
+@property (nonatomic, copy) NSString *message;
+@property (nonatomic, assign) BOOL isDissmissWithTapOutOfButton;
 
-- (instancetype) initWithDelegate:(id <JMPopupViewDelegate>)delegate type:(JMPopupViewType)type;
+- (instancetype)initWithDelegate:(id <JMPopupViewDelegate>)delegate type:(JMPopupViewType)type;
+- (instancetype)initWithMessage:(NSString *)message delegate:(id<JMPopupViewDelegate>)delegate;
 
 - (void) show;
 

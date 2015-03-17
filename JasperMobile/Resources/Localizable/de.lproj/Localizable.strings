@@ -27,7 +27,6 @@
 
 /* Server Profiles view */
 
-"servers.info" = "%@™ v %@\n\nManagementtool und Berichts-Viewer für JasperReports Server %.1f und höher.\n\nWeitere Informationen erhalten Sie unter:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright Â© 2005-%zd TIBCO Software, Inc.";
 
 "servers.url.label" = "Serveradresse";
 "servers.url.errmsg" = "Geben Sie eine gültige URL an.";
@@ -38,41 +37,35 @@
 
 "servers.orgid.label" = "Organisations-ID";
 
-"servers.username.label" = "Benutzername";
-"servers.username.errmsg.empty" = "Geben Sie einen gültigen Benutzernamen an.";
+"login.username.label" = "Benutzername";
+"login.username.errmsg.empty" = "Geben Sie einen gültigen Benutzernamen an.";
 
-"servers.password.label" = "Passwort";
-"servers.password.errmsg.empty" = "Geben Sie ein gültiges Passwort an.";
+"login.password.label" = "Passwort";
+"login.password.errmsg.empty" = "Geben Sie ein gültiges Passwort an.";
 
 "servers.profile.title" = "Serverprofile";
 "servers.profile.delete.message" = "Bestätigen Sie, dass der Server gelöscht werden soll.";
 
 "servers.askpassword.label" = "Immer nach Passwort fragen";
 
-"servers.activeserver.label" = "Aktiver Server";
-
 "servers.title.new" = "Neues Serverprofil";
-"servers.title.edit" = "Serverprofil bearbeiten";
-
-"servers.gridview.activeserver.label" = "Aktiv";
-"servers.button.makeactive" = "Als aktiv festlegen";
 
 /* Report Saver view */
-"savereport.title" = "Bericht speichern";
-"savereport.name" = "Berichtsname";
-"savereport.format" = "Ausgabeformat";
-"savereport.saved" = "Der Bericht wurde erfolgreich gespeichert.";
-"savereport.name.errmsg.empty" = "Darf nicht leer sein";
-"savereport.name.errmsg.notunique" = "Dieser Name wird bereits verwendet, wählen Sie einen anderen Namen aus.";
-"savereport.name.errmsg.maxlength" = "Muss weniger als %i Symbole sein";
-"savereport.name.errmsg.characters" = "Die Zeichen %@ sind nicht zulässig.";
-"savereport.saving.status.title" = "Bericht speichern...";
+"report.viewer.save.title" = "Bericht speichern";
+"report.viewer.save.name" = "Berichtsname";
+"report.viewer.save.format" = "Ausgabeformat";
+"report.viewer.save.saved" = "Der Bericht wurde erfolgreich gespeichert.";
+"report.viewer.save.name.errmsg.empty" = "Darf nicht leer sein";
+"report.viewer.save.name.errmsg.notunique" = "Dieser Name wird bereits verwendet, wählen Sie einen anderen Namen aus.";
+"report.viewer.save.name.errmsg.maxlength" = "Muss weniger als %i Symbole sein";
+"report.viewer.save.name.errmsg.characters" = "Die Zeichen %@ sind nicht zulässig.";
+"report.viewer.save.saving.status.title" = "Bericht speichern...";
 
 /* Rename Saved Report popup */
 
-"savedreport.modify.title" = "Bericht umbenennen";
-"savedreport.modify.reportname" = "Berichtsname";
-"savedreport.delete.confirmation.message" = "Bestätigen Sie, dass der Bericht gelöscht werden soll.";
+"savedreport.viewer.modify.title" = "Bericht umbenennen";
+"savedreport.viewer.modify.reportname" = "Berichtsname";
+"savedreport.viewer.delete.confirmation.message" = "Bestätigen Sie, dass der Bericht gelöscht werden soll.";
 
 
 /* Search filter */
@@ -81,22 +74,20 @@
 /* Home View */
 
 // Labels
-"home.menuitem.library.label" = "Bibliothek";
-"home.menuitem.saveditems.label" = "Gespeicherte Elemente";
-"home.menuitem.settings.label" = "Einstellungen";
-"home.menuitem.repository.label" = "Repository";
-"home.menuitem.favorites.label" = "Favoriten";
+"menuitem.library.label" = "Bibliothek";
+"menuitem.saveditems.label" = "Gespeicherte Elemente";
+"menuitem.settings.label" = "Einstellungen";
+"menuitem.repository.label" = "Repository";
+"menuitem.favorites.label" = "Favoriten";
 
 // Descriptions
 
-"home.menuitem.library.description" = "Ihre JR-Server-Bibliothek durchsuchen.";
-"home.menuitem.repository.description" = "Ihr JR-Server-Repository durchsuchen.";
-"home.menuitem.settings.description" = "Ihre Jaspersoft-Mobil-App konfigurieren.";
-"home.menuitem.saveditems.description" = "Die auf diesem Gerät gespeicherten Elemente anzeigen. ";
-"home.menuitem.favorites.description" = "Ihre Favoriten durchsuchen.";
+"menuitem.library.description" = "Ihre JR-Server-Bibliothek durchsuchen.";
+"menuitem.repository.description" = "Ihr JR-Server-Repository durchsuchen.";
+"menuitem.settings.description" = "Ihre Jaspersoft-Mobil-App konfigurieren.";
+"menuitem.saveditems.description" = "Die auf diesem Gerät gespeicherten Elemente anzeigen. ";
+"menuitem.favorites.description" = "Ihre Favoriten durchsuchen.";
 
-// Navigation Bar Titles
-"title.home" = "Startseite";
 
 /* Master view */
 
@@ -107,17 +98,17 @@
 // Resources
 "master.base.resources.title" = "Durchsuchen";
 
-"master.resources.title" = "Objekttyp";
-"master.resources.type.all" = "Alle";
-"master.resources.type.reportUnit" = "Berichte";
-"master.resources.type.dashboard" = "Dashboards";
-"master.resources.type.folder" = "Folders";
+"resources.title" = "Objekttyp";
+"resources.type.all" = "Alle";
+"resources.type.reportUnit" = "Berichte";
+"resources.type.dashboard" = "Dashboards";
+"resources.type.folder" = "Folders";
 
 // Sort by
-"master.sortby.title" = "Sortierungsoptionen";
-"master.sortby.type.name" = "Name";
-"master.sortby.type.date" = "Datum";
-"master.sortby.type.creator" = "Ersteller";
+"resources.sortby.title" = "Sortierungsoptionen";
+"resources.sortby.type.name" = "Name";
+"resources.sortby.type.date" = "Datum";
+"resources.sortby.type.creator" = "Ersteller";
 
 // Filter By Tag
 "master.filterbytag.title" = "Tags";
@@ -126,28 +117,26 @@
 
 /* Detail view */
 
-"detail.resourcesloading.msg" = "Ladevorgang läuft.\nBitte warten...";
-"detail.noresults.msg" = "Keine Ergebnisse.\nBitte treffen Sie eine andere Auswahl...";
-"detail.search.resources.placeholder" = "Ressourcen durchsuchen";
+"resources.loading.msg" = "Ladevorgang läuft.\nBitte warten...";
+"resources.noresults.msg" = "Keine Ergebnisse.\nBitte treffen Sie eine andere Auswahl...";
+"resources.search.placeholder" = "Ressourcen durchsuchen";
 
-"detail.settings.title" = "Verbindungseinstellungen";
-"detail.settings.item.connection.timeout" = "Verbindungstimeout (in Sekunden)";
-"detail.settings.item.data.read.timeout" = "Timeout beim Lesen von Daten (in Sekunden)";
-"detail.settings.item.server" = "Server";
-"detail.settings.crashtracking.toast" = "Öffnen Sie die Seite 'Einstellungen', um die Einstellungen zum Senden von Absturzberichten zu ändern.";
-"detail.settings.crashtracking.title" = "Absturzberichte senden";
-"detail.settings.crashtracking.alert.title" = "Achtung!";
-"detail.settings.crashtracking.alert.message" = "Die Einstellungen zum Senden von Absturzberichten werden nach einem Neustart der Anwendung übernommen.";
+"settings.item.connection.timeout" = "Verbindungstimeout (in Sekunden)";
+"settings.item.server" = "Server";
+"settings.crashtracking.toast" = "Öffnen Sie die Seite 'Einstellungen', um die Einstellungen zum Senden von Absturzberichten zu ändern.";
+"settings.crashtracking.title" = "Absturzberichte senden";
+"settings.crashtracking.alert.title" = "Achtung!";
+"settings.crashtracking.alert.message" = "Die Einstellungen zum Senden von Absturzberichten werden nach einem Neustart der Anwendung übernommen.";
 
 
-"detail.report.options.title" = "Filteroptionen";
-"detail.report.options.titlelabel.title" = "Aktuelle Filter";
-"detail.report.options.singleselect.titlelabel.title" = "Einzelnes Element auswählen";
-"detail.report.options.multiselect.titlelabel.title" = "Ein oder mehr Elemente auswählen";
-"detail.report.options.search.value.placeholder" = "Werte durchsuchen";
+"report.viewer.options.title" = "Filteroptionen";
+"report.viewer.options.titlelabel.title" = "Aktuelle Filter";
+"report.viewer.options.singleselect.titlelabel.title" = "Einzelnes Element auswählen";
+"report.viewer.options.multiselect.titlelabel.title" = "Ein oder mehr Elemente auswählen";
+"report.viewer.options.search.value.placeholder" = "Werte durchsuchen";
 
-"detail.report.viewer.emptyreport.title" = "Der Bericht ist leer.";
-"detail.report.viewer.emptyreport.message" = "Tippen Sie auf 'OK', wenn Sie die Filteroptionen ändern möchten, oder auf 'Abbrechen', um zum alten Bericht zurückzukehren.";
+"report.viewer.emptyreport.title" = "Der Bericht ist leer.";
+"report.viewer.emptyreport.message" = "Tippen Sie auf 'OK', wenn Sie die Filteroptionen ändern möchten, oder auf 'Abbrechen', um zum alten Bericht zurückzukehren.";
 
 "resource.label.title" = "Name";
 "resource.description.title" = "Beschreibung";
@@ -169,7 +158,7 @@
 "action.title.sort" = "Sortierungsoptionen";
 
 
-"detail.report.viewer.pagecount" = "von %d";
+"report.viewer.pagecount" = "von %d";
 
 /* Error messages */
 
@@ -178,7 +167,6 @@
 "error.noconnection.dialog.title" = "Keine Verbindung";
 "error.noconnection.dialog.msg" = "Prüfen Sie die Einstellungen Ihres mobilen Netzwerks, und versuchen Sie es erneut.";
 
-"error.authenication.dialog.title" = "Authentifizierung erforderlich";
 "error.authenication.dialog.msg" = "Prüfen Sie die Anmeldeinformationen für den Server.";
 
 "error.unknownhost.dialog.title" = "Unbekannter Server";
@@ -188,7 +176,7 @@
 "error.upgrade.data.msg" = "Beim Aktualisieren der Benutzerdaten (Server, Favoriten, Filterwerte und -einstellungen) im Rahmen des Upgrades ist ein Fehler aufgetreten. Drücken Sie:\n'Wiederholen', um die Datenaktualisierung erneut durchzuführen,\n'Anwenden', um den Fehler zu ignorieren und das Upgrade fortzusetzen, wobei u. U. alle Benutzerdaten VERLOREN GEHEN,\n'Abbrechen', um das Upgrade abzubrechen (wobei die aktuelle Version bestehen bleibt).";
 
 "error.server.notsupported.title" = "Falsche Serverversion oder URL";
-"error.server.notsupported.msg" = "Die Serverversion ist älter als 5.5 (nicht unterstützt), oder die URL ist falsch.";
+"error.server.notsupported.msg" = "Die Serverversion ist älter als %.1f (nicht unterstützt), oder die URL ist falsch.";
 
 /* HTTP error messages */
 
@@ -202,9 +190,9 @@
 
 /* Input control messages */
 
-"ic.title.date" = "Datum";
-"ic.title.time" = "Zeit";
-"ic.title.unset" = "Festlegung aufheben";
+"report.viewer.options.ic.title.date" = "Datum";
+"report.viewer.options.ic.title.time" = "Zeit";
+"report.viewer.options.ic.title.unset" = "Festlegung aufheben";
 
 /* Buttons */
 

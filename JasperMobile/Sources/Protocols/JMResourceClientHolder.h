@@ -32,14 +32,14 @@
  to work with JasperServer Repository Service
  
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
+ @author Alexey Gubarev ogubarie@tibco.com
  @since 1.6
  */
 
-@class JSRESTResource, JSResourceLookup;
+@class JSResourceLookup;
 
 @protocol JMResourceClientHolder <NSObject>
 @optional
-@property (nonatomic, strong) JSRESTResource *resourceClient;
 @property (nonatomic, strong) JSResourceLookup *resourceLookup;
 
 @end

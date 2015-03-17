@@ -25,9 +25,10 @@
 #import "UITableViewCell+Additions.h"
 #import "UIImage+Additions.h"
 
+CGFloat static kJMMenuActionsViewCellHeight = 40;
+
 @interface JMMenuActionsView () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
-
 @property (nonatomic, strong) NSMutableArray *dataSource;
 
 @end
@@ -40,24 +41,35 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
-        self.tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
-        self.tableView.backgroundColor = [UIColor clearColor];
-        self.tableView.separatorColor = [UIColor blackColor];
-        self.tableView.backgroundView = nil;
-        self.tableView.delegate = self;
-        self.tableView.dataSource = self;
-        [self addSubview:self.tableView];
+        self.tableView = [self tableViewWithFrame:self.bounds];
+        [self addSubview:_tableView];
     }
     return self;
+}
+
+- (UITableView *)tableViewWithFrame:(CGRect)frame
+{
+    UITableView *tableView = [[UITableView alloc] initWithFrame:frame
+                                                          style:UITableViewStylePlain];
+    tableView.backgroundColor = [UIColor clearColor];
+    tableView.separatorColor = [UIColor blackColor];
+    tableView.backgroundView = nil;
+    tableView.delegate = self;
+    tableView.dataSource = self;
+    return tableView;
 }
 
 - (void)setAvailableActions:(JMMenuActionsViewAction)availableActions
 {
     _availableActions = availableActions;
     [self refreshDatasource];
+    
+    [self updateFrameFitContent];
+
+    [self.tableView reloadData];
 }
 
-- (void) refreshDatasource
+- (void)refreshDatasource
 {
     self.dataSource = [NSMutableArray array];
     int i = JMMenuActionsViewActionFirst();
@@ -67,14 +79,6 @@
         }
         i <<= 1;
     }
-    [self.tableView reloadData];
-    if (self.tableView.contentSize.height < self.tableView.frame.size.height) {
-        [self.tableView sizeToFit];
-        CGRect selfRect = self.frame;
-        selfRect.size.height = self.tableView.frame.size.height;
-        self.frame = selfRect;
-    }
-    self.tableView.scrollEnabled = (self.tableView.contentSize.height > self.tableView.frame.size.height);
 }
 
 #pragma mark - UITableViewDelegate
@@ -109,7 +113,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 40;
+    return kJMMenuActionsViewCellHeight;
 }
 
 - (void)tableView: (UITableView*)tableView willDisplayCell: (UITableViewCell*)cell forRowAtIndexPath: (NSIndexPath*)indexPath
@@ -131,6 +135,8 @@
         case JMMenuActionsViewAction_None:
             return nil;
         case JMMenuActionsViewAction_Filter:
+            return @"action.title.filter";
+        case JMMenuActionsViewAction_Edit:
             return @"action.title.edit";
         case JMMenuActionsViewAction_Refresh:
             return @"action.title.refresh";
@@ -162,6 +168,8 @@
             return nil;
         case JMMenuActionsViewAction_Filter:
             return @"filter_action";
+        case JMMenuActionsViewAction_Edit:
+            return @"filter_action";
         case JMMenuActionsViewAction_Refresh:
             return @"refresh_action";
         case JMMenuActionsViewAction_Save:
@@ -184,4 +192,52 @@
             return @"clear_selection_action";
         }
 }
+
+
+#pragma mark - Public API
+// need this call this method after adding or removing items
+- (void)updateFrameFitContent
+{
+    CGFloat tableViewHeight = kJMMenuActionsViewCellHeight * [self.dataSource count];
+    CGRect selfRect = self.frame;
+    selfRect.size.height = tableViewHeight;
+    CGFloat leftPadding = 20;
+    CGFloat rightPadding = 20;
+    CGFloat iconToTextDistance = 20;
+    selfRect.size.width = leftPadding + [self maxImageWidth] + iconToTextDistance + [self maxTextWidth] + rightPadding;
+    self.frame = CGRectIntegral(selfRect);
+    self.tableView.frame = CGRectIntegral(selfRect);
+    
+    [self.tableView sizeToFit];
+    self.tableView.scrollEnabled = NO;
+}
+
+- (CGFloat)maxTextWidth
+{
+    CGFloat maxTextWidth = .0f;
+    for (NSNumber *actionNumber in self.dataSource) {
+        JMMenuActionsViewAction action = actionNumber.integerValue;
+        NSString *titleAction = JMCustomLocalizedString([self titleForAction:action], nil);
+        NSDictionary *titleTextAttributes = @{NSFontAttributeName : [JMFont navigationBarTitleFont]};
+        CGSize titleActionContainerSize = [titleAction sizeWithAttributes:titleTextAttributes];
+        if (maxTextWidth < titleActionContainerSize.width) {
+            maxTextWidth = titleActionContainerSize.width;
+        }
+    }
+    return maxTextWidth;
+}
+
+- (CGFloat)maxImageWidth
+{
+    CGFloat maxImageWidth = .0f;
+    for (NSNumber *actionNumber in self.dataSource) {
+        JMMenuActionsViewAction action = actionNumber.integerValue;
+        UIImage *iconAction = [UIImage imageNamed:[self imageNameForAction:action]];
+        if (maxImageWidth < iconAction.size.width) {
+            maxImageWidth = iconAction.size.width;
+        }
+    }
+    return maxImageWidth;
+}
+
 @end
