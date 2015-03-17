@@ -24,6 +24,7 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMFavorites+Helpers.h"
+#import "JMSessionManager.h"
 
 NSString * const kJMSavedResources = @"SavedResources";
 
@@ -38,17 +39,25 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 + (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format
 {
-    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
-    JMSavedResources *savedReport = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:self.managedObjectContext];
-    savedReport.label = name;
-    savedReport.uri = [self uriForSavedReportWithName:name format:format];
-    savedReport.wsType = resource.resourceType;
-    savedReport.creationDate = [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
-    savedReport.resourceDescription = resource.resourceDescription;
-    savedReport.username = activeServerProfile.username;
-    savedReport.organization = activeServerProfile.organization;
-    savedReport.format = format;
-    [activeServerProfile addSavedResourcesObject:savedReport];
+    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:name, @"label", format, @"format", nil];
+    JMSavedResources *savedReport = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    if (!savedReport) {
+        JSProfile *sessionServerProfile = [JMSessionManager sharedManager].restClient.serverProfile;
+        JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForname:sessionServerProfile.alias];
+        savedReport = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:self.managedObjectContext];
+        savedReport.label = name;
+        savedReport.uri = [self uriForSavedReportWithName:name format:format];
+        savedReport.wsType = resource.resourceType;
+        savedReport.resourceDescription = resource.resourceDescription;
+        savedReport.format = format;
+        savedReport.username = sessionServerProfile.username;
+        savedReport.organization = activeServerProfile.organization;
+        [activeServerProfile addSavedResourcesObject:savedReport];
+    }
+    
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    dateFormatter.dateFormat = self.restClient.serverInfo.datetimeFormatPattern;
+    savedReport.creationDate = [dateFormatter stringFromDate:[NSDate date]];
     
     [self.managedObjectContext save:nil];
 }
@@ -74,7 +83,7 @@ NSString * const kJMSavedResources = @"SavedResources";
     NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:reportName, @"label", reportFormat, @"format", nil];
     JMSavedResources *savedReport = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
     
-    return (![savedReport.format isEqualToString:reportFormat]);
+    return (!savedReport);
 }
 
 - (void)renameReportTo:(NSString *)newName
@@ -137,13 +146,8 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 + (NSFetchRequest *)savedReportsFetchRequestWithValuesAndFields:(id)firstValue, ... NS_REQUIRES_NIL_TERMINATION
 {
-    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMSavedResources];
-    
-    NSMutableArray *predicates = [NSMutableArray array];
-    [predicates addObject:[NSPredicate predicateWithFormat:@"serverProfile == %@", activeServerProfile]];
-    [predicates addObject:[NSPredicate predicateWithFormat:@"username == %@", activeServerProfile.username]];
-    [predicates addObject:[NSPredicate predicateWithFormat:@"organization == %@", activeServerProfile.organization]];
+    NSMutableArray *predicates = [NSMutableArray arrayWithObject:[[JMSessionManager sharedManager] predicateForCurrentServerProfile]];
 
     va_list args;
     va_start(args, firstValue);
@@ -153,9 +157,7 @@ NSString * const kJMSavedResources = @"SavedResources";
     }
     va_end(args);
 
-
     fetchRequest.predicate = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
-
     return fetchRequest;
 }
 

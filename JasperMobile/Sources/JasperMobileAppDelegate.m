@@ -27,26 +27,22 @@
 
 #import "JasperMobileAppDelegate.h"
 #import "JMAppUpdater.h"
-#import "JMConstants.h"
-#import "JMBaseModule.h"
-#import "JMReportClientHolder.h"
-#import "JMResourceClientHolder.h"
+#import "Appirater.h"
 #import "JMUtils.h"
-#import "UIAlertView+Additions.h"
 #import "JMServerProfile+Helpers.h"
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
+#import "JMSessionManager.h"
+#import "JMCancelRequestPopup.h"
+#import "JMMenuViewController.h"
 
 static NSString * const kJMProductName = @"JasperMobile";
+static NSString * const kGAITrackingID = @"UA-57445224-1";
 
-@interface JasperMobileAppDelegate() <JMResourceClientHolder, JMReportClientHolder>
+@interface JasperMobileAppDelegate()
 @end
 
 @implementation JasperMobileAppDelegate
 
 @synthesize window = _window;
-@synthesize reportClient = _reportClient;
-@synthesize resourceClient = _resourceClient;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -56,65 +52,49 @@ static NSString * const kJMProductName = @"JasperMobile";
 - (id)init
 {
     if (self = [super init]) {
-        [self initObjectionModules];
-        
+        _applicationFirstStart = NO;
         if ([JMAppUpdater isRunningForTheFirstTime]) {
             [JMAppUpdater updateAppVersionTo:[JMAppUpdater latestAppVersion]];
+            _applicationFirstStart = YES;
             [self coreDataInit];
         } else {
             [JMAppUpdater update];
         }
-        
-        // Add notification to track selecting of the another server profile
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(changeServerProfile:)
-                                                     name:kJMChangeServerProfileNotification
-                                                   object:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(resetApplication)
                                                      name:kJMResetApplicationNotification
                                                    object:nil];
         
+
+        // Configure Appirater
+        [Appirater setAppId:@"467317446"];
+        [Appirater setDaysUntilPrompt:0];
+        [Appirater setUsesUntilPrompt:5];
+        [Appirater setTimeBeforeReminding:2];
+        [Appirater setDebug:NO];
+        [Appirater appLaunched:YES];
+        
+        // Configure Url Cache
+        NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
+        [NSURLCache setSharedURLCache:URLCache];
     }
     
     return self;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+{    
     [JMUtils activateCrashReportSendingIfNeeded];
-    
-    JMServerProfile *serverProfile = [JMServerProfile activeServerProfile];
-    
-    if (serverProfile.askPassword.boolValue) {
-        NSString *alias = [NSString stringWithFormat:@"%@ %@", serverProfile.alias, JMCustomLocalizedString(@"servers.password.label", nil)];
-        NSMutableString *credentials = [NSMutableString stringWithString:serverProfile.username];
-        if (serverProfile.organization.length) {
-            [credentials appendFormat:@" | %@", serverProfile.organization];
-        }
-        
-        UIAlertView *askPasswordDialog = [UIAlertView localizedAlertWithTitle:alias message:credentials completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
-            if (buttonIndex != alertView.cancelButtonIndex && [alertView textFieldAtIndex:0].text) {
-                [serverProfile setPasswordAsPrimitive:[alertView textFieldAtIndex:0].text];
-            } else {
-                [serverProfile setPasswordAsPrimitive:nil];
-            }
-            [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile withParams:nil];
-        } @weakselfend cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil];
-        askPasswordDialog.alertViewStyle = UIAlertViewStyleSecureTextInput;
-        UITextField *passwordTextField = [askPasswordDialog textFieldAtIndex:0];
-        passwordTextField.placeholder = JMCustomLocalizedString(@"servers.password.label", nil);
-        [askPasswordDialog show];
-    } else {
-        [JMUtils sendChangeServerProfileNotificationWithProfile:serverProfile withParams:nil];
-    }
-    
+
     [application setStatusBarStyle:UIStatusBarStyleLightContent];
     
-    // crashlitics
-    [Fabric with:@[CrashlyticsKit]];
-
+    // Google Analytics
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
+    [GAI sharedInstance].dispatchInterval = 20;
+    //[[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+    [[GAI sharedInstance] trackerWithTrackingId:kGAITrackingID];
+    
     return YES;
 }
 							
@@ -124,17 +104,6 @@ static NSString * const kJMProductName = @"JasperMobile";
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    if (self.resourceClient.serverProfile.serverInfo.versionAsFloat == 0) {
-        self.resourceClient.serverProfile.serverInfo = nil;
-    }
-    
-    if (self.reportClient.serverProfile.serverInfo.versionAsFloat == 0) {
-        self.reportClient.serverProfile.serverInfo = nil;
-    }
-}
-
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
@@ -142,7 +111,25 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [self updateTimeouts];
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+    [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:@weakself(^(BOOL success)) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [JMCancelRequestPopup dismiss];
+            
+            SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
+            JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
+            
+            if (success) {
+                self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
+                [menuViewController setSelectedItemIndex:0];
+                
+            } else {
+                [JMUtils showLoginViewAnimated:NO completion:@weakself(^(void)) {
+                    [menuViewController setSelectedItemIndex:0];
+                } @weakselfend];
+            }
+        });
+    } @weakselfend];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -152,6 +139,7 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
@@ -244,20 +232,6 @@ static NSString * const kJMProductName = @"JasperMobile";
 }
 
 #pragma mark - Private
-
-- (void)initObjectionModules
-{
-    JMBaseModule *module = [[JMBaseModule alloc] init];
-    module.managedObjectContext = self.managedObjectContext;
-    
-    JSObjectionInjector *injector = [JSObjection createInjector:module];
-    [JSObjection setDefaultInjector:injector];
-    
-    // Inject resource and report clients
-    self.resourceClient = [injector getObject:[JSRESTResource class]];
-    self.reportClient = [injector getObject:[JSRESTReport class]];
-}
-
 - (void)coreDataInit
 {
     NSString *profilesPath = [[NSBundle mainBundle] pathForResource:@"profiles" ofType:@"json"];
@@ -268,14 +242,11 @@ static NSString * const kJMProductName = @"JasperMobile";
             JMServerProfile *serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
             
             serverProfile.alias = [profileDictionary objectForKey:@"mAlias"];
-            serverProfile.username = [profileDictionary objectForKey:@"mUsername"];
-            serverProfile.password = [profileDictionary objectForKey:@"mPassword"];
             serverProfile.organization = [profileDictionary objectForKey:@"mOrganization"];
             serverProfile.serverUrl = [profileDictionary objectForKey:@"mServerUrl"];
             serverProfile.askPassword = [NSNumber numberWithBool:NO];
-            
+
             [self.managedObjectContext save:nil];
-            [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:serverProfile.profileID];
         }
     }
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
@@ -284,51 +255,12 @@ static NSString * const kJMProductName = @"JasperMobile";
     if (!serverProfile) {
         serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
         serverProfile.alias = @"Jaspersoft Mobile Demo";
-        serverProfile.username = @"jasperadmin";
-        serverProfile.password = @"jasperadmin";
         serverProfile.organization = @"organization_1";
         serverProfile.serverUrl = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
         serverProfile.askPassword = [NSNumber numberWithBool:NO];
-        
+
         [self.managedObjectContext save:nil];
-        [JMServerProfile storePasswordInKeychain:serverProfile.password profileID:serverProfile.profileID];
     }
-    [serverProfile setServerProfileIsActive:YES];
-}
-
-- (void)changeServerProfile:(NSNotification *)notification
-{
-    JMServerProfile *serverProfile = [[notification userInfo] objectForKey:kJMServerProfileKey];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    if (serverProfile == nil) {
-        [defaults removeObjectForKey:kJMDefaultsActiveServer];
-    } else {
-        JSProfile *profile = [[JSProfile alloc] initWithAlias:serverProfile.alias
-                                                     username:serverProfile.username
-                                                     password:serverProfile.password
-                                                 organization:serverProfile.organization
-                                                    serverUrl:serverProfile.serverUrl];
-        // Set connection details
-        self.reportClient.serverProfile = profile;
-        self.resourceClient.serverProfile = profile;
-        
-        // Update timeouts
-        [self updateTimeouts];
-        
-        [defaults setURL:[serverProfile.objectID URIRepresentation] forKey:kJMDefaultsActiveServer];
-    }
-    
-    [defaults synchronize];
-}
-
-// Loads timeout for report / other type of requests from project settings
-// (defined in Settings.bundle)
-- (void)updateTimeouts
-{
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.resourceClient.timeoutInterval = [defaults integerForKey:kJMDefaultRequestTimeout] ?: 120;
-    self.reportClient.timeoutInterval = [defaults integerForKey:kJMReportRequestTimeout] ?: 120;
 }
 
 // Resets database and defaults

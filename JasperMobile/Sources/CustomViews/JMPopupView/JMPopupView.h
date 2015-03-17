@@ -35,13 +35,14 @@
 
 typedef NS_ENUM(NSInteger, JMPopupViewType) {
     JMPopupViewType_ContentViewOnly = 0,
+    JMPopupViewType_ContentWithMessage,
     JMPopupViewType_OkCancelButtons
 };
 
 
-#define kJMPopupViewContentMaxHeight        [JMUtils isIphone] ? 260.f : 360.f
-#define kJMPopupViewDefaultWidth            [JMUtils isIphone] ? 260.f : 360.f
-#define kJMPopupViewButtonsHeight           [JMUtils isIphone] ? 35.f  : 44.f
+#define kJMPopupViewContentMaxHeight        ([JMUtils isIphone] ? 260.f : 360.f)
+#define kJMPopupViewDefaultWidth            ([JMUtils isIphone] ? 260.f : 360.f)
+#define kJMPopupViewButtonsHeight           ([JMUtils isIphone] ? 35.f  : 44.f)
 
 @class JMPopupView;
 @protocol JMPopupViewDelegate <NSObject>
@@ -68,15 +69,20 @@ typedef NS_ENUM(NSInteger, JMPopupViewType) {
 @property (nonatomic, retain) UIView *contentView;
 @property (nonatomic, readonly) JMPopupViewType type;
 @property (nonatomic, weak) id <JMPopupViewDelegate> delegate;
+@property (nonatomic, copy) NSString *message;
 @property (nonatomic, assign) BOOL isDissmissWithTapOutOfButton;
 
-- (id) initWithDelegate:(id <JMPopupViewDelegate>)delegate type:(JMPopupViewType)type;
+- (instancetype)initWithDelegate:(id <JMPopupViewDelegate>)delegate type:(JMPopupViewType)type;
+- (instancetype)initWithMessage:(NSString *)message delegate:(id<JMPopupViewDelegate>)delegate;
 
-- (void)show;
-- (void)showFromPoint:(CGPoint)point onView:(UIView*)view;
+- (void) show;
 
-- (void)dismiss;
-- (void)dismiss:(BOOL)animated;
+- (void) showFromPoint:(CGPoint)point onView:(UIView*)view;
+
+- (void) dismiss;
+
+- (void) dismiss:(BOOL)animated;
+
 + (void)dismissAllVisiblePopups:(BOOL)animated;
 
 + (JMPopupView *)displayedPopupViewForClass:(Class)someClass;

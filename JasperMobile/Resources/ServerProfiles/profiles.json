@@ -3,198 +3,27 @@
                   {
                   "mAlias" : "PRO TRUNK Superuser",
                   "mServerUrl" : "http://build-master.jaspersoft.com:5980/jrs-pro-trunk",
-                  "mOrganization" : "",
-                  "mUsername" : "superuser",
-                  "mPassword" : "superuser"
+                  "mOrganization" : ""
                   },
                   {
-                  "mAlias" : "PRO TRUNK Adminuser",
+                  "mAlias" : "PRO TRUNK OtherUsers",
                   "mServerUrl" : "http://build-master.jaspersoft.com:5980/jrs-pro-trunk",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "jasperadmin",
-                  "mPassword" : "jasperadmin"
+                  "mOrganization" : "organization_1"
                   },
                   {
-                  "mAlias" : "PRO TRUNK JoeUser",
-                  "mServerUrl" : "http://build-master.jaspersoft.com:5980/jrs-pro-trunk",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "joeuser",
-                  "mPassword" : "joeuser"
+                  "mAlias" : "CE 6.0.1 OtherUsers",
+                  "mServerUrl" : "http://172.17.10.25:8080/jasperserver601",
+                  "mOrganization" : "organization_1"
                   },
                   {
-                  "mAlias" : "PRO 6.0.1 Superuser",
-                  "mServerUrl" : "http://192.168.88.44:8088/jasperserver-pro-6.0.1",
-                  "mOrganization" : "",
-                  "mUsername" : "superuser",
-                  "mPassword" : "superuser"
+                  "mAlias" : "CE 5.6.1 OtherUsers",
+                  "mServerUrl" : "http://172.17.10.25:8080/jasperserver561",
+                  "mOrganization" : "organization_1"
                   },
                   {
-                  "mAlias" : "PRO 6.0.1 Adminuser",
-                  "mServerUrl" : "http://192.168.88.44:8088/jasperserver-pro-6.0.1",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "jasperadmin",
-                  "mPassword" : "jasperadmin"
-                  },
-                  {
-                  "mAlias" : "PRO 6.0.1 JoeUser",
-                  "mServerUrl" : "http://192.168.88.44:8088/jasperserver-pro-6.0.1",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "joeuser",
-                  "mPassword" : "joeuser"
-                  },
-                  {
-                  "mAlias" : "PRO 6.0 Superuser",
-                  "mServerUrl" : "http://192.168.88.44:8087/jasperserver-pro-6.0",
-                  "mOrganization" : "",
-                  "mUsername" : "superuser",
-                  "mPassword" : "superuser"
-                  },
-                  {
-                  "mAlias" : "PRO 6.0 Adminuser",
-                  "mServerUrl" : "http://192.168.88.44:8087/jasperserver-pro-6.0",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "jasperadmin",
-                  "mPassword" : "jasperadmin"
-                  },
-                  {
-                  "mAlias" : "PRO 6.0 JoeUser",
-                  "mServerUrl" : "http://192.168.88.44:8087/jasperserver-pro-6.0",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "joeuser",
-                  "mPassword" : "joeuser"
-                  },
-                  {
-                  "mAlias" : "PRO 5.6.1 Superuser",
-                  "mServerUrl" : "http://192.168.88.44:8086/jasperserver-pro-5.6.1",
-                  "mOrganization" : "",
-                  "mUsername" : "superuser",
-                  "mPassword" : "superuser"
-                  },
-                  {
-                  "mAlias" : "PRO 5.6.1 Adminuser",
-                  "mServerUrl" : "http://192.168.88.44:8086/jasperserver-pro-5.6.1",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "jasperadmin",
-                  "mPassword" : "jasperadmin"
-                  },
-                  {
-                  "mAlias" : "PRO 5.6.1 JoeUser",
-                  "mServerUrl" : "http://192.168.88.44:8086/jasperserver-pro-5.6.1",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "joeuser",
-                  "mPassword" : "joeuser"
-                  },
-                  {
-                  "mAlias" : "PRO 5.6.0 Superuser",
-                  "mServerUrl" : "http://192.168.88.44:8085/jasperserver-pro-5.6.0",
-                  "mOrganization" : "",
-                  "mUsername" : "superuser",
-                  "mPassword" : "superuser"
-                  },
-                  {
-                  "mAlias" : "PRO 5.6.0 Adminuser",
-                  "mServerUrl" : "http://192.168.88.44:8085/jasperserver-pro-5.6.0",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "jasperadmin",
-                  "mPassword" : "jasperadmin"
-                  },
-                  {
-                  "mAlias" : "PRO 5.6.0 JoeUser",
-                  "mServerUrl" : "http://192.168.88.44:8085/jasperserver-pro-5.6.0",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "joeuser",
-                  "mPassword" : "joeuser"
-                  },
-                  {
-                  "mAlias" : "PRO 5.5 Superuser",
-                  "mServerUrl" : "http://192.168.88.44:8084/jasperserver-pro-5.5",
-                  "mOrganization" : "",
-                  "mUsername" : "superuser",
-                  "mPassword" : "superuser"
-                  },
-                  {
-                  "mAlias" : "PRO 5.5 JasperAdmin",
-                  "mServerUrl" : "http://192.168.88.44:8084/jasperserver-pro-5.5",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "jasperadmin",
-                  "mPassword" : "jasperadmin"
-                  },
-                  {
-                  "mAlias" : "PRO 5.5 JoeUser",
-                  "mServerUrl" : "http://192.168.88.44:8084/jasperserver-pro-5.5",
-                  "mOrganization" : "organization_1",
-                  "mUsername" : "joeuser",
-                  "mPassword" : "joeuser"
-                  },
-                  {
-                  "mAlias" : "CE TRUNK Adminuser",
-                  "mServerUrl" : "http://build-master.jaspersoft.com:6080/jrs-ce-trunk-ce",
-                  "mOrganization" : "",
-                  "mUsername" : "jasperadmin",
-                  "mPassword" : "jasperadmin"
-                  },
-                  {
-                  "mAlias" : "CE TRUNK JoeUser",
-                  "mServerUrl" : "http://build-master.jaspersoft.com:6080/jrs-ce-trunk-ce",
-                  "mOrganization" : "",
-                  "mUsername" : "joeuser",
-                  "mPassword" : "joeuser"
-                  },
-                  {
-                  "mAlias" : "CE 6.0.1 JasperAdmin",
-                  "mServerUrl" : "http://192.168.88.44:8089/jasperserver-ce-6.0.1",
-                  "mOrganization" : "",
-                  "mUsername" : "jasperadmin",
-                  "mPassword" : "jasperadmin"
-                  },
-                  {
-                  "mAlias" : "CE 6.0.1 JoeUser",
-                  "mServerUrl" : "http://192.168.88.44:8089/jasperserver-ce-6.0.1",
-                  "mOrganization" : "",
-                  "mUsername" : "joeuser",
-                  "mPassword" : "joeuser"
-                  },
-                  {
-                  "mAlias" : "CE 5.6.1 JasperAdmin",
-                  "mServerUrl" : "http://192.168.88.44:8083/jasperserver-ce-5.6.1",
-                  "mOrganization" : "",
-                  "mUsername" : "jasperadmin",
-                  "mPassword" : "jasperadmin"
-                  },
-                  {
-                  "mAlias" : "CE 5.6.1 JoeUser",
-                  "mServerUrl" : "http://192.168.88.44:8083/jasperserver-ce-5.6.1",
-                  "mOrganization" : "",
-                  "mUsername" : "joeuser",
-                  "mPassword" : "joeuser"
-                  },
-                  {
-                  "mAlias" : "CE 5.6.0 JasperAdmin",
-                  "mServerUrl" : "http://192.168.88.44:8082/jasperserver-ce-5.6.0",
-                  "mOrganization" : "",
-                  "mUsername" : "jasperadmin",
-                  "mPassword" : "jasperadmin"
-                  },
-                  {
-                  "mAlias" : "CE 5.6.0 JoeUser",
-                  "mServerUrl" : "http://192.168.88.44:8082/jasperserver-ce-5.6.0",
-                  "mOrganization" : "",
-                  "mUsername" : "joeuser",
-                  "mPassword" : "joeuser"
-                  },
-                  {
-                  "mAlias" : "CE 5.5 LOCAL JasperAdmin",
-                  "mServerUrl" : "http://192.168.88.44:8081/jasperserver-ce-5.5",
-                  "mOrganization" : "",
-                  "mUsername" : "jasperadmin",
-                  "mPassword" : "jasperadmin"
-                  },
-                  {
-                  "mAlias" : "CE 5.5 LOCAL JoeUser",
-                  "mServerUrl" : "http://192.168.88.44:8081/jasperserver-ce-5.5",
-                  "mOrganization" : "",
-                  "mUsername" : "joeuser",
-                  "mPassword" : "joeuser"
+                  "mAlias" : "CE 5.6.0 OtherUsers",
+                  "mServerUrl" : "http://172.17.10.25:8080/jasperserver560",
+                  "mOrganization" : "organization_1"
                   }
                   ]
 }

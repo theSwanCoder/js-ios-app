@@ -23,6 +23,8 @@
 
 #import "JMFavorites+Helpers.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMSessionManager.h"
+
 
 NSString * const kJMFavorites = @"Favorites";
 
@@ -30,16 +32,17 @@ NSString * const kJMFavorites = @"Favorites";
 
 + (void)addToFavorites:(JSResourceLookup *)resource
 {
-    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
+    JSProfile *sessionServerProfile = [JMSessionManager sharedManager].restClient.serverProfile;
+    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForname:sessionServerProfile.alias];
     JMFavorites *favorites = [NSEntityDescription insertNewObjectForEntityForName:kJMFavorites inManagedObjectContext:self.managedObjectContext];
     favorites.uri = resource.uri;
     favorites.label = resource.label;
     favorites.wsType = resource.resourceType;
     favorites.creationDate = resource.creationDate;
     favorites.resourceDescription = resource.resourceDescription;
-    favorites.username = activeServerProfile.username;
     favorites.organization = activeServerProfile.organization;
-    [activeServerProfile addFavoritesObject:favorites];
+    favorites.username = sessionServerProfile.username;
+    [activeServerProfile  addFavoritesObject:favorites];
     
     [self.managedObjectContext save:nil];
 }
@@ -84,18 +87,10 @@ NSString * const kJMFavorites = @"Favorites";
 
 + (NSFetchRequest *)favoritesFetchRequest:(NSString *)resourceUri
 {
-    JMServerProfile *activeServerProfile = [JMServerProfile activeServerProfile];
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMFavorites];
-    NSMutableString *format = [NSMutableString stringWithString:@"(serverProfile == %@) AND (uri LIKE[cd] %@) AND (username LIKE[cd] %@) AND "];
-    
-    if (activeServerProfile.organization.length) {
-        [format appendString:@"(organization LIKE[cd] %@)"];
-    } else {
-        [format appendString:@"(organization = %@)"];
-    }
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:format, activeServerProfile, resourceUri, activeServerProfile.username, activeServerProfile.organization];
-    fetchRequest.predicate = predicate;
+    NSMutableArray *predicates = [NSMutableArray arrayWithObject:[[JMSessionManager sharedManager] predicateForCurrentServerProfile]];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"uri LIKE[cd] %@", resourceUri]];
+    fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
     
     return fetchRequest;
 }

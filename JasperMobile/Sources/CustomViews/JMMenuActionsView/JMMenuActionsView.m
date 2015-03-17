@@ -30,6 +30,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
 @interface JMMenuActionsView () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataSource;
+
 @end
 
 
@@ -40,7 +41,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
-        _tableView = [self tableViewWithFrame:self.bounds];
+        self.tableView = [self tableViewWithFrame:self.bounds];
         [self addSubview:_tableView];
     }
     return self;
@@ -62,8 +63,9 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
 {
     _availableActions = availableActions;
     [self refreshDatasource];
-    [self updateFrameFitContent];
     
+    [self updateFrameFitContent];
+
     [self.tableView reloadData];
 }
 
@@ -133,6 +135,8 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
         case JMMenuActionsViewAction_None:
             return nil;
         case JMMenuActionsViewAction_Filter:
+            return @"action.title.filter";
+        case JMMenuActionsViewAction_Edit:
             return @"action.title.edit";
         case JMMenuActionsViewAction_Refresh:
             return @"action.title.refresh";
@@ -150,8 +154,10 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
             return @"action.title.info";
         case JMMenuActionsViewAction_Sort:
             return @"action.title.sort";
-        case JMMenuActionsViewAction_FilterBy:
-            return @"action.title.filterBy";
+        case JMMenuActionsViewAction_SelectAll:
+            return @"action.title.selectall";
+        case JMMenuActionsViewAction_ClearSelections:
+            return @"action.title.clearselections";
     }
 }
 
@@ -161,6 +167,8 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
         case JMMenuActionsViewAction_None:
             return nil;
         case JMMenuActionsViewAction_Filter:
+            return @"filter_action";
+        case JMMenuActionsViewAction_Edit:
             return @"filter_action";
         case JMMenuActionsViewAction_Refresh:
             return @"refresh_action";
@@ -178,11 +186,13 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
             return @"info_item";
         case JMMenuActionsViewAction_Sort:
             return @"sort_action";
-        case JMMenuActionsViewAction_FilterBy:
-            return @"filter_action";
-
+        case JMMenuActionsViewAction_SelectAll:
+            return @"select_all_action";
+        case JMMenuActionsViewAction_ClearSelections:
+            return @"clear_selection_action";
         }
 }
+
 
 #pragma mark - Public API
 // need this call this method after adding or removing items
@@ -198,7 +208,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     self.frame = CGRectIntegral(selfRect);
     self.tableView.frame = CGRectIntegral(selfRect);
     
-    [self.tableView sizeToFit];    
+    [self.tableView sizeToFit];
     self.tableView.scrollEnabled = NO;
 }
 

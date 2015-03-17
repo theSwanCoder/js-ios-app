@@ -5,7 +5,8 @@
   <style type="text/css">
   #container {
     /*height: 450%;
-    width: 450%;*/
+    width: 450%;
+    background-color: yellow;*/
   }
   .dashlet {
     /*pointer-events:none;*/
@@ -16,120 +17,13 @@
     /*pointer-events:auto !important;*/
   }
   </style>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="http://visualizejs-preview.eng.jaspersoft.com:8080/jasperserver-pro-branch/client/visualize.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="VISUALIZE_PATH"></script>
+<!--    <script src="visualize.js"></script>-->
+  <script>
+  JASPERMOBILE_SCRIPT
+  </script>
 </head>
 <body>
-  <script>
-    var JasperMobile = {};
-    
-    JasperMobile.htmlHandler = {
-      changeClicker: function() {
-        $(".body > div").click(function() {
-          var title = $(this).find(".innerLabel > p")[0].textContent;
-
-          var button = $(this).find(".maximizeDashletButton")[0];
-          button.click();
-
-          JasperMobile.makeCallback.run("command:maximize&title:"+title);
-          JasperMobile.htmlHandler.setSize("200%", "200%");
-          //JasperMobile.htmlHandler.setInterection(true);
-        });
-      },
-      minimizeDashlet: function() {
-        $(".body > div").find(".minimizeDashlet")[0].click();
-        JasperMobile.htmlHandler.setSize("450%", "450%");
-        //JasperMobile.htmlHandler.setInterection(false);
-      },
-      setSize: function(widht, height) {
-          $("#container").css("width", widht);
-          $("#container").css("height", height);
-      },
-      setInterection: function(enable) {
-        if (enable == true) {
-          $(".dashlet").css("pointer-events", "auto");
-        } else {
-          $(".dashlet").css("pointer-events", "none");
-        }
-      }
-    };
-
-    JasperMobile.logger = {
-      log : function (message) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', "http://debugger/" + encodeURIComponent(message));
-        xhr.send(null);
-      }
-    };
-
-    JasperMobile.auth = {
-      name: "",
-      password: "",
-      setCredentials : function(name, password) {
-        JasperMobile.logger.log("set credentials" + " " + name + " " + password);
-        this.name = name;
-        this.password = password;
-      }
-    };
-
-    JasperMobile.makeCallback = {
-      run : function(data) {
-        window.location.href = "http://jaspermobile.callback/" + data;
-      }
-    };
-
-    <!-- Dashboards -->
-    JasperMobile.dashboard = {
-      run: function(resourcePath) {
-          visualize({
-                  auth: {
-                    name: JasperMobile.auth.name,
-                    password: JasperMobile.auth.password
-                  }
-                  }, function (v) {
-                  v("#container").dashboard({
-                    resource: resourcePath,
-                    success: function() {
-                        JasperMobile.logger.log("end loading");
-                        JasperMobile.makeCallback.run("command:didEndLoading");
-                        JasperMobile.htmlHandler.changeClicker();
-                    },
-                    error: function(err) {
-                      JasperMobile.logger.log(err);
-                    }
-                  });
-        });
-      }
-    };
-  
-    <!-- Reports -->
-    JasperMobile.report = {
-      run: function(resourcePath) {
-        visualize({
-                    auth: {
-                        name: "jasperadmin",
-                        password: "jasperadmin",
-                        organization: "organization_1"
-                    }
-                    }, function (v) {
-
-                    //render report from provided resource
-                    v("#container").report({
-                                           resource: resourcePath,
-                                           error: function (err){
-                                                alert(err.message);
-                                           }
-                                           });
-                  
-        });
-      }
-    };
-  
-  var domLoadedListener = function() {
-      JasperMobile.report.run("/public/Samples/Reports/01._Geographic_Results_by_Segment_Report");
-  };
-  document.addEventListener("DOMContentLoaded", domLoadedListener, false);
-  
-  </script>
   <div id="container"></div>
 </body>

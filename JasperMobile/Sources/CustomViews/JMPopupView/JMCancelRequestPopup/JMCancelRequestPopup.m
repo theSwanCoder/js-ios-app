@@ -27,22 +27,33 @@
 
 #import "JMCancelRequestPopup.h"
 #import "JMUtils.h"
-#import "JMRequestDelegate.h"
 #import <QuartzCore/QuartzCore.h>
-#import <jaspersoft-sdk/JaspersoftSDK.h>
+
+static NSInteger _cancelRequestPopupCounter = 0;
 
 @interface JMCancelRequestPopup ()
-@property (nonatomic, strong) JSRESTBase *restClient;
 @property (nonatomic, copy) JMCancelRequestBlock cancelBlock;
 @property (nonatomic, weak) IBOutlet UIButton *cancelButton;
 @property (nonatomic, weak) IBOutlet UILabel *progressLabel;
+
 @end
+
 
 @implementation JMCancelRequestPopup
 
 #pragma mark - Class Methods
 
-+ (void)presentWithMessage:(NSString *)message restClient:(JSRESTBase *)client cancelBlock:(JMCancelRequestBlock)cancelBlock {
+- (instancetype)initWithDelegate:(id<JMPopupViewDelegate>)delegate type:(JMPopupViewType)type
+{
+    self = [super initWithDelegate:delegate type:type];
+    if (self) {
+        self.isDissmissWithTapOutOfButton = NO;
+    }
+    return self;
+}
+
++ (void)presentWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock
+{
     JMCancelRequestPopup *popup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:[self class]];
     if (!popup) {
         popup = [[JMCancelRequestPopup alloc] initWithDelegate:nil type:JMPopupViewType_ContentViewOnly];
@@ -54,8 +65,10 @@
     }
     popup.progressLabel.text = JMCustomLocalizedString(message, nil);
     [popup.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
-    popup.restClient = client;
     popup.cancelBlock = cancelBlock;
+    _cancelRequestPopupCounter ++;
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSLog(@"counter: %@", @(_cancelRequestPopupCounter));
 }
 
 - (void)dismiss:(BOOL)animated
@@ -67,20 +80,25 @@
 #pragma mark - Actions
 - (IBAction)cancelRequests:(id)sender
 {
-    [self.restClient cancelAllRequests];
-
-    [JMRequestDelegate clearRequestPool];
-
     if (self.cancelBlock) {
         self.cancelBlock();
     }
-    
     [self dismiss:YES];
 }
 
 + (void) dismiss
 {
-    [JMPopupView dismissAllVisiblePopups:YES];
+    _cancelRequestPopupCounter --;
+    if (_cancelRequestPopupCounter < 0) {
+        _cancelRequestPopupCounter = 0;
+        return;
+    }
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSLog(@"counter: %@", @(_cancelRequestPopupCounter));
+    if (_cancelRequestPopupCounter == 0) {
+        JMCancelRequestPopup *cancelPopup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:self];
+        [cancelPopup dismiss];
+    }
 }
 
 @end

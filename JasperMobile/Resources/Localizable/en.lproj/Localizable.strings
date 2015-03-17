@@ -25,142 +25,134 @@
 //  TIBCO JasperMobile
 //
 
+/* Application Info */
+
+"application.info" = "%@™ v %@\n\nManagement tool and report viewer for TIBCO JasperReports Server %.1f and greater.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
+
+/* Login Page */
+
+"login.username.label" = "Username";
+"login.username.errmsg.empty" = "Please specify a valid username";
+"login.password.label" = "Password";
+"login.password.errmsg.empty" = "Please specify a valid password";
+"login.server.profile.errmsg.empty" = "Please select a server profile";
+"login.button.login" = "Login";
+"login.button.try.demo" = "Try Demo";
+
 /* Server Profiles view */
 
-"servers.info" = "%@™ v %@\n\nManagement tool and report viewer for JasperReports Server %.1f and greater.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%@ TIBCO Software, Inc.";
-
-
+"servers.profile.title" = "Server Profiles";
 "servers.url.label" = "Server Address";
 "servers.url.errmsg" = "Please specify a valid URL";
-
 "servers.name.label" = "Server Name";
 "servers.name.errmsg.empty" = "Please specify a valid profile name";
 "servers.name.errmsg.exists" = "Profile name already exists. Please specify another one";
-
 "servers.orgid.label" = "Organization ID";
-
-"servers.username.label" = "Username";
-"servers.username.errmsg.empty" = "Please specify a valid username";
-
-"servers.password.label" = "Password";
-"servers.password.errmsg.empty" = "Please specify a valid password";
-
-"servers.profile.title" = "Server Profiles";
+"servers.askpassword.label" = "Always ask for password";
+"servers.title.new" = "New Server Profile";
+"servers.action.profile.edit" = "Edit";
+"servers.action.profile.clone" = "Clone Profile";
+"servers.action.profile.delete" = "Delete";
 "servers.profile.delete.message" = "Please, confirm deleting server.";
 
-"servers.askpassword.label" = "Always ask for password";
+/* Onboarding Intro */
+"intro.title" = "Welcome to TIBCO JasperMobile";
+"intro.description" = "swipe up to begin";
+"intro.button.skip.skip" = "Skip Intro";
+"intro.button.skip.startUsing" = "Start using TIBCO JasperMobile";
+"intro.model.firstScreen.title" = "Stay Connected";
+"intro.model.firstScreen.description" = "TIBCO JasperMobile keeps you connected to\nyour business wherever you are.";
+"intro.model.secondScreen.title" = "Instant Access";
+"intro.model.secondScreen.description" = "Get access to live interactive reports\ndriven from your operational applications.";
+"intro.model.thirdScreen.title" = "Seemless Integration";
+"intro.model.thirdScreen.description" = "View and interact with your TIBCO JasperReports\nServer v%.1f or greater environment.";
 
-"servers.activeserver.label" = "Active Server";
-
-"servers.title.new" = "New Server Profile";
-"servers.title.edit" = "Edit Server Profile";
-
-"servers.gridview.activeserver.label" = "Active";
-"servers.button.makeactive" = "Make Active";
-
-/* Report Saver view */
-"savereport.title" = "Save Report";
-"savereport.name" = "Report Name";
-"savereport.format" = "Output Format";
-"savereport.pagesRange" = "Range Pages";
-"savereport.pagesRange.fromPage" = "From page:";
-"savereport.pagesRange.toPage" = "To page:";
-"savereport.pagesRange.errorFromPage" = "\"From\" value must be less \"To\" value";
-"savereport.pagesRange.errorToPage" = "\"To\" value must be more \"From\" value";
-"savereport.saved" = "Report was successfully saved";
-"savereport.name.errmsg.empty" = "Cannot be empty";
-"savereport.name.errmsg.notunique" = "This name has been already taken, please choose different name";
-"savereport.name.errmsg.maxlength" = "Should be less than %i symbols";
-"savereport.name.errmsg.characters" = "Characters %@ are not allowed";
-"savereport.saving.status.title" = "Saving report...";
-
-/* Rename Saved Report popup */
-
-"savedreport.modify.title" = "Rename Report";
-"savedreport.modify.reportname" = "Report Name";
-"savedreport.delete.confirmation.message" = "Please, confirm deleting report.";
-
-
-/* Search filter */
-"status.loading" = "Loading...";
-
-/* Home View */
+/* Menu View */
 
 // Labels
-"home.menuitem.library.label" = "Library";
-"home.menuitem.saveditems.label" = "Saved Items";
-"home.menuitem.settings.label" = "Settings";
-"home.menuitem.repository.label" = "Repository";
-"home.menuitem.favorites.label" = "Favorites";
+"menuitem.library.label" = "Library";
+"menuitem.saveditems.label" = "Saved Items";
+"menuitem.settings.label" = "Settings";
+"menuitem.repository.label" = "Repository";
+"menuitem.favorites.label" = "Favorites";
+"menuitem.logout.label" = "Log Out";
 
 // Descriptions
 
-"home.menuitem.library.description" = "Browse your JR Server Library.";
-"home.menuitem.repository.description" = "Browse your JR Server Repository.";
-"home.menuitem.settings.description" = "Configure your Jaspersoft Mobile App.";
-"home.menuitem.saveditems.description" = "View Items Saved on this Device. ";
-"home.menuitem.favorites.description" = "Browse your Favorites Items.";
+"menuitem.library.description" = "Browse your JR Server Library.";
+"menuitem.repository.description" = "Browse your JR Server Repository.";
+"menuitem.settings.description" = "Configure your Jaspersoft Mobile App.";
+"menuitem.saveditems.description" = "View Items Saved on this Device. ";
+"menuitem.favorites.description" = "Browse your Favorites Items.";
 
-// Navigation Bar Titles
-"title.home" = "Home";
+/* Resource views */
 
-/* Master view */
+"resources.loading.msg" = "Loading.\nPlease Wait...";
+"resources.noresults.msg" = "No Results.\nPlease Make Another Selection...";
+"resources.search.placeholder" = "Search Resources";
 
+// Filter By
+"resources.title" = "Object Type";
+"resources.type.all" = "All";
+"resources.type.reportUnit" = "Reports";
+"resources.type.dashboard" = "Dashboards";
+"resources.type.folder" = "Folders";
+
+// Sort by
+"resources.sortby.title" = "Sort Options";
+"resources.sortby.type.name" = "Name";
+"resources.sortby.type.date" = "Date";
+"resources.sortby.type.creator" = "Creator";
+
+// Repository view
 "repository.root.organization" = "Organization";
 "repository.root.root" = "Root";
 "repository.root.public" = "Public";
 
-// Resources
-"master.base.resources.title" = "Browse";
+/* Resource viewer view */
 
-"master.resources.title" = "Object Type";
-"master.resources.type.all" = "All";
-"master.resources.type.reportUnit" = "Reports";
-"master.resources.type.dashboard" = "Dashboards";
+"resource.viewer.open.link" = "Do you want to open link in external browser?";
+"resource.viewer.can't.open.link" = "Link can't be opened.";
 
-// Sort by
-"master.sortby.title" = "Sort Options";
-"master.sortby.type.name" = "Name";
-"master.sortby.type.date" = "Date";
-"master.sortby.type.creator" = "Creator";
+// Report viewer
+"report.viewer.error.title" = "Error of loading report";
+"report.viewer.visualize.render.error" = "Report rendering did failed.";
+"report.viewer.emptyreport.title" = "Report is empty";
+"report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options or tap 'Cancel' for returning to old report.";
+"report.viewer.pagecount" = "of %d";
+"report.viewer.wrongNumberOfCurrentPage" = "Current page can't be more count of pages (%@)";
 
-// Filter By Tag
-"master.filterbytag.title" = "Tags";
-"master.filterbytag.type.none" = "None";
-"master.filterbytag.type.favorites" = "Favorites";
+// Report Saver view
+"report.viewer.save.title" = "Save Report";
+"report.viewer.save.name" = "Report Name";
+"report.viewer.save.format" = "Output Format";
+"report.viewer.save.pagesRange" = "Range Pages";
+"report.viewer.save.pagesRange.fromPage" = "From page:";
+"report.viewer.save.pagesRange.toPage" = "To page:";
+"report.viewer.save.saved" = "Report was successfully saved";
+"report.viewer.save.name.errmsg.empty" = "Cannot be empty";
+"report.viewer.save.name.errmsg.notunique" = "This name has been already taken, please choose different name";
+"report.viewer.save.name.errmsg.notunique.rewrite" = "This name has been already taken, do you want to rewrite it?";
+"report.viewer.save.name.errmsg.maxlength" = "Should be less than %i symbols";
+"report.viewer.save.name.errmsg.characters" = "Characters %@ are not allowed";
+"report.viewer.save.saving.status.title" = "Saving report...";
 
-/* Detail view */
+// Report viewer Options view
+"report.viewer.options.title" = "Filter Options";
+"report.viewer.options.titlelabel.title" = "Current Filters";
+"report.viewer.options.singleselect.titlelabel.title" = "Select a single item";
+"report.viewer.options.multiselect.titlelabel.title" = "Select one or more items";
+"report.viewer.options.search.value.placeholder" = "Search Values";
+"report.viewer.options.ic.title.date" = "Date";
+"report.viewer.options.ic.title.time" = "Time";
+"report.viewer.options.ic.title.unset" = "Unset";
 
-"detail.resourcesloading.msg" = "Loading.\nPlease Wait...";
-"detail.noresults.msg" = "No Results.\nPlease Make Another Selection...";
-"detail.search.resources.placeholder" = "Search Resources";
+// Saved Reports viewer view
+"savedreport.viewer.modify.title" = "Rename Report";
+"savedreport.viewer.modify.reportname" = "Report Name";
+"savedreport.viewer.delete.confirmation.message" = "Please, confirm deleting report.";
 
-"detail.settings.title" = "Connection settings";
-"detail.settings.item.connection.timeout" = "Connection timeout (in seconds)";
-"detail.settings.item.data.read.timeout" = "Data read timeout (in seconds)";
-"detail.settings.item.server" = "Server";
-"detail.settings.crashtracking.toast" = "For changing crash reports settings go to Settings page.";
-"detail.settings.crashtracking.title" = "Send crash reports";
-"detail.settings.crashtracking.alert.title" = "Attention!";
-"detail.settings.crashtracking.alert.message" = "Sending crash reports settings will be applied after restart application.";
-"detail.settings.privacy.policy.title" = "Privacy Policy";
-"detail.settings.feedback" = "Feedback by Email";
-"detail.settings.feedback.errorShowClient" = "Need configure email";
-
-"detail.report.options.title" = "Filter Options";
-"detail.report.options.titlelabel.title" = "Current Filters";
-"detail.report.options.singleselect.titlelabel.title" = "Select a single item";
-"detail.report.options.multiselect.titlelabel.title" = "Select one or more items";
-"detail.report.options.search.value.placeholder" = "Search Values";
-
-"detail.resource.viewer.open.link" = "Do you want to open link in external browser?";
-"detail.resource.viewer.can't.open.link" = "Link can't be opened.";
-"detail.report.viewer.emptyreport.title" = "Report is empty";
-"detail.report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options or tap 'Cancel' for returning to old report.";
-"detail.report.viewer.pagecount" = "of %d";
-"detail.report.viewer.wrongNumberOfCurrentPage" = "Current page can't be more count of pages (%@)";
-"detail.dashboard.viewer.not.supported" = "Such dashboard's type is not supported now";
-
+/* Resource Info View */
 
 "resource.label.title" = "Name";
 "resource.description.title" = "Description";
@@ -169,18 +161,34 @@
 "resource.version.title" = "Version";
 "resource.creationDate.title" = "Creation Date";
 
+/* Settings view */
 
-// Action titles
+"settings.item.connection.timeout" = "Connection timeout (in seconds)";
+"settings.item.server" = "Server";
+"settings.item.intro" = "Show intro";
+"settings.crashtracking.toast" = "For changing crash reports settings go to Settings page.";
+"settings.crashtracking.title" = "Send crash reports";
+"settings.crashtracking.alert.title" = "Attention!";
+"settings.crashtracking.alert.message" = "Sending crash reports settings will be applied after restart application.";
+"settings.privacy.policy.title" = "Privacy Policy";
+"settings.feedback" = "Feedback by Email";
+"settings.feedback.errorShowClient" = "Need configure email";
+"settings.save.message" = "Saving Settings...";
+
+/* Action titles */
+
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
-"action.title.edit" = "Show filters";
-"action.title.filterBy" = "Filter by";
+"action.title.edit" = "Edit Filter Options";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
 "action.title.markasfavorite" = "Mark as Favorite";
 "action.title.markasunfavorite" = "Remove From Favorites";
 "action.title.info" = "Info";
+"action.title.filter" = "Filter by";
 "action.title.sort" = "Sort by";
+"action.title.selectall" = "Select All";
+"action.title.clearselections" = "Clear selections";
 
 /* Error messages */
 
@@ -189,7 +197,7 @@
 "error.noconnection.dialog.title" = "No connection";
 "error.noconnection.dialog.msg" = "Please check your mobile network settings and try again";
 
-"error.authenication.dialog.title" = "Authenication needed";
+"error.authenication.dialog.title" = "Invalid Credentials";
 "error.authenication.dialog.msg" = "Please check server credentials";
 
 "error.unknownhost.dialog.title" = "Unknown server";
@@ -199,7 +207,7 @@
 "error.upgrade.data.msg" = "There was an error updating user data (Servers, Favorites, Filter values & Settings) during the upgrade process. Press:\nRetry - to re-execute the data update again\nApply - to ignore the error and continue with upgrade, you may LOSE all user data\nCancel - to cancel the upgrade (this will leave you at current version)";
 
 "error.server.notsupported.title" = "Wrong server version or URL";
-"error.server.notsupported.msg" = "Server version is either older than 5.5 (not supported) or URL is incorrect";
+"error.server.notsupported.msg" = "Server version is either older than %.1f (not supported) or URL is incorrect";
 
 /* HTTP error messages */
 
@@ -210,12 +218,6 @@
 "error.http.502" = "502 - Bad Gateway";
 "error.http.503" = "503 - Service Unavailable";
 "error.http.504" = "504 - Gateway Timeout";
-
-/* Input control messages */
-
-"ic.title.date" = "Date";
-"ic.title.time" = "Time";
-"ic.title.unset" = "Unset";
 
 /* Buttons */
 
@@ -231,3 +233,7 @@
 "dialog.button.removefavorite" = "Remove Favorite";
 "dialog.button.save" = "Save";
 "dialog.button.delete" = "Delete";
+
+/* Other */
+
+"status.loading" = "Loading...";

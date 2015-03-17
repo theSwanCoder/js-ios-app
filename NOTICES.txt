@@ -25,17 +25,20 @@ along with Jaspersoft Mobile SDK for Android. If not, see
 THIRD PARTY COMPONENTS
 -------------------------------
 This software includes third party software subject to the associated copyrights, as follows:
-- ALToastView (MIT) - https://github.com/alexleutgoeb/ALToastView
-- MJPopupViewController v0.4 (MIT) - https://github.com/martinjuhasz/MJPopupViewController
-- Objection v0.16.0 (MIT) - https://github.com/atomicobject/objection
-- SSKeychain v0.1.4 (MIT) - https://github.com/soffes/sskeychain
+- ALToastView-v0.0.1 (MIT) - https://github.com/alexleutgoeb/ALToastView
+- Appirater-v2.0.4 (MIT) - https://github.com/arashpayan/appirater
+- Crashlytics-v2.2.9 (Apache) - https://github.com/twitterdev/cannonball-ios
+- Fabric-v1.1.1 (Apache) - https://github.com/twitterdev/cannonball-ios
+- GoogleAnalytics-v3.08 (Apache) - https://developers.google.com/analytics/devguides/collection/ios/resources
+- JaspersoftSDK-v1.9.0-beta (Apache) - https://github.com/Jaspersoft/js-ios-sdk
 - PopoverView-v0.0.2 (MIT) - https://github.com/runway20/PopoverView
+- RNCachingURLProtocol (MIT) - https://github.com/rnapier/RNCachingURLProtocol
+- SWRevealViewController-v2.3.0 (MIT) - https://github.com/John-Lluch/SWRevealViewController
+
 
 This software is built using the Jaspersoft Mobile SDK for iOS, which depends on 
 third party software, subject to the associated copyrights, as follows:
-- RestKit v0.10.3 (Apache) - https://github.com/RestKit/RestKit
-- JRSwizzle v1.0 (MIT) - https://github.com/rentzsch/jrswizzle
-- XMLWriter (MIT) - http://code.google.com/p/xswi/
+- RestKit v0.23.0 (Apache) - https://github.com/RestKit/RestKit
 
 The text of licenses for the above software is included with the
 JasperMobile for iOS source package, in the /licenses folder.

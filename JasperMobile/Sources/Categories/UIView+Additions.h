@@ -28,6 +28,7 @@
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
+ @author Oleksandr Dahno odahno@tibco.com
  @since 1.9
  */
 
@@ -36,4 +37,16 @@
 @interface UIView (Additions)
 
 - (UIColor *) colorOfPoint:(CGPoint)point;
+
+- (UIImage *)renderedImageForView:(UIView *)view;
+- (UIImage *)renderedImage;
+
+- (void)updateFrameWithOrigin:(CGPoint)newOrigin size:(CGSize)newSize;
+- (void)updateOriginWithOrigin:(CGPoint)newOrigin;
+- (void)updateOriginXWithValue:(CGFloat)newOriginX;
+- (void)updateOriginYWithValue:(CGFloat)newOriginY;
+- (void)updateSizeWithSize:(CGSize)newSize;
+- (void)updateHeightWithValue:(CGFloat)newHeight;
+- (void)updateWidthWithValue:(CGFloat)newWidth;
+
 @end
