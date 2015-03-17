@@ -29,7 +29,7 @@
 #pragma mark - Actions
 - (void)reloadDashboard
 {
-    if ([self.restClient isSessionAuthorized]) {
+    if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
         [self clearWebView];
         // waiting until page will be cleared
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -102,9 +102,25 @@
 
 #pragma mark - UIWebViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{        
+{
+    NSString *requestUrl = request.URL.absoluteString;
     NSLog(@"Dashboard");
-    NSLog(@"request url: %@", request.URL.absoluteString);
+    NSLog(@"request url: %@", requestUrl);
+    
+    if ([requestUrl isEqualToString:@"http://localhost/"]) {
+        // clearing web view
+    }
+
+    // Check request to login and handle it
+    NSString *loginUrlRegex = [NSString stringWithFormat:@"%@/login.html(.+)?", self.restClient.serverProfile.serverUrl];
+    NSPredicate *loginUrlValidator = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", loginUrlRegex];
+    if ([loginUrlValidator evaluateWithObject:requestUrl]) {
+        [self.restClient deleteCookies];
+        [self reloadDashboard];
+        return NO;
+    }
+    
+    
     BOOL sholdStartFromSuperclass = [super webView:webView shouldStartLoadWithRequest:request
                                     navigationType:navigationType];
     
@@ -119,21 +135,6 @@
         return NO;
     }
     
-    NSString *requestUrl = request.URL.absoluteString;
-    if ([requestUrl isEqualToString:@"http://localhost/"]) {
-        // clearing web view
-    }
-    
-    NSString *loginUrlRegex = [NSString stringWithFormat:@"%@/login.html(.+)?", self.restClient.serverProfile.serverUrl];
-    
-    NSPredicate *loginUrlValidator = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", loginUrlRegex];
-    if ([loginUrlValidator evaluateWithObject:requestUrl]) {
-        for (NSHTTPCookie *cookie in self.restClient.cookies) {
-            [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
-        }
-        [self reloadDashboard];
-        return NO;
-    }
     return YES;
 }
 

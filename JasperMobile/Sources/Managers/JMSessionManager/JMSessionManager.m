@@ -92,11 +92,14 @@ static JMSessionManager *_sharedManager = nil;
     }
 }
 
+- (BOOL) userIsLoggedIn
+{
+    return !![[NSUserDefaults standardUserDefaults] objectForKey:kJMSavedSessionKey];
+}
+
 - (void) logout
 {
-    for (NSHTTPCookie *cookie in self.restClient.cookies) {
-        [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
-    }
+    [self.restClient deleteCookies];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMSavedSessionKey];
     [self.restClient cancelAllRequests];
     self.restClient = nil;

@@ -188,7 +188,9 @@
 #pragma mark - Private
 - (void)loginWithServerProfile:(JMServerProfile *)serverProfile userName:(NSString *)userName password:(NSString *)password
 {
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
+        [self.restClient cancelAllRequests];
+    } @weakselfend];
     
     JSProfile *jsServerProfile = [[JSProfile alloc] initWithAlias:serverProfile.alias
                                                       serverUrl:serverProfile.serverUrl

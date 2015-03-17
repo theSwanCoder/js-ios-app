@@ -31,8 +31,11 @@
  @author Alexey Gubarev ogubarie@tibco.com
  @since 2.0
  */
+#import "JMMenuItem.h"
 
 @interface JMMenuViewController : UIViewController
+
+@property (nonatomic, readonly) JMMenuItem *selectedItem;
 
 - (void) setSelectedItemIndex:(NSUInteger)itemIndex;
 

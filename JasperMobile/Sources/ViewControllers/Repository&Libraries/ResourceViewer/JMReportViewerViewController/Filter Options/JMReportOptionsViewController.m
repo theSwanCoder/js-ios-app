@@ -218,23 +218,21 @@
                                             ids:allInputControls
                                  selectedValues:selectedValues
                                 completionBlock:@weakself(^(JSOperationResult *result)) {
+                                    [JMCancelRequestPopup dismiss];
+
                                     if (result.error) {
                                         if (result.error.code == JSSessionExpiredErrorCode) {
                                             if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
                                                 [self updatedInputControlsValuesWithCompletion:completion];
                                             } else {
-                                                [JMCancelRequestPopup dismiss];
                                                 [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
                                                     [self updatedInputControlsValuesWithCompletion:completion];
                                                 } @weakselfend];
                                             }
                                         } else {
-                                            [JMCancelRequestPopup dismiss];
                                             [JMUtils showAlertViewWithError:result.error];
                                         }
                                     } else {
-                                        [JMCancelRequestPopup dismiss];
-                                        
                                         for (JSInputControlState *state in result.objects) {
                                             for (JSInputControlDescriptor *inputControl in self.inputControls) {
                                                 NSString *uuid = state.uuid;

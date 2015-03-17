@@ -275,23 +275,21 @@
                                         ids:nil
                              selectedValues:nil
                             completionBlock:@weakself(^(JSOperationResult *result)) {
+                                [self stopShowLoader];
+
                                 if (result.error) {
                                     if (result.error.code == JSSessionExpiredErrorCode) {
                                         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
                                             [self verifyInputControls];
                                         } else {
-                                            [self stopShowLoader];
-                                            
                                             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
                                                 [self verifyInputControls];
                                             } @weakselfend];
                                         }
                                     } else {
-                                        [self stopShowLoader];
                                         [JMUtils showAlertViewWithError:result.error];
                                     }
                                 } else {
-                                    [self stopShowLoader];
                                     
                                     NSMutableArray *invisibleInputControls = [NSMutableArray array];
                                     for (JSInputControlDescriptor *inputControl in result.objects) {

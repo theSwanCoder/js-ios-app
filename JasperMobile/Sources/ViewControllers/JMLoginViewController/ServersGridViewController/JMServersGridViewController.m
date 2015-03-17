@@ -106,8 +106,8 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
     
     JMServerProfile *serverProfile = [self.servers objectAtIndex:indexPath.row];
     [serverProfile checkServerProfileWithCompletionBlock:@weakself(^(NSError *error)) {
+        [JMCancelRequestPopup dismiss];
         if (!requestDidCancelled) {
-            [JMCancelRequestPopup dismiss];
             if (error) {
                 [[UIAlertView localizedAlertWithTitle:error.domain message:error.localizedDescription delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
             } else {

@@ -45,9 +45,9 @@
 
 - (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(BOOL success))completionBlock;
 
-- (void) saveActiveSessionIfNeeded;
-
 - (void) restoreLastSessionWithCompletion:(void(^)(BOOL success))completionBlock;
+
+- (BOOL) userIsLoggedIn;
 
 - (void) logout;
 

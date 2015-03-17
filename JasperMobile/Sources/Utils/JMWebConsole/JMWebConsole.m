@@ -59,9 +59,7 @@
         
         NSPredicate *loginUrlValidator = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", loginUrlRegex];
         if ([loginUrlValidator evaluateWithObject:requestUrl]) {
-            for (NSHTTPCookie *cookie in self.restClient.cookies) {
-                [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
-            }
+            [self.restClient deleteCookies];
             // TODO: Here need to handle session expired issue
         }
     }

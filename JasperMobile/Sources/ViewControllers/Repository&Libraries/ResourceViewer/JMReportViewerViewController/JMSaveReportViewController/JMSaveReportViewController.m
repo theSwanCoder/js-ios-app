@@ -325,17 +325,16 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
         JSRequestCompletionBlock checkErrorBlock = @weakself(^(JSOperationResult *result)) {
             if (!result.isSuccessful) {
+                [JMCancelRequestPopup dismiss];
                 if (result.error.code == JSSessionExpiredErrorCode) {
                     if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
                         [self saveReport];
                     } else {
-                        [JMCancelRequestPopup dismiss];
                         [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
                             [self saveReport];
                         } @weakselfend];
                     }
                 } else {
-                    [JMCancelRequestPopup dismiss];
                     [JMUtils showAlertViewWithError:result.error];
                 }
                 

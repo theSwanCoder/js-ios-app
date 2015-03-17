@@ -27,7 +27,6 @@
 //
 
 #import "JMMenuViewController.h"
-#import "JMMenuItem.h"
 #import "SWRevealViewController.h"
 #import "JMMenuItemTableViewCell.h"
 #import "JMMainNavigationController.h"
@@ -180,6 +179,16 @@
                        ];
     }
     return _menuItems;
+}
+
+- (JMMenuItem *)selectedItem
+{
+    for (JMMenuItem *menuItem in self.menuItems) {
+        if (menuItem.selected) {
+            return menuItem;
+        }
+    }
+    return nil;
 }
 
 #pragma mark - Private API

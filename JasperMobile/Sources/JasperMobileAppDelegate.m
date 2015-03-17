@@ -111,25 +111,32 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
-    [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:@weakself(^(BOOL success)) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [JMCancelRequestPopup dismiss];
-            
-            SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
-            JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
-            
-            if (success) {
-                self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
-                [menuViewController setSelectedItemIndex:0];
+    SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
+    JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
+
+    if ([[JMSessionManager sharedManager] userIsLoggedIn]) {
+        [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+        [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:@weakself(^(BOOL success)) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [JMCancelRequestPopup dismiss];
                 
-            } else {
-                [JMUtils showLoginViewAnimated:NO completion:@weakself(^(void)) {
-                    [menuViewController setSelectedItemIndex:0];
-                } @weakselfend];
-            }
-        });
-    } @weakselfend];
+                if (success) {
+                    self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
+                    if (!menuViewController.selectedItem) {
+                        [menuViewController setSelectedItemIndex:0];
+                    }
+                } else {
+                    [JMUtils showLoginViewAnimated:NO completion:@weakself(^(void)) {
+                        [menuViewController setSelectedItemIndex:0];
+                    } @weakselfend];
+                }
+            });
+        } @weakselfend];
+    } else {
+        [JMUtils showLoginViewAnimated:NO completion:@weakself(^(void)) {
+            [menuViewController setSelectedItemIndex:0];
+        } @weakselfend];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
