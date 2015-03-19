@@ -829,9 +829,9 @@
 			isa = PBXGroup;
 			children = (
 				089B14CD1AA756BD0021A915 /* Cells */,
+				089B14D21AA756BD0021A915 /* ServerOptionsViewController */,
 				089B14D01AA756BD0021A915 /* JMServersGridViewController.h */,
 				089B14D11AA756BD0021A915 /* JMServersGridViewController.m */,
-				089B14D21AA756BD0021A915 /* ServerOptionsViewController */,
 			);
 			path = ServersGridViewController;
 			sourceTree = "<group>";

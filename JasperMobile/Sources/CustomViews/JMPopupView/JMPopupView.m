@@ -143,8 +143,13 @@ static NSMutableArray* visiblePopupsArray = nil;
     if (self.animatedNow) {
         return;
     }
+
+    UIWindow *currentWindow = [[UIApplication sharedApplication] keyWindow];
+    if (currentWindow.windowLevel > UIWindowLevelNormal) {
+        currentWindow = [[[UIApplication sharedApplication] windows] lastObject];
+    }
+    UIView *topView = [[currentWindow subviews] lastObject];
     
-    UIView* topView = [[[[[UIApplication sharedApplication] windows] lastObject] subviews] lastObject];
 //    UIView* topView = [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject];
 
     self.frame = topView.bounds;
