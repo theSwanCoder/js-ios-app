@@ -81,23 +81,24 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if (!self.isCommandSend) {
+        NSLog(@"inject js");
         self.isCommandSend = YES;
         
         [self.webView.scrollView setZoomScale:0.1 animated:YES];
         
-        NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"jaspermobile_dashboard" ofType:@"js"];
+        NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"dashboard-amber-ios-mobilejs-sdk" ofType:@"js"];
         
         NSError *error;
         NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
         if (jsMobile) {
-            NSString *width = @"\"250%\"";
-            NSString *height = @"\"250%\"";
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                width = @"\"150%\"";
-                height = @"\"150%\"";
-            }
-            jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_WIDTH" withString:width];
-            jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_HEIGHT" withString:height];
+//            NSString *width = @"\"250%\"";
+//            NSString *height = @"\"250%\"";
+//            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+//                width = @"\"150%\"";
+//                height = @"\"150%\"";
+//            }
+//            jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_WIDTH" withString:width];
+//            jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_HEIGHT" withString:height];
             [self.webView stringByEvaluatingJavaScriptFromString:jsMobile];
         } else {
             NSLog(@"load jaspermobile.js error: %@", error.localizedDescription);

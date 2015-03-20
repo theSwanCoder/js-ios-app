@@ -45,23 +45,18 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 @synthesize resourceLookup = _resourceLookup;
 
-#pragma mark - LifeCycle
-- (void)dealloc
-{
-    _webView.delegate = nil;
-    [_webView loadHTMLString:nil baseURL:nil];
-    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:self.resourceRequest];
-}
-
-#pragma mark - UIViewController
+#pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
     self.title = [self currentResourceLookup].label;
     
+    [self setupNavigationItems];
+    
     [self setupWebView];
     
+    // start point of loading resource
     [self runReportExecution];
 }
 
@@ -69,13 +64,8 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 {
     [super viewWillAppear:animated];
     
+    // Google Analitycs
     self.screenName = NSStringFromClass(self.class);
-    
-    [self setupNavigationItems];
-    
-    if (!self.isResourceLoaded && self.resourceRequest) {
-        [self.webView loadRequest:self.resourceRequest];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -127,12 +117,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     webView.delegate = self;
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
-    
-    self.webView.scrollView.bounces = NO;
-    self.webView.scalesPageToFit = YES;
-    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
-    self.webView.suppressesIncrementalRendering = YES;
-    [self.webView loadHTMLString:@"" baseURL:nil];
 }
 
 - (void)setupNavigationItems
@@ -324,12 +308,14 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     [JMUtils showNetworkActivityIndicator];
     [JMCancelRequestPopup presentWithMessage:message
                                  cancelBlock:cancelBlock];
+    self.activityIndicator.hidden = NO;
 }
 
 - (void)stopShowLoader
 {
     [JMUtils hideNetworkActivityIndicator];
     [JMCancelRequestPopup dismiss];
+    self.activityIndicator.hidden = YES;
 }
 
 @end

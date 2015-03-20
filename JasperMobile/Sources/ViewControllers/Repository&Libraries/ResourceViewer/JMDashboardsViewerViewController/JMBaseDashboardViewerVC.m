@@ -45,6 +45,7 @@
 - (void) backButtonTapped:(id) sender
 {
     [self clearWebView];
+    self.webView.delegate = nil;
     [self.navigationController popViewControllerAnimated:YES];
 }
 

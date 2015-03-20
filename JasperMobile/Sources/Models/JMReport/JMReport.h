@@ -48,6 +48,8 @@ extern NSString * const kJMReportLoaderDidChangeCountOfPagesNotification;
 // html
 @property (nonatomic, copy, readonly) NSString *HTMLString;
 @property (nonatomic, copy, readonly) NSString *baseURLString;
+// input controls
+@property (nonatomic, assign) BOOL isInputControlsLoaded;
 
 - (instancetype)initWithResource:(JSResourceLookup *)resourceLookup
                    inputControls:(NSArray *)inputControls;

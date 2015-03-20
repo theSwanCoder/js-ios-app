@@ -111,7 +111,7 @@
 }
 
 - (void)minimizeDashlet {
-    NSString *minimizeDashletCall = @"JasperMobile.htmlHandler.minimizeDashlet()";
+    NSString *minimizeDashletCall = @"MobileDashboard.minimizeDashlet()";
     [self.webView stringByEvaluatingJavaScriptFromString:minimizeDashletCall];
 }
 

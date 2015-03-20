@@ -48,9 +48,16 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 @property (nonatomic, assign) BOOL isResourceLoaded;
 @property (nonatomic, strong) NSURLRequest *resourceRequest;
 
-- (JSResourceLookup *)currentResourceLookup;
+// setup
 - (void)setupNavigationItems;
+- (void)setupWebView;
+
+- (JSResourceLookup *)currentResourceLookup;
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource;
+
+// UIWebView helpers
+- (void)startShowLoadingIndicators;
+- (void)stopShowLoadingIndicators;
 
 - (void)startShowLoaderWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock;
 - (void)stopShowLoader;

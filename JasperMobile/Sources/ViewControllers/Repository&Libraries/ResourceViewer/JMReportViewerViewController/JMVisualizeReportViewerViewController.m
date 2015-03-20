@@ -33,29 +33,82 @@
 #import "JMReportOptionsViewController.h"
 #import "JMWebConsole.h"
 #import "JMWebViewController.h"
+#import "JMVisualizeWebViewManager.h"
 
 @interface JMVisualizeReportViewerViewController () <JMVisualizeReportLoaderDelegate>
 @property (nonatomic, strong) JMVisualizeReportLoader *reportLoader;
-@property (nonatomic, assign) BOOL isRefreshWebView;
 @end
 
 @implementation JMVisualizeReportViewerViewController
 
 @synthesize reportLoader = _reportLoader;
 
-#pragma mark - UIViewController
-- (void)viewDidLoad {
+#pragma mark - UIViewController LifeCycle
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    //[JMWebConsole enable];
-    self.isRefreshWebView = NO;
+    self.isStartFromAnotherReport = NO;
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    //[self clearWebView];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+#pragma mark - Actions
+- (void)backButtonTapped:(id) sender
 {
-    [super viewWillAppear:animated];
+    [self clearWebView];
+    [super backButtonTapped:sender];
+}
+
+- (void)backToPreviousReport
+{
+    [self clearWebView];
+    [self.navigationController setToolbarHidden:YES animated:YES];
+    [self.webView removeFromSuperview];
     
+    NSInteger viewControllersCount = self.navigationController.viewControllers.count;
+    JMVisualizeReportViewerViewController *reportViewController = self.navigationController.viewControllers[viewControllersCount - 2];
     
+    //
+    [reportViewController.view insertSubview:self.webView belowSubview:reportViewController.activityIndicator];
+    self.webView.delegate = reportViewController.reportLoader;
+    reportViewController.returnFromPreviousReportCompletion = @weakself(^()) {
+        [reportViewController.reportLoader refreshReport];
+    }@weakselfend;
+    
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - Setups
+- (void)setupNavigationItems
+{
+    if (!self.isStartFromAnotherReport) {
+        [super setupNavigationItems];
+    }
+}
+
+- (void)setupWebView // overriden with another webView
+{
+    UIWebView *webView = [JMVisualizeWebViewManager sharedInstance].webView;
+    CGRect rootViewBounds = self.navigationController.view.bounds;
+    webView.frame = rootViewBounds;
+    webView.delegate = self;
+    [self.view insertSubview:webView belowSubview:self.activityIndicator];
+    self.webView = webView;
+}
+
+#pragma mark - Start point
+- (void)startLoadReport
+{
+    if (self.returnFromPreviousReportCompletion) {
+        self.returnFromPreviousReportCompletion();
+    } else {
+        [super startLoadReport];
+    }
 }
 
 #pragma mark - Custom accessors
@@ -64,8 +117,8 @@
     if (!_reportLoader) {
         _reportLoader = [JMVisualizeReportLoader loaderWithReport:self.report];
         _reportLoader.webView = self.webView;
-        _reportLoader.delegate = self;
         self.webView.delegate = _reportLoader;
+        _reportLoader.delegate = self;
     }
     return _reportLoader;
 }
@@ -73,10 +126,12 @@
 #pragma mark - JMReportViewerToolBarDelegate
 - (void)toolbar:(JMReportViewerToolBar *)toolbar pageDidChanged:(NSInteger)page
 {
-    [self.reportLoader loadPageNumber:page withLoadHTMLCompletion:@weakself(^(BOOL success, NSError *error)) {
-        
-    }@weakselfend reportLoadCompletion:@weakself(^(BOOL success, NSError *error)) {
-        
+            // session
+    
+    
+    // start show loading indicator
+    [self.reportLoader loadPageNumber:page withReportLoadCompletion:@weakself(^(BOOL success, NSError *error)) {
+        // stop show loading indicator
     }@weakselfend];
 }
 
@@ -85,78 +140,110 @@
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
         [self.reportLoader cancelReport];
-        [self backToRootVC];
+        [self backToPreviousReport];
     }@weakselfend];
     
-    [self hideEmptyReportMessage];
-    
-    [self.reportLoader fetchStartPageWithLoadHTMLCompletion:@weakself(^(BOOL success, NSError *error)) {
-        if (success) {
-            [self.webView stopLoading];
-            [self.webView loadHTMLString:self.report.HTMLString
-                                 baseURL:[NSURL URLWithString:self.report.baseURLString]];
-        } else {
-            NSLog(@"Error loading HTML%@", error.localizedDescription);
-        }
-    }@weakselfend reportLoadCompletion:@weakself(^(BOOL success, NSError *error)) {
+    [self.reportLoader fetchStartPageWithReportLoadCompletion:@weakself(^(BOOL success, NSError *error)) {
         [self stopShowLoader];
+        
         if (success) {
             [self hideEmptyReportMessage];
         } else {
             if (error.code == JMReportLoaderErrorTypeEmtpyReport) {
                 [self showEmptyReportMessage];
             } else {
-                [self stopShowLoader];
                 [UIAlertView localizedAlertWithTitle:@"detail.report.viewer.error.title"
                                              message:error.localizedDescription
                                           completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                              [self backToRootVC];
+                                              [self backToPreviousView];
                                           }
                                    cancelButtonTitle:@"dialog.button.ok"
                                    otherButtonTitles:nil];
             }
         }
+        
     }@weakselfend];
+}
+
+- (void)reloadReport
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+//    [self hideEmptyReportMessage];
+//    [self.report restoreDefaultState];
     
+    //[self clearWebView];
     
+    NSLog(@"subviews: %@", self.view.subviews);
+    if ([self.webView isLoading]) {
+        NSLog(@"web view is loading");
+    }
+    [super updateToobarAppearence];
+    [self.reportLoader refreshReport];
 }
 
 #pragma mark - JMRefreshable
 - (void)refresh
 {
     if (self.reportLoader.isReportInLoadingProcess) {
-        [self hideEmptyReportMessage];
+        //[self hideEmptyReportMessage];
         [self.report restoreDefaultState];
         [super updateToobarAppearence];
-        [self.reportLoader reloadReportWithInputControls:self.report.inputControls];
+        // session
+        [self.reportLoader refreshReport];
     } else {
         [super refresh];
     }
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate
-//- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReciveClickOnReport:(JMVisualizeReport *)report
-//{
-//    NSLog(@"click on report: %@", report);
-//    NSString *identifier = @"JMVisualizeReportViewerViewController";
-// 
-//    JMVisualizeReportViewerViewController *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
-//    reportViewController.report = report;
-//    reportViewController.shouldLoadInputControls = NO;
-//    
-//    [self.navigationController pushViewController:reportViewController animated:YES];
-//}
-
 - (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReciveOnClickEventForReport:(JMVisualizeReport *)report withParameters:(NSDictionary *)reportParameters
+{   
+    NSString *reportURI = [report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls)) {
+        report.isInputControlsLoaded = YES;
+        if (inputControls) {
+            [report updateInputControls:inputControls];
+            [report applyReportParameters:reportParameters];
+            
+            NSString *identifier = @"JMVisualizeReportViewerViewController";
+            
+            JMVisualizeReportViewerViewController *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+            reportViewController.report = report;
+            reportViewController.isStartFromAnotherReport = YES;
+            
+            NSString *backItemTitle = self.title;
+            UIBarButtonItem *backItem = [self backButtonWithTitle:backItemTitle
+                                                           target:reportViewController
+                                                           action:@selector(backToPreviousReport)];
+            reportViewController.navigationItem.leftBarButtonItem = backItem;
+            
+            [self clearWebView];
+            [self.navigationController pushViewController:reportViewController animated:YES];
+        }
+    }@weakselfend];
+}
+
+- (void)clearWebView
 {
+    [self.webView stopLoading];
+    NSLog(@"contentScaleFactor: %f", self.webView.contentScaleFactor);
+    NSLog(@"zoomScale: %f", self.webView.scrollView.zoomScale);
     
-    NSLog(@"click on report: %@", report);
-    NSString *identifier = @"JMVisualizeReportViewerViewController";
-    
-    JMVisualizeReportViewerViewController *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
-    reportViewController.report = report;
-    
-    [self.navigationController pushViewController:reportViewController animated:YES];
+    // reset zoom in webView
+    //[self.webView.scrollView setZoomScale:0.1 animated:NO];
+    [self.reportLoader destroyReport];
+}
+
+#pragma mark - UIWebView helpers
+- (void)startShowLoadingIndicators
+{
+    [JMUtils hideNetworkActivityIndicator];
+}
+
+
+- (void)stopShowLoadingIndicators
+{
+    [JMUtils hideNetworkActivityIndicator];
 }
 
 @end

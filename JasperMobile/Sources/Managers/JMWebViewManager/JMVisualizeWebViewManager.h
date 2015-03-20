@@ -22,20 +22,17 @@
 
 
 //
-//  JMVisualizeReportViewerViewController.h
+//  JMVisualizeWebViewManager.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
+ @author Aleksandr Dakhno odahno@tibco.com
+ @since 2.0
  */
 
-#import "JMBaseReportViewerViewController.h"
-#import "JMVisualizeReport.h"
-
-@interface JMVisualizeReportViewerViewController : JMBaseReportViewerViewController
-@property (nonatomic, strong) JMVisualizeReport *report;
-@property (nonatomic, assign) BOOL isStartFromAnotherReport;
-@property (nonatomic, copy) void(^returnFromPreviousReportCompletion)(void);
+@interface JMVisualizeWebViewManager : NSObject
+@property (nonatomic, strong, readonly) UIWebView *webView;
+@property (nonatomic, assign) BOOL isVisualizeLoaded;
++ (instancetype)sharedInstance;
 @end

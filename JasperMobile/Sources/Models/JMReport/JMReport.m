@@ -67,6 +67,8 @@ NSString * const kJMReportLoaderDidChangeCountOfPagesNotification = @"kJMReportL
         [self updateInputControls:inputControls];
         
         [self restoreDefaultState];
+        
+        _isInputControlsLoaded = NO;
     }
     return self;
 }
@@ -259,13 +261,18 @@ internalInputControls:(NSDictionary *)inputControls
 
 - (void)updateInputControlsWithReportParameters:(NSDictionary *)reportParameters
 {
+    
     for (JSInputControlDescriptor *description in self.inputControls) {
         JSInputControlState *inputState = description.state;
-        id value = reportParameters[inputState.uuid];
-        if (value) {
-            inputState.value = value;
+        NSString *value = reportParameters[inputState.uuid];
+        for (JSInputControlOption *option in description.state.options) {
+            if ([value isEqualToString:option.value]) {
+                option.selected = @"true";
+            } else {
+                option.selected = @"false";
+            }
         }
-    }
+    }    
 }
 
 @end

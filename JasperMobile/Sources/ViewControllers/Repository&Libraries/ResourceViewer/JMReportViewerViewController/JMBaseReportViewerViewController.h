@@ -48,9 +48,23 @@ typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (nonatomic, strong) JMReport *report;
 
+// start point
+- (void)startLoadReport;
+// setups
 - (void)updateToobarAppearence;
-- (void)showReportOptionsViewControllerWithBackButton:(BOOL)isShowBackButton;
-- (void)backToRootVC;
+- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
+                                  target:(id)target
+                                  action:(SEL)action;
+
+// overridden actions
+- (void)backButtonTapped:(id) sender;
+// visible actions
+- (void)backToPreviousView;
+
+// input controls
+- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *))completion;
+
+// empty report handle
 - (void)showEmptyReportMessage;
 - (void)hideEmptyReportMessage;
 @end

@@ -30,6 +30,7 @@
 #import "JMVisualizeReportViewerViewController.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMVisualizeReport.h"
+#import "JMVisualizeWebViewManager.h"
 
 typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     JMReportViewerAlertViewTypeEmptyReport,
@@ -67,7 +68,8 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
     if (!_visualizePath) {
         NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js", self.restClient.serverProfile.serverUrl];
         // fix for servers lower 6.1
-        if (self.restClient.serverProfile.serverInfo.versionAsFloat < 6.1) {
+        NSInteger intVersion = ceilf(self.restClient.serverProfile.serverInfo.versionAsFloat * 10);
+        if (intVersion < 6.1 * 10 ) {
             visualizePath = [visualizePath stringByAppendingString:@"?_opt=false"];
         }
         _visualizePath = visualizePath;
@@ -76,39 +78,34 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 }
 
 #pragma mark - Public API
-- (void)fetchStartPageWithLoadHTMLCompletion:(void(^)(BOOL success, NSError *error))loadHTMLCompletion reportLoadCompletion:(void(^)(BOOL success, NSError *error))reportLoadCompletion
+- (void)fetchStartPageWithReportLoadCompletion:(void(^)(BOOL success, NSError *error))reportLoadCompletion
 {
     [self.report updateCurrentPage:1]; // set start page
     self.isReportInLoadingProcess = YES;
-    
     self.reportLoadCompletion = reportLoadCompletion;
-    NSLog(@"visuzalise.js did start load");
-    [self loadVisualizeJSWithCompletion:@weakself(^(BOOL success, NSError *error)){
-        //self.isReportInLoadingProcess = NO;
-        if (success) {
-            NSLog(@"visuzalise.js did end load");
-            NSString *baseURLString = self.restClient.serverProfile.serverUrl;
-            [self.report updateHTMLString:[self htmlString] baseURLSring:baseURLString];
-            if (loadHTMLCompletion) {
-                loadHTMLCompletion(YES, nil);
+    
+    if (![JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded) {
+        [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+            if (success) {
+                [JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded = YES;
+                [self.webView stopLoading];
+                [self.webView loadHTMLString:self.report.HTMLString
+                                     baseURL:[NSURL URLWithString:self.report.baseURLString]];
+            } else {
+                NSLog(@"Error loading HTML%@", error.localizedDescription);
             }
-        } else {
-            // TODO: handle this error
-            NSLog(@"Error loading visualize.js");
-            // TODO: add error code
-            NSError *error = [NSError errorWithDomain:kJMReportVisualizeLoaderErrorDomain
-                                                 code:0
-                                             userInfo:nil];
-            if (loadHTMLCompletion) {
-                loadHTMLCompletion(NO, error);
-            }
-        }
-    }@weakselfend];
+        }@weakselfend];
+    } else {
+        NSString *parametersAsString = [self createParametersAsStringFromInputControls:self.report.inputControls];
+        NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.run({'uri': '%@', 'params': %@});", self.report.reportURI, parametersAsString];
+        [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
+    }
+    
 }
 
-- (void)loadPageNumber:(NSInteger)pageNumber withLoadHTMLCompletion:(void(^)(BOOL success, NSError *error))loadHTMLCompletion reportLoadCompletion:(void(^)(BOOL success, NSError *error))reportLoadCompletion
+- (void)loadPageNumber:(NSInteger)pageNumber withReportLoadCompletion:(void(^)(BOOL success, NSError *error))reportLoadCompletion
 {
-    NSString *setPageCommand = [NSString stringWithFormat:@"JasperMobile.report.setPage(%@)", @(pageNumber).stringValue];
+    NSString *setPageCommand = [NSString stringWithFormat:@"MobileReport.selectPage(%@)", @(pageNumber).stringValue];
     [self.report updateCurrentPage:pageNumber];
     [self.webView stringByEvaluatingJavaScriptFromString:setPageCommand];
 }
@@ -117,7 +114,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 {
     [self.report updateCurrentPage:1]; // set start page
     NSString *parametersAsString = [self createParametersAsStringFromInputControls:inputControls];
-    NSString *runReportCommand = [NSString stringWithFormat:@"JasperMobile.report.run(reportPath, %@);", parametersAsString];
+    NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.run({'uri': '%@', 'params': %@});", self.report.reportURI, parametersAsString];
     [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
 }
 
@@ -126,34 +123,80 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
     // TODO: need cancel?
 }
 
+- (void)refreshReport
+{
+    [self reloadReportWithInputControls:self.report.inputControls];
+}
+
+- (void)destroyReport
+{
+    NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.destroy();"];
+    [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
+}
+
+#pragma mark - Private
+- (void)startLoadHTMLWithCompletion:(void(^)(BOOL success, NSError *error))completion
+{
+    //[self.report updateCurrentPage:1]; // set start page
+    //self.isReportInLoadingProcess = YES;
+    
+    //self.reportLoadCompletion = reportLoadCompletion;
+    NSLog(@"visuzalise.js did start load");
+    [self loadVisualizeJSWithCompletion:@weakself(^(BOOL success, NSError *error)){
+        //self.isReportInLoadingProcess = NO;
+        if (success) {
+            NSLog(@"visuzalise.js did end load");
+            NSString *baseURLString = self.restClient.serverProfile.serverUrl;
+            [self.report updateHTMLString:[self htmlString] baseURLSring:baseURLString];
+            if (completion) {
+                completion(YES, nil);
+            }
+        } else {
+            // TODO: handle this error
+            NSLog(@"Error loading visualize.js");
+            // TODO: add error code
+            NSError *error = [NSError errorWithDomain:kJMReportVisualizeLoaderErrorDomain
+                                                 code:0
+                                             userInfo:nil];
+            if (completion) {
+                completion(NO, error);
+            }
+        }
+    }@weakselfend];
+}
+
 #pragma mark - Helpers
 - (NSString *)htmlString
 {
-    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"visualize_test" ofType:@"html"];
+    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"report_optimized" ofType:@"html"];
+    // fix for servers lower 6.1
+    NSInteger intVersion = ceilf(self.restClient.serverProfile.serverInfo.versionAsFloat * 10);
+    if (intVersion < 6.1 * 10 ) {
+        htmlPath = [[NSBundle mainBundle] pathForResource:@"report" ofType:@"html"];
+    }
+    
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
     // Visualize
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
     
+    // REQUIRE_JS
+    NSString *requireJSPath = [[NSBundle mainBundle] pathForResource:@"require.min" ofType:@"js"];
+    NSString *requirejsString = [NSString stringWithContentsOfFile:requireJSPath encoding:NSUTF8StringEncoding error:nil];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"REQUIRE_JS" withString:requirejsString];
+
     // JasperMobile
-    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"jaspermobile" ofType:@"js"];
+    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"report-ios-mobilejs-sdk" ofType:@"js"];
     NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
-    NSString *reportPath = [NSString stringWithFormat:@"\"%@\"", self.report.reportURI];
-    jaspermobileString = [jaspermobileString stringByReplacingOccurrencesOfString:@"REPORT_PATH" withString:reportPath];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];    
     
-    // auth
-    NSString *authName = [NSString stringWithFormat:@"\"%@\"", self.restClient.serverProfile.username];
-    NSString *authPassword = [NSString stringWithFormat:@"\"%@\"", self.restClient.serverProfile.password];
-    NSString *authOrganisation = [NSString stringWithFormat:@"\"%@\"", self.restClient.serverProfile.organization];
     
-    jaspermobileString = [jaspermobileString stringByReplacingOccurrencesOfString:@"AUTH_NAME" withString:authName];
-    jaspermobileString = [jaspermobileString stringByReplacingOccurrencesOfString:@"AUTH_PASSWORD" withString:authPassword];
-    jaspermobileString = [jaspermobileString stringByReplacingOccurrencesOfString:@"AUTH_ORGANISATION" withString:authOrganisation];
-    
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
-    
-    NSString *parametersAsString = [self createParametersAsStringFromInputControls:self.report.inputControls];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"REPORT_PARAMETERS"
-                                                       withString:parametersAsString];
+//    //NSString *reportPath = [NSString stringWithFormat:@"\"%@\"", self.report.reportURI];
+//    //jaspermobileString = [jaspermobileString stringByReplacingOccurrencesOfString:@"REPORT_PATH" withString:reportPath];
+//
+//
+//    NSString *parametersAsString = [self createParametersAsStringFromInputControls:self.report.inputControls];
+//    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"REPORT_PARAMETERS"
+//                                                       withString:parametersAsString];
     
     return htmlString;
 }
@@ -267,7 +310,9 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
         NSRange callbackRange = [requestURLString rangeOfString:callback];
         NSRange commandRange = NSMakeRange(callbackRange.length, requestURLString.length - callbackRange.length);
         NSString *command = [requestURLString substringWithRange:commandRange];
-        if ([command rangeOfString:@"runReport"].length) {
+        if ([command rangeOfString:@"DOMContentLoaded"].length) {
+            [self handleDOMContentLoaded];
+        } else if ([command rangeOfString:@"runReport"].length) {
             [self handleRunReportWithJSCommand:command];
         } else if ([command rangeOfString:@"changeTotalPages"].length) {
             [self handleEventTotalPageDidChangeWithCommand:command];
@@ -293,6 +338,20 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
         // call to controller
         return YES;
     }
+}
+
+#pragma mark - DOM listeners
+- (void)handleDOMContentLoaded
+{
+    // auth
+    //JasperMobile.auth.setCredentials(authName, authPassword, authOrganisation);
+    NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.setCredentials({'username': '%@', 'password': '%@', 'organization': '%@'});", self.restClient.serverProfile.username, self.restClient.serverProfile.password, self.restClient.serverProfile.organization];
+    [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
+    
+    //JasperMobile.report.run(reportPath, reportParameters);
+    NSString *parametersAsString = [self createParametersAsStringFromInputControls:self.report.inputControls];
+    runReportCommand = [NSString stringWithFormat:@"MobileReport.run({'uri': '%@', 'params': %@});", self.report.reportURI, parametersAsString];
+    [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
 }
 
 #pragma mark - VisualizeJS error handlers
