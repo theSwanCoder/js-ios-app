@@ -78,7 +78,16 @@
     [self.view endEditing:YES];
     if ([self validateInputControls]) { // Local validation
         
+        [JMCancelRequestPopup presentWithMessage:@"status.loading"
+                                     cancelBlock:@weakself(^(void)) {
+                                         [self.restClient cancelAllRequests];
+                                         [self.navigationController popViewControllerAnimated:YES];
+                                     } @weakselfend];
+        
         [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
+            
+            [JMCancelRequestPopup dismiss];
+            
             if (dataIsValid) {
                 if (self.completionBlock) {
                     self.completionBlock();
@@ -165,7 +174,15 @@
 - (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor
 {
     if (descriptor.slaveDependencies.count) {
-        [self updatedInputControlsValuesWithCompletion:nil];
+        [JMCancelRequestPopup presentWithMessage:@"status.loading"
+                                     cancelBlock:@weakself(^(void)) {
+                                         [self.restClient cancelAllRequests];
+                                         [self.navigationController popViewControllerAnimated:YES];
+                                     } @weakselfend];
+        
+        [self updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) {
+            [JMCancelRequestPopup dismiss];
+        }];
     }
 }
 
@@ -208,17 +225,17 @@
         [allInputControls addObject:descriptor.uuid];
     }
     
-    [JMCancelRequestPopup presentWithMessage:@"status.loading"
-                                 cancelBlock:@weakself(^(void)) {
-                                     [self.restClient cancelAllRequests];
-                                     [self.navigationController popViewControllerAnimated:YES];
-                                 } @weakselfend];
+//    [JMCancelRequestPopup presentWithMessage:@"status.loading"
+//                                 cancelBlock:@weakself(^(void)) {
+//                                     [self.restClient cancelAllRequests];
+//                                     [self.navigationController popViewControllerAnimated:YES];
+//                                 } @weakselfend];
     
     [self.restClient updatedInputControlsValues:self.resourceLookup.uri
                                             ids:allInputControls
                                  selectedValues:selectedValues
                                 completionBlock:@weakself(^(JSOperationResult *result)) {
-                                    [JMCancelRequestPopup dismiss];
+//                                    [JMCancelRequestPopup dismiss];
 
                                     if (result.error) {
                                         if (result.error.code == JSSessionExpiredErrorCode) {

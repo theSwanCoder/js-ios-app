@@ -302,20 +302,42 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     return availableAction;
 }
 
+- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
+                                  target:(id)target
+                                  action:(SEL)action
+{
+    NSString *backItemTitle = title;
+    if (!backItemTitle) {
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        NSInteger viewControllersCount = viewControllers.count;
+        UIViewController *previousViewController = [viewControllers objectAtIndex:(viewControllersCount - 2)];
+        backItemTitle = previousViewController.title;
+    }
+    
+    UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
+    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:backItemTitle
+                                                                 style:UIBarButtonItemStyleBordered
+                                                                target:target
+                                                                action:action];
+    [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    return backItem;
+}
+
 #pragma mark - Loader Popups
 - (void)startShowLoaderWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock
 {
     [JMUtils showNetworkActivityIndicator];
     [JMCancelRequestPopup presentWithMessage:message
                                  cancelBlock:cancelBlock];
-    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
 }
 
 - (void)stopShowLoader
 {
     [JMUtils hideNetworkActivityIndicator];
     [JMCancelRequestPopup dismiss];
-    self.activityIndicator.hidden = YES;
+    [self.activityIndicator stopAnimating];
 }
 
 @end

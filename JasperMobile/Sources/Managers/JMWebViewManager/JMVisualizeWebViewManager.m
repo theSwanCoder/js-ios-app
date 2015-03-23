@@ -43,7 +43,7 @@
     if (self = [super init]) {
         _webView = [[UIWebView alloc] initWithFrame:CGRectZero];
         _webView.scalesPageToFit = YES;
-        _webView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         _webView.scrollView.bounces = NO;
         _webView.scalesPageToFit = YES;

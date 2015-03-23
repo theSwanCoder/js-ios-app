@@ -43,12 +43,13 @@
 - (instancetype)initWithReport:(JMVisualizeReport *)report;
 + (instancetype)loaderWithReport:(JMVisualizeReport *)report;
 
-- (void)fetchStartPageWithReportLoadCompletion:(void(^)(BOOL success, NSError *error))reportLoadCompletion;
+- (void)fetchStartPageWithCompletion:(void(^)(BOOL success, NSError *error))reportLoadCompletion;
 - (void)reloadReportWithInputControls:(NSArray *)inputControls;
-- (void)loadPageNumber:(NSInteger)pageNumber withReportLoadCompletion:(void(^)(BOOL success, NSError *error))reportLoadCompletion;
+- (void)loadPageWithNumber:(NSInteger)pageNumber completion:(void(^)(BOOL success, NSError *error))reportLoadCompletion;
+- (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion;
 - (void)cancelReport;
-- (void)refreshReport;
 - (void)destroyReport;
+- (void)authenticate;
 @end
 
 @protocol JMVisualizeReportLoaderDelegate <NSObject>

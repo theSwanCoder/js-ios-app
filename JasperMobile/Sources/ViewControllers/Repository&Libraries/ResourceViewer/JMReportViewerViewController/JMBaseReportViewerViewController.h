@@ -39,7 +39,8 @@
 
 typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
     JMReportLoaderErrorTypeUndefined,
-    JMReportLoaderErrorTypeEmtpyReport
+    JMReportLoaderErrorTypeEmtpyReport,
+    JMReportLoaderErrorTypeAuthentification
 };
 
 @interface JMBaseReportViewerViewController : JMResourceViewerViewController <JMRefreshable, JMReportViewerToolBarDelegate>
@@ -52,9 +53,7 @@ typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
 - (void)startLoadReport;
 // setups
 - (void)updateToobarAppearence;
-- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
-                                  target:(id)target
-                                  action:(SEL)action;
+- (void)setupBackNavigationItem;
 
 // overridden actions
 - (void)backButtonTapped:(id) sender;

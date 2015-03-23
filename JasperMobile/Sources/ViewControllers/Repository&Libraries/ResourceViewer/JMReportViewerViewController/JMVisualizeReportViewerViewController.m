@@ -50,6 +50,7 @@
     
     self.isStartFromAnotherReport = NO;
 }
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -77,17 +78,25 @@
     [reportViewController.view insertSubview:self.webView belowSubview:reportViewController.activityIndicator];
     self.webView.delegate = reportViewController.reportLoader;
     reportViewController.returnFromPreviousReportCompletion = @weakself(^()) {
-        [reportViewController.reportLoader refreshReport];
+        reportViewController.returnFromPreviousReportCompletion = nil;
+        [reportViewController.reportLoader refreshReportWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+            if (success) {
+                // succcess action
+                //[self hideEmptyReportMessage];
+            } else {
+                [self handleError:error];
+            }
+        }@weakselfend];
     }@weakselfend;
     
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Setups
-- (void)setupNavigationItems
+- (void)setupBackNavigationItem
 {
     if (!self.isStartFromAnotherReport) {
-        [super setupNavigationItems];
+        [super setupBackNavigationItem];
     }
 }
 
@@ -126,13 +135,18 @@
 #pragma mark - JMReportViewerToolBarDelegate
 - (void)toolbar:(JMReportViewerToolBar *)toolbar pageDidChanged:(NSInteger)page
 {
-            // session
-    
-    
+    // TODO: need support sessions
     // start show loading indicator
-    [self.reportLoader loadPageNumber:page withReportLoadCompletion:@weakself(^(BOOL success, NSError *error)) {
+    [self.reportLoader loadPageWithNumber:page completion:@weakself(^(BOOL success, NSError *error)) {
         // stop show loading indicator
     }@weakselfend];
+}
+
+- (void)handleReportLoaderDidChangeCountOfPages
+{
+    if (self.report.isReportEmpty) {
+        [self showEmptyReportMessage];
+    }
 }
 
 #pragma mark - Run report
@@ -140,58 +154,77 @@
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
         [self.reportLoader cancelReport];
-        [self backToPreviousReport];
+        [self backToPreviousView];
     }@weakselfend];
     
-    [self.reportLoader fetchStartPageWithReportLoadCompletion:@weakself(^(BOOL success, NSError *error)) {
-        [self stopShowLoader];
+    [self hideEmptyReportMessage];
+    NSLog(@"begin load report");
+    
+    __weak JMVisualizeReportViewerViewController * weakSelf = self;
+    
+    [self.reportLoader fetchStartPageWithCompletion:^(BOOL success, NSError *error) {
+        
+        NSLog(@"end load report");
+        
+        JMVisualizeReportViewerViewController *strongSelf = weakSelf;
+        
+        [strongSelf stopShowLoader];
         
         if (success) {
-            [self hideEmptyReportMessage];
+            // succcess action
         } else {
-            if (error.code == JMReportLoaderErrorTypeEmtpyReport) {
-                [self showEmptyReportMessage];
-            } else {
-                [UIAlertView localizedAlertWithTitle:@"detail.report.viewer.error.title"
-                                             message:error.localizedDescription
-                                          completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                              [self backToPreviousView];
-                                          }
-                                   cancelButtonTitle:@"dialog.button.ok"
-                                   otherButtonTitles:nil];
-            }
+            [strongSelf handleError:error];
         }
         
-    }@weakselfend];
-}
-
-- (void)reloadReport
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-//    [self hideEmptyReportMessage];
-//    [self.report restoreDefaultState];
-    
-    //[self clearWebView];
-    
-    NSLog(@"subviews: %@", self.view.subviews);
-    if ([self.webView isLoading]) {
-        NSLog(@"web view is loading");
-    }
-    [super updateToobarAppearence];
-    [self.reportLoader refreshReport];
+    }];
 }
 
 #pragma mark - JMRefreshable
 - (void)refresh
 {
     if (self.reportLoader.isReportInLoadingProcess) {
-        //[self hideEmptyReportMessage];
+        [self hideEmptyReportMessage];
         [self.report restoreDefaultState];
         [super updateToobarAppearence];
         // session
-        [self.reportLoader refreshReport];
+        [self.reportLoader refreshReportWithCompletion:^(BOOL success, NSError *error) {
+            [self stopShowLoader];
+            if (success) {
+                // succcess action
+            } else {
+                [self handleError:error];
+            }
+        }];
     } else {
         [super refresh];
+    }
+}
+
+- (void)handleError:(NSError *)error
+{
+    if (error.code == JMReportLoaderErrorTypeAuthentification) {
+        
+        [self.restClient deleteCookies];
+        [self clearWebView];
+        [self.webView loadHTMLString:nil baseURL:nil];
+        
+        [self.report restoreDefaultState];
+        if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+            [self runReport];
+        } else {
+            [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
+                [self runReport];
+            } @weakselfend];
+        }
+        
+    } else {
+        [[UIAlertView localizedAlertWithTitle:@"detail.report.viewer.error.title"
+                                      message:error.localizedDescription
+                                   completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                       [self backToPreviousView];
+                                   }
+                            cancelButtonTitle:@"dialog.button.ok"
+                            otherButtonTitles:nil] show];
     }
 }
 

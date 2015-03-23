@@ -17,7 +17,7 @@
       };
 
       ReportCallback.prototype.onLoadError = function(error) {
-        this._makeCallback("reportDidEndRenderFailured");
+        this._makeCallback("reportDidEndRenderFailured&error=" + error);
       };
 
       ReportCallback.prototype.onTotalPagesLoaded = function(pages) {
@@ -33,7 +33,7 @@
       };
 
       ReportCallback.prototype.onReportExecutionClick = function(reportUri, params) {
-        console.log("onReportExecutionClick");
+        this._makeCallback("runReport&params=" + params);
       };
 
       ReportCallback.prototype._makeCallback = function(command) {
@@ -268,6 +268,7 @@
 
       function MobileReport(context1) {
         this.context = context1;
+        this.context.callback.onScriptLoaded();
       }
 
       MobileReport.prototype.setCredentials = function(options) {

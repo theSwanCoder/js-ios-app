@@ -104,7 +104,7 @@ JasperMobile.auth = {
                                                   paramString += "&" + key + "=" + value;
                                               }
                                                               
-                                              var command = decodeURI("type=runReport&reportPath=" + _report + paramString);
+                                              var command = decodeURI("runReport&reportPath=" + _report + paramString);
                                               JasperMobile.makeCallback.run(command);
                                           } else if (type == "LocalAnchor") {
                                               var parameters = link.parameters;

@@ -69,6 +69,7 @@ NSString * const kJMReportLoaderDidChangeCountOfPagesNotification = @"kJMReportL
         [self restoreDefaultState];
         
         _isInputControlsLoaded = NO;
+        _isReportEmpty = NO;
     }
     return self;
 }
@@ -121,6 +122,8 @@ NSString * const kJMReportLoaderDidChangeCountOfPagesNotification = @"kJMReportL
     
     if (countOfPages == 0) {
         self.isReportEmpty = YES;
+    } else {
+        self.isReportEmpty = NO;
     }
     
     self.countOfPages = countOfPages;

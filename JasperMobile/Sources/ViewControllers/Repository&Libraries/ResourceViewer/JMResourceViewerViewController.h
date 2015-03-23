@@ -51,9 +51,13 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 // setup
 - (void)setupNavigationItems;
 - (void)setupWebView;
+- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
+                                  target:(id)target
+                                  action:(SEL)action;
 
 - (JSResourceLookup *)currentResourceLookup;
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource;
+
 
 // UIWebView helpers
 - (void)startShowLoadingIndicators;

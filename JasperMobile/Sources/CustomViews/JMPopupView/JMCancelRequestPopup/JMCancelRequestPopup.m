@@ -66,9 +66,10 @@ static NSInteger _cancelRequestPopupCounter = 0;
     popup.progressLabel.text = JMCustomLocalizedString(message, nil);
     [popup.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
     popup.cancelBlock = cancelBlock;
-    _cancelRequestPopupCounter ++;
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSLog(@"counter: %@", @(_cancelRequestPopupCounter));
+    NSLog(@"counter before: %@", @(_cancelRequestPopupCounter));
+    _cancelRequestPopupCounter ++;
+    NSLog(@"counter after: %@", @(_cancelRequestPopupCounter));
 }
 
 - (void)dismiss:(BOOL)animated
@@ -88,13 +89,14 @@ static NSInteger _cancelRequestPopupCounter = 0;
 
 + (void) dismiss
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSLog(@"counter before: %@", @(_cancelRequestPopupCounter));
     _cancelRequestPopupCounter --;
     if (_cancelRequestPopupCounter < 0) {
         _cancelRequestPopupCounter = 0;
         return;
     }
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSLog(@"counter: %@", @(_cancelRequestPopupCounter));
+    NSLog(@"counter after: %@", @(_cancelRequestPopupCounter));
     if (_cancelRequestPopupCounter == 0) {
         JMCancelRequestPopup *cancelPopup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:self];
         [cancelPopup dismiss];

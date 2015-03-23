@@ -39,8 +39,6 @@
 {
     [super viewDidLoad];
     
-
-    
     self.visualizeClient = [JMVisualizeClient new];
     self.visualizeClient.delegate = self;
     self.visualizeClient.webView = self.webView;
@@ -56,9 +54,9 @@
 #pragma mark - Actions
 - (void)minimizeDashboard
 {
-    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItems = self.rightButtonItems;
-    self.navigationItem.title = self.resourceLookup.label;
+    self.navigationItem.title = [self currentResourceLookup].label;
     [self.visualizeClient minimizeDashlet];
 }
 
@@ -86,19 +84,20 @@
         
         [self.webView.scrollView setZoomScale:0.1 animated:YES];
         
-        NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"dashboard-amber-ios-mobilejs-sdk" ofType:@"js"];
+        NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"jaspermobile_dashboard" ofType:@"js"];
         
         NSError *error;
         NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
         if (jsMobile) {
-//            NSString *width = @"\"250%\"";
-//            NSString *height = @"\"250%\"";
-//            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-//                width = @"\"150%\"";
-//                height = @"\"150%\"";
-//            }
-//            jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_WIDTH" withString:width];
-//            jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_HEIGHT" withString:height];
+            NSString *width = @"\"250%\"";
+            NSString *height = @"\"250%\"";
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                width = @"\"150%\"";
+                height = @"\"150%\"";
+            }
+            jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_WIDTH" withString:width];
+            jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_HEIGHT" withString:height];
+
             [self.webView stringByEvaluatingJavaScriptFromString:jsMobile];
         } else {
             NSLog(@"load jaspermobile.js error: %@", error.localizedDescription);
@@ -117,9 +116,10 @@
 - (void)visualizeClientDidMaximizeDashletWithTitle:(NSString *)title
 {
     [self.webView.scrollView setZoomScale:0.1 animated:YES];
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(minimizeDashboard)];
-    self.navigationItem.rightBarButtonItem = barButtonItem;
-    
+    self.navigationItem.rightBarButtonItems = nil;
+    self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:[self currentResourceLookup].label
+                                                               target:self
+                                                               action:@selector(minimizeDashboard)];
     self.navigationItem.title = title;
 }
 
