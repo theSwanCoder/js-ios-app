@@ -22,39 +22,17 @@
 
 
 //
-//  JMWebViewManager.h
+//  JMVisualizeWebViewManager.h
 //  TIBCO JasperMobile
 //
 
-#import "JMWebViewManager.h"
+/**
+ @author Aleksandr Dakhno odahno@tibco.com
+ @since 2.0
+ */
 
-@interface JMWebViewManager()
-@property (nonatomic, strong, readwrite) UIWebView *webView;
-@end
-
-@implementation JMWebViewManager
-
-+ (instancetype)sharedInstance {
-    static JMWebViewManager *sharedMyManager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedMyManager = [[self alloc] init];
-    });
-    return sharedMyManager;
-}
-
-- (instancetype)init {
-    if (self = [super init]) {
-        _webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-        
-        _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        
-        _webView.scrollView.bounces = NO;
-        _webView.scalesPageToFit = YES;
-        _webView.dataDetectorTypes = UIDataDetectorTypeNone;
-        _webView.suppressesIncrementalRendering = YES;
-    }
-    return self;
-}
-
+@interface JMVisualizeWebViewManager : NSObject
+@property (nonatomic, strong, readonly) UIWebView *webView;
+@property (nonatomic, assign) BOOL isVisualizeLoaded;
++ (instancetype)sharedInstance;
 @end

@@ -39,8 +39,6 @@
 {
     [super viewDidLoad];
     
-
-    
     self.visualizeClient = [JMVisualizeClient new];
     self.visualizeClient.delegate = self;
     self.visualizeClient.webView = self.webView;
@@ -56,9 +54,9 @@
 #pragma mark - Actions
 - (void)minimizeDashboard
 {
-    self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItems = self.rightButtonItems;
-    self.navigationItem.title = self.resourceLookup.label;
+    self.navigationItem.title = [self currentResourceLookup].label;
     [self.visualizeClient minimizeDashlet];
 }
 
@@ -81,6 +79,7 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     if (!self.isCommandSend) {
+        NSLog(@"inject js");
         self.isCommandSend = YES;
         
         [self.webView.scrollView setZoomScale:0.1 animated:YES];
@@ -98,6 +97,7 @@
             }
             jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_WIDTH" withString:width];
             jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_HEIGHT" withString:height];
+
             [self.webView stringByEvaluatingJavaScriptFromString:jsMobile];
         } else {
             NSLog(@"load jaspermobile.js error: %@", error.localizedDescription);
@@ -116,9 +116,10 @@
 - (void)visualizeClientDidMaximizeDashletWithTitle:(NSString *)title
 {
     [self.webView.scrollView setZoomScale:0.1 animated:YES];
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(minimizeDashboard)];
-    self.navigationItem.rightBarButtonItem = barButtonItem;
-    
+    self.navigationItem.rightBarButtonItems = nil;
+    self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:[self currentResourceLookup].label
+                                                               target:self
+                                                               action:@selector(minimizeDashboard)];
     self.navigationItem.title = title;
 }
 

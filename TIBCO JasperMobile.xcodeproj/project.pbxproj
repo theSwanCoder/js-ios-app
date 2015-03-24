@@ -120,8 +120,6 @@
 		089B161C1AA757EA0021A915 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B16131AA757EA0021A915 /* SWRevealViewController.m */; };
 		089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16151AA757EA0021A915 /* jaspermobile.js */; };
 		089B161E1AA757EA0021A915 /* jaspermobile_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */; };
-		089B16201AA757EA0021A915 /* visualize_test.html in Resources */ = {isa = PBXBuildFile; fileRef = 089B16181AA757EA0021A915 /* visualize_test.html */; };
-		089B16211AA757EA0021A915 /* visualize_test_old.html in Resources */ = {isa = PBXBuildFile; fileRef = 089B16191AA757EA0021A915 /* visualize_test_old.html */; };
 		08C838141A1F57640004BE78 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C837ED1A1F57640004BE78 /* Appirater.m */; };
 		08C838161A1F57640004BE78 /* AppiraterLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08C837F01A1F57640004BE78 /* AppiraterLocalizable.strings */; };
 		08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C838191A1F5A0D0004BE78 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -131,6 +129,15 @@
 		08FCFACA1A8A6057007940E7 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */; };
 		7F0FBEF9123360B7837DA1F6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */; };
 		93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */; };
+		93047D611AB9722B0047C982 /* JMVisualizeWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93047D601AB9722B0047C982 /* JMVisualizeWebViewManager.m */; };
+		930F8D3F1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D3B1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js */; };
+		930F8D401ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D3C1ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js */; };
+		930F8D411ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D3D1ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js */; };
+		930F8D421ABB1C35005F93FB /* report-ios-mobilejs-sdk.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D3E1ABB1C35005F93FB /* report-ios-mobilejs-sdk.js */; };
+		930F8D451ABB1CDF005F93FB /* dashboard.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D431ABB1CDF005F93FB /* dashboard.html */; };
+		930F8D461ABB1CDF005F93FB /* report.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D441ABB1CDF005F93FB /* report.html */; };
+		930F8D481ABB1D9F005F93FB /* require.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D471ABB1D9F005F93FB /* require.min.js */; };
+		930F8D4A1ABB28B0005F93FB /* report_optimized.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D491ABB28B0005F93FB /* report_optimized.html */; };
 		9339E3021AA9C7E40024419D /* JMReportViewerToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9339E2FF1AA9C7E40024419D /* JMReportViewerToolBar.m */; };
 		9339E3031AA9C7E40024419D /* JMReportViewerToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9339E3001AA9C7E40024419D /* JMReportViewerToolBar.xib */; };
 		9339E3041AA9C7E40024419D /* JMReportViewerToolBar~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9339E3011AA9C7E40024419D /* JMReportViewerToolBar~ipad.xib */; };
@@ -389,8 +396,6 @@
 		089B16131AA757EA0021A915 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		089B16151AA757EA0021A915 /* jaspermobile.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jaspermobile.js; sourceTree = "<group>"; };
 		089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jaspermobile_dashboard.js; sourceTree = "<group>"; };
-		089B16181AA757EA0021A915 /* visualize_test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = visualize_test.html; sourceTree = "<group>"; };
-		089B16191AA757EA0021A915 /* visualize_test_old.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = visualize_test_old.html; sourceTree = "<group>"; };
 		08B99F6D1A07CD7700E822B0 /* profiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = profiles.json; sourceTree = "<group>"; };
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		08C837EC1A1F57640004BE78 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appirater.h; sourceTree = "<group>"; };
@@ -458,6 +463,16 @@
 		93047D591AB6F5750047C982 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		93047D5A1AB6F5750047C982 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
 		93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
+		93047D5F1AB9722B0047C982 /* JMVisualizeWebViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeWebViewManager.h; sourceTree = "<group>"; };
+		93047D601AB9722B0047C982 /* JMVisualizeWebViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeWebViewManager.m; sourceTree = "<group>"; };
+		930F8D3B1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "dashboard-amber-ios-mobilejs-sdk.js"; sourceTree = "<group>"; };
+		930F8D3C1ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "dashboard-amber2-ios-mobilejs-sdk.js"; sourceTree = "<group>"; };
+		930F8D3D1ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "dashboard-legacy-mobilejs-sdk.js"; sourceTree = "<group>"; };
+		930F8D3E1ABB1C35005F93FB /* report-ios-mobilejs-sdk.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "report-ios-mobilejs-sdk.js"; sourceTree = "<group>"; };
+		930F8D431ABB1CDF005F93FB /* dashboard.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = dashboard.html; sourceTree = "<group>"; };
+		930F8D441ABB1CDF005F93FB /* report.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = report.html; sourceTree = "<group>"; };
+		930F8D471ABB1D9F005F93FB /* require.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = require.min.js; sourceTree = "<group>"; };
+		930F8D491ABB28B0005F93FB /* report_optimized.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = report_optimized.html; sourceTree = "<group>"; };
 		9339E2FE1AA9C7E40024419D /* JMReportViewerToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportViewerToolBar.h; sourceTree = "<group>"; };
 		9339E2FF1AA9C7E40024419D /* JMReportViewerToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportViewerToolBar.m; sourceTree = "<group>"; };
 		9339E3001AA9C7E40024419D /* JMReportViewerToolBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMReportViewerToolBar.xib; sourceTree = "<group>"; };
@@ -1433,10 +1448,16 @@
 		089B16141AA757EA0021A915 /* VisualizeJS */ = {
 			isa = PBXGroup;
 			children = (
+				930F8D471ABB1D9F005F93FB /* require.min.js */,
+				930F8D431ABB1CDF005F93FB /* dashboard.html */,
+				930F8D441ABB1CDF005F93FB /* report.html */,
+				930F8D491ABB28B0005F93FB /* report_optimized.html */,
+				930F8D3B1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js */,
+				930F8D3C1ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js */,
+				930F8D3D1ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js */,
+				930F8D3E1ABB1C35005F93FB /* report-ios-mobilejs-sdk.js */,
 				089B16151AA757EA0021A915 /* jaspermobile.js */,
 				089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */,
-				089B16181AA757EA0021A915 /* visualize_test.html */,
-				089B16191AA757EA0021A915 /* visualize_test_old.html */,
 			);
 			path = VisualizeJS;
 			sourceTree = "<group>";
@@ -1636,6 +1657,8 @@
 			children = (
 				93D8C6431AAC7E9200117306 /* JMWebViewManager.h */,
 				93D8C6441AAC7E9200117306 /* JMWebViewManager.m */,
+				93047D5F1AB9722B0047C982 /* JMVisualizeWebViewManager.h */,
+				93047D601AB9722B0047C982 /* JMVisualizeWebViewManager.m */,
 			);
 			path = JMWebViewManager;
 			sourceTree = "<group>";
@@ -1870,23 +1893,29 @@
 				9348F4EA1A35D103006F5677 /* profiles.json in Resources */,
 				089B15C11AA756BD0021A915 /* JMGridLoadingCollectionViewCell.xib in Resources */,
 				089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */,
+				930F8D421ABB1C35005F93FB /* report-ios-mobilejs-sdk.js in Resources */,
+				930F8D411ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js in Resources */,
+				930F8D401ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js in Resources */,
 				089B15FC1AA756BD0021A915 /* JMBaseCollectionView.xib in Resources */,
+				930F8D461ABB1CDF005F93FB /* report.html in Resources */,
 				08FCFACA1A8A6057007940E7 /* MainStoryboard_iPad.storyboard in Resources */,
-				089B16201AA757EA0021A915 /* visualize_test.html in Resources */,
 				BDABBD2B1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard in Resources */,
 				089B15DC1AA756BD0021A915 /* JMSingleSelectTableViewController.xib in Resources */,
 				089B15C61AA756BD0021A915 /* JMGridResourceCollectionViewCell.xib in Resources */,
+				930F8D481ABB1D9F005F93FB /* require.min.js in Resources */,
 				089B15FD1AA756BD0021A915 /* JMBaseCollectionView~ipad.xib in Resources */,
+				930F8D451ABB1CDF005F93FB /* dashboard.html in Resources */,
 				089B15C91AA756BD0021A915 /* JMHorizontalResourceCollectionViewCell~ipad.xib in Resources */,
-				089B16211AA757EA0021A915 /* visualize_test_old.html in Resources */,
 				937336111A0DE46D004E6520 /* Images.xcassets in Resources */,
 				089B15C81AA756BD0021A915 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
 				089B15AD1AA756BD0021A915 /* JMCancelRequestPopup.xib in Resources */,
 				089B15DD1AA756BD0021A915 /* JMSingleSelectTableViewController~ipad.xib in Resources */,
+				930F8D3F1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js in Resources */,
 				9339E3031AA9C7E40024419D /* JMReportViewerToolBar.xib in Resources */,
 				089B15C21AA756BD0021A915 /* JMGridLoadingCollectionViewCell~ipad.xib in Resources */,
 				089B15C31AA756BD0021A915 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */,
 				089B15C71AA756BD0021A915 /* JMGridResourceCollectionViewCell~ipad.xib in Resources */,
+				930F8D4A1ABB28B0005F93FB /* report_optimized.html in Resources */,
 				089B15AF1AA756BD0021A915 /* JMListOptionsPopupView.xib in Resources */,
 				9339E3041AA9C7E40024419D /* JMReportViewerToolBar~ipad.xib in Resources */,
 				08C838161A1F57640004BE78 /* AppiraterLocalizable.strings in Resources */,
@@ -1972,6 +2001,7 @@
 				08C838141A1F57640004BE78 /* Appirater.m in Sources */,
 				089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */,
 				93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */,
+				93047D611AB9722B0047C982 /* JMVisualizeWebViewManager.m in Sources */,
 				08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */,
 				089B15F41AA756BD0021A915 /* JMSettings.m in Sources */,
 				089B15F81AA756BD0021A915 /* JMLibraryCollectionViewController.m in Sources */,

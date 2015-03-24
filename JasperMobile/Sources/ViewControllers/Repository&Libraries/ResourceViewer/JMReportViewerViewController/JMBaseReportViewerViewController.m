@@ -44,7 +44,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [_toolbar removeFromSuperview];
 }
 
 #pragma mark - UIViewController
@@ -63,6 +62,13 @@
     
     // start point
     [self startLoadReport];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [_toolbar removeFromSuperview];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -99,6 +105,11 @@
 {
     [super setupNavigationItems];
     
+    [self setupBackNavigationItem];
+}
+
+- (void)setupBackNavigationItem
+{
     UIViewController *rootViewController = [self.navigationController.viewControllers firstObject];
     NSString *backItemTitle = rootViewController.title;
     
@@ -106,28 +117,6 @@
                                                    target:self
                                                    action:@selector(backButtonTapped:)];
     self.navigationItem.leftBarButtonItem = backItem;
-}
-
-- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
-                                  target:(id)target
-                                  action:(SEL)action
-{
-    NSString *backItemTitle = title;
-    if (!backItemTitle) {
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        NSInteger viewControllersCount = viewControllers.count;
-        UIViewController *previousViewController = [viewControllers objectAtIndex:(viewControllersCount - 2)];
-        backItemTitle = previousViewController.title;
-    }
-    
-    UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
-    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:backItemTitle
-                                                                 style:UIBarButtonItemStyleBordered
-                                                                target:target
-                                                                action:action];
-    [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    return backItem;
 }
 
 #pragma mark - Observe Notifications
@@ -161,16 +150,16 @@
 }
 
 #pragma mark - Actions
-- (void) backButtonTapped:(id) sender
-{
-    //[self clearWebView];
-    [self backToRootVC];
-}
-
-- (void)backToRootVC
+- (void)backButtonTapped:(id) sender
 {
     [self.view endEditing:YES];
-    [_toolbar removeFromSuperview];
+    self.webView.delegate = nil;
+    [self backToPreviousView];
+}
+
+- (void)backToPreviousView
+{
+    [self clearWebView];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -185,9 +174,30 @@
 - (void)startLoadReport
 {
     BOOL isReportEmpty = self.report.isReportEmpty;
+    BOOL isInputControlsLoaded = self.report.isInputControlsLoaded;
     BOOL isReportInLoadingProcess = self.reportLoader.isReportInLoadingProcess;
-    if (isReportEmpty && !isReportInLoadingProcess) {
-        [self verifyInputControls];
+    
+    if (!isInputControlsLoaded) {
+        // start load input controls
+        
+        NSString *reportURI = [self.report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        [self loadInputControlsWithReportURI:reportURI
+                                  completion:@weakself(^(NSArray *inputControls)) {
+            self.report.isInputControlsLoaded = YES;
+            if (inputControls) {
+                [self.report updateInputControls:inputControls];
+                [self showReportOptionsViewControllerWithBackButton:YES];
+                
+                [self.restClient performSelector:@selector(deleteCookies) withObject:nil afterDelay:30];
+            } else {
+                [self runReport];
+            }
+        }@weakselfend];
+        
+    } else if(isInputControlsLoaded && (!isReportEmpty && !isReportInLoadingProcess) ) {
+        // show report with loaded input controls
+        // when we start running a report from another report by tapping on hyperlink
+        [self runReport];
     }
 }
 
@@ -236,12 +246,6 @@
     [self runReport];
 }
 
-- (void)clearWebView
-{
-    [self.webView stopLoading];
-    [self.webView loadHTMLString:nil baseURL:nil];
-}
-
 #pragma mark - JMReportViewerToolBarDelegate
 - (void)toolbar:(JMReportViewerToolBar *)toolbar pageDidChanged:(NSInteger)page
 {
@@ -261,16 +265,20 @@
     // overriden in childs
 }
 
+- (void)reloadReport
+{
+    // overriden in childs
+}
+
 #pragma mark - Report Options (Input Controls)
-- (void)verifyInputControls
+- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *))completion
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
         [self.restClient cancelAllRequests];
         [self.reportLoader cancelReport];
-        [self backToRootVC];
+        [self backToPreviousView];
     }@weakselfend];
     
-    NSString *reportURI = [self.report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self.restClient inputControlsForReport:reportURI
                                         ids:nil
                              selectedValues:nil
@@ -280,10 +288,10 @@
                                 if (result.error) {
                                     if (result.error.code == JSSessionExpiredErrorCode) {
                                         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                            [self verifyInputControls];
+                                            [self loadInputControlsWithReportURI:reportURI completion:completion];
                                         } else {
                                             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                                                [self verifyInputControls];
+                                                [self loadInputControlsWithReportURI:reportURI completion:completion];
                                             } @weakselfend];
                                         }
                                     } else {
@@ -299,15 +307,13 @@
                                     }
                                     
                                     if (result.objects.count - invisibleInputControls.count == 0) {
-                                        [self runReport];
+                                        completion(nil);
                                     } else {
                                         NSMutableArray *inputControls = [result.objects mutableCopy];
                                         if (invisibleInputControls.count) {
                                             [inputControls removeObjectsInArray:invisibleInputControls];
-                                        }
-                                        
-                                        [self.report updateInputControls:inputControls];
-                                        [self showReportOptionsViewControllerWithBackButton:YES];
+                                        }                                        
+                                        completion([inputControls copy]);
                                     }
                                 }
                                 
@@ -357,6 +363,12 @@
 {
     self.emptyReportMessageLabel.hidden = YES;
     self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
+}
+
+- (void)clearWebView
+{
+    [self.webView stopLoading];
+    [self.webView loadHTMLString:nil baseURL:nil];
 }
 
 @end

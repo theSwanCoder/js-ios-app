@@ -70,8 +70,9 @@
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
         [self.restClient cancelAllRequests];
         [self.reportLoader cancelReport];
-        [self backToRootVC];
+        [self backToPreviousView];
     }@weakselfend];
+    
     [self.reportLoader fetchStartPageWithCompletion:@weakself(^(BOOL success, NSError *error)) {
         [self stopShowLoader];
         
@@ -92,24 +93,7 @@
     }@weakselfend];
 }
 
-#pragma mark - Empty Report handlers
-- (void)showViewWithInputControls
-{
-    if ([self.report canRestorePreviousState]) {
-        [self showReportOptionsViewControllerWithBackButton:NO];
-    } else {
-        [self.report restorePreviousState];
-        [self showReportOptionsViewControllerWithBackButton:YES];
-    }
-}
-
-- (void)reloadPageWithRestoredInputControls
-{
-    [self.report restorePreviousState];
-    [self.webView loadHTMLString:self.report.HTMLString
-                         baseURL:[NSURL URLWithString:self.report.baseURLString]];
-}
-
+#pragma mark - Error Report handlers
 - (void) handleReportLoaderError:(NSError *)error
 {
     if (error.code == JSSessionExpiredErrorCode) {

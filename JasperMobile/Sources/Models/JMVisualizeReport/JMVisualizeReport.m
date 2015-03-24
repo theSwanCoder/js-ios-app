@@ -27,6 +27,21 @@
 //
 #import "JMVisualizeReport.h"
 
+@interface JMVisualizeReport()
+// html
+@property (nonatomic, copy, readwrite) NSString *HTMLString;
+@property (nonatomic, copy, readwrite) NSString *baseURLString;
+@end
+
 @implementation JMVisualizeReport
+
+@synthesize HTMLString = _HTMLString, baseURLString = _baseURLString;
+
+- (void)updateHTMLString:(NSString *)HTMLString
+            baseURLSring:(NSString *)baseURLString
+{
+    self.HTMLString = HTMLString;
+    self.baseURLString = baseURLString;
+}
 
 @end

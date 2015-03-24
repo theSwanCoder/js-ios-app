@@ -68,6 +68,7 @@ extern NSString * const kJMDashboardKey;
 // Settings keys
 extern NSString * const kJMDefaultRequestTimeout;
 extern NSString * const kJMDefaultSendingCrashReport;
+extern NSString * const kJMDefaultUseVisualize;
 
 // Report directory
 extern NSString * const kJMReportsDirectory;
