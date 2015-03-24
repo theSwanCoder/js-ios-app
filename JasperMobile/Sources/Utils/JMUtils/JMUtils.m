@@ -168,9 +168,22 @@
                       otherButtonTitles: nil] show];
 }
 
++ (BOOL)shouldUseVisualize
+{
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize]) {
+        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultUseVisualize];
+    }
+    
+    id useVisualizeSettings = [[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize];
+    if (useVisualizeSettings) {
+        return [useVisualizeSettings boolValue];
+    }
+    return YES;
+}
+
 + (BOOL)isSupportVisualize
 {
-    return [self isServerVersionUpOrEqual6] && [self isServerProEdition];
+    return [self shouldUseVisualize] && [self isServerVersionUpOrEqual6] && [self isServerProEdition];
 }
 
 + (BOOL)isServerVersionUpOrEqual6

@@ -53,10 +53,13 @@ static NSString * const kJMIntroCellIdentifier = @"IntroCellIdentifier";
 {
     NSMutableArray *itemsArray = [NSMutableArray array];
     NSArray *itemsSourceArray =
-    @[@{@"title" : JMCustomLocalizedString(@"settings.item.connection.timeout", nil), @"value" : @(self.restClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier},
+    @[
+      @{@"title" : JMCustomLocalizedString(@"settings.item.connection.timeout", nil), @"value" : @(self.restClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.crashtracking.title", nil), @"value" : @([JMUtils crashReportsSendingEnable]), @"cellIdentifier" : kJMBooleanCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.item.intro", nil), @"value" : @"", @"cellIdentifier" : kJMIntroCellIdentifier},
-      @{@"title" : JMCustomLocalizedString(@"settings.feedback", nil), @"value" : @"", @"cellIdentifier" : kJMFeedbackCellIdentifier}];
+      @{@"title" : JMCustomLocalizedString(@"settings.feedback", nil), @"value" : @"", @"cellIdentifier" : kJMFeedbackCellIdentifier},
+      @{@"title" : @"Use Visualize", @"value" : @([JMUtils shouldUseVisualize]), @"cellIdentifier" : kJMBooleanCellIdentifier}
+      ];
     
     for (NSDictionary *itemData in itemsSourceArray) {
         JMSettingsItem *item = [[JMSettingsItem alloc] init];
@@ -78,6 +81,7 @@ static NSString * const kJMIntroCellIdentifier = @"IntroCellIdentifier";
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[[self.itemsArray objectAtIndex:0] valueSettings] forKey:kJMDefaultRequestTimeout];
     [defaults setObject:[[self.itemsArray objectAtIndex:1] valueSettings] forKey:kJMDefaultSendingCrashReport];
+    [defaults setObject:[[self.itemsArray objectAtIndex:4] valueSettings] forKey:kJMDefaultUseVisualize];
     [defaults synchronize];
     
     self.restClient.timeoutInterval = [[[self.itemsArray objectAtIndex:0] valueSettings] doubleValue];
