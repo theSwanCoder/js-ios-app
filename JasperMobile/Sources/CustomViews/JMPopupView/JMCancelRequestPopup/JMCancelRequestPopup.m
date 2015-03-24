@@ -67,14 +67,19 @@ static NSInteger _cancelRequestPopupCounter = 0;
     [popup.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
     popup.cancelBlock = cancelBlock;
     _cancelRequestPopupCounter ++;
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSLog(@"counter: %@", @(_cancelRequestPopupCounter));
 }
 
 - (void)dismiss:(BOOL)animated
 {
-    [super dismiss:animated];
-    [JMUtils hideNetworkActivityIndicator];
+    _cancelRequestPopupCounter --;
+    if (_cancelRequestPopupCounter < 0) {
+        _cancelRequestPopupCounter = 0;
+        return;
+    }
+    if (_cancelRequestPopupCounter == 0) {
+        [super dismiss:animated];
+        [JMUtils hideNetworkActivityIndicator];
+    }
 }
 
 #pragma mark - Actions
@@ -88,17 +93,8 @@ static NSInteger _cancelRequestPopupCounter = 0;
 
 + (void) dismiss
 {
-    _cancelRequestPopupCounter --;
-    if (_cancelRequestPopupCounter < 0) {
-        _cancelRequestPopupCounter = 0;
-        return;
-    }
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSLog(@"counter: %@", @(_cancelRequestPopupCounter));
-    if (_cancelRequestPopupCounter == 0) {
-        JMCancelRequestPopup *cancelPopup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:self];
-        [cancelPopup dismiss];
-    }
+    JMCancelRequestPopup *cancelPopup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:self];
+    [cancelPopup dismiss];
 }
 
 @end
