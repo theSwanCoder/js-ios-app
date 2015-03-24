@@ -162,7 +162,7 @@
     
     __weak JMVisualizeReportViewerViewController * weakSelf = self;
     
-    [self.reportLoader fetchStartPageWithCompletion:^(BOOL success, NSError *error) {
+    [self.reportLoader fetchStartPageWithCompletion:@weakself(^(BOOL success, NSError *error)) {
         
         NSLog(@"end load report");
         
@@ -176,7 +176,7 @@
             [strongSelf handleError:error];
         }
         
-    }];
+    }@weakselfend];
 }
 
 #pragma mark - JMRefreshable
@@ -187,14 +187,14 @@
         [self.report restoreDefaultState];
         [super updateToobarAppearence];
         // session
-        [self.reportLoader refreshReportWithCompletion:^(BOOL success, NSError *error) {
+        [self.reportLoader refreshReportWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             [self stopShowLoader];
             if (success) {
                 // succcess action
             } else {
                 [self handleError:error];
             }
-        }];
+        }@weakselfend];
     } else {
         [super refresh];
     }

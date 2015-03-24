@@ -326,10 +326,8 @@
     reportOptionsViewController.resourceLookup = self.report.resourceLookup;
     reportOptionsViewController.inputControls = [[NSArray alloc] initWithArray:self.report.inputControls copyItems:YES];
     reportOptionsViewController.completionBlock = @weakself(^(void)) {
-        //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.report updateInputControls:reportOptionsViewController.inputControls];
-            [self refresh];
-        //});
+        [self.report updateInputControls:reportOptionsViewController.inputControls];
+        [self refresh];
     }@weakselfend;
     
     if (isShowBackButton) {
