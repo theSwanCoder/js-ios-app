@@ -85,6 +85,7 @@
         [self.webView.scrollView setZoomScale:0.1 animated:YES];
         
         NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"jaspermobile_dashboard" ofType:@"js"];
+//        NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"dashboard-amber-ios-mobilejs-sdk" ofType:@"js"];
         
         NSError *error;
         NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];

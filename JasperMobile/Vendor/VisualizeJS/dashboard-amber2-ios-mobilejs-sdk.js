@@ -77,9 +77,9 @@
       function Scaler() {}
 
       Scaler.prototype.scale = function(factor) {
-        jQuery("meta[name=viewport]").attr('content', 'width=device-width; minimum-scale=0.1; maximum-scale=1; user-scalable=yes');
-        jQuery("#frame").css("width", "50%");
-        jQuery("#frame").css("height", "50%");
+        jQuery("meta[name=viewport]").attr('content', 'target-densitydpi=device-dpi, height=device-height, width=device-width, user-scalable=yes');
+        jQuery("#frame").css("width", "100%");
+        jQuery("#frame").css("height", "100%");
       };
 
       return Scaler;
