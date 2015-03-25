@@ -49,7 +49,7 @@
 #pragma mark - UIViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [self addObservers];
     self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
 }
@@ -57,9 +57,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+
     [self updateToobarAppearence];
-    
+
     // start point
     [self startLoadReport];
 }
@@ -67,7 +67,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+
     [_toolbar removeFromSuperview];
 }
 
@@ -104,7 +104,7 @@
 - (void)setupNavigationItems
 {
     [super setupNavigationItems];
-    
+
     [self setupBackNavigationItem];
 }
 
@@ -112,7 +112,7 @@
 {
     UIViewController *rootViewController = [self.navigationController.viewControllers firstObject];
     NSString *backItemTitle = rootViewController.title;
-    
+
     UIBarButtonItem *backItem = [self backButtonWithTitle:backItemTitle
                                                    target:self
                                                    action:@selector(backButtonTapped:)];
@@ -126,7 +126,7 @@
                                              selector:@selector(multipageNotification)
                                                  name:kJMReportLoaderReportIsMutlipageNotification
                                                object:self.report];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportLoaderDidChangeCountOfPages:)
                                                  name:kJMReportLoaderDidChangeCountOfPagesNotification
@@ -176,33 +176,33 @@
     BOOL isReportEmpty = self.report.isReportEmpty;
     BOOL isInputControlsLoaded = self.report.isInputControlsLoaded;
     BOOL isReportInLoadingProcess = self.reportLoader.isReportInLoadingProcess;
-    
+
     if (!isInputControlsLoaded) {
         // start load input controls
-        
+
         [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
             [self.restClient cancelAllRequests];
             [self.reportLoader cancelReport];
             [self backToPreviousView];
         }@weakselfend];
-        
+
         NSString *reportURI = [self.report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [self loadInputControlsWithReportURI:reportURI
                                   completion:@weakself(^(NSArray *inputControls)) {
-                                      
+
             [self stopShowLoader];
-                                      
+
             self.report.isInputControlsLoaded = YES;
             if (inputControls) {
                 [self.report updateInputControls:inputControls];
                 [self showReportOptionsViewControllerWithBackButton:YES];
-                
+
                 //[self.restClient performSelector:@selector(deleteCookies) withObject:nil afterDelay:30];
             } else {
                 [self runReport];
             }
         }@weakselfend];
-        
+
     } else if(isInputControlsLoaded && (!isReportEmpty && !isReportInLoadingProcess) ) {
         // show report with loaded input controls
         // when we start running a report from another report by tapping on hyperlink
@@ -238,7 +238,7 @@
         }
         case JMMenuActionsViewAction_Save:
             // TODO: change save action
-            
+
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
         default:
@@ -282,17 +282,10 @@
 #pragma mark - Report Options (Input Controls)
 - (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *))completion
 {
-//    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
-//        [self.restClient cancelAllRequests];
-//        [self.reportLoader cancelReport];
-//        [self backToPreviousView];
-//    }@weakselfend];
-    
     [self.restClient inputControlsForReport:reportURI
                                         ids:nil
                              selectedValues:nil
                             completionBlock:@weakself(^(JSOperationResult *result)) {
-//                                [self stopShowLoader];
 
                                 if (result.error) {
                                     if (result.error.code == JSSessionExpiredErrorCode) {
@@ -307,25 +300,25 @@
                                         [JMUtils showAlertViewWithError:result.error];
                                     }
                                 } else {
-                                    
+
                                     NSMutableArray *invisibleInputControls = [NSMutableArray array];
                                     for (JSInputControlDescriptor *inputControl in result.objects) {
                                         if (!inputControl.visible.boolValue) {
                                             [invisibleInputControls addObject:inputControl];
                                         }
                                     }
-                                    
+
                                     if (result.objects.count - invisibleInputControls.count == 0) {
                                         completion(nil);
                                     } else {
                                         NSMutableArray *inputControls = [result.objects mutableCopy];
                                         if (invisibleInputControls.count) {
                                             [inputControls removeObjectsInArray:invisibleInputControls];
-                                        }                                        
+                                        }
                                         completion([inputControls copy]);
                                     }
                                 }
-                                
+
                             }@weakselfend];
 }
 
@@ -338,17 +331,17 @@
         [self.report updateInputControls:reportOptionsViewController.inputControls];
         [self refresh];
     }@weakselfend;
-    
+
     if (isShowBackButton) {
         UIViewController *rootViewController = [self.navigationController.viewControllers firstObject];
         NSString *backItemTitle = rootViewController.title;
-        
+
         UIBarButtonItem *backItem = [self backButtonWithTitle:backItemTitle
                                                        target:reportOptionsViewController
                                                        action:@selector(backToLibrary)];
         reportOptionsViewController.navigationItem.leftBarButtonItem = backItem;
     }
-    
+
     [self.navigationController pushViewController:reportOptionsViewController animated:YES];
 }
 
