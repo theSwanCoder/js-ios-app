@@ -31,8 +31,8 @@
  @since 2.0
  */
 
-@interface JMVisualizeWebViewManager : NSObject
-@property (nonatomic, strong, readonly) UIWebView *webView;
+#import "JMWebViewManager.h"
+
+@interface JMVisualizeWebViewManager : JMWebViewManager
 @property (nonatomic, assign) BOOL isVisualizeLoaded;
-+ (instancetype)sharedInstance;
 @end

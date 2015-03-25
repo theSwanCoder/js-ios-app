@@ -27,6 +27,7 @@
 //
 
 #import "JMWebViewManager.h"
+#import "JMUtils.h"
 
 @interface JMWebViewManager()
 @property (nonatomic, strong, readwrite) UIWebView *webView;
@@ -46,15 +47,31 @@
 - (instancetype)init {
     if (self = [super init]) {
         _webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-        
         _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        
         _webView.scrollView.bounces = NO;
         _webView.scalesPageToFit = YES;
         _webView.dataDetectorTypes = UIDataDetectorTypeNone;
         _webView.suppressesIncrementalRendering = YES;
     }
     return self;
+}
+
+- (UIWebView *)webViewWithParentFrame:(CGRect)frame
+{
+    if ([JMUtils isSystemVersion7]) {
+        UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
+        CGRect webViewFrame = CGRectZero;
+        if ( UIInterfaceOrientationIsPortrait(statusBarOrientation) ) {
+            webViewFrame = frame;
+        } else {
+            webViewFrame = CGRectMake(0, 0, CGRectGetHeight(frame), CGRectGetWidth(frame));
+        }
+
+        _webView.frame = webViewFrame;
+    } else {
+        _webView.frame = frame;        
+    }
+    return _webView;
 }
 
 @end

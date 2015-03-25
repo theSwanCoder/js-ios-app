@@ -54,7 +54,7 @@
         *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.maxlength", nil), kJMNameMax];
     } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
         NSMutableString *invalidCharsString = [NSMutableString string];
-        
+
         NSInteger subLocation = 0;
         while (subLocation < (reportName.length)) {
             NSString *subString = [reportName substringWithRange:NSMakeRange(subLocation ++, 1)];
@@ -95,6 +95,11 @@
 {
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 
+}
+
++ (BOOL)isSystemVersion7
+{
+    return [UIDevice currentDevice].systemVersion.integerValue < 8;
 }
 
 + (NSManagedObjectContext *)managedObjectContext
@@ -145,7 +150,7 @@
 + (void)showLoginViewAnimated:(BOOL)animated completion:(LoginCompletionBlock)completion
 {
     SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
-    
+
     UINavigationController *loginNavController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
     JMLoginViewController *loginViewController = (JMLoginViewController *)loginNavController.topViewController;
     loginViewController.completion = completion;
@@ -160,7 +165,7 @@
         title = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
         message = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
     }
-    
+
     [[[UIAlertView alloc] initWithTitle:title
                                 message:message
                                delegate:nil
@@ -173,7 +178,7 @@
     if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize]) {
         [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultUseVisualize];
     }
-    
+
     id useVisualizeSettings = [[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize];
     if (useVisualizeSettings) {
         return [useVisualizeSettings boolValue];

@@ -65,21 +65,27 @@
 
 /**
  Checks if current device is iPhone
- 
+
  @return YES if current device is iPhone
  */
 + (BOOL)isIphone;
 
 /**
+ Verify system version is 7
+ */
+
++ (BOOL)isSystemVersion7;
+
+/**
  Returns used in application NSManagedObjectContext
- 
+
  @return used in application NSManagedObjectContext
  */
 + (NSManagedObjectContext *)managedObjectContext;
 
 /**
  Returns YES if crash reports sending is available
- 
+
  @return YES if crash reports sending is available
  */
 + (BOOL)crashReportsSendingEnable;
@@ -102,28 +108,28 @@
 
 /**
  Returns YES if User want to use Visualize for watching reports and dashboards
- 
+
  @return YES if User want to use Visualize for watching reports and dashboards
  */
 + (BOOL)shouldUseVisualize;
 
 /**
  Returns YES if JRS instance has version equal 6.0 or upper
- 
+
  @return YES if JRS instance has version equal 6.0 or upper
  */
 + (BOOL)isServerVersionUpOrEqual6;
 
 /**
  Returns YES if visualize is supported on current JRS instance
- 
+
  @return YES if visualize is supported on current JRS instance
  */
 + (BOOL)isSupportVisualize;
 
 /**
  Returns YES if JRS instance has Pro Edition
- 
+
  @return YES if JRS instance has Pro Edition
  */
 + (BOOL)isServerProEdition;

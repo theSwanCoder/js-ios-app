@@ -47,14 +47,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     self.isStartFromAnotherReport = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+
     //[self clearWebView];
 }
 
@@ -70,10 +70,10 @@
     [self clearWebView];
     [self.navigationController setToolbarHidden:YES animated:YES];
     [self.webView removeFromSuperview];
-    
+
     NSInteger viewControllersCount = self.navigationController.viewControllers.count;
     JMVisualizeReportViewerViewController *reportViewController = self.navigationController.viewControllers[viewControllersCount - 2];
-    
+
     //
     [reportViewController.view insertSubview:self.webView belowSubview:reportViewController.activityIndicator];
     self.webView.delegate = reportViewController.reportLoader;
@@ -88,7 +88,7 @@
             }
         }@weakselfend];
     }@weakselfend;
-    
+
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -102,9 +102,8 @@
 
 - (void)setupWebView // overriden with another webView
 {
-    UIWebView *webView = [JMVisualizeWebViewManager sharedInstance].webView;
     CGRect rootViewBounds = self.navigationController.view.bounds;
-    webView.frame = rootViewBounds;
+    UIWebView *webView = [[JMVisualizeWebViewManager sharedInstance] webViewWithParentFrame:rootViewBounds];
     webView.delegate = self;
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
@@ -156,12 +155,12 @@
         [self.reportLoader cancelReport];
         [self backToPreviousView];
     }@weakselfend];
-    
+
     [self hideEmptyReportMessage];
-    
-    [self.reportLoader fetchStartPageWithCompletion:@weakself(^(BOOL success, NSError *error)) {        
+
+    [self.reportLoader fetchStartPageWithCompletion:@weakself(^(BOOL success, NSError *error)) {
         [self stopShowLoader];
-        
+
         if (success) {
             // succcess action
         } else {
@@ -194,11 +193,11 @@
 - (void)handleError:(NSError *)error
 {
     if (error.code == JMReportLoaderErrorTypeAuthentification) {
-        
+
         [self.restClient deleteCookies];
         [self clearWebView];
         [self.webView loadHTMLString:nil baseURL:nil];
-        
+
         [self.report restoreDefaultState];
         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
             [self runReport];
@@ -207,7 +206,7 @@
                 [self runReport];
             } @weakselfend];
         }
-        
+
     } else {
         [[UIAlertView localizedAlertWithTitle:@"detail.report.viewer.error.title"
                                       message:error.localizedDescription
@@ -221,26 +220,26 @@
 
 #pragma mark - JMVisualizeReportLoaderDelegate
 - (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReciveOnClickEventForReport:(JMVisualizeReport *)report withParameters:(NSDictionary *)reportParameters
-{   
+{
     NSString *reportURI = [report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls)) {
         report.isInputControlsLoaded = YES;
         if (inputControls) {
             [report updateInputControls:inputControls];
             [report applyReportParameters:reportParameters];
-            
+
             NSString *identifier = @"JMVisualizeReportViewerViewController";
-            
+
             JMVisualizeReportViewerViewController *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
             reportViewController.report = report;
             reportViewController.isStartFromAnotherReport = YES;
-            
+
             NSString *backItemTitle = self.title;
             UIBarButtonItem *backItem = [self backButtonWithTitle:backItemTitle
                                                            target:reportViewController
                                                            action:@selector(backToPreviousReport)];
             reportViewController.navigationItem.leftBarButtonItem = backItem;
-            
+
             [self clearWebView];
             [self.navigationController pushViewController:reportViewController animated:YES];
         }
@@ -252,7 +251,7 @@
     [self.webView stopLoading];
     NSLog(@"contentScaleFactor: %f", self.webView.contentScaleFactor);
     NSLog(@"zoomScale: %f", self.webView.scrollView.zoomScale);
-    
+
     // reset zoom in webView
     //[self.webView.scrollView setZoomScale:0.1 animated:NO];
     [self.reportLoader destroyReport];

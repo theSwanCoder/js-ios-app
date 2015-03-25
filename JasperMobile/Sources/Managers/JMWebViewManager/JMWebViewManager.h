@@ -32,6 +32,6 @@
  */
 
 @interface JMWebViewManager : NSObject
-@property (nonatomic, strong, readonly) UIWebView *webView;
 + (instancetype)sharedInstance;
+- (UIWebView *)webViewWithParentFrame:(CGRect)frame;
 @end

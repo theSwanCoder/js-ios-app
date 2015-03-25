@@ -51,11 +51,11 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     [super viewDidLoad];
 
     self.title = [self currentResourceLookup].label;
-    
+
     [self setupNavigationItems];
-    
+
     [self setupWebView];
-    
+
     // start point of loading resource
     [self runReportExecution];
 }
@@ -63,7 +63,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     // Google Analitycs
     self.screenName = NSStringFromClass(self.class);
 }
@@ -71,7 +71,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+
     if (self.webView.loading) {
         [self stopShowLoadingIndicators];
         [self.webView stopLoading];
@@ -111,9 +111,8 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 #pragma mark - Setups
 - (void)setupWebView
 {
-    UIWebView *webView = [JMWebViewManager sharedInstance].webView;
     CGRect rootViewBounds = self.navigationController.view.bounds;
-    webView.frame = rootViewBounds;
+    UIWebView *webView = [[JMWebViewManager sharedInstance] webViewWithParentFrame:rootViewBounds];    
     webView.delegate = self;
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
@@ -126,7 +125,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     if (actionBarButtonItem) {
         [items addObject:actionBarButtonItem];
     }
-    
+
     UIBarButtonItem *favoriteBarButtonItem = [self favoriteBarButtonItem];
     if (favoriteBarButtonItem) {
         [items addObject:favoriteBarButtonItem];
@@ -141,7 +140,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     actionsView.delegate = self;
     actionsView.availableActions = [self availableActionForResource:[self currentResourceLookup]];
     CGPoint point = CGPointMake(CGRectGetWidth(self.view.frame), -10);
-    
+
     self.popoverView = [PopoverView showPopoverAtPoint:point
                                                 inView:self.view
                                              withTitle:nil
@@ -169,12 +168,12 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 #pragma mark - UIWebViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{       
+{
     NSString *serverHost = [NSURL URLWithString:self.restClient.serverProfile.serverUrl].host;
     NSString *requestHost = request.URL.host;
     BOOL isParentHost = [requestHost isEqualToString:serverHost];
     BOOL isLinkClicked = navigationType == UIWebViewNavigationTypeLinkClicked;
-    
+
     if (!isParentHost && isLinkClicked) {
         if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
             [[UIAlertView localizedAlertWithTitle:nil
@@ -274,7 +273,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     if (![JMUtils isIphone]) {
         BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:[self currentResourceLookup]];
         NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
-        
+
         UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
                                                                          style:UIBarButtonItemStyleBordered
                                                                         target:self
@@ -313,7 +312,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
         UIViewController *previousViewController = [viewControllers objectAtIndex:(viewControllersCount - 2)];
         backItemTitle = previousViewController.title;
     }
-    
+
     UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
     UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:backItemTitle
