@@ -279,8 +279,9 @@ static NSMutableArray* visiblePopupsArray = nil;
                 self.dismissBlock = nil;
             }];
         }
-        [visiblePopupsArray removeObject:self];
     }@weakselfend;
+    
+    [visiblePopupsArray removeObject:self];
     
     if (self.animatedNow) {
         return;

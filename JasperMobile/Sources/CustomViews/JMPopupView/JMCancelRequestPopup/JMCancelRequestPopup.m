@@ -54,19 +54,21 @@ static NSInteger _cancelRequestPopupCounter = 0;
 
 + (void)presentWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock
 {
-    JMCancelRequestPopup *popup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:[self class]];
-    if (!popup) {
+    JMCancelRequestPopup *popup;
+    
+    if (_cancelRequestPopupCounter++ == 0) { // there is no popup
         popup = [[JMCancelRequestPopup alloc] initWithDelegate:nil type:JMPopupViewType_ContentViewOnly];
         UIView *nibView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:popup options:nil] lastObject];
         popup->_backGroundView.layer.cornerRadius = 5.f;
         popup->_backGroundView.layer.masksToBounds = YES;
         popup.contentView = nibView;
         [popup show];
+    } else { // there is popup
+        popup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:[self class]];
     }
     popup.progressLabel.text = JMCustomLocalizedString(message, nil);
     [popup.cancelButton setTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil) forState:UIControlStateNormal];
     popup.cancelBlock = cancelBlock;
-    _cancelRequestPopupCounter ++;
 }
 
 - (void)dismiss:(BOOL)animated
@@ -74,7 +76,6 @@ static NSInteger _cancelRequestPopupCounter = 0;
     _cancelRequestPopupCounter --;
     if (_cancelRequestPopupCounter < 0) {
         _cancelRequestPopupCounter = 0;
-        return;
     }
     if (_cancelRequestPopupCounter == 0) {
         [super dismiss:animated];
