@@ -68,8 +68,9 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
     if (!_visualizePath) {
         NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js", self.restClient.serverProfile.serverUrl];
         // fix for servers lower 6.1
-        NSInteger intVersion = ceilf(self.restClient.serverProfile.serverInfo.versionAsFloat * 10);
-        if (intVersion < 6.1 * 10 ) {
+        CGFloat versionAsFloat = self.restClient.serverProfile.serverInfo.versionAsFloat;
+        NSInteger intVersion = floorf(versionAsFloat * 100);
+        if (intVersion < 6.1 * 100 ) {
             visualizePath = [visualizePath stringByAppendingString:@"?_opt=false"];
         }
         _visualizePath = visualizePath;
@@ -81,9 +82,6 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 - (void)fetchStartPageWithCompletion:(void(^)(BOOL success, NSError *error))reportLoadCompletion
 {
     self.reportLoadCompletion = reportLoadCompletion;
-    
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSLog(@"reportLoadCompletion: %@", self.reportLoadCompletion);
     
     self.isReportInLoadingProcess = YES;
     
@@ -170,8 +168,8 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 {
     NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"report_optimized" ofType:@"html"];
     // fix for servers lower 6.1
-    NSInteger intVersion = ceilf(self.restClient.serverProfile.serverInfo.versionAsFloat * 10);
-    if (intVersion < 6.1 * 10 ) {
+    NSInteger intVersion = floorf(self.restClient.serverProfile.serverInfo.versionAsFloat * 100);
+    if (intVersion < 6.1 * 100 ) {
         htmlPath = [[NSBundle mainBundle] pathForResource:@"report" ofType:@"html"];
     }
     
@@ -361,7 +359,6 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 - (void)handleReportBeginRenderSuccessfull
 {
     NSLog(@"report rendering begin");
-    NSLog(@"reportLoadCompletion: %@", self.reportLoadCompletion);
 }
 
 - (void)handleReportEndRenderSuccessfull
@@ -369,8 +366,6 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
     NSLog(@"report rendering end");
 
     if (self.reportLoadCompletion) {
-        NSLog(@"callback to view controller: %@", self.delegate);
-        NSLog(@"reportLoadCompletion: %@", self.reportLoadCompletion);
         self.reportLoadCompletion(YES, nil);
     }
 }
@@ -380,7 +375,6 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
     NSLog(@"report rendering failured with error: %@", command);
     
     NSDictionary *parameters = [self parseCommand:command];
-    NSLog(@"parameters: %@", parameters);
     if (self.reportLoadCompletion) {
         NSString *errorString = parameters[@"error"];
         JMReportLoaderErrorType errorType = JMReportLoaderErrorTypeUndefined;
@@ -426,8 +420,6 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
     [self.report updateCountOfPages:totalPage];
     
     if (self.reportLoadCompletion) {
-        NSLog(@"callback to view controller: %@", self.delegate);
-        NSLog(@"reportLoadCompletion: %@", self.reportLoadCompletion);
         self.reportLoadCompletion(YES, nil);
     }
 }

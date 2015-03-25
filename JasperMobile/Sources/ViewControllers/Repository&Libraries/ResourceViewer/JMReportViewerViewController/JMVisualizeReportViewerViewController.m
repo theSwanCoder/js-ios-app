@@ -158,24 +158,15 @@
     }@weakselfend];
     
     [self hideEmptyReportMessage];
-    NSLog(@"begin load report");
     
-    __weak JMVisualizeReportViewerViewController * weakSelf = self;
-    
-    [self.reportLoader fetchStartPageWithCompletion:@weakself(^(BOOL success, NSError *error)) {
-        
-        NSLog(@"end load report");
-        
-        JMVisualizeReportViewerViewController *strongSelf = weakSelf;
-        
-        [strongSelf stopShowLoader];
+    [self.reportLoader fetchStartPageWithCompletion:@weakself(^(BOOL success, NSError *error)) {        
+        [self stopShowLoader];
         
         if (success) {
             // succcess action
         } else {
-            [strongSelf handleError:error];
+            [self handleError:error];
         }
-        
     }@weakselfend];
 }
 

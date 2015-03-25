@@ -180,15 +180,24 @@
     if (!isInputControlsLoaded) {
         // start load input controls
         
+        [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
+            [self.restClient cancelAllRequests];
+            [self.reportLoader cancelReport];
+            [self backToPreviousView];
+        }@weakselfend];
+        
         NSString *reportURI = [self.report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [self loadInputControlsWithReportURI:reportURI
                                   completion:@weakself(^(NSArray *inputControls)) {
+                                      
+            [self stopShowLoader];
+                                      
             self.report.isInputControlsLoaded = YES;
             if (inputControls) {
                 [self.report updateInputControls:inputControls];
                 [self showReportOptionsViewControllerWithBackButton:YES];
                 
-                [self.restClient performSelector:@selector(deleteCookies) withObject:nil afterDelay:30];
+                //[self.restClient performSelector:@selector(deleteCookies) withObject:nil afterDelay:30];
             } else {
                 [self runReport];
             }
@@ -273,17 +282,17 @@
 #pragma mark - Report Options (Input Controls)
 - (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *))completion
 {
-    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
-        [self.restClient cancelAllRequests];
-        [self.reportLoader cancelReport];
-        [self backToPreviousView];
-    }@weakselfend];
+//    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
+//        [self.restClient cancelAllRequests];
+//        [self.reportLoader cancelReport];
+//        [self backToPreviousView];
+//    }@weakselfend];
     
     [self.restClient inputControlsForReport:reportURI
                                         ids:nil
                              selectedValues:nil
                             completionBlock:@weakself(^(JSOperationResult *result)) {
-                                [self stopShowLoader];
+//                                [self stopShowLoader];
 
                                 if (result.error) {
                                     if (result.error.code == JSSessionExpiredErrorCode) {
