@@ -29,7 +29,7 @@
       };
 
       ReportCallback.prototype.onReferenceClick = function(location) {
-        console.log("onReferenceClick");
+        this._makeCallback("handleReferenceClick&location=" + location);
       };
 
       ReportCallback.prototype.onReportExecutionClick = function(reportUri, params) {

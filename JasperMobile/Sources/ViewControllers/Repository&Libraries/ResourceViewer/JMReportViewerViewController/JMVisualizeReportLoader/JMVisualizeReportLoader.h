@@ -53,6 +53,8 @@
 @end
 
 @protocol JMVisualizeReportLoaderDelegate <NSObject>
+@optional
 - (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReciveOnClickEventForReport:(JMVisualizeReport *)report withParameters:(NSDictionary *)reportParameters;
+- (void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReciveOnClickEventForReference:(NSURL *)urlReference;
 @end
 

@@ -246,6 +246,15 @@
     }@weakselfend];
 }
 
+-(void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReciveOnClickEventForReference:(NSURL *)urlReference
+{
+    JMWebViewController *webViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMWebViewController"];
+    webViewController.url = urlReference;
+
+    [self.navigationController pushViewController:webViewController animated:YES];
+}
+
+#pragma mark - UIWebView helpers
 - (void)clearWebView
 {
     [self.webView stopLoading];
@@ -257,7 +266,6 @@
     [self.reportLoader destroyReport];
 }
 
-#pragma mark - UIWebView helpers
 - (void)startShowLoadingIndicators
 {
     [JMUtils hideNetworkActivityIndicator];

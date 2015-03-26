@@ -32,5 +32,5 @@
  */
 
 @interface JMWebViewController : UIViewController
-@property(nonatomic, copy) NSString *urlString;
+@property (nonatomic, strong) NSURL *url;
 @end

@@ -82,9 +82,9 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 - (void)fetchStartPageWithCompletion:(void(^)(BOOL success, NSError *error))reportLoadCompletion
 {
     self.reportLoadCompletion = reportLoadCompletion;
-    
+
     self.isReportInLoadingProcess = YES;
-    
+
     if (![JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded) {
         [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             if (success) {
@@ -104,7 +104,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 - (void)loadPageWithNumber:(NSInteger)pageNumber completion:(void(^)(BOOL success, NSError *error))completion
 {
     self.reportLoadCompletion = completion;
-    
+
     NSString *setPageCommand = [NSString stringWithFormat:@"MobileReport.selectPage(%@)", @(pageNumber).stringValue];
     [self.report updateCurrentPage:pageNumber];
     [self.webView stringByEvaluatingJavaScriptFromString:setPageCommand];
@@ -113,7 +113,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 - (void)reloadReportWithInputControls:(NSArray *)inputControls
 {
     [self.report updateCurrentPage:1]; // set start page
-    
+
     NSString *parametersAsString = [self createParametersAsStringFromInputControls:inputControls];
     NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.run({'uri': '%@', 'params': %@});", self.report.reportURI, parametersAsString];
     [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
@@ -127,7 +127,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
     self.reportLoadCompletion = completion;
-    
+
     [self reloadReportWithInputControls:self.report.inputControls];
 }
 
@@ -172,12 +172,12 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
     if (intVersion < 6.1 * 100 ) {
         htmlPath = [[NSBundle mainBundle] pathForResource:@"report" ofType:@"html"];
     }
-    
+
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-    
+
     // Visualize
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
-    
+
     // REQUIRE_JS
     NSString *requireJSPath = [[NSBundle mainBundle] pathForResource:@"require.min" ofType:@"js"];
     NSString *requirejsString = [NSString stringWithContentsOfFile:requireJSPath encoding:NSUTF8StringEncoding error:nil];
@@ -187,7 +187,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
     NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"report-ios-mobilejs-sdk" ofType:@"js"];
     NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
-    
+
     return htmlString;
 }
 
@@ -261,17 +261,17 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
         }
         return;
     }
-    
+
     NSURLResponse *response;
     NSError *error;
-    
+
     NSURLRequest *visualizeJSRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.visualizePath]];
     NSData *data = [NSURLConnection sendSynchronousRequest:visualizeJSRequest returningResponse:&response error:&error];
     if (data) {
         // cache visualize.js
         NSCachedURLResponse *cachedURLResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:data];
         [[NSURLCache sharedURLCache] storeCachedResponse:cachedURLResponse forRequest:visualizeJSRequest];
-        
+
         if (completion) {
             completion(YES, nil);
         }
@@ -299,7 +299,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
     NSString *debugger = @"http://debugger/";
     NSString *requestURLString = request.URL.absoluteString;
     NSLog(@"requestURLString: %@", requestURLString);
-    
+
     if ([requestURLString rangeOfString:callback].length) {
         NSRange callbackRange = [requestURLString rangeOfString:callback];
         NSRange commandRange = NSMakeRange(callbackRange.length, requestURLString.length - callbackRange.length);
@@ -308,6 +308,8 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
             [self handleDOMContentLoaded];
         } else if ([command rangeOfString:@"runReport"].length) {
             [self handleRunReportWithJSCommand:command];
+        } else if ([command rangeOfString:@"handleReferenceClick"].length) {
+            [self handleReferenceClickWithJSCommand:command];
         } else if ([command rangeOfString:@"changeTotalPages"].length) {
             [self handleEventTotalPageDidChangeWithCommand:command];
         } else if ([command rangeOfString:@"inputControls"].length) {
@@ -373,7 +375,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 - (void)handleReportEndRenderFailuredWithJSCommand:(NSString *)command
 {
     NSLog(@"report rendering failured with error: %@", command);
-    
+
     NSDictionary *parameters = [self parseCommand:command];
     if (self.reportLoadCompletion) {
         NSString *errorString = parameters[@"error"];
@@ -410,15 +412,15 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 
 - (void)handleEventTotalPageDidChangeWithCommand:(NSString *)command
 {
-    
+
     NSRange totalPageKeyRange = [command rangeOfString:@"&totalPage="];
     NSRange totalPageRange = NSMakeRange(totalPageKeyRange.length + totalPageKeyRange.location, command.length - (totalPageKeyRange.length + totalPageKeyRange.location));
     NSString *totalPageString = [command substringWithRange:totalPageRange];
     NSInteger totalPage = totalPageString.integerValue;
     NSLog(@"total of pages: %@", @(totalPage));
-    
+
     [self.report updateCountOfPages:totalPage];
-    
+
     if (self.reportLoadCompletion) {
         self.reportLoadCompletion(YES, nil);
     }
@@ -444,20 +446,37 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 //            //href = [[component componentsSeparatedByString:@"="] lastObject];
 //        }
 //    }
-    
+
     //JMWebViewController *webViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMWebViewController"];
     //webViewController.urlString = href;
     //[self.navigationController pushViewController:webViewController animated:YES];
 }
 
-- (void)handleRunReportWithJSCommand:(NSString *)command
+- (void)handleReferenceClickWithJSCommand:(NSString *)command
 {
-    NSLog(@"hyperlink for run report");
-    
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    NSLog(@"command: %@", command);
     NSString *decodedCommand = [command stringByRemovingPercentEncoding];
     NSDictionary *parameters = [self parseCommand:decodedCommand];
     NSLog(@"parameters: %@", parameters);
-    
+
+    NSString *locationString = parameters[@"location"];
+    if (locationString) {
+        NSURL *locationURL = [NSURL URLWithString:locationString];
+        if ([self.delegate respondsToSelector:@selector(reportLoader:didReciveOnClickEventForReference:)]) {
+            [self.delegate reportLoader:self didReciveOnClickEventForReference:locationURL];
+        }
+    }
+}
+
+- (void)handleRunReportWithJSCommand:(NSString *)command
+{
+    NSLog(@"hyperlink for run report");
+
+    NSString *decodedCommand = [command stringByRemovingPercentEncoding];
+    NSDictionary *parameters = [self parseCommand:decodedCommand];
+    NSLog(@"parameters: %@", parameters);
+
     NSString *params = parameters[@"params"];
     if (!params) {
         return;
@@ -465,17 +484,17 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
     NSData *jsonData = [params dataUsingEncoding:NSUTF8StringEncoding];
     NSError *jsonError;
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&jsonError];
-    
+
     NSString *reportPath;
     if (json) {
         reportPath = json[@"_report"];
-        
+
         if (reportPath) {
             [self.restClient resourceLookupForURI:reportPath resourceType:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT completionBlock:^(JSOperationResult *result) {
                 NSError *error = result.error;
                 if (error) {
                     NSLog(@"error: %@", error.localizedDescription);
-                    
+
                     NSString *errorString = error.localizedDescription;
                     JMReportLoaderErrorType errorType = JMReportLoaderErrorTypeUndefined;
                     if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
@@ -487,14 +506,14 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
                     JSResourceLookup *resourceLookup = [result.objects firstObject];
                     if (resourceLookup) {
                         JMVisualizeReport *report = [JMVisualizeReport reportWithResource:resourceLookup inputControls:nil];
-                        
+
                         NSMutableDictionary *reportParameters = [NSMutableDictionary dictionary];
                         for (NSString *key in json.allKeys) {
                             if (![key isEqualToString:@"_report"]) {
                                 reportParameters[key] = json[key];
                             }
                         }
-                        
+
                         if ([self.delegate respondsToSelector:@selector(reportLoader:didReciveOnClickEventForReport:withParameters:)]) {
                             [self.delegate reportLoader:self didReciveOnClickEventForReport:report withParameters:[reportParameters copy]];
                         }
@@ -502,7 +521,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
                 }
             }];
         }
-        
+
     } else {
         NSLog(@"parse json with error: %@", jsonError.localizedDescription);
     }

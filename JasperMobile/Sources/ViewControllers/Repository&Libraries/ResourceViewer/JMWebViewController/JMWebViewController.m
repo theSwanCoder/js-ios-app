@@ -43,9 +43,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    NSURL *url = [NSURL URLWithString:self.urlString];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+    NSURLRequest *request = [NSURLRequest requestWithURL:self.url];
     [self.webView loadRequest:request];
 }
 
