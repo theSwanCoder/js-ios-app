@@ -81,7 +81,8 @@
 
 
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        float serverVersion = restBase.serverInfo.versionAsFloat;
+        JSServerInfo *serverInfo = restBase.serverInfo;
+        float serverVersion = serverInfo.versionAsFloat;
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionBlock) {
                 if (serverVersion >= [JMServerProfile minSupportedServerVersion]) {
@@ -90,7 +91,7 @@
                     NSString *title = [NSString stringWithFormat:JMCustomLocalizedString(@"error.server.notsupported.title", nil), serverVersion];
                     NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"error.server.notsupported.msg", nil), [JMServerProfile minSupportedServerVersion]];
 
-                    if (!restBase.serverInfo) {
+                    if (!serverInfo) {
                         title = JMCustomLocalizedString(@"error.unknownhost.dialog.title", nil);
                         message = JMCustomLocalizedString(@"error.unknownhost.dialog.msg", nil);
                     }

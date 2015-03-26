@@ -66,15 +66,6 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
                                                      name:kJMResetApplicationNotification
                                                    object:nil];
         
-
-        // Configure Appirater
-        [Appirater setAppId:@"467317446"];
-        [Appirater setDaysUntilPrompt:0];
-        [Appirater setUsesUntilPrompt:5];
-        [Appirater setTimeBeforeReminding:2];
-        [Appirater setDebug:NO];
-        [Appirater appLaunched:YES];
-        
         // Configure Url Cache
         NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
         [NSURLCache setSharedURLCache:URLCache];
@@ -114,6 +105,18 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
     SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
     JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
 
+    void (^loginCompletionBlock)(void) = ^{
+        [menuViewController setSelectedItemIndex:0];
+
+        // Configure Appirater
+        [Appirater setAppId:@"467317446"];
+        [Appirater setDaysUntilPrompt:0];
+        [Appirater setUsesUntilPrompt:5];
+        [Appirater setTimeBeforeReminding:2];
+        [Appirater setDebug:NO];
+        [Appirater appLaunched:YES];
+    };
+    
     if ([[JMSessionManager sharedManager] userIsLoggedIn]) {
         [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
         [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:@weakself(^(BOOL success)) {
@@ -123,18 +126,18 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
                 if (success) {
                     self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
                     if (!menuViewController.selectedItem) {
-                        [menuViewController setSelectedItemIndex:0];
+                        loginCompletionBlock();
                     }
                 } else {
                     [JMUtils showLoginViewAnimated:NO completion:@weakself(^(void)) {
-                        [menuViewController setSelectedItemIndex:0];
+                        loginCompletionBlock();
                     } @weakselfend];
                 }
             });
         } @weakselfend];
     } else {
         [JMUtils showLoginViewAnimated:NO completion:@weakself(^(void)) {
-            [menuViewController setSelectedItemIndex:0];
+            loginCompletionBlock();
         } @weakselfend];
     }
 }

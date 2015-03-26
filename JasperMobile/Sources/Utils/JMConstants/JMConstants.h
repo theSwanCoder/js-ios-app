@@ -38,14 +38,6 @@
 
 // Constants for NSUserDefaults
 extern NSString * const kJMDefaultsCurrentVersion;
-extern NSString * const kJMDefaultsFavorites;
-extern NSString * const kJMDefaultsServerAlias;
-extern NSString * const kJMDefaultsServerAlwaysAskPassword;
-extern NSString * const kJMDefaultsServerBaseUrl;
-extern NSString * const kJMDefaultsServerOrganization;
-extern NSString * const kJMDefaultsServerPassword;
-extern NSString * const kJMDefaultsServerUsername;
-
 
 // Notifications
 extern NSString * const kJMLoginDidSuccessNotification;
@@ -75,6 +67,9 @@ extern NSString * const kJMReportsDirectory;
 
 // Name of the main report file (outputResource)
 extern NSString * const kJMReportFilename;
+
+// Name of the thumbnail image file for saved reports
+extern NSString * const kJMThumbnailImageFileName;
 
 // Privacy Policy Link
 extern NSString * const kJMPrivacyPolicyURI;

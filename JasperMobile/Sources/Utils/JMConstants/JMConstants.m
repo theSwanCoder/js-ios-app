@@ -30,14 +30,6 @@
 
 // Constants for NSUserDefaults
 NSString * const kJMDefaultsCurrentVersion = @"jaspersoft.mobile.current.version";
-NSString * const kJMDefaultsFavorites = @"jaspersoft.server.favorites.%d";
-NSString * const kJMDefaultsServerAlias = @"jaspersoft.server.alias.%d";
-NSString * const kJMDefaultsServerAlwaysAskPassword = @"jaspersoft.server.alwaysAskPassword.%d";
-NSString * const kJMDefaultsServerBaseUrl = @"jaspersoft.server.baseUrl.%d";
-NSString * const kJMDefaultsServerOrganization = @"jaspersoft.server.organization.%d";
-NSString * const kJMDefaultsServerPassword = @"jaspersoft.server.password.%d";
-NSString * const kJMDefaultsServerUsername = @"jaspersoft.server.username.%d";
-
 
 // Notifications
 NSString * const kJMLoginDidSuccessNotification = @"JMLoginDidSuccessNotification";
@@ -68,6 +60,10 @@ NSString * const kJMReportsDirectory = @"reports";
 
 // Name of the main report file (outputResource)
 NSString * const kJMReportFilename = @"report";
+
+// Name of the thumbnail image file for saved reports
+NSString * const kJMThumbnailImageFileName = @"_jaspersoftMobileThumbnailImageFile";
+
 
 // Privacy Policy Link
 NSString * const kJMPrivacyPolicyURI = @"http://www.tibco.com/company/privacy-cma";
