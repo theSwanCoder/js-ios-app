@@ -76,6 +76,8 @@ typedef NS_ENUM(NSInteger, JMResourcesListSectionType) {
 // start point for loading process
 - (void)setNeedsUpdate;
 - (void)updateIfNeeded;
+//
+- (void)loadNextPage;
 
 // helpers
 - (NSUInteger)resourceCount;
@@ -83,11 +85,11 @@ typedef NS_ENUM(NSInteger, JMResourcesListSectionType) {
 - (void)addResourcesWithResources:(NSArray *)resources;
 - (id)resourceAtIndex:(NSInteger)index;
 - (void)sortLoadedResourcesUsingComparator:(NSComparator)compartor;
-//
-- (void)loadNextPage;
+
 // search
 - (void)searchWithQuery:(NSString *)query;
 - (void)clearSearchResults;
+
 //
 - (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option;
 - (id)parameterForQueryWithOption:(JMResourcesListLoaderOption)option;
