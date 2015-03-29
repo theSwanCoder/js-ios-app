@@ -40,7 +40,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 
 @synthesize resourceLookup = _resourceLookup;
 
-#pragma mark - NSObject
+#pragma mark - LifeCycle
 
 - (instancetype)init
 {
@@ -51,13 +51,15 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
         _filterBySelectedIndex = 0;
         _sortBySelectedIndex = 0;
         _needUpdateData = YES;
-        self.sections = @{
-                          @(JMResourcesListSectionTypeFolder) : @[],
-                          @(JMResourcesListSectionTypeReportUnit) : @[],
-                          };
+        _sections = @{
+                      @(JMResourcesListSectionTypeFolder) : @[],
+                      @(JMResourcesListSectionTypeReportUnit) : @[],
+                      };
     }
     return self;
 }
+
+#pragma mark - Change state API
 
 - (void)setNeedsUpdate
 {
