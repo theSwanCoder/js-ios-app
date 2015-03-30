@@ -30,6 +30,7 @@
 #import "JMVisualizeReportViewerViewController.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMVisualizeReport.h"
+#import "JMUtils.h"
 
 typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     JMReportViewerAlertViewTypeEmptyReport,
@@ -66,10 +67,8 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 {
     if (!_visualizePath) {
         NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js", self.restClient.serverProfile.serverUrl];
-        // fix for servers lower 6.1
-        CGFloat versionAsFloat = self.restClient.serverProfile.serverInfo.versionAsFloat;
-        NSInteger intVersion = floorf(versionAsFloat * 100);
-        if (intVersion < 6.1 * 100 ) {
+
+        if ([JMUtils isServerVersionUpOrEqual6] && ![JMUtils isServerAmber2]) {
             visualizePath = [visualizePath stringByAppendingString:@"?_opt=false"];
         }
         _visualizePath = visualizePath;
@@ -166,9 +165,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 - (NSString *)htmlString
 {
     NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"report_optimized" ofType:@"html"];
-    // fix for servers lower 6.1
-    NSInteger intVersion = floorf(self.restClient.serverProfile.serverInfo.versionAsFloat * 100);
-    if (intVersion < 6.1 * 100 ) {
+    if ([JMUtils isServerVersionUpOrEqual6] && ![JMUtils isServerAmber2]) {
         htmlPath = [[NSBundle mainBundle] pathForResource:@"report" ofType:@"html"];
     }
 
