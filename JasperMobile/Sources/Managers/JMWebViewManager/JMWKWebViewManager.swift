@@ -59,18 +59,6 @@ class JMWKWebViewManager: NSObject {
         self.webView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
         self.webView.scrollView.bounces = false
 
-//        // requreJS
-//        let requireJSPath = NSBundle.mainBundle().pathForResource("require.min", ofType: "js")
-//        let requireJSContent = String(contentsOfFile: requireJSPath!, encoding: NSUTF8StringEncoding, error: nil)
-//        var script = WKUserScript(source: requireJSContent!, injectionTime: .AtDocumentStart, forMainFrameOnly: true)
-//        self.webView.configuration.userContentController.addUserScript(script)
-//
-//        // mobilejs
-//        let mobileJSPath = NSBundle.mainBundle().pathForResource("dashboard-amber2-ios-mobilejs-sdk", ofType: "js")
-//        let mobileJSContent = String(contentsOfFile: mobileJSPath!, encoding: NSUTF8StringEncoding, error: nil)
-//        script = WKUserScript(source: mobileJSContent!, injectionTime: .AtDocumentStart, forMainFrameOnly: true)
-//        self.webView.configuration.userContentController.addUserScript(script)
-
         super.init()
     }
 }

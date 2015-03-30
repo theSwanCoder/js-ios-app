@@ -33,7 +33,7 @@
 import UIKit
 import WebKit
 
-class JMDashboardVC: GAITrackedViewController, JMResourceClientHolder, WKNavigationDelegate {
+class JMDashboardVC: GAITrackedViewController, JMResourceClientHolder {
 
     var resourceLookup: JSResourceLookup?
     var dashboard: JMDashboard?
@@ -55,6 +55,16 @@ class JMDashboardVC: GAITrackedViewController, JMResourceClientHolder, WKNavigat
         loadDashboard()
 
         activityIndicator.stopAnimating()
+
+        let destroyButton = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "destroyDashboard")
+        self.navigationItem.rightBarButtonItem = destroyButton
+    }
+
+    // Actions
+    func destroyDashboard() {
+        println("destroy dashboard")
+        let destroyDashboardJS = "MobileDashboard.destroy();"
+        webView.evaluateJavaScript(destroyDashboardJS, completionHandler: nil)
     }
 
     // Setups
@@ -62,70 +72,22 @@ class JMDashboardVC: GAITrackedViewController, JMResourceClientHolder, WKNavigat
         let rootViewBounds = navigationController!.view.bounds
         let webView = JMWKWebViewManager.sharedInstance.webView
         webView.frame = view.frame
-        addScriptToWebView(webView)
 
         webView.navigationDelegate = self
         self.view.insertSubview(webView, belowSubview:activityIndicator)
         self.webView = webView
     }
 
-    func addScriptToWebView(webView: WKWebView) {
-        // requreJS
-        let requireJSPath = NSBundle.mainBundle().pathForResource("require.min", ofType: "js")
-        let requireJSContent = String(contentsOfFile: requireJSPath!, encoding: NSUTF8StringEncoding, error: nil)
-        var script = WKUserScript(source: requireJSContent!, injectionTime: .AtDocumentStart, forMainFrameOnly: true)
-        webView.configuration.userContentController.addUserScript(script)
-
-        // mobilejs
-        let mobileJSPath = NSBundle.mainBundle().pathForResource("dashboard-amber2-ios-mobilejs-sdk", ofType: "js")
-        let mobileJSContent = String(contentsOfFile: mobileJSPath!, encoding: NSUTF8StringEncoding, error: nil)
-        script = WKUserScript(source: mobileJSContent!, injectionTime: .AtDocumentStart, forMainFrameOnly: true)
-        webView.configuration.userContentController.addUserScript(script)
-
-//        var script: WKUserScript
-
-//        // authorize
-//        let authorizeString = "MobileDashboard.authorize({'username': '\(self.restClient().serverProfile.username)', 'password': '\(self.restClient().serverProfile.password)', 'organization': '\(self.restClient().serverProfile.organization)'});"
-//        script = WKUserScript(source: authorizeString, injectionTime: .AtDocumentEnd, forMainFrameOnly: true)
-//        webView.configuration.userContentController.addUserScript(script)
-//
-//        // run dashboard
-//        if let dashboard = self.dashboard {
-//            let runDashboardString = "MobileDashboard.run({'uri': '\(dashboard.resourceURI)'});"
-//            script = WKUserScript(source: runDashboardString, injectionTime: .AtDocumentEnd, forMainFrameOnly: true)
-//            webView.configuration.userContentController.addUserScript(script)
-//        } else {
-//            println("dashboard is nil")
-//        }
-    }
-
-    // WKNavigationDelegate
-
-    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        println("webView didStartProvisionalNavigation")
-        activityIndicator.startAnimating()
-    }
-
-    func webView(webView: WKWebView!, didFinishNavigation navigation: WKNavigation!) {
-        println("webView didFinishNavigation")
-        activityIndicator.stopAnimating()
-
-        let authorizeString = "MobileDashboard.authorize({'username': '\(self.restClient().serverProfile.username)', 'password': '\(self.restClient().serverProfile.password)', 'organization': '\(self.restClient().serverProfile.organization)'});"
-        webView.evaluateJavaScript(authorizeString, completionHandler: nil)
-
-        if let dashboard = self.dashboard {
-            let runDashboardString = "MobileDashboard.run({'uri': '\(dashboard.resourceURI)'});"
-            webView.evaluateJavaScript(runDashboardString, completionHandler: nil)
-        }
-    }
-
     // Start point
     func loadDashboard() {
         if let dashboard = self.dashboard {
-
-            if let htmlString = HTMLString() {
-                let baseURLString = self.restClient().serverProfile.serverUrl
-                webView.loadHTMLString(htmlString, baseURL: NSURL(string: baseURLString))
+            if JMWKWebViewManager.sharedInstance.isVisualizeLoaded {
+                runDashboard()
+            } else {
+                if let htmlString = HTMLString() {
+                    let baseURLString = self.restClient().serverProfile.serverUrl
+                    webView.loadHTMLString(htmlString, baseURL: NSURL(string: baseURLString))
+                }
             }
         }
     }
@@ -142,7 +104,48 @@ class JMDashboardVC: GAITrackedViewController, JMResourceClientHolder, WKNavigat
 
             htmlStringWithVisualizePath = htmlString.stringByReplacingOccurrencesOfString("VISUALIZE_PATH", withString: baseURLString + "/client/visualize.js", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
 
+            // requreJS
+            let requireJSPath = NSBundle.mainBundle().pathForResource("require.min", ofType: "js")
+            let requireJSContent = String(contentsOfFile: requireJSPath!, encoding: NSUTF8StringEncoding, error: nil)
+            if let requireJS = requireJSContent {
+                htmlStringWithVisualizePath = htmlStringWithVisualizePath!.stringByReplacingOccurrencesOfString("REQUIRE_JS", withString: requireJS, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
+            }
+
+            // mobilejs
+            let mobileJSPath = NSBundle.mainBundle().pathForResource("dashboard-amber2-ios-mobilejs-sdk", ofType: "js")
+            let mobileJSContent = String(contentsOfFile: mobileJSPath!, encoding: NSUTF8StringEncoding, error: nil)
+            if let mobileJS = mobileJSContent {
+                htmlStringWithVisualizePath = htmlStringWithVisualizePath!.stringByReplacingOccurrencesOfString("JASPERMOBILE_SCRIPT", withString: mobileJS, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
+            }
         }
         return htmlStringWithVisualizePath
     }
+
+    // run dashboard
+    func runDashboard() {
+        let authorizeString = "MobileDashboard.authorize({'username': '\(self.restClient().serverProfile.username)', 'password': '\(self.restClient().serverProfile.password)', 'organization': '\(self.restClient().serverProfile.organization)'});"
+        webView.evaluateJavaScript(authorizeString, completionHandler: nil)
+
+        if let dashboard = self.dashboard {
+            let runDashboardString = "MobileDashboard.run({'uri': '\(dashboard.resourceURI)'});"
+            webView.evaluateJavaScript(runDashboardString, completionHandler: nil)
+        }
+    }
+}
+
+extension JMDashboardVC: WKNavigationDelegate {
+
+    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        println("webView didStartProvisionalNavigation")
+        activityIndicator.startAnimating()
+    }
+
+    func webView(webView: WKWebView!, didFinishNavigation navigation: WKNavigation!) {
+        JMWKWebViewManager.sharedInstance.isVisualizeLoaded = true
+        println("webView didFinishNavigation")
+        activityIndicator.stopAnimating()
+
+        runDashboard()
+    }
+
 }
