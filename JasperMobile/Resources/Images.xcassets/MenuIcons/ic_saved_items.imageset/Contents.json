@@ -7,12 +7,12 @@
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "ic_saved_items-1.png"
+      "filename" : "ic_saved_items@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "ic_saved_items.png"
+      "filename" : "ic_saved_items@3x.png"
     }
   ],
   "info" : {
