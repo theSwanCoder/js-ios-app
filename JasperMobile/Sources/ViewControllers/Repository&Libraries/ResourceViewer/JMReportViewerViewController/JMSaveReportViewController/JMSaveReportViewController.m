@@ -83,7 +83,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reportLoaderDidChangeCountOfPages:) name:kJMReportLoaderDidChangeCountOfPagesNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupSections) name:kJMReportLoaderReportIsMutlipageNotification object:nil];
-
 }
 
 #pragma mark - Setups
@@ -326,6 +325,9 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         JSRequestCompletionBlock checkErrorBlock = @weakself(^(JSOperationResult *result)) {
             if (!result.isSuccessful) {
                 [JMCancelRequestPopup dismiss];
+                [self.restClient cancelAllRequests];
+                [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
+
                 if (result.error.code == JSSessionExpiredErrorCode) {
                     if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
                         [self saveReport];
@@ -337,9 +339,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                 } else {
                     [JMUtils showAlertViewWithError:result.error];
                 }
-                
-                [self.restClient cancelAllRequests];
-                [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
             }
             if ([self.restClient isRequestPoolEmpty]) {
                 [JMCancelRequestPopup dismiss];
