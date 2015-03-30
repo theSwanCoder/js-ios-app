@@ -22,7 +22,7 @@
 
 
 //
-//  JMVisualizeWebViewManager.h
+//  JMVisualizeWebViewManager.swift
 //  TIBCO JasperMobile
 //
 
