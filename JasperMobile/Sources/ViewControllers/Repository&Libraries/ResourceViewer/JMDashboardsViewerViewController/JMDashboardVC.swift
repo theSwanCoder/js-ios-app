@@ -33,52 +33,35 @@
 import UIKit
 import WebKit
 
-class JMDashboardVC: GAITrackedViewController, JMResourceClientHolder {
+class JMDashboardVC: JMResourceViewerVC {
 
-    var resourceLookup: JSResourceLookup?
     var dashboard: JMDashboard?
 
-    // IBOutlets
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    weak var webView: WKWebView!
-
     deinit {
-        let destroyDashboardJS = "MobileDashboard.destroy();"
-        webView.evaluateJavaScript(destroyDashboardJS, completionHandler: nil)
+        destroyDashboard()
     }
 
-    // ViewController LifeCycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupWebView()
-        loadDashboard()
-
-        activityIndicator.stopAnimating()
-
-        let destroyButton = UIBarButtonItem(barButtonSystemItem: .Action, target: self, action: "destroyDashboard")
-        self.navigationItem.rightBarButtonItem = destroyButton
+    override func currentResourceLookup() -> JSResourceLookup! {
+        var resourceLookup : JSResourceLookup?
+        if let dashboard = self.dashboard {
+            resourceLookup = dashboard.resourceLookup
+        }
+        return resourceLookup
     }
 
     // Actions
     func destroyDashboard() {
-        println("destroy dashboard")
         let destroyDashboardJS = "MobileDashboard.destroy();"
-        webView.evaluateJavaScript(destroyDashboardJS, completionHandler: nil)
-    }
-
-    // Setups
-    func setupWebView() {
-        let rootViewBounds = navigationController!.view.bounds
-        let webView = JMWKWebViewManager.sharedInstance.webView
-        webView.frame = view.frame
-
-        webView.navigationDelegate = self
-        self.view.insertSubview(webView, belowSubview:activityIndicator)
-        self.webView = webView
+        if let webView = self.webView {
+            webView.evaluateJavaScript(destroyDashboardJS, completionHandler: nil)
+        }
     }
 
     // Start point
+    override func runReportExecution() {
+        loadDashboard()
+    }
+
     func loadDashboard() {
         if let dashboard = self.dashboard {
             if JMWKWebViewManager.sharedInstance.isVisualizeLoaded {
@@ -86,12 +69,34 @@ class JMDashboardVC: GAITrackedViewController, JMResourceClientHolder {
             } else {
                 if let htmlString = HTMLString() {
                     let baseURLString = self.restClient().serverProfile.serverUrl
-                    webView.loadHTMLString(htmlString, baseURL: NSURL(string: baseURLString))
+                    if let webView = self.webView {
+                        JMWKWebViewManager.sharedInstance.isVisualizeLoaded = true
+                        webView.loadHTMLString(htmlString, baseURL: NSURL(string: baseURLString))
+                    }
                 }
             }
         }
     }
 
+    // run dashboard
+    func runDashboard() {
+        let authorizeString = "MobileDashboard.authorize({'username': '\(self.restClient().serverProfile.username)', 'password': '\(self.restClient().serverProfile.password)', 'organization': '\(self.restClient().serverProfile.organization)'});"
+        if let webView = self.webView {
+            webView.evaluateJavaScript(authorizeString, completionHandler: nil)
+        }
+
+        if let dashboard = self.dashboard {
+            let runDashboardString = "MobileDashboard.run({'uri': '\(dashboard.resourceURI)'});"
+            if let webView = self.webView {
+                webView.evaluateJavaScript(runDashboardString, completionHandler: nil)
+            }
+        }
+    }
+}
+
+extension JMDashboardVC {
+
+    // helpers
     func HTMLString() -> String? {
 
         let dashboardHTMLPath = NSBundle.mainBundle().pathForResource("dashboard", ofType: "html")
@@ -120,32 +125,19 @@ class JMDashboardVC: GAITrackedViewController, JMResourceClientHolder {
         }
         return htmlStringWithVisualizePath
     }
-
-    // run dashboard
-    func runDashboard() {
-        let authorizeString = "MobileDashboard.authorize({'username': '\(self.restClient().serverProfile.username)', 'password': '\(self.restClient().serverProfile.password)', 'organization': '\(self.restClient().serverProfile.organization)'});"
-        webView.evaluateJavaScript(authorizeString, completionHandler: nil)
-
-        if let dashboard = self.dashboard {
-            let runDashboardString = "MobileDashboard.run({'uri': '\(dashboard.resourceURI)'});"
-            webView.evaluateJavaScript(runDashboardString, completionHandler: nil)
-        }
-    }
 }
 
 extension JMDashboardVC: WKNavigationDelegate {
 
-    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        println("webView didStartProvisionalNavigation")
-        activityIndicator.startAnimating()
-    }
+    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
 
-    func webView(webView: WKWebView!, didFinishNavigation navigation: WKNavigation!) {
-        JMWKWebViewManager.sharedInstance.isVisualizeLoaded = true
-        println("webView didFinishNavigation")
-        activityIndicator.stopAnimating()
+        let isLinkClicked = navigationAction.navigationType == .LinkActivated
+        let requestString = navigationAction.request.URL.absoluteString!
 
-        runDashboard()
+        println("request: \(requestString)")
+        println("isLinkClicked: \(isLinkClicked)")
+        decisionHandler(.Allow)
+
     }
 
 }

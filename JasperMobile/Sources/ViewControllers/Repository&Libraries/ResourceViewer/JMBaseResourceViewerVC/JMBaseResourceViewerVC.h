@@ -46,7 +46,10 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 @property (nonatomic, assign) BOOL isResourceLoaded;
 @property (nonatomic, strong) NSURLRequest *resourceRequest;
 
+- (void)runReportExecution;
+
 // setup
+- (void)setupSubviews;
 - (void)setupNavigationItems;
 - (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
                                   target:(id)target

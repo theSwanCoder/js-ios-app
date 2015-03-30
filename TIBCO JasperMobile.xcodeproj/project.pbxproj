@@ -162,6 +162,7 @@
 		93EEB4641AC54EAE000718C7 /* JMWKWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4631AC54EAE000718C7 /* JMWKWebViewManager.swift */; };
 		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
 		93EEB46A1AC9569F000718C7 /* JMBaseResourceViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4691AC9569F000718C7 /* JMBaseResourceViewerVC.m */; };
+		93EEB46C1AC972AA000718C7 /* JMResourceViewerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB46B1AC972AA000718C7 /* JMResourceViewerVC.swift */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDABBD2B1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDABBD2A1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard */; };
@@ -514,6 +515,7 @@
 		93EEB4651AC55430000718C7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		93EEB4681AC9569F000718C7 /* JMBaseResourceViewerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseResourceViewerVC.h; sourceTree = "<group>"; };
 		93EEB4691AC9569F000718C7 /* JMBaseResourceViewerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourceViewerVC.m; sourceTree = "<group>"; };
+		93EEB46B1AC972AA000718C7 /* JMResourceViewerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMResourceViewerVC.swift; sourceTree = "<group>"; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
@@ -1044,6 +1046,7 @@
 				089B154D1AA756BD0021A915 /* JMSavedResourceViewerViewController */,
 				089B154B1AA756BD0021A915 /* JMResourceViewerViewController.h */,
 				089B154C1AA756BD0021A915 /* JMResourceViewerViewController.m */,
+				93EEB46B1AC972AA000718C7 /* JMResourceViewerVC.swift */,
 			);
 			path = ResourceViewer;
 			sourceTree = "<group>";
@@ -2117,6 +2120,7 @@
 				93D8C6511AAD685C00117306 /* JMBaseDashboardViewerVC.m in Sources */,
 				089B15B11AA756BD0021A915 /* JasperMobileAppDelegate.m in Sources */,
 				089B15D41AA756BD0021A915 /* JMInputControlCell.m in Sources */,
+				93EEB46C1AC972AA000718C7 /* JMResourceViewerVC.swift in Sources */,
 				089B15AB1AA756BD0021A915 /* JMMenuActionsView.m in Sources */,
 				089B15FF1AA756BD0021A915 /* JMMenuItemTableViewCell.m in Sources */,
 				089B15A11AA756BD0021A915 /* NSObject+Additions.m in Sources */,

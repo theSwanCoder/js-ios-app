@@ -48,6 +48,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     self.title = [self currentResourceLookup].label;
 
     [self setupNavigationItems];
+    [self setupSubviews];
 
     // start point of loading resource
     [self runReportExecution];
@@ -93,6 +94,11 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 
 #pragma mark - Setups
+- (void)setupSubviews
+{
+    // override in children
+}
+
 - (void)setupNavigationItems
 {
     NSMutableArray *items = [NSMutableArray array];
