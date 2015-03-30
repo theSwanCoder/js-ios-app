@@ -105,7 +105,7 @@
       }
 
       DashboardController.prototype.destroyDashboard = function() {
-        return this.dashboard.destroy;
+        return this.dashboard.destroy();
       };
 
       DashboardController.prototype.runDashboard = function() {
