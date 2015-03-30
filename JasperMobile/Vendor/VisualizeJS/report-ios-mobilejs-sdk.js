@@ -250,8 +250,8 @@
         return this._instance || (this._instance = new MobileReport(context));
       };
 
-      MobileReport.setCredentials = function(options) {
-        return this._instance.setCredentials(options);
+      MobileReport.authorize = function(options) {
+        return this._instance.authorize(options);
       };
 
       MobileReport.destroy = function() {
@@ -282,6 +282,7 @@
       };
 
       MobileReport.prototype.run = function(options) {
+        console.log("run report with options" + options);
         options.session = this.session;
         options.context = this.context;
         this.reportController = new ReportController(options);
