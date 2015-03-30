@@ -31,39 +31,9 @@
  @since 1.9
  */
 
-#import "GAITrackedViewController.h"
-#import "JMResourceClientHolder.h"
-#import "JMMenuActionsView.h"
-#import "JMCancelRequestPopup.h"
+#import "JMBaseResourceViewerVC.h"
 
-extern NSString * const kJMShowReportOptionsSegue;
-extern NSString * const kJMShowMultiPageReportSegue;
-extern NSString * const kJMShowDashboardViewerSegue;
-extern NSString * const kJMShowSavedRecourcesViewerSegue;
-
-
-@interface JMResourceViewerViewController : GAITrackedViewController <JMResourceClientHolder, JMMenuActionsViewDelegate, UIWebViewDelegate>
+@interface JMResourceViewerViewController : JMBaseResourceViewerVC <UIWebViewDelegate>
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
-@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, assign) BOOL isResourceLoaded;
-@property (nonatomic, strong) NSURLRequest *resourceRequest;
-
-// setup
-- (void)setupNavigationItems;
 - (void)setupWebView;
-- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
-                                  target:(id)target
-                                  action:(SEL)action;
-
-- (JSResourceLookup *)currentResourceLookup;
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource;
-
-
-// UIWebView helpers
-- (void)startShowLoadingIndicators;
-- (void)stopShowLoadingIndicators;
-
-- (void)startShowLoaderWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock;
-- (void)stopShowLoader;
-
 @end

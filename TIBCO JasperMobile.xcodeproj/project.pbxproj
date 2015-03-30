@@ -161,6 +161,7 @@
 		93EEB4621AC54761000718C7 /* JMVisualizeWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */; };
 		93EEB4641AC54EAE000718C7 /* JMWKWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4631AC54EAE000718C7 /* JMWKWebViewManager.swift */; };
 		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
+		93EEB46A1AC9569F000718C7 /* JMBaseResourceViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4691AC9569F000718C7 /* JMBaseResourceViewerVC.m */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDABBD2B1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDABBD2A1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard */; };
@@ -511,6 +512,8 @@
 		93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMVisualizeWebViewManager.swift; sourceTree = "<group>"; };
 		93EEB4631AC54EAE000718C7 /* JMWKWebViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMWKWebViewManager.swift; sourceTree = "<group>"; };
 		93EEB4651AC55430000718C7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		93EEB4681AC9569F000718C7 /* JMBaseResourceViewerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseResourceViewerVC.h; sourceTree = "<group>"; };
+		93EEB4691AC9569F000718C7 /* JMBaseResourceViewerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourceViewerVC.m; sourceTree = "<group>"; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
@@ -1034,6 +1037,7 @@
 		089B15091AA756BD0021A915 /* ResourceViewer */ = {
 			isa = PBXGroup;
 			children = (
+				93EEB4671AC9568E000718C7 /* JMBaseResourceViewerVC */,
 				089B16081AA7573F0021A915 /* JMWebViewController */,
 				089B150A1AA756BD0021A915 /* JMDashboardsViewerViewController */,
 				089B150D1AA756BD0021A915 /* JMReportViewerViewController */,
@@ -1690,6 +1694,15 @@
 			path = JMVisualizeDashboard;
 			sourceTree = "<group>";
 		};
+		93EEB4671AC9568E000718C7 /* JMBaseResourceViewerVC */ = {
+			isa = PBXGroup;
+			children = (
+				93EEB4681AC9569F000718C7 /* JMBaseResourceViewerVC.h */,
+				93EEB4691AC9569F000718C7 /* JMBaseResourceViewerVC.m */,
+			);
+			path = JMBaseResourceViewerVC;
+			sourceTree = "<group>";
+		};
 		BDABBD231A41D8CC00EDA100 /* RNCachingURLProtocol */ = {
 			isa = PBXGroup;
 			children = (
@@ -2048,6 +2061,7 @@
 				93EEB4621AC54761000718C7 /* JMVisualizeWebViewManager.swift in Sources */,
 				0801DF9D1AAF2CC900DD072C /* JMFavorites.m in Sources */,
 				089B15F51AA756BD0021A915 /* JMSettingsItem.m in Sources */,
+				93EEB46A1AC9569F000718C7 /* JMBaseResourceViewerVC.m in Sources */,
 				089B15EF1AA756BD0021A915 /* JMBooleanSettingsTableViewCell.m in Sources */,
 				93EEB4601AC53CAF000718C7 /* JMDashboardVC.swift in Sources */,
 				089B15F11AA756BD0021A915 /* JMTextSettingsTableViewCell.m in Sources */,
