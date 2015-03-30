@@ -36,6 +36,7 @@ import WebKit
 
 class JMVisualizeDashboardLoader: NSObject {
 
+    let CallbackHandler = "callback"
     weak var webView: WKWebView?
     let dashboard: JMDashboard
 
@@ -44,7 +45,6 @@ class JMVisualizeDashboardLoader: NSObject {
     }
 
     // public api
-    // start point
     func run() {
         loadDashboard()
     }
@@ -137,5 +137,15 @@ extension JMVisualizeDashboardLoader {
             }
         }
         return htmlStringWithVisualizePath
+    }
+}
+
+extension JMVisualizeDashboardLoader: WKScriptMessageHandler {
+
+    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        if message.name == CallbackHandler {
+            println("callback")
+            println("message body: \(message.body)")
+        }
     }
 }

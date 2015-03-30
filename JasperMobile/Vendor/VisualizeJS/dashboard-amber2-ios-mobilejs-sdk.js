@@ -1,5 +1,5 @@
 (function() {
-  define('js.mobile.ios.dashboard.callback', ['require'],function(require) {
+  define('js.mobile.ios.callbacks.WebKitCallback', ['require'],function(require) {
     var IosCallback;
     return IosCallback = (function() {
       function IosCallback() {}
@@ -21,7 +21,7 @@
       IosCallback.prototype.onLoadError = function(error) {};
 
       IosCallback.prototype._makeCallback = function(command) {
-        return window.location.href = "http://jaspermobile.callback/" + command;
+        return webkit.messageHandlers.callback.postMessage + command;
       };
 
       return IosCallback;
@@ -304,9 +304,9 @@
 }).call(this);
 
 (function() {
-  define('js.mobile.amber2.ios.dashboard.client', ['require','js.mobile.ios.dashboard.callback','js.mobile.ios.loggers.logger','js.mobile.context','js.mobile.amber2.dashboard'],function(require) {
+  define('js.mobile.amber2.ios.dashboard.client', ['require','js.mobile.ios.callbacks.WebKitCallback','js.mobile.ios.loggers.logger','js.mobile.context','js.mobile.amber2.dashboard'],function(require) {
     var Context, IosCallback, IosClient, IosLogger, MobileDashboard;
-    IosCallback = require('js.mobile.ios.dashboard.callback');
+    IosCallback = require('js.mobile.ios.callbacks.WebKitCallback');
     IosLogger = require('js.mobile.ios.loggers.logger');
     Context = require('js.mobile.context');
     MobileDashboard = require('js.mobile.amber2.dashboard');
