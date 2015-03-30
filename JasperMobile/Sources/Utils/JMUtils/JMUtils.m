@@ -97,9 +97,9 @@
 
 }
 
-+ (BOOL)isSystemVersion7
++ (BOOL)isSystemVersion8
 {
-    return [UIDevice currentDevice].systemVersion.integerValue < 8;
+    return [UIDevice currentDevice].systemVersion.integerValue == 8;
 }
 
 + (NSManagedObjectContext *)managedObjectContext
@@ -194,6 +194,11 @@
 + (BOOL)isServerVersionUpOrEqual6
 {
     return self.restClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0;
+}
+
++ (BOOL)isServerAmber2
+{
+    return self.restClient.serverProfile.serverInfo.versionAsFloat == [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_1_0;
 }
 
 + (BOOL)isServerProEdition

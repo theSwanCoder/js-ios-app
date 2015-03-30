@@ -33,7 +33,6 @@
 #import "JMReportOptionsViewController.h"
 #import "JMWebConsole.h"
 #import "JMWebViewController.h"
-#import "JMVisualizeWebViewManager.h"
 
 @interface JMVisualizeReportViewerViewController () <JMVisualizeReportLoaderDelegate>
 @property (nonatomic, strong) JMVisualizeReportLoader *reportLoader;

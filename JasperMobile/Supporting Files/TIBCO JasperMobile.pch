@@ -38,4 +38,7 @@
     #import "GAITrackedViewController.h"
     #import "GAITracker.h"
 
+// Swift
+    #import "TIBCO_JasperMobile-Swift.h"
+
 #endif

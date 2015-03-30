@@ -71,10 +71,10 @@
 + (BOOL)isIphone;
 
 /**
- Verify system version is 7
+ Verify system version is 8
  */
 
-+ (BOOL)isSystemVersion7;
++ (BOOL)isSystemVersion8;
 
 /**
  Returns used in application NSManagedObjectContext
@@ -119,6 +119,14 @@
  @return YES if JRS instance has version equal 6.0 or upper
  */
 + (BOOL)isServerVersionUpOrEqual6;
+
+/**
+ Returns YES if JRS instance has version equal 6.1
+
+ @return YES if JRS instance has version equal 6.1
+ */
+
++ (BOOL)isServerAmber2;
 
 /**
  Returns YES if visualize is supported on current JRS instance

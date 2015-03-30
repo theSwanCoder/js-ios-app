@@ -58,7 +58,7 @@
 
 - (UIWebView *)webViewWithParentFrame:(CGRect)frame
 {
-    if ([JMUtils isSystemVersion7]) {
+    if (![JMUtils isSystemVersion8]) {
         UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
         CGRect webViewFrame = CGRectZero;
         if ( UIInterfaceOrientationIsPortrait(statusBarOrientation) ) {
@@ -69,7 +69,7 @@
 
         _webView.frame = webViewFrame;
     } else {
-        _webView.frame = frame;        
+        _webView.frame = frame;
     }
     return _webView;
 }

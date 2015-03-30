@@ -48,7 +48,7 @@
 }).call(this);
 
 (function() {
-  define('js.mobile.ios.logger', [],function() {
+  define('js.mobile.ios.loggers.logger', [],function() {
     var IosLogger;
     return IosLogger = (function() {
       function IosLogger() {}
@@ -271,7 +271,7 @@
         this.context.callback.onScriptLoaded();
       }
 
-      MobileReport.prototype.setCredentials = function(options) {
+      MobileReport.prototype.authorize = function(options) {
         return this.session = new Session(options);
       };
 
@@ -302,10 +302,10 @@
 }).call(this);
 
 (function() {
-  define('js.mobile.ios.report.client', ['require','js.mobile.ios.report.callback','js.mobile.ios.logger','js.mobile.context','js.mobile.report'],function(require) {
-    var AndroidLogger, Context, MobileReport, ReportCallback, ReportClient;
+  define('js.mobile.ios.report.client', ['require','js.mobile.ios.report.callback','js.mobile.ios.loggers.logger','js.mobile.context','js.mobile.report'],function(require) {
+    var Context, IosLogger, MobileReport, ReportCallback, ReportClient;
     ReportCallback = require('js.mobile.ios.report.callback');
-    AndroidLogger = require('js.mobile.ios.logger');
+    IosLogger = require('js.mobile.ios.loggers.logger');
     Context = require('js.mobile.context');
     MobileReport = require('js.mobile.report');
     return ReportClient = (function() {
@@ -314,7 +314,7 @@
       ReportClient.prototype.run = function() {
         var callbackImplementor, context, logger;
         callbackImplementor = new ReportCallback();
-        logger = new AndroidLogger();
+        logger = new IosLogger();
         context = new Context({
           callback: callbackImplementor,
           logger: logger

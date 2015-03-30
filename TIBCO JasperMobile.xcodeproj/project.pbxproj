@@ -129,7 +129,6 @@
 		08FCFACA1A8A6057007940E7 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */; };
 		7F0FBEF9123360B7837DA1F6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */; };
 		93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */; };
-		93047D611AB9722B0047C982 /* JMVisualizeWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93047D601AB9722B0047C982 /* JMVisualizeWebViewManager.m */; };
 		930F8D3F1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D3B1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js */; };
 		930F8D401ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D3C1ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js */; };
 		930F8D411ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D3D1ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js */; };
@@ -158,6 +157,10 @@
 		93D8C6511AAD685C00117306 /* JMBaseDashboardViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6501AAD685C00117306 /* JMBaseDashboardViewerVC.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
 		93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */; };
+		93EEB4601AC53CAF000718C7 /* JMDashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB45F1AC53CAF000718C7 /* JMDashboardVC.swift */; };
+		93EEB4621AC54761000718C7 /* JMVisualizeWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */; };
+		93EEB4641AC54EAE000718C7 /* JMWKWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4631AC54EAE000718C7 /* JMWKWebViewManager.swift */; };
+		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDABBD2B1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDABBD2A1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard */; };
@@ -463,8 +466,6 @@
 		93047D591AB6F5750047C982 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		93047D5A1AB6F5750047C982 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
 		93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
-		93047D5F1AB9722B0047C982 /* JMVisualizeWebViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeWebViewManager.h; sourceTree = "<group>"; };
-		93047D601AB9722B0047C982 /* JMVisualizeWebViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeWebViewManager.m; sourceTree = "<group>"; };
 		930F8D3B1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "dashboard-amber-ios-mobilejs-sdk.js"; sourceTree = "<group>"; };
 		930F8D3C1ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "dashboard-amber2-ios-mobilejs-sdk.js"; sourceTree = "<group>"; };
 		930F8D3D1ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "dashboard-legacy-mobilejs-sdk.js"; sourceTree = "<group>"; };
@@ -505,6 +506,11 @@
 		93D8C6541AAD69CD00117306 /* JMDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboard.m; sourceTree = "<group>"; };
 		93D8C6571AAD778400117306 /* JMVisualizeDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeDashboard.h; sourceTree = "<group>"; };
 		93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeDashboard.m; sourceTree = "<group>"; };
+		93EEB45E1AC53CAE000718C7 /* TIBCO JasperMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "TIBCO JasperMobile-Bridging-Header.h"; path = "ViewControllers/Repository&Libraries/ResourceViewer/JMDashboardsViewerViewController/TIBCO JasperMobile-Bridging-Header.h"; sourceTree = "<group>"; };
+		93EEB45F1AC53CAF000718C7 /* JMDashboardVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMDashboardVC.swift; sourceTree = "<group>"; };
+		93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMVisualizeWebViewManager.swift; sourceTree = "<group>"; };
+		93EEB4631AC54EAE000718C7 /* JMWKWebViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMWKWebViewManager.swift; sourceTree = "<group>"; };
+		93EEB4651AC55430000718C7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
@@ -535,6 +541,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */,
 				08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */,
 				9348F4E81A35C616006F5677 /* libsqlite3.0.dylib in Frameworks */,
 				93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */,
@@ -698,6 +705,7 @@
 		089B148A1AA756BD0021A915 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				93EEB45E1AC53CAE000718C7 /* TIBCO JasperMobile-Bridging-Header.h */,
 				089B14BD1AA756BD0021A915 /* JasperMobileAppDelegate.h */,
 				089B14BE1AA756BD0021A915 /* JasperMobileAppDelegate.m */,
 				93D8C6411AAC7E9200117306 /* Managers */,
@@ -1045,6 +1053,7 @@
 				93D8C64D1AAD684500117306 /* JMVisualizeDashboardViewerVC.m */,
 				93D8C64F1AAD685C00117306 /* JMBaseDashboardViewerVC.h */,
 				93D8C6501AAD685C00117306 /* JMBaseDashboardViewerVC.m */,
+				93EEB45F1AC53CAF000718C7 /* JMDashboardVC.swift */,
 			);
 			path = JMDashboardsViewerViewController;
 			sourceTree = "<group>";
@@ -1657,8 +1666,8 @@
 			children = (
 				93D8C6431AAC7E9200117306 /* JMWebViewManager.h */,
 				93D8C6441AAC7E9200117306 /* JMWebViewManager.m */,
-				93047D5F1AB9722B0047C982 /* JMVisualizeWebViewManager.h */,
-				93047D601AB9722B0047C982 /* JMVisualizeWebViewManager.m */,
+				93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */,
+				93EEB4631AC54EAE000718C7 /* JMWKWebViewManager.swift */,
 			);
 			path = JMWebViewManager;
 			sourceTree = "<group>";
@@ -1727,6 +1736,7 @@
 		F55CC331174CFFCE00CEB39E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				93EEB4651AC55430000718C7 /* WebKit.framework */,
 				08DB3D931A891640006F9620 /* MessageUI.framework */,
 				9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */,
 				F54C91AA1752FAC90009E2BE /* libxml2.dylib */,
@@ -2001,7 +2011,6 @@
 				08C838141A1F57640004BE78 /* Appirater.m in Sources */,
 				089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */,
 				93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */,
-				93047D611AB9722B0047C982 /* JMVisualizeWebViewManager.m in Sources */,
 				08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */,
 				089B15F41AA756BD0021A915 /* JMSettings.m in Sources */,
 				089B15F81AA756BD0021A915 /* JMLibraryCollectionViewController.m in Sources */,
@@ -2030,14 +2039,17 @@
 				089B15B01AA756BD0021A915 /* JMPopupView.m in Sources */,
 				089B159D1AA756BD0021A915 /* JMMainNavigationController.m in Sources */,
 				089B15E11AA756BD0021A915 /* JMReportPageViewerViewController.m in Sources */,
+				93EEB4641AC54EAE000718C7 /* JMWKWebViewManager.swift in Sources */,
 				9339E3021AA9C7E40024419D /* JMReportViewerToolBar.m in Sources */,
 				089B15E71AA756BD0021A915 /* JMSaveReportFormatCell.m in Sources */,
 				089B15F61AA756BD0021A915 /* JMBaseCollectionViewController.m in Sources */,
 				089B15F31AA756BD0021A915 /* JMSettingsViewController.m in Sources */,
 				089B15A31AA756BD0021A915 /* UIColor+RGBComponent.m in Sources */,
+				93EEB4621AC54761000718C7 /* JMVisualizeWebViewManager.swift in Sources */,
 				0801DF9D1AAF2CC900DD072C /* JMFavorites.m in Sources */,
 				089B15F51AA756BD0021A915 /* JMSettingsItem.m in Sources */,
 				089B15EF1AA756BD0021A915 /* JMBooleanSettingsTableViewCell.m in Sources */,
+				93EEB4601AC53CAF000718C7 /* JMDashboardVC.swift in Sources */,
 				089B15F11AA756BD0021A915 /* JMTextSettingsTableViewCell.m in Sources */,
 				9342341A1AAC3D5300D34478 /* JMVisualizeReport.m in Sources */,
 				089B159E1AA756BD0021A915 /* JMFavorites+Helpers.m in Sources */,
@@ -2322,8 +2334,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Vlad Zavadskii (3F9737C33N)";
 				COPY_PHASE_STRIP = YES;
+				DEFINES_MODULE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
@@ -2338,6 +2352,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/JasperMobile/Supporting Files/TIBCO JasperMobile.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
@@ -2352,6 +2367,8 @@
 				PRODUCT_NAME = "TIBCO JasperMobile";
 				PROVISIONING_PROFILE = "232047f5-5edf-4a26-bdbd-25cef80232ab";
 				RUN_CLANG_STATIC_ANALYZER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Sources/ViewControllers/Repository&Libraries/ResourceViewer/JMDashboardsViewerViewController/TIBCO JasperMobile-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				VALID_ARCHS = "i386 armv7 armv7s x86_64 arm64";
@@ -2365,8 +2382,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaspersoft Corporation (HD6C6SELJN)";
 				COPY_PHASE_STRIP = YES;
+				DEFINES_MODULE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
@@ -2381,6 +2400,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/JasperMobile/Supporting Files/TIBCO JasperMobile.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JasperMobile/Vendor/**",
@@ -2395,6 +2415,7 @@
 				PRODUCT_NAME = "TIBCO JasperMobile";
 				PROVISIONING_PROFILE = "19c611e3-5c19-487e-b5de-5ac45a90d20d";
 				RUN_CLANG_STATIC_ANALYZER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Sources/ViewControllers/Repository&Libraries/ResourceViewer/JMDashboardsViewerViewController/TIBCO JasperMobile-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
 				VALID_ARCHS = "i386 armv7 armv7s x86_64 arm64";

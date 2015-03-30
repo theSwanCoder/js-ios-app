@@ -30,7 +30,6 @@
 #import "JMVisualizeReportViewerViewController.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMVisualizeReport.h"
-#import "JMVisualizeWebViewManager.h"
 
 typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     JMReportViewerAlertViewTypeEmptyReport,
@@ -346,7 +345,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 
 - (void)authenticate
 {
-    NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.setCredentials({'username': '%@', 'password': '%@', 'organization': '%@'});", self.restClient.serverProfile.username, self.restClient.serverProfile.password, self.restClient.serverProfile.organization];
+    NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.authorize({'username': '%@', 'password': '%@', 'organization': '%@'});", self.restClient.serverProfile.username, self.restClient.serverProfile.password, self.restClient.serverProfile.organization];
     [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
 }
 

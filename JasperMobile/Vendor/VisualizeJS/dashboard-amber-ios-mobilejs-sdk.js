@@ -32,7 +32,7 @@
 }).call(this);
 
 (function() {
-  define('js.mobile.ios.logger', [],function() {
+  define('js.mobile.ios.loggers.logger', [],function() {
     var IosLogger;
     return IosLogger = (function() {
       function IosLogger() {}
@@ -116,9 +116,11 @@
       function Scaler() {}
 
       Scaler.prototype.scale = function(factor) {
-        jQuery("meta[name=viewport]").attr('content', 'target-densitydpi=device-dpi, height=device-height, width=device-width, user-scalable=yes');
-        jQuery("#frame").css("width", "100%");
-        jQuery("#frame").css("height", "100%");
+        var originalDashletInScaledCanvasCss, scaledCanvasCss;
+        jQuery("#scale_style").remove();
+        scaledCanvasCss = ".scaledCanvas { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + factor + " ); -ms-transform: scale( " + factor + " ); -webkit-transform: scale( " + factor + " ); width: " + (100 / factor) + "% !important; height: " + (100 / factor) + "% !important; }";
+        originalDashletInScaledCanvasCss = ".dashboardCanvas > .content > .body div.canvasOverlay.originalDashletInScaledCanvas { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + (1 / factor) + " ); -ms-transform: scale( " + (1 / factor) + " ); -webkit-transform: scale( " + (1 / factor) + " ); width: " + (100 * factor) + "% !important; height: " + (100 * factor) + "% !important; }";
+        jQuery('<style id="scale_style"></style').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo('head');
       };
 
       return Scaler;
@@ -147,7 +149,7 @@
 
       DashboardController.prototype.initialize = function() {
         this.callback.onLoadStart();
-        this.scaler.scale(0.5);
+        this.scaler.scale(0.25);
         this._removeRedundantArtifacts();
         this._injectViewport();
         return this._attachDashletLoadListeners();
@@ -323,10 +325,10 @@
 }).call(this);
 
 (function() {
-  define('js.mobile.amber.ios.dashboard.client', ['require','js.mobile.ios.dashboard.callback','js.mobile.ios.logger','js.mobile.context','js.mobile.amber.dashboard'],function(require) {
+  define('js.mobile.amber.ios.dashboard.client', ['require','js.mobile.ios.dashboard.callback','js.mobile.ios.loggers.logger','js.mobile.context','js.mobile.amber.dashboard'],function(require) {
     var Context, IosCallback, IosClient, IosLogger, MobileDashboard;
     IosCallback = require('js.mobile.ios.dashboard.callback');
-    IosLogger = require('js.mobile.ios.logger');
+    IosLogger = require('js.mobile.ios.loggers.logger');
     Context = require('js.mobile.context');
     MobileDashboard = require('js.mobile.amber.dashboard');
     return IosClient = (function() {
