@@ -90,6 +90,11 @@
                   "mAlias" : "CE 5.5 LOCAL OtherUsers (Vitaliy)",
                   "mServerUrl" : "http://192.168.88.44:8081/jasperserver-ce-5.5",
                   "mOrganization" : ""
+                  },
+                  {
+                      "mAlias" : "Visualize Dashboard Impr",
+                      "mServerUrl" : "http://build-master.jaspersoft.com:8580/jrs-pro-feature-dashboard-improvements-for-jasper-mobile",
+                      "mOrganization" : ""
                   }
                   ]
 }
