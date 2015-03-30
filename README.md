@@ -1,5 +1,6 @@
 Tibco JasperMobile for iOS
 ==========================
+[![Build Status](https://travis-ci.org/Jaspersoft/js-ios-app.svg?branch=develop)](https://travis-ci.org/Jaspersoft/js-ios-app/builds)
 
 Tibco JasperMobile for iOS is a native application which allows you to browse your JasperReports Server repository and view reports in several formats.
 
