@@ -82,7 +82,9 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     id destinationViewController = segue.destinationViewController;
-    [destinationViewController setResourceLookup:[self currentResourceLookup]];
+    if ([destinationViewController respondsToSelector:@selector(setResourceLookup:)]) {
+        [destinationViewController setResourceLookup:[self currentResourceLookup]];
+    }
 }
 
 #pragma mark - Custom Accessors

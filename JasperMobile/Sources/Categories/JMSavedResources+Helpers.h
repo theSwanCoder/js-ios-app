@@ -52,6 +52,9 @@ extern NSString * const kJMSavedResources;
 // Removes saved resource
 - (void)removeReport;
 
+// Returns thumbnail image for saved report
+- (UIImage *)thumbnailImage;
+
 // Returns wrapper from SavedReports. Wrapper is a JSResourceLookup
 - (JSResourceLookup *)wrapperFromSavedReports;
 

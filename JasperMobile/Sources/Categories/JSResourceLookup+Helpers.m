@@ -57,4 +57,12 @@
         return [JMDashboard dashboardWithResource:self];
     }
 }
+
+- (NSString *)thumbnailImageUrlString
+{
+    NSString *restURI = [JSConstants sharedInstance].REST_SERVICES_V2_URI;
+    NSString *resourceURI = self.uri;
+    return  [NSString stringWithFormat:@"%@/%@/thumbnails%@?defaultAllowed=false", self.restClient.serverProfile.serverUrl, restURI, resourceURI];
+}
+
 @end

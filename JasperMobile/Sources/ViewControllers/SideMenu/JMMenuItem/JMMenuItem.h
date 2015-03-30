@@ -42,12 +42,15 @@ typedef NS_ENUM(NSInteger, JMResourceType){
 };
 
 @interface JMMenuItem : NSObject
-@property (assign, nonatomic) JMResourceType resourceType;
-@property (copy, nonatomic) NSString *title;
+@property (nonatomic, readonly) JMResourceType resourceType;
+@property (nonatomic, readonly) NSString *itemTitle;
+@property (nonatomic, readonly) UIImage  *itemIcon;
+@property (nonatomic, readonly) UIImage  *selectedItemIcon;
+
 @property (assign, nonatomic) BOOL selected;
 
-- (instancetype)initWithTitle:(NSString *)title resourceType:(JMResourceType)resourceType;
-+ (instancetype)menuItemWithTitle:(NSString *)title resourceType:(JMResourceType)resourceType;
+- (instancetype)initWithResourceType:(JMResourceType)resourceType;
++ (instancetype)menuItemWithResourceType:(JMResourceType)resourceType;
 
 - (NSString *) vcIdentifierForSelectedItem;
 

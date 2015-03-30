@@ -38,7 +38,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 @property (nonatomic, weak) IBOutlet UILabel *resourceName;
 @property (nonatomic, weak) IBOutlet UILabel *resourceDescription;
 @property (nonatomic, weak) IBOutlet UIButton *infoButton;
-
+@property (nonatomic, readwrite) UIImage *thumbnailImage;
 @end
 
 @implementation JMResourceCollectionViewCell
@@ -56,8 +56,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     _resourceLookup = resourceLookup;
     self.resourceName.text = resourceLookup.label;
     self.resourceDescription.text = resourceLookup.resourceDescription;
-    
-    [self updateResourceImageWithResourceLookup:resourceLookup];
+    self.thumbnailImage = nil;
+    [self updateResourceImage];
 }
 
 - (IBAction)infoButtonDidTapped:(id)sender
@@ -65,58 +65,46 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     [self.delegate infoButtonDidTappedOnCell:self];
 }
 
-- (NSString *)imageURLString
-{
-    NSString *restURI = [JSConstants sharedInstance].REST_SERVICES_V2_URI;
-    NSString *resourceURI = self.resourceLookup.uri;
-    return  [NSString stringWithFormat:@"%@/thumbnails%@?defaultAllowed=false", restURI, resourceURI];
-}
-
-- (void)updateResourceImageWithResourceLookup:(JSResourceLookup *)resourceLookup
+- (void)updateResourceImage
 {
     UIImage *resourceImage;
-    
-    if ([resourceLookup isReport]) {
-        resourceImage = [UIImage imageNamed:@"res_type_report"];
-        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:resourceLookup];
+    if ([self.resourceLookup isReport]) {
+        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
         if (savedReport) {
-            if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-                resourceImage = [UIImage imageNamed:@"res_type_html"];
-            } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
-                resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+            self.thumbnailImage = [savedReport thumbnailImage];
+            resourceImage = [UIImage imageNamed:[NSString stringWithFormat:@"res_type_%@", savedReport.format]];
+        } else {
+            resourceImage = [UIImage imageNamed:@"res_type_report"];
+            if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
+                NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.resourceLookup thumbnailImageUrlString]]];
+                [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
+                [self.resourceImage setImageWithURLRequest:imageRequest placeholderImage:resourceImage success:@weakself(^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image)) {
+                    if (image) {
+                        self.thumbnailImage = image;
+                        [self updateResourceImage:self.thumbnailImage thumbnails:YES];
+                    }
+                } @weakselfend failure:nil];
             }
         }
-    } else if ([resourceLookup isDashboard]) {
+    } else if ([self.resourceLookup isDashboard]) {
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
-    } else if ([resourceLookup isFolder]) {
+    } else if ([self.resourceLookup isFolder]) {
         resourceImage = [UIImage imageNamed:@"res_type_folder"];
     }
     
+    if (resourceImage || _thumbnailImage) {
+        [self updateResourceImage:_thumbnailImage ?:resourceImage thumbnails:!!_thumbnailImage];
+    }
+    // TODO: Should be fixed! need replace url generation to SDK!
+}
+
+- (void)updateResourceImage:(UIImage *)image thumbnails:(BOOL)thumbnails
+{
+    UIImage *resourceImage = thumbnails ? [self cropedImageFromImage:image inRect:self.resourceImage.bounds] : image;
     BOOL shouldFitImage = ((resourceImage.size.height > self.resourceImage.frame.size.height) || (resourceImage.size.width > self.resourceImage.frame.size.width));
     self.resourceImage.contentMode = shouldFitImage ? UIViewContentModeScaleAspectFit : UIViewContentModeCenter;
-    self.resourceImage.backgroundColor = kJMResourcePreviewBackgroundColor;
+    self.resourceImage.backgroundColor = thumbnails ? [UIColor clearColor] : kJMResourcePreviewBackgroundColor;
     self.resourceImage.image = resourceImage;
-
-    // TODO: Should be fixed! need replace url generation to SDK!
-    
-    if ([JMUtils isServerVersionUpOrEqual6] && [resourceLookup isReport]) {
-        // show thumbnail
-        RKObjectManager *objectManager = self.restClient.restKitObjectManager;
-        NSMutableURLRequest *imageRequest = (NSMutableURLRequest *)[objectManager requestWithObject:nil
-                                                               method:RKRequestMethodGET
-                                                                 path:[self imageURLString]
-                                                           parameters:nil];
-        
-        [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
-        
-        [self.resourceImage setImageWithURLRequest:imageRequest placeholderImage:self.resourceImage.image success:@weakself(^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image)) {
-            if (image) {
-                self.resourceImage.contentMode = UIViewContentModeScaleAspectFit;
-                self.resourceImage.backgroundColor = [UIColor clearColor];
-                self.resourceImage.image = [self cropedImageFromImage:image inRect:self.resourceImage.bounds];
-            }
-        } @weakselfend failure:nil];
-    }
 }
 
 - (UIImage *)cropedImageFromImage:(UIImage *)image inRect:(CGRect)rect
@@ -138,7 +126,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                     croppedHeight *scaleFactor);
     
     CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], croppedRect);
-    UIImage *img = [UIImage imageWithCGImage:imageRef scale:[[UIScreen mainScreen] scale] orientation:UIImageOrientationUp];
+    UIImage *img = [UIImage imageWithCGImage:imageRef scale:scaleFactor orientation:UIImageOrientationUp];
     CGImageRelease(imageRef);
     return img;
 }

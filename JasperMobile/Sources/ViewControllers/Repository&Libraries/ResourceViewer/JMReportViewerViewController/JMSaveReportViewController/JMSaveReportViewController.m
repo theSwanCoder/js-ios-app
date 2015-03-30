@@ -31,6 +31,8 @@
 #import "JMSaveReportPageRangeCell.h"
 #import "UIAlertView+Additions.h"
 #import "JMReport.h"
+#import "JSResourceLookup+Helpers.h"
+
 
 NSString * const kJMSaveReportViewControllerSegue = @"SaveReportViewControllerSegue";
 NSString * const kJMAttachmentPrefix = @"_";
@@ -56,8 +58,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
 @implementation JMSaveReportViewController
 
-@synthesize resourceLookup = _resourceLookup;
-
 #pragma mark - Lifecycle
 - (void)dealloc
 {
@@ -68,7 +68,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 {
     [super viewDidLoad];
     self.title = [JMCustomLocalizedString(@"report.viewer.save.title", nil) capitalizedString];
-    self.reportName = self.resourceLookup.label;
+    self.reportName = self.report.resourceLookup.label;
     self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] firstObject];
 
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
@@ -345,9 +345,14 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                 [JMCancelRequestPopup dismiss];
                 
                 if (result.isSuccessful) {
-                    [JMSavedResources addReport:self.resourceLookup
+                    [JMSavedResources addReport:self.report.resourceLookup
                                        withName:self.reportName
                                          format:self.selectedReportFormat];
+                    
+
+                    // Save thumbnail image
+                    [self saveThumbnailToPath:fullReportDirectory];
+                    
                     // Animation
                     [CATransaction begin];
                     [CATransaction setCompletionBlock:^{
@@ -360,7 +365,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
             }
         }@weakselfend;
         
-        [self.restClient runReportExecution:self.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO
+        [self.restClient runReportExecution:self.report.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO
                                   freshData:YES saveDataSnapshot:NO ignorePagination:NO transformerKey:nil pages:[self makePagesFormat]
                           attachmentsPrefix:kJMAttachmentPrefix parameters:parameters completionBlock:@weakself(^(JSOperationResult *result)) {
                               if (result.error) {
@@ -396,6 +401,28 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         }
     }
     return pagesFormat;
+}
+
+- (void) saveThumbnailToPath:(NSString *)directoryPath
+{
+    __block NSData *thumbnailData = UIImagePNGRepresentation(self.report.thumbnailImage);
+    if (!thumbnailData) {
+        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.report.resourceLookup thumbnailImageUrlString]]];
+            [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
+            NSData *imageData = [NSURLConnection sendSynchronousRequest:imageRequest returningResponse:nil error:nil];
+            if ([UIImage imageWithData:imageData]) {
+                thumbnailData = imageData;
+            }
+            dispatch_semaphore_signal(sem);
+        });
+        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+    }
+    if (thumbnailData) {
+        NSString *thumbnailPath = [directoryPath stringByAppendingPathComponent:kJMThumbnailImageFileName];
+        [thumbnailData writeToFile:thumbnailPath atomically:YES];
+    }
 }
 
 - (void) reportLoaderDidChangeCountOfPages:(NSNotification *) notification

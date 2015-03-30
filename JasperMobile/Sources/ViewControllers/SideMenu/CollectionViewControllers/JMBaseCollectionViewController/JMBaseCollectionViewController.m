@@ -387,6 +387,11 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     if ([resourceLookup isReport]) {
         JMReport *report = [resourceLookup reportModelWithVCIdentifier:&controllerIdentifier];
         nextVC = [self.storyboard instantiateViewControllerWithIdentifier:controllerIdentifier];
+        
+        JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
+        JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [baseCollectionView.collectionView cellForItemAtIndexPath:indexPath];
+        report.thumbnailImage = cell.thumbnailImage;
+        
         [nextVC setReport:report];
     } else if ([resourceLookup isDashboard]) {
         JMDashboard *dashboard = [resourceLookup dashboardModelWithVCIdentifier:&controllerIdentifier];

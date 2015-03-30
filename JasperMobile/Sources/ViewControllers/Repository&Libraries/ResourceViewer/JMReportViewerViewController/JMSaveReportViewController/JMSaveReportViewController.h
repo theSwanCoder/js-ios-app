@@ -47,7 +47,7 @@
 
 extern NSString * const kJMSaveReportViewControllerSegue;
 
-@interface JMSaveReportViewController : JMEditabledViewController <JMResourceClientHolder>
+@interface JMSaveReportViewController : JMEditabledViewController
 @property (nonatomic, weak) id <JMSaveReportViewControllerDelegate> delegate;
 
 @property (nonatomic, strong) JMReport *report;

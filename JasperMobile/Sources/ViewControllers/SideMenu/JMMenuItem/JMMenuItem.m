@@ -30,20 +30,23 @@
 
 @implementation JMMenuItem
 
-- (instancetype)initWithTitle:(NSString *)title resourceType:(JMResourceType)resourceType
+- (instancetype)initWithResourceType:(JMResourceType)resourceType
 {
     self = [super init];
     if (self) {
-        _title = title;
         _resourceType = resourceType;
+        _itemTitle = [self titleWithResourceType];
+        _itemIcon = [self iconWithResourceType];
+        _selectedItemIcon = [self selectedIconWithResourceType];
+        
         _selected = NO;
     }
     return self;
 }
 
-+ (instancetype)menuItemWithTitle:(NSString *)title resourceType:(JMResourceType)resourceType
++ (instancetype)menuItemWithResourceType:(JMResourceType)resourceType
 {
-    return [[[self class] alloc] initWithTitle:title resourceType:resourceType];
+    return [[[self class] alloc] initWithResourceType:resourceType];
 }
 
 - (void)setSelected:(BOOL)selected
@@ -51,33 +54,80 @@
     _selected = selected;
 }
 
+#pragma mark - Private API
 - (NSString *) vcIdentifierForSelectedItem
 {
     switch (self.resourceType) {
-        case JMResourceTypeLibrary: {
+        case JMResourceTypeLibrary:
             return @"JMLibraryNavigationViewController";
-            break;
-        }
-        case JMResourceTypeSavedItems: {
+        case JMResourceTypeSavedItems:
             return @"JMSavedItemsNavigationViewController";
-            break;
-        }
-        case JMResourceTypeFavorites: {
+        case JMResourceTypeFavorites:
             return @"JMFavoritesNavigationViewController";
-            break;
-        }
-        case JMResourceTypeRepository: {
+        case JMResourceTypeRepository:
             return @"JMRepositoryNavigationViewController";
-            break;
-        }
-        case JMResourceTypeSettings: {
+        case JMResourceTypeSettings:
             return @"JMSettingsNavigationViewController";
-            break;
-        }
-        case JMResourceTypeNone: {
+        case JMResourceTypeNone:
             return @"JMSplashViewController";
-            break;
-        }
+        default:
+            return nil;
+    }
+}
+
+- (NSString *) titleWithResourceType
+{
+    switch (self.resourceType) {
+        case JMResourceTypeLibrary:
+            return JMCustomLocalizedString(@"menuitem.library.label", nil);
+        case JMResourceTypeSavedItems:
+            return JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
+        case JMResourceTypeFavorites:
+            return JMCustomLocalizedString(@"menuitem.favorites.label", nil);
+        case JMResourceTypeRepository:
+            return JMCustomLocalizedString(@"menuitem.repository.label", nil);
+        case JMResourceTypeSettings:
+            return JMCustomLocalizedString(@"menuitem.settings.label", nil);
+        case JMResourceTypeLogout:
+            return JMCustomLocalizedString(@"menuitem.logout.label", nil);
+        case JMResourceTypeNone:
+            return @"JMSplashViewController";
+        default:
+            return nil;
+    }
+}
+
+- (UIImage *)iconWithResourceType
+{
+    switch (self.resourceType) {
+        case JMResourceTypeLibrary:
+            return [UIImage imageNamed:@"ic_library"];
+        case JMResourceTypeRepository:
+            return [UIImage imageNamed:@"ic_repository"];
+        case JMResourceTypeSavedItems:
+            return [UIImage imageNamed:@"ic_saved_items"];
+        case JMResourceTypeFavorites:
+            return [UIImage imageNamed:@"ic_favorites"];
+        case JMResourceTypeSettings:
+            return [UIImage imageNamed:@"ic_settings"];
+        default:
+            return nil;
+    }
+}
+
+- (UIImage *)selectedIconWithResourceType
+{
+    switch (self.resourceType) {
+        case JMResourceTypeLibrary:
+            return [UIImage imageNamed:@"ic_library_selected"];
+        case JMResourceTypeRepository:
+            return [UIImage imageNamed:@"ic_repository_selected"];
+        case JMResourceTypeSavedItems:
+            return [UIImage imageNamed:@"ic_saved_items_selected"];
+        case JMResourceTypeFavorites:
+            return [UIImage imageNamed:@"ic_favorites_selected"];
+        case JMResourceTypeSettings:
+            return [UIImage imageNamed:@"ic_settings_selected"];
         default:
             return nil;
     }
