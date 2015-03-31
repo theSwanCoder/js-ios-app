@@ -40,19 +40,39 @@ class JMVisualizeDashboardLoader: NSObject {
     weak var webView: WKWebView?
     let dashboard: JMDashboard
 
-    init(dashboard: JMDashboard) {
+    deinit {
+        if let webView = self.webView {
+            webView.navigationDelegate = nil
+        }
+    }
+
+    init(dashboard: JMDashboard, webView: WKWebView?) {
         self.dashboard = dashboard
+        self.webView = webView
+
+        super.init()
+
+        if let localWebView = self.webView {
+            localWebView.navigationDelegate = self
+        }
     }
 
     // public api
     func run() {
+        if let webView = self.webView {
+            webView.configuration.userContentController.addScriptMessageHandler(self, name: CallbackHandler)
+        }
         loadDashboard()
     }
 
-    func destroy() {
+    func destroyDashboard() {
+        let destroyDashboardJS = "MobileDashboard.destroy();"
         if let webView = self.webView {
-            let destroyDashboardJS = "MobileDashboard.destroy();"
             webView.evaluateJavaScript(destroyDashboardJS, completionHandler: nil)
+        }
+        
+        if let webView = self.webView {
+            webView.configuration.userContentController.removeScriptMessageHandlerForName(CallbackHandler)
         }
     }
 
@@ -64,8 +84,8 @@ class JMVisualizeDashboardLoader: NSObject {
         } else {
             if let htmlString = HTMLString() {
                 let baseURLString = self.restClient().serverProfile.serverUrl
+                JMWKWebViewManager.sharedInstance.isVisualizeLoaded = true
                 if let webView = self.webView {
-                    JMWKWebViewManager.sharedInstance.isVisualizeLoaded = true
                     webView.loadHTMLString(htmlString, baseURL: NSURL(string: baseURLString))
                 }
             }

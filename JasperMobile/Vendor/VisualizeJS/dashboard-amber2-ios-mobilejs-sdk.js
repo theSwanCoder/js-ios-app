@@ -15,13 +15,16 @@
       IosCallback.prototype.onLoadStart = function() {};
 
       IosCallback.prototype.onLoadDone = function() {
-        this._makeCallback("command:didEndLoading");
+        this._makeCallback({
+          "command": "onLoadDone"
+        });
       };
 
       IosCallback.prototype.onLoadError = function(error) {};
 
       IosCallback.prototype._makeCallback = function(command) {
-        return webkit.messageHandlers.callback.postMessage + command;
+        console.log("callback");
+        return window.webkit.messageHandlers.callback.postMessage(command);
       };
 
       return IosCallback;
