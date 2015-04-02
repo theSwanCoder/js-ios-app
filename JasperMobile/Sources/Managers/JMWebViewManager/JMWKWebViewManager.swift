@@ -36,8 +36,8 @@ import WebKit
 
 class JMWKWebViewManager: NSObject {
     var isVisualizeLoaded = false
-    var hasScriptMessageHandler = false
     let webView: WKWebView
+    var messageHandler: AnyObject?
 
     class var sharedInstance: JMWKWebViewManager {
         struct Static {
@@ -61,5 +61,16 @@ class JMWKWebViewManager: NSObject {
         self.webView.scrollView.bounces = false
 
         super.init()
+    }
+
+    func setupMessageHandler(messageHandler: JMVisualizeMessageHandler, name: String) {
+        webView.configuration.userContentController.addScriptMessageHandler(messageHandler, name: name)
+        self.messageHandler = messageHandler
+    }
+
+    // TODO: need mechanism of removing message handler
+    func removeMessageHanlerForName(name: String) {
+        webView.configuration.userContentController.removeScriptMessageHandlerForName(name)
+        messageHandler = nil
     }
 }

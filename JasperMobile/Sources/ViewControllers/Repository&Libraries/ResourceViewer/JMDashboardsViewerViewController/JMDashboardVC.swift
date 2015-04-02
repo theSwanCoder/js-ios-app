@@ -37,34 +37,76 @@ class JMDashboardVC: JMResourceViewerVC {
 
     var dashboard: JMDashboard?
     var dashboardLoader: JMVisualizeDashboardLoader?
+    var rightBarButtonItems: [AnyObject]?
+
+    // UIViewController LifeCycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        rightBarButtonItems = navigationItem.rightBarButtonItems
+    }
 
     // Actions
     override func backButtonAction() {
-        if let loader = dashboardLoader {
-            loader.destroyDashboard()
-        }
+        dashboardLoader?.destroyDashboard()
         super.backButtonAction()
     }
 
     // overrided functions
-    override func currentResourceLookup() -> JSResourceLookup! {
-        var resourceLookup : JSResourceLookup?
-        if let dashboard = self.dashboard {
-            resourceLookup = dashboard.resourceLookup
-        }
-        return resourceLookup
+    override func currentResourceLookup() -> JSResourceLookup? {
+        return dashboard?.resourceLookup
     }
 
     // Start point
     override func runReportExecution() {
-
         if let dashboard = self.dashboard {
             dashboardLoader = JMVisualizeDashboardLoader(dashboard: dashboard, webView: webView)
-            if let loader = dashboardLoader {
-                loader.run()
-            }
+            dashboardLoader!.delegate = self
+            dashboardLoader!.run()
         } else {
             println("dashboard is nil")
         }
+    }
+
+    func minimizeDashlet() {
+        dashboardLoader?.minimizeDashlet()
+    }
+}
+
+extension JMDashboardVC: JMVisualizeDashboardLoaderDelegate {
+
+    func loaderDidStartLoadDashboard(dashboardLoader: JMVisualizeDashboardLoader) {
+        startShowLoaderWithMessage("Loading...", cancelBlock: { () -> Void in
+            println("cancel loading dashboard")
+        })
+    }
+
+    func loaderDidFinishLoadDashboard(dashboardLoader: JMVisualizeDashboardLoader) {
+        stopShowLoader()
+    }
+
+    func loader(dashboardLoader: JMVisualizeDashboardLoader, didReceiveError error: NSError) {
+        stopShowLoader()
+        println("error of loading dashboard: \(error.localizedDescription)")
+    }
+
+    func loader(dashboardLoader: JMVisualizeDashboardLoader, didMaximizeDashlet dashlet: String) {
+        var dashboardTitle = currentResourceLookup()?.label
+        let backItem = backButtonWithTitle(dashboardTitle, target: self, action: "minimizeDashlet")
+        navigationItem.leftBarButtonItem = backItem
+        navigationItem.rightBarButtonItems = nil
+        navigationItem.title = dashlet
+
+        startShowLoaderWithMessage("Maximize \(dashlet)", cancelBlock: nil)
+    }
+
+    func loaderDidMinimizeDashlet(dashboardLoader: JMVisualizeDashboardLoader) {
+        setupBackButton()
+        navigationItem.rightBarButtonItems = rightBarButtonItems
     }
 }

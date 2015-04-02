@@ -34,11 +34,21 @@
 import UIKit
 import WebKit
 
+let kCallbackHandler = "callback"
+
+@objc protocol JMVisualizeDashboardLoaderDelegate : NSObjectProtocol {
+    optional func loaderDidStartLoadDashboard(dashboardLoader: JMVisualizeDashboardLoader) -> Void
+    optional func loaderDidFinishLoadDashboard(dashboardLoader: JMVisualizeDashboardLoader) -> Void
+    optional func loader(dashboardLoader: JMVisualizeDashboardLoader, didReceiveError error: NSError) -> Void
+    optional func loader(dashboardLoader: JMVisualizeDashboardLoader, didMaximizeDashlet dashlet: String)
+    optional func loaderDidMinimizeDashlet(dashboardLoader: JMVisualizeDashboardLoader)
+}
+
 class JMVisualizeDashboardLoader: NSObject {
 
-    let CallbackHandler = "callback"
     weak var webView: WKWebView?
     let dashboard: JMDashboard
+    weak var delegate: JMVisualizeDashboardLoaderDelegate?
 
     deinit {
         if let webView = self.webView {
@@ -54,10 +64,15 @@ class JMVisualizeDashboardLoader: NSObject {
 
         if let localWebView = self.webView {
             localWebView.navigationDelegate = self
-            // TODO: need handle adding script recieving
-            if !JMWKWebViewManager.sharedInstance.hasScriptMessageHandler {
-                JMWKWebViewManager.sharedInstance.hasScriptMessageHandler = true
-                localWebView.configuration.userContentController.addScriptMessageHandler(self, name: CallbackHandler)
+
+            // TODO: need add handler for receiving message from script
+            if JMWKWebViewManager.sharedInstance.messageHandler == nil {
+                let messageHandler = JMVisualizeMessageHandler()
+                messageHandler.loader = self
+                JMWKWebViewManager.sharedInstance.setupMessageHandler(messageHandler, name: kCallbackHandler)
+            } else {
+                let messageHandler = JMWKWebViewManager.sharedInstance.messageHandler as JMVisualizeMessageHandler
+                messageHandler.loader = self
             }
         }
     }
@@ -70,6 +85,11 @@ class JMVisualizeDashboardLoader: NSObject {
     func destroyDashboard() {
         let destroyDashboardJS = "MobileDashboard.destroy();"
         sendScriptMessage(destroyDashboardJS)
+    }
+
+    func minimizeDashlet() {
+        let minimizeDashletJS = "MobileDashboard.minimizeDashlet();"
+        sendScriptMessage(minimizeDashletJS)
     }
 
     // private api
@@ -96,7 +116,7 @@ class JMVisualizeDashboardLoader: NSObject {
 
     private func removeScriptMessageHandler() {
         if let webView = self.webView {
-            webView.configuration.userContentController.removeScriptMessageHandlerForName(self.CallbackHandler)
+            webView.configuration.userContentController.removeScriptMessageHandlerForName(kCallbackHandler)
         }
     }
 
@@ -127,8 +147,8 @@ extension JMVisualizeDashboardLoader: WKNavigationDelegate {
         let isLinkClicked = navigationAction.navigationType == .LinkActivated
         let requestString = navigationAction.request.URL.absoluteString!
 
-        println("request: \(requestString)")
-        println("isLinkClicked: \(isLinkClicked)")
+        //println("request: \(requestString)")
+        //println("isLinkClicked: \(isLinkClicked)")
         decisionHandler(.Allow)
     }
 
@@ -136,7 +156,7 @@ extension JMVisualizeDashboardLoader: WKNavigationDelegate {
 
         let response = navigationResponse.response
 
-        println("response: \(response)")
+        //println("response: \(response)")
         decisionHandler(.Allow)
     }
 }
@@ -174,10 +194,16 @@ extension JMVisualizeDashboardLoader {
     }
 }
 
-extension JMVisualizeDashboardLoader: WKScriptMessageHandler {
+class JMVisualizeMessageHandler: NSObject, WKScriptMessageHandler {
+
+    weak var loader: JMVisualizeDashboardLoader!
+
+    deinit {
+        println("JMVisualizeMessageHandler.deinit")
+    }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if message.name == CallbackHandler {
+        if message.name == kCallbackHandler {
             parseCommand(message.body as Dictionary<String, AnyObject>)
         }
     }
@@ -191,6 +217,12 @@ extension JMVisualizeDashboardLoader: WKScriptMessageHandler {
                 onLoadStart(commandDict["parameters"] as Dictionary<String, AnyObject>)
             case "onLoadDone" :
                 onLoadDone(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            case "onMinimize" :
+                onMinimize(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            case "onMaximize" :
+                onMaximize(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            case "onLoadError" :
+                onLoadError(commandDict["parameters"] as Dictionary<String, AnyObject>)
             default:
                 break
         }
@@ -199,34 +231,64 @@ extension JMVisualizeDashboardLoader: WKScriptMessageHandler {
     // swift counterparts from js callbacks
     func onScriptLoaded(parameters: Dictionary<String, AnyObject>) {
         println("onScriptLoaded")
-        println("parameters \(parameters)")
+        //println("parameters \(parameters)")
         JMWKWebViewManager.sharedInstance.isVisualizeLoaded = true
-        runDashboard()
+        loader.runDashboard()
     }
 
     func onLoadStart(parameters: Dictionary<String, AnyObject>) {
         println("onLoadStart")
-        println("parameters \(parameters)")
+        //println("parameters \(parameters)")
+        if let delegate = self.loader.delegate {
+            if delegate.respondsToSelector("loaderDidStartLoadDashboard:") {
+                delegate.loaderDidStartLoadDashboard!(loader)
+            }
+        }
     }
 
     func onLoadDone(parameters: Dictionary<String, AnyObject>) {
         println("onLoadDone")
-        println("parameters \(parameters)")
+        //println("parameters \(parameters)")
+        if let delegate = self.loader.delegate {
+            if delegate.respondsToSelector("loaderDidFinishLoadDashboard:") {
+                delegate.loaderDidFinishLoadDashboard!(loader)
+            }
+        }
     }
 
     func onMaximize(parameters: Dictionary<String, AnyObject>) {
         println("onMaximize")
-        println("parameters \(parameters)")
+        //println("parameters \(parameters)")
+        if let delegate = self.loader.delegate {
+            if delegate.respondsToSelector("loader:didMaximizeDashlet:") {
+                // TODO: replace to instance of JMDashlet class
+                let dashletTitle = parameters["title"] as String
+                delegate.loader!(loader, didMaximizeDashlet: dashletTitle)
+            }
+        }
     }
 
     func onMinimize(parameters: Dictionary<String, AnyObject>) {
         println("onMinimize")
-        println("parameters \(parameters)")
+        //println("parameters \(parameters)")
+        if let delegate = self.loader.delegate {
+            if delegate.respondsToSelector("loaderDidMinimizeDashlet:") {
+                delegate.loaderDidMinimizeDashlet!(loader)
+            }
+        }
     }
 
     func onLoadError(parameters: Dictionary<String, AnyObject>) {
         println("onLoadError")
-        println("parameters \(parameters)")
+        //println("parameters \(parameters)")
+        if let delegate = self.loader.delegate {
+            if delegate.respondsToSelector("loader:didReceiveError:") {
+                let errorString = parameters["error"] as String
+                let userInfo = [NSLocalizedDescriptionKey : errorString]
+                // TODO: improve error creating
+                let error = NSError(domain: "JMVisualizeDashboardLoader", code: 0, userInfo: userInfo)
+                delegate.loader!(loader, didReceiveError: error)
+            }
+        }
     }
-
 }
