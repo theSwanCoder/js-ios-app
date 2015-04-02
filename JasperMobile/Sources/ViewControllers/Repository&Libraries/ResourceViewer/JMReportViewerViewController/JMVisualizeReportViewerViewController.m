@@ -227,7 +227,35 @@
             reportViewController.report = report;
             reportViewController.isStartFromAnotherReport = YES;
 
+
             NSString *backItemTitle = self.title;
+            NSString *title = report.resourceLookup.label;
+
+            // detect backButton text width to truncate with '...'
+            NSDictionary *textAttributes = @{NSFontAttributeName : [JMFont navigationBarTitleFont]};
+            CGSize titleTextSize = [title sizeWithAttributes:textAttributes];
+            CGFloat titleTextWidth = titleTextSize.width;
+            CGSize backItemTextSize = [backItemTitle sizeWithAttributes:textAttributes];
+            CGFloat backItemTextWidth = backItemTextSize.width;
+            CGFloat backItemOffset = 12;
+
+            CGFloat viewWidth = CGRectGetWidth(self.view.bounds);
+
+            if ( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) {
+                CGFloat charWidth = backItemTextWidth/backItemTitle.length;
+                CGFloat excessWidth = (backItemOffset + backItemTextWidth) - (viewWidth - titleTextWidth) / 2;
+
+                NSInteger excessLength = excessWidth/charWidth;
+                NSInteger remainedLength = backItemTitle.length - excessLength;
+                NSString *replaceSymbols = @"...";
+                if (remainedLength < 10) {
+                    backItemTitle = replaceSymbols;
+                } else {
+                    NSRange range = NSMakeRange(backItemTitle.length - (excessLength + replaceSymbols.length), excessLength + replaceSymbols.length);
+                    backItemTitle = [backItemTitle stringByReplacingCharactersInRange:range withString:replaceSymbols];
+                }
+            }
+
             UIBarButtonItem *backItem = [self backButtonWithTitle:backItemTitle
                                                            target:reportViewController
                                                            action:@selector(backToPreviousReport)];
