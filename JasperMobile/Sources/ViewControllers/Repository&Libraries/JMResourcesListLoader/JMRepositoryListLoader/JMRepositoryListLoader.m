@@ -82,9 +82,7 @@
                     [self loadResourceLookup:resourceURI];
                 } else {
                     [self finishLoadingWithError:result.error];
-                    [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                        [self loadResourceLookup:resourceURI];
-                    } @weakselfend];
+                    [JMUtils showLoginViewAnimated:YES completion:nil];
                 }
             } else {
                 [self finishLoadingWithError:result.error];

@@ -104,9 +104,9 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
 {
     SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
     JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
-
-    void (^loginCompletionBlock)(void) = ^{
-        [menuViewController setSelectedItemIndex:0];
+    
+    LoginCompletionBlock loginCompletionBlock = ^{
+        [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
 
         // Configure Appirater
         [Appirater setAppId:@"467317446"];
@@ -117,28 +117,14 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
         [Appirater appLaunched:YES];
     };
     
-    if ([[JMSessionManager sharedManager] userIsLoggedIn]) {
-        [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
-        [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:@weakself(^(BOOL success)) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [JMCancelRequestPopup dismiss];
-                
-                if (success) {
-                    self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
-                    if (!menuViewController.selectedItem) {
-                        loginCompletionBlock();
-                    }
-                } else {
-                    [JMUtils showLoginViewAnimated:NO completion:@weakself(^(void)) {
-                        loginCompletionBlock();
-                    } @weakselfend];
-                }
-            });
-        } @weakselfend];
-    } else {
-        [JMUtils showLoginViewAnimated:NO completion:@weakself(^(void)) {
+    if ([[JMSessionManager sharedManager] restoreLastSession]) {
+        self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
+        
+        if (!menuViewController.selectedItem) {
             loginCompletionBlock();
-        } @weakselfend];
+        }
+    } else {
+        [JMUtils showLoginViewAnimated:NO completion:nil loginCompletion:loginCompletionBlock];
     }
 }
 
@@ -250,14 +236,21 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
     if (profilesArray && [profilesArray isKindOfClass:[NSArray class]] && profilesArray.count) {
         for (NSDictionary *profileDictionary in profilesArray) {
             JMServerProfile *serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
-            
             serverProfile.alias = [profileDictionary objectForKey:@"mAlias"];
             serverProfile.organization = [profileDictionary objectForKey:@"mOrganization"];
             serverProfile.serverUrl = [profileDictionary objectForKey:@"mServerUrl"];
-            serverProfile.askPassword = [NSNumber numberWithBool:NO];
-
             [self.managedObjectContext save:nil];
         }
+    }
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"serverUrl == %@", @"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
+    JMServerProfile *serverProfile = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] firstObject];
+    if (!serverProfile) {
+        serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
+        serverProfile.alias = @"Jaspersoft Mobile Demo";
+        serverProfile.organization = @"organization_1";
+        serverProfile.serverUrl = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
+        [self.managedObjectContext save:nil];
     }
 }
 

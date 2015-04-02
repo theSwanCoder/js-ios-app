@@ -155,18 +155,22 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
 
 - (void)deleteServerProfileForCell:(JMServerCollectionViewCell *)cell
 {
-    [[UIAlertView localizedAlertWithTitle:nil
-                                  message:@"servers.profile.delete.message"
-                               completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
-                                   if (alertView.cancelButtonIndex != buttonIndex) {
-                                       JMServerProfile *serverProfile = [self.servers objectAtIndex:[self.collectionView indexPathForCell:cell].row];
-                                       [[JMUtils managedObjectContext] deleteObject:serverProfile];
-                                       [[JMUtils managedObjectContext] save:nil];
-                                       [self refreshDatasource];
-                                   }
-                               } @weakselfend
-                        cancelButtonTitle:@"dialog.button.cancel"
-                        otherButtonTitles:@"dialog.button.delete", nil] show];
+    JMServerProfile *serverProfile = [self.servers objectAtIndex:[self.collectionView indexPathForCell:cell].row];
+    if (serverProfile == [JMServerProfile demoServerProfile]) {
+        [[UIAlertView localizedAlertWithTitle:nil message:@"servers.profile.delete.demo.message" delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil] show];
+    } else {
+        [[UIAlertView localizedAlertWithTitle:nil
+                                      message:@"servers.profile.delete.message"
+                                   completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                                       if (alertView.cancelButtonIndex != buttonIndex) {
+                                           [serverProfile.managedObjectContext deleteObject:serverProfile];
+                                           [serverProfile.managedObjectContext save:nil];
+                                           [self refreshDatasource];
+                                       }
+                                   } @weakselfend
+                            cancelButtonTitle:@"dialog.button.cancel"
+                            otherButtonTitles:@"dialog.button.delete", nil] show];
+    }
 }
 
 -(void)editServerProfileForCell:(JMServerCollectionViewCell *)cell

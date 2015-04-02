@@ -35,6 +35,13 @@
 @interface JMServerProfile (Helpers)
 
 /**
+ Return demo server profile
+ 
+ @return demo server profile
+ */
++ (JMServerProfile *)demoServerProfile;
+
+/**
  Returns number of min supported server version
  
  @return number of min supported server version

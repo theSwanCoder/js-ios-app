@@ -49,6 +49,9 @@
 @end
 
 @implementation JMMenuViewController
++ (NSInteger)defaultItemIndex {
+    return 0;
+}
 
 #pragma mark - LifeCycle
 -(void)dealloc
@@ -149,9 +152,7 @@
             }
         } else {
             [[JMSessionManager sharedManager] logout];
-            [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                [self setSelectedItemIndex:0];
-            } @weakselfend];
+            [JMUtils showLoginViewAnimated:YES completion:nil];
         }
     }
 }
