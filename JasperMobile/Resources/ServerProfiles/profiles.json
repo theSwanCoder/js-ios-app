@@ -92,9 +92,14 @@
                   "mOrganization" : ""
                   },
                   {
-                      "mAlias" : "Visualize Dashboard Impr",
-                      "mServerUrl" : "http://build-master.jaspersoft.com:8580/jrs-pro-feature-dashboard-improvements-for-jasper-mobile",
-                      "mOrganization" : ""
+                  "mAlias" : "Visualize Dashboard Impr",
+                  "mServerUrl" : "http://build-master.jaspersoft.com:8580/jrs-pro-feature-dashboard-improvements-for-jasper-mobile",
+                  "mOrganization" : ""
+                  },
+                  {
+                  "mAlias" : "New Mobile Demo",
+                  "mServerUrl" : "http://mobiledemo2.jaspersoft.com/jasperserver-pro/",
+                  "mOrganization" : ""
                   }
                   ]
 }
