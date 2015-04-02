@@ -48,12 +48,14 @@
 "servers.name.errmsg.empty" = "Please specify a valid profile name";
 "servers.name.errmsg.exists" = "Profile name already exists. Please specify another one";
 "servers.orgid.label" = "Organization ID";
+"servers.keepSession.label" = "Automatic to extend session";
 "servers.askpassword.label" = "Always ask for password";
 "servers.title.new" = "New Server Profile";
 "servers.action.profile.edit" = "Edit";
 "servers.action.profile.clone" = "Clone Profile";
 "servers.action.profile.delete" = "Delete";
 "servers.profile.delete.message" = "Please, confirm deleting server.";
+"servers.profile.delete.demo.message" = "Sorry, You can't delete demo server.";
 
 /* Onboarding Intro */
 "intro.title" = "Welcome to TIBCO JasperMobile";

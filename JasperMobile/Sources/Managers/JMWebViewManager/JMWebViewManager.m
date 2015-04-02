@@ -44,8 +44,9 @@
     return sharedMyManager;
 }
 
-- (instancetype)init {
-    if (self = [super init]) {
+- (UIWebView *)webView
+{
+    if (!_webView) {
         _webView = [[UIWebView alloc] initWithFrame:CGRectZero];
         _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _webView.scrollView.bounces = NO;
@@ -53,7 +54,7 @@
         _webView.dataDetectorTypes = UIDataDetectorTypeNone;
         _webView.suppressesIncrementalRendering = YES;
     }
-    return self;
+    return _webView;
 }
 
 - (UIWebView *)webViewWithParentFrame:(CGRect)frame
@@ -67,11 +68,16 @@
             webViewFrame = CGRectMake(0, 0, CGRectGetHeight(frame), CGRectGetWidth(frame));
         }
 
-        _webView.frame = webViewFrame;
+        self.webView.frame = webViewFrame;
     } else {
-        _webView.frame = frame;
+        self.webView.frame = frame;
     }
-    return _webView;
+    return self.webView;
+}
+
+- (void)reset
+{
+    self.webView = nil;
 }
 
 @end

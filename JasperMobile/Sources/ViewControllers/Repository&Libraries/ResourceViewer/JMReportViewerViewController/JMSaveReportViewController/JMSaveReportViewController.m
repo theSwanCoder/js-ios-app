@@ -332,9 +332,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                     if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
                         [self saveReport];
                     } else {
-                        [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                            [self saveReport];
-                        } @weakselfend];
+                        [JMUtils showLoginViewAnimated:YES completion:nil];
                     }
                 } else {
                     [JMUtils showAlertViewWithError:result.error];

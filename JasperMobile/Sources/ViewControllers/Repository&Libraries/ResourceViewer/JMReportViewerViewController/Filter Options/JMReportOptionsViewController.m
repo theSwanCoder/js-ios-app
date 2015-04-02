@@ -242,9 +242,7 @@
                                             if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
                                                 [self updatedInputControlsValuesWithCompletion:completion];
                                             } else {
-                                                [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                                                    [self updatedInputControlsValuesWithCompletion:completion];
-                                                } @weakselfend];
+                                                [JMUtils showLoginViewAnimated:YES completion:nil];
                                             }
                                         } else {
                                             [JMUtils showAlertViewWithError:result.error];

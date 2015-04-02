@@ -27,6 +27,7 @@
 		089590FF19E3D514001471DA /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E019E3D514001471DA /* ALToastView.m */; };
 		0895910419E3D514001471DA /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590F919E3D514001471DA /* PopoverView.m */; };
 		08982CCF1AC98A0700368522 /* JMRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08982CCE1AC98A0700368522 /* JMRevealViewController.m */; };
+		08982CD61ACBF41F00368522 /* JasperMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 08982CD21ACBF41E00368522 /* JasperMobile.xcdatamodeld */; };
 		089B159C1AA756BD0021A915 /* JMEditabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B148E1AA756BD0021A915 /* JMEditabledViewController.m */; };
 		089B159D1AA756BD0021A915 /* JMMainNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14911AA756BD0021A915 /* JMMainNavigationController.m */; };
 		089B159E1AA756BD0021A915 /* JMFavorites+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14941AA756BD0021A915 /* JMFavorites+Helpers.m */; };
@@ -126,7 +127,6 @@
 		08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C838191A1F5A0D0004BE78 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DB3D931A891640006F9620 /* MessageUI.framework */; };
 		08E62C8319922B0B0081CA83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E62C8019922B0B0081CA83 /* main.m */; };
-		08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 08E62D7019922F5A0081CA83 /* JasperMobile.xcdatamodeld */; };
 		08FCFACA1A8A6057007940E7 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */; };
 		7F0FBEF9123360B7837DA1F6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */; };
 		93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */; };
@@ -222,7 +222,6 @@
 		0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMOnboardIntroViewController.m; sourceTree = "<group>"; };
 		082D1E901AB70FB700E0C0C6 /* JSResourceLookup+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JSResourceLookup+Helpers.h"; sourceTree = "<group>"; };
 		082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSResourceLookup+Helpers.m"; sourceTree = "<group>"; };
-		08625FB619C328410087684E /* JasperMobile_v_1_9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile_v_1_9.xcdatamodel; sourceTree = "<group>"; };
 		0871503B19F1265B00C5875E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		0871503D19F1266900C5875E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		089590DF19E3D514001471DA /* ALToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALToastView.h; sourceTree = "<group>"; };
@@ -233,6 +232,9 @@
 		089590FB19E3D514001471DA /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverViewCompatibility.h; sourceTree = "<group>"; };
 		08982CCE1AC98A0700368522 /* JMRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRevealViewController.m; sourceTree = "<group>"; };
 		08982CD01AC98A6300368522 /* JMRevealViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JMRevealViewController.h; sourceTree = "<group>"; };
+		08982CD31ACBF41F00368522 /* JasperMobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile.xcdatamodel; sourceTree = "<group>"; };
+		08982CD41ACBF41F00368522 /* JasperMobile_v_1_9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile_v_1_9.xcdatamodel; sourceTree = "<group>"; };
+		08982CD51ACBF41F00368522 /* JasperMobile_v_2_0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile_v_2_0.xcdatamodel; sourceTree = "<group>"; };
 		089B148D1AA756BD0021A915 /* JMEditabledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMEditabledViewController.h; sourceTree = "<group>"; };
 		089B148E1AA756BD0021A915 /* JMEditabledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMEditabledViewController.m; sourceTree = "<group>"; };
 		089B14901AA756BD0021A915 /* JMMainNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMainNavigationController.h; sourceTree = "<group>"; };
@@ -457,8 +459,6 @@
 		08E62CFD19922BA40081CA83 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		08E62CFE19922BA40081CA83 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		08E62D0019922BA40081CA83 /* zh */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh; path = zh.lproj/Localizable.strings; sourceTree = "<group>"; };
-		08E62D7119922F5A0081CA83 /* JasperMobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile.xcdatamodel; sourceTree = "<group>"; };
-		08F1288B1A8D1295006CB937 /* JasperMobile_v_2_0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile_v_2_0.xcdatamodel; sourceTree = "<group>"; };
 		20A5E8D0860C986563FB740C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1560,7 +1560,7 @@
 		08E62D6F19922F5A0081CA83 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				08E62D7019922F5A0081CA83 /* JasperMobile.xcdatamodeld */,
+				08982CD21ACBF41E00368522 /* JasperMobile.xcdatamodeld */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -2056,6 +2056,7 @@
 				089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */,
 				93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */,
 				08E62D7219922F5A0081CA83 /* JasperMobile.xcdatamodeld in Sources */,
+				93047D611AB9722B0047C982 /* JMVisualizeWebViewManager.m in Sources */,
 				089B15F41AA756BD0021A915 /* JMSettings.m in Sources */,
 				089B15F81AA756BD0021A915 /* JMLibraryCollectionViewController.m in Sources */,
 				089B16071AA756BD0021A915 /* JMWebConsole.m in Sources */,
@@ -2085,6 +2086,7 @@
 				089B15E11AA756BD0021A915 /* JMReportPageViewerViewController.m in Sources */,
 				93EEB4641AC54EAE000718C7 /* JMWKWebViewManager.swift in Sources */,
 				9339E3021AA9C7E40024419D /* JMReportViewerToolBar.m in Sources */,
+				08982CD61ACBF41F00368522 /* JasperMobile.xcdatamodeld in Sources */,
 				089B15E71AA756BD0021A915 /* JMSaveReportFormatCell.m in Sources */,
 				089B15F61AA756BD0021A915 /* JMBaseCollectionViewController.m in Sources */,
 				089B15F31AA756BD0021A915 /* JMSettingsViewController.m in Sources */,
@@ -2504,14 +2506,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		08E62D7019922F5A0081CA83 /* JasperMobile.xcdatamodeld */ = {
+		08982CD21ACBF41E00368522 /* JasperMobile.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				08F1288B1A8D1295006CB937 /* JasperMobile_v_2_0.xcdatamodel */,
-				08625FB619C328410087684E /* JasperMobile_v_1_9.xcdatamodel */,
-				08E62D7119922F5A0081CA83 /* JasperMobile.xcdatamodel */,
+				08982CD31ACBF41F00368522 /* JasperMobile.xcdatamodel */,
+				08982CD41ACBF41F00368522 /* JasperMobile_v_1_9.xcdatamodel */,
+				08982CD51ACBF41F00368522 /* JasperMobile_v_2_0.xcdatamodel */,
 			);
-			currentVersion = 08F1288B1A8D1295006CB937 /* JasperMobile_v_2_0.xcdatamodel */;
+			currentVersion = 08982CD51ACBF41F00368522 /* JasperMobile_v_2_0.xcdatamodel */;
 			path = JasperMobile.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

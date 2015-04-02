@@ -28,6 +28,8 @@
 
 #import "JMSessionManager.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMCancelRequestPopup.h"
+#import "JMWebViewManager.h"
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 
@@ -72,8 +74,9 @@ static JMSessionManager *_sharedManager = nil;
     }
 }
 
-- (void) restoreLastSessionWithCompletion:(void(^)(BOOL success))completionBlock
+- (BOOL) restoreLastSession
 {
+    BOOL isRestoredSession = NO;
     if (!self.restClient) {
         NSData *savedSession = [[NSUserDefaults standardUserDefaults] objectForKey:kJMSavedSessionKey];
         if (savedSession) {
@@ -83,26 +86,28 @@ static JMSessionManager *_sharedManager = nil;
             }
         }
     }
-    if (completionBlock) {
-        if (self.restClient && self.restClient.keepSession) {
-            completionBlock([self.restClient isSessionAuthorized] && self.restClient.serverInfo);
-        } else {
-            completionBlock(NO);
+    if (self.restClient && self.restClient.keepSession) {
+        JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForname:self.restClient.serverProfile.alias];
+        if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
+            [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+            isRestoredSession = ([self.restClient isSessionAuthorized] && self.restClient.serverInfo);
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [JMCancelRequestPopup dismiss];
+            });
         }
     }
-}
-
-- (BOOL) userIsLoggedIn
-{
-    return !![[NSUserDefaults standardUserDefaults] objectForKey:kJMSavedSessionKey];
+    return isRestoredSession;
 }
 
 - (void) logout
 {
+    [self.restClient cancelAllRequests];
     [self.restClient deleteCookies];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMSavedSessionKey];
-    [self.restClient cancelAllRequests];
     self.restClient = nil;
+    
+    // Clear webView
+    [[JMWebViewManager sharedInstance] reset];
 }
 
 - (NSPredicate *)predicateForCurrentServerProfile

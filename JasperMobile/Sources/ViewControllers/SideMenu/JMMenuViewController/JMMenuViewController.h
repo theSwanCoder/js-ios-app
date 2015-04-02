@@ -37,6 +37,8 @@
 
 @property (nonatomic, readonly) JMMenuItem *selectedItem;
 
++ (NSInteger)defaultItemIndex;
+
 - (void) setSelectedItemIndex:(NSUInteger)itemIndex;
 
 @end

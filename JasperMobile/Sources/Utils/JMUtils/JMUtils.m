@@ -33,6 +33,7 @@
 #import "JasperMobileAppDelegate.h"
 #import "JMMainNavigationController.h"
 #import "SWRevealViewController.h"
+#import "JMMenuViewController.h"
 
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
@@ -147,14 +148,29 @@
 }
 
 
-+ (void)showLoginViewAnimated:(BOOL)animated completion:(LoginCompletionBlock)completion
++ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion
 {
-    SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
+    [self showLoginViewAnimated:animated completion:completion loginCompletion:nil];
+}
 
++ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion
+{
+    [[JMSessionManager sharedManager] logout];
+    
+    SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
+    JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
+    
     UINavigationController *loginNavController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
     JMLoginViewController *loginViewController = (JMLoginViewController *)loginNavController.topViewController;
-    loginViewController.completion = completion;
-    [revealViewController.rearViewController presentViewController:loginNavController animated:animated completion:nil];
+    loginViewController.completion = ^(void){
+        if (loginCompletion) {
+            loginCompletion();
+        } else {
+            [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
+        }
+    };
+    
+    [revealViewController.rearViewController presentViewController:loginNavController animated:animated completion:completion];
 }
 
 + (void)showAlertViewWithError:(NSError *)error

@@ -84,6 +84,7 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
     
     self.serverProfile.organization = [[self.optionsArray objectAtIndex:2] optionValue];
     self.serverProfile.askPassword  = [[self.optionsArray objectAtIndex:3] optionValue];
+    self.serverProfile.keepSession  = [[self.optionsArray objectAtIndex:4] optionValue];
     
     for (JMServerOption *option in self.optionsArray) {
         if (option.errorString) {
@@ -110,10 +111,11 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
 {
     NSMutableArray *optionsArray = [NSMutableArray array];
     NSMutableArray *optionsSourceArray = [NSMutableArray arrayWithArray:
-    @[@{@"title" : [self localizedString:@"servers.name.label" mandatory:YES],     @"value" : self.serverProfile.alias         ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
-      @{@"title" : [self localizedString:@"servers.url.label" mandatory:YES],      @"value" : self.serverProfile.serverUrl     ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
-      @{@"title" : [self localizedString:@"servers.orgid.label" mandatory:YES],    @"value" : self.serverProfile.organization  ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
-      @{@"title" : [self localizedString:@"servers.askpassword.label" mandatory:NO], @"value" : self.serverProfile.askPassword   ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier}]];
+    @[@{@"title" : [self localizedString:@"servers.name.label" mandatory:YES],     @"value" : self.serverProfile.alias          ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
+      @{@"title" : [self localizedString:@"servers.url.label" mandatory:YES],      @"value" : self.serverProfile.serverUrl      ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
+      @{@"title" : [self localizedString:@"servers.orgid.label" mandatory:YES],    @"value" : self.serverProfile.organization   ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
+      @{@"title" : [self localizedString:@"servers.askpassword.label" mandatory:NO], @"value" : self.serverProfile.askPassword  ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier},
+      @{@"title" : [self localizedString:@"servers.keepSession.label" mandatory:NO], @"value" : self.serverProfile.keepSession  ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier}]];
     
     for (NSDictionary *optionData in optionsSourceArray) {
         JMServerOption *option = [[JMServerOption alloc] init];

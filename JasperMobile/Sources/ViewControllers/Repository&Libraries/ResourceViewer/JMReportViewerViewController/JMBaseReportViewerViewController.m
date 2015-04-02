@@ -155,6 +155,7 @@
 #pragma mark - Actions
 - (void)backButtonTapped:(id) sender
 {
+    [self.reportLoader cancelReport];
     [self.view endEditing:YES];
     self.webView.delegate = nil;
     [self backToPreviousView];

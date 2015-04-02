@@ -102,7 +102,9 @@
  */
 + (NSString *)buildVersion;
 
-+ (void)showLoginViewAnimated:(BOOL)animated completion:(LoginCompletionBlock)completion;
++ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion;
+
++ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion;
 
 + (void)showAlertViewWithError:(NSError *)error;
 

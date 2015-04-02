@@ -32,6 +32,12 @@
 
 
 @implementation JMServerProfile (Helpers)
++ (JMServerProfile *)demoServerProfile
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"serverUrl == %@", @"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
+    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] firstObject];
+}
 
 + (float) minSupportedServerVersion
 {
@@ -62,6 +68,7 @@
     
     newServerProfile.alias          = serverName;
     newServerProfile.askPassword    = serverProfile.askPassword;
+    newServerProfile.keepSession    = serverProfile.keepSession;
     newServerProfile.organization   = serverProfile.organization;
     newServerProfile.serverUrl      = serverProfile.serverUrl;
     [[self managedObjectContext] save:nil];

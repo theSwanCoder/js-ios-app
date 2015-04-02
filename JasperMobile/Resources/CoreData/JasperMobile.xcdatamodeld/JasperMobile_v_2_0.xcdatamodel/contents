@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="JasperMobile" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14C109" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="JasperMobile" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6751" systemVersion="14C1514" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Favorites" representedClassName="JMFavorites" syncable="YES">
         <attribute name="creationDate" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
@@ -23,7 +23,8 @@
     </entity>
     <entity name="ServerProfile" representedClassName="JMServerProfile" syncable="YES">
         <attribute name="alias" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="askPassword" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="askPassword" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="keepSession" optional="YES" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
         <attribute name="organization" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="serverUrl" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="favorites" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Favorites" inverseName="serverProfile" inverseEntity="Favorites" syncable="YES"/>
@@ -32,6 +33,6 @@
     <elements>
         <element name="Favorites" positionX="-632" positionY="-432" width="128" height="163"/>
         <element name="SavedResources" positionX="-207" positionY="-441" width="128" height="178"/>
-        <element name="ServerProfile" positionX="-432" positionY="-423" width="128" height="133"/>
+        <element name="ServerProfile" positionX="-432" positionY="-423" width="128" height="150"/>
     </elements>
 </model>

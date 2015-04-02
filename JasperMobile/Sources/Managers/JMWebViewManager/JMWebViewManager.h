@@ -32,6 +32,11 @@
  */
 
 @interface JMWebViewManager : NSObject
+
 + (instancetype)sharedInstance;
+
 - (UIWebView *)webViewWithParentFrame:(CGRect)frame;
+
+- (void)reset;
+
 @end

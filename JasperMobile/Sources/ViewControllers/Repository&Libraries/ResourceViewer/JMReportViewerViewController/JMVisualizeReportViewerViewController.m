@@ -58,12 +58,6 @@
 }
 
 #pragma mark - Actions
-- (void)backButtonTapped:(id) sender
-{
-    [self clearWebView];
-    [super backButtonTapped:sender];
-}
-
 - (void)backToPreviousReport
 {
     [self clearWebView];
@@ -267,9 +261,8 @@
 
 - (void)startShowLoadingIndicators
 {
-    [JMUtils hideNetworkActivityIndicator];
+    [JMUtils showNetworkActivityIndicator];
 }
-
 
 - (void)stopShowLoadingIndicators
 {

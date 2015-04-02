@@ -31,6 +31,7 @@
 
 @dynamic alias;
 @dynamic askPassword;
+@dynamic keepSession;
 @dynamic organization;
 @dynamic serverUrl;
 @dynamic favorites;
