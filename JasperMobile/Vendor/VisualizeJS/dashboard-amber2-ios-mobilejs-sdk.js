@@ -5,22 +5,52 @@
       function IosCallback() {}
 
       IosCallback.prototype.onMaximize = function(title) {
-        this._makeCallback("command:maximize&title:" + title);
-      };
-
-      IosCallback.prototype.onMinimize = function() {};
-
-      IosCallback.prototype.onScriptLoaded = function() {};
-
-      IosCallback.prototype.onLoadStart = function() {};
-
-      IosCallback.prototype.onLoadDone = function() {
         this._makeCallback({
-          "command": "onLoadDone"
+          "command": "onMaximize",
+          "parameters": {
+            "title": title
+          }
         });
       };
 
-      IosCallback.prototype.onLoadError = function(error) {};
+      IosCallback.prototype.onMinimize = function() {
+        this._makeCallback({
+          "command": "onMinimize",
+          "parameters": {}
+        });
+      };
+
+      IosCallback.prototype.onScriptLoaded = function() {
+        this._makeCallback({
+          "command": "onScriptLoaded",
+          "parameters": {}
+        });
+      };
+
+      IosCallback.prototype.onLoadStart = function() {
+        this._makeCallback({
+          "command": "onLoadStart",
+          "parameters": {}
+        });
+      };
+
+      IosCallback.prototype.onLoadDone = function(components) {
+        this._makeCallback({
+          "command": "onLoadDone",
+          "parameters": {
+            "components": components
+          }
+        });
+      };
+
+      IosCallback.prototype.onLoadError = function(error) {
+        this._makeCallback({
+          "command": "onLoadError",
+          "parameters": {
+            "error": error
+          }
+        });
+      };
 
       IosCallback.prototype._makeCallback = function(command) {
         console.log("callback");
@@ -119,12 +149,19 @@
           self.v = v;
           self.scaler.scale(0.5);
           return self.dashboard = v.dashboard({
+            report: {
+              chart: {
+                animation: false,
+                zoom: false
+              }
+            },
             container: '#container',
             resource: self.uri,
             success: function() {
               var dashboardId;
               self.logger.log("Scale dashboard");
               self.components = this.data().components;
+              window.components = self.components;
               $(this.container()).find('.dashboardCanvas').addClass('scaledCanvas');
               self.logger.log("Iterate components");
               this.data().components.forEach(function(component) {
@@ -153,7 +190,7 @@
                   self.callback.onMaximize(component.name);
                 }
               });
-              self.callback.onLoadDone();
+              self.callback.onLoadDone(self.components);
             },
             error: function(e) {
               self.logger.log(error);

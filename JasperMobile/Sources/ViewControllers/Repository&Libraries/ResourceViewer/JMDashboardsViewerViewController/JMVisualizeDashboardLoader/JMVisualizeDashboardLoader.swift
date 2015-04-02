@@ -54,28 +54,23 @@ class JMVisualizeDashboardLoader: NSObject {
 
         if let localWebView = self.webView {
             localWebView.navigationDelegate = self
+            // TODO: need handle adding script recieving
+            if !JMWKWebViewManager.sharedInstance.hasScriptMessageHandler {
+                JMWKWebViewManager.sharedInstance.hasScriptMessageHandler = true
+                localWebView.configuration.userContentController.addScriptMessageHandler(self, name: CallbackHandler)
+            }
         }
     }
 
     // public api
     func run() {
-        if let webView = self.webView {
-            webView.configuration.userContentController.addScriptMessageHandler(self, name: CallbackHandler)
-        }
         loadDashboard()
     }
 
     func destroyDashboard() {
         let destroyDashboardJS = "MobileDashboard.destroy();"
-        if let webView = self.webView {
-            webView.evaluateJavaScript(destroyDashboardJS, completionHandler: nil)
-        }
-        
-        if let webView = self.webView {
-            webView.configuration.userContentController.removeScriptMessageHandlerForName(CallbackHandler)
-        }
+        sendScriptMessage(destroyDashboardJS)
     }
-
 
     // private api
     private func loadDashboard() {
@@ -84,7 +79,6 @@ class JMVisualizeDashboardLoader: NSObject {
         } else {
             if let htmlString = HTMLString() {
                 let baseURLString = self.restClient().serverProfile.serverUrl
-                JMWKWebViewManager.sharedInstance.isVisualizeLoaded = true
                 if let webView = self.webView {
                     webView.loadHTMLString(htmlString, baseURL: NSURL(string: baseURLString))
                 }
@@ -94,13 +88,26 @@ class JMVisualizeDashboardLoader: NSObject {
 
     private func runDashboard() {
         let authorizeString = "MobileDashboard.authorize({'username': '\(self.restClient().serverProfile.username)', 'password': '\(self.restClient().serverProfile.password)', 'organization': '\(self.restClient().serverProfile.organization)'});"
-        if let webView = self.webView {
-            webView.evaluateJavaScript(authorizeString, completionHandler: nil)
-        }
+        sendScriptMessage(authorizeString)
 
         let runDashboardString = "MobileDashboard.run({'uri': '\(dashboard.resourceURI)'});"
+        sendScriptMessage(runDashboardString)
+    }
+
+    private func removeScriptMessageHandler() {
         if let webView = self.webView {
-            webView.evaluateJavaScript(runDashboardString, completionHandler: nil)
+            webView.configuration.userContentController.removeScriptMessageHandlerForName(self.CallbackHandler)
+        }
+    }
+
+    private func sendScriptMessage(message: String) {
+        if let webView = self.webView {
+            webView.evaluateJavaScript(message, completionHandler: { (result, error) in
+                println("\(message) result: \(result)")
+                if let evaluateError = error {
+                    println("error: \(evaluateError.localizedDescription)")
+                }
+            })
         }
     }
 }
@@ -123,7 +130,14 @@ extension JMVisualizeDashboardLoader: WKNavigationDelegate {
         println("request: \(requestString)")
         println("isLinkClicked: \(isLinkClicked)")
         decisionHandler(.Allow)
+    }
 
+    func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
+
+        let response = navigationResponse.response
+
+        println("response: \(response)")
+        decisionHandler(.Allow)
     }
 }
 
@@ -140,7 +154,7 @@ extension JMVisualizeDashboardLoader {
         if let htmlString = dashboardHTMLContent {
             let baseURLString = self.restClient().serverProfile.serverUrl
 
-            htmlStringWithVisualizePath = htmlString.stringByReplacingOccurrencesOfString("VISUALIZE_PATH", withString: baseURLString + "/client/visualize.js", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
+            htmlStringWithVisualizePath = htmlString.stringByReplacingOccurrencesOfString("VISUALIZE_PATH", withString: baseURLString + "/client/visualize.js?_showInputControls=true&_opt=true", options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
 
             // requreJS
             let requireJSPath = NSBundle.mainBundle().pathForResource("require.min", ofType: "js")
@@ -164,8 +178,55 @@ extension JMVisualizeDashboardLoader: WKScriptMessageHandler {
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         if message.name == CallbackHandler {
-            println("callback")
-            println("message body: \(message.body)")
+            parseCommand(message.body as Dictionary<String, AnyObject>)
         }
     }
+
+    // parsing command
+    func parseCommand(commandDict: Dictionary<String, AnyObject>) {
+        switch commandDict["command"] as String {
+            case "onScriptLoaded" :
+                onScriptLoaded(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            case "onLoadStart" :
+                onLoadStart(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            case "onLoadDone" :
+                onLoadDone(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            default:
+                break
+        }
+    }
+
+    // swift counterparts from js callbacks
+    func onScriptLoaded(parameters: Dictionary<String, AnyObject>) {
+        println("onScriptLoaded")
+        println("parameters \(parameters)")
+        JMWKWebViewManager.sharedInstance.isVisualizeLoaded = true
+        runDashboard()
+    }
+
+    func onLoadStart(parameters: Dictionary<String, AnyObject>) {
+        println("onLoadStart")
+        println("parameters \(parameters)")
+    }
+
+    func onLoadDone(parameters: Dictionary<String, AnyObject>) {
+        println("onLoadDone")
+        println("parameters \(parameters)")
+    }
+
+    func onMaximize(parameters: Dictionary<String, AnyObject>) {
+        println("onMaximize")
+        println("parameters \(parameters)")
+    }
+
+    func onMinimize(parameters: Dictionary<String, AnyObject>) {
+        println("onMinimize")
+        println("parameters \(parameters)")
+    }
+
+    func onLoadError(parameters: Dictionary<String, AnyObject>) {
+        println("onLoadError")
+        println("parameters \(parameters)")
+    }
+
 }

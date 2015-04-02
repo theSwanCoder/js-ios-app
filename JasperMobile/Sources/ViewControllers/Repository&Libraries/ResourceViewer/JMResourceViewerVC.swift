@@ -35,23 +35,35 @@ import WebKit
 
 class JMResourceViewerVC: JMBaseResourceViewerVC {
 
-    weak var webView: WKWebView?
+    weak var webView: WKWebView!
 
-    override func setupSubviews() {
-        setupWebView()
+    // Actions
+    func backButtonAction() {
+        webView.removeFromSuperview()
+        webView = nil
+        navigationController?.popViewControllerAnimated(true)
     }
 
     // Setups
-    func setupWebView() {
-        let rootViewBounds = navigationController!.view.bounds
-        let webView = JMWKWebViewManager.sharedInstance.webView
-        webView.frame = view.frame
-
-        webView.navigationDelegate = self
-        self.view.insertSubview(webView, belowSubview:activityIndicator)
-        self.webView = webView
+    override func setupSubviews() {
+        setupWebView()
+        setupBackButton()
     }
 
+    func setupWebView() {
+        webView = JMWKWebViewManager.sharedInstance.webView
+        webView.frame = view.bounds
+
+        //webView.navigationDelegate = self
+        self.view.insertSubview(webView, belowSubview:activityIndicator)
+    }
+
+    func setupBackButton() {
+        let backButton = backButtonWithTitle("Library", target: self, action: "backButtonAction")
+        navigationItem.leftBarButtonItem = backButton
+    }
+
+    // start point
     override func runReportExecution() {
         println("run report execution")
     }

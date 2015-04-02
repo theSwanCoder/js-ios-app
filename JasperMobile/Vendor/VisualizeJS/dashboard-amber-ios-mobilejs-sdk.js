@@ -149,7 +149,6 @@
 
       DashboardController.prototype.initialize = function() {
         this.callback.onLoadStart();
-        this.scaler.scale(0.25);
         this._removeRedundantArtifacts();
         this._injectViewport();
         return this._attachDashletLoadListeners();
@@ -167,7 +166,7 @@
       DashboardController.prototype._injectViewport = function() {
         var viewPort;
         viewPort = document.querySelector('meta[name=viewport]');
-        return viewPort.setAttribute('content', "width=device-width, height=device-height, user-scalable=yes");
+        return viewPort.setAttribute('content', "target-densitydpi=device-dpi, height=device-height, width=device-width, user-scalable=yes");
       };
 
       DashboardController.prototype._scaleDashboard = function() {

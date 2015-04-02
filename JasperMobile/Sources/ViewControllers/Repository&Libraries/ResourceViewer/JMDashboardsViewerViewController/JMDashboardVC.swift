@@ -38,10 +38,12 @@ class JMDashboardVC: JMResourceViewerVC {
     var dashboard: JMDashboard?
     var dashboardLoader: JMVisualizeDashboardLoader?
 
-    deinit {
+    // Actions
+    override func backButtonAction() {
         if let loader = dashboardLoader {
-            loader.destroy()
+            loader.destroyDashboard()
         }
+        super.backButtonAction()
     }
 
     // overrided functions
@@ -57,14 +59,12 @@ class JMDashboardVC: JMResourceViewerVC {
     override func runReportExecution() {
 
         if let dashboard = self.dashboard {
-            dashboardLoader = JMVisualizeDashboardLoader(dashboard: dashboard)
+            dashboardLoader = JMVisualizeDashboardLoader(dashboard: dashboard, webView: webView)
             if let loader = dashboardLoader {
-                loader.webView = webView
-                loader.webView?.navigationDelegate = loader
                 loader.run()
             }
         } else {
-            println("dashboard isn't assigned")
+            println("dashboard is nil")
         }
     }
 }

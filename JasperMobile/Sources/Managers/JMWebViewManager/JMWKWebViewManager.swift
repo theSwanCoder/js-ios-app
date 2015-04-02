@@ -36,7 +36,8 @@ import WebKit
 
 class JMWKWebViewManager: NSObject {
     var isVisualizeLoaded = false
-    var webView: WKWebView
+    var hasScriptMessageHandler = false
+    let webView: WKWebView
 
     class var sharedInstance: JMWKWebViewManager {
         struct Static {
@@ -50,7 +51,7 @@ class JMWKWebViewManager: NSObject {
     }
 
     deinit {
-        println("deinit JMWKWebViewManager")
+        println("JMWKWebViewManager.deinit")
     }
 
     override init() {
