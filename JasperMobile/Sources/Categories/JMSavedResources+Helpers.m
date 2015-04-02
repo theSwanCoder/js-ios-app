@@ -78,6 +78,20 @@ NSString * const kJMSavedResources = @"SavedResources";
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
 }
 
+- (UIImage *)thumbnailImage
+{
+    NSString *reportDirectoryPath = [JMSavedResources pathToReportDirectoryWithName:self.label format:self.format];
+    NSString *thumbnailImagePath = [reportDirectoryPath stringByAppendingPathComponent:kJMThumbnailImageFileName];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:thumbnailImagePath]) {
+        NSData *imageData = [NSData dataWithContentsOfFile:thumbnailImagePath];
+        if (imageData) {
+            return [UIImage imageWithData:imageData scale:[UIScreen mainScreen].scale];
+        }
+    }
+    return nil;
+}
+
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat
 {
     NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:reportName, @"label", reportFormat, @"format", nil];

@@ -26,6 +26,7 @@
 		0871503E19F1266900C5875E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503D19F1266900C5875E /* libz.dylib */; };
 		089590FF19E3D514001471DA /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E019E3D514001471DA /* ALToastView.m */; };
 		0895910419E3D514001471DA /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590F919E3D514001471DA /* PopoverView.m */; };
+		08982CCF1AC98A0700368522 /* JMRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08982CCE1AC98A0700368522 /* JMRevealViewController.m */; };
 		089B159C1AA756BD0021A915 /* JMEditabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B148E1AA756BD0021A915 /* JMEditabledViewController.m */; };
 		089B159D1AA756BD0021A915 /* JMMainNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14911AA756BD0021A915 /* JMMainNavigationController.m */; };
 		089B159E1AA756BD0021A915 /* JMFavorites+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14941AA756BD0021A915 /* JMFavorites+Helpers.m */; };
@@ -148,6 +149,7 @@
 		9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */; };
 		9356ECA51A3075F500ACE2C6 /* JMUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */; };
 		937336111A0DE46D004E6520 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 937336101A0DE46D004E6520 /* Images.xcassets */; };
+		937AD98E1AC83D6900076855 /* JMResourcesListLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */; };
 		9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9397F97C1AAACADF006B89C6 /* JMReport.m */; };
 		93C37C6A1A39D49900CEE7CF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08E62CF819922BA40081CA83 /* Localizable.strings */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
@@ -229,6 +231,8 @@
 		089590F919E3D514001471DA /* PopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverView.m; sourceTree = "<group>"; };
 		089590FA19E3D514001471DA /* PopoverView_Configuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverView_Configuration.h; sourceTree = "<group>"; };
 		089590FB19E3D514001471DA /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverViewCompatibility.h; sourceTree = "<group>"; };
+		08982CCE1AC98A0700368522 /* JMRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRevealViewController.m; sourceTree = "<group>"; };
+		08982CD01AC98A6300368522 /* JMRevealViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JMRevealViewController.h; sourceTree = "<group>"; };
 		089B148D1AA756BD0021A915 /* JMEditabledViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMEditabledViewController.h; sourceTree = "<group>"; };
 		089B148E1AA756BD0021A915 /* JMEditabledViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMEditabledViewController.m; sourceTree = "<group>"; };
 		089B14901AA756BD0021A915 /* JMMainNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMainNavigationController.h; sourceTree = "<group>"; };
@@ -493,6 +497,7 @@
 		9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptionsTests.m; sourceTree = "<group>"; };
 		9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUtilsTests.m; sourceTree = "<group>"; };
 		937336101A0DE46D004E6520 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesListLoaderTests.m; sourceTree = "<group>"; };
 		9397F97B1AAACADF006B89C6 /* JMReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReport.h; sourceTree = "<group>"; };
 		9397F97C1AAACADF006B89C6 /* JMReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReport.m; sourceTree = "<group>"; };
 		93D8C6431AAC7E9200117306 /* JMWebViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMWebViewManager.h; sourceTree = "<group>"; };
@@ -707,6 +712,15 @@
 				089590FB19E3D514001471DA /* PopoverViewCompatibility.h */,
 			);
 			path = "PopoverView-v0.0.2";
+			sourceTree = "<group>";
+		};
+		08982CCC1AC98A0700368522 /* JMRevealViewController */ = {
+			isa = PBXGroup;
+			children = (
+				08982CD01AC98A6300368522 /* JMRevealViewController.h */,
+				08982CCE1AC98A0700368522 /* JMRevealViewController.m */,
+			);
+			path = JMRevealViewController;
 			sourceTree = "<group>";
 		};
 		089B148A1AA756BD0021A915 /* Sources */ = {
@@ -1290,6 +1304,7 @@
 				089B157C1AA756BD0021A915 /* JMMenuItem */,
 				089B157F1AA756BD0021A915 /* JMMenuItemTableViewCell */,
 				089B15821AA756BD0021A915 /* JMMenuViewController */,
+				08982CCC1AC98A0700368522 /* JMRevealViewController */,
 			);
 			path = SideMenu;
 			sourceTree = "<group>";
@@ -1628,6 +1643,7 @@
 				9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */,
 				9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */,
 				9356EC991A30752900ACE2C6 /* Supporting Files */,
+				937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */,
 			);
 			path = "TIBCO JasperMobile Tests";
 			sourceTree = "<group>";
@@ -2013,6 +2029,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9356ECA51A3075F500ACE2C6 /* JMUtilsTests.m in Sources */,
+				937AD98E1AC83D6900076855 /* JMResourcesListLoaderTests.m in Sources */,
 				9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2128,6 +2145,7 @@
 				089B15DE1AA756BD0021A915 /* JMReportOptionsViewController.m in Sources */,
 				082D1E921AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m in Sources */,
 				089B15F91AA756BD0021A915 /* JMRepositoryCollectionViewController.m in Sources */,
+				08982CCF1AC98A0700368522 /* JMRevealViewController.m in Sources */,
 				93D8C6511AAD685C00117306 /* JMBaseDashboardViewerVC.m in Sources */,
 				089B15B11AA756BD0021A915 /* JasperMobileAppDelegate.m in Sources */,
 				089B15D41AA756BD0021A915 /* JMInputControlCell.m in Sources */,

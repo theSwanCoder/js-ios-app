@@ -50,6 +50,8 @@ extern NSString * const kJMReportLoaderDidChangeCountOfPagesNotification;
 @property (nonatomic, copy, readonly) NSString *baseURLString;
 // input controls
 @property (nonatomic, assign) BOOL isInputControlsLoaded;
+// thumbnails
+@property (nonatomic, strong) UIImage *thumbnailImage;
 
 - (instancetype)initWithResource:(JSResourceLookup *)resourceLookup
                    inputControls:(NSArray *)inputControls;

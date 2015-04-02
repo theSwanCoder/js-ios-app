@@ -35,7 +35,7 @@
 
 + (float) minSupportedServerVersion
 {
-    return [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0;
+    return [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_5_0;
 }
 
 + (JMServerProfile *)serverProfileForname:(NSString *)serverName

@@ -57,24 +57,19 @@
     super.selected = selected;
     if (selected) {
         self.textLabel.textColor = [UIColor whiteColor];
-        self.imageView.image = self.selectedItemIcon;
+        self.imageView.image = self.menuItem.selectedItemIcon;
     } else {
         self.textLabel.textColor = [UIColor grayColor];
-        self.imageView.image = self.itemIcon;
+        self.imageView.image = self.menuItem.itemIcon;
     }
 }
 
 #pragma mark - Setters
--(void)setItemName:(NSString *)itemName
+- (void)setMenuItem:(JMMenuItem *)menuItem
 {
-    _itemName = itemName;
-    self.textLabel.text = itemName;
-}
-
--(void)setItemIcon:(UIImage *)itemIcon
-{
-    _itemIcon = itemIcon;
-    self.imageView.image = itemIcon;
+    _menuItem = menuItem;
+    self.textLabel.text = menuItem.itemTitle;
+    self.imageView.image = menuItem.itemIcon;
 }
 
 @end

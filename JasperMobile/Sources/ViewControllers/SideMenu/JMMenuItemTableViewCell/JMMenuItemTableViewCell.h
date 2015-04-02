@@ -30,9 +30,8 @@
  @author Aleksandr Dakhno odahno@tibco.com
  @since 2.0
  */
+#import "JMMenuItem.h"
 
 @interface JMMenuItemTableViewCell : UITableViewCell
-@property (nonatomic, strong) NSString *itemName;
-@property (nonatomic, strong) UIImage *itemIcon;
-@property (nonatomic, strong) UIImage *selectedItemIcon;
+@property (nonatomic, strong) JMMenuItem *menuItem;
 @end

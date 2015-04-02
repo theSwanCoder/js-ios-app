@@ -46,5 +46,6 @@ extern NSString * kJMGridResourceCell;
 @interface JMResourceCollectionViewCell : UICollectionViewCell
 @property (nonatomic, strong) JSResourceLookup *resourceLookup;
 @property (nonatomic, weak) id <JMResourceCollectionViewCellDelegate> delegate;
+@property (nonatomic, readonly) UIImage *thumbnailImage;
 
 @end

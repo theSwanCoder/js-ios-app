@@ -61,7 +61,10 @@
     [self updateToobarAppearence];
 
     // start point
-    [self startLoadReport];
+#warning HERE NEED CORRECT RUNNING REPORT - NOW REPORT ARE RELOADED AFTER RETURN FROM SAVE REPORT SCREEN!
+//    if (self.report.isReportEmpty) {
+        [self startLoadReport];
+//    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

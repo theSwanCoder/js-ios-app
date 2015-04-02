@@ -132,17 +132,25 @@
                             cancelButtonTitle:@"dialog.button.ok"
                             otherButtonTitles:nil] show];
     } else {
-        [self loginWithServerProfile:self.selectedServerProfile userName:self.userNameTextField.text password:self.passwordTextField.text];
+        JSProfile *serverProfile = [[JSProfile alloc] initWithAlias:self.selectedServerProfile.alias
+                                                          serverUrl:self.selectedServerProfile.serverUrl
+                                                       organization:self.selectedServerProfile.organization
+                                                           username:self.userNameTextField.text
+                                                           password:self.passwordTextField.text];
+
+        [self loginWithServerProfile:serverProfile];
     }
 }
 
 - (IBAction)tryDemoButtonTapped:(id)sender
 {
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"serverUrl == %@", @"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
-    JMServerProfile *serverProfile = [[[JMUtils managedObjectContext] executeFetchRequest:fetchRequest error:nil] firstObject];
+    JSProfile *serverProfile = [[JSProfile alloc] initWithAlias:@"Mobile Demo"
+                                                      serverUrl:@"http://mobiledemo.jaspersoft.com/jasperserver-pro"
+                                                   organization:@"organization_1"
+                                                       username:@"phoneuser"
+                                                       password:@"phoneuser"];
     
-    [self loginWithServerProfile:serverProfile userName:@"phoneuser" password:@"phoneuser"];
+    [self loginWithServerProfile:serverProfile];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -186,19 +194,13 @@
 
 
 #pragma mark - Private
-- (void)loginWithServerProfile:(JMServerProfile *)serverProfile userName:(NSString *)userName password:(NSString *)password
+- (void)loginWithServerProfile:(JSProfile *)serverProfile
 {
     [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
         [self.restClient cancelAllRequests];
     } @weakselfend];
     
-    JSProfile *jsServerProfile = [[JSProfile alloc] initWithAlias:serverProfile.alias
-                                                      serverUrl:serverProfile.serverUrl
-                                                   organization:serverProfile.organization
-                                                       username:userName
-                                                       password:password];
-    
-    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:![self.selectedServerProfile.askPassword boolValue] completion:@weakself(^(BOOL success)) {
+    [[JMSessionManager sharedManager] createSessionWithServerProfile:serverProfile keepLogged:![self.selectedServerProfile.askPassword boolValue] completion:@weakself(^(BOOL success)) {
         [JMCancelRequestPopup dismiss];
         if (success) {
             self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;

@@ -23,4 +23,6 @@
 
 - (JMDashboard *) dashboardModelWithVCIdentifier:(NSString **)identifier;
 
+- (NSString *)thumbnailImageUrlString;
+
 @end

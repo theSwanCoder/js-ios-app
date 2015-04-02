@@ -7,12 +7,12 @@
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "ic_repository_selected-1.png"
+      "filename" : "ic_repository_selected@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "ic_repository_selected.png"
+      "filename" : "ic_repository_selected@3x.png"
     }
   ],
   "info" : {

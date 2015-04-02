@@ -108,10 +108,7 @@
 {
     JMMenuItemTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JMMenuItemTableViewCell"
                                                                     forIndexPath:indexPath];
-    JMMenuItem *menuItem = self.menuItems[indexPath.row];
-    cell.itemName = menuItem.title;
-    cell.itemIcon = [self iconWithResourceType:menuItem.resourceType];
-    cell.selectedItemIcon = [self selectedIconWithResourceType:menuItem.resourceType];
+    cell.menuItem = self.menuItems[indexPath.row];
     return cell;
 }
 
@@ -164,18 +161,12 @@
 {
     if (!_menuItems) {
         _menuItems = @[
-                       [JMMenuItem menuItemWithTitle:JMCustomLocalizedString(@"menuitem.library.label", nil)
-                                        resourceType:JMResourceTypeLibrary],
-                       [JMMenuItem menuItemWithTitle:JMCustomLocalizedString(@"menuitem.repository.label", nil)
-                                        resourceType:JMResourceTypeRepository],
-                       [JMMenuItem menuItemWithTitle:JMCustomLocalizedString(@"menuitem.saveditems.label", nil)
-                                        resourceType:JMResourceTypeSavedItems],
-                       [JMMenuItem menuItemWithTitle:JMCustomLocalizedString(@"menuitem.favorites.label", nil)
-                                        resourceType:JMResourceTypeFavorites],
-                       [JMMenuItem menuItemWithTitle:JMCustomLocalizedString(@"menuitem.settings.label", nil)
-                                        resourceType:JMResourceTypeSettings],
-                       [JMMenuItem menuItemWithTitle:JMCustomLocalizedString(@"menuitem.logout.label", nil)
-                                        resourceType:JMResourceTypeLogout]
+                       [JMMenuItem menuItemWithResourceType:JMResourceTypeLibrary],
+                       [JMMenuItem menuItemWithResourceType:JMResourceTypeRepository],
+                       [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
+                       [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
+                       [JMMenuItem menuItemWithResourceType:JMResourceTypeSettings],
+                       [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]
                        ];
     }
     return _menuItems;
@@ -189,43 +180,6 @@
         }
     }
     return nil;
-}
-
-#pragma mark - Private API
-- (UIImage *)iconWithResourceType:(JMResourceType)resourceType
-{
-    switch (resourceType) {
-        case JMResourceTypeLibrary:
-            return [UIImage imageNamed:@"ic_library"];
-        case JMResourceTypeRepository:
-            return [UIImage imageNamed:@"ic_repository"];
-        case JMResourceTypeSavedItems:
-            return [UIImage imageNamed:@"ic_saved_items"];
-        case JMResourceTypeFavorites:
-            return [UIImage imageNamed:@"ic_favorites"];
-        case JMResourceTypeSettings:
-            return [UIImage imageNamed:@"ic_settings"];
-        default:
-            return nil;
-    }
-}
-
-- (UIImage *)selectedIconWithResourceType:(JMResourceType)resourceType
-{
-    switch (resourceType) {
-        case JMResourceTypeLibrary:
-            return [UIImage imageNamed:@"ic_library_selected"];
-        case JMResourceTypeRepository:
-            return [UIImage imageNamed:@"ic_repository_selected"];
-        case JMResourceTypeSavedItems:
-            return [UIImage imageNamed:@"ic_saved_items_selected"];
-        case JMResourceTypeFavorites:
-            return [UIImage imageNamed:@"ic_favorites_selected"];
-        case JMResourceTypeSettings:
-            return [UIImage imageNamed:@"ic_settings_selected"];
-        default:
-            return nil;
-    }
 }
 
 @end
