@@ -28,13 +28,6 @@
 @implementation JMResourceViewerViewController
 
 #pragma mark - UIViewController LifeCycle
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    [self setupWebView];
-}
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -46,6 +39,11 @@
 }
 
 #pragma mark - Setups
+- (void)setupSubviews
+{
+    [self setupWebView];
+}
+
 - (void)setupWebView
 {
     CGRect rootViewBounds = self.navigationController.view.bounds;
