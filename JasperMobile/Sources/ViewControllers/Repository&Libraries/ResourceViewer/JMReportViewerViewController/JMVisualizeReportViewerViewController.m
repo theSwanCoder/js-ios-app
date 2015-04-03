@@ -190,6 +190,7 @@
         [self.restClient deleteCookies];
         [self clearWebView];
         [self.webView loadHTMLString:nil baseURL:nil];
+        [JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded = NO;
 
         [self.report restoreDefaultState];
         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
@@ -269,10 +270,7 @@
 
 -(void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReciveOnClickEventForReference:(NSURL *)urlReference
 {
-    JMWebViewController *webViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMWebViewController"];
-    webViewController.url = urlReference;
-
-    [self.navigationController pushViewController:webViewController animated:YES];
+    [[UIApplication sharedApplication] openURL:urlReference];
 }
 
 #pragma mark - UIWebView helpers
