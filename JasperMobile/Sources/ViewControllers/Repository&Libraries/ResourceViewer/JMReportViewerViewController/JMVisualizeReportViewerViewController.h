@@ -35,7 +35,4 @@
 #import "JMVisualizeReport.h"
 
 @interface JMVisualizeReportViewerViewController : JMBaseReportViewerViewController
-@property (nonatomic, strong) JMVisualizeReport *report;
-@property (nonatomic, assign) BOOL isStartFromAnotherReport;
-@property (nonatomic, copy) void(^returnFromPreviousReportCompletion)(void);
 @end

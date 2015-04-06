@@ -28,8 +28,8 @@
 
 #import "JMReport.h"
 
-NSString * const kJMReportLoaderReportIsMutlipageNotification = @"kJMReportLoaderReportIsMutlipageNotification";
-NSString * const kJMReportLoaderDidChangeCountOfPagesNotification = @"kJMReportLoaderDidChangeCountOfPagesNotification";
+NSString * const kJMReportIsMutlipageDidChangedNotification = @"kJMReportIsMutlipageDidChangedNotification";
+NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOfPagesDidChangeNotification";
 
 @interface JMReport()
 @property (nonatomic, copy, readwrite) NSArray *inputControls;
@@ -176,13 +176,13 @@ NSString * const kJMReportLoaderDidChangeCountOfPagesNotification = @"kJMReportL
 #pragma mark - Notifications
 - (void)postNotificationMultipageReport
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMReportLoaderReportIsMutlipageNotification
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMReportIsMutlipageDidChangedNotification
                                                         object:self];
 }
 
 - (void)postNotificationCountOfPages
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMReportLoaderDidChangeCountOfPagesNotification
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMReportCountOfPagesDidChangeNotification
                                                         object:self];
 }
 

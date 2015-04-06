@@ -71,6 +71,10 @@ extern NSString * const kJMReportFilename;
 // Name of the thumbnail image file for saved reports
 extern NSString * const kJMThumbnailImageFileName;
 
+// Error domain for report loader
+extern NSString * const kJMReportLoaderErrorDomain;
+
+
 // Privacy Policy Link
 extern NSString * const kJMPrivacyPolicyURI;
 

@@ -31,25 +31,21 @@
  @since 2.0
  */
 
+#import "JMReportLoader.h"
+
 @class JMVisualizeReport;
 @protocol JMVisualizeReportLoaderDelegate;
 
 
-@interface JMVisualizeReportLoader : NSObject <UIWebViewDelegate>
-@property (nonatomic, assign) BOOL isReportInLoadingProcess;
+@interface JMVisualizeReportLoader : NSObject <JMReportLoader, UIWebViewDelegate>
 @property (nonatomic, weak) UIWebView *webView;
 @property (nonatomic, weak) id<JMVisualizeReportLoaderDelegate> delegate;
 
-- (instancetype)initWithReport:(JMVisualizeReport *)report;
-+ (instancetype)loaderWithReport:(JMVisualizeReport *)report;
-
-- (void)fetchStartPageWithCompletion:(void(^)(BOOL success, NSError *error))reportLoadCompletion;
-- (void)reloadReportWithInputControls:(NSArray *)inputControls;
-- (void)loadPageWithNumber:(NSInteger)pageNumber completion:(void(^)(BOOL success, NSError *error))reportLoadCompletion;
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion;
-- (void)cancelReport;
+
 - (void)destroyReport;
 - (void)authenticate;
+
 @end
 
 @protocol JMVisualizeReportLoaderDelegate <NSObject>

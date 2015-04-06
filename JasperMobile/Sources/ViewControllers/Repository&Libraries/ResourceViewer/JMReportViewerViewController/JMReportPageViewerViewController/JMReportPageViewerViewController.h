@@ -31,8 +31,6 @@
  @since 2.0
  */
 
-#include "JMReportLoader.h"
-
 @interface JMReportPageViewerViewController : UIViewController
 @property (nonatomic, assign) NSUInteger pageIndex;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;

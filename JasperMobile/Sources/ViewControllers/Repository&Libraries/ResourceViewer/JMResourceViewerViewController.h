@@ -35,5 +35,4 @@
 
 @interface JMResourceViewerViewController : JMBaseResourceViewerVC <UIWebViewDelegate>
 @property (nonatomic, weak) IBOutlet UIWebView *webView;
-- (void)setupWebView;
 @end

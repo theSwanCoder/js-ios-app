@@ -46,17 +46,15 @@ class JMResourceViewerVC: JMBaseResourceViewerVC {
 
     // Setups
     override func setupSubviews() {
-        setupWebView()
+        webView = JMWKWebViewManager.sharedInstance.webView
+        webView.frame = view.bounds
+        
+        //webView.navigationDelegate = self
+        self.view.insertSubview(webView, belowSubview:activityIndicator)
+
         setupBackButton()
     }
 
-    func setupWebView() {
-        webView = JMWKWebViewManager.sharedInstance.webView
-        webView.frame = view.bounds
-
-        //webView.navigationDelegate = self
-        self.view.insertSubview(webView, belowSubview:activityIndicator)
-    }
 
     func setupBackButton() {
         let backButton = backButtonWithTitle(nil, target: self, action: "backButtonAction")
@@ -64,7 +62,7 @@ class JMResourceViewerVC: JMBaseResourceViewerVC {
     }
 
     // start point
-    override func runReportExecution() {
+    override func startResourceViewing() {
         println("run report execution")
     }
 }

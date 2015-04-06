@@ -37,28 +37,16 @@
 #import "JMReport.h"
 #import "JMReportLoader.h"
 
-typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
-    JMReportLoaderErrorTypeUndefined,
-    JMReportLoaderErrorTypeEmtpyReport,
-    JMReportLoaderErrorTypeAuthentification
-};
-
 @interface JMBaseReportViewerViewController : JMResourceViewerViewController <JMRefreshable, JMReportViewerToolBarDelegate>
-@property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
-@property (nonatomic, strong, readonly) JMReportLoader *reportLoader;
-@property (nonatomic, weak) JMReportViewerToolBar *toolbar;
+@property (nonatomic, strong, readonly) id <JMReportLoader> reportLoader;
 @property (nonatomic, strong) JMReport *report;
 
 // start point
 - (void)startLoadReport;
+- (void)runReport;
+
 // setups
 - (void)updateToobarAppearence;
-- (void)setupBackNavigationItem;
-
-// overridden actions
-- (void)backButtonTapped:(id) sender;
-// visible actions
-- (void)backToPreviousView;
 
 // input controls
 - (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *))completion;

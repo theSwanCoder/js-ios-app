@@ -37,10 +37,10 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     JMReportViewerAlertViewTypeErrorLoad
 };
 
-NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoaderErrorDomain";
-
 @interface JMVisualizeReportLoader()
 @property (nonatomic, weak) JMVisualizeReport *report;
+@property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
+
 @property (nonatomic, strong) NSString *visualizePath;
 @property (nonatomic, copy) void(^reportLoadCompletion)(BOOL success, NSError *error);
 @end
@@ -99,9 +99,9 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
     }
 }
 
-- (void)loadPageWithNumber:(NSInteger)pageNumber completion:(void(^)(BOOL success, NSError *error))completion
+- (void)fetchPageNumber:(NSInteger)pageNumber withCompletion:(void(^)(BOOL success, NSError *error))completionBlock
 {
-    self.reportLoadCompletion = completion;
+    self.reportLoadCompletion = completionBlock;
 
     NSString *setPageCommand = [NSString stringWithFormat:@"MobileReport.selectPage(%@)", @(pageNumber).stringValue];
     [self.report updateCurrentPage:pageNumber];
@@ -151,7 +151,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
             // TODO: handle this error
             NSLog(@"Error loading visualize.js");
             // TODO: add error code
-            NSError *error = [NSError errorWithDomain:kJMReportVisualizeLoaderErrorDomain
+            NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
                                                  code:0
                                              userInfo:nil];
             if (completion) {
@@ -242,7 +242,7 @@ NSString * const kJMReportVisualizeLoaderErrorDomain = @"JMReportVisualizeLoader
 - (NSError *)createErrorWithType:(JMReportLoaderErrorType)errorType
 {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey : JMCustomLocalizedString(@"report.viewer.visualize.render.error", nil) };
-    NSError *error = [NSError errorWithDomain:kJMReportVisualizeLoaderErrorDomain
+    NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
                                          code:errorType
                                      userInfo:userInfo];
     return error;

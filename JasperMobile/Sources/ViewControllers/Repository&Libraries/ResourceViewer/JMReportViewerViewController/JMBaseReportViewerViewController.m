@@ -35,6 +35,8 @@
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
 @property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;
+@property (nonatomic, weak) JMReportViewerToolBar *toolbar;
+@property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 
 @end
 
@@ -103,36 +105,17 @@
     }
 }
 
-#pragma mark - Setup Back
-- (void)setupNavigationItems
-{
-    [super setupNavigationItems];
-
-    [self setupBackNavigationItem];
-}
-
-- (void)setupBackNavigationItem
-{
-    UIViewController *rootViewController = [self.navigationController.viewControllers firstObject];
-    NSString *backItemTitle = rootViewController.title;
-
-    UIBarButtonItem *backItem = [self backButtonWithTitle:backItemTitle
-                                                   target:self
-                                                   action:@selector(backButtonTapped:)];
-    self.navigationItem.leftBarButtonItem = backItem;
-}
-
 #pragma mark - Observe Notifications
 - (void)addObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(multipageNotification)
-                                                 name:kJMReportLoaderReportIsMutlipageNotification
+                                                 name:kJMReportIsMutlipageDidChangedNotification
                                                object:self.report];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportLoaderDidChangeCountOfPages:)
-                                                 name:kJMReportLoaderDidChangeCountOfPagesNotification
+                                                 name:kJMReportCountOfPagesDidChangeNotification
                                                object:self.report];
 }
 
@@ -153,22 +136,14 @@
 }
 
 #pragma mark - Actions
-- (void)backButtonTapped:(id) sender
+- (void)cancelResourceViewingAndExit
 {
     [self.reportLoader cancelReport];
-    [self.view endEditing:YES];
-    self.webView.delegate = nil;
-    [self backToPreviousView];
-}
-
-- (void)backToPreviousView
-{
-    [self clearWebView];
-    [self.navigationController popViewControllerAnimated:YES];
+    [super cancelResourceViewingAndExit];
 }
 
 #pragma mark - Overloaded methods
-- (void) runReportExecution
+- (void) startResourceViewing
 {
     // empty method because parent call it from viewDidLoad
     // there is issue with "white screen" after loading input controls
@@ -187,7 +162,7 @@
         [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
             [self.restClient cancelAllRequests];
             [self.reportLoader cancelReport];
-            [self backToPreviousView];
+            [self cancelResourceViewingAndExit];
         }@weakselfend];
 
         NSString *reportURI = [self.report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -200,8 +175,6 @@
             if (inputControls) {
                 [self.report updateInputControls:inputControls];
                 [self showReportOptionsViewControllerWithBackButton:YES];
-
-                //[self.restClient performSelector:@selector(deleteCookies) withObject:nil afterDelay:30];
             } else {
                 [self runReport];
             }
@@ -253,7 +226,7 @@
 #pragma mark - JMRefreshable
 - (void)refresh
 {
-    [self clearWebView];
+    [self resetSubViews];
     [self updateToobarAppearence];
     //
     [self runReport];
@@ -278,11 +251,6 @@
     // overriden in childs
 }
 
-- (void)reloadReport
-{
-    // overriden in childs
-}
-
 #pragma mark - Report Options (Input Controls)
 - (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *))completion
 {
@@ -297,7 +265,7 @@
                                             [self loadInputControlsWithReportURI:reportURI completion:completion];
                                         } else {
                                             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                                                [self loadInputControlsWithReportURI:reportURI completion:completion];
+                                                [self cancelResourceViewingAndExit];
                                             } @weakselfend];
                                         }
                                     } else {
@@ -369,12 +337,6 @@
 {
     self.emptyReportMessageLabel.hidden = YES;
     self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
-}
-
-- (void)clearWebView
-{
-    [self.webView stopLoading];
-    [self.webView loadHTMLString:nil baseURL:nil];
 }
 
 @end

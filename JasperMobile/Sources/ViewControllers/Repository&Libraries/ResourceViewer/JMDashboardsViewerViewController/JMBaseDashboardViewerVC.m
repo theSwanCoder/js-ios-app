@@ -30,59 +30,16 @@
 - (void)reloadDashboard
 {
     if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-        [self clearWebView];
+        [self resetSubViews];
         // waiting until page will be cleared
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self startLoadDashboard];
         });
     } else {
         [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-            [self startLoadDashboard];
+            [self cancelResourceViewingAndExit];
         } @weakselfend];
     }
-}
-
-- (void) backButtonTapped:(id) sender
-{
-    [self clearWebView];
-    self.webView.delegate = nil;
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-#pragma mark - Setup Back
-- (void)setupNavigationItems
-{
-    [super setupNavigationItems];
-    
-    UIViewController *rootViewController = [self.navigationController.viewControllers firstObject];
-    NSString *backItemTitle = rootViewController.title;
-    
-    UIBarButtonItem *backItem = [self backButtonWithTitle:backItemTitle
-                                                   target:self
-                                                   action:@selector(backButtonTapped:)];
-    self.navigationItem.leftBarButtonItem = backItem;
-}
-
-- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
-                                  target:(id)target
-                                  action:(SEL)action
-{
-    NSString *backItemTitle = title;
-    if (!backItemTitle) {
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        NSInteger viewControllersCount = viewControllers.count;
-        UIViewController *previousViewController = [viewControllers objectAtIndex:(viewControllersCount - 2)];
-        backItemTitle = previousViewController.title;
-    }
-    
-    UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
-    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:backItemTitle
-                                                                 style:UIBarButtonItemStyleBordered
-                                                                target:target
-                                                                action:action];
-    [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    return backItem;
 }
 
 #pragma mark - Overriden methods
@@ -91,7 +48,7 @@
     return self.dashboard.resourceLookup;
 }
 
-- (void)runReportExecution
+- (void)startResourceViewing
 {
     [self startLoadDashboard];
 }
@@ -179,7 +136,7 @@
 }
 
 #pragma mark - Heplers
-- (void)clearWebView
+- (void)resetSubViews
 {
     [self.webView stopLoading];
     [self.webView loadHTMLString:@"<html><head></head><body></body></html>"

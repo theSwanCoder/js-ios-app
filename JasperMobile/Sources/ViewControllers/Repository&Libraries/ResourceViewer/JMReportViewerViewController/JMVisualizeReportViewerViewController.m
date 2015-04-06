@@ -30,12 +30,14 @@
 
 #import "SWRevealViewController.h"
 #import "JMBaseCollectionViewController.h"
-#import "JMReportOptionsViewController.h"
 #import "JMWebConsole.h"
 #import "JMWebViewController.h"
 
 @interface JMVisualizeReportViewerViewController () <JMVisualizeReportLoaderDelegate>
 @property (nonatomic, strong) JMVisualizeReportLoader *reportLoader;
+@property (nonatomic, assign) BOOL isStartFromAnotherReport;
+@property (nonatomic, copy) void(^returnFromPreviousReportCompletion)(void);
+
 @end
 
 @implementation JMVisualizeReportViewerViewController
@@ -50,17 +52,10 @@
     self.isStartFromAnotherReport = NO;
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-
-    //[self clearWebView];
-}
-
 #pragma mark - Actions
 - (void)backToPreviousReport
 {
-    [self clearWebView];
+    [self resetSubViews];
     [self.navigationController setToolbarHidden:YES animated:YES];
     [self.webView removeFromSuperview];
 
@@ -86,14 +81,15 @@
 }
 
 #pragma mark - Setups
-- (void)setupBackNavigationItem
+- (void)setupNavigationItems
 {
-    if (!self.isStartFromAnotherReport) {
-        [super setupBackNavigationItem];
+    [super setupNavigationItems];
+    if (self.isStartFromAnotherReport) {
+        self.navigationItem.leftBarButtonItem = nil;
     }
 }
 
-- (void)setupWebView // overriden with another webView
+- (void)setupSubviews
 {
     CGRect rootViewBounds = self.navigationController.view.bounds;
     UIWebView *webView = [[JMVisualizeWebViewManager sharedInstance] webViewWithParentFrame:rootViewBounds];
@@ -129,7 +125,7 @@
 {
     // TODO: need support sessions
     // start show loading indicator
-    [self.reportLoader loadPageWithNumber:page completion:@weakself(^(BOOL success, NSError *error)) {
+    [self.reportLoader fetchPageNumber:page withCompletion:@weakself(^(BOOL success, NSError *error)) {
         // stop show loading indicator
     }@weakselfend];
 }
@@ -146,7 +142,7 @@
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
         [self.reportLoader cancelReport];
-        [self backToPreviousView];
+        [self cancelResourceViewingAndExit];
     }@weakselfend];
 
     [self hideEmptyReportMessage];
@@ -188,7 +184,7 @@
     if (error.code == JMReportLoaderErrorTypeAuthentification) {
 
         [self.restClient deleteCookies];
-        [self clearWebView];
+        [self resetSubViews];
         [self.webView loadHTMLString:nil baseURL:nil];
 
         [self.report restoreDefaultState];
@@ -196,7 +192,7 @@
             [self runReport];
         } else {
             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                [self runReport];
+                [self cancelResourceViewingAndExit];
             } @weakselfend];
         }
 
@@ -204,7 +200,7 @@
         [[UIAlertView localizedAlertWithTitle:@"detail.report.viewer.error.title"
                                       message:error.localizedDescription
                                    completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                       [self backToPreviousView];
+                                       [self cancelResourceViewingAndExit];
                                    }
                             cancelButtonTitle:@"dialog.button.ok"
                             otherButtonTitles:nil] show];
@@ -233,7 +229,7 @@
                                                            action:@selector(backToPreviousReport)];
             reportViewController.navigationItem.leftBarButtonItem = backItem;
 
-            [self clearWebView];
+            [self resetSubViews];
             [self.navigationController pushViewController:reportViewController animated:YES];
         }
     }@weakselfend];
@@ -248,7 +244,7 @@
 }
 
 #pragma mark - UIWebView helpers
-- (void)clearWebView
+- (void)resetSubViews
 {
     [self.webView stopLoading];
     NSLog(@"contentScaleFactor: %f", self.webView.contentScaleFactor);

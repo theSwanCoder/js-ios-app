@@ -58,18 +58,6 @@
 }
 
 #pragma mark - Public API
-//- (void)startLoadReportPageContentWithLoader:(JMReportLoader *)reportLoader
-//{
-//    if (!self.webView.isLoading) {
-//        self.startLoad = YES;
-//        [reportLoader startLoadPage:(self.pageIndex+1) withCompletion:@weakself(^(NSString *HTMLString, NSString *baseURL)) {
-//            self.startLoad = NO;
-//            [self.webView loadHTMLString:HTMLString
-//                                 baseURL:[NSURL URLWithString:baseURL]];
-//        }@weakselfend];
-//    }
-//}
-
 - (void)startShowLoadProgress
 {
     [JMUtils showNetworkActivityIndicator];

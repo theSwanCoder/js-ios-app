@@ -30,8 +30,8 @@
  @author Aleksandr Dakhno odahno@tibco.com
  @since 2.0
  */
-extern NSString * const kJMReportLoaderReportIsMutlipageNotification;
-extern NSString * const kJMReportLoaderDidChangeCountOfPagesNotification;
+extern NSString * const kJMReportIsMutlipageDidChangedNotification;
+extern NSString * const kJMReportCountOfPagesDidChangeNotification;
 
 @interface JMReport : NSObject
 // getters

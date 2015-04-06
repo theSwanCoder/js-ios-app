@@ -22,11 +22,11 @@
 
 
 //
-//  JMReportLoader.h
+//  JMRestReportLoader.m
 //  TIBCO JasperMobile
 //
 
-#import "JMReportLoader.h"
+#import "JMRestReportLoader.h"
 #import "UIAlertView+Additions.h"
 #import "NSObject+Additions.h"
 #import "JMBaseReportViewerViewController.h"
@@ -43,10 +43,11 @@ static NSInteger const kJMReportViewerStatusCheckingInterval = 1.f;
 static NSString *const kJMRestStatusReady = @"ready";
 static NSString *const kJMRestStatusCanceled = @"canceled";
 
-NSString * const kJMReportLoaderErrorDomain = @"JMReportLoaderErrorDomain";
 
-@interface JMReportLoader()
+@interface JMRestReportLoader()
 @property (nonatomic, weak, readwrite) JMReport *report;
+@property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
+
 // callbacks
 @property (nonatomic, copy) void(^loadPageCompletionBlock)(BOOL success, NSError *error);
 //
@@ -57,7 +58,7 @@ NSString * const kJMReportLoaderErrorDomain = @"JMReportLoaderErrorDomain";
 @property (nonatomic, strong) NSTimer *statusCheckingTimer;
 @end
 
-@implementation JMReportLoader
+@implementation JMRestReportLoader
 
 #pragma mark - Lifecycle
 - (instancetype)initWithReport:(JMReport *)report

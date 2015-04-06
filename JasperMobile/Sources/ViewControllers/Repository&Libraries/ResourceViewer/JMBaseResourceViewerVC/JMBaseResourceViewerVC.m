@@ -51,7 +51,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     [self setupSubviews];
 
     // start point of loading resource
-    [self runReportExecution];
+    [self startResourceViewing];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -101,6 +101,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)setupNavigationItems
 {
+    // Right bar button items
     NSMutableArray *items = [NSMutableArray array];
     UIBarButtonItem *actionBarButtonItem = [self actionBarButtonItem];
     if (actionBarButtonItem) {
@@ -112,9 +113,42 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
         [items addObject:favoriteBarButtonItem];
     }
     self.navigationItem.rightBarButtonItems = [items copy];
+    
+    // Left bar button items
+    UIViewController *rootViewController = [self.navigationController.viewControllers firstObject];
+    NSString *backItemTitle = rootViewController.title;
+    
+    UIBarButtonItem *backItem = [self backButtonWithTitle:backItemTitle
+                                                   target:self
+                                                   action:@selector(backButtonTapped:)];
+    
+    self.navigationItem.leftBarButtonItem = backItem;
+}
+
+- (void)resetSubViews
+{
+    // override in children
+}
+
+
+#pragma mark - Resource Viewing
+-(void) startResourceViewing
+{
+    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:[NSString stringWithFormat:@"You need to implement \"%@\" method in \"%@\" class", NSStringFromSelector(_cmd), NSStringFromClass(self.class)] userInfo:nil];
+}
+
+- (void) cancelResourceViewingAndExit
+{
+    [self resetSubViews];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Actions
+- (void) backButtonTapped:(id)sender
+{
+    [self cancelResourceViewingAndExit];
+}
+
 - (void)showAvailableActions
 {
     JMMenuActionsView *actionsView = [JMMenuActionsView new];
@@ -142,11 +176,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
--(void) runReportExecution
-{
-    @throw [NSException exceptionWithName:@"Method implementation is missing" reason:[NSString stringWithFormat:@"You need to implement \"%@\" method in \"%@\" class", NSStringFromSelector(_cmd), NSStringFromClass(self.class)] userInfo:nil];
-}
-
 #pragma mark - JMMenuActionsViewDelegate
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
@@ -172,6 +201,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 }
 
 #pragma mark - Helpers
+
 - (void)showResourceInfoViewControllerWithResourceLookup:(JSResourceLookup *)resourceLookup
 {
     JMResourceInfoViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"JMResourceInfoViewController"];

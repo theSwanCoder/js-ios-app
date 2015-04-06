@@ -30,11 +30,11 @@
 
 #import "SWRevealViewController.h"
 #import "JMBaseCollectionViewController.h"
-#import "JMReportOptionsViewController.h"
 
+#import "JMRestReportLoader.h"
 
 @interface JMReportViewerViewController ()
-@property (nonatomic, strong, readwrite) JMReportLoader *reportLoader;
+@property (nonatomic, strong, readwrite) JMRestReportLoader *reportLoader;
 @end
 
 @implementation JMReportViewerViewController
@@ -42,10 +42,10 @@
 @synthesize reportLoader = _reportLoader;
 
 #pragma mark - Custom accessors
-- (JMReportLoader *)reportLoader
+- (JMRestReportLoader *)reportLoader
 {
     if (!_reportLoader) {
-        _reportLoader = [JMReportLoader loaderWithReport:self.report];
+        _reportLoader = [JMRestReportLoader loaderWithReport:self.report];
     }
     return _reportLoader;
 }
@@ -70,7 +70,7 @@
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
         [self.restClient cancelAllRequests];
         [self.reportLoader cancelReport];
-        [self backToPreviousView];
+        [self cancelResourceViewingAndExit];
     }@weakselfend];
     
     [self.reportLoader fetchStartPageWithCompletion:@weakself(^(BOOL success, NSError *error)) {
@@ -101,7 +101,7 @@
             [self runReport];
         } else {
             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                [self runReport];
+                [self cancelResourceViewingAndExit];
             } @weakselfend];
         }
     } else {

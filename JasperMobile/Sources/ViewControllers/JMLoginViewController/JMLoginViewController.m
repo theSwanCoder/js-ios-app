@@ -197,8 +197,6 @@
     
     [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[self.selectedServerProfile.keepSession boolValue] completion:@weakself(^(BOOL success)) {
         [JMCancelRequestPopup dismiss];
-        [self.restClient performSelector:@selector(deleteCookies) withObject:nil afterDelay:30];
-
         if (success) {
             self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
             if (self.completion) {

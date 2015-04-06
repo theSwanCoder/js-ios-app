@@ -36,7 +36,6 @@
 #import "JMResourceInfoViewController.h"
 #import "JMListOptionsPopupView.h"
 #import "JMReportViewerViewController.h"
-#import "JMReportOptionsViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMSettingsViewController.h"
 

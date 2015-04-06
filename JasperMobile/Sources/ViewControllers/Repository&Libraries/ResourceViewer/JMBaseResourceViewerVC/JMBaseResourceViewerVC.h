@@ -46,14 +46,15 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 @property (nonatomic, assign) BOOL isResourceLoaded;
 @property (nonatomic, strong) NSURLRequest *resourceRequest;
 
-- (void)runReportExecution;
-
 // setup
 - (void)setupSubviews;
-- (void)setupNavigationItems;
-- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
-                                  target:(id)target
-                                  action:(SEL)action;
+- (void)setupNavigationItems NS_REQUIRES_SUPER;
+- (void)resetSubViews;
+
+
+// Resource Viewing
+- (void) startResourceViewing;
+- (void) cancelResourceViewingAndExit NS_REQUIRES_SUPER;
 
 - (JSResourceLookup *)currentResourceLookup;
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource;
@@ -64,4 +65,10 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 - (void)startShowLoaderWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock;
 - (void)stopShowLoader;
 
+// UIBarButtonItem helper for backButton
+- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
+                                  target:(id)target
+                                  action:(SEL)action;
+
+- (void) backButtonTapped:(id)sender;
 @end

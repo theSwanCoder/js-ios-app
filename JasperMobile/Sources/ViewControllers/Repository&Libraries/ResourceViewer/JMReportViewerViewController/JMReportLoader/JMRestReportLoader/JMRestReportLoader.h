@@ -22,33 +22,17 @@
 
 
 //
-//  JMSaveReportViewController.h
+//  JMRestReportLoader.h
 //  TIBCO JasperMobile
 //
 
 /**
+ @author Aleksandr Dakhno odahno@tibco.com
  @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
+ @since 2.0
  */
 
-#import <UIKit/UIKit.h>
-#import "JMEditabledViewController.h"
-#import "JMResourceClientHolder.h"
-#import "JMReport.h"
+#import "JMReportLoader.h"
+@interface JMRestReportLoader : NSObject <JMReportLoader>
 
-@protocol JMSaveReportViewControllerDelegate <NSObject>
-
-@required
-- (void)reportDidSavedSuccessfully;
-
-@end
-
-@class JMReportViewer;
-
-extern NSString * const kJMSaveReportViewControllerSegue;
-
-@interface JMSaveReportViewController : JMEditabledViewController
-@property (nonatomic, weak) id <JMSaveReportViewControllerDelegate> delegate;
-
-@property (nonatomic, strong) JMReport *report;
 @end

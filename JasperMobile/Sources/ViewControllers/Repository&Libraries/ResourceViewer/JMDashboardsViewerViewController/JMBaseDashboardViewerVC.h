@@ -39,5 +39,4 @@
 
 - (void)startLoadDashboard;
 - (void)reloadDashboard;
-- (void)clearWebView;
 @end

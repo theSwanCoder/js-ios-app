@@ -42,7 +42,7 @@
     return _savedReports;
 }
 
-- (void)runReportExecution
+- (void)startResourceViewing
 {
     NSString *fullReportPath = [JMSavedResources pathToReportWithName:self.savedReports.label format:self.savedReports.format];
     NSURL *url = [NSURL fileURLWithPath:fullReportPath];

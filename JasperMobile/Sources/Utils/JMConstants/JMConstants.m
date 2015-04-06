@@ -64,6 +64,9 @@ NSString * const kJMReportFilename = @"report";
 // Name of the thumbnail image file for saved reports
 NSString * const kJMThumbnailImageFileName = @"_jaspersoftMobileThumbnailImageFile";
 
+// Error domain for report loader
+NSString * const kJMReportLoaderErrorDomain = @"JMReportLoaderErrorDomain";
+
 
 // Privacy Policy Link
 NSString * const kJMPrivacyPolicyURI = @"http://www.tibco.com/company/privacy-cma";

@@ -63,7 +63,7 @@ class JMDashboardVC: JMResourceViewerVC {
     }
 
     // Start point
-    override func runReportExecution() {
+    override func startResourceViewing() {
         if let dashboard = self.dashboard {
             dashboardLoader = JMVisualizeDashboardLoader(dashboard: dashboard, webView: webView)
             dashboardLoader!.delegate = self

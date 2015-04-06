@@ -41,16 +41,26 @@
 #pragma mark - Setups
 - (void)setupSubviews
 {
-    [self setupWebView];
-}
-
-- (void)setupWebView
-{
     CGRect rootViewBounds = self.navigationController.view.bounds;
     UIWebView *webView = [[JMWebViewManager sharedInstance] webViewWithParentFrame:rootViewBounds];
     webView.delegate = self;
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
+}
+
+- (void)resetSubViews
+{
+    [self.webView stopLoading];
+    [self.webView loadHTMLString:nil baseURL:nil];
+}
+
+- (void)cancelResourceViewingAndExit
+{
+    [self resetSubViews];
+    [self.view endEditing:YES];
+    self.webView.delegate = nil;
+
+    [super cancelResourceViewingAndExit];
 }
 
 #pragma mark - UIWebViewDelegate
