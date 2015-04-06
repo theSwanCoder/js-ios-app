@@ -85,7 +85,7 @@
     NSString *requestURLString = request.URL.absoluteString;
     
     //  don't let run link run report
-    if ([requestURLString rangeOfString:@"_flowId=viewReportFlow"].length) {
+    if (navigationType == UIWebViewNavigationTypeLinkClicked && [requestURLString rangeOfString:@"_flowId=viewReportFlow"].length) {
         return NO;
     }
     
@@ -141,6 +141,8 @@
     [self.webView stopLoading];
     [self.webView loadHTMLString:@"<html><head></head><body></body></html>"
                          baseURL:[NSURL URLWithString:@"http://localhost"]];
+    // TODO: for test purpose only
+    //[[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
 @end

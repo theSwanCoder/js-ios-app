@@ -36,12 +36,24 @@ import WebKit
 
 let kCallbackHandler = "callback"
 
+enum JMVisualizeDashboardLoaderErrorType: Int {
+    case Load
+    case Maximize
+    case Minimize
+}
+
 @objc protocol JMVisualizeDashboardLoaderDelegate : NSObjectProtocol {
     optional func loaderDidStartLoadDashboard(dashboardLoader: JMVisualizeDashboardLoader) -> Void
     optional func loaderDidFinishLoadDashboard(dashboardLoader: JMVisualizeDashboardLoader) -> Void
     optional func loader(dashboardLoader: JMVisualizeDashboardLoader, didReceiveError error: NSError) -> Void
-    optional func loader(dashboardLoader: JMVisualizeDashboardLoader, didMaximizeDashlet dashlet: String)
-    optional func loaderDidMinimizeDashlet(dashboardLoader: JMVisualizeDashboardLoader)
+
+    optional func loader(dashboardLoader: JMVisualizeDashboardLoader, didStartMaximizeDashlet dashlet: String)
+    optional func loader(dashboardLoader: JMVisualizeDashboardLoader, didEndMaximizeDashlet dashlet: String)
+    optional func loaderDidFailedMaximizeDashlet(dashboardLoader: JMVisualizeDashboardLoader, error: NSError)
+
+    optional func loaderDidStartMinimizeDashlet(dashboardLoader: JMVisualizeDashboardLoader)
+    optional func loaderDidEndMinimizeDashlet(dashboardLoader: JMVisualizeDashboardLoader)
+    optional func loaderDidFailedMinimizeDashlet(dashboardLoader: JMVisualizeDashboardLoader, error: NSError)
 }
 
 class JMVisualizeDashboardLoader: NSObject {
@@ -217,10 +229,18 @@ class JMVisualizeMessageHandler: NSObject, WKScriptMessageHandler {
                 onLoadStart(commandDict["parameters"] as Dictionary<String, AnyObject>)
             case "onLoadDone" :
                 onLoadDone(commandDict["parameters"] as Dictionary<String, AnyObject>)
-            case "onMinimize" :
-                onMinimize(commandDict["parameters"] as Dictionary<String, AnyObject>)
-            case "onMaximize" :
-                onMaximize(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            case "onMinimizeStart" :
+                onMinimizeStart(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            case "onMinimizeEnd" :
+                onMinimizeEnd(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            case "onMinimizeFailed" :
+                onMinimizeFailed(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            case "onMaximizeStart" :
+                onMaximizeStart(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            case "onMaximizeEnd" :
+                onMaximizeEnd(commandDict["parameters"] as Dictionary<String, AnyObject>)
+            case "onMaximizeFailed" :
+                onMaximizeFailed(commandDict["parameters"] as Dictionary<String, AnyObject>)
             case "onLoadError" :
                 onLoadError(commandDict["parameters"] as Dictionary<String, AnyObject>)
             default:
@@ -256,24 +276,74 @@ class JMVisualizeMessageHandler: NSObject, WKScriptMessageHandler {
         }
     }
 
-    func onMaximize(parameters: Dictionary<String, AnyObject>) {
-        println("onMaximize")
+    func onMaximizeStart(parameters: Dictionary<String, AnyObject>) {
+        println("onMaximizeStart")
         //println("parameters \(parameters)")
         if let delegate = self.loader.delegate {
-            if delegate.respondsToSelector("loader:didMaximizeDashlet:") {
+            if delegate.respondsToSelector("loader:didStartMaximizeDashlet:") {
                 // TODO: replace to instance of JMDashlet class
                 let dashletTitle = parameters["title"] as String
-                delegate.loader!(loader, didMaximizeDashlet: dashletTitle)
+                delegate.loader!(loader, didStartMaximizeDashlet: dashletTitle)
             }
         }
     }
 
-    func onMinimize(parameters: Dictionary<String, AnyObject>) {
-        println("onMinimize")
+    func onMaximizeEnd(parameters: Dictionary<String, AnyObject>) {
+        println("onMaximizeEnd")
         //println("parameters \(parameters)")
         if let delegate = self.loader.delegate {
-            if delegate.respondsToSelector("loaderDidMinimizeDashlet:") {
-                delegate.loaderDidMinimizeDashlet!(loader)
+            if delegate.respondsToSelector("loader:didEndMaximizeDashlet:") {
+                // TODO: replace to instance of JMDashlet class
+                let dashletTitle = parameters["title"] as String
+                delegate.loader!(loader, didEndMaximizeDashlet: dashletTitle)
+            }
+        }
+    }
+
+    func onMaximizeFailed(parameters: Dictionary<String, AnyObject>) {
+        println("onMaximizeFailed")
+        //println("parameters \(parameters)")
+        if let delegate = self.loader.delegate {
+            if delegate.respondsToSelector("loader:loaderDidFailedMaximizeDashlet:") {
+                // TODO: improve error creating
+                let errorString = parameters["error"] as String
+                let userInfo = [NSLocalizedDescriptionKey : errorString]
+                let error = NSError(domain: "JMVisualizeDashboardLoader", code: JMVisualizeDashboardLoaderErrorType.Maximize.rawValue, userInfo: userInfo)
+                delegate.loaderDidFailedMaximizeDashlet!(loader, error: error)
+            }
+        }
+    }
+
+    func onMinimizeStart(parameters: Dictionary<String, AnyObject>) {
+        println("onMinimizeStart")
+        //println("parameters \(parameters)")
+        if let delegate = self.loader.delegate {
+            if delegate.respondsToSelector("loaderDidStartMinimizeDashlet:") {
+                delegate.loaderDidStartMinimizeDashlet!(loader)
+            }
+        }
+    }
+
+    func onMinimizeEnd(parameters: Dictionary<String, AnyObject>) {
+        println("onMinimizeEnd")
+        //println("parameters \(parameters)")
+        if let delegate = self.loader.delegate {
+            if delegate.respondsToSelector("loaderDidEndMinimizeDashlet:") {
+                delegate.loaderDidEndMinimizeDashlet!(loader)
+            }
+        }
+    }
+
+    func onMinimizeFailed(parameters: Dictionary<String, AnyObject>) {
+        println("onMinimizeFailed")
+        //println("parameters \(parameters)")
+        if let delegate = self.loader.delegate {
+            if delegate.respondsToSelector("loaderDidFailedMinimizeDashlet:error:") {
+                // TODO: improve error creating
+                let errorString = parameters["error"] as String
+                let userInfo = [NSLocalizedDescriptionKey : errorString]
+                let error = NSError(domain: "JMVisualizeDashboardLoader", code: JMVisualizeDashboardLoaderErrorType.Minimize.rawValue, userInfo: userInfo)
+                delegate.loaderDidFailedMinimizeDashlet!(loader, error: error)
             }
         }
     }
@@ -283,10 +353,10 @@ class JMVisualizeMessageHandler: NSObject, WKScriptMessageHandler {
         //println("parameters \(parameters)")
         if let delegate = self.loader.delegate {
             if delegate.respondsToSelector("loader:didReceiveError:") {
+                // TODO: improve error creating
                 let errorString = parameters["error"] as String
                 let userInfo = [NSLocalizedDescriptionKey : errorString]
-                // TODO: improve error creating
-                let error = NSError(domain: "JMVisualizeDashboardLoader", code: 0, userInfo: userInfo)
+                let error = NSError(domain: "JMVisualizeDashboardLoader", code: JMVisualizeDashboardLoaderErrorType.Load.rawValue, userInfo: userInfo)
                 delegate.loader!(loader, didReceiveError: error)
             }
         }

@@ -95,7 +95,7 @@ extension JMDashboardVC: JMVisualizeDashboardLoaderDelegate {
         println("error of loading dashboard: \(error.localizedDescription)")
     }
 
-    func loader(dashboardLoader: JMVisualizeDashboardLoader, didMaximizeDashlet dashlet: String) {
+    func loader(dashboardLoader: JMVisualizeDashboardLoader, didStartMaximizeDashlet dashlet: String) {
         var dashboardTitle = currentResourceLookup()?.label
         let backItem = backButtonWithTitle(dashboardTitle, target: self, action: "minimizeDashlet")
         navigationItem.leftBarButtonItem = backItem
@@ -105,8 +105,28 @@ extension JMDashboardVC: JMVisualizeDashboardLoaderDelegate {
         startShowLoaderWithMessage("Maximize \(dashlet)", cancelBlock: nil)
     }
 
-    func loaderDidMinimizeDashlet(dashboardLoader: JMVisualizeDashboardLoader) {
+    func loader(dashboardLoader: JMVisualizeDashboardLoader, didEndMaximizeDashlet dashlet: String) {
+        stopShowLoader()
+    }
+
+    func loaderDidFailedMaximizeDashlet(dashboardLoader: JMVisualizeDashboardLoader, error: NSError) {
+        stopShowLoader()
+        println("Error of maximize dashlet: \(error.localizedDescription)")
+    }
+
+    func loaderDidStartMinimizeDashlet(dashboardLoader: JMVisualizeDashboardLoader) {
+        startShowLoaderWithMessage("Minimize", cancelBlock: nil)
+    }
+
+    func loaderDidEndMinimizeDashlet(dashboardLoader: JMVisualizeDashboardLoader) {
+        stopShowLoader()
+
         setupBackButton()
         navigationItem.rightBarButtonItems = rightBarButtonItems
+    }
+
+    func loaderDidFailedMinimizeDashlet(dashboardLoader: JMVisualizeDashboardLoader, error: NSError) {
+        stopShowLoader()
+        println("Error of maximize dashlet: \(error.localizedDescription)")
     }
 }

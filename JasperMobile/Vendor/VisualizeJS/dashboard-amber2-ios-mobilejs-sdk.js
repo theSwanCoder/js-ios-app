@@ -4,7 +4,7 @@
     return IosCallback = (function() {
       function IosCallback() {}
 
-      IosCallback.prototype.onMaximize = function(title) {
+      IosCallback.prototype.onMaximizeStart = function(title) {
         this._makeCallback({
           "command": "onMaximize",
           "parameters": {
@@ -13,7 +13,39 @@
         });
       };
 
-      IosCallback.prototype.onMinimize = function() {
+      IosCallback.prototype.onMaximizeEnd = function(title) {
+        this._makeCallback({
+          "command": "onMaximize",
+          "parameters": {
+            "title": title
+          }
+        });
+      };
+
+      IosCallback.prototype.onMaximizeFailed = function(title) {
+        this._makeCallback({
+          "command": "onMaximize",
+          "parameters": {
+            "title": title
+          }
+        });
+      };
+
+      IosCallback.prototype.onMinimizeStart = function() {
+        this._makeCallback({
+          "command": "onMinimize",
+          "parameters": {}
+        });
+      };
+
+      IosCallback.prototype.onMinimizeEnd = function() {
+        this._makeCallback({
+          "command": "onMinimize",
+          "parameters": {}
+        });
+      };
+
+      IosCallback.prototype.onMinimizeFailed = function() {
         this._makeCallback({
           "command": "onMinimize",
           "parameters": {}
@@ -125,12 +157,15 @@
 }).call(this);
 
 (function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   define('js.mobile.amber2.dashboard.controller', ['require','jquery','js.mobile.scaler'],function(require) {
     var $, DashboardController, Scaler;
     $ = require('jquery');
     Scaler = require('js.mobile.scaler');
     return DashboardController = (function() {
       function DashboardController(options) {
+        this._clickCallback = bind(this._clickCallback, this);
         this.context = options.context, this.session = options.session, this.uri = options.uri;
         this.callback = this.context.callback;
         this.logger = this.context.logger;
@@ -139,65 +174,6 @@
 
       DashboardController.prototype.destroyDashboard = function() {
         return this.dashboard.destroy();
-      };
-
-      DashboardController.prototype.runDashboard = function() {
-        var self;
-        this.callback.onLoadStart();
-        self = this;
-        return visualize(this.session.authOptions(), function(v) {
-          self.v = v;
-          self.scaler.scale(0.5);
-          return self.dashboard = v.dashboard({
-            report: {
-              chart: {
-                animation: false,
-                zoom: false
-              }
-            },
-            container: '#container',
-            resource: self.uri,
-            success: function() {
-              var dashboardId;
-              self.logger.log("Scale dashboard");
-              self.components = this.data().components;
-              window.components = self.components;
-              $(this.container()).find('.dashboardCanvas').addClass('scaledCanvas');
-              self.logger.log("Iterate components");
-              this.data().components.forEach(function(component) {
-                if (component.type !== 'inputControl') {
-                  self.dashboard.updateComponent(component.id, {
-                    interactive: false,
-                    toolbar: false
-                  });
-                }
-              });
-              self.logger.log("Apply click events");
-              dashboardId = self.v.dashboard.componentIdDomAttribute;
-              $(this.container()).find("[" + dashboardId + "]").on('click', function() {
-                var component, id;
-                $('.show_chartTypeSelector_wrapper').show();
-                id = $(this).attr(dashboardId);
-                component = self.getComponentById(id);
-                if (component && !component.maximized) {
-                  $(self.dashboard.container()).find("[" + dashboardId + "='" + id + "']").addClass('originalDashletInScaledCanvas');
-                  self.dashboard.updateComponent(id, {
-                    maximized: true,
-                    interactive: true
-                  });
-                  self.maximizedComponent = component;
-                  self.logger.log("onMaximize");
-                  self.callback.onMaximize(component.name);
-                }
-              });
-              self.callback.onLoadDone(self.components);
-            },
-            error: function(e) {
-              self.logger.log(error);
-              self.callback.onLoadError(error);
-            }
-          });
-        });
       };
 
       DashboardController.prototype.refreshDashlet = function() {
@@ -220,18 +196,133 @@
         dashboardId = this.v.dashboard.componentIdDomAttribute;
         component = this.maximizedComponent;
         $(this.dashboard.container()).find("[" + dashboardId + "='" + component.id + "']").removeClass('originalDashletInScaledCanvas');
-        this.dashboard.updateComponent(component.id, {
+        this.callback.onMinimizeStart();
+        return this.dashboard.updateComponent(component.id, {
           maximized: false,
           interactive: false
-        });
-        this.logger.log("onMinimize");
-        return this.callback.onMinimize();
+        }, (function(_this) {
+          return function() {
+            return _this.callback.onMinimizeEnd();
+          };
+        })(this), (function(_this) {
+          return function(error) {
+            return _this.callback.onMinimizeFailed(error);
+          };
+        })(this));
       };
 
-      DashboardController.prototype.getComponentById = function(id) {
+      DashboardController.prototype.runDashboard = function() {
+        var self;
+        this.callback.onLoadStart();
+        self = this;
+        return visualize(this.session.authOptions(), function(v) {
+          self.v = v;
+          self.scaler.scale(0.5);
+          return self.dashboard = v.dashboard({
+            report: {
+              chart: {
+                animation: false,
+                zoom: false
+              }
+            },
+            container: '#container',
+            resource: self.uri,
+            success: function() {
+              self.selfDashboard = this;
+              self.data = this.data();
+              self.components = this.data().components;
+              self.container = this.container();
+              self._scaleContainer();
+              self._configureComponents();
+              self._defineComponentsClickEvent();
+              return self.callback.onLoadDone(self.components);
+            },
+            linkOptions: {
+              events: {
+                click: self._clickCallback
+              }
+            },
+            error: function(e) {
+              self.logger.log(error);
+              return self.callback.onLoadError(error);
+            }
+          });
+        });
+      };
+
+      DashboardController.prototype._scaleContainer = function() {
+        this.logger.log("Scale dashboard");
+        return $(this.container).find('.dashboardCanvas').addClass('scaledCanvas');
+      };
+
+      DashboardController.prototype._configureComponents = function() {
+        this.logger.log("Iterate components");
+        return this.components.forEach((function(_this) {
+          return function(component) {
+            if (component.type !== 'inputControl') {
+              _this.dashboard.updateComponent(component.id, {
+                interactive: false,
+                toolbar: false
+              });
+            }
+          };
+        })(this));
+      };
+
+      DashboardController.prototype._defineComponentsClickEvent = function() {
+        var dashboardId, self;
+        this.logger.log("Apply click events");
+        dashboardId = this.v.dashboard.componentIdDomAttribute;
+        self = this;
+        return $(this.container).find("[" + dashboardId + "]").on('click', function() {
+          var component, id;
+          $('.show_chartTypeSelector_wrapper').show();
+          id = $(this).attr(dashboardId);
+          component = self._getComponentById(id);
+          if (component && !component.maximized) {
+            $(self.container).find("[" + dashboardId + "='" + id + "']").addClass('originalDashletInScaledCanvas');
+            self.callback.onMaximizeStart(component.name);
+            self.dashboard.updateComponent(id, {
+              maximized: true,
+              interactive: true
+            }, function() {
+              self.maximizedComponent = component;
+              return self.callback.onMaximizeEnd(component.name);
+            }, function(error) {
+              return self.callback.onMaximizeFailed(error);
+            });
+          }
+        });
+      };
+
+      DashboardController.prototype._getComponentById = function(id) {
         return this.dashboard.data().components.filter(function(c) {
           return c.id === id;
         })[0];
+      };
+
+      DashboardController.prototype._clickCallback = function(event, link) {
+        var data, dataString;
+        if (link.type === "ReportExecution") {
+          data = {
+            resource: link.parameters._report,
+            params: this._collectReportParams(link)
+          };
+          dataString = JSON.stringify(data, null, 4);
+          return this.callback.onReportExecution(dataString);
+        }
+      };
+
+      DashboardController.prototype._collectReportParams = function(link) {
+        var isValueNotArray, key, params;
+        params = {};
+        for (key in link.parameters) {
+          if (key !== '_report') {
+            isValueNotArray = Object.prototype.toString.call(link.parameters[key]) !== '[object Array]';
+            params[key] = isValueNotArray ? [link.parameters[key]] : link.parameters[key];
+          }
+        }
+        return params;
       };
 
       return DashboardController;
