@@ -63,10 +63,9 @@
     [self updateToobarAppearence];
 
     // start point
-#warning HERE NEED CORRECT RUNNING REPORT - NOW REPORT ARE RELOADED AFTER RETURN FROM SAVE REPORT SCREEN!
-//    if (self.report.isReportEmpty) {
-        [self startLoadReport];
-//    }
+    if (!self.report.isReportAlreadyLoaded) {
+        [self startLoadReportWithPage:1];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -150,9 +149,9 @@
     // until current view doesn't appear (on iOS 7)
 }
 
-- (void)startLoadReport
+- (void)startLoadReportWithPage:(NSInteger)page
 {
-    BOOL isReportEmpty = self.report.isReportEmpty;
+    BOOL isReportAlreadyLoaded = self.report.isReportAlreadyLoaded;
     BOOL isInputControlsLoaded = self.report.isInputControlsLoaded;
     BOOL isReportInLoadingProcess = self.reportLoader.isReportInLoadingProcess;
 
@@ -176,14 +175,14 @@
                 [self.report updateInputControls:inputControls];
                 [self showReportOptionsViewControllerWithBackButton:YES];
             } else {
-                [self runReport];
+                [self runReportWithPage:page];
             }
         }@weakselfend];
 
-    } else if(isInputControlsLoaded && (!isReportEmpty && !isReportInLoadingProcess) ) {
+    } else if(isInputControlsLoaded && (!isReportAlreadyLoaded && !isReportInLoadingProcess) ) {
         // show report with loaded input controls
         // when we start running a report from another report by tapping on hyperlink
-        [self runReport];
+        [self runReportWithPage:page];
     }
 }
 
@@ -229,7 +228,7 @@
     [self resetSubViews];
     [self updateToobarAppearence];
     //
-    [self runReport];
+    [self runReportWithPage:1];
 }
 
 #pragma mark - JMReportViewerToolBarDelegate
@@ -246,7 +245,7 @@
 }
 
 #pragma mark - Run report
-- (void)runReport
+- (void)runReportWithPage:(NSInteger)page
 {
     // overriden in childs
 }

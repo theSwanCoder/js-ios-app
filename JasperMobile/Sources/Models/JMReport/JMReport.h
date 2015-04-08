@@ -45,6 +45,8 @@ extern NSString * const kJMReportCountOfPagesDidChangeNotification;
 @property (nonatomic, assign, readonly) BOOL isReportWithInputControls;
 @property (nonatomic, assign, readonly) BOOL isReportEmpty;
 @property (nonatomic, strong, readonly) NSString *requestId;
+@property (nonatomic, assign, readonly) BOOL isReportAlreadyLoaded;
+
 // html
 @property (nonatomic, copy, readonly) NSString *HTMLString;
 @property (nonatomic, copy, readonly) NSString *baseURLString;

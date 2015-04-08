@@ -42,8 +42,8 @@
 @property (nonatomic, strong) JMReport *report;
 
 // start point
-- (void)startLoadReport;
-- (void)runReport;
+- (void)startLoadReportWithPage:(NSInteger)page;
+- (void)runReportWithPage:(NSInteger)page;
 
 // setups
 - (void)updateToobarAppearence;

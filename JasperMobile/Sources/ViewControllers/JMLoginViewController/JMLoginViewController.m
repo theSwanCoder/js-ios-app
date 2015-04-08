@@ -173,7 +173,7 @@
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
-    return [JMUtils isIphone] ? UIInterfaceOrientationPortrait : UIInterfaceOrientationLandscapeLeft;
+    return [JMUtils isIphone] ? UIInterfaceOrientationPortrait : [super preferredInterfaceOrientationForPresentation];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -195,7 +195,7 @@
         [self.restClient cancelAllRequests];
     } @weakselfend];
     
-    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[self.selectedServerProfile.keepSession boolValue] completion:@weakself(^(BOOL success)) {
+    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:@weakself(^(BOOL success)) {
         [JMCancelRequestPopup dismiss];
         if (success) {
             self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;

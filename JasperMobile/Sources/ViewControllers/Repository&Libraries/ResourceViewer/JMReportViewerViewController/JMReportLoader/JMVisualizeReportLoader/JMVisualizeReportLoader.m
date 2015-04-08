@@ -76,14 +76,22 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     return _visualizePath;
 }
 
-#pragma mark - Public API
-- (void)fetchStartPageWithCompletion:(void(^)(BOOL success, NSError *error))reportLoadCompletion
+-(void)setReportLoadCompletion:(void (^)(BOOL, NSError *))reportLoadCompletion
 {
-    self.reportLoadCompletion = reportLoadCompletion;
+    if (_reportLoadCompletion != reportLoadCompletion) {
+        _reportLoadCompletion = [reportLoadCompletion copy];
+    }
+}
 
+#pragma mark - Public API
+- (void)runReportWithPage:(NSInteger)page completion:(void(^)(BOOL success, NSError *error))completionBlock
+{
     self.isReportInLoadingProcess = YES;
-
+    
     if (![JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded) {
+        self.reportLoadCompletion = completionBlock;
+        [self.report updateCurrentPage:page];
+
         [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             if (success) {
                 [JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded = YES;
@@ -95,26 +103,23 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
             }
         }@weakselfend];
     } else {
-        [self reloadReportWithInputControls:self.report.inputControls];
+        [self fetchPageNumber:page withCompletion:completionBlock];
     }
 }
 
 - (void)fetchPageNumber:(NSInteger)pageNumber withCompletion:(void(^)(BOOL success, NSError *error))completionBlock
 {
     self.reportLoadCompletion = completionBlock;
-
-    NSString *setPageCommand = [NSString stringWithFormat:@"MobileReport.selectPage(%@)", @(pageNumber).stringValue];
     [self.report updateCurrentPage:pageNumber];
-    [self.webView stringByEvaluatingJavaScriptFromString:setPageCommand];
-}
 
-- (void)reloadReportWithInputControls:(NSArray *)inputControls
-{
-    [self.report updateCurrentPage:1]; // set start page
-
-    NSString *parametersAsString = [self createParametersAsStringFromInputControls:inputControls];
-    NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.run({'uri': '%@', 'params': %@});", self.report.reportURI, parametersAsString];
-    [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
+    if (pageNumber == 1 && !self.report.isReportAlreadyLoaded) {
+        NSString *parametersAsString = [self createParametersAsStringFromInputControls:self.report.inputControls];
+        NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.run({'uri': '%@', 'params': %@});", self.report.reportURI, parametersAsString];
+        [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
+    } else {
+        NSString *setPageCommand = [NSString stringWithFormat:@"MobileReport.selectPage(%@)", @(pageNumber).stringValue];
+        [self.webView stringByEvaluatingJavaScriptFromString:setPageCommand];
+    }
 }
 
 - (void) cancelReport
@@ -124,9 +129,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    self.reportLoadCompletion = completion;
-
-    [self reloadReportWithInputControls:self.report.inputControls];
+    [self fetchPageNumber:1 withCompletion:completion];
 }
 
 - (void)destroyReport
@@ -337,7 +340,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     // auth
     [self authenticate];
-    [self reloadReportWithInputControls:self.report.inputControls];
+    [self fetchPageNumber:self.report.currentPage withCompletion:self.reportLoadCompletion];
 }
 
 - (void)authenticate

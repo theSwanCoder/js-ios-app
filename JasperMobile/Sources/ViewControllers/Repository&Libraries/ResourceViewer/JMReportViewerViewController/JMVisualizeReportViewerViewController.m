@@ -99,12 +99,12 @@
 }
 
 #pragma mark - Start point
-- (void)startLoadReport
+- (void)startLoadReportWithPage:(NSInteger)page
 {
     if (self.returnFromPreviousReportCompletion) {
         self.returnFromPreviousReportCompletion();
     } else {
-        [super startLoadReport];
+        [super startLoadReportWithPage:page];
     }
 }
 
@@ -126,6 +126,11 @@
     // TODO: need support sessions
     // start show loading indicator
     [self.reportLoader fetchPageNumber:page withCompletion:@weakself(^(BOOL success, NSError *error)) {
+        if (success) {
+            // succcess action
+        } else {
+            [self handleError:error];
+        }
         // stop show loading indicator
     }@weakselfend];
 }
@@ -138,7 +143,7 @@
 }
 
 #pragma mark - Run report
-- (void)runReport
+- (void)runReportWithPage:(NSInteger)page
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
         [self.reportLoader cancelReport];
@@ -147,7 +152,7 @@
 
     [self hideEmptyReportMessage];
 
-    [self.reportLoader fetchStartPageWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+    [self.reportLoader runReportWithPage:page completion:@weakself(^(BOOL success, NSError *error)) {
         [self stopShowLoader];
 
         if (success) {
@@ -164,7 +169,7 @@
     if (self.reportLoader.isReportInLoadingProcess) {
         [self hideEmptyReportMessage];
         [self.report restoreDefaultState];
-        [super updateToobarAppearence];
+        [self updateToobarAppearence];
         // session
         [self.reportLoader refreshReportWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             [self stopShowLoader];
@@ -188,9 +193,11 @@
         [self.webView loadHTMLString:nil baseURL:nil];
         [JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded = NO;
 
+        NSInteger reportCurrentPage = self.report.currentPage;
         [self.report restoreDefaultState];
         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-            [self runReport];
+            // TODO: Need add restoring for current page
+            [self runReportWithPage:reportCurrentPage];
         } else {
             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
                 [self cancelResourceViewingAndExit];

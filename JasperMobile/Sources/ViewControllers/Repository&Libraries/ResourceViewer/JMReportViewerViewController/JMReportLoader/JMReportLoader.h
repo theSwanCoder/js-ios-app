@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
 - (instancetype)initWithReport:(JMReport *)report;
 + (instancetype)loaderWithReport:(JMReport *)report;
 
-- (void)fetchStartPageWithCompletion:(void(^)(BOOL success, NSError *error))completionBlock;
+- (void)runReportWithPage:(NSInteger)page completion:(void(^)(BOOL success, NSError *error))completionBlock;
 
 - (void)fetchPageNumber:(NSInteger)pageNumber withCompletion:(void(^)(BOOL success, NSError *error))completionBlock;
 

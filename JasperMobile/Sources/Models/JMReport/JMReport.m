@@ -42,6 +42,8 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
 @property (nonatomic, assign, readwrite) BOOL isReportWithInputControls;
 @property (nonatomic, assign, readwrite) BOOL isReportEmpty;
 @property (nonatomic, strong, readwrite) NSString *requestId;
+@property (nonatomic, assign, readwrite) BOOL isReportAlreadyLoaded;
+
 // html
 @property (nonatomic, copy, readwrite) NSString *HTMLString;
 @property (nonatomic, copy, readwrite) NSString *baseURLString;
@@ -141,9 +143,7 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
     self.HTMLString = HTMLString;
     self.baseURLString = baseURLString;
     
-    if (HTMLString.length > 0) {
-        self.isReportEmpty = NO;
-    }
+    self.isReportAlreadyLoaded = (HTMLString.length > 0);
 }
 
 - (void)updateRequestId:(NSString *)requestId

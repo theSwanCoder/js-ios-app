@@ -77,14 +77,14 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 }
 
 #pragma mark - Public API
-- (void)fetchStartPageWithCompletion:(void(^)(BOOL success, NSError *error))completionBlock
+- (void)runReportWithPage:(NSInteger)page completion:(void(^)(BOOL success, NSError *error))completionBlock;
 {
     [self.report restoreDefaultState];
 
     self.loadPageCompletionBlock = completionBlock;
     
 
-    [self.report updateCurrentPage:1];
+    [self.report updateCurrentPage:page];
     
     // restore default state of loader
     self.exportIdsDictionary = [@{} mutableCopy];

@@ -65,7 +65,7 @@
 }
 
 #pragma mark - Run report
-- (void)runReport
+- (void)runReportWithPage:(NSInteger)page
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
         [self.restClient cancelAllRequests];
@@ -73,7 +73,7 @@
         [self cancelResourceViewingAndExit];
     }@weakselfend];
     
-    [self.reportLoader fetchStartPageWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+    [self.reportLoader runReportWithPage:page completion:@weakself(^(BOOL success, NSError *error)) {
         [self stopShowLoader];
         
         if (success) {
@@ -98,7 +98,7 @@
 {
     if (error.code == JSSessionExpiredErrorCode) {
         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-            [self runReport];
+            [self runReportWithPage:self.report.currentPage];
         } else {
             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
                 [self cancelResourceViewingAndExit];
