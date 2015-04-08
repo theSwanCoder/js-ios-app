@@ -220,9 +220,11 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         if (self.isScrollToTop) {
             self.isScrollToTop = NO;
             NSIndexPath *firstItemIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-            [baseCollectionView.collectionView scrollToItemAtIndexPath:firstItemIndexPath
-                                                      atScrollPosition:UICollectionViewScrollPositionBottom
-                                                              animated:NO];
+            if ([baseCollectionView.collectionView cellForItemAtIndexPath:firstItemIndexPath]) {
+                [baseCollectionView.collectionView scrollToItemAtIndexPath:firstItemIndexPath
+                                                          atScrollPosition:UICollectionViewScrollPositionBottom
+                                                                  animated:NO];
+            }
         }
         
         _needReloadData = NO;

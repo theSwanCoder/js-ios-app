@@ -336,15 +336,8 @@ your business wherever you are.</string>
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REPORT OPTIONS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6SG-9Y-ptV">
-                                <rect key="frame" x="10" y="10" width="300" height="25"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="FFl-Rt-mxS">
-                                <rect key="frame" x="10" y="40" width="300" height="415"/>
+                                <rect key="frame" x="10" y="10" width="300" height="445"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -680,7 +673,6 @@ your business wherever you are.</string>
                     <connections>
                         <outlet property="runReportButton" destination="XQG-fP-q11" id="ZLX-Nq-SCq"/>
                         <outlet property="tableView" destination="FFl-Rt-mxS" id="guf-Wg-3VW"/>
-                        <outlet property="titleLabel" destination="6SG-9Y-ptV" id="ZpG-wm-JKg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIY-vr-ZmM" userLabel="First Responder" sceneMemberID="firstResponder"/>

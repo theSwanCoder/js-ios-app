@@ -130,7 +130,6 @@
 
 
 "report.viewer.options.title" = "Opzioni filtro";
-"report.viewer.options.titlelabel.title" = "Filtri correnti";
 "report.viewer.options.singleselect.titlelabel.title" = "Seleziona un unico elemento";
 "report.viewer.options.multiselect.titlelabel.title" = "Seleziona uno o più elementi";
 "report.viewer.options.search.value.placeholder" = "Cerca valori";

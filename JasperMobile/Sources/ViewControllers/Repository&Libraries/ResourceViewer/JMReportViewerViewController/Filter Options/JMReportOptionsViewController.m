@@ -32,7 +32,6 @@
 
 @interface JMReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel    *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *runReportButton;
 @end
 
@@ -43,10 +42,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"report.viewer.options.title", nil);
-    self.titleLabel.text = JMCustomLocalizedString(@"report.viewer.options.titlelabel.title", nil);
-    self.titleLabel.textColor = kJMDetailViewLightTextColor;
-    
+    self.title = JMCustomLocalizedString(@"report.viewer.options.title", nil);    
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     
     // Remove extra separators

@@ -131,7 +131,6 @@
 
 
 "report.viewer.options.title" = "过滤器选项";
-"report.viewer.options.titlelabel.title" = "当前过滤器";
 "report.viewer.options.singleselect.titlelabel.title" = "选择单个项目";
 "report.viewer.options.multiselect.titlelabel.title" = "选择一个或多个项目";
 "report.viewer.options.search.value.placeholder" = "搜索值";

@@ -129,7 +129,6 @@
 
 
 "report.viewer.options.title" = "フィルタオプション";
-"report.viewer.options.titlelabel.title" = "現在のフィルタ";
 "report.viewer.options.singleselect.titlelabel.title" = "単一アイテムを選択";
 "report.viewer.options.multiselect.titlelabel.title" = "1 つまたは複数のアイテムを選択";
 "report.viewer.options.search.value.placeholder" = "値の検索";
