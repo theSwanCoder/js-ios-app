@@ -6,7 +6,7 @@
 
       IosCallback.prototype.onMaximizeStart = function(title) {
         this._makeCallback({
-          "command": "onMaximize",
+          "command": "onMaximizeStart",
           "parameters": {
             "title": title
           }
@@ -15,40 +15,42 @@
 
       IosCallback.prototype.onMaximizeEnd = function(title) {
         this._makeCallback({
-          "command": "onMaximize",
+          "command": "onMaximizeEnd",
           "parameters": {
             "title": title
           }
         });
       };
 
-      IosCallback.prototype.onMaximizeFailed = function(title) {
+      IosCallback.prototype.onMaximizeFailed = function(error) {
         this._makeCallback({
-          "command": "onMaximize",
+          "command": "onMaximizeFailed",
           "parameters": {
-            "title": title
+            "error": error
           }
         });
       };
 
       IosCallback.prototype.onMinimizeStart = function() {
         this._makeCallback({
-          "command": "onMinimize",
+          "command": "onMinimizeStart",
           "parameters": {}
         });
       };
 
       IosCallback.prototype.onMinimizeEnd = function() {
         this._makeCallback({
-          "command": "onMinimize",
+          "command": "onMinimizeEnd",
           "parameters": {}
         });
       };
 
       IosCallback.prototype.onMinimizeFailed = function() {
         this._makeCallback({
-          "command": "onMinimize",
-          "parameters": {}
+          "command": "onMinimizeFailed",
+          "parameters": {
+            "error": error
+          }
         });
       };
 

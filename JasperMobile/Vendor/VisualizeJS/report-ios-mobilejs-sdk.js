@@ -123,12 +123,13 @@
         this._processSuccess = bind(this._processSuccess, this);
         this._processChangeTotalPages = bind(this._processChangeTotalPages, this);
         this._executeReport = bind(this._executeReport, this);
-        this.context = options.context, this.session = options.session, this.uri = options.uri, this.params = options.params;
+        this.context = options.context, this.session = options.session, this.uri = options.uri, this.params = options.params, this.pages = options.pages;
         this.callback = this.context.callback;
         this.logger = this.context.logger;
         this.logger.log(this.uri);
         this.params || (this.params = {});
         this.totalPages = 0;
+        this.pages || (this.pages = '1');
       }
 
       ReportController.prototype.selectPage = function(page) {
@@ -147,9 +148,10 @@
       };
 
       ReportController.prototype._executeReport = function(visualize) {
-        return this.loader = visualize.report({
+        this.loader = visualize.report({
           resource: this.uri,
           params: this.params,
+          pages: this.pages,
           container: "#container",
           scale: "width",
           linkOptions: {
@@ -163,6 +165,7 @@
           },
           success: this._processSuccess
         });
+        return window.loader = this.loader;
       };
 
       ReportController.prototype._processChangeTotalPages = function(totalPages) {

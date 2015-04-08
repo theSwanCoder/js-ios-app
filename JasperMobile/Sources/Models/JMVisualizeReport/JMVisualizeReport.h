@@ -33,5 +33,5 @@
 #import "JMReport.h"
 
 @interface JMVisualizeReport : JMReport
-
+- (void)updateLoadingStatusWithValue:(BOOL)loadingStatus;
 @end

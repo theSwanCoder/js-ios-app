@@ -87,7 +87,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)runReportWithPage:(NSInteger)page completion:(void(^)(BOOL success, NSError *error))completionBlock
 {
     self.isReportInLoadingProcess = YES;
-    
+    [self.report updateLoadingStatusWithValue:NO];
+
     if (![JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded) {
         self.reportLoadCompletion = completionBlock;
         [self.report updateCurrentPage:page];
@@ -112,9 +113,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     self.reportLoadCompletion = completionBlock;
     [self.report updateCurrentPage:pageNumber];
 
-    if (pageNumber == 1 && !self.report.isReportAlreadyLoaded) {
+    if (!self.report.isReportAlreadyLoaded) {
         NSString *parametersAsString = [self createParametersAsStringFromInputControls:self.report.inputControls];
-        NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.run({'uri': '%@', 'params': %@});", self.report.reportURI, parametersAsString];
+        NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.run({'uri': '%@', 'params': %@, 'pages' : '%@'});", self.report.reportURI, parametersAsString, @(pageNumber)];
         [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
     } else {
         NSString *setPageCommand = [NSString stringWithFormat:@"MobileReport.selectPage(%@)", @(pageNumber).stringValue];
@@ -365,6 +366,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)handleReportEndRenderSuccessfull
 {
     NSLog(@"report rendering end");
+
+    [self.report updateLoadingStatusWithValue:YES];
 
     if (self.reportLoadCompletion) {
         self.reportLoadCompletion(YES, nil);

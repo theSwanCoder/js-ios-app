@@ -31,6 +31,7 @@
 // html
 @property (nonatomic, copy, readwrite) NSString *HTMLString;
 @property (nonatomic, copy, readwrite) NSString *baseURLString;
+@property (nonatomic, assign, readwrite) BOOL isReportAlreadyLoaded;
 @end
 
 @implementation JMVisualizeReport
@@ -42,6 +43,11 @@
 {
     self.HTMLString = HTMLString;
     self.baseURLString = baseURLString;
+}
+
+- (void)updateLoadingStatusWithValue:(BOOL)loadingStatus
+{
+    self.isReportAlreadyLoaded = loadingStatus;
 }
 
 @end
