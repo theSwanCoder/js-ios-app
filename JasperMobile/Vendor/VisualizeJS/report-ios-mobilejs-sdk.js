@@ -144,6 +144,7 @@
       };
 
       ReportController.prototype.destroyReport = function() {
+        console.log("destroy");
         return this.loader.destroy();
       };
 

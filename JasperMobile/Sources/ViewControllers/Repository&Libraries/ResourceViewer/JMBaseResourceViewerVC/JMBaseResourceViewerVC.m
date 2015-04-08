@@ -141,7 +141,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void) cancelResourceViewingAndExit
 {
-    [self resetSubViews];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
