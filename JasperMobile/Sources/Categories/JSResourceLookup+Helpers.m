@@ -49,14 +49,16 @@
 - (JMDashboard *)dashboardModelWithVCIdentifier:(NSString *__autoreleasing *)identifier
 {
     // TODO: replace seque with constant
-    if ([self isNewDashboard] && [JMUtils isSupportVisualize]) {
-        if ([JMUtils isServerAmber2] && [JMUtils isSystemVersion8]) {
+    if ([self isNewDashboard]) {
+
+        if ([JMUtils isServerAmber2] && [JMUtils isSystemVersion8] && [JMUtils isSupportVisualize]) {
             *identifier = @"JMDashboardVC";
             return [JMVisualizeDashboard dashboardWithResource:self];
         } else {
             *identifier = @"JMVisualizeDashboardViewerVC";
             return [JMVisualizeDashboard dashboardWithResource:self];
         }
+
     } else {
         *identifier = @"JMDashboardsViewerViewController";
         return [JMDashboard dashboardWithResource:self];
