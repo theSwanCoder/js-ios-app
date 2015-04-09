@@ -34,7 +34,8 @@
 
     if (self.webView.loading) {
         [self stopShowLoadingIndicators];
-        [self.webView stopLoading];
+        // old dashboards don't load empty page
+        //[self.webView stopLoading];
     }
 }
 
