@@ -539,7 +539,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 }
 
 - (void)updateWelcomePageViewsWithVelocity:(CGPoint)velocity {
-    CGFloat velocityY = fabsf(velocity.y);
+    CGFloat velocityY = fabs(velocity.y);
     CGPoint contentViewOrigin = self.contentView.frame.origin;
 
     CGFloat contentViewStartHeight;
@@ -658,7 +658,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 }
 
 - (void)updateStayConnectedPageViewsWithVelocity:(CGPoint)velocity {
-    CGFloat velocityY = fabsf(velocity.y);
+    CGFloat velocityY = fabs(velocity.y);
 
     CGPoint homeScreenImageOrigin = self.homeScreenImage.frame.origin;
     CGFloat homeScreenImageStartOriginY = 10;
@@ -761,7 +761,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 }
 
 - (void)updateInstanceAccessPageViewsWithVelocity:(CGPoint)velocity {
-    CGFloat velocityY = fabsf(velocity.y);
+    CGFloat velocityY = fabs(velocity.y);
 
     CGPoint reportScreenIpadImageOrigin = self.reportScreenIpadImage.frame.origin;
     CGFloat reportScreenIpadImageFrameOriginX = self.contentView.frame.size.width/2 - self.reportScreenIpadImage.frame.size.width/2;
@@ -877,7 +877,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 }
 
 - (void)updateSeemlessIntegrationViewsPageWithVelocity:(CGPoint)velocity {
-    CGFloat velocityY = fabsf(velocity.y);
+    CGFloat velocityY = fabs(velocity.y);
 
     CGPoint serverScreenImageOrigin = self.serverScreenImage.frame.origin;
     CGFloat serverScreenImageStartOriginY = 10;

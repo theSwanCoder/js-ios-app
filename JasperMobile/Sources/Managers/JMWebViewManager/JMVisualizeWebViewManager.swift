@@ -35,13 +35,13 @@
 class JMVisualizeWebViewManager: JMWebViewManager {
     var isVisualizeLoaded = false
 
-    class var sharedInstance: JMVisualizeWebViewManager {
+    override class func sharedInstance() -> JMVisualizeWebViewManager {
         struct Static {
             static var onceToken: dispatch_once_t = 0
             static var instance: JMVisualizeWebViewManager? = nil
         }
         dispatch_once(&Static.onceToken) {
-            Static.instance = JMVisualizeWebViewManager()
+        Static.instance = JMVisualizeWebViewManager()
         }
         return Static.instance!
     }

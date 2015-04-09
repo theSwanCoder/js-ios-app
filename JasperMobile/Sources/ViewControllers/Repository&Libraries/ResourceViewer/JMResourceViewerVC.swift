@@ -77,7 +77,7 @@ extension JMResourceViewerVC: WKNavigationDelegate {
 //        })
     }
 
-    func webView(webView: WKWebView!, didFinishNavigation navigation: WKNavigation!) {
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         println("webView didFinishNavigation")
         stopShowLoadingIndicators()
 //        stopShowLoader()

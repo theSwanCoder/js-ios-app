@@ -83,7 +83,7 @@ class JMVisualizeDashboardLoader: NSObject {
                 messageHandler.loader = self
                 JMWKWebViewManager.sharedInstance.setupMessageHandler(messageHandler, name: kCallbackHandler)
             } else {
-                let messageHandler = JMWKWebViewManager.sharedInstance.messageHandler as JMVisualizeMessageHandler
+                let messageHandler = JMWKWebViewManager.sharedInstance.messageHandler as! JMVisualizeMessageHandler
                 messageHandler.loader = self
             }
         }
@@ -150,14 +150,14 @@ extension JMVisualizeDashboardLoader: WKNavigationDelegate {
         println("webView didStartProvisionalNavigation")
     }
 
-    func webView(webView: WKWebView!, didFinishNavigation navigation: WKNavigation!) {
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         println("webView didFinishNavigation")
     }
 
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
 
         let isLinkClicked = navigationAction.navigationType == .LinkActivated
-        let requestString = navigationAction.request.URL.absoluteString!
+        let requestString = navigationAction.request.URL!.absoluteString!
 
         //println("request: \(requestString)")
         //println("isLinkClicked: \(isLinkClicked)")
@@ -216,33 +216,33 @@ class JMVisualizeMessageHandler: NSObject, WKScriptMessageHandler {
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         if message.name == kCallbackHandler {
-            parseCommand(message.body as Dictionary<String, AnyObject>)
+            parseCommand(message.body as! Dictionary<String, AnyObject>)
         }
     }
 
     // parsing command
     func parseCommand(commandDict: Dictionary<String, AnyObject>) {
-        switch commandDict["command"] as String {
+        switch commandDict["command"] as! String {
             case "onScriptLoaded" :
-                onScriptLoaded(commandDict["parameters"] as Dictionary<String, AnyObject>)
+                onScriptLoaded(commandDict["parameters"] as! Dictionary<String, AnyObject>)
             case "onLoadStart" :
-                onLoadStart(commandDict["parameters"] as Dictionary<String, AnyObject>)
+                onLoadStart(commandDict["parameters"] as! Dictionary<String, AnyObject>)
             case "onLoadDone" :
-                onLoadDone(commandDict["parameters"] as Dictionary<String, AnyObject>)
+                onLoadDone(commandDict["parameters"] as! Dictionary<String, AnyObject>)
             case "onMinimizeStart" :
-                onMinimizeStart(commandDict["parameters"] as Dictionary<String, AnyObject>)
+                onMinimizeStart(commandDict["parameters"] as! Dictionary<String, AnyObject>)
             case "onMinimizeEnd" :
-                onMinimizeEnd(commandDict["parameters"] as Dictionary<String, AnyObject>)
+                onMinimizeEnd(commandDict["parameters"] as! Dictionary<String, AnyObject>)
             case "onMinimizeFailed" :
-                onMinimizeFailed(commandDict["parameters"] as Dictionary<String, AnyObject>)
+                onMinimizeFailed(commandDict["parameters"] as! Dictionary<String, AnyObject>)
             case "onMaximizeStart" :
-                onMaximizeStart(commandDict["parameters"] as Dictionary<String, AnyObject>)
+                onMaximizeStart(commandDict["parameters"] as! Dictionary<String, AnyObject>)
             case "onMaximizeEnd" :
-                onMaximizeEnd(commandDict["parameters"] as Dictionary<String, AnyObject>)
+                onMaximizeEnd(commandDict["parameters"] as! Dictionary<String, AnyObject>)
             case "onMaximizeFailed" :
-                onMaximizeFailed(commandDict["parameters"] as Dictionary<String, AnyObject>)
+                onMaximizeFailed(commandDict["parameters"] as! Dictionary<String, AnyObject>)
             case "onLoadError" :
-                onLoadError(commandDict["parameters"] as Dictionary<String, AnyObject>)
+                onLoadError(commandDict["parameters"] as! Dictionary<String, AnyObject>)
             default:
                 break
         }
@@ -282,7 +282,7 @@ class JMVisualizeMessageHandler: NSObject, WKScriptMessageHandler {
         if let delegate = self.loader.delegate {
             if delegate.respondsToSelector("loader:didStartMaximizeDashlet:") {
                 // TODO: replace to instance of JMDashlet class
-                let dashletTitle = parameters["title"] as String
+                let dashletTitle = parameters["title"] as! String
                 delegate.loader!(loader, didStartMaximizeDashlet: dashletTitle)
             }
         }
@@ -294,7 +294,7 @@ class JMVisualizeMessageHandler: NSObject, WKScriptMessageHandler {
         if let delegate = self.loader.delegate {
             if delegate.respondsToSelector("loader:didEndMaximizeDashlet:") {
                 // TODO: replace to instance of JMDashlet class
-                let dashletTitle = parameters["title"] as String
+                let dashletTitle = parameters["title"] as! String
                 delegate.loader!(loader, didEndMaximizeDashlet: dashletTitle)
             }
         }
@@ -306,7 +306,7 @@ class JMVisualizeMessageHandler: NSObject, WKScriptMessageHandler {
         if let delegate = self.loader.delegate {
             if delegate.respondsToSelector("loader:loaderDidFailedMaximizeDashlet:") {
                 // TODO: improve error creating
-                let errorString = parameters["error"] as String
+                let errorString = parameters["error"] as! String
                 let userInfo = [NSLocalizedDescriptionKey : errorString]
                 let error = NSError(domain: "JMVisualizeDashboardLoader", code: JMVisualizeDashboardLoaderErrorType.Maximize.rawValue, userInfo: userInfo)
                 delegate.loaderDidFailedMaximizeDashlet!(loader, error: error)
@@ -340,7 +340,7 @@ class JMVisualizeMessageHandler: NSObject, WKScriptMessageHandler {
         if let delegate = self.loader.delegate {
             if delegate.respondsToSelector("loaderDidFailedMinimizeDashlet:error:") {
                 // TODO: improve error creating
-                let errorString = parameters["error"] as String
+                let errorString = parameters["error"] as! String
                 let userInfo = [NSLocalizedDescriptionKey : errorString]
                 let error = NSError(domain: "JMVisualizeDashboardLoader", code: JMVisualizeDashboardLoaderErrorType.Minimize.rawValue, userInfo: userInfo)
                 delegate.loaderDidFailedMinimizeDashlet!(loader, error: error)
@@ -354,7 +354,7 @@ class JMVisualizeMessageHandler: NSObject, WKScriptMessageHandler {
         if let delegate = self.loader.delegate {
             if delegate.respondsToSelector("loader:didReceiveError:") {
                 // TODO: improve error creating
-                let errorString = parameters["error"] as String
+                let errorString = parameters["error"] as! String
                 let userInfo = [NSLocalizedDescriptionKey : errorString]
                 let error = NSError(domain: "JMVisualizeDashboardLoader", code: JMVisualizeDashboardLoaderErrorType.Load.rawValue, userInfo: userInfo)
                 delegate.loader!(loader, didReceiveError: error)

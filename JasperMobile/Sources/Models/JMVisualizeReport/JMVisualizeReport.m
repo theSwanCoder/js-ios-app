@@ -35,8 +35,7 @@
 @end
 
 @implementation JMVisualizeReport
-
-@synthesize HTMLString = _HTMLString, baseURLString = _baseURLString;
+@synthesize HTMLString = _HTMLString, baseURLString = _baseURLString, isReportAlreadyLoaded = _isReportAlreadyLoaded;
 
 - (void)updateHTMLString:(NSString *)HTMLString
             baseURLSring:(NSString *)baseURLString
