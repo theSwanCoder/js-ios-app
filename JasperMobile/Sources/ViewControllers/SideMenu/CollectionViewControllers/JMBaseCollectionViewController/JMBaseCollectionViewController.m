@@ -312,7 +312,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         [navBarItems addObject:sortItem];
     }
     
-    BOOL shouldConcateItems = ([JMUtils isIphone] && [navBarItems count] > 1) && (UIInterfaceOrientationIsPortrait([UIDevice currentDevice].orientation) ||
+    BOOL shouldConcateItems = ([JMUtils isIphone] && [navBarItems count] > 1) && (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ||
                                                                                   (!UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) &&
                                                                                    UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)));
     
@@ -510,22 +510,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
     searchBar.showsCancelButton = YES;
-}
-
-- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    NSString *newText = searchBar.text;
-    if (range.length) {
-        // delete symbol
-        newText = [newText stringByReplacingCharactersInRange:range withString:@""];
-    } else {
-        // added new symbol
-        newText = [newText stringByAppendingString:text];
-    }
-    
-    [self.resourceListLoader searchWithQuery:newText];
-    
-    return YES;
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar

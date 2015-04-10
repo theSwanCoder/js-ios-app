@@ -59,7 +59,7 @@
 
 /* Onboarding Intro */
 "intro.title" = "Welcome to TIBCO JasperMobile";
-"intro.description" = "swipe up to begin";
+"intro.description" = "Swipe up to begin";
 "intro.button.skip.skip" = "Skip Intro";
 "intro.button.skip.startUsing" = "Start using TIBCO JasperMobile";
 "intro.model.firstScreen.title" = "Stay Connected";
@@ -120,7 +120,7 @@
 "report.viewer.error.title" = "Error of loading report";
 "report.viewer.visualize.render.error" = "Report rendering did failed.";
 "report.viewer.emptyreport.title" = "Report is empty";
-"report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options or tap 'Cancel' for returning to old report.";
+"report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change report options or tap 'Cancel' for returning to old report.";
 "report.viewer.pagecount" = "of %d";
 "report.viewer.wrongNumberOfCurrentPage" = "Current page can't be more count of pages (%@)";
 
@@ -140,7 +140,7 @@
 "report.viewer.save.saving.status.title" = "Saving report...";
 
 // Report viewer Options view
-"report.viewer.options.title" = "Filter Options";
+"report.viewer.options.title" = "Report Options";
 "report.viewer.options.singleselect.titlelabel.title" = "Select a single item";
 "report.viewer.options.multiselect.titlelabel.title" = "Select one or more items";
 "report.viewer.options.search.value.placeholder" = "Search Values";
@@ -180,7 +180,7 @@
 
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
-"action.title.edit" = "Edit Filter Options";
+"action.title.edit" = "Edit Report Options";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
 "action.title.markasfavorite" = "Mark as Favorite";

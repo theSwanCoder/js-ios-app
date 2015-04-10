@@ -44,9 +44,11 @@
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
+    [super setInputControlDescriptor:inputControlDescriptor];
+
     self.dateFormatter = [[NSDateFormatter alloc] init];
-    self.dateFormatter.dateFormat = inputControlDescriptor.validationRules.dateTimeFormatValidationRule.format;
-    
+    self.dateFormatter.dateFormat = inputControlDescriptor.dateTimeFormatValidationRule.format;
+
 #warning NEED CHECK CONVERTING DATE WITH TIME ZONE
     NSString *value = inputControlDescriptor.state.value;
     if (value && [value length]) {
@@ -57,8 +59,6 @@
             inputControlDescriptor.state.value = [self.dateFormatter stringFromDate:self.datePicker.date];
         }
     }
-
-    [super setInputControlDescriptor:inputControlDescriptor];
 }
 
 - (UIDatePicker *)datePicker

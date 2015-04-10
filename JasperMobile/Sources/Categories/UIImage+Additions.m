@@ -30,7 +30,7 @@
 + (NSString *)splashImageNameForOrientation:(UIInterfaceOrientation)orientation {
     CGSize viewSize = [UIScreen mainScreen].bounds.size;
     NSString* viewOrientation = @"Portrait";
-    if (UIDeviceOrientationIsLandscape(orientation)) {
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
         viewSize = CGSizeMake(viewSize.height, viewSize.width);
         viewOrientation = @"Landscape";
     }

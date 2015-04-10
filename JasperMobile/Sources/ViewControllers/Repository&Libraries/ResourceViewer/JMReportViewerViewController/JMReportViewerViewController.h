@@ -35,5 +35,4 @@
 #import "JMRestReport.h"
 
 @interface JMReportViewerViewController : JMBaseReportViewerViewController
-@property (nonatomic, strong) JMRestReport *report;
 @end
