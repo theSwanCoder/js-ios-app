@@ -216,7 +216,7 @@
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReciveOnClickEventForReport:(JMVisualizeReport *)report withParameters:(NSDictionary *)reportParameters
+- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForReport:(JMVisualizeReport *)report withParameters:(NSDictionary *)reportParameters
 {
     NSString *reportURI = [report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls)) {
@@ -271,9 +271,17 @@
     }@weakselfend];
 }
 
--(void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReciveOnClickEventForReference:(NSURL *)urlReference
+-(void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
 {
     [[UIApplication sharedApplication] openURL:urlReference];
+}
+
+- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName
+{
+    // sample
+    // [self.reportLoader exportReportWithFormat:@"pdf"];
+    // html format currently vis.js doesn't support
+    // here we can receive link on file.
 }
 
 #pragma mark - UIWebView helpers

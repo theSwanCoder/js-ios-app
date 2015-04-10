@@ -42,7 +42,7 @@
 @property (nonatomic, weak) id<JMVisualizeReportLoaderDelegate> delegate;
 
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion;
-
+- (void)exportReportWithFormat:(NSString *)exportFormat;
 - (void)destroyReport;
 - (void)authenticate;
 
@@ -50,7 +50,7 @@
 
 @protocol JMVisualizeReportLoaderDelegate <NSObject>
 @optional
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReciveOnClickEventForReport:(JMVisualizeReport *)report withParameters:(NSDictionary *)reportParameters;
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReciveOnClickEventForReference:(NSURL *)urlReference;
+- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForReport:(JMVisualizeReport *)report withParameters:(NSDictionary *)reportParameters;
+- (void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference;
+- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName;
 @end
-

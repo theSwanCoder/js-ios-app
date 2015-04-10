@@ -36,6 +36,10 @@
         this._makeCallback("runReport&params=" + params);
       };
 
+      ReportCallback.prototype.onExportGetResourcePath = function(link) {
+        return this._makeCallback("exportPath&link=" + link);
+      };
+
       ReportCallback.prototype._makeCallback = function(command) {
         return window.location.href = "http://jaspermobile.callback/" + command;
       };
@@ -113,6 +117,7 @@
     var ReportController;
     return ReportController = (function() {
       function ReportController(options) {
+        this._exportResource = bind(this._exportResource, this);
         this._notifyPageChange = bind(this._notifyPageChange, this);
         this._openRemoteLink = bind(this._openRemoteLink, this);
         this._navigateToPage = bind(this._navigateToPage, this);
@@ -141,6 +146,12 @@
       ReportController.prototype.runReport = function() {
         this.callback.onLoadStart();
         return visualize(this.session.authOptions(), this._executeReport);
+      };
+
+      ReportController.prototype.exportReport = function(format) {
+        return this.loader["export"]({
+          outputFormat: format
+        }).done(this._exportResource);
       };
 
       ReportController.prototype.destroyReport = function() {
@@ -235,6 +246,17 @@
         return this.callback.onPageChange(this.loader.pages());
       };
 
+      ReportController.prototype._exportReport = function(format) {
+        console.log("export with format: " + format);
+        return this.loader["export"]({
+          outputFormat: format
+        }).done(this._exportResource);
+      };
+
+      ReportController.prototype._exportResource = function(link) {
+        return this.callback.onExportGetResourcePath(link.href);
+      };
+
       return ReportController;
 
     })();
@@ -270,6 +292,10 @@
         return this._instance.selectPage(page);
       };
 
+      MobileReport.exportReport = function(format) {
+        return this._instance.exportReport(format);
+      };
+
       function MobileReport(context1) {
         this.context = context1;
         this.context.callback.onScriptLoaded();
@@ -291,6 +317,10 @@
         options.context = this.context;
         this.reportController = new ReportController(options);
         return this.reportController.runReport();
+      };
+
+      MobileReport.prototype.exportReport = function(format) {
+        return this.reportController.exportReport(format);
       };
 
       MobileReport.prototype.destroyReport = function() {

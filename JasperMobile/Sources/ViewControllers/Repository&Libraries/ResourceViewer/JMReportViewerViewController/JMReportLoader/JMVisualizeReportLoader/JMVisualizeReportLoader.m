@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 @property (nonatomic, strong) NSString *visualizePath;
 @property (nonatomic, copy) void(^reportLoadCompletion)(BOOL success, NSError *error);
+@property (nonatomic, copy) NSString *exportFormat;
 @end
 
 @implementation JMVisualizeReportLoader
@@ -131,6 +132,13 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
     [self fetchPageNumber:1 withCompletion:completion];
+}
+
+- (void)exportReportWithFormat:(NSString *)exportFormat
+{
+    self.exportFormat = exportFormat;
+    NSString *exportReportCommand = [NSString stringWithFormat:@"MobileReport.exportReport('%@');", exportFormat];
+    [self.webView stringByEvaluatingJavaScriptFromString:exportReportCommand];
 }
 
 - (void)destroyReport
@@ -326,6 +334,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
             [self handleLinkOptionsWithJSCommand:command];
         } else if ([command rangeOfString:@"error"].length) {
             [self handleErrorWithCommand:command];
+        } else if ([command rangeOfString:@"exportPath"].length) {
+            [self handleExportCommand:command];
         }
         return NO;
     } else if ([requestURLString rangeOfString:debugger].length) {
@@ -386,6 +396,20 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
             errorType = JMReportLoaderErrorTypeAuthentification;
         }
         self.reportLoadCompletion(NO, [self createErrorWithType:errorType]);
+    }
+}
+
+- (void)handleExportCommand:(NSString *)command
+{
+    NSDictionary *params = [self parseCommand:command];
+    NSLog(@"params: %@", params);
+
+    NSString *outputResourcesPath = params[@"link"];
+    if (outputResourcesPath) {
+        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOutputResourcePath:fullReportName:)]) {
+            NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", self.report.resourceLookup.label, self.exportFormat];
+            [self.delegate reportLoader:self didReceiveOutputResourcePath:outputResourcesPath fullReportName:fullReportName];
+        }
     }
 }
 
@@ -465,8 +489,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     NSString *locationString = parameters[@"location"];
     if (locationString) {
         NSURL *locationURL = [NSURL URLWithString:locationString];
-        if ([self.delegate respondsToSelector:@selector(reportLoader:didReciveOnClickEventForReference:)]) {
-            [self.delegate reportLoader:self didReciveOnClickEventForReference:locationURL];
+        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForReference:)]) {
+            [self.delegate reportLoader:self didReceiveOnClickEventForReference:locationURL];
         }
     }
 }
@@ -516,8 +540,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                             }
                         }
 
-                        if ([self.delegate respondsToSelector:@selector(reportLoader:didReciveOnClickEventForReport:withParameters:)]) {
-                            [self.delegate reportLoader:self didReciveOnClickEventForReport:report withParameters:[reportParameters copy]];
+                        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForReport:withParameters:)]) {
+                            [self.delegate reportLoader:self didReceiveOnClickEventForReport:report withParameters:[reportParameters copy]];
                         }
                     }
                 }
