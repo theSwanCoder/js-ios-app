@@ -273,6 +273,7 @@ your business wherever you are.</string>
                         <outlet property="titlePageLabel" destination="ZXN-zZ-mep" id="o4b-UG-wFr"/>
                         <outlet property="titleView" destination="zdf-mA-oqg" id="d5I-eU-YkE"/>
                         <outlet property="welcomeView" destination="scU-Dt-kru" id="PcU-Rq-Fjm"/>
+                        <outlet property="bottomView" destination="SqA-Kl-2pl" id="xga-lZ-jqk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cBr-n4-zHN" userLabel="First Responder" sceneMemberID="firstResponder"/>
