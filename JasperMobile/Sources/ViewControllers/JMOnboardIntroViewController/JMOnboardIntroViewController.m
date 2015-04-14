@@ -415,7 +415,11 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 
     switch (introPage) {
         case JMOnboardIntroPageWelcome : {
+            // make visible images
             self.homeScreenImage.hidden = NO;
+            self.serverScreenImage.hidden = YES;
+            self.reportScreenIpadImage.hidden = YES;
+            self.reportScreenIphoneImage.hidden = YES;
 
             [UIView animateWithDuration:animationDuration animations:^{
                 [self setupContentViewStartPosition];
@@ -425,7 +429,11 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             break;
         }
         case JMOnboardIntroPageStayConnected : {
+            // make visible images
             self.homeScreenImage.hidden = NO;
+            self.serverScreenImage.hidden = YES;
+            self.reportScreenIpadImage.hidden = NO;
+            self.reportScreenIphoneImage.hidden = NO;
 
             [UIView animateWithDuration:animationDuration animations:^{
                 [self.homeScreenImage updateFrameForPageWithIdentifier:kPageIdentifierStayConnected];
@@ -437,6 +445,9 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             break;
         }
         case JMOnboardIntroPageInstanceAccess : {
+            // make visible images
+            self.homeScreenImage.hidden = NO;
+            self.serverScreenImage.hidden = NO;
             self.reportScreenIpadImage.hidden = NO;
             self.reportScreenIphoneImage.hidden = NO;
 
@@ -451,7 +462,11 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             break;
         }
         case JMOnboardIntroPageSeemlessIntegration : {
+            // make visible images
+            self.homeScreenImage.hidden = YES;
             self.serverScreenImage.hidden = NO;
+            self.reportScreenIpadImage.hidden = NO;
+            self.reportScreenIphoneImage.hidden = NO;
 
             [UIView animateWithDuration:animationDuration animations:^{
                 [self.reportScreenIpadImage updateFrameForPageWithIdentifier:kPageIdentifierSeemlessIntegration];
@@ -501,24 +516,51 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
         CGPoint velocity = [gestureRecognizer velocityInView:self.view];
         switch (self.introPage) {
             case JMOnboardIntroPageWelcome : {
+                // make visible images
+                self.homeScreenImage.hidden = NO;
+                self.serverScreenImage.hidden = YES;
+                self.reportScreenIpadImage.hidden = YES;
+                self.reportScreenIphoneImage.hidden = YES;
+
                 [self changeWelcomePageViewsWithVelocity:velocity];
                 break;
             }
             case JMOnboardIntroPageStayConnected : {
+                // make visible images
+                self.homeScreenImage.hidden = NO;
+                self.serverScreenImage.hidden = YES;
+                self.reportScreenIpadImage.hidden = NO;
+                self.reportScreenIphoneImage.hidden = NO;
+
                 [self changeStayConnectedViewsWithVelocity:velocity];
                 break;
             }
             case JMOnboardIntroPageInstanceAccess : {
+                // make visible images
+                self.homeScreenImage.hidden = YES;
+                self.serverScreenImage.hidden = NO;
+                self.reportScreenIpadImage.hidden = NO;
+                self.reportScreenIphoneImage.hidden = NO;
+
                 [self changeInstanceAccessViewsWithVelocity:velocity];
                 break;
             }
             case JMOnboardIntroPageSeemlessIntegration : {
+                // make visible images
+                self.homeScreenImage.hidden = YES;
+                self.serverScreenImage.hidden = NO;
+                self.reportScreenIpadImage.hidden = NO;
+                self.reportScreenIphoneImage.hidden = NO;
+
                 [self changeSeemlessIntegrationPageViewsWithVelocity:velocity];
                 break;
             }
         }
     } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
         CGPoint velocity = [gestureRecognizer velocityInView:self.view];
+
+        [self hideImagesForIntroPage:self.introPage];
+
         switch (self.introPage) {
             case JMOnboardIntroPageWelcome : {
                 [self updateWelcomePageViewsWithVelocity:velocity];
@@ -691,8 +733,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     CGFloat homeScreenImageBeginUpdateOriginY = 70;
     CGFloat homeScreenImageBottomValueOriginY = 90;
 
-    if (velocity.y > 0) {
-        // move down
+    if (velocity.y > 0) { // move down
+
         if (homeScreenImageOrigin.y == homeScreenImageStartOriginY ) {
             self.isUnderRedLine = YES;
         }
@@ -725,8 +767,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
                 self.descriptionPageLabel.text = model.pageDescription;
             }
         }
-    } else {
-        // move up
+    } else { // move up
+
         if (homeScreenImageOrigin.y == homeScreenImageStartOriginY) {
             self.isUnderRedLine = NO;
         }
@@ -806,8 +848,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     CGFloat reportScreenIpadImageBeginUpdateOriginX = 20;
     CGFloat reportScreenIpadImageBottomValueOriginX = 0;
 
-    if (velocity.y > 0) {
-        // move down
+    if (velocity.y > 0) { // move down
+
         if (reportScreenIpadImageOrigin.x == reportScreenIpadImageFrameOriginX) {
             self.isUnderRedLine = YES;
         }
@@ -816,16 +858,16 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             if (reportScreenIpadImageOrigin.x > reportScreenIpadImageBottomValueOriginX) {
                 [self.homeScreenImage updateOriginYWithValue:(self.homeScreenImage.frame.origin.y - kDefaultStepValue)];
                 // start hiding ipad image
-                [self.reportScreenIpadImage updateOriginXWithValue:(self.reportScreenIpadImage.frame.origin.x - kDefaultStepValue)];
+                [self.reportScreenIpadImage updateOriginXWithValue:(self.reportScreenIpadImage.frame.origin.x + kDefaultStepValue)];
                 // start hiding iphone image
-                [self.reportScreenIphoneImage updateOriginXWithValue:(self.reportScreenIphoneImage.frame.origin.x + kDefaultStepValue)];
+                [self.reportScreenIphoneImage updateOriginXWithValue:(self.reportScreenIphoneImage.frame.origin.x - kDefaultStepValue)];
             }
         } else {
             [self.serverScreenImage updateOriginYWithValue:(self.serverScreenImage.frame.origin.y + kDefaultStepValue)];
             // start hiding ipad image
-            [self.reportScreenIpadImage updateOriginXWithValue:(self.reportScreenIpadImage.frame.origin.x + kDefaultStepValue)];
+            [self.reportScreenIpadImage updateOriginXWithValue:(self.reportScreenIpadImage.frame.origin.x - kDefaultStepValue)];
             // start hiding iphone image
-            [self.reportScreenIphoneImage updateOriginXWithValue:(self.reportScreenIphoneImage.frame.origin.x - kDefaultStepValue)];
+            [self.reportScreenIphoneImage updateOriginXWithValue:(self.reportScreenIphoneImage.frame.origin.x + kDefaultStepValue)];
 
             if (reportScreenIpadImageOrigin.x == reportScreenIpadImageBeginUpdateOriginX) {
                 // current page title
@@ -834,8 +876,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
                 self.descriptionPageLabel.text = model.pageDescription;
             }
         }
-    } else {
-        // move up
+    } else { // move up
+
         if (reportScreenIpadImageOrigin.x == reportScreenIpadImageFrameOriginX) {
             self.isUnderRedLine = NO;
         }
@@ -869,29 +911,20 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     CGFloat velocityY = fabs(velocity.y);
 
     CGPoint reportScreenIpadImageOrigin = self.reportScreenIpadImage.frame.origin;
-    CGFloat reportScreenIpadImageFrameOriginX = self.contentView.frame.size.width/2 - self.reportScreenIpadImage.frame.size.width/2;
     CGFloat reportScreenIpadImageBeginUpdateOriginX = 20;
 
-    if (velocity.y > 0) {
-        // move down
-        if (reportScreenIpadImageOrigin.x == reportScreenIpadImageFrameOriginX) {
-            self.isUnderRedLine = YES;
-        }
+    if (velocity.y > 0) { // move down
 
-        if (reportScreenIpadImageOrigin.x < reportScreenIpadImageBeginUpdateOriginX || (self.isUnderRedLine && velocityY > kDefaultMinVelocity) ) {
+        if ( (velocityY > kDefaultMinVelocity) || reportScreenIpadImageOrigin.x < reportScreenIpadImageBeginUpdateOriginX ) {
             // move to previous page
             [self forwardToPage:JMOnboardIntroPageStayConnected animation:YES];
         } else {
             // restore current page
             [self backToPage:JMOnboardIntroPageInstanceAccess animation:YES];
         }
-    } else {
-        // move up
-        if (reportScreenIpadImageOrigin.x == reportScreenIpadImageFrameOriginX) {
-            self.isUnderRedLine = NO;
-        }
+    } else { // move up
 
-        if (reportScreenIpadImageOrigin.x < reportScreenIpadImageBeginUpdateOriginX || (!self.isUnderRedLine && velocityY > kDefaultMinVelocity) ) {
+        if ( (velocityY > kDefaultMinVelocity) || reportScreenIpadImageOrigin.x < reportScreenIpadImageBeginUpdateOriginX ) {
             // move to next page
             [self forwardToPage:JMOnboardIntroPageSeemlessIntegration animation:YES];
         } else {
