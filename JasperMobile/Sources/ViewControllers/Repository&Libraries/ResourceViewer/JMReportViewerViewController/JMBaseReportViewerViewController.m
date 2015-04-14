@@ -304,12 +304,10 @@
     }@weakselfend;
 
     if (isShowBackButton) {
-        UIViewController *rootViewController = [self.navigationController.viewControllers firstObject];
-        NSString *backItemTitle = rootViewController.title;
-
+        NSString *backItemTitle = JMCustomLocalizedString(@"back.button.title", nil);
         UIBarButtonItem *backItem = [self backButtonWithTitle:backItemTitle
                                                        target:reportOptionsViewController
-                                                       action:@selector(backToLibrary)];
+                                                       action:@selector(backButtonTapped:)];
         reportOptionsViewController.navigationItem.leftBarButtonItem = backItem;
     }
 

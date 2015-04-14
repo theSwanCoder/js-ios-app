@@ -30,6 +30,10 @@
 #import "JMInputControlCell.h"
 #import "JMReportViewerViewController.h"
 
+NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
+#define kJMReportOptionsTableViewCellHorizontalOffset ([JMUtils isIphone] ? 10.f : 15.f)
+#define kJMReportOptionsTableViewCellVerticalOffset ([JMUtils isIphone] ? 7.f : 7.f)
+
 @interface JMReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *runReportButton;
@@ -48,9 +52,6 @@
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    [self.tableView setRowHeight:44.f];
-
-    
     // setup "Run Report" button
     self.runReportButton.backgroundColor = kJMResourcePreviewBackgroundColor;
     [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog.button.run.report", nil)
@@ -63,9 +64,9 @@
     [self runReport];
 }
 
-- (void)backToLibrary
+- (void)backButtonTapped:(id)sender
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Private API
@@ -129,15 +130,18 @@
 {
     JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
     if ([inputControlDescriptor errorString]) {
-        CGFloat maxWidth = tableView.frame.size.width - 30;
+        CGFloat maxWidth = tableView.frame.size.width - 2 * kJMReportOptionsTableViewCellHorizontalOffset;
+        if ([self isSelectableCellAtIndexPath:indexPath]) {
+            maxWidth -= 25;
+        }
         CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
         CGRect textRect = [[inputControlDescriptor errorString] boundingRectWithSize:maximumLabelSize
                                                                              options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
                                                                           attributes:@{NSFontAttributeName:[JMFont tableViewCellDetailErrorFont]}
                                                                              context:nil];
-        return tableView.rowHeight + ceil(textRect.size.height);
+        return kJMReportOptionsTableViewCellHeight + kJMReportOptionsTableViewCellVerticalOffset + ceil(textRect.size.height);
     }
-    return tableView.rowHeight;
+    return kJMReportOptionsTableViewCellHeight;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -208,6 +212,15 @@
              [JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT             : @"MultiSelectCell",
              [JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT_CHECKBOX    : @"MultiSelectCell",
              };
+}
+
+- (BOOL)isSelectableCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSInputControlDescriptor *descriptor = [self.inputControls objectAtIndex:indexPath.row];
+    return ([descriptor.type isEqualToString:[JSConstants sharedInstance].ICD_TYPE_SINGLE_SELECT] ||
+            [descriptor.type isEqualToString:[JSConstants sharedInstance].ICD_TYPE_SINGLE_SELECT_RADIO] ||
+            [descriptor.type isEqualToString:[JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT] ||
+            [descriptor.type isEqualToString:[JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT_CHECKBOX]);
 }
 
 - (void)updatedInputControlsValuesWithCompletion:(void(^)(BOOL dataIsValid))completion

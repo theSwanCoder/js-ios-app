@@ -36,29 +36,11 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.textLabel.font = [JMFont tableViewCellTitleFont];
-    self.textLabel.textColor = [UIColor darkGrayColor];
-    self.detailTextLabel.font = [JMFont tableViewCellDetailErrorFont];
-    self.detailTextLabel.textColor = [UIColor redColor];
+    self.titleLabel.font = [JMFont tableViewCellTitleFont];
+    self.titleLabel.textColor = [UIColor darkGrayColor];
+    self.errorLabel.font = [JMFont tableViewCellDetailErrorFont];
+    self.errorLabel.textColor = [UIColor redColor];
     self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
-    
-    // TODO: set init value
-    self.detailTextLabel.text = nil;
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-
-    CGRect titleLabelRect = self.textLabel.frame;
-    titleLabelRect.size.width = self.contentView.frame.size.width - 3 * titleLabelRect.origin.x - self.valuePlaceHolderView.frame.size.width;
-    self.textLabel.frame = titleLabelRect;
-    
-    if ([self.inputControlDescriptor errorString]) {
-        CGRect errorLabelRect = self.detailTextLabel.frame;
-        errorLabelRect.origin.y = 2 * self.valuePlaceHolderView.frame.origin.y + self.valuePlaceHolderView.frame.size.height;
-        self.detailTextLabel.frame = errorLabelRect;
-    }
 }
 
 - (void) updateDisplayingOfErrorMessage
@@ -66,10 +48,10 @@
     NSString *errorString = [self.inputControlDescriptor errorString];
 
     BOOL isInputHasError = (errorString != nil);
-    BOOL hasPreviousError = self.detailTextLabel.text && self.detailTextLabel.text.length > 0;
+    BOOL hasPreviousError = self.errorLabel.text && self.errorLabel.text.length > 0;
     
     if ( (isInputHasError && !hasPreviousError) || (!isInputHasError && hasPreviousError) ) {
-        self.detailTextLabel.text = errorString;
+        self.errorLabel.text = errorString;
         [self.delegate reloadTableViewCell:self];
     }
 }
@@ -79,9 +61,9 @@
     _inputControlDescriptor = inputControlDescriptor;
     [self setEnabledCell:(!inputControlDescriptor.readOnly.boolValue)];
     if (inputControlDescriptor.mandatory.boolValue) {
-        self.textLabel.text = [NSString stringWithFormat:@"* %@",inputControlDescriptor.label];
+        self.titleLabel.text = [NSString stringWithFormat:@"* %@",inputControlDescriptor.label];
     } else {
-        self.textLabel.text = inputControlDescriptor.label;
+        self.titleLabel.text = inputControlDescriptor.label;
     }
     [self updateDisplayingOfErrorMessage];
 }
@@ -89,9 +71,9 @@
 - (void)setEnabledCell:(BOOL)enabled
 {
     if (enabled) {
-        self.textLabel.textColor = [UIColor darkGrayColor];
+        self.titleLabel.textColor = [UIColor darkGrayColor];
     } else {
-        self.textLabel.textColor = [UIColor lightGrayColor];
+        self.titleLabel.textColor = [UIColor lightGrayColor];
     }
 }
 

@@ -45,6 +45,8 @@
 
 @property (nonatomic, strong) JSInputControlDescriptor *inputControlDescriptor;
 @property (nonatomic, weak) id <JMInputControlCellDelegate> delegate;
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet UILabel *errorLabel;
 
 - (void) updateDisplayingOfErrorMessage;
 - (void) setEnabledCell:(BOOL) enabled;
