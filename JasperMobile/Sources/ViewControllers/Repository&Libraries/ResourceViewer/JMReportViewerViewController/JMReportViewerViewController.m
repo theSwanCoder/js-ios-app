@@ -78,7 +78,6 @@
         
         if (success) {
             [self hideEmptyReportMessage];
-            [self.report saveCurrentState];
             
             [self.webView stopLoading];
             [self.webView loadHTMLString:self.report.HTMLString

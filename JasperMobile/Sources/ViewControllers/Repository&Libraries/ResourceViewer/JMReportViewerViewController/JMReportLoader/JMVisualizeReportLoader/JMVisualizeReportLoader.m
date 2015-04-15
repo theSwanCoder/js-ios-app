@@ -115,7 +115,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.report updateCurrentPage:pageNumber];
 
     if (!self.report.isReportAlreadyLoaded) {
-        NSString *parametersAsString = [self createParametersAsStringFromInputControls:self.report.inputControls];
+        NSString *parametersAsString = [self createParametersAsString];
         NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.run({'uri': '%@', 'params': %@, 'pages' : '%@'});", self.report.reportURI, parametersAsString, @(pageNumber)];
         [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
     } else {
@@ -131,6 +131,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
+    [self.report updateLoadingStatusWithValue:NO];
     [self fetchPageNumber:1 withCompletion:completion];
 }
 
@@ -199,53 +200,16 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     return htmlString;
 }
 
-- (NSDictionary *)reportParametersWithInputControls:(NSArray *)inputControls
-{
-    NSMutableDictionary *reportParameters = [NSMutableDictionary dictionary];
-    for (JSInputControlDescriptor *inputControl in inputControls) {
-        if (inputControl.state.uuid && [inputControl.selectedValues firstObject]) {
-            reportParameters[inputControl.state.uuid] = inputControl.selectedValues;
-        }
-    }
-    return [reportParameters copy];
-}
-
-- (NSString *)createParametersAsStringFromInputParameters:(NSDictionary *)inputParameters
+- (NSString *)createParametersAsString
 {
     NSMutableString *parametersAsString = [@"{" mutableCopy];
-    for (NSString *key in inputParameters.allKeys) {
-        id value = inputParameters[key];
-        if ([value isKindOfClass:[NSArray class]]) {
-            NSArray *values = value;
-            NSString *stringValues = @"";
-            for (NSString *value in values) {
-                stringValues = [stringValues stringByAppendingFormat:@"\"%@\",", value];
-            }
-            [parametersAsString appendFormat:@"\"%@\":[%@],", key, stringValues];
-        } else {
-            [parametersAsString appendFormat:@"\"%@\":[\"%@\"],", key, value];
+    for (JSReportParameter *parameter in self.report.reportParameters) {
+        NSArray *values = parameter.value;
+        NSString *stringValues = @"";
+        for (NSString *value in values) {
+            stringValues = [stringValues stringByAppendingFormat:@"\"%@\",", value];
         }
-    }
-    [parametersAsString appendString:@"}"];
-    return [parametersAsString copy];
-}
-
-- (NSString *)createParametersAsStringFromInputControls:(NSArray *)inputControls
-{
-    NSDictionary *inputParameters = [self reportParametersWithInputControls:inputControls];
-    NSMutableString *parametersAsString = [@"{" mutableCopy];
-    for (NSString *key in inputParameters.allKeys) {
-        id value = inputParameters[key];
-        if ([value isKindOfClass:[NSArray class]]) {
-            NSArray *values = value;
-            NSString *stringValues = @"";
-            for (NSString *value in values) {
-                stringValues = [stringValues stringByAppendingFormat:@"\"%@\",", value];
-            }
-            [parametersAsString appendFormat:@"\"%@\":[%@],", key, stringValues];
-        } else {
-            [parametersAsString appendFormat:@"\"%@\":[\"%@\"],", key, value];
-        }
+        [parametersAsString appendFormat:@"\"%@\":[%@],", parameter.name, stringValues];
     }
     [parametersAsString appendString:@"}"];
     return [parametersAsString copy];

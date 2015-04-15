@@ -124,7 +124,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                          transformerKey:nil
                                   pages:nil
                       attachmentsPrefix:[JSConstants sharedInstance].REST_EXPORT_EXECUTION_ATTACHMENTS_PREFIX_URI
-                             parameters:[self parametersForInputControls:self.report.inputControls]
+                             parameters:self.report.reportParameters
                         completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
                             
                                  if (result.error) {
@@ -347,16 +347,6 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 {
     BOOL interactive = (self.restClient.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0);
     return interactive;
-}
-
-- (NSArray *)parametersForInputControls:(NSArray *)inputControls
-{
-    NSMutableArray *parameters = [NSMutableArray array];
-    for (JSInputControlDescriptor *inputControlDescriptor in inputControls) {
-        [parameters addObject:[[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
-                                                                value:inputControlDescriptor.selectedValues]];
-    }
-    return [parameters copy];
 }
 
 #pragma mark - Request delegates

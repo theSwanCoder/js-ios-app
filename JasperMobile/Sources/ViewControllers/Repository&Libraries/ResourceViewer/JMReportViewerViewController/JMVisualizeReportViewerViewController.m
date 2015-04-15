@@ -212,7 +212,6 @@
         report.isInputControlsLoaded = YES;
         if (inputControls) {
             [report updateInputControls:inputControls];
-            [report applyReportParameters:reportParameters];
 
             NSString *identifier = @"JMVisualizeReportViewerViewController";
 

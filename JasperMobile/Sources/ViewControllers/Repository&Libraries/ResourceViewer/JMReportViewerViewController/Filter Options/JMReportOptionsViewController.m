@@ -243,15 +243,8 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
                                             }
                                         }
                                         [self.tableView reloadData];
-                                        if ([self validateInputControls]) {
-                                            if (completion) {
-                                                completion(YES);
-                                            }
-                                        } else {
-                                            [self.tableView reloadData];
-                                            if (completion) {
-                                                completion(NO);
-                                            }
+                                        if (completion) {
+                                            completion([self validateInputControls]);
                                         }
                                     }
                                 } @weakselfend];
