@@ -101,6 +101,16 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     // override in children
 }
 
+- (NSString *)backButtonTitle
+{
+    if (!_backButtonTitle) {
+        UIViewController *rootViewController = [self.navigationController.viewControllers firstObject];
+        NSString *backItemTitle = rootViewController.title;
+        _backButtonTitle = backItemTitle;
+    }
+    return _backButtonTitle;
+}
+
 - (void)setupNavigationItems
 {
     // Right bar button items
@@ -116,11 +126,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     }
     self.navigationItem.rightBarButtonItems = [items copy];
     
-    // Left bar button items
-    UIViewController *rootViewController = [self.navigationController.viewControllers firstObject];
-    NSString *backItemTitle = rootViewController.title;
-    
-    UIBarButtonItem *backItem = [self backButtonWithTitle:backItemTitle
+    UIBarButtonItem *backItem = [self backButtonWithTitle:self.backButtonTitle
                                                    target:self
                                                    action:@selector(backButtonTapped:)];
     

@@ -247,6 +247,7 @@
                     NSRange range = NSMakeRange(backItemTitle.length - (excessLength + replaceSymbols.length), excessLength + replaceSymbols.length);
                     backItemTitle = [backItemTitle stringByReplacingCharactersInRange:range withString:replaceSymbols];
                 }
+                reportViewController.backButtonTitle = backItemTitle;
             }
 
             [self resetSubViews];
