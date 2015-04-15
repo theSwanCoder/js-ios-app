@@ -37,8 +37,8 @@
 
 @interface JMReportOptionsViewController : JMEditabledViewController
 
-@property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, copy) NSArray *inputControls;
+@property (nonatomic, strong) JMReport *report;
+@property (nonatomic, readonly) NSArray *inputControls;
 
 @property (nonatomic, copy) void(^completionBlock)(void);
 @end
