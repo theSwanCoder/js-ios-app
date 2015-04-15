@@ -37,58 +37,47 @@
 @property (nonatomic, strong) JMVisualizeReportLoader *reportLoader;
 @property (nonatomic, assign) BOOL isStartFromAnotherReport;
 @property (nonatomic, copy) void(^returnFromPreviousReportCompletion)(void);
-
 @end
 
 @implementation JMVisualizeReportViewerViewController
 
 @synthesize reportLoader = _reportLoader;
 
-#pragma mark - UIViewController LifeCycle
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.isStartFromAnotherReport = NO;
-}
-
 #pragma mark - Actions
-- (void)backToPreviousReport
+- (void)backButtonTapped:(id)sender
 {
-    [self resetSubViews];
-    [self.navigationController setToolbarHidden:YES animated:YES];
-    [self.webView removeFromSuperview];
-
-    NSInteger viewControllersCount = self.navigationController.viewControllers.count;
-    JMVisualizeReportViewerViewController *reportViewController = self.navigationController.viewControllers[viewControllersCount - 2];
-
-    //
-    [reportViewController.view insertSubview:self.webView belowSubview:reportViewController.activityIndicator];
-    self.webView.delegate = reportViewController.reportLoader;
-    reportViewController.returnFromPreviousReportCompletion = @weakself(^()) {
-        reportViewController.returnFromPreviousReportCompletion = nil;
-        [reportViewController.reportLoader refreshReportWithCompletion:@weakself(^(BOOL success, NSError *error)) {
-            if (success) {
-                // succcess action
-                //[self hideEmptyReportMessage];
-            } else {
-                [self handleError:error];
-            }
-        }@weakselfend];
-    }@weakselfend;
-
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-#pragma mark - Setups
-- (void)setupNavigationItems
-{
-    [super setupNavigationItems];
     if (self.isStartFromAnotherReport) {
-        self.navigationItem.leftBarButtonItem = nil;
+        [self resetSubViews];
+        [self.navigationController setToolbarHidden:YES animated:YES];
+        [self.webView removeFromSuperview];
+
+        NSInteger viewControllersCount = self.navigationController.viewControllers.count;
+        JMVisualizeReportViewerViewController *reportViewController = self.navigationController.viewControllers[viewControllersCount - 2];
+
+        //
+        [reportViewController.view insertSubview:self.webView belowSubview:reportViewController.activityIndicator];
+        self.webView.delegate = reportViewController.reportLoader;
+
+        [((JMVisualizeReport *) reportViewController.report) updateLoadingStatusWithValue:NO];
+        reportViewController.returnFromPreviousReportCompletion = @weakself(^()) {
+                reportViewController.returnFromPreviousReportCompletion = nil;
+                [reportViewController.reportLoader refreshReportWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+                        if (success) {
+                            // succcess action
+                            //[self hideEmptyReportMessage];
+                        } else {
+                            [self handleError:error];
+                        }
+                    }@weakselfend];
+            }@weakselfend;
+
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [super backButtonTapped:sender];
     }
 }
 
+#pragma mark - Setups
 - (void)setupSubviews
 {
     CGRect rootViewBounds = self.navigationController.view.bounds;
@@ -259,11 +248,6 @@
                     backItemTitle = [backItemTitle stringByReplacingCharactersInRange:range withString:replaceSymbols];
                 }
             }
-
-            UIBarButtonItem *backItem = [self backButtonWithTitle:backItemTitle
-                                                           target:reportViewController
-                                                           action:@selector(backToPreviousReport)];
-            reportViewController.navigationItem.leftBarButtonItem = backItem;
 
             [self resetSubViews];
             [self.navigationController pushViewController:reportViewController animated:YES];
