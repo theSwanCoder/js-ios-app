@@ -68,7 +68,16 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 
 - (void)backButtonTapped:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    // TODO: Need to refactor here after adding "Always Prompt" flag support
+    if (self.report.isReportAlreadyLoaded) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        NSMutableArray *viewControllers = [self.navigationController.viewControllers mutableCopy];
+        while (![[viewControllers lastObject] isKindOfClass:NSClassFromString(@"JMBaseCollectionViewController")]) {
+            [viewControllers removeLastObject];
+        }
+        [self.navigationController popToViewController:[viewControllers lastObject] animated:YES];
+    }
 }
 
 #pragma mark - Private API

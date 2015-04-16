@@ -104,11 +104,30 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (NSString *)backButtonTitle
 {
     if (!_backButtonTitle) {
-        UIViewController *rootViewController = [self.navigationController.viewControllers firstObject];
-        NSString *backItemTitle = rootViewController.title;
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        UIViewController *previousViewController = [viewControllers objectAtIndex:[viewControllers indexOfObject:self] - 1];
+        NSString *backItemTitle = previousViewController.navigationItem.title;
         _backButtonTitle = backItemTitle;
     }
     return _backButtonTitle;
+}
+
+- (NSString *)croppedBackButtonTitleWithControllerTitle:(NSString *)title
+{
+    // detect backButton text width to truncate with '...'
+    NSDictionary *textAttributes = @{NSFontAttributeName : [JMFont navigationBarTitleFont]};
+    CGSize titleTextSize = [title sizeWithAttributes:textAttributes];
+    CGFloat titleTextWidth = titleTextSize.width;
+    CGSize backItemTextSize = [self.backButtonTitle sizeWithAttributes:textAttributes];
+    CGFloat backItemTextWidth = backItemTextSize.width;
+    CGFloat backItemOffset = 12;
+    
+    CGFloat viewWidth = CGRectGetWidth(self.view.bounds);
+    
+    if ( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) {
+        return JMCustomLocalizedString(@"back.button.title", nil);
+    }
+    return self.backButtonTitle;
 }
 
 - (void)setupNavigationItems
@@ -126,7 +145,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     }
     self.navigationItem.rightBarButtonItems = [items copy];
     
-    UIBarButtonItem *backItem = [self backButtonWithTitle:self.backButtonTitle
+    UIBarButtonItem *backItem = [self backButtonWithTitle:[self croppedBackButtonTitleWithControllerTitle:self.title]
                                                    target:self
                                                    action:@selector(backButtonTapped:)];
     
