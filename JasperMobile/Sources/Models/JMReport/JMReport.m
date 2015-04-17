@@ -47,11 +47,9 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
 // html
 @property (nonatomic, copy, readwrite) NSString *HTMLString;
 @property (nonatomic, copy, readwrite) NSString *baseURLString;
-// state keeping
-@property (nonatomic, strong) NSUndoManager *icUndoManager;
 // cache
 @property (nonatomic, strong) NSMutableDictionary *cachedPages;
-@property (nonatomic, copy, readwrite) NSDictionary *reportParameters;
+@property (nonatomic, copy, readwrite) NSArray *reportParameters;
 @end
 
 @implementation JMReport
@@ -64,7 +62,6 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
     if (self) {
         _resourceLookup = resourceLookup;
         _reportURI = resourceLookup.uri;
-        _icUndoManager = [NSUndoManager new];
         
         [self updateInputControls:inputControls];
         
@@ -92,19 +89,7 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
         _isReportWithInputControls = NO;
     }
     
-    if (inputControls) {
-        self.reportParameters = [self reportParametersFromInputControls:inputControls];
-    }
-}
-
-- (void)applyReportParameters:(NSDictionary *)reportParameters
-{
-    [self updateInputControlsWithReportParameters:reportParameters];
-}
-
-- (void)saveInputControls
-{
-    self.reportParameters = [self reportParametersFromInputControls:self.inputControls];
+    self.reportParameters = nil;
 }
 
 - (void)updateCurrentPage:(NSInteger)currentPage
@@ -157,6 +142,14 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
     [self postNotificationMultipageReport];
 }
 
+- (NSArray *)reportParameters
+{
+    if (!_reportParameters) {
+        _reportParameters = [self reportParametersFromInputControls:self.inputControls];
+    }
+    return _reportParameters;
+}
+
 #pragma mark - Cache pages
 - (void)cacheHTMLString:(NSString *)HTMLString forPageNumber:(NSInteger)pageNumber
 {
@@ -186,80 +179,30 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
                                                         object:self];
 }
 
-#pragma mark - Save state
-- (void)saveCurrentState
-{
-    [[self.icUndoManager prepareWithInvocationTarget:self] setHTMLString:self.HTMLString
-                                                           baseURLString:self.baseURLString
-                                                             currentPage:self.currentPage
-                                                            countOfPages:self.countOfPages
-                                                       isMultiPageReport:self.isMultiPageReport
-                                                           isReportEmpty:self.isReportEmpty
-                                                   internalInputControls:self.reportParameters
-                                                               requestId:self.requestId];
-    [self.icUndoManager setActionName:@"ResetChanges"];
-}
-
-- (void)restorePreviousState
-{
-    [self.icUndoManager undo];
-    [self updateInputControlsWithReportParameters:self.reportParameters];
-    [self saveCurrentState];
-}
-
+#pragma mark - Restore default state
 - (void)restoreDefaultState
 {
     [self clearCachedReportPages];
-    [self setHTMLString:nil
-          baseURLString:nil
-            currentPage:NSNotFound
-           countOfPages:NSNotFound
-      isMultiPageReport:NO
-          isReportEmpty:YES
-  internalInputControls:self.reportParameters
-              requestId:self.requestId];
-}
 
-- (BOOL)canRestorePreviousState
-{
-    BOOL canRestore = [self.icUndoManager canUndo];
-    return canRestore;
+    self.HTMLString = nil;
+    self.baseURLString = nil;
+    self.currentPage = NSNotFound;
+    self.countOfPages = NSNotFound;
+    self.isMultiPageReport = NO;
+    self.isReportEmpty = YES;
+    self.reportParameters = nil;
+    self.requestId = nil;
 }
-
-- (void)setHTMLString:(NSString *)HTMLString
-        baseURLString:(NSString *)baseURLString
-          currentPage:(NSInteger)currentPage
-         countOfPages:(NSInteger)countOfPages
-    isMultiPageReport:(BOOL)isMultiPageReport
-        isReportEmpty:(BOOL)isReportEmpty
-internalInputControls:(NSDictionary *)inputControls
-            requestId:(NSString *)requestId
-{
-    self.HTMLString = HTMLString;
-    self.baseURLString = baseURLString;
-    self.currentPage = currentPage;
-    self.countOfPages = countOfPages;
-    self.isMultiPageReport = isMultiPageReport;
-    self.isReportEmpty = isReportEmpty;
-    self.reportParameters = inputControls;
-    self.requestId = requestId;
-}
-
 
 #pragma mark - Helpers
-- (NSDictionary *)reportParametersFromInputControls:(NSArray *)inputControls
+- (NSArray *)reportParametersFromInputControls:(NSArray *)inputControls
 {
-    NSMutableDictionary *reportParameters = [NSMutableDictionary dictionary];
-    
-    for (JSInputControlDescriptor *description in inputControls) {
-        JSInputControlState *inputState = description.state;
-        id value = inputState.value;
-        if (value) {
-            reportParameters[inputState.uuid] = value;
-        }
+    NSMutableArray *parameters = [NSMutableArray array];
+    for (JSInputControlDescriptor *inputControlDescriptor in inputControls) {
+        [parameters addObject:[[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
+                                                                value:inputControlDescriptor.selectedValues]];
     }
-    
-    return reportParameters;
+    return [parameters copy];
 }
 
 - (void)updateInputControlsWithReportParameters:(NSDictionary *)reportParameters

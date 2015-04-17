@@ -46,14 +46,8 @@
 - (void) updateDisplayingOfErrorMessage
 {
     NSString *errorString = [self.inputControlDescriptor errorString];
-
-    BOOL isInputHasError = (errorString != nil);
-    BOOL hasPreviousError = self.errorLabel.text && self.errorLabel.text.length > 0;
-    
-    if ( (isInputHasError && !hasPreviousError) || (!isInputHasError && hasPreviousError) ) {
-        self.errorLabel.text = errorString;
-        [self.delegate reloadTableViewCell:self];
-    }
+    self.errorLabel.text = errorString;
+    [self.delegate reloadTableViewCell:self];
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor

@@ -296,8 +296,7 @@
 - (void)showReportOptionsViewControllerWithBackButton:(BOOL)isShowBackButton
 {
     JMReportOptionsViewController *reportOptionsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMReportOptionsViewController"];
-    reportOptionsViewController.resourceLookup = self.report.resourceLookup;
-    reportOptionsViewController.inputControls = [[NSArray alloc] initWithArray:self.report.inputControls copyItems:YES];
+    reportOptionsViewController.report = self.report;
     reportOptionsViewController.completionBlock = @weakself(^(void)) {
         [self.report updateInputControls:reportOptionsViewController.inputControls];
         [self refresh];

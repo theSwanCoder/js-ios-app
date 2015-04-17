@@ -37,6 +37,8 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 @interface JMReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *runReportButton;
+@property (nonatomic, strong, readwrite) NSArray *inputControls;
+
 @end
 
 @implementation JMReportOptionsViewController
@@ -74,17 +76,7 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 {
     [self.view endEditing:YES];
     if ([self validateInputControls]) { // Local validation
-        
-        [JMCancelRequestPopup presentWithMessage:@"status.loading"
-                                     cancelBlock:@weakself(^(void)) {
-                                         [self.restClient cancelAllRequests];
-                                         [self.navigationController popViewControllerAnimated:YES];
-                                     } @weakselfend];
-        
         [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
-            
-            [JMCancelRequestPopup dismiss];
-            
             if (dataIsValid) {
                 if (self.completionBlock) {
                     self.completionBlock();
@@ -92,15 +84,15 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
                 [self.navigationController popViewControllerAnimated:YES];
             }
         } @weakselfend];
+    } else {
+        [self.tableView reloadData];
     }
 }
 
 - (BOOL) validateInputControls
 {
-    // TODO: change this COMPLETLY!
-    for (int i = 0; i < [self.tableView numberOfRowsInSection:0]; i++) {
-        JMInputControlCell *cell = (JMInputControlCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        if (cell && ![cell isValidData]) {
+    for (JSInputControlDescriptor *descriptor in self.inputControls) {
+        if ([[descriptor errorString] length]) {
             return NO;
         }
     }
@@ -110,12 +102,7 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     id destinationViewController = segue.destinationViewController;
-    if ([self isResourceSegue:segue]) {
-        // TODO: where we use it ???
-        //[destinationViewController setResourceLookup:self.resourceLookup];
-        //[destinationViewController setInputControls:sender];
-        //self.delegate = destinationViewController;
-    } else {
+    if ([destinationViewController respondsToSelector:@selector(setCell:)]) {
         [destinationViewController setCell:sender];
     }
 }
@@ -187,16 +174,6 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 }
 
 #pragma mark - Private
-
-- (BOOL)isResourceSegue:(UIStoryboardSegue *)segue;
-{
-    NSString *identifier = segue.identifier;
-    return ([identifier isEqualToString:kJMShowMultiPageReportSegue] ||
-            [identifier isEqualToString:kJMShowReportOptionsSegue] ||
-            [identifier isEqualToString:kJMShowDashboardViewerSegue] ||
-            [identifier isEqualToString:kJMShowSavedRecourcesViewerSegue]);
-}
-
 // Returns input control types
 - (NSDictionary *)inputControlDescriptorTypes
 {
@@ -234,17 +211,17 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
         [allInputControls addObject:descriptor.uuid];
     }
     
-//    [JMCancelRequestPopup presentWithMessage:@"status.loading"
-//                                 cancelBlock:@weakself(^(void)) {
-//                                     [self.restClient cancelAllRequests];
-//                                     [self.navigationController popViewControllerAnimated:YES];
-//                                 } @weakselfend];
-    
-    [self.restClient updatedInputControlsValues:self.resourceLookup.uri
+    [JMCancelRequestPopup presentWithMessage:@"status.loading"
+                                 cancelBlock:@weakself(^(void)) {
+                                     [self.restClient cancelAllRequests];
+                                     [self.navigationController popViewControllerAnimated:YES];
+                                 } @weakselfend];
+
+    [self.restClient updatedInputControlsValues:self.report.reportURI
                                             ids:allInputControls
                                  selectedValues:selectedValues
                                 completionBlock:@weakself(^(JSOperationResult *result)) {
-//                                    [JMCancelRequestPopup dismiss];
+                                    [JMCancelRequestPopup dismiss];
 
                                     if (result.error) {
                                         if (result.error.code == JSSessionExpiredErrorCode) {
@@ -259,26 +236,26 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
                                     } else {
                                         for (JSInputControlState *state in result.objects) {
                                             for (JSInputControlDescriptor *inputControl in self.inputControls) {
-                                                NSString *uuid = state.uuid;
-                                                if ([uuid isEqualToString:inputControl.uuid]) {
+                                                if ([state.uuid isEqualToString:inputControl.uuid]) {
                                                     inputControl.state = state;
                                                     break;
                                                 }
                                             }
                                         }
                                         [self.tableView reloadData];
-                                        if ([self validateInputControls]) {
-                                            if (completion) {
-                                                completion(YES);
-                                            }
-                                        } else {
-                                            [self.tableView reloadData];
-                                            if (completion) {
-                                                completion(NO);
-                                            }
+                                        if (completion) {
+                                            completion([self validateInputControls]);
                                         }
                                     }
                                 } @weakselfend];
+}
+
+- (NSArray *)inputControls
+{
+    if (!_inputControls) {
+        _inputControls = [[NSArray alloc] initWithArray:self.report.inputControls copyItems:YES];
+    }
+    return _inputControls;
 }
 
 @end

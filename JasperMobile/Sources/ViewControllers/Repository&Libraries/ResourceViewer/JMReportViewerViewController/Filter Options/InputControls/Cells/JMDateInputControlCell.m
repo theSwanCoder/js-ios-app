@@ -82,7 +82,6 @@
 - (void) dateValueDidChanged:(id)sender
 {
     self.textField.text = [self.dateFormatter stringFromDate:self.datePicker.date];
-    self.inputControlDescriptor.state.value = self.textField.text;
 }
 
 #pragma mark - UITextFieldDelegate
