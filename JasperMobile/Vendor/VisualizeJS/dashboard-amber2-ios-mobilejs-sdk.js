@@ -141,14 +141,46 @@
   define('js.mobile.scaler', [],function() {
     var Scaler;
     return Scaler = (function() {
-      function Scaler() {}
+      function Scaler(options) {
+        this.diagonal = options.diagonal;
+      }
 
-      Scaler.prototype.scale = function(factor) {
+      Scaler.prototype.initialize = function() {
+        var factor;
+        factor = this._calculateFactor();
+        this._generateStyles(factor);
+        return this._applyScaleToDOM();
+      };
+
+      Scaler.prototype.addOriginalScale = function() {
+        return this._getOverlay().addClass("originalDashletInScaledCanvas");
+      };
+
+      Scaler.prototype.removeOriginalScale = function() {
+        return this._getOverlay().removeClass("originalDashletInScaledCanvas");
+      };
+
+      Scaler.prototype._getOverlay = function() {
+        return jQuery(".dashboardCanvas > .content > .body div.canvasOverlay");
+      };
+
+      Scaler.prototype._calculateFactor = function() {
+        var factor;
+        factor = this.diagonal / 10.1;
+        console.log(factor);
+        return factor;
+      };
+
+      Scaler.prototype._generateStyles = function(factor) {
         var originalDashletInScaledCanvasCss, scaledCanvasCss;
         jQuery("#scale_style").remove();
         scaledCanvasCss = ".scaledCanvas { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + factor + " ); -ms-transform: scale( " + factor + " ); -webkit-transform: scale( " + factor + " ); width: " + (100 / factor) + "% !important; height: " + (100 / factor) + "% !important; }";
         originalDashletInScaledCanvasCss = ".dashboardCanvas > .content > .body div.canvasOverlay.originalDashletInScaledCanvas { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + (1 / factor) + " ); -ms-transform: scale( " + (1 / factor) + " ); -webkit-transform: scale( " + (1 / factor) + " ); width: " + (100 * factor) + "% !important; height: " + (100 * factor) + "% !important; }";
         jQuery('<style id="scale_style"></style').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo('head');
+      };
+
+      Scaler.prototype._applyScaleToDOM = function() {
+        return jQuery('.dashboardCanvas').addClass('scaledCanvas');
       };
 
       return Scaler;

@@ -62,21 +62,10 @@
     }
 }
 
-- (void)runDashboard {
-    if (!self.isActive) {
-        self.isActive = YES;
-        NSLog(@"call dashboard api");
-        // set credentials
-        NSString *credentials = @"JasperMobile.auth.setCredentials(\"NAME\", \"PASSWORD\");";
-        credentials = [credentials stringByReplacingOccurrencesOfString:@"NAME" withString:self.restClient.serverProfile.username];
-        credentials = [credentials stringByReplacingOccurrencesOfString:@"PASSWORD" withString:self.restClient.serverProfile.username];
-        [self.webView stringByEvaluatingJavaScriptFromString:credentials];
-
-        // run dashboard
-        NSString *runDashboardCall = @"JasperMobile.dashboard.run(\"REPORT_PATH\");";
-        runDashboardCall = [runDashboardCall stringByReplacingOccurrencesOfString:@"REPORT_PATH" withString:self.resourceLookup.uri];
-        [self.webView stringByEvaluatingJavaScriptFromString:runDashboardCall];
-    }
+- (void)run
+{
+    NSString *runDashboard = [NSString stringWithFormat:@"MobileDashboard.configure({'diagonal': %@}).run()", @([self diagonal])];
+    [self.webView stringByEvaluatingJavaScriptFromString:runDashboard];
 }
 
 - (BOOL)isCallbackRequest:(NSURLRequest *)request {
@@ -91,7 +80,9 @@
         NSRange commandRange = [callback rangeOfString:@"command:"];
         NSString *command = [commandItem substringWithRange:NSMakeRange(commandRange.length, commandItem.length - commandRange.length)];
 
-        if ([command isEqualToString:@"didEndLoading"]) {
+        if ([command isEqualToString:@"didScriptLoad"]) {
+            [self run];
+        } else if ([command isEqualToString:@"didEndLoading"]) {
             if ([self.delegate respondsToSelector:@selector(visualizeClientDidEndLoading)]) {
                 [self.delegate visualizeClientDidEndLoading];
             }
@@ -111,12 +102,28 @@
 }
 
 - (void)minimizeDashlet {
-    NSString *minimizeDashletCall = @"JasperMobile.htmlHandler.minimizeDashlet()"; // Old js codebase
-//    NSString *minimizeDashletCall = @"MobileDashboard.minimizeDashlet()"; // New js codebase
+    NSString *minimizeDashletCall = @"MobileDashboard.minimizeDashlet()";
     [self.webView stringByEvaluatingJavaScriptFromString:minimizeDashletCall];
 }
 
 #pragma mark - Private API
 
+#pragma mark - Helpers
+- (CGFloat)diagonal
+{
+    // TODO: extend this simplified version
+    float diagonal = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? [self diagonalIpad]: [self diagonalIphone];
+    return diagonal;
+}
+
+- (CGFloat)diagonalIpad
+{
+    return 9.7;
+}
+
+- (CGFloat)diagonalIphone
+{
+    return 4.0;
+}
 
 @end
