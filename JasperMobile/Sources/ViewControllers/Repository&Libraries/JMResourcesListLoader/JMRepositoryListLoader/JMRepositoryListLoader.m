@@ -28,8 +28,6 @@
 @end
 
 @implementation JMRepositoryListLoader
-@synthesize offset;
-@synthesize hasNextPage;
 
 - (instancetype)init
 {

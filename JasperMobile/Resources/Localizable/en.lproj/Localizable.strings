@@ -55,7 +55,6 @@
 "servers.action.profile.clone" = "Clone Profile";
 "servers.action.profile.delete" = "Delete";
 "servers.profile.delete.message" = "Please, confirm deleting server.";
-"servers.profile.delete.demo.message" = "Sorry, You can't delete demo server.";
 
 /* Onboarding Intro */
 "intro.title" = "Welcome to TIBCO JasperMobile";
@@ -234,6 +233,11 @@
 "dialog.button.removefavorite" = "Remove Favorite";
 "dialog.button.save" = "Save";
 "dialog.button.delete" = "Delete";
+
+"dialod.title.attention" = "Attention";
+"dialod.title.error" = "Error";
+"dialod.title.confirmation" = "Confirmation";
+
 
 /* Other */
 

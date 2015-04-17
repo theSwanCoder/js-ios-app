@@ -126,7 +126,7 @@
     }
     
     if ([errorMessage length]) {
-        [[UIAlertView localizedAlertWithTitle:nil
+        [[UIAlertView localizedAlertWithTitle:@"dialod.title.error"
                                       message:errorMessage
                                      delegate: nil
                             cancelButtonTitle:@"dialog.button.ok"

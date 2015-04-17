@@ -73,7 +73,7 @@
 {
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
         if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
-            [[UIAlertView localizedAlertWithTitle:nil message:@"resource.viewer.open.link" completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+            [[UIAlertView localizedAlertWithTitle:@"dialod.title.attention" message:@"resource.viewer.open.link" completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                 if (alertView.cancelButtonIndex != buttonIndex) {
                     [[UIApplication sharedApplication] openURL:request.URL];
                 }

@@ -160,7 +160,7 @@
 
 - (void)showErrorWithMessage:(NSString *)errorMessage
 {
-    [[UIAlertView localizedAlertWithTitle:nil
+    [[UIAlertView localizedAlertWithTitle:@"dialod.title.error"
                                   message:errorMessage
                                  delegate:self
                         cancelButtonTitle:@"dialog.button.ok"

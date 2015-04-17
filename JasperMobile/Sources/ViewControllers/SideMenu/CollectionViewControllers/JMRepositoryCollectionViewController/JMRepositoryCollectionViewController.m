@@ -55,11 +55,6 @@
     return keyString;
 }
 
-- (NSInteger)numberOfItemsInSection:(NSInteger)section
-{
-    return [self.resourceListLoader resourceCount];
-}
-
 - (JSResourceLookup *)loadedResourceForIndexPath:(NSIndexPath *)indexPath
 {
     NSArray *folders = self.resourceListLoader.sections[@(JMResourcesListSectionTypeFolder)];

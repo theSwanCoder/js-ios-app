@@ -79,7 +79,7 @@
         alertView.tag = action;
         [alertView show];
     } else if(action == JMMenuActionsViewAction_Delete) {
-        UIAlertView *alertView  = [UIAlertView localizedAlertWithTitle:nil
+        UIAlertView *alertView  = [UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation"
                                                                message:@"savedreport.viewer.delete.confirmation.message"
                                                               delegate:self
                                                      cancelButtonTitle:@"dialog.button.cancel"

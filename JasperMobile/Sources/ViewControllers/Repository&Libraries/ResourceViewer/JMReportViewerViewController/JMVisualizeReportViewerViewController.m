@@ -194,7 +194,7 @@
         }
 
     } else {
-        [[UIAlertView localizedAlertWithTitle:@"detail.report.viewer.error.title"
+        [[UIAlertView localizedAlertWithTitle:@"report.viewer.error.title"
                                       message:error.localizedDescription
                                    completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                        [self cancelResourceViewingAndExit];

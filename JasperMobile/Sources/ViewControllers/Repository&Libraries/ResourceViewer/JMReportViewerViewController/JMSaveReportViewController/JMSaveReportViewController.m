@@ -288,7 +288,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
     if (!self.errorString && isValidReportName) {
         if (![JMSavedResources isAvailableReportName:self.reportName format:self.selectedReportFormat]) {
             self.errorString = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
-            [[UIAlertView localizedAlertWithTitle:nil message:@"report.viewer.save.name.errmsg.notunique.rewrite" completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+            [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.save.name.errmsg.notunique.rewrite" completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
                 if (alertView.cancelButtonIndex != buttonIndex) {
                     [self saveReport];
                 }

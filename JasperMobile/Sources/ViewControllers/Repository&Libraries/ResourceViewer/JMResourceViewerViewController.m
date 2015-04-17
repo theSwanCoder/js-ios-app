@@ -74,7 +74,7 @@
 
     if (!isParentHost && isLinkClicked) {
         if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
-            [[UIAlertView localizedAlertWithTitle:nil
+            [[UIAlertView localizedAlertWithTitle:@"dialod.title.attention"
                                           message:@"resource.viewer.open.link"
                                        completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                                         if (alertView.cancelButtonIndex != buttonIndex) {
