@@ -43,7 +43,7 @@ Name</string>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="infoButton" destination="U8c-so-7KC" id="uDg-yb-9R6"/>
-                <outlet property="resourceImage" destination="Cuq-Sy-oqL" id="RFY-x5-ARJ"/>
+                <outlet property="resourceImageView" destination="Cuq-Sy-oqL" id="RFY-x5-ARJ"/>
                 <outlet property="resourceName" destination="H1O-A5-CXh" id="6Z0-mo-SP9"/>
             </connections>
             <point key="canvasLocation" x="222" y="146"/>

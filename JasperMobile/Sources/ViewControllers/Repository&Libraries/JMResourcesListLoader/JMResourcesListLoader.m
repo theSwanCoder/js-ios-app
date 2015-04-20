@@ -23,6 +23,7 @@
 
 #import "JMResourcesListLoader.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JSResourceLookup+KPI.h"
 
 NSString * const kJMResourceListLoaderOptionItemTitleKey = @"JMResourceListLoaderFilterItemTitleKey";
 NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoaderFilterItemValueKey";

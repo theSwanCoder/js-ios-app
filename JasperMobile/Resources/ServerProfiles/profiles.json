@@ -100,6 +100,11 @@
                   "mAlias" : "New Mobile Demo",
                   "mServerUrl" : "http://mobiledemo2.jaspersoft.com/jasperserver-pro/",
                   "mOrganization" : ""
+                  },
+                  {
+                  "mAlias" : "KPI Demo",
+                  "mServerUrl" : "http://172.17.10.125:8080/jasperserver-pro-601",
+                  "mOrganization" : ""
                   }
                   ]
 }

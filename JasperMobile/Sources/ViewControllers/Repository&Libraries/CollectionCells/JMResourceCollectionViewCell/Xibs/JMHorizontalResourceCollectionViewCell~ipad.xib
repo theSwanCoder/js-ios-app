@@ -50,7 +50,7 @@
             <connections>
                 <outlet property="infoButton" destination="Lvz-UX-B1i" id="SAS-h2-54V"/>
                 <outlet property="resourceDescription" destination="gAi-iq-Rd5" id="CDT-O4-mYd"/>
-                <outlet property="resourceImage" destination="m3Z-wI-tNu" id="0vo-x0-pUj"/>
+                <outlet property="resourceImageView" destination="m3Z-wI-tNu" id="0vo-x0-pUj"/>
                 <outlet property="resourceName" destination="qOa-H5-K3Y" id="V3w-ux-6N7"/>
             </connections>
         </collectionViewCell>

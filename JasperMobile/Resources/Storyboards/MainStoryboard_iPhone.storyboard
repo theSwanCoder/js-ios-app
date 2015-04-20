@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ARf-6W-JXB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ARf-6W-JXB">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
@@ -260,6 +260,7 @@ your business wherever you are.</string>
                     <navigationItem key="navigationItem" id="gBX-sh-L3x"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
+                        <outlet property="bottomView" destination="SqA-Kl-2pl" id="xga-lZ-jqk"/>
                         <outlet property="contentView" destination="zN4-7v-hyV" id="VaO-7W-6Z6"/>
                         <outlet property="descriptionLabel" destination="T2Z-a3-ZJ1" id="E2W-ag-bIg"/>
                         <outlet property="descriptionPageLabel" destination="qcO-Ra-OsM" id="QZb-WR-aYG"/>
@@ -273,7 +274,6 @@ your business wherever you are.</string>
                         <outlet property="titlePageLabel" destination="ZXN-zZ-mep" id="o4b-UG-wFr"/>
                         <outlet property="titleView" destination="zdf-mA-oqg" id="d5I-eU-YkE"/>
                         <outlet property="welcomeView" destination="scU-Dt-kru" id="PcU-Rq-Fjm"/>
-                        <outlet property="bottomView" destination="SqA-Kl-2pl" id="xga-lZ-jqk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cBr-n4-zHN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1053,7 +1053,7 @@ your business wherever you are.</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextCellIdentifier" textLabel="FkY-Qs-99e" style="IBUITableViewCellStyleDefault" id="dzz-4a-J4M" customClass="JMTextSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="86" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="22" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dzz-4a-J4M" id="iC1-Tp-e94">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -1083,7 +1083,7 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BooleanCellIdentifier" textLabel="ehn-Jd-ueF" style="IBUITableViewCellStyleDefault" id="uVG-rE-OoL" customClass="JMBooleanSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="130" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="66" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uVG-rE-OoL" id="0CI-6d-EkU">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -1111,7 +1111,7 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IntroCellIdentifier" textLabel="TDI-Ai-vEN" style="IBUITableViewCellStyleDefault" id="ZRK-XI-mbG" customClass="JMSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="174" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="110" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZRK-XI-mbG" id="RLN-2u-qEw">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -1130,7 +1130,7 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedbackCellIdentifier" textLabel="NHL-5E-XIk" style="IBUITableViewCellStyleDefault" id="VXs-qL-KsU" customClass="JMSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="218" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="154" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VXs-qL-KsU" id="TDV-N4-NZk">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>

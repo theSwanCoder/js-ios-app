@@ -22,23 +22,17 @@
 
 
 #import "JMResourceCollectionViewCell.h"
-#import "JMSavedResources+Helpers.h"
-#import "JMServerProfile+Helpers.h"
-#import "UIImageView+AFNetworking.h"
-#import "RKObjectManager.h"
-
-#import "JSResourceLookup+Helpers.h"
+#import "JMResourcePreviewView.h"
 
 NSString * kJMHorizontalResourceCell = @"JMHorizontalResourceCollectionViewCell";
 NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 
 
 @interface JMResourceCollectionViewCell()
-@property (nonatomic, weak) IBOutlet UIImageView *resourceImage;
+@property (nonatomic, weak) IBOutlet JMResourcePreviewView *previewView;
 @property (nonatomic, weak) IBOutlet UILabel *resourceName;
 @property (nonatomic, weak) IBOutlet UILabel *resourceDescription;
 @property (nonatomic, weak) IBOutlet UIButton *infoButton;
-@property (nonatomic, readwrite) UIImage *thumbnailImage;
 @end
 
 @implementation JMResourceCollectionViewCell
@@ -56,79 +50,12 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     _resourceLookup = resourceLookup;
     self.resourceName.text = resourceLookup.label;
     self.resourceDescription.text = resourceLookup.resourceDescription;
-    self.thumbnailImage = nil;
-    [self updateResourceImage];
+    [self.previewView updateResourcePreviewWithResourceLookup:self.resourceLookup];
 }
 
 - (IBAction)infoButtonDidTapped:(id)sender
 {
     [self.delegate infoButtonDidTappedOnCell:self];
-}
-
-- (void)updateResourceImage
-{
-    UIImage *resourceImage;
-    if ([self.resourceLookup isReport]) {
-        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
-        if (savedReport) {
-            self.thumbnailImage = [savedReport thumbnailImage];
-            resourceImage = [UIImage imageNamed:[NSString stringWithFormat:@"res_type_%@", savedReport.format]];
-        } else {
-            resourceImage = [UIImage imageNamed:@"res_type_report"];
-            if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
-                NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.resourceLookup thumbnailImageUrlString]]];
-                [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
-                [self.resourceImage setImageWithURLRequest:imageRequest placeholderImage:resourceImage success:@weakself(^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image)) {
-                    if (image) {
-                        self.thumbnailImage = image;
-                        [self updateResourceImage:self.thumbnailImage thumbnails:YES];
-                    }
-                } @weakselfend failure:nil];
-            }
-        }
-    } else if ([self.resourceLookup isDashboard]) {
-        resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
-    } else if ([self.resourceLookup isFolder]) {
-        resourceImage = [UIImage imageNamed:@"res_type_folder"];
-    }
-    
-    if (resourceImage || _thumbnailImage) {
-        [self updateResourceImage:_thumbnailImage ?:resourceImage thumbnails:!!_thumbnailImage];
-    }
-    // TODO: Should be fixed! need replace url generation to SDK!
-}
-
-- (void)updateResourceImage:(UIImage *)image thumbnails:(BOOL)thumbnails
-{
-    UIImage *resourceImage = thumbnails ? [self cropedImageFromImage:image inRect:self.resourceImage.bounds] : image;
-    BOOL shouldFitImage = ((resourceImage.size.height > self.resourceImage.frame.size.height) || (resourceImage.size.width > self.resourceImage.frame.size.width));
-    self.resourceImage.contentMode = shouldFitImage ? UIViewContentModeScaleAspectFit : UIViewContentModeCenter;
-    self.resourceImage.backgroundColor = thumbnails ? [UIColor clearColor] : kJMResourcePreviewBackgroundColor;
-    self.resourceImage.image = resourceImage;
-}
-
-- (UIImage *)cropedImageFromImage:(UIImage *)image inRect:(CGRect)rect
-{
-    CGFloat imageWidth = image.size.width;
-    
-    CGFloat rectWidth = CGRectGetWidth(rect);
-    CGFloat rectHeight = CGRectGetHeight(rect);
-    
-    CGFloat croppedOriginX = 0;
-    CGFloat croppedOriginY = 0;
-    CGFloat croppedWidth = imageWidth; // always equal width of image
-    CGFloat croppedHeight = (imageWidth/rectWidth) * rectHeight; // changed to fill rect
-    
-    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
-    CGRect croppedRect = CGRectMake(croppedOriginX,
-                                    croppedOriginY,
-                                    croppedWidth * scaleFactor,
-                                    croppedHeight *scaleFactor);
-    
-    CGImageRef imageRef = CGImageCreateWithImageInRect([image CGImage], croppedRect);
-    UIImage *img = [UIImage imageWithCGImage:imageRef scale:scaleFactor orientation:UIImageOrientationUp];
-    CGImageRelease(imageRef);
-    return img;
 }
 
 @end

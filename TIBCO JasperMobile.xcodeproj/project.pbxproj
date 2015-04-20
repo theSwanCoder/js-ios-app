@@ -159,6 +159,7 @@
 		93D8C6511AAD685C00117306 /* JMBaseDashboardViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6501AAD685C00117306 /* JMBaseDashboardViewerVC.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
 		93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */; };
+		93DA95B01AE4EEED00B2FFB3 /* JMResourcePreviewView in Resources */ = {isa = PBXBuildFile; fileRef = 93DA95AF1AE4EEED00B2FFB3 /* JMResourcePreviewView */; };
 		93EEB4601AC53CAF000718C7 /* JMDashboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB45F1AC53CAF000718C7 /* JMDashboardVC.swift */; };
 		93EEB4621AC54761000718C7 /* JMVisualizeWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */; };
 		93EEB4641AC54EAE000718C7 /* JMWKWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4631AC54EAE000718C7 /* JMWKWebViewManager.swift */; };
@@ -166,6 +167,7 @@
 		93EEB46A1AC9569F000718C7 /* JMBaseResourceViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4691AC9569F000718C7 /* JMBaseResourceViewerVC.m */; };
 		93EEB46C1AC972AA000718C7 /* JMResourceViewerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB46B1AC972AA000718C7 /* JMResourceViewerVC.swift */; };
 		93EEB46F1AC98498000718C7 /* JMVisualizeDashboardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB46E1AC98498000718C7 /* JMVisualizeDashboardLoader.swift */; };
+		A1478BDD7158CE663ADD0CFB /* JSResourceLookup+KPI.m in Sources */ = {isa = PBXBuildFile; fileRef = A147826BC81205A1906FEC15 /* JSResourceLookup+KPI.m */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDABBD2B1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDABBD2A1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard */; };
@@ -515,6 +517,7 @@
 		93D8C6541AAD69CD00117306 /* JMDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboard.m; sourceTree = "<group>"; };
 		93D8C6571AAD778400117306 /* JMVisualizeDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeDashboard.h; sourceTree = "<group>"; };
 		93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeDashboard.m; sourceTree = "<group>"; };
+		93DA95AF1AE4EEED00B2FFB3 /* JMResourcePreviewView */ = {isa = PBXFileReference; lastKnownFileType = folder; path = JMResourcePreviewView; sourceTree = "<group>"; };
 		93EEB45E1AC53CAE000718C7 /* TIBCO JasperMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "TIBCO JasperMobile-Bridging-Header.h"; path = "ViewControllers/Repository&Libraries/ResourceViewer/JMDashboardsViewerViewController/TIBCO JasperMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		93EEB45F1AC53CAF000718C7 /* JMDashboardVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMDashboardVC.swift; sourceTree = "<group>"; };
 		93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMVisualizeWebViewManager.swift; sourceTree = "<group>"; };
@@ -524,6 +527,8 @@
 		93EEB4691AC9569F000718C7 /* JMBaseResourceViewerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourceViewerVC.m; sourceTree = "<group>"; };
 		93EEB46B1AC972AA000718C7 /* JMResourceViewerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMResourceViewerVC.swift; sourceTree = "<group>"; };
 		93EEB46E1AC98498000718C7 /* JMVisualizeDashboardLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMVisualizeDashboardLoader.swift; sourceTree = "<group>"; };
+		A147801CC876DF85B061234E /* JSResourceLookup+KPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JSResourceLookup+KPI.h"; sourceTree = "<group>"; };
+		A147826BC81205A1906FEC15 /* JSResourceLookup+KPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSResourceLookup+KPI.m"; sourceTree = "<group>"; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
@@ -821,6 +826,8 @@
 				089B14A21AA756BD0021A915 /* UITableViewCell+Additions.m */,
 				089B14A31AA756BD0021A915 /* UIView+Additions.h */,
 				089B14A41AA756BD0021A915 /* UIView+Additions.m */,
+				A147826BC81205A1906FEC15 /* JSResourceLookup+KPI.m */,
+				A147801CC876DF85B061234E /* JSResourceLookup+KPI.h */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -828,6 +835,7 @@
 		089B14AE1AA756BD0021A915 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				93DA95AF1AE4EEED00B2FFB3 /* JMResourcePreviewView */,
 				089B14AF1AA756BD0021A915 /* JMMenuActionsView */,
 				089B14B21AA756BD0021A915 /* JMPopupView */,
 			);
@@ -1959,6 +1967,7 @@
 				930F8D421ABB1C35005F93FB /* report-ios-mobilejs-sdk.js in Resources */,
 				930F8D411ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js in Resources */,
 				930F8D401ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js in Resources */,
+				93DA95B01AE4EEED00B2FFB3 /* JMResourcePreviewView in Resources */,
 				089B15FC1AA756BD0021A915 /* JMBaseCollectionView.xib in Resources */,
 				930F8D461ABB1CDF005F93FB /* report.html in Resources */,
 				08FCFACA1A8A6057007940E7 /* MainStoryboard_iPad.storyboard in Resources */,
@@ -2165,6 +2174,7 @@
 				089B15A11AA756BD0021A915 /* NSObject+Additions.m in Sources */,
 				93EEB46F1AC98498000718C7 /* JMVisualizeDashboardLoader.swift in Sources */,
 				93D8C64E1AAD684500117306 /* JMVisualizeDashboardViewerVC.m in Sources */,
+				A1478BDD7158CE663ADD0CFB /* JSResourceLookup+KPI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

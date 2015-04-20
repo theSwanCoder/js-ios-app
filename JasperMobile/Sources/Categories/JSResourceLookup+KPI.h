@@ -20,30 +20,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+
 //
-//  JMVisualizeClient.h
+//  JSResourceLookup+KPI.h
 //  TIBCO JasperMobile
 //
 
 /**
- @since 1.9.1
- */
+@author Olexandr Dahno odahno@tibco.com
+@since 2.1
+*/
 
-#import "JMResourceClientHolder.h"
+#import <Foundation/Foundation.h>
+#import "JSResourceLookup.h"
 
-@protocol JMVisualizeClientDelegate;
-
-@interface JMVisualizeClient : NSObject <JMResourceClientHolder>
-@property (weak, nonatomic) UIWebView *webView;
-@property (weak, nonatomic) id<JMVisualizeClientDelegate>delegate;
-
-- (void)setup;
-- (BOOL)isCallbackRequest:(NSURLRequest *)request;
-- (void)minimizeDashlet;
-@end
-
-@protocol JMVisualizeClientDelegate <NSObject>
-@optional
-- (void)visualizeClientDidEndLoading;
-- (void)visualizeClientDidMaximizeDashletWithTitle:(NSString *)title;
+@interface JSResourceLookup (KPI)
+- (void)fetchKPIwithCompletion:(void(^)(NSDictionary *kpi, NSError *error))completion;
 @end
