@@ -22,20 +22,19 @@
 
 
 //
-//  JSResourceLookup+KPI.h
+//  JMDefaultKPIView.h
 //  TIBCO JasperMobile
 //
+
+@class JMBaseKPIModel;
 
 /**
 @author Olexandr Dahno odahno@tibco.com
 @since 2.1
 */
 
-#import <Foundation/Foundation.h>
-#import "JSResourceLookup.h"
+@interface JMDefaultKPIView : UIView
 
-@class JMBaseKPIModel;
+- (void)setupViewWithKPIModel:(JMBaseKPIModel *)kpiModel;
 
-@interface JSResourceLookup (KPI)
-- (void)fetchKPIwithCompletion:(void(^)(JMBaseKPIModel *kpi, NSError *error))completion;
 @end

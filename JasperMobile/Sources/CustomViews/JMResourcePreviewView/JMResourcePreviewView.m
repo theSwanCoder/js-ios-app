@@ -1,6 +1,29 @@
+/*
+ * TIBCO JasperMobile for iOS
+ * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * http://community.jaspersoft.com/project/jaspermobile-ios
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
+
 //
-// Created by Aleksandr Dakhno on 4/17/15.
-// Copyright (c) 2015 TIBCO JasperMobile. All rights reserved.
+//  JMResourcePreviewView.m
+//  TIBCO JasperMobile
 //
 
 #import "JMResourcePreviewView.h"
@@ -8,6 +31,8 @@
 #import "JMSavedResources.h"
 #import "JMSavedResources+Helpers.h"
 #import "JSResourceLookup+KPI.h"
+#import "JMBaseKPIModel.h"
+#import "JMDefaultKPIView.h"
 
 @interface JMResourcePreviewView()
 @property (nonatomic, weak) UIImageView *resourceImageView;
@@ -26,16 +51,17 @@
     self.resourceImageView = resourceImage;
 
     // TODO: create separate classes for different KPIs
-    UIView *kpiView = [[UIView alloc] initWithFrame:self.bounds];
-    [self addSubview:kpiView];
-    self.kpiView = kpiView;
-    self.kpiView.hidden = YES;
+//    UIView *kpiView = [[UIView alloc] initWithFrame:self.bounds];
+//    [self addSubview:kpiView];
+//    self.kpiView = kpiView;
+//    self.kpiView.hidden = YES;
 }
 
 #pragma mark - Public API
 - (void)updateResourcePreviewWithResourceLookup:(JSResourceLookup *)resourceLookup
 {
     self.kpiView.frame = self.bounds;
+
     [self updateResourceImageWithResourceLookup:resourceLookup];
 }
 
@@ -60,46 +86,31 @@
     [self updateResourceImage:resourceImage thumbnails:NO];
 
     if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
-        [self fetchKPIforResourceLookup:resourceLookup completion:^(NSDictionary *kpi) {
+        [self fetchKPIforResourceLookup:resourceLookup completion:^(JMBaseKPIModel *kpi) {
             if (kpi) {
-                // clean kpiView
-                [self.kpiView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-
-                NSLog(@"has kpi: %@", kpi);
                 self.resourceImageView.hidden = YES;
                 self.kpiView.hidden = NO;
 
-                CGFloat value = ((NSNumber *)kpi[@"value"]).floatValue;
-                CGFloat target = ((NSNumber *)kpi[@"target"]).floatValue;
-                NSString *title = (NSString *)kpi[@"title"];
+                [self.kpiView removeFromSuperview];
 
-                // show kpi
-                NSString *imageName = @"kpi_arrow_down";
-
-                if (value > target) {
-                    imageName = @"kpi_arrow_up";
+                switch (kpi.widgetType) {
+                    case JMKPIWidgetTypeDefault : {
+                        NSLog(@"default");
+                        JMDefaultKPIView *defaultKPIView = [[JMDefaultKPIView alloc] initWithFrame:self.bounds];
+                        [defaultKPIView setupViewWithKPIModel:kpi];
+                        [self addSubview:defaultKPIView];
+                        self.kpiView = defaultKPIView;
+                        break;
+                    };
+                    case JMKPIWidgetTypeGauge : {
+                        NSLog(@"gauge");
+                        break;
+                    };
+                    case JMKPIWidgetTypeNumber: {
+                        NSLog(@"number");
+                        break;
+                    };
                 }
-
-                self.kpiView.backgroundColor = [UIColor colorWithRed:24/255.0f green:27/255.0f blue:31/255.0f alpha:1.0];
-                UIImageView *arrowImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-                CGRect arrowImageFrame = arrowImageView.frame;
-                CGFloat arrowImageOriginX = 0.9 * CGRectGetWidth(self.kpiView.frame) - CGRectGetWidth(arrowImageFrame);
-                CGFloat arrowImageOriginY = 0.1 * CGRectGetHeight(self.kpiView.frame);
-                arrowImageFrame.origin = CGPointMake(arrowImageOriginX, arrowImageOriginY);
-                arrowImageView.frame = arrowImageFrame;
-                [self.kpiView addSubview:arrowImageView];
-
-                NSString *indicatorValue = [NSString stringWithFormat:@"%.0f %%", (value * 100) / target];
-                CGFloat indicatorLabelOriginX = 0.1 * CGRectGetWidth(self.kpiView.frame);
-                CGFloat indicatorLabelOriginY = 0.3 * CGRectGetHeight(self.kpiView.frame);
-                CGFloat indicatorLabelWidth = 0.8 * CGRectGetWidth(self.kpiView.frame);
-                CGFloat indicatorLabelHeight = 0.7 * CGRectGetHeight(self.kpiView.frame);
-                CGRect indicatorLabelFrame = CGRectMake(indicatorLabelOriginX, indicatorLabelOriginY, indicatorLabelWidth, indicatorLabelHeight);
-                UILabel *indicatorLabel = [[UILabel alloc] initWithFrame:indicatorLabelFrame];
-                indicatorLabel.text = indicatorValue;
-                indicatorLabel.textColor = [UIColor whiteColor];
-                indicatorLabel.font = [UIFont boldSystemFontOfSize:23];
-                [self.kpiView addSubview:indicatorLabel];
             } else {
                 [self fetchAndSetThumbnailWithResourceLookup:resourceLookup];
             }
@@ -134,9 +145,9 @@
     }
 }
 
-- (void)fetchKPIforResourceLookup:(JSResourceLookup *)resourceLookup completion:(void(^)(NSDictionary *kpi))completion
+- (void)fetchKPIforResourceLookup:(JSResourceLookup *)resourceLookup completion:(void(^)(JMBaseKPIModel *kpi))completion
 {
-    [resourceLookup fetchKPIwithCompletion:^(NSDictionary *kpi, NSError *error) {
+    [resourceLookup fetchKPIwithCompletion:^(JMBaseKPIModel *kpi, NSError *error) {
         if (completion) {
             completion(kpi);
         }

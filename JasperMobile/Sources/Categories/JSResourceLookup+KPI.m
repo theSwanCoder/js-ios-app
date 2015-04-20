@@ -27,11 +27,11 @@
 //
 
 #import "JSResourceLookup+KPI.h"
-
+#import "JMBaseKPIModel.h"
 
 @implementation JSResourceLookup (KPI)
 
-- (void)fetchKPIwithCompletion:(void(^)(NSDictionary *kpi, NSError *error))completion
+- (void)fetchKPIwithCompletion:(void(^)(JMBaseKPIModel *kpi, NSError *error))completion
 {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         id kpiJSON;
@@ -52,7 +52,14 @@
 
         dispatch_async(dispatch_get_main_queue(), ^(void){
             if (completion && [kpiJSON isKindOfClass:[NSArray class]] && ((NSArray *)kpiJSON).firstObject ) {
-                completion(((NSArray *)kpiJSON).firstObject, error);
+                JMBaseKPIModel *kpiModel = [JMBaseKPIModel new];
+                NSDictionary *kpi = ((NSArray *)kpiJSON).firstObject;
+                //NSLog(@"kpi: %@", kpi);
+                kpiModel.title = kpi[@"title"];
+                kpiModel.target = kpi[@"target"];
+                kpiModel.value = kpi[@"value"];
+                kpiModel.widgetType = [kpiModel widgetTypeFromString:kpi[@"widget"]];
+                completion(kpiModel, error);
             }
         });
 

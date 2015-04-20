@@ -22,20 +22,29 @@
 
 
 //
-//  JSResourceLookup+KPI.h
+//  JMBaseKPIModel.m
 //  TIBCO JasperMobile
 //
 
-/**
-@author Olexandr Dahno odahno@tibco.com
-@since 2.1
-*/
+#import "JMBaseKPIModel.h"
 
-#import <Foundation/Foundation.h>
-#import "JSResourceLookup.h"
 
-@class JMBaseKPIModel;
+@implementation JMBaseKPIModel
 
-@interface JSResourceLookup (KPI)
-- (void)fetchKPIwithCompletion:(void(^)(JMBaseKPIModel *kpi, NSError *error))completion;
+#pragma mark - Public API
+- (JMKPIWidgetType)widgetTypeFromString:(NSString *)widgetTypeString
+{
+    JMKPIWidgetType widgetType = JMKPIWidgetTypeDefault;
+
+    if ([widgetTypeString isEqualToString:@"default"]) {
+        widgetType = JMKPIWidgetTypeDefault;
+    } else if ([widgetTypeString isEqualToString:@"gauge"]) {
+        widgetType = JMKPIWidgetTypeGauge;
+    } else if ([widgetTypeString isEqualToString:@"number"]) {
+        widgetType = JMKPIWidgetTypeNumber;
+    }
+
+    return widgetType;
+}
+
 @end
