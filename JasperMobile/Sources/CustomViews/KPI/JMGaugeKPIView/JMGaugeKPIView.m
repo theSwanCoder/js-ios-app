@@ -22,14 +22,15 @@
 
 
 //
-//  JMDefaultKPIView.m
+//  JMGaugeKPIView.m
 //  TIBCO JasperMobile
 //
 
-#import "JMDefaultKPIView.h"
+#import "JMGaugeKPIView.h"
 #import "JMBaseKPIModel.h"
 
-@implementation JMDefaultKPIView
+
+@implementation JMGaugeKPIView
 
 #pragma mark - Public API
 - (void)setupViewWithKPIModel:(JMBaseKPIModel *)kpiModel
@@ -50,7 +51,8 @@
     CGRect indicatorLabelFrame = CGRectMake(indicatorLabelOriginX, indicatorLabelOriginY, indicatorLabelWidth, indicatorLabelHeight);
     UILabel *indicatorLabel = [[UILabel alloc] initWithFrame:indicatorLabelFrame];
 
-    NSString *indicatorValueString = [NSString stringWithFormat:@"$%.0f", kpiModel.value.doubleValue];
+    double indicatorValue = (kpiModel.value.doubleValue * 100) / kpiModel.target.doubleValue;
+    NSString *indicatorValueString = [NSString stringWithFormat:@"%.0f%% of goal", indicatorValue];
 
     NSMutableAttributedString *indicatorValueAttributedString = [[NSMutableAttributedString alloc] initWithString:indicatorValueString];
 
@@ -59,8 +61,25 @@
             NSForegroundColorAttributeName: [UIColor whiteColor],
             NSFontAttributeName : [UIFont boldSystemFontOfSize:16]
     };
-    NSRange valueRange = NSMakeRange(0, indicatorValueString.length);
+    NSRange valueRange = [indicatorValueString rangeOfString:[NSString stringWithFormat:@"%.0f", indicatorValue]];
     [indicatorValueAttributedString addAttributes:valueAttributes range:valueRange];
+
+    // setup percent sign font
+    NSDictionary *percentSignAttributes = @{
+            NSForegroundColorAttributeName: [UIColor grayColor],
+            NSFontAttributeName : [UIFont italicSystemFontOfSize:12]
+    };
+    NSRange percentSignRange = [indicatorValueString rangeOfString:@"%"];
+    [indicatorValueAttributedString addAttributes:percentSignAttributes range:percentSignRange];
+
+
+    // description font
+    NSDictionary *descriptionAttributes = @{
+            NSForegroundColorAttributeName: [UIColor grayColor],
+            NSFontAttributeName : [UIFont italicSystemFontOfSize:12]
+    };
+    NSRange descriptionRange = [indicatorValueString rangeOfString:@" of goal"];
+    [indicatorValueAttributedString addAttributes:descriptionAttributes range:descriptionRange];
 
     // set text
     indicatorLabel.attributedText = indicatorValueAttributedString;
@@ -72,12 +91,12 @@
 - (void)setupGraphWithModel:(JMBaseKPIModel *)kpiModel
 {
     CGFloat graphOriginX = 0.1 * CGRectGetWidth(self.frame);
-    CGFloat graphOriginY = 0.4 * CGRectGetHeight(self.frame);
+    CGFloat graphOriginY = 0.45 * CGRectGetHeight(self.frame);
     CGFloat graphWidth = 0.8 * CGRectGetWidth(self.frame);
-    CGFloat graphHeight = 0.5 * CGRectGetHeight(self.frame);
+    CGFloat graphHeight = 0.35 * CGRectGetHeight(self.frame);
     CGRect graphFrame = CGRectMake(graphOriginX, graphOriginY, graphWidth, graphHeight);
 
-    UIImageView *graphView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sample_graph"]];
+    UIImageView *graphView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sample_gauge"]];
     graphView.frame = graphFrame;
     [self addSubview:graphView];
 }

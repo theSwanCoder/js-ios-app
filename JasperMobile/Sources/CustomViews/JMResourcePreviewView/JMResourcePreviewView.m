@@ -33,6 +33,8 @@
 #import "JSResourceLookup+KPI.h"
 #import "JMBaseKPIModel.h"
 #import "JMDefaultKPIView.h"
+#import "JMGaugeKPIView.h"
+#import "JMNumberKPIView.h"
 
 @interface JMResourcePreviewView()
 @property (nonatomic, weak) UIImageView *resourceImageView;
@@ -95,7 +97,6 @@
 
                 switch (kpi.widgetType) {
                     case JMKPIWidgetTypeDefault : {
-                        NSLog(@"default");
                         JMDefaultKPIView *defaultKPIView = [[JMDefaultKPIView alloc] initWithFrame:self.bounds];
                         [defaultKPIView setupViewWithKPIModel:kpi];
                         [self addSubview:defaultKPIView];
@@ -103,11 +104,17 @@
                         break;
                     };
                     case JMKPIWidgetTypeGauge : {
-                        NSLog(@"gauge");
+                        JMGaugeKPIView *gaugeKPIView = [[JMGaugeKPIView alloc] initWithFrame:self.bounds];
+                        [gaugeKPIView setupViewWithKPIModel:kpi];
+                        [self addSubview:gaugeKPIView];
+                        self.kpiView = gaugeKPIView;
                         break;
                     };
                     case JMKPIWidgetTypeNumber: {
-                        NSLog(@"number");
+                        JMNumberKPIView *numberKPIView = [[JMNumberKPIView alloc] initWithFrame:self.bounds];
+                        [numberKPIView setupViewWithKPIModel:kpi];
+                        [self addSubview:numberKPIView];
+                        self.kpiView = numberKPIView;
                         break;
                     };
                 }

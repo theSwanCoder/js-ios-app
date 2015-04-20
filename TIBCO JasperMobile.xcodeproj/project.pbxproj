@@ -169,7 +169,9 @@
 		A147828A706FFFAD2009EF89 /* JMDefaultKPIView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478D7EC47687CAF043E92E /* JMDefaultKPIView.m */; };
 		A14785707EEA014DB78011E6 /* JMResourcePreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478EDD74ABFAD9BDF5DCE2 /* JMResourcePreviewView.m */; };
 		A14786076FF224142041E652 /* JMBaseKPIModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A14784AED59CF24B358FD30C /* JMBaseKPIModel.m */; };
+		A14786DC43F53DA452934701 /* JMNumberKPIView.m in Sources */ = {isa = PBXBuildFile; fileRef = A14789AB1D571EFF3D9F1C94 /* JMNumberKPIView.m */; };
 		A1478BDD7158CE663ADD0CFB /* JSResourceLookup+KPI.m in Sources */ = {isa = PBXBuildFile; fileRef = A147826BC81205A1906FEC15 /* JSResourceLookup+KPI.m */; };
+		A1478EC70A1ABFA1A905E898 /* JMGaugeKPIView.m in Sources */ = {isa = PBXBuildFile; fileRef = A14781AC00C998E38610058D /* JMGaugeKPIView.m */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDABBD2B1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDABBD2A1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard */; };
@@ -529,10 +531,14 @@
 		93EEB46B1AC972AA000718C7 /* JMResourceViewerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMResourceViewerVC.swift; sourceTree = "<group>"; };
 		93EEB46E1AC98498000718C7 /* JMVisualizeDashboardLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMVisualizeDashboardLoader.swift; sourceTree = "<group>"; };
 		A147801CC876DF85B061234E /* JSResourceLookup+KPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JSResourceLookup+KPI.h"; sourceTree = "<group>"; };
+		A14781AC00C998E38610058D /* JMGaugeKPIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMGaugeKPIView.m; sourceTree = "<group>"; };
 		A147826BC81205A1906FEC15 /* JSResourceLookup+KPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSResourceLookup+KPI.m"; sourceTree = "<group>"; };
 		A1478312E6ADEB501466F087 /* JMDefaultKPIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDefaultKPIView.h; sourceTree = "<group>"; };
 		A1478396C81324B3FBC50A59 /* JMBaseKPIModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseKPIModel.h; sourceTree = "<group>"; };
+		A147843D6924A2C877C85F19 /* JMGaugeKPIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMGaugeKPIView.h; sourceTree = "<group>"; };
 		A14784AED59CF24B358FD30C /* JMBaseKPIModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseKPIModel.m; sourceTree = "<group>"; };
+		A14789AB1D571EFF3D9F1C94 /* JMNumberKPIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMNumberKPIView.m; sourceTree = "<group>"; };
+		A1478B5AAB615FE0B1794E45 /* JMNumberKPIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMNumberKPIView.h; sourceTree = "<group>"; };
 		A1478D0EABBB36AE72C188BE /* JMResourcePreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourcePreviewView.h; sourceTree = "<group>"; };
 		A1478D7EC47687CAF043E92E /* JMDefaultKPIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDefaultKPIView.m; sourceTree = "<group>"; };
 		A1478EDD74ABFAD9BDF5DCE2 /* JMResourcePreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcePreviewView.m; sourceTree = "<group>"; };
@@ -1778,6 +1784,15 @@
 			path = JMDefaultKPIView;
 			sourceTree = "<group>";
 		};
+		A1478795E03F91021E3EE820 /* JMGaugeKPIView */ = {
+			isa = PBXGroup;
+			children = (
+				A14781AC00C998E38610058D /* JMGaugeKPIView.m */,
+				A147843D6924A2C877C85F19 /* JMGaugeKPIView.h */,
+			);
+			path = JMGaugeKPIView;
+			sourceTree = "<group>";
+		};
 		A147886592F08DA55D0FD8AB /* KPI */ = {
 			isa = PBXGroup;
 			children = (
@@ -1795,10 +1810,21 @@
 			path = JMResourcePreviewView;
 			sourceTree = "<group>";
 		};
+		A1478AA502EE4C0AC279C4C1 /* JMNumberKPIView */ = {
+			isa = PBXGroup;
+			children = (
+				A14789AB1D571EFF3D9F1C94 /* JMNumberKPIView.m */,
+				A1478B5AAB615FE0B1794E45 /* JMNumberKPIView.h */,
+			);
+			path = JMNumberKPIView;
+			sourceTree = "<group>";
+		};
 		A1478E484C8214BB0946FD81 /* KPI */ = {
 			isa = PBXGroup;
 			children = (
 				A147842EB4854016485D2A0E /* JMDefaultKPIView */,
+				A1478AA502EE4C0AC279C4C1 /* JMNumberKPIView */,
+				A1478795E03F91021E3EE820 /* JMGaugeKPIView */,
 			);
 			path = KPI;
 			sourceTree = "<group>";
@@ -2229,6 +2255,8 @@
 				A14785707EEA014DB78011E6 /* JMResourcePreviewView.m in Sources */,
 				A147828A706FFFAD2009EF89 /* JMDefaultKPIView.m in Sources */,
 				A14786076FF224142041E652 /* JMBaseKPIModel.m in Sources */,
+				A1478EC70A1ABFA1A905E898 /* JMGaugeKPIView.m in Sources */,
+				A14786DC43F53DA452934701 /* JMNumberKPIView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

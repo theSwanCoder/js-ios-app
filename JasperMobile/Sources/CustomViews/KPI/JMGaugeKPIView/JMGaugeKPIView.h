@@ -22,7 +22,7 @@
 
 
 //
-//  JMDefaultKPIView.h
+//  JMGaugeKPIView.h
 //  TIBCO JasperMobile
 //
 
@@ -33,6 +33,7 @@
 @since 2.1
 */
 
-@interface JMDefaultKPIView : UIView
+
+@interface JMGaugeKPIView : UIView
 - (void)setupViewWithKPIModel:(JMBaseKPIModel *)kpiModel;
 @end
