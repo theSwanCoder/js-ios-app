@@ -38,7 +38,6 @@
 @property (weak, nonatomic) id<JMVisualizeClientDelegate>delegate;
 
 - (void)setup;
-- (void)runDashboard;
 - (BOOL)isCallbackRequest:(NSURLRequest *)request;
 - (void)minimizeDashlet;
 @end

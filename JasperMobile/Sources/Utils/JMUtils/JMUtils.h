@@ -144,4 +144,5 @@
  */
 + (BOOL)isServerProEdition;
 
++ (NSString *)localizedStringFromDate:(NSDate *)date;
 @end

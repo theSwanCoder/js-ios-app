@@ -40,24 +40,25 @@
 {
     [super awakeFromNib];
     self.textField.inputView = self.datePicker;
+    
+    self.dateFormatter = [[NSDateFormatter alloc] init];
+    self.dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
-
-    self.dateFormatter = [[NSDateFormatter alloc] init];
-    self.dateFormatter.dateFormat = inputControlDescriptor.dateTimeFormatValidationRule.format;
-
-#warning NEED CHECK CONVERTING DATE WITH TIME ZONE
+    
     NSString *value = inputControlDescriptor.state.value;
     if (value && [value length]) {
-        if ([self.dateFormatter dateFromString:value]) {
-            self.datePicker.date = [self.dateFormatter dateFromString:value];
-        } else {
-            self.datePicker.date = [NSDate date];
-            inputControlDescriptor.state.value = [self.dateFormatter stringFromDate:self.datePicker.date];
+        self.dateFormatter.dateFormat = inputControlDescriptor.dateTimeFormatValidationRule.format;
+        NSDate *date = [self.dateFormatter dateFromString:value];
+        if (!date) {
+            date = [NSDate date];
         }
+        self.datePicker.date = date;
+        self.textField.text = [JMUtils localizedStringFromDate:self.datePicker.date];
+        self.inputControlDescriptor.state.value = [self.dateFormatter stringFromDate:self.datePicker.date];
     }
 }
 
@@ -95,8 +96,9 @@
 
 - (void)doneButtonTapped:(id)sender
 {
-    self.textField.text = [self.dateFormatter stringFromDate:self.datePicker.date];
-    [super doneButtonTapped:sender];
+    self.textField.text = [JMUtils localizedStringFromDate:self.datePicker.date];
+    self.inputControlDescriptor.state.value = [self.dateFormatter stringFromDate:self.datePicker.date];
+    [self.textField resignFirstResponder];
 }
 
 - (void)unset:(id)sender

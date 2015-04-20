@@ -46,6 +46,13 @@ static NSString * const kJMValueKey = @"value";
     
     self.title = self.resourceLookup.label;
     [self updateFavoriteItem];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetResourceProperties) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) updateFavoriteItem
@@ -67,9 +74,17 @@ static NSString * const kJMValueKey = @"value";
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
+- (void)resetResourceProperties
+{
+    self.resourceProperties = nil;
+    [self.tableView reloadData];
+}
+
 - (NSArray *)resourceProperties
 {
+    
     if (!_resourceProperties) {
+        NSString *createdAtString = [JMUtils localizedStringFromDate:self.resourceLookup.creationDate];
         _resourceProperties = @[
                                 @{
                                     kJMTitleKey : @"label",
@@ -94,7 +109,7 @@ static NSString * const kJMValueKey = @"value";
                                     },
                                 @{
                                     kJMTitleKey : @"creationDate",
-                                    kJMValueKey : self.resourceLookup.creationDate ?: @""
+                                    kJMValueKey : createdAtString ?: @""
                                     }
                                 ];
     }

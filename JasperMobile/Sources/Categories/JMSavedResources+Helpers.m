@@ -54,10 +54,7 @@ NSString * const kJMSavedResources = @"SavedResources";
         savedReport.organization = activeServerProfile.organization;
         [activeServerProfile addSavedResourcesObject:savedReport];
     }
-    
-    NSDateFormatter *dateFormatter = [NSDateFormatter new];
-    dateFormatter.dateFormat = self.restClient.serverInfo.datetimeFormatPattern;
-    savedReport.creationDate = [dateFormatter stringFromDate:[NSDate date]];
+    savedReport.creationDate = [NSDate date];
     
     [self.managedObjectContext save:nil];
 }

@@ -87,6 +87,7 @@ static JMSessionManager *_sharedManager = nil;
         }
     }
     if (self.restClient && self.restClient.keepSession) {
+        [self.restClient resetReachabilityStatus];
         JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForname:self.restClient.serverProfile.alias];
         if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
             [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
