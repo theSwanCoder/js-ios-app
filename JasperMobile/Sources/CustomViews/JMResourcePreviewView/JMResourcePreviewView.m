@@ -51,12 +51,6 @@
     UIImageView *resourceImage = [[UIImageView alloc] initWithFrame:self.bounds];
     [self addSubview:resourceImage];
     self.resourceImageView = resourceImage;
-
-    // TODO: create separate classes for different KPIs
-//    UIView *kpiView = [[UIView alloc] initWithFrame:self.bounds];
-//    [self addSubview:kpiView];
-//    self.kpiView = kpiView;
-//    self.kpiView.hidden = YES;
 }
 
 #pragma mark - Public API

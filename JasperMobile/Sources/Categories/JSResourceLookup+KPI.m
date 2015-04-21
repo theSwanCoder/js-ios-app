@@ -46,6 +46,9 @@
         if (kpiJSONData) {
             NSError *parseError;
             kpiJSON = [NSJSONSerialization JSONObjectWithData:kpiJSONData options:0 error:&parseError];
+            if (parseError) {
+                NSLog(@"error of parsing json: %@", parseError);
+            }
         } else {
             NSLog(@"Error getting KPI: %@", error.localizedDescription);
         }
