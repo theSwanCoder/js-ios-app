@@ -86,6 +86,20 @@
         });
       };
 
+      IosCallback.prototype.onWindowResizeStart = function() {
+        this._makeCallback({
+          "command": "onWindowResizeStart",
+          "parameters": {}
+        });
+      };
+
+      IosCallback.prototype.onWindowResizeEnd = function() {
+        this._makeCallback({
+          "command": "onWindowResizeEnd",
+          "parameters": {}
+        });
+      };
+
       IosCallback.prototype._makeCallback = function(command) {
         console.log("callback");
         return window.webkit.messageHandlers.callback.postMessage(command);
@@ -165,10 +179,7 @@
       };
 
       Scaler.prototype._calculateFactor = function() {
-        var factor;
-        factor = this.diagonal / 10.1;
-        console.log(factor);
-        return factor;
+        return this.diagonal / 10.1;
       };
 
       Scaler.prototype._generateStyles = function(factor) {
@@ -176,7 +187,7 @@
         jQuery("#scale_style").remove();
         scaledCanvasCss = ".scaledCanvas { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + factor + " ); -ms-transform: scale( " + factor + " ); -webkit-transform: scale( " + factor + " ); width: " + (100 / factor) + "% !important; height: " + (100 / factor) + "% !important; }";
         originalDashletInScaledCanvasCss = ".dashboardCanvas > .content > .body div.canvasOverlay.originalDashletInScaledCanvas { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + (1 / factor) + " ); -ms-transform: scale( " + (1 / factor) + " ); -webkit-transform: scale( " + (1 / factor) + " ); width: " + (100 * factor) + "% !important; height: " + (100 * factor) + "% !important; }";
-        jQuery('<style id="scale_style"></style').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo('head');
+        jQuery('<style id="scale_style"></style>').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo('head');
       };
 
       Scaler.prototype._applyScaleToDOM = function() {

@@ -8,7 +8,15 @@
         this._makeCallback("command:maximize&title:" + title);
       };
 
+      IosCallback.prototype.onMaximizeEnd = function(title) {};
+
+      IosCallback.prototype.onMaximizeFailed = function(error) {};
+
       IosCallback.prototype.onMinimizeStart = function() {};
+
+      IosCallback.prototype.onMinimizeEnd = function() {};
+
+      IosCallback.prototype.onMinimizeFailed = function(error) {};
 
       IosCallback.prototype.onScriptLoaded = function() {
         this._makeCallback("command:didScriptLoad");
@@ -21,6 +29,10 @@
       };
 
       IosCallback.prototype.onLoadError = function(error) {};
+
+      IosCallback.prototype.onWindowResizeStart = function() {};
+
+      IosCallback.prototype.onWindowResizeEnd = function() {};
 
       IosCallback.prototype._makeCallback = function(command) {
         return window.location.href = "http://jaspermobile.callback/" + command;
@@ -112,11 +124,54 @@
 }).call(this);
 
 (function() {
-  define('js.mobile.amber.dashboard.controller', ['require','js.mobile.amber.dashboard.view'],function(require) {
-    var DashboardController, View;
+  define('js.mobile.dom_tree_observer', [],function() {
+    var DOMTreeObserver;
+    return DOMTreeObserver = (function() {
+      function DOMTreeObserver() {}
+
+      DOMTreeObserver._instance = null;
+
+      DOMTreeObserver.lastModify = function(callback) {
+        this._instance = new DOMTreeObserver;
+        this._instance.callback = callback;
+        return this._instance;
+      };
+
+      DOMTreeObserver.prototype.wait = function() {
+        var timeout;
+        timeout = null;
+        jQuery("body").unbind();
+        return jQuery("body").bind("DOMSubtreeModified", (function(_this) {
+          return function() {
+            if (timeout != null) {
+              window.clearInterval(timeout);
+            }
+            return timeout = window.setTimeout(function() {
+              window.clearInterval(timeout);
+              jQuery("body").unbind();
+              return _this.callback.call(_this);
+            }, 1000);
+          };
+        })(this));
+      };
+
+      return DOMTreeObserver;
+
+    })();
+  });
+
+}).call(this);
+
+(function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  define('js.mobile.amber.dashboard.controller', ['require','js.mobile.amber.dashboard.view','js.mobile.dom_tree_observer'],function(require) {
+    var DOMTreeObserver, DashboardController, View;
     View = require('js.mobile.amber.dashboard.view');
+    DOMTreeObserver = require('js.mobile.dom_tree_observer');
     return DashboardController = (function() {
       function DashboardController(options) {
+        this._overrideDashletTouches = bind(this._overrideDashletTouches, this);
         this.context = options.context, this.viewport = options.viewport, this.scaler = options.scaler;
         this.logger = this.context.logger;
         this.callback = this.context.callback;
@@ -134,21 +189,27 @@
         this.logger.log("minimize dashlet");
         this.logger.log("Remove original scale");
         this.scaler.removeOriginalScale();
-        jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click();
         this._disableDashlets();
-        return this.callback.onMinimizeStart();
+        this.callback.onMinimizeStart();
+        DOMTreeObserver.lastModify(this.callback.onMinimizeEnd).wait();
+        return jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click();
+      };
+
+      DashboardController.prototype._removeRedundantArtifacts = function() {
+        var customStyle;
+        this.logger.log("remove artifacts");
+        customStyle = ".header, .dashletToolbar, .show_chartTypeSelector_wrapper { display: none !important; } .column.decorated { margin: 0 !important; border: none !important; } .dashboardViewer.dashboardContainer>.content>.body, .column.decorated>.content>.body, .column>.content>.body { top: 0 !important; } #mainNavigation{ display: none !important; } .customOverlay { position: absolute; width: 100%; height: 100%; z-index: 1000; } .dashboardCanvas .dashlet > .dashletContent > .content { -webkit-overflow-scrolling : auto !important; }";
+        return jQuery('<style id="custom_mobile"></style>').text(customStyle).appendTo('head');
       };
 
       DashboardController.prototype._injectViewport = function() {
+        this.logger.log("inject custom viewport");
         return this.viewport.configure();
-      };
-
-      DashboardController.prototype._scaleDashboard = function() {
-        return jQuery('.dashboardCanvas').addClass('scaledCanvas');
       };
 
       DashboardController.prototype._attachDashletLoadListeners = function() {
         var timeInterval;
+        this.logger.log("attaching dashlet listener");
         return timeInterval = window.setInterval((function(_this) {
           return function() {
             var timeIntervalDashletContent;
@@ -169,22 +230,18 @@
       };
 
       DashboardController.prototype._configureDashboard = function() {
+        this.logger.log("_configureDashboard");
         this._createCustomOverlays();
         this._scaleDashboard();
         this._overrideDashletTouches();
         this._disableDashlets();
-        return this.callback.onLoadDone();
-      };
-
-      DashboardController.prototype._removeRedundantArtifacts = function() {
-        var customStyle;
-        this.logger.log("remove artifacts");
-        customStyle = ".header, .dashletToolbar, .show_chartTypeSelector_wrapper { display: none !important; } .column.decorated { margin: 0 !important; border: none !important; } .dashboardViewer.dashboardContainer>.content>.body, .column.decorated>.content>.body, .column>.content>.body { top: 0 !important; } #mainNavigation{ display: none !important; } .customOverlay { position: absolute; width: 100%; height: 100%; z-index: 1000; }";
-        return jQuery('<style id="custom_mobile"></style').text(customStyle).appendTo('head');
+        this.callback.onLoadDone();
+        return this._setupResizeListener();
       };
 
       DashboardController.prototype._createCustomOverlays = function() {
         var dashletElements;
+        this.logger.log("_createCustomOverlays");
         dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent());
         return jQuery.each(dashletElements, function(key, value) {
           var dashlet, overlay;
@@ -193,6 +250,21 @@
           overlay.addClass("customOverlay");
           return dashlet.prepend(overlay);
         });
+      };
+
+      DashboardController.prototype._scaleDashboard = function() {
+        this.logger.log("_scaleDashboard");
+        return jQuery('.dashboardCanvas').addClass('scaledCanvas');
+      };
+
+      DashboardController.prototype._setupResizeListener = function() {
+        this.logger.log("set resizer listener");
+        return jQuery(window).resize((function(_this) {
+          return function() {
+            DOMTreeObserver.lastModify(_this.callback.onWindowResizeEnd).wait();
+            return _this.callback.onWindowResizeStart();
+          };
+        })(this));
       };
 
       DashboardController.prototype._disableDashlets = function() {
@@ -225,10 +297,16 @@
       };
 
       DashboardController.prototype._maximizeDashlet = function(dashlet, title) {
-        var button;
+        var button, endListener;
         this.logger.log("maximizing dashlet");
         this._enableDashlets();
         this.callback.onMaximizeStart(title);
+        endListener = (function(_this) {
+          return function() {
+            return _this.callback.onMaximizeEnd(title);
+          };
+        })(this);
+        DOMTreeObserver.lastModify(endListener).wait();
         button = jQuery(jQuery(dashlet).find('div.dashletToolbar > div.content div.buttons > .maximizeDashletButton')[0]);
         button.click();
         this.logger.log("Add original scale");
@@ -286,10 +364,7 @@
       };
 
       Scaler.prototype._calculateFactor = function() {
-        var factor;
-        factor = this.diagonal / 10.1;
-        console.log(factor);
-        return factor;
+        return this.diagonal / 10.1;
       };
 
       Scaler.prototype._generateStyles = function(factor) {
@@ -297,7 +372,7 @@
         jQuery("#scale_style").remove();
         scaledCanvasCss = ".scaledCanvas { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + factor + " ); -ms-transform: scale( " + factor + " ); -webkit-transform: scale( " + factor + " ); width: " + (100 / factor) + "% !important; height: " + (100 / factor) + "% !important; }";
         originalDashletInScaledCanvasCss = ".dashboardCanvas > .content > .body div.canvasOverlay.originalDashletInScaledCanvas { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + (1 / factor) + " ); -ms-transform: scale( " + (1 / factor) + " ); -webkit-transform: scale( " + (1 / factor) + " ); width: " + (100 * factor) + "% !important; height: " + (100 * factor) + "% !important; }";
-        jQuery('<style id="scale_style"></style').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo('head');
+        jQuery('<style id="scale_style"></style>').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo('head');
       };
 
       Scaler.prototype._applyScaleToDOM = function() {
@@ -320,9 +395,15 @@
     MobileDashboard = (function() {
       MobileDashboard._instance = null;
 
-      MobileDashboard.getInstance = function(context, viewport) {
+      MobileDashboard.newInstance = function(context, viewport) {
         return this._instance || (this._instance = new MobileDashboard(context, viewport));
       };
+
+      function MobileDashboard(context1, viewport1) {
+        this.context = context1;
+        this.viewport = viewport1;
+        this.context.callback.onScriptLoaded();
+      }
 
       MobileDashboard.configure = function(options) {
         this._instance.options = options;
@@ -333,17 +414,27 @@
         return this._instance.run();
       };
 
+      MobileDashboard.prototype.run = function() {
+        if (this.options == null) {
+          return alert("Run was called without options");
+        } else {
+          return this._initController();
+        }
+      };
+
       MobileDashboard.minimizeDashlet = function() {
         return this._instance.minimizeDashlet();
       };
 
-      function MobileDashboard(context1, viewport1) {
-        this.context = context1;
-        this.viewport = viewport1;
-        this.context.callback.onScriptLoaded();
-      }
+      MobileDashboard.prototype.minimizeDashlet = function() {
+        if (this.dashboardController == null) {
+          return alert("MobileDashboard not initialized");
+        } else {
+          return this.dashboardController.minimizeDashlet();
+        }
+      };
 
-      MobileDashboard.prototype.run = function() {
+      MobileDashboard.prototype._initController = function() {
         var scaler;
         scaler = new Scaler(this.options);
         this.dashboardController = new DashboardController({
@@ -354,15 +445,11 @@
         return this.dashboardController.initialize();
       };
 
-      MobileDashboard.prototype.minimizeDashlet = function() {
-        return this.dashboardController.minimizeDashlet();
-      };
-
       return MobileDashboard;
 
     })();
     root = typeof window !== "undefined" && window !== null ? window : exports;
-    return root.MobileDashboard = MobileDashboard;
+    return window.MobileDashboard = MobileDashboard;
   });
 
 }).call(this);
@@ -404,7 +491,7 @@
           logger: new IosLogger()
         });
         viewport = new Viewport();
-        return MobileDashboard.getInstance(context, viewport);
+        return MobileDashboard.newInstance(context, viewport);
       };
 
       return IosClient;
