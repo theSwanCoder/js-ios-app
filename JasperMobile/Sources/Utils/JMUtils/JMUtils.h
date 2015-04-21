@@ -77,13 +77,6 @@
 + (BOOL)isSystemVersion8;
 
 /**
- Returns used in application NSManagedObjectContext
-
- @return used in application NSManagedObjectContext
- */
-+ (NSManagedObjectContext *)managedObjectContext;
-
-/**
  Returns YES if crash reports sending is available
 
  @return YES if crash reports sending is available

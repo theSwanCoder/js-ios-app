@@ -103,12 +103,6 @@
     return [UIDevice currentDevice].systemVersion.integerValue == 8;
 }
 
-+ (NSManagedObjectContext *)managedObjectContext
-{
-    JasperMobileAppDelegate *appDelegate = (JasperMobileAppDelegate*) [UIApplication sharedApplication].delegate;
-    return appDelegate.managedObjectContext;
-}
-
 + (BOOL)crashReportsSendingEnable
 {
     if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultSendingCrashReport]) {

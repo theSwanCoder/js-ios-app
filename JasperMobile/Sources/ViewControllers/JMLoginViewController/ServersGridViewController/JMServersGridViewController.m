@@ -71,7 +71,7 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"self != %@", [JMServerProfile demoServerProfile]];
     
-    self.servers = [[[JMUtils managedObjectContext] executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
+    self.servers = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
     [self.collectionView reloadData];
 }
 

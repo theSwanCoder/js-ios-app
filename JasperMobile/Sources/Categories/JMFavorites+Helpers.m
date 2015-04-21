@@ -34,7 +34,7 @@ NSString * const kJMFavorites = @"Favorites";
 {
     JSProfile *sessionServerProfile = [JMSessionManager sharedManager].restClient.serverProfile;
     JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForname:sessionServerProfile.alias];
-    JMFavorites *favorites = [NSEntityDescription insertNewObjectForEntityForName:kJMFavorites inManagedObjectContext:self.managedObjectContext];
+    JMFavorites *favorites = [NSEntityDescription insertNewObjectForEntityForName:kJMFavorites inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
     favorites.uri = resource.uri;
     favorites.label = resource.label;
     favorites.wsType = resource.resourceType;
@@ -43,28 +43,28 @@ NSString * const kJMFavorites = @"Favorites";
     favorites.organization = activeServerProfile.organization;
     favorites.username = sessionServerProfile.username;
     [activeServerProfile  addFavoritesObject:favorites];
-    
-    [self.managedObjectContext save:nil];
+
+    [[JMCoreDataManager sharedInstance] save:nil];
 }
 
 + (void)removeFromFavorites:(JSResourceLookup *)resource
 {
     JMFavorites *favorites = [self favoritesFromResourceLookup:resource];
-    [self.managedObjectContext deleteObject:favorites];
+    [[JMCoreDataManager sharedInstance].managedObjectContext deleteObject:favorites];
     
-    [self.managedObjectContext save:nil];
+    [[JMCoreDataManager sharedInstance] save:nil];
 }
 
 + (BOOL)isResourceInFavorites:(JSResourceLookup *)resource
 {
     NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resource.uri];
-    return ([self.managedObjectContext countForFetchRequest:fetchRequest error:nil] > 0);
+    return ([[JMCoreDataManager sharedInstance].managedObjectContext countForFetchRequest:fetchRequest error:nil] > 0);
 }
 
 + (JMFavorites *)favoritesFromResourceLookup:(JSResourceLookup *)resource
 {
     NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resource.uri];
-    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
 - (JSResourceLookup *)wrapperFromFavorite
@@ -79,11 +79,6 @@ NSString * const kJMFavorites = @"Favorites";
 }
 
 #pragma mark - Private
-
-+ (NSManagedObjectContext *)managedObjectContext
-{
-    return [JMUtils managedObjectContext];
-}
 
 + (NSFetchRequest *)favoritesFetchRequest:(NSString *)resourceUri
 {

@@ -23,6 +23,7 @@
     #import "JMConstants.h"
     #import "weakself.h"
     #import "JMUtils.h"
+    #import "JMCoreDataManager.h"
     #import "JMFont.h"
     #import "JMLocalization.h"
     #import "UIAlertView+Additions.h"

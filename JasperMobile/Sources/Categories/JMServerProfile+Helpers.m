@@ -36,7 +36,7 @@
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"serverUrl == %@", @"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
-    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] firstObject];
+    return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] firstObject];
 }
 
 + (float) minSupportedServerVersion
@@ -48,7 +48,7 @@
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K == %@", @"alias", serverName]];
-    return [[[self managedObjectContext] executeFetchRequest:fetchRequest error:nil] lastObject];
+    return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
 + (void) cloneServerProfile:(JMServerProfile *)serverProfile
@@ -58,7 +58,7 @@
     //create new object in data store
     JMServerProfile *newServerProfile = [NSEntityDescription
                                          insertNewObjectForEntityForName:entityName
-                                         inManagedObjectContext:[self managedObjectContext]];
+                                         inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
 
     NSInteger cloneNumber = 0;
     NSString *serverName = nil;
@@ -71,7 +71,7 @@
     newServerProfile.keepSession    = serverProfile.keepSession;
     newServerProfile.organization   = serverProfile.organization;
     newServerProfile.serverUrl      = serverProfile.serverUrl;
-    [[self managedObjectContext] save:nil];
+    [[JMCoreDataManager sharedInstance] save:nil];
 }
 
 - (void) checkServerProfileWithCompletionBlock:(void(^)(NSError *error))completionBlock
@@ -107,13 +107,6 @@
             }
         });
     });
-}
-
-#pragma mark - Private
-
-+ (NSManagedObjectContext *)managedObjectContext
-{
-    return [JMUtils managedObjectContext];
 }
 
 @end

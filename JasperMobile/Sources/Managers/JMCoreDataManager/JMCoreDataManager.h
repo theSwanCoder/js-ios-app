@@ -20,32 +20,29 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
-
 //
-//  JMSavedResources.h
+//  JMCoreDataManager.h
 //  TIBCO JasperMobile
 //
-
-/**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
- */
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class JMServerProfile;
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ 
+ @since 2.0
+ */
 
-@interface JMSavedResources : NSManagedObject
+@interface JMCoreDataManager : NSObject
+@property (nonatomic, readonly, strong) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, readonly, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, readonly, strong) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
-@property (nonatomic, retain) NSDate   * creationDate;
-@property (nonatomic, retain) NSString * label;
-@property (nonatomic, retain) NSString * organization;
-@property (nonatomic, retain) NSString * username;
-@property (nonatomic, retain) NSString * uri;
-@property (nonatomic, retain) NSString * wsType;
-@property (nonatomic, retain) NSString * resourceDescription;
-@property (nonatomic, retain) NSString * format;
-@property (nonatomic, retain) JMServerProfile *serverProfile;
++ (instancetype)sharedInstance;
+
+- (BOOL)save:(NSError **)error;
+
+- (void)resetPersistentStore;
 
 @end

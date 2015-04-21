@@ -39,7 +39,7 @@
 
 @property (nonatomic, strong) NSString * organization;
 @property (nonatomic, strong) NSString * username;
-@property (nonatomic, strong) NSString * creationDate;
+@property (nonatomic, strong) NSDate   * creationDate;
 @property (nonatomic, strong) NSString * resourceDescription;
 @property (nonatomic, strong) NSString * label;
 @property (nonatomic, strong) NSString * uri;

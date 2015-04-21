@@ -41,7 +41,7 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
         if (serverProfile) {
             self.serverProfile = serverProfile;
         } else {
-            self.serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:self.managedObjectContext];
+            self.serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
         }
     }
     return self;
@@ -49,9 +49,9 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
 
 - (void)saveChanges
 {
-    if ([self.managedObjectContext hasChanges]) {
+    if ([[JMCoreDataManager sharedInstance].managedObjectContext hasChanges]) {
         NSError *error = nil;
-        [self.managedObjectContext save:&error];
+        [[JMCoreDataManager sharedInstance] save:&error];
     }
 }
 
@@ -97,7 +97,7 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
 
 - (void)discardChanges
 {
-    [self.managedObjectContext reset];
+    [[JMCoreDataManager sharedInstance].managedObjectContext reset];
 }
 
 - (NSArray *)optionsArray{
@@ -133,11 +133,6 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
        return [NSString stringWithFormat:@"* %@",JMCustomLocalizedString(key, nil)];
     }
     return JMCustomLocalizedString(key, nil);
-}
-
-- (NSManagedObjectContext *)managedObjectContext
-{
-    return [JMUtils managedObjectContext];
 }
 
 @end

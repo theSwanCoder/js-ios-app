@@ -47,8 +47,8 @@
     fetchRequest.predicate = [self predicates];
     
     NSError *error;
-    NSArray *fetchedObjects = [[JMUtils managedObjectContext] executeFetchRequest:fetchRequest
-                                                                            error:&error];
+    NSArray *fetchedObjects = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest
+                                                                                                     error:&error];
     
     if (error) {
         [self finishLoadingWithError:error];
@@ -104,7 +104,7 @@
 - (NSFetchRequest *)fetchRequest
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:kJMFavorites inManagedObjectContext:[JMUtils managedObjectContext]];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:kJMFavorites inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
     if ([self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]) {
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]
                                                                        ascending:YES];

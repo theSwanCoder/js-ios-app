@@ -34,17 +34,17 @@ NSString * const kJMSavedResources = @"SavedResources";
 + (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource
 {
     NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:resource.uri, @"uri", nil];
-    return [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
 + (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format
 {
     NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:name, @"label", format, @"format", nil];
-    JMSavedResources *savedReport = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    JMSavedResources *savedReport = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
     if (!savedReport) {
         JSProfile *sessionServerProfile = [JMSessionManager sharedManager].restClient.serverProfile;
         JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForname:sessionServerProfile.alias];
-        savedReport = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:self.managedObjectContext];
+        savedReport = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
         savedReport.label = name;
         savedReport.uri = [self uriForSavedReportWithName:name format:format];
         savedReport.wsType = resource.resourceType;
@@ -56,7 +56,7 @@ NSString * const kJMSavedResources = @"SavedResources";
     }
     savedReport.creationDate = [NSDate date];
     
-    [self.managedObjectContext save:nil];
+    [[JMCoreDataManager sharedInstance] save:nil];
 }
 
 - (void)removeReport
@@ -92,7 +92,7 @@ NSString * const kJMSavedResources = @"SavedResources";
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat
 {
     NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:reportName, @"label", reportFormat, @"format", nil];
-    JMSavedResources *savedReport = [[self.managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    JMSavedResources *savedReport = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
     
     return (!savedReport);
 }
@@ -149,11 +149,6 @@ NSString * const kJMSavedResources = @"SavedResources";
 }
 
 #pragma mark - Private
-
-+ (NSManagedObjectContext *)managedObjectContext
-{
-    return [JMUtils managedObjectContext];
-}
 
 + (NSFetchRequest *)savedReportsFetchRequestWithValuesAndFields:(id)firstValue, ... NS_REQUIRES_NIL_TERMINATION
 {
