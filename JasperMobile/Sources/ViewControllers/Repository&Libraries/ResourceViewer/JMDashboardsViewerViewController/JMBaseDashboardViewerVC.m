@@ -85,15 +85,12 @@
     NSString *requestURLString = request.URL.absoluteString;
     
     //  don't let run link run report
-    if (navigationType == UIWebViewNavigationTypeLinkClicked && [requestURLString rangeOfString:@"_flowId=viewReportFlow"].length) {
+    if ([requestURLString rangeOfString:@"_flowId=viewReportFlow&reportUnit"].length) {
+        //[[UIApplication sharedApplication] openURL:request.URL];
         return NO;
     }
-    
-    if (!sholdStartFromSuperclass) {
-        return NO;
-    }
-    
-    return YES;
+
+    return sholdStartFromSuperclass;
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
