@@ -21,20 +21,20 @@
  */
 
 //
-//  JMFavorites.m
+//  NSManagedObjectModel+JMAdditions.h
 //  TIBCO JasperMobile
 //
 
-#import "JMFavorites.h"
+#import <CoreData/CoreData.h>
 
-@implementation JMFavorites
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.0
+ */
 
-@dynamic username;
-@dynamic label;
-@dynamic uri;
-@dynamic wsType;
-@dynamic serverProfile;
-@dynamic creationDate;
-@dynamic resourceDescription;
+@interface NSManagedObjectModel (JMAdditions)
+
++ (NSArray *)jm_allModelPaths;
+- (NSString *)jm_modelName;
 
 @end

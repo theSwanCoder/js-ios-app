@@ -40,7 +40,6 @@ NSString * const kJMFavorites = @"Favorites";
     favorites.wsType = resource.resourceType;
     favorites.creationDate = resource.creationDate;
     favorites.resourceDescription = resource.resourceDescription;
-    favorites.organization = activeServerProfile.organization;
     favorites.username = sessionServerProfile.username;
     [activeServerProfile  addFavoritesObject:favorites];
 

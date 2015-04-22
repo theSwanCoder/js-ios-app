@@ -40,7 +40,6 @@
 
 @property (nonatomic, retain) NSDate   * creationDate;
 @property (nonatomic, retain) NSString * label;
-@property (nonatomic, retain) NSString * organization;
 @property (nonatomic, retain) NSString * username;
 @property (nonatomic, retain) NSString * uri;
 @property (nonatomic, retain) NSString * wsType;

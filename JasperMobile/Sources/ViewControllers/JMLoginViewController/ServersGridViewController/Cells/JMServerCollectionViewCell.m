@@ -50,13 +50,6 @@
     }
 }
 
-- (void) editServerProfile:(id)sender
-{
-    if ([self.delegate respondsToSelector:@selector(editServerProfileForCell:)]) {
-        [self.delegate editServerProfileForCell:self];
-    }
-}
-
 - (void) deleteServerProfile:(id)sender
 {
     if ([self.delegate respondsToSelector:@selector(deleteServerProfileForCell:)]) {

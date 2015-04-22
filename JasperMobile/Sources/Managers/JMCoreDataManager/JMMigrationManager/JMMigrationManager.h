@@ -21,20 +21,35 @@
  */
 
 //
-//  JMFavorites.m
+//  JMMigrationManager.h
 //  TIBCO JasperMobile
 //
 
-#import "JMFavorites.h"
+#import <Foundation/Foundation.h>
 
-@implementation JMFavorites
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ 
+ @since 2.0
+ */
 
-@dynamic username;
-@dynamic label;
-@dynamic uri;
-@dynamic wsType;
-@dynamic serverProfile;
-@dynamic creationDate;
-@dynamic resourceDescription;
+@class JMMigrationManager;
+
+@protocol JMMigrationManagerDelegate <NSObject>
+
+@optional
+- (void)migrationManager:(JMMigrationManager *)migrationManager migrationProgress:(float)migrationProgress;
+- (NSArray *)migrationManager:(JMMigrationManager *)migrationManager mappingModelsForSourceModel:(NSManagedObjectModel *)sourceModel;
+
+@end
+
+@interface JMMigrationManager : NSObject
+
+- (BOOL)progressivelyMigrateURL:(NSURL *)sourceStoreURL
+                         ofType:(NSString *)type
+                        toModel:(NSManagedObjectModel *)finalModel
+                          error:(NSError **)error;
+
+@property (nonatomic, weak) id<JMMigrationManagerDelegate> delegate;
 
 @end

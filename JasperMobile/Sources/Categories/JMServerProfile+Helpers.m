@@ -35,8 +35,20 @@
 + (JMServerProfile *)demoServerProfile
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"serverUrl == %@", @"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
-    return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] firstObject];
+    NSMutableArray *predicates = [NSMutableArray array];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"serverUrl == %@", kJMDemoServerUrl]];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"alias == %@", kJMDemoServerAlias]];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"organization == %@", kJMDemoServerOrganization]];
+    fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+    JMServerProfile *demoServerProfile = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] firstObject];
+    if (!demoServerProfile) {
+        demoServerProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
+        demoServerProfile.alias = kJMDemoServerAlias;
+        demoServerProfile.organization = kJMDemoServerOrganization;
+        demoServerProfile.serverUrl = kJMDemoServerUrl;
+        [[JMCoreDataManager sharedInstance] save:nil];
+    }
+    return demoServerProfile;
 }
 
 + (float) minSupportedServerVersion

@@ -135,16 +135,6 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
             [[JMCoreDataManager sharedInstance] save:nil];
         }
     }
-    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
-    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"serverUrl == %@", @"http://mobiledemo.jaspersoft.com/jasperserver-pro"];
-    JMServerProfile *serverProfile = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] firstObject];
-    if (!serverProfile) {
-        serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
-        serverProfile.alias = @"Jaspersoft Mobile Demo";
-        serverProfile.organization = @"organization_1";
-        serverProfile.serverUrl = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
-        [[JMCoreDataManager sharedInstance] save:nil];
-    }
 }
 
 // Resets database and defaults

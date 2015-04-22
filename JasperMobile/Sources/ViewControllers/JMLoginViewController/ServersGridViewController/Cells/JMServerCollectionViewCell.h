@@ -38,7 +38,6 @@
 
 @protocol JMServerCollectionViewCellDelegate <NSObject>
 @optional
-- (void)editServerProfileForCell:(JMServerCollectionViewCell *)cell;
 - (void)deleteServerProfileForCell:(JMServerCollectionViewCell *)cell;
 - (void)cloneServerProfileForCell:(JMServerCollectionViewCell *)cell;
 

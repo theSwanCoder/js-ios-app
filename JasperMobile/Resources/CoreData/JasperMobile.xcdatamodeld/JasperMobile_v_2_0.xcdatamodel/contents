@@ -3,7 +3,6 @@
     <entity name="Favorites" representedClassName="JMFavorites" syncable="YES">
         <attribute name="creationDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="organization" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="resourceDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uri" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
@@ -14,7 +13,6 @@
         <attribute name="creationDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="format" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="organization" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="resourceDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uri" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
@@ -31,8 +29,8 @@
         <relationship name="savedResources" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SavedResources" inverseName="serverProfile" inverseEntity="SavedResources" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Favorites" positionX="-632" positionY="-432" width="128" height="163"/>
-        <element name="SavedResources" positionX="-207" positionY="-441" width="128" height="178"/>
+        <element name="Favorites" positionX="-632" positionY="-432" width="128" height="150"/>
+        <element name="SavedResources" positionX="-207" positionY="-441" width="128" height="165"/>
         <element name="ServerProfile" positionX="-432" positionY="-423" width="128" height="150"/>
     </elements>
 </model>

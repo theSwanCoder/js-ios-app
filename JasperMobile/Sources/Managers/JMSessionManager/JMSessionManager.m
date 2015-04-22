@@ -114,12 +114,19 @@ static JMSessionManager *_sharedManager = nil;
 - (NSPredicate *)predicateForCurrentServerProfile
 {
     JMServerProfile *activaServerProfile = [JMServerProfile serverProfileForname:self.restClient.serverProfile.alias];
-    NSMutableArray *predicates = [NSMutableArray array];
-    [predicates addObject:[NSPredicate predicateWithFormat:@"serverProfile == %@", activaServerProfile]];
-    [predicates addObject:[NSPredicate predicateWithFormat:@"username == %@", self.restClient.serverProfile.username]];
-    [predicates addObject:[NSPredicate predicateWithFormat:@"organization == %@", self.restClient.serverProfile.organization]];
+    NSMutableArray *currentServerProfilepredicates = [NSMutableArray array];
+    [currentServerProfilepredicates addObject:[NSPredicate predicateWithFormat:@"serverProfile = %@", activaServerProfile]];
+    [currentServerProfilepredicates addObject:[NSPredicate predicateWithFormat:@"username = %@", self.restClient.serverProfile.username]];
+
+    NSMutableArray *nilServerProfilepredicates = [NSMutableArray array];
+    [nilServerProfilepredicates addObject:[NSPredicate predicateWithFormat:@"serverProfile = nil"]];
+    [nilServerProfilepredicates addObject:[NSPredicate predicateWithFormat:@"username = nil"]];
     
-    return [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
+    NSMutableArray *predicates = [NSMutableArray array];
+    [predicates addObject:[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:currentServerProfilepredicates]];
+    [predicates addObject:[[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:nilServerProfilepredicates]];
+    
+    return [[NSCompoundPredicate alloc] initWithType:NSOrPredicateType subpredicates:predicates];
 }
 
 @end

@@ -37,7 +37,6 @@
  */
 @interface JMFavorites : NSManagedObject
 
-@property (nonatomic, strong) NSString * organization;
 @property (nonatomic, strong) NSString * username;
 @property (nonatomic, strong) NSDate   * creationDate;
 @property (nonatomic, strong) NSString * resourceDescription;

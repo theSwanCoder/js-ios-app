@@ -51,7 +51,6 @@ NSString * const kJMSavedResources = @"SavedResources";
         savedReport.resourceDescription = resource.resourceDescription;
         savedReport.format = format;
         savedReport.username = sessionServerProfile.username;
-        savedReport.organization = activeServerProfile.organization;
         [activeServerProfile addSavedResourcesObject:savedReport];
     }
     savedReport.creationDate = [NSDate date];

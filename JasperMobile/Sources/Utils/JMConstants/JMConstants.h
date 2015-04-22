@@ -62,6 +62,11 @@ extern NSString * const kJMDefaultRequestTimeout;
 extern NSString * const kJMDefaultSendingCrashReport;
 extern NSString * const kJMDefaultUseVisualize;
 
+// Demo server parameters
+extern NSString * const kJMDemoServerAlias;
+extern NSString * const kJMDemoServerUrl;
+extern NSString * const kJMDemoServerOrganization;
+
 // Report directory
 extern NSString * const kJMReportsDirectory;
 

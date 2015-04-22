@@ -54,6 +54,10 @@ NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";
 NSString * const kJMDefaultSendingCrashReport = @"jaspersoft.crashreportsending.enabled";
 NSString * const kJMDefaultUseVisualize = @"jaspersoft.use.visualize";
 
+// Demo server parameters
+NSString * const kJMDemoServerAlias = @"Jaspersoft Mobile Demo";
+NSString * const kJMDemoServerUrl = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
+NSString * const kJMDemoServerOrganization = @"organization_1";
 
 // Directory to store downloaded reports
 NSString * const kJMReportsDirectory = @"reports";

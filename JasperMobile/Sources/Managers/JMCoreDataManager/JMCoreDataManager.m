@@ -26,11 +26,13 @@
 //
 
 #import "JMCoreDataManager.h"
+#import "JMMigrationManager.h"
 #import "JMAppUpdater.h"
+#import "NSManagedObjectModel+JMAdditions.h"
 
 static NSString * const kJMProductName = @"JasperMobile";
 
-@interface JMCoreDataManager ()
+@interface JMCoreDataManager () <JMMigrationManagerDelegate>
 
 @property (nonatomic, readwrite, strong) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, readwrite, strong) NSManagedObjectContext *managedObjectContext;
@@ -48,7 +50,6 @@ static NSString * const kJMProductName = @"JasperMobile";
     });
     return sharedInstance;
 }
-
 
 #pragma mark - Core Data stack
 // Returns the managed object context for the application.
@@ -87,7 +88,6 @@ static NSString * const kJMProductName = @"JasperMobile";
         NSError *error = nil;
         NSDictionary *options = nil;
         if ([self isMigrationNeeded]) {
-            [self migrate:&error];
             options = @{NSInferMappingModelAutomaticallyOption: @YES,
                         NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}};
         } else {
@@ -96,20 +96,19 @@ static NSString * const kJMProductName = @"JasperMobile";
         }
         
         _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-        if (![_persistentStoreCoordinator addPersistentStoreWithType:[self sourceStoreType]
+        if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                                                        configuration:nil
                                                                  URL:[self sourceStoreURL]
                                                              options:options
                                                                error:&error]) {
-            NSFileManager *fileManager = [NSFileManager new];
-            [fileManager removeItemAtPath:[self sourceStoreURL].path error:nil];
-            
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
+            [[NSNotificationCenter defaultCenter] postNotificationName:kJMResetApplicationNotification object:nil];
         }
     }
     return _persistentStoreCoordinator;
 }
+
+#pragma mark - Public Api
 
 - (BOOL)save:(NSError **)error
 {
@@ -125,9 +124,6 @@ static NSString * const kJMProductName = @"JasperMobile";
     }
     self.persistentStoreCoordinator = nil;
 }
-
-
-# pragma mark -  Private Api
 
 - (BOOL)isMigrationNeeded
 {
@@ -148,83 +144,43 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (BOOL)migrate:(NSError *__autoreleasing *)error
 {
-    BOOL migratedSuccessfully = YES;
-    for (NSString *mappingModelName in [self mappingModelNames]) {
-        NSURL *fileURL = [[NSBundle mainBundle] URLForResource:mappingModelName withExtension:@"cdm"];
-        
-        NSMappingModel *mappingModel = [[NSMappingModel alloc] initWithContentsOfURL:fileURL];
-        
-        NSArray *bundlesForSourceModel = nil; /* an array of bundles, or nil for the main bundle */
-        NSManagedObjectModel *sourceModel = [NSManagedObjectModel mergedModelFromBundles:bundlesForSourceModel
-                                                                        forStoreMetadata:[self sourceMetadata:error]];
-        if (sourceModel) {
-            NSMigrationManager *migrationManager = [[NSMigrationManager alloc] initWithSourceModel:sourceModel destinationModel:[self managedObjectModel]];
-            
-            migratedSuccessfully &= [migrationManager migrateStoreFromURL:[self sourceStoreURL]
-                                                                     type:[self sourceStoreType]
-                                                                  options:nil
-                                                         withMappingModel:mappingModel
-                                                         toDestinationURL:[self destinationStoreURL]
-                                                          destinationType:[self sourceStoreType]
-                                                       destinationOptions:nil
-                                                                    error:error];
-        }
-    }
-    // Replace old database with new one
-    NSError *fileManagerError = nil;
-    [[NSFileManager defaultManager] removeItemAtURL:[self sourceStoreURL] error:&fileManagerError];
-    [[NSFileManager defaultManager] moveItemAtURL:[self destinationStoreURL] toURL:[self sourceStoreURL] error:&fileManagerError];
+    // Enable migrations to run even while user exits app
+    __block UIBackgroundTaskIdentifier bgTask;
+    bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+        bgTask = UIBackgroundTaskInvalid;
+    }];
+
+    JMMigrationManager *migrationManager = [JMMigrationManager new];
+    migrationManager.delegate = self;
     
-    return (migratedSuccessfully && !fileManagerError);
+    BOOL migratedSuccessfully = [migrationManager progressivelyMigrateURL:[self sourceStoreURL]
+                                                 ofType:NSSQLiteStoreType
+                                                toModel:[self managedObjectModel]
+                                                  error:error];
+    if (migratedSuccessfully) {
+        NSLog(@"migration complete");
+    }
+    
+    // Mark it as invalid
+    [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+    bgTask = UIBackgroundTaskInvalid;
+    
+    return (migratedSuccessfully);
 }
+
+# pragma mark -  Private Api
 
 - (NSURL *)sourceStoreURL
 {
     return [[self applicationDocumentsDirectory] URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.sqlite", kJMProductName]];
 }
 
-- (NSURL *)destinationStoreURL
-{
-    return [[self applicationDocumentsDirectory] URLByAppendingPathComponent:[NSString stringWithFormat:@"%@_New.sqlite", kJMProductName]];
-}
-
-- (NSString *)sourceStoreType
-{
-    return NSSQLiteStoreType;
-}
-
 - (NSDictionary *)sourceMetadata:(NSError **)error
 {
-    return [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:[self sourceStoreType]
+    return [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
                                                                       URL:[self sourceStoreURL]
                                                                     error:error];
-}
-
-- (NSArray *)mappingModelNames
-{
-    NSNumber *latestAppVersion = [JMAppUpdater latestAppVersion];
-    NSNumber *currentAppVersion = [JMAppUpdater currentAppVersion];
-    if (currentAppVersion != nil && [currentAppVersion compare:latestAppVersion] == NSOrderedSame) return nil;
-    
-    NSMutableDictionary *versionsToUpdate = [NSMutableDictionary dictionary];
-    
-    // Add update methods
-    [versionsToUpdate setObject:@"Migration_v_1_9" forKey:@1.9];
-    [versionsToUpdate setObject:@"Migration_v_2_0" forKey:@2.0];
-#warning NEED CHECK SORTED ARRAY!!!!!!!!!!!!!!!!!!!!!!
-    NSArray *versionsArray = [versionsToUpdate.allKeys sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        return [obj1 compare:obj2];
-    }];
-    
-    
-    NSLog(@"%@", versionsArray);
-    NSMutableArray *mappingModels = [NSMutableArray array];
-    
-    for (NSNumber *version in versionsArray) {
-        if (version.doubleValue <= currentAppVersion.doubleValue) continue;
-        [mappingModels addObject:[versionsToUpdate objectForKey:version]];
-    }
-    return mappingModels;
 }
 
 #pragma mark - Application's Documents directory
@@ -235,4 +191,36 @@ static NSString * const kJMProductName = @"JasperMobile";
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
+#pragma mark -
+#pragma mark - JMMigrationManagerDelegate
+
+- (void)migrationManager:(JMMigrationManager *)migrationManager migrationProgress:(float)migrationProgress
+{
+    NSLog(@"migration progress: %f", migrationProgress);
+}
+
+- (NSArray *)migrationManager:(JMMigrationManager *)migrationManager
+  mappingModelsForSourceModel:(NSManagedObjectModel *)sourceModel
+{
+    NSMutableArray *mappingModels = [@[] mutableCopy];
+//    NSString *modelName = [sourceModel jm_modelName];
+//    if ([modelName isEqual:@"Model2"]) {
+//        // Migrating to Model3
+//        NSArray *urls = [[NSBundle bundleForClass:[self class]]
+//                         URLsForResourcesWithExtension:@"cdm"
+//                         subdirectory:nil];
+//        for (NSURL *url in urls) {
+//            if ([url.lastPathComponent rangeOfString:@"Model2_to_Model"].length != 0) {
+//                NSMappingModel *mappingModel = [[NSMappingModel alloc] initWithContentsOfURL:url];
+//                if ([url.lastPathComponent rangeOfString:@"User"].length != 0) {
+//                    // User first so we create new relationship
+//                    [mappingModels insertObject:mappingModel atIndex:0];
+//                } else {
+//                    [mappingModels addObject:mappingModel];
+//                }
+//            }
+//        }
+//    }
+    return mappingModels;
+}
 @end

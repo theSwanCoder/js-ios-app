@@ -29,7 +29,6 @@
 
 @dynamic creationDate;
 @dynamic label;
-@dynamic organization;
 @dynamic username;
 @dynamic uri;
 @dynamic wsType;

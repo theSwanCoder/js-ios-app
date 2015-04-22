@@ -45,4 +45,8 @@
 
 - (void)resetPersistentStore;
 
+- (BOOL)isMigrationNeeded;
+
+- (BOOL)migrate:(NSError *__autoreleasing *)error;
+
 @end

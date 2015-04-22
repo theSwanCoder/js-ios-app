@@ -32,6 +32,7 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
 
 @interface JMServersGridViewController () <JMServerCollectionViewCellDelegate>
 @property (nonatomic, strong) NSMutableArray *servers;
+
 @end
 
 @implementation JMServersGridViewController
@@ -48,11 +49,10 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
     
     [[NSNotificationCenter defaultCenter] addObserver:self.collectionView selector:@selector(reloadData) name:UIDeviceOrientationDidChangeNotification object:nil];
     
-    UIMenuItem *editItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers.action.profile.edit", nil) action:@selector(editServerProfile:)];
     UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers.action.profile.delete", nil) action:@selector(deleteServerProfile:)];
     UIMenuItem *cloneItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers.action.profile.clone", nil) action:@selector(cloneServerProfile:)];
 
-    [[UIMenuController sharedMenuController] setMenuItems:@[editItem, deleteItem, cloneItem]];
+    [[UIMenuController sharedMenuController] setMenuItems:@[deleteItem, cloneItem]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -130,7 +130,7 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
-    if (action == @selector(cloneServerProfile:) || action == @selector(deleteServerProfile:) || action == @selector(editServerProfile:)) {
+    if (action == @selector(cloneServerProfile:) || action == @selector(deleteServerProfile:)) {
         return YES;
     }
     return NO;
@@ -152,6 +152,9 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
 - (void)cloneServerProfileForCell:(JMServerCollectionViewCell *)cell
 {
     [JMServerProfile cloneServerProfile:cell.serverProfile];
+    JMServerProfile *serverProfile = [self.servers objectAtIndex:[self.collectionView indexPathForCell:cell].row];
+    [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:serverProfile];
+#warning NEED CORRECTED CLONNING SERVER PROFILES
     [self refreshDatasource];
 }
 
@@ -169,12 +172,6 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
                                } @weakselfend
                         cancelButtonTitle:@"dialog.button.cancel"
                         otherButtonTitles:@"dialog.button.delete", nil] show];
-}
-
--(void)editServerProfileForCell:(JMServerCollectionViewCell *)cell
-{
-    JMServerProfile *serverProfile = [self.servers objectAtIndex:[self.collectionView indexPathForCell:cell].row];
-    [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:serverProfile];
 }
 
 #pragma mark - Actions
