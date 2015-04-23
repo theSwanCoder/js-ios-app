@@ -25,8 +25,8 @@
 		08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C921AE78CD300F94F1D /* JMMigrationManager.m */; };
 		08221C971AE7956600F94F1D /* NSManagedObjectModel+JMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C961AE7956600F94F1D /* NSManagedObjectModel+JMAdditions.m */; };
 		08221C991AE79FD800F94F1D /* MigrateTo_v_1_9.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08221C981AE79FD800F94F1D /* MigrateTo_v_1_9.xcmappingmodel */; };
-		08221C9B1AE7A03100F94F1D /* MigrateTo_v_2_0.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08221C9A1AE7A03100F94F1D /* MigrateTo_v_2_0.xcmappingmodel */; };
 		08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */; };
+		08221CA11AE8EFE200F94F1D /* MigrateTo_v_2_0.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08221CA01AE8EFE200F94F1D /* MigrateTo_v_2_0.xcmappingmodel */; };
 		082D1E921AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */; };
 		0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503B19F1265B00C5875E /* CoreTelephony.framework */; };
 		0871503E19F1266900C5875E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503D19F1266900C5875E /* libz.dylib */; };
@@ -233,10 +233,10 @@
 		08221C951AE7956600F94F1D /* NSManagedObjectModel+JMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectModel+JMAdditions.h"; sourceTree = "<group>"; };
 		08221C961AE7956600F94F1D /* NSManagedObjectModel+JMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectModel+JMAdditions.m"; sourceTree = "<group>"; };
 		08221C981AE79FD800F94F1D /* MigrateTo_v_1_9.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MigrateTo_v_1_9.xcmappingmodel; sourceTree = "<group>"; };
-		08221C9A1AE7A03100F94F1D /* MigrateTo_v_2_0.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MigrateTo_v_2_0.xcmappingmodel; sourceTree = "<group>"; };
 		08221C9C1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMigrateTo_v_2_0.h; sourceTree = "<group>"; };
 		08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMigrateTo_v_2_0.m; sourceTree = "<group>"; };
 		08221C9F1AE7A3B100F94F1D /* TIBCO JasperMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TIBCO JasperMobile-Bridging-Header.h"; sourceTree = "<group>"; };
+		08221CA01AE8EFE200F94F1D /* MigrateTo_v_2_0.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MigrateTo_v_2_0.xcmappingmodel; sourceTree = "<group>"; };
 		082D1E901AB70FB700E0C0C6 /* JSResourceLookup+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JSResourceLookup+Helpers.h"; sourceTree = "<group>"; };
 		082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSResourceLookup+Helpers.m"; sourceTree = "<group>"; };
 		0871503B19F1265B00C5875E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -967,10 +967,10 @@
 		089B14D21AA756BD0021A915 /* ServerOptionsViewController */ = {
 			isa = PBXGroup;
 			children = (
+				089B14DC1AA756BD0021A915 /* ServerOptions */,
 				089B14D31AA756BD0021A915 /* Cells */,
 				089B14DA1AA756BD0021A915 /* JMServerOptionsViewController.h */,
 				089B14DB1AA756BD0021A915 /* JMServerOptionsViewController.m */,
-				089B14DC1AA756BD0021A915 /* ServerOptions */,
 			);
 			path = ServerOptionsViewController;
 			sourceTree = "<group>";
@@ -1378,7 +1378,6 @@
 			isa = PBXGroup;
 			children = (
 				089B15681AA756BD0021A915 /* JMBaseCollectionViewController */,
-				089B156B1AA756BD0021A915 /* JMFavoritesCollectionViewController */,
 				089B156E1AA756BD0021A915 /* JMLibraryCollectionViewController */,
 				089B15711AA756BD0021A915 /* JMRepositoryCollectionViewController */,
 				089B15741AA756BD0021A915 /* JMSavedItemsCollectionViewController */,
@@ -1389,6 +1388,7 @@
 		089B15681AA756BD0021A915 /* JMBaseCollectionViewController */ = {
 			isa = PBXGroup;
 			children = (
+				089B156B1AA756BD0021A915 /* JMFavoritesCollectionViewController */,
 				089B15691AA756BD0021A915 /* JMBaseCollectionViewController.h */,
 				089B156A1AA756BD0021A915 /* JMBaseCollectionViewController.m */,
 			);
@@ -1401,7 +1401,8 @@
 				089B156C1AA756BD0021A915 /* JMFavoritesCollectionViewController.h */,
 				089B156D1AA756BD0021A915 /* JMFavoritesCollectionViewController.m */,
 			);
-			path = JMFavoritesCollectionViewController;
+			name = JMFavoritesCollectionViewController;
+			path = ../JMFavoritesCollectionViewController;
 			sourceTree = "<group>";
 		};
 		089B156E1AA756BD0021A915 /* JMLibraryCollectionViewController */ = {
@@ -1628,7 +1629,7 @@
 			children = (
 				08982CD21ACBF41E00368522 /* JasperMobile.xcdatamodeld */,
 				08221C981AE79FD800F94F1D /* MigrateTo_v_1_9.xcmappingmodel */,
-				08221C9A1AE7A03100F94F1D /* MigrateTo_v_2_0.xcmappingmodel */,
+				08221CA01AE8EFE200F94F1D /* MigrateTo_v_2_0.xcmappingmodel */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -2115,6 +2116,7 @@
 				08930A8B1AD2A90300D13769 /* JMVisualizeReportLoader.m in Sources */,
 				08C838141A1F57640004BE78 /* Appirater.m in Sources */,
 				089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */,
+				08221CA11AE8EFE200F94F1D /* MigrateTo_v_2_0.xcmappingmodel in Sources */,
 				08221C991AE79FD800F94F1D /* MigrateTo_v_1_9.xcmappingmodel in Sources */,
 				93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */,
 				089B15F41AA756BD0021A915 /* JMSettings.m in Sources */,
@@ -2132,7 +2134,6 @@
 				089B15D11AA756BD0021A915 /* JMBooleanInputControlCell.m in Sources */,
 				089B15BA1AA756BD0021A915 /* JMServerOptionCell.m in Sources */,
 				9342340E1AAB4B5500D34478 /* JMVisualizeReportViewerViewController.m in Sources */,
-				08221C9B1AE7A03100F94F1D /* MigrateTo_v_2_0.xcmappingmodel in Sources */,
 				93D8C64B1AAC95D000117306 /* JMBaseReportViewerViewController.m in Sources */,
 				089B15F21AA756BD0021A915 /* JMPrivacyPolicyViewController.m in Sources */,
 				089B15BD1AA756BD0021A915 /* JMServerOption.m in Sources */,

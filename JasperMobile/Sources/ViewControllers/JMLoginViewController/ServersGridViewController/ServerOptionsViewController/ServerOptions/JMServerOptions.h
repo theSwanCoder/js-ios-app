@@ -39,6 +39,7 @@
 
 @property (nonatomic, strong) JMServerProfile *serverProfile;
 @property (nonatomic, readonly) NSArray *optionsArray;
+@property (nonatomic, assign) BOOL editable;
 
 - (id)initWithServerProfile:(JMServerProfile *)serverProfile;
 

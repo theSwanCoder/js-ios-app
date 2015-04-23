@@ -37,10 +37,10 @@
 @class JMServerCollectionViewCell;
 
 @protocol JMServerCollectionViewCellDelegate <NSObject>
-@optional
+@required
 - (void)deleteServerProfileForCell:(JMServerCollectionViewCell *)cell;
 - (void)cloneServerProfileForCell:(JMServerCollectionViewCell *)cell;
-
+- (void)editServerProfileForCell:(JMServerCollectionViewCell *)cell;
 @end
 
 @interface JMServerCollectionViewCell : UICollectionViewCell

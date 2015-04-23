@@ -29,7 +29,7 @@
 #import "JMConstants.h"
 #import <objc/runtime.h>
 #import "JMSessionManager.h"
-
+#import "JMSavedResources+Helpers.h"
 
 @implementation JMServerProfile (Helpers)
 + (JMServerProfile *)demoServerProfile
@@ -63,7 +63,7 @@
     return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
-+ (void) cloneServerProfile:(JMServerProfile *)serverProfile
++ (JMServerProfile *) cloneServerProfile:(JMServerProfile *)serverProfile
 {
     NSString *entityName = [[serverProfile entity] name];
     
@@ -84,6 +84,18 @@
     newServerProfile.organization   = serverProfile.organization;
     newServerProfile.serverUrl      = serverProfile.serverUrl;
     [[JMCoreDataManager sharedInstance] save:nil];
+    return newServerProfile;
+}
+
++ (void) deleteServerProfile:(JMServerProfile *)serverProfile
+{
+    NSArray *savedReports = [serverProfile.savedResources allObjects];
+    for (JMSavedResources *savedResource in savedReports) {
+        NSString *fullPath = [JMSavedResources pathToReportDirectoryWithName:savedResource.label format:savedResource.format];
+        [[NSFileManager defaultManager] removeItemAtPath:fullPath error:nil];
+    }
+    [serverProfile.managedObjectContext deleteObject:serverProfile];
+    [serverProfile.managedObjectContext save:nil];
 }
 
 - (void) checkServerProfileWithCompletionBlock:(void(^)(NSError *error))completionBlock

@@ -43,7 +43,7 @@
 @end
 
 @interface JMServerOptionsViewController : JMEditabledViewController
-
+@property (nonatomic, assign) BOOL editable;
 @property (nonatomic, retain) JMServerProfile *serverProfile;
 @property (nonatomic, weak) id <JMServerOptionsViewControllerDelegate> delegate;
 @end

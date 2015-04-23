@@ -60,8 +60,16 @@
  Create clone for server profile.
  
  @param serverProfile for clonning
+ @return Cloned server profile
  */
-+ (void) cloneServerProfile:(JMServerProfile *)serverProfile;
++ (JMServerProfile *) cloneServerProfile:(JMServerProfile *)serverProfile;
+
+/**
+ Delete server profile.
+ 
+ @param serverProfile for deleting
+ */
++ (void) deleteServerProfile:(JMServerProfile *)serverProfile;
 
 /**
  Check if jasperserver exist and it version is supported by application.
@@ -69,5 +77,6 @@
  @param completionBlock block of code will be executed after checking. If server exist and supported error will be nil.
  */
 - (void) checkServerProfileWithCompletionBlock:(void(^)(NSError *error))completionBlock;
+
 
 @end

@@ -42,6 +42,8 @@
     [super setServerOption:serverOption];
     self.textField.enabled = serverOption.editable;
     self.textField.text = serverOption.optionValue;
+    
+    self.textField.textColor = serverOption.editable ? [UIColor darkTextColor] : [UIColor lightGrayColor];
 }
 
 

@@ -63,6 +63,7 @@
     if (!self.serverProfile) {
         self.serverOptions = [[JMServerOptions alloc] initWithServerProfile:nil];
     }
+    self.serverOptions.editable = self.editable;
     self.tableView.rowHeight = 50.f;
 }
 

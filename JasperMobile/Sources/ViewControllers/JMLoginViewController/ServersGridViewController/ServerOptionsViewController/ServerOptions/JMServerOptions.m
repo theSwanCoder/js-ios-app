@@ -111,17 +111,18 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
 {
     NSMutableArray *optionsArray = [NSMutableArray array];
     NSMutableArray *optionsSourceArray = [NSMutableArray arrayWithArray:
-    @[@{@"title" : [self localizedString:@"servers.name.label" mandatory:YES],     @"value" : self.serverProfile.alias          ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
-      @{@"title" : [self localizedString:@"servers.url.label" mandatory:YES],      @"value" : self.serverProfile.serverUrl      ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
-      @{@"title" : [self localizedString:@"servers.orgid.label" mandatory:YES],    @"value" : self.serverProfile.organization   ? : @"", @"cellIdentifier" : kJMTextCellIdentifier},
-      @{@"title" : [self localizedString:@"servers.askpassword.label" mandatory:NO], @"value" : self.serverProfile.askPassword  ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier},
-      @{@"title" : [self localizedString:@"servers.keepSession.label" mandatory:NO], @"value" : self.serverProfile.keepSession  ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier}]];
+                                          @[@{@"title" : [self localizedString:@"servers.name.label" mandatory:YES],     @"value" : self.serverProfile.alias          ? : @"", @"cellIdentifier" : kJMTextCellIdentifier, @"editable" : @(YES)},
+                                            @{@"title" : [self localizedString:@"servers.url.label" mandatory:YES],      @"value" : self.serverProfile.serverUrl      ? : @"", @"cellIdentifier" : kJMTextCellIdentifier, @"editable" : @(self.editable)},
+                                            @{@"title" : [self localizedString:@"servers.orgid.label" mandatory:NO],      @"value" : self.serverProfile.organization   ? : @"", @"cellIdentifier" : kJMTextCellIdentifier, @"editable" : @(self.editable)},
+                                            @{@"title" : [self localizedString:@"servers.askpassword.label" mandatory:NO], @"value" : self.serverProfile.askPassword  ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier, @"editable" : @(YES)},
+                                            @{@"title" : [self localizedString:@"servers.keepSession.label" mandatory:NO], @"value" : self.serverProfile.keepSession  ? : @(0), @"cellIdentifier" : kJMBooleanCellIdentifier, @"editable" : @(YES)}]];
     
     for (NSDictionary *optionData in optionsSourceArray) {
         JMServerOption *option = [[JMServerOption alloc] init];
         option.titleString      = [optionData objectForKey:@"title"];
         option.optionValue      = [optionData objectForKey:@"value"];
         option.cellIdentifier   = [optionData objectForKey:@"cellIdentifier"];
+        option.editable         = [[optionData objectForKey:@"editable"] boolValue];
         [optionsArray addObject:option];
     }
     self.optionsArray = optionsArray;

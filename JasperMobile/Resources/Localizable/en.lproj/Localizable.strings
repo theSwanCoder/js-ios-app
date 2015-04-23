@@ -55,6 +55,7 @@
 "servers.action.profile.clone" = "Clone Profile";
 "servers.action.profile.delete" = "Delete";
 "servers.profile.delete.message" = "Please, confirm deleting server.";
+"servers.profile.list.empty" = "There are no Server Profiles";
 
 /* Onboarding Intro */
 "intro.title" = "Welcome to TIBCO JasperMobile";
@@ -139,7 +140,7 @@
 "report.viewer.save.saving.status.title" = "Saving report...";
 
 // Report viewer Options view
-"report.viewer.options.title" = "Report Options";
+"report.viewer.options.title" = "Filter Options";
 "report.viewer.options.singleselect.titlelabel.title" = "Select a single item";
 "report.viewer.options.multiselect.titlelabel.title" = "Select one or more items";
 "report.viewer.options.search.value.placeholder" = "Search Values";
@@ -179,7 +180,7 @@
 
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
-"action.title.edit" = "Edit Report Options";
+"action.title.edit" = "Edit Filter Options";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
 "action.title.markasfavorite" = "Mark as Favorite";

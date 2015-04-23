@@ -40,7 +40,7 @@
 
 @end
 
-@interface JMServersGridViewController : UICollectionViewController
+@interface JMServersGridViewController : UIViewController
 @property (nonatomic, weak) IBOutlet id <JMServersGridViewControllerDelegate> delegate;
 
 

@@ -45,16 +45,17 @@
 
 - (void) cloneServerProfile:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(cloneServerProfileForCell:)]) {
-        [self.delegate cloneServerProfileForCell:self];
-    }
+    [self.delegate cloneServerProfileForCell:self];
 }
 
 - (void) deleteServerProfile:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(deleteServerProfileForCell:)]) {
-        [self.delegate deleteServerProfileForCell:self];
-    }
+    [self.delegate deleteServerProfileForCell:self];
+}
+
+- (void) editServerProfile:(id)sender
+{
+    [self.delegate editServerProfileForCell:self];
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {

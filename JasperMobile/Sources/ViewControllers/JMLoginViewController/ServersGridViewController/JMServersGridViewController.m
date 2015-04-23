@@ -28,10 +28,13 @@
 #import "JMServerOptionsViewController.h"
 #import "JMCancelRequestPopup.h"
 
-static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
+NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
+NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 
 @interface JMServersGridViewController () <JMServerCollectionViewCellDelegate>
 @property (nonatomic, strong) NSMutableArray *servers;
+@property (nonatomic, weak) IBOutlet UICollectionView *collectionView;
+@property (nonatomic, weak) IBOutlet UILabel *errorLabel;
 
 @end
 
@@ -46,13 +49,17 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
     self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
     self.collectionView.backgroundColor = kJMMainCollectionViewBackgroundColor;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(addButtonTapped:)];
+    self.errorLabel.text = JMCustomLocalizedString(@"servers.profile.list.empty", nil);
+    self.errorLabel.font = [JMFont resourcesActivityTitleFont];
+
     
     [[NSNotificationCenter defaultCenter] addObserver:self.collectionView selector:@selector(reloadData) name:UIDeviceOrientationDidChangeNotification object:nil];
     
+    UIMenuItem *editItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers.action.profile.edit", nil) action:@selector(editServerProfile:)];
     UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers.action.profile.delete", nil) action:@selector(deleteServerProfile:)];
     UIMenuItem *cloneItem = [[UIMenuItem alloc] initWithTitle:JMCustomLocalizedString(@"servers.action.profile.clone", nil) action:@selector(cloneServerProfile:)];
 
-    [[UIMenuController sharedMenuController] setMenuItems:@[deleteItem, cloneItem]];
+    [[UIMenuController sharedMenuController] setMenuItems:@[editItem, deleteItem, cloneItem]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -72,6 +79,7 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"self != %@", [JMServerProfile demoServerProfile]];
     
     self.servers = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy] ?: [NSMutableArray array];
+    self.errorLabel.hidden = [self.servers count];
     [self.collectionView reloadData];
 }
 
@@ -79,7 +87,8 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
 {
     JMServerOptionsViewController *destinationViewController = segue.destinationViewController;
     if (sender) {
-        [destinationViewController setServerProfile:sender];
+        [destinationViewController setServerProfile:[sender objectForKey:kJMServerProfileKey]];
+        destinationViewController.editable = [[sender objectForKey:kJMServerProfileEditableKey] boolValue];
     }
 }
 
@@ -151,22 +160,19 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
 #pragma mark - JMServerCollectionViewCellDelegate
 - (void)cloneServerProfileForCell:(JMServerCollectionViewCell *)cell
 {
-    [JMServerProfile cloneServerProfile:cell.serverProfile];
-    JMServerProfile *serverProfile = [self.servers objectAtIndex:[self.collectionView indexPathForCell:cell].row];
-    [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:serverProfile];
-#warning NEED CORRECTED CLONNING SERVER PROFILES
-    [self refreshDatasource];
+    JMServerProfile *newServerProfile = [JMServerProfile cloneServerProfile:cell.serverProfile];
+    NSDictionary *info = @{kJMServerProfileKey : newServerProfile,
+                           kJMServerProfileEditableKey : @(YES)};
+    [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:info];
 }
 
 - (void)deleteServerProfileForCell:(JMServerCollectionViewCell *)cell
 {
-    JMServerProfile *serverProfile = [self.servers objectAtIndex:[self.collectionView indexPathForCell:cell].row];
     [[UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation"
                                   message:@"servers.profile.delete.message"
                                completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
                                    if (alertView.cancelButtonIndex != buttonIndex) {
-                                       [serverProfile.managedObjectContext deleteObject:serverProfile];
-                                       [serverProfile.managedObjectContext save:nil];
+                                       [JMServerProfile deleteServerProfile:cell.serverProfile];
                                        [self refreshDatasource];
                                    }
                                } @weakselfend
@@ -174,10 +180,18 @@ static NSString * const kJMShowServerOptionsSegue = @"ShowServerOptions";
                         otherButtonTitles:@"dialog.button.delete", nil] show];
 }
 
+- (void)editServerProfileForCell:(JMServerCollectionViewCell *)cell
+{
+    NSDictionary *info = @{kJMServerProfileKey : cell.serverProfile,
+                           kJMServerProfileEditableKey : @(NO)};
+    [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:info];
+}
+
 #pragma mark - Actions
 - (void)addButtonTapped:(id)sender
 {
-    [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:nil];
+    NSDictionary *info = @{ kJMServerProfileEditableKey : @(YES)};
+    [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:info];
 }
 
 @end
