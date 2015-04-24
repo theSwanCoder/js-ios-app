@@ -464,7 +464,7 @@
       Viewport.prototype.configure = function() {
         var viewPort;
         viewPort = document.querySelector('meta[name=viewport]');
-        return viewPort.setAttribute('content', "width=device-width, minimum-scale=0.1, maximum-scale=1, user-scalable=yes");
+        return viewPort.setAttribute('content', "width=device-width, minimum-scale=0.1, maximum-scale=3, user-scalable=yes");
       };
 
       return Viewport;
