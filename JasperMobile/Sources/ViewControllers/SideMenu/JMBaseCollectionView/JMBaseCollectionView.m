@@ -110,6 +110,7 @@
 #pragma mark - Loading views
 - (void)showLoadingView
 {
+    [self.collectionView reloadData];
     self.activityViewTitleLabel.hidden = NO;
     self.activityIndicator.hidden = NO;
     self.noResultsViewTitleLabel.hidden = YES;
@@ -118,19 +119,31 @@
 
 - (void)hideLoadingView
 {
+    [self.collectionView reloadData];
+    [self.refreshControl endRefreshing];
+
     self.activityViewTitleLabel.hidden = YES;
     self.activityIndicator.hidden = YES;
     self.collectionView.hidden = NO;
+
+    if ([self collectionViewNotEmpty]) {
+        self.noResultsViewTitleLabel.hidden = YES;
+    } else {
+        self.noResultsViewTitleLabel.hidden = NO;
+    }
 }
 
-- (void)showNoResultsView
+- (BOOL) collectionViewNotEmpty
 {
-    self.noResultsViewTitleLabel.hidden = NO;
-}
-
-- (void)hideNoResultView;
-{
-    self.noResultsViewTitleLabel.hidden = YES;
+    NSInteger sectionsCount = self.collectionView.numberOfSections;
+    if (sectionsCount) {
+        NSInteger rowsCount = 0;
+        for (NSInteger section = 0; section < sectionsCount; section ++) {
+            rowsCount += [self.collectionView numberOfItemsInSection:section];
+        }
+        return (rowsCount > 0);
+    }
+    return NO;
 }
 
 @end

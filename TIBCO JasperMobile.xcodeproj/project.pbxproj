@@ -1378,6 +1378,7 @@
 			isa = PBXGroup;
 			children = (
 				089B15681AA756BD0021A915 /* JMBaseCollectionViewController */,
+				089B156B1AA756BD0021A915 /* JMFavoritesCollectionViewController */,
 				089B156E1AA756BD0021A915 /* JMLibraryCollectionViewController */,
 				089B15711AA756BD0021A915 /* JMRepositoryCollectionViewController */,
 				089B15741AA756BD0021A915 /* JMSavedItemsCollectionViewController */,
@@ -1388,7 +1389,6 @@
 		089B15681AA756BD0021A915 /* JMBaseCollectionViewController */ = {
 			isa = PBXGroup;
 			children = (
-				089B156B1AA756BD0021A915 /* JMFavoritesCollectionViewController */,
 				089B15691AA756BD0021A915 /* JMBaseCollectionViewController.h */,
 				089B156A1AA756BD0021A915 /* JMBaseCollectionViewController.m */,
 			);
@@ -1401,8 +1401,7 @@
 				089B156C1AA756BD0021A915 /* JMFavoritesCollectionViewController.h */,
 				089B156D1AA756BD0021A915 /* JMFavoritesCollectionViewController.m */,
 			);
-			name = JMFavoritesCollectionViewController;
-			path = ../JMFavoritesCollectionViewController;
+			path = JMFavoritesCollectionViewController;
 			sourceTree = "<group>";
 		};
 		089B156E1AA756BD0021A915 /* JMLibraryCollectionViewController */ = {

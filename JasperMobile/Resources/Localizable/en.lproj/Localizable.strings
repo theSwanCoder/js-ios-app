@@ -32,29 +32,29 @@
 /* Login Page */
 
 "login.username.label" = "Username";
-"login.username.errmsg.empty" = "Please specify a valid username";
+"login.username.errmsg.empty" = "Specify a valid username.";
 "login.password.label" = "Password";
-"login.password.errmsg.empty" = "Please specify a valid password";
-"login.server.profile.errmsg.empty" = "Please select a server profile";
+"login.password.errmsg.empty" = "Specify a valid password.";
+"login.server.profile.errmsg.empty" = "Select a server profile.";
 "login.button.login" = "Login";
 "login.button.try.demo" = "Try Demo";
 
 /* Server Profiles view */
 
 "servers.profile.title" = "Server Profiles";
-"servers.url.label" = "Server Address";
-"servers.url.errmsg" = "Please specify a valid URL";
-"servers.name.label" = "Server Name";
-"servers.name.errmsg.empty" = "Please specify a valid profile name";
-"servers.name.errmsg.exists" = "Profile name already exists. Please specify another one";
+"servers.url.label" = "Server address";
+"servers.url.errmsg" = "Specify a valid URL.";
+"servers.name.label" = "Profile name";
+"servers.name.errmsg.empty" = "Specify a valid profile name";
+"servers.name.errmsg.exists" = "Profile name already exists. Specify a unique name.";
 "servers.orgid.label" = "Organization ID";
-"servers.keepSession.label" = "Automatic to extend session";
 "servers.askpassword.label" = "Always ask for password";
+"servers.keepSession.label" = "Automatically extend the session";
 "servers.title.new" = "New Server Profile";
 "servers.action.profile.edit" = "Edit";
 "servers.action.profile.clone" = "Clone Profile";
 "servers.action.profile.delete" = "Delete";
-"servers.profile.delete.message" = "Please, confirm deleting server.";
+"servers.profile.delete.message" = "Confirm to delete this server profile.";
 "servers.profile.list.empty" = "There are no Server Profiles";
 
 /* Onboarding Intro */
@@ -81,17 +81,17 @@
 
 // Descriptions
 
-"menuitem.library.description" = "Browse your JR Server Library.";
-"menuitem.repository.description" = "Browse your JR Server Repository.";
-"menuitem.settings.description" = "Configure your Jaspersoft Mobile App.";
-"menuitem.saveditems.description" = "View Items Saved on this Device. ";
-"menuitem.favorites.description" = "Browse your Favorites Items.";
+"menuitem.library.description" = "Browse your JR Server Library";
+"menuitem.repository.description" = "Browse your JR Server Repository";
+"menuitem.settings.description" = "Configure your Jaspersoft Mobile App";
+"menuitem.saveditems.description" = "View Items Saved on this device";
+"menuitem.favorites.description" = "Browse your favorite items";
 
 /* Resource views */
 
-"resources.loading.msg" = "Loading.\nPlease Wait...";
-"resources.noresults.msg" = "No Results.\nPlease Make Another Selection...";
-"resources.search.placeholder" = "Search Resources";
+"resources.loading.msg" = "Loading.\nPlease wait...";
+"resources.noresults.msg" = "No Results.";
+"resources.search.placeholder" = "Search resources";
 
 // Filter By
 "resources.title" = "Object Type";
@@ -117,26 +117,26 @@
 "resource.viewer.can't.open.link" = "Link can't be opened.";
 
 // Report viewer
-"report.viewer.error.title" = "Error of loading report";
-"report.viewer.visualize.render.error" = "Report rendering did failed.";
-"report.viewer.emptyreport.title" = "Report is empty";
-"report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change report options or tap 'Cancel' for returning to old report.";
+"report.viewer.error.title" = "Error while loading report.";
+"report.viewer.visualize.render.error" = "Report rendering failed.";
+"report.viewer.emptyreport.title" = "Report is empty.";
+"report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options, or tap 'Cancel' to return to the previous report.";
 "report.viewer.pagecount" = "of %d";
-"report.viewer.wrongNumberOfCurrentPage" = "Current page can't be more count of pages (%@)";
+"report.viewer.wrongNumberOfCurrentPage" = "The requested page is out of range (%@).";
 
 // Report Saver view
 "report.viewer.save.title" = "Save Report";
-"report.viewer.save.name" = "Report Name";
-"report.viewer.save.format" = "Output Format";
-"report.viewer.save.pagesRange" = "Range Pages";
+"report.viewer.save.name" = "Report name";
+"report.viewer.save.format" = "Output format";
+"report.viewer.save.pagesRange" = "Page range";
 "report.viewer.save.pagesRange.fromPage" = "From page:";
 "report.viewer.save.pagesRange.toPage" = "To page:";
-"report.viewer.save.saved" = "Report was successfully saved";
-"report.viewer.save.name.errmsg.empty" = "Cannot be empty";
-"report.viewer.save.name.errmsg.notunique" = "This name has been already taken, please choose different name";
-"report.viewer.save.name.errmsg.notunique.rewrite" = "This name has been already taken, do you want to rewrite it?";
-"report.viewer.save.name.errmsg.maxlength" = "Should be less than %i symbols";
-"report.viewer.save.name.errmsg.characters" = "Characters %@ are not allowed";
+"report.viewer.save.saved" = "The report was saved successfully.";
+"report.viewer.save.name.errmsg.empty" = "This field is required.";
+"report.viewer.save.name.errmsg.notunique" = "This name already exists, choose a unique name.";
+"report.viewer.save.name.errmsg.notunique.rewrite" = "This name already exists, do you want to overwrite it?";
+"report.viewer.save.name.errmsg.maxlength" = "Must be less than %i characters.";
+"report.viewer.save.name.errmsg.characters" = "Characters %@ are not allowed.";
 "report.viewer.save.saving.status.title" = "Saving report...";
 
 // Report viewer Options view
@@ -150,8 +150,8 @@
 
 // Saved Reports viewer view
 "savedreport.viewer.modify.title" = "Rename Report";
-"savedreport.viewer.modify.reportname" = "Report Name";
-"savedreport.viewer.delete.confirmation.message" = "Please, confirm deleting report.";
+"savedreport.viewer.modify.reportname" = "Item name";
+"savedreport.viewer.delete.confirmation.message" = "Do you really want to delete this item?";
 
 /* Resource Info View */
 
@@ -167,14 +167,15 @@
 "settings.item.connection.timeout" = "Connection timeout (in seconds)";
 "settings.item.server" = "Server";
 "settings.item.intro" = "Show intro";
-"settings.crashtracking.toast" = "For changing crash reports settings go to Settings page.";
+"settings.crashtracking.toast" = "To change crash reports settings, go to Settings page.";
 "settings.crashtracking.title" = "Send crash reports";
-"settings.crashtracking.alert.title" = "Attention!";
-"settings.crashtracking.alert.message" = "Sending crash reports settings will be applied after restart application.";
+"settings.crashtracking.alert.title" = "Note";
+"settings.crashtracking.alert.message" = "Restart the app after changing this setting.";
 "settings.privacy.policy.title" = "Privacy Policy";
-"settings.feedback" = "Feedback by Email";
-"settings.feedback.errorShowClient" = "Need configure email";
+"settings.feedback" = "Feedback by email";
+"settings.feedback.errorShowClient" = "An email address is required.";
 "settings.save.message" = "Saving Settings...";
+
 
 /* Action titles */
 
@@ -193,22 +194,23 @@
 
 /* Error messages */
 
-"error.readingresponse.dialog.msg" = "Error reading the response";
+"error.readingresponse.dialog.msg" = "Error reading the server.";
 
-"error.noconnection.dialog.title" = "No connection";
-"error.noconnection.dialog.msg" = "Please check your mobile network settings and try again";
+"error.noconnection.dialog.title" = "No Connection";
+"error.noconnection.dialog.msg" = "Check your network settings (mobile data or wifi) and try again.";
 
 "error.authenication.dialog.title" = "Invalid Credentials";
-"error.authenication.dialog.msg" = "Please check server credentials";
+"error.authenication.dialog.msg" = "The username or password is incorrect. Re-enter your credentials.";
 
 "error.unknownhost.dialog.title" = "Unknown server";
-"error.unknownhost.dialog.msg" = "A server with the specified hostname could not be found";
+"error.unknownhost.dialog.msg" = "The specified hostname could not be found.";
 
 "error.upgrade.data.title" = "Upgrade Error - User Data Update";
-"error.upgrade.data.msg" = "There was an error updating user data (Servers, Favorites, Filter values & Settings) during the upgrade process. Press:\nRetry - to re-execute the data update again\nApply - to ignore the error and continue with upgrade, you may LOSE all user data\nCancel - to cancel the upgrade (this will leave you at current version)";
+"error.upgrade.data.msg" = "There was an error updating user data (Servers, Favorites, Filter values & Settings) during the upgrade process. Press:\nRetry - to re-execute the data update again\nApply - to ignore the error and continue with upgrade, you may LOSE all user data\nCancel - to cancel the upgrade (this will leave you at the current version)";
 
 "error.server.notsupported.title" = "Wrong server version or URL";
-"error.server.notsupported.msg" = "Server version is either older than %.1f (not supported) or URL is incorrect";
+"error.server.notsupported.msg" = "The server version is older than %.1f (not supported), or the URL is incorrect.";
+
 
 /* HTTP error messages */
 
@@ -235,7 +237,7 @@
 "dialog.button.save" = "Save";
 "dialog.button.delete" = "Delete";
 
-"dialod.title.attention" = "Attention";
+"dialod.title.attention" = "Warning";
 "dialod.title.error" = "Error";
 "dialod.title.confirmation" = "Confirmation";
 

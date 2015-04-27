@@ -54,6 +54,4 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 - (NSString *)resourceCellForRepresentationType:(JMResourcesRepresentationType)type;
 - (void)showLoadingView;
 - (void)hideLoadingView;
-- (void)showNoResultsView;
-- (void)hideNoResultView;
 @end

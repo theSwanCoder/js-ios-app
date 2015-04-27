@@ -28,7 +28,7 @@ NSString * const kJMResourceListLoaderOptionItemTitleKey = @"JMResourceListLoade
 NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoaderFilterItemValueKey";
 
 @interface JMResourcesListLoader ()
-@property (nonatomic, strong) NSMutableArray *resources;
+@property (atomic, strong) NSMutableArray *resources;
 @property (nonatomic, assign) BOOL needUpdateData;
 @property (nonatomic, assign) BOOL isLoadingNow;
 @property (nonatomic, assign, readwrite) BOOL hasNextPage;
@@ -70,9 +70,9 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 {
     if (self.needUpdateData && !self.isLoadingNow) {
         [self resetState];
-        [self.delegate resourceListLoaderDidStartLoad:self];
-        
         self.isLoadingNow = YES;
+
+        [self.delegate resourceListLoaderDidStartLoad:self];
         [self loadNextPage];
     }
 }
@@ -122,7 +122,10 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 
 - (id)resourceAtIndex:(NSInteger)index
 {
-    return [self.resources objectAtIndex:index];
+    if (index < self.resources.count) {
+        return [self.resources objectAtIndex:index];
+    }
+    return nil;
 }
 
 - (void)addResourcesWithResource:(id)resource

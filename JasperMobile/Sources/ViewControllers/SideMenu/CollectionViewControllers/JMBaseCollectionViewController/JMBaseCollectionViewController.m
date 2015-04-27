@@ -48,7 +48,7 @@ NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentationTypeDidChangeNotification";
 
 @interface JMBaseCollectionViewController() <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMPopupViewDelegate, JMResourceCollectionViewCellDelegate, PopoverViewDelegate, JMMenuActionsViewDelegate, JMResourcesListLoaderDelegate>
-@property (nonatomic, assign) UIDeviceOrientation currentOrientation;
+@property (nonatomic, assign) UIInterfaceOrientation currentOrientation;
 // observers
 @property (nonatomic, strong) id deviceOrientationObserver;
 @property (nonatomic, strong) id representationTypeObserver;
@@ -83,7 +83,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     
     baseCollectionView.searchBar.delegate = self;
     
-    self.currentOrientation = UIDeviceOrientationUnknown;
+    self.currentOrientation = self.interfaceOrientation;
         
     [self addObservers];
     [self setupMenu];
@@ -99,8 +99,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [super viewWillAppear:animated];
     
     self.screenName = NSStringFromClass(self.class);
-    
-    [self updateIfNeeded];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -346,20 +344,13 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 - (BOOL)isOrientationChanged
 {
-    BOOL result = NO;
     if ( UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) ) {
-        if (self.currentOrientation != UIDeviceOrientationUnknown) {
-            BOOL isOrientationChanged = [UIDevice currentDevice].orientation != self.currentOrientation;
-            if (isOrientationChanged) {
-                self.currentOrientation = [UIDevice currentDevice].orientation;
-                result = YES;
-            }
-        } else {
-            self.currentOrientation = [UIDevice currentDevice].orientation;
-            result = YES;
+        if (self.currentOrientation != self.interfaceOrientation) {
+            self.currentOrientation = self.interfaceOrientation;
+            return YES;
         }
     }
-    return result;
+    return NO;
 }
 
 - (UIBarButtonItem *)resourceRepresentationItem
@@ -543,8 +534,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             NSUInteger selectedIndex = [popup selectedIndex];
             if (selectedIndex != self.resourceListLoader.filterBySelectedIndex) {
                  self.resourceListLoader.filterBySelectedIndex = selectedIndex;
-                [self.resourceListLoader updateIfNeeded];
-                
                 self.isScrollToTop = YES;
             }
             break;
@@ -553,8 +542,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             NSUInteger selectedIndex = [popup selectedIndex];
             if (selectedIndex != self.resourceListLoader.sortBySelectedIndex) {
                 self.resourceListLoader.sortBySelectedIndex = selectedIndex;
-                [self.resourceListLoader updateIfNeeded];
-                
                 self.isScrollToTop = YES;
             }
             break;
@@ -586,14 +573,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)resourceListLoaderDidEndLoad:(JMResourcesListLoader *)listLoader withResources:(NSArray *)resources
 {
     JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-    [baseCollectionView.refreshControl endRefreshing];
     [baseCollectionView hideLoadingView];
-    
-    if (resources.count > 0) {
-        [baseCollectionView hideNoResultView];
-    } else {
-        [baseCollectionView showNoResultsView];
-    }
     
     self.needReloadData = YES;
 }
@@ -601,7 +581,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)resourceListLoaderDidFailed:(JMResourcesListLoader *)listLoader withError:(NSError *)error
 {
     JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-    [baseCollectionView.refreshControl endRefreshing];
     [baseCollectionView hideLoadingView];
     
     [JMUtils showAlertViewWithError:error];
