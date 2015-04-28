@@ -38,6 +38,8 @@
 static NSString * const kGAITrackingID = @"UA-57445224-1";
 
 @interface JasperMobileAppDelegate()
+@property (nonatomic, assign) BOOL shouldDisplayOnboardingIntro;
+
 @end
 
 @implementation JasperMobileAppDelegate
@@ -49,10 +51,9 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
 - (id)init
 {
     if (self = [super init]) {
-        _applicationFirstStart = NO;
+        self.shouldDisplayOnboardingIntro = [JMAppUpdater isRunningForTheFirstTime] || ([[JMAppUpdater latestAppVersion] compare:[JMAppUpdater currentAppVersion]] != NSOrderedSame);
         if ([JMAppUpdater isRunningForTheFirstTime]) {
             [JMAppUpdater updateAppVersionTo:[JMAppUpdater latestAppVersion]];
-            _applicationFirstStart = YES;
             [self coreDataInit];
         } else {
             [JMAppUpdater update];
@@ -101,6 +102,8 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
         [Appirater setTimeBeforeReminding:2];
         [Appirater setDebug:NO];
         [Appirater appLaunched:YES];
+        
+        [self showOnboardIntro];
     };
     
     if ([[JMSessionManager sharedManager] restoreLastSession]) {
@@ -148,6 +151,16 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
     // Update db with latest app version and demo profile
     [JMAppUpdater updateAppVersionTo:[JMAppUpdater latestAppVersion]];
     [self coreDataInit];
+}
+
+- (void)showOnboardIntro
+{
+    if (self.shouldDisplayOnboardingIntro) {
+        SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
+        UIViewController *introViewController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
+        [revealViewController.rearViewController presentViewController:introViewController animated:YES completion:nil];
+        self.shouldDisplayOnboardingIntro = NO;
+    }
 }
 
 @end

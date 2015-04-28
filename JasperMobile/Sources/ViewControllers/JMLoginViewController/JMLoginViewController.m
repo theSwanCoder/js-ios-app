@@ -199,13 +199,11 @@
         [JMCancelRequestPopup dismiss];
         if (success) {
             self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
+            [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoginDidSuccessNotification object:nil];
+            [self dismissViewControllerAnimated:NO completion:nil];
             if (self.completion) {
                 self.completion();
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoginDidSuccessNotification object:nil];
-            [self dismissViewControllerAnimated:NO completion:@weakself(^(void)) {
-                [self showOnboardIntro];
-            } @weakselfend];
         } else {
             [[UIAlertView localizedAlertWithTitle:@"error.authenication.dialog.title"
                                           message:@"error.authenication.dialog.msg"
@@ -216,14 +214,4 @@
     } @weakselfend];
 }
 
-- (void)showOnboardIntro
-{
-    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    
-    if (appDelegate.isApplicationFirstStart) {
-        SWRevealViewController *revealViewController = (SWRevealViewController *) appDelegate.window.rootViewController;
-        UIViewController *introViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
-        [revealViewController.rearViewController presentViewController:introViewController animated:YES completion:nil];
-    }
-}
 @end

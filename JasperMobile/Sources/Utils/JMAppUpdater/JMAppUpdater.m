@@ -38,9 +38,6 @@ static NSString * const kJMApplicationVersion = @"CFBundleShortVersionString";
 static NSString * errorMessage = nil;
 
 // Old constants used in previous versions of application
-static NSString * const kJMDefaultsCount = @"jaspersoft.server.count";
-static NSString * const kJMDefaultsFirstRun = @"jaspersoft.mobile.firstRun";
-static NSString * const kJMDefaultsNotFirstRun = @"jaspersoft.mobile.notFirstRun";
 static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated.versions";
 
 @implementation JMAppUpdater
@@ -117,12 +114,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
 + (BOOL)isRunningForTheFirstTime
 {
-    NSNumber *currentAppVersion = [self currentAppVersion];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber *wasFirstRun = [defaults objectForKey:kJMDefaultsFirstRun];
-    NSNumber *notFirstRun = [defaults objectForKey:kJMDefaultsNotFirstRun];
-    
-    return currentAppVersion == nil && wasFirstRun.intValue != 1 && notFirstRun.intValue != 1;
+    return (![self currentAppVersion]);
 }
 
 #pragma mark - Migration methods

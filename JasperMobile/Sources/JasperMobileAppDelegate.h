@@ -37,6 +37,4 @@
  */
 @interface JasperMobileAppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (nonatomic, assign, getter=isApplicationFirstStart) BOOL applicationFirstStart;
-
 @end
