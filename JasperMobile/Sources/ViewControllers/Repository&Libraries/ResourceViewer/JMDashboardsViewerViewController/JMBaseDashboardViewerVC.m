@@ -86,7 +86,7 @@
     
     //  don't let run link run report
     if ([requestURLString rangeOfString:@"_flowId=viewReportFlow&reportUnit"].length) {
-        //[[UIApplication sharedApplication] openURL:request.URL];
+        [[UIApplication sharedApplication] openURL:request.URL];
         return NO;
     }
 
