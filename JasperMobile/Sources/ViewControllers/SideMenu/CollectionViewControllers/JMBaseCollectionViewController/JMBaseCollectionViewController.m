@@ -49,9 +49,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 @interface JMBaseCollectionViewController() <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMPopupViewDelegate, JMResourceCollectionViewCellDelegate, PopoverViewDelegate, JMMenuActionsViewDelegate, JMResourcesListLoaderDelegate>
 @property (nonatomic, assign) UIInterfaceOrientation currentOrientation;
-// observers
-@property (nonatomic, strong) id deviceOrientationObserver;
-@property (nonatomic, strong) id representationTypeObserver;
 @property (nonatomic, strong) PopoverView *popoverView;
 @property (nonatomic, assign) BOOL isScrollToTop;
 @end
@@ -63,9 +60,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 #pragma mark - LifeCycle
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSNotificationCenter defaultCenter] removeObserver:self.deviceOrientationObserver];
-    [[NSNotificationCenter defaultCenter] removeObserver:self.representationTypeObserver];
+    [self removeObservers];
 }
 
 - (void)viewDidLoad
@@ -105,6 +100,18 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     [super viewDidAppear:animated];
     [self.resourceListLoader updateIfNeeded];
+
+    [self addObservers];
+    if ([self isOrientationChanged]) {
+        self.needLayoutUI = YES;
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+
+    [self removeObservers];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -262,23 +269,33 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 #pragma mark - Observers
 - (void)addObservers
 {
-    self.deviceOrientationObserver = [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceOrientationDidChangeNotification
-                                                                                       object:nil
-                                                                                        queue:[NSOperationQueue mainQueue]
-                                                                                   usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
-                                                                                        if ([self isOrientationChanged]) {
-                                                                                            self.needLayoutUI = YES;
-                                                                                        }
-                                                                                    } @weakselfend];
-    
-    self.representationTypeObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kJMRepresentationTypeDidChangeNotification
-                                                                                        object:nil
-                                                                                         queue:[NSOperationQueue mainQueue]
-                                                                                    usingBlock:@weakselfnotnil(^(NSNotification *notification)) {
-                                                                                        self.needReloadData = YES;
-                                                                                    } @weakselfend];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(deviceOrientationDidChange)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(representationTypeDidChange)
+                                                 name:kJMRepresentationTypeDidChangeNotification
+                                               object:nil];
 }
 
+- (void)removeObservers
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)deviceOrientationDidChange
+{
+    if ([self isOrientationChanged]) {
+        self.needLayoutUI = YES;
+    }
+}
+
+- (void)representationTypeDidChange
+{
+    self.needReloadData = YES;
+}
 
 #pragma mark - Menu setup
 - (void)setupMenu
@@ -345,8 +362,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (BOOL)isOrientationChanged
 {
     if ( UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) ) {
-        if (self.currentOrientation != self.interfaceOrientation) {
-            self.currentOrientation = self.interfaceOrientation;
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        if (self.currentOrientation != orientation) {
+            self.currentOrientation = orientation;
             return YES;
         }
     }
