@@ -94,24 +94,14 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [super viewWillAppear:animated];
     
     self.screenName = NSStringFromClass(self.class);
+    [self updateIfNeeded];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self.resourceListLoader updateIfNeeded];
-
-    [self addObservers];
-    if ([self isOrientationChanged]) {
-        self.needLayoutUI = YES;
-    }
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-
-    [self removeObservers];
+    [self updateIfNeeded];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
