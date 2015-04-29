@@ -139,7 +139,7 @@
 
 - (IBAction)tryDemoButtonTapped:(id)sender
 {
-    [self loginWithServerProfile:[JMServerProfile demoServerProfile] userName:@"phoneuser" password:@"phoneuser"];
+    [self loginWithServerProfile:[JMServerProfile demoServerProfile] userName:kJMDemoServerUsername password:kJMDemoServerPassword];
 }
 
 #pragma mark - UITextFieldDelegate

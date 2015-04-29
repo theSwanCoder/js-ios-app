@@ -56,8 +56,10 @@ NSString * const kJMDefaultUseVisualize = @"jaspersoft.use.visualize";
 
 // Demo server parameters
 NSString * const kJMDemoServerAlias = @"Jaspersoft Mobile Demo";
-NSString * const kJMDemoServerUrl = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
+NSString * const kJMDemoServerUrl = @"http://mobiledemo2.jaspersoft.com/jasperserver-pro";
 NSString * const kJMDemoServerOrganization = @"organization_1";
+NSString * const kJMDemoServerUsername = @"phoneuser";
+NSString * const kJMDemoServerPassword = @"phoneuser";
 
 // Directory to store downloaded reports
 NSString * const kJMReportsDirectory = @"reports";

@@ -44,6 +44,8 @@ extern NSString * const kJMLoginDidSuccessNotification;
 extern NSString * const kJMResetApplicationNotification;
 extern NSString * const kJMFavoritesDidChangedNotification;
 extern NSString * const kJMSavedResourcesDidChangedNotification;
+extern NSString * const kJMDemoServerUsername;
+extern NSString * const kJMDemoServerPassword;
 
 // Shared keys for dictionary
 extern NSString * const kJMServerProfileKey;
