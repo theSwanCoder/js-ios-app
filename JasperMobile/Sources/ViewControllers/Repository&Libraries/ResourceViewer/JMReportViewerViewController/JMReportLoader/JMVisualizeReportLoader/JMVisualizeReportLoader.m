@@ -133,6 +133,13 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     [self.report updateLoadingStatusWithValue:NO];
     [self fetchPageNumber:1 withCompletion:completion];
+
+    // TODO: need understand logic of refresh via visualize.js
+//    self.reportLoadCompletion = completion;
+//    [self.report updateCurrentPage:1];
+//
+//    NSString *refreshReportCommand = [NSString stringWithFormat:@"MobileReport.refresh();"];
+//    [self.webView stringByEvaluatingJavaScriptFromString:refreshReportCommand];
 }
 
 - (void)exportReportWithFormat:(NSString *)exportFormat
@@ -287,11 +294,11 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         } else if ([command rangeOfString:@"inputControls"].length) {
             [self handleInputControlsWithJSCommand:command];
         } else if([command rangeOfString:@"reportDidBeginRender"].length) {
-            [self handleReportBeginRenderSuccessfull];
+            [self handleReportBeginRenderSuccessful];
         } else if([command rangeOfString:@"reportDidEndRenderSuccessful"].length) {
             [self handleReportEndRenderSuccessfull];
         } else if([command rangeOfString:@"reportDidEndRenderFailured"].length) {
-            [self handleReportEndRenderFailuredWithJSCommand:command];
+            [self handleReportEndRenderFailedWithJSCommand:command];
         } else if ([command rangeOfString:@"reportDidChangePage"].length) {
             [self handleReportDidChangePageWithJSCommand:command];
         } else if ([command rangeOfString:@"linkOptions"].length) {
@@ -300,6 +307,10 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
             [self handleErrorWithCommand:command];
         } else if ([command rangeOfString:@"exportPath"].length) {
             [self handleExportCommand:command];
+        } else if ([command rangeOfString:@"reportDidDidEndRefreshSuccessful"].length) {
+            [self handleRefreshDidEndSuccessful];
+        } else if ([command rangeOfString:@"reportDidEndRefreshFailured"].length) {
+            [self handleRefreshDidEndFailedWithJSCommand:command];
         }
         return NO;
     } else if ([requestURLString rangeOfString:debugger].length) {
@@ -332,7 +343,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 }
 
 #pragma mark - VisualizeJS handlers
-- (void)handleReportBeginRenderSuccessfull
+- (void)handleReportBeginRenderSuccessful
 {
     NSLog(@"report rendering begin");
 }
@@ -348,7 +359,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     }
 }
 
-- (void)handleReportEndRenderFailuredWithJSCommand:(NSString *)command
+- (void)handleReportEndRenderFailedWithJSCommand:(NSString *)command
 {
     NSLog(@"report rendering failured with error: %@", command);
 
@@ -374,6 +385,25 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
             NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", self.report.resourceLookup.label, self.exportFormat];
             [self.delegate reportLoader:self didReceiveOutputResourcePath:outputResourcesPath fullReportName:fullReportName];
         }
+    }
+}
+
+- (void)handleRefreshDidEndSuccessful
+{
+    NSLog(@"handleRefreshDidEndSuccessful");
+    [self.report updateLoadingStatusWithValue:YES];
+
+    if (self.reportLoadCompletion) {
+        self.reportLoadCompletion(YES, nil);
+    }
+}
+
+- (void)handleRefreshDidEndFailedWithJSCommand:(NSString *)command
+{
+    NSLog(@"handleRefreshDidEndFailedWithJSCommand: %@", command);
+    if (self.reportLoadCompletion) {
+        // TODO: add error
+        self.reportLoadCompletion(NO, nil);
     }
 }
 

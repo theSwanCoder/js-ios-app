@@ -40,6 +40,16 @@
         return this._makeCallback("exportPath&link=" + link);
       };
 
+      ReportCallback.prototype.onRefreshSuccess = function() {
+        console.log("onRefreshSuccess");
+        return this._makeCallback("reportDidDidEndRefreshSuccessful");
+      };
+
+      ReportCallback.prototype.onRefreshError = function(error) {
+        console.log("onRefreshError");
+        return this._makeCallback("reportDidEndRefreshFailured&error=" + error);
+      };
+
       ReportCallback.prototype._makeCallback = function(command) {
         return window.location.href = "http://jaspermobile.callback/" + command;
       };
@@ -212,6 +222,18 @@
         return this.report.destroy();
       };
 
+      ReportController.prototype.refresh = function() {
+        return this.report.refresh((function(_this) {
+          return function() {
+            return _this.callback.onRefreshSuccess();
+          };
+        })(this), (function(_this) {
+          return function(error) {
+            return _this.callback.onRefreshError(error.message);
+          };
+        })(this));
+      };
+
       ReportController.prototype._executeReport = function(visualize) {
         return this.report = visualize.report({
           resource: this.uri,
@@ -364,23 +386,27 @@
       };
 
       MobileReport.authorize = function(options) {
-        return this._instance.authorize(options);
+        return this._instance._authorize(options);
       };
 
       MobileReport.destroy = function() {
-        return this._instance.destroyReport();
+        return this._instance._destroyReport();
       };
 
       MobileReport.run = function(options) {
-        return this._instance.run(options);
+        return this._instance._run(options);
       };
 
       MobileReport.selectPage = function(page) {
-        return this._instance.selectPage(page);
+        return this._instance._selectPage(page);
       };
 
       MobileReport.exportReport = function(format) {
-        return this._instance.exportReport(format);
+        return this._instance._exportReport(format);
+      };
+
+      MobileReport.refresh = function() {
+        return this._instance._refreshController();
       };
 
       function MobileReport(context1) {
@@ -388,29 +414,33 @@
         this.context.callback.onScriptLoaded();
       }
 
-      MobileReport.prototype.authorize = function(options) {
-        return this.session = new Session(options);
-      };
-
-      MobileReport.prototype.selectPage = function(page) {
-        if (this.reportController) {
-          return this.reportController.selectPage(page);
-        }
-      };
-
-      MobileReport.prototype.run = function(options) {
+      MobileReport.prototype._run = function(options) {
         options.session = this.session;
         options.context = this.context;
         this.reportController = new ReportController(options);
         return this.reportController.runReport();
       };
 
-      MobileReport.prototype.exportReport = function(format) {
+      MobileReport.prototype._authorize = function(options) {
+        return this.session = new Session(options);
+      };
+
+      MobileReport.prototype._selectPage = function(page) {
+        if (this.reportController) {
+          return this.reportController.selectPage(page);
+        }
+      };
+
+      MobileReport.prototype._exportReport = function(format) {
         return this.reportController.exportReport(format);
       };
 
-      MobileReport.prototype.destroyReport = function() {
+      MobileReport.prototype._destroyReport = function() {
         return this.reportController.destroyReport();
+      };
+
+      MobileReport.prototype._refreshController = function() {
+        return this.reportController.refresh();
       };
 
       return MobileReport;
