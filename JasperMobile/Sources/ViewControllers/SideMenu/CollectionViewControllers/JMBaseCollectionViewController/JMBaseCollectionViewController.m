@@ -95,13 +95,20 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     
     self.screenName = NSStringFromClass(self.class);
     [self updateIfNeeded];
+    [self addKeyboardObservers];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self.resourceListLoader updateIfNeeded];
-    [self updateIfNeeded];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+
+    [self removeKeyboardObservers];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -285,6 +292,31 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)representationTypeDidChange
 {
     self.needReloadData = YES;
+}
+
+#pragma mark - Keyboard Observers
+- (void)addKeyboardObservers
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
+
+}
+
+- (void)removeKeyboardObservers
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
+}
+
+- (void)keyboardDidHide
+{
+    JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
+    if (!baseCollectionView.searchBar.text.length) {
+        [self.resourceListLoader clearSearchResults];
+    }
 }
 
 #pragma mark - Menu setup
@@ -527,6 +559,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [searchBar resignFirstResponder];
     searchBar.text = nil;
     [self.resourceListLoader clearSearchResults];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    NSLog(@"%@", NSStringFromSelector(_cmd));
+    NSLog(@"search text %@", searchText);
 }
 
 #pragma mark - JMPopupDelegate
