@@ -40,6 +40,7 @@
 @interface JMBaseReportViewerViewController : JMResourceViewerViewController <JMRefreshable, JMReportViewerToolBarDelegate>
 @property (nonatomic, strong, readonly) id <JMReportLoader> reportLoader;
 @property (nonatomic, strong) JMReport *report;
+@property (nonatomic, copy) void(^exitBlock)(void);
 
 // start point
 - (void)startLoadReportWithPage:(NSInteger)page;

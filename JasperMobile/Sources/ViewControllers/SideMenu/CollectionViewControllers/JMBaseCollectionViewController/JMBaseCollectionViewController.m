@@ -427,6 +427,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         report.thumbnailImage = cell.thumbnailImage;
         
         [nextVC setReport:report];
+        [nextVC setExitBlock:@weakself(^(void)) {
+            [baseCollectionView.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+        }@weakselfend];
     } else if ([resourceLookup isDashboard]) {
         JMDashboard *dashboard = [resourceLookup dashboardModelWithVCIdentifier:&controllerIdentifier];
         nextVC = [self.storyboard instantiateViewControllerWithIdentifier:controllerIdentifier];

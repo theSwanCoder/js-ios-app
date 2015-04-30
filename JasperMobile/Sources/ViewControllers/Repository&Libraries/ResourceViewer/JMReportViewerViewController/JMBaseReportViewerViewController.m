@@ -138,6 +138,9 @@
 - (void)cancelResourceViewingAndExit
 {
     [self.reportLoader cancelReport];
+    if (self.exitBlock) {
+        self.exitBlock();
+    }
     [super cancelResourceViewingAndExit];
 }
 
