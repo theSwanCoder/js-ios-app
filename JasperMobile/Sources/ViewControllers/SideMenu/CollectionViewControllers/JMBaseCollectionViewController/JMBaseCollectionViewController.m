@@ -78,7 +78,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     
     baseCollectionView.searchBar.delegate = self;
     
-    self.currentOrientation = self.interfaceOrientation;
+    self.currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
         
     [self addObservers];
     [self setupMenu];
@@ -116,6 +116,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     if ([self isMenuShown]) {
         [self closeMenu];
     }
+
+    self.needLayoutUI = YES;
 }
 
 #pragma mark - Custom accessors
