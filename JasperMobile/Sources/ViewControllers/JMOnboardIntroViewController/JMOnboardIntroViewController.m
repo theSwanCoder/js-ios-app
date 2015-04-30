@@ -745,12 +745,12 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             }
         } else {
             // start expend home screen image
-            CGFloat newOriginX = self.contentView.frame.size.width / 2 - homeScreenImageSize.width / 2;
+            CGFloat newOriginX = CGRectGetWidth(self.contentView.frame) / 2 - homeScreenImageSize.width / 2;
             CGFloat newOriginY = homeScreenImageOrigin.y - kDefaultStepValue;
             CGPoint newOrigin = CGPointMake(newOriginX, newOriginY);
 
-            CGFloat newHeight = homeScreenImageSize.height + kDefaultStepValue * (homeScreenImageSizeProportion);
-            CGFloat newWidth = homeScreenImageSize.width + kDefaultStepValue - 0.5f;
+            CGFloat newHeight = homeScreenImageSize.height + kDefaultStepValue;
+            CGFloat newWidth = newHeight / homeScreenImageSizeProportion;
             CGSize newSize = CGSizeMake(newWidth, newHeight);
             [self.homeScreenImage updateFrameWithOrigin:newOrigin
                                                    size:newSize];
@@ -778,12 +778,12 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
         } else {
             if (homeScreenImageOrigin.y < homeScreenImageBottomValueOriginY) {
                 // start shrink home screen image
-                CGFloat newOriginX = self.contentView.frame.size.width / 2 - homeScreenImageSize.width / 2;
+                CGFloat newOriginX = CGRectGetWidth(self.contentView.frame) / 2 - homeScreenImageSize.width / 2;
                 CGFloat newOriginY = homeScreenImageOrigin.y + kDefaultStepValue;
                 CGPoint newOrigin = CGPointMake(newOriginX, newOriginY);
 
-                CGFloat newHeight = homeScreenImageSize.height - kDefaultStepValue * (homeScreenImageSizeProportion) - 1;
-                CGFloat newWidth = homeScreenImageSize.width - kDefaultStepValue - 0.5f;
+                CGFloat newHeight = homeScreenImageSize.height - kDefaultStepValue;
+                CGFloat newWidth = newHeight / homeScreenImageSizeProportion;
                 CGSize newSize = CGSizeMake(newWidth, newHeight);
                 [self.homeScreenImage updateFrameWithOrigin:newOrigin
                                                        size:newSize];
@@ -842,20 +842,21 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 
 #pragma mark - Instance Access Page
 
-- (void)changeInstanceAccessViewsWithVelocity:(CGPoint)velocity {
-    CGPoint reportScreenIpadImageOrigin = self.reportScreenIpadImage.frame.origin;
-    CGFloat reportScreenIpadImageFrameOriginX = self.contentView.frame.size.width/2 - self.reportScreenIpadImage.frame.size.width/2;
+- (void)changeInstanceAccessViewsWithVelocity:(CGPoint)velocity
+{
+    CGPoint reportScreenIpadImageCurrentOrigin = self.reportScreenIpadImage.frame.origin;
+    CGFloat reportScreenIpadImageStartOriginX = CGRectGetWidth(self.contentView.frame)/2 - CGRectGetWidth(self.reportScreenIpadImage.frame)/2;
     CGFloat reportScreenIpadImageBeginUpdateOriginX = 20;
     CGFloat reportScreenIpadImageBottomValueOriginX = 0;
 
     if (velocity.y > 0) { // move down
 
-        if (reportScreenIpadImageOrigin.x == reportScreenIpadImageFrameOriginX) {
+        if (reportScreenIpadImageCurrentOrigin.x == reportScreenIpadImageStartOriginX) {
             self.isUnderRedLine = YES;
         }
 
         if (self.isUnderRedLine) {
-            if (reportScreenIpadImageOrigin.x > reportScreenIpadImageBottomValueOriginX) {
+            if (reportScreenIpadImageCurrentOrigin.x > reportScreenIpadImageBottomValueOriginX) {
                 [self.homeScreenImage updateOriginYWithValue:(self.homeScreenImage.frame.origin.y - kDefaultStepValue)];
                 // start hiding ipad image
                 [self.reportScreenIpadImage updateOriginXWithValue:(self.reportScreenIpadImage.frame.origin.x + kDefaultStepValue)];
@@ -869,7 +870,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             // start hiding iphone image
             [self.reportScreenIphoneImage updateOriginXWithValue:(self.reportScreenIphoneImage.frame.origin.x + kDefaultStepValue)];
 
-            if (reportScreenIpadImageOrigin.x == reportScreenIpadImageBeginUpdateOriginX) {
+            if (reportScreenIpadImageCurrentOrigin.x == reportScreenIpadImageBeginUpdateOriginX) {
                 // current page title
                 JMIntroModel *model = [self.modelManager modelAtIndex:1];
                 self.titlePageLabel.text = model.pageTitle;
@@ -877,8 +878,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             }
         }
     } else { // move up
-
-        if (reportScreenIpadImageOrigin.x == reportScreenIpadImageFrameOriginX) {
+        if (reportScreenIpadImageCurrentOrigin.x == reportScreenIpadImageStartOriginX) {
             self.isUnderRedLine = NO;
         }
 
@@ -889,14 +889,14 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             // start hiding iphone image
             [self.reportScreenIphoneImage updateOriginXWithValue:(self.reportScreenIphoneImage.frame.origin.x - kDefaultStepValue)];
         } else {
-            if (reportScreenIpadImageOrigin.x > reportScreenIpadImageBottomValueOriginX) {
-                [self.serverScreenImage updateOriginYWithValue:(self.serverScreenImage.frame.origin.y - kDefaultStepValue)];
+            if (reportScreenIpadImageCurrentOrigin.x > reportScreenIpadImageBottomValueOriginX) {
+                [self.serverScreenImage updateOriginYWithValue:(self.serverScreenImage.frame.origin.y + kDefaultStepValue)];
                 // start hiding ipad image
                 [self.reportScreenIpadImage updateOriginXWithValue:(self.reportScreenIpadImage.frame.origin.x - kDefaultStepValue)];
                 // start hiding iphone image
                 [self.reportScreenIphoneImage updateOriginXWithValue:(self.reportScreenIphoneImage.frame.origin.x + kDefaultStepValue)];
 
-                if (reportScreenIpadImageOrigin.x == reportScreenIpadImageBeginUpdateOriginX) {
+                if (reportScreenIpadImageCurrentOrigin.x == reportScreenIpadImageBeginUpdateOriginX) {
                     // next page title
                     JMIntroModel *model = [self.modelManager modelAtIndex:2];
                     self.titlePageLabel.text = model.pageTitle;
@@ -907,7 +907,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     }
 }
 
-- (void)updateInstanceAccessPageViewsWithVelocity:(CGPoint)velocity {
+- (void)updateInstanceAccessPageViewsWithVelocity:(CGPoint)velocity
+{
     CGFloat velocityY = fabs(velocity.y);
 
     CGPoint reportScreenIpadImageOrigin = self.reportScreenIpadImage.frame.origin;
@@ -935,10 +936,12 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 }
 
 #pragma mark - Seemless Integration Page
-- (void)changeSeemlessIntegrationPageViewsWithVelocity:(CGPoint)velocity {
+- (void)changeSeemlessIntegrationPageViewsWithVelocity:(CGPoint)velocity
+{
     CGPoint serverScreenImageOrigin = self.serverScreenImage.frame.origin;
     CGSize serverScreenImageSize = self.serverScreenImage.frame.size;
-    CGFloat mainViewWidth = CGRectGetWidth([UIApplication sharedApplication].keyWindow.bounds);
+    CGFloat serverScreenImageSizeProportion = serverScreenImageSize.height / serverScreenImageSize.width;
+    CGFloat mainViewWidth = CGRectGetWidth(self.view.bounds);
     CGFloat serverScreenImageStartOriginY = 10;
     CGFloat serverScreenImageUpperValueOriginY = 5;
     CGFloat serverScreenImageBeginUpdateOriginY = 100;
@@ -956,8 +959,9 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
                 CGFloat newOriginY = serverScreenImageOrigin.y + kDefaultStepValue;
                 CGPoint newOrigin = CGPointMake(newOriginX, newOriginY);
 
-                CGFloat newHeight = serverScreenImageSize.height - kDefaultStepValue * (serverScreenImageSize.height / serverScreenImageSize.width) - 1;
-                CGFloat newWidth = serverScreenImageSize.width - kDefaultStepValue - 0.5f;
+                CGFloat newHeight = serverScreenImageSize.height - kDefaultStepValue;
+                CGFloat newWidth = newHeight / serverScreenImageSizeProportion;
+
                 CGSize newSize = CGSizeMake(newWidth, newHeight);
                 [self.serverScreenImage updateFrameWithOrigin:newOrigin
                                                          size:newSize];
@@ -988,8 +992,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             CGFloat newOriginY = serverScreenImageOrigin.y - kDefaultStepValue;
             CGPoint newOrigin = CGPointMake(newOriginX, newOriginY);
 
-            CGFloat newHeight = serverScreenImageSize.height + kDefaultStepValue * (serverScreenImageSize.height / serverScreenImageSize.width);
-            CGFloat newWidth = serverScreenImageSize.width + kDefaultStepValue - 0.5f;
+            CGFloat newHeight = serverScreenImageSize.height + kDefaultStepValue;
+            CGFloat newWidth = newHeight / serverScreenImageSizeProportion;
             CGSize newSize = CGSizeMake(newWidth, newHeight);
             [self.serverScreenImage updateFrameWithOrigin:newOrigin
                                                      size:newSize];
@@ -1014,7 +1018,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     }
 }
 
-- (void)updateSeemlessIntegrationViewsPageWithVelocity:(CGPoint)velocity {
+- (void)updateSeemlessIntegrationViewsPageWithVelocity:(CGPoint)velocity
+{
     CGFloat velocityY = fabs(velocity.y);
 
     CGPoint serverScreenImageOrigin = self.serverScreenImage.frame.origin;

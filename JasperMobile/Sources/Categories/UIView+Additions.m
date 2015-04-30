@@ -70,53 +70,38 @@
 }
 
 - (void)updateFrameWithOrigin:(CGPoint)newOrigin size:(CGSize)newSize {
-//    [self updateOriginWithOrigin:newOrigin];
-//    [self updateSizeWithSize:newSize];
     CGRect viewFrame = self.frame;
     viewFrame.origin = newOrigin;
     viewFrame.size = newSize;
-    self.frame = CGRectIntegral(viewFrame);
+    self.frame = viewFrame;
 }
 
 - (void)updateOriginWithOrigin:(CGPoint)newOrigin {
-//    [self updateOriginXWithValue:newOrigin.x];
-//    [self updateOriginYWithValue:newOrigin.y];
     CGRect viewFrame = self.frame;
     viewFrame.origin = newOrigin;
-    self.frame = CGRectIntegral(viewFrame);
+    self.frame = viewFrame;
+//    self.frame = CGRectIntegral(viewFrame);
 }
 
 - (void)updateOriginXWithValue:(CGFloat)newOriginX {
     CGRect viewFrame = self.frame;
     viewFrame.origin.x = newOriginX;
-    self.frame = CGRectIntegral(viewFrame);
+    self.frame = viewFrame;
+//    self.frame = CGRectIntegral(viewFrame);
 }
 
 - (void)updateOriginYWithValue:(CGFloat)newOriginY {
     CGRect viewFrame = self.frame;
     viewFrame.origin.y = newOriginY;
-    self.frame = CGRectIntegral(viewFrame);
-}
-
-- (void)updateSizeWithSize:(CGSize)newSize {
-//    [self updateHeightWithValue:newSize.height];
-//    [self updateWidthWithValue:newSize.width];
-    CGRect viewFrame = self.frame;
-    viewFrame.size = newSize;
-    self.frame = CGRectIntegral(viewFrame);
+    self.frame = viewFrame;
+//    self.frame = CGRectIntegral(viewFrame);
 }
 
 - (void)updateHeightWithValue:(CGFloat)newHeight {
     CGRect viewFrame = self.frame;
     viewFrame.size.height = newHeight;
-    self.frame = CGRectIntegral(viewFrame);
+    self.frame = viewFrame;
+//    self.frame = CGRectIntegral(viewFrame);
 }
-
-- (void)updateWidthWithValue:(CGFloat)newWidth {
-    CGRect viewFrame = self.frame;
-    viewFrame.size.width = newWidth;
-    self.frame = CGRectIntegral(viewFrame);
-}
-
 
 @end

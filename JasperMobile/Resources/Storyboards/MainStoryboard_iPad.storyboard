@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="Vdc-Fb-o64">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="Vdc-Fb-o64">
     <dependencies>
         <deployment version="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <scenes>
         <!--Single Select Table View Controller-->
@@ -1782,8 +1782,8 @@
         <image name="im_logo_white" width="67" height="70"/>
         <image name="jasper_logo" width="260" height="260"/>
         <image name="menu_icon" width="20" height="20"/>
-        <image name="report_screen_ipad" width="395" height="530"/>
-        <image name="report_screen_iphone" width="169" height="312"/>
+        <image name="report_screen_ipad" width="392" height="554"/>
+        <image name="report_screen_iphone" width="151" height="316"/>
         <image name="server" width="32" height="40"/>
         <image name="server_screen" width="605" height="661"/>
         <image name="unchecked_checkbox" width="36" height="36"/>

@@ -45,8 +45,5 @@
 - (void)updateOriginWithOrigin:(CGPoint)newOrigin;
 - (void)updateOriginXWithValue:(CGFloat)newOriginX;
 - (void)updateOriginYWithValue:(CGFloat)newOriginY;
-- (void)updateSizeWithSize:(CGSize)newSize;
 - (void)updateHeightWithValue:(CGFloat)newHeight;
-- (void)updateWidthWithValue:(CGFloat)newWidth;
-
 @end
