@@ -58,7 +58,8 @@ static NSString * const kJMIntroCellIdentifier = @"IntroCellIdentifier";
       @{@"title" : JMCustomLocalizedString(@"settings.crashtracking.title", nil), @"value" : @([JMUtils crashReportsSendingEnable]), @"cellIdentifier" : kJMBooleanCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.item.intro", nil), @"value" : @"", @"cellIdentifier" : kJMIntroCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.feedback", nil), @"value" : @"", @"cellIdentifier" : kJMFeedbackCellIdentifier},
-      @{@"title" : @"Use Visualize", @"value" : @([JMUtils shouldUseVisualize]), @"cellIdentifier" : kJMBooleanCellIdentifier}
+      // used for test purpose
+      //@{@"title" : @"Use Visualize", @"value" : @([JMUtils shouldUseVisualize]), @"cellIdentifier" : kJMBooleanCellIdentifier}
       ];
     
     for (NSDictionary *itemData in itemsSourceArray) {
@@ -81,7 +82,8 @@ static NSString * const kJMIntroCellIdentifier = @"IntroCellIdentifier";
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:[[self.itemsArray objectAtIndex:0] valueSettings] forKey:kJMDefaultRequestTimeout];
     [defaults setObject:[[self.itemsArray objectAtIndex:1] valueSettings] forKey:kJMDefaultSendingCrashReport];
-    [defaults setObject:[[self.itemsArray objectAtIndex:4] valueSettings] forKey:kJMDefaultUseVisualize];
+    // used for test purpose
+    //[defaults setObject:[[self.itemsArray objectAtIndex:4] valueSettings] forKey:kJMDefaultUseVisualize];
     [defaults synchronize];
     
     self.restClient.timeoutInterval = [[[self.itemsArray objectAtIndex:0] valueSettings] doubleValue];
