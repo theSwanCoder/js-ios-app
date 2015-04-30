@@ -45,4 +45,9 @@ class JMVisualizeWebViewManager: JMWebViewManager {
         }
         return Static.instance!
     }
+
+    override func reset() {
+        super.reset()
+        isVisualizeLoaded = false
+    }
 }
