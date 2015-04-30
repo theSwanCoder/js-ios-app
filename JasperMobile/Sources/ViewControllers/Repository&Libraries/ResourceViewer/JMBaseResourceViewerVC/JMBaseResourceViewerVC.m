@@ -47,7 +47,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
     self.title = [self currentResourceLookup].label;
 
-    [self setupNavigationItems];
     [self setupSubviews];
 
     // start point of loading resource
@@ -60,6 +59,8 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
     // Google Analitycs
     self.screenName = NSStringFromClass(self.class);
+
+    [self setupNavigationItems];
 }
 
 #pragma mark - Segues
