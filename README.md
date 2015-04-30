@@ -15,9 +15,33 @@ General Information
 Please see the Tibco JasperMobile for iOS Community project page:
 http://community.jaspersoft.com/project/jaspermobile-ios
 
-Source Build
---------------------
+Installation
+------------
 
-This project includes the SDK files as part of the source.  
-- Download the source package and extract all files
-- Open the 'Tibco JasperMobile.xcodeproj' from Xcode, build & run
+The recommended approach for installing JaspersoftSDK for building application is via the [CocoaPods](http://cocoapods.org/) package manager, as it provides flexible dependency management and dead simple installation. For best results, it is recommended that you install via CocoaPods **>= ** 0.19.1g Git **>= 1.8.0** installed via Homebrew.
+
+### via CocoaPods
+
+Install CocoaPods if not already available:
+
+``` bash
+$ [sudo] gem install cocoapods
+$ pod setup
+```
+
+Change to the directory of your TIBCO JasperMobile project, and Install pods into your project:
+
+``` bash
+$ pod install
+```
+
+Open your TIBCO JasperMobile project in Xcode from the .xcworkspace file (not the usual project file)
+
+``` bash
+$ open TIBCO JasperMobile.xcworkspace
+```
+
+License
+-------
+
+TIBCO JasperMobile app is licensed under the terms of the [GNU LESSER GENERAL PUBLIC LICENSE, version 3.0](http://www.gnu.org/licenses/lgpl). Please see the [LICENSE](LICENSE) file for full details.
