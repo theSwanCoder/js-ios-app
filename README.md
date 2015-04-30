@@ -17,6 +17,9 @@ http://community.jaspersoft.com/project/jaspermobile-ios
 Source Build
 --------------------
 
-This project includes the SDK files as part of the source.  
-- Download the source package and extract all files
-- Open the 'Tibco JasperMobile.xcodeproj' from Xcode, build & run
+This project includes the SDK files as git submodules. 
+  * you should clone repository recursively:
+``` bash
+$ git clone --branch <tag_name> --recursive https://github.com/Jaspersoft/js-ios-app.git
+```
+  * Open the 'Tibco JasperMobile.xcodeproj' from Xcode, build & run.
