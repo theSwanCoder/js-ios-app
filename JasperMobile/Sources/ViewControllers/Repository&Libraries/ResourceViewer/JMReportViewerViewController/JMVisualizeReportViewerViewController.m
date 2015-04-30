@@ -77,6 +77,13 @@
     }
 }
 
+#pragma mark - Actions
+- (void)cancelResourceViewingAndExit
+{
+    [self.reportLoader destroyReport];
+    [super cancelResourceViewingAndExit];
+}
+
 #pragma mark - Setups
 - (void)setupSubviews
 {
@@ -244,12 +251,9 @@
 - (void)resetSubViews
 {
     [self.webView stopLoading];
-    NSLog(@"contentScaleFactor: %f", self.webView.contentScaleFactor);
-    NSLog(@"zoomScale: %f", self.webView.scrollView.zoomScale);
 
     // reset zoom in webView
-    //[self.webView.scrollView setZoomScale:0.1 animated:NO];
-    [self.reportLoader destroyReport];
+//    [self.webView.scrollView setZoomScale:0.1 animated:NO];
 }
 
 - (void)startShowLoadingIndicators
