@@ -84,9 +84,11 @@
         case JMResourcesListLoaderOption_Filter: {
             NSMutableArray *itemsArray = [@[
                                             @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.type.all", nil),
-                                              kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT, [JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY, [JSConstants sharedInstance].WS_TYPE_FOLDER]},
+                                              kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT, [JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY, [JSConstants sharedInstance].WS_TYPE_FOLDER, kJMSavedReportUnit]},
                                             @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.type.reportUnit", nil),
                                               kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]},
+                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil),
+                                              kJMResourceListLoaderOptionItemValueKey: @[kJMSavedReportUnit]},
                                             @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.type.folder", nil),
                                               kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_FOLDER]}
                                             ] mutableCopy];

@@ -33,7 +33,6 @@
 
 #import <UIKit/UIKit.h>
 #import "JMEditabledViewController.h"
-#import "JMResourceClientHolder.h"
 #import "JMReport.h"
 
 @protocol JMSaveReportViewControllerDelegate <NSObject>

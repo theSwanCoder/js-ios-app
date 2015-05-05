@@ -72,6 +72,9 @@ extern NSString * const kJMDemoServerOrganization;
 // Report directory
 extern NSString * const kJMReportsDirectory;
 
+// Saved Items ws types
+extern NSString * const kJMSavedReportUnit;
+
 // Name of the main report file (outputResource)
 extern NSString * const kJMReportFilename;
 

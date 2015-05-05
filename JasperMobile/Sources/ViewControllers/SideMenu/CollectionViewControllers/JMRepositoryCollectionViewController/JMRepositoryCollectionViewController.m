@@ -39,7 +39,7 @@
     [super awakeFromNib];
     
     self.resourceListLoader = [NSClassFromString(@"JMRepositoryListLoader") new];
-    self.title = @"Repository"; 
+    self.title = JMCustomLocalizedString(@"Repository", nil);
 }
 
 #pragma mark - Overloaded methods

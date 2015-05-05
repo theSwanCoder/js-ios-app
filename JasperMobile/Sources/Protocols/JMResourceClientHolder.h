@@ -39,7 +39,7 @@
 @class JSResourceLookup;
 
 @protocol JMResourceClientHolder <NSObject>
-@optional
+@required
 @property (nonatomic, strong) JSResourceLookup *resourceLookup;
 
 @end

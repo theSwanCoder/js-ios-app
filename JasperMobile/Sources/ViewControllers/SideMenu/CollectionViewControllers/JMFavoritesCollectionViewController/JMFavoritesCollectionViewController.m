@@ -44,7 +44,7 @@
     [super awakeFromNib];
     
     self.resourceListLoader = [NSClassFromString(@"JMFavoritesListLoader") new];
-    self.title = @"Favorites";
+    self.title = JMCustomLocalizedString(@"Favorites", nil);
 }
 
 

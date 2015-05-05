@@ -489,7 +489,7 @@
         <!--Saved Resource Viewer View Controller-->
         <scene sceneID="lCg-yC-QkV">
             <objects>
-                <viewController id="ya8-xd-T77" customClass="JMSavedResourceViewerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMSavedResourceViewerViewController" id="ya8-xd-T77" customClass="JMSavedResourceViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="s8Q-af-wnM">
                         <rect key="frame" x="0.0" y="64" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask"/>

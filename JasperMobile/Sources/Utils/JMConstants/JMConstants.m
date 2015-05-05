@@ -64,6 +64,10 @@ NSString * const kJMDemoServerPassword = @"phoneuser";
 // Directory to store downloaded reports
 NSString * const kJMReportsDirectory = @"reports";
 
+// Saved Items ws types
+NSString * const kJMSavedReportUnit = @"savedReportUnit";
+
+
 // Name of the main report file (outputResource)
 NSString * const kJMReportFilename = @"report";
 

@@ -23,7 +23,6 @@
 
 #import "JMSettings.h"
 #import "JMSettingsItem.h"
-#import "JMResourceClientHolder.h"
 #import "JMServerProfile+Helpers.h"
 
 static NSString * const kJMTextCellIdentifier = @"TextCellIdentifier";
@@ -33,7 +32,7 @@ static NSString * const kJMIntroCellIdentifier = @"IntroCellIdentifier";
 
 
 
-@interface JMSettings () <JMResourceClientHolder>
+@interface JMSettings ()
 @property (nonatomic, readwrite, strong) NSArray *itemsArray;
 
 @end

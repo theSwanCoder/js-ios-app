@@ -26,7 +26,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "JMResourceClientHolder.h"
 #import "JMServerProfile.h"
 #import "JMLoginViewController.h"
 

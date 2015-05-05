@@ -24,6 +24,11 @@
     return [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT];
 }
 
+- (BOOL) isSavedReport
+{
+    return [self.resourceType isEqualToString:kJMSavedReportUnit];
+}
+
 - (BOOL) isDashboard
 {
     return [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD] || [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY];

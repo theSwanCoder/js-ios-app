@@ -69,23 +69,21 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 {
     UIImage *resourceImage;
     if ([self.resourceLookup isReport]) {
-        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
-        if (savedReport) {
-            self.thumbnailImage = [savedReport thumbnailImage];
-            resourceImage = [UIImage imageNamed:[NSString stringWithFormat:@"res_type_%@", savedReport.format]];
-        } else {
-            resourceImage = [UIImage imageNamed:@"res_type_report"];
-            if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
-                NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.resourceLookup thumbnailImageUrlString]]];
-                [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
-                [self.resourceImage setImageWithURLRequest:imageRequest placeholderImage:resourceImage success:@weakself(^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image)) {
-                    if (image) {
-                        self.thumbnailImage = image;
-                        [self updateResourceImage:self.thumbnailImage thumbnails:YES];
-                    }
-                } @weakselfend failure:nil];
-            }
+        resourceImage = [UIImage imageNamed:@"res_type_report"];
+        if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
+            NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.resourceLookup thumbnailImageUrlString]]];
+            [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
+            [self.resourceImage setImageWithURLRequest:imageRequest placeholderImage:resourceImage success:@weakself(^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image)) {
+                if (image) {
+                    self.thumbnailImage = image;
+                    [self updateResourceImage:self.thumbnailImage thumbnails:YES];
+                }
+            } @weakselfend failure:nil];
         }
+    } else if ([self.resourceLookup isSavedReport]) {
+        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
+        self.thumbnailImage = [savedReport thumbnailImage];
+        resourceImage = [UIImage imageNamed:[NSString stringWithFormat:@"res_type_%@", savedReport.format]];
     } else if ([self.resourceLookup isDashboard]) {
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
     } else if ([self.resourceLookup isFolder]) {

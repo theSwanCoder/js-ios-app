@@ -823,7 +823,7 @@ your business wherever you are.</string>
         <!--Saved Resource Viewer View Controller-->
         <scene sceneID="o6f-Oo-Ck4">
             <objects>
-                <viewController id="xno-v3-xNA" customClass="JMSavedResourceViewerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMSavedResourceViewerViewController" id="xno-v3-xNA" customClass="JMSavedResourceViewerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="b4R-k0-m3B">
                         <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask"/>

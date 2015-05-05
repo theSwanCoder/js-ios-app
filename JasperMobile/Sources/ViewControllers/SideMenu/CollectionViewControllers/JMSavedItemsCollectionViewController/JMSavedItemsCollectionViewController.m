@@ -41,7 +41,7 @@
     [super awakeFromNib];
     
     self.resourceListLoader = [NSClassFromString(@"JMSavedResourcesListLoader") new];
-    self.title = @"Saved Items";
+    self.title = JMCustomLocalizedString(@"Saved Items", nil);
 }
 
 #pragma mark - Overloaded methods
@@ -50,26 +50,6 @@
     NSString * keyString = @"RepresentationTypeKey";
     keyString = [@"SavedItems" stringByAppendingString:keyString];
     return keyString;
-}
-
-- (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
-{
-    JSResourceLookup *resourceLookup = [self.resourceListLoader resourceAtIndex:indexPath.row];
-    JMSavedResources *savedResources = [JMSavedResources savedReportsFromResourceLookup:resourceLookup];
-    if (savedResources) {
-        // TODO: replace seque with constant
-        [self performSegueWithIdentifier:@"ShowSavedRecourcesViewer"
-                                  sender:@{kJMResourceLookup:resourceLookup}];
-    } else {
-        //TODO: need some action )
-    }
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"ShowSavedRecourcesViewer"]) {
-        [segue.destinationViewController  performSelector:@selector(setResourceLookup:) withObject:sender[kJMResourceLookup]];
-    }
 }
 
 @end

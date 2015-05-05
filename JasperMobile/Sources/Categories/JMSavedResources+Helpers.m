@@ -47,10 +47,10 @@ NSString * const kJMSavedResources = @"SavedResources";
         savedReport = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
         savedReport.label = name;
         savedReport.uri = [self uriForSavedReportWithName:name format:format];
-        savedReport.wsType = resource.resourceType;
         savedReport.resourceDescription = resource.resourceDescription;
         savedReport.format = format;
         savedReport.username = sessionServerProfile.username;
+        savedReport.wsType = [self wsTypeWithSourceWSType:resource.resourceType];
         [activeServerProfile addSavedResourcesObject:savedReport];
     }
     savedReport.creationDate = [NSDate date];
@@ -166,4 +166,11 @@ NSString * const kJMSavedResources = @"SavedResources";
     return fetchRequest;
 }
 
++ (NSString *)wsTypeWithSourceWSType:(NSString *)wsType
+{
+    if ([wsType isEqualToString:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]) {
+        return kJMSavedReportUnit;
+    }
+    return nil;
+}
 @end

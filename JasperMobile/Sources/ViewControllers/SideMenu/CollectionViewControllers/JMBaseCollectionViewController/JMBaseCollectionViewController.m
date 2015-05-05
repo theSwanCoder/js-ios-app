@@ -417,7 +417,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     JSResourceLookup *resourceLookup = [self loadedResourceForIndexPath:indexPath];
     id nextVC = nil;
     NSString *controllerIdentifier = nil;
-
+    
     if ([resourceLookup isReport]) {
         JMReport *report = [resourceLookup reportModelWithVCIdentifier:&controllerIdentifier];
         nextVC = [self.storyboard instantiateViewControllerWithIdentifier:controllerIdentifier];
@@ -443,6 +443,10 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         repositoryViewController.representationTypeKey = self.representationTypeKey;
         repositoryViewController.representationType = self.representationType;
         nextVC = repositoryViewController;
+    } else if ([resourceLookup isSavedReport]) {
+        // TODO: replace seque with constant
+        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMSavedResourceViewerViewController"];
+        [nextVC setResourceLookup:resourceLookup];
     }
     if (nextVC) {
         [self.navigationController pushViewController:nextVC animated:YES];
