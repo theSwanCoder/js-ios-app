@@ -53,12 +53,12 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
     if (self = [super init]) {
         self.shouldDisplayOnboardingIntro = [JMAppUpdater isRunningForTheFirstTime] || ([[JMAppUpdater latestAppVersion] compare:[JMAppUpdater currentAppVersion]] != NSOrderedSame);
         if ([JMAppUpdater isRunningForTheFirstTime]) {
-            [JMAppUpdater updateAppVersionTo:[JMAppUpdater latestAppVersion]];
             [self coreDataInit];
         } else {
             [JMAppUpdater update];
         }
-        
+        [JMAppUpdater updateAppVersionTo:[JMAppUpdater latestAppVersion]];
+
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(resetApplication)
                                                      name:kJMResetApplicationNotification
