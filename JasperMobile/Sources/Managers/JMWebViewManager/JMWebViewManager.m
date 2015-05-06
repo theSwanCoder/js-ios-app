@@ -53,6 +53,8 @@
         _webView.scalesPageToFit = YES;
         _webView.dataDetectorTypes = UIDataDetectorTypeNone;
         _webView.suppressesIncrementalRendering = YES;
+        _webView.scrollView.minimumZoomScale = 1;
+        _webView.scrollView.maximumZoomScale = 2;
     }
     return _webView;
 }
