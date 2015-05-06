@@ -183,6 +183,22 @@
                       otherButtonTitles: nil] show];
 }
 
++ (void)showAlertViewWithError:(NSError *)error completion:(void(^)(UIAlertView *alertView, NSInteger buttonIndex))completion
+{
+    NSString *title = @"error.readingresponse.dialog.msg";
+    NSString *message = error.localizedDescription;
+    if (error.code == JSInvalidCredentialsErrorCode) {
+        title = @"error.authenication.dialog.title";
+        message = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
+    }
+
+    [[UIAlertView localizedAlertWithTitle:title
+                                  message:message
+                               completion:completion
+                        cancelButtonTitle:@"dialog.button.ok"
+                        otherButtonTitles:nil] show];
+}
+
 + (BOOL)shouldUseVisualize
 {
     if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize]) {

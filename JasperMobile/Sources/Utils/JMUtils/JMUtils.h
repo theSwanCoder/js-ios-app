@@ -100,6 +100,8 @@
 
 + (void)showAlertViewWithError:(NSError *)error;
 
++ (void)showAlertViewWithError:(NSError *)error completion:(void (^)(UIAlertView *alertView, NSInteger buttonIndex))completion;
+
 /**
  Returns YES if User want to use Visualize for watching reports and dashboards
 
