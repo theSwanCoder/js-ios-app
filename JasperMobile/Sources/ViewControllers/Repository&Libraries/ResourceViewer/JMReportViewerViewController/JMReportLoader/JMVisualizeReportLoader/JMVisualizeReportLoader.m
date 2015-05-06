@@ -222,9 +222,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     return [parametersAsString copy];
 }
 
-- (NSError *)createErrorWithType:(JMReportLoaderErrorType)errorType
+- (NSError *)createErrorWithType:(JMReportLoaderErrorType)errorType errorMessage:(NSString *)errorMessage
 {
-    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : JMCustomLocalizedString(@"report.viewer.visualize.render.error", nil) };
+    NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report.viewer.visualize.render.error", nil) };
     NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
                                          code:errorType
                                      userInfo:userInfo];
@@ -366,11 +366,12 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     NSDictionary *parameters = [self parseCommand:command];
     if (self.reportLoadCompletion) {
         NSString *errorString = parameters[@"error"];
+        errorString = [errorString stringByRemovingPercentEncoding];
         JMReportLoaderErrorType errorType = JMReportLoaderErrorTypeUndefined;
         if (errorString && [errorString rangeOfString:@"authentication.error"].length) {
             errorType = JMReportLoaderErrorTypeAuthentification;
         }
-        self.reportLoadCompletion(NO, [self createErrorWithType:errorType]);
+        self.reportLoadCompletion(NO, [self createErrorWithType:errorType errorMessage:errorString]);
     }
 }
 
@@ -520,7 +521,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                     if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
                         errorType = JMReportLoaderErrorTypeAuthentification;
                     }
-                    self.reportLoadCompletion(NO, [self createErrorWithType:errorType]);
+                    self.reportLoadCompletion(NO, [self createErrorWithType:errorType errorMessage:errorString]);
                 } else {
                     NSLog(@"objects: %@", result.objects);
                     JSResourceLookup *resourceLookup = [result.objects firstObject];

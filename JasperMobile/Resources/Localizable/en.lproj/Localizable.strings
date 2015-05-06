@@ -245,4 +245,5 @@
 /* Other */
 
 "status.loading" = "Loading...";
+"status.loading.ic" = "Loading IC...";
 "back.button.title" = "Back";

@@ -201,13 +201,9 @@
         }
 
     } else {
-        [[UIAlertView localizedAlertWithTitle:@"report.viewer.error.title"
-                                      message:error.localizedDescription
-                                   completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                       [self cancelResourceViewingAndExit];
-                                   }
-                            cancelButtonTitle:@"dialog.button.ok"
-                            otherButtonTitles:nil] show];
+        [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+            [self cancelResourceViewingAndExit];
+        }];
     }
 }
 
@@ -215,9 +211,9 @@
 - (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForReport:(JMVisualizeReport *)report withParameters:(NSDictionary *)reportParameters
 {
     NSString *reportURI = [report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls)) {
+    [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls, NSError *error)) {
         report.isInputControlsLoaded = YES;
-        if (inputControls) {
+        if (inputControls && !error) {
             [report updateInputControls:inputControls];
 
             NSString *identifier = @"JMVisualizeReportViewerViewController";
@@ -230,6 +226,10 @@
 
             [self resetSubViews];
             [self.navigationController pushViewController:reportViewController animated:YES];
+        } else if (error) {
+            [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                [self cancelResourceViewingAndExit];
+            }];
         }
     }@weakselfend];
 }

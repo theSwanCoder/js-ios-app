@@ -50,7 +50,7 @@
 - (void)updateToobarAppearence;
 
 // input controls
-- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *))completion;
+- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *, NSError *))completion;
 
 // empty report handle
 - (void)showEmptyReportMessage;

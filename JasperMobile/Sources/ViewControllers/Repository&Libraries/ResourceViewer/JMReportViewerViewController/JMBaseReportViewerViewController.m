@@ -161,7 +161,7 @@
     if (!isInputControlsLoaded) {
         // start load input controls
 
-        [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
+        [self startShowLoaderWithMessage:@"status.loading.ic" cancelBlock:@weakself(^(void)) {
             [self.restClient cancelAllRequests];
             [self.reportLoader cancelReport];
             [self cancelResourceViewingAndExit];
@@ -169,14 +169,18 @@
 
         NSString *reportURI = [self.report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [self loadInputControlsWithReportURI:reportURI
-                                  completion:@weakself(^(NSArray *inputControls)) {
+                                  completion:@weakself(^(NSArray *inputControls, NSError* error)) {
 
             [self stopShowLoader];
 
             self.report.isInputControlsLoaded = YES;
-            if (inputControls) {
+            if (inputControls && !error) {
                 [self.report updateInputControls:inputControls];
                 [self showReportOptionsViewControllerWithBackButton:YES];
+            } else if (error) {
+                [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                    [self cancelResourceViewingAndExit];
+                }];
             } else {
                 [self runReportWithPage:page];
             }
@@ -254,7 +258,7 @@
 }
 
 #pragma mark - Report Options (Input Controls)
-- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *))completion
+- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *inputControls, NSError *error))completion
 {
     [self.restClient inputControlsForReport:reportURI
                                         ids:nil
@@ -271,7 +275,9 @@
                                             } @weakselfend];
                                         }
                                     } else {
-                                        [JMUtils showAlertViewWithError:result.error];
+                                        if (completion) {
+                                            completion(nil, result.error);
+                                        }
                                     }
                                 } else {
 
@@ -283,13 +289,13 @@
                                     }
 
                                     if (result.objects.count - invisibleInputControls.count == 0) {
-                                        completion(nil);
+                                        completion(nil, nil);
                                     } else {
                                         NSMutableArray *inputControls = [result.objects mutableCopy];
                                         if (invisibleInputControls.count) {
                                             [inputControls removeObjectsInArray:invisibleInputControls];
                                         }
-                                        completion([inputControls copy]);
+                                        completion([inputControls copy], nil);
                                     }
                                 }
 
