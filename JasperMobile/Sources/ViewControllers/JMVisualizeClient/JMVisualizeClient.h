@@ -44,6 +44,7 @@
 
 @protocol JMVisualizeClientDelegate <NSObject>
 @optional
+- (void)visualizeClientDidStartLoading;
 - (void)visualizeClientDidEndLoading;
 - (void)visualizeClientDidMaximizeDashletWithTitle:(NSString *)title;
 @end

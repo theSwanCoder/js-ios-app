@@ -29,6 +29,7 @@
 
 @interface JMVisualizeDashboardViewerVC() <JMVisualizeClientDelegate>
 @property (strong, nonatomic) NSArray *rightButtonItems;
+@property (strong, nonatomic) UIBarButtonItem *leftButtonItem;
 @property (strong, nonatomic) JMVisualizeClient *visualizeClient;
 @property (assign, nonatomic) BOOL isCommandSend;
 @end
@@ -54,7 +55,7 @@
 #pragma mark - Actions
 - (void)minimizeDashboard
 {
-    self.navigationItem.leftBarButtonItem = nil;
+    self.navigationItem.leftBarButtonItem = self.leftButtonItem;
     self.navigationItem.rightBarButtonItems = self.rightButtonItems;
     self.navigationItem.title = [self currentResourceLookup].label;
     [self.visualizeClient minimizeDashlet];
@@ -62,9 +63,14 @@
 
 #pragma mark - Start Point
 - (void)startLoadDashboard
-{    
+{
+    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)){
+            [self resetSubViews];
+            [self.navigationController popViewControllerAnimated:YES];
+        }@weakselfend];
+
     self.isCommandSend = NO;
-    [self.webView loadRequest:self.dashboard.resourceRequest];
+    [super startLoadDashboard];
 }
 
 #pragma mark - UIWebViewDelegate
@@ -89,26 +95,20 @@
         NSError *error;
         NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
         [self.webView stringByEvaluatingJavaScriptFromString:jsMobile];
-//        if (jsMobile) {
-//            NSString *width = @"\"250%\"";
-//            NSString *height = @"\"250%\"";
-//            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-//                width = @"\"150%\"";
-//                height = @"\"150%\"";
-//            }
-//            jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_WIDTH" withString:width];
-//            jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"CONTAINER_SIZE_HEIGHT" withString:height];
-//
-//            [self.webView stringByEvaluatingJavaScriptFromString:jsMobile];
-//        } else {
-//            NSLog(@"load jaspermobile.js error: %@", error.localizedDescription);
-//        }
     } else {        
         [super webViewDidFinishLoad:webView];
     }
 }
 
 #pragma mark - JMVisualizeClientDelegate
+-(void)visualizeClientDidStartLoading
+{
+//    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)){
+//        [self resetSubViews];
+//        [self.navigationController popViewControllerAnimated:YES];
+//    }@weakselfend];
+}
+
 - (void)visualizeClientDidEndLoading
 {
     [self stopShowLoader];
@@ -118,6 +118,7 @@
 {
     [self.webView.scrollView setZoomScale:0.1 animated:YES];
     self.navigationItem.rightBarButtonItems = nil;
+    self.leftButtonItem = self.navigationItem.leftBarButtonItem;
     self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:[self currentResourceLookup].label
                                                                target:self
                                                                action:@selector(minimizeDashboard)];

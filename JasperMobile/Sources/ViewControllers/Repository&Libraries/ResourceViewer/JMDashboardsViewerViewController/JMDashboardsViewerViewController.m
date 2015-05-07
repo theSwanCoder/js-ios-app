@@ -27,8 +27,48 @@
 #import "RKObjectmanager.h"
 
 
-@interface JMDashboardsViewerViewController() <JMVisualizeClientDelegate>
+@interface JMDashboardsViewerViewController()
+@property (nonatomic, assign, getter=isLoaderVisible) BOOL loaderVisible;
 @end
 
 @implementation JMDashboardsViewerViewController
+
+#pragma mark - UIViewController LifeCycle
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    self.loaderVisible = NO;
+}
+
+#pragma mark - UIWebViewDelegate
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    if (self.navigationController && self.navigationController.visibleViewController == self && self.isViewLoaded) {
+        if (!self.isLoaderVisible) {
+            self.loaderVisible = YES;
+            [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)){
+                    [self resetSubViews];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }@weakselfend];
+        }
+    }
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    self.loaderVisible = NO;
+    [self stopShowLoader];
+    [super webViewDidFinishLoad:webView];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    self.loaderVisible = NO;
+    [self stopShowLoader];
+}
+
 @end

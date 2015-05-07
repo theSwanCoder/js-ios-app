@@ -82,10 +82,19 @@
 
         if ([command isEqualToString:@"didScriptLoad"]) {
             [self run];
+            if ([self.delegate respondsToSelector:@selector(visualizeClientDidStartLoading)]) {
+                [self.delegate visualizeClientDidStartLoading];
+            }
         } else if ([command isEqualToString:@"didEndLoading"]) {
             if ([self.delegate respondsToSelector:@selector(visualizeClientDidEndLoading)]) {
                 [self.delegate visualizeClientDidEndLoading];
             }
+        } else if ([command isEqualToString:@"didWindowResizeStart"]) {
+            // TODO: start loading
+            // at the moment end event not stable
+        }  else if ([command isEqualToString:@"didWindowResizeEnd"]) {
+            // TODO: stop loading
+            // at the moment end event not stable
         } else if ([command isEqualToString:@"maximize"]) {
             NSString *titleItem = callbackItems[1];
             NSRange titleRange = [titleItem rangeOfString:@"title:"];

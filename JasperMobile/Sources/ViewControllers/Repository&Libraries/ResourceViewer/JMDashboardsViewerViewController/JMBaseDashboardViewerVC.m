@@ -30,7 +30,7 @@
 - (void)reloadDashboard
 {
     if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-        [self resetSubViews];
+        [self clearContentWebView];
         // waiting until page will be cleared
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self startLoadDashboard];
@@ -61,12 +61,15 @@
 #pragma mark - UIWebViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSString *requestUrl = request.URL.absoluteString;
     NSLog(@"Dashboard");
     NSLog(@"request url: %@", requestUrl);
     
     if ([requestUrl isEqualToString:@"http://localhost/"]) {
         // clearing web view
+        NSLog(@"clearing web view");
+        return YES;
     }
 
     // Check request to login and handle it
@@ -93,27 +96,6 @@
     return sholdStartFromSuperclass;
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView
-{
-    if (self.navigationController && self.navigationController.visibleViewController == self) {
-        [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)){
-            [self.webView stopLoading];
-            [self.navigationController popViewControllerAnimated:YES];
-        }@weakselfend];
-    }
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    [self stopShowLoader];
-    [super webViewDidFinishLoad:webView];
-}
-
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
-{
-    [self stopShowLoader];
-}
-
 #pragma mark - JMMenuActionsViewDelegate
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
@@ -133,13 +115,23 @@
 }
 
 #pragma mark - Heplers
-- (void)resetSubViews
+- (void)clearContentWebView
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self.webView stopLoading];
     [self.webView loadHTMLString:@"<html><head></head><body></body></html>"
                          baseURL:[NSURL URLWithString:@"http://localhost"]];
     // TODO: for test purpose only
     //[[NSURLCache sharedURLCache] removeAllCachedResponses];
+}
+
+- (void)resetSubViews
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self clearContentWebView];
+    self.webView.delegate = nil;
+    [self.webView removeFromSuperview];
+    [[JMWebViewManager sharedInstance] reset];
 }
 
 @end
