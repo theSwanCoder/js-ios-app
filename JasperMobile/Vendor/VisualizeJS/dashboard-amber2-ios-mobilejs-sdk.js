@@ -118,7 +118,9 @@
     return IosLogger = (function() {
       function IosLogger() {}
 
-      IosLogger.prototype.log = function(message) {};
+      IosLogger.prototype.log = function(message) {
+        return console.log(message);
+      };
 
       return IosLogger;
 

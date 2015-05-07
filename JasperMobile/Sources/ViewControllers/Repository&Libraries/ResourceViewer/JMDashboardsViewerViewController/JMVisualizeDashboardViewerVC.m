@@ -84,7 +84,8 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-    if (!self.isCommandSend) {
+    NSString *requestURLString = webView.request.URL.absoluteString;
+    if (!self.isCommandSend && ![requestURLString isEqualToString:@"http://localhost/"]) {
         NSLog(@"inject js");
         self.isCommandSend = YES;
         

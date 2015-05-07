@@ -8,7 +8,11 @@
         this._makeCallback("command:maximize&title:" + title);
       };
 
+      IosCallback.prototype.onMaximizeEnd = function(title) {};
+
       IosCallback.prototype.onMinimizeStart = function() {};
+
+      IosCallback.prototype.onMinimizeEnd = function() {};
 
       IosCallback.prototype.onScriptLoaded = function() {
         this._makeCallback("command:didScriptLoad");
@@ -47,7 +51,9 @@
     return IosLogger = (function() {
       function IosLogger() {}
 
-      IosLogger.prototype.log = function(message) {};
+      IosLogger.prototype.log = function(message) {
+        return console.log(message);
+      };
 
       return IosLogger;
 
@@ -187,16 +193,32 @@
         this.logger.log("Remove original scale");
         this._removeOriginalScale();
         this._disableDashlets();
+        this._hideDashletChartTypeSelector();
         this.callback.onMinimizeStart();
-        DOMTreeObserver.lastModify(this.callback.onMinimizeEnd).wait();
+        DOMTreeObserver.lastModify((function(_this) {
+          return function() {
+            _this._hideDashletChartTypeSelector();
+            return _this.callback.onMinimizeEnd();
+          };
+        })(this)).wait();
         return jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click();
       };
 
       DashboardController.prototype._removeRedundantArtifacts = function() {
         var customStyle;
         this.logger.log("remove artifacts");
-        customStyle = ".header, .dashletToolbar, .show_chartTypeSelector_wrapper { display: none !important; } .column.decorated { margin: 0 !important; border: none !important; } .dashboardViewer.dashboardContainer>.content>.body, .column.decorated>.content>.body, .column>.content>.body { top: 0 !important; } #mainNavigation{ display: none !important; } .customOverlay { position: absolute; width: 100%; height: 100%; z-index: 1000; } .dashboardCanvas .dashlet > .dashletContent > .content { -webkit-overflow-scrolling : auto !important; }";
+        customStyle = ".header, .dashletToolbar { display: none !important; } .show_chartTypeSelector_wrapper { display: none; } .column.decorated { margin: 0 !important; border: none !important; } .dashboardViewer.dashboardContainer>.content>.body, .column.decorated>.content>.body, .column>.content>.body { top: 0 !important; } #mainNavigation{ display: none !important; } .customOverlay { position: absolute; width: 100%; height: 100%; z-index: 1000; } .dashboardCanvas .dashlet > .dashletContent > .content { -webkit-overflow-scrolling : auto !important; } .component_show { display: block; }";
         return jQuery('<style id="custom_mobile"></style>').text(customStyle).appendTo('head');
+      };
+
+      DashboardController.prototype._hideDashletChartTypeSelector = function() {
+        this.logger.log("hide dashlet chart type selector");
+        return jQuery('.show_chartTypeSelector_wrapper').removeClass('component_show');
+      };
+
+      DashboardController.prototype._showDashletChartTypeSelector = function() {
+        this.logger.log("show dashlet chart type selector");
+        return jQuery('.show_chartTypeSelector_wrapper').addClass('component_show');
       };
 
       DashboardController.prototype._injectViewport = function() {
@@ -241,8 +263,8 @@
         this._createCustomOverlays();
         this._overrideDashletTouches();
         this._disableDashlets();
-        this.callback.onLoadDone();
-        return this._setupResizeListener();
+        this._setupResizeListener();
+        return this.callback.onLoadDone();
       };
 
       DashboardController.prototype._scaleDashboard = function() {
@@ -267,8 +289,9 @@
         this.logger.log("set resizer listener");
         return jQuery(window).resize((function(_this) {
           return function() {
-            DOMTreeObserver.lastModify(_this.callback.onWindowResizeEnd).wait();
-            return _this.callback.onWindowResizeStart();
+            _this.logger.log("inside resize callback");
+            _this.callback.onWindowResizeStart();
+            return DOMTreeObserver.lastModify(_this.callback.onWindowResizeEnd).wait();
           };
         })(this));
       };
@@ -309,6 +332,7 @@
         this.callback.onMaximizeStart(title);
         endListener = (function(_this) {
           return function() {
+            _this._showDashletChartTypeSelector();
             return _this.callback.onMaximizeEnd(title);
           };
         })(this);
