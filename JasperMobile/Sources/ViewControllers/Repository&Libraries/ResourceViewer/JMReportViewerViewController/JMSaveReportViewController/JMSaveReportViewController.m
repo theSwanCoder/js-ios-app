@@ -361,26 +361,41 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                 }
             }
         }@weakselfend;
-        
-        [self.restClient runReportExecution:self.report.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO
-                                  freshData:YES saveDataSnapshot:NO ignorePagination:NO transformerKey:nil pages:[self makePagesFormat]
-                          attachmentsPrefix:kJMAttachmentPrefix parameters:parameters completionBlock:@weakself(^(JSOperationResult *result)) {
-                              if (result.error) {
-                                  checkErrorBlock(result);
-                              } else {
-                                  JSReportExecutionResponse *response = [result.objects objectAtIndex:0];
-                                  JSExportExecutionResponse *export = [response.exports objectAtIndex:0];
-                                  NSString *requestId = response.requestId;
-                                  
-                                  NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
-                                  [self.restClient loadReportOutput:requestId exportOutput:export.uuid loadForSaving:YES path:fullReportPath completionBlock:checkErrorBlock];
-                                  
-                                  for (JSReportOutputResource *attachment in export.attachments) {
-                                      NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
-                                      [self.restClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath completionBlock:checkErrorBlock];
-                                  }
-                              }
-                          } @weakselfend];
+
+        @try
+        {
+            [self.restClient runReportExecution:self.report.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO
+                                      freshData:YES saveDataSnapshot:NO ignorePagination:NO transformerKey:nil pages:[self makePagesFormat]
+                              attachmentsPrefix:kJMAttachmentPrefix parameters:parameters completionBlock:@weakself(^(JSOperationResult *result)) {
+                            if (result.error) {
+                                checkErrorBlock(result);
+                            } else {
+                                JSReportExecutionResponse *response = result.objects.firstObject;
+                                JSExportExecutionResponse *export = response.exports.firstObject;
+                                NSString *requestId = response.requestId;
+
+                                NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
+                                [self.restClient loadReportOutput:requestId exportOutput:export.uuid loadForSaving:YES path:fullReportPath completionBlock:checkErrorBlock];
+
+                                for (JSReportOutputResource *attachment in export.attachments) {
+                                    NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
+                                    [self.restClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath completionBlock:checkErrorBlock];
+                                }
+                            }
+                        } @weakselfend];
+        }
+        @catch(NSException *exception) {
+            NSLog(@"exception: %@", exception);
+
+            [JMCancelRequestPopup dismiss];
+            [self.restClient cancelAllRequests];
+            [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
+
+            NSError *error;
+            [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                [self.navigationController popViewControllerAnimated:YES];
+            }];
+        }
     }
 }
 
