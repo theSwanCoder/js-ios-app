@@ -233,8 +233,19 @@
       };
 
       DashboardController.prototype._attachDashletLoadListeners = function() {
+        var dashboardElInterval;
         this.logger.log("attaching dashlet listener");
-        return DOMTreeObserver.lastModify(this._configureDashboard).wait();
+        return dashboardElInterval = window.setInterval((function(_this) {
+          return function() {
+            var dashboardContainer;
+            dashboardContainer = jQuery('.dashboardCanvas');
+            if (dashboardContainer.length > 0) {
+              window.clearInterval(dashboardElInterval);
+              DOMTreeObserver.lastModify(_this._configureDashboard).wait();
+              return _this._scaleDashboard();
+            }
+          };
+        })(this), 500);
       };
 
       DashboardController.prototype._configureDashboard = function() {
