@@ -69,6 +69,25 @@
     [self refreshDataSource];
 }
 
+#pragma mark - Auto rotate
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    if ([self isMenuShown]) {
+       [self closeMenu];
+    }
+}
+
+#pragma mark - Menu Utils
+- (BOOL)isMenuShown
+{
+    return (self.revealViewController.frontViewPosition == FrontViewPositionRight);
+}
+
+- (void)closeMenu
+{
+    [self.revealViewController setFrontViewPosition:FrontViewPositionLeft];
+}
+
 - (void) refreshDataSource
 {
     self.detailSettings = [[JMSettings alloc] init];
