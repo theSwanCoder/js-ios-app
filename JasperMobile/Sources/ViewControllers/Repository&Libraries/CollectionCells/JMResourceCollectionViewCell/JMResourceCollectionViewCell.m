@@ -81,9 +81,20 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
             } @weakselfend failure:nil];
         }
     } else if ([self.resourceLookup isSavedReport]) {
+//        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
+//        self.thumbnailImage = [savedReport thumbnailImage];
+//        resourceImage = [UIImage imageNamed:[NSString stringWithFormat:@"res_type_%@", savedReport.format]];
+
+        // We temporary disabled showing thumbnails of saved items
+        resourceImage = [UIImage imageNamed:@"res_type_report"];
         JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
-        self.thumbnailImage = [savedReport thumbnailImage];
-        resourceImage = [UIImage imageNamed:[NSString stringWithFormat:@"res_type_%@", savedReport.format]];
+        if (savedReport) {
+            if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+                resourceImage = [UIImage imageNamed:@"res_type_html"];
+            } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+                resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+            }
+        }
     } else if ([self.resourceLookup isDashboard]) {
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
     } else if ([self.resourceLookup isFolder]) {
