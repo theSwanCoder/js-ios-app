@@ -32,6 +32,7 @@
 #import "UIAlertView+Additions.h"
 #import "JMReport.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMFileManager.h"
 
 
 NSString * const kJMSaveReportViewControllerSegue = @"SaveReportViewControllerSegue";
@@ -303,99 +304,91 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
 - (void) saveReport
 {
-    NSString *fullReportDirectory = [JMSavedResources pathToReportDirectoryWithName:self.reportName format:self.selectedReportFormat];
     if (self.errorString) { // Clear error messages
         self.errorString = nil;
         [self.tableView reloadData];
     }
-    
-    if ([self createReportDirectory:fullReportDirectory errorMessage:nil]) {
-        NSMutableArray *parameters = [NSMutableArray array];
-        for (JSInputControlDescriptor *inputControlDescriptor in self.report.inputControls) {
-            JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
-                                                                                   value:inputControlDescriptor.selectedValues];
-            [parameters addObject:reportParameter];
-        }
+
+    BOOL isDirectoryCreated = [[JMFileManager sharedInstance] createDirectoryForReportWithName:self.reportName
+                                                                                 fileExtension:self.selectedReportFormat];
+    if (isDirectoryCreated) {
 
         [JMCancelRequestPopup presentWithMessage:@"report.viewer.save.saving.status.title" cancelBlock:^{
             [self.restClient cancelAllRequests];
-            [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
+            [[JMFileManager sharedInstance] cancelDownloadReportWithName:self.reportName
+                                                           fileExtension:self.selectedReportFormat];
         }];
 
-        JSRequestCompletionBlock checkErrorBlock = @weakself(^(JSOperationResult *result)) {
-            if (!result.isSuccessful) {
-                [JMCancelRequestPopup dismiss];
-                [self.restClient cancelAllRequests];
-                [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
-
-                if (result.error.code == JSSessionExpiredErrorCode) {
-                    if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                        [self saveReport];
-                    } else {
-                        [JMUtils showLoginViewAnimated:YES completion:nil];
-                    }
+        void(^errorBlock)(NSError *) = @weakself(^(NSError *error)) {
+            [self.restClient cancelAllRequests];
+            [[JMFileManager sharedInstance] cancelDownloadReportWithName:self.reportName
+                                                           fileExtension:self.selectedReportFormat];
+            if (error.code == JSSessionExpiredErrorCode) {
+                if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                    [self saveReport];
                 } else {
-                    [JMUtils showAlertViewWithError:result.error];
+                    [JMUtils showLoginViewAnimated:YES completion:nil];
                 }
-            }
-            if ([self.restClient isRequestPoolEmpty]) {
-                [JMCancelRequestPopup dismiss];
-                
-                if (result.isSuccessful) {
-                    [JMSavedResources addReport:self.report.resourceLookup
-                                       withName:self.reportName
-                                         format:self.selectedReportFormat];
-                    
-
-                    // Save thumbnail image
-                    [self saveThumbnailToPath:fullReportDirectory];
-                    
-                    // Animation
-                    [CATransaction begin];
-                    [CATransaction setCompletionBlock:^{
-                        [self.delegate reportDidSavedSuccessfully];
-                    }];
-                    
-                    [self.navigationController popViewControllerAnimated:YES];
-                    [CATransaction commit];
-                }
+            } else {
+                [JMUtils showAlertViewWithError:error];
             }
         }@weakselfend;
 
-        @try
-        {
-            [self.restClient runReportExecution:self.report.resourceLookup.uri async:NO outputFormat:self.selectedReportFormat interactive:NO
-                                      freshData:YES saveDataSnapshot:NO ignorePagination:NO transformerKey:nil pages:[self makePagesFormat]
-                              attachmentsPrefix:kJMAttachmentPrefix parameters:parameters completionBlock:@weakself(^(JSOperationResult *result)) {
-                            if (result.error) {
-                                checkErrorBlock(result);
-                            } else {
-                                JSReportExecutionResponse *response = result.objects.firstObject;
-                                JSExportExecutionResponse *export = response.exports.firstObject;
-                                NSString *requestId = response.requestId;
-
-                                NSString *fullReportPath = [NSString stringWithFormat:@"%@/%@.%@", fullReportDirectory, kJMReportFilename, self.selectedReportFormat];
-                                [self.restClient loadReportOutput:requestId exportOutput:export.uuid loadForSaving:YES path:fullReportPath completionBlock:checkErrorBlock];
-
-                                for (JSReportOutputResource *attachment in export.attachments) {
-                                    NSString *attachmentPath = [NSString stringWithFormat:@"%@/%@%@", fullReportDirectory, kJMAttachmentPrefix, attachment.fileName];
-                                    [self.restClient saveReportAttachment:requestId exportOutput:export.uuid attachmentName:attachment.fileName path:attachmentPath completionBlock:checkErrorBlock];
-                                }
-                            }
-                        } @weakselfend];
-        }
-        @catch(NSException *exception) {
-            NSLog(@"exception: %@", exception);
-
+        void(^completionBlock)(BOOL, NSError *) = @weakself(^(BOOL success, NSError *error)) {
             [JMCancelRequestPopup dismiss];
-            [self.restClient cancelAllRequests];
-            [[NSFileManager defaultManager] removeItemAtPath:fullReportDirectory error:nil];
+            if (success) {
+                [JMSavedResources addReport:self.report.resourceLookup
+                                   withName:self.reportName
+                                     format:self.selectedReportFormat];
+                // Save thumbnail image
+                [[JMFileManager sharedInstance] downloadThumbnailForReportWithName:self.reportName
+                                                                     fileExtension:self.selectedReportFormat
+                                                                 resourceURLString:[self.report.resourceLookup thumbnailImageUrlString]];
 
-            NSError *error;
-            [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                // Animation
+                [CATransaction begin];
+                [CATransaction setCompletionBlock:^{
+                    [self.delegate reportDidSavedSuccessfully];
+                }];
+
                 [self.navigationController popViewControllerAnimated:YES];
-            }];
-        }
+                [CATransaction commit];
+            } else {
+                errorBlock(error);
+            }
+        }@weakselfend;
+
+        [self.restClient runReportExecution:self.report.resourceLookup.uri
+                                      async:NO
+                               outputFormat:self.selectedReportFormat
+                                interactive:NO
+                                  freshData:YES
+                           saveDataSnapshot:NO
+                           ignorePagination:NO
+                             transformerKey:nil
+                                      pages:[self makePagesFormat]
+                          attachmentsPrefix:kJMAttachmentPrefix
+                                 parameters:self.report.reportParameters
+                            completionBlock:@weakself(^(JSOperationResult *result)) {
+                        if (result.error) {
+                            errorBlock(result.error);
+                        } else {
+                            JSReportExecutionResponse *response = result.objects.firstObject;
+                            JSExportExecutionResponse *export = response.exports.firstObject;
+
+                            NSMutableArray *attachmentNames = [NSMutableArray array];
+                            for (JSReportOutputResource *attachment in export.attachments) {
+                                [attachmentNames addObject:attachment.fileName];
+                            }
+
+                            [[JMFileManager sharedInstance] downloadReportWithName:self.reportName
+                                                                     fileExtension:self.selectedReportFormat
+                                                                         requestId:response.requestId
+                                                                          exportId:export.uuid
+                                                                   attachmentNames:[attachmentNames copy]
+                                                                        completion:completionBlock];
+                        }
+                    }@weakselfend];
     }
 }
 
@@ -413,28 +406,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         }
     }
     return pagesFormat;
-}
-
-- (void) saveThumbnailToPath:(NSString *)directoryPath
-{
-    __block NSData *thumbnailData = UIImagePNGRepresentation(self.report.thumbnailImage);
-    if (!thumbnailData) {
-        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.report.resourceLookup thumbnailImageUrlString]]];
-            [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
-            NSData *imageData = [NSURLConnection sendSynchronousRequest:imageRequest returningResponse:nil error:nil];
-            if ([UIImage imageWithData:imageData]) {
-                thumbnailData = imageData;
-            }
-            dispatch_semaphore_signal(sem);
-        });
-        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
-    }
-    if (thumbnailData) {
-        NSString *thumbnailPath = [directoryPath stringByAppendingPathComponent:kJMThumbnailImageFileName];
-        [thumbnailData writeToFile:thumbnailPath atomically:YES];
-    }
 }
 
 - (void) reportLoaderDidChangeCountOfPages:(NSNotification *) notification

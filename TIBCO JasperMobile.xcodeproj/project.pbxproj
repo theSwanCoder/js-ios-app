@@ -172,6 +172,7 @@
 		93EEB46A1AC9569F000718C7 /* JMBaseResourceViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4691AC9569F000718C7 /* JMBaseResourceViewerVC.m */; };
 		93EEB46C1AC972AA000718C7 /* JMResourceViewerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB46B1AC972AA000718C7 /* JMResourceViewerVC.swift */; };
 		93EEB46F1AC98498000718C7 /* JMVisualizeDashboardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB46E1AC98498000718C7 /* JMVisualizeDashboardLoader.swift */; };
+		A147856E6E0E7F2F4B21BDA6 /* JMFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A14780B58A557311DF10B120 /* JMFileManager.m */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDABBD2B1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDABBD2A1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard */; };
@@ -540,6 +541,8 @@
 		93EEB4691AC9569F000718C7 /* JMBaseResourceViewerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourceViewerVC.m; sourceTree = "<group>"; };
 		93EEB46B1AC972AA000718C7 /* JMResourceViewerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMResourceViewerVC.swift; sourceTree = "<group>"; };
 		93EEB46E1AC98498000718C7 /* JMVisualizeDashboardLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMVisualizeDashboardLoader.swift; sourceTree = "<group>"; };
+		A14780B58A557311DF10B120 /* JMFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFileManager.m; sourceTree = "<group>"; };
+		A1478F34566E444CAD3FD4F1 /* JMFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFileManager.h; sourceTree = "<group>"; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
@@ -1743,6 +1746,7 @@
 				08221C3F1AE54DA000F94F1D /* JMCoreDataManager */,
 				0801DF921AAF2CC000DD072C /* JMSessionManager */,
 				93D8C6421AAC7E9200117306 /* JMWebViewManager */,
+				A14781A66383F634AB55FF8C /* JMFileManager */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1791,6 +1795,15 @@
 				93EEB46E1AC98498000718C7 /* JMVisualizeDashboardLoader.swift */,
 			);
 			path = JMVisualizeDashboardLoader;
+			sourceTree = "<group>";
+		};
+		A14781A66383F634AB55FF8C /* JMFileManager */ = {
+			isa = PBXGroup;
+			children = (
+				A14780B58A557311DF10B120 /* JMFileManager.m */,
+				A1478F34566E444CAD3FD4F1 /* JMFileManager.h */,
+			);
+			path = JMFileManager;
 			sourceTree = "<group>";
 		};
 		BDABBD231A41D8CC00EDA100 /* RNCachingURLProtocol */ = {
@@ -2221,6 +2234,7 @@
 				089B15A11AA756BD0021A915 /* NSObject+Additions.m in Sources */,
 				93EEB46F1AC98498000718C7 /* JMVisualizeDashboardLoader.swift in Sources */,
 				93D8C64E1AAD684500117306 /* JMVisualizeDashboardViewerVC.m in Sources */,
+				A147856E6E0E7F2F4B21BDA6 /* JMFileManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
