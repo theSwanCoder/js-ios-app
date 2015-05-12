@@ -442,8 +442,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
     [self.report updateCountOfPages:totalPage];
 
-    if (self.reportLoadCompletion) {
-        self.reportLoadCompletion(YES, nil);
+    if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveChangeTotalPagesForReport:totalPages:)]) {
+        [self.delegate reportLoader:self didReceiveChangeTotalPagesForReport:self.report totalPages:totalPage];
     }
 }
 

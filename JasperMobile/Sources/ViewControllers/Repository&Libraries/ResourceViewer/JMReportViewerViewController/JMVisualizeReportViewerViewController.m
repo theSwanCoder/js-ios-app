@@ -247,6 +247,11 @@
     // here we can receive link on file.
 }
 
+- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveChangeTotalPagesForReport:(JMVisualizeReport *)report totalPages:(NSInteger)totalPages
+{
+    [self updateToobarAppearence];
+}
+
 #pragma mark - UIWebView helpers
 - (void)resetSubViews
 {
