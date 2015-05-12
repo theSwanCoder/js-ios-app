@@ -45,14 +45,22 @@
 - (void)startResourceViewing
 {
     NSString *fullReportPath = [JMSavedResources pathToReportWithName:self.savedReports.label format:self.savedReports.format];
-    NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-    self.resourceRequest = [NSURLRequest requestWithURL:url];
-    
+
     if (self.webView.isLoading) {
         [self.webView stopLoading];
     }
     self.isResourceLoaded = NO;
-    [self.webView loadRequest:self.resourceRequest];
+
+    if ([self.savedReports.format isEqualToString:kJMSavedResourceFileExtensionHTML]) {
+        NSString* content = [NSString stringWithContentsOfFile:fullReportPath
+                                                      encoding:NSUTF8StringEncoding
+                                                         error:NULL];
+        [self.webView loadHTMLString:content baseURL:nil];
+    } else {
+        NSURL *url = [NSURL fileURLWithPath:fullReportPath];
+        self.resourceRequest = [NSURLRequest requestWithURL:url];
+        [self.webView loadRequest:self.resourceRequest];
+    }
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
