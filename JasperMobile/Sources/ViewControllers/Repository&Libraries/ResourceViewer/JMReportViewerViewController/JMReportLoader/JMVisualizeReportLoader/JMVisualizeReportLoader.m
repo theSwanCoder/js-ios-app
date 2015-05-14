@@ -174,6 +174,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     // TODO: need understand logic of refresh via visualize.js
     self.reportLoadCompletion = completion;
     [self.report updateCurrentPage:1];
+    [self.report updateCountOfPages:NSNotFound];
 
     NSString *refreshReportCommand = [NSString stringWithFormat:@"MobileReport.refresh();"];
     [self.webView stringByEvaluatingJavaScriptFromString:refreshReportCommand];

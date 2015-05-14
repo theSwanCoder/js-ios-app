@@ -83,54 +83,71 @@
       }
 
       ReportCallback.prototype.onScriptLoaded = function() {
-        this._makeCallback("DOMContentLoaded");
+        this.dispatch(function() {
+          return this._makeCallback("DOMContentLoaded");
+        });
       };
 
       ReportCallback.prototype.onLoadStart = function() {};
 
       ReportCallback.prototype.onLoadDone = function(parameters) {
-        this._makeCallback("reportDidEndRenderSuccessful");
+        this.dispatch(function() {
+          return this._makeCallback("reportDidEndRenderSuccessful");
+        });
       };
 
       ReportCallback.prototype.onLoadError = function(error) {
-        this._makeCallback("reportDidEndRenderFailured&error=" + error);
+        this.dispatch(function() {
+          return this._makeCallback("reportDidEndRenderFailured&error=" + error);
+        });
       };
 
-      ReportCallback.prototype.onTotalPagesLoaded = function(pages) {
-        this._makeCallback("changeTotalPages&totalPage=" + pages);
+      ReportCallback.prototype.onReportCompleted = function(status, pages, error) {
+        this.dispatch(function() {
+          return this._makeCallback("reportRunDidCompleted&status=" + status + "&pages=" + pages + "&error=" + error);
+        });
       };
 
       ReportCallback.prototype.onPageChange = function(page) {};
 
       ReportCallback.prototype.onReferenceClick = function(location) {
-        this._makeCallback("handleReferenceClick&location=" + location);
+        this.dispatch(function() {
+          return this._makeCallback("handleReferenceClick&location=" + location);
+        });
       };
 
       ReportCallback.prototype.onReportExecutionClick = function(reportUri, params) {
-        this._makeCallback("runReport&params=" + params);
+        this.dispatch(function() {
+          return this._makeCallback("runReport&params=" + params);
+        });
       };
 
       ReportCallback.prototype.onExportGetResourcePath = function(link) {
-        return this._makeCallback("exportPath&link=" + link);
+        return this.dispatch(function() {
+          return this._makeCallback("exportPath&link=" + link);
+        });
       };
 
       ReportCallback.prototype.onRefreshSuccess = function() {
-        return this._makeCallback("reportDidDidEndRefreshSuccessful");
+        return this.dispatch(function() {
+          return this._makeCallback("reportDidDidEndRefreshSuccessful");
+        });
       };
 
       ReportCallback.prototype.onRefreshError = function(error) {
-        return this._makeCallback("reportDidEndRefreshFailured&error=" + error);
+        return this.dispatch(function() {
+          return this._makeCallback("reportDidEndRefreshFailured&error=" + error);
+        });
       };
 
-      ReportCallback.prototype.onMultipageStateObtained = function(isMultipage) {
-        console.log("onMultipageStateObtained");
-        return this._makeCallback("onMultipageStateObtained&isMultipage=" + isMultipage);
+      ReportCallback.prototype.onMultiPageStateObtained = function(isMultipage) {
+        return this.dispatch(function() {
+          return this._makeCallback("reportDidObtaineMultipageState&isMultiPage=" + isMultipage);
+        });
       };
 
       ReportCallback.prototype._makeCallback = function(command) {
-        return this.dispatch(function() {
-          return window.location.href = "http://jaspermobile.callback/" + command;
-        });
+        return window.location.href = "http://jaspermobile.callback/" + command;
       };
 
       return ReportCallback;
@@ -337,18 +354,18 @@
       }
 
       ReportController.prototype.runReport = function() {
-        this.logger.log("onLoadStart");
+        this.logger.log("runReport");
         this.callback.onLoadStart();
         return this._getServerVersion(this._runReportOnTheVersionBasis);
       };
 
       ReportController.prototype.refresh = function() {
-        this.logger.log("onRefreshStart");
+        this.logger.log("refresh");
         return this.report.refresh(this._processSuccess, this._processErrors);
       };
 
       ReportController.prototype.applyReportParams = function(parameters) {
-        this.logger.log("onLoadStart");
+        this.logger.log("applyReportParams");
         this.callback.onLoadStart();
         return this.report.params(parameters).run().done(this._processSuccess).fail(this._processErrors);
       };
@@ -366,7 +383,7 @@
       };
 
       ReportController.prototype.destroyReport = function() {
-        this.logger.log("destroy");
+        this.logger.log("destroyReport");
         return this.report.destroy();
       };
 
@@ -382,11 +399,13 @@
       };
 
       ReportController.prototype._runReportWithoutAuth = function() {
+        this.logger.log("_runReportWithoutAuth");
         return visualize(this._executeReport, this._runReportWithoutAuthButWithHack);
       };
 
       ReportController.prototype._runReportWithoutAuthButWithHack = function(error) {
         var skipAuth;
+        this.logger.log("_runReportWithoutAuthButWithHack");
         if (error != null) {
           this.logger.log(" Reason: " + error.message);
         }
@@ -401,6 +420,7 @@
       };
 
       ReportController.prototype._runReportWithAuth = function(error) {
+        this.logger.log("_runReportWithAuth");
         if (error != null) {
           this.logger.log(" Reason: " + error.message);
         }
@@ -408,6 +428,7 @@
       };
 
       ReportController.prototype._executeReport = function(visualize) {
+        this.logger.log("_executeReport");
         return this.report = visualize.report({
           resource: this.uri,
           params: this.params,
@@ -441,11 +462,14 @@
           outputFormat: "html",
           pages: "2"
         }).done((function(_this) {
-          return function() {
-            return _this._processMultipageState(true);
+          return function(params) {
+            return _this._fetchHTMLPage(params.href, function(isPageExists) {
+              return _this._processMultipageState(isPageExists);
+            });
           };
         })(this)).fail((function(_this) {
-          return function() {
+          return function(error) {
+            _this.logger.log("multipage error: " + (JSON.stringify(error)));
             return _this._processMultipageState(false);
           };
         })(this));
@@ -501,12 +525,6 @@
 
       ReportController.prototype._getServerVersion = function(callback) {
         var params;
-        jQuery.ajax(window.location.href + "/rest_v2/serverInfo", {
-          dataType: 'json'
-        }).done((function(_this) {
-          return function(response) {};
-        })(this));
-        this.logger.log("_getServerVersion");
         params = {
           async: false,
           dataType: 'json',
@@ -526,6 +544,29 @@
           })(this)
         };
         return jQuery.ajax(window.location.href + "/rest_v2/serverInfo", params);
+      };
+
+      ReportController.prototype._fetchHTMLPage = function(pageURL, callback) {
+        var params;
+        this.logger.log("_fetchHTMLPage");
+        params = {
+          dataType: 'html',
+          success: (function(_this) {
+            return function(response, status) {
+              if (response.length > 0) {
+                return callback(true);
+              } else {
+                return callback(false);
+              }
+            };
+          })(this),
+          error: (function(_this) {
+            return function(error, status) {
+              return callback(false);
+            };
+          })(this)
+        };
+        return jQuery.ajax(pageURL, params);
       };
 
       ReportController.prototype._parseServerVersion = function(response) {
@@ -551,13 +592,8 @@
       };
 
       ReportController.prototype._processSuccess = function(parameters) {
-        if (parameters.components.length === 0) {
-          this.logger.log("onEmptyReportEvent");
-          this.callback.onEmptyReportEvent();
-        } else {
-          this._checkMultipageState();
-        }
-        this.logger.log("onLoadDone");
+        this.logger.log("_processSuccess");
+        this._checkMultipageState();
         return this.callback.onLoadDone(parameters);
       };
 
@@ -709,8 +745,7 @@
           callback: callbackImplementor,
           logger: logger
         });
-        MobileReport.getInstance(context);
-        return callbackImplementor.onScriptLoaded();
+        return MobileReport.getInstance(context);
       };
 
       return ReportClient;

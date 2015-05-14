@@ -79,6 +79,20 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
     return [[self alloc] initWithResource:resourceLookup inputControls:inputControl];
 }
 
+
+#pragma mark - Custom accessors
+- (void)setIsMultiPageReport:(BOOL)isMultiPageReport
+{
+    _isMultiPageReport = isMultiPageReport;
+    [self postNotificationMultipageReport];
+}
+
+- (void)setCountOfPages:(NSInteger)countOfPages
+{
+    _countOfPages = countOfPages;
+    [self postNotificationCountOfPages];
+}
+
 #pragma mark - Public API
 - (void)updateInputControls:(NSArray *)inputControls
 {   
@@ -114,11 +128,9 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
     }
     
     self.countOfPages = countOfPages;
-    [self postNotificationCountOfPages];
     
-    if (countOfPages != NSNotFound) {
+    if (countOfPages != NSNotFound && countOfPages > 1) {
         self.isMultiPageReport = countOfPages > 1;
-        [self postNotificationMultipageReport];
     }
 }
 
@@ -139,7 +151,6 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
 - (void)updateIsMultiPageReport:(BOOL)isMultiPageReport
 {
     self.isMultiPageReport = isMultiPageReport;
-    [self postNotificationMultipageReport];
 }
 
 - (NSArray *)reportParameters
