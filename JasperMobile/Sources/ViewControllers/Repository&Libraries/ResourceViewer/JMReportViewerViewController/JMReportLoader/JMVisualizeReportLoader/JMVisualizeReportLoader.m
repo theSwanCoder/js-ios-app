@@ -93,6 +93,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     if (![JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded) {
         self.reportLoadCompletion = completionBlock;
         [self.report updateCurrentPage:page];
+        [self.report updateCountOfPages:NSNotFound];
 
         [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             if (success) {
@@ -113,6 +114,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     self.reportLoadCompletion = completionBlock;
     [self.report updateCurrentPage:pageNumber];
+    [self.report updateCountOfPages:NSNotFound];
 
     if (!self.report.isReportAlreadyLoaded) {
         NSString *parametersAsString = [self createParametersAsString];
@@ -129,17 +131,52 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     // TODO: need cancel?
 }
 
+- (void)applyReportParametersWithCompletion:(void(^)(BOOL success, NSError *error))completion
+{
+    if (![JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded) {
+        self.isReportInLoadingProcess = YES;
+        [self.report updateLoadingStatusWithValue:NO];
+
+        self.reportLoadCompletion = completion;
+        [self.report updateCurrentPage:1];
+
+        [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+                if (success) {
+                    [JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded = YES;
+                    [self.webView stopLoading];
+                    [self.webView loadHTMLString:self.report.HTMLString
+                                         baseURL:[NSURL URLWithString:self.report.baseURLString]];
+                } else {
+                    NSLog(@"Error loading HTML%@", error.localizedDescription);
+                }
+            }@weakselfend];
+    } else if (!self.report.isReportAlreadyLoaded) {
+        self.isReportInLoadingProcess = YES;
+        [self.report updateLoadingStatusWithValue:NO];
+
+        [self fetchPageNumber:1 withCompletion:completion];
+    } else {
+        self.reportLoadCompletion = completion;
+        [self.report updateCurrentPage:1];
+        [self.report updateCountOfPages:NSNotFound];
+
+        NSString *parametersAsString = [self createParametersAsString];
+        NSString *refreshReportCommand = [NSString stringWithFormat:@"MobileReport.applyReportParams(%@);", parametersAsString];
+        [self.webView stringByEvaluatingJavaScriptFromString:refreshReportCommand];
+    }
+}
+
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    [self.report updateLoadingStatusWithValue:NO];
-    [self fetchPageNumber:1 withCompletion:completion];
-
+//    [self.report updateLoadingStatusWithValue:NO];
+//    [self fetchPageNumber:1 withCompletion:completion];
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     // TODO: need understand logic of refresh via visualize.js
-//    self.reportLoadCompletion = completion;
-//    [self.report updateCurrentPage:1];
-//
-//    NSString *refreshReportCommand = [NSString stringWithFormat:@"MobileReport.refresh();"];
-//    [self.webView stringByEvaluatingJavaScriptFromString:refreshReportCommand];
+    self.reportLoadCompletion = completion;
+    [self.report updateCurrentPage:1];
+
+    NSString *refreshReportCommand = [NSString stringWithFormat:@"MobileReport.refresh();"];
+    [self.webView stringByEvaluatingJavaScriptFromString:refreshReportCommand];
 }
 
 - (void)exportReportWithFormat:(NSString *)exportFormat
@@ -153,6 +190,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.destroy();"];
     [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
+    [self.report updateLoadingStatusWithValue:NO];
 }
 
 #pragma mark - Private
@@ -289,8 +327,10 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
             [self handleRunReportWithJSCommand:command];
         } else if ([command rangeOfString:@"handleReferenceClick"].length) {
             [self handleReferenceClickWithJSCommand:command];
-        } else if ([command rangeOfString:@"changeTotalPages"].length) {
-            [self handleEventTotalPageDidChangeWithCommand:command];
+        } else if ([command rangeOfString:@"reportDidObtaineMultipageState"].length) {
+            [self handleEventObtaineMultipageStateWithCommand:command];
+        }   else if ([command rangeOfString:@"reportRunDidCompleted"].length) {
+            [self handleEventReportRunDidCompletedWithCommand:command];
         } else if ([command rangeOfString:@"inputControls"].length) {
             [self handleInputControlsWithJSCommand:command];
         } else if([command rangeOfString:@"reportDidBeginRender"].length) {
@@ -375,10 +415,17 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     }
 }
 
+- (void)handleEventReportRunDidCompletedWithCommand:(NSString *)command
+{
+    NSDictionary *params = [self parseCommand:command];
+
+    NSInteger countOfPages = ((NSNumber *)params[@"pages"]).integerValue;
+    [self.report updateCountOfPages:countOfPages];
+}
+
 - (void)handleExportCommand:(NSString *)command
 {
     NSDictionary *params = [self parseCommand:command];
-    NSLog(@"params: %@", params);
 
     NSString *outputResourcesPath = params[@"link"];
     if (outputResourcesPath) {
@@ -411,7 +458,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 #pragma mark - Visualize Helpers
 - (NSDictionary *)parseCommand:(NSString *)command
 {
-    NSArray *components = [command componentsSeparatedByString:@"&"];
+    NSString *decodedCommand = [command stringByRemovingPercentEncoding];
+    NSArray *components = [decodedCommand componentsSeparatedByString:@"&"];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     for (NSString *component in components) {
         NSArray *keyValue = [component componentsSeparatedByString:@"="];
@@ -431,20 +479,11 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     NSLog(@"current page: %@", currentPageString);
 }
 
-- (void)handleEventTotalPageDidChangeWithCommand:(NSString *)command
+- (void)handleEventObtaineMultipageStateWithCommand:(NSString *)command
 {
-
-    NSRange totalPageKeyRange = [command rangeOfString:@"&totalPage="];
-    NSRange totalPageRange = NSMakeRange(totalPageKeyRange.length + totalPageKeyRange.location, command.length - (totalPageKeyRange.length + totalPageKeyRange.location));
-    NSString *totalPageString = [command substringWithRange:totalPageRange];
-    NSInteger totalPage = totalPageString.integerValue;
-    NSLog(@"total of pages: %@", @(totalPage));
-
-    [self.report updateCountOfPages:totalPage];
-
-    if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveChangeTotalPagesForReport:totalPages:)]) {
-        [self.delegate reportLoader:self didReceiveChangeTotalPagesForReport:self.report totalPages:totalPage];
-    }
+    NSDictionary *parameters = [self parseCommand:command];
+    BOOL isMultiPage =((NSNumber *)parameters[@"isMultiPage"]).boolValue;
+    [self.report updateIsMultiPageReport:isMultiPage];
 }
 
 #pragma mark - Input Controls (from visualize)
@@ -475,10 +514,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)handleReferenceClickWithJSCommand:(NSString *)command
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    NSLog(@"command: %@", command);
-    NSString *decodedCommand = [command stringByRemovingPercentEncoding];
-    NSDictionary *parameters = [self parseCommand:decodedCommand];
+    NSDictionary *parameters = [self parseCommand:command];
     NSLog(@"parameters: %@", parameters);
 
     NSString *locationString = parameters[@"location"];
@@ -493,9 +529,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)handleRunReportWithJSCommand:(NSString *)command
 {
     NSLog(@"hyperlink for run report");
-
-    NSString *decodedCommand = [command stringByRemovingPercentEncoding];
-    NSDictionary *parameters = [self parseCommand:decodedCommand];
+    NSDictionary *parameters = [self parseCommand:command];
     NSLog(@"parameters: %@", parameters);
 
     NSString *params = parameters[@"params"];

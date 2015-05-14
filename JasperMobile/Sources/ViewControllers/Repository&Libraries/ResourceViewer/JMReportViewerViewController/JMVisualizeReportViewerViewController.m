@@ -159,6 +159,26 @@
     }@weakselfend];
 }
 
+- (void)updateReportWithNewParameters
+{
+    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
+        [self.reportLoader cancelReport];
+        [self cancelResourceViewingAndExit];
+    }@weakselfend];
+
+    [self hideEmptyReportMessage];
+
+    [self.reportLoader applyReportParametersWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+        [self stopShowLoader];
+
+        if (success) {
+            // succcess action
+        } else {
+            [self handleError:error];
+        }
+    }@weakselfend];
+}
+
 #pragma mark - JMRefreshable
 - (void)refresh
 {
@@ -222,6 +242,7 @@
             reportViewController.report = report;
             reportViewController.isStartFromAnotherReport = YES;
 
+
             reportViewController.backButtonTitle = self.title;
 
             [self resetSubViews];
@@ -245,11 +266,6 @@
     // [self.reportLoader exportReportWithFormat:@"pdf"];
     // html format currently vis.js doesn't support
     // here we can receive link on file.
-}
-
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveChangeTotalPagesForReport:(JMVisualizeReport *)report totalPages:(NSInteger)totalPages
-{
-    [self updateToobarAppearence];
 }
 
 #pragma mark - UIWebView helpers

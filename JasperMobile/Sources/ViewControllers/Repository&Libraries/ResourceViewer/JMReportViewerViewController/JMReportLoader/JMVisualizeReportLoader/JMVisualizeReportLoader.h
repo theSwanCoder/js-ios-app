@@ -41,6 +41,8 @@
 @property (nonatomic, weak) UIWebView *webView;
 @property (nonatomic, weak) id<JMVisualizeReportLoaderDelegate> delegate;
 
+- (void)applyReportParametersWithCompletion:(void (^)(BOOL success, NSError *error))completion;
+
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion;
 - (void)exportReportWithFormat:(NSString *)exportFormat;
 - (void)destroyReport;
@@ -51,7 +53,6 @@
 @protocol JMVisualizeReportLoaderDelegate <NSObject>
 @optional
 - (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForReport:(JMVisualizeReport *)report withParameters:(NSDictionary *)reportParameters;
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveChangeTotalPagesForReport:(JMVisualizeReport *)report totalPages:(NSInteger)totalPages;
 - (void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference;
 - (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName;
 @end

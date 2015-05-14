@@ -46,6 +46,8 @@
 - (void)startLoadReportWithPage:(NSInteger)page;
 - (void)runReportWithPage:(NSInteger)page;
 
+- (void)updateReportWithNewParameters;
+
 // setups
 - (void)updateToobarAppearence;
 

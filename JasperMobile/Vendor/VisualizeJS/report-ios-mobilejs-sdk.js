@@ -1,25 +1,19 @@
 (function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   define('js.mobile.callback_dispatcher', [],function() {
     var CallbackDispatcher;
     return CallbackDispatcher = (function() {
       function CallbackDispatcher() {
+        this._processQueue = bind(this._processQueue, this);
         this.queue = [];
         this.paused = false;
       }
 
       CallbackDispatcher.prototype.dispatch = function(task) {
-        var dispatchTimeInterval;
         if (!this.paused) {
           this.queue.push(task);
-          return dispatchTimeInterval = window.setInterval((function(_this) {
-            return function() {
-              if (_this.queue.length === 0) {
-                return window.clearInterval(dispatchTimeInterval);
-              } else {
-                return _this.queue.pop().call(_this);
-              }
-            };
-          })(this), 1000);
+          return this._processEventLoop();
         } else {
           return this.queue.push(task);
         }
@@ -36,8 +30,35 @@
         }
       };
 
-      CallbackDispatcher.prototype.setPause = function(paused) {
-        this.paused = paused;
+      CallbackDispatcher.prototype.pause = function() {
+        return this.paused = true;
+      };
+
+      CallbackDispatcher.prototype.resume = function() {
+        return this.paused = false;
+      };
+
+      CallbackDispatcher.prototype._processEventLoop = function() {
+        if (this.dispatchTimeInterval == null) {
+          return this._createInterval(this._processQueue);
+        }
+      };
+
+      CallbackDispatcher.prototype._processQueue = function() {
+        if (this.queue.length === 0) {
+          return this._removeInterval();
+        } else {
+          return this.queue.pop().call(this);
+        }
+      };
+
+      CallbackDispatcher.prototype._createInterval = function(eventLoop) {
+        return this.dispatchTimeInterval = window.setInterval(eventLoop, 200);
+      };
+
+      CallbackDispatcher.prototype._removeInterval = function() {
+        window.clearInterval(this.dispatchTimeInterval);
+        return this.dispatchTimeInterval = null;
       };
 
       return CallbackDispatcher;
@@ -99,6 +120,11 @@
 
       ReportCallback.prototype.onRefreshError = function(error) {
         return this._makeCallback("reportDidEndRefreshFailured&error=" + error);
+      };
+
+      ReportCallback.prototype.onMultipageStateObtained = function(isMultipage) {
+        console.log("onMultipageStateObtained");
+        return this._makeCallback("onMultipageStateObtained&isMultipage=" + isMultipage);
       };
 
       ReportCallback.prototype._makeCallback = function(command) {
@@ -187,10 +213,10 @@
       dashboardController: {
         instanceMethods: {
           pause: function() {
-            return this.callback.setPause(true);
+            return this.callback.pause();
           },
           resume: function() {
-            this.callback.setPause(false);
+            this.callback.resume();
             return this.callback.firePendingTasks();
           }
         }
@@ -281,6 +307,11 @@
       ReportController.include(lifecycle.reportController.instanceMethods);
 
       function ReportController(options) {
+        this._processLinkClicks = bind(this._processLinkClicks, this);
+        this._processErrors = bind(this._processErrors, this);
+        this._processSuccess = bind(this._processSuccess, this);
+        this._processMultipageState = bind(this._processMultipageState, this);
+        this._processReportComplete = bind(this._processReportComplete, this);
         this._parseServerVersion = bind(this._parseServerVersion, this);
         this._getServerVersion = bind(this._getServerVersion, this);
         this._exportResource = bind(this._exportResource, this);
@@ -289,16 +320,13 @@
         this._navigateToPage = bind(this._navigateToPage, this);
         this._navigateToAnchor = bind(this._navigateToAnchor, this);
         this._startReportExecution = bind(this._startReportExecution, this);
-        this._processLinkClicks = bind(this._processLinkClicks, this);
-        this._processErrors = bind(this._processErrors, this);
-        this._processSuccess = bind(this._processSuccess, this);
-        this._processChangeTotalPages = bind(this._processChangeTotalPages, this);
         this._executeFailedCallback = bind(this._executeFailedCallback, this);
         this._executeReport = bind(this._executeReport, this);
         this._runReportWithAuth = bind(this._runReportWithAuth, this);
         this._runReportWithoutAuthButWithHack = bind(this._runReportWithoutAuthButWithHack, this);
         this._runReportWithoutAuth = bind(this._runReportWithoutAuth, this);
         this._runReportOnTheVersionBasis = bind(this._runReportOnTheVersionBasis, this);
+        this.refresh = bind(this.refresh, this);
         this.context = options.context, this.uri = options.uri, this.session = options.session, this.params = options.params, this.pages = options.pages;
         this.callback = this.context.callback;
         this.logger = this.context.logger;
@@ -308,15 +336,38 @@
         this.pages || (this.pages = '1');
       }
 
+      ReportController.prototype.runReport = function() {
+        this.logger.log("onLoadStart");
+        this.callback.onLoadStart();
+        return this._getServerVersion(this._runReportOnTheVersionBasis);
+      };
+
+      ReportController.prototype.refresh = function() {
+        this.logger.log("onRefreshStart");
+        return this.report.refresh(this._processSuccess, this._processErrors);
+      };
+
+      ReportController.prototype.applyReportParams = function(parameters) {
+        this.logger.log("onLoadStart");
+        this.callback.onLoadStart();
+        return this.report.params(parameters).run().done(this._processSuccess).fail(this._processErrors);
+      };
+
       ReportController.prototype.selectPage = function(page) {
         if (this.report != null) {
-          return this.report.pages(page).run().done(this._processSuccess).fail(this._processErrors);
+          return this.report.pages(page).run();
         }
       };
 
-      ReportController.prototype.runReport = function() {
-        this.callback.onLoadStart();
-        return this._getServerVersion(this._runReportOnTheVersionBasis);
+      ReportController.prototype.exportReport = function(format) {
+        return this.report["export"]({
+          outputFormat: format
+        }).done(this._exportResource);
+      };
+
+      ReportController.prototype.destroyReport = function() {
+        this.logger.log("destroy");
+        return this.report.destroy();
       };
 
       ReportController.prototype._runReportOnTheVersionBasis = function(version) {
@@ -331,13 +382,11 @@
       };
 
       ReportController.prototype._runReportWithoutAuth = function() {
-        this.logger.log("_runReportWithoutAuth");
         return visualize(this._executeReport, this._runReportWithoutAuthButWithHack);
       };
 
       ReportController.prototype._runReportWithoutAuthButWithHack = function(error) {
         var skipAuth;
-        this.logger.log("_runReportWithoutAuthButWithHack.");
         if (error != null) {
           this.logger.log(" Reason: " + error.message);
         }
@@ -352,34 +401,10 @@
       };
 
       ReportController.prototype._runReportWithAuth = function(error) {
-        this.logger.log("_runReportWithAuth");
         if (error != null) {
           this.logger.log(" Reason: " + error.message);
         }
         return visualize(this.session.authOptions(), this._executeReport, this._executeFailedCallback, this._executeAlways);
-      };
-
-      ReportController.prototype.exportReport = function(format) {
-        return this.report["export"]({
-          outputFormat: format
-        }).done(this._exportResource);
-      };
-
-      ReportController.prototype.destroyReport = function() {
-        this.logger.log("destroy");
-        return this.report.destroy();
-      };
-
-      ReportController.prototype.refresh = function() {
-        return this.report.refresh((function(_this) {
-          return function() {
-            return _this.callback.onRefreshSuccess();
-          };
-        })(this), (function(_this) {
-          return function(error) {
-            return _this.callback.onRefreshError(error.message);
-          };
-        })(this));
       };
 
       ReportController.prototype._executeReport = function(visualize) {
@@ -387,7 +412,6 @@
           resource: this.uri,
           params: this.params,
           pages: this.pages,
-          container: "#container",
           scale: "width",
           linkOptions: {
             events: {
@@ -396,9 +420,15 @@
           },
           error: this._processErrors,
           events: {
-            changeTotalPages: this._processChangeTotalPages
+            reportCompleted: this._processReportComplete
           },
-          success: this._processSuccess
+          success: (function(_this) {
+            return function(parameters) {
+              return _this.report.container("#container").render().done(function() {
+                return _this._processSuccess(parameters);
+              });
+            };
+          })(this)
         });
       };
 
@@ -406,38 +436,19 @@
         return this.logger.log(error.message);
       };
 
-      ReportController.prototype._processChangeTotalPages = function(totalPages) {
-        this.totalPages = totalPages;
-        return this.callback.onTotalPagesLoaded(this.totalPages);
-      };
-
-      ReportController.prototype._processSuccess = function(parameters) {
-        return this.callback.onLoadDone(parameters);
-      };
-
-      ReportController.prototype._processErrors = function(error) {
-        this.logger.log(error);
-        if (error.errorCode === "authentication.error") {
-          this.callback.onLoadStart();
-          return this._runReportWithAuth(error);
-        } else {
-          return this.callback.onLoadError(error.message);
-        }
-      };
-
-      ReportController.prototype._processLinkClicks = function(event, link) {
-        var type;
-        type = link.type;
-        switch (type) {
-          case "ReportExecution":
-            return this._startReportExecution(link);
-          case "LocalAnchor":
-            return this._navigateToAnchor(link);
-          case "LocalPage":
-            return this._navigateToPage(link);
-          case "Reference":
-            return this._openRemoteLink(link);
-        }
+      ReportController.prototype._checkMultipageState = function() {
+        return this.report["export"]({
+          outputFormat: "html",
+          pages: "2"
+        }).done((function(_this) {
+          return function() {
+            return _this._processMultipageState(true);
+          };
+        })(this)).fail((function(_this) {
+          return function() {
+            return _this._processMultipageState(false);
+          };
+        })(this));
       };
 
       ReportController.prototype._startReportExecution = function(link) {
@@ -470,7 +481,7 @@
       };
 
       ReportController.prototype._loadPage = function(page) {
-        return this.report.pages(page).run().fail(this._processErrors).done(this._notifyPageChange);
+        return this.report.pages(page).run().fail(this).done(this._notifyPageChange);
       };
 
       ReportController.prototype._notifyPageChange = function() {
@@ -490,6 +501,11 @@
 
       ReportController.prototype._getServerVersion = function(callback) {
         var params;
+        jQuery.ajax(window.location.href + "/rest_v2/serverInfo", {
+          dataType: 'json'
+        }).done((function(_this) {
+          return function(response) {};
+        })(this));
         this.logger.log("_getServerVersion");
         params = {
           async: false,
@@ -498,7 +514,6 @@
             return function(response) {
               var version;
               version = _this._parseServerVersion(response);
-              _this.logger.log("Server version: " + version);
               return callback.call(_this, version);
             };
           })(this),
@@ -523,6 +538,53 @@
           result += digit * Math.pow(10, index * -1);
         }
         return result;
+      };
+
+      ReportController.prototype._processReportComplete = function(status, error) {
+        this.logger.log("onReportCompleted");
+        return this.callback.onReportCompleted(status, this.report.data().totalPages, error);
+      };
+
+      ReportController.prototype._processMultipageState = function(isMultipage) {
+        this.logger.log("multi " + isMultipage);
+        return this.callback.onMultiPageStateObtained(isMultipage);
+      };
+
+      ReportController.prototype._processSuccess = function(parameters) {
+        if (parameters.components.length === 0) {
+          this.logger.log("onEmptyReportEvent");
+          this.callback.onEmptyReportEvent();
+        } else {
+          this._checkMultipageState();
+        }
+        this.logger.log("onLoadDone");
+        return this.callback.onLoadDone(parameters);
+      };
+
+      ReportController.prototype._processErrors = function(error) {
+        this.logger.log(error);
+        if (error.errorCode === "authentication.error") {
+          this.logger.log("onLoadStart");
+          this.callback.onLoadStart();
+          return this._runReportWithAuth(error);
+        } else {
+          return this.callback.onLoadError(error.message);
+        }
+      };
+
+      ReportController.prototype._processLinkClicks = function(event, link) {
+        var type;
+        type = link.type;
+        switch (type) {
+          case "ReportExecution":
+            return this._startReportExecution(link);
+          case "LocalAnchor":
+            return this._navigateToAnchor(link);
+          case "LocalPage":
+            return this._navigateToPage(link);
+          case "Reference":
+            return this._openRemoteLink(link);
+        }
       };
 
       return ReportController;
@@ -579,6 +641,10 @@
         return this._instance._refreshController();
       };
 
+      MobileReport.applyReportParams = function(params) {
+        return this._instance._applyReportParams(params);
+      };
+
       function MobileReport(context1) {
         this.context = context1;
         this.context.callback.onScriptLoaded();
@@ -611,6 +677,10 @@
 
       MobileReport.prototype._refreshController = function() {
         return this._controller.refresh();
+      };
+
+      MobileReport.prototype._applyReportParams = function(params) {
+        return this._controller.applyReportParams(params);
       };
 
       return MobileReport;

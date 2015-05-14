@@ -257,6 +257,12 @@
     // overriden in childs
 }
 
+- (void)updateReportWithNewParameters
+{
+    // can be overriden in childs
+    [self refresh];
+}
+
 #pragma mark - Report Options (Input Controls)
 - (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *inputControls, NSError *error))completion
 {
@@ -308,7 +314,7 @@
     reportOptionsViewController.report = self.report;
     reportOptionsViewController.completionBlock = @weakself(^(void)) {
         [self.report updateInputControls:reportOptionsViewController.inputControls];
-        [self refresh];
+        [self updateReportWithNewParameters];
     }@weakselfend;
 
     if (isShowBackButton) {
