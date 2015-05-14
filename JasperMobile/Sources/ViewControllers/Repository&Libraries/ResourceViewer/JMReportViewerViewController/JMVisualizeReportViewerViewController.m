@@ -274,7 +274,7 @@
     [self.webView stopLoading];
 
     // reset zoom in webView
-    [self.webView.scrollView setZoomScale:0.5 animated:NO];
+    [self.webView.scrollView setZoomScale:0.1 animated:NO];
 }
 
 - (void)startShowLoadingIndicators
