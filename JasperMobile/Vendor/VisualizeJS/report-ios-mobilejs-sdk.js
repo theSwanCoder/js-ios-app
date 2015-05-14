@@ -677,7 +677,6 @@
 
       function MobileReport(context1) {
         this.context = context1;
-        console.log("MobileReport constructor");
         this.context.callback.onScriptLoaded();
       }
 
@@ -740,7 +739,6 @@
           callback: callbackImplementor,
           logger: logger
         });
-        logger.log("MobileReport.getInstance");
         return MobileReport.getInstance(context);
       };
 
