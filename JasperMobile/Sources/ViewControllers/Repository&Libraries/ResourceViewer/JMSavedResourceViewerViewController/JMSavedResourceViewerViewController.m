@@ -55,7 +55,8 @@
         NSString* content = [NSString stringWithContentsOfFile:fullReportPath
                                                       encoding:NSUTF8StringEncoding
                                                          error:NULL];
-        [self.webView loadHTMLString:content baseURL:nil];
+        NSURL *url = [NSURL fileURLWithPath:fullReportPath];
+        [self.webView loadHTMLString:content baseURL:url];
     } else {
         NSURL *url = [NSURL fileURLWithPath:fullReportPath];
         self.resourceRequest = [NSURLRequest requestWithURL:url];
