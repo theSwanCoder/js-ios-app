@@ -129,7 +129,7 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
     
     self.countOfPages = countOfPages;
     
-    if (countOfPages != NSNotFound && countOfPages > 1) {
+    if (countOfPages != NSNotFound) {
         self.isMultiPageReport = countOfPages > 1;
     }
 }

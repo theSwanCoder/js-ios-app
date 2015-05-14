@@ -339,6 +339,8 @@
         this._startReportExecution = bind(this._startReportExecution, this);
         this._executeFailedCallback = bind(this._executeFailedCallback, this);
         this._executeReport = bind(this._executeReport, this);
+        this._executeReportForAmber = bind(this._executeReportForAmber, this);
+        this._executeReportForAmber2OrHigher = bind(this._executeReportForAmber2OrHigher, this);
         this._runReportWithAuth = bind(this._runReportWithAuth, this);
         this._runReportWithoutAuthButWithHack = bind(this._runReportWithoutAuthButWithHack, this);
         this._runReportWithoutAuth = bind(this._runReportWithoutAuth, this);
@@ -400,7 +402,7 @@
 
       ReportController.prototype._runReportWithoutAuth = function() {
         this.logger.log("_runReportWithoutAuth");
-        return visualize(this._executeReport, this._runReportWithoutAuthButWithHack);
+        return visualize(this._executeReportForAmber2OrHigher, this._runReportWithoutAuthButWithHack);
       };
 
       ReportController.prototype._runReportWithoutAuthButWithHack = function(error) {
@@ -416,7 +418,7 @@
             }
           }
         };
-        return visualize(skipAuth, this._executeReport);
+        return visualize(skipAuth, this._executeReportForAmber);
       };
 
       ReportController.prototype._runReportWithAuth = function(error) {
@@ -424,12 +426,28 @@
         if (error != null) {
           this.logger.log(" Reason: " + error.message);
         }
-        return visualize(this.session.authOptions(), this._executeReport, this._executeFailedCallback, this._executeAlways);
+        return visualize(this.session.authOptions(), this._executeReportForAmber, this._executeFailedCallback, this._executeAlways);
       };
 
-      ReportController.prototype._executeReport = function(visualize) {
+      ReportController.prototype._executeReportForAmber2OrHigher = function(visualize) {
+        var params;
+        params = {
+          chart: {
+            animation: false,
+            zoom: false
+          }
+        };
+        return this._executeReport(visualize, params);
+      };
+
+      ReportController.prototype._executeReportForAmber = function(visualize) {
+        return this._executeReport(visualize, {});
+      };
+
+      ReportController.prototype._executeReport = function(visualize, params) {
+        var actualParams, defaultParams;
         this.logger.log("_executeReport");
-        return this.report = visualize.report({
+        defaultParams = {
           resource: this.uri,
           params: this.params,
           pages: this.pages,
@@ -450,7 +468,9 @@
               });
             };
           })(this)
-        });
+        };
+        actualParams = jQuery.extend({}, defaultParams, params);
+        return this.report = visualize.report(actualParams);
       };
 
       ReportController.prototype._executeFailedCallback = function(error) {
@@ -463,13 +483,10 @@
           pages: "2"
         }).done((function(_this) {
           return function(params) {
-            return _this._fetchHTMLPage(params.href, function(isPageExists) {
-              return _this._processMultipageState(isPageExists);
-            });
+            return _this._processMultipageState(true);
           };
         })(this)).fail((function(_this) {
           return function(error) {
-            _this.logger.log("multipage error: " + (JSON.stringify(error)));
             return _this._processMultipageState(false);
           };
         })(this));
@@ -544,29 +561,6 @@
           })(this)
         };
         return jQuery.ajax(window.location.href + "/rest_v2/serverInfo", params);
-      };
-
-      ReportController.prototype._fetchHTMLPage = function(pageURL, callback) {
-        var params;
-        this.logger.log("_fetchHTMLPage");
-        params = {
-          dataType: 'html',
-          success: (function(_this) {
-            return function(response, status) {
-              if (response.length > 0) {
-                return callback(true);
-              } else {
-                return callback(false);
-              }
-            };
-          })(this),
-          error: (function(_this) {
-            return function(error, status) {
-              return callback(false);
-            };
-          })(this)
-        };
-        return jQuery.ajax(pageURL, params);
       };
 
       ReportController.prototype._parseServerVersion = function(response) {
@@ -683,6 +677,7 @@
 
       function MobileReport(context1) {
         this.context = context1;
+        console.log("MobileReport constructor");
         this.context.callback.onScriptLoaded();
       }
 
@@ -745,6 +740,7 @@
           callback: callbackImplementor,
           logger: logger
         });
+        logger.log("MobileReport.getInstance");
         return MobileReport.getInstance(context);
       };
 
