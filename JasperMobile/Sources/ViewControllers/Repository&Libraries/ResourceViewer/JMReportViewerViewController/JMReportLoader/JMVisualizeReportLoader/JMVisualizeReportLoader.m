@@ -89,6 +89,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     self.isReportInLoadingProcess = YES;
     [self.report updateLoadingStatusWithValue:NO];
+    [self.report updateCountOfPages:NSNotFound];
 
     if (![JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded) {
         self.reportLoadCompletion = completionBlock;
@@ -114,7 +115,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     self.reportLoadCompletion = completionBlock;
     [self.report updateCurrentPage:pageNumber];
-    [self.report updateCountOfPages:NSNotFound];
 
     if (!self.report.isReportAlreadyLoaded) {
         NSString *parametersAsString = [self createParametersAsString];
@@ -153,6 +153,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     } else if (!self.report.isReportAlreadyLoaded) {
         self.isReportInLoadingProcess = YES;
         [self.report updateLoadingStatusWithValue:NO];
+        [self.report updateCountOfPages:NSNotFound];
 
         [self fetchPageNumber:1 withCompletion:completion];
     } else {
