@@ -126,6 +126,7 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
 #pragma mark - Private
 - (void)coreDataInit
 {
+#ifndef __RELEASE__
     NSString *profilesPath = [[NSBundle mainBundle] pathForResource:@"profiles" ofType:@"json"];
     NSData *profilesData = [NSData dataWithContentsOfFile:profilesPath];
     NSArray *profilesArray = [[NSJSONSerialization JSONObjectWithData:profilesData options:NSJSONReadingAllowFragments error:nil] objectForKey:@"profiles"];
@@ -138,6 +139,8 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
             [[JMCoreDataManager sharedInstance] save:nil];
         }
     }
+#endif
+    
 }
 
 // Resets database and defaults

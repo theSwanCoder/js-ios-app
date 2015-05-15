@@ -58,6 +58,12 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.resourceDescription.text = resourceLookup.resourceDescription;
     self.thumbnailImage = nil;
     [self updateResourceImage];
+    
+    // Add file extension for saved items
+    if ([self.resourceLookup isSavedReport]) {
+        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
+        self.resourceName.text = [resourceLookup.label stringByAppendingPathExtension:savedReport.format];
+    }
 }
 
 - (IBAction)infoButtonDidTapped:(id)sender

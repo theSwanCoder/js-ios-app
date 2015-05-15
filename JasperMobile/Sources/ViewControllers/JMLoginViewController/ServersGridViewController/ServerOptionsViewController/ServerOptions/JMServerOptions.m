@@ -29,7 +29,6 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
 
 @interface JMServerOptions ()
 @property (nonatomic, readwrite, strong) NSArray *optionsArray;
-@property (nonatomic, assign) BOOL isExistingServerProfile;
 @end
 
 @implementation JMServerOptions

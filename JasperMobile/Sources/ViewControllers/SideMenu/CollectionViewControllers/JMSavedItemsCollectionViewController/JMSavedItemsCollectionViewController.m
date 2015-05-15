@@ -41,7 +41,7 @@
     [super awakeFromNib];
     
     self.resourceListLoader = [NSClassFromString(@"JMSavedResourcesListLoader") new];
-    self.title = JMCustomLocalizedString(@"Saved Items", nil);
+    self.title = JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
 }
 
 #pragma mark - Overloaded methods

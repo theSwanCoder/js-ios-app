@@ -32,6 +32,7 @@
 #import "JMAppUpdater.h"
 #import "UIView+Additions.h"
 #import <MessageUI/MessageUI.h>
+#import "ALToastView.h"
 
 @interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 
@@ -190,7 +191,8 @@
 - (IBAction)saveButtonTapped:(id)sender
 {
     [self.view endEditing:YES];
-    [self showPopupWithMessage:JMCustomLocalizedString(@"settings.save.message", nil) showingTime:0.5];
+    [ALToastView toastInView:self.tableView
+                    withText:JMCustomLocalizedString(@"settings.save.message", nil)];
     
     BOOL previousSendingCrashReports = [JMUtils crashReportsSendingEnable];
     [self.detailSettings saveSettings];
@@ -224,17 +226,6 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-#pragma mark - Private methods
-- (void)showPopupWithMessage:(NSString *)message showingTime:(NSTimeInterval)showingTime
-{
-    JMPopupView *popup = [[JMPopupView alloc] initWithMessage:message delegate:nil];
-    [popup show];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(showingTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [popup dismiss];
-    });
 }
 
 @end

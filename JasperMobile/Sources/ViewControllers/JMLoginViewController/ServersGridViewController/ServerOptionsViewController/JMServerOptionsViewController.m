@@ -49,7 +49,7 @@
 {
     [super viewDidLoad];
     
-    if (self.serverProfile) {
+    if (self.serverOptions.isExistingServerProfile) {
         self.title = self.serverProfile.alias;
     } else {
         self.title = JMCustomLocalizedString(@"servers.title.new", nil);
