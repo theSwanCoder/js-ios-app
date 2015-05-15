@@ -83,7 +83,7 @@
     newServerProfile.keepSession    = serverProfile.keepSession;
     newServerProfile.organization   = serverProfile.organization;
     newServerProfile.serverUrl      = serverProfile.serverUrl;
-    [[JMCoreDataManager sharedInstance] save:nil];
+//    [[JMCoreDataManager sharedInstance] save:nil];
     return newServerProfile;
 }
 
