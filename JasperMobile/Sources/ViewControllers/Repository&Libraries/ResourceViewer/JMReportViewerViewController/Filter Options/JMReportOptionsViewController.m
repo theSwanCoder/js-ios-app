@@ -87,7 +87,7 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 
     BOOL isReportParametersChanged = [self isReportParametersChanged];
 
-    if ( (!isReportParametersChanged && !self.report.isReportAlreadyLoaded) || isReportParametersChanged) {
+    if (!self.report.isReportAlreadyLoaded || (self.report.isReportAlreadyLoaded && isReportParametersChanged)) {
         if ([self validateInputControls]) { // Local validation
             [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
                     if (dataIsValid) {
@@ -103,29 +103,24 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
     } else {
         [self backButtonTapped:nil];
     }
-
 }
 
 - (BOOL)isReportParametersChanged
 {
-    BOOL isReportParametersChanged = NO;
-    // TODO: refactor !!!
     for (JSInputControlDescriptor *inputControl in self.report.inputControls) {
         for (JSInputControlDescriptor *internalInputControl in self.inputControls) {
             if ([inputControl.uuid isEqualToString:internalInputControl.uuid]) {
-                for (JSInputControlOption *option in inputControl.state.options) {
-                    for (JSInputControlOption *internalOption in internalInputControl.state.options) {
-                        if ([option.value isEqualToString:internalOption.value] && ![option.selected isEqualToString:internalOption.selected]) {
-                            isReportParametersChanged = YES;
-                            break;
-                        }
-                    }
+                NSSet *inputControlSelectedValues = [NSSet setWithArray:[inputControl selectedValues]];
+                NSSet *internalInputControlSelectedValues = [NSSet setWithArray:[internalInputControl selectedValues]];
+                if (![inputControlSelectedValues isEqualToSet:internalInputControlSelectedValues]) {
+                    return YES;
                 }
+                break;
             }
         }
     }
 
-    return isReportParametersChanged;
+    return NO;
 }
 
 - (BOOL) validateInputControls
