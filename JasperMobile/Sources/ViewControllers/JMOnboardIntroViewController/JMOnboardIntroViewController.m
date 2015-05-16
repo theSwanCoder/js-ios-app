@@ -92,14 +92,13 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
     self.titleLabel.text = JMCustomLocalizedString(@"intro.title", nil);
     self.descriptionLabel.text = JMCustomLocalizedString(@"intro.description", nil);
-
-    [self setupImages];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
+    [self setupImages];
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 }
 
