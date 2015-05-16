@@ -33,6 +33,7 @@
 #import "JMSessionManager.h"
 #import "JMCancelRequestPopup.h"
 #import "JMMenuViewController.h"
+#import "JMOnboardIntroViewController.h"
 
 
 static NSString * const kGAITrackingID = @"UA-57445224-1";
@@ -160,9 +161,12 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
 {
     if (self.shouldDisplayOnboardingIntro) {
         SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
-        UIViewController *introViewController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
-        [revealViewController.rearViewController presentViewController:introViewController animated:YES completion:nil];
-        self.shouldDisplayOnboardingIntro = NO;
+        JMOnboardIntroViewController *introViewController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
+        introViewController.completion = @weakself(^){
+            // flag should be set only after intro was shown
+            self.shouldDisplayOnboardingIntro = NO;
+        }@weakselfend;
+        [revealViewController presentViewController:introViewController animated:YES completion:nil];
     }
 }
 

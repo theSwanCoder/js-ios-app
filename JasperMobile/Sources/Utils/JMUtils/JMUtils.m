@@ -153,7 +153,12 @@
     
     SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
     JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
-    
+
+    if ([revealViewController.presentedViewController isKindOfClass:[UINavigationController class]]) {
+        // if a nav view controller was loaded previously
+        return;
+    }
+
     UINavigationController *loginNavController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
     JMLoginViewController *loginViewController = (JMLoginViewController *)loginNavController.topViewController;
     loginViewController.completion = ^(void){
@@ -164,7 +169,7 @@
         }
     };
     
-    [revealViewController.rearViewController presentViewController:loginNavController animated:animated completion:completion];
+    [revealViewController presentViewController:loginNavController animated:animated completion:completion];
 }
 
 + (void)showAlertViewWithError:(NSError *)error

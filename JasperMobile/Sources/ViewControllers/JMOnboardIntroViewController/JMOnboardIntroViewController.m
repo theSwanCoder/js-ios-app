@@ -275,7 +275,11 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 #pragma mark - Actions
 - (IBAction)skipAction:(id)sender
 {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:@weakself(^){
+        if (self.completion) {
+            self.completion();
+        }
+    }@weakselfend];
 }
 
 #pragma mark - Setup

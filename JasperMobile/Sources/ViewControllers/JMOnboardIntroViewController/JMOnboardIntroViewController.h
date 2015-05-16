@@ -32,4 +32,5 @@
  */
 
 @interface JMOnboardIntroViewController : UIViewController
+@property (copy, nonatomic) void(^completion)(void);
 @end
