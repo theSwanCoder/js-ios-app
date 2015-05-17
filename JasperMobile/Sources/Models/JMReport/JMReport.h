@@ -51,7 +51,7 @@ extern NSString * const kJMReportCountOfPagesDidChangeNotification;
 @property (nonatomic, copy, readonly) NSString *HTMLString;
 @property (nonatomic, copy, readonly) NSString *baseURLString;
 // input controls
-@property (nonatomic, assign) BOOL isInputControlsLoaded;
+@property (nonatomic, assign, readonly) BOOL isInputControlsLoaded;
 // thumbnails
 @property (nonatomic, strong) UIImage *thumbnailImage;
 
@@ -62,6 +62,7 @@ extern NSString * const kJMReportCountOfPagesDidChangeNotification;
 
 // update state
 - (void)updateInputControls:(NSArray *)inputControls;
+- (void)updateReportParameters:(NSArray *)reportParameters;
 - (void)updateCurrentPage:(NSInteger)currentPage;
 - (void)updateCountOfPages:(NSInteger)countOfPages;
 - (void)updateHTMLString:(NSString *)HTMLString

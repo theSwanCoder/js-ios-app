@@ -43,6 +43,7 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
 @property (nonatomic, assign, readwrite) BOOL isReportEmpty;
 @property (nonatomic, strong, readwrite) NSString *requestId;
 @property (nonatomic, assign, readwrite) BOOL isReportAlreadyLoaded;
+@property (nonatomic, assign, readwrite) BOOL isInputControlsLoaded;
 
 // html
 @property (nonatomic, copy, readwrite) NSString *HTMLString;
@@ -97,13 +98,16 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
 - (void)updateInputControls:(NSArray *)inputControls
 {   
     _inputControls = [inputControls copy];
-    if (inputControls && inputControls.count) {
-        _isReportWithInputControls = YES;
-    } else {
-        _isReportWithInputControls = NO;
-    }
-    
+    _isReportWithInputControls = inputControls && inputControls.count;
+    _isInputControlsLoaded = YES;
+
     self.reportParameters = nil;
+}
+
+- (void)updateReportParameters:(NSArray *)reportParameters
+{
+    _reportParameters = [reportParameters copy];
+    _isInputControlsLoaded = YES;
 }
 
 - (void)updateCurrentPage:(NSInteger)currentPage
@@ -120,13 +124,8 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
     if (self.countOfPages == countOfPages) {
         return;
     }
-    
-    if (countOfPages == 0) {
-        self.isReportEmpty = YES;
-    } else {
-        self.isReportEmpty = NO;
-    }
-    
+
+    self.isReportEmpty = countOfPages == 0;
     self.countOfPages = countOfPages;
     
     if (countOfPages != NSNotFound) {
@@ -214,22 +213,6 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
                                                                 value:inputControlDescriptor.selectedValues]];
     }
     return [parameters copy];
-}
-
-- (void)updateInputControlsWithReportParameters:(NSDictionary *)reportParameters
-{
-    
-    for (JSInputControlDescriptor *description in self.inputControls) {
-        JSInputControlState *inputState = description.state;
-        NSString *value = reportParameters[inputState.uuid];
-        for (JSInputControlOption *option in description.state.options) {
-            if ([value isEqualToString:option.value]) {
-                option.selected = @"true";
-            } else {
-                option.selected = @"false";
-            }
-        }
-    }    
 }
 
 @end
