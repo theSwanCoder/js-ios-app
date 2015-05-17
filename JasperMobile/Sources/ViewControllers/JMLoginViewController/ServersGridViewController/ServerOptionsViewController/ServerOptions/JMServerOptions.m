@@ -59,11 +59,10 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
     JMServerOption *serverOption = [self.optionsArray objectAtIndex:0];
     if (serverOption.optionValue && [[serverOption.optionValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
         // Check if alias is unique
-        JMServerProfile *serverProfile = [JMServerProfile serverProfileForname:serverOption.optionValue];
-        if (serverProfile && ![serverProfile isEqual:self.serverProfile]) {
-            serverOption.errorString = JMCustomLocalizedString(@"servers.name.errmsg.exists", nil);
-        } else {
+        if ([JMServerProfile isValidNameForServerProfile:serverOption.optionValue]) {
             self.serverProfile.alias = serverOption.optionValue;
+        } else {
+            serverOption.errorString = JMCustomLocalizedString(@"servers.name.errmsg.exists", nil);
         }
     } else {
         serverOption.errorString = JMCustomLocalizedString(@"servers.name.errmsg.empty", nil);

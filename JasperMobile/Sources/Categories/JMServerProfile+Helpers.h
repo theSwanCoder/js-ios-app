@@ -51,10 +51,10 @@
 /**
  Return server profile by server name
  
- @param serverName Server alias
+ @param profile JSProfile Server profile
  @return server profile with required name
 */
-+ (JMServerProfile *)serverProfileForname:(NSString *)serverName;
++ (JMServerProfile *)serverProfileForJSProfile:(JSProfile *)profile;
 
 /**
  Create clone for server profile.
@@ -70,6 +70,14 @@
  @param serverProfile for deleting
  */
 + (void) deleteServerProfile:(JMServerProfile *)serverProfile;
+
+/**
+ Check name for server profile.
+ 
+ @param name New name for checking
+ @return YES if name is valid
+ */
++ (BOOL) isValidNameForServerProfile:(NSString *)name;
 
 /**
  Check if jasperserver exist and it version is supported by application.

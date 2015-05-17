@@ -168,6 +168,13 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 }
 
 #pragma mark - Actions
+- (void)menuButtonTapped:(id)sender
+{
+    [self.view endEditing:YES];
+    SWRevealViewController *revealViewController = self.revealViewController;
+    [revealViewController revealToggle:sender];
+}
+
 - (void)sortByButtonTapped:(id)sender
 {
     JMListOptionsPopupView *sortPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self
@@ -326,8 +333,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     SWRevealViewController *revealViewController = self.revealViewController;
     if (revealViewController) {
-        [self.menuButton setTarget:revealViewController];
-        [self.menuButton setAction:@selector(revealToggle:)];
+        [self.menuButton setTarget:self];
+        [self.menuButton setAction:@selector(menuButtonTapped:)];
         [self.view addGestureRecognizer:revealViewController.panGestureRecognizer];
     }
 }

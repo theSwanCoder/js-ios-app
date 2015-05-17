@@ -56,10 +56,15 @@
     return [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_5_0;
 }
 
-+ (JMServerProfile *)serverProfileForname:(NSString *)serverName
++ (JMServerProfile *)serverProfileForJSProfile:(JSProfile *)profile
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"%K == %@", @"alias", serverName]];
+    NSMutableArray *predicates = [NSMutableArray array];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"serverUrl == %@", profile.serverUrl]];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"alias == %@", profile.alias]];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"organization == %@", profile.organization]];
+    fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+    
     return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
@@ -76,14 +81,13 @@
     NSString *serverName = nil;
     do {
         serverName = (cloneNumber++ > 0) ? [serverProfile.alias stringByAppendingFormat:@" %zd", cloneNumber] : serverProfile.alias;
-    } while ([self serverProfileForname:serverName]);
+    } while ([self isValidNameForServerProfile:serverName]);
     
     newServerProfile.alias          = serverName;
     newServerProfile.askPassword    = serverProfile.askPassword;
     newServerProfile.keepSession    = serverProfile.keepSession;
     newServerProfile.organization   = serverProfile.organization;
     newServerProfile.serverUrl      = serverProfile.serverUrl;
-//    [[JMCoreDataManager sharedInstance] save:nil];
     return newServerProfile;
 }
 
@@ -96,6 +100,17 @@
     }
     [serverProfile.managedObjectContext deleteObject:serverProfile];
     [serverProfile.managedObjectContext save:nil];
+}
+
++ (BOOL) isValidNameForServerProfile:(NSString *)name
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+    NSMutableArray *predicates = [NSMutableArray array];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"self != %@", [JMServerProfile demoServerProfile]]];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"alias == %@", name]];
+    fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+    JMServerProfile *profile = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
+    return !!profile;
 }
 
 - (void) checkServerProfileWithCompletionBlock:(void(^)(NSError *error))completionBlock

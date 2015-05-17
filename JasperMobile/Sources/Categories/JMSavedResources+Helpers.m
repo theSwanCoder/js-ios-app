@@ -45,7 +45,7 @@ NSString * const kJMSavedResourceFileExtensionHTML = @"html";
     JMSavedResources *savedReport = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
     if (!savedReport) {
         JSProfile *sessionServerProfile = [JMSessionManager sharedManager].restClient.serverProfile;
-        JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForname:sessionServerProfile.alias];
+        JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
         savedReport = [NSEntityDescription insertNewObjectForEntityForName:kJMSavedResources inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
         savedReport.label = name;
         savedReport.uri = [self uriForSavedReportWithName:name format:format];

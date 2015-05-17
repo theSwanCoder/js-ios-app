@@ -203,6 +203,18 @@ static void * JMMigrationManagerContext = &JMMigrationManagerContext;
         //Failed to copy the file
         return NO;
     }
+    
+    // Remove all temporary files from old database
+    NSString *folderPath = [sourceStoreURL.path stringByDeletingLastPathComponent];
+    NSMutableArray *sqlTemporaryFiles = [[fileManager contentsOfDirectoryAtPath:folderPath error:nil] mutableCopy];
+    [sqlTemporaryFiles removeObjectsInArray:@[@".DS_Store", kJMReportsDirectory]];
+    for (NSString *temporaryFile in sqlTemporaryFiles) {
+        if ([temporaryFile rangeOfString:[sourceStoreURL.path lastPathComponent]].location != NSNotFound) {
+            [fileManager removeItemAtPath:[folderPath stringByAppendingPathComponent:temporaryFile] error:nil];
+        }
+    }
+    
+    
     //Move the destination to the source path
     if (![fileManager moveItemAtPath:destinationStoreURL.path
                               toPath:sourceStoreURL.path

@@ -88,7 +88,7 @@ static JMSessionManager *_sharedManager = nil;
     }
     if (self.restClient && self.restClient.keepSession) {
         [self.restClient resetReachabilityStatus];
-        JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForname:self.restClient.serverProfile.alias];
+        JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
         if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
             [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
             isRestoredSession = ([self.restClient isSessionAuthorized] && self.restClient.serverInfo);
@@ -115,7 +115,7 @@ static JMSessionManager *_sharedManager = nil;
 
 - (NSPredicate *)predicateForCurrentServerProfile
 {
-    JMServerProfile *activaServerProfile = [JMServerProfile serverProfileForname:self.restClient.serverProfile.alias];
+    JMServerProfile *activaServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
     NSMutableArray *currentServerProfilepredicates = [NSMutableArray array];
     [currentServerProfilepredicates addObject:[NSPredicate predicateWithFormat:@"serverProfile = %@", activaServerProfile]];
     [currentServerProfilepredicates addObject:[NSPredicate predicateWithFormat:@"username = %@", self.restClient.serverProfile.username]];
