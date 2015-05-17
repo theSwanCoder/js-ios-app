@@ -91,14 +91,13 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.report updateLoadingStatusWithValue:NO];
     [self.report updateCountOfPages:NSNotFound];
 
-    if (![JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded) {
+    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.webView]) {
         self.reportLoadCompletion = completionBlock;
         [self.report updateCurrentPage:page];
         [self.report updateCountOfPages:NSNotFound];
 
         [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             if (success) {
-                [JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded = YES;
                 [self.webView stopLoading];
                 [self.webView loadHTMLString:self.report.HTMLString
                                      baseURL:[NSURL URLWithString:self.report.baseURLString]];
@@ -133,7 +132,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)applyReportParametersWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    if (![JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded) {
+    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.webView]) {
         self.isReportInLoadingProcess = YES;
         [self.report updateLoadingStatusWithValue:NO];
 
@@ -142,7 +141,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
         [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
                 if (success) {
-                    [JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded = YES;
                     [self.webView stopLoading];
                     [self.webView loadHTMLString:self.report.HTMLString
                                          baseURL:[NSURL URLWithString:self.report.baseURLString]];
@@ -169,10 +167,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-//    [self.report updateLoadingStatusWithValue:NO];
-//    [self fetchPageNumber:1 withCompletion:completion];
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    // TODO: need understand logic of refresh via visualize.js
     self.reportLoadCompletion = completion;
     [self.report updateCurrentPage:1];
     [self.report updateCountOfPages:NSNotFound];
@@ -564,15 +558,18 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                     if (resourceLookup) {
                         JMVisualizeReport *report = [JMVisualizeReport reportWithResource:resourceLookup inputControls:nil];
 
-                        NSMutableDictionary *reportParameters = [NSMutableDictionary dictionary];
+                        NSMutableArray *reportParameters = [NSMutableArray array];
                         for (NSString *key in json.allKeys) {
                             if (![key isEqualToString:@"_report"]) {
-                                reportParameters[key] = json[key];
+                                JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:key
+                                                                                                       value:@[json[key]]];
+                                [reportParameters addObject:reportParameter];
                             }
                         }
 
-                        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForReport:withParameters:)]) {
-                            [self.delegate reportLoader:self didReceiveOnClickEventForReport:report withParameters:[reportParameters copy]];
+                        [report updateReportParameters:reportParameters];
+                        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForReport:)]) {
+                            [self.delegate reportLoader:self didReceiveOnClickEventForReport:report];
                         }
                     }
                 }

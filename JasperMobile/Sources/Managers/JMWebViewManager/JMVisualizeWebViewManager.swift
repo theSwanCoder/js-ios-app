@@ -33,7 +33,6 @@
 
 
 class JMVisualizeWebViewManager: JMWebViewManager {
-    var isVisualizeLoaded = false
 
     override class func sharedInstance() -> JMVisualizeWebViewManager {
         struct Static {
@@ -46,8 +45,10 @@ class JMVisualizeWebViewManager: JMWebViewManager {
         return Static.instance!
     }
 
-    override func reset() {
-        super.reset()
-        isVisualizeLoaded = false
+    func isWebViewEmpty(webView: UIWebView) -> Bool {
+        let jsCommand = "document.getElementsByTagName('body')[0].innerHTML"
+        let result = webView.stringByEvaluatingJavaScriptFromString(jsCommand)
+        let isEmpty = result?.isEmpty
+        return isEmpty!
     }
 }

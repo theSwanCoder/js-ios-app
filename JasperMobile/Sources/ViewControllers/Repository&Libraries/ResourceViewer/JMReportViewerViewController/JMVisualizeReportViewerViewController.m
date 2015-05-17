@@ -35,8 +35,7 @@
 
 @interface JMVisualizeReportViewerViewController () <JMVisualizeReportLoaderDelegate>
 @property (nonatomic, strong) JMVisualizeReportLoader *reportLoader;
-@property (nonatomic, assign) BOOL isStartFromAnotherReport;
-@property (nonatomic, copy) void(^returnFromPreviousReportCompletion)(void);
+@property (nonatomic, assign) BOOL isChildReport;
 @end
 
 @implementation JMVisualizeReportViewerViewController
@@ -44,64 +43,46 @@
 @synthesize reportLoader = _reportLoader;
 
 #pragma mark - Actions
-- (void)backButtonTapped:(id)sender
+- (void)cancelResourceViewingAndExit
 {
-    if (self.isStartFromAnotherReport) {
-        [self resetSubViews];
-        [self.navigationController setToolbarHidden:YES animated:YES];
-        [self.webView removeFromSuperview];
-
-        NSInteger viewControllersCount = self.navigationController.viewControllers.count;
-        JMVisualizeReportViewerViewController *reportViewController = self.navigationController.viewControllers[viewControllersCount - 2];
-
-        //
-        [reportViewController.view insertSubview:self.webView belowSubview:reportViewController.activityIndicator];
-        self.webView.delegate = reportViewController.reportLoader;
-
-        [((JMVisualizeReport *) reportViewController.report) updateLoadingStatusWithValue:NO];
-        reportViewController.returnFromPreviousReportCompletion = @weakself(^()) {
-                reportViewController.returnFromPreviousReportCompletion = nil;
-                [reportViewController.reportLoader refreshReportWithCompletion:@weakself(^(BOOL success, NSError *error)) {
-                        if (success) {
-                            // succcess action
-                            //[self hideEmptyReportMessage];
-                        } else {
-                            [self handleError:error];
-                        }
-                    }@weakselfend];
-            }@weakselfend;
-
-        [self.navigationController popViewControllerAnimated:YES];
+    if (self.isChildReport) {
+        [self closeChildReport];
     } else {
-        [super backButtonTapped:sender];
+        [super cancelResourceViewingAndExit];
     }
 }
 
-#pragma mark - Actions
-- (void)cancelResourceViewingAndExit
+- (void)handleReportLoaderDidChangeCountOfPages
 {
-    [self.reportLoader destroyReport];
-    [super cancelResourceViewingAndExit];
+    if (self.report.isReportEmpty) {
+        [self showEmptyReportMessage];
+    }
 }
 
 #pragma mark - Setups
+- (void)setupNavigationItems
+{
+    if (self.isChildReport) {
+        self.navigationItem.rightBarButtonItem = [self infoPageBarButtonItem];
+        self.navigationItem.leftBarButtonItem = [self backBarButtonItemWithAction:@selector(closeChildReport)];
+    } else {
+        [super setupNavigationItems];
+    }
+}
+
+- (void)closeChildReport
+{
+    [[JMVisualizeWebViewManager sharedInstance] resetChildWebView];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)setupSubviews
 {
     CGRect rootViewBounds = self.navigationController.view.bounds;
-    UIWebView *webView = [[JMVisualizeWebViewManager sharedInstance] webViewWithParentFrame:rootViewBounds];
+    UIWebView *webView = [[JMVisualizeWebViewManager sharedInstance] webViewWithParentFrame:rootViewBounds asSecondary:self.isChildReport];
     webView.delegate = self;
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
-}
-
-#pragma mark - Start point
-- (void)startLoadReportWithPage:(NSInteger)page
-{
-    if (self.returnFromPreviousReportCompletion) {
-        self.returnFromPreviousReportCompletion();
-    } else {
-        [super startLoadReportWithPage:page];
-    }
 }
 
 #pragma mark - Custom accessors
@@ -131,18 +112,10 @@
     }@weakselfend];
 }
 
-- (void)handleReportLoaderDidChangeCountOfPages
-{
-    if (self.report.isReportEmpty) {
-        [self showEmptyReportMessage];
-    }
-}
-
 #pragma mark - Run report
 - (void)runReportWithPage:(NSInteger)page
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
-        [self.reportLoader cancelReport];
         [self cancelResourceViewingAndExit];
     }@weakselfend];
 
@@ -162,9 +135,8 @@
 - (void)updateReportWithNewParameters
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
-        [self.reportLoader cancelReport];
-        [self cancelResourceViewingAndExit];
-    }@weakselfend];
+            [self cancelResourceViewingAndExit];
+        }@weakselfend];
 
     [self hideEmptyReportMessage];
 
@@ -206,8 +178,6 @@
 
         [self.restClient deleteCookies];
         [self resetSubViews];
-        [self.webView loadHTMLString:nil baseURL:nil];
-        [JMVisualizeWebViewManager sharedInstance].isVisualizeLoaded = NO;
 
         NSInteger reportCurrentPage = self.report.currentPage;
         [self.report restoreDefaultState];
@@ -228,31 +198,15 @@
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForReport:(JMVisualizeReport *)report withParameters:(NSDictionary *)reportParameters
+- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForReport:(JMVisualizeReport *)report
 {
-    NSString *reportURI = [report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls, NSError *error)) {
-        report.isInputControlsLoaded = YES;
-        if (inputControls && !error) {
-            [report updateInputControls:inputControls];
+    NSString *identifier = @"JMVisualizeReportViewerViewController";
+    JMVisualizeReportViewerViewController *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
+    reportViewController.report = report;
+    reportViewController.isChildReport = YES;
+    reportViewController.backButtonTitle = self.title;
 
-            NSString *identifier = @"JMVisualizeReportViewerViewController";
-
-            JMVisualizeReportViewerViewController *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
-            reportViewController.report = report;
-            reportViewController.isStartFromAnotherReport = YES;
-
-
-            reportViewController.backButtonTitle = self.title;
-
-            [self resetSubViews];
-            [self.navigationController pushViewController:reportViewController animated:YES];
-        } else if (error) {
-            [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                [self cancelResourceViewingAndExit];
-            }];
-        }
-    }@weakselfend];
+    [self.navigationController pushViewController:reportViewController animated:YES];
 }
 
 -(void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
@@ -272,18 +226,7 @@
 - (void)resetSubViews
 {
     [self.webView stopLoading];
-
     [[JMVisualizeWebViewManager sharedInstance] reset];
-}
-
-- (void)startShowLoadingIndicators
-{
-    [JMUtils showNetworkActivityIndicator];
-}
-
-- (void)stopShowLoadingIndicators
-{
-    [JMUtils hideNetworkActivityIndicator];
 }
 
 @end
