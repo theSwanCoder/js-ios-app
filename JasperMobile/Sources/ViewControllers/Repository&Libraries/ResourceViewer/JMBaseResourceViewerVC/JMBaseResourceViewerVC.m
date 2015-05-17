@@ -203,12 +203,17 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
+- (void)showInfoPage
+{
+    [self showResourceInfoViewControllerWithResourceLookup:[self currentResourceLookup]];
+}
+
 #pragma mark - JMMenuActionsViewDelegate
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     switch (action) {
         case JMMenuActionsViewAction_Info:
-            [self showResourceInfoViewControllerWithResourceLookup:[self currentResourceLookup]];
+            [self showInfoPage];
             break;
         case JMMenuActionsViewAction_MakeFavorite:
         case JMMenuActionsViewAction_MakeUnFavorite:
@@ -246,6 +251,15 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     return nil;
 }
 
+- (UIBarButtonItem *)infoPageBarButtonItem
+{
+    UIBarButtonItem *infoPageItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"]
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(showInfoPage)];
+    return infoPageItem;
+}
+
 - (UIBarButtonItem *) favoriteBarButtonItem
 {
     if (![JMUtils isIphone]) {
@@ -279,6 +293,11 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     return availableAction;
 }
 
+- (UIBarButtonItem *)backBarButtonItemWithAction:(SEL)action
+{
+    return [self backButtonWithTitle:nil target:self action:action];
+}
+
 - (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
                                   target:(id)target
                                   action:(SEL)action
@@ -287,13 +306,13 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     if (!backItemTitle) {
         NSArray *viewControllers = self.navigationController.viewControllers;
         NSInteger viewControllersCount = viewControllers.count;
-        UIViewController *previousViewController = [viewControllers objectAtIndex:(viewControllersCount - 2)];
+        UIViewController *previousViewController = viewControllers[viewControllersCount - 2];
         backItemTitle = previousViewController.title;
     }
 
     UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
     UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:backItemTitle
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:[self croppedBackButtonTitleWithControllerTitle:backItemTitle]
                                                                  style:UIBarButtonItemStyleBordered
                                                                 target:target
                                                                 action:action];
