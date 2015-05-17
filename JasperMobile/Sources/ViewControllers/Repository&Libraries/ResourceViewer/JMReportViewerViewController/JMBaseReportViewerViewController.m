@@ -173,7 +173,6 @@
 
             [self stopShowLoader];
 
-            self.report.isInputControlsLoaded = YES;
             if (inputControls && !error) {
                 [self.report updateInputControls:inputControls];
                 [self showReportOptionsViewControllerWithBackButton:YES];

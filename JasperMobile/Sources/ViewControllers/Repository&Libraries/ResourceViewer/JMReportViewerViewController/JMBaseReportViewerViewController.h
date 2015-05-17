@@ -42,6 +42,8 @@
 @property (nonatomic, strong) JMReport *report;
 @property (nonatomic, copy) void(^exitBlock)(void);
 
+- (void)handleReportLoaderDidChangeCountOfPages;
+
 // start point
 - (void)startLoadReportWithPage:(NSInteger)page;
 - (void)runReportWithPage:(NSInteger)page;
