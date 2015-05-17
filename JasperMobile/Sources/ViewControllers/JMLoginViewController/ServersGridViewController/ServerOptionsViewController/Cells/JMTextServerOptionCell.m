@@ -42,7 +42,14 @@
     [super setServerOption:serverOption];
     self.textField.enabled = serverOption.editable;
     self.textField.text = serverOption.optionValue;
-    
+
+    NSDictionary *attributes = @{
+            NSFontAttributeName : [UIFont boldSystemFontOfSize:11]
+    };
+    NSAttributedString *placeholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"servers.profile.placeholder", nil)
+                                                                      attributes:attributes];
+    self.textField.attributedPlaceholder = placeholder;
+
     self.textField.textColor = serverOption.editable ? [UIColor darkTextColor] : [UIColor lightGrayColor];
 }
 

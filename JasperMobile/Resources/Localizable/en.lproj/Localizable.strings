@@ -56,6 +56,8 @@
 "servers.action.profile.delete" = "Delete";
 "servers.profile.delete.message" = "Confirm to delete this server profile.";
 "servers.profile.list.empty" = "There are no Server Profiles";
+// TODO: choose correct name
+"servers.profile.placeholder" = "enter new value";
 
 /* Onboarding Intro */
 "intro.title" = "Welcome to TIBCO JasperMobile";
