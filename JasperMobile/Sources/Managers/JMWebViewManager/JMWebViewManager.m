@@ -30,10 +30,13 @@
 #import "JMUtils.h"
 
 @interface JMWebViewManager()
-@property (nonatomic, strong, readwrite) UIWebView *webView;
+@property (nonatomic, strong, readwrite) UIWebView *primaryWebView;
+@property (nonatomic, strong, readwrite) UIWebView *secondaryWebView;
 @end
 
 @implementation JMWebViewManager
+
+#pragma mark - Public API
 
 + (instancetype)sharedInstance {
     static JMWebViewManager *sharedMyManager = nil;
@@ -44,22 +47,72 @@
     return sharedMyManager;
 }
 
-- (UIWebView *)webView
+- (UIWebView *)webViewWithParentFrame:(CGRect)frame
 {
-    if (!_webView) {
-        _webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-        _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        _webView.scrollView.bounces = NO;
-        _webView.scalesPageToFit = YES;
-        _webView.dataDetectorTypes = UIDataDetectorTypeNone;
-        _webView.suppressesIncrementalRendering = YES;
-        _webView.scrollView.minimumZoomScale = 1;
-        _webView.scrollView.maximumZoomScale = 2;
-    }
-    return _webView;
+    return [self webViewWithParentFrame:frame asSecondary:NO];
 }
 
-- (UIWebView *)webViewWithParentFrame:(CGRect)frame
+- (UIWebView *)webViewWithParentFrame:(CGRect)frame asSecondary:(BOOL)asSecondary
+{
+    UIWebView *webView;
+    if (asSecondary) {
+        webView = self.secondaryWebView;
+    } else {
+        webView = self.primaryWebView;
+    }
+
+    [self updateFrame:frame forWebView:webView];
+
+    webView.scrollView.minimumZoomScale = 1;
+    webView.scrollView.maximumZoomScale = 2;
+
+    return webView;
+}
+
+- (void)reset
+{
+    self.primaryWebView.delegate = nil;
+    self.primaryWebView = nil;
+
+    [self resetChildWebView];
+}
+
+- (void)resetChildWebView
+{
+    self.secondaryWebView.delegate = nil;
+    self.secondaryWebView = nil;
+}
+
+#pragma mark - Private API
+
+- (UIWebView *)primaryWebView
+{
+    if (!_primaryWebView) {
+        _primaryWebView = [self createWebView];
+    }
+    return _primaryWebView;
+}
+
+- (UIWebView *)secondaryWebView
+{
+    if (!_secondaryWebView) {
+        _secondaryWebView = [self createWebView];
+    }
+    return _secondaryWebView;
+}
+
+- (UIWebView *)createWebView
+{
+    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    webView.scrollView.bounces = NO;
+    webView.scalesPageToFit = YES;
+    webView.dataDetectorTypes = UIDataDetectorTypeNone;
+    webView.suppressesIncrementalRendering = YES;
+    return webView;
+}
+
+- (void)updateFrame:(CGRect)frame forWebView:(UIWebView *)webView
 {
     if (![JMUtils isSystemVersion8]) {
         UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -70,16 +123,11 @@
             webViewFrame = CGRectMake(0, 0, CGRectGetHeight(frame), CGRectGetWidth(frame));
         }
 
-        self.webView.frame = webViewFrame;
+        webView.frame = webViewFrame;
     } else {
-        self.webView.frame = frame;
+        webView.frame = frame;
     }
-    return self.webView;
 }
 
-- (void)reset
-{
-    self.webView = nil;
-}
 
 @end
