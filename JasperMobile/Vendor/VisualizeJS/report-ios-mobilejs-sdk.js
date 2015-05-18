@@ -723,8 +723,6 @@
       };
 
       MobileReport.run = function(options) {
-        js_mobile.log("run with options: " + (JSON.stringify(options)));
-        js_mobile.log("scaler: " + this.scaler);
         return this._instance.run(options);
       };
 
@@ -750,8 +748,7 @@
 
       function MobileReport(args) {
         this.callback = args.callback;
-        this.scaler = ScaleManager.getReportManager();
-        js_mobile.log("scaler: " + this.scaler);
+        this.scaler = ScaleManager.getReportManager;
         this.callback.onScriptLoaded();
       }
 
