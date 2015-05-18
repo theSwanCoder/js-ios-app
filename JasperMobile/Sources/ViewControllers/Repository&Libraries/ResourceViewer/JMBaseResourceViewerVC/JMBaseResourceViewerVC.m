@@ -93,6 +93,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     [self.popoverView animateRotationToNewPoint:point
                                          inView:self.view
                                    withDuration:duration];
+    [self setupNavigationItems];
 }
 
 
@@ -102,33 +103,22 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     // override in children
 }
 
-- (NSString *)backButtonTitle
-{
-    if (!_backButtonTitle) {
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        UIViewController *previousViewController = [viewControllers objectAtIndex:[viewControllers indexOfObject:self] - 1];
-        NSString *backItemTitle = previousViewController.navigationItem.title;
-        _backButtonTitle = backItemTitle;
-    }
-    return _backButtonTitle;
-}
-
-- (NSString *)croppedBackButtonTitleWithControllerTitle:(NSString *)title
+- (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle
 {
     // detect backButton text width to truncate with '...'
     NSDictionary *textAttributes = @{NSFontAttributeName : [JMFont navigationBarTitleFont]};
-    CGSize titleTextSize = [title sizeWithAttributes:textAttributes];
-    CGFloat titleTextWidth = titleTextSize.width;
-    CGSize backItemTextSize = [self.backButtonTitle sizeWithAttributes:textAttributes];
-    CGFloat backItemTextWidth = backItemTextSize.width;
+    CGSize titleTextSize = [self.title sizeWithAttributes:textAttributes];
+    CGFloat titleTextWidth = ceil(titleTextSize.width);
+    CGSize backItemTextSize = [backButtonTitle sizeWithAttributes:textAttributes];
+    CGFloat backItemTextWidth = ceil(backItemTextSize.width);
     CGFloat backItemOffset = 12;
     
     CGFloat viewWidth = CGRectGetWidth(self.view.bounds);
     
-    if ( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) {
-        return JMCustomLocalizedString(@"back.button.title", nil);
+    if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMCustomLocalizedString(@"back.button.title", nil)]) {
+        return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back.button.title", nil)];
     }
-    return self.backButtonTitle;
+    return backButtonTitle;
 }
 
 - (void)setupNavigationItems
@@ -146,9 +136,8 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     }
     self.navigationItem.rightBarButtonItems = [items copy];
     
-    UIBarButtonItem *backItem = [self backButtonWithTitle:[self croppedBackButtonTitleWithControllerTitle:self.title]
-                                                   target:self
-                                                   action:@selector(backButtonTapped:)];
+    UIBarButtonItem *backItem = [self backBarButtonItemWithTarget:self
+                                                           action:@selector(backButtonTapped:)];
     
     self.navigationItem.leftBarButtonItem = backItem;
 }
@@ -293,9 +282,9 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     return availableAction;
 }
 
-- (UIBarButtonItem *)backBarButtonItemWithAction:(SEL)action
+- (UIBarButtonItem *)backBarButtonItemWithTarget:(id)target action:(SEL)action
 {
-    return [self backButtonWithTitle:nil target:self action:action];
+    return [self backButtonWithTitle:nil target:target action:action];
 }
 
 - (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
@@ -305,14 +294,13 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     NSString *backItemTitle = title;
     if (!backItemTitle) {
         NSArray *viewControllers = self.navigationController.viewControllers;
-        NSInteger viewControllersCount = viewControllers.count;
-        UIViewController *previousViewController = viewControllers[viewControllersCount - 2];
+        UIViewController *previousViewController = [viewControllers objectAtIndex:[viewControllers indexOfObject:self] - 1];
         backItemTitle = previousViewController.title;
     }
 
     UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
     UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:[self croppedBackButtonTitleWithControllerTitle:backItemTitle]
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:[self croppedBackButtonTitle:backItemTitle]
                                                                  style:UIBarButtonItemStyleBordered
                                                                 target:target
                                                                 action:action];

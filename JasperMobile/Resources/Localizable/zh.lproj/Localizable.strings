@@ -167,7 +167,8 @@
 "error.noconnection.dialog.title" = "无连接";
 "error.noconnection.dialog.msg" = "请检查您的移动网络设置，然后重试";
 
-"error.authenication.dialog.msg" = "请检查服务器凭据";
+"error.authenication.dialog.title" = "C提供的凭证无效。";
+"error.authenication.dialog.msg" = "无法登录 JasperReports Server。";
 
 "error.unknownhost.dialog.title" = "未知服务器";
 "error.unknownhost.dialog.msg" = "找不到具有指定主机名的服务器";

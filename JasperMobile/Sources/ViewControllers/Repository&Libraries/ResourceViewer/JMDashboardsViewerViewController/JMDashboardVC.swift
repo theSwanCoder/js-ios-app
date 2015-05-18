@@ -97,7 +97,7 @@ extension JMDashboardVC: JMVisualizeDashboardLoaderDelegate {
 
     func loader(dashboardLoader: JMVisualizeDashboardLoader, didStartMaximizeDashlet dashlet: String) {
         var dashboardTitle = currentResourceLookup()?.label
-        let backItem = backButtonWithTitle(dashboardTitle, target: self, action: "minimizeDashlet")
+        let backItem = backBarButtonItemWithTarget(self, action: "minimizeDashlet")
         navigationItem.leftBarButtonItem = backItem
         navigationItem.rightBarButtonItems = nil
         navigationItem.title = dashlet

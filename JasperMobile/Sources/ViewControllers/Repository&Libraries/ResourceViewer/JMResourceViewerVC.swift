@@ -57,7 +57,7 @@ class JMResourceViewerVC: JMBaseResourceViewerVC {
 
 
     func setupBackButton() {
-        let backButton = backButtonWithTitle(nil, target: self, action: "backButtonAction")
+        let backButton = backBarButtonItemWithTarget(self, action: "backButtonAction")
         navigationItem.leftBarButtonItem = backButton
     }
 

@@ -166,7 +166,8 @@
 "error.noconnection.dialog.title" = "Keine Verbindung";
 "error.noconnection.dialog.msg" = "Prüfen Sie die Einstellungen Ihres mobilen Netzwerks, und versuchen Sie es erneut.";
 
-"error.authenication.dialog.msg" = "Prüfen Sie die Anmeldeinformationen für den Server.";
+"error.authenication.dialog.title" = "Ungültige Anmeldedaten eingegeben.";
+"error.authenication.dialog.msg" = "Anmeldung bei JasperReports Server nicht möglich.";
 
 "error.unknownhost.dialog.title" = "Unbekannter Server";
 "error.unknownhost.dialog.msg" = "Es wurde kein Server mit dem angegebenen Hostnamen gefunden.";

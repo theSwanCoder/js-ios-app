@@ -165,7 +165,8 @@
 "error.noconnection.dialog.title" = "Aucune connexion";
 "error.noconnection.dialog.msg" = "Veuillez vérifier les paramètres de votre réseau mobile et réessayer.";
 
-"error.authenication.dialog.msg" = "Veuillez vérifier les informations d'identification du serveur.";
+"error.authenication.dialog.title" = "Données d'identification fournies non valides.";
+"error.authenication.dialog.msg" = "Impossible de se connecter à JasperReports Server.";
 
 "error.unknownhost.dialog.title" = "Serveur inconnu";
 "error.unknownhost.dialog.msg" = "Impossible de trouver un serveur portant ce nom d'hôte.";

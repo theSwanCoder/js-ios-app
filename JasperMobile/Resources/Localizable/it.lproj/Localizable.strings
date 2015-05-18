@@ -166,7 +166,8 @@
 "error.noconnection.dialog.title" = "Nessuna connessione";
 "error.noconnection.dialog.msg" = "Verificare le impostazioni della rete mobile e riprovare";
 
-"error.authenication.dialog.msg" = "Verificare le credenziali del server";
+"error.authenication.dialog.title" = "Sono state fornite credenziali non valide.";
+"error.authenication.dialog.msg" = "Impossibile accedere a JasperReports Server.";
 
 "error.unknownhost.dialog.title" = "Server sconosciuto";
 "error.unknownhost.dialog.msg" = "Impossibile trovare un server con il nome host specificato";

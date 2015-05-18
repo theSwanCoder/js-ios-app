@@ -77,7 +77,7 @@
  @param name New name for checking
  @return YES if name is valid
  */
-+ (BOOL) isValidNameForServerProfile:(NSString *)name;
+- (BOOL) isValidNameForServerProfile:(NSString *)name;
 
 /**
  Check if jasperserver exist and it version is supported by application.

@@ -81,7 +81,7 @@
     NSString *serverName = nil;
     do {
         serverName = (cloneNumber++ > 0) ? [serverProfile.alias stringByAppendingFormat:@" %zd", cloneNumber] : serverProfile.alias;
-    } while ([self isValidNameForServerProfile:serverName]);
+    } while (![newServerProfile isValidNameForServerProfile:serverName]);
     
     newServerProfile.alias          = serverName;
     newServerProfile.askPassword    = serverProfile.askPassword;
@@ -102,15 +102,16 @@
     [serverProfile.managedObjectContext save:nil];
 }
 
-+ (BOOL) isValidNameForServerProfile:(NSString *)name
+- (BOOL) isValidNameForServerProfile:(NSString *)name
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
     NSMutableArray *predicates = [NSMutableArray array];
     [predicates addObject:[NSPredicate predicateWithFormat:@"self != %@", [JMServerProfile demoServerProfile]]];
+    [predicates addObject:[NSPredicate predicateWithFormat:@"self != %@", self]];
     [predicates addObject:[NSPredicate predicateWithFormat:@"alias == %@", name]];
     fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
     JMServerProfile *profile = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
-    return !!profile;
+    return !profile;
 }
 
 - (void) checkServerProfileWithCompletionBlock:(void(^)(NSError *error))completionBlock

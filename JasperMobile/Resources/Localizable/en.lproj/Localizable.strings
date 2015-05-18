@@ -201,8 +201,8 @@
 "error.noconnection.dialog.title" = "No Connection";
 "error.noconnection.dialog.msg" = "Check your network settings (mobile data or wifi) and try again.";
 
-"error.authenication.dialog.title" = "Invalid Credentials";
-"error.authenication.dialog.msg" = "The username or password is incorrect. Re-enter your credentials.";
+"error.authenication.dialog.title" = "Invalid credentials supplied.";
+"error.authenication.dialog.msg" = "Could not login to JasperReports Server.";
 
 "error.unknownhost.dialog.title" = "Unknown server";
 "error.unknownhost.dialog.msg" = "The specified hostname could not be found.";

@@ -165,7 +165,8 @@
 "error.noconnection.dialog.title" = "接続がありません";
 "error.noconnection.dialog.msg" = "モバイルネットワーク設定を確認の上、もう一度お試しください";
 
-"error.authenication.dialog.msg" = "サーバー資格情報を確認してください";
+"error.authenication.dialog.title" = "無効な認証情報が入力されました。";
+"error.authenication.dialog.msg" = "JasperReports Server にログインできませんでした。";
 
 "error.unknownhost.dialog.title" = "不明なサーバー";
 "error.unknownhost.dialog.msg" = "指定されたホスト名を持つサーバーが見つかりませんでした";

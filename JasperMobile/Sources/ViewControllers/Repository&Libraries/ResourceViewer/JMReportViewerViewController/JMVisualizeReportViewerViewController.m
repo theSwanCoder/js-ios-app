@@ -64,7 +64,7 @@
 {
     if (self.isChildReport) {
         self.navigationItem.rightBarButtonItem = [self infoPageBarButtonItem];
-        self.navigationItem.leftBarButtonItem = [self backBarButtonItemWithAction:@selector(closeChildReport)];
+        self.navigationItem.leftBarButtonItem = [self backBarButtonItemWithTarget:self action:@selector(closeChildReport)];
     } else {
         [super setupNavigationItems];
     }

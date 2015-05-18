@@ -70,10 +70,8 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 
 // UIBarButtonItem helpers
 - (UIBarButtonItem *)infoPageBarButtonItem;
-- (UIBarButtonItem *)backBarButtonItemWithAction:(SEL)action;
-- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
-                                  target:(id)target
-                                  action:(SEL)action;
+- (UIBarButtonItem *)backBarButtonItemWithTarget:(id)target
+                                          action:(SEL)action;
 
 - (void) backButtonTapped:(id)sender;
 @end
