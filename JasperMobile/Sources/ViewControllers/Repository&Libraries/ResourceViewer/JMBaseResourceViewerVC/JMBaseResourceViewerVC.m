@@ -123,7 +123,20 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)setupNavigationItems
 {
-    // Right bar button items
+    [self setupRightBarButtonItems];
+    [self setupLeftBarButtonItems];
+}
+
+- (void)setupLeftBarButtonItems
+{
+    UIBarButtonItem *backItem = [self backBarButtonItemWithTarget:self
+                                                           action:@selector(backButtonTapped:)];
+
+    self.navigationItem.leftBarButtonItem = backItem;
+}
+
+- (void)setupRightBarButtonItems
+{
     NSMutableArray *items = [NSMutableArray array];
     UIBarButtonItem *actionBarButtonItem = [self actionBarButtonItem];
     if (actionBarButtonItem) {
@@ -135,11 +148,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
         [items addObject:favoriteBarButtonItem];
     }
     self.navigationItem.rightBarButtonItems = [items copy];
-    
-    UIBarButtonItem *backItem = [self backBarButtonItemWithTarget:self
-                                                           action:@selector(backButtonTapped:)];
-    
-    self.navigationItem.leftBarButtonItem = backItem;
 }
 
 - (void)resetSubViews
