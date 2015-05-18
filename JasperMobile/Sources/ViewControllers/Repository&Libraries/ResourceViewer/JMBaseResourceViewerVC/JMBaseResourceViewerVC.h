@@ -49,7 +49,8 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 
 // setup
 - (void)setupSubviews;
-- (void)setupNavigationItems NS_REQUIRES_SUPER;
+- (void)setupLeftBarButtonItems NS_REQUIRES_SUPER;
+- (void)setupRightBarButtonItems NS_REQUIRES_SUPER;
 - (void)resetSubViews;
 
 
