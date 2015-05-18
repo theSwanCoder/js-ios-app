@@ -60,13 +60,12 @@
 }
 
 #pragma mark - Setups
-- (void)setupNavigationItems
+- (void)setupLeftBarButtonItems
 {
     if (self.isChildReport) {
-        self.navigationItem.rightBarButtonItem = [self infoPageBarButtonItem];
         self.navigationItem.leftBarButtonItem = [self backBarButtonItemWithAction:@selector(closeChildReport)];
     } else {
-        [super setupNavigationItems];
+        [super setupLeftBarButtonItems];
     }
 }
 
@@ -228,5 +227,15 @@
     [self.webView stopLoading];
     [[JMVisualizeWebViewManager sharedInstance] reset];
 }
+
+//#pragma mark - Helpers
+//- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+//{
+//    JMMenuActionsViewAction availableAction = [super availableActionForResource:resource] | self.menuActionsViewAction;
+//    if (self.report.isReportWithInputControls) {
+//        availableAction |= JMMenuActionsViewAction_Edit;
+//    }
+//    return availableAction;
+//}
 
 @end
