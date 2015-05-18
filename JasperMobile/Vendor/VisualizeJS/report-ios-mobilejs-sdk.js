@@ -748,7 +748,7 @@
 
       function MobileReport(args) {
         this.callback = args.callback;
-        this.scaler = ScaleManager.getReportManager;
+        this.scaler = ScaleManager.getReportManager();
         this.callback.onScriptLoaded();
       }
 

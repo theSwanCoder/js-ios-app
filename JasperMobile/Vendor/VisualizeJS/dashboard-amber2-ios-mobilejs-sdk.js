@@ -673,7 +673,7 @@
 
       function MobileDashboard(args) {
         this.callback = args.callback;
-        this.scaler = ScaleManager.getDashboardManager;
+        this.scaler = ScaleManager.getDashboardManager();
         this.callback.onScriptLoaded();
       }
 
