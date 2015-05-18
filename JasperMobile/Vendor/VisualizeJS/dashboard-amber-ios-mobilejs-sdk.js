@@ -48,7 +48,7 @@
         if (this.queue.length === 0) {
           return this._removeInterval();
         } else {
-          return this.queue.pop().call(this);
+          return this.queue.shift().call(this);
         }
       };
 

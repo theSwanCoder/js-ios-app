@@ -48,7 +48,7 @@
         if (this.queue.length === 0) {
           return this._removeInterval();
         } else {
-          return this.queue.pop().call(this);
+          return this.queue.shift().call(this);
         }
       };
 
@@ -300,6 +300,7 @@
         this.callback = callback;
         this.scaler = scaler;
         this._clickCallback = bind(this._clickCallback, this);
+        this._processErrors = bind(this._processErrors, this);
         this._processSuccess = bind(this._processSuccess, this);
         this._executeDashboard = bind(this._executeDashboard, this);
         this.uri = params.uri, this.session = params.session;
@@ -351,6 +352,7 @@
         if (this.session != null) {
           return visualize(this.session.authOptions(), this._executeDashboard, this._processErrors);
         } else {
+          js_mobile.log("Without session");
           return visualize(this._executeDashboard, this._processErrors);
         }
       };
@@ -633,7 +635,7 @@
       };
 
       MobileDashboard.prototype._configure = function(configs) {
-        return this.scaler = ScaleManager.getDashboardManager(options.diagonal);
+        return this.scaler = ScaleManager.getDashboardManager(configs.diagonal);
       };
 
       MobileDashboard.run = function(params) {
@@ -643,7 +645,7 @@
       MobileDashboard.prototype._legacyRun = function(params) {
         var scaler;
         params.session = this.session;
-        scaler = ScaleManager.getDashboardManager(options.diagonal);
+        scaler = ScaleManager.getDashboardManager(params.diagonal);
         this._controller = new DashboardController(this.callback, scaler, params);
         return this._controller.runDashboard();
       };
