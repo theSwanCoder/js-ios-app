@@ -110,7 +110,7 @@
     [predicates addObject:[NSPredicate predicateWithFormat:@"alias == %@", name]];
     fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
     JMServerProfile *profile = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
-    return !!profile;
+    return (profile == nil);
 }
 
 - (void) checkServerProfileWithCompletionBlock:(void(^)(NSError *error))completionBlock
