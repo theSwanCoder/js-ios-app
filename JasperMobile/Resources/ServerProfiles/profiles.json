@@ -100,6 +100,16 @@
                   "mAlias" : "New Mobile Demo",
                   "mServerUrl" : "http://mobiledemo2.jaspersoft.com/jasperserver-pro/",
                   "mOrganization" : ""
+                  },
+                  {
+                  "mAlias" : "New Trunk",
+                  "mServerUrl" : "http://172.17.10.146:8080/jasperserver-pro-trunk",
+                  "mOrganization" : ""
+                  },
+                  {
+                  "mAlias" : "Office Trunk",
+                  "mServerUrl" : "http://192.168.88.55:8080/jasperserver-pro-trunk/",
+                  "mOrganization" : ""
                   }
                   ]
 }
