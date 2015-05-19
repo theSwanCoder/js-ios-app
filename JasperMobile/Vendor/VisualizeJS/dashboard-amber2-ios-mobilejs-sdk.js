@@ -420,7 +420,7 @@
         js_mobile.log("Apply click events");
         dashboardId = this.v.dashboard.componentIdDomAttribute;
         self = this;
-        return $(this.container).find("[" + dashboardId + "]").on('click', function() {
+        return $(this.container).find("[" + dashboardId + "] > .dashlet").parent().on('click', function() {
           var component, id;
           $('.show_chartTypeSelector_wrapper').show();
           id = $(this).attr(dashboardId);
