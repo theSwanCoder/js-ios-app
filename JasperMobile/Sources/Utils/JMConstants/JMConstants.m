@@ -30,6 +30,7 @@
 
 // Constants for NSUserDefaults
 NSString * const kJMDefaultsCurrentVersion = @"jaspersoft.mobile.current.version";
+NSString * const kJMDefaultsIntroDidApear = @"JMDefaultsIntroDidApear";
 
 // Notifications
 NSString * const kJMLoginDidSuccessNotification = @"JMLoginDidSuccessNotification";

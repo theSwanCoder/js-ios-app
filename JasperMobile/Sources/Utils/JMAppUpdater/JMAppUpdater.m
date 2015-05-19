@@ -48,12 +48,15 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
 + (void)update
 {
-    if ([[JMCoreDataManager sharedInstance] isMigrationNeeded]) {
-        [[JMCoreDataManager sharedInstance] migrate:nil];
-    }
     NSNumber *latestAppVersion = [self latestAppVersion];
     NSNumber *currentAppVersion = [self currentAppVersion];
     if (currentAppVersion != nil && [currentAppVersion compare:latestAppVersion] == NSOrderedSame) return;
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMDefaultsIntroDidApear];
+
+    if ([[JMCoreDataManager sharedInstance] isMigrationNeeded]) {
+        [[JMCoreDataManager sharedInstance] migrate:nil];
+    }
     
     NSMutableDictionary *versionsToUpdate = [NSMutableDictionary dictionary];
     

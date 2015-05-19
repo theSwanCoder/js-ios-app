@@ -38,11 +38,6 @@
 
 static NSString * const kGAITrackingID = @"UA-57445224-1";
 
-@interface JasperMobileAppDelegate()
-@property (nonatomic, assign) BOOL shouldDisplayOnboardingIntro;
-
-@end
-
 @implementation JasperMobileAppDelegate
 
 @synthesize window = _window;
@@ -52,7 +47,6 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
 - (id)init
 {
     if (self = [super init]) {
-        self.shouldDisplayOnboardingIntro = [JMAppUpdater isRunningForTheFirstTime] || ([[JMAppUpdater latestAppVersion] compare:[JMAppUpdater currentAppVersion]] != NSOrderedSame);
         if ([JMAppUpdater isRunningForTheFirstTime]) {
             [self coreDataInit];
         } else {
@@ -104,7 +98,7 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
         [Appirater setDebug:NO];
         [Appirater appLaunched:YES];
         
-        [self showOnboardIntro];
+        [self showOnboardIntroIfNeeded];
     };
     
     if ([[JMSessionManager sharedManager] restoreLastSession]) {
@@ -157,15 +151,12 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
     [self coreDataInit];
 }
 
-- (void)showOnboardIntro
+- (void)showOnboardIntroIfNeeded
 {
-    if (self.shouldDisplayOnboardingIntro) {
+    BOOL shouldDisplayIntro = ![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultsIntroDidApear];
+    if (shouldDisplayIntro) {
         SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
         JMOnboardIntroViewController *introViewController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
-        introViewController.completion = @weakself(^){
-            // flag should be set only after intro was shown
-            self.shouldDisplayOnboardingIntro = NO;
-        }@weakselfend;
         [revealViewController presentViewController:introViewController animated:YES completion:nil];
     }
 }

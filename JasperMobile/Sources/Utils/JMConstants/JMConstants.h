@@ -38,6 +38,7 @@
 
 // Constants for NSUserDefaults
 extern NSString * const kJMDefaultsCurrentVersion;
+extern NSString * const kJMDefaultsIntroDidApear;
 
 // Notifications
 extern NSString * const kJMLoginDidSuccessNotification;
@@ -88,7 +89,7 @@ extern NSString * const kJMReportLoaderErrorDomain;
 // Privacy Policy Link
 extern NSString * const kJMPrivacyPolicyURI;
 
-#define kJMResourceLimit                                15
+#define kJMResourceLimit                                100
 #define kJMMasterViewWidth                              [JMUtils isIphone] ? 210.f : 240.f
 #define kJMMasterViewAnimationDuration                  0.2f
 
