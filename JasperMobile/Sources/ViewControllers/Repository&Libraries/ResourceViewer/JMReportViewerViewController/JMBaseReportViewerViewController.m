@@ -339,6 +339,7 @@
 {
     self.emptyReportMessageLabel.hidden = NO;
     self.menuActionsViewAction = JMMenuActionsViewAction_None;
+    [self.navigationController setToolbarHidden:YES animated:YES];
 }
 
 - (void)hideEmptyReportMessage
