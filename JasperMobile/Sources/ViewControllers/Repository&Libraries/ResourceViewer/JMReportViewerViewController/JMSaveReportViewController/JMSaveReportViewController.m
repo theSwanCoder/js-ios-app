@@ -320,6 +320,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         }];
 
         void(^errorBlock)(NSError *) = @weakself(^(NSError *error)) {
+            [JMCancelRequestPopup dismiss];
             [self.restClient cancelAllRequests];
             [[JMFileManager sharedInstance] cancelDownloadReportWithName:self.reportName
                                                            fileExtension:self.selectedReportFormat];
@@ -331,30 +332,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                 }
             } else {
                 [JMUtils showAlertViewWithError:error];
-            }
-        }@weakselfend;
-
-        void(^completionBlock)(BOOL, NSError *) = @weakself(^(BOOL success, NSError *error)) {
-            [JMCancelRequestPopup dismiss];
-            if (success) {
-                [JMSavedResources addReport:self.report.resourceLookup
-                                   withName:self.reportName
-                                     format:self.selectedReportFormat];
-                // Save thumbnail image
-                [[JMFileManager sharedInstance] downloadThumbnailForReportWithName:self.reportName
-                                                                     fileExtension:self.selectedReportFormat
-                                                                 resourceURLString:[self.report.resourceLookup thumbnailImageUrlString]];
-
-                // Animation
-                [CATransaction begin];
-                [CATransaction setCompletionBlock:^{
-                    [self.delegate reportDidSavedSuccessfully];
-                }];
-
-                [self.navigationController popViewControllerAnimated:YES];
-                [CATransaction commit];
-            } else {
-                errorBlock(error);
             }
         }@weakselfend;
 
@@ -380,13 +357,37 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                             for (JSReportOutputResource *attachment in export.attachments) {
                                 [attachmentNames addObject:attachment.fileName];
                             }
-
+                            
+                            [JMUtils showNetworkActivityIndicator];
                             [[JMFileManager sharedInstance] downloadReportWithName:self.reportName
                                                                      fileExtension:self.selectedReportFormat
                                                                          requestId:response.requestId
                                                                           exportId:export.uuid
                                                                    attachmentNames:[attachmentNames copy]
-                                                                        completion:completionBlock];
+                                                                        completion:@weakself(^(BOOL success, NSError *error)) {
+                                                                            [JMCancelRequestPopup dismiss];
+                                                                            
+                                                                            if (success) {
+                                                                                [JMSavedResources addReport:self.report.resourceLookup
+                                                                                                   withName:self.reportName
+                                                                                                     format:self.selectedReportFormat];
+                                                                                // Save thumbnail image
+                                                                                [[JMFileManager sharedInstance] downloadThumbnailForReportWithName:self.reportName
+                                                                                                                                     fileExtension:self.selectedReportFormat
+                                                                                                                                 resourceURLString:[self.report.resourceLookup thumbnailImageUrlString]];
+                                                                                
+                                                                                // Animation
+                                                                                [CATransaction begin];
+                                                                                [CATransaction setCompletionBlock:^{
+                                                                                    [self.delegate reportDidSavedSuccessfully];
+                                                                                }];
+                                                                                
+                                                                                [self.navigationController popViewControllerAnimated:YES];
+                                                                                [CATransaction commit];
+                                                                            } else {
+                                                                                errorBlock(error);
+                                                                            }
+                                                                        }@weakselfend];
                         }
                     }@weakselfend];
     }

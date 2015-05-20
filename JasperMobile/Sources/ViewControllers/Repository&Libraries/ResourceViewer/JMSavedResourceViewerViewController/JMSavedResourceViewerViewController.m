@@ -129,6 +129,7 @@
                 [self.savedReports renameReportTo:newName];
                 self.title = newName;
         } else if (alertView.tag == JMMenuActionsViewAction_Delete) {
+            [self cancelResourceViewingAndExit];
             [self.savedReports removeReport];
             [self.navigationController popViewControllerAnimated:YES];
         }
