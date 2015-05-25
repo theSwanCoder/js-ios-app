@@ -98,11 +98,11 @@
 // Resources
 "master.base.resources.title" = "Durchsuchen";
 
-"resources.title" = "Objekttyp";
-"resources.type.all" = "Alle";
-"resources.type.reportUnit" = "Berichte";
-"resources.type.dashboard" = "Dashboards";
-"resources.type.folder" = "Folders";
+"resources.filterby.title" = "Objekttyp";
+"resources.filterby.type.all" = "Alle";
+"resources.filterby.type.reportUnit" = "Berichte";
+"resources.filterby.type.dashboard" = "Dashboards";
+"resources.filterby.type.folder" = "Folders";
 
 // Sort by
 "resources.sortby.title" = "Sortierungsoptionen";

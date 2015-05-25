@@ -60,6 +60,8 @@
     switch (self.resourceType) {
         case JMResourceTypeLibrary:
             return @"JMLibraryNavigationViewController";
+        case JMResourceTypeRecentViews:
+            return @"JMRecentViewsNavigationViewController";
         case JMResourceTypeSavedItems:
             return @"JMSavedItemsNavigationViewController";
         case JMResourceTypeFavorites:
@@ -80,6 +82,8 @@
     switch (self.resourceType) {
         case JMResourceTypeLibrary:
             return JMCustomLocalizedString(@"menuitem.library.label", nil);
+        case JMResourceTypeRecentViews:
+            return JMCustomLocalizedString(@"menuitem.recentviews.label", nil);
         case JMResourceTypeSavedItems:
             return JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
         case JMResourceTypeFavorites:
@@ -102,6 +106,8 @@
     switch (self.resourceType) {
         case JMResourceTypeLibrary:
             return [UIImage imageNamed:@"ic_library"];
+        case JMResourceTypeRecentViews:
+            return [UIImage imageNamed:@"ic_recent_views"];
         case JMResourceTypeRepository:
             return [UIImage imageNamed:@"ic_repository"];
         case JMResourceTypeSavedItems:
@@ -120,6 +126,8 @@
     switch (self.resourceType) {
         case JMResourceTypeLibrary:
             return [UIImage imageNamed:@"ic_library_selected"];
+        case JMResourceTypeRecentViews:
+            return [UIImage imageNamed:@"ic_recent_views_selected"];
         case JMResourceTypeRepository:
             return [UIImage imageNamed:@"ic_repository_selected"];
         case JMResourceTypeSavedItems:

@@ -36,6 +36,7 @@
 
 @interface JMServerOptionsViewController () <UITableViewDataSource, UITableViewDelegate, JMServerOptionCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (nonatomic, strong) JMServerOptions *serverOptions;
 @property (nonatomic, strong) JSRESTBase *restBase;
 @end
@@ -55,8 +56,7 @@
         self.title = JMCustomLocalizedString(@"servers.title.new", nil);
     }
 
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(saveButtonTapped:)];
-    self.navigationItem.rightBarButtonItem = saveButton;
+    [self.saveButton setTitle:JMCustomLocalizedString(@"dialog.button.save", nil) forState:UIControlStateNormal];
     
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.tableView.layer.cornerRadius = 4;
@@ -126,7 +126,7 @@
 }
 #pragma mark - Actions
 
-- (void)saveButtonTapped:(id)sender
+- (IBAction)saveButtonTapped:(id)sender
 {
     [self.view endEditing:YES];
     if ([self.serverOptions isValidData]) {

@@ -153,22 +153,23 @@
 #pragma mark - JMRefreshable
 - (void)refresh
 {
-    if (self.reportLoader.isReportInLoadingProcess) {
-        [self hideEmptyReportMessage];
-        [self.report restoreDefaultState];
-        [self updateToobarAppearence];
-        // session
-        [self.reportLoader refreshReportWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+    [self.report restoreDefaultState];
+    [self updateToobarAppearence];
+    [self runReportWithPage:1];
+}
+
+- (void)refreshReport
+{
+    [self hideEmptyReportMessage];
+    [self.reportLoader refreshReportWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             [self stopShowLoader];
             if (success) {
                 // succcess action
+                [self updateToobarAppearence];
             } else {
                 [self handleError:error];
             }
-        }@weakselfend];
-    } else {
-        [super refresh];
-    }
+    }@weakselfend];
 }
 
 - (void)handleError:(NSError *)error

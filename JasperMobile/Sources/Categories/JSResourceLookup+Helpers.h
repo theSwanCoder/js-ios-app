@@ -26,4 +26,6 @@
 
 - (NSString *)thumbnailImageUrlString;
 
+- (NSString *)localizedResourceType;
+
 @end

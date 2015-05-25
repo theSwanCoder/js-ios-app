@@ -25,6 +25,8 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JMSessionManager.h"
+#import "JMRecentViews+Helpers.h"
+
 
 NSString * const kJMSavedResources = @"SavedResources";
 NSString * const kJMSavedResourceFileExtensionPDF = @"pdf";
@@ -53,6 +55,7 @@ NSString * const kJMSavedResourceFileExtensionHTML = @"html";
         savedReport.format = format;
         savedReport.username = sessionServerProfile.username;
         savedReport.wsType = [self wsTypeWithSourceWSType:resource.resourceType];
+        savedReport.version = resource.version;
         [activeServerProfile addSavedResourcesObject:savedReport];
     }
     savedReport.creationDate = [NSDate date];
@@ -70,6 +73,13 @@ NSString * const kJMSavedResourceFileExtensionHTML = @"html";
         [self.managedObjectContext deleteObject:favorites];
         [self.managedObjectContext save:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
+    }
+    
+    JMRecentViews *recentView = [JMRecentViews recentViewsForResourceLookup:[self wrapperFromSavedReports]];
+    if (recentView) {
+        [self.managedObjectContext deleteObject:recentView];
+        [self.managedObjectContext save:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMRecentViewsDidChangedNotification object:nil];
     }
     [self.managedObjectContext deleteObject:self];
     [self.managedObjectContext save:nil];
@@ -98,10 +108,14 @@ NSString * const kJMSavedResourceFileExtensionHTML = @"html";
     return (!savedReport);
 }
 
-- (void)renameReportTo:(NSString *)newName
+- (BOOL)renameReportTo:(NSString *)newName
 {
     NSString *currentPath = [JMSavedResources pathToReportDirectoryWithName:self.label format:self.format];
     NSString *newPath = [JMSavedResources pathToReportDirectoryWithName:newName format:self.format];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:newPath isDirectory:nil]) {
+        [[NSFileManager defaultManager] removeItemAtPath:newPath error:nil];
+    }
     
     NSError *error = nil;
     [[NSFileManager defaultManager] moveItemAtPath:currentPath toPath:newPath error:&error];
@@ -113,11 +127,22 @@ NSString * const kJMSavedResourceFileExtensionHTML = @"html";
             [self.managedObjectContext save:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
         }
+
+        JMRecentViews *recentView = [JMRecentViews recentViewsForResourceLookup:[self wrapperFromSavedReports]];
+        if (recentView) {
+            recentView.label = newName;
+            recentView.uri = [JMSavedResources uriForSavedReportWithName:newName format:self.format];
+            [self.managedObjectContext save:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kJMRecentViewsDidChangedNotification object:nil];
+        }
         
         self.label = newName;
         self.uri = [JMSavedResources uriForSavedReportWithName:newName format:self.format];
         [self.managedObjectContext save:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
+        return YES;
+    } else {
+        return NO;
     }
 }
 
@@ -129,6 +154,7 @@ NSString * const kJMSavedResourceFileExtensionHTML = @"html";
     resource.resourceType = self.wsType;
     resource.creationDate = self.creationDate;
     resource.resourceDescription = self.resourceDescription;
+    resource.version = self.version;
     return resource;
 }
 

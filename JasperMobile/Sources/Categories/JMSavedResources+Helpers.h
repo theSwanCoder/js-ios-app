@@ -49,7 +49,7 @@ extern NSString * const kJMSavedResourceFileExtensionHTML;
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat;
 
 // Rename saved resource
-- (void)renameReportTo:(NSString *)newName;
+- (BOOL)renameReportTo:(NSString *)newName;
 
 // Removes saved resource
 - (void)removeReport;

@@ -49,7 +49,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 
-- (void)setup;
+- (void)setupWithNoResultText:(NSString *)noResult;
 - (NSString *)loadingCellForRepresentationType:(JMResourcesRepresentationType)type;
 - (NSString *)resourceCellForRepresentationType:(JMResourcesRepresentationType)type;
 - (void)showLoadingView;

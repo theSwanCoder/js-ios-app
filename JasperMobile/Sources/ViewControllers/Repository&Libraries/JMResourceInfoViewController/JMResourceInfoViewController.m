@@ -24,6 +24,7 @@
 #import "JMResourceInfoViewController.h"
 #import "JMFavorites+Helpers.h"
 #import "UITableViewCell+Additions.h"
+#import "JSResourceLookup+Helpers.h"
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
@@ -101,7 +102,7 @@ static NSString * const kJMValueKey = @"value";
 
                                 @{
                                     kJMTitleKey : @"type",
-                                    kJMValueKey : self.resourceLookup.resourceType ?: @""
+                                    kJMValueKey : [self.resourceLookup localizedResourceType] ?: @""
                                     },
                                 @{
                                     kJMTitleKey : @"version",

@@ -36,12 +36,13 @@
 
 #pragma mark -LifeCycle
 
--(void)awakeFromNib
+-(void)viewDidLoad
 {
-    [super awakeFromNib];
-    
-    self.resourceListLoader = [NSClassFromString(@"JMSavedResourcesListLoader") new];
+    [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
+    
+    JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
+    [baseCollectionView setupWithNoResultText:JMCustomLocalizedString(@"resources.noresults.saveditems.msg", nil)];
 }
 
 #pragma mark - Overloaded methods
@@ -50,6 +51,11 @@
     NSString * keyString = @"RepresentationTypeKey";
     keyString = [@"SavedItems" stringByAppendingString:keyString];
     return keyString;
+}
+
+- (Class)resourceLoaderClass
+{
+    return NSClassFromString(@"JMSavedResourcesListLoader");
 }
 
 @end

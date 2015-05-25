@@ -37,7 +37,7 @@
 @interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *settingsTitleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *privacyPolicyButton;
 
 @property (nonatomic, strong) JMSettings *detailSettings;
@@ -50,14 +50,14 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
-    self.settingsTitleLabel.textColor = kJMDetailViewLightTextColor;
     self.tableView.layer.cornerRadius = 4;
     
     [self.privacyPolicyButton setTitle:JMCustomLocalizedString(@"settings.privacy.policy.title", nil) forState:UIControlStateNormal];
     
+    [self.saveButton setTitle:JMCustomLocalizedString(@"dialog.button.save", nil) forState:UIControlStateNormal];
+    
     UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(applicationInfo:)];
-    UIBarButtonItem *applyItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"apply_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(saveButtonTapped:)];
-    self.navigationItem.rightBarButtonItems = @[applyItem, infoItem];
+    self.navigationItem.rightBarButtonItem = infoItem;
     //self.navigationItem.rightBarButtonItems = @[infoItem];
     
     [self setupMenu];

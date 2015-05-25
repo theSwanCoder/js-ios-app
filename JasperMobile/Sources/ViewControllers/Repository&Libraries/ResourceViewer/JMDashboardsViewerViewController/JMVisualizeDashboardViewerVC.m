@@ -57,7 +57,7 @@
 {
     self.navigationItem.leftBarButtonItem = self.leftButtonItem;
     self.navigationItem.rightBarButtonItems = self.rightButtonItems;
-    self.navigationItem.title = [self currentResourceLookup].label;
+    self.navigationItem.title = [self resourceLookup].label;
     [self.visualizeClient minimizeDashlet];
 }
 
@@ -119,8 +119,10 @@
 {
     [self.webView.scrollView setZoomScale:0.1 animated:YES];
     self.navigationItem.rightBarButtonItems = nil;
+
     self.leftButtonItem = self.navigationItem.leftBarButtonItem;
-    self.navigationItem.leftBarButtonItem = [self backBarButtonItemWithTarget:self action:@selector(minimizeDashboard)];
+    self.navigationItem.leftBarButtonItem = [self backBarButtonItemWithTarget:self
+                                                                       action:@selector(minimizeDashboard)];
     self.navigationItem.title = title;
 }
 

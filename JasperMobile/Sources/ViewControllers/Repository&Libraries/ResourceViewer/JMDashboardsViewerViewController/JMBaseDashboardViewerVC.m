@@ -43,7 +43,7 @@
 }
 
 #pragma mark - Overriden methods
-- (JSResourceLookup *)currentResourceLookup
+- (JSResourceLookup *)resourceLookup
 {
     return self.dashboard.resourceLookup;
 }

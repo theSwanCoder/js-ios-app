@@ -97,11 +97,11 @@
 // Resources
 "master.base.resources.title" = "参照";
 
-"resources.title" = "オブジェクトタイプ";
-"resources.type.all" = "すべて";
-"resources.type.reportUnit" = "レポート";
-"resources.type.dashboard" = "ダッシュボード";
-"resources.type.folder" = "フォルダの";
+"resources.filterby.title" = "オブジェクトタイプ";
+"resources.filterby.type.all" = "すべて";
+"resources.filterby.type.reportUnit" = "レポート";
+"resources.filterby.type.dashboard" = "ダッシュボード";
+"resources.filterby.type.folder" = "フォルダの";
 
 // Sort by
 "resources.sortby.title" = "ソート オプション";

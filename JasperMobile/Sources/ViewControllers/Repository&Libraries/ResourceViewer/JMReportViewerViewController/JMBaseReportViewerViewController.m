@@ -85,12 +85,6 @@
     }
 }
 
-#pragma mark - Custom Accessors
-- (JSResourceLookup *)currentResourceLookup
-{
-    return self.report.resourceLookup;
-}
-
 #pragma mark - Setups
 - (void)updateToobarAppearence
 {
@@ -144,6 +138,14 @@
     [super cancelResourceViewingAndExit];
 }
 
+- (void)refreshReport
+{
+    [self resetSubViews];
+    [self updateToobarAppearence];
+    //
+    [self runReportWithPage:1];
+}
+
 #pragma mark - Overloaded methods
 - (void) startResourceViewing
 {
@@ -157,34 +159,48 @@
     BOOL isReportAlreadyLoaded = self.report.isReportAlreadyLoaded;
     BOOL isInputControlsLoaded = self.report.isInputControlsLoaded;
     BOOL isReportInLoadingProcess = self.reportLoader.isReportInLoadingProcess;
-
+    
     if (!isInputControlsLoaded) {
         // start load input controls
-
+        
         [self startShowLoaderWithMessage:@"status.loading.ic" cancelBlock:@weakself(^(void)) {
             [self.restClient cancelAllRequests];
             [self.reportLoader cancelReport];
             [self cancelResourceViewingAndExit];
         }@weakselfend];
-
+        
         NSString *reportURI = [self.report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [self loadInputControlsWithReportURI:reportURI
                                   completion:@weakself(^(NSArray *inputControls, NSError* error)) {
-
-            [self stopShowLoader];
-
-            if (inputControls && !error) {
-                [self.report updateInputControls:inputControls];
-                [self showReportOptionsViewControllerWithBackButton:YES];
-            } else if (error) {
-                [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                    [self cancelResourceViewingAndExit];
-                }];
-            } else {
-                [self runReportWithPage:page];
-            }
-        }@weakselfend];
-
+                                      [self stopShowLoader];
+                                      if (error) {
+                                          [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                              [self cancelResourceViewingAndExit];
+                                          }];
+                                      } else {
+                                          [self.report updateInputControls:inputControls];
+                                          if (inputControls && [inputControls count]) {
+                                              [self.restClient resourceLookupForURI:reportURI resourceType:@"reportUnit"
+                                                                          modeClass:[JSResourceReportUnit class]
+                                                                    completionBlock:@weakself(^(JSOperationResult *result)) {
+                                                                        if (result.error) {
+                                                                            [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                                                                [self cancelResourceViewingAndExit];
+                                                                            }];
+                                                                        } else {
+                                                                            JSResourceReportUnit *reportUnit = [result.objects firstObject];
+                                                                            if (reportUnit.alwaysPromptControls) {
+                                                                                [self showReportOptionsViewControllerWithBackButton:YES];
+                                                                            } else {
+                                                                                [self runReportWithPage:page];
+                                                                            }
+                                                                        }
+                                                                    }@weakselfend];
+                                          } else {
+                                              [self runReportWithPage:page];
+                                          }
+                                      }
+                                  }@weakselfend];
     } else if(isInputControlsLoaded && (!isReportAlreadyLoaded && !isReportInLoadingProcess) ) {
         // show report with loaded input controls
         // when we start running a report from another report by tapping on hyperlink
@@ -193,6 +209,11 @@
 }
 
 #pragma mark - Custom accessors
+- (JSResourceLookup *)resourceLookup
+{
+    return self.report.resourceLookup;
+}
+
 - (JMReportViewerToolBar *)toolbar
 {
     if (!_toolbar) {
@@ -212,7 +233,7 @@
     [super actionsView:view didSelectAction:action];
     switch (action) {
         case JMMenuActionsViewAction_Refresh:
-            [self refresh];
+            [self refreshReport];
             break;
         case JMMenuActionsViewAction_Edit: {
             [self showReportOptionsViewControllerWithBackButton:NO];
@@ -231,10 +252,7 @@
 #pragma mark - JMRefreshable
 - (void)refresh
 {
-    [self resetSubViews];
-    [self updateToobarAppearence];
-    //
-    [self runReportWithPage:1];
+    [self refreshReport];
 }
 
 #pragma mark - JMReportViewerToolBarDelegate
@@ -305,6 +323,16 @@
                                 }
 
                             }@weakselfend];
+}
+
+- (void)fetchAlwaysPromptControlsForReportURI:(NSString *)reportURI completion:(void(^)(BOOL shouldAlwaysPrompt))completion
+{
+    [self.restClient resourceLookupForURI:reportURI resourceType:@"reportUnit" modeClass:[JSResourceReportUnit class] completionBlock:^(JSOperationResult *result) {
+        JSResourceReportUnit *reportUnit = [result.objects firstObject];
+        if (completion) {
+            completion(reportUnit.alwaysPromptControls);
+        }
+    }];
 }
 
 - (void)showReportOptionsViewControllerWithBackButton:(BOOL)isShowBackButton
