@@ -20,9 +20,13 @@
 
 - (BOOL) isNewDashboard;
 
-- (JMReport *) reportModelWithVCIdentifier:(NSString *__autoreleasing *)identifier;
+- (NSString *) resourceViewerVCIdentifier;
 
-- (JMDashboard *) dashboardModelWithVCIdentifier:(NSString **)identifier;
+- (NSString *) infoVCIdentifier;
+
+- (JMReport *) reportModel;
+
+- (JMDashboard *) dashboardModel;
 
 - (NSString *)thumbnailImageUrlString;
 

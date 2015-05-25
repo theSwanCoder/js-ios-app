@@ -23,8 +23,24 @@
 
 #import "JMBaseDashboardViewerVC.h"
 #import "RKObjectmanager.h"
+#import "JSResourceLookup+Helpers.h"
+
+@interface JMBaseDashboardViewerVC()
+@property (nonatomic, strong, readwrite) JMDashboard *dashboard;
+
+@end
+
 
 @implementation JMBaseDashboardViewerVC
+
+#pragma mark - Custom Accessors
+- (JMDashboard *)dashboard
+{
+    if (!_dashboard) {
+        _dashboard = [self.resourceLookup dashboardModel];
+    }
+    return _dashboard;
+}
 
 #pragma mark - Actions
 - (void)reloadDashboard
@@ -43,11 +59,6 @@
 }
 
 #pragma mark - Overriden methods
-- (JSResourceLookup *)resourceLookup
-{
-    return self.dashboard.resourceLookup;
-}
-
 - (void)startResourceViewing
 {
     [self startLoadDashboard];

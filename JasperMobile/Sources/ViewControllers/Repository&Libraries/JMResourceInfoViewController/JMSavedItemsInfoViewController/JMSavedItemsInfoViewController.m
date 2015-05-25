@@ -21,69 +21,83 @@
  */
 
 
-#import "JMSavedResourceViewerViewController.h"
+//
+//  JMSavedItemsInfoViewController.m
+//  TIBCO JasperMobile
+//
+
+#import "JMSavedItemsInfoViewController.h"
+#import "JSResourceLookup+Helpers.h"
 #import "JMSavedResources+Helpers.h"
 
-@interface JMSavedResourceViewerViewController () <UIAlertViewDelegate, UITextFieldDelegate>
-@property (nonatomic, strong) JMSavedResources *savedReports;
-@property (nonatomic, strong) NSString *changedReportName;
 
+@interface JMSavedItemsInfoViewController () <UIAlertViewDelegate, UITextFieldDelegate>
+@property (nonatomic, strong) JMSavedResources *savedReports;
 @end
 
-@implementation JMSavedResourceViewerViewController
-@synthesize changedReportName;
+@implementation JMSavedItemsInfoViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetResourceProperties) name:kJMSavedResourcesDidChangedNotification object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (JMSavedResources *)savedReports
 {
     if (!_savedReports) {
         _savedReports = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
     }
-    
     return _savedReports;
 }
 
-- (void)startResourceViewing
+#pragma mark - Overloaded methods
+- (void)resetResourceProperties
 {
-    NSString *fullReportPath = [JMSavedResources pathToReportWithName:self.savedReports.label format:self.savedReports.format];
-
-    if (self.webView.isLoading) {
-        [self.webView stopLoading];
-    }
-    self.isResourceLoaded = NO;
-
-    if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-        NSString* content = [NSString stringWithContentsOfFile:fullReportPath
-                                                      encoding:NSUTF8StringEncoding
-                                                         error:NULL];
-        NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-        [self.webView loadHTMLString:content baseURL:url];
+    if (self.savedReports.managedObjectContext) {
+        self.resourceLookup = [self.savedReports wrapperFromSavedReports];
+        [super resetResourceProperties];
     } else {
-        NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-        self.resourceRequest = [NSURLRequest requestWithURL:url];
-        [self.webView loadRequest:self.resourceRequest];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+- (NSArray *)resourceProperties
 {
-    return ([super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete);
+    NSMutableArray *properties = [[super resourceProperties] mutableCopy];
+    [properties addObject:@{
+                            kJMTitleKey : @"format",
+                            kJMValueKey : self.savedReports.format ?: @""
+                            }];
+    return properties;
 }
 
-#pragma mark - JMMenuActionsViewDelegate
+- (JMMenuActionsViewAction)availableAction
+{
+    return ([super availableAction] | JMMenuActionsViewAction_Run | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete);
+}
+
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     [super actionsView:view didSelectAction:action];
-    if (action == JMMenuActionsViewAction_Rename) {
+    if (action == JMMenuActionsViewAction_Run) {
+        [self runReport];
+    }else if (action == JMMenuActionsViewAction_Rename) {
         UIAlertView *alertView  = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(@"savedreport.viewer.modify.title", nil)
-                                                     message:nil
-                                                    delegate:self
-                                           cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
-                                           otherButtonTitles:JMCustomLocalizedString(@"dialog.button.ok", nil), nil];
+                                                             message:nil
+                                                            delegate:self
+                                                   cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
+                                                   otherButtonTitles:JMCustomLocalizedString(@"dialog.button.ok", nil), nil];
         alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField *textField = [alertView textFieldAtIndex:0];
         textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
         textField.delegate = self;
-        textField.text = [self.savedReports.label copy];
+        textField.text = [self.resourceLookup.label copy];
         
         alertView.tag = action;
         [alertView show];
@@ -95,6 +109,18 @@
                                                      otherButtonTitles:@"dialog.button.ok", nil];
         alertView.tag = action;
         [alertView show];
+    }
+}
+
+- (void)runReport
+{
+    id nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
+    if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
+        [nextVC setResourceLookup:self.resourceLookup];
+    }
+    
+    if (nextVC) {
+        [self.navigationController pushViewController:nextVC animated:YES];
     }
 }
 
@@ -131,10 +157,9 @@
                 self.resourceLookup = [self.savedReports wrapperFromSavedReports];
             }
         } else if (alertView.tag == JMMenuActionsViewAction_Delete) {
-            [self cancelResourceViewingAndExit];
             [self.savedReports removeReport];
+            [self.navigationController popViewControllerAnimated:YES];
         }
     }
 }
-
 @end

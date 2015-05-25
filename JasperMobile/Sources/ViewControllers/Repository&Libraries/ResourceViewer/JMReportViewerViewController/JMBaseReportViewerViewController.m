@@ -31,12 +31,13 @@
 #import "JMBaseCollectionViewController.h"
 #import "JMReportOptionsViewController.h"
 #import "ALToastView.h"
-
+#import "JSResourceLookup+Helpers.h"
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
 @property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
+@property (nonatomic, strong, readwrite) JMReport *report;
 
 @end
 
@@ -159,16 +160,16 @@
     BOOL isReportAlreadyLoaded = self.report.isReportAlreadyLoaded;
     BOOL isInputControlsLoaded = self.report.isInputControlsLoaded;
     BOOL isReportInLoadingProcess = self.reportLoader.isReportInLoadingProcess;
-    
+
     if (!isInputControlsLoaded) {
         // start load input controls
-        
+
         [self startShowLoaderWithMessage:@"status.loading.ic" cancelBlock:@weakself(^(void)) {
             [self.restClient cancelAllRequests];
             [self.reportLoader cancelReport];
             [self cancelResourceViewingAndExit];
         }@weakselfend];
-        
+
         NSString *reportURI = [self.report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [self loadInputControlsWithReportURI:reportURI
                                   completion:@weakself(^(NSArray *inputControls, NSError* error)) {
@@ -195,12 +196,12 @@
                                                                                 [self runReportWithPage:page];
                                                                             }
                                                                         }
-                                                                    }@weakselfend];
+                                              }@weakselfend];
                                           } else {
                                               [self runReportWithPage:page];
                                           }
                                       }
-                                  }@weakselfend];
+        }@weakselfend];
     } else if(isInputControlsLoaded && (!isReportAlreadyLoaded && !isReportInLoadingProcess) ) {
         // show report with loaded input controls
         // when we start running a report from another report by tapping on hyperlink
@@ -209,11 +210,6 @@
 }
 
 #pragma mark - Custom accessors
-- (JSResourceLookup *)resourceLookup
-{
-    return self.report.resourceLookup;
-}
-
 - (JMReportViewerToolBar *)toolbar
 {
     if (!_toolbar) {
@@ -225,6 +221,14 @@
         [self.navigationController.toolbar addSubview: _toolbar];
     }
     return _toolbar;
+}
+
+-(JMReport *)report
+{
+    if (!_report) {
+        _report = [self.resourceLookup reportModel];
+    }
+    return _report;
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -323,16 +327,6 @@
                                 }
 
                             }@weakselfend];
-}
-
-- (void)fetchAlwaysPromptControlsForReportURI:(NSString *)reportURI completion:(void(^)(BOOL shouldAlwaysPrompt))completion
-{
-    [self.restClient resourceLookupForURI:reportURI resourceType:@"reportUnit" modeClass:[JSResourceReportUnit class] completionBlock:^(JSOperationResult *result) {
-        JSResourceReportUnit *reportUnit = [result.objects firstObject];
-        if (completion) {
-            completion(reportUnit.alwaysPromptControls);
-        }
-    }];
 }
 
 - (void)showReportOptionsViewControllerWithBackButton:(BOOL)isShowBackButton

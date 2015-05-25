@@ -52,7 +52,7 @@
 
 @protocol JMVisualizeReportLoaderDelegate <NSObject>
 @optional
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForReport:(JMVisualizeReport *)report;
+- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSDictionary *)reportParameters;
 - (void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference;
 - (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName;
 @end

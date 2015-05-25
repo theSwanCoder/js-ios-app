@@ -35,7 +35,7 @@
 #import "JMCancelRequestPopup.h"
 
 @interface JMBaseDashboardViewerVC : JMResourceViewerViewController
-@property (nonatomic, strong) JMDashboard *dashboard;
+@property (nonatomic, strong, readonly) JMDashboard *dashboard;
 
 - (void)startLoadDashboard;
 - (void)reloadDashboard;

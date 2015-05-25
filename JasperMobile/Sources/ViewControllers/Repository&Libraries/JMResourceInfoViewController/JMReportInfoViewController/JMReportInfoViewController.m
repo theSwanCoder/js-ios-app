@@ -22,46 +22,40 @@
 
 
 //
-//  JMLibraryCollectionViewController.h
+//  JMReportInfoViewController.m
 //  TIBCO JasperMobile
 //
+#import "JMReportInfoViewController.h"
+#import "JSResourceLookup+Helpers.h"
 
-#import "JMLibraryCollectionViewController.h"
-#import "SWRevealViewController.h"
+@interface JMReportInfoViewController ()
 
-@interface JMLibraryCollectionViewController()
 @end
 
-@implementation JMLibraryCollectionViewController
-
-#pragma mark -LifeCycle
-
--(void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"menuitem.library.label", nil);
-}
-
+@implementation JMReportInfoViewController
 #pragma mark - Overloaded methods
 - (JMMenuActionsViewAction)availableAction
 {
-    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Sort;
-    if( [JMUtils isServerProEdition] ) {
-        availableAction |= JMMenuActionsViewAction_Filter;
+    return ([super availableAction] | JMMenuActionsViewAction_Run);
+}
+
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
+{
+    [super actionsView:view didSelectAction:action];
+    if (action == JMMenuActionsViewAction_Run) {
+        [self runReport];
     }
-    return availableAction;
 }
 
-- (NSString *)defaultRepresentationTypeKey
+- (void)runReport
 {
-    NSString * keyString = @"RepresentationTypeKey";
-    keyString = [@"Library" stringByAppendingString:keyString];
-    return keyString;
+    id nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
+    if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
+        [nextVC setResourceLookup:self.resourceLookup];
+    }
+    
+    if (nextVC) {
+        [self.navigationController pushViewController:nextVC animated:YES];
+    }
 }
-
-- (Class)resourceLoaderClass
-{
-    return NSClassFromString(@"JMLibraryListLoader");
-}
-
 @end

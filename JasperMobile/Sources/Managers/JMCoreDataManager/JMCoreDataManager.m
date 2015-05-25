@@ -196,7 +196,7 @@ static NSString * const kJMProductName = @"JasperMobile";
 
 - (void)migrationManager:(JMMigrationManager *)migrationManager migrationProgress:(float)migrationProgress
 {
-    NSLog(@"migration progress: %f", migrationProgress);
+//    NSLog(@"migration progress: %f", migrationProgress);
 }
 
 - (NSArray *)migrationManager:(JMMigrationManager *)migrationManager

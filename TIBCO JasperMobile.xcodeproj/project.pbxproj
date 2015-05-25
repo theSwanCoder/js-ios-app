@@ -138,6 +138,10 @@
 		08DD182C1B135BE500856112 /* MigrateTo_v_1_9.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18281B135BE500856112 /* MigrateTo_v_1_9.xcmappingmodel */; };
 		08DD182D1B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18291B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel */; };
 		08DD182E1B135BE500856112 /* MigrateTo_v_2_1.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08DD182A1B135BE500856112 /* MigrateTo_v_2_1.xcmappingmodel */; };
+		08DD18391B136B8A00856112 /* JMDashboardInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18311B136B8A00856112 /* JMDashboardInfoViewController.m */; };
+		08DD183A1B136B8A00856112 /* JMReportInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18341B136B8A00856112 /* JMReportInfoViewController.m */; };
+		08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08DD18351B136B8A00856112 /* JMResourceInfoViewController.xib */; };
+		08DD183C1B136B8A00856112 /* JMSavedItemsInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18381B136B8A00856112 /* JMSavedItemsInfoViewController.m */; };
 		08E0D19E1B0CF27200BFBFE5 /* AppIcon120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19A1B0CF27200BFBFE5 /* AppIcon120x120.png */; };
 		08E0D19F1B0CF27200BFBFE5 /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19B1B0CF27200BFBFE5 /* Icon-1024.png */; };
 		08E0D1A01B0CF27200BFBFE5 /* Icon-512.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19C1B0CF27200BFBFE5 /* Icon-512.png */; };
@@ -487,6 +491,13 @@
 		08DD18281B135BE500856112 /* MigrateTo_v_1_9.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MigrateTo_v_1_9.xcmappingmodel; sourceTree = "<group>"; };
 		08DD18291B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MigrateTo_v_2_0.xcmappingmodel; sourceTree = "<group>"; };
 		08DD182A1B135BE500856112 /* MigrateTo_v_2_1.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MigrateTo_v_2_1.xcmappingmodel; sourceTree = "<group>"; };
+		08DD18301B136B8A00856112 /* JMDashboardInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardInfoViewController.h; sourceTree = "<group>"; };
+		08DD18311B136B8A00856112 /* JMDashboardInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardInfoViewController.m; sourceTree = "<group>"; };
+		08DD18331B136B8A00856112 /* JMReportInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportInfoViewController.h; sourceTree = "<group>"; };
+		08DD18341B136B8A00856112 /* JMReportInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportInfoViewController.m; sourceTree = "<group>"; };
+		08DD18351B136B8A00856112 /* JMResourceInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMResourceInfoViewController.xib; sourceTree = "<group>"; };
+		08DD18371B136B8A00856112 /* JMSavedItemsInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedItemsInfoViewController.h; sourceTree = "<group>"; };
+		08DD18381B136B8A00856112 /* JMSavedItemsInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedItemsInfoViewController.m; sourceTree = "<group>"; };
 		08E0D19A1B0CF27200BFBFE5 /* AppIcon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon120x120.png; sourceTree = "<group>"; };
 		08E0D19B1B0CF27200BFBFE5 /* Icon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024.png"; sourceTree = "<group>"; };
 		08E0D19C1B0CF27200BFBFE5 /* Icon-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-512.png"; sourceTree = "<group>"; };
@@ -1101,8 +1112,12 @@
 		089B14F71AA756BD0021A915 /* JMResourceInfoViewController */ = {
 			isa = PBXGroup;
 			children = (
+				08DD182F1B136B8A00856112 /* JMDashBoardInfoViewController */,
+				08DD18321B136B8A00856112 /* JMReportInfoViewController */,
+				08DD18361B136B8A00856112 /* JMSavedItemsInfoViewController */,
 				089B14F81AA756BD0021A915 /* JMResourceInfoViewController.h */,
 				089B14F91AA756BD0021A915 /* JMResourceInfoViewController.m */,
+				08DD18351B136B8A00856112 /* JMResourceInfoViewController.xib */,
 			);
 			path = JMResourceInfoViewController;
 			sourceTree = "<group>";
@@ -1629,6 +1644,33 @@
 			path = JMRecentViewsListLoader;
 			sourceTree = "<group>";
 		};
+		08DD182F1B136B8A00856112 /* JMDashBoardInfoViewController */ = {
+			isa = PBXGroup;
+			children = (
+				08DD18301B136B8A00856112 /* JMDashboardInfoViewController.h */,
+				08DD18311B136B8A00856112 /* JMDashboardInfoViewController.m */,
+			);
+			path = JMDashBoardInfoViewController;
+			sourceTree = "<group>";
+		};
+		08DD18321B136B8A00856112 /* JMReportInfoViewController */ = {
+			isa = PBXGroup;
+			children = (
+				08DD18331B136B8A00856112 /* JMReportInfoViewController.h */,
+				08DD18341B136B8A00856112 /* JMReportInfoViewController.m */,
+			);
+			path = JMReportInfoViewController;
+			sourceTree = "<group>";
+		};
+		08DD18361B136B8A00856112 /* JMSavedItemsInfoViewController */ = {
+			isa = PBXGroup;
+			children = (
+				08DD18371B136B8A00856112 /* JMSavedItemsInfoViewController.h */,
+				08DD18381B136B8A00856112 /* JMSavedItemsInfoViewController.m */,
+			);
+			path = JMSavedItemsInfoViewController;
+			sourceTree = "<group>";
+		};
 		08E0D1981B0CF27200BFBFE5 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -2098,6 +2140,7 @@
 				089B15DC1AA756BD0021A915 /* JMSingleSelectTableViewController.xib in Resources */,
 				08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */,
 				089B15C61AA756BD0021A915 /* JMGridResourceCollectionViewCell.xib in Resources */,
+				08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */,
 				930F8D481ABB1D9F005F93FB /* require.min.js in Resources */,
 				089B15FD1AA756BD0021A915 /* JMBaseCollectionView~ipad.xib in Resources */,
 				930F8D451ABB1CDF005F93FB /* dashboard.html in Resources */,
@@ -2183,7 +2226,9 @@
 			files = (
 				08DD181B1B133BBF00856112 /* JMRecentViews.m in Sources */,
 				9342341E1AAC3DC100D34478 /* JMRestReport.m in Sources */,
+				08DD18391B136B8A00856112 /* JMDashboardInfoViewController.m in Sources */,
 				089B15B61AA756BD0021A915 /* JMLoginViewController.m in Sources */,
+				08DD183C1B136B8A00856112 /* JMSavedItemsInfoViewController.m in Sources */,
 				089B15F01AA756BD0021A915 /* JMSettingsTableViewCell.m in Sources */,
 				089B15A21AA756BD0021A915 /* UIAlertView+Additions.m in Sources */,
 				089B15D61AA756BD0021A915 /* JMNumberInputControlCell.m in Sources */,
@@ -2203,6 +2248,7 @@
 				93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */,
 				089B15F41AA756BD0021A915 /* JMSettings.m in Sources */,
 				089B15F81AA756BD0021A915 /* JMLibraryCollectionViewController.m in Sources */,
+				08DD183A1B136B8A00856112 /* JMReportInfoViewController.m in Sources */,
 				08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */,
 				08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */,
 				089B16071AA756BD0021A915 /* JMWebConsole.m in Sources */,

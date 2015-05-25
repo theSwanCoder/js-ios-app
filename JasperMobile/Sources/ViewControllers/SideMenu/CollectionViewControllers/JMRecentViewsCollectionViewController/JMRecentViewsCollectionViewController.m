@@ -37,6 +37,7 @@
     self.title = JMCustomLocalizedString(@"Recent Views", nil);
 }
 
+
 #pragma mark - Overloaded methods
 - (NSString *)defaultRepresentationTypeKey
 {
@@ -49,5 +50,4 @@
 {
     return NSClassFromString(@"JMRecentViewsListLoader");
 }
-
 @end

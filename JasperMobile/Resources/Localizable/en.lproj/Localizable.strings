@@ -169,6 +169,9 @@
 "resource.uri.title" = "URI";
 "resource.version.title" = "Version";
 "resource.creationDate.title" = "Creation Date";
+"resource.format.title" = "Format";
+"resource.countOfViews.title" = "Count of Views";
+
 
 "resources.type.reportUnit" = "Report";
 "resources.type.dashboard" = "Dashboard";
@@ -204,6 +207,7 @@
 "action.title.sort" = "Sort by";
 "action.title.selectall" = "Select All";
 "action.title.clearselections" = "Clear selections";
+"action.title.run" = "Run";
 
 /* Error messages */
 

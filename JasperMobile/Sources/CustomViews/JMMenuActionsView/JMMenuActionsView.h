@@ -46,11 +46,12 @@ typedef NS_OPTIONS(NSInteger, JMMenuActionsViewAction) {
     JMMenuActionsViewAction_Rename          = 1 << 8,
     JMMenuActionsViewAction_Info            = 1 << 9,
     JMMenuActionsViewAction_SelectAll       = 1 << 10,
-    JMMenuActionsViewAction_ClearSelections = 1 << 11
+    JMMenuActionsViewAction_ClearSelections = 1 << 11,
+    JMMenuActionsViewAction_Run             = 1 << 12
 };
 
 static inline JMMenuActionsViewAction JMMenuActionsViewActionFirst() { return JMMenuActionsViewAction_MakeFavorite; }
-static inline JMMenuActionsViewAction JMMenuActionsViewActionLast() { return JMMenuActionsViewAction_ClearSelections; }
+static inline JMMenuActionsViewAction JMMenuActionsViewActionLast() { return JMMenuActionsViewAction_Run; }
 
 @class JMMenuActionsView;
 

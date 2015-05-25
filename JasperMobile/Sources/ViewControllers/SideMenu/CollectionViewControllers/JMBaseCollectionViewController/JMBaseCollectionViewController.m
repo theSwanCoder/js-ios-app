@@ -48,7 +48,6 @@ NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentationTypeDidChangeNotification";
 
 @interface JMBaseCollectionViewController() <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMPopupViewDelegate, JMResourceCollectionViewCellDelegate, PopoverViewDelegate, JMMenuActionsViewDelegate, JMResourcesListLoaderDelegate>
-@property (nonatomic, assign) UIInterfaceOrientation currentOrientation;
 @property (nonatomic, strong) PopoverView *popoverView;
 @property (nonatomic, assign) BOOL isScrollToTop;
 @end
@@ -78,12 +77,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     
     baseCollectionView.searchBar.delegate = self;
     
-    self.currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-        
     [self addObservers];
     [self setupMenu];
     
-    self.resourceListLoader.delegate = self;
     self.isScrollToTop = NO;
     
     [self showNavigationItems];
@@ -290,8 +286,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)addObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(deviceOrientationDidChange)
-                                                 name:UIDeviceOrientationDidChangeNotification
+                                             selector:@selector(interfaceOrientationDidChanged:)
+                                                 name:UIApplicationDidChangeStatusBarOrientationNotification
                                                object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -305,11 +301,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)deviceOrientationDidChange
+- (void)interfaceOrientationDidChanged:(NSNotification *)notification
 {
-    if ([self isOrientationChanged]) {
-        self.needLayoutUI = YES;
-    }
+    self.needLayoutUI = YES;
 }
 
 - (void)representationTypeDidChange
@@ -404,18 +398,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 #pragma mark - Utils
 
-- (BOOL)isOrientationChanged
-{
-    if ( UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) ) {
-        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-        if (self.currentOrientation != orientation) {
-            self.currentOrientation = orientation;
-            return YES;
-        }
-    }
-    return NO;
-}
-
 - (UIBarButtonItem *)resourceRepresentationItem
 {
     NSString *imageName = ([self nextRepresentationTypeForType:self.representationType] == JMResourcesRepresentationType_Grid) ? @"grid_button" : @"horizontal_list_button";
@@ -437,26 +419,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     JSResourceLookup *resourceLookup = [self loadedResourceForIndexPath:indexPath];
     id nextVC = nil;
-    NSString *controllerIdentifier = nil;
     
-    if ([resourceLookup isReport]) {
-        JMReport *report = [resourceLookup reportModelWithVCIdentifier:&controllerIdentifier];
-        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:controllerIdentifier];
-        
-        JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-        JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [baseCollectionView.collectionView cellForItemAtIndexPath:indexPath];
-        report.thumbnailImage = cell.thumbnailImage;
-        
-        [nextVC setReport:report];
-        [nextVC setExitBlock:@weakself(^(void)) {
-            [baseCollectionView.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-        }@weakselfend];
-    } else if ([resourceLookup isDashboard]) {
-        JMDashboard *dashboard = [resourceLookup dashboardModelWithVCIdentifier:&controllerIdentifier];
-        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:controllerIdentifier];
-        [nextVC setDashboard:dashboard];
-    } else if ([resourceLookup isFolder]) {
-        // TODO: replace seque with constant
+    if ([resourceLookup isFolder]) {
+        // TODO: replace identifier with constant
         JMRepositoryCollectionViewController *repositoryViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMRepositoryCollectionViewController"];
         repositoryViewController.resourceListLoader.resourceLookup = resourceLookup;
         repositoryViewController.navigationItem.leftBarButtonItem = nil;
@@ -464,11 +429,22 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         repositoryViewController.representationTypeKey = self.representationTypeKey;
         repositoryViewController.representationType = self.representationType;
         nextVC = repositoryViewController;
-    } else if ([resourceLookup isSavedReport]) {
-        // TODO: replace seque with constant
-        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMSavedResourceViewerViewController"];
-        [nextVC setResourceLookup:resourceLookup];
+    } else {
+        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
+        if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
+            [nextVC setResourceLookup:resourceLookup];
+        }
+        // Customizing report viewer view controller
+        if ([resourceLookup isReport]) {
+            JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
+            JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [baseCollectionView.collectionView cellForItemAtIndexPath:indexPath];
+            [nextVC report].thumbnailImage = cell.thumbnailImage;
+            [nextVC setExitBlock:@weakself(^(void)) {
+                [baseCollectionView.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+            }@weakselfend];
+        }
     }
+    
     if (nextVC) {
         [self.navigationController pushViewController:nextVC animated:YES];
     }
@@ -484,7 +460,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 - (void)showResourceInfoViewControllerWithResourceLookup:(JSResourceLookup *)resourceLookup
 {
-    JMResourceInfoViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"JMResourceInfoViewController"];
+    JMResourceInfoViewController *vc = [NSClassFromString([resourceLookup infoVCIdentifier]) new];
     vc.resourceLookup = resourceLookup;
     [self.navigationController pushViewController:vc animated:YES];
 }

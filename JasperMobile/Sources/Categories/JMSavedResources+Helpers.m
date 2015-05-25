@@ -29,8 +29,6 @@
 
 
 NSString * const kJMSavedResources = @"SavedResources";
-NSString * const kJMSavedResourceFileExtensionPDF = @"pdf";
-NSString * const kJMSavedResourceFileExtensionHTML = @"html";
 
 
 @implementation JMSavedResources (Helpers)

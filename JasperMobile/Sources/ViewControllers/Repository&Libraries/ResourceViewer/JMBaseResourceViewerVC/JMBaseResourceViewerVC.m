@@ -27,6 +27,8 @@
 #import "JMResourceInfoViewController.h"
 #import "JMUtils.h"
 #import "JMRecentViews+Helpers.h"
+#import "JSResourceLookup+Helpers.h"
+#import "JMMainNavigationController.h"
 
 NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
 NSString * const kJMShowMultiPageReportSegue = @"ShowMultiPageReport";
@@ -201,7 +203,10 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)showInfoPage
 {
-    [self showResourceInfoViewControllerWithResourceLookup:self.resourceLookup];
+    JMResourceInfoViewController *vc = [NSClassFromString([self.resourceLookup infoVCIdentifier]) new];
+    vc.resourceLookup = self.resourceLookup;
+    JMMainNavigationController *nextNC = [[JMMainNavigationController alloc] initWithRootViewController:vc];
+    [self.navigationController presentViewController:nextNC animated:YES completion:nil];
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -229,13 +234,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 }
 
 #pragma mark - Helpers
-
-- (void)showResourceInfoViewControllerWithResourceLookup:(JSResourceLookup *)resourceLookup
-{
-    JMResourceInfoViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"JMResourceInfoViewController"];
-    vc.resourceLookup = resourceLookup;
-    [self.navigationController pushViewController:vc animated:YES];
-}
 
 - (UIBarButtonItem *) actionBarButtonItem
 {

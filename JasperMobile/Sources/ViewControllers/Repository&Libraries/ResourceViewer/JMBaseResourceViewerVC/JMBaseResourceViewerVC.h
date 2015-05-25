@@ -45,7 +45,6 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, assign) BOOL isResourceLoaded;
 @property (nonatomic, strong) NSURLRequest *resourceRequest;
-@property (nonatomic, strong) NSString *backButtonTitle;
 
 // setup
 - (void)setupSubviews;
