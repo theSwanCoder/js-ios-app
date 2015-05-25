@@ -25,30 +25,41 @@
 #import "JMFavorites+Helpers.h"
 #import "UITableViewCell+Additions.h"
 #import "JSResourceLookup+Helpers.h"
+#import "PopoverView.h"
+#import "JMRecentViews+Helpers.h"
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
-static NSString * const kJMTitleKey = @"title";
-static NSString * const kJMValueKey = @"value";
-
-@interface JMResourceInfoViewController ()<UITableViewDataSource, UITableViewDelegate>
+@interface JMResourceInfoViewController ()<UITableViewDataSource, UITableViewDelegate, PopoverViewDelegate>
 @property (nonatomic, strong) NSArray *resourceProperties;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) PopoverView *popoverView;
+@property (nonatomic, assign) BOOL needLayoutUI;
 
 @end
 
 @implementation JMResourceInfoViewController
 @synthesize resourceLookup = _resourceLookup;
 
-#pragma mark - UIViewController
+#pragma mark - UIViewController Life Cycle
+- (instancetype)init
+{
+    return [self initWithNibName:@"JMResourceInfoViewController" bundle:[NSBundle mainBundle]];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.title = self.resourceLookup.label;
-    [self updateFavoriteItem];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetResourceProperties) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [self showNavigationItems];
+    [self resetResourceProperties];
+    [self addObservers];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self updateIfNeeded];
 }
 
 - (void)dealloc
@@ -56,14 +67,33 @@ static NSString * const kJMValueKey = @"value";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void) updateFavoriteItem
+#pragma mark - Observers
+- (void)addObservers
 {
-    UIImage *itemImage = [JMFavorites isResourceInFavorites:self.resourceLookup] ? [UIImage imageNamed:@"favorited_item"] : [UIImage imageNamed:@"make_favorite_item"];
-    UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:itemImage style:UIBarButtonItemStyleBordered target:self action:@selector(favoriteButtonTapped:)];
-    favoriteItem.tintColor = [JMFavorites isResourceInFavorites:self.resourceLookup] ? [UIColor yellowColor] : [UIColor whiteColor];
-    self.navigationItem.rightBarButtonItem = favoriteItem;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetResourceProperties) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(favoriteMarkDidChanged:) name:kJMFavoritesDidChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetResourceProperties) name:kJMRecentViewsDidChangedNotification object:nil];
 }
 
+- (void)resetResourceProperties
+{
+    self.title = self.resourceLookup.label;
+    self.resourceProperties = nil;
+    [self.tableView reloadData];
+}
+
+- (void)interfaceOrientationDidChanged:(id)notification
+{
+    self.needLayoutUI = YES;
+}
+
+- (void)favoriteMarkDidChanged:(id)notification
+{
+    self.needLayoutUI = YES;
+}
+
+#pragma mark - Actions
 - (void)favoriteButtonTapped:(id)sender
 {
     if ([JMFavorites isResourceInFavorites:self.resourceLookup]) {
@@ -71,50 +101,154 @@ static NSString * const kJMValueKey = @"value";
     } else {
         [JMFavorites addToFavorites:self.resourceLookup];
     }
-    [self updateFavoriteItem];
+    [self setNeedLayoutUI:YES];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
-- (void)resetResourceProperties
+- (void)cancelButtonTapped:(id)sender
 {
-    self.resourceProperties = nil;
-    [self.tableView reloadData];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - Public API
 - (NSArray *)resourceProperties
 {
     
     if (!_resourceProperties) {
         NSString *createdAtString = [JMUtils localizedStringFromDate:self.resourceLookup.creationDate];
-        _resourceProperties = @[
-                                @{
-                                    kJMTitleKey : @"label",
-                                    kJMValueKey : self.resourceLookup.label ?: @""
-                                    },
-                                @{
-                                    kJMTitleKey : @"description",
-                                    kJMValueKey : self.resourceLookup.resourceDescription ?: @""
-                                    },
-                                @{
-                                    kJMTitleKey : @"uri",
-                                    kJMValueKey : self.resourceLookup.uri ?: @""
-                                    },
-
-                                @{
-                                    kJMTitleKey : @"type",
-                                    kJMValueKey : [self.resourceLookup localizedResourceType] ?: @""
-                                    },
-                                @{
-                                    kJMTitleKey : @"version",
-                                    kJMValueKey : self.resourceLookup.version ? [NSString stringWithFormat:@"%@", self.resourceLookup.version]: @""
-                                    },
-                                @{
-                                    kJMTitleKey : @"creationDate",
-                                    kJMValueKey : createdAtString ?: @""
-                                    }
-                                ];
+        NSMutableArray *properties = [@[
+                                        @{
+                                            kJMTitleKey : @"label",
+                                            kJMValueKey : self.resourceLookup.label ?: @""
+                                            },
+                                        @{
+                                            kJMTitleKey : @"description",
+                                            kJMValueKey : self.resourceLookup.resourceDescription ?: @""
+                                            },
+                                        @{
+                                            kJMTitleKey : @"uri",
+                                            kJMValueKey : self.resourceLookup.uri ?: @""
+                                            },
+                                        
+                                        @{
+                                            kJMTitleKey : @"type",
+                                            kJMValueKey : [self.resourceLookup localizedResourceType] ?: @""
+                                            },
+                                        @{
+                                            kJMTitleKey : @"version",
+                                            kJMValueKey : self.resourceLookup.version ? [NSString stringWithFormat:@"%@", self.resourceLookup.version]: @""
+                                            },
+                                        @{
+                                            kJMTitleKey : @"creationDate",
+                                            kJMValueKey : createdAtString ?: @""
+                                            }
+                                        ] mutableCopy];
+        JMRecentViews *recentViews = [JMRecentViews recentViewsForResourceLookup:self.resourceLookup];
+        if (recentViews) {
+            [properties addObject:@{
+                                   kJMTitleKey : @"countOfViews",
+                                   kJMValueKey : [recentViews.countOfViews stringValue] ?: @""
+                                   }];
+        }
+        _resourceProperties = properties;
     }
     return _resourceProperties;
+}
+
+- (JMMenuActionsViewAction)availableAction
+{
+    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_None;
+    if (![self favoriteItemShouldDisplaySeparately]) {
+        availableAction |= [self favoriteAction];
+    }
+    return availableAction;
+}
+
+#pragma mark - Private API
+- (void)setNeedLayoutUI:(BOOL)needLayoutUI
+{
+    _needLayoutUI = needLayoutUI;
+    if (self.isViewLoaded && self.view.window && needLayoutUI) {
+        [self updateIfNeeded];
+    }
+}
+
+- (void)updateIfNeeded
+{
+    if (self.needLayoutUI) {
+        [self showNavigationItems];
+        self.needLayoutUI = NO;
+    }
+}
+
+- (JMMenuActionsViewAction)favoriteAction
+{
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
+    return isResourceInFavorites ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite;
+}
+
+#pragma mark - Setup Navigation Items
+- (BOOL) favoriteItemShouldDisplaySeparately
+{
+    return (![JMUtils isIphone]) || ([JMUtils isIphone] && UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation));
+}
+
+- (void) showNavigationItems
+{
+    BOOL selfIsModalViewController = [self.navigationController.viewControllers count] == 1;
+    if (selfIsModalViewController) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonTapped:)];
+    } else {
+        NSMutableArray *navBarItems = [NSMutableArray array];
+        JMMenuActionsViewAction availableAction = [self availableAction];
+        
+        if (availableAction && (availableAction ^ [self favoriteAction])) {
+            [navBarItems addObject:[self actionBarButtonItem]];
+        } else if (![self favoriteItemShouldDisplaySeparately]) {
+            [navBarItems addObject:[self favoriteBarButtonItem]];
+        }
+        
+        if ([self favoriteItemShouldDisplaySeparately]) {
+            [navBarItems addObject:[self favoriteBarButtonItem]];
+        }
+        
+        self.navigationItem.rightBarButtonItems = navBarItems;
+    }
+}
+
+- (UIBarButtonItem *) favoriteBarButtonItem
+{
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
+    NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
+    
+    UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(favoriteButtonTapped:)];
+    favoriteItem.tintColor = isResourceInFavorites ? [UIColor yellowColor] : [UIColor whiteColor];
+    return favoriteItem;
+}
+
+- (UIBarButtonItem *) actionBarButtonItem
+{
+    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                         target:self
+                                                         action:@selector(showAvailableActions)];
+}
+
+- (void)showAvailableActions
+{
+    JMMenuActionsView *actionsView = [JMMenuActionsView new];
+    actionsView.delegate = self;
+    actionsView.availableActions = [self availableAction];
+    CGPoint point = CGPointMake(CGRectGetWidth(self.view.frame), -10);
+    
+    self.popoverView = [PopoverView showPopoverAtPoint:point
+                                                inView:self.view
+                                             withTitle:nil
+                                       withContentView:actionsView
+                                              delegate:self];
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
@@ -127,6 +261,13 @@ static NSString * const kJMValueKey = @"value";
 {
     NSString *cellIdentifier = @"ResourceAttributeCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+        cell.textLabel.font = [JMFont tableViewCellTitleFont];
+        cell.detailTextLabel.font = [JMFont tableViewCellDetailFont];
+        cell.detailTextLabel.numberOfLines = 2;
+    }
+    
     if (indexPath.row) {
         [cell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
     }
@@ -135,6 +276,37 @@ static NSString * const kJMValueKey = @"value";
     cell.textLabel.text = JMCustomLocalizedString([NSString stringWithFormat:@"resource.%@.title", [item objectForKey:kJMTitleKey]], nil);
     cell.detailTextLabel.text = [item objectForKey:kJMValueKey];
     return cell;
+}
+
+#pragma mark - JMMenuActionsViewDelegate
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
+{
+    switch (action) {
+        case JMMenuActionsViewAction_MakeFavorite:
+        case JMMenuActionsViewAction_MakeUnFavorite:
+            [self favoriteButtonTapped:nil];
+            break;
+        default:
+            break;
+    }
+    
+    [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
+}
+
+#pragma mark - PopoverViewDelegate Methods
+- (void)popoverViewDidDismiss:(PopoverView *)popoverView
+{
+    self.popoverView = nil;
+}
+
+#pragma mark - Handle rotates
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+                                         duration:(NSTimeInterval)duration
+{
+    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
+    [self.popoverView animateRotationToNewPoint:point
+                                         inView:self.view
+                                   withDuration:duration];
 }
 
 @end

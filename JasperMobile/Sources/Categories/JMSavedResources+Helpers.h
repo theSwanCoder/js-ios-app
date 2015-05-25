@@ -34,8 +34,6 @@
 #import "JMSavedResources.h"
 
 extern NSString * const kJMSavedResources;
-extern NSString * const kJMSavedResourceFileExtensionPDF;
-extern NSString * const kJMSavedResourceFileExtensionHTML;
 
 @interface JMSavedResources (Helpers)
 

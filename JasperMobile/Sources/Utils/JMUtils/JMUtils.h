@@ -139,4 +139,6 @@
 + (BOOL)isServerProEdition;
 
 + (NSString *)localizedStringFromDate:(NSDate *)date;
+
++ (UIStoryboard *)mainStoryBoard;
 @end

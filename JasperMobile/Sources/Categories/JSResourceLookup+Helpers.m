@@ -39,33 +39,61 @@
     return [JMUtils isServerVersionUpOrEqual6] && [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD];
 }
 
-- (JMReport *)reportModelWithVCIdentifier:(NSString *__autoreleasing *)identifier
+- (NSString *)resourceViewerVCIdentifier
 {
-    // TODO: replace seque with constant
+    // TODO: identifiers with constant
+    if ([self isReport]) {
+        if ([JMUtils isSupportVisualize]) {
+            return @"JMVisualizeReportViewerViewController";
+        } else {
+            return @"JMReportViewerViewController";
+        }
+    } else if ([self isDashboard]) {
+        if ([self isNewDashboard]) {
+            if ([JMUtils isServerAmber2] && [JMUtils isSystemVersion8] && [JMUtils isSupportVisualize]) {
+                return @"JMDashboardVC";
+            } else {
+                return @"JMVisualizeDashboardViewerVC";
+            }
+        } else {
+            return @"JMDashboardsViewerViewController";
+        }
+    } else if ([self isSavedReport]) {
+        return @"JMSavedResourceViewerViewController";
+    }
+    return nil;
+}
+
+- (NSString *)infoVCIdentifier
+{
+    if ([self isReport]) {
+        return @"JMReportInfoViewController";
+    } else if ([self isDashboard]) {
+        return @"JMDashboardInfoViewController";
+    } else if ([self isSavedReport]) {
+        return @"JMSavedItemsInfoViewController";
+    }
+    return @"JMResourceInfoViewController";
+}
+
+- (JMReport *)reportModel
+{
     if ([JMUtils isSupportVisualize]) {
-        *identifier = @"JMVisualizeReportViewerViewController";
         return [JMVisualizeReport reportWithResource:self inputControls:nil];
     } else {
-        *identifier = @"JMReportViewerViewController";
         return [JMRestReport reportWithResource:self inputControls:nil];
     }
 }
 
-- (JMDashboard *)dashboardModelWithVCIdentifier:(NSString *__autoreleasing *)identifier
+- (JMDashboard *)dashboardModel
 {
-    // TODO: replace seque with constant
     if ([self isNewDashboard]) {
-
         if ([JMUtils isServerAmber2] && [JMUtils isSystemVersion8] && [JMUtils isSupportVisualize]) {
-            *identifier = @"JMDashboardVC";
             return [JMVisualizeDashboard dashboardWithResource:self];
         } else {
-            *identifier = @"JMVisualizeDashboardViewerVC";
             return [JMVisualizeDashboard dashboardWithResource:self];
         }
-
     } else {
-        *identifier = @"JMDashboardsViewerViewController";
         return [JMDashboard dashboardWithResource:self];
     }
 }

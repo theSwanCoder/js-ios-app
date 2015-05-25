@@ -76,9 +76,10 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 @implementation JMOnboardIntroViewController
 
 #pragma mark - UIViewController LifeCycle
+
 - (void)awakeFromNib {
     [super awakeFromNib];
-
+    
     self.introPage = JMOnboardIntroPageWelcome;
     self.modelManager = [JMIntroModelManager new];
 }
@@ -86,9 +87,9 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     [self addGestureRecognizer];
-
+    
     [self setButtonTitle:JMCustomLocalizedString(@"intro.button.skip.skip", nil)];
     self.titleLabel.text = JMCustomLocalizedString(@"intro.title", nil);
     self.descriptionLabel.text = JMCustomLocalizedString(@"intro.description", nil);

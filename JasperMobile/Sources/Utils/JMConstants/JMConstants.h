@@ -48,6 +48,8 @@ extern NSString * const kJMSavedResourcesDidChangedNotification;
 extern NSString * const kJMRecentViewsDidChangedNotification;
 
 // Shared keys for dictionary
+extern NSString * const kJMTitleKey;
+extern NSString * const kJMValueKey;
 extern NSString * const kJMServerProfileKey;
 extern NSString * const kJMResourceLookup;
 extern NSString * const kJMInputControls;

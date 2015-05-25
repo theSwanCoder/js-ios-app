@@ -556,8 +556,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                     NSLog(@"objects: %@", result.objects);
                     JSResourceLookup *resourceLookup = [result.objects firstObject];
                     if (resourceLookup) {
-                        JMVisualizeReport *report = [JMVisualizeReport reportWithResource:resourceLookup inputControls:nil];
-
                         NSMutableArray *reportParameters = [NSMutableArray array];
                         for (NSString *key in json.allKeys) {
                             if (![key isEqualToString:@"_report"]) {
@@ -567,9 +565,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                             }
                         }
 
-                        [report updateReportParameters:reportParameters];
-                        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForReport:)]) {
-                            [self.delegate reportLoader:self didReceiveOnClickEventForReport:report];
+                        if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResourceLookup:withParameters:)]) {
+                            [self.delegate reportLoader:self didReceiveOnClickEventForResourceLookup:resourceLookup withParameters:[reportParameters copy]];
                         }
                     }
                 }

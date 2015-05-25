@@ -40,6 +40,8 @@ NSString * const kJMSavedResourcesDidChangedNotification = @"JMSavedResourcesDid
 NSString * const kJMRecentViewsDidChangedNotification = @"JMRecentViewsDidChangedNotification";
 
 // Shared keys for NSDictionary
+NSString * const kJMTitleKey = @"title";
+NSString * const kJMValueKey = @"value";
 NSString * const kJMServerProfileKey = @"serverProfile";
 NSString * const kJMResourceLookup = @"resourceLookup";
 NSString * const kJMInputControls = @"inputControls";

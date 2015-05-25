@@ -22,41 +22,18 @@
 
 
 //
-//  JMBaseReportViewerViewController.h
+//  JMReportInfoViewController.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
+ @since 2.1
  */
 
-#import "JMResourceViewerViewController.h"
-#import "JMRefreshable.h"
-#import "JMReportViewerToolBar.h"
-#import "JMReport.h"
-#import "JMReportLoader.h"
 
-@interface JMBaseReportViewerViewController : JMResourceViewerViewController <JMRefreshable, JMReportViewerToolBarDelegate>
-@property (nonatomic, strong, readonly) id <JMReportLoader> reportLoader;
-@property (nonatomic, strong, readonly) JMReport *report;
-@property (nonatomic, copy) void(^exitBlock)(void);
+#import "JMResourceInfoViewController.h"
 
-- (void)handleReportLoaderDidChangeCountOfPages;
+@interface JMReportInfoViewController : JMResourceInfoViewController
 
-// start point
-- (void)startLoadReportWithPage:(NSInteger)page;
-- (void)runReportWithPage:(NSInteger)page;
-
-- (void)updateReportWithNewParameters;
-
-// setups
-- (void)updateToobarAppearence;
-
-// input controls
-- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *, NSError *))completion;
-
-// empty report handle
-- (void)showEmptyReportMessage;
-- (void)hideEmptyReportMessage;
 @end

@@ -248,4 +248,16 @@
     return [dateFormatter stringFromDate:date];
 }
 
++ (UIStoryboard *)mainStoryBoard
+{
+    static dispatch_once_t onceToken;
+    static UIStoryboard * mainStoryboard;
+    dispatch_once(&onceToken, ^{
+        NSBundle *bundle = [NSBundle mainBundle];
+        NSString *storyboardName = [bundle objectForInfoDictionaryKey:@"UIMainStoryboardFile"];
+        mainStoryboard = [UIStoryboard storyboardWithName:storyboardName bundle:bundle];
+    });
+    return mainStoryboard;
+}
+
 @end

@@ -38,15 +38,6 @@ class JMDashboardVC: JMResourceViewerVC {
     var dashboard: JMDashboard?
     var dashboardLoader: JMVisualizeDashboardLoader?
     var rightBarButtonItems: [AnyObject]?
-
-    override var resourceLookup: JSResourceLookup? {
-        get {
-            return self.dashboard?.resourceLookup
-        }
-        set {
-            super.resourceLookup = newValue
-        }
-    }
     
     // UIViewController LifeCycle
     override func viewDidLoad() {
@@ -101,7 +92,6 @@ extension JMDashboardVC: JMVisualizeDashboardLoaderDelegate {
 
     func loader(dashboardLoader: JMVisualizeDashboardLoader, didStartMaximizeDashlet dashlet: String) {
         let backItem = backBarButtonItemWithTarget(self, action: "minimizeDashlet")
-
         navigationItem.leftBarButtonItem = backItem
         navigationItem.rightBarButtonItems = nil
         navigationItem.title = dashlet

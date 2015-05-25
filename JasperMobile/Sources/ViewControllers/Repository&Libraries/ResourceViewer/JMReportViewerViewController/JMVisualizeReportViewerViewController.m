@@ -32,6 +32,7 @@
 #import "JMBaseCollectionViewController.h"
 #import "JMWebConsole.h"
 #import "JMWebViewController.h"
+#import "JSResourceLookup+Helpers.h"
 
 @interface JMVisualizeReportViewerViewController () <JMVisualizeReportLoaderDelegate>
 @property (nonatomic, strong) JMVisualizeReportLoader *reportLoader;
@@ -198,15 +199,24 @@
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForReport:(JMVisualizeReport *)report
+- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSDictionary *)reportParameters
 {
-    NSString *identifier = @"JMVisualizeReportViewerViewController";
-    JMVisualizeReportViewerViewController *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:identifier];
-    reportViewController.report = report;
-    reportViewController.isChildReport = YES;
-    reportViewController.backButtonTitle = self.title;
-
-    [self.navigationController pushViewController:reportViewController animated:YES];
+    NSString *reportURI = [resourceLookup.uri stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls, NSError *error)) {
+        if (error) {
+            [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                [self cancelResourceViewingAndExit];
+            }];
+        } else {
+            JMVisualizeReportViewerViewController *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
+            reportViewController.resourceLookup = resourceLookup;
+            [reportViewController.report updateInputControls:inputControls];
+            reportViewController.isChildReport = YES;
+            
+            [self resetSubViews];
+            [self.navigationController pushViewController:reportViewController animated:YES];
+        }
+    }@weakselfend];
 }
 
 -(void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
