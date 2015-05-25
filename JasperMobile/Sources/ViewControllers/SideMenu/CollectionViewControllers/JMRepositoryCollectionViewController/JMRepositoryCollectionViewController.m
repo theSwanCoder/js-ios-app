@@ -34,11 +34,9 @@
 @implementation JMRepositoryCollectionViewController
 
 #pragma mark - LifeCycle
--(void)awakeFromNib
+-(void)viewDidLoad
 {
-    [super awakeFromNib];
-    
-    self.resourceListLoader = [NSClassFromString(@"JMRepositoryListLoader") new];
+    [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"menuitem.repository.label", nil);
 }
 
@@ -64,6 +62,11 @@
     [resources addObjectsFromArray:reportUnits];
     
     return resources.count > 0 ? [resources objectAtIndex:indexPath.row] : nil;
+}
+
+- (Class)resourceLoaderClass
+{
+    return NSClassFromString(@"JMRepositoryListLoader");
 }
 
 @end

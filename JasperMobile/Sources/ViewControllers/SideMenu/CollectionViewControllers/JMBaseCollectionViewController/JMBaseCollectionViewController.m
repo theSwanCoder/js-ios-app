@@ -68,7 +68,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [super viewDidLoad];
     
     JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-    [baseCollectionView setup];
+    [baseCollectionView setupWithNoResultText:JMCustomLocalizedString(@"resources.noresults.msg", nil)];
     baseCollectionView.collectionView.delegate = self;
     baseCollectionView.collectionView.dataSource = self;
     
@@ -167,6 +167,15 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     return _representationTypeKey;
 }
 
+- (JMResourcesListLoader *)resourceListLoader
+{
+    if (!_resourceListLoader) {
+        _resourceListLoader = [[self resourceLoaderClass] new];
+        _resourceListLoader.delegate = self;
+    }
+    return _resourceListLoader;
+}
+
 #pragma mark - Actions
 - (void)menuButtonTapped:(id)sender
 {
@@ -248,6 +257,11 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         }
         self.needLayoutUI = NO;
     }
+}
+
+- (Class)resourceLoaderClass
+{
+    return [JMResourcesListLoader class];
 }
 
 #pragma mark - Overloaded methods

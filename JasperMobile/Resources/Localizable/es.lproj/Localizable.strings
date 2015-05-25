@@ -98,11 +98,11 @@
 // Resources
 "master.base.resources.title" = "Examinar";
 
-"resources.title" = "Tipo de objeto";
-"resources.type.all" = "Todo";
-"resources.type.reportUnit" = "Informes";
-"resources.type.dashboard" = "Paneles";
-"resources.type.folder" = "Carpetas";
+"resources.filterby.title" = "Tipo de objeto";
+"resources.filterby.type.all" = "Todo";
+"resources.filterby.type.reportUnit" = "Informes";
+"resources.filterby.type.dashboard" = "Paneles";
+"resources.filterby.type.folder" = "Carpetas";
 
 // Sort by
 "resources.sortby.title" = "Opciones de ordenación";

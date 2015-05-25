@@ -116,10 +116,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 50.f;
-}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -164,6 +160,7 @@
         _menuItems = @[
                        [JMMenuItem menuItemWithResourceType:JMResourceTypeLibrary],
                        [JMMenuItem menuItemWithResourceType:JMResourceTypeRepository],
+                       [JMMenuItem menuItemWithResourceType:JMResourceTypeRecentViews],
                        [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
                        [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
                        [JMMenuItem menuItemWithResourceType:JMResourceTypeSettings],

@@ -66,7 +66,7 @@
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    return ([super availableActionForResource:[self currentResourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete);
+    return ([super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete);
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -125,9 +125,10 @@
 {
     if (alertView.cancelButtonIndex != buttonIndex) {
         if (alertView.tag == JMMenuActionsViewAction_Rename) {
-                NSString *newName = [alertView textFieldAtIndex:0].text;
-                [self.savedReports renameReportTo:newName];
+            NSString *newName = [alertView textFieldAtIndex:0].text;
+            if ([self.savedReports renameReportTo:newName]) {
                 self.title = newName;
+            }
         } else if (alertView.tag == JMMenuActionsViewAction_Delete) {
             [self cancelResourceViewingAndExit];
             [self.savedReports removeReport];

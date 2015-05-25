@@ -37,6 +37,7 @@ NSString * const kJMLoginDidSuccessNotification = @"JMLoginDidSuccessNotificatio
 NSString * const kJMResetApplicationNotification = @"resetApplication";
 NSString * const kJMFavoritesDidChangedNotification = @"JMFavoritesDidChangedNotification";
 NSString * const kJMSavedResourcesDidChangedNotification = @"JMSavedResourcesDidChangedNotification";
+NSString * const kJMRecentViewsDidChangedNotification = @"JMRecentViewsDidChangedNotification";
 
 // Shared keys for NSDictionary
 NSString * const kJMServerProfileKey = @"serverProfile";

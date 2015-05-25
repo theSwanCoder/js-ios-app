@@ -58,9 +58,6 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 - (void) startResourceViewing;
 - (void) cancelResourceViewingAndExit NS_REQUIRES_SUPER;
 
-- (JSResourceLookup *)currentResourceLookup;
-
-
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource;
 
 // Loaders

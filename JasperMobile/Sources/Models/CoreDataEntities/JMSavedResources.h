@@ -45,6 +45,7 @@
 @property (nonatomic, retain) NSString * wsType;
 @property (nonatomic, retain) NSString * resourceDescription;
 @property (nonatomic, retain) NSString * format;
+@property (nonatomic, retain) NSNumber * version;
 @property (nonatomic, retain) JMServerProfile *serverProfile;
 
 @end

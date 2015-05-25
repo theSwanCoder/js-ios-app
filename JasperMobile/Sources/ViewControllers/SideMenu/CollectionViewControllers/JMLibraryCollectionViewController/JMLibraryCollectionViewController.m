@@ -36,11 +36,11 @@
 
 #pragma mark -LifeCycle
 
--(void)awakeFromNib
+#pragma mark -LifeCycle
+
+-(void)viewDidLoad
 {
-    [super awakeFromNib];
-    
-    self.resourceListLoader = [NSClassFromString(@"JMLibraryListLoader") new];
+    [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"menuitem.library.label", nil);
 }
 
@@ -59,6 +59,11 @@
     NSString * keyString = @"RepresentationTypeKey";
     keyString = [@"Library" stringByAppendingString:keyString];
     return keyString;
+}
+
+- (Class)resourceLoaderClass
+{
+    return NSClassFromString(@"JMLibraryListLoader");
 }
 
 @end

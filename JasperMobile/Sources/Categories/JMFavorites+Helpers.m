@@ -41,6 +41,7 @@ NSString * const kJMFavorites = @"Favorites";
     favorites.creationDate = resource.creationDate;
     favorites.resourceDescription = resource.resourceDescription;
     favorites.username = sessionServerProfile.username;
+    favorites.version = resource.version;
     [activeServerProfile  addFavoritesObject:favorites];
 
     [[JMCoreDataManager sharedInstance] save:nil];
@@ -74,6 +75,7 @@ NSString * const kJMFavorites = @"Favorites";
     resource.resourceType = self.wsType;
     resource.creationDate = self.creationDate;
     resource.resourceDescription = self.resourceDescription;
+    resource.version = self.version;
     return resource;
 }
 

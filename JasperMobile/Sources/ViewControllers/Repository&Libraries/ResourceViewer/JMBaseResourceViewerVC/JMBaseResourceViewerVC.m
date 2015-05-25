@@ -26,6 +26,7 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMResourceInfoViewController.h"
 #import "JMUtils.h"
+#import "JMRecentViews+Helpers.h"
 
 NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
 NSString * const kJMShowMultiPageReportSegue = @"ShowMultiPageReport";
@@ -45,12 +46,15 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 {
     [super viewDidLoad];
 
-    self.title = [self currentResourceLookup].label;
+    self.title = self.resourceLookup.label;
 
     [self setupSubviews];
 
     // start point of loading resource
     [self startResourceViewing];
+    
+    // Update count of views for resource
+    [JMRecentViews updateCountOfViewsForResourceLookup:self.resourceLookup];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -68,7 +72,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 {
     id destinationViewController = segue.destinationViewController;
     if ([destinationViewController respondsToSelector:@selector(setResourceLookup:)]) {
-        [destinationViewController setResourceLookup:[self currentResourceLookup]];
+        [destinationViewController setResourceLookup:self.resourceLookup];
     }
 }
 
@@ -78,11 +82,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     if (resourceRequest != _resourceRequest) {
         _resourceRequest = resourceRequest;
     }
-}
-
-- (JSResourceLookup *)currentResourceLookup
-{
-    return self.resourceLookup;
 }
 
 #pragma mark - Handle rotates
@@ -177,7 +176,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 {
     JMMenuActionsView *actionsView = [JMMenuActionsView new];
     actionsView.delegate = self;
-    actionsView.availableActions = [self availableActionForResource:[self currentResourceLookup]];
+    actionsView.availableActions = [self availableActionForResource:self.resourceLookup];
     CGPoint point = CGPointMake(CGRectGetWidth(self.view.frame), -10);
 
     self.popoverView = [PopoverView showPopoverAtPoint:point
@@ -189,10 +188,10 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)favoriteButtonTapped:(id)sender
 {
-    if ([JMFavorites isResourceInFavorites:[self currentResourceLookup]]) {
-        [JMFavorites removeFromFavorites:[self currentResourceLookup]];
+    if ([JMFavorites isResourceInFavorites:self.resourceLookup]) {
+        [JMFavorites removeFromFavorites:self.resourceLookup];
     } else {
-        [JMFavorites addToFavorites:[self currentResourceLookup]];
+        [JMFavorites addToFavorites:self.resourceLookup];
     }
     if (sender) {
         [self replaceRightNavigationItem:sender withItem:[self favoriteBarButtonItem]];
@@ -202,7 +201,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)showInfoPage
 {
-    [self showResourceInfoViewControllerWithResourceLookup:[self currentResourceLookup]];
+    [self showResourceInfoViewControllerWithResourceLookup:self.resourceLookup];
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -240,7 +239,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (UIBarButtonItem *) actionBarButtonItem
 {
-    if ([self availableActionForResource:[self currentResourceLookup]]) {
+    if ([self availableActionForResource:self.resourceLookup]) {
         return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
                                                              target:self
                                                              action:@selector(showAvailableActions)];
@@ -260,7 +259,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (UIBarButtonItem *) favoriteBarButtonItem
 {
     if (![JMUtils isIphone]) {
-        BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:[self currentResourceLookup]];
+        BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
         NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
 
         UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]

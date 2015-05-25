@@ -276,7 +276,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 {
     switch (option) {
         case JMResourcesListLoaderOption_Filter:
-            return JMCustomLocalizedString(@"resources.title", nil);
+            return JMCustomLocalizedString(@"resources.filterby.title", nil);
         case JMResourcesListLoaderOption_Sort:
             return JMCustomLocalizedString(@"resources.sortby.title", nil);
     }

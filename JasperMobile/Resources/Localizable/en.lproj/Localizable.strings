@@ -75,6 +75,7 @@
 
 // Labels
 "menuitem.library.label" = "Library";
+"menuitem.recentviews.label" = "Recent Views";
 "menuitem.saveditems.label" = "Saved Items";
 "menuitem.settings.label" = "Settings";
 "menuitem.repository.label" = "Repository";
@@ -94,18 +95,23 @@
 "resources.loading.msg" = "Loading.\nPlease wait...";
 "resources.noresults.msg" = "No Results.";
 "resources.search.placeholder" = "Search resources";
+"resources.noresults.saveditems.msg" = "No Saved Items.";
+"resources.noresults.favorites.msg" = "No Favorited Items.";
+
 
 // Filter By
-"resources.title" = "Object Type";
-"resources.type.all" = "All";
-"resources.type.reportUnit" = "Reports";
-"resources.type.dashboard" = "Dashboards";
-"resources.type.folder" = "Folders";
+"resources.filterby.title" = "Object Type";
+"resources.filterby.type.all" = "All";
+"resources.filterby.type.reportUnit" = "Reports";
+"resources.filterby.type.dashboard" = "Dashboards";
+"resources.filterby.type.folder" = "Folders";
+"resources.filterby.type.saved.reportUnit" = "Saved Items";
 
 // Sort by
 "resources.sortby.title" = "Sort Options";
 "resources.sortby.type.name" = "Name";
 "resources.sortby.type.date" = "Date";
+"resources.sortby.type.countViews" = "Count of Views";
 "resources.sortby.type.creator" = "Creator";
 
 // Repository view
@@ -163,6 +169,11 @@
 "resource.uri.title" = "URI";
 "resource.version.title" = "Version";
 "resource.creationDate.title" = "Creation Date";
+
+"resources.type.reportUnit" = "Report";
+"resources.type.dashboard" = "Dashboard";
+"resources.type.folder" = "Folder";
+"resources.type.saved.reportUnit" = "Saved Report";
 
 /* Settings view */
 

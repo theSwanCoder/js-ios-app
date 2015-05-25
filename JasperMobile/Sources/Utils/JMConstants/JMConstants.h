@@ -45,8 +45,7 @@ extern NSString * const kJMLoginDidSuccessNotification;
 extern NSString * const kJMResetApplicationNotification;
 extern NSString * const kJMFavoritesDidChangedNotification;
 extern NSString * const kJMSavedResourcesDidChangedNotification;
-extern NSString * const kJMDemoServerUsername;
-extern NSString * const kJMDemoServerPassword;
+extern NSString * const kJMRecentViewsDidChangedNotification;
 
 // Shared keys for dictionary
 extern NSString * const kJMServerProfileKey;
@@ -69,6 +68,8 @@ extern NSString * const kJMDefaultUseVisualize;
 extern NSString * const kJMDemoServerAlias;
 extern NSString * const kJMDemoServerUrl;
 extern NSString * const kJMDemoServerOrganization;
+extern NSString * const kJMDemoServerUsername;
+extern NSString * const kJMDemoServerPassword;
 
 // Report directory
 extern NSString * const kJMReportsDirectory;

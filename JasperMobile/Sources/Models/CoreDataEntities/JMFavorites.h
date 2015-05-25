@@ -43,6 +43,7 @@
 @property (nonatomic, strong) NSString * label;
 @property (nonatomic, strong) NSString * uri;
 @property (nonatomic, strong) NSString * wsType;
+@property (nonatomic, retain) NSNumber * version;
 @property (nonatomic, strong) JMServerProfile *serverProfile;
 
 @end

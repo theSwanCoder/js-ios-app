@@ -98,11 +98,11 @@
 // Resources
 "master.base.resources.title" = "Sfoglia";
 
-"resources.title" = "Tipo oggetto";
-"resources.type.all" = "Tutti";
-"resources.type.reportUnit" = "Report";
-"resources.type.dashboard" = "Dashboard";
-"resources.type.folder" = "Cartelle";
+"resources.filterby.title" = "Tipo oggetto";
+"resources.filterby.type.all" = "Tutti";
+"resources.filterby.type.reportUnit" = "Report";
+"resources.filterby.type.dashboard" = "Dashboard";
+"resources.filterby.type.folder" = "Cartelle";
 
 // Sort by
 "resources.sortby.title" = "Opzioni di ordinamento";
