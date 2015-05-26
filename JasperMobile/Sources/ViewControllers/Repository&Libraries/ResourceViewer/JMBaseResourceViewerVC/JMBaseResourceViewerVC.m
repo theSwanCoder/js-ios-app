@@ -57,6 +57,13 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     
     // Update count of views for resource
     [JMRecentViews updateCountOfViewsForResourceLookup:self.resourceLookup];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupRightBarButtonItems) name:kJMFavoritesDidChangedNotification object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -163,15 +170,17 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     @throw [NSException exceptionWithName:@"Method implementation is missing" reason:[NSString stringWithFormat:@"You need to implement \"%@\" method in \"%@\" class", NSStringFromSelector(_cmd), NSStringFromClass(self.class)] userInfo:nil];
 }
 
-- (void) cancelResourceViewingAndExit
+- (void) cancelResourceViewingAndExit:(BOOL)exit
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (exit) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark - Actions
 - (void) backButtonTapped:(id)sender
 {
-    [self cancelResourceViewingAndExit];
+    [self cancelResourceViewingAndExit:YES];
 }
 
 - (void)showAvailableActions
@@ -195,10 +204,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     } else {
         [JMFavorites addToFavorites:self.resourceLookup];
     }
-    if (sender) {
-        [self replaceRightNavigationItem:sender withItem:[self favoriteBarButtonItem]];
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
 - (void)showInfoPage
@@ -206,6 +211,8 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     JMResourceInfoViewController *vc = [NSClassFromString([self.resourceLookup infoVCIdentifier]) new];
     vc.resourceLookup = self.resourceLookup;
     JMMainNavigationController *nextNC = [[JMMainNavigationController alloc] initWithRootViewController:vc];
+
+    nextNC.modalPresentationStyle = UIModalPresentationFormSheet;
     [self.navigationController presentViewController:nextNC animated:YES completion:nil];
 }
 

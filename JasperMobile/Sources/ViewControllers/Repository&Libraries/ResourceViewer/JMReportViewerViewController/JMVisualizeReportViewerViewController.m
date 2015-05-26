@@ -44,12 +44,12 @@
 @synthesize reportLoader = _reportLoader;
 
 #pragma mark - Actions
-- (void)cancelResourceViewingAndExit
+- (void)cancelResourceViewingAndExit:(BOOL)exit
 {
     if (self.isChildReport) {
         [self closeChildReport];
     } else {
-        [super cancelResourceViewingAndExit];
+        [super cancelResourceViewingAndExit:exit];
     }
 }
 
@@ -116,7 +116,7 @@
 - (void)runReportWithPage:(NSInteger)page
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
-        [self cancelResourceViewingAndExit];
+        [self cancelResourceViewingAndExit:YES];
     }@weakselfend];
 
     [self hideEmptyReportMessage];
@@ -135,7 +135,7 @@
 - (void)updateReportWithNewParameters
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
-            [self cancelResourceViewingAndExit];
+            [self cancelResourceViewingAndExit:YES];
         }@weakselfend];
 
     [self hideEmptyReportMessage];
@@ -187,13 +187,13 @@
             [self runReportWithPage:reportCurrentPage];
         } else {
             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                [self cancelResourceViewingAndExit];
+                [self cancelResourceViewingAndExit:YES];
             } @weakselfend];
         }
 
     } else {
         [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-            [self cancelResourceViewingAndExit];
+            [self cancelResourceViewingAndExit:YES];
         }];
     }
 }
@@ -205,7 +205,7 @@
     [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls, NSError *error)) {
         if (error) {
             [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                [self cancelResourceViewingAndExit];
+                [self cancelResourceViewingAndExit:YES];
             }];
         } else {
             JMVisualizeReportViewerViewController *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];

@@ -70,7 +70,7 @@
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
         [self.restClient cancelAllRequests];
         [self.reportLoader cancelReport];
-        [self cancelResourceViewingAndExit];
+        [self cancelResourceViewingAndExit:YES];
     }@weakselfend];
     
     [self.reportLoader runReportWithPage:page completion:@weakself(^(BOOL success, NSError *error)) {
@@ -100,7 +100,7 @@
             [self runReportWithPage:self.report.currentPage];
         } else {
             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                [self cancelResourceViewingAndExit];
+                [self cancelResourceViewingAndExit:YES];
             } @weakselfend];
         }
     } else {

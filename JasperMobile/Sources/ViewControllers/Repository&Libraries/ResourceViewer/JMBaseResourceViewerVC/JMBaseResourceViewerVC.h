@@ -36,6 +36,14 @@
 #import "JMMenuActionsView.h"
 #import "JMCancelRequestPopup.h"
 
+@class JMBaseResourceViewerVC;
+@protocol JMBaseResourceViewerVCDelegate <NSObject>
+@optional
+- (BOOL)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer shouldCloseViewerAfterDeletingResource:(JSResourceLookup *)resourceLookup;
+- (void)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer didDeleteResource:(JSResourceLookup *)resourceLookup;
+
+@end
+
 extern NSString * const kJMShowReportOptionsSegue;
 extern NSString * const kJMShowMultiPageReportSegue;
 extern NSString * const kJMShowDashboardViewerSegue;
@@ -45,6 +53,7 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, assign) BOOL isResourceLoaded;
 @property (nonatomic, strong) NSURLRequest *resourceRequest;
+@property (nonatomic, weak) id <JMBaseResourceViewerVCDelegate>delegate;
 
 // setup
 - (void)setupSubviews;
@@ -55,7 +64,7 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 
 // Resource Viewing
 - (void) startResourceViewing;
-- (void) cancelResourceViewingAndExit NS_REQUIRES_SUPER;
+- (void) cancelResourceViewingAndExit:(BOOL)exit NS_REQUIRES_SUPER;
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource;
 

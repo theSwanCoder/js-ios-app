@@ -53,7 +53,7 @@
         });
     } else {
         [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-            [self cancelResourceViewingAndExit];
+            [self cancelResourceViewingAndExit:YES];
         } @weakselfend];
     }
 }

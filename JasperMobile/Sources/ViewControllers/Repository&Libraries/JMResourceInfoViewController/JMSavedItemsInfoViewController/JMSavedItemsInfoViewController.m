@@ -29,7 +29,7 @@
 #import "JMSavedItemsInfoViewController.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMSavedResources+Helpers.h"
-
+#import "JMSavedResourceViewerViewController.h"
 
 @interface JMSavedItemsInfoViewController () <UIAlertViewDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
@@ -59,12 +59,8 @@
 #pragma mark - Overloaded methods
 - (void)resetResourceProperties
 {
-    if (self.savedReports.managedObjectContext) {
-        self.resourceLookup = [self.savedReports wrapperFromSavedReports];
-        [super resetResourceProperties];
-    } else {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+    self.resourceLookup = [self.savedReports wrapperFromSavedReports];
+    [super resetResourceProperties];
 }
 
 - (NSArray *)resourceProperties
@@ -114,10 +110,9 @@
 
 - (void)runReport
 {
-    id nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
-    if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
-        [nextVC setResourceLookup:self.resourceLookup];
-    }
+    JMSavedResourceViewerViewController *nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
+    nextVC.resourceLookup = self.resourceLookup;
+    nextVC.delegate = self;
     
     if (nextVC) {
         [self.navigationController pushViewController:nextVC animated:YES];
@@ -162,4 +157,18 @@
         }
     }
 }
+
+#pragma mark - JMBaseResourceViewerVCDelegate
+- (void)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer didDeleteResource:(JSResourceLookup *)resourceLookup
+{
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    UIViewController *previousViewController = [viewControllers objectAtIndex:[viewControllers indexOfObject:self] - 1];
+    [self.navigationController popToViewController:previousViewController animated:YES];
+}
+
+- (BOOL)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer shouldCloseViewerAfterDeletingResource:(JSResourceLookup *)resourceLookup
+{
+    return NO;
+}
+
 @end

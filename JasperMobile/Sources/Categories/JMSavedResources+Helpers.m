@@ -66,12 +66,7 @@ NSString * const kJMSavedResources = @"SavedResources";
     NSString *pathToReport = [JMSavedResources pathToReportWithName:self.label format:self.format];
     [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
     
-    JMFavorites *favorites = [JMFavorites favoritesFromResourceLookup:[self wrapperFromSavedReports]];
-    if (favorites) {
-        [self.managedObjectContext deleteObject:favorites];
-        [self.managedObjectContext save:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
-    }
+    [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
     
     JMRecentViews *recentView = [JMRecentViews recentViewsForResourceLookup:[self wrapperFromSavedReports]];
     if (recentView) {
