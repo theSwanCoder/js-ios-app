@@ -102,8 +102,6 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         [JMFavorites addToFavorites:self.resourceLookup];
     }
     [self setNeedLayoutUI:YES];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
 - (void)cancelButtonTapped:(id)sender
@@ -199,6 +197,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     BOOL selfIsModalViewController = [self.navigationController.viewControllers count] == 1;
     if (selfIsModalViewController) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonTapped:)];
+        self.navigationItem.rightBarButtonItem = [self favoriteBarButtonItem];
     } else {
         NSMutableArray *navBarItems = [NSMutableArray array];
         JMMenuActionsViewAction availableAction = [self availableAction];

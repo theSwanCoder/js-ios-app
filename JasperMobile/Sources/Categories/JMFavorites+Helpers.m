@@ -45,6 +45,7 @@ NSString * const kJMFavorites = @"Favorites";
     [activeServerProfile  addFavoritesObject:favorites];
 
     [[JMCoreDataManager sharedInstance] save:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
 + (void)removeFromFavorites:(JSResourceLookup *)resource
@@ -53,6 +54,7 @@ NSString * const kJMFavorites = @"Favorites";
     [[JMCoreDataManager sharedInstance].managedObjectContext deleteObject:favorites];
     
     [[JMCoreDataManager sharedInstance] save:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
 + (BOOL)isResourceInFavorites:(JSResourceLookup *)resource

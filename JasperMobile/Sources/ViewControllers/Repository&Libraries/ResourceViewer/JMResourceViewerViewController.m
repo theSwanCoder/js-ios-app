@@ -55,13 +55,13 @@
     [self.webView loadHTMLString:nil baseURL:nil];
 }
 
-- (void)cancelResourceViewingAndExit
+- (void)cancelResourceViewingAndExit:(BOOL)exit
 {
     [self resetSubViews];
     [self.view endEditing:YES];
     self.webView.delegate = nil;
 
-    [super cancelResourceViewingAndExit];
+    [super cancelResourceViewingAndExit:exit];
 }
 
 #pragma mark - UIWebViewDelegate

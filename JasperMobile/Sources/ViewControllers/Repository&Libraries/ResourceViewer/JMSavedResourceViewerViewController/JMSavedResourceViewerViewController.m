@@ -131,8 +131,16 @@
                 self.resourceLookup = [self.savedReports wrapperFromSavedReports];
             }
         } else if (alertView.tag == JMMenuActionsViewAction_Delete) {
-            [self cancelResourceViewingAndExit];
+            BOOL shouldCloseViewer = YES;
+            if (self.delegate && [self.delegate respondsToSelector:@selector(resourceViewer:shouldCloseViewerAfterDeletingResource:)]) {
+                shouldCloseViewer = [self.delegate resourceViewer:self shouldCloseViewerAfterDeletingResource:self.resourceLookup];
+            }
+            [self cancelResourceViewingAndExit:shouldCloseViewer];
             [self.savedReports removeReport];
+            
+            if (self.delegate && [self.delegate respondsToSelector:@selector(resourceViewer:didDeleteResource:)]) {
+                [self.delegate resourceViewer:self didDeleteResource:self.resourceLookup];
+            }
         }
     }
 }

@@ -130,13 +130,13 @@
 }
 
 #pragma mark - Actions
-- (void)cancelResourceViewingAndExit
+- (void)cancelResourceViewingAndExit:(BOOL)exit
 {
     [self.reportLoader cancelReport];
     if (self.exitBlock) {
         self.exitBlock();
     }
-    [super cancelResourceViewingAndExit];
+    [super cancelResourceViewingAndExit:exit];
 }
 
 - (void)refreshReport
@@ -167,7 +167,7 @@
         [self startShowLoaderWithMessage:@"status.loading.ic" cancelBlock:@weakself(^(void)) {
             [self.restClient cancelAllRequests];
             [self.reportLoader cancelReport];
-            [self cancelResourceViewingAndExit];
+            [self cancelResourceViewingAndExit:YES];
         }@weakselfend];
 
         NSString *reportURI = [self.report.reportURI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -176,7 +176,7 @@
                                       [self stopShowLoader];
                                       if (error) {
                                           [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                              [self cancelResourceViewingAndExit];
+                                              [self cancelResourceViewingAndExit:YES];
                                           }];
                                       } else {
                                           [self.report updateInputControls:inputControls];
@@ -186,7 +186,7 @@
                                                                     completionBlock:@weakself(^(JSOperationResult *result)) {
                                                                         if (result.error) {
                                                                             [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                                                                [self cancelResourceViewingAndExit];
+                                                                                [self cancelResourceViewingAndExit:YES];
                                                                             }];
                                                                         } else {
                                                                             JSResourceReportUnit *reportUnit = [result.objects firstObject];
@@ -298,7 +298,7 @@
                                             [self loadInputControlsWithReportURI:reportURI completion:completion];
                                         } else {
                                             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                                                [self cancelResourceViewingAndExit];
+                                                [self cancelResourceViewingAndExit:YES];
                                             } @weakselfend];
                                         }
                                     } else {

@@ -37,7 +37,7 @@
 
 extern NSString * const kJMShowResourceInfoSegue;
 
-@interface JMResourceInfoViewController : UIViewController <JMResourceClientHolder, JMMenuActionsViewDelegate>
+@interface JMResourceInfoViewController : UIViewController <JMResourceClientHolder, JMMenuActionsViewDelegate, JMBaseResourceViewerVCDelegate>
 
 - (NSArray *)resourceProperties;
 
