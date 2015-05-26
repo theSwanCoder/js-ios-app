@@ -69,7 +69,8 @@
 }).call(this);
 
 (function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
   define('js.mobile.ios.callbacks.IosCallback', ['require','js.mobile.callback_dispatcher'],function(require) {
@@ -79,6 +80,7 @@
       extend(IosCallback, superClass);
 
       function IosCallback() {
+        this.onWindowResizeEnd = bind(this.onWindowResizeEnd, this);
         return IosCallback.__super__.constructor.apply(this, arguments);
       }
 
