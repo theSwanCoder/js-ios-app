@@ -231,7 +231,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
             break;
     }
 
-    [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
+    [self.popoverView dismiss];
 }
 
 #pragma mark - PopoverViewDelegate Methods
