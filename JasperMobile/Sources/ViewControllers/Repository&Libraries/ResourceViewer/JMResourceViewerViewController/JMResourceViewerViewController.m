@@ -24,6 +24,7 @@
 #import "JMResourceViewerViewController.h"
 #import "JMWebViewManager.h"
 #import "ALToastView.h"
+#import "JSResourceLookup+Helpers.h"
 
 @implementation JMResourceViewerViewController
 
@@ -62,6 +63,17 @@
     self.webView.delegate = nil;
 
     [super cancelResourceViewingAndExit:exit];
+}
+
+#pragma mark - Overriden methods
+
+- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+{
+    JMMenuActionsViewAction availableActions = [super availableActionForResource:resource];
+    if (![self.resourceLookup isSavedReport]) {
+        availableActions |= JMMenuActionsViewAction_Print;
+    }
+    return availableActions;
 }
 
 #pragma mark - UIWebViewDelegate

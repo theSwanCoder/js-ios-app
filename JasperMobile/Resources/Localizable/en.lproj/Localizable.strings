@@ -208,6 +208,7 @@
 "action.title.selectall" = "Select All";
 "action.title.clearselections" = "Clear selections";
 "action.title.run" = "Run";
+"action.title.print" = "Print";
 
 /* Error messages */
 

@@ -34,7 +34,6 @@
 #import "JSResourceLookup+Helpers.h"
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
-@property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
@@ -54,7 +53,6 @@
     [super viewDidLoad];
 
     [self addObservers];
-    self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -350,7 +348,10 @@
 #pragma mark - Helpers
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    JMMenuActionsViewAction availableAction = [super availableActionForResource:resource] | self.menuActionsViewAction;
+    JMMenuActionsViewAction availableAction = [super availableActionForResource:resource];
+    if (!self.report.isReportEmpty) {
+        availableAction |= (JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh);
+    }
     if (self.report.isReportWithInputControls) {
         availableAction |= JMMenuActionsViewAction_Edit;
     }
@@ -360,14 +361,12 @@
 - (void)showEmptyReportMessage
 {
     self.emptyReportMessageLabel.hidden = NO;
-    self.menuActionsViewAction = JMMenuActionsViewAction_None;
     [self.navigationController setToolbarHidden:YES animated:YES];
 }
 
 - (void)hideEmptyReportMessage
 {
     self.emptyReportMessageLabel.hidden = YES;
-    self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
 }
 
 @end
