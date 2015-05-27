@@ -136,6 +136,7 @@
 		08B518501B15E65D00B3F20A /* JMResourceViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B518261B15E65D00B3F20A /* JMResourceViewerViewController.m */; };
 		08B518511B15E65D00B3F20A /* JMSavedResourceViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B518291B15E65D00B3F20A /* JMSavedResourceViewerViewController.m */; };
 		08B518521B15E65D00B3F20A /* JMWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B5182C1B15E65D00B3F20A /* JMWebViewController.m */; };
+		08B5185D1B16259A00B3F20A /* JMPrintResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B5185C1B16259A00B3F20A /* JMPrintResourceViewController.m */; };
 		08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C838191A1F5A0D0004BE78 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DB3D931A891640006F9620 /* MessageUI.framework */; };
 		08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18141B13390500856112 /* JMRecentViewsCollectionViewController.m */; };
@@ -448,6 +449,8 @@
 		08B518291B15E65D00B3F20A /* JMSavedResourceViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedResourceViewerViewController.m; sourceTree = "<group>"; };
 		08B5182B1B15E65D00B3F20A /* JMWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMWebViewController.h; sourceTree = "<group>"; };
 		08B5182C1B15E65D00B3F20A /* JMWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMWebViewController.m; sourceTree = "<group>"; };
+		08B5185B1B16259A00B3F20A /* JMPrintResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPrintResourceViewController.h; sourceTree = "<group>"; };
+		08B5185C1B16259A00B3F20A /* JMPrintResourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPrintResourceViewController.m; sourceTree = "<group>"; };
 		08B99F6D1A07CD7700E822B0 /* profiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = profiles.json; sourceTree = "<group>"; };
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		08C838191A1F5A0D0004BE78 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -1362,6 +1365,7 @@
 			isa = PBXGroup;
 			children = (
 				08B5182A1B15E65D00B3F20A /* JMWebViewController */,
+				08B5185A1B16259A00B3F20A /* JMPrintResourceViewController */,
 				08B517E01B15E65D00B3F20A /* JMReportViewerViewController */,
 				08B518271B15E65D00B3F20A /* JMSavedResourceViewerViewController */,
 				08B517D51B15E65D00B3F20A /* JMDashboardsViewerViewController */,
@@ -1583,6 +1587,15 @@
 				08B5182C1B15E65D00B3F20A /* JMWebViewController.m */,
 			);
 			path = JMWebViewController;
+			sourceTree = "<group>";
+		};
+		08B5185A1B16259A00B3F20A /* JMPrintResourceViewController */ = {
+			isa = PBXGroup;
+			children = (
+				08B5185B1B16259A00B3F20A /* JMPrintResourceViewController.h */,
+				08B5185C1B16259A00B3F20A /* JMPrintResourceViewController.m */,
+			);
+			path = JMPrintResourceViewController;
 			sourceTree = "<group>";
 		};
 		08B99F6C1A07CD7700E822B0 /* ServerProfiles */ = {
@@ -2173,6 +2186,7 @@
 				089B159C1AA756BD0021A915 /* JMEditabledViewController.m in Sources */,
 				08B5184C1B15E65D00B3F20A /* JMSaveReportSection.m in Sources */,
 				08B518331B15E65D00B3F20A /* JMBooleanInputControlCell.m in Sources */,
+				08B5185D1B16259A00B3F20A /* JMPrintResourceViewController.m in Sources */,
 				08E62C8319922B0B0081CA83 /* main.m in Sources */,
 				089B15B81AA756BD0021A915 /* JMServersGridViewController.m in Sources */,
 				089B15CE1AA756BD0021A915 /* JMResourcesListLoader.m in Sources */,

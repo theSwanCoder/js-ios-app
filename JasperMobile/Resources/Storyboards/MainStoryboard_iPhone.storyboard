@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ARf-6W-JXB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ARf-6W-JXB">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
         <!--Main Navigation Controller-->
@@ -466,7 +466,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="cyI-ld-frz">
-                                                    <rect key="frame" x="178.00000010403721" y="7" width="110" height="30"/>
+                                                    <rect key="frame" x="178" y="7" width="110" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -853,6 +853,47 @@ your business wherever you are.</string>
             </objects>
             <point key="canvasLocation" x="-896" y="-105"/>
         </scene>
+        <!--Print Resource View Controller-->
+        <scene sceneID="mwF-7r-jSH">
+            <objects>
+                <viewController storyboardIdentifier="JMPrintResourceViewController" id="Dji-H4-Y8n" customClass="JMPrintResourceViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8WD-Gc-JlB">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="a0q-1D-9Hu">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="457"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="pWU-49-7Yv">
+                                <rect key="frame" x="10" y="465" width="300" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" red="0.25882352939999997" green="0.5568627451" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Print">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="printButtonTapped:" destination="Dji-H4-Y8n" eventType="touchUpInside" id="58f-SN-EnD"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <outlet property="printButton" destination="pWU-49-7Yv" id="5Xf-dI-UP9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xtP-ph-eGe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-416" y="-105"/>
+        </scene>
         <!--Favorites Collection View Controller-->
         <scene sceneID="3vm-cL-7yI">
             <objects>
@@ -943,7 +984,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rJN-ll-lVB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-773" y="-847"/>
+            <point key="canvasLocation" x="-896" y="-847"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="3c7-so-7d2">
@@ -996,7 +1037,7 @@ your business wherever you are.</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextCellIdentifier" textLabel="FkY-Qs-99e" style="IBUITableViewCellStyleDefault" id="dzz-4a-J4M" customClass="JMTextSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="86" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="22" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dzz-4a-J4M" id="iC1-Tp-e94">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -1026,7 +1067,7 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BooleanCellIdentifier" textLabel="ehn-Jd-ueF" style="IBUITableViewCellStyleDefault" id="uVG-rE-OoL" customClass="JMBooleanSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="130" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="66" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uVG-rE-OoL" id="0CI-6d-EkU">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -1054,7 +1095,7 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IntroCellIdentifier" textLabel="TDI-Ai-vEN" style="IBUITableViewCellStyleDefault" id="ZRK-XI-mbG" customClass="JMSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="174" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="110" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZRK-XI-mbG" id="RLN-2u-qEw">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -1073,7 +1114,7 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedbackCellIdentifier" textLabel="NHL-5E-XIk" style="IBUITableViewCellStyleDefault" id="VXs-qL-KsU" customClass="JMSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="218" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="154" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VXs-qL-KsU" id="TDV-N4-NZk">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
