@@ -27,11 +27,15 @@
 //
 
 #import "JMPrintResourceViewController.h"
+#import "JMFileManager.h"
 
 @interface JMPrintResourceViewController ()
-@property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, strong) id printingItem;
 
+@property (nonatomic, strong) JMReport *report;
+@property (nonatomic, strong) JSResourceLookup *resourceLookup;
+@property (nonatomic, weak) UIWebView *webView;
+
+@property (nonatomic, strong) id printingItem;
 @property (nonatomic, weak) IBOutlet UIButton *printButton;
 @end
 
@@ -44,40 +48,52 @@
                       forState:UIControlStateNormal];
 }
 
-- (void)printForResourceLookup:(JSResourceLookup *)resourceLookup withWebView:(UIWebView *)webView
+#pragma mark - Public API
+- (void)setReport:(JMReport *)report withWebView:(UIWebView *)webView
 {
-    self.resourceLookup = resourceLookup;
-    
-    UIGraphicsBeginImageContextWithOptions(webView.bounds.size, webView.opaque, 0.0);
-    [webView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
-    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    self.printingItem = viewImage;
+    self.report = report;
+    self.webView = webView;
 }
 
-- (IBAction)printButtonTapped:(id)sender
+- (void)setResourceLookup:(JSResourceLookup *)resourceLookup withWebView:(UIWebView *)webView
+{
+    self.resourceLookup = resourceLookup;
+    self.webView = webView;
+}
+
+#pragma mark - Private API
+- (NSString *)jobName
+{
+    if (self.report) {
+        return self.report.resourceLookup.label;
+    } else if (self.resourceLookup) {
+        return self.resourceLookup.label;
+    } else {
+        NSString *applicationName = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"];
+        return [NSString stringWithFormat:JMCustomLocalizedString(@"resource.viewer.print.operation.name", nil), applicationName];
+    }
+}
+
+- (void)printResource
 {
     UIPrintInfo *printInfo = [UIPrintInfo printInfo];
-    printInfo.jobName = self.resourceLookup.label;
+    printInfo.jobName = self.jobName;
     printInfo.outputType = UIPrintInfoOutputGeneral;
     printInfo.duplex = UIPrintInfoDuplexLongEdge;
-
+    
     UIPrintInteractionController *printController = [UIPrintInteractionController sharedPrintController];
     printController.printInfo = printInfo;
     printController.showsPageRange = NO;
     
     printController.printingItem = self.printingItem;
     
-    UIPrintInteractionCompletionHandler completionHandler =
-    ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
-        if(!completed && error){
+    UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
+        if(error){
             NSLog(@"FAILED! due to error in domain %@ with error code %u", error.domain, error.code);
         } else {
             [self.navigationController popViewControllerAnimated:YES];
         }
-    };
+    }@weakselfend;
     
     if ([JMUtils isIphone]) {
         [printController presentAnimated:YES completionHandler:completionHandler];
@@ -86,4 +102,26 @@
     }
 }
 
+- (IBAction)printButtonTapped:(id)sender
+{
+    if (self.report) {
+        
+    } else {
+        self.printingItem = [self imageFromWebView];
+        [self printResource];
+    }
+}
+
+#pragma mark - Helpers
+- (UIImage *)imageFromWebView
+{
+    // Screenshot rendering from webView
+    UIGraphicsBeginImageContextWithOptions(self.webView.bounds.size, self.webView.opaque, 0.0);
+    [self.webView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return viewImage;
+}
 @end

@@ -85,11 +85,11 @@
     }
 }
 
-#pragma mark - Private API
+#pragma mark - Public API
 - (void)printResource
 {
     JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
-    [printController printForResourceLookup:self.resourceLookup withWebView:self.webView];
+    [printController setResourceLookup:self.resourceLookup withWebView:self.webView];
     [self.navigationController pushViewController:printController animated:YES];
 }
 

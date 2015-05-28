@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0801DF891AAF2B2A00DD072C /* JMSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF881AAF2B2A00DD072C /* JMSplashViewController.m */; };
-		0801DF8D1AAF2BCD00DD072C /* JMVisualizeClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF8C1AAF2BCD00DD072C /* JMVisualizeClient.m */; };
 		0801DF951AAF2CC000DD072C /* JMSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF941AAF2CC000DD072C /* JMSessionManager.m */; };
 		0801DF9D1AAF2CC900DD072C /* JMFavorites.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF981AAF2CC900DD072C /* JMFavorites.m */; };
 		0801DF9E1AAF2CC900DD072C /* JMSavedResources.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF9A1AAF2CC900DD072C /* JMSavedResources.m */; };
@@ -137,6 +136,7 @@
 		08B518511B15E65D00B3F20A /* JMSavedResourceViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B518291B15E65D00B3F20A /* JMSavedResourceViewerViewController.m */; };
 		08B518521B15E65D00B3F20A /* JMWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B5182C1B15E65D00B3F20A /* JMWebViewController.m */; };
 		08B5185D1B16259A00B3F20A /* JMPrintResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B5185C1B16259A00B3F20A /* JMPrintResourceViewController.m */; };
+		08B518681B170C7C00B3F20A /* JMVisualizeClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B518671B170C7C00B3F20A /* JMVisualizeClient.m */; };
 		08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C838191A1F5A0D0004BE78 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DB3D931A891640006F9620 /* MessageUI.framework */; };
 		08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18141B13390500856112 /* JMRecentViewsCollectionViewController.m */; };
@@ -211,8 +211,6 @@
 /* Begin PBXFileReference section */
 		0801DF871AAF2B2A00DD072C /* JMSplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSplashViewController.h; sourceTree = "<group>"; };
 		0801DF881AAF2B2A00DD072C /* JMSplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSplashViewController.m; sourceTree = "<group>"; };
-		0801DF8B1AAF2BCD00DD072C /* JMVisualizeClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeClient.h; sourceTree = "<group>"; };
-		0801DF8C1AAF2BCD00DD072C /* JMVisualizeClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeClient.m; sourceTree = "<group>"; };
 		0801DF931AAF2CC000DD072C /* JMSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSessionManager.h; sourceTree = "<group>"; };
 		0801DF941AAF2CC000DD072C /* JMSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSessionManager.m; sourceTree = "<group>"; };
 		0801DF971AAF2CC900DD072C /* JMFavorites.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFavorites.h; sourceTree = "<group>"; };
@@ -451,6 +449,8 @@
 		08B5182C1B15E65D00B3F20A /* JMWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMWebViewController.m; sourceTree = "<group>"; };
 		08B5185B1B16259A00B3F20A /* JMPrintResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPrintResourceViewController.h; sourceTree = "<group>"; };
 		08B5185C1B16259A00B3F20A /* JMPrintResourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPrintResourceViewController.m; sourceTree = "<group>"; };
+		08B518661B170C7C00B3F20A /* JMVisualizeClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeClient.h; sourceTree = "<group>"; };
+		08B518671B170C7C00B3F20A /* JMVisualizeClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeClient.m; sourceTree = "<group>"; };
 		08B99F6D1A07CD7700E822B0 /* profiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = profiles.json; sourceTree = "<group>"; };
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		08C838191A1F5A0D0004BE78 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -602,15 +602,6 @@
 				0801DF881AAF2B2A00DD072C /* JMSplashViewController.m */,
 			);
 			path = JMSplashViewController;
-			sourceTree = "<group>";
-		};
-		0801DF8A1AAF2BCD00DD072C /* JMVisualizeClient */ = {
-			isa = PBXGroup;
-			children = (
-				0801DF8B1AAF2BCD00DD072C /* JMVisualizeClient.h */,
-				0801DF8C1AAF2BCD00DD072C /* JMVisualizeClient.m */,
-			);
-			path = JMVisualizeClient;
 			sourceTree = "<group>";
 		};
 		0801DF921AAF2CC000DD072C /* JMSessionManager */ = {
@@ -887,7 +878,6 @@
 		089B14BF1AA756BD0021A915 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				0801DF8A1AAF2BCD00DD072C /* JMVisualizeClient */,
 				089B14C91AA756BD0021A915 /* JMLoginViewController */,
 				0801DF861AAF2B2A00DD072C /* JMSplashViewController */,
 				0801DFB01AAF2E7500DD072C /* JMOnboardIntroViewController */,
@@ -1598,6 +1588,15 @@
 			path = JMPrintResourceViewController;
 			sourceTree = "<group>";
 		};
+		08B518651B170C7C00B3F20A /* JMVisualizeClient */ = {
+			isa = PBXGroup;
+			children = (
+				08B518661B170C7C00B3F20A /* JMVisualizeClient.h */,
+				08B518671B170C7C00B3F20A /* JMVisualizeClient.m */,
+			);
+			path = JMVisualizeClient;
+			sourceTree = "<group>";
+		};
 		08B99F6C1A07CD7700E822B0 /* ServerProfiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -1824,6 +1823,7 @@
 				0801DF921AAF2CC000DD072C /* JMSessionManager */,
 				93D8C6421AAC7E9200117306 /* JMWebViewManager */,
 				A14781A66383F634AB55FF8C /* JMFileManager */,
+				08B518651B170C7C00B3F20A /* JMVisualizeClient */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1860,8 +1860,8 @@
 		A14781A66383F634AB55FF8C /* JMFileManager */ = {
 			isa = PBXGroup;
 			children = (
-				A14780B58A557311DF10B120 /* JMFileManager.m */,
 				A1478F34566E444CAD3FD4F1 /* JMFileManager.h */,
+				A14780B58A557311DF10B120 /* JMFileManager.m */,
 			);
 			path = JMFileManager;
 			sourceTree = "<group>";
@@ -2233,6 +2233,7 @@
 				08DD18181B13399800856112 /* JMRecentViews+Helpers.m in Sources */,
 				089B159D1AA756BD0021A915 /* JMMainNavigationController.m in Sources */,
 				93EEB4641AC54EAE000718C7 /* JMWKWebViewManager.swift in Sources */,
+				08B518681B170C7C00B3F20A /* JMVisualizeClient.m in Sources */,
 				089B15F61AA756BD0021A915 /* JMBaseCollectionViewController.m in Sources */,
 				089B15F31AA756BD0021A915 /* JMSettingsViewController.m in Sources */,
 				089B15A31AA756BD0021A915 /* UIColor+RGBComponent.m in Sources */,
@@ -2258,7 +2259,6 @@
 				089B15B91AA756BD0021A915 /* JMBooleanServerOptionCell.m in Sources */,
 				0801DFBF1AAF2E7500DD072C /* JMOnboardIntroViewController.m in Sources */,
 				0801DFBE1AAF2E7500DD072C /* JMIntroModelManager.m in Sources */,
-				0801DF8D1AAF2BCD00DD072C /* JMVisualizeClient.m in Sources */,
 				08221C971AE7956600F94F1D /* NSManagedObjectModel+JMAdditions.m in Sources */,
 				08B518351B15E65D00B3F20A /* JMDateTimeInputControlCell.m in Sources */,
 				08B5184F1B15E65D00B3F20A /* JMResourceViewerVC.swift in Sources */,

@@ -36,6 +36,8 @@
 
 @interface JMPrintResourceViewController : UIViewController
 
-- (void)printForResourceLookup:(JSResourceLookup *)resourceLookup withWebView:(UIWebView *)webView;
+- (void) setResourceLookup:(JSResourceLookup *)resourceLookup withWebView:(UIWebView *)webView;
+
+- (void) setReport:(JMReport *)report withWebView:(UIWebView *)webView;
 
 @end

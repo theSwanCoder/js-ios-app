@@ -32,6 +32,7 @@
 #import "JMReportOptionsViewController.h"
 #import "ALToastView.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMPrintResourceViewController.h"
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
@@ -205,6 +206,13 @@
         // when we start running a report from another report by tapping on hyperlink
         [self runReportWithPage:page];
     }
+}
+
+- (void)printResource
+{
+    JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
+    [printController setReport:self.report withWebView:self.webView];
+    [self.navigationController pushViewController:printController animated:YES];
 }
 
 #pragma mark - Custom accessors
