@@ -1,24 +1,24 @@
-Tibco JasperMobile for iOS
+TIBCO JasperMobile for iOS
 ==========================
 [![Build Status](https://travis-ci.org/Jaspersoft/js-ios-app.svg?branch=develop)](https://travis-ci.org/Jaspersoft/js-ios-app/builds)
 
-Tibco JasperMobile for iOS is a native application which allows you to browse your JasperReports Server repository and view reports in several formats.
+TIBCO JasperMobile for iOS is a native application which allows you to browse your JasperReports Server repository and view reports/dashboards in several formats.
 
-It is built using the Jaspersoft Mobile SDK for iOS version 1.8, and it is compatible with JasperReports Server 5.0 or higher, Community or Commercial editions.  
+It is built using the Jaspersoft Mobile SDK for iOS version 2.0, and it is compatible with JasperReports Server 5.5 or higher, Community or Commercial editions.  
 
-The source code of JasperMobile for iOS is freely available and can be used as a good example of how to integrate reporting and analysis services of JasperReports Server with your own native applications.
+The source code of TIBCO JasperMobile for iOS is freely available and can be used as a good example of how to integrate reporting and analysis services of JasperReports Server with your own native applications.
 
 
 General Information
 --------------------
 
-Please see the Tibco JasperMobile for iOS Community project page:
+Please see the TIBCO JasperMobile for iOS Community project page:
 http://community.jaspersoft.com/project/jaspermobile-ios
 
 Installation
 ------------
 
-The recommended approach for installing JaspersoftSDK for building application is via the [CocoaPods](http://cocoapods.org/) package manager, as it provides flexible dependency management and dead simple installation. For best results, it is recommended that you install via CocoaPods **>= ** 0.19.1g Git **>= 1.8.0** installed via Homebrew.
+The recommended approach for installing JaspersoftSDK for building application is via the [CocoaPods](http://cocoapods.org/) package manager, as it provides flexible dependency management and dead simple installation. For best results, it is recommended that you install via **CocoaPods >= 0.19.1g Git >= 1.8.0** installed via Homebrew.
 
 ### via CocoaPods
 
