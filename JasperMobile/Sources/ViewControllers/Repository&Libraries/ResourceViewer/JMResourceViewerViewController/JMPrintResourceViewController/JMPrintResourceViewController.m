@@ -27,7 +27,7 @@
 //
 
 #import "JMPrintResourceViewController.h"
-#import "JMFileManager.h"
+#import "JMReportSaver.h"
 
 @interface JMPrintResourceViewController ()
 
@@ -74,6 +74,43 @@
     }
 }
 
+- (void)prepareForPrint
+{
+    if (self.report) {
+        JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
+        [JMCancelRequestPopup presentWithMessage:@"report.viewer.save.saving.status.title" cancelBlock:^{
+            [reportSaver cancelReport];
+        }];
+        [reportSaver saveReportWithName:[self reportName]
+                                 format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
+                                  pages:nil
+                                addToDB:NO
+                             completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     [JMCancelRequestPopup dismiss];
+                                 });
+                                 if (error) {
+                                     [reportSaver cancelReport];
+                                     if (error.code == JSSessionExpiredErrorCode) {
+                                         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                                             [self prepareForPrint];
+                                         } else {
+                                             [JMUtils showLoginViewAnimated:YES completion:nil];
+                                         }
+                                     } else {
+                                         [JMUtils showAlertViewWithError:error];
+                                     }
+                                 } else {
+                                     self.printingItem = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
+                                     [self printResource];
+                                 }
+                             }@weakselfend];
+    } else {
+        self.printingItem = [self imageFromWebView];
+        [self printResource];
+    }
+}
+
 - (void)printResource
 {
     UIPrintInfo *printInfo = [UIPrintInfo printInfo];
@@ -84,10 +121,17 @@
     UIPrintInteractionController *printController = [UIPrintInteractionController sharedPrintController];
     printController.printInfo = printInfo;
     printController.showsPageRange = NO;
-    
     printController.printingItem = self.printingItem;
     
     UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
+        if ([self.printingItem isKindOfClass:[NSURL class]]) {
+            NSURL *fileURL = (NSURL *)self.printingItem;
+            NSString *directoryPath = [fileURL.path stringByDeletingLastPathComponent];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
+                [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
+            }
+        }
+
         if(error){
             NSLog(@"FAILED! due to error in domain %@ with error code %u", error.domain, error.code);
         } else {
@@ -95,21 +139,18 @@
         }
     }@weakselfend;
     
-    if ([JMUtils isIphone]) {
-        [printController presentAnimated:YES completionHandler:completionHandler];
-    } else {
-        [printController presentFromRect:self.printButton.frame inView:self.view animated:YES completionHandler:completionHandler];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([JMUtils isIphone]) {
+            [printController presentAnimated:YES completionHandler:completionHandler];
+        } else {
+            [printController presentFromRect:self.printButton.frame inView:self.view animated:YES completionHandler:completionHandler];
+        }
+    });
 }
 
 - (IBAction)printButtonTapped:(id)sender
 {
-    if (self.report) {
-        
-    } else {
-        self.printingItem = [self imageFromWebView];
-        [self printResource];
-    }
+    [self prepareForPrint];
 }
 
 #pragma mark - Helpers
@@ -124,4 +165,10 @@
     
     return viewImage;
 }
+
+- (NSString *)reportName
+{
+    return [[NSProcessInfo processInfo] globallyUniqueString];
+}
+
 @end

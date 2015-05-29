@@ -63,7 +63,7 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 - (void)removeReport
 {
-    NSString *pathToReport = [JMSavedResources pathToReportWithName:self.label format:self.format];
+    NSString *pathToReport = [JMSavedResources pathToReportDirectoryWithName:self.label format:self.format];
     [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
     
     [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
