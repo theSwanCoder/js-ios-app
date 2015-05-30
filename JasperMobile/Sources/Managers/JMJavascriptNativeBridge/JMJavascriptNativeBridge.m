@@ -27,7 +27,74 @@
 //
 
 #import "JMJavascriptNativeBridge.h"
+#import "JMJavascriptRequest.h"
+#import "JMJavascriptCallback.h"
 
+
+@interface JMJavascriptNativeBridge() <UIWebViewDelegate>
+@end
 
 @implementation JMJavascriptNativeBridge
+
+#pragma mark - Custom Accessors
+- (void)setWebView:(UIWebView *)webView
+{
+    _webView = webView;
+    _webView.delegate = self;
+}
+
+#pragma mark - Public API
+- (void)sendRequest:(JMJavascriptRequest *)request
+{
+    NSString *javascriptString = request.command;
+    NSString *parameters = request.parametersAsString;
+    NSString *fullJavascriptString = [NSString stringWithFormat:javascriptString, parameters];
+    [self.webView stringByEvaluatingJavaScriptFromString:fullJavascriptString];
+}
+
+#pragma mark - UIWebViewDelegate
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSString *callback = @"http://jaspermobile.callback/";
+    NSString *requestURLString = request.URL.absoluteString;
+//    NSLog(@"requestURLString: %@", requestURLString);
+
+    if ([requestURLString rangeOfString:callback].length) {
+
+        NSRange callbackRange = [requestURLString rangeOfString:callback];
+        NSRange commandRange = NSMakeRange(callbackRange.length, requestURLString.length - callbackRange.length);
+        NSString *command = [requestURLString substringWithRange:commandRange];
+
+        NSDictionary *parameters = [self parseCommand:command];
+
+        JMJavascriptCallback *response = [JMJavascriptCallback new];
+        response.type = parameters[@"callback.type"];
+        response.parameters = parameters;
+        [self.delegate javascriptNativeBridge:self didReceiveCallback:response];
+
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+#pragma mark - Helpers
+- (NSDictionary *)parseCommand:(NSString *)command
+{
+    NSString *decodedCommand = [command stringByRemovingPercentEncoding];
+    NSArray *components = [decodedCommand componentsSeparatedByString:@"&"];
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    result[@"callback.type"] = [components firstObject];
+
+    NSMutableArray *parameters = [NSMutableArray arrayWithArray:components];
+    [parameters removeObjectAtIndex:0];
+    for (NSString *component in parameters) {
+        NSArray *keyValue = [component componentsSeparatedByString:@"="];
+        if (keyValue.count == 2) {
+            result[keyValue[0]] = keyValue[1];
+        }
+    }
+    return result;
+}
+
 @end

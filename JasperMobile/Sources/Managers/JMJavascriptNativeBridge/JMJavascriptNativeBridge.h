@@ -31,6 +31,16 @@
 @since 2.1
 */
 
+@class JMJavascriptRequest;
+@class JMJavascriptCallback;
+@protocol JMJavascriptNativeBridgeDelegate;
 
 @interface JMJavascriptNativeBridge : NSObject
+@property (nonatomic, weak) UIWebView *webView;
+@property (nonatomic, weak) id<JMJavascriptNativeBridgeDelegate> delegate;
+- (void)sendRequest:(JMJavascriptRequest *)request;
+@end
+
+@protocol JMJavascriptNativeBridgeDelegate <NSObject>
+- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *)bridge didReceiveCallback:(JMJavascriptCallback *)callback;
 @end
