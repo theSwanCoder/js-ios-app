@@ -22,14 +22,12 @@
 
 
 //
-//  JMJavascriptResponse.m
+//  JMJavascriptCallback.m
 //  TIBCO JasperMobile
 //
 
-#import "JMJavascriptResponse.h"
+#import "JMJavascriptCallback.h"
 
 
-@implementation JMJavascriptResponse {
-
-}
+@implementation JMJavascriptCallback
 @end

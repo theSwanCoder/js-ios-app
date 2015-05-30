@@ -22,7 +22,7 @@
 
 
 //
-//  JMJavascriptResponse.h
+//  JMJavascriptCallback.h
 //  TIBCO JasperMobile
 //
 
@@ -31,5 +31,7 @@
 @since 2.1
 */
 
-@interface JMJavascriptResponse : NSObject
+@interface JMJavascriptCallback : NSObject
+@property (nonatomic, copy) NSString *type;
+@property (nonatomic, copy) NSDictionary *parameters;
 @end
