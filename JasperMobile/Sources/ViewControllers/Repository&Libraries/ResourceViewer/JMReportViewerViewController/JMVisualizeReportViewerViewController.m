@@ -33,6 +33,7 @@
 #import "JMWebConsole.h"
 #import "JMWebViewController.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMJavascriptNativeBridge.h"
 
 @interface JMVisualizeReportViewerViewController () <JMVisualizeReportLoaderDelegate>
 @property (nonatomic, strong) JMVisualizeReportLoader *reportLoader;
@@ -90,8 +91,9 @@
 {
     if (!_reportLoader) {
         _reportLoader = [JMVisualizeReportLoader loaderWithReport:self.report];
-        _reportLoader.webView = self.webView;
-        self.webView.delegate = _reportLoader;
+        JMJavascriptNativeBridge *bridge = [JMJavascriptNativeBridge new];
+        bridge.webView = self.webView;
+        _reportLoader.bridge = bridge;
         _reportLoader.delegate = self;
     }
     return _reportLoader;

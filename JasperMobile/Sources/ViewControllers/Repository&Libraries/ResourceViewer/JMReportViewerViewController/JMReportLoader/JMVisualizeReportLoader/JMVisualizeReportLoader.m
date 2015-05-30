@@ -31,19 +31,23 @@
 #import "JMVisualizeReportLoader.h"
 #import "JMVisualizeReport.h"
 #import "JMUtils.h"
+#import "JMJavascriptNativeBridge.h"
+#import "JMJavascriptRequest.h"
+#import "JMVisualizeManager.h"
+#import "JMJavascriptCallback.h"
 
 typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     JMReportViewerAlertViewTypeEmptyReport,
     JMReportViewerAlertViewTypeErrorLoad
 };
 
-@interface JMVisualizeReportLoader()
+@interface JMVisualizeReportLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMVisualizeReport *report;
 @property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
 
-@property (nonatomic, strong) NSString *visualizePath;
 @property (nonatomic, copy) void(^reportLoadCompletion)(BOOL success, NSError *error);
 @property (nonatomic, copy) NSString *exportFormat;
+@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
 @end
 
 @implementation JMVisualizeReportLoader
@@ -54,6 +58,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     self = [super init];
     if (self) {
         _report = report;
+        _visualizeManager = [JMVisualizeManager new];
     }
     return self;
 }
@@ -64,24 +69,17 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 }
 
 #pragma mark - Custom accessors
-- (NSString *)visualizePath
-{
-    if (!_visualizePath) {
-        NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js", self.restClient.serverProfile.serverUrl];
-
-        if ([JMUtils isServerVersionUpOrEqual6] && ![JMUtils isServerAmber2]) {
-            visualizePath = [visualizePath stringByAppendingString:@"?_opt=false"];
-        }
-        _visualizePath = visualizePath;
-    }
-    return _visualizePath;
-}
-
 -(void)setReportLoadCompletion:(void (^)(BOOL, NSError *))reportLoadCompletion
 {
     if (_reportLoadCompletion != reportLoadCompletion) {
         _reportLoadCompletion = [reportLoadCompletion copy];
     }
+}
+
+- (void)setBridge:(JMJavascriptNativeBridge *)bridge
+{
+    _bridge = bridge;
+    _bridge.delegate = self;
 }
 
 #pragma mark - Public API
@@ -91,15 +89,15 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.report updateLoadingStatusWithValue:NO];
     [self.report updateCountOfPages:NSNotFound];
 
-    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.webView]) {
+    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
         self.reportLoadCompletion = completionBlock;
         [self.report updateCurrentPage:page];
         [self.report updateCountOfPages:NSNotFound];
 
         [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             if (success) {
-                [self.webView stopLoading];
-                [self.webView loadHTMLString:self.report.HTMLString
+                [self.bridge.webView stopLoading];
+                [self.bridge.webView loadHTMLString:self.report.HTMLString
                                      baseURL:[NSURL URLWithString:self.report.baseURLString]];
             } else {
                 NSLog(@"Error loading HTML%@", error.localizedDescription);
@@ -117,11 +115,15 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
     if (!self.report.isReportAlreadyLoaded) {
         NSString *parametersAsString = [self createParametersAsString];
-        NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.run({'uri': '%@', 'params': %@, 'pages' : '%@'});", self.report.reportURI, parametersAsString, @(pageNumber)];
-        [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
+        JMJavascriptRequest *request = [JMJavascriptRequest new];
+        request.command = @"MobileReport.run(%@);";
+        request.parametersAsString = [NSString stringWithFormat:@"{'uri': '%@', 'params': %@, 'pages' : '%@'}", self.report.reportURI, parametersAsString, @(pageNumber)];
+        [self.bridge sendRequest:request];
     } else {
-        NSString *setPageCommand = [NSString stringWithFormat:@"MobileReport.selectPage(%@)", @(pageNumber).stringValue];
-        [self.webView stringByEvaluatingJavaScriptFromString:setPageCommand];
+        JMJavascriptRequest *request = [JMJavascriptRequest new];
+        request.command = @"MobileReport.selectPage(%@);";
+        request.parametersAsString = @(pageNumber).stringValue;
+        [self.bridge sendRequest:request];
     }
 }
 
@@ -132,7 +134,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)applyReportParametersWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.webView]) {
+    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
         self.isReportInLoadingProcess = YES;
         [self.report updateLoadingStatusWithValue:NO];
 
@@ -141,8 +143,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
         [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
                 if (success) {
-                    [self.webView stopLoading];
-                    [self.webView loadHTMLString:self.report.HTMLString
+                    [self.bridge.webView stopLoading];
+                    [self.bridge.webView loadHTMLString:self.report.HTMLString
                                          baseURL:[NSURL URLWithString:self.report.baseURLString]];
                 } else {
                     NSLog(@"Error loading HTML%@", error.localizedDescription);
@@ -159,9 +161,10 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         [self.report updateCurrentPage:1];
         [self.report updateCountOfPages:NSNotFound];
 
-        NSString *parametersAsString = [self createParametersAsString];
-        NSString *refreshReportCommand = [NSString stringWithFormat:@"MobileReport.applyReportParams(%@);", parametersAsString];
-        [self.webView stringByEvaluatingJavaScriptFromString:refreshReportCommand];
+        JMJavascriptRequest *request = [JMJavascriptRequest new];
+        request.command = @"MobileReport.applyReportParams(%@);";
+        request.parametersAsString = [self createParametersAsString];
+        [self.bridge sendRequest:request];
     }
 }
 
@@ -171,33 +174,50 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.report updateCurrentPage:1];
     [self.report updateCountOfPages:NSNotFound];
 
-    NSString *refreshReportCommand = [NSString stringWithFormat:@"MobileReport.refresh();"];
-    [self.webView stringByEvaluatingJavaScriptFromString:refreshReportCommand];
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileReport.refresh(%@);";
+    request.parametersAsString = @"";
+    [self.bridge sendRequest:request];
 }
 
 - (void)exportReportWithFormat:(NSString *)exportFormat
 {
     self.exportFormat = exportFormat;
-    NSString *exportReportCommand = [NSString stringWithFormat:@"MobileReport.exportReport('%@');", exportFormat];
-    [self.webView stringByEvaluatingJavaScriptFromString:exportReportCommand];
+
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileReport.exportReport(%@);";
+    request.parametersAsString = exportFormat;
+    [self.bridge sendRequest:request];
 }
 
 - (void)destroyReport
 {
-    NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.destroy();"];
-    [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileReport.destroy(%@);";
+    request.parametersAsString = @"";
+    [self.bridge sendRequest:request];
+
     [self.report updateLoadingStatusWithValue:NO];
+}
+
+- (void)authenticate
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileReport.authorize(%@);";
+    request.parametersAsString = [NSString stringWithFormat:@"{'username': '%@', 'password': '%@', 'organization': '%@'}", self.restClient.serverProfile.username, self.restClient.serverProfile.password, self.restClient.serverProfile.organization];
+    [self.bridge sendRequest:request];
 }
 
 #pragma mark - Private
 - (void)startLoadHTMLWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
     NSLog(@"visuzalise.js did start load");
-    [self loadVisualizeJSWithCompletion:@weakself(^(BOOL success, NSError *error)){
+    [self.visualizeManager loadVisualizeJSWithCompletion:@weakself(^(BOOL success, NSError *error)){
         if (success) {
             NSLog(@"visuzalise.js did end load");
             NSString *baseURLString = self.restClient.serverProfile.serverUrl;
-            [self.report updateHTMLString:[self htmlString] baseURLSring:baseURLString];
+            [self.report updateHTMLString:[self.visualizeManager htmlString] baseURLSring:baseURLString];
+
             if (completion) {
                 completion(YES, nil);
             }
@@ -215,32 +235,34 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     }@weakselfend];
 }
 
-#pragma mark - Helpers
-- (NSString *)htmlString
+#pragma mark - JMJavascriptNativeBridgeDelegate
+- (void)javascriptNativeBridge:(JMJavascriptNativeBridge *)bridge didReceiveCallback:(JMJavascriptCallback *)callback
 {
-    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"report_optimized" ofType:@"html"];
-    if ([JMUtils isServerVersionUpOrEqual6] && ![JMUtils isServerAmber2]) {
-        htmlPath = [[NSBundle mainBundle] pathForResource:@"report" ofType:@"html"];
+    NSLog(@"response parameters: %@", callback.parameters);
+    if ([callback.type isEqualToString:@"DOMContentLoaded"]) {
+        [self handleDOMContentLoaded];
+    } else if ([callback.type isEqualToString:@"runReport"]) {
+        [self handleRunReportWithParameters:callback.parameters];
+    } else if ([callback.type isEqualToString:@"handleReferenceClick"]) {
+        [self handleReferenceClickWithParameters:callback.parameters];
+    } else if ([callback.type isEqualToString:@"reportDidObtaineMultipageState"]) {
+        [self handleEventObtaineMultipageStateWithParameters:callback.parameters];
+    } else if ([callback.type isEqualToString:@"reportRunDidCompleted"]) {
+        [self handleEventReportRunDidCompletedWithParameters:callback.parameters];
+    } else if([callback.type isEqualToString:@"reportDidEndRenderSuccessful"]) {
+        [self handleReportEndRenderSuccessfull];
+    } else if([callback.type isEqualToString:@"reportDidEndRenderFailured"]) {
+        [self handleReportEndRenderFailedWithParameters:callback.parameters];
+    } else if ([callback.type isEqualToString:@"exportPath"]) {
+        [self handleExportParameters:callback.parameters];
+    } else if ([callback.type isEqualToString:@"reportDidDidEndRefreshSuccessful"]) {
+        [self handleRefreshDidEndSuccessful];
+    } else if ([callback.type isEqualToString:@"reportDidEndRefreshFailured"]) {
+        [self handleRefreshDidEndFailedWithParameters:callback.parameters];
     }
-
-    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-
-    // Visualize
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
-
-    // REQUIRE_JS
-    NSString *requireJSPath = [[NSBundle mainBundle] pathForResource:@"require.min" ofType:@"js"];
-    NSString *requirejsString = [NSString stringWithContentsOfFile:requireJSPath encoding:NSUTF8StringEncoding error:nil];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"REQUIRE_JS" withString:requirejsString];
-
-    // JasperMobile
-    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"report-ios-mobilejs-sdk" ofType:@"js"];
-    NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
-
-    return htmlString;
 }
 
+#pragma mark - Helpers
 - (NSString *)createParametersAsString
 {
     NSMutableString *parametersAsString = [@"{" mutableCopy];
@@ -265,125 +287,14 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     return error;
 }
 
-#pragma mark - Load Visualize.js
-- (void)loadVisualizeJSWithCompletion:(void(^)(BOOL success, NSError *error))completion
-{
-    if ([self isVisualizeLoaded]) {
-        if (completion) {
-            completion(YES, nil);
-        }
-        return;
-    }
-
-    NSURLResponse *response;
-    NSError *error;
-
-    NSURLRequest *visualizeJSRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.visualizePath]];
-    NSData *data = [NSURLConnection sendSynchronousRequest:visualizeJSRequest returningResponse:&response error:&error];
-    if (data) {
-        // cache visualize.js
-        NSCachedURLResponse *cachedURLResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:data];
-        [[NSURLCache sharedURLCache] storeCachedResponse:cachedURLResponse forRequest:visualizeJSRequest];
-
-        if (completion) {
-            completion(YES, nil);
-        }
-    } else {
-        if (completion) {
-            completion(NO, error);
-        }
-    }
-}
-
-- (BOOL)isVisualizeLoaded
-{
-    BOOL isVisualizeLoaded = NO;
-    NSURLRequest *visualizeJSRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.visualizePath]];
-    if ([[NSURLCache sharedURLCache] cachedResponseForRequest:visualizeJSRequest]) {
-        isVisualizeLoaded = YES;
-    }
-    return isVisualizeLoaded;
-}
-
-#pragma mark - UIWebView delegate
--(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    NSString *callback = @"http://jaspermobile.callback/";
-    NSString *debugger = @"http://debugger/";
-    NSString *requestURLString = request.URL.absoluteString;
-    NSLog(@"requestURLString: %@", requestURLString);
-
-    if ([requestURLString rangeOfString:callback].length) {
-        NSRange callbackRange = [requestURLString rangeOfString:callback];
-        NSRange commandRange = NSMakeRange(callbackRange.length, requestURLString.length - callbackRange.length);
-        NSString *command = [requestURLString substringWithRange:commandRange];
-        if ([command rangeOfString:@"DOMContentLoaded"].length) {
-            [self handleDOMContentLoaded];
-        } else if ([command rangeOfString:@"runReport"].length) {
-            [self handleRunReportWithJSCommand:command];
-        } else if ([command rangeOfString:@"handleReferenceClick"].length) {
-            [self handleReferenceClickWithJSCommand:command];
-        } else if ([command rangeOfString:@"reportDidObtaineMultipageState"].length) {
-            [self handleEventObtaineMultipageStateWithCommand:command];
-        }   else if ([command rangeOfString:@"reportRunDidCompleted"].length) {
-            [self handleEventReportRunDidCompletedWithCommand:command];
-        } else if ([command rangeOfString:@"inputControls"].length) {
-            [self handleInputControlsWithJSCommand:command];
-        } else if([command rangeOfString:@"reportDidBeginRender"].length) {
-            [self handleReportBeginRenderSuccessful];
-        } else if([command rangeOfString:@"reportDidEndRenderSuccessful"].length) {
-            [self handleReportEndRenderSuccessfull];
-        } else if([command rangeOfString:@"reportDidEndRenderFailured"].length) {
-            [self handleReportEndRenderFailedWithJSCommand:command];
-        } else if ([command rangeOfString:@"reportDidChangePage"].length) {
-            [self handleReportDidChangePageWithJSCommand:command];
-        } else if ([command rangeOfString:@"linkOptions"].length) {
-            [self handleLinkOptionsWithJSCommand:command];
-        } else if ([command rangeOfString:@"error"].length) {
-            [self handleErrorWithCommand:command];
-        } else if ([command rangeOfString:@"exportPath"].length) {
-            [self handleExportCommand:command];
-        } else if ([command rangeOfString:@"reportDidDidEndRefreshSuccessful"].length) {
-            [self handleRefreshDidEndSuccessful];
-        } else if ([command rangeOfString:@"reportDidEndRefreshFailured"].length) {
-            [self handleRefreshDidEndFailedWithJSCommand:command];
-        }
-        return NO;
-    } else if ([requestURLString rangeOfString:debugger].length) {
-        return NO;
-    } else {
-        // call to controller
-        return YES;
-    }
-}
-
 #pragma mark - DOM listeners
 - (void)handleDOMContentLoaded
 {
-    // auth
     [self authenticate];
     [self fetchPageNumber:self.report.currentPage withCompletion:self.reportLoadCompletion];
 }
 
-- (void)authenticate
-{
-    NSString *runReportCommand = [NSString stringWithFormat:@"MobileReport.authorize({'username': '%@', 'password': '%@', 'organization': '%@'});", self.restClient.serverProfile.username, self.restClient.serverProfile.password, self.restClient.serverProfile.organization];
-    [self.webView stringByEvaluatingJavaScriptFromString:runReportCommand];
-}
-
-#pragma mark - VisualizeJS error handlers
-- (void)handleErrorWithCommand:(NSString *)command
-{
-    NSLog(@"handleErrorWithCommand: %@", command);
-    // TODO: extend handle errors
-}
-
-#pragma mark - VisualizeJS handlers
-- (void)handleReportBeginRenderSuccessful
-{
-    NSLog(@"report rendering begin");
-}
-
+#pragma mark - Run report
 - (void)handleReportEndRenderSuccessfull
 {
     NSLog(@"report rendering end");
@@ -395,11 +306,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     }
 }
 
-- (void)handleReportEndRenderFailedWithJSCommand:(NSString *)command
+- (void)handleReportEndRenderFailedWithParameters:(NSDictionary *)parameters
 {
-    NSLog(@"report rendering failured with error: %@", command);
-
-    NSDictionary *parameters = [self parseCommand:command];
     if (self.reportLoadCompletion) {
         NSString *errorString = parameters[@"error"];
         errorString = [errorString stringByRemovingPercentEncoding];
@@ -411,19 +319,41 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     }
 }
 
-- (void)handleEventReportRunDidCompletedWithCommand:(NSString *)command
+- (void)handleEventReportRunDidCompletedWithParameters:(NSDictionary *)parameters
 {
-    NSDictionary *params = [self parseCommand:command];
-
-    NSInteger countOfPages = ((NSNumber *)params[@"pages"]).integerValue;
+    NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
     [self.report updateCountOfPages:countOfPages];
 }
 
-- (void)handleExportCommand:(NSString *)command
+#pragma mark - Multipage
+- (void)handleEventObtaineMultipageStateWithParameters:(NSDictionary *)parameters
 {
-    NSDictionary *params = [self parseCommand:command];
+    BOOL isMultiPage =((NSNumber *)parameters[@"isMultiPage"]).boolValue;
+    [self.report updateIsMultiPageReport:isMultiPage];
+}
 
-    NSString *outputResourcesPath = params[@"link"];
+#pragma mark - Handle refresh
+- (void)handleRefreshDidEndSuccessful
+{
+    [self.report updateLoadingStatusWithValue:YES];
+
+    if (self.reportLoadCompletion) {
+        self.reportLoadCompletion(YES, nil);
+    }
+}
+
+- (void)handleRefreshDidEndFailedWithParameters:(NSDictionary *)parameters
+{
+    if (self.reportLoadCompletion) {
+        // TODO: add error
+        self.reportLoadCompletion(NO, nil);
+    }
+}
+
+#pragma mark - Export report
+- (void)handleExportParameters:(NSDictionary *)parameters
+{
+    NSString *outputResourcesPath = parameters[@"link"];
     if (outputResourcesPath) {
         if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOutputResourcePath:fullReportName:)]) {
             NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", self.report.resourceLookup.label, self.exportFormat];
@@ -432,87 +362,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     }
 }
 
-- (void)handleRefreshDidEndSuccessful
-{
-    NSLog(@"handleRefreshDidEndSuccessful");
-    [self.report updateLoadingStatusWithValue:YES];
-
-    if (self.reportLoadCompletion) {
-        self.reportLoadCompletion(YES, nil);
-    }
-}
-
-- (void)handleRefreshDidEndFailedWithJSCommand:(NSString *)command
-{
-    NSLog(@"handleRefreshDidEndFailedWithJSCommand: %@", command);
-    if (self.reportLoadCompletion) {
-        // TODO: add error
-        self.reportLoadCompletion(NO, nil);
-    }
-}
-
-#pragma mark - Visualize Helpers
-- (NSDictionary *)parseCommand:(NSString *)command
-{
-    NSString *decodedCommand = [command stringByRemovingPercentEncoding];
-    NSArray *components = [decodedCommand componentsSeparatedByString:@"&"];
-    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    for (NSString *component in components) {
-        NSArray *keyValue = [component componentsSeparatedByString:@"="];
-        if (keyValue.count == 2) {
-            parameters[keyValue[0]] = keyValue[1];
-        }
-    }
-    return parameters;
-}
-
-#pragma mark - Current page and Count of pages
-- (void)handleReportDidChangePageWithJSCommand:(NSString *)command
-{
-    NSRange currentPageKeyRange = [command rangeOfString:@"&currentPage="];
-    NSRange currentPageRange = NSMakeRange(currentPageKeyRange.length + currentPageKeyRange.location, command.length - (currentPageKeyRange.length + currentPageKeyRange.location));
-    NSString *currentPageString = [command substringWithRange:currentPageRange];
-    NSLog(@"current page: %@", currentPageString);
-}
-
-- (void)handleEventObtaineMultipageStateWithCommand:(NSString *)command
-{
-    NSDictionary *parameters = [self parseCommand:command];
-    BOOL isMultiPage =((NSNumber *)parameters[@"isMultiPage"]).boolValue;
-    [self.report updateIsMultiPageReport:isMultiPage];
-}
-
-#pragma mark - Input Controls (from visualize)
-- (void)handleInputControlsWithJSCommand:(NSString *)command
-{
-    NSLog(@"command: %@", command);
-}
-
 #pragma mark - Hyperlinks handlers
-- (void)handleLinkOptionsWithJSCommand:(NSString *)command
+- (void)handleReferenceClickWithParameters:(NSDictionary *)parameters
 {
-    // TODO: need refactor!!!
-    //NSString *linkType = @"";
-    //NSString *href = @"";
-//    NSArray *components = [command componentsSeparatedByString:@"&"];
-//    for (NSString *component in components) {
-//        if ([component containsString:@"linkType"]) {
-//            //linkType = [[component componentsSeparatedByString:@"="] lastObject];
-//        } else if([component containsString:@"href"]) {
-//            //href = [[component componentsSeparatedByString:@"="] lastObject];
-//        }
-//    }
-
-    //JMWebViewController *webViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMWebViewController"];
-    //webViewController.urlString = href;
-    //[self.navigationController pushViewController:webViewController animated:YES];
-}
-
-- (void)handleReferenceClickWithJSCommand:(NSString *)command
-{
-    NSDictionary *parameters = [self parseCommand:command];
-    NSLog(@"parameters: %@", parameters);
-
     NSString *locationString = parameters[@"location"];
     if (locationString) {
         NSURL *locationURL = [NSURL URLWithString:locationString];
@@ -522,12 +374,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     }
 }
 
-- (void)handleRunReportWithJSCommand:(NSString *)command
+- (void)handleRunReportWithParameters:(NSDictionary *)parameters
 {
-    NSLog(@"hyperlink for run report");
-    NSDictionary *parameters = [self parseCommand:command];
-    NSLog(@"parameters: %@", parameters);
-
     NSString *params = parameters[@"params"];
     if (!params) {
         return;
