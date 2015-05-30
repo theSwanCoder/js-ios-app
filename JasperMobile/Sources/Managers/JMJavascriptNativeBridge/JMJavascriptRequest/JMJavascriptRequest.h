@@ -32,4 +32,6 @@
 */
 
 @interface JMJavascriptRequest : NSObject
+@property (nonatomic, copy) NSString *command;
+@property (nonatomic, copy) NSString *parametersAsString;
 @end
