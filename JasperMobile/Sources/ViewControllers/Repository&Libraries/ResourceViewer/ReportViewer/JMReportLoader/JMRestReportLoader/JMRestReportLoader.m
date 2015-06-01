@@ -120,6 +120,16 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     }
 }
 
+- (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion
+{
+    [self runReportWithPage:1 completion:completion];
+}
+
+- (void)applyReportParametersWithCompletion:(void (^)(BOOL success, NSError *error))completion
+{
+    [self runReportWithPage:1 completion:completion];
+}
+
 #pragma mark - Private API
 
 - (void) runReportExecution

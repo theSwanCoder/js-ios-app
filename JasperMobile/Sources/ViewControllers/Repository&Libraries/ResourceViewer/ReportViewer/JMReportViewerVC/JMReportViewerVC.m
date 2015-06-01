@@ -111,11 +111,7 @@
             if (success) {
                 // succcess action
             } else {
-                if (error.code == JMReportLoaderErrorTypeEmtpyReport) {
-                    [self showEmptyReportMessage];
-                } else {
-                    [self handleError:error];
-                }
+                [self handleError:error];
             }
         }@weakselfend];
 }
@@ -151,6 +147,7 @@
 - (void)refreshReport
 {
     [self hideEmptyReportMessage];
+    [self updateToobarAppearence];
     [self.reportLoader refreshReportWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             [self stopShowLoader];
             if (success) {
@@ -180,6 +177,8 @@
                 } @weakselfend];
         }
 
+    } else if (error.code == JMReportLoaderErrorTypeEmtpyReport) {
+        [self showEmptyReportMessage];
     } else {
         [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
             [self cancelResourceViewingAndExit:YES];
