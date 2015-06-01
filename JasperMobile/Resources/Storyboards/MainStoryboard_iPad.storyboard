@@ -13,7 +13,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0kZ-u0-I87" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2445" y="5653"/>
+            <point key="canvasLocation" x="2369" y="6445"/>
         </scene>
         <!--Library Collection View Controller-->
         <scene sceneID="B15-DU-AKg">
@@ -34,7 +34,6 @@
                         <segue destination="1j7-lS-aWh" kind="push" identifier="ShowReportViewer" id="Toq-EU-QXD"/>
                         <segue destination="Op6-2z-h3K" kind="push" identifier="ShowDashboardViewer" id="jcG-Y8-xoE"/>
                         <segue destination="4cG-Np-KUD" kind="push" identifier="ShowDashboardVisualizeViewer" id="T9j-xj-DeS"/>
-                        <segue destination="KMf-bB-aGV" kind="push" identifier="ShowReportVisualizeViewer" id="jes-U1-yIf"/>
                         <segue destination="l9I-9Q-Acb" kind="push" identifier="ShowDashboard" id="cnB-uV-8Pd"/>
                     </connections>
                 </viewController>
@@ -42,44 +41,10 @@
             </objects>
             <point key="canvasLocation" x="-468" y="6355"/>
         </scene>
-        <!--Visualize Report Viewer View Controller-->
-        <scene sceneID="c0u-Jn-MNL">
-            <objects>
-                <viewController storyboardIdentifier="JMVisualizeReportViewerViewController" id="KMf-bB-aGV" customClass="JMVisualizeReportViewerViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="nrA-eb-Unr">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="Uec-2x-Fji">
-                                <rect key="frame" x="374" y="502" width="20" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            </activityIndicatorView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report is empty!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ry4-z3-ixl">
-                                <rect key="frame" x="16" y="496" width="736" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="bye-uf-t4c"/>
-                    <connections>
-                        <outlet property="activityIndicator" destination="Uec-2x-Fji" id="PEC-lM-xXY"/>
-                        <outlet property="emptyReportMessageLabel" destination="ry4-z3-ixl" id="PBo-ck-0bg"/>
-                        <segue destination="j7d-mf-iC4" kind="push" identifier="SaveReportViewControllerSegue" id="gpi-kF-g2W"/>
-                        <segue destination="r9P-mI-kQe" kind="push" identifier="ShowReportOptions" id="oah-1Y-5yW"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cGJ-zL-Rcj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="468" y="6747"/>
-        </scene>
-        <!--Report Viewer View Controller-->
+        <!--Report ViewerVC-->
         <scene sceneID="g4p-L1-pik">
             <objects>
-                <viewController storyboardIdentifier="JMReportViewerViewController" id="1j7-lS-aWh" customClass="JMReportViewerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMReportViewerViewController" id="1j7-lS-aWh" customClass="JMReportViewerVC" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zk0-bX-Hf2">
                         <rect key="frame" x="0.0" y="64" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -108,7 +73,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xr4-oY-Rss" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="473" y="5545"/>
+            <point key="canvasLocation" x="517" y="6355"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="UyA-JE-YUt">
@@ -451,7 +416,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zE8-BY-OdC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2445" y="4441"/>
+            <point key="canvasLocation" x="2369" y="5229"/>
         </scene>
         <!--Dashboards Viewer View Controller-->
         <scene sceneID="WLo-Zb-DiH">
@@ -838,7 +803,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextCellIdentifier" textLabel="vk6-Oi-Vvi" style="IBUITableViewCellStyleDefault" id="lCO-9N-7ao" customClass="JMTextSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="86" width="738" height="50"/>
+                                        <rect key="frame" x="0.0" y="22" width="738" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lCO-9N-7ao" id="zMT-t7-0Ih">
                                             <rect key="frame" x="0.0" y="0.0" width="738" height="50"/>
@@ -868,7 +833,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BooleanCellIdentifier" textLabel="mUh-45-45d" style="IBUITableViewCellStyleDefault" id="5Fr-ab-bHk" customClass="JMBooleanSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="136" width="738" height="50"/>
+                                        <rect key="frame" x="0.0" y="72" width="738" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5Fr-ab-bHk" id="Awg-OL-KLx">
                                             <rect key="frame" x="0.0" y="0.0" width="738" height="50"/>
@@ -896,7 +861,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IntroCellIdentifier" textLabel="LtX-Rk-7ER" style="IBUITableViewCellStyleDefault" id="FNt-MX-uUp" customClass="JMSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="186" width="738" height="50"/>
+                                        <rect key="frame" x="0.0" y="122" width="738" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FNt-MX-uUp" id="5AK-BL-90t">
                                             <rect key="frame" x="0.0" y="0.0" width="738" height="50"/>
@@ -915,7 +880,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedbackCellIdentifier" textLabel="Ugk-KI-0ih" style="IBUITableViewCellStyleDefault" id="sVu-XZ-diu" customClass="JMSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="236" width="738" height="50"/>
+                                        <rect key="frame" x="0.0" y="172" width="738" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sVu-XZ-diu" id="9e3-uL-m2A">
                                             <rect key="frame" x="0.0" y="0.0" width="738" height="50"/>
@@ -1263,7 +1228,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6SE-p8-sf5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1493" y="6747"/>
+            <point key="canvasLocation" x="1461" y="6951"/>
         </scene>
         <!--Splash View Controller-->
         <scene sceneID="r6x-53-97w">
@@ -1667,7 +1632,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yBi-du-99w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1498" y="5055"/>
+            <point key="canvasLocation" x="1461" y="5791"/>
         </scene>
         <!--Servers Grid View Controller-->
         <scene sceneID="hmj-EW-u8Y">
@@ -1807,8 +1772,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="gpi-kF-g2W"/>
-        <segue reference="oah-1Y-5yW"/>
-    </inferredMetricsTieBreakers>
 </document>
