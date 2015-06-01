@@ -21,7 +21,6 @@
  */
 
 
-#import "JMReportViewerViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMRestReport.h"
 
@@ -32,6 +31,8 @@
 #import "JMReportOptionsViewController.h"
 #import "ALToastView.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMReportViewerToolBar.h"
+#import "JMBaseReportViewerViewController.h"
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
 @property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;

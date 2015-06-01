@@ -27,10 +27,8 @@
 //
 
 #import "JMBaseReportViewerViewController.h"
-#import "JMVisualizeReportViewerViewController.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMVisualizeReport.h"
-#import "JMUtils.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMJavascriptRequest.h"
 #import "JMVisualizeManager.h"
