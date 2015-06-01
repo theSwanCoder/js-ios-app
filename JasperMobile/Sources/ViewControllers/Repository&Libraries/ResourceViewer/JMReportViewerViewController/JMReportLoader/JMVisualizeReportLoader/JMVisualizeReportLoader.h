@@ -31,29 +31,8 @@
  @since 2.0
  */
 
-#import "JMReportLoader.h"
+@protocol JMReportLoader;
 
-@class JMVisualizeReport;
-@protocol JMVisualizeReportLoaderDelegate;
-@class JMJavascriptNativeBridge;
-
-
-@interface JMVisualizeReportLoader : NSObject <JMReportLoader, UIWebViewDelegate>
-@property (nonatomic, strong) JMJavascriptNativeBridge *bridge;
-@property (nonatomic, weak) id<JMVisualizeReportLoaderDelegate> delegate;
-
-- (void)applyReportParametersWithCompletion:(void (^)(BOOL success, NSError *error))completion;
-
-- (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion;
-- (void)exportReportWithFormat:(NSString *)exportFormat;
-- (void)destroyReport;
-- (void)authenticate;
-
+@interface JMVisualizeReportLoader : NSObject <JMReportLoader>
 @end
 
-@protocol JMVisualizeReportLoaderDelegate <NSObject>
-@optional
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSDictionary *)reportParameters;
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference;
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName;
-@end
