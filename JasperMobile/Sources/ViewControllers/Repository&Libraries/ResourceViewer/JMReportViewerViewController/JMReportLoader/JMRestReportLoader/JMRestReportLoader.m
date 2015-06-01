@@ -30,6 +30,7 @@
 #import "UIAlertView+Additions.h"
 #import "NSObject+Additions.h"
 #import "JMBaseReportViewerViewController.h"
+#import "JMJavascriptNativeBridgeProtocol.h"
 
 typedef NS_ENUM(NSInteger, JMReportViewerOutputResourceType) {
     JMReportViewerOutputResourceType_None = 0,
@@ -59,6 +60,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 @end
 
 @implementation JMRestReportLoader
+@synthesize bridge = _bridge, delegate = _delegate;
 
 #pragma mark - Lifecycle
 - (instancetype)initWithReport:(JMReport *)report
@@ -74,6 +76,13 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 + (instancetype)loaderWithReport:(JMReport *)report
 {
     return [[self alloc] initWithReport:report];
+}
+
+#pragma mark - Custom accessors
+- (void)setBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge
+{
+    _bridge = bridge;
+//    _bridge.delegate = self;
 }
 
 #pragma mark - Public API
@@ -103,6 +112,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 
 - (void) cancelReport
 {
+    [self.restClient cancelAllRequests];
     [self.statusCheckingTimer invalidate];
     self.loadPageCompletionBlock = nil;
     if (!self.isReportExecutingStatusReady && self.report.requestId) {
@@ -176,6 +186,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     if (HTMLString && self.loadPageCompletionBlock) { // show cached page
         NSLog(@"load cached page");
         [self.report updateHTMLString:HTMLString baseURLSring:self.report.baseURLString];
+        [self startLoadReportHTML];
         self.loadPageCompletionBlock(YES, nil);
     } else { // export page
         NSString *exportID = self.exportIdsDictionary[@(page)];
@@ -251,6 +262,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                                       if (self.loadPageCompletionBlock) {
                                           [self.report updateHTMLString:result.bodyAsString
                                                            baseURLSring:self.restClient.serverProfile.serverUrl];
+                                          [self startLoadReportHTML];
                                           self.loadPageCompletionBlock(YES, nil);
                                       }
                                   }
@@ -268,6 +280,12 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                               }
                           }
                       } @weakselfend];
+}
+
+- (void)startLoadReportHTML
+{
+    [self.bridge startLoadHTMLString:self.report.HTMLString
+                             baseURL:[NSURL URLWithString:self.report.baseURLString]];
 }
 
 #pragma mark - Check status
