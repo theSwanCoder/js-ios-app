@@ -22,7 +22,7 @@
 
 
 //
-//  JMJavascriptNativeBridge.h
+//  JMJavascriptNativeBridgeProtocol.h
 //  TIBCO JasperMobile
 //
 
@@ -31,8 +31,18 @@
 @since 2.1
 */
 
-#import "JMJavascriptNativeBridgeProtocol.h"
+@class JMJavascriptRequest;
+@class JMJavascriptCallback;
+@protocol JMJavascriptNativeBridgeDelegate;
 
-@interface JMJavascriptNativeBridge : NSObject <JMJavascriptNativeBridgeProtocol>
+@protocol JMJavascriptNativeBridgeProtocol <NSObject>
+@property (nonatomic, weak) id webView;
+@property (nonatomic, weak) id <JMJavascriptNativeBridgeDelegate>delegate;
+
+- (void)startLoadHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL;
+- (void)sendRequest:(JMJavascriptRequest *)request;
 @end
 
+@protocol JMJavascriptNativeBridgeDelegate <NSObject>
+- (void)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback;
+@end
