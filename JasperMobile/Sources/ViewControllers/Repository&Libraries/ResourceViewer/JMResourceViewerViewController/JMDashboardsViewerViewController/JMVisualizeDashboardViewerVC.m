@@ -121,8 +121,9 @@
     self.navigationItem.rightBarButtonItems = nil;
 
     self.leftButtonItem = self.navigationItem.leftBarButtonItem;
-    self.navigationItem.leftBarButtonItem = [self backBarButtonItemWithTarget:self
-                                                                       action:@selector(minimizeDashboard)];
+    self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
+                                                               target:self
+                                                               action:@selector(minimizeDashboard)];
     self.navigationItem.title = title;
 }
 

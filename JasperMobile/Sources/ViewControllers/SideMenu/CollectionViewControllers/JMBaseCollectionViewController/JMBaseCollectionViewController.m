@@ -33,15 +33,15 @@
 #import "JMResourceCollectionViewCell.h"
 #import "JMPopupView.h"
 #import "PopoverView.h"
-#import "JMResourceInfoViewController.h"
 #import "JMListOptionsPopupView.h"
-#import "JMReportViewerViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMSettingsViewController.h"
 
 #import "JMRepositoryCollectionViewController.h"
 #import "JMBaseDashboardViewerVC.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMBaseReportViewerViewController.h"
+#import "JMResourceInfoViewController.h"
 
 NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 

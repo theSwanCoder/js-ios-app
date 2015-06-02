@@ -248,6 +248,7 @@ NSString * const kJMPrintReportPageRangeCellIdentifier = @"PageRangeCell";
     return pagesFormat;
 }
 
+#pragma mark - Actions
 - (IBAction)printButtonTapped:(id)sender
 {
     [self prepareForPrint];

@@ -43,11 +43,7 @@
 {
     // TODO: identifiers with constant
     if ([self isReport]) {
-        if ([JMUtils isSupportVisualize]) {
-            return @"JMVisualizeReportViewerViewController";
-        } else {
-            return @"JMReportViewerViewController";
-        }
+        return @"JMReportViewerVC";
     } else if ([self isDashboard]) {
         if ([self isNewDashboard]) {
             if ([JMUtils isServerAmber2] && [JMUtils isSystemVersion8] && [JMUtils isSupportVisualize]) {

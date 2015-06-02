@@ -298,7 +298,6 @@ your business wherever you are.</string>
                         <outlet property="menuButton" destination="rH4-91-Hd1" id="f4I-sb-Ruj"/>
                         <segue destination="8AY-7W-tMT" kind="push" identifier="ShowDashboardViewer" id="1Yl-7H-aUa"/>
                         <segue destination="LDD-kF-5Ch" kind="push" identifier="ShowReportViewer" id="xOu-Fd-A7w"/>
-                        <segue destination="Jac-N6-AQg" kind="push" identifier="ShowReportVisualizeViewer" id="HYy-j4-jsy"/>
                         <segue destination="W4b-4M-emD" kind="push" identifier="ShowDashboardVisualizeViewer" id="A6u-1B-THM"/>
                         <segue destination="9Nw-rh-bIW" kind="push" identifier="ShowDashboard" id="pm9-gf-xkJ"/>
                     </connections>
@@ -427,7 +426,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="wO2-Zp-RXk">
-                                                    <rect key="frame" x="179.9999999627471" y="7" width="110" height="30"/>
+                                                    <rect key="frame" x="180" y="7" width="109.99999996274711" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
@@ -466,7 +465,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="cyI-ld-frz">
-                                                    <rect key="frame" x="178.00000010403721" y="7" width="110" height="30"/>
+                                                    <rect key="frame" x="178" y="7" width="110" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -684,7 +683,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIY-vr-ZmM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-223" y="737"/>
+            <point key="canvasLocation" x="-303" y="1015"/>
         </scene>
         <!--Single Select Table View Controller-->
         <scene sceneID="pCI-XA-TBR">
@@ -696,12 +695,12 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tew-lf-EBI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="213" y="1135"/>
+            <point key="canvasLocation" x="157" y="1319"/>
         </scene>
-        <!--Report Viewer View Controller-->
+        <!--Report ViewerVC-->
         <scene sceneID="awL-Ln-vHg">
             <objects>
-                <viewController storyboardIdentifier="JMReportViewerViewController" id="LDD-kF-5Ch" customClass="JMReportViewerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMReportViewerVC" id="LDD-kF-5Ch" customClass="JMReportViewerVC" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="r2h-uK-Jvn">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -732,7 +731,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K3U-4u-nW3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-721" y="939"/>
+            <point key="canvasLocation" x="-749" y="1334"/>
         </scene>
         <!--Multi Select Table View Controller-->
         <scene sceneID="MA0-Xs-vyz">
@@ -744,7 +743,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Atm-T3-5r4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="213" y="489"/>
+            <point key="canvasLocation" x="157" y="647"/>
         </scene>
         <!--DashboardVC-->
         <scene sceneID="bUs-ba-Byd">
@@ -998,31 +997,6 @@ your business wherever you are.</string>
             </objects>
             <point key="canvasLocation" x="-1795" y="3060"/>
         </scene>
-        <!--Web View Controller-->
-        <scene sceneID="6Ga-t5-Il6">
-            <objects>
-                <viewController storyboardIdentifier="JMWebViewController" id="26H-1e-le4" customClass="JMWebViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="XhC-Nr-FEe">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" scalesPageToFit="YES" id="ViA-p9-afS">
-                                <rect key="frame" x="0.0" y="1" width="320" height="568"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <dataDetectorType key="dataDetectorTypes"/>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <outlet property="webView" destination="ViA-p9-afS" id="OnL-1p-zzF"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rJN-ll-lVB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-896" y="-847"/>
-        </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="3c7-so-7d2">
             <objects>
@@ -1088,7 +1062,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="h2Y-VO-bQ5">
-                                                    <rect key="frame" x="240" y="7" width="50" height="30"/>
+                                                    <rect key="frame" x="240.00000017881393" y="7" width="50" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -1219,40 +1193,6 @@ your business wherever you are.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mno-oK-Jgy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1322" y="3060"/>
-        </scene>
-        <!--Visualize Report Viewer View Controller-->
-        <scene sceneID="l4E-wX-6OO">
-            <objects>
-                <viewController storyboardIdentifier="JMVisualizeReportViewerViewController" id="Jac-N6-AQg" customClass="JMVisualizeReportViewerViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="h1F-2S-NEz">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="HPp-Qi-G5Y">
-                                <rect key="frame" x="150" y="274" width="20" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            </activityIndicatorView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report is empty!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EPh-uN-KCJ">
-                                <rect key="frame" x="16" y="273" width="288" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="NKm-DN-XGB"/>
-                    <connections>
-                        <outlet property="activityIndicator" destination="HPp-Qi-G5Y" id="Fkq-ja-mRr"/>
-                        <outlet property="emptyReportMessageLabel" destination="EPh-uN-KCJ" id="GO3-bu-pDq"/>
-                        <segue destination="0O6-q8-JlO" kind="push" identifier="SaveReportViewControllerSegue" id="p1D-Df-caj"/>
-                        <segue destination="Zu1-8t-uvk" kind="push" identifier="ShowReportOptions" id="Kkv-Mf-CvB"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="F9f-QM-age" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-721" y="1656"/>
         </scene>
         <!--Privacy Policy View Controller-->
         <scene sceneID="eIO-RW-mdB">
@@ -1512,7 +1452,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="rJv-Li-s1y">
-                                                    <rect key="frame" x="170.00000032285845" y="7" width="120" height="30"/>
+                                                    <rect key="frame" x="170.00000065684998" y="7" width="120" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -1551,7 +1491,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="gYa-nw-iDD">
-                                                    <rect key="frame" x="170.00000032285845" y="7" width="120" height="30"/>
+                                                    <rect key="frame" x="170.00000065684998" y="7" width="120" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done" secureTextEntry="YES"/>
@@ -1777,7 +1717,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3yu-PO-0zM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-223" y="1656"/>
+            <point key="canvasLocation" x="-303" y="1674"/>
         </scene>
         <!--Splash View Controller-->
         <scene sceneID="mHF-IR-URj">
@@ -1860,8 +1800,4 @@ your business wherever you are.</string>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="p1D-Df-caj"/>
-        <segue reference="Kkv-Mf-CvB"/>
-    </inferredMetricsTieBreakers>
 </document>
