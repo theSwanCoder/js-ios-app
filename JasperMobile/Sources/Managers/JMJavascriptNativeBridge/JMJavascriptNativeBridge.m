@@ -35,15 +35,22 @@
 @end
 
 @implementation JMJavascriptNativeBridge
+@synthesize webView = _webView, delegate = _delegate;
 
 #pragma mark - Custom Accessors
-- (void)setWebView:(UIWebView *)webView
+- (void)setWebView:(id)webView
 {
     _webView = webView;
-    _webView.delegate = self;
+    ((UIWebView *)_webView).delegate = self;
 }
 
 #pragma mark - Public API
+- (void)startLoadHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL
+{
+    [(UIWebView *)self.webView stopLoading];
+    [(UIWebView *)self.webView loadHTMLString:HTMLString baseURL:baseURL];
+}
+
 - (void)sendRequest:(JMJavascriptRequest *)request
 {
     NSString *javascriptString = request.command;

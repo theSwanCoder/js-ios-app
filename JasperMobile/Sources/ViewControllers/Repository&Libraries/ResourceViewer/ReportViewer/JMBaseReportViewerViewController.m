@@ -21,7 +21,6 @@
  */
 
 
-#import "JMReportViewerViewController.h"
 #import "JMCancelRequestPopup.h"
 #import "JMRestReport.h"
 
@@ -32,6 +31,8 @@
 #import "JMReportOptionsViewController.h"
 #import "ALToastView.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMReportViewerToolBar.h"
+#import "JMBaseReportViewerViewController.h"
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
 @property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;
@@ -89,7 +90,7 @@
 #pragma mark - Setups
 - (void)updateToobarAppearence
 {
-    if (self.report.isMultiPageReport && self.toolbar) {
+    if (self.toolbar && self.report.isMultiPageReport && !self.report.isReportEmpty) {
         self.toolbar.currentPage = self.report.currentPage;
         if (self.navigationController.visibleViewController == self) {
             [self.navigationController setToolbarHidden:NO animated:YES];
@@ -259,23 +260,11 @@
     [self refreshReport];
 }
 
-#pragma mark - JMReportViewerToolBarDelegate
-- (void)toolbar:(JMReportViewerToolBar *)toolbar pageDidChanged:(NSInteger)page
-{
-    // overriden in childs
-}
-
 #pragma mark - JMSaveReportControllerDelegate
 - (void)reportDidSavedSuccessfully
 {
     [ALToastView toastInView:self.view
                     withText:JMCustomLocalizedString(@"report.viewer.save.saved", nil)];
-}
-
-#pragma mark - Run report
-- (void)runReportWithPage:(NSInteger)page
-{
-    // overriden in childs
 }
 
 - (void)updateReportWithNewParameters

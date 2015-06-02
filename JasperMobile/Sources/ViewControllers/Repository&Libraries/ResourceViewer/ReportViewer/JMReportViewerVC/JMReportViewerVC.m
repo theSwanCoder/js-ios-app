@@ -21,28 +21,16 @@
  */
 
 
-#import "JMVisualizeReportViewerViewController.h"
-#import "JMCancelRequestPopup.h"
-#import "JMVisualizeReportLoader.h"
-#import "JMVisualizeReport.h"
-#import "JMReportViewerToolBar.h"
-#import "JMSaveReportViewController.h"
-
-#import "SWRevealViewController.h"
-#import "JMBaseCollectionViewController.h"
-#import "JMWebConsole.h"
-#import "JMWebViewController.h"
+#import "JMReportViewerVC.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMJavascriptNativeBridge.h"
+#import "JMReportViewerConfigurator.h"
 
-@interface JMVisualizeReportViewerViewController () <JMVisualizeReportLoaderDelegate>
-@property (nonatomic, strong) JMVisualizeReportLoader *reportLoader;
+@interface JMReportViewerVC () <JMReportLoaderDelegate>
+@property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, assign) BOOL isChildReport;
 @end
 
-@implementation JMVisualizeReportViewerViewController
-
-@synthesize reportLoader = _reportLoader;
+@implementation JMReportViewerVC
 
 #pragma mark - Actions
 - (void)cancelResourceViewingAndExit:(BOOL)exit
@@ -61,6 +49,12 @@
     }
 }
 
+- (void)closeChildReport
+{
+    [[JMVisualizeWebViewManager sharedInstance] resetChildWebView];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - Setups
 - (void)setupLeftBarButtonItems
 {
@@ -71,32 +65,19 @@
     }
 }
 
-- (void)closeChildReport
-{
-    [[JMVisualizeWebViewManager sharedInstance] resetChildWebView];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (void)setupSubviews
 {
+    self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
+
     CGRect rootViewBounds = self.navigationController.view.bounds;
-    UIWebView *webView = [[JMVisualizeWebViewManager sharedInstance] webViewWithParentFrame:rootViewBounds asSecondary:self.isChildReport];
-    webView.delegate = self;
+    id webView = [self.configurator webViewWithFrame:rootViewBounds asSecondary:self.isChildReport];
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
-    self.webView = webView;
 }
 
 #pragma mark - Custom accessors
-- (JMVisualizeReportLoader *)reportLoader
+- (id<JMReportLoader>)reportLoader
 {
-    if (!_reportLoader) {
-        _reportLoader = [JMVisualizeReportLoader loaderWithReport:self.report];
-        JMJavascriptNativeBridge *bridge = [JMJavascriptNativeBridge new];
-        bridge.webView = self.webView;
-        _reportLoader.bridge = bridge;
-        _reportLoader.delegate = self;
-    }
-    return _reportLoader;
+    return [self.configurator reportLoader];
 }
 
 #pragma mark - JMReportViewerToolBarDelegate
@@ -105,52 +86,54 @@
     // TODO: need support sessions
     // start show loading indicator
     [self.reportLoader fetchPageNumber:page withCompletion:@weakself(^(BOOL success, NSError *error)) {
-        if (success) {
-            // succcess action
-        } else {
-            [self handleError:error];
-        }
-        // stop show loading indicator
-    }@weakselfend];
+            if (success) {
+                // succcess action
+            } else {
+                [self handleError:error];
+            }
+            // stop show loading indicator
+        }@weakselfend];
 }
 
 #pragma mark - Run report
 - (void)runReportWithPage:(NSInteger)page
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
-        [self cancelResourceViewingAndExit:YES];
-    }@weakselfend];
+            [self.reportLoader cancelReport];
+            [self cancelResourceViewingAndExit:YES];
+        }@weakselfend];
 
     [self hideEmptyReportMessage];
 
     [self.reportLoader runReportWithPage:page completion:@weakself(^(BOOL success, NSError *error)) {
-        [self stopShowLoader];
+            [self stopShowLoader];
 
-        if (success) {
-            // succcess action
-        } else {
-            [self handleError:error];
-        }
-    }@weakselfend];
+            if (success) {
+                // succcess action
+            } else {
+                [self handleError:error];
+            }
+        }@weakselfend];
 }
 
 - (void)updateReportWithNewParameters
 {
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
+            [self.reportLoader cancelReport];
             [self cancelResourceViewingAndExit:YES];
         }@weakselfend];
 
     [self hideEmptyReportMessage];
 
     [self.reportLoader applyReportParametersWithCompletion:@weakself(^(BOOL success, NSError *error)) {
-        [self stopShowLoader];
+            [self stopShowLoader];
 
-        if (success) {
-            // succcess action
-        } else {
-            [self handleError:error];
-        }
-    }@weakselfend];
+            if (success) {
+                // succcess action
+            } else {
+                [self handleError:error];
+            }
+        }@weakselfend];
 }
 
 #pragma mark - JMRefreshable
@@ -164,6 +147,7 @@
 - (void)refreshReport
 {
     [self hideEmptyReportMessage];
+    [self updateToobarAppearence];
     [self.reportLoader refreshReportWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             [self stopShowLoader];
             if (success) {
@@ -172,7 +156,7 @@
             } else {
                 [self handleError:error];
             }
-    }@weakselfend];
+        }@weakselfend];
 }
 
 - (void)handleError:(NSError *)error
@@ -189,44 +173,69 @@
             [self runReportWithPage:reportCurrentPage];
         } else {
             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                [self cancelResourceViewingAndExit:YES];
-            } @weakselfend];
+                    [self cancelResourceViewingAndExit:YES];
+                } @weakselfend];
         }
 
+    } else if (error.code == JMReportLoaderErrorTypeEmtpyReport) {
+        [self showEmptyReportMessage];
     } else {
         [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
             [self cancelResourceViewingAndExit:YES];
         }];
     }
+
+
+
+
+
+
+//    if (error.code == JSSessionExpiredErrorCode) {
+//        if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+//            [self runReportWithPage:self.report.currentPage];
+//        } else {
+//            [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
+//                    [self cancelResourceViewingAndExit:YES];
+//                } @weakselfend];
+//        }
+//    } else {
+//        if (self.report.requestId) {
+//            [self.reportLoader cancelReport];
+//        }
+//        [JMUtils showAlertViewWithError:error];
+//    }
+
+
+
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSDictionary *)reportParameters
+- (void)reportLoader:(id<JMReportLoader>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSDictionary *)reportParameters
 {
     NSString *reportURI = [resourceLookup.uri stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls, NSError *error)) {
-        if (error) {
-            [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                [self cancelResourceViewingAndExit:YES];
-            }];
-        } else {
-            JMVisualizeReportViewerViewController *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-            reportViewController.resourceLookup = resourceLookup;
-            [reportViewController.report updateInputControls:inputControls];
-            reportViewController.isChildReport = YES;
-            
-            [self resetSubViews];
-            [self.navigationController pushViewController:reportViewController animated:YES];
-        }
-    }@weakselfend];
+            if (error) {
+                [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                    [self cancelResourceViewingAndExit:YES];
+                }];
+            } else {
+                JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
+                reportViewController.resourceLookup = resourceLookup;
+                [reportViewController.report updateInputControls:inputControls];
+                reportViewController.isChildReport = YES;
+
+                [self resetSubViews];
+                [self.navigationController pushViewController:reportViewController animated:YES];
+            }
+        }@weakselfend];
 }
 
--(void)reportLoader:(JMVisualizeReportLoader *)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
+-(void)reportLoader:(id<JMReportLoader>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
 {
     [[UIApplication sharedApplication] openURL:urlReference];
 }
 
-- (void)reportLoader:(JMVisualizeReportLoader *)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName
+- (void)reportLoader:(id<JMReportLoader>)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName
 {
     // sample
     // [self.reportLoader exportReportWithFormat:@"pdf"];
@@ -237,18 +246,7 @@
 #pragma mark - UIWebView helpers
 - (void)resetSubViews
 {
-    [self.webView stopLoading];
     [[JMVisualizeWebViewManager sharedInstance] reset];
 }
-
-//#pragma mark - Helpers
-//- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
-//{
-//    JMMenuActionsViewAction availableAction = [super availableActionForResource:resource] | self.menuActionsViewAction;
-//    if (self.report.isReportWithInputControls) {
-//        availableAction |= JMMenuActionsViewAction_Edit;
-//    }
-//    return availableAction;
-//}
 
 @end

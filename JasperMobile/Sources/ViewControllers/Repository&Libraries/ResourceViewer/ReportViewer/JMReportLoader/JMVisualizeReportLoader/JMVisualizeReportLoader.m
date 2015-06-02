@@ -27,10 +27,8 @@
 //
 
 #import "JMBaseReportViewerViewController.h"
-#import "JMVisualizeReportViewerViewController.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMVisualizeReport.h"
-#import "JMUtils.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMJavascriptRequest.h"
 #import "JMVisualizeManager.h"
@@ -51,6 +49,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 @end
 
 @implementation JMVisualizeReportLoader
+@synthesize bridge = _bridge, delegate = _delegate;
 
 #pragma mark - Lifecycle
 - (instancetype)initWithReport:(JMVisualizeReport *)report
@@ -96,9 +95,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
         [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             if (success) {
-                [self.bridge.webView stopLoading];
-                [self.bridge.webView loadHTMLString:self.report.HTMLString
-                                     baseURL:[NSURL URLWithString:self.report.baseURLString]];
+                [self.bridge startLoadHTMLString:self.report.HTMLString
+                                         baseURL:[NSURL URLWithString:self.report.baseURLString]];
             } else {
                 NSLog(@"Error loading HTML%@", error.localizedDescription);
             }
@@ -143,9 +141,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
         [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
                 if (success) {
-                    [self.bridge.webView stopLoading];
-                    [self.bridge.webView loadHTMLString:self.report.HTMLString
-                                         baseURL:[NSURL URLWithString:self.report.baseURLString]];
+                    [self.bridge startLoadHTMLString:self.report.HTMLString
+                                             baseURL:[NSURL URLWithString:self.report.baseURLString]];
                 } else {
                     NSLog(@"Error loading HTML%@", error.localizedDescription);
                 }

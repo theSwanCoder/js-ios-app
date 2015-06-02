@@ -22,19 +22,27 @@
 
 
 //
-//  JMReportPageViewerViewController.h
+//  JMJavascriptNativeBridgeProtocol.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
- */
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.1
+*/
 
-@interface JMReportPageViewerViewController : UIViewController
-@property (nonatomic, assign) NSUInteger pageIndex;
-@property (weak, nonatomic) IBOutlet UIWebView *webView;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-- (void)startShowLoadProgress;
-- (void)stopShowLoadProgress;
+@class JMJavascriptRequest;
+@class JMJavascriptCallback;
+@protocol JMJavascriptNativeBridgeDelegate;
+
+@protocol JMJavascriptNativeBridgeProtocol <NSObject>
+@property (nonatomic, weak) id webView;
+@property (nonatomic, weak) id <JMJavascriptNativeBridgeDelegate>delegate;
+
+- (void)startLoadHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL;
+- (void)sendRequest:(JMJavascriptRequest *)request;
+@end
+
+@protocol JMJavascriptNativeBridgeDelegate <NSObject>
+- (void)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback;
 @end

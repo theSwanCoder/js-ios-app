@@ -22,17 +22,16 @@
 
 
 //
-//  JMReportViewerViewController.h
+//  JMReportViewerVC.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
- */
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.1
+*/
 
 #import "JMBaseReportViewerViewController.h"
-#import "JMRestReport.h"
 
-@interface JMReportViewerViewController : JMBaseReportViewerViewController
+@interface JMReportViewerVC : JMBaseReportViewerViewController
 @end

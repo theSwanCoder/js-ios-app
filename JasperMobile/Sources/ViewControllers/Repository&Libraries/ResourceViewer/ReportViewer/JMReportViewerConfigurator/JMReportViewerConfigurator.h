@@ -22,17 +22,22 @@
 
 
 //
-//  JMJavascriptNativeBridge.h
+//  JMReportViewerConfigurator.h
 //  TIBCO JasperMobile
 //
+
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.1
 */
 
-#import "JMJavascriptNativeBridgeProtocol.h"
+@protocol JMReportLoader;
+@class JMReport;
 
-@interface JMJavascriptNativeBridge : NSObject <JMJavascriptNativeBridgeProtocol>
+@interface JMReportViewerConfigurator : NSObject
+- (instancetype)initWithReport:(JMReport *)report;
++ (instancetype)configuratorWithReport:(JMReport *)report;
+- (id)webViewWithFrame:(CGRect)frame asSecondary:(BOOL)asSecondary;
+- (id<JMReportLoader>)reportLoader;
 @end
-

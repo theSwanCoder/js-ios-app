@@ -28,7 +28,6 @@
 #import "JMResourceClientHolder.h"
 #import "JMCancelRequestPopup.h"
 #import "JMInputControlCell.h"
-#import "JMReportViewerViewController.h"
 
 NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 #define kJMReportOptionsTableViewCellHorizontalOffset ([JMUtils isIphone] ? 10.f : 15.f)

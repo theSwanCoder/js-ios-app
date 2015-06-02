@@ -22,17 +22,17 @@
 
 
 //
-//  JMVisualizeReportViewerViewController.h
+//  JMVisualizeReportLoader.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
+ @author Aleksandr Dakhno odahno@tibco.com
+ @since 2.0
  */
 
-#import "JMBaseReportViewerViewController.h"
-#import "JMVisualizeReport.h"
+@protocol JMReportLoader;
 
-@interface JMVisualizeReportViewerViewController : JMBaseReportViewerViewController
+@interface JMVisualizeReportLoader : NSObject <JMReportLoader>
 @end
+
