@@ -35,10 +35,11 @@
 
 @class JMVisualizeReport;
 @protocol JMVisualizeReportLoaderDelegate;
+@class JMJavascriptNativeBridge;
 
 
 @interface JMVisualizeReportLoader : NSObject <JMReportLoader, UIWebViewDelegate>
-@property (nonatomic, weak) UIWebView *webView;
+@property (nonatomic, strong) JMJavascriptNativeBridge *bridge;
 @property (nonatomic, weak) id<JMVisualizeReportLoaderDelegate> delegate;
 
 - (void)applyReportParametersWithCompletion:(void (^)(BOOL success, NSError *error))completion;

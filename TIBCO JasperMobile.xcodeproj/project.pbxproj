@@ -181,7 +181,11 @@
 		93EEB46A1AC9569F000718C7 /* JMBaseResourceViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4691AC9569F000718C7 /* JMBaseResourceViewerVC.m */; };
 		93EEB46C1AC972AA000718C7 /* JMResourceViewerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB46B1AC972AA000718C7 /* JMResourceViewerVC.swift */; };
 		93EEB46F1AC98498000718C7 /* JMVisualizeDashboardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB46E1AC98498000718C7 /* JMVisualizeDashboardLoader.swift */; };
+		A14782BCF3499821EAB23934 /* JMJavascriptCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A147810144F2E290F3B7FF83 /* JMJavascriptCallback.m */; };
+		A147840152F978C37C268CD9 /* JMJavascriptNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = A147880E387FEFB88BBD19B4 /* JMJavascriptNativeBridge.m */; };
 		A147856E6E0E7F2F4B21BDA6 /* JMFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A14780B58A557311DF10B120 /* JMFileManager.m */; };
+		A1478B843A55B9FA52664AA5 /* JMJavascriptRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478374AAA1B5E8D1DB41E5 /* JMJavascriptRequest.m */; };
+		A1478D6B609C61DEF3A3AC92 /* JMVisualizeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478AE10405430D44256CA0 /* JMVisualizeManager.m */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDABBD2B1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDABBD2A1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard */; };
@@ -535,6 +539,14 @@
 		93EEB46E1AC98498000718C7 /* JMVisualizeDashboardLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMVisualizeDashboardLoader.swift; sourceTree = "<group>"; };
 		9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.adhoc.xcconfig; path = "Pods/Target Support Files/Pods/Pods.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A14780B58A557311DF10B120 /* JMFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFileManager.m; sourceTree = "<group>"; };
+		A147810144F2E290F3B7FF83 /* JMJavascriptCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptCallback.m; sourceTree = "<group>"; };
+		A1478109BED20F430D9E6D81 /* JMJavascriptRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptRequest.h; sourceTree = "<group>"; };
+		A1478374AAA1B5E8D1DB41E5 /* JMJavascriptRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptRequest.m; sourceTree = "<group>"; };
+		A14787FFFE47A9E26BFB7469 /* JMJavascriptNativeBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptNativeBridge.h; sourceTree = "<group>"; };
+		A147880E387FEFB88BBD19B4 /* JMJavascriptNativeBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptNativeBridge.m; sourceTree = "<group>"; };
+		A1478AE10405430D44256CA0 /* JMVisualizeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeManager.m; sourceTree = "<group>"; };
+		A1478EA56C0D8D23BDD84C37 /* JMJavascriptCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptCallback.h; sourceTree = "<group>"; };
+		A1478EEB9FB0CCB7D652FF2F /* JMVisualizeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeManager.h; sourceTree = "<group>"; };
 		A1478F34566E444CAD3FD4F1 /* JMFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFileManager.h; sourceTree = "<group>"; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
@@ -1795,6 +1807,8 @@
 				0801DF921AAF2CC000DD072C /* JMSessionManager */,
 				93D8C6421AAC7E9200117306 /* JMWebViewManager */,
 				A14781A66383F634AB55FF8C /* JMFileManager */,
+				A147898DB80B9E88171DCD17 /* JMJavascriptNativeBridge */,
+				A14786A84BEF08E4A786B76A /* JMVisualizeManager */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1845,6 +1859,15 @@
 			path = JMVisualizeDashboardLoader;
 			sourceTree = "<group>";
 		};
+		A1478114D887FD01093A3B51 /* JMJavascriptRequest */ = {
+			isa = PBXGroup;
+			children = (
+				A1478374AAA1B5E8D1DB41E5 /* JMJavascriptRequest.m */,
+				A1478109BED20F430D9E6D81 /* JMJavascriptRequest.h */,
+			);
+			path = JMJavascriptRequest;
+			sourceTree = "<group>";
+		};
 		A14781A66383F634AB55FF8C /* JMFileManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1852,6 +1875,35 @@
 				A1478F34566E444CAD3FD4F1 /* JMFileManager.h */,
 			);
 			path = JMFileManager;
+			sourceTree = "<group>";
+		};
+		A14786A84BEF08E4A786B76A /* JMVisualizeManager */ = {
+			isa = PBXGroup;
+			children = (
+				A1478AE10405430D44256CA0 /* JMVisualizeManager.m */,
+				A1478EEB9FB0CCB7D652FF2F /* JMVisualizeManager.h */,
+			);
+			path = JMVisualizeManager;
+			sourceTree = "<group>";
+		};
+		A147898DB80B9E88171DCD17 /* JMJavascriptNativeBridge */ = {
+			isa = PBXGroup;
+			children = (
+				A147880E387FEFB88BBD19B4 /* JMJavascriptNativeBridge.m */,
+				A14787FFFE47A9E26BFB7469 /* JMJavascriptNativeBridge.h */,
+				A1478114D887FD01093A3B51 /* JMJavascriptRequest */,
+				A1478A402E96B16B965E9FD5 /* JMJavascriptCallback */,
+			);
+			path = JMJavascriptNativeBridge;
+			sourceTree = "<group>";
+		};
+		A1478A402E96B16B965E9FD5 /* JMJavascriptCallback */ = {
+			isa = PBXGroup;
+			children = (
+				A147810144F2E290F3B7FF83 /* JMJavascriptCallback.m */,
+				A1478EA56C0D8D23BDD84C37 /* JMJavascriptCallback.h */,
+			);
+			path = JMJavascriptCallback;
 			sourceTree = "<group>";
 		};
 		BDABBD231A41D8CC00EDA100 /* RNCachingURLProtocol */ = {
@@ -2291,6 +2343,10 @@
 				93D8C64E1AAD684500117306 /* JMVisualizeDashboardViewerVC.m in Sources */,
 				08DD182C1B135BE500856112 /* MigrateTo_v_1_9.xcmappingmodel in Sources */,
 				A147856E6E0E7F2F4B21BDA6 /* JMFileManager.m in Sources */,
+				A147840152F978C37C268CD9 /* JMJavascriptNativeBridge.m in Sources */,
+				A1478B843A55B9FA52664AA5 /* JMJavascriptRequest.m in Sources */,
+				A14782BCF3499821EAB23934 /* JMJavascriptCallback.m in Sources */,
+				A1478D6B609C61DEF3A3AC92 /* JMVisualizeManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
