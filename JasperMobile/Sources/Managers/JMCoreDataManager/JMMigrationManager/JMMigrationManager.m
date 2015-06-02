@@ -193,7 +193,7 @@ static void * JMMigrationManagerContext = &JMMigrationManagerContext;
    movingDestinationStoreAtURL:(NSURL *)destinationStoreURL
                          error:(NSError **)error
 {
-    NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString];
+    NSString *guid = [[NSUUID UUID] UUIDString];
     NSString *backupPath = [NSTemporaryDirectory() stringByAppendingPathComponent:guid];
 
     NSFileManager *fileManager = [NSFileManager defaultManager];

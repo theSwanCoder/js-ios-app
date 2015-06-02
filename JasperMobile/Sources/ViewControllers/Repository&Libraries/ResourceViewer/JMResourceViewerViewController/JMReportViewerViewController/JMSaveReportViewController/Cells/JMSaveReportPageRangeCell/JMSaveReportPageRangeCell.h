@@ -35,6 +35,7 @@
 
 @interface JMSaveReportPageRangeCell : UITableViewCell
 @property (nonatomic, assign) NSInteger currentPage;
+@property (nonatomic, assign) BOOL editable;
 @property (nonatomic, weak) id<JMSaveReportPageRangeCellDelegate> cellDelegate;
 @end
 

@@ -28,8 +28,15 @@
 
 #import "JMPrintResourceViewController.h"
 #import "JMReportSaver.h"
+#import "JMSaveReportPageRangeCell.h"
+#import "UITableViewCell+Additions.h"
 
-@interface JMPrintResourceViewController ()
+NSString * const kJMPrintPageFromKey = @"kJMPrintPageFromKey";
+NSString * const kJMPrintPageToKey = @"kJMPrintPageToKey";
+NSString * const kJMPrintReportPageRangeCellIdentifier = @"PageRangeCell";
+
+
+@interface JMPrintResourceViewController () <UITableViewDataSource, UITableViewDelegate, JMSaveReportPageRangeCellDelegate>
 
 @property (nonatomic, strong) JMReport *report;
 @property (nonatomic, strong) JSResourceLookup *resourceLookup;
@@ -37,6 +44,9 @@
 
 @property (nonatomic, strong) id printingItem;
 @property (nonatomic, weak) IBOutlet UIButton *printButton;
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) NSMutableDictionary *pages;
+
 @end
 
 @implementation JMPrintResourceViewController
@@ -44,24 +54,27 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.tableView.backgroundColor = kJMDetailViewLightBackgroundColor;
+
     [self.printButton setTitle:JMCustomLocalizedString(@"action.title.print", nil)
                       forState:UIControlStateNormal];
 }
 
-#pragma mark - Public API
-- (void)setReport:(JMReport *)report withWebView:(UIWebView *)webView
+#pragma mark - Custom Accessories
+- (NSMutableDictionary *)pages
 {
-    self.report = report;
-    self.webView = webView;
+    if (!_pages) {
+        _pages = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(1), kJMPrintPageFromKey, nil];
+        if (self.report && self.report.isMultiPageReport) {
+            [_pages setObject:@(self.report.countOfPages) forKey:kJMPrintPageToKey];
+        } else {
+            [_pages setObject:@(1) forKey:kJMPrintPageToKey];
+        }
+    }
+    return _pages;
 }
 
-- (void)setResourceLookup:(JSResourceLookup *)resourceLookup withWebView:(UIWebView *)webView
-{
-    self.resourceLookup = resourceLookup;
-    self.webView = webView;
-}
-
-#pragma mark - Private API
 - (NSString *)jobName
 {
     if (self.report) {
@@ -74,16 +87,87 @@
     }
 }
 
+#pragma mark - Public API
+- (void)setReport:(JMReport *)report withWebView:(UIWebView *)webView
+{
+    self.report = report;
+    self.webView = webView;
+    [self updatePrintJob];
+}
+
+- (void)setResourceLookup:(JSResourceLookup *)resourceLookup withWebView:(UIWebView *)webView
+{
+    self.resourceLookup = resourceLookup;
+    self.webView = webView;
+    [self updatePrintJob];
+}
+
+#pragma mark - JMSaveReportPageRangeCellDelegate
+- (NSRange)availableRangeForPageRangeCell:(JMSaveReportPageRangeCell *)cell
+{
+    if (self.report.countOfPages != NSNotFound) {
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        if (indexPath.row == 0) {
+            return NSMakeRange(1, ((NSNumber *)self.pages[kJMPrintPageToKey]).integerValue);
+        } else {
+            NSInteger toPage = ((NSNumber *)self.pages[kJMPrintPageFromKey]).integerValue;
+            return NSMakeRange(toPage, self.report.countOfPages - toPage + 1);
+        }
+    }
+    return NSMakeRange(NSNotFound, 0);
+}
+
+- (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSNumber *)page
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (indexPath.row == 0) {
+        self.pages[kJMPrintPageFromKey] = page;
+    } else if (indexPath.row == 1) {
+        self.pages[kJMPrintPageToKey] = page;
+    }
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+#pragma mark - UITableViewDataSource, UITableViewDelegate
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 2;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return JMCustomLocalizedString(@"report.viewer.save.pagesRange", nil);
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    JMSaveReportPageRangeCell *pageRangeCell = [tableView dequeueReusableCellWithIdentifier:kJMPrintReportPageRangeCellIdentifier
+                                                                               forIndexPath:indexPath];
+    pageRangeCell.cellDelegate = self;
+    pageRangeCell.editable = (self.report && self.report.isMultiPageReport);
+    if (indexPath.row == 0) {
+        pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pagesRange.fromPage", nil);
+        pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMPrintPageFromKey]).integerValue;
+        [pageRangeCell removeTopSeparator];
+    } else if (indexPath.row == 1) {
+        pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pagesRange.toPage", nil);
+        pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMPrintPageToKey]).integerValue;
+        [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+    }
+    return pageRangeCell;
+}
+
+#pragma mark - Private API
 - (void)prepareForPrint
 {
-    if (self.report) {
+    if (self.report && self.report.isMultiPageReport) {
         JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
         [JMCancelRequestPopup presentWithMessage:@"report.viewer.save.saving.status.title" cancelBlock:^{
             [reportSaver cancelReport];
         }];
-        [reportSaver saveReportWithName:[self reportName]
+        [reportSaver saveReportWithName:[self tempReportName]
                                  format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
-                                  pages:nil
+                                  pages:[self makePagesFormat]
                                 addToDB:NO
                              completion:@weakself(^(NSString *reportURI, NSError *error)) {
                                  dispatch_async(dispatch_get_main_queue(), ^{
@@ -148,12 +232,35 @@
     });
 }
 
+- (NSString *)makePagesFormat
+{
+    NSString *pagesFormat = nil;
+    NSInteger fromPageNumber = ((NSNumber *)self.pages[kJMPrintPageFromKey]).integerValue;
+    NSInteger toPageNumber = ((NSNumber *)self.pages[kJMPrintPageToKey]).integerValue;
+    
+    if (fromPageNumber != 1 || toPageNumber != self.report.countOfPages) {
+        if (fromPageNumber == toPageNumber) {
+            pagesFormat = [NSString stringWithFormat:@"%@", self.pages[kJMPrintPageFromKey]];
+        } else {
+            pagesFormat = [NSString stringWithFormat:@"%@-%@", self.pages[kJMPrintPageFromKey], self.pages[kJMPrintPageToKey]];
+        }
+    }
+    return pagesFormat;
+}
+
 - (IBAction)printButtonTapped:(id)sender
 {
     [self prepareForPrint];
 }
 
 #pragma mark - Helpers
+- (void) updatePrintJob
+{
+    self.pages = nil;
+    self.title = [self jobName];
+    self.printingItem = nil;
+}
+
 - (UIImage *)imageFromWebView
 {
     // Screenshot rendering from webView
@@ -166,8 +273,9 @@
     return viewImage;
 }
 
-- (NSString *)reportName
+- (NSString *)tempReportName
 {
+    return [[NSUUID UUID] UUIDString];
     return [[NSProcessInfo processInfo] globallyUniqueString];
 }
 

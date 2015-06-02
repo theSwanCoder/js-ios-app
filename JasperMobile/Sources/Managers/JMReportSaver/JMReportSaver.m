@@ -59,7 +59,7 @@ NSString * const kJMAttachmentPrefix = @"_";
     self.reportDirectory = [JMSavedResources pathToReportDirectoryWithName:name format:format];
     NSError *error;
     [[NSFileManager defaultManager] removeItemAtPath:self.reportDirectory error:nil];
-    BOOL isDirectoryCreated = [[NSFileManager defaultManager] createDirectoryAtPath:self.reportDirectory withIntermediateDirectories:NO attributes:nil error:&error];
+    BOOL isDirectoryCreated = [[NSFileManager defaultManager] createDirectoryAtPath:self.reportDirectory withIntermediateDirectories:YES attributes:nil error:&error];
     if (!isDirectoryCreated && error) {
         if (completionBlock) {
             completionBlock(nil, error);
