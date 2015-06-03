@@ -22,30 +22,22 @@
 
 
 //
-//  JMWebViewController.h
+//  JMPrintResourceViewController.h
 //  TIBCO JasperMobile
 //
 
-#import "JMWebViewController.h"
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.1
+ */
 
-@interface JMWebViewController()
-@property (weak, nonatomic) IBOutlet UIWebView *webView;
-@end
+#import <UIKit/UIKit.h>
+#import "JMReport.h"
 
-@implementation JMWebViewController
+@interface JMPrintResourceViewController : UIViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+- (void) setResourceLookup:(JSResourceLookup *)resourceLookup withWebView:(UIWebView *)webView;
 
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    NSURLRequest *request = [NSURLRequest requestWithURL:self.url];
-    [self.webView loadRequest:request];
-}
+- (void) setReport:(JMReport *)report withWebView:(UIWebView *)webView;
 
 @end

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="Vdc-Fb-o64">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="Vdc-Fb-o64">
     <dependencies>
         <deployment version="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
         <!--Single Select Table View Controller-->
@@ -44,7 +44,7 @@
         <!--Report ViewerVC-->
         <scene sceneID="g4p-L1-pik">
             <objects>
-                <viewController storyboardIdentifier="JMReportViewerViewController" id="1j7-lS-aWh" customClass="JMReportViewerVC" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMReportViewerVC" id="1j7-lS-aWh" customClass="JMReportViewerVC" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zk0-bX-Hf2">
                         <rect key="frame" x="0.0" y="64" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -614,31 +614,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dci-LI-0MA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1483" y="2973"/>
-        </scene>
-        <!--Web View Controller-->
-        <scene sceneID="ZHv-II-YAg">
-            <objects>
-                <viewController storyboardIdentifier="JMWebViewController" id="SoJ-8Z-a6C" customClass="JMWebViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="QG5-v4-qmp">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" scalesPageToFit="YES" id="mvG-eI-XlX">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <dataDetectorType key="dataDetectorTypes"/>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <outlet property="webView" destination="mvG-eI-XlX" id="El9-Mi-XzO"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Y4N-zz-cYk" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1449" y="1581"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="jIP-qq-TKW">
@@ -1750,6 +1725,84 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="znb-5X-npn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1483" y="299"/>
+        </scene>
+        <!--Print Resource View Controller-->
+        <scene sceneID="vZG-fT-hil">
+            <objects>
+                <viewController storyboardIdentifier="JMPrintResourceViewController" id="ztg-7b-OPe" customClass="JMPrintResourceViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="CMK-Sw-wd2">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="50" sectionHeaderHeight="1" sectionFooterHeight="1" id="n81-DI-GAT">
+                                <rect key="frame" x="15" y="0.0" width="738" height="887"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PageRangeCell" textLabel="20k-CB-6gR" style="IBUITableViewCellStyleDefault" id="Jvb-YG-txK" customClass="JMSaveReportPageRangeCell">
+                                        <rect key="frame" x="0.0" y="50" width="738" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jvb-YG-txK" id="Hk3-Pk-m7h">
+                                            <rect key="frame" x="0.0" y="0.0" width="738" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="20k-CB-6gR">
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="IrI-3R-YUk">
+                                                    <rect key="frame" x="467" y="7" width="246" height="36"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="Jvb-YG-txK" id="mAf-F9-IbA"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="accessoryView" destination="IrI-3R-YUk" id="btO-iZ-3Bq"/>
+                                            <outlet property="textField" destination="IrI-3R-YUk" id="hkr-hK-04U"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="ztg-7b-OPe" id="4uP-L0-Pou"/>
+                                    <outlet property="delegate" destination="ztg-7b-OPe" id="mlr-gf-R48"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="79T-iK-Kia">
+                                <rect key="frame" x="15" y="895" width="738" height="45"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" red="0.25882352939999997" green="0.5568627451" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Print">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="printButtonTapped:" destination="ztg-7b-OPe" eventType="touchUpInside" id="WQI-z5-qD0"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <outlet property="printButton" destination="79T-iK-Kia" id="6FY-Zj-sJh"/>
+                        <outlet property="tableView" destination="n81-DI-GAT" id="rPG-8w-Xrf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zMj-3L-1Ob" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="468" y="1597"/>
         </scene>
     </scenes>
     <resources>

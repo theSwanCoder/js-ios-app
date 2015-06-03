@@ -32,11 +32,9 @@
 #import "UIAlertView+Additions.h"
 #import "JMReport.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMFileManager.h"
-
+#import "JMReportSaver.h"
 
 NSString * const kJMSaveReportViewControllerSegue = @"SaveReportViewControllerSegue";
-NSString * const kJMAttachmentPrefix = @"_";
 NSString * const kJMSavePageFromKey = @"kJMSavePageFromKey";
 NSString * const kJMSavePageToKey = @"kJMSavePageToKey";
 NSString * const kJMSaveReportNameCellIdentifier = @"ReportNameCell";
@@ -309,88 +307,40 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         [self.tableView reloadData];
     }
 
-    BOOL isDirectoryCreated = [[JMFileManager sharedInstance] createDirectoryForReportWithName:self.reportName
-                                                                                 fileExtension:self.selectedReportFormat];
-    if (isDirectoryCreated) {
-
-        [JMCancelRequestPopup presentWithMessage:@"report.viewer.save.saving.status.title" cancelBlock:^{
-            [self.restClient cancelAllRequests];
-            [[JMFileManager sharedInstance] cancelDownloadReportWithName:self.reportName
-                                                           fileExtension:self.selectedReportFormat];
-        }];
-
-        void(^errorBlock)(NSError *) = @weakself(^(NSError *error)) {
-            [JMCancelRequestPopup dismiss];
-            [self.restClient cancelAllRequests];
-            [[JMFileManager sharedInstance] cancelDownloadReportWithName:self.reportName
-                                                           fileExtension:self.selectedReportFormat];
-            if (error.code == JSSessionExpiredErrorCode) {
-                if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                    [self saveReport];
-                } else {
-                    [JMUtils showLoginViewAnimated:YES completion:nil];
-                }
-            } else {
-                [JMUtils showAlertViewWithError:error];
-            }
-        }@weakselfend;
-
-        [self.restClient runReportExecution:self.report.resourceLookup.uri
-                                      async:NO
-                               outputFormat:self.selectedReportFormat
-                                interactive:NO
-                                  freshData:YES
-                           saveDataSnapshot:NO
-                           ignorePagination:NO
-                             transformerKey:nil
-                                      pages:[self makePagesFormat]
-                          attachmentsPrefix:kJMAttachmentPrefix
-                                 parameters:self.report.reportParameters
-                            completionBlock:@weakself(^(JSOperationResult *result)) {
-                        if (result.error) {
-                            errorBlock(result.error);
-                        } else {
-                            JSReportExecutionResponse *response = result.objects.firstObject;
-                            JSExportExecutionResponse *export = response.exports.firstObject;
-
-                            NSMutableArray *attachmentNames = [NSMutableArray array];
-                            for (JSReportOutputResource *attachment in export.attachments) {
-                                [attachmentNames addObject:attachment.fileName];
-                            }
-                            
-                            [JMUtils showNetworkActivityIndicator];
-                            [[JMFileManager sharedInstance] downloadReportWithName:self.reportName
-                                                                     fileExtension:self.selectedReportFormat
-                                                                         requestId:response.requestId
-                                                                          exportId:export.uuid
-                                                                   attachmentNames:[attachmentNames copy]
-                                                                        completion:@weakself(^(BOOL success, NSError *error)) {
-                                                                            [JMCancelRequestPopup dismiss];
-                                                                            
-                                                                            if (success) {
-                                                                                [JMSavedResources addReport:self.report.resourceLookup
-                                                                                                   withName:self.reportName
-                                                                                                     format:self.selectedReportFormat];
-                                                                                // Save thumbnail image
-                                                                                [[JMFileManager sharedInstance] downloadThumbnailForReportWithName:self.reportName
-                                                                                                                                     fileExtension:self.selectedReportFormat
-                                                                                                                                 resourceURLString:[self.report.resourceLookup thumbnailImageUrlString]];
-                                                                                
-                                                                                // Animation
-                                                                                [CATransaction begin];
-                                                                                [CATransaction setCompletionBlock:^{
-                                                                                    [self.delegate reportDidSavedSuccessfully];
-                                                                                }];
-                                                                                
-                                                                                [self.navigationController popViewControllerAnimated:YES];
-                                                                                [CATransaction commit];
-                                                                            } else {
-                                                                                errorBlock(error);
-                                                                            }
-                                                                        }@weakselfend];
-                        }
-                    }@weakselfend];
-    }
+    JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
+    [JMCancelRequestPopup presentWithMessage:@"report.viewer.save.saving.status.title" cancelBlock:^{
+        [reportSaver cancelReport];
+    }];
+    [reportSaver saveReportWithName:self.reportName
+                             format:self.selectedReportFormat
+                              pages:[self makePagesFormat]
+                            addToDB:YES
+                         completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                             dispatch_async(dispatch_get_main_queue(), ^{
+                                 [JMCancelRequestPopup dismiss];
+                             });
+                             if (error) {
+                                 [reportSaver cancelReport];
+                                 if (error.code == JSSessionExpiredErrorCode) {
+                                     if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                                         [self saveReport];
+                                     } else {
+                                         [JMUtils showLoginViewAnimated:YES completion:nil];
+                                     }
+                                 } else {
+                                     [JMUtils showAlertViewWithError:error];
+                                 }
+                             } else {
+                                 // Animation
+                                 [CATransaction begin];
+                                 [CATransaction setCompletionBlock:^{
+                                     [self.delegate reportDidSavedSuccessfully];
+                                 }];
+                                 
+                                 [self.navigationController popViewControllerAnimated:YES];
+                                 [CATransaction commit];
+                             }
+                         }@weakselfend];
 }
 
 - (NSString *)makePagesFormat

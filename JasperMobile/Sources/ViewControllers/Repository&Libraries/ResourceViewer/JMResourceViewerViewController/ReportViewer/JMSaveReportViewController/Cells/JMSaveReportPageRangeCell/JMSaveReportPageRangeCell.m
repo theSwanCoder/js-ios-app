@@ -67,14 +67,12 @@
     self.activityIndicator.center = CGPointMake(CGRectGetMidX(self.textField.bounds), CGRectGetMidY(self.textField.bounds));
 }
 
-//- (void)layoutSubviews
-//{
-//    [super layoutSubviews];
-//    
-//    CGRect titleLabelRect = self.textLabel.frame;
-//    titleLabelRect.size.width = self.contentView.frame.size.width - 3 * titleLabelRect.origin.x - self.textField.frame.size.width;
-//    self.textLabel.frame = titleLabelRect;
-//}
+- (void)setEditable:(BOOL)editable
+{
+    _editable = editable;
+    self.textField.enabled = editable;
+    self.textField.textColor = editable ? [UIColor darkTextColor] : [UIColor lightGrayColor];
+}
 
 #pragma mark - Custom Setters
 - (void)setCurrentPage:(NSInteger)currentPage

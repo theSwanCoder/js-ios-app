@@ -66,7 +66,7 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 - (void) startResourceViewing;
 - (void) cancelResourceViewingAndExit:(BOOL)exit NS_REQUIRES_SUPER;
 
-- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource;
+- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource NS_REQUIRES_SUPER;
 
 // Loaders
 - (void)startShowLoadingIndicators;
@@ -75,7 +75,6 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 - (void)stopShowLoader;
 
 // UIBarButtonItem helpers
-- (UIBarButtonItem *)infoPageBarButtonItem;
 - (UIBarButtonItem *)backBarButtonItemWithTarget:(id)target
                                           action:(SEL)action;
 - (UIBarButtonItem *)backButtonWithTitle:(NSString *)title

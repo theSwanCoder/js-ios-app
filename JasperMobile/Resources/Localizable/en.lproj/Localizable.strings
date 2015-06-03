@@ -123,6 +123,7 @@
 
 "resource.viewer.open.link" = "Do you want to open link in external browser?";
 "resource.viewer.can't.open.link" = "Link can't be opened.";
+"resource.viewer.print.operation.name" = "%@ print operation";
 
 // Report viewer
 "report.viewer.error.title" = "Error while loading report.";
@@ -175,6 +176,7 @@
 
 "resources.type.reportUnit" = "Report";
 "resources.type.dashboard" = "Dashboard";
+"resources.type.dashboard.legacy" = "Legacy Dashboard";
 "resources.type.folder" = "Folder";
 "resources.type.saved.reportUnit" = "Saved Report";
 
@@ -208,6 +210,7 @@
 "action.title.selectall" = "Select All";
 "action.title.clearselections" = "Clear selections";
 "action.title.run" = "Run";
+"action.title.print" = "Print";
 
 /* Error messages */
 

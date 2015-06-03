@@ -22,26 +22,26 @@
 
 
 //
-//  JMSaveReportPageRangeCell.m
+//  JMReportSaver.h
 //  TIBCO JasperMobile
 //
 
 /**
-@since 1.9.1
-*/
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.1
+ */
 
+#import <Foundation/Foundation.h>
+#import "JMReport.h"
 
-@protocol JMSaveReportPageRangeCellDelegate;
+typedef void(^SaveReportCompletion)(NSString *reportURI, NSError *error);
 
-@interface JMSaveReportPageRangeCell : UITableViewCell
-@property (nonatomic, assign) NSInteger currentPage;
-@property (nonatomic, weak) id<JMSaveReportPageRangeCellDelegate> cellDelegate;
-@end
+@interface JMReportSaver : NSObject
 
-@protocol JMSaveReportPageRangeCellDelegate <NSObject>
-@required
-- (NSRange)availableRangeForPageRangeCell:(JMSaveReportPageRangeCell *)cell;
+- (instancetype)initWithReport:(JMReport *)report;
 
-@optional
-- (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSNumber *)page;
+- (void)saveReportWithName:(NSString *)name format:(NSString *)format pages:(NSString *)pages addToDB:(BOOL)addToDB completion:(SaveReportCompletion)completionBlock;
+
+- (void) cancelReport;
+
 @end

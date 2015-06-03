@@ -51,10 +51,12 @@ NSString * const kJMFavorites = @"Favorites";
 + (void)removeFromFavorites:(JSResourceLookup *)resource
 {
     JMFavorites *favorites = [self favoritesFromResourceLookup:resource];
-    [[JMCoreDataManager sharedInstance].managedObjectContext deleteObject:favorites];
-    
-    [[JMCoreDataManager sharedInstance] save:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
+    if (favorites) {
+        [[JMCoreDataManager sharedInstance].managedObjectContext deleteObject:favorites];
+        
+        [[JMCoreDataManager sharedInstance] save:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
+    }
 }
 
 + (BOOL)isResourceInFavorites:(JSResourceLookup *)resource

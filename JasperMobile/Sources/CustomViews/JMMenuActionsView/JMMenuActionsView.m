@@ -160,6 +160,8 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
             return @"action.title.clearselections";
         case JMMenuActionsViewAction_Run:
             return @"action.title.run";
+        case JMMenuActionsViewAction_Print:
+            return @"action.title.print";
     }
 }
 
@@ -194,6 +196,8 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
             return @"clear_selection_action";
         case JMMenuActionsViewAction_Run:
             return @"run_action";
+        case JMMenuActionsViewAction_Print:
+            return @"print_action";
         }
 }
 

@@ -252,15 +252,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     return nil;
 }
 
-- (UIBarButtonItem *)infoPageBarButtonItem
-{
-    UIBarButtonItem *infoPageItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"]
-                                                                     style:UIBarButtonItemStyleBordered
-                                                                    target:self
-                                                                    action:@selector(showInfoPage)];
-    return infoPageItem;
-}
-
 - (UIBarButtonItem *) favoriteBarButtonItem
 {
     if (![JMUtils isIphone]) {

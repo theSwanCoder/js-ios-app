@@ -33,6 +33,9 @@
 #import "JSResourceLookup+Helpers.h"
 #import "JMReportViewerToolBar.h"
 #import "JMBaseReportViewerViewController.h"
+#import "JMPrintResourceViewController.h"
+#import "JMReportLoader.h"
+#import "JMJavascriptNativeBridgeProtocol.h"
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
 @property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;
@@ -208,6 +211,19 @@
         // when we start running a report from another report by tapping on hyperlink
         [self runReportWithPage:page];
     }
+}
+
+- (void)printResource
+{
+#warning HERE NEED RESOLVE ISSUE WITH UNEXISTED WEBVIEW!!!
+    JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
+    [printController setReport:self.report withWebView:[[self.reportLoader bridge] webView]];
+    [self.navigationController pushViewController:printController animated:YES];
+}
+
+- (void)runReportWithPage:(NSInteger)page
+{
+    // This method should be overrided in inherited classes.
 }
 
 #pragma mark - Custom accessors

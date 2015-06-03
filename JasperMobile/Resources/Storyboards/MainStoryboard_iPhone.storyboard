@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ARf-6W-JXB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ARf-6W-JXB">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
         <!--Main Navigation Controller-->
@@ -852,6 +852,84 @@ your business wherever you are.</string>
             </objects>
             <point key="canvasLocation" x="-896" y="-105"/>
         </scene>
+        <!--Print Resource View Controller-->
+        <scene sceneID="mwF-7r-jSH">
+            <objects>
+                <viewController storyboardIdentifier="JMPrintResourceViewController" id="Dji-H4-Y8n" customClass="JMPrintResourceViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8WD-Gc-JlB">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="GfB-23-eCk">
+                                <rect key="frame" x="10" y="0.0" width="300" height="446"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PageRangeCell" textLabel="Y2b-Cp-Wq3" style="IBUITableViewCellStyleDefault" id="TSv-f7-NVG" customClass="JMSaveReportPageRangeCell">
+                                        <rect key="frame" x="0.0" y="50" width="300" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TSv-f7-NVG" id="ihK-U5-RhU">
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y2b-Cp-Wq3">
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="WE4-4X-ogg">
+                                                    <rect key="frame" x="190" y="7" width="100" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="TSv-f7-NVG" id="EbX-G5-Kcd"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="accessoryView" destination="WE4-4X-ogg" id="Ksy-QD-hyL"/>
+                                            <outlet property="textField" destination="WE4-4X-ogg" id="vpe-EK-A2f"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Dji-H4-Y8n" id="6uD-cK-Vf0"/>
+                                    <outlet property="delegate" destination="Dji-H4-Y8n" id="Z9Q-nb-aOD"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="pWU-49-7Yv">
+                                <rect key="frame" x="10" y="454" width="300" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <color key="backgroundColor" red="0.25882352939999997" green="0.5568627451" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Print">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="printButtonTapped:" destination="Dji-H4-Y8n" eventType="touchUpInside" id="58f-SN-EnD"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <connections>
+                        <outlet property="printButton" destination="pWU-49-7Yv" id="5Xf-dI-UP9"/>
+                        <outlet property="tableView" destination="GfB-23-eCk" id="HDb-OS-rWR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xtP-ph-eGe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-416" y="-105"/>
+        </scene>
         <!--Favorites Collection View Controller-->
         <scene sceneID="3vm-cL-7yI">
             <objects>
@@ -919,31 +997,6 @@ your business wherever you are.</string>
             </objects>
             <point key="canvasLocation" x="-1795" y="3060"/>
         </scene>
-        <!--Web View Controller-->
-        <scene sceneID="6Ga-t5-Il6">
-            <objects>
-                <viewController storyboardIdentifier="JMWebViewController" id="26H-1e-le4" customClass="JMWebViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="XhC-Nr-FEe">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" scalesPageToFit="YES" id="ViA-p9-afS">
-                                <rect key="frame" x="0.0" y="1" width="320" height="568"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <dataDetectorType key="dataDetectorTypes"/>
-                            </webView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <outlet property="webView" destination="ViA-p9-afS" id="OnL-1p-zzF"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rJN-ll-lVB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-773" y="-847"/>
-        </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="3c7-so-7d2">
             <objects>
@@ -995,7 +1048,7 @@ your business wherever you are.</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextCellIdentifier" textLabel="FkY-Qs-99e" style="IBUITableViewCellStyleDefault" id="dzz-4a-J4M" customClass="JMTextSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="86" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="22" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dzz-4a-J4M" id="iC1-Tp-e94">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -1025,7 +1078,7 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BooleanCellIdentifier" textLabel="ehn-Jd-ueF" style="IBUITableViewCellStyleDefault" id="uVG-rE-OoL" customClass="JMBooleanSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="130" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="66" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uVG-rE-OoL" id="0CI-6d-EkU">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -1053,7 +1106,7 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IntroCellIdentifier" textLabel="TDI-Ai-vEN" style="IBUITableViewCellStyleDefault" id="ZRK-XI-mbG" customClass="JMSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="174" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="110" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZRK-XI-mbG" id="RLN-2u-qEw">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -1072,7 +1125,7 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedbackCellIdentifier" textLabel="NHL-5E-XIk" style="IBUITableViewCellStyleDefault" id="VXs-qL-KsU" customClass="JMSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="218" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="154" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VXs-qL-KsU" id="TDV-N4-NZk">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>

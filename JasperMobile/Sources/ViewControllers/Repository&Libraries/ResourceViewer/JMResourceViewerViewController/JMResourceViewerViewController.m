@@ -24,6 +24,8 @@
 #import "JMResourceViewerViewController.h"
 #import "JMWebViewManager.h"
 #import "ALToastView.h"
+#import "JSResourceLookup+Helpers.h"
+#import "JMPrintResourceViewController.h"
 
 @implementation JMResourceViewerViewController
 
@@ -62,6 +64,33 @@
     self.webView.delegate = nil;
 
     [super cancelResourceViewingAndExit:exit];
+}
+
+#pragma mark - Overriden methods
+
+- (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
+{
+    JMMenuActionsViewAction availableActions = [super availableActionForResource:resource];
+    if (![self.resourceLookup isSavedReport]) {
+        availableActions |= JMMenuActionsViewAction_Print;
+    }
+    return availableActions;
+}
+
+- (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
+{
+    [super actionsView:view didSelectAction:action];
+    if (action == JMMenuActionsViewAction_Print) {
+        [self printResource];
+    }
+}
+
+#pragma mark - Public API
+- (void)printResource
+{
+    JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
+    [printController setResourceLookup:self.resourceLookup withWebView:self.webView];
+    [self.navigationController pushViewController:printController animated:YES];
 }
 
 #pragma mark - UIWebViewDelegate

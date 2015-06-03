@@ -22,15 +22,27 @@
 
 
 //
-//  JMWebViewController.h
+//  JMSaveReportPageRangeCell.m
 //  TIBCO JasperMobile
 //
 
 /**
- @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
- */
+@since 1.9.1
+*/
 
-@interface JMWebViewController : UIViewController
-@property (nonatomic, strong) NSURL *url;
+
+@protocol JMSaveReportPageRangeCellDelegate;
+
+@interface JMSaveReportPageRangeCell : UITableViewCell
+@property (nonatomic, assign) NSInteger currentPage;
+@property (nonatomic, assign) BOOL editable;
+@property (nonatomic, weak) id<JMSaveReportPageRangeCellDelegate> cellDelegate;
+@end
+
+@protocol JMSaveReportPageRangeCellDelegate <NSObject>
+@required
+- (NSRange)availableRangeForPageRangeCell:(JMSaveReportPageRangeCell *)cell;
+
+@optional
+- (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSNumber *)page;
 @end
