@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright Ac 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -25,83 +25,80 @@
 //  TIBCO JasperMobile
 //
 
-/* Server Profiles view */
+/* Application Info */
 
+"application.info" = "%@™ v %@\n\nTIBCO JasperReports Server %.1f 以降向けの管理ツール/レポートビューア。\n\n詳細は以下の URL をご覧ください。\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%@ TIBCO Software, Inc.";
 
-"servers.url.label" = "サーバー アドレス";
-"servers.url.errmsg" = "有効な URL を指定してください";
-
-"servers.name.label" = "サーバー名";
-"servers.name.errmsg.empty" = "有効なプロファイル名を指定してください";
-"servers.name.errmsg.exists" = "プロファイル名はすでに存在しています。別の名前を指定してください。";
-
-"servers.orgid.label" = "組織 ID";
+/* Login Page */
 
 "login.username.label" = "ユーザー名";
-"login.username.errmsg.empty" = "有効なユーザー名を指定してください";
-
+"login.username.errmsg.empty" = "有効なユーザー名を指定してください。";
 "login.password.label" = "パスワード";
-"login.password.errmsg.empty" = "有効なパスワードを指定してください";
+"login.password.errmsg.empty" = "有効なパスワードを指定してください。";
+"login.server.profile.errmsg.empty" = "サーバー プロファイルを選択してください。";
+"login.button.login" = "ログイン";
+"login.button.try.demo" = "デモの実行";
 
-"servers.profile.title" = "サーバープロファイル";
-"servers.profile.delete.message" = "サーバーの削除確認を行ってください。";
+/* Server Profiles view */
 
-"servers.askpassword.label" = "常にパスワードを要求";
+"servers.profile.title" = "サーバー プロファイル";
+"servers.url.label" = "サーバー アドレス";
+"servers.url.errmsg" = "有効な URL を指定してください。";
+"servers.name.label" = "プロファイル名";
+"servers.name.errmsg.empty" = "有効なプロファイ名を指定してください";
+"servers.name.errmsg.exists" = "プロファイル名は既に存在します。一意の名前を指定してください。";
+"servers.orgid.label" = "組織 ID";
+"servers.askpassword.label" = "常にパスワードを尋ねる";
+"servers.keepSession.label" = "自動的にセッションを延長する";
+"servers.title.new" = "新しいサーバー プロファイル";
+"servers.action.profile.edit" = "編集";
+"servers.action.profile.clone" = "プロファイルの複製";
+"servers.action.profile.delete" = "削除";
+"servers.profile.delete.message" = "このサーバー プロファイルを削除するかどうかを確認してください。";
+"servers.profile.list.empty" = "サーバー プロファイルがありません";
 
-"servers.title.new" = "新しいサーバープロファイル";
+/* Onboarding Intro */
+"intro.title" = "TIBCO JasperMobile へようこそ";
+"intro.description" = "最初までスワイプします";
+"intro.button.skip.skip" = "イントロをスキップ";
+"intro.button.skip.startUsing" = "TIBCO JasperMobile の使用を開始";
+"intro.model.firstScreen.title" = "接続を維持する";
+"intro.model.firstScreen.description" = "TIBCO JasperMobile を使用すると、場所を問わず業務を続けることができます。";
+"intro.model.secondScreen.title" = "簡易アクセス";
+"intro.model.secondScreen.description" = "操作中のアプリケーションから実行されている\nインタラクティブなライブ レポートにアクセスします。";
+"intro.model.thirdScreen.title" = "シームレスな統合";
+"intro.model.thirdScreen.description" = "TIBCO JasperReports Server v%.1f 以降の環境を\n表示して連携します。";
 
-/* Report Saver view */
-"report.viewer.save.title" = "レポートの保存";
-"report.viewer.save.name" = "レポート名";
-"report.viewer.save.format" = "出力フォーマット";
-"report.viewer.save.saved" = "レポートは正常に保存されました";
-"report.viewer.save.name.errmsg.empty" = "空にはできません";
-"report.viewer.save.name.errmsg.notunique" = "この名前はすでに使用されています。別の名前を選択してください。";
-"report.viewer.save.name.errmsg.maxlength" = "%i シンボル未満でなければなりません";
-"report.viewer.save.name.errmsg.characters" = "文字 %@ は使用できません";
-"report.viewer.save.saving.status.title" = "レポートを保存中...";
-
-/* Rename Saved Report popup */
-
-"savedreport.viewer.modify.title" = "レポート名の変更";
-"savedreport.viewer.modify.reportname" = "レポート名";
-"savedreport.viewer.delete.confirmation.message" = "レポートの削除確認を行ってください。";
-
-
-/* Search filter */
-"status.loading" = "読み込んでいます...";
-
-/* Home View */
+/* Menu View */
 
 // Labels
 "menuitem.library.label" = "ライブラリ";
-"menuitem.saveditems.label" = "保存済みアイテム";
+"menuitem.saveditems.label" = "保存されたアイテム";
 "menuitem.settings.label" = "設定";
 "menuitem.repository.label" = "リポジトリ";
 "menuitem.favorites.label" = "お気に入り";
+"menuitem.logout.label" = "ログアウト";
 
 // Descriptions
 
-"menuitem.library.description" = "JR サーバーライブラリを参照します。";
-"menuitem.repository.description" = "JR サーバーリポジトリを参照します。";
-"menuitem.settings.description" = "Jaspersoft Mobile アプリを設定します。";
-"menuitem.saveditems.description" = "このデバイスに保存されているアイテムを表示します。 ";
-"menuitem.favorites.description" = "お気に入りのアイテムを参照します。";
+"menuitem.library.description" = "JR サーバー ライブラリを参照する";
+"menuitem.repository.description" = "JR サーバー リポジトリを参照する";
+"menuitem.settings.description" = "Jaspersoft Mobile App を構成する";
+"menuitem.saveditems.description" = "このデバイスに保存されたアイテムを表示する";
+"menuitem.favorites.description" = "お気に入りアイテムを参照する";
 
-/* Master view */
+/* Resource views */
 
-"repository.root.organization" = "組織";
-"repository.root.root" = "ルート";
-"repository.root.public" = "パブリック";
+"resources.loading.msg" = "読み込み中です。\nお待ちください...";
+"resources.noresults.msg" = "結果はありません。";
+"resources.search.placeholder" = "リソースの検索";
 
-// Resources
-"master.base.resources.title" = "参照";
-
-"resources.filterby.title" = "オブジェクトタイプ";
-"resources.filterby.type.all" = "すべて";
-"resources.filterby.type.reportUnit" = "レポート";
-"resources.filterby.type.dashboard" = "ダッシュボード";
-"resources.filterby.type.folder" = "フォルダの";
+// Filter By
+"resources.title" = "オブジェクト タイプ";
+"resources.type.all" = "すべて";
+"resources.type.reportUnit" = "レポート";
+"resources.type.dashboard" = "ダッシュボード";
+"resources.type.folder" = "フォルダ";
 
 // Sort by
 "resources.sortby.title" = "ソート オプション";
@@ -109,89 +106,118 @@
 "resources.sortby.type.date" = "日付";
 "resources.sortby.type.creator" = "作成者";
 
-// Filter By Tag
-"master.filterbytag.title" = "タグ";
-"master.filterbytag.type.none" = "なし";
-"master.filterbytag.type.favorites" = "お気に入り";
+// Repository view
+"repository.root.organization" = "組織";
+"repository.root.root" = "ルート";
+"repository.root.public" = "パブリック";
 
-/* Detail view */
+/* Resource viewer view */
 
-"resources.loading.msg" = "読み込んでいます。\nしばらくお待ちください...";
-"resources.noresults.msg" = "結果がありません。\n選択内容を変更してください...";
-"resources.search.placeholder" = "リソースの検索";
+"resource.viewer.open.link" = "外部ブラウザのリンクを開きますか?";
+"resource.viewer.can't.open.link" = "リンクを開けません。";
 
-"settings.item.connection.timeout" = "接続タイムアウト (秒)";
-"settings.item.server" = "サーバー";
-"settings.crashtracking.toast" = "クラッシュレポート設定を変更するには、[設定] ページに移動してください。";
-"settings.crashtracking.title" = "クラッシュレポートの送信";
-"settings.crashtracking.alert.title" = "注意！";
-"settings.crashtracking.alert.message" = "クラッシュレポートの送信設定は、アプリケーションの再起動後に適用されます。";
+// Report viewer
+"report.viewer.error.title" = "レポートの読み込み中にエラーが発生しました。";
+"report.viewer.visualize.render.error" = "レポートのレンダリングに失敗しました。";
+"report.viewer.emptyreport.title" = "レポートは空です。";
+"report.viewer.emptyreport.message" = "フィルタ オプションを変更する場合は、[OK] をタップします。前のページに戻る場合は、[キャンセル] をタップします。";
+"report.viewer.pagecount" = "/%d";
+"report.viewer.wrongNumberOfCurrentPage" = "要求されたページは範囲外です (%@)。";
 
+// Report Saver view
+"report.viewer.save.title" = "レポートの保存";
+"report.viewer.save.name" = "レポート名";
+"report.viewer.save.format" = "出力フォーマット";
+"report.viewer.save.pagesRange" = "ページ範囲";
+"report.viewer.save.pagesRange.fromPage" = "開始ページ:";
+"report.viewer.save.pagesRange.toPage" = "終了ページ:";
+"report.viewer.save.saved" = "レポートは正常に保存されました。";
+"report.viewer.save.name.errmsg.empty" = "このフィールドは必須です。";
+"report.viewer.save.name.errmsg.notunique" = "この名前は既に存在しています。一意の名前を選択してください。";
+"report.viewer.save.name.errmsg.notunique.rewrite" = "この名前は既に存在しています。上書きしますか?";
+"report.viewer.save.name.errmsg.maxlength" = "%i 文字を超えないようにしてください。";
+"report.viewer.save.name.errmsg.characters" = "文字 %@ は使用できません。";
+"report.viewer.save.saving.status.title" = "レポートを保存しています...";
 
-"report.viewer.options.title" = "フィルタオプション";
-"report.viewer.options.singleselect.titlelabel.title" = "単一アイテムを選択";
+// Report viewer Options view
+"report.viewer.options.title" = "フィルタ オプション";
+"report.viewer.options.singleselect.titlelabel.title" = "1 つのアイテムを選択";
 "report.viewer.options.multiselect.titlelabel.title" = "1 つまたは複数のアイテムを選択";
-"report.viewer.options.search.value.placeholder" = "値の検索";
+"report.viewer.options.search.value.placeholder" = "値を検索";
+"report.viewer.options.ic.title.date" = "日付";
+"report.viewer.options.ic.title.time" = "時間";
+"report.viewer.options.ic.title.unset" = "未設定";
 
-"report.viewer.emptyreport.title" = "レポートが空です";
-"report.viewer.emptyreport.message" = "フィルタオプションを変更する場合は、[Ok] を、古いレポートに戻る場合は [キャンセル] をタップします。";
+// Saved Reports viewer view
+"savedreport.viewer.modify.title" = "レポートの名前変更";
+"savedreport.viewer.modify.reportname" = "アイテム名";
+"savedreport.viewer.delete.confirmation.message" = "このアイテムを削除しますか?";
+
+/* Resource Info View */
 
 "resource.label.title" = "名前";
 "resource.description.title" = "説明";
 "resource.type.title" = "タイプ";
 "resource.uri.title" = "URI";
 "resource.version.title" = "バージョン";
-"resource.creationDate.title" = "作成日付";
+"resource.creationDate.title" = "作成日";
+
+/* Settings view */
+
+"settings.item.connection.timeout" = "接続タイムアウト (秒)";
+"settings.item.server" = "サーバー";
+"settings.item.intro" = "イントロの表示";
+"settings.crashtracking.toast" = "クラッシュ レポートの設定を変更するには、[設定] ページに移動します。";
+"settings.crashtracking.title" = "クラッシュ レポートの送信";
+"settings.crashtracking.alert.title" = "注意";
+"settings.crashtracking.alert.message" = "この設定を変更したら、アプリを再起動してください。";
+"settings.privacy.policy.title" = "プライバシー ポリシー";
+"settings.feedback" = "メールによるフィードバック";
+"settings.feedback.errorShowClient" = "メール アドレスは必須です。";
+"settings.save.message" = "設定を保存しています...";
 
 
-// Action titles
+/* Action titles */
+
 "action.title.refresh" = "更新";
 "action.title.save" = "保存";
-"action.title.edit" = "フィルタオプションの編集";
+"action.title.edit" = "フィルタ オプションの編集";
 "action.title.delete" = "削除";
-"action.title.rename" = "名前変更";
+"action.title.rename" = "名前の変更";
 "action.title.markasfavorite" = "お気に入りとしてマーク";
 "action.title.markasunfavorite" = "お気に入りから削除";
 "action.title.info" = "お知らせ";
-"action.title.sort" = "ソート オプション";
-
-
-"report.viewer.pagecount" = "/%d";
+"action.title.filter" = "フィルタ基準";
+"action.title.sort" = "ソート基準";
+"action.title.selectall" = "すべて選択";
+"action.title.clearselections" = "選択のクリア";
 
 /* Error messages */
 
-"error.readingresponse.dialog.msg" = "応答の読み込み時にエラーが発生しました";
+"error.noconnection.dialog.msg" = "ネットワーク設定 (モバイル データや WiFi) を確認して、やり直してください。";
 
-"error.noconnection.dialog.title" = "接続がありません";
-"error.noconnection.dialog.msg" = "モバイルネットワーク設定を確認の上、もう一度お試しください";
-
-"error.authenication.dialog.title" = "無効な認証情報が入力されました。";
-"error.authenication.dialog.msg" = "JasperReports Server にログインできませんでした。";
+"error.authenication.dialog.title" = "無効な認証情報";
+"error.authenication.dialog.msg" = "ユーザー名またはパスワードが正しくありません。認証情報をもう一度入力してください。";
 
 "error.unknownhost.dialog.title" = "不明なサーバー";
-"error.unknownhost.dialog.msg" = "指定されたホスト名を持つサーバーが見つかりませんでした";
+"error.unknownhost.dialog.msg" = "指定されたホスト名を見つけることができませんでした。";
 
-"error.upgrade.data.title" = "アップグレードエラー - ユーザーデータ更新";
-"error.upgrade.data.msg" = "アップグレード処理中、ユーザーデータ (サーバー、お気に入り、フィルタ値と設定) の更新時にエラーが発生しました。必要に応じて以下のボタンを押してください。\n再試行 - データの更新を再実行する\n適用 - エラーを無視してアップグレードを続行する、すべてのユーザーデータが失われる可能性があります\nキャンセル - アップグレードをキャンセルする (現在のバージョンが保持されます)";
+"error.upgrade.data.title" = "アップグレード エラー - ユーザー データの更新";
+"error.upgrade.data.msg" = "アップグレード プロセス中にユーザー データ (サーバー、お気に入り、フィルタの値と設定) の更新でエラーが発生しました。次を押してください。\n再試行 - データ更新をもう一度実行します\n適用 - エラーを無視してアップグレードを続けます。すべてのユーザー データが失われる可能性があります\nキャンセル - アップグレードをキャンセルします (現在のバージョンから変更されません)";
 
-"error.server.notsupported.title" = "サーバーのバージョンまたは URL が誤っています";
-"error.server.notsupported.msg" = "サーバーのバージョンが %.1f より前か (サポートされていない) または URL が誤っています";
+"error.server.notsupported.title" = "サーバー バージョンまたは URL が不正";
+"error.server.notsupported.msg" = "サーバー バージョンが %.1f より古い (サポートされていない) か、URL が正しくありません。";
+
 
 /* HTTP error messages */
 
-"error.http.400" = "400 - リクエストが誤っています。リクエストは無効です。";
-"error.http.403" = "403 - 権限が拒否されました。リクエスト内容は理解されましたが、拒否されました。";
-"error.http.404" = "404 - 見つかりません。リクエストされた URI が無効、またはリクエストされたリソースが存在していません。";
-"error.http.500" = "500 - 内部サーバーエラー";
-"error.http.502" = "502 - ゲートウェイが誤っています";
-"error.http.503" = "503 - サービスが利用できません";
-"error.http.504" = "504 - ゲートウェイタイムアウト";
-
-/* Input control messages */
-
-"report.viewer.options.ic.title.date" = "日付";
-"report.viewer.options.ic.title.time" = "時間";
-"report.viewer.options.ic.title.unset" = "設定解除";
+"error.http.400" = "400 - 不正なリクエスト。リクエストは無効です";
+"error.http.403" = "403 - アクセスは拒否されました。リクエストは認識されましたが、拒否されました";
+"error.http.404" = "404 - 見つかりませんでした。要求された URI が無効か、要求されたリソースが存在しません";
+"error.http.500" = "500 - サーバーの内部エラー";
+"error.http.502" = "502 - 不正なゲートウェイ";
+"error.http.503" = "503 - サービスを利用できません";
+"error.http.504" = "504 - ゲートウェイのタイムアウト";
 
 /* Buttons */
 
@@ -203,7 +229,17 @@
 "dialog.button.retry" = "再試行";
 "dialog.button.run.report" = "レポートの実行";
 "dialog.button.info" = "お知らせ";
-"dialog.button.addfavorite" = "お気に入り追加";
-"dialog.button.removefavorite" = "お気に入り削除";
+"dialog.button.addfavorite" = "お気に入りの追加";
+"dialog.button.removefavorite" = "お気に入りの削除";
 "dialog.button.save" = "保存";
 "dialog.button.delete" = "削除";
+
+"dialod.title.attention" = "警告";
+"dialod.title.error" = "エラー";
+"dialod.title.confirmation" = "確認";
+
+
+/* Other */
+
+"status.loading" = "読み込み中...";
+"back.button.title" = "戻る";

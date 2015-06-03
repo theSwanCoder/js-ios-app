@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright ?? 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -25,54 +25,51 @@
 //  TIBCO JasperMobile
 //
 
-/* Server Profiles view */
+/* Application Info */
 
+"application.info" = "%@™ v %@\n\nTIBCO JasperReports Server %.1f 及更高版本的管理工具和报告查看程序。\n\n有关更多信息，请访问: \nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\n版权所有 © 2005-%@ TIBCO Software, Inc.";
 
-"servers.url.label" = "服务器地址";
-"servers.url.errmsg" = "请指定有效的 URL";
-
-"servers.name.label" = "服务器名称";
-"servers.name.errmsg.empty" = "请指定有效的配置文件名称";
-"servers.name.errmsg.exists" = "配置文件名称已存在。请重新指定一个名称";
-
-"servers.orgid.label" = "组织 ID";
+/* Login Page */
 
 "login.username.label" = "用户名";
-"login.username.errmsg.empty" = "请指定一个有效的用户名";
-
+"login.username.errmsg.empty" = "指定一个有效的用户名。";
 "login.password.label" = "密码";
-"login.password.errmsg.empty" = "请指定有效的密码";
+"login.password.errmsg.empty" = "指定一个有效的密码。";
+"login.server.profile.errmsg.empty" = "选择一个服务器配置文件。";
+"login.button.login" = "登录";
+"login.button.try.demo" = "尝试演示";
+
+/* Server Profiles view */
 
 "servers.profile.title" = "服务器配置文件";
-"servers.profile.delete.message" = "请确认删除服务器。";
+"servers.url.label" = "服务器地址";
+"servers.url.errmsg" = "指定一个有效的 URL。";
+"servers.name.label" = "配置文件名";
+"servers.name.errmsg.empty" = "指定一个有效的配置文件名";
+"servers.name.errmsg.exists" = "配置文件名已存在。指定一个唯一的名称。";
+"servers.orgid.label" = "组织 ID";
+"servers.askpassword.label" = "始终询问密码";
+"servers.keepSession.label" = "自动扩展会话";
+"servers.title.new" = "新服务器配置文件";
+"servers.action.profile.edit" = "编辑";
+"servers.action.profile.clone" = "克隆配置文件";
+"servers.action.profile.delete" = "删除";
+"servers.profile.delete.message" = "确认删除此服务器配置文件。";
+"servers.profile.list.empty" = "没有服务器配置文件";
 
-"servers.askpassword.label" = "始终要求输入密码";
+/* Onboarding Intro */
+"intro.title" = "欢迎使用 TIBCO JasperMobile";
+"intro.description" = "向上轻扫以开始";
+"intro.button.skip.skip" = "跳过简介";
+"intro.button.skip.startUsing" = "开始使用 TIBCO JasperMobile";
+"intro.model.firstScreen.title" = "保持连接";
+"intro.model.firstScreen.description" = "TIBCO JasperMobile 可随时随地让您连接到您的企业。";
+"intro.model.secondScreen.title" = "即时访问";
+"intro.model.secondScreen.description" = "访问通过您运行的应用程序生成的实时交互报表。";
+"intro.model.thirdScreen.title" = "无缝集成";
+"intro.model.thirdScreen.description" = "查看并与您的 TIBCO JasperReports Server v%.1f 或更大的环境交互。";
 
-"servers.title.new" = "新建服务器配置文件";
-
-
-/* Report Saver view */
-"report.viewer.save.title" = "保存报告";
-"report.viewer.save.name" = "报告名称";
-"report.viewer.save.format" = "输出格式";
-"report.viewer.save.saved" = "已成功保存报告";
-"report.viewer.save.name.errmsg.empty" = "不能为空";
-"report.viewer.save.name.errmsg.notunique" = "已使用该名称，请选择其他名称";
-"report.viewer.save.name.errmsg.maxlength" = "不能少于 %i 个符号";
-"report.viewer.save.name.errmsg.characters" = "不允许字符 %@";
-"report.viewer.save.saving.status.title" = "正在保存报告...";
-
-/* Rename Saved Report popup */
-
-"savedreport.viewer.modify.title" = "重命名报告";
-"savedreport.viewer.modify.reportname" = "报告名称";
-"savedreport.viewer.delete.confirmation.message" = "请确认删除报告。";
-
-
-/* Search filter */
-"status.loading" = "加载中...";
-
-/* Home View */
+/* Menu View */
 
 // Labels
 "menuitem.library.label" = "库";
@@ -80,30 +77,28 @@
 "menuitem.settings.label" = "设置";
 "menuitem.repository.label" = "资料库";
 "menuitem.favorites.label" = "收藏夹";
+"menuitem.logout.label" = "退出";
 
 // Descriptions
 
-"menuitem.library.description" = "浏览您的 JR 服务器库。";
-"menuitem.repository.description" = "浏览您的 JR 服务器存储库。";
-"menuitem.settings.description" = "配置您的 Jaspersoft Mobile App。";
-"menuitem.saveditems.description" = "查看该设备上保存的项目。 ";
-"menuitem.favorites.description" = "浏览您的收藏夹项目。";
+"menuitem.library.description" = "浏览 JR Server 库";
+"menuitem.repository.description" = "浏览 JR Server 资料库";
+"menuitem.settings.description" = "配置 Jaspersoft 移动应用";
+"menuitem.saveditems.description" = "查看此设备上保存的项目";
+"menuitem.favorites.description" = "浏览收藏项目";
 
+/* Resource views */
 
-/* Master view */
+"resources.loading.msg" = "正在加载。\n请稍候...";
+"resources.noresults.msg" = "无结果。";
+"resources.search.placeholder" = "搜索资源";
 
-"repository.root.organization" = "组织";
-"repository.root.root" = "根";
-"repository.root.public" = "公共";
-
-// Resources
-"master.base.resources.title" = "浏览";
-
-"resources.filterby.title" = "对象类型";
-"resources.filterby.type.all" = "全部";
-"resources.filterby.type.reportUnit" = "报告";
-"resources.filterby.type.dashboard" = "仪表板";
-"resources.filterby.type.folder" = "文件夹";
+// Filter By
+"resources.title" = "对象类型";
+"resources.type.all" = "全部";
+"resources.type.reportUnit" = "报表";
+"resources.type.dashboard" = "仪表板";
+"resources.type.folder" = "文件夹";
 
 // Sort by
 "resources.sortby.title" = "排序选项";
@@ -111,32 +106,54 @@
 "resources.sortby.type.date" = "日期";
 "resources.sortby.type.creator" = "创建者";
 
-// Filter By Tag
-"master.filterbytag.title" = "标签";
-"master.filterbytag.type.none" = "无";
-"master.filterbytag.type.favorites" = "收藏夹";
+// Repository view
+"repository.root.organization" = "组织";
+"repository.root.root" = "根目录";
+"repository.root.public" = "公共";
 
-/* Detail view */
+/* Resource viewer view */
 
-"resources.loading.msg" = "加载中。\n请稍候...";
-"resources.noresults.msg" = "无结果。\n请另行选择...";
-"resources.search.placeholder" = "搜索资源";
+"resource.viewer.open.link" = "是否要在外部浏览器中打开链接?";
+"resource.viewer.can't.open.link" = "无法打开链接。";
 
-"settings.item.connection.timeout" = "连接超时（以秒为单位）";
-"settings.item.server" = "服务器";
-"settings.crashtracking.toast" = "如需更改崩溃报告设置，请转到“设置”页面。";
-"settings.crashtracking.title" = "发送崩溃报告";
-"settings.crashtracking.alert.title" = "注意！";
-"settings.crashtracking.alert.message" = "在重启应用程序后将应用发送崩溃报告设置。";
+// Report viewer
+"report.viewer.error.title" = "加载报表时出错。";
+"report.viewer.visualize.render.error" = "报表渲染失败。";
+"report.viewer.emptyreport.title" = "报表为空。";
+"report.viewer.emptyreport.message" = "如果要更改过滤器选项点击“确定”，或点击“取消”返回上一个报表。";
+"report.viewer.pagecount" = "/%d";
+"report.viewer.wrongNumberOfCurrentPage" = "请求的页面超出范围(%@)。";
 
+// Report Saver view
+"report.viewer.save.title" = "保存报表";
+"report.viewer.save.name" = "报表名";
+"report.viewer.save.format" = "输出格式";
+"report.viewer.save.pagesRange" = "页面范围";
+"report.viewer.save.pagesRange.fromPage" = "超始页面:";
+"report.viewer.save.pagesRange.toPage" = "截止页面:";
+"report.viewer.save.saved" = "已成功保存报表。";
+"report.viewer.save.name.errmsg.empty" = "此字段为必填字段。";
+"report.viewer.save.name.errmsg.notunique" = "此名称已存在，选择一个唯一的名称。";
+"report.viewer.save.name.errmsg.notunique.rewrite" = "此名称已存在，是否要覆盖?";
+"report.viewer.save.name.errmsg.maxlength" = "必须少于 %i 个字符。";
+"report.viewer.save.name.errmsg.characters" = "不允许使用字符 %@。";
+"report.viewer.save.saving.status.title" = "正在保存报表...";
 
+// Report viewer Options view
 "report.viewer.options.title" = "过滤器选项";
-"report.viewer.options.singleselect.titlelabel.title" = "选择单个项目";
+"report.viewer.options.singleselect.titlelabel.title" = "选择一个项目";
 "report.viewer.options.multiselect.titlelabel.title" = "选择一个或多个项目";
 "report.viewer.options.search.value.placeholder" = "搜索值";
+"report.viewer.options.ic.title.date" = "日期";
+"report.viewer.options.ic.title.time" = "时间";
+"report.viewer.options.ic.title.unset" = "未设置";
 
-"report.viewer.emptyreport.title" = "报告为空";
-"report.viewer.emptyreport.message" = "如果您要更改过滤器选项则敲击“确定”，或者敲击“取消”返回至原报告。";
+// Saved Reports viewer view
+"savedreport.viewer.modify.title" = "重命名报表";
+"savedreport.viewer.modify.reportname" = "项目名称";
+"savedreport.viewer.delete.confirmation.message" = "是否确定要删除此项目?";
+
+/* Resource Info View */
 
 "resource.label.title" = "名称";
 "resource.description.title" = "说明";
@@ -145,8 +162,23 @@
 "resource.version.title" = "版本";
 "resource.creationDate.title" = "创建日期";
 
+/* Settings view */
 
-// Action titles
+"settings.item.connection.timeout" = "连接超时(秒)";
+"settings.item.server" = "服务器";
+"settings.item.intro" = "显示简介";
+"settings.crashtracking.toast" = "要更改崩溃报表设置，请转到设置页面。";
+"settings.crashtracking.title" = "发送崩溃报表";
+"settings.crashtracking.alert.title" = "注";
+"settings.crashtracking.alert.message" = "在更改此设置后重新启动应用程序。";
+"settings.privacy.policy.title" = "隐私政策";
+"settings.feedback" = "通过电子邮件发送反馈";
+"settings.feedback.errorShowClient" = "电子邮件地址为必填字段。";
+"settings.save.message" = "正在保存设置...";
+
+
+/* Action titles */
+
 "action.title.refresh" = "刷新";
 "action.title.save" = "保存";
 "action.title.edit" = "编辑过滤器选项";
@@ -155,45 +187,37 @@
 "action.title.markasfavorite" = "标记为收藏项";
 "action.title.markasunfavorite" = "从收藏夹中删除";
 "action.title.info" = "信息";
-"action.title.sort" = "排序选项";
-
-
-"report.viewer.pagecount" = "/%d";
+"action.title.filter" = "过滤方式";
+"action.title.sort" = "排序方式";
+"action.title.selectall" = "全选";
+"action.title.clearselections" = "清除选定内容";
 
 /* Error messages */
 
-"error.readingresponse.dialog.msg" = "读取响应时出错";
+"error.noconnection.dialog.msg" = "检查您的网络设置(移动数据或 WiFi)并重试。";
 
-"error.noconnection.dialog.title" = "无连接";
-"error.noconnection.dialog.msg" = "请检查您的移动网络设置，然后重试";
-
-"error.authenication.dialog.title" = "C提供的凭证无效。";
-"error.authenication.dialog.msg" = "无法登录 JasperReports Server。";
+"error.authenication.dialog.title" = "凭据无效";
+"error.authenication.dialog.msg" = "用户名或密码不正确。重新输入您的凭据。";
 
 "error.unknownhost.dialog.title" = "未知服务器";
-"error.unknownhost.dialog.msg" = "找不到具有指定主机名的服务器";
+"error.unknownhost.dialog.msg" = "找不到指定主机名。";
 
 "error.upgrade.data.title" = "升级错误 - 用户数据更新";
-"error.upgrade.data.msg" = "在升级过程中出现用户数据（服务器、收藏夹、过滤器值和设置）更新错误。请按: \n重试 - 再次重新执行数据更新\n应用 - 忽略错误并继续升级，您可能“丢失”所有用户数据\n取消 - 取消升级（这将保留当前版本）";
+"error.upgrade.data.msg" = "在升级过程中更新用户数据(服务器、收藏夹、过滤器值和设置)时出错。按:\n重试 - 再次重新执行数据更新\n应用 - 忽略错误并继续升级，您可能会丢失所有用户数据\n取消 - 取消升级(保留当前版本)";
 
-"error.server.notsupported.title" = "服务器版本或 URL 错误";
-"error.server.notsupported.msg" = "服务器版本低于 %.1f（不受支持）或 URL 不正确";
+"error.server.notsupported.title" = "服务器版本或 URL 不正确";
+"error.server.notsupported.msg" = "服务器版本比 %.1f (不支持)更旧，或 URL 不正确。";
+
 
 /* HTTP error messages */
 
-"error.http.400" = "400 - 错误请求。请求无效";
-"error.http.403" = "403 - 权限被拒绝。已理解请求，但是请求被拒绝";
-"error.http.404" = "404 - 未找到。请求的 URI 无效或者请求的资源不存在";
+"error.http.400" = "400 - 错误的请求。请求无效";
+"error.http.403" = "403 - 权限被拒绝。请求已理解，但被拒绝";
+"error.http.404" = "404 - 找不到。请求的 URI 无效或请求的资源不存在";
 "error.http.500" = "500 - 内部服务器错误";
-"error.http.502" = "502 - 错误网关";
+"error.http.502" = "502 - 错误的网关";
 "error.http.503" = "503 - 服务不可用";
 "error.http.504" = "504 - 网关超时";
-
-/* Input control messages */
-
-"report.viewer.options.ic.title.date" = "日期";
-"report.viewer.options.ic.title.time" = "时间";
-"report.viewer.options.ic.title.unset" = "未设置";
 
 /* Buttons */
 
@@ -203,9 +227,19 @@
 "dialog.button.cancel" = "取消";
 "dialog.button.continue" = "继续";
 "dialog.button.retry" = "重试";
-"dialog.button.run.report" = "运行报告";
+"dialog.button.run.report" = "运行报表";
 "dialog.button.info" = "信息";
-"dialog.button.addfavorite" = "添加收藏项";
-"dialog.button.removefavorite" = "删除收藏项";
+"dialog.button.addfavorite" = "添加收藏夹";
+"dialog.button.removefavorite" = "删除收藏夹";
 "dialog.button.save" = "保存";
 "dialog.button.delete" = "删除";
+
+"dialod.title.attention" = "警告";
+"dialod.title.error" = "错误";
+"dialod.title.confirmation" = "确认";
+
+
+/* Other */
+
+"status.loading" = "正在加载...";
+"back.button.title" = "后退";

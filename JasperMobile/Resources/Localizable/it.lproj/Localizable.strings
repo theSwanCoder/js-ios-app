@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright Â© 2005-2014 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -25,53 +25,51 @@
 //  TIBCO JasperMobile
 //
 
-/* Server Profiles view */
+/* Application Info */
 
+"application.info" = "%@™ v %@\n\nStrumento di gestione e visualizzatore report per server TIBCO JasperReports %.1f e versioni successive.\n\nPer ulteriori informazioni visitare la pagina:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%@ TIBCO Software, Inc.";
 
-"servers.url.label" = "Indirizzo server";
-"servers.url.errmsg" = "Specificare un URL valido";
-
-"servers.name.label" = "Nome server";
-"servers.name.errmsg.empty" = "Specificare un nome profilo valido";
-"servers.name.errmsg.exists" = "Nome profilo già esiste. Specificarne un altro";
-
-"servers.orgid.label" = "ID organizzazione";
+/* Login Page */
 
 "login.username.label" = "Nome utente";
-"login.username.errmsg.empty" = "Specificare un nome utente valido";
-
+"login.username.errmsg.empty" = "Specificare un nome utente valido.";
 "login.password.label" = "Password";
-"login.password.errmsg.empty" = "Specificare una password valida";
+"login.password.errmsg.empty" = "Indicare una password valida.";
+"login.server.profile.errmsg.empty" = "Selezionare un profilo server.";
+"login.button.login" = "Accesso";
+"login.button.try.demo" = "Prova demo";
+
+/* Server Profiles view */
 
 "servers.profile.title" = "Profili server";
-"servers.profile.delete.message" = "Confermare l'eliminazione del server.";
-
-"servers.askpassword.label" = "Chiedi sempre password";
-
+"servers.url.label" = "Indirizzo server";
+"servers.url.errmsg" = "Specificare un URL valido.";
+"servers.name.label" = "Nome profilo";
+"servers.name.errmsg.empty" = "Indicare un nome di profilo valido";
+"servers.name.errmsg.exists" = "Nome di profilo già esistente. Indicare un nome univoco.";
+"servers.orgid.label" = "ID organizzazione";
+"servers.askpassword.label" = "Chiedere sempre la password";
+"servers.keepSession.label" = "Estendi automaticamente la sessione";
 "servers.title.new" = "Nuovo profilo server";
+"servers.action.profile.edit" = "Modifica";
+"servers.action.profile.clone" = "Clona profilo";
+"servers.action.profile.delete" = "Elimina";
+"servers.profile.delete.message" = "Assicurati di eliminare il profilo server.";
+"servers.profile.list.empty" = "Nessun profilo server";
 
-/* Report Saver view */
-"report.viewer.save.title" = "Salva report";
-"report.viewer.save.name" = "Nome report";
-"report.viewer.save.format" = "Formato dell'output";
-"report.viewer.save.saved" = "Report salvato correttamente";
-"report.viewer.save.name.errmsg.empty" = "Non può essere vuoto";
-"report.viewer.save.name.errmsg.notunique" = "Nome già utilizzato. Sceglierne uno diverso";
-"report.viewer.save.name.errmsg.maxlength" = "Deve essere inferiore ai simboli %i";
-"report.viewer.save.name.errmsg.characters" = "Caratteri %@ non consentiti";
-"report.viewer.save.saving.status.title" = "Salvataggio report in corso...";
+/* Onboarding Intro */
+"intro.title" = "Benvenuto a TIBCO JasperMobile";
+"intro.description" = "Scorri rapidamente per iniziare";
+"intro.button.skip.skip" = "Salta intr";
+"intro.button.skip.startUsing" = "Inizia a usare TIBCO JasperMobile";
+"intro.model.firstScreen.title" = "Rimani collegato";
+"intro.model.firstScreen.description" = "TIBCO JasperMobile ti consente di essere sempre\nconnesso al tuo business, ovunque ti trovi.";
+"intro.model.secondScreen.title" = "Accesso istantaneo";
+"intro.model.secondScreen.description" = "Accedi a report interattivi in tempo reale\nrealizzati dalle tue applicazioni operative.";
+"intro.model.thirdScreen.title" = "Integrazione senza interruzioni";
+"intro.model.thirdScreen.description" = "Visualizza e interagisci con il tuo ambiente TIBCO JasperReports\nServer v%.1f o versioni successive.";
 
-/* Rename Saved Report popup */
-
-"savedreport.viewer.modify.title" = "Rinomina report";
-"savedreport.viewer.modify.reportname" = "Nome report";
-"savedreport.viewer.delete.confirmation.message" = "Confermare l'eliminazione del report.";
-
-
-/* Search filter */
-"status.loading" = "Caricamento in corso...";
-
-/* Home View */
+/* Menu View */
 
 // Labels
 "menuitem.library.label" = "Libreria";
@@ -79,63 +77,83 @@
 "menuitem.settings.label" = "Impostazioni";
 "menuitem.repository.label" = "Archivio";
 "menuitem.favorites.label" = "Preferiti";
+"menuitem.logout.label" = "Disconnetti";
 
 // Descriptions
 
-"menuitem.library.description" = "Sfoglia libreria server JR.";
-"menuitem.repository.description" = "Sfoglia archivio server JR.";
-"menuitem.settings.description" = "Configura l'applicazione mobile Jaspersoft.";
-"menuitem.saveditems.description" = "Visualizza elementi salvati sul dispositivo. ";
-"menuitem.favorites.description" = "Sfoglia Elementi preferiti.";
+"menuitem.library.description" = "Sfoglia la tua libreria JR Server";
+"menuitem.repository.description" = "Sfoglia il tuo archivio JR Server";
+"menuitem.settings.description" = "Configura la tua app mobile Jaspersoft";
+"menuitem.saveditems.description" = "Mostra elementi salvati nel dispositivo";
+"menuitem.favorites.description" = "Sfoglia gli elementi preferiti";
 
+/* Resource views */
 
-/* Master view */
+"resources.loading.msg" = "Caricamento in corso.\nAttendere...";
+"resources.noresults.msg" = "Nessun risultato.";
+"resources.search.placeholder" = "Cerca risorse";
 
-"repository.root.organization" = "Organizzazione";
-"repository.root.root" = "Directory principale";
-"repository.root.public" = "Pubblica";
-
-// Resources
-"master.base.resources.title" = "Sfoglia";
-
-"resources.filterby.title" = "Tipo oggetto";
-"resources.filterby.type.all" = "Tutti";
-"resources.filterby.type.reportUnit" = "Report";
-"resources.filterby.type.dashboard" = "Dashboard";
-"resources.filterby.type.folder" = "Cartelle";
+// Filter By
+"resources.title" = "Tipo di oggetto";
+"resources.type.all" = "Tutto";
+"resources.type.reportUnit" = "Report";
+"resources.type.dashboard" = "Dashboard";
+"resources.type.folder" = "Cartelle";
 
 // Sort by
 "resources.sortby.title" = "Opzioni di ordinamento";
 "resources.sortby.type.name" = "Nome";
 "resources.sortby.type.date" = "Data";
-"resources.sortby.type.creator" = "Autore";
+"resources.sortby.type.creator" = "Creatore";
 
-// Filter By Tag
-"master.filterbytag.title" = "Tag";
-"master.filterbytag.type.none" = "Nessuna";
-"master.filterbytag.type.favorites" = "Preferiti";
+// Repository view
+"repository.root.organization" = "Organizzazione";
+"repository.root.root" = "Root";
+"repository.root.public" = "Pubblica";
 
-/* Detail view */
+/* Resource viewer view */
 
-"resources.loading.msg" = "Caricamento in corso. Attendere...";
-"resources.noresults.msg" = "Nessun risultato.\nEffettuare un'altra selezione...";
-"resources.search.placeholder" = "Cerca risorse";
+"resource.viewer.open.link" = "Aprire il collegamento in un browser esterno?";
+"resource.viewer.can't.open.link" = "Impossibile aprire il collegamento.";
 
-"settings.item.connection.timeout" = "Timeout connessione (in secondi)";
-"settings.item.server" = "Server";
-"settings.crashtracking.toast" = "Per modificare le impostazioni dei report degli arresti anomali accedere alla pagina Impostazioni.";
-"settings.crashtracking.title" = "Invia report di arresti anomali";
-"settings.crashtracking.alert.title" = "Attenzione.";
-"settings.crashtracking.alert.message" = "L'invio delle impostazioni dei report di arresti anomali verrà applicato dopo il riavvio dell'applicazione.";
+// Report viewer
+"report.viewer.error.title" = "Errore durante il caricamento del report.";
+"report.viewer.visualize.render.error" = "Impossibile eseguire il rendering del report.";
+"report.viewer.emptyreport.title" = "Il report è vuoto.";
+"report.viewer.emptyreport.message" = "Toccare 'Ok' per modificare le opzioni del filtro, oppure 'Annulla' per tornare al report precedente.";
+"report.viewer.pagecount" = "di %d";
+"report.viewer.wrongNumberOfCurrentPage" = "La pagina richiesta si trova al di fuori dell'intervallo (%@).";
 
+// Report Saver view
+"report.viewer.save.title" = "Salva report";
+"report.viewer.save.name" = "Nome report";
+"report.viewer.save.format" = "Formato di output";
+"report.viewer.save.pagesRange" = "Intervallo di pagine";
+"report.viewer.save.pagesRange.fromPage" = "Da pagina:";
+"report.viewer.save.pagesRange.toPage" = "A pagina:";
+"report.viewer.save.saved" = "Il report è stato salvato.";
+"report.viewer.save.name.errmsg.empty" = "Questo campo è obbligatorio.";
+"report.viewer.save.name.errmsg.notunique" = "Nome già esistente, scegliere un nome univoco.";
+"report.viewer.save.name.errmsg.notunique.rewrite" = "Nome già esistente, sostituirlo?";
+"report.viewer.save.name.errmsg.maxlength" = "Non può contenere più di %i caratteri.";
+"report.viewer.save.name.errmsg.characters" = "I caratteri %@ non sono consentiti.";
+"report.viewer.save.saving.status.title" = "Salvataggio del report in corso...";
 
+// Report viewer Options view
 "report.viewer.options.title" = "Opzioni filtro";
-"report.viewer.options.singleselect.titlelabel.title" = "Seleziona un unico elemento";
-"report.viewer.options.multiselect.titlelabel.title" = "Seleziona uno o più elementi";
+"report.viewer.options.singleselect.titlelabel.title" = "Selezionare un unico elemento";
+"report.viewer.options.multiselect.titlelabel.title" = "Selezionare uno o più elementi";
 "report.viewer.options.search.value.placeholder" = "Cerca valori";
+"report.viewer.options.ic.title.date" = "Data";
+"report.viewer.options.ic.title.time" = "Ora";
+"report.viewer.options.ic.title.unset" = "Annulla impostazione";
 
-"report.viewer.emptyreport.title" = "Report è vuoto";
-"report.viewer.emptyreport.message" = "Toccare 'Ok' se si desidera modificare le opzioni di filtro oppure 'Annulla' per ritornare al report precedente.";
+// Saved Reports viewer view
+"savedreport.viewer.modify.title" = "Rinomina report";
+"savedreport.viewer.modify.reportname" = "Nome dell'elemento";
+"savedreport.viewer.delete.confirmation.message" = "Eliminare questo elemento?";
+
+/* Resource Info View */
 
 "resource.label.title" = "Nome";
 "resource.description.title" = "Descrizione";
@@ -144,55 +162,62 @@
 "resource.version.title" = "Versione";
 "resource.creationDate.title" = "Data creazione";
 
+/* Settings view */
 
-// Action titles
+"settings.item.connection.timeout" = "Timeout della connessione (in secondi)";
+"settings.item.server" = "Server";
+"settings.item.intro" = "Mostra intro";
+"settings.crashtracking.toast" = "Per modificare le impostazioni dei report di crash, andare alla pagina delle impostazioni.";
+"settings.crashtracking.title" = "Invia report di crash";
+"settings.crashtracking.alert.title" = "Nota";
+"settings.crashtracking.alert.message" = "Dopo aver modificato l'impostazione, riavviare l'app.";
+"settings.privacy.policy.title" = "Informativa sulla privacy";
+"settings.feedback" = "Commento tramite e-mail";
+"settings.feedback.errorShowClient" = "Fornire un indirizzo e-mail.";
+"settings.save.message" = "Salvataggio impostazioni in corso...";
+
+
+/* Action titles */
+
 "action.title.refresh" = "Aggiorna";
 "action.title.save" = "Salva";
-"action.title.edit" = "Modifica opzioni filtro";
+"action.title.edit" = "Modifica opzioni del filtro";
 "action.title.delete" = "Elimina";
 "action.title.rename" = "Rinomina";
-"action.title.markasfavorite" = "Contrassegna come Preferito";
-"action.title.markasunfavorite" = "Rimuovi dai Preferiti";
+"action.title.markasfavorite" = "Contrassegna come preferito";
+"action.title.markasunfavorite" = "Rimuovi dai preferiti";
 "action.title.info" = "Informazioni";
-"action.title.sort" = "Opzioni di ordinamento";
-
-
-"report.viewer.pagecount" = "di %d";
+"action.title.filter" = "Filtra per";
+"action.title.sort" = "Ordina per";
+"action.title.selectall" = "Seleziona tutto";
+"action.title.clearselections" = "Cancella selezioni";
 
 /* Error messages */
 
-"error.readingresponse.dialog.msg" = "Errore di lettura della risposta";
+"error.noconnection.dialog.msg" = "Verificare le impostazioni di rete (dati mobili o wi-fi) e riprovare.";
 
-"error.noconnection.dialog.title" = "Nessuna connessione";
-"error.noconnection.dialog.msg" = "Verificare le impostazioni della rete mobile e riprovare";
-
-"error.authenication.dialog.title" = "Sono state fornite credenziali non valide.";
-"error.authenication.dialog.msg" = "Impossibile accedere a JasperReports Server.";
+"error.authenication.dialog.title" = "Credenziali non valide";
+"error.authenication.dialog.msg" = "Nome utente o password non corretti. Immettere nuovamente le credenziali.";
 
 "error.unknownhost.dialog.title" = "Server sconosciuto";
-"error.unknownhost.dialog.msg" = "Impossibile trovare un server con il nome host specificato";
+"error.unknownhost.dialog.msg" = "Impossibile trovare il nome host specificato.";
 
-"error.upgrade.data.title" = "Errore di aggiornamento: aggiornamento dati utente";
-"error.upgrade.data.msg" = "Si è verificato un errore di aggiornamento dei dati utente (Server, Preferiti, Valori filtro e Impostazioni) durante il processo di aggiornamento. Premere:\nRiprova, per eseguire di nuovo l'aggiornamento dei dati\nApplica, per ignorare l'errore e continuare con l'aggiornamento. Potrebbe verificarsi una PERDITA di tutti i dati utente\nAnnulla, per annullare l'aggiornamento (l'operazione non modificherà la versione corrente)";
+"error.upgrade.data.title" = "Errore di upgrade -Aggiornamento dati utente";
+"error.upgrade.data.msg" = "Si è verificato un errore di aggiornamento dei dati utente (Server, Preferiti, Valori dei filtri e Impostazioni) durante il processo di upgrade. Premere:\nRiprova - per ritentare l'aggiornamento dei dati\nApplica - per ignorare l'errore e continuare con l'upgrade, tutti i dati utente potrebbero essere ELIMINATI\nAnnulla - per annullare l'upgrade (verrà mantenuta la versione attuale)";
 
-"error.server.notsupported.title" = "Versione server o URL errati";
-"error.server.notsupported.msg" = "Versione server è precedente a %.1f (non supportata) oppure URL errato";
+"error.server.notsupported.title" = "Versione del server o URL non corretti";
+"error.server.notsupported.msg" = "La versione del server è precedente alla %.1f (non supportata), oppure l'URL non è corretto.";
+
 
 /* HTTP error messages */
 
-"error.http.400" = "400 - Richiesta non valida. La richiesta non era valida";
-"error.http.403" = "403 - Autorizzazione negata. La richiesta è stata recepita, ma è stata rifiutata";
+"error.http.400" = "400 - Richiesta non valida. La richiesta non è valida";
+"error.http.403" = "403 - Permesso negato. La richiesta è stata compresa, ma è stata rifiutata";
 "error.http.404" = "404 - Non trovato. L'URI richiesto non è valido o la risorsa richiesta non esiste";
-"error.http.500" = "500 - Errore server interno";
+"error.http.500" = "500 - Errore interno del server";
 "error.http.502" = "502 - Gateway non valido";
 "error.http.503" = "503 - Servizio non disponibile";
-"error.http.504" = "504 - Timeout gateway";
-
-/* Input control messages */
-
-"report.viewer.options.ic.title.date" = "Data";
-"report.viewer.options.ic.title.time" = "Orario";
-"report.viewer.options.ic.title.unset" = "Disattiva impostazione";
+"error.http.504" = "504 - Timeout del gateway";
 
 /* Buttons */
 
@@ -204,7 +229,17 @@
 "dialog.button.retry" = "Riprova";
 "dialog.button.run.report" = "Esegui report";
 "dialog.button.info" = "Informazioni";
-"dialog.button.addfavorite" = "Aggiungi Preferito";
-"dialog.button.removefavorite" = "Rimuovi Preferito";
+"dialog.button.addfavorite" = "Aggiungi preferito";
+"dialog.button.removefavorite" = "Rimuovi preferito";
 "dialog.button.save" = "Salva";
 "dialog.button.delete" = "Elimina";
+
+"dialod.title.attention" = "Avviso";
+"dialod.title.error" = "Errore";
+"dialod.title.confirmation" = "Conferma";
+
+
+/* Other */
+
+"status.loading" = "Caricamento in corso...";
+"back.button.title" = "Indietro";
