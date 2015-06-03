@@ -27,6 +27,11 @@
 #import "JSResourceLookup+Helpers.h"
 #import "JMPrintResourceViewController.h"
 
+@interface JMResourceViewerViewController ()
+@property (nonatomic, weak, readwrite) IBOutlet UIWebView *webView;
+
+@end
+
 @implementation JMResourceViewerViewController
 
 #pragma mark - UIViewController LifeCycle

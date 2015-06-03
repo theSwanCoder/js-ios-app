@@ -213,11 +213,15 @@
     }
 }
 
+- (UIWebView *)webView
+{
+    return [[self.reportLoader bridge] webView];
+}
+
 - (void)printResource
 {
-#warning HERE NEED RESOLVE ISSUE WITH UNEXISTED WEBVIEW!!!
     JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
-    [printController setReport:self.report withWebView:[[self.reportLoader bridge] webView]];
+    [printController setReport:self.report withWebView:self.webView];
     [self.navigationController pushViewController:printController animated:YES];
 }
 

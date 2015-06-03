@@ -34,7 +34,7 @@
 #import "JMBaseResourceViewerVC.h"
 
 @interface JMResourceViewerViewController : JMBaseResourceViewerVC <UIWebViewDelegate>
-@property (nonatomic, weak) IBOutlet UIWebView *webView;
+@property (nonatomic, weak, readonly) IBOutlet UIWebView *webView;
 
 - (void)printResource;
 
