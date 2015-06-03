@@ -986,7 +986,8 @@ your business wherever you are.</string>
         <scene sceneID="WYL-9E-HSb">
             <objects>
                 <navigationController storyboardIdentifier="JMSettingsNavigationViewController" definesPresentationContext="YES" id="o4b-Cf-1In" customClass="JMMainNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="xc3-W8-fT1">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="xc3-W8-fT1">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -1039,11 +1040,11 @@ your business wherever you are.</string>
             <objects>
                 <viewController id="xJy-TL-6y3" customClass="JMSettingsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4yQ-eA-1p1">
-                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="f36-cr-0JG">
-                                <rect key="frame" x="10" y="20" width="300" height="472"/>
+                                <rect key="frame" x="10" y="20" width="300" height="408"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -1148,7 +1149,7 @@ your business wherever you are.</string>
                                 </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Dra-kl-LI7">
-                                <rect key="frame" x="16" y="538" width="288" height="26"/>
+                                <rect key="frame" x="16" y="474" width="288" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <state key="normal" title="Privacy Policy">
@@ -1160,7 +1161,7 @@ your business wherever you are.</string>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cmt-sS-fcs">
-                                <rect key="frame" x="10" y="500" width="300" height="30"/>
+                                <rect key="frame" x="10" y="436" width="300" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.25882352939999997" green="0.5568627451" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Button">
@@ -1248,7 +1249,7 @@ your business wherever you are.</string>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </imageView>
                             <view contentMode="scaleToFill" id="18U-zM-22q">
-                                <rect key="frame" x="0.0" y="170" width="320" height="190"/>
+                                <rect key="frame" x="0.0" y="160" width="320" height="211"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" id="wvW-3K-RzP">
@@ -1271,23 +1272,6 @@ your business wherever you are.</string>
                                             <outlet property="delegate" destination="HrC-Cb-VTr" id="Ssu-S5-wfh"/>
                                         </connections>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cnc-hb-WRO">
-                                        <rect key="frame" x="20" y="152" width="280" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                        <state key="normal" title="Login">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="4"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="loginButtonTapped:" destination="HrC-Cb-VTr" eventType="touchUpInside" id="gwp-sk-Uaj"/>
-                                        </connections>
-                                    </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="center" minimumFontSize="17" id="JLH-A6-hC6">
                                         <rect key="frame" x="20" y="15" width="280" height="30"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -1298,21 +1282,43 @@ your business wherever you are.</string>
                                             <outlet property="delegate" destination="HrC-Cb-VTr" id="gZi-Re-x8h"/>
                                         </connections>
                                     </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" id="M0V-i5-3uF">
+                                        <rect key="frame" x="165" y="152" width="135" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
+                                        <color key="backgroundColor" red="0.20784313725490197" green="0.47843137254901963" blue="0.70196078431372544" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="Try Demo">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="4"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="tryDemoButtonTapped:" destination="HrC-Cb-VTr" eventType="touchUpInside" id="4pa-dh-EtM"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" id="cnc-hb-WRO">
+                                        <rect key="frame" x="20" y="152" width="135" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="Login">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="4"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="loginButtonTapped:" destination="HrC-Cb-VTr" eventType="touchUpInside" id="gwp-sk-Uaj"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3fH-ce-V6T">
-                                <rect key="frame" x="16" y="530" width="288" height="30"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Try Demo">
-                                    <color key="titleColor" red="0.1037834928" green="0.21454571889999999" blue="0.6586568813" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="tryDemoButtonTapped:" destination="HrC-Cb-VTr" eventType="touchUpInside" id="K3y-sf-urR"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
@@ -1323,7 +1329,7 @@ your business wherever you are.</string>
                         <outlet property="passwordTextField" destination="wvW-3K-RzP" id="gLi-XW-icI"/>
                         <outlet property="placeHolderView" destination="18U-zM-22q" id="Xic-Wz-mGe"/>
                         <outlet property="serverProfileTextField" destination="8dZ-sY-QZ4" id="e8F-ya-onc"/>
-                        <outlet property="tryDemoButton" destination="3fH-ce-V6T" id="3Jr-xe-CYP"/>
+                        <outlet property="tryDemoButton" destination="M0V-i5-3uF" id="zYd-uY-1pY"/>
                         <outlet property="userNameTextField" destination="JLH-A6-hC6" id="qbX-74-SS2"/>
                         <outletCollection property="textfields" destination="JLH-A6-hC6" id="0yt-Pq-pUj"/>
                         <outletCollection property="textfields" destination="wvW-3K-RzP" id="kbf-sL-Im1"/>

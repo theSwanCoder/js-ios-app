@@ -117,6 +117,12 @@ static NSMutableArray* visiblePopupsArray = nil;
 
 - (void)setContentView:(UIView *)contentView
 {
+    // Fix for no-retina screens with correct displaying
+    CGRect contentViewFrame = contentView.frame;
+    contentViewFrame.size.width = 2 * ceil(contentViewFrame.size.width / 2);
+    contentViewFrame.size.height = 2 * ceil(contentViewFrame.size.height / 2);
+    contentView.frame = contentViewFrame;
+    
     _contentView = contentView;
     switch (self.type) {
         case JMPopupViewType_ContentViewOnly:

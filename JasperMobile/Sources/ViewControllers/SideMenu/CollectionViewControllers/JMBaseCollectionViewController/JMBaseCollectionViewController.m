@@ -185,6 +185,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     JMListOptionsPopupView *sortPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self
                                                                                     type:JMPopupViewType_ContentViewOnly
                                                                                    items:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOption_Sort]];
+    sortPopup.titleString = JMCustomLocalizedString(@"resources.sortby.title", nil);
     sortPopup.selectedIndex = self.resourceListLoader.sortBySelectedIndex;
     sortPopup.option = JMResourcesListLoaderOption_Sort;
     [sortPopup show];
@@ -195,6 +196,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     JMListOptionsPopupView *filterPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self
                                                                                       type:JMPopupViewType_ContentViewOnly
                                                                                      items:[self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOption_Filter]];
+    filterPopup.titleString = JMCustomLocalizedString(@"resources.filterby.title", nil);
     filterPopup.selectedIndex = self.resourceListLoader.filterBySelectedIndex;
     filterPopup.option = JMResourcesListLoaderOption_Filter;
     [filterPopup show];

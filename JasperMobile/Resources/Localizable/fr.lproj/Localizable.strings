@@ -95,11 +95,11 @@
 "resources.search.placeholder" = "Rechercher des ressources";
 
 // Filter By
-"resources.title" = "Type d’objet";
-"resources.type.all" = "Tout";
-"resources.type.reportUnit" = "Rapports";
-"resources.type.dashboard" = "Tableaux de bord";
-"resources.type.folder" = "Dossiers";
+"resources.filterby.title" = "Type d’objet";
+"resources.filterby.type.all" = "Tout";
+"resources.filterby.type.reportUnit" = "Rapports";
+"resources.filterby.type.dashboard" = "Tableaux de bord";
+"resources.filterby.type.folder" = "Dossiers";
 
 // Sort by
 "resources.sortby.title" = "Options de tri";

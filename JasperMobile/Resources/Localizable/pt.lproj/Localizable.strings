@@ -94,11 +94,11 @@
 "resources.search.placeholder" = "Resultados da busca";
 
 // Filter By
-"resources.title" = "Tipo de objeto";
-"resources.type.all" = "Todos";
-"resources.type.reportUnit" = "Relatórios";
-"resources.type.dashboard" = "Painéis";
-"resources.type.folder" = "Pastas";
+"resources.filterby.title" = "Tipo de objeto";
+"resources.filterby.type.all" = "Todos";
+"resources.filterby.type.reportUnit" = "Relatórios";
+"resources.filterby.type.dashboard" = "Painéis";
+"resources.filterby.type.folder" = "Pastas";
 
 // Sort by
 "resources.sortby.title" = "Opções de classificação";

@@ -94,11 +94,11 @@
 "resources.search.placeholder" = "搜索资源";
 
 // Filter By
-"resources.title" = "对象类型";
-"resources.type.all" = "全部";
-"resources.type.reportUnit" = "报表";
-"resources.type.dashboard" = "仪表板";
-"resources.type.folder" = "文件夹";
+"resources.filterby.title" = "对象类型";
+"resources.filterby.type.all" = "全部";
+"resources.filterby.type.reportUnit" = "报表";
+"resources.filterby.type.dashboard" = "仪表板";
+"resources.filterby.type.folder" = "文件夹";
 
 // Sort by
 "resources.sortby.title" = "排序选项";

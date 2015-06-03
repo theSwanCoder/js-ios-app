@@ -94,11 +94,11 @@
 "resources.search.placeholder" = "リソースの検索";
 
 // Filter By
-"resources.title" = "オブジェクト タイプ";
-"resources.type.all" = "すべて";
-"resources.type.reportUnit" = "レポート";
-"resources.type.dashboard" = "ダッシュボード";
-"resources.type.folder" = "フォルダ";
+"resources.filterby.title" = "オブジェクト タイプ";
+"resources.filterby.type.all" = "すべて";
+"resources.filterby.type.reportUnit" = "レポート";
+"resources.filterby.type.dashboard" = "ダッシュボード";
+"resources.filterby.type.folder" = "フォルダ";
 
 // Sort by
 "resources.sortby.title" = "ソート オプション";

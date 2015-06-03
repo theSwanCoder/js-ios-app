@@ -106,13 +106,13 @@
     if ([self.resourceType isEqualToString:kJMSavedReportUnit]) {
         return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
     } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]) {
-        return JMCustomLocalizedString(@"resources.type.reportUnit", nil);
+        return JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil);
     } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD]) {
-        return JMCustomLocalizedString(@"resources.type.dashboard", nil);
+        return JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil);
     } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY]) {
         return JMCustomLocalizedString(@"resources.type.dashboard.legacy", nil);
     } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FOLDER]) {
-        return JMCustomLocalizedString(@"resources.type.folder", nil);
+        return JMCustomLocalizedString(@"resources.filterby.type.folder", nil);
     }
     return nil;
 }

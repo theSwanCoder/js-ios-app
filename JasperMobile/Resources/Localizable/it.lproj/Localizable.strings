@@ -94,11 +94,11 @@
 "resources.search.placeholder" = "Cerca risorse";
 
 // Filter By
-"resources.title" = "Tipo di oggetto";
-"resources.type.all" = "Tutto";
-"resources.type.reportUnit" = "Report";
-"resources.type.dashboard" = "Dashboard";
-"resources.type.folder" = "Cartelle";
+"resources.filterby.title" = "Tipo di oggetto";
+"resources.filterby.type.all" = "Tutto";
+"resources.filterby.type.reportUnit" = "Report";
+"resources.filterby.type.dashboard" = "Dashboard";
+"resources.filterby.type.folder" = "Cartelle";
 
 // Sort by
 "resources.sortby.title" = "Opzioni di ordinamento";

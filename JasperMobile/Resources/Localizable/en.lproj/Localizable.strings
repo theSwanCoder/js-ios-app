@@ -100,7 +100,7 @@
 
 
 // Filter By
-"resources.filterby.title" = "Object Type";
+"resources.filterby.title" = "Resource Type";
 "resources.filterby.type.all" = "All";
 "resources.filterby.type.reportUnit" = "Reports";
 "resources.filterby.type.dashboard" = "Dashboards";
@@ -174,11 +174,11 @@
 "resource.countOfViews.title" = "Count of Views";
 
 
-"resources.type.reportUnit" = "Report";
-"resources.type.dashboard" = "Dashboard";
+"resources.filterby.type.reportUnit" = "Report";
+"resources.filterby.type.dashboard" = "Dashboard";
 "resources.type.dashboard.legacy" = "Legacy Dashboard";
-"resources.type.folder" = "Folder";
-"resources.type.saved.reportUnit" = "Saved Report";
+"resources.filterby.type.folder" = "Folder";
+"resources.type.saved.reportUnit" = "Content Resource";
 
 /* Settings view */
 
