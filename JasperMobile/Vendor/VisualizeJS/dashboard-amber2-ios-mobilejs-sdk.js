@@ -377,7 +377,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
           },
           linkOptions: {
             events: {
-              click: self._clickCallback
+              click: this._clickCallback
             }
           },
           error: this._processErrors
@@ -395,7 +395,11 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       DashboardController.prototype._processErrors = function(error) {
         js_mobile.log(JSON.stringify(error));
-        return this.callback.onLoadError(error.message);
+        if (error.errorCode === "authentication.error") {
+          return this.callback.onAuthError(error.message);
+        } else {
+          return this.callback.onLoadError(error.message);
+        }
       };
 
       DashboardController.prototype._scaleDashboard = function() {

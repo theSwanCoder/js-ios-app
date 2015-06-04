@@ -314,6 +314,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         this.refresh = bind(this.refresh, this);
         this.session = options.session, this.uri = options.uri, this.params = options.params, this.pages = options.pages;
         js_mobile.log(this.uri);
+        this.currentWidth = window.innerWidth;
         this.params || (this.params = {});
         this.totalPages = 0;
         this.pages || (this.pages = '1');
@@ -435,7 +436,8 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
           })(this)
         };
         actualParams = jQuery.extend({}, defaultParams, params);
-        return this.report = visualize.report(actualParams);
+        this.report = visualize.report(actualParams);
+        return this._adjustScaleForReport(this.report);
       };
 
       ReportController.prototype._executeFailedCallback = function(error) {
@@ -580,6 +582,17 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
           case "Reference":
             return this._openRemoteLink(link);
         }
+      };
+
+      ReportController.prototype._adjustScaleForReport = function(report) {
+        return jQuery(window).resize((function(_this) {
+          return function() {
+            if (_this.currentWidth !== window.innerWidth) {
+              _this.currentWidth = window.innerWidth;
+              return report.scale("width").run();
+            }
+          };
+        })(this));
       };
 
       return ReportController;
