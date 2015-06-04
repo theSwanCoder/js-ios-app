@@ -1,64 +1,64 @@
 {
-    "profiles" : [
-                  {
-                  "mAlias" : "PRO TRUNK",
-                  "mServerUrl" : "http://build-master.jaspersoft.com:5980/jrs-pro-trunk",
-                  "mOrganization" : "",
-                  },
-                  {
-                  "mAlias" : "PRO 6.1",
-                  "mServerUrl" : "http://192.168.88.44:8090/jasperserver-pro-6.1",
-                  "mOrganization" : "",
-                  },
-                  {
-                  "mAlias" : "PRO 6.0.1",
-                  "mServerUrl" : "http://192.168.88.44:8088/jasperserver-pro-6.0.1",
-                  "mOrganization" : "",
-                  },
-                  {
-                  "mAlias" : "PRO 6.0",
-                  "mServerUrl" : "http://192.168.88.44:8087/jasperserver-pro-6.0",
-                  "mOrganization" : "",
-                  },
-                  {
-                  "mAlias" : "PRO 5.6.1",
-                  "mServerUrl" : "http://192.168.88.44:8086/jasperserver-pro-5.6.1",
-                  "mOrganization" : "",
-                  },
-                  {
-                  "mAlias" : "PRO 5.6.0",
-                  "mServerUrl" : "http://192.168.88.44:8085/jasperserver-pro-5.6.0",
-                  "mOrganization" : "",
-                  },
-                  {
-                  "mAlias" : "PRO 5.5",
-                  "mServerUrl" : "http://192.168.88.44:8084/jasperserver-pro-5.5",
-                  "mOrganization" : "",
-                  },
-                  {
-                  "mAlias" : "CE TRUNK",
-                  "mServerUrl" : "http://build-master.jaspersoft.com:6080/jrs-ce-trunk-ce",
-                  "mOrganization" : "",
-                  },
-                  {
-                  "mAlias" : "CE 6.0.1",
-                  "mServerUrl" : "http://192.168.88.44:8089/jasperserver-ce-6.0.1",
-                  "mOrganization" : "",
-                  },
-                  {
-                  "mAlias" : "CE 5.6.1",
-                  "mServerUrl" : "http://192.168.88.44:8083/jasperserver-ce-5.6.1",
-                  "mOrganization" : "",
-                  },
-                  {
-                  "mAlias" : "CE 5.6.0",
-                  "mServerUrl" : "http://192.168.88.44:8082/jasperserver-ce-5.6.0",
-                  "mOrganization" : "",
-                  },
-                  {
-                  "mAlias" : "CE 5.5",
-                  "mServerUrl" : "http://192.168.88.44:8081/jasperserver-ce-5.5",
-                  "mOrganization" : "",
-                  }
-                  ]
+  "profiles" : [
+    {
+      "mAlias" : "PRO TRUNK",
+      "mServerUrl" : "http://build-master.jaspersoft.com:5980/jrs-pro-trunk",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "PRO 6.1",
+      "mServerUrl" : "http://192.168.88.44:8090/jasperserver-pro-6.1",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "PRO 6.0.1",
+      "mServerUrl" : "http://192.168.88.44:8088/jasperserver-pro-6.0.1",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "PRO 6.0",
+      "mServerUrl" : "http://192.168.88.44:8087/jasperserver-pro-6.0",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "PRO 5.6.1",
+      "mServerUrl" : "http://192.168.88.44:8086/jasperserver-pro-5.6.1",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "PRO 5.6.0",
+      "mServerUrl" : "http://192.168.88.44:8085/jasperserver-pro-5.6.0",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "PRO 5.5",
+      "mServerUrl" : "http://192.168.88.44:8084/jasperserver-pro-5.5",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "CE TRUNK",
+      "mServerUrl" : "http://build-master.jaspersoft.com:6080/jrs-ce-trunk-ce",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "CE 6.0.1",
+      "mServerUrl" : "http://192.168.88.44:8089/jasperserver-ce-6.0.1",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "CE 5.6.1",
+      "mServerUrl" : "http://192.168.88.44:8083/jasperserver-ce-5.6.1",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "CE 5.6.0",
+      "mServerUrl" : "http://192.168.88.44:8082/jasperserver-ce-5.6.0",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "CE 5.5",
+      "mServerUrl" : "http://192.168.88.44:8081/jasperserver-ce-5.5",
+      "mOrganization" : ""
+    }
+  ]
 }
