@@ -28,8 +28,6 @@
 
 - (JMDashboard *) dashboardModel;
 
-- (NSString *)thumbnailImageUrlString;
-
 - (NSString *)localizedResourceType;
 
 @end

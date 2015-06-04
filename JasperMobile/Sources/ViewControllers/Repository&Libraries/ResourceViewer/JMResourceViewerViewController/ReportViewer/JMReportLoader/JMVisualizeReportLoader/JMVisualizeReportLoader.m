@@ -386,7 +386,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         reportPath = json[@"_report"];
 
         if (reportPath) {
-            [self.restClient resourceLookupForURI:reportPath resourceType:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT completionBlock:^(JSOperationResult *result) {
+            [self.restClient resourceLookupForURI:reportPath resourceType:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT modelClass:[JSResourceLookup class] completionBlock:^(JSOperationResult *result) {
                 NSError *error = result.error;
                 if (error) {
                     NSLog(@"error: %@", error.localizedDescription);

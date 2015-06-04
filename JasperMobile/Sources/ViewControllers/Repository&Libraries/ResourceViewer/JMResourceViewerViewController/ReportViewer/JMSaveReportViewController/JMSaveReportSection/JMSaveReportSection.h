@@ -27,7 +27,10 @@
 //
 
 /**
-@since 1.9.1
+ @author Alexey Gubarev ogubarie@tibco.com
+ @author Aleksandr Dakhno odahno@tibco.com
+
+ @since 1.9.1
 */
 
 typedef NS_ENUM(NSInteger, JMSaveReportSectionType) {

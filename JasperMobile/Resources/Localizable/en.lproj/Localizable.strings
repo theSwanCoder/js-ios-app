@@ -171,13 +171,12 @@
 "resource.version.title" = "Version";
 "resource.creationDate.title" = "Creation Date";
 "resource.format.title" = "Format";
-"resource.countOfViews.title" = "Count of Views";
 
 
-"resources.filterby.type.reportUnit" = "Report";
-"resources.filterby.type.dashboard" = "Dashboard";
+"resources.type.reportUnit" = "Report";
+"resources.type.dashboard" = "Dashboard";
 "resources.type.dashboard.legacy" = "Legacy Dashboard";
-"resources.filterby.type.folder" = "Folder";
+"resources.type.folder" = "Folder";
 "resources.type.saved.reportUnit" = "Content Resource";
 
 /* Settings view */

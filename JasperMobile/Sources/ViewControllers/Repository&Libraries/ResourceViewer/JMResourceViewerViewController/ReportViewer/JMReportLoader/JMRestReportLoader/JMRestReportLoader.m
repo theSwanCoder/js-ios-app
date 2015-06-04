@@ -389,7 +389,6 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
         BOOL isPagesOutOfRange = [error.errorCode isEqualToString:@"export.pages.out.of.range"];
         BOOL isExportFailed = [error.errorCode isEqualToString:@"export.failed"];
         if (isIllegalParameter || isPagesOutOfRange || isExportFailed) {
-            // TODO: where it used ???
             [self.report updateCountOfPages:page - 1];
         }
     }

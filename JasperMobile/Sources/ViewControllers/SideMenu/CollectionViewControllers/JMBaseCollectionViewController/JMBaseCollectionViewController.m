@@ -265,7 +265,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 #pragma mark - Overloaded methods
 - (JMMenuActionsViewAction)availableAction
 {
-    return JMMenuActionsViewAction_Filter | JMMenuActionsViewAction_Sort;
+    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Sort;
+    NSArray *filterItems = [self.resourceListLoader listItemsWithOption:JMResourcesListLoaderOption_Filter];
+    if ([filterItems count] > 1) {
+        availableAction |= JMMenuActionsViewAction_Filter;
+    }
+    return  availableAction;
 }
 
 - (NSString *)defaultRepresentationTypeKey

@@ -25,7 +25,6 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JMSessionManager.h"
-#import "JMRecentViews+Helpers.h"
 
 
 NSString * const kJMSavedResources = @"SavedResources";
@@ -68,12 +67,6 @@ NSString * const kJMSavedResources = @"SavedResources";
     
     [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
     
-    JMRecentViews *recentView = [JMRecentViews recentViewsForResourceLookup:[self wrapperFromSavedReports]];
-    if (recentView) {
-        [self.managedObjectContext deleteObject:recentView];
-        [self.managedObjectContext save:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMRecentViewsDidChangedNotification object:nil];
-    }
     [self.managedObjectContext deleteObject:self];
     [self.managedObjectContext save:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
@@ -119,14 +112,6 @@ NSString * const kJMSavedResources = @"SavedResources";
             favorites.uri = [JMSavedResources uriForSavedReportWithName:newName format:self.format];
             [self.managedObjectContext save:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
-        }
-
-        JMRecentViews *recentView = [JMRecentViews recentViewsForResourceLookup:[self wrapperFromSavedReports]];
-        if (recentView) {
-            recentView.label = newName;
-            recentView.uri = [JMSavedResources uriForSavedReportWithName:newName format:self.format];
-            [self.managedObjectContext save:nil];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kJMRecentViewsDidChangedNotification object:nil];
         }
         
         self.label = newName;

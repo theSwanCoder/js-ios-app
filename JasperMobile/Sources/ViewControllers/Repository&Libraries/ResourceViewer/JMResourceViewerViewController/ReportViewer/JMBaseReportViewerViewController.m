@@ -186,7 +186,7 @@
                                           [self.report updateInputControls:inputControls];
                                           if (inputControls && [inputControls count]) {
                                               [self.restClient resourceLookupForURI:reportURI resourceType:@"reportUnit"
-                                                                          modeClass:[JSResourceReportUnit class]
+                                                                          modelClass:[JSResourceReportUnit class]
                                                                     completionBlock:@weakself(^(JSOperationResult *result)) {
                                                                         if (result.error) {
                                                                             [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {

@@ -43,15 +43,6 @@
 }
 
 #pragma mark - Overloaded methods
-- (JMMenuActionsViewAction)availableAction
-{
-    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Sort;
-    if( [JMUtils isServerProEdition] ) {
-        availableAction |= JMMenuActionsViewAction_Filter;
-    }
-    return availableAction;
-}
-
 - (NSString *)defaultRepresentationTypeKey
 {
     NSString * keyString = @"RepresentationTypeKey";

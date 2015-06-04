@@ -51,6 +51,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
         _filterBySelectedIndex = 0;
         _sortBySelectedIndex = 0;
         _needUpdateData = YES;
+        _loadRecursively = YES;
         _sections = @{
                       @(JMResourcesListSectionTypeFolder) : @[],
                       @(JMResourcesListSectionTypeReportUnit) : @[],
@@ -109,6 +110,11 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     }
 }
 
+- (NSString *) accessType
+{
+    return @"viewed";
+}
+
 #pragma mark - Public API
 - (NSArray *)loadedResources
 {
@@ -163,6 +169,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                                query:self.searchQuery
                                types:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]
                               sortBy:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]
+                          accessType:self.accessType
                            recursive:self.loadRecursively
                               offset:self.offset
                                limit:kJMResourceLimit
@@ -250,6 +257,27 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                      @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.type.date", nil),
                        kJMResourceListLoaderOptionItemValueKey: @"creationDate"}
                      ];
+        case JMResourcesListLoaderOption_Filter:{
+            NSMutableArray *options = [@[
+                                        @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil),
+                                          kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]}] mutableCopy];
+                                       if ([JMUtils isServerProEdition]) {
+                                           id dashboardItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil),
+                                                                kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY]};
+                                           [options addObject:dashboardItem];
+                                       }
+                                       
+                                       if ([options count] > 1) {
+                                           NSMutableArray *allAvailableItems = [NSMutableArray array];
+                                           for (NSDictionary *item in options) {
+                                               [allAvailableItems addObjectsFromArray:[item objectForKey:kJMResourceListLoaderOptionItemValueKey]];
+                                           }
+                                           id allItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil), kJMResourceListLoaderOptionItemValueKey: allAvailableItems};
+                                           [options insertObject:allItem atIndex:0];
+                                       }
+                                       
+            return options;
+        }
         default:
             return nil;
     }
