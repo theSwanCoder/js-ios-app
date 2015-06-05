@@ -160,37 +160,41 @@ NSString * const kJMPrintReportPageRangeCellIdentifier = @"PageRangeCell";
 #pragma mark - Private API
 - (void)prepareForPrint
 {
-    if (self.report && self.report.isMultiPageReport) {
-        JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
-        [JMCancelRequestPopup presentWithMessage:@"report.viewer.save.saving.status.title" cancelBlock:^{
-            [reportSaver cancelReport];
-        }];
-        [reportSaver saveReportWithName:[self tempReportName]
-                                 format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
-                                  pages:[self makePagesFormat]
-                                addToDB:NO
-                             completion:@weakself(^(NSString *reportURI, NSError *error)) {
-                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                     [JMCancelRequestPopup dismiss];
-                                 });
-                                 if (error) {
-                                     [reportSaver cancelReport];
-                                     if (error.code == JSSessionExpiredErrorCode) {
-                                         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                             [self prepareForPrint];
+    if (!self.printingItem) {
+        if (self.report && self.report.isMultiPageReport) {
+            JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
+            [JMCancelRequestPopup presentWithMessage:@"report.viewer.save.saving.status.title" cancelBlock:^{
+                [reportSaver cancelReport];
+            }];
+            [reportSaver saveReportWithName:[self tempReportName]
+                                     format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
+                                      pages:[self makePagesFormat]
+                                    addToDB:NO
+                                 completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                         [JMCancelRequestPopup dismiss];
+                                     });
+                                     if (error) {
+                                         [reportSaver cancelReport];
+                                         if (error.code == JSSessionExpiredErrorCode) {
+                                             if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                                                 [self prepareForPrint];
+                                             } else {
+                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
+                                             }
                                          } else {
-                                             [JMUtils showLoginViewAnimated:YES completion:nil];
+                                             [JMUtils showAlertViewWithError:error];
                                          }
                                      } else {
-                                         [JMUtils showAlertViewWithError:error];
+                                         self.printingItem = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
+                                         [self printResource];
                                      }
-                                 } else {
-                                     self.printingItem = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
-                                     [self printResource];
-                                 }
-                             }@weakselfend];
+                                 }@weakselfend];
+        } else {
+            self.printingItem = [self imageFromWebView];
+            [self printResource];
+        }
     } else {
-        self.printingItem = [self imageFromWebView];
         [self printResource];
     }
 }
@@ -208,17 +212,16 @@ NSString * const kJMPrintReportPageRangeCellIdentifier = @"PageRangeCell";
     printController.printingItem = self.printingItem;
     
     UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
-        if ([self.printingItem isKindOfClass:[NSURL class]]) {
-            NSURL *fileURL = (NSURL *)self.printingItem;
-            NSString *directoryPath = [fileURL.path stringByDeletingLastPathComponent];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
-                [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
-            }
-        }
-
         if(error){
             NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
-        } else {
+        } else if (completed) {
+            if ([self.printingItem isKindOfClass:[NSURL class]]) {
+                NSURL *fileURL = (NSURL *)self.printingItem;
+                NSString *directoryPath = [fileURL.path stringByDeletingLastPathComponent];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
+                    [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
+                }
+            }
             [self.navigationController popViewControllerAnimated:YES];
         }
     }@weakselfend;

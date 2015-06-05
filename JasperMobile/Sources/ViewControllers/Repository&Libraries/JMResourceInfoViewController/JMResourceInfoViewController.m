@@ -26,7 +26,6 @@
 #import "UITableViewCell+Additions.h"
 #import "JSResourceLookup+Helpers.h"
 #import "PopoverView.h"
-#import "JMRecentViews+Helpers.h"
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
@@ -73,7 +72,6 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetResourceProperties) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(favoriteMarkDidChanged:) name:kJMFavoritesDidChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetResourceProperties) name:kJMRecentViewsDidChangedNotification object:nil];
 }
 
 - (void)resetResourceProperties
@@ -115,41 +113,33 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     
     if (!_resourceProperties) {
         NSString *createdAtString = [JMUtils localizedStringFromDate:self.resourceLookup.creationDate];
-        NSMutableArray *properties = [@[
-                                        @{
-                                            kJMTitleKey : @"label",
-                                            kJMValueKey : self.resourceLookup.label ?: @""
-                                            },
-                                        @{
-                                            kJMTitleKey : @"description",
-                                            kJMValueKey : self.resourceLookup.resourceDescription ?: @""
-                                            },
-                                        @{
-                                            kJMTitleKey : @"uri",
-                                            kJMValueKey : self.resourceLookup.uri ?: @""
-                                            },
-                                        
-                                        @{
-                                            kJMTitleKey : @"type",
-                                            kJMValueKey : [self.resourceLookup localizedResourceType] ?: @""
-                                            },
-                                        @{
-                                            kJMTitleKey : @"version",
-                                            kJMValueKey : self.resourceLookup.version ? [NSString stringWithFormat:@"%@", self.resourceLookup.version]: @""
-                                            },
-                                        @{
-                                            kJMTitleKey : @"creationDate",
-                                            kJMValueKey : createdAtString ?: @""
-                                            }
-                                        ] mutableCopy];
-        JMRecentViews *recentViews = [JMRecentViews recentViewsForResourceLookup:self.resourceLookup];
-        if (recentViews) {
-            [properties addObject:@{
-                                   kJMTitleKey : @"countOfViews",
-                                   kJMValueKey : [recentViews.countOfViews stringValue] ?: @""
-                                   }];
-        }
-        _resourceProperties = properties;
+        _resourceProperties = @[
+                                @{
+                                    kJMTitleKey : @"label",
+                                    kJMValueKey : self.resourceLookup.label ?: @""
+                                    },
+                                @{
+                                    kJMTitleKey : @"description",
+                                    kJMValueKey : self.resourceLookup.resourceDescription ?: @""
+                                    },
+                                @{
+                                    kJMTitleKey : @"uri",
+                                    kJMValueKey : self.resourceLookup.uri ?: @""
+                                    },
+                                
+                                @{
+                                    kJMTitleKey : @"type",
+                                    kJMValueKey : [self.resourceLookup localizedResourceType] ?: @""
+                                    },
+                                @{
+                                    kJMTitleKey : @"version",
+                                    kJMValueKey : self.resourceLookup.version ? [NSString stringWithFormat:@"%@", self.resourceLookup.version]: @""
+                                    },
+                                @{
+                                    kJMTitleKey : @"creationDate",
+                                    kJMValueKey : createdAtString ?: @""
+                                    }
+                                ];
     }
     return _resourceProperties;
 }

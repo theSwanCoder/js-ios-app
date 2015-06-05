@@ -228,7 +228,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 - (void)nameCell:(JMSaveReportNameCell *)cell didChangeReportName:(NSString *)reportName
 {
     self.reportName = reportName;
-    // TODO: valid existing name
 }
 
 #pragma mark - JMSaveReportPageRangeCellDelegate

@@ -31,7 +31,6 @@
 {
     self = [super init];
     if (self) {
-        self.loadRecursively = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setNeedsUpdate) name:kJMFavoritesDidChangedNotification object:nil];
     }
     return self;

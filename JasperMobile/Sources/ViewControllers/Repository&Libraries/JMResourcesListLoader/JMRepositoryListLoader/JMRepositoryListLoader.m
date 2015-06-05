@@ -73,7 +73,7 @@
 
 - (void)loadResourceLookup:(NSString *)resourceURI
 {
-    [self.restClient resourceLookupForURI:resourceURI resourceType:[JSConstants sharedInstance].WS_TYPE_FOLDER completionBlock:@weakself(^(JSOperationResult *result)) {
+    [self.restClient resourceLookupForURI:resourceURI resourceType:[JSConstants sharedInstance].WS_TYPE_FOLDER modelClass:[JSResourceLookup class] completionBlock:@weakself(^(JSOperationResult *result)) {
         if (result.error) {
             if (result.error.code == JSSessionExpiredErrorCode) {
                 if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {

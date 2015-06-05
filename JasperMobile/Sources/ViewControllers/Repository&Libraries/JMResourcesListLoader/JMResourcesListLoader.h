@@ -66,7 +66,7 @@ typedef NS_ENUM(NSInteger, JMResourcesListSectionType) {
 @property (nonatomic, assign) BOOL      loadRecursively;
 @property (nonatomic, readonly) BOOL hasNextPage;
 @property (nonatomic, readonly) NSInteger offset;
-
+@property (nonatomic, readonly) NSString *accessType;
 @property (nonatomic, assign) NSInteger filterBySelectedIndex;
 @property (nonatomic, assign) NSInteger sortBySelectedIndex;
 

@@ -100,7 +100,7 @@ NSString * const kJMAttachmentPrefix = @"_";
                                                                   // Save thumbnail image
                                                                   [self downloadThumbnailForReportWithName:name
                                                                                              fileExtension:format
-                                                                                         resourceURLString:[self.report.resourceLookup thumbnailImageUrlString]];
+                                                                                         resourceURLString:[self.restClient generateThumbnailImageUrl:self.report.resourceLookup.uri]];
                                                               }
                                                               if (completionBlock) {
                                                                   NSString *reportURI = [JMSavedResources uriForSavedReportWithName:name format:format];

@@ -77,7 +77,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     if ([self.resourceLookup isReport]) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
         if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
-            NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.resourceLookup thumbnailImageUrlString]]];
+            NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.restClient generateThumbnailImageUrl:self.resourceLookup.uri]]];
             [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
             [self.resourceImage setImageWithURLRequest:imageRequest placeholderImage:resourceImage success:@weakself(^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image)) {
                 if (image) {
@@ -110,7 +110,6 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     if (resourceImage || _thumbnailImage) {
         [self updateResourceImage:_thumbnailImage ?:resourceImage thumbnails:!!_thumbnailImage];
     }
-    // TODO: Should be fixed! need replace url generation to SDK!
 }
 
 - (void)updateResourceImage:(UIImage *)image thumbnails:(BOOL)thumbnails

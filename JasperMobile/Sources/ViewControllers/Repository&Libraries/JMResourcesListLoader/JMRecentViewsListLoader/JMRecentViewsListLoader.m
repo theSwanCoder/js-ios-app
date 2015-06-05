@@ -27,53 +27,8 @@
 //
 
 #import "JMRecentViewsListLoader.h"
-#import "JMRecentViews+Helpers.h"
 
 @implementation JMRecentViewsListLoader
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setNeedsUpdate) name:kJMRecentViewsDidChangedNotification object:nil];
-    }
-    return self;
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)loadNextPage {
-    NSFetchRequest *fetchRequest = [self fetchRequest];
-    fetchRequest.predicate = [self predicates];
-    
-    NSError *error;
-    NSArray *fetchedObjects = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest
-                                                                                                     error:&error];
-    
-    if (error) {
-        [self finishLoadingWithError:error];
-    } else {
-        NSMutableArray *folders = [NSMutableArray array];
-        NSMutableArray *resources = [NSMutableArray array];
-        for(JMRecentViews *recentView in fetchedObjects) {
-            [resources addObject:[recentView wrapperFromJMRecentViews]];
-        }
-        [self addResourcesWithResources:folders];
-        [self addResourcesWithResources:resources];
-        
-        self.sections = @{
-                          @(JMResourcesListSectionTypeFolder) : [folders copy],
-                          @(JMResourcesListSectionTypeReportUnit) : [resources copy],
-                          };
-        
-        _needUpdateData = NO;
-        
-        [self finishLoadingWithError:nil];
-    }
-}
-
 - (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option
 {
     switch (option) {
@@ -82,55 +37,13 @@
                      @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.type.name", nil),
                        kJMResourceListLoaderOptionItemValueKey: @"label"},
                      @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.type.date", nil),
-                       kJMResourceListLoaderOptionItemValueKey: @"lastViewDate"},
+                       kJMResourceListLoaderOptionItemValueKey: @"accessTime"},
                      @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.type.countViews", nil),
-                       kJMResourceListLoaderOptionItemValueKey: @"countOfViews"},
+                       kJMResourceListLoaderOptionItemValueKey: @"popularity"},
                      ];
-        case JMResourcesListLoaderOption_Filter: {
-            NSMutableArray *itemsArray = [@[
-                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
-                                              kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT, [JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY, [JSConstants sharedInstance].WS_TYPE_FOLDER, kJMSavedReportUnit]},
-                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil),
-                                              kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]},
-                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.saved.reportUnit", nil),
-                                              kJMResourceListLoaderOptionItemValueKey: @[kJMSavedReportUnit]}
-                                            ] mutableCopy];
-            if ([JMUtils isServerProEdition]) {
-                id dashboardItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil),
-                                     kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY]};
-                [itemsArray insertObject:dashboardItem atIndex:3];
-            }
-            return itemsArray;
-        }
+        case JMResourcesListLoaderOption_Filter:
+            return [super listItemsWithOption:option];
     }
 }
 
-#pragma mark - Utils
-- (NSFetchRequest *)fetchRequest
-{
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:kJMRecentViews inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
-    if ([self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]) {
-        BOOL ascending = (self.sortBySelectedIndex == 0);
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]
-                                                                       ascending:ascending];
-        [fetchRequest setSortDescriptors:@[sortDescriptor]];
-    }
-    [fetchRequest setEntity:entity];
-    
-    return fetchRequest;
-}
-
-- (NSPredicate *)predicates
-{
-    NSMutableArray *predicates = [NSMutableArray arrayWithObject:[[JMSessionManager sharedManager] predicateForCurrentServerProfile]];
-    [predicates addObject:[NSPredicate predicateWithFormat:@"wsType IN %@", [self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]]];
-    if (self.searchQuery && self.searchQuery.length) {
-        NSMutableArray *queryPredicates = [NSMutableArray array];
-        [queryPredicates addObject:[NSPredicate predicateWithFormat:@"label LIKE[cd] %@", [NSString stringWithFormat:@"*%@*", self.searchQuery]]];
-        [queryPredicates addObject:[NSPredicate predicateWithFormat:@"resourceDescription LIKE[cd] %@", [NSString stringWithFormat:@"*%@*", self.searchQuery]]];
-        [predicates addObject:[[NSCompoundPredicate alloc] initWithType:NSOrPredicateType subpredicates:queryPredicates]];
-    }
-    return [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:predicates];
-}
 @end

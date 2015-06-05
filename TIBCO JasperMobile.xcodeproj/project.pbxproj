@@ -100,8 +100,6 @@
 		08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C838191A1F5A0D0004BE78 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DB3D931A891640006F9620 /* MessageUI.framework */; };
 		08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18141B13390500856112 /* JMRecentViewsCollectionViewController.m */; };
-		08DD18181B13399800856112 /* JMRecentViews+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18171B13399800856112 /* JMRecentViews+Helpers.m */; };
-		08DD181B1B133BBF00856112 /* JMRecentViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD181A1B133BBF00856112 /* JMRecentViews.m */; };
 		08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD181E1B13426200856112 /* JMRecentViewsListLoader.m */; };
 		08DD182B1B135BE500856112 /* JasperMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18231B135BE500856112 /* JasperMobile.xcdatamodeld */; };
 		08DD182C1B135BE500856112 /* MigrateTo_v_1_9.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18281B135BE500856112 /* MigrateTo_v_1_9.xcmappingmodel */; };
@@ -388,10 +386,6 @@
 		08DB677F1A137E370035F58F /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		08DD18131B13390500856112 /* JMRecentViewsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRecentViewsCollectionViewController.h; sourceTree = "<group>"; };
 		08DD18141B13390500856112 /* JMRecentViewsCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRecentViewsCollectionViewController.m; sourceTree = "<group>"; };
-		08DD18161B13399800856112 /* JMRecentViews+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JMRecentViews+Helpers.h"; sourceTree = "<group>"; };
-		08DD18171B13399800856112 /* JMRecentViews+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JMRecentViews+Helpers.m"; sourceTree = "<group>"; };
-		08DD18191B133BBF00856112 /* JMRecentViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRecentViews.h; sourceTree = "<group>"; };
-		08DD181A1B133BBF00856112 /* JMRecentViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRecentViews.m; sourceTree = "<group>"; };
 		08DD181D1B13426200856112 /* JMRecentViewsListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRecentViewsListLoader.h; sourceTree = "<group>"; };
 		08DD181E1B13426200856112 /* JMRecentViewsListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRecentViewsListLoader.m; sourceTree = "<group>"; };
 		08DD18241B135BE500856112 /* JasperMobile.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JasperMobile.xcdatamodel; sourceTree = "<group>"; };
@@ -623,8 +617,6 @@
 		0801DF961AAF2CC900DD072C /* CoreDataEntities */ = {
 			isa = PBXGroup;
 			children = (
-				08DD18191B133BBF00856112 /* JMRecentViews.h */,
-				08DD181A1B133BBF00856112 /* JMRecentViews.m */,
 				0801DF971AAF2CC900DD072C /* JMFavorites.h */,
 				0801DF981AAF2CC900DD072C /* JMFavorites.m */,
 				0801DF991AAF2CC900DD072C /* JMSavedResources.h */,
@@ -805,8 +797,6 @@
 		089B14921AA756BD0021A915 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				08DD18161B13399800856112 /* JMRecentViews+Helpers.h */,
-				08DD18171B13399800856112 /* JMRecentViews+Helpers.m */,
 				082D1E901AB70FB700E0C0C6 /* JSResourceLookup+Helpers.h */,
 				082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */,
 				089B14931AA756BD0021A915 /* JMFavorites+Helpers.h */,
@@ -2217,7 +2207,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08DD181B1B133BBF00856112 /* JMRecentViews.m in Sources */,
 				9342341E1AAC3DC100D34478 /* JMRestReport.m in Sources */,
 				08DD18391B136B8A00856112 /* JMDashboardInfoViewController.m in Sources */,
 				089B15B61AA756BD0021A915 /* JMLoginViewController.m in Sources */,
@@ -2267,7 +2256,6 @@
 				089B15A61AA756BD0021A915 /* UIView+Additions.m in Sources */,
 				089B15B01AA756BD0021A915 /* JMPopupView.m in Sources */,
 				08E2AC831B1E056900AC462B /* JMResourceViewerVC.swift in Sources */,
-				08DD18181B13399800856112 /* JMRecentViews+Helpers.m in Sources */,
 				089B159D1AA756BD0021A915 /* JMMainNavigationController.m in Sources */,
 				93EEB4641AC54EAE000718C7 /* JMWKWebViewManager.swift in Sources */,
 				089B15F61AA756BD0021A915 /* JMBaseCollectionViewController.m in Sources */,

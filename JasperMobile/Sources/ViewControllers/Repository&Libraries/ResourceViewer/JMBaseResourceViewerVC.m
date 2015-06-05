@@ -26,7 +26,6 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMResourceInfoViewController.h"
 #import "JMUtils.h"
-#import "JMRecentViews+Helpers.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMMainNavigationController.h"
 
@@ -54,9 +53,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
     // start point of loading resource
     [self startResourceViewing];
-    
-    // Update count of views for resource
-    [JMRecentViews updateCountOfViewsForResourceLookup:self.resourceLookup];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupRightBarButtonItems) name:kJMFavoritesDidChangedNotification object:nil];
 }

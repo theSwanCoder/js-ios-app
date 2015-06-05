@@ -94,25 +94,18 @@
     }
 }
 
-- (NSString *)thumbnailImageUrlString
-{
-    NSString *restURI = [JSConstants sharedInstance].REST_SERVICES_V2_URI;
-    NSString *resourceURI = self.uri;
-    return  [NSString stringWithFormat:@"%@/%@/thumbnails%@?defaultAllowed=false", self.restClient.serverProfile.serverUrl, restURI, resourceURI];
-}
-
 - (NSString *)localizedResourceType
 {
     if ([self.resourceType isEqualToString:kJMSavedReportUnit]) {
         return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
     } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]) {
-        return JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil);
+        return JMCustomLocalizedString(@"resources.type.reportUnit", nil);
     } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD]) {
-        return JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil);
+        return JMCustomLocalizedString(@"resources.type.dashboard", nil);
     } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY]) {
         return JMCustomLocalizedString(@"resources.type.dashboard.legacy", nil);
     } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FOLDER]) {
-        return JMCustomLocalizedString(@"resources.filterby.type.folder", nil);
+        return JMCustomLocalizedString(@"resources.type.folder", nil);
     }
     return nil;
 }
