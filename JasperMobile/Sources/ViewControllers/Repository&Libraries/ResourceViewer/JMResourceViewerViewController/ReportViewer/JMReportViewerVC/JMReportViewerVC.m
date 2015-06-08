@@ -72,6 +72,8 @@
     CGRect rootViewBounds = self.navigationController.view.bounds;
     id webView = [self.configurator webViewWithFrame:rootViewBounds asSecondary:self.isChildReport];
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
+
+    [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
 #pragma mark - Custom accessors
