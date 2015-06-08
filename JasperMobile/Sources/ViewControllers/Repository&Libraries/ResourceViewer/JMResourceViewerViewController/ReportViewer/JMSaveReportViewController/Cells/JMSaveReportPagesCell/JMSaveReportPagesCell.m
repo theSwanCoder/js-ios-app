@@ -22,34 +22,35 @@
 
 
 //
-//  JMSaveReportViewController.h
+//  JMSaveReportPagesCell.m
 //  TIBCO JasperMobile
 //
 
-/**
- @author Alexey Gubarev ogubarie@tibco.com
- @author Aleksandr Dakhno odahno@tibco.com
+#import "JMSaveReportPagesCell.h"
 
- @since 1.9
- */
-
-#import <UIKit/UIKit.h>
-#import "JMEditabledViewController.h"
-#import "JMReport.h"
-
-@protocol JMSaveReportViewControllerDelegate <NSObject>
-
-@required
-- (void)reportDidSavedSuccessfully;
-
+@interface JMSaveReportPagesCell()
+@property (nonatomic, weak) IBOutlet UISwitch *pagesTypeSwitch;
 @end
 
-@class JMReportViewer;
+@implementation JMSaveReportPagesCell
 
-extern NSString * const kJMSaveReportViewControllerSegue;
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.all", nil);
+}
 
-@interface JMSaveReportViewController : JMEditabledViewController
-@property (nonatomic, weak) id <JMSaveReportViewControllerDelegate> delegate;
+#pragma mark - Private API
+-(void)setPagesType:(JMSaveReportPagesType)pagesType{
+    _pagesType = pagesType;
+    self.pagesTypeSwitch.on = (pagesType == JMSaveReportPagesType_All);
+}
 
-@property (nonatomic, strong) JMReport *report;
+#pragma mark - Actions
+- (IBAction)switchValueChanged:(id)sender
+{
+    self.pagesType = self.pagesTypeSwitch.on ? JMSaveReportPagesType_All : JMSaveReportPagesType_Range;
+    [self.cellDelegate pagesCell:self didChangedPagesType:self.pagesType];
+}
 @end

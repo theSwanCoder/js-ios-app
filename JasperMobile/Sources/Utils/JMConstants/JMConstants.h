@@ -91,9 +91,11 @@ extern NSString * const kJMReportLoaderErrorDomain;
 // Privacy Policy Link
 extern NSString * const kJMPrivacyPolicyURI;
 
-#define kJMResourceLimit                                100
-#define kJMMasterViewWidth                              [JMUtils isIphone] ? 210.f : 240.f
-#define kJMMasterViewAnimationDuration                  0.2f
+// Limit of pages for saving report to HTML format
+NSInteger  const kJMSaveReportMaxRangePages;
+
+// Limit of resource for loading from JRS
+NSInteger  const kJMResourceLimit;
 
 #define kJMDetailViewLightBackgroundColor               [UIColor colorFromHexString:@"#E5E9EB"]
 #define kJMDetailViewLightTextColor                     [UIColor colorFromHexString:@"#8F8F8F"]
@@ -104,5 +106,4 @@ extern NSString * const kJMPrivacyPolicyURI;
 
 #define kJMResourcePreviewBackgroundColor               [UIColor colorFromHexString:@"#428EC0"]
 
-#define kJMMasterResourceCellDefaultBackgroundColor     [UIColor colorFromHexString:@"#2E3138"]
 #define kJMMasterResourceCellSelectedBackgroundColor    [UIColor colorFromHexString:@"#484F59"]

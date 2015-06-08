@@ -28,6 +28,7 @@
 #import "JMSaveReportSection.h"
 #import "JMSaveReportNameCell.h"
 #import "JMSaveReportFormatCell.h"
+#import "JMSaveReportPagesCell.h"
 #import "JMSaveReportPageRangeCell.h"
 #import "UIAlertView+Additions.h"
 #import "JMReport.h"
@@ -39,10 +40,10 @@ NSString * const kJMSavePageFromKey = @"kJMSavePageFromKey";
 NSString * const kJMSavePageToKey = @"kJMSavePageToKey";
 NSString * const kJMSaveReportNameCellIdentifier = @"ReportNameCell";
 NSString * const kJMSaveReportFormatCellIdentifier = @"FormatSelectionCell";
+NSString * const kJMSaveReportPagesCellIdentifier = @"PagesCell";
 NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
-NSInteger const kJMSaveReportMaxRangePages = 1000;
 
-@interface JMSaveReportViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, JMSaveReportNameCellDelegate, JMSaveReportPageRangeCellDelegate>
+@interface JMSaveReportViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, JMSaveReportNameCellDelegate, JMSaveReportPageRangeCellDelegate, JMSaveReportPagesCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *saveReportButton;
@@ -52,6 +53,8 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
 @property (nonatomic, strong) NSString *errorString;
 
 @property (nonatomic, strong) NSMutableArray *sections;
+
+@property (nonatomic, assign) JMSaveReportPagesType pagesType;
 @property (nonatomic, strong) NSMutableDictionary *pages;
 @end
 
@@ -71,6 +74,8 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
     self.reportName = self.report.resourceLookup.label;
     self.selectedReportFormat = [[JMUtils supportedFormatsForReportSaving] firstObject];
 
+    self.pagesType = JMSaveReportPagesType_All;
+    
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.tableView.backgroundColor = kJMDetailViewLightBackgroundColor;
     
@@ -100,7 +105,7 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
     if (self.report.isMultiPageReport) {
         if (![self sectionForType:JMSaveReportSectionTypePageRange]) {
             [self.sections addObject: [JMSaveReportSection sectionWithType:JMSaveReportSectionTypePageRange
-                                                                     title:JMCustomLocalizedString(@"report.viewer.save.pagesRange", nil)]];
+                                                                     title:JMCustomLocalizedString(@"report.viewer.save.pages", nil)]];
         }
     } else {
         if ([self sectionForType:JMSaveReportSectionTypePageRange]) {
@@ -141,7 +146,7 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
             break;
         }
         case JMSaveReportSectionTypePageRange: {
-            numberOfRows = 2;
+            numberOfRows = (self.pagesType == JMSaveReportPagesType_All) ? 1 : 3;
             break;
         }
     }
@@ -195,19 +200,28 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
             return formatCell;
         }
         case JMSaveReportSectionTypePageRange: {
-            JMSaveReportPageRangeCell *pageRangeCell = [tableView dequeueReusableCellWithIdentifier:kJMSaveReportPageRangeCellIdentifier
-                                                                                       forIndexPath:indexPath];
-            pageRangeCell.cellDelegate = self;
             if (indexPath.row == 0) {
-                pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pagesRange.fromPage", nil);
-                pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
-                [pageRangeCell removeTopSeparator];
-            } else if (indexPath.row == 1) {
-                pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pagesRange.toPage", nil);
-                pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
+                JMSaveReportPagesCell *pagesCell = [tableView dequeueReusableCellWithIdentifier:kJMSaveReportPagesCellIdentifier
+                                                                                           forIndexPath:indexPath];
+                pagesCell.cellDelegate = self;
+                pagesCell.pagesType = self.pagesType;
+                [pagesCell removeTopSeparator];
+                return pagesCell;
+            } else {
+                JMSaveReportPageRangeCell *pageRangeCell = [tableView dequeueReusableCellWithIdentifier:kJMSaveReportPageRangeCellIdentifier
+                                                                                           forIndexPath:indexPath];
+                pageRangeCell.cellDelegate = self;
+                
+                if (indexPath.row == 1) {
+                    pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.fromPage", nil);
+                    pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
+                } else if (indexPath.row == 2) {
+                    pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.toPage", nil);
+                    pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
+                }
                 [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+                return pageRangeCell;
             }
-            return pageRangeCell;
         }
     }
 }
@@ -236,7 +250,7 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
 {
     if (self.report.countOfPages != NSNotFound) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-        if (indexPath.row == 0) {
+        if (indexPath.row == 1) {
             return NSMakeRange(1, ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue);
         } else {
             NSInteger toPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
@@ -249,12 +263,22 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
 - (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSNumber *)page
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    if (indexPath.row == 0) {
+    if (indexPath.row == 1) {
         self.pages[kJMSavePageFromKey] = page;
-    } else if (indexPath.row == 1) {
+    } else if (indexPath.row == 2) {
         self.pages[kJMSavePageToKey] = page;
     }
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+#pragma mark - JMSaveReportPagesCellDelegate
+- (void)pagesCell:(JMSaveReportPagesCell *)pagesCell didChangedPagesType:(JMSaveReportPagesType)pagesType
+{
+    self.pagesType = pagesType;
+    JMSaveReportSection *rangeSection = [self sectionForType:JMSaveReportSectionTypePageRange];
+    NSInteger rangeSectionIndex = [self.sections indexOfObject:rangeSection];
+    NSIndexSet *sectionsForUpdate = [NSIndexSet indexSetWithIndex:rangeSectionIndex];
+    [self.tableView reloadSections:sectionsForUpdate withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - Actions
@@ -385,14 +409,16 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
 - (NSString *)makePagesFormat
 {
     NSString *pagesFormat = nil;
-    NSInteger fromPageNumber = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
-    NSInteger toPageNumber = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
-
-    if (fromPageNumber != 1 || toPageNumber != self.report.countOfPages) {
-        if (fromPageNumber == toPageNumber) {
-            pagesFormat = [NSString stringWithFormat:@"%@", self.pages[kJMSavePageFromKey]];
-        } else {
-            pagesFormat = [NSString stringWithFormat:@"%@-%@", self.pages[kJMSavePageFromKey], self.pages[kJMSavePageToKey]];
+    if (self.pagesType != JMSaveReportPagesType_All) {
+        NSInteger fromPageNumber = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
+        NSInteger toPageNumber = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
+        
+        if (fromPageNumber != 1 || toPageNumber != self.report.countOfPages) {
+            if (fromPageNumber == toPageNumber) {
+                pagesFormat = [NSString stringWithFormat:@"%@", self.pages[kJMSavePageFromKey]];
+            } else {
+                pagesFormat = [NSString stringWithFormat:@"%@-%@", self.pages[kJMSavePageFromKey], self.pages[kJMSavePageToKey]];
+            }
         }
     }
     return pagesFormat;
