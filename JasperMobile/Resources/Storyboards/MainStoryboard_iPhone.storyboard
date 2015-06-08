@@ -827,14 +827,6 @@ your business wherever you are.</string>
                         <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" scalesPageToFit="YES" id="sur-YJ-B98">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <outlet property="delegate" destination="xno-v3-xNA" id="PwY-rn-VmI"/>
-                                </connections>
-                            </webView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="ySM-uE-Xj8">
                                 <rect key="frame" x="152" y="272" width="16" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -845,7 +837,6 @@ your business wherever you are.</string>
                     <navigationItem key="navigationItem" id="6am-Iz-cVe"/>
                     <connections>
                         <outlet property="activityIndicator" destination="ySM-uE-Xj8" id="dxU-2u-1po"/>
-                        <outlet property="webView" destination="sur-YJ-B98" id="RZn-GT-JVa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nrj-Qs-OHo" userLabel="First Responder" sceneMemberID="firstResponder"/>
