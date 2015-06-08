@@ -30,10 +30,13 @@
 #import "JMReportSaver.h"
 #import "JMSaveReportPageRangeCell.h"
 #import "UITableViewCell+Additions.h"
+#import "JMPrintPreviewTableViewCell.h"
+
 
 NSString * const kJMPrintPageFromKey = @"kJMPrintPageFromKey";
 NSString * const kJMPrintPageToKey = @"kJMPrintPageToKey";
 NSString * const kJMPrintReportPageRangeCellIdentifier = @"PageRangeCell";
+NSString * const kJMPrintReportPagePreviewIdentifier = @"PreviewCell";
 
 
 @interface JMPrintResourceViewController () <UITableViewDataSource, UITableViewDelegate, JMSaveReportPageRangeCellDelegate>
@@ -57,8 +60,19 @@ NSString * const kJMPrintReportPageRangeCellIdentifier = @"PageRangeCell";
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.tableView.backgroundColor = kJMDetailViewLightBackgroundColor;
 
-    [self.printButton setTitle:JMCustomLocalizedString(@"action.title.print", nil)
+    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 0.01f)];
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+
+    [self.printButton setTitle:JMCustomLocalizedString(@"resource.viewer.print.button.title", nil)
                       forState:UIControlStateNormal];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    [self updatePrintJob];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Custom Accessories
@@ -129,32 +143,83 @@ NSString * const kJMPrintReportPageRangeCellIdentifier = @"PageRangeCell";
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [self shouldShowRangeCells] ? 2 : 1;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    NSInteger countOfRows = 1;
+    if ([self shouldShowRangeCells] && !section) {
+        countOfRows = 2;
+    }
+    return countOfRows;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return JMCustomLocalizedString(@"report.viewer.save.pagesRange", nil);
+    if ([self shouldShowRangeCells] && !section) {
+        return JMCustomLocalizedString(@"report.viewer.save.pagesRange", nil);
+    } else {
+        return JMCustomLocalizedString(@"resource.viewer.print.preview.title", nil);
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat rowHeight = CGRectGetHeight(tableView.bounds) - [self tableView:tableView heightForHeaderInSection:indexPath.section];
+    if ([self shouldShowRangeCells]){
+        if(indexPath.section) {
+            CGFloat heightOfAllOtherSections = 0;
+            NSInteger countOfSections = [self numberOfSectionsInTableView:tableView];
+            for (NSInteger i = 0; i < countOfSections; i++) {
+                if (i != indexPath.section) {
+                    heightOfAllOtherSections += CGRectGetHeight([tableView rectForSection:i]);
+                }
+            }
+            rowHeight -= heightOfAllOtherSections;
+        } else {
+            rowHeight = tableView.rowHeight;
+        }
+    }
+    return rowHeight;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40.f;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMSaveReportPageRangeCell *pageRangeCell = [tableView dequeueReusableCellWithIdentifier:kJMPrintReportPageRangeCellIdentifier
-                                                                               forIndexPath:indexPath];
-    pageRangeCell.cellDelegate = self;
-    pageRangeCell.editable = (self.report && self.report.isMultiPageReport);
-    if (indexPath.row == 0) {
-        pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pagesRange.fromPage", nil);
-        pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMPrintPageFromKey]).integerValue;
-        [pageRangeCell removeTopSeparator];
-    } else if (indexPath.row == 1) {
-        pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pagesRange.toPage", nil);
-        pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMPrintPageToKey]).integerValue;
-        [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+    if ([self shouldShowRangeCells] && !indexPath.section) {
+        JMSaveReportPageRangeCell *pageRangeCell = [tableView dequeueReusableCellWithIdentifier:kJMPrintReportPageRangeCellIdentifier
+                                                                                   forIndexPath:indexPath];
+        pageRangeCell.cellDelegate = self;
+        if (indexPath.row == 0) {
+            pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pagesRange.fromPage", nil);
+            pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMPrintPageFromKey]).integerValue;
+            [pageRangeCell removeTopSeparator];
+        } else if (indexPath.row == 1) {
+            pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pagesRange.toPage", nil);
+            pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMPrintPageToKey]).integerValue;
+            [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+        }
+        return pageRangeCell;
+    } else {
+        JMPrintPreviewTableViewCell *previewCell = [tableView dequeueReusableCellWithIdentifier:kJMPrintReportPagePreviewIdentifier
+                                                                                   forIndexPath:indexPath];
+        previewCell.previewImageView.image = [self imageFromWebView];
+        return previewCell;
     }
-    return pageRangeCell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell isKindOfClass:[JMPrintPreviewTableViewCell class]]) {
+        cell.backgroundColor = [UIColor clearColor];
+    }
 }
 
 #pragma mark - Private API
@@ -257,12 +322,23 @@ NSString * const kJMPrintReportPageRangeCellIdentifier = @"PageRangeCell";
     [self prepareForPrint];
 }
 
+- (void)interfaceOrientationDidChanged:(id)notification
+{
+    [self.tableView reloadData];
+}
+
 #pragma mark - Helpers
+- (BOOL) shouldShowRangeCells
+{
+    return (self.report && self.report.isMultiPageReport);
+}
+
 - (void) updatePrintJob
 {
     self.pages = nil;
     self.title = [self jobName];
     self.printingItem = nil;
+    [self.tableView reloadData];
 }
 
 - (UIImage *)imageFromWebView

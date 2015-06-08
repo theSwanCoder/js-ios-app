@@ -124,6 +124,8 @@
 "resource.viewer.open.link" = "Do you want to open link in external browser?";
 "resource.viewer.can't.open.link" = "Link can't be opened.";
 "resource.viewer.print.operation.name" = "%@ print operation";
+"resource.viewer.print.button.title" = "Print...";
+"resource.viewer.print.preview.title" = "Preview";
 
 // Report viewer
 "report.viewer.error.title" = "Error while loading report.";
