@@ -476,14 +476,6 @@
                         <rect key="frame" x="0.0" y="64" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" scalesPageToFit="YES" id="reA-fS-50h">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <outlet property="delegate" destination="ya8-xd-T77" id="QzR-7z-Poa"/>
-                                </connections>
-                            </webView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="MxI-EN-m3a">
                                 <rect key="frame" x="368" y="496" width="16" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -494,7 +486,6 @@
                     <navigationItem key="navigationItem" id="zGE-As-H21"/>
                     <connections>
                         <outlet property="activityIndicator" destination="MxI-EN-m3a" id="MKo-Zj-rAt"/>
-                        <outlet property="webView" destination="reA-fS-50h" id="SId-hF-r9s"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XHg-io-h9N" userLabel="First Responder" sceneMemberID="firstResponder"/>
