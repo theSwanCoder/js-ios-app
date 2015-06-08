@@ -40,6 +40,7 @@ NSString * const kJMSavePageToKey = @"kJMSavePageToKey";
 NSString * const kJMSaveReportNameCellIdentifier = @"ReportNameCell";
 NSString * const kJMSaveReportFormatCellIdentifier = @"FormatSelectionCell";
 NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
+NSInteger const kJMSaveReportMaxRangePages = 1000;
 
 @interface JMSaveReportViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, JMSaveReportNameCellDelegate, JMSaveReportPageRangeCellDelegate>
 
@@ -288,15 +289,46 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
             self.errorString = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
             [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.save.name.errmsg.notunique.rewrite" completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
                 if (alertView.cancelButtonIndex != buttonIndex) {
-                    [self saveReport];
+                    [self verifyRangePagesWithCompletion:^{
+                        [self saveReport];
+                    }];
                 }
             } @weakselfend cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
         } else {
-            [self saveReport];
+            [self verifyRangePagesWithCompletion:^{
+                [self saveReport];
+            }];
         }
     }
     // Clear any errors
     [self.tableView reloadData];
+}
+
+- (void)verifyRangePagesWithCompletion:(void(^)(void))completion
+{
+    BOOL isHTML = [self.selectedReportFormat isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML];
+    if (isHTML) {
+        NSInteger fromPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
+        NSInteger toPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
+        if ( (toPage - fromPage) > kJMSaveReportMaxRangePages ) {
+            NSString *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.tooBigRange", nil), @(kJMSaveReportMaxRangePages)];
+            [[UIAlertView localizedAlertWithTitle:@"dialod.title.error"
+                                          message:errorMessage
+                                       completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+
+                                       }
+                                cancelButtonTitle:@"dialog.button.ok"
+                                otherButtonTitles:nil] show];
+        } else {
+            if (completion) {
+                completion();
+            }
+        }
+    } else {
+        if (completion) {
+            completion();
+        }
+    }
 }
 
 - (void) saveReport
@@ -315,9 +347,8 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                               pages:[self makePagesFormat]
                             addToDB:YES
                          completion:@weakself(^(NSString *reportURI, NSError *error)) {
-                             dispatch_async(dispatch_get_main_queue(), ^{
-                                 [JMCancelRequestPopup dismiss];
-                             });
+                             [JMCancelRequestPopup dismiss];
+
                              if (error) {
                                  [reportSaver cancelReport];
                                  if (error.code == JSSessionExpiredErrorCode) {
