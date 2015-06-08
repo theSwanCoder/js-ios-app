@@ -58,7 +58,7 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
                                                  selector:@selector(resetApplication)
                                                      name:kJMResetApplicationNotification
                                                    object:nil];
-        
+
         // Configure Url Cache
         NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
         [NSURLCache setSharedURLCache:URLCache];
@@ -72,7 +72,7 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
     [JMUtils activateCrashReportSendingIfNeeded];
 
     [application setStatusBarStyle:UIStatusBarStyleLightContent];
-    
+
     // Google Analytics
     [GAI sharedInstance].trackUncaughtExceptions = YES;
     [GAI sharedInstance].dispatchInterval = 20;
@@ -84,32 +84,36 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
-    JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
-    
-    LoginCompletionBlock loginCompletionBlock = ^{
-        [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
+    [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:^(BOOL isSessionRestored) {
 
-        // Configure Appirater
-        [Appirater setAppId:@"467317446"];
-        [Appirater setDaysUntilPrompt:0];
-        [Appirater setUsesUntilPrompt:5];
-        [Appirater setTimeBeforeReminding:2];
-        [Appirater setDebug:NO];
-        [Appirater appLaunched:YES];
-        
-        [self showOnboardIntroIfNeeded];
-    };
-    
-    if ([[JMSessionManager sharedManager] restoreLastSession]) {
-        self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
-        
-        if (!menuViewController.selectedItem) {
-            loginCompletionBlock();
+        SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
+        JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
+
+        LoginCompletionBlock loginCompletionBlock = ^{
+            [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
+
+            // Configure Appirater
+            [Appirater setAppId:@"467317446"];
+            [Appirater setDaysUntilPrompt:0];
+            [Appirater setUsesUntilPrompt:5];
+            [Appirater setTimeBeforeReminding:2];
+            [Appirater setDebug:NO];
+            [Appirater appLaunched:YES];
+
+            [self showOnboardIntroIfNeeded];
+        };
+
+        if (isSessionRestored) {
+            self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
+
+            if (!menuViewController.selectedItem) {
+                loginCompletionBlock();
+            }
+        } else {
+            [JMUtils showLoginViewAnimated:NO completion:nil loginCompletion:loginCompletionBlock];
         }
-    } else {
-        [JMUtils showLoginViewAnimated:NO completion:nil loginCompletion:loginCompletionBlock];
-    }
+
+    }];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
