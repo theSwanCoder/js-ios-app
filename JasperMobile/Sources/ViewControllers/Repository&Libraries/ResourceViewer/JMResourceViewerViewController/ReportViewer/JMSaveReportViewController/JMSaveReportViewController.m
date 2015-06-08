@@ -98,13 +98,13 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
     }
     
     if (self.report.isMultiPageReport) {
-        if (![self rangeSaveReportSection]) {
+        if (![self sectionForType:JMSaveReportSectionTypePageRange]) {
             [self.sections addObject: [JMSaveReportSection sectionWithType:JMSaveReportSectionTypePageRange
                                                                      title:JMCustomLocalizedString(@"report.viewer.save.pagesRange", nil)]];
         }
     } else {
-        if ([self rangeSaveReportSection]) {
-            [self.sections removeObject:[self rangeSaveReportSection]];
+        if ([self sectionForType:JMSaveReportSectionTypePageRange]) {
+            [self.sections removeObject:[self sectionForType:JMSaveReportSectionTypePageRange]];
         }
     }
 }
@@ -318,13 +318,10 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
                                            if (alertView.cancelButtonIndex != buttonIndex) {
                                                self.selectedReportFormat = [JSConstants sharedInstance].CONTENT_TYPE_PDF;
                                                // update format section
-                                               [self.sections enumerateObjectsUsingBlock:^(JMSaveReportSection *section, NSUInteger idx, BOOL *stop) {
-                                                   if (section.sectionType == JMSaveReportSectionTypeFormat) {
-                                                       NSIndexSet *sections = [NSIndexSet indexSetWithIndex:idx];
-                                                       [self.tableView reloadSections:sections withRowAnimation:UITableViewRowAnimationAutomatic];
-                                                       *stop = YES;
-                                                   }
-                                               }];
+                                               JMSaveReportSection *formatSection = [self sectionForType:JMSaveReportSectionTypeFormat];
+                                               NSInteger formatSectionIndex = [self.sections indexOfObject:formatSection];
+                                               NSIndexSet *sectionsForUpdate = [NSIndexSet indexSetWithIndex:formatSectionIndex];
+                                               [self.tableView reloadSections:sectionsForUpdate withRowAnimation:UITableViewRowAnimationAutomatic];
                                                // try save report in format PDF
                                                [self runSaveAction];
                                            }
@@ -413,10 +410,10 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
     [self.tableView reloadData];
 }
 
-- (JMSaveReportSection *)rangeSaveReportSection
+- (JMSaveReportSection *)sectionForType:(JMSaveReportSectionType)sectionType
 {
     for (JMSaveReportSection *section in self.sections) {
-        if (section.sectionType == JMSaveReportSectionTypePageRange) {
+        if (section.sectionType == sectionType) {
             return section;
         }
     }
