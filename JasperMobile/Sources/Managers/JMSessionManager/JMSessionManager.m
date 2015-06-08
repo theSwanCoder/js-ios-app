@@ -74,10 +74,10 @@ static JMSessionManager *_sharedManager = nil;
     }
 }
 
-- (BOOL) restoreLastSession
+- (void) restoreLastSessionWithCompletion:(void(^)(BOOL isSessionRestored))completion
 {
-    BOOL isRestoredSession = NO;
-    if (!self.restClient) {
+
+    if (!self.restClient) { // try restore restClient
         NSData *savedSession = [[NSUserDefaults standardUserDefaults] objectForKey:kJMSavedSessionKey];
         if (savedSession) {
             id unarchivedSession = [NSKeyedUnarchiver unarchiveObjectWithData:savedSession];
@@ -86,18 +86,29 @@ static JMSessionManager *_sharedManager = nil;
             }
         }
     }
-    if (self.restClient && self.restClient.keepSession) {
+
+    if (self.restClient && self.restClient.keepSession) { // try restore session
         [self.restClient resetReachabilityStatus];
-        JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
-        if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
-            [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
-            isRestoredSession = ([self.restClient isSessionAuthorized] && self.restClient.serverInfo);
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [JMCancelRequestPopup dismiss];
-            });
+
+        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+
+            JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+            if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
+
+                BOOL isRestoredSession = ([self.restClient isSessionAuthorized] && self.restClient.serverInfo);
+                dispatch_async(dispatch_get_main_queue(), ^(void){
+                    if (completion) {
+                        completion(isRestoredSession);
+                    }
+                });
+            }
+
+        });
+    } else {
+        if (completion) {
+            completion(NO);
         }
     }
-    return isRestoredSession;
 }
 
 - (void) logout

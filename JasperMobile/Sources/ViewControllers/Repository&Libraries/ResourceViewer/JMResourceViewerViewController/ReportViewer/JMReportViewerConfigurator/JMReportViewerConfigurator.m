@@ -80,4 +80,9 @@
     return _reportLoader;
 }
 
+- (void)updateReportLoaderDelegateWithObject:(id <JMReportLoaderDelegate>)delegate
+{
+    [self reportLoader].delegate = delegate;
+}
+
 @end

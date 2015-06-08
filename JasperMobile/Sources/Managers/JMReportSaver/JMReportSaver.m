@@ -89,9 +89,11 @@ NSString * const kJMAttachmentPrefix = @"_";
                                                    fileExtension:format
                                                       completion:@weakself(^(NSError *error)) {
                                                           if (error) {
-                                                              if (completionBlock) {
-                                                                  completionBlock(nil, error);
-                                                              }
+                                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                                  if (completionBlock) {
+                                                                      completionBlock(nil, error);
+                                                                  }
+                                                              });
                                                           } else {
                                                               if (addToDB) {
                                                                   [JMSavedResources addReport:self.report.resourceLookup
@@ -102,10 +104,13 @@ NSString * const kJMAttachmentPrefix = @"_";
                                                                                              fileExtension:format
                                                                                          resourceURLString:[self.restClient generateThumbnailImageUrl:self.report.resourceLookup.uri]];
                                                               }
-                                                              if (completionBlock) {
-                                                                  NSString *reportURI = [JMSavedResources uriForSavedReportWithName:name format:format];
-                                                                  completionBlock(reportURI, nil);
-                                                              }
+
+                                                              dispatch_async(dispatch_get_main_queue(), ^{
+                                                                  if (completionBlock) {
+                                                                      NSString *reportURI = [JMSavedResources uriForSavedReportWithName:name format:format];
+                                                                      completionBlock(reportURI, nil);
+                                                                  }
+                                                              });
                                                           }
                                                       }@weakselfend];
                                 }
