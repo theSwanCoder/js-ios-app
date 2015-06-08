@@ -315,10 +315,22 @@ NSInteger const kJMSaveReportMaxRangePages = 1000;
             [[UIAlertView localizedAlertWithTitle:@"dialod.title.error"
                                           message:errorMessage
                                        completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-
+                                           if (alertView.cancelButtonIndex != buttonIndex) {
+                                               self.selectedReportFormat = [JSConstants sharedInstance].CONTENT_TYPE_PDF;
+                                               // update format section
+                                               [self.sections enumerateObjectsUsingBlock:^(JMSaveReportSection *section, NSUInteger idx, BOOL *stop) {
+                                                   if (section.sectionType == JMSaveReportSectionTypeFormat) {
+                                                       NSIndexSet *sections = [NSIndexSet indexSetWithIndex:idx];
+                                                       [self.tableView reloadSections:sections withRowAnimation:UITableViewRowAnimationAutomatic];
+                                                       *stop = YES;
+                                                   }
+                                               }];
+                                               // try save report in format PDF
+                                               [self runSaveAction];
+                                           }
                                        }
-                                cancelButtonTitle:@"dialog.button.ok"
-                                otherButtonTitles:nil] show];
+                                cancelButtonTitle:@"dialog.button.cancel"
+                                otherButtonTitles:@"dialog.button.ok", nil] show];
         } else {
             if (completion) {
                 completion();

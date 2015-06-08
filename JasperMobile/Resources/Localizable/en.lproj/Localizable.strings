@@ -147,7 +147,7 @@
 "report.viewer.save.name.errmsg.maxlength" = "Must be less than %i characters.";
 "report.viewer.save.name.errmsg.characters" = "Characters %@ are not allowed.";
 "report.viewer.save.saving.status.title" = "Saving report...";
-"report.viewer.save.name.errmsg.tooBigRange" = "Can't save report of more than %@ pages in HTML format.";
+"report.viewer.save.name.errmsg.tooBigRange" = "Can't save report of more than %@ pages in HTML format. Would you like to save it in PDF format?";
 
 // Report viewer Options view
 "report.viewer.options.title" = "Filter Options";
