@@ -467,18 +467,13 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       };
 
       ReportController.prototype._navigateToAnchor = function(link) {
-        return window.location.hash = link.href;
+        return this.report.pages({
+          anchor: link.anchor
+        }).run();
       };
 
       ReportController.prototype._navigateToPage = function(link) {
-        var href, matches, numberPattern, pageNumber;
-        href = link.href;
-        numberPattern = /\d+/g;
-        matches = href.match(numberPattern);
-        if (matches != null) {
-          pageNumber = matches.join("");
-          return this._loadPage(pageNumber);
-        }
+        return this._loadPage(link.pages);
       };
 
       ReportController.prototype._openRemoteLink = function(link) {

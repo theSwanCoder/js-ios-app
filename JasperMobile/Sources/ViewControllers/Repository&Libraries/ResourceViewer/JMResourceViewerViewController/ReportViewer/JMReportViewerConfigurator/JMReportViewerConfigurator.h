@@ -34,10 +34,12 @@
 
 @protocol JMReportLoader;
 @class JMReport;
+@protocol JMReportLoaderDelegate;
 
 @interface JMReportViewerConfigurator : NSObject
 - (instancetype)initWithReport:(JMReport *)report;
 + (instancetype)configuratorWithReport:(JMReport *)report;
 - (id)webViewWithFrame:(CGRect)frame asSecondary:(BOOL)asSecondary;
 - (id<JMReportLoader>)reportLoader;
+- (void)updateReportLoaderDelegateWithObject:(id<JMReportLoaderDelegate>)delegate;
 @end
