@@ -36,6 +36,5 @@
 @dynamic serverUrl;
 @dynamic favorites;
 @dynamic savedResources;
-@dynamic recentViews;
-
+@dynamic userSettings;
 @end

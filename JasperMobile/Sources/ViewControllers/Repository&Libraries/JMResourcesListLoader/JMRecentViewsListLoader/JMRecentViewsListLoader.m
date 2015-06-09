@@ -32,15 +32,15 @@
 - (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option
 {
     switch (option) {
-        case JMResourcesListLoaderOption_Sort:
-            return @[
-                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.type.name", nil),
-                       kJMResourceListLoaderOptionItemValueKey: @"label"},
-                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.type.date", nil),
-                       kJMResourceListLoaderOptionItemValueKey: @"accessTime"},
-                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.type.countViews", nil),
-                       kJMResourceListLoaderOptionItemValueKey: @"popularity"},
-                     ];
+        case JMResourcesListLoaderOption_Sort: {
+            NSMutableArray *optionsArray = [NSMutableArray arrayWithArray:[super listItemsWithOption:option]];
+            [optionsArray addObjectsFromArray:@[@{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.accessTime", nil),
+                                                  kJMResourceListLoaderOptionItemValueKey: @"accessTime"},
+                                                @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.countViews", nil),
+                                                  kJMResourceListLoaderOptionItemValueKey: @"popularity"}
+                                                ]];
+            return optionsArray;
+        }
         case JMResourcesListLoaderOption_Filter:
             return [super listItemsWithOption:option];
     }

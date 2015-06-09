@@ -20,21 +20,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+
 //
-//  NSManagedObjectModel+JMAdditions.h
+//  JMUserSettings.h
 //  TIBCO JasperMobile
 //
 
-#import <CoreData/CoreData.h>
-
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 2.0
+ @since 2.1
  */
 
-@interface NSManagedObjectModel (JMAdditions)
+#import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-+ (NSArray *)jm_allModelPaths;
-- (NSString *)jm_modelName;
+@class JMServerProfile;
+
+@interface JMUserSettings : NSManagedObject
+
+@property (nonatomic, retain) NSNumber * connectionTimeout;
+@property (nonatomic, retain) NSNumber * crashReportSending;
+@property (nonatomic, retain) NSString * username;
+@property (nonatomic, retain) JMServerProfile *serverProfile;
 
 @end

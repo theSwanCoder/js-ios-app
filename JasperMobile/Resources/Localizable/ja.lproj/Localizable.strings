@@ -102,9 +102,9 @@
 
 // Sort by
 "resources.sortby.title" = "ソート オプション";
-"resources.sortby.type.name" = "名前";
-"resources.sortby.type.date" = "日付";
-"resources.sortby.type.creator" = "作成者";
+"resources.sortby.name" = "名前";
+"resources.sortby.creationDate" = "日付";
+"resources.sortby.creator" = "作成者";
 
 // Repository view
 "repository.root.organization" = "組織";
