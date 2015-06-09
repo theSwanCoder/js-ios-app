@@ -1,4 +1,8 @@
-language: swift
+language: objective-c
+
+before_install:
+- brew update
+- if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
 
 script:
-  - xctool test -workspace TIBCO\ JasperMobile.xcworkspace -scheme TIBCO\ JasperMobile\ Tests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+- xctool test -workspace TIBCO\ JasperMobile.xcworkspace -scheme TIBCO\ JasperMobile\ Tests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
