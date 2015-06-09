@@ -128,9 +128,9 @@
 "report.viewer.save.title" = "Bericht speichern";
 "report.viewer.save.name" = "Berichtsname";
 "report.viewer.save.format" = "Ausgabeformat";
-"report.viewer.save.pagesRange" = "Seitenbereich";
-"report.viewer.save.pagesRange.fromPage" = "Von Seite:";
-"report.viewer.save.pagesRange.toPage" = "Bis Seite:";
+"report.viewer.save.pages" = "Seitenbereich";
+"report.viewer.save.pages.range.fromPage" = "Von Seite:";
+"report.viewer.save.pages.range.toPage" = "Bis Seite:";
 "report.viewer.save.saved" = "Der Bericht wurde erfolgreich gespeichert.";
 "report.viewer.save.name.errmsg.empty" = "Dieses Feld ist erforderlich.";
 "report.viewer.save.name.errmsg.notunique" = "Dieser Name ist bereits vorhanden. Wählen Sie einen eindeutigen Namen aus.";

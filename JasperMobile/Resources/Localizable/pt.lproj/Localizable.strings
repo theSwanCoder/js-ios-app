@@ -128,9 +128,9 @@
 "report.viewer.save.title" = "Tabela / Relatório";
 "report.viewer.save.name" = "Nome do relatório";
 "report.viewer.save.format" = "Formatos de saída";
-"report.viewer.save.pagesRange" = "Intervalo de páginas";
-"report.viewer.save.pagesRange.fromPage" = "Da página:";
-"report.viewer.save.pagesRange.toPage" = "Até a página:";
+"report.viewer.save.pages" = "Intervalo de páginas";
+"report.viewer.save.pages.range.fromPage" = "Da página:";
+"report.viewer.save.pages.range.toPage" = "Até a página:";
 "report.viewer.save.saved" = "O relatório foi validado com sucesso.";
 "report.viewer.save.name.errmsg.empty" = "Este campo é obrigatório.";
 "report.viewer.save.name.errmsg.notunique" = "Este nome já existe, escolha um nome exclusivo.";

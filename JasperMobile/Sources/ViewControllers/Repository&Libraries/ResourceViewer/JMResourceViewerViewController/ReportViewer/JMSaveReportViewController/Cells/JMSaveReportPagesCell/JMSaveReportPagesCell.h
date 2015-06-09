@@ -22,34 +22,32 @@
 
 
 //
-//  JMSaveReportViewController.h
+//  JMSaveReportPagesCell.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @author Aleksandr Dakhno odahno@tibco.com
-
- @since 1.9
+ 
+ @since 2.1
  */
 
 #import <UIKit/UIKit.h>
-#import "JMEditabledViewController.h"
-#import "JMReport.h"
 
-@protocol JMSaveReportViewControllerDelegate <NSObject>
+typedef NS_ENUM(NSInteger, JMSaveReportPagesType) {
+    JMSaveReportPagesType_All = 0,
+    JMSaveReportPagesType_Range
+};
 
+@class JMSaveReportPagesCell;
+@protocol JMSaveReportPagesCellDelegate <NSObject>
 @required
-- (void)reportDidSavedSuccessfully;
+- (void)pagesCell:(JMSaveReportPagesCell *)pagesCell didChangedPagesType:(JMSaveReportPagesType)pagesType;
 
 @end
 
-@class JMReportViewer;
+@interface JMSaveReportPagesCell : UITableViewCell
+@property (nonatomic, assign) JMSaveReportPagesType pagesType;
+@property (nonatomic, weak) id <JMSaveReportPagesCellDelegate> cellDelegate;
 
-extern NSString * const kJMSaveReportViewControllerSegue;
-
-@interface JMSaveReportViewController : JMEditabledViewController
-@property (nonatomic, weak) id <JMSaveReportViewControllerDelegate> delegate;
-
-@property (nonatomic, strong) JMReport *report;
 @end

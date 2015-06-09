@@ -387,7 +387,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="WbH-FR-T3V">
-                                                    <rect key="frame" x="179.9999999627471" y="7" width="110" height="30"/>
+                                                    <rect key="frame" x="180" y="7" width="110" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
@@ -426,7 +426,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="wO2-Zp-RXk">
-                                                    <rect key="frame" x="180" y="7" width="109.99999996274711" height="30"/>
+                                                    <rect key="frame" x="180" y="7" width="110" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
@@ -851,13 +851,40 @@ your business wherever you are.</string>
                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="GfB-23-eCk">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="GfB-23-eCk">
                                 <rect key="frame" x="10" y="0.0" width="300" height="446"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PageRangeCell" textLabel="Y2b-Cp-Wq3" style="IBUITableViewCellStyleDefault" id="TSv-f7-NVG" customClass="JMSaveReportPageRangeCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PagesCell" textLabel="VUt-n3-Dh6" style="IBUITableViewCellStyleDefault" id="5OB-92-Gb1" customClass="JMSaveReportPagesCell">
                                         <rect key="frame" x="0.0" y="50" width="300" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5OB-92-Gb1" id="aks-9h-Bpm">
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VUt-n3-Dh6">
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="6To-ok-zRM">
+                                                    <rect key="frame" x="235" y="7" width="51" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="switchValueChanged:" destination="5OB-92-Gb1" eventType="valueChanged" id="Xic-8J-gR4"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="accessoryView" destination="6To-ok-zRM" id="r4s-mk-Tgb"/>
+                                            <outlet property="pagesTypeSwitch" destination="6To-ok-zRM" id="doF-20-aPx"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PageRangeCell" textLabel="Y2b-Cp-Wq3" style="IBUITableViewCellStyleDefault" id="TSv-f7-NVG" customClass="JMSaveReportPageRangeCell">
+                                        <rect key="frame" x="0.0" y="94" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TSv-f7-NVG" id="ihK-U5-RhU">
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
@@ -883,6 +910,26 @@ your business wherever you are.</string>
                                         <connections>
                                             <outlet property="accessoryView" destination="WE4-4X-ogg" id="Ksy-QD-hyL"/>
                                             <outlet property="textField" destination="WE4-4X-ogg" id="vpe-EK-A2f"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PreviewCell" id="kyz-sG-F8H" customClass="JMPrintPreviewTableViewCell">
+                                        <rect key="frame" x="0.0" y="138" width="300" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kyz-sG-F8H" id="ybj-DZ-AJk">
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="vQU-3B-yU4">
+                                                    <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="previewImageView" destination="vQU-3B-yU4" id="2wF-VH-sCe"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -1650,7 +1697,7 @@ your business wherever you are.</string>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PageRangeCell" textLabel="Zzg-Mq-gea" style="IBUITableViewCellStyleDefault" id="T8i-4G-8lZ" customClass="JMSaveReportPageRangeCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PagesCell" textLabel="Zzg-Mq-gea" style="IBUITableViewCellStyleDefault" id="T8i-4G-8lZ" customClass="JMSaveReportPagesCell">
                                         <rect key="frame" x="0.0" y="164" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="T8i-4G-8lZ" id="HTF-0M-UC3">
@@ -1663,20 +1710,47 @@ your business wherever you are.</string>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="BvK-Nd-q2o">
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="dsQ-Vg-ZUQ">
+                                                    <rect key="frame" x="235" y="7" width="51" height="31"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                    <connections>
+                                                        <action selector="switchValueChanged:" destination="T8i-4G-8lZ" eventType="valueChanged" id="Paz-ea-iIb"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="accessoryView" destination="dsQ-Vg-ZUQ" id="QCH-NK-viK"/>
+                                            <outlet property="pagesTypeSwitch" destination="dsQ-Vg-ZUQ" id="Gnx-Xg-hLF"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PageRangeCell" textLabel="eTw-ar-msj" style="IBUITableViewCellStyleDefault" id="8m7-91-4sb" customClass="JMSaveReportPageRangeCell">
+                                        <rect key="frame" x="0.0" y="208" width="300" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8m7-91-4sb" id="6ix-Ir-rJa">
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eTw-ar-msj">
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="J7M-Fe-B3L">
                                                     <rect key="frame" x="190" y="7" width="100" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
-                                                        <outlet property="delegate" destination="T8i-4G-8lZ" id="Goe-Jf-FqZ"/>
+                                                        <outlet property="delegate" destination="8m7-91-4sb" id="Vtv-40-Qj3"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accessoryView" destination="BvK-Nd-q2o" id="a9o-T6-BUa"/>
-                                            <outlet property="textField" destination="BvK-Nd-q2o" id="dBQ-Sc-G1f"/>
+                                            <outlet property="accessoryView" destination="J7M-Fe-B3L" id="B1V-8T-FWP"/>
+                                            <outlet property="textField" destination="J7M-Fe-B3L" id="hed-LD-Gzr"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

@@ -125,6 +125,8 @@
 "resource.viewer.open.link" = "Do you want to open link in external browser?";
 "resource.viewer.can't.open.link" = "Link can't be opened.";
 "resource.viewer.print.operation.name" = "%@ print operation";
+"resource.viewer.print.button.title" = "Print...";
+"resource.viewer.print.preview.title" = "Preview";
 
 // Report viewer
 "report.viewer.error.title" = "Error while loading report.";
@@ -138,9 +140,10 @@
 "report.viewer.save.title" = "Save Report";
 "report.viewer.save.name" = "Report name";
 "report.viewer.save.format" = "Output format";
-"report.viewer.save.pagesRange" = "Page range";
-"report.viewer.save.pagesRange.fromPage" = "From page:";
-"report.viewer.save.pagesRange.toPage" = "To page:";
+"report.viewer.save.pages" = "Pages";
+"report.viewer.save.pages.all" = "All Pages";
+"report.viewer.save.pages.range.fromPage" = "From page:";
+"report.viewer.save.pages.range.toPage" = "To page:";
 "report.viewer.save.saved" = "The report was saved successfully.";
 "report.viewer.save.name.errmsg.empty" = "This field is required.";
 "report.viewer.save.name.errmsg.notunique" = "This name already exists, choose a unique name.";

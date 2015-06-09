@@ -128,9 +128,9 @@
 "report.viewer.save.title" = "Guardar informe";
 "report.viewer.save.name" = "Nombre de informe";
 "report.viewer.save.format" = "Formatos de salida";
-"report.viewer.save.pagesRange" = "Intervalo de páginas";
-"report.viewer.save.pagesRange.fromPage" = "Desde la página:";
-"report.viewer.save.pagesRange.toPage" = "Hasta la página:";
+"report.viewer.save.pages" = "Intervalo de páginas";
+"report.viewer.save.pages.range.fromPage" = "Desde la página:";
+"report.viewer.save.pages.range.toPage" = "Hasta la página:";
 "report.viewer.save.saved" = "El informe se ha guardado correctamente.";
 "report.viewer.save.name.errmsg.empty" = "Este campo es obligatorio.";
 "report.viewer.save.name.errmsg.notunique" = "Esta nombre ya existe; seleccione un nombre exclusivo.";
