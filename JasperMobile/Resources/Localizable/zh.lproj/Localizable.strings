@@ -128,9 +128,9 @@
 "report.viewer.save.title" = "保存报表";
 "report.viewer.save.name" = "报表名";
 "report.viewer.save.format" = "输出格式";
-"report.viewer.save.pagesRange" = "页面范围";
-"report.viewer.save.pagesRange.fromPage" = "超始页面:";
-"report.viewer.save.pagesRange.toPage" = "截止页面:";
+"report.viewer.save.pages" = "页面范围";
+"report.viewer.save.pages.range.fromPage" = "超始页面:";
+"report.viewer.save.pages.range.toPage" = "截止页面:";
 "report.viewer.save.saved" = "已成功保存报表。";
 "report.viewer.save.name.errmsg.empty" = "此字段为必填字段。";
 "report.viewer.save.name.errmsg.notunique" = "此名称已存在，选择一个唯一的名称。";

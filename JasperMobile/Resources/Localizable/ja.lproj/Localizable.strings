@@ -128,9 +128,9 @@
 "report.viewer.save.title" = "レポートの保存";
 "report.viewer.save.name" = "レポート名";
 "report.viewer.save.format" = "出力フォーマット";
-"report.viewer.save.pagesRange" = "ページ範囲";
-"report.viewer.save.pagesRange.fromPage" = "開始ページ:";
-"report.viewer.save.pagesRange.toPage" = "終了ページ:";
+"report.viewer.save.pages" = "ページ範囲";
+"report.viewer.save.pages.range.fromPage" = "開始ページ:";
+"report.viewer.save.pages.range.toPage" = "終了ページ:";
 "report.viewer.save.saved" = "レポートは正常に保存されました。";
 "report.viewer.save.name.errmsg.empty" = "このフィールドは必須です。";
 "report.viewer.save.name.errmsg.notunique" = "この名前は既に存在しています。一意の名前を選択してください。";

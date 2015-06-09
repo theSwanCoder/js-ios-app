@@ -80,6 +80,11 @@ NSString * const kJMThumbnailImageFileName = @"_jaspersoftMobileThumbnailImageFi
 // Error domain for report loader
 NSString * const kJMReportLoaderErrorDomain = @"JMReportLoaderErrorDomain";
 
-
 // Privacy Policy Link
 NSString * const kJMPrivacyPolicyURI = @"http://www.tibco.com/company/privacy-cma";
+
+// Limit of pages for saving report to HTML format
+NSInteger  const kJMSaveReportMaxRangePages = 1000;
+
+// Limit of resource for loading from JRS
+NSInteger  const kJMResourceLimit = 100;
