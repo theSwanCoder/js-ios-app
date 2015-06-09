@@ -109,10 +109,11 @@
 
 // Sort by
 "resources.sortby.title" = "Sort Options";
-"resources.sortby.type.name" = "Name";
-"resources.sortby.type.date" = "Date";
-"resources.sortby.type.countViews" = "Count of Views";
-"resources.sortby.type.creator" = "Creator";
+"resources.sortby.name" = "Name";
+"resources.sortby.creationDate" = "Creation Date";
+"resources.sortby.modifiedDate" = "Modified Date";
+"resources.sortby.accessTime" = "Access Time";
+"resources.sortby.countViews" = "Count of Views";
 
 // Repository view
 "repository.root.organization" = "Organization";

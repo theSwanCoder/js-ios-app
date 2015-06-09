@@ -39,6 +39,7 @@
 
 @property (nonatomic, strong) NSString * username;
 @property (nonatomic, strong) NSDate   * creationDate;
+@property (nonatomic, strong) NSDate   * updateDate;
 @property (nonatomic, strong) NSString * resourceDescription;
 @property (nonatomic, strong) NSString * label;
 @property (nonatomic, strong) NSString * uri;

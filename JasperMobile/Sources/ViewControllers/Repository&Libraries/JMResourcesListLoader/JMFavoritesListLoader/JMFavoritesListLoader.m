@@ -107,8 +107,8 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:kJMFavorites inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
     if ([self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]) {
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]
-                                                                       ascending:YES];
+        BOOL ascending = self.sortBySelectedIndex == 0;
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:ascending];
         [fetchRequest setSortDescriptors:@[sortDescriptor]];
     }
     [fetchRequest setEntity:entity];

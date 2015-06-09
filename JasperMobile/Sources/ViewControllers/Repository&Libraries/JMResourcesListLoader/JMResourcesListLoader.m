@@ -252,10 +252,12 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     switch (option) {
         case JMResourcesListLoaderOption_Sort:
             return @[
-                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.type.name", nil),
+                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.name", nil),
                        kJMResourceListLoaderOptionItemValueKey: @"label"},
-                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.type.date", nil),
-                       kJMResourceListLoaderOptionItemValueKey: @"creationDate"}
+                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.creationDate", nil),
+                       kJMResourceListLoaderOptionItemValueKey: @"creationDate"},
+                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.modifiedDate", nil),
+                       kJMResourceListLoaderOptionItemValueKey: @"updateDate"}
                      ];
         case JMResourcesListLoaderOption_Filter:{
             NSMutableArray *options = [@[

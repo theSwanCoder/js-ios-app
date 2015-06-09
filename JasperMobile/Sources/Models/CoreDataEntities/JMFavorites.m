@@ -37,5 +37,6 @@
 @dynamic creationDate;
 @dynamic resourceDescription;
 @dynamic version;
+@dynamic updateDate;
 
 @end

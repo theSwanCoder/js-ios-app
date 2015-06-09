@@ -56,7 +56,7 @@ NSString * const kJMSavedResources = @"SavedResources";
         [activeServerProfile addSavedResourcesObject:savedReport];
     }
     savedReport.creationDate = [NSDate date];
-    
+    savedReport.updateDate = [NSDate date];
     [[JMCoreDataManager sharedInstance] save:nil];
 }
 
@@ -116,6 +116,7 @@ NSString * const kJMSavedResources = @"SavedResources";
         
         self.label = newName;
         self.uri = [JMSavedResources uriForSavedReportWithName:newName format:self.format];
+        self.updateDate = [NSDate date];
         [self.managedObjectContext save:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
         return YES;
@@ -131,6 +132,7 @@ NSString * const kJMSavedResources = @"SavedResources";
     resource.label = self.label;
     resource.resourceType = self.wsType;
     resource.creationDate = self.creationDate;
+    resource.updateDate = self.updateDate;
     resource.resourceDescription = self.resourceDescription;
     resource.version = self.version;
     return resource;

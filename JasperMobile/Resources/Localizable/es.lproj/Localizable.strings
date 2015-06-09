@@ -102,9 +102,9 @@
 
 // Sort by
 "resources.sortby.title" = "Opciones de ordenación";
-"resources.sortby.type.name" = "Nombre";
-"resources.sortby.type.date" = "Fecha";
-"resources.sortby.type.creator" = "Creador";
+"resources.sortby.name" = "Nombre";
+"resources.sortby.creationDate" = "Fecha";
+"resources.sortby.creator" = "Creador";
 
 // Repository view
 "repository.root.organization" = "Organización";
