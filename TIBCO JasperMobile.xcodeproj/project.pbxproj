@@ -108,8 +108,8 @@
 		08DD183A1B136B8A00856112 /* JMReportInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18341B136B8A00856112 /* JMReportInfoViewController.m */; };
 		08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08DD18351B136B8A00856112 /* JMResourceInfoViewController.xib */; };
 		08DD183C1B136B8A00856112 /* JMSavedItemsInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18381B136B8A00856112 /* JMSavedItemsInfoViewController.m */; };
-		08DF00991B26FC3D0056F683 /* JMUserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DF00981B26FC3D0056F683 /* JMUserSettings.m */; };
 		08DF00941B25F87C0056F683 /* JMSaveReportPagesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DF00931B25F87C0056F683 /* JMSaveReportPagesCell.m */; };
+		08DF009E1B2844F40056F683 /* MigrateTo_v_2_1.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08DF009D1B2844F40056F683 /* MigrateTo_v_2_1.xcmappingmodel */; };
 		08E0D19E1B0CF27200BFBFE5 /* AppIcon120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19A1B0CF27200BFBFE5 /* AppIcon120x120.png */; };
 		08E0D19F1B0CF27200BFBFE5 /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19B1B0CF27200BFBFE5 /* Icon-1024.png */; };
 		08E0D1A01B0CF27200BFBFE5 /* Icon-512.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19C1B0CF27200BFBFE5 /* Icon-512.png */; };
@@ -402,10 +402,9 @@
 		08DD18351B136B8A00856112 /* JMResourceInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMResourceInfoViewController.xib; sourceTree = "<group>"; };
 		08DD18371B136B8A00856112 /* JMSavedItemsInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedItemsInfoViewController.h; sourceTree = "<group>"; };
 		08DD18381B136B8A00856112 /* JMSavedItemsInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedItemsInfoViewController.m; sourceTree = "<group>"; };
-		08DF00971B26FC3D0056F683 /* JMUserSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMUserSettings.h; sourceTree = "<group>"; };
-		08DF00981B26FC3D0056F683 /* JMUserSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUserSettings.m; sourceTree = "<group>"; };
 		08DF00921B25F87C0056F683 /* JMSaveReportPagesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSaveReportPagesCell.h; sourceTree = "<group>"; };
 		08DF00931B25F87C0056F683 /* JMSaveReportPagesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSaveReportPagesCell.m; sourceTree = "<group>"; };
+		08DF009D1B2844F40056F683 /* MigrateTo_v_2_1.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MigrateTo_v_2_1.xcmappingmodel; sourceTree = "<group>"; };
 		08E0D19A1B0CF27200BFBFE5 /* AppIcon120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIcon120x120.png; sourceTree = "<group>"; };
 		08E0D19B1B0CF27200BFBFE5 /* Icon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024.png"; sourceTree = "<group>"; };
 		08E0D19C1B0CF27200BFBFE5 /* Icon-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-512.png"; sourceTree = "<group>"; };
@@ -621,8 +620,6 @@
 		0801DF961AAF2CC900DD072C /* CoreDataEntities */ = {
 			isa = PBXGroup;
 			children = (
-				08DF00971B26FC3D0056F683 /* JMUserSettings.h */,
-				08DF00981B26FC3D0056F683 /* JMUserSettings.m */,
 				0801DF971AAF2CC900DD072C /* JMFavorites.h */,
 				0801DF981AAF2CC900DD072C /* JMFavorites.m */,
 				0801DF991AAF2CC900DD072C /* JMSavedResources.h */,
@@ -1733,7 +1730,7 @@
 				08DD18231B135BE500856112 /* JasperMobile.xcdatamodeld */,
 				08DD18281B135BE500856112 /* MigrateTo_v_1_9.xcmappingmodel */,
 				08DD18291B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel */,
-				08DF00951B26FBA90056F683 /* MigrateTo_v_2_1.xcmappingmodel */,
+				08DF009D1B2844F40056F683 /* MigrateTo_v_2_1.xcmappingmodel */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -2224,7 +2221,6 @@
 				08E2AC821B1E056900AC462B /* JMPrintResourceViewController.m in Sources */,
 				089B15CA1AA756BD0021A915 /* JMResourceInfoViewController.m in Sources */,
 				089B15A41AA756BD0021A915 /* UIImage+Additions.m in Sources */,
-				08DF00991B26FC3D0056F683 /* JMUserSettings.m in Sources */,
 				0801DFBD1AAF2E7500DD072C /* JMIntroModel.m in Sources */,
 				089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */,
 				93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */,
@@ -2289,7 +2285,6 @@
 				0801DFBC1AAF2E7500DD072C /* JMIntroImageView.m in Sources */,
 				089B159F1AA756BD0021A915 /* JMSavedResources+Helpers.m in Sources */,
 				93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */,
-				08DF00961B26FBA90056F683 /* MigrateTo_v_2_1.xcmappingmodel in Sources */,
 				08E2AC9B1B1E056900AC462B /* JMSaveReportPageRangeCell.m in Sources */,
 				08E2AC9A1B1E056900AC462B /* JMSaveReportNameCell.m in Sources */,
 				089B15A01AA756BD0021A915 /* JMServerProfile+Helpers.m in Sources */,
@@ -2306,6 +2301,7 @@
 				08E2AC251B1DFF2B00AC462B /* JMVisualizeClient.m in Sources */,
 				089B16001AA756BD0021A915 /* JMMenuViewController.m in Sources */,
 				089B15BB1AA756BD0021A915 /* JMTextServerOptionCell.m in Sources */,
+				08DF009E1B2844F40056F683 /* MigrateTo_v_2_1.xcmappingmodel in Sources */,
 				0801DF9F1AAF2CC900DD072C /* JMServerProfile.m in Sources */,
 				08221C421AE54DA000F94F1D /* JMCoreDataManager.m in Sources */,
 				089B15FE1AA756BD0021A915 /* JMMenuItem.m in Sources */,
