@@ -56,8 +56,6 @@
 "servers.action.profile.delete" = "Delete";
 "servers.profile.delete.message" = "Confirm to delete this server profile.";
 "servers.profile.list.empty" = "There are no Server Profiles";
-// TODO: choose correct name
-"servers.profile.placeholder" = "enter new value";
 
 /* Onboarding Intro */
 "intro.title" = "Welcome to TIBCO JasperMobile";
@@ -175,6 +173,7 @@
 "resource.uri.title" = "URI";
 "resource.version.title" = "Version";
 "resource.creationDate.title" = "Creation Date";
+"resource.modifiedDate.title" = "Modified Date";
 "resource.format.title" = "Format";
 
 
@@ -189,7 +188,6 @@
 "settings.item.connection.timeout" = "Connection timeout (in seconds)";
 "settings.item.server" = "Server";
 "settings.item.intro" = "Show intro";
-"settings.crashtracking.toast" = "To change crash reports settings, go to Settings page.";
 "settings.crashtracking.title" = "Send crash reports";
 "settings.crashtracking.alert.title" = "Note";
 "settings.crashtracking.alert.message" = "Restart the app after changing this setting.";
@@ -219,22 +217,16 @@
 /* Error messages */
 
 "error.readingresponse.dialog.msg" = "Error reading the server.";
-
 "error.noconnection.dialog.title" = "No Connection";
 "error.noconnection.dialog.msg" = "Check your network settings (mobile data or wifi) and try again.";
-
 "error.authenication.dialog.title" = "Invalid credentials supplied.";
 "error.authenication.dialog.msg" = "Could not login to JasperReports Server.";
-
 "error.unknownhost.dialog.title" = "Unknown server";
 "error.unknownhost.dialog.msg" = "The specified hostname could not be found.";
-
 "error.upgrade.data.title" = "Upgrade Error - User Data Update";
 "error.upgrade.data.msg" = "There was an error updating user data (Servers, Favorites, Filter values & Settings) during the upgrade process. Press:\nRetry - to re-execute the data update again\nApply - to ignore the error and continue with upgrade, you may LOSE all user data\nCancel - to cancel the upgrade (this will leave you at the current version)";
-
 "error.server.notsupported.title" = "Wrong server version or URL";
 "error.server.notsupported.msg" = "The server version is older than %.1f (not supported), or the URL is incorrect.";
-
 
 /* HTTP error messages */
 
@@ -250,14 +242,10 @@
 
 "dialog.button.applyUpdate" = "Apply";
 "dialog.button.ok" = "OK";
-"dialog.button.edit" = "Edit";
 "dialog.button.cancel" = "Cancel";
 "dialog.button.continue" = "Continue";
 "dialog.button.retry" = "Retry";
 "dialog.button.run.report" = "Run Report";
-"dialog.button.info" = "Info";
-"dialog.button.addfavorite" = "Add Favorite";
-"dialog.button.removefavorite" = "Remove Favorite";
 "dialog.button.save" = "Save";
 "dialog.button.delete" = "Delete";
 

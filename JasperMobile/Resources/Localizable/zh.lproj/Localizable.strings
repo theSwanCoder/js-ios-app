@@ -167,7 +167,6 @@
 "settings.item.connection.timeout" = "连接超时(秒)";
 "settings.item.server" = "服务器";
 "settings.item.intro" = "显示简介";
-"settings.crashtracking.toast" = "要更改崩溃报表设置，请转到设置页面。";
 "settings.crashtracking.title" = "发送崩溃报表";
 "settings.crashtracking.alert.title" = "注";
 "settings.crashtracking.alert.message" = "在更改此设置后重新启动应用程序。";
@@ -223,14 +222,10 @@
 
 "dialog.button.applyUpdate" = "应用";
 "dialog.button.ok" = "确定";
-"dialog.button.edit" = "编辑";
 "dialog.button.cancel" = "取消";
 "dialog.button.continue" = "继续";
 "dialog.button.retry" = "重试";
 "dialog.button.run.report" = "运行报表";
-"dialog.button.info" = "信息";
-"dialog.button.addfavorite" = "添加收藏夹";
-"dialog.button.removefavorite" = "删除收藏夹";
 "dialog.button.save" = "保存";
 "dialog.button.delete" = "删除";
 

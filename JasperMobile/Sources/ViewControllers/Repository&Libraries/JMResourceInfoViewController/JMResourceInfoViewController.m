@@ -113,6 +113,8 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     
     if (!_resourceProperties) {
         NSString *createdAtString = [JMUtils localizedStringFromDate:self.resourceLookup.creationDate];
+        NSString *modifiedAtString = [JMUtils localizedStringFromDate:self.resourceLookup.updateDate];
+
         _resourceProperties = @[
                                 @{
                                     kJMTitleKey : @"label",
@@ -138,6 +140,10 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
                                 @{
                                     kJMTitleKey : @"creationDate",
                                     kJMValueKey : createdAtString ?: @""
+                                    },
+                                @{
+                                    kJMTitleKey : @"modifiedDate",
+                                    kJMValueKey : modifiedAtString ?: @""
                                     }
                                 ];
     }
