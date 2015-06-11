@@ -32,6 +32,8 @@
 
 
 @interface JMJavascriptNativeBridge() <UIWebViewDelegate>
+@property (nonatomic, copy) NSString *jsInitCode;
+@property (nonatomic, assign) BOOL isJSInitCodeInjected;
 @end
 
 @implementation JMJavascriptNativeBridge
@@ -51,12 +53,29 @@
     [(UIWebView *)self.webView loadHTMLString:HTMLString baseURL:baseURL];
 }
 
+- (void)loadRequest:(NSURLRequest *)request
+{
+    [(UIWebView *)self.webView stopLoading];
+    [(UIWebView *)self.webView loadRequest:request];
+}
+
 - (void)sendRequest:(JMJavascriptRequest *)request
 {
     NSString *javascriptString = request.command;
     NSString *parameters = request.parametersAsString;
     NSString *fullJavascriptString = [NSString stringWithFormat:javascriptString, parameters];
     [self.webView stringByEvaluatingJavaScriptFromString:fullJavascriptString];
+}
+
+- (void)injectJSInitCode:(NSString *)jsCode
+{
+    self.jsInitCode = jsCode;
+}
+
+- (void)reset
+{
+    self.isJSInitCodeInjected = NO;
+    [(UIWebView *)self.webView loadRequest:nil];
 }
 
 #pragma mark - UIWebViewDelegate
@@ -82,6 +101,14 @@
         return NO;
     } else {
         return YES;
+    }
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    if (self.jsInitCode && !self.isJSInitCodeInjected) {
+        self.isJSInitCodeInjected = YES;
+        [(UIWebView *)self.webView stringByEvaluatingJavaScriptFromString:self.jsInitCode];
     }
 }
 

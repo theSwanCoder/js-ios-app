@@ -40,7 +40,11 @@
 @property (nonatomic, weak) id <JMJavascriptNativeBridgeDelegate>delegate;
 
 - (void)startLoadHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL;
+- (void)loadRequest:(NSURLRequest *)request;
+
+- (void)injectJSInitCode:(NSString *)jsCode;
 - (void)sendRequest:(JMJavascriptRequest *)request;
+- (void)reset;
 @end
 
 @protocol JMJavascriptNativeBridgeDelegate <NSObject>
