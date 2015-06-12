@@ -115,17 +115,37 @@
 #pragma mark - Helpers
 - (NSDictionary *)parseCommand:(NSString *)command
 {
-    NSString *decodedCommand = [command stringByRemovingPercentEncoding];
+    NSString *decodedCommand = [command stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSArray *components = [decodedCommand componentsSeparatedByString:@"&"];
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
-    result[@"callback.type"] = [components firstObject];
 
-    NSMutableArray *parameters = [NSMutableArray arrayWithArray:components];
-    [parameters removeObjectAtIndex:0];
-    for (NSString *component in parameters) {
-        NSArray *keyValue = [component componentsSeparatedByString:@"="];
-        if (keyValue.count == 2) {
-            result[keyValue[0]] = keyValue[1];
+    NSString *callbackType = [components firstObject];
+
+    if ([callbackType isEqualToString:@"json"]) {
+        NSString *parameters = components[1];
+        NSLog(@"json as string: %@", parameters);
+        NSData *parametersAsData = [parameters dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *error;
+        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:parametersAsData
+                                                             options:NSJSONReadingMutableContainers
+                                                               error:&error];
+        if (json) {
+            result[@"callback.type"] = json[@"command"];
+            result[@"parameters"] = json[@"parameters"];
+        } else {
+            result[@"callback.type"] = @"Error";
+            result[@"parameters"] = error.localizedDescription;
+        }
+    } else {
+        result[@"callback.type"] = callbackType;
+
+        NSMutableArray *parameters = [NSMutableArray arrayWithArray:components];
+        [parameters removeObjectAtIndex:0];
+        for (NSString *component in parameters) {
+            NSArray *keyValue = [component componentsSeparatedByString:@"="];
+            if (keyValue.count == 2) {
+                result[keyValue[0]] = keyValue[1];
+            }
         }
     }
     return result;
