@@ -30,6 +30,7 @@
 #import "JMDashboardLoader.h"
 #import "JMBaseDashboardLoader.h"
 #import "JMJavascriptNativeBridge.h"
+#import "JMVisDashboardLoader.h"
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, weak) JMDashboard *dashboard;
@@ -64,7 +65,11 @@
 
 - (id <JMDashboardLoader>)dashboardLoader {
     if (!_dashboardLoader) {
-        _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard];
+        if ([JMUtils isServerAmber2]) {
+            _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard];
+        } else {
+            _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard];
+        }
         JMJavascriptNativeBridge *bridge = [JMJavascriptNativeBridge new];
         _dashboardLoader.bridge = bridge;
         bridge.webView = self.webView;
