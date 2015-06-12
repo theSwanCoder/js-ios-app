@@ -179,6 +179,7 @@
 		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
 		A14781771A715A15EC6DEB42 /* JMDashboardViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A147836339CAA44087D8D5A9 /* JMDashboardViewerVC.m */; };
 		A14782BCF3499821EAB23934 /* JMJavascriptCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A147810144F2E290F3B7FF83 /* JMJavascriptCallback.m */; };
+		A14783BF5E8A435877FA3C68 /* JMVisDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A147857E6720A6D7DD71BDC7 /* JMVisDashboardLoader.m */; };
 		A147840152F978C37C268CD9 /* JMJavascriptNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = A147880E387FEFB88BBD19B4 /* JMJavascriptNativeBridge.m */; };
 		A147856CD09EE2C170D6491F /* JMBaseDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478813EB545BE2271F5D4D /* JMBaseDashboardLoader.m */; };
 		A147874948067892B357C8A3 /* JMReportViewerToolBar~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14789D933A44C3C32D79FBC /* JMReportViewerToolBar~ipad.xib */; };
@@ -544,6 +545,7 @@
 		A1478374AAA1B5E8D1DB41E5 /* JMJavascriptRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptRequest.m; sourceTree = "<group>"; };
 		A147843CB473DFC037E0C39F /* JMDashboardViewerConfigurator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardViewerConfigurator.m; sourceTree = "<group>"; };
 		A14784B4C8CE961738FEA352 /* JMDashboardViewerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardViewerVC.h; sourceTree = "<group>"; };
+		A147857E6720A6D7DD71BDC7 /* JMVisDashboardLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisDashboardLoader.m; sourceTree = "<group>"; };
 		A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportViewerToolBar.m; sourceTree = "<group>"; };
 		A14787FFFE47A9E26BFB7469 /* JMJavascriptNativeBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptNativeBridge.h; sourceTree = "<group>"; };
 		A147880E387FEFB88BBD19B4 /* JMJavascriptNativeBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptNativeBridge.m; sourceTree = "<group>"; };
@@ -554,6 +556,7 @@
 		A1478AE10405430D44256CA0 /* JMVisualizeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeManager.m; sourceTree = "<group>"; };
 		A1478EA56C0D8D23BDD84C37 /* JMJavascriptCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptCallback.h; sourceTree = "<group>"; };
 		A1478EEB9FB0CCB7D652FF2F /* JMVisualizeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeManager.h; sourceTree = "<group>"; };
+		A1478FD2EA1737BBA27802F1 /* JMVisDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisDashboardLoader.h; sourceTree = "<group>"; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
@@ -1932,6 +1935,15 @@
 			path = JMVisualizeManager;
 			sourceTree = "<group>";
 		};
+		A14788CF51F1626F04975558 /* JMVisualizeDashboardLoader */ = {
+			isa = PBXGroup;
+			children = (
+				A147857E6720A6D7DD71BDC7 /* JMVisDashboardLoader.m */,
+				A1478FD2EA1737BBA27802F1 /* JMVisDashboardLoader.h */,
+			);
+			path = JMVisualizeDashboardLoader;
+			sourceTree = "<group>";
+		};
 		A147898DB80B9E88171DCD17 /* JMJavascriptNativeBridge */ = {
 			isa = PBXGroup;
 			children = (
@@ -1977,6 +1989,7 @@
 			children = (
 				A147824201D0AD38264DCDE8 /* JMDashboardLoader.h */,
 				A1478E103AC7335FAD0E096E /* JMBaseDashboardLoader */,
+				A14788CF51F1626F04975558 /* JMVisualizeDashboardLoader */,
 			);
 			path = JMDashboardLoader;
 			sourceTree = "<group>";
@@ -2399,6 +2412,7 @@
 				A14781771A715A15EC6DEB42 /* JMDashboardViewerVC.m in Sources */,
 				A147856CD09EE2C170D6491F /* JMBaseDashboardLoader.m in Sources */,
 				A1478C9142D8F18EFBF6A112 /* JMDashboardViewerConfigurator.m in Sources */,
+				A14783BF5E8A435877FA3C68 /* JMVisDashboardLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
