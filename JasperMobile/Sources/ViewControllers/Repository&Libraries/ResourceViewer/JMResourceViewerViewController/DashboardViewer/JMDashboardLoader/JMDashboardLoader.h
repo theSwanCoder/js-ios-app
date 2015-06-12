@@ -26,20 +26,41 @@
 //  TIBCO JasperMobile
 //
 
-@protocol JMJavascriptNativeBridgeProtocol;
-@protocol JMDashboardLoaderDelegate;
-
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.1
 */
 
+@protocol JMJavascriptNativeBridgeProtocol;
+@protocol JMDashboardLoaderDelegate;
+@class JMDashboard;
+
+typedef NS_ENUM(NSInteger, JMDashboardLoaderErrorType) {
+    JMDashboardLoaderErrorTypeUndefined,
+    JMDashboardLoaderErrorTypeEmtpyReport,
+    JMDashboardLoaderErrorTypeAuthentification
+};
+
+typedef NS_ENUM(NSInteger, JMHyperlinkType) {
+    JMHyperlinkTypeLocalPage,
+    JMHyperlinkTypeLocalAnchor,
+    JMHyperlinkTypeRemotePage,
+    JMHyperlinkTypeRemoteAnchor,
+    JMHyperlinkTypeReference,
+    JMHyperlinkTypeReportExecution,
+    JMHyperlinkTypeAdHocExecution
+};
+
 @protocol JMDashboardLoader <NSObject>
 @property (nonatomic, strong) id<JMJavascriptNativeBridgeProtocol>bridge;
 @property (nonatomic, weak) id<JMDashboardLoaderDelegate> delegate;
-- (void)loadDashboard;
+
+- (instancetype)initWithDashboard:(JMDashboard *)dashboard;
++ (instancetype)loaderWithDashboard:(JMDashboard *)dashboard;
+
+- (void)loadDashboardWithCompletion:(void(^)(BOOL success, NSError *error))completion;
 - (void)stopLoadDashboard;
-- (void)reloadDashboard;
+- (void)reloadDashboardWithCompletion:(void(^)(BOOL success, NSError *error))completion;
 - (void)reset;
 - (void)minimizeDashlet;
 @end
@@ -47,4 +68,7 @@
 
 @protocol JMDashboardLoaderDelegate <NSObject>
 - (void)dashboardLoader:(id<JMDashboardLoader>)loader didStartMaximazeDashletWithTitle:(NSString *)title;
+- (void)dashboardLoader:(id<JMDashboardLoader>)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
+         resourceLookup:(JSResourceLookup *)resourceLookup
+             parameters:(NSArray *)parameters;
 @end

@@ -22,18 +22,17 @@
 
 
 //
-//  JMBaseDashboardLoader.h
+//  JMVisDashboardLoader.h
 //  TIBCO JasperMobile
 //
+
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.1
 */
 
-
 #import "JMDashboardLoader.h"
 
-@interface JMBaseDashboardLoader : NSObject <JMDashboardLoader>
-
+@interface JMVisDashboardLoader : NSObject <JMDashboardLoader>
 @end
