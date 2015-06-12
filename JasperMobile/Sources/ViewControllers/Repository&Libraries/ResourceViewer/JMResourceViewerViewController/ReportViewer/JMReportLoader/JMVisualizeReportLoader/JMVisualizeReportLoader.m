@@ -213,7 +213,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         if (success) {
             NSLog(@"visuzalise.js did end load");
             NSString *baseURLString = self.restClient.serverProfile.serverUrl;
-            [self.report updateHTMLString:[self.visualizeManager htmlString] baseURLSring:baseURLString];
+            [self.report updateHTMLString:[self.visualizeManager htmlStringForReport] baseURLSring:baseURLString];
 
             if (completion) {
                 completion(YES, nil);
