@@ -313,6 +313,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         this._processErrors = bind(this._processErrors, this);
         this._processSuccess = bind(this._processSuccess, this);
         this._processMultipageState = bind(this._processMultipageState, this);
+        this._processCurrentPageChanged = bind(this._processCurrentPageChanged, this);
         this._processReportComplete = bind(this._processReportComplete, this);
         this._getChartTypeList = bind(this._getChartTypeList, this);
         this._updateComponent = bind(this._updateComponent, this);
@@ -446,7 +447,8 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
           },
           error: this._processErrors,
           events: {
-            reportCompleted: this._processReportComplete
+            reportCompleted: this._processReportComplete,
+            changePagesState: this._processCurrentPageChanged
           },
           success: (function(_this) {
             return function(parameters) {
@@ -523,7 +525,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       };
 
       ReportController.prototype._notifyPageChange = function() {
-        return this.callback.onPageChange(this.report.pages());
+        return this.callback.onPageChange(parseInt(this.report.pages()));
       };
 
       ReportController.prototype._exportReport = function(format) {
@@ -600,6 +602,11 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         return this.callback.onReportCompleted(status, this.report.data().totalPages, error);
       };
 
+      ReportController.prototype._processCurrentPageChanged = function(page) {
+        js_mobile.log("Current page changed: " + page);
+        return this.callback.onPageChange(page);
+      };
+
       ReportController.prototype._processMultipageState = function(isMultipage) {
         js_mobile.log("multi " + isMultipage);
         return this.callback.onMultiPageStateObtained(isMultipage);
@@ -634,6 +641,8 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
             return this._navigateToPage(link);
           case "Reference":
             return this._openRemoteLink(link);
+          default:
+            return defaultHandler.call(this);
         }
       };
 
