@@ -110,11 +110,6 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     }
 }
 
-- (NSString *) accessType
-{
-    return @"viewed";
-}
-
 #pragma mark - Public API
 - (NSArray *)loadedResources
 {

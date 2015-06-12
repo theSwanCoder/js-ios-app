@@ -29,6 +29,15 @@
 #import "JMRecentViewsListLoader.h"
 
 @implementation JMRecentViewsListLoader
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.accessType = @"viewed";
+    }
+    return self;
+}
+
 - (NSArray *)listItemsWithOption:(JMResourcesListLoaderOption)option
 {
     switch (option) {
