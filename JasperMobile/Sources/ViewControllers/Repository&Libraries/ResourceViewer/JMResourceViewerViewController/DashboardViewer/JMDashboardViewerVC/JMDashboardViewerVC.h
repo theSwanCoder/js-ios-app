@@ -31,6 +31,7 @@
 @since 2.1
 */
 
+#import "JMResourceViewerViewController.h"
 
 @interface JMDashboardViewerVC : JMResourceViewerViewController
 

@@ -30,7 +30,7 @@
 #import "JMDashboardViewerConfigurator.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMDashboardLoader.h"
-#import "JMJavascriptNativeBridgeProtocol.h"
+#import "JMReportViewerVC.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate>
 @property (strong, nonatomic) NSArray *rightButtonItems;
@@ -99,7 +99,15 @@
         [self.dashboardLoader reset];
         // waiting until page will be cleared
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.dashboardLoader reloadDashboard];
+
+            [self startShowLoaderWithMessage:@"status.loading"
+                                 cancelBlock:@weakself(^(void)) {
+
+                                     }@weakselfend];
+
+            [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
+                [self stopShowLoader];
+            }];
         });
     } else {
         [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
@@ -111,7 +119,14 @@
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
-    [self.dashboardLoader loadDashboard];
+    [self startShowLoaderWithMessage:@"status.loading"
+                         cancelBlock:@weakself(^(void)) {
+
+        }@weakselfend];
+
+    [self.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
+        [self stopShowLoader];
+    }];
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
@@ -138,6 +153,76 @@
                                                                target:self
                                                                action:@selector(minimizeDashlet)];
     self.navigationItem.title = title;
+}
+
+- (void)dashboardLoader:(id <JMDashboardLoader>)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
+         resourceLookup:(JSResourceLookup *)resourceLookup
+             parameters:(NSArray *)parameters
+{
+    if (hyperlinkType == JMHyperlinkTypeReportExecution) {
+
+        NSString *reportURI = [resourceLookup.uri stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls, NSError *error)) {
+                if (error) {
+                    [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                        [self cancelResourceViewingAndExit:YES];
+                    }];
+                } else {
+                    JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
+                    reportViewController.resourceLookup = resourceLookup;
+                    [reportViewController.report updateInputControls:inputControls];
+                    [reportViewController.report updateReportParameters:parameters];
+
+                    [self resetSubViews];
+                    [self.navigationController pushViewController:reportViewController animated:YES];
+                }
+            }@weakselfend];
+    }
+}
+
+#pragma mark - Report Options (Input Controls)
+- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *inputControls, NSError *error))completion
+{
+    [self.restClient inputControlsForReport:reportURI
+                                        ids:nil
+                             selectedValues:nil
+                            completionBlock:@weakself(^(JSOperationResult *result)) {
+
+                                    if (result.error) {
+                                        if (result.error.code == JSSessionExpiredErrorCode) {
+                                            if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                                                [self loadInputControlsWithReportURI:reportURI completion:completion];
+                                            } else {
+                                                [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
+                                                        [self cancelResourceViewingAndExit:YES];
+                                                    } @weakselfend];
+                                            }
+                                        } else {
+                                            if (completion) {
+                                                completion(nil, result.error);
+                                            }
+                                        }
+                                    } else {
+
+                                        NSMutableArray *invisibleInputControls = [NSMutableArray array];
+                                        for (JSInputControlDescriptor *inputControl in result.objects) {
+                                            if (!inputControl.visible.boolValue) {
+                                                [invisibleInputControls addObject:inputControl];
+                                            }
+                                        }
+
+                                        if (result.objects.count - invisibleInputControls.count == 0) {
+                                            completion(nil, nil);
+                                        } else {
+                                            NSMutableArray *inputControls = [result.objects mutableCopy];
+                                            if (invisibleInputControls.count) {
+                                                [inputControls removeObjectsInArray:invisibleInputControls];
+                                            }
+                                            completion([inputControls copy], nil);
+                                        }
+                                    }
+
+                                }@weakselfend];
 }
 
 @end
