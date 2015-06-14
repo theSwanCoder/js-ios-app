@@ -31,9 +31,11 @@
 #import "JMJavascriptNativeBridge.h"
 #import "JMJavascriptCallback.h"
 #import "JMJavascriptRequest.h"
+#import "JMDashboard.h"
 
 @interface JMBaseDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
+@property (nonatomic, copy) void(^loadCompletion)(BOOL success, NSError *error);
 @end
 
 @implementation JMBaseDashboardLoader
@@ -61,8 +63,10 @@
 }
 
 #pragma mark - Public API
-- (void)loadDashboard
+- (void)loadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
 {
+    self.loadCompletion = completion;
+
     [self.bridge loadRequest:self.dashboard.resourceRequest];
 
     NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"dashboard-amber-ios-mobilejs-sdk" ofType:@"js"];
@@ -73,14 +77,9 @@
     [self.bridge injectJSInitCode:jsMobile];
 }
 
-- (void)stopLoadDashboard
+- (void)reloadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
 {
-
-}
-
-- (void)reloadDashboard
-{
-    [self loadDashboard];
+    [self loadDashboardWithCompletion:completion];
 }
 
 - (void)minimizeDashlet {
@@ -106,6 +105,10 @@
     }
 }
 
+- (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
+{
+    [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
+}
 
 #pragma mark - JS Handlers
 - (void)handleDidScriptLoad
@@ -114,6 +117,10 @@
     request.command = @"MobileDashboard.configure({'diagonal': %@}).run();";
     request.parametersAsString = [NSString stringWithFormat:@"%@", @([self diagonal])];
     [self.bridge sendRequest:request];
+
+    if (self.loadCompletion) {
+        self.loadCompletion(YES, nil);
+    }
 }
 
 - (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
