@@ -49,4 +49,5 @@
 
 @protocol JMJavascriptNativeBridgeDelegate <NSObject>
 - (void)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback;
+- (void)javascriptNativeBridgeDidReceiveAuthRequest:(id<JMJavascriptNativeBridgeProtocol>)bridge;
 @end

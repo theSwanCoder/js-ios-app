@@ -81,9 +81,20 @@
 #pragma mark - UIWebViewDelegate
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
+    NSLog(@"request from webViewx: %@", request);
+
+    if ([self isLoginRequest:request]) {
+        [self.restClient deleteCookies];
+        [self.delegate javascriptNativeBridgeDidReceiveAuthRequest:self];
+        return NO;
+    }
+
+    if ([self isRequestToRunReport:request]) {
+        return NO;
+    }
+
     NSString *callback = @"http://jaspermobile.callback/";
     NSString *requestURLString = request.URL.absoluteString;
-//    NSLog(@"requestURLString: %@", requestURLString);
 
     if ([requestURLString rangeOfString:callback].length) {
 
@@ -149,6 +160,32 @@
         }
     }
     return result;
+}
+
+- (BOOL)isLoginRequest:(NSURLRequest *)request
+{
+    BOOL isLoginRequest = NO;
+    // Check request to login and handle it
+    NSString *loginUrlRegex = [NSString stringWithFormat:@"%@/login.html(.+)?", self.restClient.serverProfile.serverUrl];
+    NSPredicate *loginUrlValidator = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", loginUrlRegex];
+    NSString *requestUrl = request.URL.absoluteString;
+    if ([loginUrlValidator evaluateWithObject:requestUrl]) {
+        isLoginRequest = YES;
+    }
+    return isLoginRequest;
+}
+
+- (BOOL)isRequestToRunReport:(NSURLRequest *)request
+{
+    BOOL isRequestToRunReport = NO;
+
+    NSString *requestURLString = request.URL.absoluteString;
+    //  don't let run link run report
+    if ([requestURLString rangeOfString:@"_flowId=viewReportFlow&reportUnit"].length) {
+        [[UIApplication sharedApplication] openURL:request.URL];
+        isRequestToRunReport = YES;
+    }
+    return isRequestToRunReport;
 }
 
 @end
