@@ -31,13 +31,14 @@
 #import "JSResourceLookup+Helpers.h"
 #import "JMDashboardLoader.h"
 #import "JMReportViewerVC.h"
+#import "JMDashboard.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate>
-@property (strong, nonatomic) NSArray *rightButtonItems;
-@property (strong, nonatomic) UIBarButtonItem *leftButtonItem;
+@property (nonatomic, copy) NSArray *rightButtonItems;
+@property (nonatomic, strong) UIBarButtonItem *leftButtonItem;
+
+@property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
-@property (nonatomic, strong) JMDashboard *dashboard;
-@property (nonatomic, weak) id<JMDashboardLoader>dashboardLoader;
 @end
 
 
@@ -96,13 +97,13 @@
 - (void)reloadDashboard
 {
     if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-        [self.dashboardLoader reset];
         // waiting until page will be cleared
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
             [self startShowLoaderWithMessage:@"status.loading"
                                  cancelBlock:@weakself(^(void)) {
-
+                                         [self.dashboardLoader reset];
+                                         [super cancelResourceViewingAndExit:YES];
                                      }@weakselfend];
 
             [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
@@ -121,8 +122,9 @@
 {
     [self startShowLoaderWithMessage:@"status.loading"
                          cancelBlock:@weakself(^(void)) {
-
-        }@weakselfend];
+                                 [self.dashboardLoader reset];
+                                 [super cancelResourceViewingAndExit:YES];
+                             }@weakselfend];
 
     [self.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
         [self stopShowLoader];
@@ -178,6 +180,11 @@
                 }
             }@weakselfend];
     }
+}
+
+- (void)dashboardLoaderDidReceiveAuthRequest:(id <JMDashboardLoader>)loader
+{
+    [self reloadDashboard];
 }
 
 #pragma mark - Report Options (Input Controls)

@@ -33,6 +33,8 @@
 
 #import "JMResourceViewerViewController.h"
 
-@interface JMDashboardViewerVC : JMResourceViewerViewController
+@class JMDashboard;
 
+@interface JMDashboardViewerVC : JMResourceViewerViewController
+@property (nonatomic, strong, readonly) JMDashboard *dashboard;
 @end
