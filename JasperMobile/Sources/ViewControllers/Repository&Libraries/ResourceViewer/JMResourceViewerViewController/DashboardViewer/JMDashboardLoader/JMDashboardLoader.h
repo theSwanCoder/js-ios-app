@@ -59,7 +59,6 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 + (instancetype)loaderWithDashboard:(JMDashboard *)dashboard;
 
 - (void)loadDashboardWithCompletion:(void(^)(BOOL success, NSError *error))completion;
-- (void)stopLoadDashboard;
 - (void)reloadDashboardWithCompletion:(void(^)(BOOL success, NSError *error))completion;
 - (void)reset;
 - (void)minimizeDashlet;
@@ -71,4 +70,5 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 - (void)dashboardLoader:(id<JMDashboardLoader>)loader didReceiveHyperlinkWithType:(JMHyperlinkType)hyperlinkType
          resourceLookup:(JSResourceLookup *)resourceLookup
              parameters:(NSArray *)parameters;
+- (void)dashboardLoaderDidReceiveAuthRequest:(id<JMDashboardLoader>)loader;
 @end
