@@ -90,18 +90,21 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     }
 }
 
-- (void)stopLoadDashboard
-{
-
-}
-
 - (void)reloadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
 {
-    [self loadDashboardWithCompletion:completion];
+    if (completion) {
+        completion(YES, nil);
+    }
+
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileDashboard.refresh();";
+    request.parametersAsString = @"";
+    [self.bridge sendRequest:request];
 }
 
 - (void)reset
 {
+    [self destroyDashboard];
     [self.bridge reset];
 }
 
@@ -109,6 +112,15 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileDashboard.minimizeDashlet();";
+    request.parametersAsString = @"";
+    [self.bridge sendRequest:request];
+}
+
+#pragma mark - Private API
+- (void)destroyDashboard
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileDashboard.destroyDashboard();";
     request.parametersAsString = @"";
     [self.bridge sendRequest:request];
 }
@@ -154,6 +166,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     } else if ([callback.type isEqualToString:@"onReportExecution"]) {
         [self handleOnReportExecution:callback.parameters];
     }
+}
+
+- (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
+{
+    [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
 }
 
 #pragma mark - Handle JS callbacks
