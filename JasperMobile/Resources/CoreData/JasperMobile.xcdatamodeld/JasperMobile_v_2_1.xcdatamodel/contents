@@ -31,18 +31,10 @@
         <attribute name="serverUrl" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="favorites" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Favorites" inverseName="serverProfile" inverseEntity="Favorites" syncable="YES"/>
         <relationship name="savedResources" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SavedResources" inverseName="serverProfile" inverseEntity="SavedResources" syncable="YES"/>
-        <relationship name="userSettings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserSettings" inverseName="serverProfile" inverseEntity="UserSettings" syncable="YES"/>
-    </entity>
-    <entity name="UserSettings" representedClassName="JMUserSettings" syncable="YES">
-        <attribute name="connectionTimeout" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="crashReportSending" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="serverProfile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ServerProfile" inverseName="userSettings" inverseEntity="ServerProfile" syncable="YES"/>
     </entity>
     <elements>
         <element name="Favorites" positionX="-632" positionY="-432" width="128" height="180"/>
         <element name="SavedResources" positionX="-207" positionY="-441" width="128" height="195"/>
-        <element name="ServerProfile" positionX="-432" positionY="-423" width="128" height="165"/>
-        <element name="UserSettings" positionX="-423" positionY="-360" width="128" height="105"/>
+        <element name="ServerProfile" positionX="-432" positionY="-423" width="128" height="150"/>
     </elements>
 </model>

@@ -168,7 +168,6 @@
 "settings.item.connection.timeout" = "Expiration de la connexion (en secondes)";
 "settings.item.server" = "Serveur";
 "settings.item.intro" = "Afficher l’intro";
-"settings.crashtracking.toast" = "Pour modifier les paramètres des rapports de panne, accédez à la page Paramètres.";
 "settings.crashtracking.title" = "Envoyer les rapports de panne";
 "settings.crashtracking.alert.title" = "Remarque";
 "settings.crashtracking.alert.message" = "Redémarrez l’application après avoir modifié ce paramètre.";
@@ -224,14 +223,10 @@
 
 "dialog.button.applyUpdate" = "Appliquer";
 "dialog.button.ok" = "OK";
-"dialog.button.edit" = "Modifier";
 "dialog.button.cancel" = "Annuler";
 "dialog.button.continue" = "Continuer";
 "dialog.button.retry" = "Réessayer";
 "dialog.button.run.report" = "Lancer le rapport";
-"dialog.button.info" = "Infos";
-"dialog.button.addfavorite" = "Ajouter un favori";
-"dialog.button.removefavorite" = "Supprimer le favori";
 "dialog.button.save" = "Enregistrer";
 "dialog.button.delete" = "Supprimer";
 

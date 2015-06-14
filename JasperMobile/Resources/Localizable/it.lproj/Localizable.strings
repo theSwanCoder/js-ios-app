@@ -167,7 +167,6 @@
 "settings.item.connection.timeout" = "Timeout della connessione (in secondi)";
 "settings.item.server" = "Server";
 "settings.item.intro" = "Mostra intro";
-"settings.crashtracking.toast" = "Per modificare le impostazioni dei report di crash, andare alla pagina delle impostazioni.";
 "settings.crashtracking.title" = "Invia report di crash";
 "settings.crashtracking.alert.title" = "Nota";
 "settings.crashtracking.alert.message" = "Dopo aver modificato l'impostazione, riavviare l'app.";
@@ -223,14 +222,10 @@
 
 "dialog.button.applyUpdate" = "Applica";
 "dialog.button.ok" = "OK";
-"dialog.button.edit" = "Modifica";
 "dialog.button.cancel" = "Annulla";
 "dialog.button.continue" = "Continua";
 "dialog.button.retry" = "Riprova";
 "dialog.button.run.report" = "Esegui report";
-"dialog.button.info" = "Informazioni";
-"dialog.button.addfavorite" = "Aggiungi preferito";
-"dialog.button.removefavorite" = "Rimuovi preferito";
 "dialog.button.save" = "Salva";
 "dialog.button.delete" = "Elimina";
 

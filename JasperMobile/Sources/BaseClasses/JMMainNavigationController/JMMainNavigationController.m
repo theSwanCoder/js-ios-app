@@ -44,6 +44,12 @@
 
     NSDictionary *textTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [JMFont navigationBarTitleFont], NSFontAttributeName, nil];
     [[UINavigationBar appearance] setTitleTextAttributes:textTitleOptions];
+    
+    if ([UIDevice currentDevice].systemVersion.integerValue <8) {
+        // Here is hack for using UIPrintInteractionController
+        NSDictionary *textTitleOptionsForPopover = [NSDictionary dictionaryWithObjectsAndKeys:kJMMainNavigationBarBackgroundColor, NSForegroundColorAttributeName, [JMFont navigationBarTitleFont], NSFontAttributeName, nil];
+        [[UINavigationBar appearanceWhenContainedIn:[UIPopoverController class], nil] setTitleTextAttributes:textTitleOptionsForPopover];
+    }
 
     NSDictionary *barButtonTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor lightGrayColor], NSForegroundColorAttributeName, [JMFont navigationItemsFont], NSFontAttributeName, nil];
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateDisabled];

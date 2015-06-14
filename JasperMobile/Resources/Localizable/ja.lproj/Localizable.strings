@@ -167,7 +167,6 @@
 "settings.item.connection.timeout" = "接続タイムアウト (秒)";
 "settings.item.server" = "サーバー";
 "settings.item.intro" = "イントロの表示";
-"settings.crashtracking.toast" = "クラッシュ レポートの設定を変更するには、[設定] ページに移動します。";
 "settings.crashtracking.title" = "クラッシュ レポートの送信";
 "settings.crashtracking.alert.title" = "注意";
 "settings.crashtracking.alert.message" = "この設定を変更したら、アプリを再起動してください。";
@@ -223,14 +222,10 @@
 
 "dialog.button.applyUpdate" = "適用";
 "dialog.button.ok" = "OK";
-"dialog.button.edit" = "編集";
 "dialog.button.cancel" = "キャンセル";
 "dialog.button.continue" = "続行";
 "dialog.button.retry" = "再試行";
 "dialog.button.run.report" = "レポートの実行";
-"dialog.button.info" = "お知らせ";
-"dialog.button.addfavorite" = "お気に入りの追加";
-"dialog.button.removefavorite" = "お気に入りの削除";
 "dialog.button.save" = "保存";
 "dialog.button.delete" = "削除";
 

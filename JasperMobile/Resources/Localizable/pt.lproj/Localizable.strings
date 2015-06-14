@@ -167,7 +167,6 @@
 "settings.item.connection.timeout" = "Tempo limite da conexão (em segundos)";
 "settings.item.server" = "Servidor";
 "settings.item.intro" = "Mostrar a introdução";
-"settings.crashtracking.toast" = "Para alterar as configurações dos relatórios de falhas, acesse a página Configurações.";
 "settings.crashtracking.title" = "Enviar relatórios de falha";
 "settings.crashtracking.alert.title" = "Obs.";
 "settings.crashtracking.alert.message" = "Reiniciar o aplicativo após alterar essas configurações.";
@@ -223,14 +222,10 @@
 
 "dialog.button.applyUpdate" = "Aplicar";
 "dialog.button.ok" = "OK";
-"dialog.button.edit" = "Editar";
 "dialog.button.cancel" = "Cancelar";
 "dialog.button.continue" = "Continuar";
 "dialog.button.retry" = "Tentar novamente";
 "dialog.button.run.report" = "Executar relatório";
-"dialog.button.info" = "Informações";
-"dialog.button.addfavorite" = "Adicionar favorito";
-"dialog.button.removefavorite" = "Remover favorito";
 "dialog.button.save" = "Salvar";
 "dialog.button.delete" = "Excluir";
 

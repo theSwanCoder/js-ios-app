@@ -72,9 +72,4 @@
  */
 + (BOOL)isRunningForTheFirstTime;
 
-/**
- Checks if update has any errors
- */
-+ (BOOL)hasErrors;
-
 @end
