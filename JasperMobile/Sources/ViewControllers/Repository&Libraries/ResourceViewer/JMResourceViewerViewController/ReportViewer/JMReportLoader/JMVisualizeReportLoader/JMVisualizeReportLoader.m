@@ -222,9 +222,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
             // TODO: handle this error
             NSLog(@"Error loading visualize.js");
             // TODO: add error code
-            NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
-                                                 code:0
-                                             userInfo:nil];
+//            NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
+//                                                 code:0
+//                                             userInfo:nil];
             if (completion) {
                 completion(NO, error);
             }
@@ -257,6 +257,11 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     } else if ([callback.type isEqualToString:@"reportDidEndRefreshFailured"]) {
         [self handleRefreshDidEndFailedWithParameters:callback.parameters];
     }
+}
+
+- (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
+{
+    // TODO: handle auth requests.
 }
 
 #pragma mark - Helpers

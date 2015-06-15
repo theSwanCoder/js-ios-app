@@ -226,14 +226,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
         NSError *error = result.error;
         if (error) {
-            NSLog(@"error: %@", error.localizedDescription);
-
-            NSString *errorString = error.localizedDescription;
-            JMDashboardLoaderErrorType errorType = JMDashboardLoaderErrorTypeUndefined;
-            if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
-                errorType = JMDashboardLoaderErrorTypeAuthentification;
-                // TODO: add error handling
-            }
+            // TODO: add error handling
+//            NSString *errorString = error.localizedDescription;
+//            JMDashboardLoaderErrorType errorType = JMDashboardLoaderErrorTypeUndefined;
+//            if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
+//                errorType = JMDashboardLoaderErrorTypeAuthentification;
+//            }
         } else {
             NSLog(@"objects: %@", result.objects);
             JSResourceLookup *resourceLookup = [result.objects firstObject];
