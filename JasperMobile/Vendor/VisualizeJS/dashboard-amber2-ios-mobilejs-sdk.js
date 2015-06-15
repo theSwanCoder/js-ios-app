@@ -310,8 +310,6 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         this.callback = callback;
         this.scaler = scaler;
         this._openRemoteLink = bind(this._openRemoteLink, this);
-        this._navigateToPage = bind(this._navigateToPage, this);
-        this._navigateToAnchor = bind(this._navigateToAnchor, this);
         this._startReportExecution = bind(this._startReportExecution, this);
         this._processLinkClicks = bind(this._processLinkClicks, this);
         this._processErrors = bind(this._processErrors, this);
@@ -476,12 +474,12 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         switch (type) {
           case "ReportExecution":
             return this._startReportExecution(link);
-          case "LocalAnchor":
-            return this._navigateToAnchor(link);
-          case "LocalPage":
-            return this._navigateToPage(link);
           case "Reference":
             return this._openRemoteLink(link);
+          case "LocalAnchor":
+            return defaultHandler.call(this);
+          case "LocalPage":
+            return defaultHandler.call(this);
           default:
             return defaultHandler.call(this);
         }
@@ -510,17 +508,6 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         }
         return params;
       };
-
-      DashboardController.prototype._navigateToAnchor = function(link) {
-        return js_mobile.log("_navigateToAnchor");
-      };
-
-      DashboardController.prototype._navigateToPage = function(link) {
-        js_mobile.log("_navigateToPage");
-        return this._loadPage(link.pages);
-      };
-
-      DashboardController.prototype._loadPage = function(page) {};
 
       DashboardController.prototype._openRemoteLink = function(link) {
         var href;

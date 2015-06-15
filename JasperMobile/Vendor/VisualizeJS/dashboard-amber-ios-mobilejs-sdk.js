@@ -1,9 +1,79 @@
 (function() {
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  define('js.mobile.callback_dispatcher', [],function() {
+    var CallbackDispatcher;
+    return CallbackDispatcher = (function() {
+      function CallbackDispatcher() {
+        this._processQueue = bind(this._processQueue, this);
+        this.queue = [];
+        this.paused = false;
+      }
+
+      CallbackDispatcher.prototype.dispatch = function(task) {
+        if (!this.paused) {
+          this.queue.push(task);
+          return this._processEventLoop();
+        } else {
+          return this.queue.push(task);
+        }
+      };
+
+      CallbackDispatcher.prototype.firePendingTasks = function() {
+        var results;
+        if (!this.paused) {
+          results = [];
+          while (this.queue.length > 0) {
+            results.push(this.queue.pop().call(this));
+          }
+          return results;
+        }
+      };
+
+      CallbackDispatcher.prototype.pause = function() {
+        return this.paused = true;
+      };
+
+      CallbackDispatcher.prototype.resume = function() {
+        return this.paused = false;
+      };
+
+      CallbackDispatcher.prototype._processEventLoop = function() {
+        if (this.dispatchTimeInterval == null) {
+          return this._createInterval(this._processQueue);
+        }
+      };
+
+      CallbackDispatcher.prototype._processQueue = function() {
+        if (this.queue.length === 0) {
+          return this._removeInterval();
+        } else {
+          return this.queue.shift().call(this);
+        }
+      };
+
+      CallbackDispatcher.prototype._createInterval = function(eventLoop) {
+        return this.dispatchTimeInterval = window.setInterval(eventLoop, 200);
+      };
+
+      CallbackDispatcher.prototype._removeInterval = function() {
+        window.clearInterval(this.dispatchTimeInterval);
+        return this.dispatchTimeInterval = null;
+      };
+
+      return CallbackDispatcher;
+
+    })();
+  });
+
+}).call(this);
+
+(function() {
   var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  define('js.mobile.ios.callback', ['require','js.mobile.callback_dispatcher'],function(require) {
+  define('js.mobile.amber.ios.dashboard.callback', ['require','js.mobile.callback_dispatcher'],function(require) {
     var CallbackDispatcher, IosCallback;
     CallbackDispatcher = require('js.mobile.callback_dispatcher');
     return IosCallback = (function(superClass) {
@@ -56,8 +126,6 @@
   });
 
 }).call(this);
-
-define("js.mobile.amber.ios.dashboard.callback", function(){});
 
 (function() {
   define('js.mobile.dom_tree_observer', [],function() {
