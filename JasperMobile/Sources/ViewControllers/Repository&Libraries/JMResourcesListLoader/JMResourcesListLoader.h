@@ -72,6 +72,7 @@ typedef NS_ENUM(NSInteger, JMResourcesListSectionType) {
 
 @property (nonatomic, copy) NSDictionary *sections;
 
+- (NSInteger)limitOfLoadingResources;
 
 // start point for loading process
 - (void)setNeedsUpdate;

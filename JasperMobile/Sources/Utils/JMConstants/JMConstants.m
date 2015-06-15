@@ -88,3 +88,5 @@ NSInteger  const kJMSaveReportMaxRangePages = 1000;
 
 // Limit of resource for loading from JRS
 NSInteger  const kJMResourceLimit = 100;
+NSInteger  const kJMRecentResourcesLimit = 10;
+
