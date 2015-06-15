@@ -109,19 +109,16 @@
 - (void)reloadDashboard
 {
     if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-        // waiting until page will be cleared
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
-            [self startShowLoaderWithMessage:@"status.loading"
-                                 cancelBlock:@weakself(^(void)) {
-                                         [self.dashboardLoader reset];
-                                         [super cancelResourceViewingAndExit:YES];
-                                     }@weakselfend];
+        [self startShowLoaderWithMessage:@"status.loading"
+                             cancelBlock:@weakself(^(void)) {
+                                     [self.dashboardLoader reset];
+                                     [super cancelResourceViewingAndExit:YES];
+                                 }@weakselfend];
 
-            [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
-                [self stopShowLoader];
-            }];
-        });
+        [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
+            [self stopShowLoader];
+        }];
     } else {
         [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
                 [self cancelResourceViewingAndExit:YES];
