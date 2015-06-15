@@ -79,7 +79,12 @@
 
 - (void)reloadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
 {
-    [self loadDashboardWithCompletion:completion];
+    [self.bridge reset];
+
+    // waiting until page will be cleared
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self loadDashboardWithCompletion:completion];
+    });
 }
 
 - (void)minimizeDashlet {
@@ -100,6 +105,8 @@
     NSLog(@"callback parameters: %@", callback.parameters);
     if ([callback.type isEqualToString:@"scriptDidLoad"]) {
         [self handleDidScriptLoad];
+    } else if ([callback.type isEqualToString:@"onLoadDone"]) {
+        [self handleOnLoadDone];
     } else if ([callback.type isEqualToString:@"didStartMaximazeDashlet"]) {
         [self handleDidStartMaximazeDashletWithParameters:callback.parameters];
     }
@@ -117,7 +124,10 @@
     request.command = @"MobileDashboard.configure({'diagonal': %@}).run();";
     request.parametersAsString = [NSString stringWithFormat:@"%@", @([self diagonal])];
     [self.bridge sendRequest:request];
+}
 
+- (void)handleOnLoadDone
+{
     if (self.loadCompletion) {
         self.loadCompletion(YES, nil);
     }
