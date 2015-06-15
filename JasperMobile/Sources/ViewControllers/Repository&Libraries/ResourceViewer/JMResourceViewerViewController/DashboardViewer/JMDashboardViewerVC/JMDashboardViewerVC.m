@@ -44,14 +44,6 @@
 
 @implementation JMDashboardViewerVC
 
-#pragma mark - LifeCycle
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    self.rightButtonItems = self.navigationItem.rightBarButtonItems;
-}
-
 #pragma mark - Custom Accessors
 
 - (JMDashboard *)dashboard
@@ -87,6 +79,14 @@
                                                                    action:@selector(minimizeDashlet)];
     } else {
         [super setupLeftBarButtonItems];
+    }
+}
+
+- (void)setupRightBarButtonItems
+{
+    if (![self isDashletShown]) {
+        [super setupRightBarButtonItems];
+        self.rightButtonItems = self.navigationItem.rightBarButtonItems;
     }
 }
 
@@ -186,8 +186,9 @@
                     reportViewController.resourceLookup = resourceLookup;
                     [reportViewController.report updateInputControls:inputControls];
                     [reportViewController.report updateReportParameters:parameters];
+                    reportViewController.isChildReport = YES;
 
-                    [self resetSubViews];
+                    //[self resetSubViews];
                     [self.navigationController pushViewController:reportViewController animated:YES];
                 }
             }@weakselfend];
