@@ -34,4 +34,5 @@
 #import "JMBaseReportViewerViewController.h"
 
 @interface JMReportViewerVC : JMBaseReportViewerViewController
+@property (nonatomic, assign) BOOL isChildReport;
 @end

@@ -27,7 +27,6 @@
 
 @interface JMReportViewerVC () <JMReportLoaderDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
-@property (nonatomic, assign) BOOL isChildReport;
 @end
 
 @implementation JMReportViewerVC
@@ -248,7 +247,11 @@
 #pragma mark - UIWebView helpers
 - (void)resetSubViews
 {
-    [[JMVisualizeWebViewManager sharedInstance] reset];
+    if (self.isChildReport) {
+        [[JMVisualizeWebViewManager sharedInstance] resetChildWebView];
+    } else {
+        [[JMVisualizeWebViewManager sharedInstance] reset];
+    }
 }
 
 @end
