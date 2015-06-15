@@ -46,6 +46,11 @@
     return keyString;
 }
 
+- (JMMenuActionsViewAction)availableAction
+{
+    return JMMenuActionsViewAction_None;
+}
+
 - (Class)resourceLoaderClass
 {
     return NSClassFromString(@"JMRecentViewsListLoader");

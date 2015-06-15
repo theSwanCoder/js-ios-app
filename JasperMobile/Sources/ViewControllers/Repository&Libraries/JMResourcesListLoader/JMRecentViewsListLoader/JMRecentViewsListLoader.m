@@ -27,6 +27,7 @@
 //
 
 #import "JMRecentViewsListLoader.h"
+#import "JSResourceLookup+Helpers.h"
 
 @implementation JMRecentViewsListLoader
 - (instancetype)init
@@ -42,17 +43,21 @@
 {
     switch (option) {
         case JMResourcesListLoaderOption_Sort: {
-            NSMutableArray *optionsArray = [NSMutableArray arrayWithArray:[super listItemsWithOption:option]];
-            [optionsArray addObjectsFromArray:@[@{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.accessTime", nil),
-                                                  kJMResourceListLoaderOptionItemValueKey: @"accessTime"},
-                                                @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.countViews", nil),
-                                                  kJMResourceListLoaderOptionItemValueKey: @"popularity"}
-                                                ]];
+            NSDictionary *optionForSortByAccessTime = @{
+                    kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.sortby.accessTime", nil),
+                    kJMResourceListLoaderOptionItemValueKey: @"accessTime"
+            };
+            NSArray *optionsArray = @[optionForSortByAccessTime];
             return optionsArray;
         }
         case JMResourcesListLoaderOption_Filter:
             return [super listItemsWithOption:option];
     }
+}
+
+- (NSInteger)limitOfLoadingResources
+{
+    return kJMRecentResourcesLimit;
 }
 
 @end

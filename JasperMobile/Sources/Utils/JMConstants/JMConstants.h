@@ -96,6 +96,7 @@ NSInteger  const kJMSaveReportMaxRangePages;
 
 // Limit of resource for loading from JRS
 NSInteger  const kJMResourceLimit;
+NSInteger  const kJMRecentResourcesLimit;
 
 #define kJMDetailViewLightBackgroundColor               [UIColor colorFromHexString:@"#E5E9EB"]
 #define kJMDetailViewLightTextColor                     [UIColor colorFromHexString:@"#8F8F8F"]

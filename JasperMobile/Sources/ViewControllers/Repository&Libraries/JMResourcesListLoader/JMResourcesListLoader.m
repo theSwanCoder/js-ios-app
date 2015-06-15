@@ -110,6 +110,11 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     }
 }
 
+- (NSInteger)limitOfLoadingResources
+{
+    return kJMResourceLimit;
+}
+
 #pragma mark - Public API
 - (NSArray *)loadedResources
 {
@@ -167,7 +172,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                           accessType:self.accessType
                            recursive:self.loadRecursively
                               offset:self.offset
-                               limit:kJMResourceLimit
+                               limit:[self limitOfLoadingResources]
                      completionBlock:@weakself(^(JSOperationResult *result)) {
                          if (result.error) {
                              if (result.error.code == JSSessionExpiredErrorCode) {
