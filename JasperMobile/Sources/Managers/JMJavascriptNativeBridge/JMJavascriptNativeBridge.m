@@ -181,7 +181,7 @@
 
     NSString *requestURLString = request.URL.absoluteString;
     //  don't let run link run report
-    if ([requestURLString rangeOfString:@"_flowId=viewReportFlow&reportUnit"].length) {
+    if ([requestURLString rangeOfString:@"_flowId=viewReportFlow&reportUnit"].length || [requestURLString rangeOfString:@"_flowId=viewReportFlow&_report"].length) {
         [[UIApplication sharedApplication] openURL:request.URL];
         isRequestToRunReport = YES;
     }
