@@ -211,7 +211,7 @@
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate
-- (void)reportLoader:(id<JMReportLoader>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSDictionary *)reportParameters
+- (void)reportLoader:(id<JMReportLoader>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSArray *)reportParameters
 {
     NSString *reportURI = [resourceLookup.uri stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls, NSError *error)) {
@@ -223,9 +223,9 @@
                 JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
                 reportViewController.resourceLookup = resourceLookup;
                 [reportViewController.report updateInputControls:inputControls];
+                [reportViewController.report updateReportParameters:reportParameters];
                 reportViewController.isChildReport = YES;
 
-                [self resetSubViews];
                 [self.navigationController pushViewController:reportViewController animated:YES];
             }
         }@weakselfend];

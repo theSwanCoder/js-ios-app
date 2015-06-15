@@ -373,7 +373,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)handleRunReportWithParameters:(NSDictionary *)parameters
 {
-    NSString *params = parameters[@"params"];
+    NSString *params = parameters[@"data"];
     if (!params) {
         return;
     }
@@ -383,14 +383,12 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
     NSString *reportPath;
     if (json) {
-        reportPath = json[@"_report"];
+        reportPath = json[@"resource"];
 
         if (reportPath) {
             [self.restClient resourceLookupForURI:reportPath resourceType:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT modelClass:[JSResourceLookup class] completionBlock:^(JSOperationResult *result) {
                 NSError *error = result.error;
                 if (error) {
-                    NSLog(@"error: %@", error.localizedDescription);
-
                     NSString *errorString = error.localizedDescription;
                     JMReportLoaderErrorType errorType = JMReportLoaderErrorTypeUndefined;
                     if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
@@ -398,16 +396,16 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                     }
                     self.reportLoadCompletion(NO, [self createErrorWithType:errorType errorMessage:errorString]);
                 } else {
-                    NSLog(@"objects: %@", result.objects);
                     JSResourceLookup *resourceLookup = [result.objects firstObject];
                     if (resourceLookup) {
+                        resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
+
                         NSMutableArray *reportParameters = [NSMutableArray array];
-                        for (NSString *key in json.allKeys) {
-                            if (![key isEqualToString:@"_report"]) {
-                                JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:key
-                                                                                                       value:@[json[key]]];
-                                [reportParameters addObject:reportParameter];
-                            }
+                        NSDictionary *rawParameters = json[@"params"];
+                        for (NSString *key in rawParameters) {
+                            JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:key
+                                                                                                   value:rawParameters[key]];
+                            [reportParameters addObject:reportParameter];
                         }
 
                         if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventForResourceLookup:withParameters:)]) {
