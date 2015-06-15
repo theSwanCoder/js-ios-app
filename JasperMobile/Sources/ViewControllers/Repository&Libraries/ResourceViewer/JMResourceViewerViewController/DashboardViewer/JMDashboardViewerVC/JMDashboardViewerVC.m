@@ -79,6 +79,17 @@
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
+- (void)setupLeftBarButtonItems
+{
+    if ([self isDashletShown]) {
+        self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
+                                                                   target:self
+                                                                   action:@selector(minimizeDashlet)];
+    } else {
+        [super setupLeftBarButtonItems];
+    }
+}
+
 - (void)resetSubViews
 {
     [[JMVisualizeWebViewManager sharedInstance] reset];
@@ -92,6 +103,7 @@
     self.navigationItem.leftBarButtonItem = self.leftButtonItem;
     self.navigationItem.rightBarButtonItems = self.rightButtonItems;
     self.navigationItem.title = [self resourceLookup].label;
+    self.leftButtonItem = nil;
 }
 
 - (void)reloadDashboard
@@ -230,6 +242,12 @@
                                     }
 
                                 }@weakselfend];
+}
+
+#pragma mark - Helpers
+- (BOOL)isDashletShown
+{
+    return self.leftButtonItem != nil;
 }
 
 @end

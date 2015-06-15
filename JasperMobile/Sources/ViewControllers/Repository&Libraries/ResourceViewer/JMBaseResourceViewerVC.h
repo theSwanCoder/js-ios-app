@@ -60,6 +60,7 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 - (void)setupLeftBarButtonItems NS_REQUIRES_SUPER;
 - (void)setupRightBarButtonItems NS_REQUIRES_SUPER;
 - (void)resetSubViews;
+- (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle;
 
 
 // Resource Viewing
