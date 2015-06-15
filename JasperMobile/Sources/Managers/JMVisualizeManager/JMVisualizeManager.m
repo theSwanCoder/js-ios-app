@@ -44,27 +44,36 @@
         return;
     }
 
-    NSURLResponse *response;
-    NSError *error;
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
 
-    NSURLRequest *visualizeJSRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.visualizePath]];
-    NSData *data = [NSURLConnection sendSynchronousRequest:visualizeJSRequest returningResponse:&response error:&error];
-    if (data) {
-        // cache visualize.js
-        NSCachedURLResponse *cachedURLResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:data];
-        [[NSURLCache sharedURLCache] storeCachedResponse:cachedURLResponse forRequest:visualizeJSRequest];
+        NSURLResponse *response;
+        NSError *error;
 
-        if (completion) {
-            completion(YES, nil);
+        NSURLRequest *visualizeJSRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.visualizePath]];
+        NSData *data = [NSURLConnection sendSynchronousRequest:visualizeJSRequest returningResponse:&response error:&error];
+        if (data) {
+            // cache visualize.js
+            NSCachedURLResponse *cachedURLResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:data];
+            [[NSURLCache sharedURLCache] storeCachedResponse:cachedURLResponse forRequest:visualizeJSRequest];
+
+            dispatch_async(dispatch_get_main_queue(), ^(void){
+                if (completion) {
+                    completion(YES, nil);
+                }
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                if (completion) {
+                    completion(NO, error);
+                }
+            });
         }
-    } else {
-        if (completion) {
-            completion(NO, error);
-        }
-    }
+    });
+
+
 }
 
-- (NSString *)htmlString
+- (NSString *)htmlStringForReport
 {
     NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"report_optimized" ofType:@"html"];
     if ([JMUtils isServerVersionUpOrEqual6] && ![JMUtils isServerAmber2]) {
@@ -83,6 +92,30 @@
 
     // JasperMobile
     NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"report-ios-mobilejs-sdk" ofType:@"js"];
+    NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
+
+    return htmlString;
+}
+
+
+- (NSString *)htmlStringForDashboard
+{
+    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"dashboard" ofType:@"html"];
+    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+
+    // Visualize
+    NSString *baseURLString = self.restClient.serverProfile.serverUrl;
+    baseURLString = [baseURLString stringByAppendingString:@"/client/visualize.js?_showInputControls=true&_opt=true"];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:baseURLString];
+
+    // REQUIRE_JS
+    NSString *requireJSPath = [[NSBundle mainBundle] pathForResource:@"require.min" ofType:@"js"];
+    NSString *requirejsString = [NSString stringWithContentsOfFile:requireJSPath encoding:NSUTF8StringEncoding error:nil];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"REQUIRE_JS" withString:requirejsString];
+
+    // JasperMobile
+    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"dashboard-amber2-ios-mobilejs-sdk" ofType:@"js"];
     NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
 

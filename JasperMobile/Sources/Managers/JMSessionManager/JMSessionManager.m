@@ -94,15 +94,19 @@ static JMSessionManager *_sharedManager = nil;
 
             JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
             if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
-
                 BOOL isRestoredSession = ([self.restClient isSessionAuthorized] && self.restClient.serverInfo);
                 dispatch_async(dispatch_get_main_queue(), ^(void){
                     if (completion) {
                         completion(isRestoredSession);
                     }
                 });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^(void){
+                    if (completion) {
+                        completion(NO);
+                    }
+                });
             }
-
         });
     } else {
         if (completion) {

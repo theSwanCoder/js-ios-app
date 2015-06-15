@@ -18,7 +18,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Vv-dK-Qcm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1795" y="1334"/>
+            <point key="canvasLocation" x="-1795" y="1674"/>
         </scene>
         <!--Reveal View Controller-->
         <scene sceneID="tb1-AT-oNt">
@@ -298,13 +298,11 @@ your business wherever you are.</string>
                         <outlet property="menuButton" destination="rH4-91-Hd1" id="f4I-sb-Ruj"/>
                         <segue destination="8AY-7W-tMT" kind="push" identifier="ShowDashboardViewer" id="1Yl-7H-aUa"/>
                         <segue destination="LDD-kF-5Ch" kind="push" identifier="ShowReportViewer" id="xOu-Fd-A7w"/>
-                        <segue destination="W4b-4M-emD" kind="push" identifier="ShowDashboardVisualizeViewer" id="A6u-1B-THM"/>
-                        <segue destination="9Nw-rh-bIW" kind="push" identifier="ShowDashboard" id="pm9-gf-xkJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dKd-5C-Is0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1334" y="1334"/>
+            <point key="canvasLocation" x="-1330" y="1674"/>
         </scene>
         <!--Saved Items Collection View Controller-->
         <scene sceneID="ctD-4K-pwQ">
@@ -745,34 +743,10 @@ your business wherever you are.</string>
             </objects>
             <point key="canvasLocation" x="157" y="647"/>
         </scene>
-        <!--DashboardVC-->
-        <scene sceneID="bUs-ba-Byd">
-            <objects>
-                <viewController storyboardIdentifier="JMDashboardVC" id="9Nw-rh-bIW" customClass="JMDashboardVC" customModule="TIBCO_JasperMobile" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="upm-6U-Stv">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="qED-uv-IMc">
-                                <rect key="frame" x="150" y="274" width="20" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            </activityIndicatorView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="DTk-Jy-sbT"/>
-                    <connections>
-                        <outlet property="activityIndicator" destination="qED-uv-IMc" id="MWy-i6-JHR"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="age-Fm-Rlp" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1916" y="2067"/>
-        </scene>
-        <!--Dashboards Viewer View Controller-->
+        <!--Dashboard ViewerVC-->
         <scene sceneID="Idq-37-0Ej">
             <objects>
-                <viewController storyboardIdentifier="JMDashboardsViewerViewController" id="8AY-7W-tMT" customClass="JMDashboardsViewerViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMDashboardViewerVC" id="8AY-7W-tMT" customClass="JMDashboardViewerVC" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OrM-B7-y02">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -793,31 +767,7 @@ your business wherever you are.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BRF-hF-xTq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1520" y="2065"/>
-        </scene>
-        <!--Visualize Dashboard ViewerVC-->
-        <scene sceneID="Sbd-pu-nra">
-            <objects>
-                <viewController storyboardIdentifier="JMVisualizeDashboardViewerVC" id="W4b-4M-emD" customClass="JMVisualizeDashboardViewerVC" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="5Hh-Tx-wWu">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="mEa-4Q-brv">
-                                <rect key="frame" x="149" y="274" width="20" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            </activityIndicatorView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="r7f-CN-bdJ"/>
-                    <connections>
-                        <outlet property="activityIndicator" destination="mEa-4Q-brv" id="gOI-ed-BhB"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Y48-S4-7kA" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1139" y="2065"/>
+            <point key="canvasLocation" x="-749" y="2071"/>
         </scene>
         <!--Saved Resource Viewer View Controller-->
         <scene sceneID="o6f-Oo-Ck4">
@@ -1101,7 +1051,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="h2Y-VO-bQ5">
-                                                    <rect key="frame" x="240.00000017881393" y="7" width="50" height="30"/>
+                                                    <rect key="frame" x="240" y="7" width="50" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>

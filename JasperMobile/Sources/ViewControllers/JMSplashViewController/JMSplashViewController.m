@@ -43,7 +43,10 @@
 
 - (void)viewDidLayoutSubviews
 {
-    self.splashImageView.image = [UIImage imageNamed:[UIImage splashImageNameForOrientation:self.interfaceOrientation]];
+    NSString *splashImageName = [UIImage splashImageNameForOrientation:self.interfaceOrientation];
+    UIImage *splashImage = [UIImage imageNamed:splashImageName];
+    self.splashImageView.image = splashImage;
+    self.splashImageView.backgroundColor = [UIColor redColor];
 }
 
 @end

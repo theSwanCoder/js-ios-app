@@ -20,18 +20,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+
 //
-//  JMVisualizeDashboardViewerVC.h
+//  JMDashboardViewerConfigurator.h
 //  TIBCO JasperMobile
 //
 
+@protocol JMDashboardLoader;
+@protocol JMDashboardLoaderDelegate;
+
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
- */
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.1
+*/
 
-#import "JMBaseDashboardViewerVC.h"
-#import "JMDashboard.h"
 
-@interface JMVisualizeDashboardViewerVC : JMBaseDashboardViewerVC
+@interface JMDashboardViewerConfigurator : NSObject
+- (instancetype)initWithDashboard:(JMDashboard *)dashboard;
++ (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard;
+
+- (id)webViewWithFrame:(CGRect)frame asSecondary:(BOOL)asSecondary;
+- (id<JMDashboardLoader>)dashboardLoader;
+- (void)updateReportLoaderDelegateWithObject:(id <JMDashboardLoaderDelegate>)delegate;
 @end

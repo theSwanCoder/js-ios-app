@@ -33,5 +33,6 @@
 
 @interface JMVisualizeManager : NSObject
 - (void)loadVisualizeJSWithCompletion:(void (^)(BOOL success, NSError *error))completion;
-- (NSString *)htmlString;
+- (NSString *)htmlStringForReport;
+- (NSString *)htmlStringForDashboard;
 @end

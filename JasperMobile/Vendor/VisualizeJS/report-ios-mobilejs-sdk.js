@@ -116,9 +116,10 @@
         });
       };
 
-      ReportCallback.prototype.onReportExecutionClick = function(reportUri, params) {
+      ReportCallback.prototype.onReportExecution = function(data) {
+        console.log("onReportExecution: " + data);
         this.dispatch(function() {
-          return this._makeCallback("runReport&params=" + params);
+          return this._makeCallback("runReport&data=" + data);
         });
       };
 
@@ -143,6 +144,24 @@
       ReportCallback.prototype.onMultiPageStateObtained = function(isMultipage) {
         return this.dispatch(function() {
           return this._makeCallback("reportDidObtaineMultipageState&isMultiPage=" + isMultipage);
+        });
+      };
+
+      ReportCallback.prototype.onChartTypeListObtained = function(chartTypes) {
+        return this.dispatch(function() {
+          return this._makeCallback("reportDidObtaineChartTypeList&chartTypeList=" + chartTypes);
+        });
+      };
+
+      ReportCallback.prototype.onChartTypeChangedSuccess = function() {
+        return this.dispatch(function() {
+          return this._makeCallback("reportDidChangeChartTypeSuccessfull");
+        });
+      };
+
+      ReportCallback.prototype.onChartTypeChangedFail = function(error) {
+        return this.dispatch(function() {
+          return this._makeCallback("reportDidChangeChartTypeFailed&error=" + error);
         });
       };
 
@@ -294,7 +313,10 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         this._processErrors = bind(this._processErrors, this);
         this._processSuccess = bind(this._processSuccess, this);
         this._processMultipageState = bind(this._processMultipageState, this);
+        this._processCurrentPageChanged = bind(this._processCurrentPageChanged, this);
         this._processReportComplete = bind(this._processReportComplete, this);
+        this._getChartTypeList = bind(this._getChartTypeList, this);
+        this._updateComponent = bind(this._updateComponent, this);
         this._parseServerVersion = bind(this._parseServerVersion, this);
         this._getServerVersion = bind(this._getServerVersion, this);
         this._exportResource = bind(this._exportResource, this);
@@ -409,8 +431,9 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         return this._executeReport(visualize, {});
       };
 
-      ReportController.prototype._executeReport = function(visualize, params) {
+      ReportController.prototype._executeReport = function(v, params) {
         var actualParams, defaultParams;
+        this.v = v;
         js_mobile.log("_executeReport");
         defaultParams = {
           resource: this.uri,
@@ -424,7 +447,8 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
           },
           error: this._processErrors,
           events: {
-            reportCompleted: this._processReportComplete
+            reportCompleted: this._processReportComplete,
+            changePagesState: this._processCurrentPageChanged
           },
           success: (function(_this) {
             return function(parameters) {
@@ -435,7 +459,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
           })(this)
         };
         actualParams = jQuery.extend({}, defaultParams, params);
-        this.report = visualize.report(actualParams);
+        this.report = this.v.report(actualParams);
         return this._adjustScaleForReport(this.report);
       };
 
@@ -459,11 +483,25 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       };
 
       ReportController.prototype._startReportExecution = function(link) {
-        var params, paramsAsString, reportUri;
-        params = link.parameters;
-        reportUri = params._report;
-        paramsAsString = JSON.stringify(params, null, 2);
-        return this.callback.onReportExecutionClick(reportUri, paramsAsString);
+        var data, dataString;
+        data = {
+          resource: link.parameters._report,
+          params: this._collectReportParams(link)
+        };
+        dataString = JSON.stringify(data, null, 4);
+        return this.callback.onReportExecution(dataString);
+      };
+
+      ReportController.prototype._collectReportParams = function(link) {
+        var isValueNotArray, key, params;
+        params = {};
+        for (key in link.parameters) {
+          if (key !== '_report') {
+            isValueNotArray = Object.prototype.toString.call(link.parameters[key]) !== '[object Array]';
+            params[key] = isValueNotArray ? [link.parameters[key]] : link.parameters[key];
+          }
+        }
+        return params;
       };
 
       ReportController.prototype._navigateToAnchor = function(link) {
@@ -487,7 +525,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       };
 
       ReportController.prototype._notifyPageChange = function() {
-        return this.callback.onPageChange(this.report.pages());
+        return this.callback.onPageChange(parseInt(this.report.pages()));
       };
 
       ReportController.prototype._exportReport = function(format) {
@@ -536,9 +574,37 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         return result;
       };
 
+      ReportController.prototype._updateComponent = function(chartType) {
+        var chartID;
+        chartID = this.report.data().components[0].id;
+        return this.report.updateComponent(chartID, {
+          chartType: chartType
+        }).done((function(_this) {
+          return function(component) {
+            _this.callback.onChartTypeChangedSuccess();
+          };
+        })(this)).fail((function(_this) {
+          return function(error) {
+            _this.callback.onChartTypeChangedFail(error);
+          };
+        })(this));
+      };
+
+      ReportController.prototype._getChartTypeList = function() {
+        var chartTypeList;
+        js_mobile.log("_getChartTypeList");
+        chartTypeList = this.v.report.chart.types;
+        return this.callback.onChartTypeListObtained(chartTypeList);
+      };
+
       ReportController.prototype._processReportComplete = function(status, error) {
         js_mobile.log("onReportCompleted");
         return this.callback.onReportCompleted(status, this.report.data().totalPages, error);
+      };
+
+      ReportController.prototype._processCurrentPageChanged = function(page) {
+        js_mobile.log("Current page changed: " + page);
+        return this.callback.onPageChange(page);
       };
 
       ReportController.prototype._processMultipageState = function(isMultipage) {
@@ -575,6 +641,8 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
             return this._navigateToPage(link);
           case "Reference":
             return this._openRemoteLink(link);
+          default:
+            return defaultHandler.call(this);
         }
       };
 
@@ -688,7 +756,8 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 }).call(this);
 
 (function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
   define('js.mobile.report', ['require','js.mobile.session','js.mobile.report.controller','js.mobile.scale.manager','js.mobile.lifecycle','js.mobile.module'],function(require) {
@@ -750,7 +819,16 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         return this._instance._applyReportParams(params);
       };
 
+      MobileReport.updateComponent = function(chartType) {
+        return this._instance._updateComponent(chartType);
+      };
+
+      MobileReport.getChartTypeList = function() {
+        return this._instance._getChartTypeList();
+      };
+
       function MobileReport(args) {
+        this._getChartTypeList = bind(this._getChartTypeList, this);
         this.callback = args.callback;
         this.scaler = ScaleManager.getReportManager();
         this.callback.onScriptLoaded();
@@ -785,6 +863,14 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       MobileReport.prototype._applyReportParams = function(params) {
         return this._controller.applyReportParams(params);
+      };
+
+      MobileReport.prototype._updateComponent = function(chartType) {
+        return this._controller._updateComponent(chartType);
+      };
+
+      MobileReport.prototype._getChartTypeList = function() {
+        return this._controller._getChartTypeList();
       };
 
       return MobileReport;

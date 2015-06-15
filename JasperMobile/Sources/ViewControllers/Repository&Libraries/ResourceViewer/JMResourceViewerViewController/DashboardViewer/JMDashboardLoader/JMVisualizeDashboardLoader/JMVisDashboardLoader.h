@@ -20,23 +20,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+
 //
-//  JMBaseDashboardViewerVC.h
+//  JMVisDashboardLoader.h
 //  TIBCO JasperMobile
 //
 
+
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
- */
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.1
+*/
 
-#import "JMResourceViewerViewController.h"
-#import "JMDashboard.h"
-#import "JMCancelRequestPopup.h"
+#import "JMDashboardLoader.h"
 
-@interface JMBaseDashboardViewerVC : JMResourceViewerViewController
-@property (nonatomic, strong, readonly) JMDashboard *dashboard;
-
-- (void)startLoadDashboard;
-- (void)reloadDashboard;
+@interface JMVisDashboardLoader : NSObject <JMDashboardLoader>
 @end

@@ -71,16 +71,16 @@
 
 - (void)reset
 {
-    self.primaryWebView.delegate = nil;
-    self.primaryWebView = nil;
+    _primaryWebView.delegate = nil;
+    _primaryWebView = nil;
 
     [self resetChildWebView];
 }
 
 - (void)resetChildWebView
 {
-    self.secondaryWebView.delegate = nil;
-    self.secondaryWebView = nil;
+    _secondaryWebView.delegate = nil;
+    _secondaryWebView = nil;
 }
 
 #pragma mark - Private API

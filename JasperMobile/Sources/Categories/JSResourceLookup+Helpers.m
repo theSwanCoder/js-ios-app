@@ -45,15 +45,7 @@
     if ([self isReport]) {
         return @"JMReportViewerVC";
     } else if ([self isDashboard]) {
-        if ([self isNewDashboard]) {
-            if ([JMUtils isServerAmber2] && [JMUtils isSystemVersion8] && [JMUtils isSupportVisualize]) {
-                return @"JMDashboardVC";
-            } else {
-                return @"JMVisualizeDashboardViewerVC";
-            }
-        } else {
-            return @"JMDashboardsViewerViewController";
-        }
+        return @"JMDashboardViewerVC";
     } else if ([self isSavedReport]) {
         return @"JMSavedResourceViewerViewController";
     }

@@ -22,7 +22,7 @@
 
 
 //
-//  JMReportViewerVC.h
+//  JMBaseDashboardLoader.h
 //  TIBCO JasperMobile
 //
 
@@ -31,8 +31,9 @@
 @since 2.1
 */
 
-#import "JMBaseReportViewerViewController.h"
 
-@interface JMReportViewerVC : JMBaseReportViewerViewController
-@property (nonatomic, assign) BOOL isChildReport;
+#import "JMDashboardLoader.h"
+
+@interface JMBaseDashboardLoader : NSObject <JMDashboardLoader>
+
 @end

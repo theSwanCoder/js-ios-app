@@ -73,7 +73,7 @@
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  define('js.mobile.ios.callbacks.WebKitCallback', ['require','js.mobile.callback_dispatcher'],function(require) {
+  define('js.mobile.amber2.ios.dashboard.callback', ['require','js.mobile.callback_dispatcher'],function(require) {
     var CallbackDispatcher, IosCallback;
     CallbackDispatcher = require('js.mobile.callback_dispatcher');
     return IosCallback = (function(superClass) {
@@ -180,9 +180,32 @@
         });
       };
 
+      IosCallback.prototype.onReportExecution = function(data) {
+        return this._makeCallback({
+          "command": "onReportExecution",
+          "parameters": data
+        });
+      };
+
+      IosCallback.prototype.onReferenceClick = function(href) {
+        return this._makeCallback({
+          "command": "onReferenceClick",
+          "parameters": {
+            "href": href
+          }
+        });
+      };
+
+      IosCallback.prototype.onAdHocExecution = function() {
+        return this._makeCallback({
+          "command": "onAdHocExecution",
+          "parameters": {}
+        });
+      };
+
       IosCallback.prototype._makeCallback = function(command) {
         return this.dispatch(function() {
-          return window.webkit.messageHandlers.callback.postMessage(command);
+          return window.location.href = "http://jaspermobile.callback/json&" + JSON.stringify(command);
         });
       };
 
@@ -301,7 +324,10 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       function DashboardController(callback, scaler, params) {
         this.callback = callback;
         this.scaler = scaler;
-        this._clickCallback = bind(this._clickCallback, this);
+        this._adHocHandler = bind(this._adHocHandler, this);
+        this._openRemoteLink = bind(this._openRemoteLink, this);
+        this._startReportExecution = bind(this._startReportExecution, this);
+        this._processLinkClicks = bind(this._processLinkClicks, this);
         this._processErrors = bind(this._processErrors, this);
         this._processSuccess = bind(this._processSuccess, this);
         this._executeDashboard = bind(this._executeDashboard, this);
@@ -329,6 +355,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       DashboardController.prototype.minimizeDashlet = function() {
         var component, dashboardId;
+        this._showDashlets();
         $('.show_chartTypeSelector_wrapper').hide();
         dashboardId = this.v.dashboard.componentIdDomAttribute;
         component = this.maximizedComponent;
@@ -377,7 +404,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
           },
           linkOptions: {
             events: {
-              click: this._clickCallback
+              click: this._processLinkClicks
             }
           },
           error: this._processErrors
@@ -426,11 +453,13 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         js_mobile.log("Apply click events");
         dashboardId = this.v.dashboard.componentIdDomAttribute;
         self = this;
-        return $(this.container).find("[" + dashboardId + "] > .dashlet").parent().on('click', function() {
-          var component, id;
+        return this._getDashlets(dashboardId).on('click', function() {
+          var component, dashlet, id;
           $('.show_chartTypeSelector_wrapper').show();
-          id = $(this).attr(dashboardId);
+          dashlet = $(this);
+          id = dashlet.attr(dashboardId);
           component = self._getComponentById(id);
+          self._hideDashlets(dashboardId, dashlet);
           if (component && !component.maximized) {
             $(self.container).find("[" + dashboardId + "='" + id + "']").addClass('originalDashletInScaledCanvas');
             self.callback.onMaximizeStart(component.name);
@@ -453,28 +482,78 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         })[0];
       };
 
-      DashboardController.prototype._clickCallback = function(event, link) {
-        var data, dataString;
-        if (link.type === "ReportExecution") {
-          data = {
-            resource: link.parameters._report,
-            params: this._collectReportParams(link)
-          };
-          dataString = JSON.stringify(data, null, 4);
-          return this.callback.onReportExecution(dataString);
+      DashboardController.prototype._processLinkClicks = function(event, link, defaultHandler) {
+        var type;
+        type = link.type;
+        js_mobile.log("_processLinkClicks: " + (JSON.stringify(link)));
+        js_mobile.log("type: " + type);
+        switch (type) {
+          case "ReportExecution":
+            return this._startReportExecution(link);
+          case "Reference":
+            return this._openRemoteLink(link);
+          case "LocalAnchor":
+            return defaultHandler.call(this);
+          case "LocalPage":
+            return defaultHandler.call(this);
+          case "AdHocExecution":
+            return this._adHocHandler(link, defaultHandler);
+          default:
+            return defaultHandler.call(this);
         }
       };
 
+      DashboardController.prototype._startReportExecution = function(link) {
+        var data;
+        js_mobile.log("_startReportExecution");
+        js_mobile.log("resource: " + link.parameters._report);
+        data = {
+          resource: link.parameters._report,
+          params: this._collectReportParams(link)
+        };
+        return this.callback.onReportExecution(data);
+      };
+
       DashboardController.prototype._collectReportParams = function(link) {
-        var isValueNotArray, key, params;
+        var isValueNotArray, key, parameters, params;
         params = {};
         for (key in link.parameters) {
           if (key !== '_report') {
-            isValueNotArray = Object.prototype.toString.call(link.parameters[key]) !== '[object Array]';
-            params[key] = isValueNotArray ? [link.parameters[key]] : link.parameters[key];
+            parameters = link.parameters[key];
+            isValueNotArray = Object.prototype.toString.call(parameters) !== '[object Array]';
+            params[key] = isValueNotArray ? [parameters] : parameters;
           }
         }
         return params;
+      };
+
+      DashboardController.prototype._openRemoteLink = function(link) {
+        var href;
+        js_mobile.log("_openRemoteLink");
+        href = link.href;
+        return this.callback.onReferenceClick(href);
+      };
+
+      DashboardController.prototype._adHocHandler = function(link, defaultHandler) {
+        js_mobile.log("_adHocHandler");
+        defaultHandler.call(this);
+        return this.callback.onAdHocExecution();
+      };
+
+      DashboardController.prototype._getDashlets = function(dashboardId) {
+        if (dashboardId != null) {
+          return $(this.container).find("[" + dashboardId + "] > .dashlet").parent();
+        } else {
+          return $(this.container).find(".dashlet").parent();
+        }
+      };
+
+      DashboardController.prototype._hideDashlets = function(dashboardId, dashlet) {
+        return this._getDashlets(dashboardId).not(dashlet).css("opacity", 0);
+      };
+
+      DashboardController.prototype._showDashlets = function() {
+        return this._getDashlets().css("opacity", 1);
       };
 
       return DashboardController;
@@ -708,9 +787,9 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 }).call(this);
 
 (function() {
-  define('js.mobile.amber2.ios.dashboard.client', ['require','js.mobile.ios.callbacks.WebKitCallback','js.mobile.amber2.dashboard'],function(require) {
+  define('js.mobile.amber2.ios.dashboard.client', ['require','js.mobile.amber2.ios.dashboard.callback','js.mobile.amber2.dashboard'],function(require) {
     var IosCallback, IosClient, MobileDashboard;
-    IosCallback = require('js.mobile.ios.callbacks.WebKitCallback');
+    IosCallback = require('js.mobile.amber2.ios.dashboard.callback');
     MobileDashboard = require('js.mobile.amber2.dashboard');
     return IosClient = (function() {
       function IosClient() {}
@@ -754,5 +833,5 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
 }).call(this);
 
-define("ios/amber2/dashboard/debug_main.js", function(){});
+define("ios/dashboard/amber2/debug_main.js", function(){});
 
