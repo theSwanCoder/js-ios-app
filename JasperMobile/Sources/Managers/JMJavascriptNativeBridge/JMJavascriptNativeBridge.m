@@ -93,6 +93,13 @@
         return NO;
     }
 
+    if ([self isExternalRequest:request]) {
+        if ([self.delegate respondsToSelector:@selector(javascriptNativeBridge:didReceiveExternalRequest:)]) {
+            [self.delegate javascriptNativeBridge:self didReceiveExternalRequest:request];
+        }
+        return NO;
+    }
+
     NSString *callback = @"http://jaspermobile.callback/";
     NSString *requestURLString = request.URL.absoluteString;
 
@@ -186,6 +193,26 @@
         isRequestToRunReport = YES;
     }
     return isRequestToRunReport;
+}
+
+- (BOOL)isExternalRequest:(NSURLRequest *)request
+{
+    BOOL isExternalRequest = NO;
+
+    NSString *requestURLString = request.URL.absoluteString;
+    NSString *requestHostURLString = request.URL.host;
+    NSURL *serverURL = [NSURL URLWithString:self.restClient.serverProfile.serverUrl];
+    NSString *serverHostURLString = serverURL.host;
+    NSString *callbackHostURLString = @"jaspermobile.callback";
+
+    BOOL isServerURL = [requestHostURLString isEqualToString:serverHostURLString];
+    BOOL isCallbackURL = [requestHostURLString isEqualToString:callbackHostURLString];
+
+    if (requestURLString.length > 0 && !(isServerURL || isCallbackURL)) {
+        isExternalRequest = YES;
+    }
+
+    return isExternalRequest;
 }
 
 @end

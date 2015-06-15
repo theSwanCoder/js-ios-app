@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 @property (nonatomic, weak) JMDashboard *dashboard;
 @property (nonatomic, strong) JMVisualizeManager *visualizeManager;
 @property (nonatomic, copy) void(^loadCompletion)(BOOL success, NSError *error);
+@property (nonatomic, copy) NSURL *externalURL;
 @end
 
 @implementation JMVisDashboardLoader
@@ -156,21 +157,30 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - JMJavascriptNativeBridgeDelegate
 - (void)javascriptNativeBridge:(id <JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback
 {
-    NSLog(@"callback parameters: %@", callback.parameters);
+    NSLog(@"callback parameters: %@", callback.parameters[@"parameters"]);
     if ([callback.type isEqualToString:@"onScriptLoaded"]) {
         [self handleOnScriptLoaded];
     } else if ([callback.type isEqualToString:@"onMaximizeStart"]) {
-        [self handleDidStartMaximazeDashletWithParameters:callback.parameters];
+        [self handleDidStartMaximazeDashletWithParameters:callback.parameters[@"parameters"]];
     } else if ([callback.type isEqualToString:@"onLoadDone"]) {
         [self handleOnLoadDone];
     } else if ([callback.type isEqualToString:@"onReportExecution"]) {
-        [self handleOnReportExecution:callback.parameters];
+        [self handleOnReportExecution:callback.parameters[@"parameters"]];
+    } else if ([callback.type isEqualToString:@"onAdHocExecution"]) {
+        [self handleOnAdHocExecution:callback.parameters[@"parameters"]];
+    } else if ([callback.type isEqualToString:@"onReferenceClick"]) {
+        [self handleOnReferenceClick:callback.parameters[@"parameters"]];
     }
 }
 
 - (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
 {
     [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
+}
+
+- (void)javascriptNativeBridge:(id <JMJavascriptNativeBridgeProtocol>)bridge didReceiveExternalRequest:(NSURLRequest *)request
+{
+    self.externalURL = request.URL;
 }
 
 #pragma mark - Handle JS callbacks
@@ -200,14 +210,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
 {
-    NSString *title = parameters[@"parameters"][@"title"];
+    NSString *title = parameters[@"title"];
     [self.delegate dashboardLoader:self didStartMaximazeDashletWithTitle:title];
 }
 
 - (void)handleOnReportExecution:(NSDictionary *)parameters
 {
-    NSString *resource = parameters[@"parameters"][@"resource"];
-    NSDictionary *params = parameters[@"parameters"][@"params"];
+    NSString *resource = parameters[@"resource"];
+    NSDictionary *params = parameters[@"params"];
 
     [self.restClient resourceLookupForURI:resource
                              resourceType:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT
@@ -222,6 +232,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
             JMDashboardLoaderErrorType errorType = JMDashboardLoaderErrorTypeUndefined;
             if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
                 errorType = JMDashboardLoaderErrorTypeAuthentification;
+                // TODO: add error handling
             }
         } else {
             NSLog(@"objects: %@", result.objects);
@@ -238,6 +249,27 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         }
     }];
 
+}
+
+- (void)handleOnAdHocExecution:(NSDictionary *)parameters
+{
+    if (self.externalURL) {
+        [self.delegate dashboardLoader:self
+           didReceiveHyperlinkWithType:JMHyperlinkTypeReference
+                        resourceLookup:nil
+                            parameters:@[self.externalURL]];
+    }
+}
+
+- (void)handleOnReferenceClick:(NSDictionary *)parameters
+{
+    NSString *URLString = parameters[@"href"];
+    if (URLString) {
+        [self.delegate dashboardLoader:self
+           didReceiveHyperlinkWithType:JMHyperlinkTypeReference
+                        resourceLookup:nil
+                            parameters:@[[NSURL URLWithString:URLString]]];
+    }
 }
 
 #pragma mark - Helpers

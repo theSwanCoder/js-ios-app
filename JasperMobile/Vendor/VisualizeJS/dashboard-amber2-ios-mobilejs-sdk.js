@@ -181,10 +181,25 @@
       };
 
       IosCallback.prototype.onReportExecution = function(data) {
-        console.log("onReportExecution: " + data);
         return this._makeCallback({
           "command": "onReportExecution",
           "parameters": data
+        });
+      };
+
+      IosCallback.prototype.onReferenceClick = function(href) {
+        return this._makeCallback({
+          "command": "onReferenceClick",
+          "parameters": {
+            "href": href
+          }
+        });
+      };
+
+      IosCallback.prototype.onAdHocExecution = function() {
+        return this._makeCallback({
+          "command": "onAdHocExecution",
+          "parameters": {}
         });
       };
 
@@ -309,6 +324,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       function DashboardController(callback, scaler, params) {
         this.callback = callback;
         this.scaler = scaler;
+        this._adHocHandler = bind(this._adHocHandler, this);
         this._openRemoteLink = bind(this._openRemoteLink, this);
         this._startReportExecution = bind(this._startReportExecution, this);
         this._processLinkClicks = bind(this._processLinkClicks, this);
@@ -480,6 +496,8 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
             return defaultHandler.call(this);
           case "LocalPage":
             return defaultHandler.call(this);
+          case "AdHocExecution":
+            return this._adHocHandler(link, defaultHandler);
           default:
             return defaultHandler.call(this);
         }
@@ -514,6 +532,12 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         js_mobile.log("_openRemoteLink");
         href = link.href;
         return this.callback.onReferenceClick(href);
+      };
+
+      DashboardController.prototype._adHocHandler = function(link, defaultHandler) {
+        js_mobile.log("_adHocHandler");
+        defaultHandler.call(this);
+        return this.callback.onAdHocExecution();
       };
 
       DashboardController.prototype._getDashlets = function(dashboardId) {

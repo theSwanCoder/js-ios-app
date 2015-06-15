@@ -189,6 +189,11 @@
                     [self.navigationController pushViewController:reportViewController animated:YES];
                 }
             }@weakselfend];
+    } else if (hyperlinkType == JMHyperlinkTypeReference) {
+        NSURL *URL = parameters.firstObject;
+        if (URL) {
+            [[UIApplication sharedApplication] openURL:URL];
+        }
     }
 }
 
