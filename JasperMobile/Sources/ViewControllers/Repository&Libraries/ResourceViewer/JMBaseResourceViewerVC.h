@@ -68,6 +68,7 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 - (void) cancelResourceViewingAndExit:(BOOL)exit NS_REQUIRES_SUPER;
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource NS_REQUIRES_SUPER;
+- (void)updateAvailableActions;
 
 // Loaders
 - (void)startShowLoadingIndicators;

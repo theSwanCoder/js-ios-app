@@ -142,6 +142,8 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
             return @"action.title.refresh";
         case JMMenuActionsViewAction_Save:
             return @"action.title.save";
+        case JMMenuActionsViewAction_SaveUnselected:
+            return @"action.title.save";
         case JMMenuActionsViewAction_Delete:
             return @"action.title.delete";
         case JMMenuActionsViewAction_Rename:
@@ -178,6 +180,8 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
             return @"refresh_action";
         case JMMenuActionsViewAction_Save:
             return @"save_action";
+        case JMMenuActionsViewAction_SaveUnselected:
+            return @"save_action_unselected";
         case JMMenuActionsViewAction_Delete:
             return @"delete_action";
         case JMMenuActionsViewAction_Rename:
