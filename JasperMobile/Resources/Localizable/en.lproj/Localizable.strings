@@ -73,7 +73,7 @@
 
 // Labels
 "menuitem.library.label" = "Library";
-"menuitem.recentviews.label" = "Recent Views";
+"menuitem.recentviews.label" = "Recently Viewed";
 "menuitem.saveditems.label" = "Saved Items";
 "menuitem.settings.label" = "Settings";
 "menuitem.repository.label" = "Repository";
