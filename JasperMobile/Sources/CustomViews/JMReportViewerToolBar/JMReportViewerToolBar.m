@@ -79,7 +79,7 @@
     self.previousButton.enabled = !(self.currentPage <= 1);
     self.firstButton.enabled = !(self.currentPage <= 1);
 
-    self.nextButton.enabled = !(self.currentPage >= self.countOfPages);
+    self.nextButton.enabled = !(self.currentPage >= self.countOfPages) && (_countOfPages != NSNotFound);
     self.lastButton.enabled = !(self.currentPage >= self.countOfPages) && (_countOfPages != NSNotFound);
 }
 
