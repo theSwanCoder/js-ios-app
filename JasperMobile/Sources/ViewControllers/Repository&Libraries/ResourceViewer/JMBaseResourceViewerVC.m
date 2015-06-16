@@ -281,6 +281,14 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     return availableAction;
 }
 
+- (void)updateAvailableActions
+{
+    JMMenuActionsView *actionsView = (JMMenuActionsView *) self.popoverView.subviewsArray.firstObject;
+    if (actionsView) {
+        actionsView.availableActions = [self availableActionForResource:self.resourceLookup];
+    }
+}
+
 - (UIBarButtonItem *)backBarButtonItemWithTarget:(id)target action:(SEL)action
 {
     return [self backButtonWithTitle:nil target:target action:action];

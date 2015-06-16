@@ -58,7 +58,7 @@
     [super viewDidLoad];
 
     [self addObservers];
-    self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
+    [self setupMenuActions];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -125,6 +125,8 @@
 - (void)reportLoaderDidChangeCountOfPages:(NSNotification *)notification
 {
     self.toolbar.countOfPages = self.report.countOfPages;
+    [self setupMenuActions];
+    [self updateAvailableActions];
     [self handleReportLoaderDidChangeCountOfPages];
 }
 
@@ -269,6 +271,8 @@
 
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
+        case JMMenuActionsViewAction_SaveUnselected:
+            break;
         default:
             break;
     }
@@ -376,7 +380,22 @@
 - (void)hideEmptyReportMessage
 {
     self.emptyReportMessageLabel.hidden = YES;
-    self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
+    [self setupMenuActions];
+}
+
+- (void)setupMenuActions
+{
+    if ([self isReportReady]) {
+        self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
+    } else {
+        self.menuActionsViewAction = JMMenuActionsViewAction_SaveUnselected;
+    }
+}
+
+- (BOOL)isReportReady
+{
+    BOOL isCountOfPagesExist = self.report.countOfPages != NSNotFound;
+    return isCountOfPagesExist;
 }
 
 @end
