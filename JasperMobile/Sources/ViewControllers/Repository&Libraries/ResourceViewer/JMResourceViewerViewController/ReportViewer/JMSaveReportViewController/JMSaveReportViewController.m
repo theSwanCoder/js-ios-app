@@ -313,6 +313,10 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
             self.errorString = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
             [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.save.name.errmsg.notunique.rewrite" completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
                 if (alertView.cancelButtonIndex != buttonIndex) {
+
+                    self.errorString = nil;
+                    [self.tableView reloadData];
+
                     [self verifyRangePagesWithCompletion:^{
                         [self saveReport];
                     }];
@@ -334,7 +338,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
     if (isHTML) {
         NSInteger fromPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
         NSInteger toPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
-        if ( (toPage - fromPage) > kJMSaveReportMaxRangePages ) {
+        if ( (toPage - fromPage) + 1 > kJMSaveReportMaxRangePages ) {
             NSString *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.tooBigRange", nil), @(kJMSaveReportMaxRangePages)];
             [[UIAlertView localizedAlertWithTitle:@"dialod.title.error"
                                           message:errorMessage
