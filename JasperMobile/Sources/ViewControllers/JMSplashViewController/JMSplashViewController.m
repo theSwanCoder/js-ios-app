@@ -41,12 +41,16 @@
     [super viewDidLoad];
 }
 
-- (void)viewDidLayoutSubviews
+- (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+
     NSString *splashImageName = [UIImage splashImageNameForOrientation:self.interfaceOrientation];
-    UIImage *splashImage = [UIImage imageNamed:splashImageName];
-    self.splashImageView.image = splashImage;
-    self.splashImageView.backgroundColor = [UIColor redColor];
+    if (splashImageName) {
+        UIImage *splashImage = [UIImage imageNamed:splashImageName];
+        self.splashImageView.image = splashImage;
+        self.splashImageView.backgroundColor = [UIColor redColor];
+    }
 }
 
 @end
