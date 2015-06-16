@@ -256,7 +256,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     if (!self.printingItem) {
         if (self.report && self.report.isMultiPageReport) {
             JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
-            [JMCancelRequestPopup presentWithMessage:@"report.viewer.save.saving.status.title" cancelBlock:^{
+            [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title" cancelBlock:^{
                 [reportSaver cancelReport];
             }];
             [reportSaver saveReportWithName:[self tempReportName]

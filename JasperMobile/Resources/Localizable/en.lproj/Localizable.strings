@@ -125,6 +125,7 @@
 "resource.viewer.print.operation.name" = "%@ print operation";
 "resource.viewer.print.button.title" = "Print...";
 "resource.viewer.print.preview.title" = "Preview";
+"resource.viewer.print.prepare.title" = "Prepare...";
 
 // Report viewer
 "report.viewer.error.title" = "Error while loading report.";
