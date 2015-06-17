@@ -34,7 +34,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"Recent Views", nil);
+    self.title = JMCustomLocalizedString(@"menuitem.recentviews.label", nil);
 }
 
 
