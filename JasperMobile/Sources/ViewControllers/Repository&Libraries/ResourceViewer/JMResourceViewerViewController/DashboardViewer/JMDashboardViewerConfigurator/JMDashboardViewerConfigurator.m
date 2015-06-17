@@ -31,6 +31,7 @@
 #import "JMBaseDashboardLoader.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMVisDashboardLoader.h"
+#import "JSResourceLookup+Helpers.h"
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, weak) JMDashboard *dashboard;
@@ -65,7 +66,11 @@
 - (id <JMDashboardLoader>)dashboardLoader {
     if (!_dashboardLoader) {
         if ([JMUtils isServerAmber2]) {
-            _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard];
+            if ([self.dashboard.resourceLookup isNewDashboard]) {
+                _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard];
+            } else {
+                _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard];
+            }
         } else {
             _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard];
         }
