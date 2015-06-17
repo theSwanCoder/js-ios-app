@@ -32,6 +32,7 @@
 #import "JMJavascriptCallback.h"
 #import "JMJavascriptRequest.h"
 #import "JMDashboard.h"
+#import "JSResourceLookup+Helpers.h"
 
 @interface JMBaseDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
@@ -65,16 +66,18 @@
 #pragma mark - Public API
 - (void)loadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
 {
-    self.loadCompletion = completion;
-
     [self.bridge loadRequest:self.dashboard.resourceRequest];
 
-    NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"dashboard-amber-ios-mobilejs-sdk" ofType:@"js"];
-
-    NSError *error;
-    NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
-
-    [self.bridge injectJSInitCode:jsMobile];
+    if ([self.dashboard.resourceLookup isNewDashboard]) {
+        self.loadCompletion = completion;
+        [self injectJSCode];
+    } else {
+        if (completion) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                completion(YES, nil);
+            });
+        }
+    };
 }
 
 - (void)reloadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
@@ -155,6 +158,14 @@
 - (CGFloat)diagonalIphone
 {
     return 4.0;
+}
+
+- (void)injectJSCode
+{
+    NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"dashboard-amber-ios-mobilejs-sdk" ofType:@"js"];
+    NSError *error;
+    NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
+    [self.bridge injectJSInitCode:jsMobile];
 }
 
 @end
