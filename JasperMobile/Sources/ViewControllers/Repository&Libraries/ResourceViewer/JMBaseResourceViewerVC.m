@@ -183,7 +183,8 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 {
     JMMenuActionsView *actionsView = [JMMenuActionsView new];
     actionsView.delegate = self;
-    actionsView.availableActions = [self availableActionForResource:self.resourceLookup];
+    [actionsView setAvailableActions:[self availableActionForResource:self.resourceLookup]
+                     disabledActions:[self disabledActionForResource:self.resourceLookup]];
     CGPoint point = CGPointMake(CGRectGetWidth(self.view.frame), -10);
 
     self.popoverView = [PopoverView showPopoverAtPoint:point
@@ -281,11 +282,17 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     return availableAction;
 }
 
+- (JMMenuActionsViewAction)disabledActionForResource:(JSResourceLookup *)resource
+{
+    JMMenuActionsViewAction disabledAction = JMMenuActionsViewAction_None;
+    return disabledAction;
+}
+
 - (void)updateAvailableActions
 {
-    JMMenuActionsView *actionsView = (JMMenuActionsView *) self.popoverView.subviewsArray.firstObject;
-    if (actionsView) {
-        actionsView.availableActions = [self availableActionForResource:self.resourceLookup];
+    if (self.popoverView) {
+        [self.popoverView dismiss];
+        [self showAvailableActions];
     }
 }
 

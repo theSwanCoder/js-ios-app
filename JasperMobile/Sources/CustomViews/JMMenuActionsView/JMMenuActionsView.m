@@ -24,12 +24,16 @@
 #import "JMMenuActionsView.h"
 #import "UITableViewCell+Additions.h"
 #import "UIImage+Additions.h"
+#import "JMLocalization.h"
+#import "JMFont.h"
+#import "JMMenuAction.h"
 
 CGFloat static kJMMenuActionsViewCellHeight = 40;
 
 @interface JMMenuActionsView () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSMutableArray *dataSource;
+@property (nonatomic, strong) NSDictionary *dataSource;
+@property (nonatomic, strong) NSArray *availableMenuActions;
 
 @end
 
@@ -43,6 +47,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
         self.backgroundColor = [UIColor clearColor];
         self.tableView = [self tableViewWithFrame:self.bounds];
         [self addSubview:_tableView];
+        [self setupDatasource];
     }
     return self;
 }
@@ -62,29 +67,103 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
 - (void)setAvailableActions:(JMMenuActionsViewAction)availableActions
 {
     _availableActions = availableActions;
-    [self refreshDatasource];
-    
+    [self refreshDatasourceForAvailableActions];
     [self updateFrameFitContent];
-
     [self.tableView reloadData];
 }
 
-- (void)refreshDatasource
+- (void)setAvailableActions:(JMMenuActionsViewAction)availableActions disabledActions:(JMMenuActionsViewAction)disabledActions
 {
-    self.dataSource = [NSMutableArray array];
-    int i = JMMenuActionsViewActionFirst();
+    _availableActions = availableActions;
+    _disabledActions = disabledActions;
+    [self resetDataSource];
+    [self refreshDatasourceForAvailableActions];
+    [self refreshDatasourceForDisabledActions];
+    [self updateFrameFitContent];
+    [self.tableView reloadData];
+}
+
+- (void)setupDatasource
+{
+    self.dataSource = @{
+            @(JMMenuActionsViewAction_MakeFavorite) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_MakeFavorite
+                                                                               available:NO
+                                                                                 enabled:YES],
+            @(JMMenuActionsViewAction_MakeUnFavorite) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_MakeUnFavorite
+                                                                                 available:NO
+                                                                                   enabled:YES],
+            @(JMMenuActionsViewAction_Refresh) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Refresh
+                                                                          available:NO
+                                                                            enabled:YES],
+            @(JMMenuActionsViewAction_Filter) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Filter
+                                                                         available:NO
+                                                                           enabled:YES],
+            @(JMMenuActionsViewAction_Edit) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Edit
+                                                                       available:NO
+                                                                         enabled:YES],
+            @(JMMenuActionsViewAction_Sort) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Sort
+                                                                       available:NO
+                                                                         enabled:YES],
+            @(JMMenuActionsViewAction_Save) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Save
+                                                                       available:NO
+                                                                         enabled:YES],
+            @(JMMenuActionsViewAction_Delete) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Delete
+                                                                         available:NO
+                                                                           enabled:YES],
+            @(JMMenuActionsViewAction_Rename) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Rename
+                                                                         available:NO
+                                                                           enabled:YES],
+            @(JMMenuActionsViewAction_SelectAll) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_SelectAll
+                                                                            available:NO
+                                                                              enabled:YES],
+            @(JMMenuActionsViewAction_ClearSelections) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ClearSelections
+                                                                                  available:NO
+                                                                                    enabled:YES],
+            @(JMMenuActionsViewAction_Run) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Run
+                                                                      available:NO
+                                                                        enabled:YES],
+            @(JMMenuActionsViewAction_Print) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Print
+                                                                        available:NO
+                                                                          enabled:YES],
+            @(JMMenuActionsViewAction_Info) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Info
+                                                                       available:NO
+                                                                         enabled:YES],
+    };
+}
+
+- (void)refreshDatasourceForAvailableActions
+{
+    NSMutableArray *availableMenuActions = [NSMutableArray array];
+    NSInteger i = JMMenuActionsViewActionFirst();
     while (i <= self.availableActions) {
         if (self.availableActions & i) {
-            [self.dataSource addObject:@(i)];
+            JMMenuAction *menuAction = self.dataSource[@(i)];
+            menuAction.actionAvailable = YES;
+            [availableMenuActions addObject:menuAction];
+        }
+        i <<= 1;
+    }
+    self.availableMenuActions = [availableMenuActions copy];
+}
+
+- (void)refreshDatasourceForDisabledActions
+{
+    NSInteger i = JMMenuActionsViewActionFirst();
+    while (i <= self.disabledActions) {
+        if (self.disabledActions & i) {
+            JMMenuAction *menuAction = self.dataSource[@(i)];
+            menuAction.actionEnabled = NO;
         }
         i <<= 1;
     }
 }
 
+
 #pragma mark - UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.dataSource count];
+    NSInteger availableActionCount = self.availableMenuActions.count;
+    return availableActionCount;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -95,7 +174,6 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.textLabel.font = [JMFont navigationBarTitleFont];
         cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-        cell.textLabel.textColor = [UIColor whiteColor];
         cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         cell.imageView.backgroundColor = [UIColor clearColor];
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -105,9 +183,16 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
         cell.selectedBackgroundView.layer.cornerRadius = 4.0f;
         cell.selectedBackgroundView.backgroundColor = [UIColor darkGrayColor];
     }
-    JMMenuActionsViewAction currentAction = [[self.dataSource objectAtIndex:indexPath.row] integerValue];
-    cell.textLabel.text = JMCustomLocalizedString([self titleForAction:currentAction], nil);
-    cell.imageView.image = [UIImage imageNamed:[self imageNameForAction:currentAction]];
+    JMMenuAction *currentMenuAction = self.availableMenuActions[indexPath.row];
+    cell.textLabel.text = JMCustomLocalizedString(currentMenuAction.actionTitle, nil);
+    cell.imageView.image = [UIImage imageNamed:currentMenuAction.actionImageName];
+    if (currentMenuAction.actionEnabled) {
+        cell.userInteractionEnabled = YES;
+        cell.textLabel.textColor = [UIColor whiteColor];
+    } else {
+        cell.userInteractionEnabled = NO;
+        cell.textLabel.textColor = [UIColor grayColor];
+    }
     return cell;
 }
 
@@ -125,92 +210,16 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     tableView.allowsSelection = NO;
-    JMMenuActionsViewAction selectedAction = [[self.dataSource objectAtIndex:indexPath.row] integerValue];
-    [self.delegate actionsView:self didSelectAction:selectedAction];
+    JMMenuAction *selectedMenuAction = self.availableMenuActions[indexPath.row];
+    [self.delegate actionsView:self didSelectAction:selectedMenuAction.menuAction];
 }
-
-- (NSString *)titleForAction:(JMMenuActionsViewAction)action
-{
-    switch (action) {
-        case JMMenuActionsViewAction_None:
-            return nil;
-        case JMMenuActionsViewAction_Filter:
-            return @"action.title.filter";
-        case JMMenuActionsViewAction_Edit:
-            return @"action.title.edit";
-        case JMMenuActionsViewAction_Refresh:
-            return @"action.title.refresh";
-        case JMMenuActionsViewAction_Save:
-            return @"action.title.save";
-        case JMMenuActionsViewAction_SaveUnselected:
-            return @"action.title.save";
-        case JMMenuActionsViewAction_Delete:
-            return @"action.title.delete";
-        case JMMenuActionsViewAction_Rename:
-            return @"action.title.rename";
-        case JMMenuActionsViewAction_MakeFavorite:
-            return @"action.title.markasfavorite";
-        case JMMenuActionsViewAction_MakeUnFavorite:
-            return @"action.title.markasunfavorite";
-        case JMMenuActionsViewAction_Info:
-            return @"action.title.info";
-        case JMMenuActionsViewAction_Sort:
-            return @"action.title.sort";
-        case JMMenuActionsViewAction_SelectAll:
-            return @"action.title.selectall";
-        case JMMenuActionsViewAction_ClearSelections:
-            return @"action.title.clearselections";
-        case JMMenuActionsViewAction_Run:
-            return @"action.title.run";
-        case JMMenuActionsViewAction_Print:
-            return @"action.title.print";
-    }
-}
-
-- (NSString *)imageNameForAction:(JMMenuActionsViewAction)action
-{
-    switch (action) {
-        case JMMenuActionsViewAction_None:
-            return nil;
-        case JMMenuActionsViewAction_Filter:
-            return @"filter_action";
-        case JMMenuActionsViewAction_Edit:
-            return @"filter_action";
-        case JMMenuActionsViewAction_Refresh:
-            return @"refresh_action";
-        case JMMenuActionsViewAction_Save:
-            return @"save_action";
-        case JMMenuActionsViewAction_SaveUnselected:
-            return @"save_action_unselected";
-        case JMMenuActionsViewAction_Delete:
-            return @"delete_action";
-        case JMMenuActionsViewAction_Rename:
-            return @"edit_action";
-        case JMMenuActionsViewAction_MakeFavorite:
-            return @"make_favorite_item";
-        case JMMenuActionsViewAction_MakeUnFavorite:
-            return @"favorited_item";
-        case JMMenuActionsViewAction_Info:
-            return @"info_item";
-        case JMMenuActionsViewAction_Sort:
-            return @"sort_action";
-        case JMMenuActionsViewAction_SelectAll:
-            return @"select_all_action";
-        case JMMenuActionsViewAction_ClearSelections:
-            return @"clear_selection_action";
-        case JMMenuActionsViewAction_Run:
-            return @"run_action";
-        case JMMenuActionsViewAction_Print:
-            return @"print_action";
-        }
-}
-
 
 #pragma mark - Public API
 // need this call this method after adding or removing items
 - (void)updateFrameFitContent
 {
-    CGFloat tableViewHeight = kJMMenuActionsViewCellHeight * [self.dataSource count];
+    NSInteger countOfActions = self.availableMenuActions.count;
+    CGFloat tableViewHeight = kJMMenuActionsViewCellHeight * countOfActions;
     CGRect selfRect = self.frame;
     selfRect.size.height = tableViewHeight;
     CGFloat leftPadding = 20;
@@ -227,9 +236,8 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
 - (CGFloat)maxTextWidth
 {
     CGFloat maxTextWidth = .0f;
-    for (NSNumber *actionNumber in self.dataSource) {
-        JMMenuActionsViewAction action = actionNumber.integerValue;
-        NSString *titleAction = JMCustomLocalizedString([self titleForAction:action], nil);
+    for (JMMenuAction *menuAction in self.availableMenuActions) {
+        NSString *titleAction = JMCustomLocalizedString(menuAction.actionTitle, nil);
         NSDictionary *titleTextAttributes = @{NSFontAttributeName : [JMFont navigationBarTitleFont]};
         CGSize titleActionContainerSize = [titleAction sizeWithAttributes:titleTextAttributes];
         if (maxTextWidth < titleActionContainerSize.width) {
@@ -242,14 +250,22 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
 - (CGFloat)maxImageWidth
 {
     CGFloat maxImageWidth = .0f;
-    for (NSNumber *actionNumber in self.dataSource) {
-        JMMenuActionsViewAction action = actionNumber.integerValue;
-        UIImage *iconAction = [UIImage imageNamed:[self imageNameForAction:action]];
+    for (JMMenuAction *menuAction in self.availableMenuActions) {
+        UIImage *iconAction = [UIImage imageNamed:menuAction.actionImageName];
         if (maxImageWidth < iconAction.size.width) {
             maxImageWidth = iconAction.size.width;
         }
     }
     return maxImageWidth;
+}
+
+#pragma mark - Helpers
+- (void)resetDataSource
+{
+    for (JMMenuAction *menuAction in self.dataSource.allValues) {
+        menuAction.actionEnabled = YES;
+        menuAction.actionAvailable = NO;
+    }
 }
 
 @end

@@ -39,6 +39,7 @@
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
 @property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;
+@property (assign, nonatomic) JMMenuActionsViewAction disabledMenuActionsViewAction;
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
@@ -125,7 +126,7 @@
 - (void)reportLoaderDidChangeCountOfPages:(NSNotification *)notification
 {
     self.toolbar.countOfPages = self.report.countOfPages;
-    [self setupMenuActions];
+    [self updateMenuActions];
     [self updateAvailableActions];
     [self handleReportLoaderDidChangeCountOfPages];
 }
@@ -263,10 +264,7 @@
         }
         case JMMenuActionsViewAction_Save:
             // TODO: change save action
-
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
-            break;
-        case JMMenuActionsViewAction_SaveUnselected:
             break;
         default:
             break;
@@ -365,6 +363,12 @@
     return availableAction;
 }
 
+- (JMMenuActionsViewAction)disabledActionForResource:(JSResourceLookup *)resource
+{
+    JMMenuActionsViewAction disabledAction = [super disabledActionForResource:resource] | self.disabledMenuActionsViewAction;
+    return disabledAction;
+}
+
 - (void)showEmptyReportMessage
 {
     self.emptyReportMessageLabel.hidden = NO;
@@ -380,10 +384,17 @@
 
 - (void)setupMenuActions
 {
+    self.menuActionsViewAction = JMMenuActionsViewAction_Save;
+    self.disabledMenuActionsViewAction = JMMenuActionsViewAction_Save;
+}
+
+- (void)updateMenuActions
+{
     if ([self isReportReady]) {
-        self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh | JMMenuActionsViewAction_Print;
+        self.menuActionsViewAction |= JMMenuActionsViewAction_Refresh | JMMenuActionsViewAction_Print;
+        self.disabledMenuActionsViewAction = JMMenuActionsViewAction_None;
     } else {
-        self.menuActionsViewAction = JMMenuActionsViewAction_SaveUnselected;
+        self.disabledMenuActionsViewAction = JMMenuActionsViewAction_Save;
     }
 }
 
