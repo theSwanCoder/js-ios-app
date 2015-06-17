@@ -84,7 +84,7 @@ NSString * const kJMReportLoaderErrorDomain = @"JMReportLoaderErrorDomain";
 NSString * const kJMPrivacyPolicyURI = @"http://www.tibco.com/company/privacy-cma";
 
 // Limit of pages for saving report to HTML format
-NSInteger  const kJMSaveReportMaxRangePages = 1000;
+NSInteger  const kJMSaveReportMaxRangePages = 500;
 
 // Limit of resource for loading from JRS
 NSInteger  const kJMResourceLimit = 100;
