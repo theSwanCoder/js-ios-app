@@ -358,7 +358,7 @@
 #pragma mark - Helpers
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    JMMenuActionsViewAction availableAction = [super availableActionForResource:resource] | self.menuActionsViewAction;
+    JMMenuActionsViewAction availableAction = ([super availableActionForResource:resource] & ~JMMenuActionsViewAction_Print ) | self.menuActionsViewAction;
     if (self.report.isReportWithInputControls) {
         availableAction |= JMMenuActionsViewAction_Edit;
     }
@@ -381,7 +381,7 @@
 - (void)setupMenuActions
 {
     if ([self isReportReady]) {
-        self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
+        self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh | JMMenuActionsViewAction_Print;
     } else {
         self.menuActionsViewAction = JMMenuActionsViewAction_SaveUnselected;
     }
