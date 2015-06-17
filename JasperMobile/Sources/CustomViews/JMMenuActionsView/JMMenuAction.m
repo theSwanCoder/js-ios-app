@@ -94,7 +94,11 @@
         case JMMenuActionsViewAction_Refresh:
             return @"refresh_action";
         case JMMenuActionsViewAction_Save:
-            return @"save_action";
+            if (self.actionEnabled) {
+                return @"save_action";
+            } else {
+                return @"save_action_disabled";
+            }
         case JMMenuActionsViewAction_Delete:
             return @"delete_action";
         case JMMenuActionsViewAction_Rename:
