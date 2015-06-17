@@ -34,9 +34,10 @@
 @implementation JMRepositoryCollectionViewController
 
 #pragma mark - LifeCycle
--(void)viewDidLoad
+-(void)awakeFromNib
 {
-    [super viewDidLoad];
+    [super awakeFromNib];
+
     self.title = JMCustomLocalizedString(@"menuitem.repository.label", nil);
 }
 
