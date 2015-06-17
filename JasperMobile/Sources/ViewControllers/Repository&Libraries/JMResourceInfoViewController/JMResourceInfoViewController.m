@@ -192,7 +192,10 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 {
     BOOL selfIsModalViewController = [self.navigationController.viewControllers count] == 1;
     if (selfIsModalViewController) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonTapped:)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                              target:self
+                                                                                              action:@selector(cancelButtonTapped:)];
+        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
         self.navigationItem.rightBarButtonItem = [self favoriteBarButtonItem];
     } else {
         NSMutableArray *navBarItems = [NSMutableArray array];
