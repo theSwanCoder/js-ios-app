@@ -34,7 +34,6 @@
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, weak) JMDashboard *dashboard;
-@property (nonatomic, weak) id webView;
 @property (nonatomic, strong) id<JMDashboardLoader> dashboardLoader;
 @end
 
