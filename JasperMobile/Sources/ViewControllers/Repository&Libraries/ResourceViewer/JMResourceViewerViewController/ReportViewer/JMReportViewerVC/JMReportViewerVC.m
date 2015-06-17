@@ -31,6 +31,11 @@
 
 @implementation JMReportViewerVC
 
+- (UIWebView *)webView
+{
+    return self.configurator.webView;
+}
+
 #pragma mark - Actions
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {

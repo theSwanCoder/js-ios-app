@@ -37,6 +37,8 @@
 @protocol JMReportLoaderDelegate;
 
 @interface JMReportViewerConfigurator : NSObject
+@property (nonatomic, weak) id webView;
+
 - (instancetype)initWithReport:(JMReport *)report;
 + (instancetype)configuratorWithReport:(JMReport *)report;
 - (id)webViewWithFrame:(CGRect)frame asSecondary:(BOOL)asSecondary;

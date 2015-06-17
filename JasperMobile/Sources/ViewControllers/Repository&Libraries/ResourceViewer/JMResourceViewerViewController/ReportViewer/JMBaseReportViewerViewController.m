@@ -215,11 +215,6 @@
     }
 }
 
-- (UIWebView *)webView
-{
-    return [[self.reportLoader bridge] webView];
-}
-
 - (void)printResource
 {
     JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
