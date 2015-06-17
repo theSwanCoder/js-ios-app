@@ -36,7 +36,6 @@
 @interface JMReportViewerConfigurator()
 @property (nonatomic, weak) JMReport *report;
 @property (nonatomic, strong) id <JMReportLoader>reportLoader;
-@property (nonatomic, weak) id webView;
 @end
 
 @implementation JMReportViewerConfigurator

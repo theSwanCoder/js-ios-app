@@ -54,6 +54,11 @@
     return _dashboard;
 }
 
+- (UIWebView *)webView
+{
+    return self.configurator.webView;
+}
+
 - (id<JMDashboardLoader>)dashboardLoader
 {
     return [self.configurator dashboardLoader];

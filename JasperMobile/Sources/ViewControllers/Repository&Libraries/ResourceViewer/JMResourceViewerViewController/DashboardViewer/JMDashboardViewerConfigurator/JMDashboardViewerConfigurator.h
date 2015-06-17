@@ -36,6 +36,8 @@
 
 
 @interface JMDashboardViewerConfigurator : NSObject
+@property (nonatomic, weak) id webView;
+
 - (instancetype)initWithDashboard:(JMDashboard *)dashboard;
 + (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard;
 

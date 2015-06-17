@@ -216,11 +216,6 @@
     }
 }
 
-- (UIWebView *)webView
-{
-    return [[self.reportLoader bridge] webView];
-}
-
 - (void)printResource
 {
     JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
@@ -361,7 +356,7 @@
 #pragma mark - Helpers
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    JMMenuActionsViewAction availableAction = [super availableActionForResource:resource] | self.menuActionsViewAction;
+    JMMenuActionsViewAction availableAction = ([super availableActionForResource:resource] & ~JMMenuActionsViewAction_Print ) | self.menuActionsViewAction;
     if (self.report.isReportWithInputControls) {
         availableAction |= JMMenuActionsViewAction_Edit;
     }
@@ -396,7 +391,7 @@
 - (void)updateMenuActions
 {
     if ([self isReportReady]) {
-        self.menuActionsViewAction |= JMMenuActionsViewAction_Refresh;
+        self.menuActionsViewAction |= JMMenuActionsViewAction_Refresh | JMMenuActionsViewAction_Print;
         self.disabledMenuActionsViewAction = JMMenuActionsViewAction_None;
     } else {
         self.disabledMenuActionsViewAction = JMMenuActionsViewAction_Save;
