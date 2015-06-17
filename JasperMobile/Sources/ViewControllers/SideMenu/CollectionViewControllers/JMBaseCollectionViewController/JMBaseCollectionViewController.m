@@ -111,8 +111,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     if ([self isMenuShown]) {
         [self closeMenu];
     }
-
-    self.needLayoutUI = YES;
 }
 
 #pragma mark - Custom accessors
@@ -372,10 +370,10 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         [navBarItems addObject:sortItem];
     }
     
-    BOOL shouldConcateItems = ([JMUtils isIphone] && [navBarItems count] > 1) && (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ||
-                                                                                  (!UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation) &&
-                                                                                   UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)));
-    
+    BOOL isValidOrientation = UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation);
+    BOOL isPortraitOrientationStatusBar = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
+    BOOL shouldConcateItems = ([JMUtils isIphone] && [navBarItems count] > 1) && (isValidOrientation && isPortraitOrientationStatusBar);
+
     if (shouldConcateItems) {
         navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
     }
