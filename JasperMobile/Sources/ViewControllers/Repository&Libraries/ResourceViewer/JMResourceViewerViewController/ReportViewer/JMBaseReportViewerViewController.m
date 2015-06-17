@@ -271,7 +271,7 @@
 
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
-        case JMMenuActionsViewAction_SaveUnselected:
+        case JMMenuActionsViewAction_Save_Disabled:
             break;
         default:
             break;
@@ -388,7 +388,7 @@
     if ([self isReportReady]) {
         self.menuActionsViewAction = JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Refresh;
     } else {
-        self.menuActionsViewAction = JMMenuActionsViewAction_SaveUnselected;
+        self.menuActionsViewAction = JMMenuActionsViewAction_Save_Disabled;
     }
 }
 

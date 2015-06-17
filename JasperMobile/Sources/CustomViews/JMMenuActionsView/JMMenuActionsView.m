@@ -24,12 +24,15 @@
 #import "JMMenuActionsView.h"
 #import "UITableViewCell+Additions.h"
 #import "UIImage+Additions.h"
+#import "JMLocalization.h"
+#import "JMFont.h"
+#import "JMMenuAction.h"
 
 CGFloat static kJMMenuActionsViewCellHeight = 40;
 
 @interface JMMenuActionsView () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSMutableArray *dataSource;
+@property (nonatomic, strong) NSArray *dataSource;
 
 @end
 
@@ -43,6 +46,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
         self.backgroundColor = [UIColor clearColor];
         self.tableView = [self tableViewWithFrame:self.bounds];
         [self addSubview:_tableView];
+        [self setupDatasource];
     }
     return self;
 }
@@ -69,17 +73,67 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     [self.tableView reloadData];
 }
 
+- (void)setupDatasource
+{
+    self.dataSource = @[
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_MakeFavorite
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_MakeUnFavorite
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Refresh
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Filter
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Edit
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Sort
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Save
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Delete
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Rename
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_SelectAll
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ClearSelections
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Run
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Print
+                                     available:NO
+                                       enabled:YES],
+            [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Info
+                                     available:NO
+                                       enabled:YES],
+    ];
+}
+
 - (void)refreshDatasource
 {
-    self.dataSource = [NSMutableArray array];
+    //self.dataSource = [NSMutableArray array];
     int i = JMMenuActionsViewActionFirst();
     while (i <= self.availableActions) {
         if (self.availableActions & i) {
-            [self.dataSource addObject:@(i)];
+            //[self.dataSource addObject:@(i)];
         }
         i <<= 1;
     }
 }
+
+
 
 #pragma mark - UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -129,88 +183,12 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     [self.delegate actionsView:self didSelectAction:selectedAction];
 }
 
-- (NSString *)titleForAction:(JMMenuActionsViewAction)action
-{
-    switch (action) {
-        case JMMenuActionsViewAction_None:
-            return nil;
-        case JMMenuActionsViewAction_Filter:
-            return @"action.title.filter";
-        case JMMenuActionsViewAction_Edit:
-            return @"action.title.edit";
-        case JMMenuActionsViewAction_Refresh:
-            return @"action.title.refresh";
-        case JMMenuActionsViewAction_Save:
-            return @"action.title.save";
-        case JMMenuActionsViewAction_SaveUnselected:
-            return @"action.title.save";
-        case JMMenuActionsViewAction_Delete:
-            return @"action.title.delete";
-        case JMMenuActionsViewAction_Rename:
-            return @"action.title.rename";
-        case JMMenuActionsViewAction_MakeFavorite:
-            return @"action.title.markasfavorite";
-        case JMMenuActionsViewAction_MakeUnFavorite:
-            return @"action.title.markasunfavorite";
-        case JMMenuActionsViewAction_Info:
-            return @"action.title.info";
-        case JMMenuActionsViewAction_Sort:
-            return @"action.title.sort";
-        case JMMenuActionsViewAction_SelectAll:
-            return @"action.title.selectall";
-        case JMMenuActionsViewAction_ClearSelections:
-            return @"action.title.clearselections";
-        case JMMenuActionsViewAction_Run:
-            return @"action.title.run";
-        case JMMenuActionsViewAction_Print:
-            return @"action.title.print";
-    }
-}
-
-- (NSString *)imageNameForAction:(JMMenuActionsViewAction)action
-{
-    switch (action) {
-        case JMMenuActionsViewAction_None:
-            return nil;
-        case JMMenuActionsViewAction_Filter:
-            return @"filter_action";
-        case JMMenuActionsViewAction_Edit:
-            return @"filter_action";
-        case JMMenuActionsViewAction_Refresh:
-            return @"refresh_action";
-        case JMMenuActionsViewAction_Save:
-            return @"save_action";
-        case JMMenuActionsViewAction_SaveUnselected:
-            return @"save_action_unselected";
-        case JMMenuActionsViewAction_Delete:
-            return @"delete_action";
-        case JMMenuActionsViewAction_Rename:
-            return @"edit_action";
-        case JMMenuActionsViewAction_MakeFavorite:
-            return @"make_favorite_item";
-        case JMMenuActionsViewAction_MakeUnFavorite:
-            return @"favorited_item";
-        case JMMenuActionsViewAction_Info:
-            return @"info_item";
-        case JMMenuActionsViewAction_Sort:
-            return @"sort_action";
-        case JMMenuActionsViewAction_SelectAll:
-            return @"select_all_action";
-        case JMMenuActionsViewAction_ClearSelections:
-            return @"clear_selection_action";
-        case JMMenuActionsViewAction_Run:
-            return @"run_action";
-        case JMMenuActionsViewAction_Print:
-            return @"print_action";
-        }
-}
-
-
 #pragma mark - Public API
 // need this call this method after adding or removing items
 - (void)updateFrameFitContent
 {
-    CGFloat tableViewHeight = kJMMenuActionsViewCellHeight * [self.dataSource count];
+    NSInteger countOfActions = self.dataSource.count;
+    CGFloat tableViewHeight = kJMMenuActionsViewCellHeight * countOfActions;
     CGRect selfRect = self.frame;
     selfRect.size.height = tableViewHeight;
     CGFloat leftPadding = 20;
