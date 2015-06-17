@@ -288,14 +288,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     return disabledAction;
 }
 
-- (void)updateAvailableActions
-{
-    if (self.popoverView) {
-        [self.popoverView dismiss];
-        [self showAvailableActions];
-    }
-}
-
 - (UIBarButtonItem *)backBarButtonItemWithTarget:(id)target action:(SEL)action
 {
     return [self backButtonWithTitle:nil target:target action:action];

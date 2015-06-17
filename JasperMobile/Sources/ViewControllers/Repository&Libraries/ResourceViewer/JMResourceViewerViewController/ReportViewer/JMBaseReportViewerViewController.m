@@ -127,7 +127,6 @@
 {
     self.toolbar.countOfPages = self.report.countOfPages;
     [self updateMenuActions];
-    [self updateAvailableActions];
     [self handleReportLoaderDidChangeCountOfPages];
 }
 
