@@ -34,6 +34,7 @@ typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
 - (void)cancelReport;
 
 @optional
+- (void)changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage withCompletion:(void (^)(BOOL success, NSError *error))completion;
 - (void)applyReportParametersWithCompletion:(void (^)(BOOL success, NSError *error))completion;
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion;
 - (void)exportReportWithFormat:(NSString *)exportFormat;
