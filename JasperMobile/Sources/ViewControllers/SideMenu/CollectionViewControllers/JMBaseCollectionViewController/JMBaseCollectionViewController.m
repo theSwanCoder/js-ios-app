@@ -376,9 +376,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         [navBarItems addObject:sortItem];
     }
     
-    BOOL isValidOrientation = UIDeviceOrientationIsValidInterfaceOrientation([UIDevice currentDevice].orientation);
     BOOL isPortraitOrientationStatusBar = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
-    BOOL shouldConcateItems = ([JMUtils isIphone] && [navBarItems count] > 1) && (isValidOrientation && isPortraitOrientationStatusBar);
+    BOOL shouldConcateItems = [JMUtils isIphone] && (navBarItems.count > 1) && (isPortraitOrientationStatusBar);
 
     if (shouldConcateItems) {
         navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
