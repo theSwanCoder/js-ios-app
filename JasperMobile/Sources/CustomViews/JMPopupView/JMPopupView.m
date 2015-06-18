@@ -154,9 +154,11 @@ static NSMutableArray* visiblePopupsArray = nil;
     if (currentWindow.windowLevel > UIWindowLevelNormal) {
         currentWindow = [[[UIApplication sharedApplication] windows] lastObject];
     }
+
     UIView *topView = [[currentWindow subviews] lastObject];
-    
-//    UIView* topView = [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject];
+    if (!topView) {
+        topView = [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject];
+    }
 
     self.frame = topView.bounds;
     [topView addSubview:self];
