@@ -379,6 +379,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     self.pages = nil;
     self.title = [self jobName];
     self.printingItem = nil;
+    self.webView.scrollView.zoomScale = 0.1;
     [self.tableView reloadData];
 }
 
