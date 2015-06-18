@@ -190,7 +190,6 @@
 
             if (success) {
                 [self showReportView];
-                [self updateToobarAppearence];
             } else {
                 [self handleError:error];
             }
@@ -295,6 +294,11 @@
 - (void)hideToolbar
 {
     [self.navigationController setToolbarHidden:YES animated:YES];
+}
+
+- (void)showToolbar
+{
+    [self.navigationController setToolbarHidden:NO animated:YES];
 }
 
 - (void)hideReportView
