@@ -31,7 +31,7 @@
 #import "JSResourceLookup+Helpers.h"
 
 NSString * const kJMAttachmentPrefix = @"_";
-
+NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessionConfigurationIdentifier.save.report";
 
 @interface JMReportSaver()
 @property (nonatomic, weak, readwrite) JMReport *report;
@@ -39,6 +39,7 @@ NSString * const kJMAttachmentPrefix = @"_";
 @property (nonatomic, strong) NSString *reportDirectory;
 @property (nonatomic, strong) JSReportExecutionResponse *requestExecution;
 @property (nonatomic, strong) JSExportExecutionResponse *exportExecution;
+@property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
 @end
 
 @implementation JMReportSaver
@@ -121,8 +122,7 @@ NSString * const kJMAttachmentPrefix = @"_";
 - (void)cancelReport
 {
     [self.restClient cancelAllRequests];
-    NSURLSession *session = [NSURLSession sharedSession];
-    [session invalidateAndCancel];
+    [self.downloadTask cancel];
     [[NSFileManager defaultManager] removeItemAtPath:self.reportDirectory error:nil];
 }
 
@@ -210,9 +210,9 @@ NSString * const kJMAttachmentPrefix = @"_";
     [JMUtils showNetworkActivityIndicator];
     NSURL *URL = [NSURL URLWithString:resourceURLString];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-    
+
     NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDownloadTask *downloadTask = [session downloadTaskWithRequest:request
+    self.downloadTask = [session downloadTaskWithRequest:request
                                                             completionHandler:@weakself(^(NSURL *location, NSURLResponse *response, NSError *error)) {
                                                                 [JMUtils hideNetworkActivityIndicator];
                                                                 if (error) {
@@ -222,7 +222,7 @@ NSString * const kJMAttachmentPrefix = @"_";
                                                                     completion(location, response, error);
                                                                 }
                                                             } @weakselfend];
-    [downloadTask resume];
+    [self.downloadTask resume];
 }
 
 - (void)downloadThumbnailForReportWithName:(NSString *)reportName
