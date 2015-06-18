@@ -32,6 +32,7 @@
  */
 extern NSString * const kJMReportIsMutlipageDidChangedNotification;
 extern NSString * const kJMReportCountOfPagesDidChangeNotification;
+extern NSString * const kJMReportCurrentPageDidChangeNotification;
 
 @interface JMReport : NSObject
 // getters

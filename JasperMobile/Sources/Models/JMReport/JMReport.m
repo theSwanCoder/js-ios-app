@@ -30,6 +30,7 @@
 
 NSString * const kJMReportIsMutlipageDidChangedNotification = @"kJMReportIsMutlipageDidChangedNotification";
 NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOfPagesDidChangeNotification";
+NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentPageDidChangeNotification";
 
 @interface JMReport()
 @property (nonatomic, copy, readwrite) NSArray *inputControls;
@@ -69,7 +70,7 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
         [self restoreDefaultState];
         
         _isInputControlsLoaded = NO;
-        _isReportEmpty = NO;
+        _isReportEmpty = YES;
     }
     return self;
 }
@@ -92,6 +93,12 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
 {
     _countOfPages = countOfPages;
     [self postNotificationCountOfPages];
+}
+
+- (void)setCurrentPage:(NSInteger)currentPage
+{
+    _currentPage = currentPage;
+    [self postNotificationCurrentPageChanged];
 }
 
 #pragma mark - Public API
@@ -125,9 +132,9 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
         return;
     }
 
-    self.isReportEmpty = countOfPages == 0;
+    self.isReportEmpty = countOfPages == 0 || countOfPages == NSNotFound;
     self.countOfPages = countOfPages;
-    
+
     if (countOfPages != NSNotFound) {
         self.isMultiPageReport = countOfPages > 1;
     }
@@ -189,6 +196,12 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
                                                         object:self];
 }
 
+- (void)postNotificationCurrentPageChanged
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMReportCurrentPageDidChangeNotification
+                                                        object:self];
+}
+
 #pragma mark - Restore default state
 - (void)restoreDefaultState
 {
@@ -213,6 +226,12 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
                                                                 value:inputControlDescriptor.selectedValues]];
     }
     return [parameters copy];
+}
+
+- (NSString *)description
+{
+    NSString *description = [NSString stringWithFormat:@"\nReport: %@\ncount of pages: %@\nisEmpty: %@", self.resourceLookup.label, @(self.countOfPages), @(self.isReportEmpty)];
+    return description;
 }
 
 @end
