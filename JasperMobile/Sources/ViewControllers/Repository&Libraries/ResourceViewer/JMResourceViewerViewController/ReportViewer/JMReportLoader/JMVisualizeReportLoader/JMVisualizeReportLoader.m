@@ -44,6 +44,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 @property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
 
 @property (nonatomic, copy) void(^reportLoadCompletion)(BOOL success, NSError *error);
+@property (nonatomic, copy) void(^reportChangePageCompletion)(BOOL success, NSError *error);
 @property (nonatomic, copy) NSString *exportFormat;
 @property (nonatomic, strong) JMVisualizeManager *visualizeManager;
 @end
@@ -109,7 +110,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)fetchPageNumber:(NSInteger)pageNumber withCompletion:(void(^)(BOOL success, NSError *error))completionBlock
 {
     self.reportLoadCompletion = completionBlock;
-    [self.report updateCurrentPage:pageNumber];
 
     if (!self.report.isReportAlreadyLoaded) {
         NSString *parametersAsString = [self createParametersAsString];
@@ -123,6 +123,17 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         request.parametersAsString = @(pageNumber).stringValue;
         [self.bridge sendRequest:request];
     }
+}
+
+
+- (void)changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage withCompletion:(void(^)(BOOL success, NSError *error))completion
+{
+    self.reportChangePageCompletion = completion;
+
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileReport.selectPage(%@);";
+    request.parametersAsString = @(toPage).stringValue;
+    [self.bridge sendRequest:request];
 }
 
 - (void) cancelReport
@@ -256,6 +267,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         [self handleRefreshDidEndSuccessful];
     } else if ([callback.type isEqualToString:@"reportDidEndRefreshFailured"]) {
         [self handleRefreshDidEndFailedWithParameters:callback.parameters];
+    } else if ([callback.type isEqualToString:@"reportOnPageChange"]) {
+        [self handleReportOnPageChangeWithParameters:callback.parameters];
     }
 }
 
@@ -325,6 +338,17 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
     [self.report updateCountOfPages:countOfPages];
+
+    if (self.reportChangePageCompletion) {
+        self.reportChangePageCompletion(YES, nil);
+        self.reportChangePageCompletion = nil;
+    }
+}
+
+- (void)handleReportOnPageChangeWithParameters:(NSDictionary *)parameters
+{
+    NSInteger currentPage = ((NSNumber *)parameters[@"page"]).integerValue;
+    [self.report updateCurrentPage:currentPage];
 }
 
 #pragma mark - Multipage

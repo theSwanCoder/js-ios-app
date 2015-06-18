@@ -31,14 +31,14 @@
  @since 1.9
  */
 
-#import <UIKit/UIKit.h>
-
 @class JMReportViewerToolBar;
 @protocol JMReportViewerToolBarDelegate <NSObject>
 
 @optional
-- (void) toolbar:(JMReportViewerToolBar *)toolbar pageDidChanged:(NSInteger)page;
-
+- (void)toolbar:(JMReportViewerToolBar *)toolbar
+ changeFromPage:(NSInteger)fromPage
+         toPage:(NSInteger)toPage
+     completion:(void(^)(BOOL success))completion;
 @end
 
 @interface JMReportViewerToolBar : UIView

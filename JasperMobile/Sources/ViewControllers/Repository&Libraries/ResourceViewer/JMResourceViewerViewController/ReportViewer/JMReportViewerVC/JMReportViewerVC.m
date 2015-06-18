@@ -48,7 +48,8 @@
 
 - (void)handleReportLoaderDidChangeCountOfPages
 {
-    if (self.report.isReportEmpty) {
+    BOOL isReportReady = self.report.countOfPages != NSNotFound;
+    if (isReportReady && self.report.isReportEmpty) {
         [self showEmptyReportMessage];
     }
 }
@@ -87,35 +88,55 @@
 }
 
 #pragma mark - JMReportViewerToolBarDelegate
-- (void)toolbar:(JMReportViewerToolBar *)toolbar pageDidChanged:(NSInteger)page
+- (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage completion:(void (^)(BOOL success))completion
 {
-    // TODO: need support sessions
-    // start show loading indicator
-    [self.reportLoader fetchPageNumber:page withCompletion:@weakself(^(BOOL success, NSError *error)) {
-            if (success) {
-                // succcess action
-            } else {
-                [self handleError:error];
-            }
-            // stop show loading indicator
-        }@weakselfend];
+    if ([self.reportLoader respondsToSelector:@selector(changeFromPage:toPage:withCompletion:)]) {
+        [self.reportLoader changeFromPage:fromPage toPage:toPage withCompletion:@weakself(^(BOOL success, NSError *error)) {
+                if (success) {
+                    if (completion) {
+                        completion(YES);
+                    }
+                } else {
+                    if (completion) {
+                        completion(NO);
+                    }
+                    [self handleError:error];
+                }
+            }@weakselfend];
+    } else {
+        [self.reportLoader fetchPageNumber:toPage withCompletion:@weakself(^(BOOL success, NSError *error)) {
+                if (success) {
+                    if (completion) {
+                        completion(YES);
+                    }
+                } else {
+                    if (completion) {
+                        completion(NO);
+                    }
+                    [self handleError:error];
+                }
+            }@weakselfend];
+    }
 }
 
 #pragma mark - Run report
 - (void)runReportWithPage:(NSInteger)page
 {
+
+    [self hideEmptyReportMessage];
+    [self hideToolbar];
+    [self hideReportView];
+
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
             [self.reportLoader cancelReport];
             [self cancelResourceViewingAndExit:YES];
         }@weakselfend];
 
-    [self hideEmptyReportMessage];
-
     [self.reportLoader runReportWithPage:page completion:@weakself(^(BOOL success, NSError *error)) {
             [self stopShowLoader];
 
             if (success) {
-                // succcess action
+                [self showReportView];
             } else {
                 [self handleError:error];
             }
@@ -124,18 +145,21 @@
 
 - (void)updateReportWithNewParameters
 {
+
+    [self hideEmptyReportMessage];
+    [self hideToolbar];
+    [self hideReportView];
+
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
             [self.reportLoader cancelReport];
             [self cancelResourceViewingAndExit:YES];
         }@weakselfend];
 
-    [self hideEmptyReportMessage];
-
     [self.reportLoader applyReportParametersWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             [self stopShowLoader];
 
             if (success) {
-                // succcess action
+                [self showReportView];
             } else {
                 [self handleError:error];
             }
@@ -153,11 +177,19 @@
 - (void)refreshReport
 {
     [self hideEmptyReportMessage];
-    [self updateToobarAppearence];
+    [self hideToolbar];
+    [self hideReportView];
+
+    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
+            [self.reportLoader cancelReport];
+            [self cancelResourceViewingAndExit:YES];
+        }@weakselfend];
+
     [self.reportLoader refreshReportWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             [self stopShowLoader];
+
             if (success) {
-                // succcess action
+                [self showReportView];
                 [self updateToobarAppearence];
             } else {
                 [self handleError:error];
@@ -257,6 +289,22 @@
     } else {
         [[JMVisualizeWebViewManager sharedInstance] reset];
     }
+}
+
+#pragma mark - Helpers
+- (void)hideToolbar
+{
+    [self.navigationController setToolbarHidden:YES animated:YES];
+}
+
+- (void)hideReportView
+{
+    ((UIView *)self.configurator.webView).hidden = YES;
+}
+
+- (void)showReportView
+{
+    ((UIView *)self.configurator.webView).hidden = NO;
 }
 
 @end

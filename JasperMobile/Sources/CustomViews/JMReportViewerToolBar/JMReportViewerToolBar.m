@@ -79,7 +79,7 @@
     self.previousButton.enabled = !(self.currentPage <= 1);
     self.firstButton.enabled = !(self.currentPage <= 1);
 
-    self.nextButton.enabled = !(self.currentPage >= self.countOfPages) && (_countOfPages != NSNotFound);
+    self.nextButton.enabled = !(self.currentPage >= self.countOfPages);
     self.lastButton.enabled = !(self.currentPage >= self.countOfPages) && (_countOfPages != NSNotFound);
 }
 
@@ -87,26 +87,62 @@
 
 - (IBAction)firstButtonTapped:(id)sender
 {
-    self.currentPage = 1;
-    [self.toolbarDelegate toolbar:self pageDidChanged:self.currentPage];
+    NSInteger currentPage = self.currentPage;
+    NSInteger nextPage = 1;
+    self.previousButton.enabled = NO;
+    self.firstButton.enabled = NO;
+    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:@weakself(^(BOOL success)) {
+            self.previousButton.enabled = YES;
+            self.firstButton.enabled = YES;
+            if (success) {
+                self.currentPage = nextPage;
+            }
+        }@weakselfend];
 }
 
 - (IBAction)lastButtonTapped:(id)sender
 {
-    self.currentPage = self.countOfPages;
-    [self.toolbarDelegate toolbar:self pageDidChanged:self.currentPage];
+    NSInteger currentPage = self.currentPage;
+    NSInteger nextPage = self.countOfPages;
+    self.nextButton.enabled = NO;
+    self.lastButton.enabled = NO;
+    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:@weakself(^(BOOL success)) {
+            self.nextButton.enabled = YES;
+            self.lastButton.enabled = YES;
+            if (success) {
+                self.currentPage = nextPage;
+            }
+        }@weakselfend];
 }
 
 - (IBAction)nextButtonTapped:(id)sender
 {
-    self.currentPage ++;
-    [self.toolbarDelegate toolbar:self pageDidChanged:self.currentPage];
+    NSInteger currentPage = self.currentPage;
+    NSInteger nextPage = currentPage+1;
+    self.nextButton.enabled = NO;
+    self.lastButton.enabled = NO;
+    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:@weakself(^(BOOL success)) {
+        self.nextButton.enabled = YES;
+        self.lastButton.enabled = YES;
+        if (success) {
+            self.currentPage = nextPage;
+        }
+    }@weakselfend];
 }
 
 - (IBAction)previousButtonTapped:(id)sender
 {
-    self.currentPage --;
-    [self.toolbarDelegate toolbar:self pageDidChanged:self.currentPage];
+    NSInteger currentPage = self.currentPage;
+    NSInteger nextPage = currentPage-1;
+    self.previousButton.enabled = NO;
+    self.firstButton.enabled = NO;
+    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:@weakself(^(BOOL success)) {
+            self.previousButton.enabled = YES;
+            self.firstButton.enabled = YES;
+            if (success) {
+                self.currentPage = nextPage;
+            }
+        }@weakselfend];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -152,8 +188,21 @@
 
 - (void)done:(id)sender
 {
-    self.currentPage = [self.pickerView selectedRowInComponent:0] + 1;
-    [self.toolbarDelegate toolbar:self pageDidChanged:self.currentPage];
+    NSInteger currentPage = self.currentPage;
+    NSInteger nextPage = [self.pickerView selectedRowInComponent:0] + 1;
+    self.previousButton.enabled = NO;
+    self.firstButton.enabled = NO;
+    self.nextButton.enabled = NO;
+    self.lastButton.enabled = NO;
+    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:@weakself(^(BOOL success)) {
+            self.previousButton.enabled = YES;
+            self.firstButton.enabled = YES;
+            self.nextButton.enabled = YES;
+            self.lastButton.enabled = YES;
+            if (success) {
+                self.currentPage = nextPage;
+            }
+        }@weakselfend];
 
     [self hidePicker];
 }
