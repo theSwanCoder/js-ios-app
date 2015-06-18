@@ -43,6 +43,7 @@
 @property (nonatomic, copy) void(^exitBlock)(void);
 
 - (void)handleReportLoaderDidChangeCountOfPages;
+- (void)handleReportLoaderDidChangeCurrentPage;
 
 // start point
 - (void)startLoadReportWithPage:(NSInteger)page;

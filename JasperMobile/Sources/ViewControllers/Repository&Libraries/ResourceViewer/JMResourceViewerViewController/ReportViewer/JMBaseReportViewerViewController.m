@@ -116,6 +116,11 @@
                                              selector:@selector(reportLoaderDidChangeCountOfPages:)
                                                  name:kJMReportCountOfPagesDidChangeNotification
                                                object:self.report];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reportLoaderDidChangeCurrentPage:)
+                                                 name:kJMReportCurrentPageDidChangeNotification
+                                               object:self.report];
 }
 
 - (void)multipageNotification
@@ -130,7 +135,18 @@
     [self handleReportLoaderDidChangeCountOfPages];
 }
 
+- (void)reportLoaderDidChangeCurrentPage:(NSNotification *)notification
+{
+    self.toolbar.currentPage = self.report.currentPage;
+    [self handleReportLoaderDidChangeCurrentPage];
+}
+
 - (void)handleReportLoaderDidChangeCountOfPages
+{
+    // override in child
+}
+
+- (void)handleReportLoaderDidChangeCurrentPage
 {
     // override in child
 }
