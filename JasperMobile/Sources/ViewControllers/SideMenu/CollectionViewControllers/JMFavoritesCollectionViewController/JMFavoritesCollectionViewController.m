@@ -31,16 +31,11 @@
 @implementation JMFavoritesCollectionViewController
 
 #pragma mark - LifeCycle
--(void)viewDidLoad
+-(void)awakeFromNib
 {
-    [super viewDidLoad];
-    
+    [super awakeFromNib];
     self.title = JMCustomLocalizedString(@"menuitem.favorites.label", nil);
-    
-    JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-    [baseCollectionView setupWithNoResultText:JMCustomLocalizedString(@"resources.noresults.favorites.msg", nil)];
 }
-
 
 #pragma mark - Overloaded methods
 - (Class)resourceLoaderClass
@@ -53,6 +48,11 @@
     NSString * keyString = @"RepresentationTypeKey";
     keyString = [@"Favorites" stringByAppendingString:keyString];
     return keyString;
+}
+
+- (NSString *)noResultText
+{
+    return JMCustomLocalizedString(@"resources.noresults.favorites.msg", nil);
 }
 
 @end

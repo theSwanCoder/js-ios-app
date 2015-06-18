@@ -66,16 +66,16 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [super viewDidLoad];
     
     JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-    [baseCollectionView setupWithNoResultText:JMCustomLocalizedString(@"resources.noresults.msg", nil)];
+    [baseCollectionView setupWithNoResultText:[self noResultText]];
     baseCollectionView.collectionView.delegate = self;
     baseCollectionView.collectionView.dataSource = self;
-    
+
     [baseCollectionView.refreshControl addTarget:self
                                           action:@selector(refershControlAction:)
                                 forControlEvents:UIControlEventValueChanged];
-    
+
     baseCollectionView.searchBar.delegate = self;
-    
+
     [self addObservers];
     [self setupMenu];
     
@@ -84,10 +84,16 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [self showNavigationItems];
 }
 
+- (NSString *)noResultText
+{
+    NSString *noResultText = JMCustomLocalizedString(@"resources.noresults.msg", nil);
+    return noResultText;
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     self.screenName = NSStringFromClass(self.class);
     [self updateIfNeeded];
     [self addKeyboardObservers];
@@ -630,7 +636,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
     [baseCollectionView hideLoadingView];
-    
     self.needReloadData = YES;
 }
 
