@@ -84,25 +84,20 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [self showNavigationItems];
 }
 
-- (NSString *)noResultText
-{
-    NSString *noResultText = JMCustomLocalizedString(@"resources.noresults.msg", nil);
-    return noResultText;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
     self.screenName = NSStringFromClass(self.class);
-    [self updateIfNeeded];
     [self addKeyboardObservers];
+
+    [self updateIfNeeded];
+    [self.resourceListLoader updateIfNeeded];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self.resourceListLoader updateIfNeeded];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -291,6 +286,11 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     return [self.resourceListLoader resourceAtIndex:indexPath.row];
 }
 
+- (NSString *)noResultText
+{
+    NSString *noResultText = JMCustomLocalizedString(@"resources.noresults.msg", nil);
+    return noResultText;
+}
 
 #pragma mark - Observers
 - (void)addObservers
