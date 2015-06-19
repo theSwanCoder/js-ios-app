@@ -536,8 +536,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       DashboardController.prototype._adHocHandler = function(link, defaultHandler) {
         js_mobile.log("_adHocHandler");
-        defaultHandler.call(this);
-        return this.callback.onAdHocExecution();
+        return defaultHandler.call(this);
       };
 
       DashboardController.prototype._getDashlets = function(dashboardId) {
