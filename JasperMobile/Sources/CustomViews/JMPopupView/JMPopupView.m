@@ -21,6 +21,7 @@
  */
 
 #import "JMPopupView.h"
+#import "JasperMobileAppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 
 static NSMutableArray* visiblePopupsArray = nil;
@@ -150,15 +151,9 @@ static NSMutableArray* visiblePopupsArray = nil;
         return;
     }
 
-    UIWindow *currentWindow = [[UIApplication sharedApplication] keyWindow];
-    if (currentWindow.windowLevel > UIWindowLevelNormal) {
-        currentWindow = [[[UIApplication sharedApplication] windows] lastObject];
-    }
-
+    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    UIWindow *currentWindow = appDelegate.window;
     UIView *topView = [[currentWindow subviews] lastObject];
-    if (!topView) {
-        topView = [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject];
-    }
 
     self.frame = topView.bounds;
     [topView addSubview:self];
