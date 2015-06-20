@@ -87,11 +87,17 @@ static NSString * const kJMProductName = @"JasperMobile";
         NSError *error = nil;
         NSDictionary *options = nil;
         if ([self isMigrationNeeded]) {
-            options = @{NSInferMappingModelAutomaticallyOption: @YES,
-                        NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}};
+            options = @{
+                    NSMigratePersistentStoresAutomaticallyOption: @YES,
+                    NSInferMappingModelAutomaticallyOption: @YES,
+                    NSSQLitePragmasOption: @{@"journal_mode": @"DELETE"}
+            };
         } else {
-            options = @{NSInferMappingModelAutomaticallyOption: @YES,
-                        NSSQLitePragmasOption: @{@"journal_mode": @"WAL"}};
+            options = @{
+                    NSMigratePersistentStoresAutomaticallyOption: @YES,
+                    NSInferMappingModelAutomaticallyOption: @YES,
+                    NSSQLitePragmasOption: @{@"journal_mode": @"WAL"}
+            };
         }
         
         _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
