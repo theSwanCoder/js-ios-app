@@ -73,6 +73,7 @@
 
 // Labels
 "menuitem.library.label" = "ライブラリ";
+"menuitem.recentviews.label" = "最近表示した項目";
 "menuitem.saveditems.label" = "保存されたアイテム";
 "menuitem.settings.label" = "設定";
 "menuitem.repository.label" = "リポジトリ";
@@ -92,6 +93,8 @@
 "resources.loading.msg" = "読み込み中です。\nお待ちください...";
 "resources.noresults.msg" = "結果はありません。";
 "resources.search.placeholder" = "リソースの検索";
+"resources.noresults.saveditems.msg" = "保存されたアイテムはありません。";
+"resources.noresults.favorites.msg" = "お気に入りのアイテムはありません。";
 
 // Filter By
 "resources.filterby.title" = "オブジェクト タイプ";
@@ -99,12 +102,16 @@
 "resources.filterby.type.reportUnit" = "レポート";
 "resources.filterby.type.dashboard" = "ダッシュボード";
 "resources.filterby.type.folder" = "フォルダ";
+"resources.filterby.type.saved.reportUnit" = "保存されたアイテム";
 
 // Sort by
 "resources.sortby.title" = "ソート オプション";
 "resources.sortby.name" = "名前";
 "resources.sortby.creationDate" = "日付";
 "resources.sortby.creator" = "作成者";
+"resources.sortby.modifiedDate" = "変更日";
+"resources.sortby.accessTime" = "アクセス時間";
+"resources.sortby.countViews" = "再生回数のカウント";
 
 // Repository view
 "repository.root.organization" = "組織";
@@ -115,6 +122,10 @@
 
 "resource.viewer.open.link" = "外部ブラウザのリンクを開きますか?";
 "resource.viewer.can't.open.link" = "リンクを開けません。";
+"resource.viewer.print.operation.name" = "%@ プリント実行";
+"resource.viewer.print.button.title" = "印刷...";
+"resource.viewer.print.preview.title" = "プレビュー";
+"resource.viewer.print.prepare.title" = "準備...";
 
 // Report viewer
 "report.viewer.error.title" = "レポートの読み込み中にエラーが発生しました。";
@@ -138,6 +149,7 @@
 "report.viewer.save.name.errmsg.maxlength" = "%i 文字を超えないようにしてください。";
 "report.viewer.save.name.errmsg.characters" = "文字 %@ は使用できません。";
 "report.viewer.save.saving.status.title" = "レポートを保存しています...";
+"report.viewer.save.name.errmsg.tooBigRange" = "%@ページ以上のレポートを、HTML形式で保存できませんでした。PDF形式で保存しますか？";
 
 // Report viewer Options view
 "report.viewer.options.title" = "フィルタ オプション";
@@ -161,6 +173,14 @@
 "resource.uri.title" = "URI";
 "resource.version.title" = "バージョン";
 "resource.creationDate.title" = "作成日";
+"resource.modifiedDate.title" = "変更日";
+"resource.format.title" = "形式";
+
+"resources.type.reportUnit" = "レポート";
+"resources.type.dashboard" = "ダッシュボード";
+"resources.type.dashboard.legacy" = "レガシーダッシュボード";
+"resources.type.folder" = "フォルダ";
+"resources.type.saved.reportUnit" = "コンテンツリソース";
 
 /* Settings view */
 
@@ -190,6 +210,8 @@
 "action.title.sort" = "ソート基準";
 "action.title.selectall" = "すべて選択";
 "action.title.clearselections" = "選択のクリア";
+"action.title.run" = "実行";
+"action.title.print" = "印刷";
 
 /* Error messages */
 

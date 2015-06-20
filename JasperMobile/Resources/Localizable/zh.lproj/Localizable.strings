@@ -73,6 +73,7 @@
 
 // Labels
 "menuitem.library.label" = "库";
+"menuitem.recentviews.label" = "最近浏览";
 "menuitem.saveditems.label" = "已保存项目";
 "menuitem.settings.label" = "设置";
 "menuitem.repository.label" = "资料库";
@@ -92,6 +93,8 @@
 "resources.loading.msg" = "正在加载。\n请稍候...";
 "resources.noresults.msg" = "无结果。";
 "resources.search.placeholder" = "搜索资源";
+"resources.noresults.saveditems.msg" = "没有已保存项目。";
+"resources.noresults.favorites.msg" = "没有收藏项目。";
 
 // Filter By
 "resources.filterby.title" = "对象类型";
@@ -99,12 +102,16 @@
 "resources.filterby.type.reportUnit" = "报表";
 "resources.filterby.type.dashboard" = "仪表板";
 "resources.filterby.type.folder" = "文件夹";
+"resources.filterby.type.saved.reportUnit" = "已保存项目";
 
 // Sort by
 "resources.sortby.title" = "排序选项";
 "resources.sortby.name" = "名称";
 "resources.sortby.creationDate" = "日期";
 "resources.sortby.creator" = "创建者";
+"resources.sortby.modifiedDate" = "修改日期";
+"resources.sortby.accessTime" = "访问时间";
+"resources.sortby.countViews" = "查看次数";
 
 // Repository view
 "repository.root.organization" = "组织";
@@ -115,6 +122,10 @@
 
 "resource.viewer.open.link" = "是否要在外部浏览器中打开链接?";
 "resource.viewer.can't.open.link" = "无法打开链接。";
+"resource.viewer.print.operation.name" = "%@打印操作";
+"resource.viewer.print.button.title" = "打印...";
+"resource.viewer.print.preview.title" = "预览";
+"resource.viewer.print.prepare.title" = "准备...";
 
 // Report viewer
 "report.viewer.error.title" = "加载报表时出错。";
@@ -138,6 +149,7 @@
 "report.viewer.save.name.errmsg.maxlength" = "必须少于 %i 个字符。";
 "report.viewer.save.name.errmsg.characters" = "不允许使用字符 %@。";
 "report.viewer.save.saving.status.title" = "正在保存报表...";
+"report.viewer.save.name.errmsg.tooBigRange" = "无法保存多于%@页的HTML格式报告。您想将其保存为PDF格式吗？";
 
 // Report viewer Options view
 "report.viewer.options.title" = "过滤器选项";
@@ -161,6 +173,14 @@
 "resource.uri.title" = "URI";
 "resource.version.title" = "版本";
 "resource.creationDate.title" = "创建日期";
+"resource.modifiedDate.title" = "修改日期";
+"resource.format.title" = "格式";
+
+"resources.type.reportUnit" = "报告";
+"resources.type.dashboard" = "控制面板";
+"resources.type.dashboard.legacy" = "传统控制面板";
+"resources.type.folder" = "文件夹";
+"resources.type.saved.reportUnit" = "内容资源";
 
 /* Settings view */
 
@@ -190,6 +210,8 @@
 "action.title.sort" = "排序方式";
 "action.title.selectall" = "全选";
 "action.title.clearselections" = "清除选定内容";
+"action.title.run" = "运行";
+"action.title.print" = "打印";
 
 /* Error messages */
 
