@@ -114,6 +114,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
+    [self.bridge reset];
     [self runReportWithPage:1 completion:completion];
 }
 
@@ -286,6 +287,10 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 
 - (void)startLoadReportHTML
 {
+    NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"jaspermobile" ofType:@"js"];
+    NSError *error;
+    NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
+    [self.bridge injectJSInitCode:jsMobile];
     [self.bridge startLoadHTMLString:self.report.HTMLString
                              baseURL:[NSURL URLWithString:self.report.baseURLString]];
 }
