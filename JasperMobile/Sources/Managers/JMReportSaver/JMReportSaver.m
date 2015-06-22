@@ -29,6 +29,7 @@
 #import "JMReportSaver.h"
 #import "JMSavedResources+Helpers.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMReportExecutor.h"
 
 NSString * const kJMAttachmentPrefix = @"_";
 NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessionConfigurationIdentifier.save.report";
@@ -72,44 +73,53 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
         [self fetchOutputResourceURLForReportWithFileExtension:format
                                                          pages:pages
                                                     completion:^(BOOL success, NSError *error) {
+                                                        if (success) {
+                                                            NSLog(@"start download report");
+                                                            [self downloadReportWithName:name
+                                                                           fileExtension:format
+                                                                              completion:@weakself(^(NSError *error)) {
+                                                                                      if (error) {
+                                                                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                                                                              if (completionBlock) {
+                                                                                                  completionBlock(nil, error);
+                                                                                              }
+                                                                                          });
+                                                                                      } else {
+                                                                                          NSLog(@"end download report");
+                                                                                          // move saved report from temp location to origin
 
-                                                        [self downloadReportWithName:name
-                                                                       fileExtension:format
-                                                                          completion:@weakself(^(NSError *error)) {
-                                                                                  if (error) {
-                                                                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                                                                          if (completionBlock) {
-                                                                                              completionBlock(nil, error);
+                                                                                          if ([self isExistSavedReportWithName:name fileExtension:format]) {
+                                                                                              [self removeReportAtPath:self.originalDirectory];
                                                                                           }
-                                                                                      });
-                                                                                  } else {
-                                                                                      // move saved report from temp location to origin
+                                                                                          [self moveResourceFromPath:self.temporaryDirectory
+                                                                                                              toPath:self.originalDirectory];
 
-                                                                                      if ([self isExistSavedReportWithName:name fileExtension:format]) {
-                                                                                          [self removeReportAtPath:self.originalDirectory];
-                                                                                      }
-                                                                                      [self moveResourceFromPath:self.temporaryDirectory
-                                                                                                          toPath:self.originalDirectory];
-
-                                                                                      // save to DB
-                                                                                      if (addToDB) {
-                                                                                          [JMSavedResources addReport:self.report.resourceLookup
-                                                                                                             withName:name
-                                                                                                               format:format];
-                                                                                          // Save thumbnail image
-                                                                                          [self downloadThumbnailForReportWithName:name
-                                                                                                                     fileExtension:format
-                                                                                                                 resourceURLString:[self.restClient generateThumbnailImageUrl:self.report.resourceLookup.uri]];
-                                                                                      }
-
-                                                                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                                                                          if (completionBlock) {
-                                                                                              NSString *reportURI = [JMSavedResources uriForSavedReportWithName:name format:format];
-                                                                                              completionBlock(reportURI, nil);
+                                                                                          // save to DB
+                                                                                          if (addToDB) {
+                                                                                              [JMSavedResources addReport:self.report.resourceLookup
+                                                                                                                 withName:name
+                                                                                                                   format:format];
+                                                                                              // Save thumbnail image
+                                                                                              [self downloadThumbnailForReportWithName:name
+                                                                                                                         fileExtension:format
+                                                                                                                     resourceURLString:[self.restClient generateThumbnailImageUrl:self.report.resourceLookup.uri]];
                                                                                           }
-                                                                                      });
-                                                                                  }
-                                                                              }@weakselfend];
+
+                                                                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                                                                              if (completionBlock) {
+                                                                                                  NSString *reportURI = [JMSavedResources uriForSavedReportWithName:name format:format];
+                                                                                                  completionBlock(reportURI, nil);
+                                                                                              }
+                                                                                          });
+                                                                                      }
+                                                                                  }@weakselfend];
+                                                        } else {
+                                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                                if (completionBlock) {
+                                                                    completionBlock(nil, error);
+                                                                }
+                                                            });
+                                                        }
                                                     }];
     }
 }
@@ -322,31 +332,35 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
                                                    pages:(NSString *)pages
                                               completion:(void(^)(BOOL success, NSError *error))completion
 {
-    [self.restClient runReportExecution:self.report.resourceLookup.uri
-                                  async:NO
-                           outputFormat:format
-                            interactive:NO
-                              freshData:NO
-                       saveDataSnapshot:YES
-                       ignorePagination:NO
-                         transformerKey:nil
-                                  pages:pages
-                      attachmentsPrefix:kJMAttachmentPrefix
-                             parameters:self.report.reportParameters
-                        completionBlock:@weakself(^(JSOperationResult *result)) {
-                                if (result.error) {
-                                    if (completion) {
-                                        completion(NO, result.error);
-                                    }
-                                } else {
-                                    self.requestExecution = result.objects.firstObject;
-                                    self.exportExecution = self.requestExecution.exports.firstObject;
-                                    NSLog(@"fetch is done");
-                                    if (completion) {
-                                        completion(YES, nil);
-                                    }
-                                }
-                            }@weakselfend];
+    JMReportExecutor *executor = [JMReportExecutor executorWithReport:self.report];
+    executor.shouldExecuteAsync = YES;
+
+    executor.interactive = NO;
+    executor.attachmentsPrefix = kJMAttachmentPrefix;
+    executor.format = format;
+    executor.pages = pages;
+
+    [executor executeWithCompletion:^(JSReportExecutionResponse *executionResponse, NSError *executionError) {
+        if (executionResponse) {
+            self.requestExecution = executionResponse;
+            [executor exportWithExecutionResponse:executionResponse completion:^(JSExportExecutionResponse *exportResponse, NSError *exportError) {
+                if (exportResponse) {
+                    self.exportExecution = exportResponse;
+                    if (completion) {
+                        completion(YES, nil);
+                    }
+                } else {
+                    if (completion) {
+                        completion(NO, exportError);
+                    }
+                }
+            }];
+        } else {
+            if (completion) {
+                completion(NO, executionError);
+            }
+        }
+    }];
 }
 
 - (BOOL)isExistSavedReportWithName:(NSString *)name fileExtension:(NSString *)fileExtension
