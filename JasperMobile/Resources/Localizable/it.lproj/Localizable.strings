@@ -73,6 +73,7 @@
 
 // Labels
 "menuitem.library.label" = "Libreria";
+"menuitem.recentviews.label" = "Visualizzato recentemente";
 "menuitem.saveditems.label" = "Elementi salvati";
 "menuitem.settings.label" = "Impostazioni";
 "menuitem.repository.label" = "Archivio";
@@ -92,6 +93,8 @@
 "resources.loading.msg" = "Caricamento in corso.\nAttendere...";
 "resources.noresults.msg" = "Nessun risultato.";
 "resources.search.placeholder" = "Cerca risorse";
+"resources.noresults.saveditems.msg" = "Nessun elemento salvato.";
+"resources.noresults.favorites.msg" = "Nessun elemento salvato tra i Preferiti.";
 
 // Filter By
 "resources.filterby.title" = "Tipo di oggetto";
@@ -99,12 +102,16 @@
 "resources.filterby.type.reportUnit" = "Report";
 "resources.filterby.type.dashboard" = "Dashboard";
 "resources.filterby.type.folder" = "Cartelle";
+"resources.filterby.type.saved.reportUnit" = "Elementi salvati.";
 
 // Sort by
 "resources.sortby.title" = "Opzioni di ordinamento";
 "resources.sortby.name" = "Nome";
 "resources.sortby.creationDate" = "Data";
 "resources.sortby.creator" = "Creatore";
+"resources.sortby.modifiedDate" = "Data modifica";
+"resources.sortby.accessTime" = "Ora di accesso";
+"resources.sortby.countViews" = "Conteggio visualizzazioni";
 
 // Repository view
 "repository.root.organization" = "Organizzazione";
@@ -115,6 +122,10 @@
 
 "resource.viewer.open.link" = "Aprire il collegamento in un browser esterno?";
 "resource.viewer.can't.open.link" = "Impossibile aprire il collegamento.";
+"resource.viewer.print.operation.name" = "%@ operazione di stampa";
+"resource.viewer.print.button.title" = "Stampa in corso...";
+"resource.viewer.print.preview.title" = "Anteprima";
+"resource.viewer.print.prepare.title" = "Preparazione in corso...";
 
 // Report viewer
 "report.viewer.error.title" = "Errore durante il caricamento del report.";
@@ -138,6 +149,7 @@
 "report.viewer.save.name.errmsg.maxlength" = "Non può contenere più di %i caratteri.";
 "report.viewer.save.name.errmsg.characters" = "I caratteri %@ non sono consentiti.";
 "report.viewer.save.saving.status.title" = "Salvataggio del report in corso...";
+"report.viewer.save.name.errmsg.tooBigRange" = "Non è possibile salvare rapporti di più di %@ pagine in formato HTML. Si desidera salvarlo in formato PDF?";
 
 // Report viewer Options view
 "report.viewer.options.title" = "Opzioni filtro";
@@ -161,6 +173,15 @@
 "resource.uri.title" = "URI";
 "resource.version.title" = "Versione";
 "resource.creationDate.title" = "Data creazione";
+"resource.modifiedDate.title" = "Data modifica";
+"resource.format.title" = "Formato";
+
+
+"resources.type.reportUnit" = "Rapporto";
+"resources.type.dashboard" = "Pannello dei comandi";
+"resources.type.dashboard.legacy" = "Pannello dei comandi versione precedente";
+"resources.type.folder" = "Cartella";
+"resources.type.saved.reportUnit" = "Risorse dei contenuti";
 
 /* Settings view */
 
@@ -190,6 +211,8 @@
 "action.title.sort" = "Ordina per";
 "action.title.selectall" = "Seleziona tutto";
 "action.title.clearselections" = "Cancella selezioni";
+"action.title.run" = "Esegui";
+"action.title.print" = "Stampa";
 
 /* Error messages */
 
