@@ -72,7 +72,7 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
     } else {
         [self fetchOutputResourceURLForReportWithFileExtension:format
                                                          pages:pages
-                                                    completion:^(BOOL success, NSError *error) {
+                                                    completion:@weakself(^(BOOL success, NSError *error)) {
                                                         if (success) {
                                                             [self downloadReportWithName:name
                                                                            fileExtension:format
@@ -118,7 +118,7 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
                                                                 }
                                                             });
                                                         }
-                                                    }];
+                                                    }@weakselfend];
     }
 }
 
@@ -338,10 +338,10 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
     executor.format = format;
     executor.pages = pages;
 
-    [executor executeWithCompletion:^(JSReportExecutionResponse *executionResponse, NSError *executionError) {
+    [executor executeWithCompletion:@weakself(^(JSReportExecutionResponse *executionResponse, NSError *executionError)) {
         if (executionResponse) {
             self.requestExecution = executionResponse;
-            [executor exportWithExecutionResponse:executionResponse completion:^(JSExportExecutionResponse *exportResponse, NSError *exportError) {
+            [executor exportWithExecutionResponse:executionResponse completion:@weakself(^(JSExportExecutionResponse *exportResponse, NSError *exportError)) {
                 if (exportResponse) {
                     self.exportExecution = exportResponse;
                     if (completion) {
@@ -352,13 +352,13 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
                         completion(NO, exportError);
                     }
                 }
-            }];
+            }@weakselfend];
         } else {
             if (completion) {
                 completion(NO, executionError);
             }
         }
-    }];
+    }@weakselfend];
 }
 
 - (BOOL)isExistSavedReportWithName:(NSString *)name fileExtension:(NSString *)fileExtension
