@@ -91,11 +91,13 @@
                 if (!resourceLookup.resourceType) {
                     resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_FOLDER;
                 }
-                [self.rootFolders addObject:resourceLookup];
-                self.sections = @{
-                                  @(JMResourcesListSectionTypeFolder) : self.rootFolders,
-                                  @(JMResourcesListSectionTypeReportUnit) : @[],
-                                  };
+                if (self.rootFolders) {
+                    [self.rootFolders addObject:resourceLookup];
+                    self.sections = @{
+                                      @(JMResourcesListSectionTypeFolder) : self.rootFolders,
+                                      @(JMResourcesListSectionTypeReportUnit) : @[],
+                                      };
+                }
             }
 
             
