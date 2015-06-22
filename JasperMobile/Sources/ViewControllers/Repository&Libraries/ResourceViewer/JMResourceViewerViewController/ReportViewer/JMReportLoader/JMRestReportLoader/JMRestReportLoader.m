@@ -32,14 +32,6 @@
 #import "JMBaseReportViewerViewController.h"
 #import "JMJavascriptNativeBridgeProtocol.h"
 
-typedef NS_ENUM(NSInteger, JMReportViewerOutputResourceType) {
-    JMReportViewerOutputResourceType_None = 0,
-    JMReportViewerOutputResourceType_LoadingNow,
-    JMReportViewerOutputResourceType_NotFinal,
-    JMReportViewerOutputResourceType_Final,
-    JMReportViewerOutputResourceType_AlreadyLoaded = JMReportViewerOutputResourceType_NotFinal | JMReportViewerOutputResourceType_Final
-};
-
 static NSInteger const kJMReportViewerStatusCheckingInterval = 1.f;
 static NSString *const kJMRestStatusReady = @"ready";
 static NSString *const kJMRestStatusCanceled = @"canceled";

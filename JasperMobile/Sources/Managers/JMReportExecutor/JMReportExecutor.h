@@ -22,26 +22,29 @@
 
 
 //
-//  JMRestReportLoader.h
+//  JMReportExecutor.h
 //  TIBCO JasperMobile
 //
 
+@class JMReport;
+
 /**
- @author Aleksandr Dakhno odahno@tibco.com
- @author Alexey Gubarev ogubarie@tibco.com
- @since 2.0
- */
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.1
+*/
 
-#import "JMReportLoader.h"
 
-typedef NS_ENUM(NSInteger, JMReportViewerOutputResourceType) {
-    JMReportViewerOutputResourceType_None = 0,
-    JMReportViewerOutputResourceType_LoadingNow,
-    JMReportViewerOutputResourceType_NotFinal,
-    JMReportViewerOutputResourceType_Final,
-    JMReportViewerOutputResourceType_AlreadyLoaded = JMReportViewerOutputResourceType_NotFinal | JMReportViewerOutputResourceType_Final
-};
+@interface JMReportExecutor : NSObject
+@property (nonatomic, assign) BOOL shouldExecuteAsync;
+// TODO: move to separate instance
+@property (nonatomic, copy) NSString *format;
+@property (nonatomic, copy) NSString *pages;
+@property (nonatomic, copy) NSString *attachmentsPrefix;
+@property (nonatomic, assign) BOOL interactive;
 
-@interface JMRestReportLoader : NSObject <JMReportLoader>
+- (instancetype)initWithReport:(JMReport *)report;
++ (instancetype)executorWithReport:(JMReport *)report;
 
+- (void)executeWithCompletion:(void(^)(JSReportExecutionResponse *executionResponse, NSError *error))completion;
+- (void)exportWithExecutionResponse:(JSReportExecutionResponse *)executionResponse completion:(void(^)(JSExportExecutionResponse *exportResponse, NSError *error))completion;
 @end
