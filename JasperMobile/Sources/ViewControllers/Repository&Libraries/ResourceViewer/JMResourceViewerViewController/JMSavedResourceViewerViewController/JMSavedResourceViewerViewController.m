@@ -33,6 +33,20 @@
 @implementation JMSavedResourceViewerViewController
 @synthesize changedReportName;
 
+#pragma mark - Handle Memory Warnings
+- (void)didReceiveMemoryWarning
+{
+    [self.webView stopLoading];
+    [self.webView loadHTMLString:nil baseURL:nil];
+    [[UIAlertView alertWithTitle:JMCustomLocalizedString(@"dialod.title.error", nil)
+                         message:JMCustomLocalizedString(@"report.viewer.error.title", nil) // TODO: replace with the other message
+                      completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                              [self cancelResourceViewingAndExit:YES];
+                          }@weakselfend
+               cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil)
+               otherButtonTitles:nil] show];
+}
+
 - (JMSavedResources *)savedReports
 {
     if (!_savedReports) {
