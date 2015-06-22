@@ -76,7 +76,7 @@
 - (void)reset
 {
     self.isJSInitCodeInjected = NO;
-    [(UIWebView *)self.webView loadRequest:nil];
+    [(UIWebView *) self.webView loadHTMLString:nil baseURL:nil];
 }
 
 #pragma mark - UIWebViewDelegate
