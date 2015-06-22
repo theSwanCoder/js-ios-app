@@ -138,15 +138,9 @@ static NSString *const kJMReportExecutorRestStatusReady = @"ready";
                                                      JSExportExecutionResponse *exportResponse = exports.firstObject;
                                                      JSExecutionStatus *exportStatus = exportResponse.status;
 
-                                                     BOOL isExecutingStatusReady = [executionResponse.status.status isEqualToString:kJMReportExecutorRestStatusReady];
                                                      BOOL isExportStatusReady = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
 
-                                                     if (isExecutingStatusReady) {
-                                                         NSLog(@"execution is ready");
-                                                     }
-
                                                      if (isExportStatusReady) {
-                                                         NSLog(@"export is ready");
                                                          if (self.statusCheckingTimer.valid) {
                                                              [self.statusCheckingTimer invalidate];
                                                          }

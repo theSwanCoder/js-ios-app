@@ -74,7 +74,6 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
                                                          pages:pages
                                                     completion:^(BOOL success, NSError *error) {
                                                         if (success) {
-                                                            NSLog(@"start download report");
                                                             [self downloadReportWithName:name
                                                                            fileExtension:format
                                                                               completion:@weakself(^(NSError *error)) {
@@ -85,7 +84,6 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
                                                                                               }
                                                                                           });
                                                                                       } else {
-                                                                                          NSLog(@"end download report");
                                                                                           // move saved report from temp location to origin
 
                                                                                           if ([self isExistSavedReportWithName:name fileExtension:format]) {
