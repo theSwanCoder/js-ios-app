@@ -48,17 +48,16 @@
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
-    
+    self.dateFormatter.dateFormat = inputControlDescriptor.dateTimeFormatValidationRule.format;
+
     NSString *value = inputControlDescriptor.state.value;
-    if (value && [value length]) {
-        self.dateFormatter.dateFormat = inputControlDescriptor.dateTimeFormatValidationRule.format;
+    if (value.length) {
         NSDate *date = [self.dateFormatter dateFromString:value];
         if (!date) {
             date = [NSDate date];
         }
         self.datePicker.date = date;
         self.textField.text = [JMUtils localizedStringFromDate:self.datePicker.date];
-        self.inputControlDescriptor.state.value = [self.dateFormatter stringFromDate:self.datePicker.date];
     }
 }
 
@@ -80,31 +79,33 @@
     return items;
 }
 
+#pragma mark - UIDatePicker action
 - (void) dateValueDidChanged:(id)sender
 {
-    self.textField.text = [self.dateFormatter stringFromDate:self.datePicker.date];
+    self.textField.text = [JMUtils localizedStringFromDate:self.datePicker.date];
 }
 
 #pragma mark - UITextFieldDelegate
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+- (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    return NO;
+    // override a super realization with an empty realization
 }
 
 #pragma mark - Actions
 
 - (void)doneButtonTapped:(id)sender
 {
-    self.textField.text = [JMUtils localizedStringFromDate:self.datePicker.date];
     self.inputControlDescriptor.state.value = [self.dateFormatter stringFromDate:self.datePicker.date];
+    self.inputControlDescriptor.state.error = nil;
+    [self updateDisplayingOfErrorMessage];
+
     [self.textField resignFirstResponder];
 }
 
 - (void)unset:(id)sender
 {
-    self.textField.text = nil;
-    self.inputControlDescriptor.state.value = self.textField.text;
+    NSDate *date = [self.dateFormatter dateFromString:self.inputControlDescriptor.state.value];
+    self.textField.text = [JMUtils localizedStringFromDate:date];
     [self.textField resignFirstResponder];
 }
 
