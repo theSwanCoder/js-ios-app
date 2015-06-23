@@ -45,6 +45,8 @@
                           }@weakselfend
                cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil)
                otherButtonTitles:nil] show];
+    
+    [super didReceiveMemoryWarning];
 }
 
 - (JMSavedResources *)savedReports
