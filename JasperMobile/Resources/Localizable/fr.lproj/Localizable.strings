@@ -141,6 +141,7 @@
 "report.viewer.save.name" = "Nom du rapport";
 "report.viewer.save.format" = "Format de sortie";
 "report.viewer.save.pages" = "Plage de pages";
+"report.viewer.save.pages.all" = "Tout";
 "report.viewer.save.pages.range.fromPage" = "De la page :";
 "report.viewer.save.pages.range.toPage" = "À la page :";
 "report.viewer.save.saved" = "Le rapport a été enregistré avec succès.";
@@ -215,6 +216,7 @@
 "action.title.print" = "Imprimer";
 
 /* Error messages */
+"error.readingresponse.dialog.msg" = "Serveur introuvable.";
 
 "error.noconnection.dialog.msg" = "Vérifiez vos paramètres réseau (données mobiles ou Wi-Fi) et réessayez.";
 
@@ -260,4 +262,5 @@
 /* Other */
 
 "status.loading" = "Chargement...";
+"status.loading.ic" = "Chargement...";
 "back.button.title" = "Précédent";

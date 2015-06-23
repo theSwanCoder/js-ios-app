@@ -140,6 +140,7 @@
 "report.viewer.save.name" = "Berichtsname";
 "report.viewer.save.format" = "Ausgabeformat";
 "report.viewer.save.pages" = "Seitenbereich";
+"report.viewer.save.pages.all" = "Alle";
 "report.viewer.save.pages.range.fromPage" = "Von Seite:";
 "report.viewer.save.pages.range.toPage" = "Bis Seite:";
 "report.viewer.save.saved" = "Der Bericht wurde erfolgreich gespeichert.";
@@ -214,6 +215,7 @@
 "action.title.print" = "Drucken";
 
 /* Error messages */
+"error.readingresponse.dialog.msg" = "Server nicht gefunden.";
 
 "error.noconnection.dialog.msg" = "Prüfen Sie Ihre Netzwerkeinstellungen (Mobildaten oder WLAN), und versuchen Sie es erneut.";
 
@@ -259,4 +261,5 @@
 /* Other */
 
 "status.loading" = "Laden...";
+"status.loading.ic" = "Laden...";
 "back.button.title" = "Zurück";

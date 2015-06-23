@@ -140,6 +140,7 @@
 "report.viewer.save.name" = "Nombre de informe";
 "report.viewer.save.format" = "Formatos de salida";
 "report.viewer.save.pages" = "Intervalo de páginas";
+"report.viewer.save.pages.all" = "Todo";
 "report.viewer.save.pages.range.fromPage" = "Desde la página:";
 "report.viewer.save.pages.range.toPage" = "Hasta la página:";
 "report.viewer.save.saved" = "El informe se ha guardado correctamente.";
@@ -214,6 +215,7 @@
 "action.title.print" = "Imprimir";
 
 /* Error messages */
+"error.readingresponse.dialog.msg" = "No se encontró el servidor.";
 
 "error.noconnection.dialog.msg" = "Compruebe la configuración de red (datos móviles o Wi-Fi) e inténtelo de nuevo.";
 
@@ -259,4 +261,5 @@
 /* Other */
 
 "status.loading" = "Cargando...";
+"status.loading.ic" = "Cargando...";
 "back.button.title" = "Atrás";

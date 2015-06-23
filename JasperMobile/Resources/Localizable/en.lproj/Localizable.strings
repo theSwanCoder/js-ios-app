@@ -140,7 +140,7 @@
 "report.viewer.save.name" = "Report name";
 "report.viewer.save.format" = "Output format";
 "report.viewer.save.pages" = "Pages";
-"report.viewer.save.pages.all" = "All Pages";
+"report.viewer.save.pages.all" = "All";
 "report.viewer.save.pages.range.fromPage" = "From page:";
 "report.viewer.save.pages.range.toPage" = "To page:";
 "report.viewer.save.saved" = "The report was saved successfully.";
@@ -217,8 +217,8 @@
 
 /* Error messages */
 
-"error.readingresponse.dialog.msg" = "Error reading the server.";
-"error.noconnection.dialog.title" = "No Connection";
+"error.readingresponse.dialog.msg" = "Server not found.";
+"error.noconnection.dialog.title" = "No Network Connection";
 "error.noconnection.dialog.msg" = "Check your network settings (mobile data or wifi) and try again.";
 "error.authenication.dialog.title" = "Invalid credentials supplied.";
 "error.authenication.dialog.msg" = "Could not login to JasperReports Server.";

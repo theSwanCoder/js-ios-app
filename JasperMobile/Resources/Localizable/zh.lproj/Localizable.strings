@@ -140,6 +140,7 @@
 "report.viewer.save.name" = "报表名";
 "report.viewer.save.format" = "输出格式";
 "report.viewer.save.pages" = "页面范围";
+"report.viewer.save.pages.all" = "全部";
 "report.viewer.save.pages.range.fromPage" = "超始页面:";
 "report.viewer.save.pages.range.toPage" = "截止页面:";
 "report.viewer.save.saved" = "已成功保存报表。";
@@ -214,6 +215,7 @@
 "action.title.print" = "打印";
 
 /* Error messages */
+"error.readingresponse.dialog.msg" = "未找到服务器。";
 
 "error.noconnection.dialog.msg" = "检查您的网络设置(移动数据或 WiFi)并重试。";
 
@@ -259,4 +261,5 @@
 /* Other */
 
 "status.loading" = "正在加载...";
+"status.loading.ic" = "正在加载...";
 "back.button.title" = "后退";

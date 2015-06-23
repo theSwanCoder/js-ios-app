@@ -140,6 +140,7 @@
 "report.viewer.save.name" = "Nome do relatório";
 "report.viewer.save.format" = "Formatos de saída";
 "report.viewer.save.pages" = "Intervalo de páginas";
+"report.viewer.save.pages.all" = "Todos";
 "report.viewer.save.pages.range.fromPage" = "Da página:";
 "report.viewer.save.pages.range.toPage" = "Até a página:";
 "report.viewer.save.saved" = "O relatório foi validado com sucesso.";
@@ -214,6 +215,7 @@
 "action.title.print" = "Imprimir";
 
 /* Error messages */
+"error.readingresponse.dialog.msg" = "Servidor não encontrado.";
 
 "error.noconnection.dialog.msg" = "Verifique as configurações da rede (dados móveis ou wifi) e tente novamente.";
 
@@ -259,4 +261,5 @@
 /* Other */
 
 "status.loading" = "Carregando...";
+"status.loading.ic" = "Carregando...";
 "back.button.title" = "Voltar";
