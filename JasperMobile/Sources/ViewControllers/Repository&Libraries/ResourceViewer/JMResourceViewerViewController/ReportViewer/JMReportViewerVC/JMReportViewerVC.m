@@ -216,34 +216,19 @@
 
     } else if (error.code == JMReportLoaderErrorTypeEmtpyReport) {
         [self showEmptyReportMessage];
+    } else if (error.code == JSSessionExpiredErrorCode) {
+        if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+            [self runReportWithPage:self.report.currentPage];
+        } else {
+            [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
+                    [self cancelResourceViewingAndExit:YES];
+                } @weakselfend];
+        }
     } else {
         [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
             [self cancelResourceViewingAndExit:YES];
         }];
     }
-
-
-
-
-
-
-//    if (error.code == JSSessionExpiredErrorCode) {
-//        if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-//            [self runReportWithPage:self.report.currentPage];
-//        } else {
-//            [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-//                    [self cancelResourceViewingAndExit:YES];
-//                } @weakselfend];
-//        }
-//    } else {
-//        if (self.report.requestId) {
-//            [self.reportLoader cancelReport];
-//        }
-//        [JMUtils showAlertViewWithError:error];
-//    }
-
-
-
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate

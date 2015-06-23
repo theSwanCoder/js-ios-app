@@ -379,7 +379,12 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 - (void)handleErrorWithOperationResult:(JSOperationResult *)result forPage:(NSInteger)page
 {
     if (page == self.report.currentPage) {
-        self.loadPageCompletionBlock(NO, result.error);
+        if (result.error.code == JSNetworkErrorCode) {
+            // TODO: need investigate error handling
+            [self.restClient deleteCookies];
+        } else {
+            self.loadPageCompletionBlock(NO, result.error);
+        }
     } else {
         JSErrorDescriptor *error = [result.objects firstObject];
         BOOL isIllegalParameter = [error.errorCode isEqualToString:@"illegal.parameter.value.error"];
