@@ -9,6 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface JMPrintPreviewTableViewCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UIImageView *previewImageView;
-
+@property (weak, nonatomic) IBOutlet UIView *containerForWebView;
 @end

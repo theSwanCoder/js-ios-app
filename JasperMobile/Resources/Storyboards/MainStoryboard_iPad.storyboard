@@ -1773,17 +1773,22 @@
                                             <rect key="frame" x="0.0" y="0.0" width="738" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="pcq-7c-x50">
+                                                <view contentMode="scaleToFill" id="YiS-fW-b05">
+                                                    <rect key="frame" x="0.0" y="0.0" width="738" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
+                                                <view contentMode="scaleToFill" id="SnI-ZA-wEA">
                                                     <rect key="frame" x="0.0" y="0.0" width="738" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                </imageView>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <outlet property="previewImageView" destination="pcq-7c-x50" id="HeF-a7-r6A"/>
+                                            <outlet property="containerForWebView" destination="YiS-fW-b05" id="XZB-dh-F39"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

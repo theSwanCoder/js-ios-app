@@ -238,7 +238,10 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     } else {
         JMPrintPreviewTableViewCell *previewCell = [tableView dequeueReusableCellWithIdentifier:kJMPrintReportPagePreviewIdentifier
                                                                                    forIndexPath:indexPath];
-        previewCell.previewImageView.image = [self imageFromWebView];
+        CGRect containerBounds = previewCell.containerForWebView.bounds;
+        self.webView.frame = containerBounds;
+        [previewCell.containerForWebView addSubview:self.webView];
+
         return previewCell;
     }
 }
@@ -284,8 +287,10 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                                      }
                                  }@weakselfend];
         } else {
-            self.printingItem = [self imageFromWebView];
-            [self printResource];
+            [self imageFromWebViewWithCompletion:^(UIImage *image) {
+                self.printingItem = image;
+                [self printResource];
+            }];
         }
     } else {
         [self printResource];
@@ -383,16 +388,26 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     [self.tableView reloadData];
 }
 
-- (UIImage *)imageFromWebView
+- (void)imageFromWebViewWithCompletion:(void(^)(UIImage *image))completion
 {
-    // Screenshot rendering from webView
-    UIGraphicsBeginImageContextWithOptions(self.webView.bounds.size, self.webView.opaque, 0.0);
-    [self.webView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
-    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return viewImage;
+    [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title" cancelBlock:^{
+
+    }];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        // Screenshot rendering from webView
+        UIGraphicsBeginImageContextWithOptions(self.webView.bounds.size, self.webView.opaque, 0.0);
+        [self.webView.layer renderInContext:UIGraphicsGetCurrentContext()];
+
+        UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [JMCancelRequestPopup dismiss];
+            if (completion) {
+                completion(viewImage);
+            }
+        });
+    });
 }
 
 - (NSString *)tempReportName
