@@ -157,15 +157,7 @@
 - (NSArray *)menuItems
 {
     if (!_menuItems) {
-        _menuItems = @[
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeLibrary],
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeRepository],
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeRecentViews],
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeSettings],
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]
-                       ];
+        _menuItems = [self createMenuItems];
     }
     return _menuItems;
 }
@@ -178,6 +170,26 @@
         }
     }
     return nil;
+}
+
+#pragma mark - Helpers
+- (NSArray *)createMenuItems
+{
+    NSMutableArray *menuItems = [@[
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeLibrary],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeRepository],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeSettings],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]
+    ] mutableCopy];
+
+    if ([JMUtils isServerProEdition]) {
+        NSUInteger indexOfRepository = [menuItems indexOfObject:[JMMenuItem menuItemWithResourceType:JMResourceTypeRepository]];
+        [menuItems insertObject:[JMMenuItem menuItemWithResourceType:JMResourceTypeRecentViews] atIndex:indexOfRepository + 1];
+    }
+
+    return [menuItems copy];
 }
 
 @end
