@@ -34,6 +34,9 @@
 #import <MessageUI/MessageUI.h>
 #import "ALToastView.h"
 
+static NSString const *kFeedbackPrimaryEmail = @"js-dev-mobile@tibco.com";
+static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
+
 @interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -140,7 +143,7 @@
         // Email Content
         NSString *messageBody = [NSString stringWithFormat:@"Send from build version: %@", [JMUtils buildVersion]];
         // To address
-        NSArray *toRecipents = @[@"js.testdevice@gmail.com"];
+        NSArray *toRecipents = @[kFeedbackPrimaryEmail, kFeedbackSecondaryEmail];
         
         MFMailComposeViewController *mc = [MFMailComposeViewController new];
         mc.mailComposeDelegate = self;
