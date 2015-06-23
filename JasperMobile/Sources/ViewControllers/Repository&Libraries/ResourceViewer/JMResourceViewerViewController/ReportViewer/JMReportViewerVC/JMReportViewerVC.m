@@ -31,6 +31,16 @@
 
 @implementation JMReportViewerVC
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    UIWebView *webView = [self webView];
+    webView.frame = self.view.bounds;
+    webView.scrollView.zoomScale = 0.1;
+    [self.view addSubview:webView];
+}
+
 - (UIWebView *)webView
 {
     return self.configurator.webView;
@@ -73,11 +83,7 @@
 - (void)setupSubviews
 {
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
-
-    CGRect rootViewBounds = self.navigationController.view.bounds;
-    id webView = [self.configurator webViewWithFrame:rootViewBounds asSecondary:self.isChildReport];
-    [self.view insertSubview:webView belowSubview:self.activityIndicator];
-
+    [self.configurator webViewWithFrame:CGRectZero asSecondary:self.isChildReport];
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
