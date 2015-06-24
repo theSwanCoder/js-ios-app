@@ -37,7 +37,6 @@
 
     UIWebView *webView = [self webView];
     webView.frame = self.view.bounds;
-    webView.scrollView.zoomScale = 0.1;
     [self.view addSubview:webView];
 }
 
