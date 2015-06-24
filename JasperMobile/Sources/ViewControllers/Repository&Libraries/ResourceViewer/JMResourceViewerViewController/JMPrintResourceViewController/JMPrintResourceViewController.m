@@ -76,8 +76,6 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reportLoaderDidChangeCountOfPages:) name:kJMReportCountOfPagesDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupSections) name:kJMReportIsMutlipageDidChangedNotification object:nil];
-
-    [self updatePrintJob];
 }
 
 - (void)dealloc
@@ -384,15 +382,12 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     self.pages = nil;
     self.title = [self jobName];
     self.printingItem = nil;
-    self.webView.scrollView.zoomScale = 0.1;
     [self.tableView reloadData];
 }
 
 - (void)imageFromWebViewWithCompletion:(void(^)(UIImage *image))completion
 {
-    [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title" cancelBlock:^{
-
-    }];
+    [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title"];
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         // Screenshot rendering from webView
         UIGraphicsBeginImageContextWithOptions(self.webView.bounds.size, self.webView.opaque, 0.0);
