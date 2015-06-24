@@ -215,7 +215,7 @@
 "action.title.print" = "Imprimir";
 
 /* Error messages */
-"error.readingresponse.dialog.msg" = "No se encontró el servidor.";
+"error.readingresponse.dialog.msg" = "Error al cargar los datos.";
 
 "error.noconnection.dialog.title" = "La red no está disponible";
 "error.noconnection.dialog.msg" = "Compruebe la configuración de red (datos móviles o Wi-Fi) e inténtelo de nuevo.";

@@ -217,7 +217,7 @@
 
 /* Error messages */
 
-"error.readingresponse.dialog.msg" = "Server not found.";
+"error.readingresponse.dialog.msg" = "Failed to load data!";
 "error.noconnection.dialog.title" = "Network is not available";
 "error.noconnection.dialog.msg" = "Check your network settings (mobile data or wifi) and try again.";
 "error.authenication.dialog.title" = "Invalid credentials supplied.";
