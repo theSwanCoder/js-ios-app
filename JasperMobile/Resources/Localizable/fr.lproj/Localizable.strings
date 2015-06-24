@@ -216,8 +216,9 @@
 "action.title.print" = "Imprimer";
 
 /* Error messages */
-"error.readingresponse.dialog.msg" = "Serveur introuvable.";
+"error.readingresponse.dialog.msg" = "Echec du chargement des données !";
 
+"error.noconnection.dialog.title" = "Le réseau n'est pas disponible";
 "error.noconnection.dialog.msg" = "Vérifiez vos paramètres réseau (données mobiles ou Wi-Fi) et réessayez.";
 
 "error.authenication.dialog.title" = "Données d’identification non valides";

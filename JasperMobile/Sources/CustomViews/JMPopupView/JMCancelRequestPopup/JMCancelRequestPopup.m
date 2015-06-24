@@ -71,6 +71,25 @@ static NSInteger _cancelRequestPopupCounter = 0;
     popup.cancelBlock = cancelBlock;
 }
 
++ (void)presentWithMessage:(NSString *)message
+{
+    JMCancelRequestPopup *popup;
+
+    if (_cancelRequestPopupCounter++ == 0) { // there is no popup
+        popup = [[JMCancelRequestPopup alloc] initWithDelegate:nil type:JMPopupViewType_ContentViewOnly];
+        UIView *nibView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:popup options:nil] lastObject];
+        popup->_backGroundView.layer.cornerRadius = 5.f;
+        popup->_backGroundView.layer.masksToBounds = YES;
+        popup.contentView = nibView;
+        [popup show];
+    } else { // there is popup
+        popup = (JMCancelRequestPopup *)[self displayedPopupViewForClass:[self class]];
+    }
+    popup.progressLabel.text = JMCustomLocalizedString(message, nil);
+    popup.cancelButton.hidden = YES;
+    popup.cancelBlock = nil;
+}
+
 - (void)dismiss:(BOOL)animated
 {
     _cancelRequestPopupCounter --;

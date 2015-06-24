@@ -35,9 +35,7 @@
 #import "JMReport.h"
 
 @interface JMPrintResourceViewController : UIViewController
-
+@property (nonatomic, copy) void(^printCompletion)(void);
 - (void) setResourceLookup:(JSResourceLookup *)resourceLookup withWebView:(UIWebView *)webView;
-
 - (void) setReport:(JMReport *)report withWebView:(UIWebView *)webView;
-
 @end

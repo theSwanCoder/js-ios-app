@@ -73,11 +73,8 @@
 - (void)setupSubviews
 {
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
-
-    CGRect rootViewBounds = self.navigationController.view.bounds;
-    id webView = [self.configurator webViewWithFrame:rootViewBounds asSecondary:self.isChildReport];
-    [self.view insertSubview:webView belowSubview:self.activityIndicator];
-
+    UIWebView *webView = [self.configurator webViewWithFrame:self.view.bounds asSecondary:self.isChildReport];
+    [self.view addSubview:webView];
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 

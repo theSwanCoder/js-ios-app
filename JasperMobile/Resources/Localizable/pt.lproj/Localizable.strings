@@ -215,8 +215,9 @@
 "action.title.print" = "Imprimir";
 
 /* Error messages */
-"error.readingresponse.dialog.msg" = "Servidor não encontrado.";
+"error.readingresponse.dialog.msg" = "Falha ao carregar dados!";
 
+"error.noconnection.dialog.title" = "Rede não está disponível";
 "error.noconnection.dialog.msg" = "Verifique as configurações da rede (dados móveis ou wifi) e tente novamente.";
 
 "error.authenication.dialog.title" = "Credenciais inválidas";

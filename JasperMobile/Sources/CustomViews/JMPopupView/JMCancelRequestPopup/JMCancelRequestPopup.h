@@ -37,7 +37,7 @@ typedef void(^JMCancelRequestBlock)(void);
 @interface JMCancelRequestPopup : JMPopupView
 
 + (void) presentWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock;
-
++ (void)presentWithMessage:(NSString *)message;
 + (void) dismiss;
 
 @end
