@@ -76,6 +76,8 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reportLoaderDidChangeCountOfPages:) name:kJMReportCountOfPagesDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupSections) name:kJMReportIsMutlipageDidChangedNotification object:nil];
+
+    [self setupNavigationItems];
 }
 
 - (void)dealloc
@@ -107,6 +109,21 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
         NSString *applicationName = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"];
         return [NSString stringWithFormat:JMCustomLocalizedString(@"resource.viewer.print.operation.name", nil), applicationName];
     }
+}
+
+#pragma mark - Setups
+- (void)setupNavigationItems
+{
+    [self setupLeftBarButtonItems];
+}
+
+- (void)setupLeftBarButtonItems
+{
+    UIBarButtonItem *backItem = [self backButtonWithTitle:nil
+                                                   target:self
+                                                   action:@selector(backButtonTapped:)];
+
+    self.navigationItem.leftBarButtonItem = backItem;
 }
 
 #pragma mark - Public API
@@ -318,6 +335,9 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                     [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
                 }
             }
+            if (self.printCompletion) {
+                self.printCompletion();
+            }
             [self.navigationController popViewControllerAnimated:YES];
         }
     }@weakselfend;
@@ -350,6 +370,14 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 }
 
 #pragma mark - Actions
+- (void)backButtonTapped:(id)sender
+{
+    if (self.printCompletion) {
+        self.printCompletion();
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (IBAction)printButtonTapped:(id)sender
 {
     [self prepareForPrint];
@@ -409,6 +437,45 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 {
     return [[NSUUID UUID] UUIDString];
     return [[NSProcessInfo processInfo] globallyUniqueString];
+}
+
+- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
+                                  target:(id)target
+                                  action:(SEL)action
+{
+    NSString *backItemTitle = title;
+    if (!backItemTitle) {
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        UIViewController *previousViewController = [viewControllers objectAtIndex:[viewControllers indexOfObject:self] - 1];
+        backItemTitle = previousViewController.title;
+    }
+
+    UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
+    UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:[self croppedBackButtonTitle:backItemTitle]
+                                                                 style:UIBarButtonItemStyleBordered
+                                                                target:target
+                                                                action:action];
+    [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    return backItem;
+}
+
+- (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle
+{
+    // detect backButton text width to truncate with '...'
+    NSDictionary *textAttributes = @{NSFontAttributeName : [JMFont navigationBarTitleFont]};
+    CGSize titleTextSize = [self.title sizeWithAttributes:textAttributes];
+    CGFloat titleTextWidth = ceil(titleTextSize.width);
+    CGSize backItemTextSize = [backButtonTitle sizeWithAttributes:textAttributes];
+    CGFloat backItemTextWidth = ceil(backItemTextSize.width);
+    CGFloat backItemOffset = 12;
+
+    CGFloat viewWidth = CGRectGetWidth(self.view.bounds);
+
+    if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMCustomLocalizedString(@"back.button.title", nil)]) {
+        return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back.button.title", nil)];
+    }
+    return backButtonTitle;
 }
 
 @end
