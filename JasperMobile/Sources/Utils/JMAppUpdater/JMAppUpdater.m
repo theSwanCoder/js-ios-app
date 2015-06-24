@@ -78,6 +78,8 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
     if (!updateDidSuccess) {
         [self showErrors];
+    } else {
+        [self removeOldMobileDemo];
     }
 }
 
@@ -159,6 +161,23 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
                                  delegate:JMAppUpdater.class
                         cancelButtonTitle:@"dialog.button.cancel"
                         otherButtonTitles:@"dialog.button.retry", @"dialog.button.applyUpdate", nil] show];
+}
+
+#pragma mark - Helpers
++ (void)removeOldMobileDemo
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+    NSMutableArray *predicates = [NSMutableArray array];
+    NSString *mobileDemoServerURLString = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
+    [predicates addObject:[NSPredicate predicateWithFormat:@"serverUrl == %@", mobileDemoServerURLString]];
+    fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+
+    NSArray *serverProfiles = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    if (serverProfiles.count == 1) {
+        JMServerProfile *serverProfile = serverProfiles.firstObject;
+        [[JMCoreDataManager sharedInstance].managedObjectContext deleteObject:serverProfile];
+        [[JMCoreDataManager sharedInstance] save:nil];
+    }
 }
 
 @end
