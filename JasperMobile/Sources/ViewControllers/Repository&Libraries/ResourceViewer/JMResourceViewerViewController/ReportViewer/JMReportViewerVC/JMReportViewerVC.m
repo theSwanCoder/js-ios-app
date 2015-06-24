@@ -31,15 +31,6 @@
 
 @implementation JMReportViewerVC
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    UIWebView *webView = [self webView];
-    webView.frame = self.view.bounds;
-    [self.view addSubview:webView];
-}
-
 - (UIWebView *)webView
 {
     return self.configurator.webView;
@@ -82,7 +73,8 @@
 - (void)setupSubviews
 {
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
-    [self.configurator webViewWithFrame:CGRectZero asSecondary:self.isChildReport];
+    UIWebView *webView = [self.configurator webViewWithFrame:self.view.bounds asSecondary:self.isChildReport];
+    [self.view addSubview:webView];
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
