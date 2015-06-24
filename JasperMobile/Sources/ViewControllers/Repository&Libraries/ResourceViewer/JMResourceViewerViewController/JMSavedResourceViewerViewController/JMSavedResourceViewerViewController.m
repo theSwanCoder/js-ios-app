@@ -39,7 +39,7 @@
     [self.webView stopLoading];
     [self.webView loadHTMLString:nil baseURL:nil];
     [[UIAlertView alertWithTitle:JMCustomLocalizedString(@"dialod.title.error", nil)
-                         message:JMCustomLocalizedString(@"report.viewer.error.title", nil) // TODO: replace with the other message
+                         message:JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil) // TODO: replace with the other message
                       completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
                               [self cancelResourceViewingAndExit:YES];
                           }@weakselfend
