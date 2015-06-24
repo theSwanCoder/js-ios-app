@@ -217,6 +217,7 @@
 /* Error messages */
 "error.readingresponse.dialog.msg" = "No se encontró el servidor.";
 
+"error.noconnection.dialog.title" = "La red no está disponible";
 "error.noconnection.dialog.msg" = "Compruebe la configuración de red (datos móviles o Wi-Fi) e inténtelo de nuevo.";
 
 "error.authenication.dialog.title" = "Credenciales no válidas";

@@ -217,6 +217,7 @@
 /* Error messages */
 "error.readingresponse.dialog.msg" = "未找到服务器。";
 
+"error.noconnection.dialog.title" = "网络没有";
 "error.noconnection.dialog.msg" = "检查您的网络设置(移动数据或 WiFi)并重试。";
 
 "error.authenication.dialog.title" = "凭据无效";

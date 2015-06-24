@@ -218,6 +218,7 @@
 /* Error messages */
 "error.readingresponse.dialog.msg" = "Server non trovato.";
 
+"error.noconnection.dialog.title" = "La rete non è disponibile";
 "error.noconnection.dialog.msg" = "Verificare le impostazioni di rete (dati mobili o wi-fi) e riprovare.";
 
 "error.authenication.dialog.title" = "Credenziali non valide";

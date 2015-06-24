@@ -217,6 +217,7 @@
 /* Error messages */
 "error.readingresponse.dialog.msg" = "サーバーが見つかりません。";
 
+"error.noconnection.dialog.title" = "ネットワークは利用不可";
 "error.noconnection.dialog.msg" = "ネットワーク設定 (モバイル データや WiFi) を確認して、やり直してください。";
 
 "error.authenication.dialog.title" = "無効な認証情報";

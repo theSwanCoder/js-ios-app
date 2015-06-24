@@ -217,6 +217,7 @@
 /* Error messages */
 "error.readingresponse.dialog.msg" = "Server nicht gefunden.";
 
+"error.noconnection.dialog.title" = "Netzwerk ist nicht verfügbar";
 "error.noconnection.dialog.msg" = "Prüfen Sie Ihre Netzwerkeinstellungen (Mobildaten oder WLAN), und versuchen Sie es erneut.";
 
 "error.authenication.dialog.title" = "Ungültige Anmeldedaten";
