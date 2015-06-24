@@ -87,6 +87,7 @@
 #pragma mark - JMReportViewerToolBarDelegate
 - (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage completion:(void (^)(BOOL success))completion
 {
+    [[self webView].scrollView setZoomScale:0.1 animated:YES];
     if ([self.reportLoader respondsToSelector:@selector(changeFromPage:toPage:withCompletion:)]) {
         [self.reportLoader changeFromPage:fromPage toPage:toPage withCompletion:@weakself(^(BOOL success, NSError *error)) {
                 if (success) {
