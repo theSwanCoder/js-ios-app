@@ -89,6 +89,7 @@
     self.serverNameLabel.text = [NSString stringWithFormat:@"%@ (v.%@)", alias, version];
     self.userNameLabel.text = self.restClient.serverProfile.username;
     self.organizationNameLabel.text = self.restClient.serverProfile.organization;
+    _menuItems = nil;
 }
 
 - (void)unselectItems
