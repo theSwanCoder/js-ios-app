@@ -244,10 +244,10 @@
 
         JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
         [printController setReport:self.report withWebView:self.webView];
-        printController.printCompletion = ^{
+        printController.printCompletion = @weakself(^){
             [self webView].frame = self.view.bounds;
             [self.view addSubview:[self webView]];
-        };
+        }@weakselfend;
         [self.navigationController pushViewController:printController animated:YES];
     });
 }
