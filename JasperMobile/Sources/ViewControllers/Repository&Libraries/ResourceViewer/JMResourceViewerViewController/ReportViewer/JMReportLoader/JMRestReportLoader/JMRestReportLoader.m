@@ -370,7 +370,9 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 
 - (BOOL)isInteractive
 {
-    BOOL interactive = (self.restClient.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0);
+    CGFloat currentVersion = self.restClient.serverInfo.versionAsFloat;
+    CGFloat currentVersion_const = [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0;
+    BOOL interactive = (currentVersion > currentVersion_const || currentVersion < currentVersion_const);
     return interactive;
 }
 
