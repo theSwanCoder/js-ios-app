@@ -51,20 +51,20 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.title = JMCustomLocalizedString(@"settings.title", nil);
+
     self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
     self.tableView.layer.cornerRadius = 4;
-    
+
     [self.privacyPolicyButton setTitle:JMCustomLocalizedString(@"settings.privacy.policy.title", nil) forState:UIControlStateNormal];
-    
+
     [self.saveButton setTitle:JMCustomLocalizedString(@"dialog.button.save", nil) forState:UIControlStateNormal];
-    
+
     UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(applicationInfo:)];
     self.navigationItem.rightBarButtonItem = infoItem;
     //self.navigationItem.rightBarButtonItems = @[infoItem];
-    
+
     [self setupMenu];
-    self.title = @"Settings";
 }
 
 - (void)viewWillAppear:(BOOL)animated

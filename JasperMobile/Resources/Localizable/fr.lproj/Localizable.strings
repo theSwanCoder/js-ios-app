@@ -185,7 +185,7 @@
 "resources.type.saved.reportUnit" = "Ressource du contenu";
 
 /* Settings view */
-
+"settings.title" = "Paramètres";
 "settings.item.connection.timeout" = "Expiration de la connexion (en secondes)";
 "settings.item.server" = "Serveur";
 "settings.item.intro" = "Afficher l’intro";

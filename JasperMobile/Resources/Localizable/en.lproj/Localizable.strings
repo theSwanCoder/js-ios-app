@@ -186,7 +186,7 @@
 "resources.type.saved.reportUnit" = "Content Resource";
 
 /* Settings view */
-
+"settings.title" = "Settings";
 "settings.item.connection.timeout" = "Connection timeout (in seconds)";
 "settings.item.server" = "Server";
 "settings.item.intro" = "Show intro";

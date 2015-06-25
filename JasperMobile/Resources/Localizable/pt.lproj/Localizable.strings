@@ -184,7 +184,7 @@
 "resources.type.saved.reportUnit" = "Recursos do Conteúdo";
 
 /* Settings view */
-
+"settings.title" = "Configurações";
 "settings.item.connection.timeout" = "Tempo limite da conexão (em segundos)";
 "settings.item.server" = "Servidor";
 "settings.item.intro" = "Mostrar a introdução";

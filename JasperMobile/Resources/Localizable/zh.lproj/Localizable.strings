@@ -184,7 +184,7 @@
 "resources.type.saved.reportUnit" = "内容资源";
 
 /* Settings view */
-
+"settings.title" = "设置";
 "settings.item.connection.timeout" = "连接超时(秒)";
 "settings.item.server" = "服务器";
 "settings.item.intro" = "显示简介";
