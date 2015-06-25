@@ -58,6 +58,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.emptyReportMessageLabel.text = JMCustomLocalizedString(@"report.viewer.emptyreport.title", nil);
     [self addObservers];
     [self setupMenuActions];
 }
@@ -245,8 +246,8 @@
         JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
         [printController setReport:self.report withWebView:self.webView];
         printController.printCompletion = @weakself(^){
-            [self webView].frame = self.view.bounds;
-            [self.view addSubview:[self webView]];
+                [self webView].frame = self.view.bounds;
+                [self.view insertSubview:[self webView] belowSubview:self.activityIndicator];
         }@weakselfend;
         [self.navigationController pushViewController:printController animated:YES];
     });

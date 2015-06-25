@@ -74,7 +74,7 @@
 {
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
     UIWebView *webView = [self.configurator webViewWithFrame:self.view.bounds asSecondary:self.isChildReport];
-    [self.view addSubview:webView];
+    [self.view insertSubview:webView belowSubview:self.activityIndicator];
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
