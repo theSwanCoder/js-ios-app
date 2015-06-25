@@ -104,6 +104,7 @@
 #pragma mark - Actions
 - (void)minimizeDashlet
 {
+    [[self webView].scrollView setZoomScale:0.1 animated:YES];
     [self.dashboardLoader minimizeDashlet];
     self.navigationItem.leftBarButtonItem = self.leftButtonItem;
     self.navigationItem.rightBarButtonItems = self.rightButtonItems;
