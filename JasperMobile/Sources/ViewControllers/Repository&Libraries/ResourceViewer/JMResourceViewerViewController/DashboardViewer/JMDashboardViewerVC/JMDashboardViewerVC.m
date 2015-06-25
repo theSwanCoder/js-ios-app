@@ -162,6 +162,7 @@
 #pragma mark - JMDashboardLoaderDelegate
 - (void)dashboardLoader:(id <JMDashboardLoader>)loader didStartMaximazeDashletWithTitle:(NSString *)title
 {
+    [[self webView].scrollView setZoomScale:0.1 animated:YES];
     self.navigationItem.rightBarButtonItems = nil;
 
     self.leftButtonItem = self.navigationItem.leftBarButtonItem;
