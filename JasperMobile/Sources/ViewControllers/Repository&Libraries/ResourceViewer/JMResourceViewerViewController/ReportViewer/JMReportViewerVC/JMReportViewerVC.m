@@ -31,6 +31,17 @@
 
 @implementation JMReportViewerVC
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    if (![JMUtils isSystemVersion8]) {
+        // need update frame for ios7
+        // there is issue with webView, when we run report and device is in landscape mode
+        [self webView].frame = self.view.bounds;
+    }
+}
+
 - (UIWebView *)webView
 {
     return self.configurator.webView;
@@ -286,11 +297,17 @@
 
 - (void)hideReportView
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSLog(@"view: %@", self.view);
+    NSLog(@"view subviews: %@", self.view.subviews);
     ((UIView *)self.configurator.webView).hidden = YES;
 }
 
 - (void)showReportView
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSLog(@"view: %@", self.view);
+    NSLog(@"view subviews: %@", self.view.subviews);
     ((UIView *)self.configurator.webView).hidden = NO;
 }
 
