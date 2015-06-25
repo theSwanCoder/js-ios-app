@@ -30,6 +30,8 @@
 #import "JSResourceLookup+Helpers.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMSavedResourceViewerViewController.h"
+#import "JMFavorites.h"
+#import "JMFavorites+Helpers.h"
 
 @interface JMSavedItemsInfoViewController () <UIAlertViewDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
@@ -149,7 +151,14 @@
             NSString *newName = [alertView textFieldAtIndex:0].text;
             if ([self.savedReports renameReportTo:newName]) {
                 self.title = newName;
-                self.resourceLookup = [self.savedReports wrapperFromSavedReports];
+
+                BOOL isResourceFavorite = [JMFavorites isResourceInFavorites:self.resourceLookup];
+                JSResourceLookup *newSavedReport = [self.savedReports wrapperFromSavedReports];
+                if (isResourceFavorite) {
+                    [JMFavorites removeFromFavorites:self.resourceLookup];
+                    [JMFavorites addToFavorites:newSavedReport];
+                }
+                self.resourceLookup = newSavedReport;
             }
         } else if (alertView.tag == JMMenuActionsViewAction_Delete) {
             [self.savedReports removeReport];
