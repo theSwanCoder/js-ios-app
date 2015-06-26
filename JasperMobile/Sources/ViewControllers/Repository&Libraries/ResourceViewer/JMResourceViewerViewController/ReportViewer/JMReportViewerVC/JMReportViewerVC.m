@@ -297,17 +297,11 @@
 
 - (void)hideReportView
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSLog(@"view: %@", self.view);
-    NSLog(@"view subviews: %@", self.view.subviews);
     ((UIView *)self.configurator.webView).hidden = YES;
 }
 
 - (void)showReportView
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    NSLog(@"view: %@", self.view);
-    NSLog(@"view subviews: %@", self.view.subviews);
     ((UIView *)self.configurator.webView).hidden = NO;
 }
 
