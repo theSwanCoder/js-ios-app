@@ -36,6 +36,7 @@
 #import "JMPrintResourceViewController.h"
 #import "JMReportLoader.h"
 #import "JMJavascriptNativeBridgeProtocol.h"
+#import "JMPrintResourceVC.h"
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
 @property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;
@@ -89,6 +90,9 @@
         JMSaveReportViewController *destinationViewController = segue.destinationViewController;
         destinationViewController.report = self.report;
         destinationViewController.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"showPrintVC"]) {
+        JMPrintResourceVC *printResourceVC = segue.destinationViewController;
+        printResourceVC.report = self.report;
     }
 }
 
@@ -243,13 +247,15 @@
         [JMCancelRequestPopup dismiss];
         [self webView].hidden = NO;
 
-        JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
-        [printController setReport:self.report withWebView:self.webView];
-        printController.printCompletion = @weakself(^){
-                [self webView].frame = self.view.bounds;
-                [self.view insertSubview:[self webView] belowSubview:self.activityIndicator];
-        }@weakselfend;
-        [self.navigationController pushViewController:printController animated:YES];
+//        JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
+//        [printController setReport:self.report withWebView:self.webView];
+//        printController.printCompletion = @weakself(^){
+//                [self webView].frame = self.view.bounds;
+//                [self.view insertSubview:[self webView] belowSubview:self.activityIndicator];
+//        }@weakselfend;
+//        [self.navigationController pushViewController:printController animated:YES];
+
+        [self performSegueWithIdentifier:@"showPrintVC" sender:nil];
     });
 }
 
