@@ -42,7 +42,6 @@
     self.textField.inputView = self.datePicker;
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
-    self.dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
