@@ -30,6 +30,7 @@
 #import "JMSavedResources+Helpers.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMReportExecutor.h"
+#import "JMReportPagesRange.h"
 
 NSString * const kJMAttachmentPrefix = @"_";
 NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessionConfigurationIdentifier.save.report";
@@ -41,6 +42,8 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 @property (nonatomic, strong) JSReportExecutionResponse *requestExecution;
 @property (nonatomic, strong) JSExportExecutionResponse *exportExecution;
 @property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
+@property (nonatomic, strong) JMReportPagesRange *pagesRange;
+@property (nonatomic, strong) JMReportExecutor *reportExecutor;
 @end
 
 @implementation JMReportSaver
@@ -51,6 +54,10 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
     self = [super init];
     if (self) {
         _report = report;
+        _reportExecutor = [JMReportExecutor executorWithReport:_report];
+        _reportExecutor.shouldExecuteAsync = YES;
+        _reportExecutor.interactive = NO; // TODO: need change this value?
+        _reportExecutor.attachmentsPrefix = kJMAttachmentPrefix;
     }
     return self;
 }
@@ -70,8 +77,21 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
             completionBlock(nil, errorOfCreationLocation);
         }
     } else {
+        if (!self.pagesRange) {
+            NSArray *components = [pages componentsSeparatedByString:@"-"];
+            NSUInteger startPage = 0;
+            NSUInteger endPage = 0;
+            if (components.count == 2) {
+                startPage = ((NSNumber *)components[0]).integerValue;
+                endPage = ((NSNumber *)components[1]).integerValue;
+            } else if (components.count == 1) {
+                startPage = ((NSNumber *)components.firstObject).integerValue;
+                endPage = ((NSNumber *)components.firstObject).integerValue;
+            }
+            self.pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
+        }
+
         [self fetchOutputResourceURLForReportWithFileExtension:format
-                                                         pages:pages
                                                     completion:@weakself(^(BOOL success, NSError *error)) {
                                                         if (success) {
                                                             [self downloadReportWithName:name
@@ -120,6 +140,21 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
                                                         }
                                                     }@weakselfend];
     }
+}
+
+
+- (void)saveReportWithName:(NSString *)name
+                    format:(NSString *)format
+                pagesRange:(JMReportPagesRange *)pagesRange
+                   addToDB:(BOOL)addToDB
+                completion:(SaveReportCompletion)completionBlock
+{
+    self.pagesRange = pagesRange;
+
+    [self saveReportWithName:name
+                      format:format
+                       pages:pagesRange.pagesFormat
+                     addToDB:addToDB completion:completionBlock];
 }
 
 - (void)cancelReport
@@ -327,23 +362,24 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 
 #pragma mark - Helpers
 - (void)fetchOutputResourceURLForReportWithFileExtension:(NSString *)format
-                                                   pages:(NSString *)pages
                                               completion:(void(^)(BOOL success, NSError *error))completion
 {
-    JMReportExecutor *executor = [JMReportExecutor executorWithReport:self.report];
-    executor.shouldExecuteAsync = YES;
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+//    self.reportExecutor.shouldExecuteAsync = YES;
+//
+//    self.reportExecutor.interactive = NO;
+//    self.reportExecutor.attachmentsPrefix = kJMAttachmentPrefix;
+    self.reportExecutor.format = format;
+    self.reportExecutor.pagesRange = self.pagesRange;
 
-    executor.interactive = NO;
-    executor.attachmentsPrefix = kJMAttachmentPrefix;
-    executor.format = format;
-    executor.pages = pages;
-
-    [executor executeWithCompletion:@weakself(^(JSReportExecutionResponse *executionResponse, NSError *executionError)) {
+    [self.reportExecutor executeWithCompletion:@weakself(^(JSReportExecutionResponse *executionResponse, NSError *executionError)) {
         if (executionResponse) {
             self.requestExecution = executionResponse;
-            [executor exportWithExecutionResponse:executionResponse completion:@weakself(^(JSExportExecutionResponse *exportResponse, NSError *exportError)) {
+            [self.reportExecutor exportWithCompletion:@weakself(^(JSExportExecutionResponse *exportResponse, NSError *exportError)) {
                 if (exportResponse) {
                     self.exportExecution = exportResponse;
+                    NSLog(@"executionID: %@", self.requestExecution.requestId);
+                    NSLog(@"exeportID: %@", self.exportExecution.uuid);
                     if (completion) {
                         completion(YES, nil);
                     }

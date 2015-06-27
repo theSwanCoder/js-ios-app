@@ -28,17 +28,24 @@
 
 #import "JMReportExecutor.h"
 #import "JMReport.h"
+#import "JMReportPagesRange.h"
 
 static NSTimeInterval const kJMReportExecutorStatusCheckingInterval = 5;
 static NSString *const kJMReportExecutorRestStatusReady = @"ready";
+static NSString *const kJMReportExecutorRestStatusQueued = @"queued";
+static NSString *const kJMReportExecutorRestStatusExecution = @"execution";
+static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
 
 @interface JMReportExecutor()
 @property (nonatomic, weak) JMReport *report;
 @property (nonatomic, copy) void(^executeCompletion)(JSReportExecutionResponse *executionResponse, NSError *error);
 @property (nonatomic, copy) void(^exportCompletion)(JSExportExecutionResponse *exportResponse, NSError *error);
-@property (nonatomic, strong) NSTimer *statusCheckingTimer;
+@property (nonatomic, strong) NSTimer *executionStatusCheckingTimer;
+@property (nonatomic, strong) NSTimer *exportStatusCheckingTimer;
 @property (nonatomic, assign) BOOL shouldExecuteWithFreshData;
 @property (nonatomic, assign) BOOL shouldIgnorePagination;
+//
+@property (nonatomic, strong) JSReportExecutionResponse *executionResponse;
 @end
 
 @implementation JMReportExecutor
@@ -63,70 +70,179 @@ static NSString *const kJMReportExecutorRestStatusReady = @"ready";
 {
     self.executeCompletion = completion;
 
-    [self.restClient runReportExecution:self.report.resourceLookup.uri
-                                  async:self.shouldExecuteAsync
-                           outputFormat:self.format
-                            interactive:self.interactive
-                              freshData:self.shouldExecuteWithFreshData
-                       saveDataSnapshot:YES // TODO: what does this parameter mean
-                       ignorePagination:self.shouldIgnorePagination
-                         transformerKey:nil // TODO: what does this parameter mean
-                                  pages:self.pages
-                      attachmentsPrefix:self.attachmentsPrefix
-                             parameters:self.report.reportParameters
-                        completionBlock:@weakself(^(JSOperationResult *result)) {
+    if (self.executionResponse) {
+        if (self.executeCompletion) {
+            self.executeCompletion(self.executionResponse, nil);
+        }
+    } else {
+        [self.restClient runReportExecution:self.report.resourceLookup.uri
+                                      async:self.shouldExecuteAsync
+                               outputFormat:self.format
+                                interactive:self.interactive
+                                  freshData:self.shouldExecuteWithFreshData
+                           saveDataSnapshot:YES // TODO: what does this parameter mean
+                           ignorePagination:self.shouldIgnorePagination
+                             transformerKey:nil // TODO: what does this parameter mean
+                                      pages:nil
+                          attachmentsPrefix:self.attachmentsPrefix
+                                 parameters:self.report.reportParameters
+                            completionBlock:@weakself(^(JSOperationResult *result)) {
 
-                                if (result.error) {
-                                    if (self.executeCompletion) {
-                                        self.executeCompletion(nil, result.error);
+                                    if (result.error) {
+                                        NSLog(@"error: %@", result.error);
+                                        if (self.executeCompletion) {
+                                            self.executeCompletion(nil, result.error);
+                                        }
+                                    } else {
+                                        NSLog(@"success report execution");
+                                        self.executionResponse = result.objects.firstObject;
+                                        NSLog(@"execution status: %@", self.executionResponse.status);
+
+                                        if ([self isExportForAllPages]) {
+                                            if (self.executeCompletion) {
+                                                self.executeCompletion(self.executionResponse, nil);
+                                            }
+                                        } else {
+                                            JSExecutionStatus *executionStatus = self.executionResponse.status;
+                                            BOOL isExecutionStatusReady = [executionStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
+                                            BOOL isExecutionStatusQueued = [executionStatus.status isEqualToString:kJMReportExecutorRestStatusQueued];
+                                            if (isExecutionStatusReady) {
+                                                if (self.executeCompletion) {
+                                                    self.executeCompletion(self.executionResponse, nil);
+                                                }
+                                            } else if (isExecutionStatusQueued) {
+                                                NSString *executionID = self.executionResponse.requestId;
+                                                [self startCheckingExecutionStatusWithID:executionID];
+                                            } else {
+                                                if (self.executeCompletion) {
+                                                    self.executeCompletion(nil, nil);
+                                                }
+                                            }
+                                        }
                                     }
-                                } else {
-                                    JSReportExecutionResponse *executionResponse = result.objects.firstObject;
-                                    if (self.executeCompletion) {
-                                        self.executeCompletion(executionResponse, nil);
-                                    }
-                                }
-                            }@weakselfend];
+                                }@weakselfend];
+    }
 }
 
-- (void)exportWithExecutionResponse:(JSReportExecutionResponse *)executionResponse completion:(void(^)(JSExportExecutionResponse *exportResponse, NSError *error))completion
+- (void)exportWithCompletion:(void(^)(JSExportExecutionResponse *exportResponse, NSError *error))completion
 {
     self.exportCompletion = completion;
 
-    NSString *executionID = executionResponse.requestId;
-    NSArray *exports = executionResponse.exports;
+    NSString *executionID = self.executionResponse.requestId;
+    if ([self isExportForAllPages]) {
+        NSArray *exports = self.executionResponse.exports;
 
-    JSExportExecutionResponse *exportResponse = exports.firstObject;
-    JSExecutionStatus *exportStatus = exportResponse.status;
+        JSExportExecutionResponse *exportResponse = exports.firstObject;
+        JSExecutionStatus *exportStatus = exportResponse.status;
 
-    BOOL isExportStatusReady = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
-    if (isExportStatusReady) {
-        if (self.exportCompletion) {
-            self.exportCompletion(exportResponse, nil);
+        NSLog(@"export status: %@", exportStatus.status);
+        BOOL isExportStatusReady = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
+        if (isExportStatusReady) {
+            if (self.exportCompletion) {
+                self.exportCompletion(exportResponse, nil);
+            }
+        } else {
+            [self startCheckingExportStatusWithID:executionID];
         }
     } else {
-        [self startCheckingExportStatusWithID:executionID];
+        NSLog(@"export only from page: %@, to page: %@", @(self.pagesRange.startPage), @(self.pagesRange.endPage));
+        [self.restClient runExportExecution:executionID
+                               outputFormat:self.format
+                                      pages:self.pagesRange.pagesFormat
+                          attachmentsPrefix:self.attachmentsPrefix
+                            completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+
+                                    if (result.error) {
+                                        completion(nil, result.error);
+                                    } else {
+                                        JSExportExecutionResponse *exportResponse = result.objects.firstObject;
+                                        JSExecutionStatus *exportStatus = exportResponse.status;
+
+                                        BOOL isExportStatusReady = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
+                                        BOOL isExportStatusExecution = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusExecution];
+                                        BOOL isExportStatusQueued = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusQueued];
+                                        BOOL isExportStatusCancelled = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusCancelled];
+                                        NSLog(@"export status: %@", exportStatus.status);
+
+                                        if (isExportStatusReady) {
+                                            if (self.exportCompletion) {
+                                                self.exportCompletion(exportResponse, nil);
+                                            }
+                                        } else if (isExportStatusExecution || isExportStatusQueued) {
+                                            [self startCheckingExportStatusWithID:executionID];
+                                        } else if (isExportStatusCancelled) {
+                                            if (self.exportCompletion) {
+                                                self.exportCompletion(nil, nil);
+                                            }
+                                        }
+                                    }
+                                } @weakselfend];
     }
 }
 
 #pragma mark - Private API
 
-
-#pragma mark - Status Checking
-- (void)startCheckingExportStatusWithID:(NSString *)identifier
+#pragma mark - Execution Status Checking
+- (void)startCheckingExecutionStatusWithID:(NSString *)identifier
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSDictionary *userInfo = @{
             @"identifier": identifier
     };
-    self.statusCheckingTimer = [NSTimer scheduledTimerWithTimeInterval:kJMReportExecutorStatusCheckingInterval
+    self.executionStatusCheckingTimer = [NSTimer scheduledTimerWithTimeInterval:kJMReportExecutorStatusCheckingInterval
                                                                 target:self
-                                                              selector:@selector(makeStatusChecking:)
+                                                              selector:@selector(makeExecutionStatusChecking:)
                                                               userInfo:userInfo
                                                                repeats:YES];
 }
 
-- (void) makeStatusChecking:(NSTimer *)timer
+- (void)makeExecutionStatusChecking:(NSTimer *)timer
 {
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSString *identifier = timer.userInfo[@"identifier"];
+    // TODO: replace with a lightwight request for checking status
+    [self.restClient reportExecutionMetadataForRequestId:identifier
+                                         completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                                                 if (!result.error) {
+                                                     JSReportExecutionResponse *executionResponse = result.objects.firstObject;
+                                                     NSLog(@"execution status: %@", executionResponse.status);
+
+                                                     JSExecutionStatus *executionStatus = executionResponse.status;
+                                                     BOOL isExecutionStatusReady = [executionStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
+
+                                                     if (isExecutionStatusReady) {
+                                                         if (self.executionStatusCheckingTimer.valid) {
+                                                             [self.executionStatusCheckingTimer invalidate];
+                                                         }
+
+                                                         if (self.executeCompletion) {
+                                                             self.executeCompletion(executionResponse, nil);
+                                                         }
+                                                     }
+                                                 } else {
+                                                     NSLog(@"error: %@", result.error);
+                                                 }
+                                             } @weakselfend];
+
+}
+
+#pragma mark - Export Status Checking
+- (void)startCheckingExportStatusWithID:(NSString *)identifier
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSDictionary *userInfo = @{
+            @"identifier": identifier
+    };
+    self.exportStatusCheckingTimer = [NSTimer scheduledTimerWithTimeInterval:kJMReportExecutorStatusCheckingInterval
+                                                                target:self
+                                                              selector:@selector(makeExportStatusChecking:)
+                                                              userInfo:userInfo
+                                                               repeats:YES];
+}
+
+- (void)makeExportStatusChecking:(NSTimer *)timer
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSString *identifier = timer.userInfo[@"identifier"];
     // TODO: replace with a lightwight request for checking status
     [self.restClient reportExecutionMetadataForRequestId:identifier
@@ -139,19 +255,39 @@ static NSString *const kJMReportExecutorRestStatusReady = @"ready";
                                                      JSExecutionStatus *exportStatus = exportResponse.status;
 
                                                      BOOL isExportStatusReady = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
+                                                     BOOL isExportStatusCancelled = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusCancelled];
 
+                                                     NSLog(@"export status: %@", exportStatus.status);
                                                      if (isExportStatusReady) {
-                                                         if (self.statusCheckingTimer.valid) {
-                                                             [self.statusCheckingTimer invalidate];
+                                                         if (self.exportStatusCheckingTimer.valid) {
+                                                             [self.exportStatusCheckingTimer invalidate];
                                                          }
 
                                                          if (self.exportCompletion) {
                                                              self.exportCompletion(exportResponse, nil);
                                                          }
+                                                     } else if (isExportStatusCancelled) {
+                                                         if (self.exportStatusCheckingTimer.valid) {
+                                                             [self.exportStatusCheckingTimer invalidate];
+                                                         }
+
+                                                         if (self.exportCompletion) {
+                                                             self.exportCompletion(nil, nil);
+                                                         }
                                                      }
+                                                 } else {
+                                                     NSLog(@"error: %@", result.error);
                                                  }
                                              } @weakselfend];
 
+}
+
+#pragma mark - Helpers
+- (BOOL)isExportForAllPages
+{
+    // TODO: investigate all cases
+    BOOL isExportForAllPages = self.pagesRange.endPage == self.report.countOfPages;
+    return isExportForAllPages;
 }
 
 @end

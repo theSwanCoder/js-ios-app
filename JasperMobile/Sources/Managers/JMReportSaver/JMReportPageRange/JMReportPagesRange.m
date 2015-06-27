@@ -22,28 +22,40 @@
 
 
 //
-//  JMReportSaver.h
+//  JMReport.h
 //  TIBCO JasperMobile
 //
 
-/**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 2.1
- */
+#import "JMReportPagesRange.h"
 
-#import <Foundation/Foundation.h>
-#import "JMReport.h"
+@implementation JMReportPagesRange
 
-@class JMReportPagesRange;
+#pragma mark - Initializers
+- (instancetype)initWithStartPage:(NSUInteger)startPage endPage:(NSUInteger)endPage
+{
+    self = [super init];
+    if (self) {
+        _startPage = startPage;
+        _endPage = endPage;
+    }
+    return self;
+}
 
-typedef void(^SaveReportCompletion)(NSString *reportURI, NSError *error);
++ (instancetype)rangeWithStartPage:(NSUInteger)startPage endPage:(NSUInteger)endPage
+{
+    return [[self alloc] initWithStartPage:startPage endPage:endPage];
+}
 
-@interface JMReportSaver : NSObject
-- (instancetype)initWithReport:(JMReport *)report;
-
-- (void)saveReportWithName:(NSString *)name format:(NSString *)format pages:(NSString *)pages addToDB:(BOOL)addToDB completion:(SaveReportCompletion)completionBlock;
-- (void)saveReportWithName:(NSString *)name format:(NSString *)format pagesRange:(JMReportPagesRange *)pagesRange addToDB:(BOOL)addToDB completion:(SaveReportCompletion)completionBlock;
-
-- (void) cancelReport;
+#pragma mark - Custom Getters
+- (NSString *)pagesFormat
+{
+    NSString *pagesFormat;
+    if (self.startPage == self.endPage) {
+        pagesFormat = [NSString stringWithFormat:@"%@", @(self.startPage)];
+    } else {
+        pagesFormat = [NSString stringWithFormat:@"%@-%@", @(self.startPage), @(self.endPage)];
+    }
+    return pagesFormat;
+}
 
 @end
