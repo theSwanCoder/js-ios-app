@@ -238,9 +238,10 @@
 
 - (void)printResource
 {
-    [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title"];
     [self webView].hidden = YES;
+    [self.navigationController setToolbarHidden:YES animated:YES];
     [[self webView].scrollView setZoomScale:0.1 animated:YES];
+    [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title"];
 
     // Add delay before printing and zoom out webView
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
