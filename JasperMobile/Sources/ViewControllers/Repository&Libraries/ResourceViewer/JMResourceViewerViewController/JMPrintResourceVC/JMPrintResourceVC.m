@@ -8,8 +8,12 @@
 #import "JMReport.h"
 #import "JMCancelRequestPopup.h"
 #import "JMReportPagesRange.h"
+#import "JMSavedResources.h"
+#import "JMSavedResources+Helpers.h"
 
-@interface JMPrintResourceVC() <UIWebViewDelegate, UITextFieldDelegate>
+NSInteger const kJMPrintResourceMaxCountDownloadPages = 2;
+
+@interface JMPrintResourceVC() <UIWebViewDelegate, UITextFieldDelegate, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (weak, nonatomic) IBOutlet UISwitch *uiSwitch;
 @property (weak, nonatomic) IBOutlet UIView *headerView;
@@ -20,6 +24,8 @@
 @property (weak, nonatomic) UITextField *activeTextField;
 @property (weak, nonatomic) IBOutlet UIButton *printButton;
 @property (strong, nonatomic) JMReportSaver *reportSaver;
+@property (assign, nonatomic) NSInteger currentCountDownloadedPages;
+@property (strong, nonatomic) NSURL *printReportURL;
 @end
 
 @implementation JMPrintResourceVC
@@ -47,6 +53,8 @@
     self.reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
     [self prepareJob];
 
+    self.currentCountDownloadedPages = kJMPrintResourceMaxCountDownloadPages;
+    self.webView.scrollView.delegate = self;
     [self addKeyboardObservers];
 }
 
@@ -170,44 +178,159 @@
     }];
 
     NSUInteger startPage = self.fromTextField.text.integerValue;
-    NSUInteger endPage = self.toTextField.text.integerValue;
+    NSUInteger endPage = startPage + kJMPrintResourceMaxCountDownloadPages - 1;
     JMReportPagesRange *pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
+    [self downloadReportWithPagesRange:pagesRange completion:^(NSString *reportURI){
+        [JMCancelRequestPopup dismiss];
+        NSLog(@"report saved");
 
+        self.printReportURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
+        NSURLRequest *request = [NSURLRequest requestWithURL:self.printReportURL];
+        [self.webView loadRequest:request];
+
+//         self.printingItem = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
+//         [self printResource];
+    }];
+}
+
+- (void)downloadReportWithPagesRange:(JMReportPagesRange *)pagesRange completion:(void(^)(NSString *reportURI))completion
+{
     [self.reportSaver saveReportWithName:[self tempReportName]
-                             format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
-                         pagesRange:pagesRange
-                            addToDB:NO
-                         completion:@weakself(^(NSString *reportURI, NSError *error)) {
-                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                     [JMCancelRequestPopup dismiss];
-                                 });
-                                 if (error) {
-                                     [self.reportSaver cancelReport];
-                                     if (error.code == JSSessionExpiredErrorCode) {
-                                         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                             [self prepareJob];
-                                         } else {
-                                             [JMUtils showLoginViewAnimated:YES completion:nil];
-                                         }
-                                     } else {
-                                         [JMUtils showAlertViewWithError:error];
-                                     }
-                                 } else {
-                                     NSLog(@"report saved");
-
-                                     NSURL *reportURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
-                                     NSURLRequest *request = [NSURLRequest requestWithURL:reportURL];
-                                     [self.webView loadRequest:request];
-
-//                                     self.printingItem = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
-//                                     [self printResource];
-                                 }
-                             }@weakselfend];
+                                  format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
+                              pagesRange:pagesRange
+                                 addToDB:NO
+                              completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                                      if (error) {
+                                          [self.reportSaver cancelReport];
+                                          if (error.code == JSSessionExpiredErrorCode) {
+                                              if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                                                  [self prepareJob];
+                                              } else {
+                                                  [JMUtils showLoginViewAnimated:YES completion:nil];
+                                              }
+                                          } else {
+                                              [JMUtils showAlertViewWithError:error];
+                                          }
+                                      } else {
+                                          if (completion) {
+                                              completion(reportURI);
+                                          }
+                                      }
+                                  }@weakselfend];
 }
 
 - (NSString *)tempReportName
 {
-    return [[NSUUID UUID] UUIDString];
+    NSString *tempReportName = [[NSUUID UUID] UUIDString];
+    NSLog(@"temp report name: %@", tempReportName);
+    return tempReportName;
+}
+
+- (void)addPagesFromURL:(NSURL *)newPartURL
+{
+    NSString *tempDirectoryPath = [JMSavedResources pathToReportDirectoryWithName:[self tempReportName]
+                                                              format:[JSConstants sharedInstance].CONTENT_TYPE_PDF];
+
+    [self createLocationAtPath:tempDirectoryPath];
+
+    NSURL *tempReportURL = [self reportLocationForPath:tempDirectoryPath
+                                     withFileExtention:[JSConstants sharedInstance].CONTENT_TYPE_PDF];
+
+    [self mergeFilesWithFirstPath:self.printReportURL
+                       secondPath:newPartURL
+               mergedResourcePath:tempReportURL];
+
+    NSURL *printReportFolderURL = [self reportDirectoryLocationForReportWithLocation:self.printReportURL];
+    [self removeReportAtPath:self.printReportURL.path];
+    [self removeReportAtPath:printReportFolderURL.path];
+
+    NSURL *newPathFolderURL = [self reportDirectoryLocationForReportWithLocation:newPartURL];
+    [self removeReportAtPath:newPartURL.path];
+    [self removeReportAtPath:newPathFolderURL.path];
+
+    self.printReportURL = tempReportURL;
+}
+
+- (void)mergeFilesWithFirstPath:(NSURL *)firstPartURL
+                     secondPath:(NSURL *)secondPartURL
+             mergedResourcePath:(NSURL *)mergedResourceURL
+{
+    // File references
+    CGPDFDocumentRef pdfRef1 = CGPDFDocumentCreateWithURL((__bridge CFURLRef) firstPartURL);
+    CGPDFDocumentRef pdfRef2 = CGPDFDocumentCreateWithURL((__bridge CFURLRef) secondPartURL);
+
+    // Number of pages
+    NSInteger numberOfPages1 = CGPDFDocumentGetNumberOfPages(pdfRef1);
+    NSInteger numberOfPages2 = CGPDFDocumentGetNumberOfPages(pdfRef2);
+
+    // Create the output context
+    CGContextRef writeContext = CGPDFContextCreateWithURL((__bridge CFURLRef)mergedResourceURL, NULL, NULL);
+
+    // Loop variables
+    CGPDFPageRef page;
+    CGRect mediaBox;
+
+    // Read the first PDF and generate the output pages
+    NSLog(@"GENERATING PAGES FROM PDF 1 (%i)...", numberOfPages1);
+    for (int i=1; i<=numberOfPages1; i++) {
+        page = CGPDFDocumentGetPage(pdfRef1, i);
+        mediaBox = CGPDFPageGetBoxRect(page, kCGPDFMediaBox);
+        CGContextBeginPage(writeContext, &mediaBox);
+        CGContextDrawPDFPage(writeContext, page);
+        CGContextEndPage(writeContext);
+    }
+
+    // Read the second PDF and generate the output pages
+    NSLog(@"GENERATING PAGES FROM PDF 2 (%i)...", numberOfPages2);
+    for (int i=1; i<=numberOfPages2; i++) {
+        page = CGPDFDocumentGetPage(pdfRef2, i);
+        mediaBox = CGPDFPageGetBoxRect(page, kCGPDFMediaBox);
+        CGContextBeginPage(writeContext, &mediaBox);
+        CGContextDrawPDFPage(writeContext, page);
+        CGContextEndPage(writeContext);
+    }
+    NSLog(@"DONE!");
+
+    // Finalize the output file
+    CGPDFContextClose(writeContext);
+
+    // Release from memory
+    CGPDFDocumentRelease(pdfRef1);
+    CGPDFDocumentRelease(pdfRef2);
+    CGContextRelease(writeContext);
+}
+
+- (NSURL *)reportLocationForPath:(NSString *)path withFileExtention:(NSString *)format
+{
+    NSString *fullPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", kJMReportFilename, format]];
+    NSURL *reportLocation = [NSURL fileURLWithPath:fullPath];
+    return reportLocation;
+}
+
+- (NSURL *)reportDirectoryLocationForReportWithLocation:(NSURL *)reportLocation
+{
+    NSArray *reportLocationPathComponents = reportLocation.pathComponents;
+    NSMutableArray *pathComponents = [NSMutableArray arrayWithArray:reportLocationPathComponents];
+    [pathComponents removeLastObject];
+    NSURL *directoryURL = [NSURL fileURLWithPathComponents:pathComponents];
+    return directoryURL;
+}
+
+- (NSError *)removeReportAtPath:(NSString *)path
+{
+    NSError *error;
+    [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
+    return error;
+}
+
+- (NSError *)createLocationAtPath:(NSString *)path
+{
+    NSError *error;
+    [[NSFileManager defaultManager] createDirectoryAtPath:path
+                              withIntermediateDirectories:YES
+                                               attributes:nil
+                                                    error:&error];
+    return error;
 }
 
 #pragma mark - UIWebViewDelegate
@@ -220,20 +343,61 @@
 //
 //    return YES;
 //}
-//
+
 //- (void)webViewDidStartLoad:(UIWebView *)webView
 //{
 //    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
 //    NSLog(@"webView.pageCount: %@", @(webView.pageCount));
 //    NSLog(@"webView.pageLength: %@", @(webView.pageLength));
 //}
-//
+
 //- (void)webViewDidFinishLoad:(UIWebView *)webView
 //{
 //    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-//    NSLog(@"webView.pageCount: %@", @(webView.pageCount));
-//    NSLog(@"webView.pageLength: %@", @(webView.pageLength));
+//
+//    CGRect rect = self.webView.scrollView.bounds;
+//
+//    rect.size.height *= self.currentCountDownloadedPages/kJMPrintResourceMaxCountDownloadPages;
+//    NSLog(@"rect: %@", NSStringFromCGRect(rect));
+//
+////    [webView.scrollView scrollRectToVisible:rect animated:YES];
+////    webView.scrollView.contentOffset = CGPointMake(0, rect.size.height);
+//
+////    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+////        [webView.scrollView setContentOffset:CGPointMake(0, rect.size.height) animated:YES];
+////    });
 //}
+
+#pragma mark - UIScrollView delegate
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    CGPoint contentOffset = scrollView.contentOffset;
+    CGSize contentSize = scrollView.contentSize;
+    CGSize viewSize = scrollView.bounds.size;
+
+    BOOL isBottomOfView =  contentOffset.y > (contentSize.height - viewSize.height);
+    if (isBottomOfView) {
+        NSLog(@"bottom of view");
+        // start load next portion
+        NSUInteger startPage = self.currentCountDownloadedPages + 1;
+        self.currentCountDownloadedPages += kJMPrintResourceMaxCountDownloadPages;
+        NSUInteger endPage = self.currentCountDownloadedPages;
+        JMReportPagesRange *pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
+        [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title" cancelBlock:^{
+            [self.reportSaver cancelReport];
+        }];
+        [self downloadReportWithPagesRange:pagesRange completion:^(NSString *reportURI){
+            [JMCancelRequestPopup dismiss];
+            NSLog(@"report saved");
+
+            NSURL *reportURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
+            [self addPagesFromURL:reportURL];
+
+            NSURLRequest *request = [NSURLRequest requestWithURL:self.printReportURL];
+            [self.webView loadRequest:request];
+        }];
+    }
+}
 
 #pragma mark - UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField
