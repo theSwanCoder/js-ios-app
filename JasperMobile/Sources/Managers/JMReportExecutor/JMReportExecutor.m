@@ -93,19 +93,13 @@ static NSString *const kJMReportExecutorRestStatusReady = @"ready";
 {
     self.exportCompletion = completion;
 
-    NSString *executionID = executionResponse.requestId;
+//    NSString *executionID = executionResponse.requestId;
     NSArray *exports = executionResponse.exports;
-
     JSExportExecutionResponse *exportResponse = exports.firstObject;
-    JSExecutionStatus *exportStatus = exportResponse.status;
+//    JSExecutionStatus *exportStatus = exportResponse.status;
 
-    BOOL isExportStatusReady = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
-    if (isExportStatusReady) {
-        if (self.exportCompletion) {
-            self.exportCompletion(exportResponse, nil);
-        }
-    } else {
-        [self startCheckingExportStatusWithID:executionID];
+    if (self.exportCompletion) {
+        self.exportCompletion(exportResponse, nil);
     }
 }
 
