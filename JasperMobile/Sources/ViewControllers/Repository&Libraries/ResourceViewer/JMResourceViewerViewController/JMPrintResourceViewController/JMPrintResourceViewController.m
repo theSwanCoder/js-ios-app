@@ -201,7 +201,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat rowHeight = CGRectGetHeight(tableView.bounds) - [self tableView:tableView heightForHeaderInSection:indexPath.section];
-    if ([self shouldShowRangeCells]){
+    if ([self shouldShowRangeCells] && !indexPath.section){
         if(indexPath.section) {
             CGFloat heightOfAllOtherSections = 0;
             NSInteger countOfSections = [self numberOfSectionsInTableView:tableView];
@@ -217,6 +217,8 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
         } else {
             rowHeight = tableView.rowHeight;
         }
+    } if (indexPath.section == 1) {
+        rowHeight = self.webView.bounds.size.height;
     }
     return rowHeight;
 }
