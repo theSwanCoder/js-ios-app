@@ -247,6 +247,34 @@
     return [dateFormatter stringFromDate:date];
 }
 
++ (NSDateFormatter *)formatterForSimpleDate
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+
+    return dateFormatter;
+}
+
++ (NSDateFormatter *)formatterForSimpleTime
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+
+    return dateFormatter;
+}
+
++ (NSDateFormatter *)formatterForSimpleDateTime
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+
+    return dateFormatter;
+}
+
 + (UIStoryboard *)mainStoryBoard
 {
     static dispatch_once_t onceToken;

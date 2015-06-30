@@ -31,6 +31,7 @@
 @interface JMDateInputControlCell()
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, strong) NSDateFormatter *fieldDateFormatter;
 
 @end
 
@@ -42,12 +43,21 @@
     self.textField.inputView = self.datePicker;
     
     self.dateFormatter = [[NSDateFormatter alloc] init];
+    self.fieldDateFormatter = [[NSDateFormatter alloc] init];
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     [super setInputControlDescriptor:inputControlDescriptor];
     self.dateFormatter.dateFormat = inputControlDescriptor.dateTimeFormatValidationRule.format;
+
+    if ([inputControlDescriptor.type isEqualToString:@"singleValueDate"]) {
+        self.fieldDateFormatter = [JMUtils formatterForSimpleDate];
+    } else if([inputControlDescriptor.type isEqualToString:@"singleValueTime"]) {
+        self.fieldDateFormatter = [JMUtils formatterForSimpleTime];
+    } else if ([inputControlDescriptor.type isEqualToString:@"singleValueDatetime"]) {
+        self.fieldDateFormatter = [JMUtils formatterForSimpleDateTime];
+    }
 
     NSString *value = inputControlDescriptor.state.value;
     if (value.length) {
@@ -56,7 +66,7 @@
             date = [NSDate date];
         }
         self.datePicker.date = date;
-        self.textField.text = [JMUtils localizedStringFromDate:self.datePicker.date];
+        self.textField.text = [self.fieldDateFormatter stringFromDate:self.datePicker.date];
     }
 }
 
@@ -81,7 +91,7 @@
 #pragma mark - UIDatePicker action
 - (void) dateValueDidChanged:(id)sender
 {
-    self.textField.text = [JMUtils localizedStringFromDate:self.datePicker.date];
+    self.textField.text = [self.fieldDateFormatter stringFromDate:self.datePicker.date];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -103,8 +113,12 @@
 
 - (void)unset:(id)sender
 {
-    NSDate *date = [self.dateFormatter dateFromString:self.inputControlDescriptor.state.value];
-    self.textField.text = [JMUtils localizedStringFromDate:date];
+    self.inputControlDescriptor.state.value = nil;
+    self.inputControlDescriptor.state.error = nil;
+    [self updateDisplayingOfErrorMessage];
+
+    self.textField.text = @"";
+
     [self.textField resignFirstResponder];
 }
 
