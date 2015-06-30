@@ -99,7 +99,6 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
                                         JSExportExecutionResponse *exportResponse = executionResponse.exports.firstObject;
 
                                         self.executionResponse = executionResponse;
-                                        self.exportResponse = exportResponse;
 
                                         if ([self isExportForAllPages]) {
                                             if (self.executeCompletion) {
@@ -136,13 +135,13 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
     if ([self isExportForAllPages]) {
         NSArray *exports = self.executionResponse.exports;
 
-        JSExportExecutionResponse *exportResponse = exports.firstObject;
-        JSExecutionStatus *exportStatus = exportResponse.status;
+        self.exportResponse = exports.firstObject;
+        JSExecutionStatus *exportStatus = self.exportResponse.status;
 
         BOOL isExportStatusReady = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
         if (isExportStatusReady) {
             if (self.exportCompletion) {
-                self.exportCompletion(exportResponse, nil);
+                self.exportCompletion(self.exportResponse, nil);
             }
         } else {
             [self startCheckingExportStatus];
@@ -267,7 +266,7 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
 - (BOOL)isExportForAllPages
 {
     // TODO: investigate all cases
-    BOOL isExportForAllPages = self.pagesRange.endPage == self.report.countOfPages;
+    BOOL isExportForAllPages = self.pagesRange.endPage == self.report.countOfPages && self.pagesRange.startPage == 1;
     return isExportForAllPages;
 }
 
