@@ -11,7 +11,7 @@
 #import "JMSavedResources.h"
 #import "JMSavedResources+Helpers.h"
 
-NSInteger const kJMPrintResourceMaxCountDownloadPages = 2;
+NSInteger const kJMPrintResourceMaxCountDownloadPages = 40;
 
 @interface JMPrintResourceVC() <UIWebViewDelegate, UITextFieldDelegate, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
@@ -53,7 +53,6 @@ NSInteger const kJMPrintResourceMaxCountDownloadPages = 2;
     self.reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
     [self prepareJob];
 
-    self.currentCountDownloadedPages = kJMPrintResourceMaxCountDownloadPages;
     self.webView.scrollView.delegate = self;
     [self addKeyboardObservers];
 }
@@ -167,7 +166,64 @@ NSInteger const kJMPrintResourceMaxCountDownloadPages = 2;
         NSLog(@"update preview");
         [self.printButton setTitle:@"Print" forState:UIControlStateNormal];
         [self prepareJob];
+    } else {
+        [self printReport];
     }
+}
+
+- (void)printReport
+{
+    NSUInteger startPage = self.fromTextField.text.integerValue;
+    NSUInteger endPage = self.toTextField.text.integerValue;
+
+    JMReportPagesRange *pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
+    [self downloadReportWithPagesRange:pagesRange completion:^(NSString *reportURI){
+        [JMCancelRequestPopup dismiss];
+        NSLog(@"report saved");
+
+        id printingItem = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
+
+        NSLog(@"printingItem: %@", printingItem);
+
+        UIPrintInfo *printInfo = [UIPrintInfo printInfo];
+        printInfo.jobName = self.report.resourceLookup.label;
+        printInfo.outputType = UIPrintInfoOutputGeneral;
+        printInfo.duplex = UIPrintInfoDuplexLongEdge;
+
+        UIPrintInteractionController *printController = [UIPrintInteractionController sharedPrintController];
+        printController.printInfo = printInfo;
+        printController.showsPageRange = NO;
+        printController.printingItem = printingItem;
+
+        UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
+                if(error){
+                    NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
+                } else if (completed) {
+                    if ([printingItem isKindOfClass:[NSURL class]]) {
+                        NSURL *fileURL = (NSURL *)printingItem;
+                        NSString *directoryPath = [fileURL.path stringByDeletingLastPathComponent];
+                        if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
+                            [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
+                        }
+                    }
+//                if (self.printCompletion) {
+//                    self.printCompletion();
+//                }
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+            }@weakselfend;
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([JMUtils isIphone]) {
+                [printController presentAnimated:YES completionHandler:completionHandler];
+            } else {
+                [printController presentFromRect:self.printButton.frame inView:self.view animated:YES completionHandler:completionHandler];
+            }
+        });
+    }];
+
+
+
 }
 
 #pragma mark - Helpers
@@ -177,8 +233,17 @@ NSInteger const kJMPrintResourceMaxCountDownloadPages = 2;
         [self.reportSaver cancelReport];
     }];
 
+    if (self.toTextField.text.integerValue > kJMPrintResourceMaxCountDownloadPages) {
+        self.currentCountDownloadedPages = kJMPrintResourceMaxCountDownloadPages;
+    } else {
+        self.currentCountDownloadedPages = self.toTextField.text.integerValue;
+    };
+
     NSUInteger startPage = self.fromTextField.text.integerValue;
     NSUInteger endPage = startPage + kJMPrintResourceMaxCountDownloadPages - 1;
+    if (endPage > self.toTextField.text.integerValue) {
+        endPage = self.toTextField.text.integerValue;
+    }
     JMReportPagesRange *pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
     [self downloadReportWithPagesRange:pagesRange completion:^(NSString *reportURI){
         [JMCancelRequestPopup dismiss];
@@ -195,6 +260,7 @@ NSInteger const kJMPrintResourceMaxCountDownloadPages = 2;
 
 - (void)downloadReportWithPagesRange:(JMReportPagesRange *)pagesRange completion:(void(^)(NSString *reportURI))completion
 {
+    NSLog(@"%@", pagesRange);
     [self.reportSaver saveReportWithName:[self tempReportName]
                                   format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
                               pagesRange:pagesRange
@@ -379,10 +445,17 @@ NSInteger const kJMPrintResourceMaxCountDownloadPages = 2;
     if (isBottomOfView) {
         NSLog(@"bottom of view");
         // start load next portion
+        if (self.currentCountDownloadedPages == self.toTextField.text.integerValue) {
+            return;
+        }
         NSUInteger startPage = self.currentCountDownloadedPages + 1;
         self.currentCountDownloadedPages += kJMPrintResourceMaxCountDownloadPages;
+        if (self.currentCountDownloadedPages > self.toTextField.text.integerValue) {
+            self.currentCountDownloadedPages = self.toTextField.text.integerValue;
+        }
         NSUInteger endPage = self.currentCountDownloadedPages;
-        JMReportPagesRange *pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
+        JMReportPagesRange *pagesRange = [JMReportPagesRange rangeWithStartPage:startPage
+                                                                        endPage:endPage];
         [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title" cancelBlock:^{
             [self.reportSaver cancelReport];
         }];
