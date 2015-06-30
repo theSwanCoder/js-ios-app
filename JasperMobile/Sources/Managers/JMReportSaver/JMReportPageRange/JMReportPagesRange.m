@@ -58,4 +58,10 @@
     return pagesFormat;
 }
 
+#pragma mark - Description
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"PagesRange from: %@, to: %@", @(self.startPage), @(self.endPage)];
+}
+
 @end
