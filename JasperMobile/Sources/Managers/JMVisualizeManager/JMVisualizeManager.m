@@ -104,6 +104,13 @@
     NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"dashboard" ofType:@"html"];
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
 
+    // Initial Scale for ViewPort
+    CGFloat initialScaleViewport = 0.75;
+    if ([JMUtils isIphone]) {
+        initialScaleViewport = 0.25;
+    }
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScaleViewport).stringValue];
+
     // Visualize
     NSString *baseURLString = self.restClient.serverProfile.serverUrl;
     baseURLString = [baseURLString stringByAppendingString:@"/client/visualize.js?_showInputControls=true&_opt=true"];
