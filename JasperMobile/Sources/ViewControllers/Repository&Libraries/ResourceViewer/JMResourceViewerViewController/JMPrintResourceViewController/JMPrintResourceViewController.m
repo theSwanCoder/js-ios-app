@@ -217,8 +217,6 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
         } else {
             rowHeight = tableView.rowHeight;
         }
-    } if (indexPath.section == 1) {
-        rowHeight = self.webView.bounds.size.height;
     }
     return rowHeight;
 }
