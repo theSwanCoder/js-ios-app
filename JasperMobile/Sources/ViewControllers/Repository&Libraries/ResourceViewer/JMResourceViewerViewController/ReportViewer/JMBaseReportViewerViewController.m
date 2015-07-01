@@ -36,6 +36,7 @@
 #import "JMPrintResourceViewController.h"
 #import "JMReportLoader.h"
 #import "JMJavascriptNativeBridgeProtocol.h"
+#import "JMReportSaver.h"
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
 @property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;
@@ -234,23 +235,94 @@
 
 - (void)printResource
 {
-    [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title"];
-    [self webView].hidden = YES;
-    [[self webView].scrollView setZoomScale:0.1 animated:YES];
-    [self.navigationController setToolbarHidden:YES animated:YES];
+    [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {
+        if (resourceURL) {
+            [self printReportWithURL:resourceURL];
+        }
+    }];
+}
 
-    // Add delay before printing and zoom out webView
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [JMCancelRequestPopup dismiss];
-        [self webView].hidden = NO;
+- (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
+{
+    JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
+    [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title" cancelBlock:^{
+        [reportSaver cancelReport];
+    }];
+    [reportSaver saveReportWithName:[self tempReportName]
+                             format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
+                              pages:[self makePagesFormat]
+                            addToDB:NO
+                         completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     [JMCancelRequestPopup dismiss];
+                                 });
+                                 if (error) {
+                                     [reportSaver cancelReport];
+                                     if (error.code == JSSessionExpiredErrorCode) {
+                                         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                                             [self preparePreviewForPrintWithCompletion:completion];
+                                         } else {
+                                             [JMUtils showLoginViewAnimated:YES completion:nil];
+                                         }
+                                     } else {
+                                         [JMUtils showAlertViewWithError:error];
+                                     }
+                                 } else {
+                                     NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
+                                     if (completion) {
+                                         completion(resourceURL);
+                                     }
+                                 }
+                             }@weakselfend];
+}
 
-        JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
-        [printController setReport:self.report withWebView:self.webView];
-        printController.printCompletion = @weakself(^){
-                [self webView].frame = self.view.bounds;
-                [self.view insertSubview:[self webView] belowSubview:self.activityIndicator];
+- (NSString *)tempReportName
+{
+    return [[NSUUID UUID] UUIDString];
+}
+
+- (NSString *)makePagesFormat
+{
+    NSString *pagesFormat;
+    if (self.report.isMultiPageReport) {
+        pagesFormat = [NSString stringWithFormat:@"1-%@", @(self.report.countOfPages)];
+    } else {
+        pagesFormat = [NSString stringWithFormat:@"1"];
+    }
+    return pagesFormat;
+}
+
+- (void)printReportWithURL:(NSURL *)resourceURL
+{
+    UIPrintInfo *printInfo = [UIPrintInfo printInfo];
+    printInfo.jobName = self.report.resourceLookup.label;
+    printInfo.outputType = UIPrintInfoOutputGeneral;
+    printInfo.duplex = UIPrintInfoDuplexLongEdge;
+
+    UIPrintInteractionController *printInteractionController = [UIPrintInteractionController sharedPrintController];
+    printInteractionController.printInfo = printInfo;
+    printInteractionController.showsPageRange = YES;
+    printInteractionController.printingItem = resourceURL;
+
+    UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
+            if(error){
+                NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
+            } else if (completed) {
+                NSString *directoryPath = [resourceURL.path stringByDeletingLastPathComponent];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
+                    [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
+                }
+            }
         }@weakselfend;
-        [self.navigationController pushViewController:printController animated:YES];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([JMUtils isIphone]) {
+            [printInteractionController presentAnimated:YES completionHandler:completionHandler];
+        } else {
+            [printInteractionController presentFromBarButtonItem:self.navigationItem.rightBarButtonItems.firstObject
+                                                        animated:YES
+                                               completionHandler:completionHandler];
+        }
     });
 }
 

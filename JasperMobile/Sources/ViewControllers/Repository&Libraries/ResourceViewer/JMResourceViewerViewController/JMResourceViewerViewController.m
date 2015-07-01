@@ -98,23 +98,7 @@
 #pragma mark - Public API
 - (void)printResource
 {
-    [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title"];
-    [self webView].hidden = YES;
-    [[self webView].scrollView setZoomScale:0.1 animated:YES];
 
-    // Add delay before printing and zoom out webView
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [JMCancelRequestPopup dismiss];
-        [self webView].hidden = NO;
-
-        JMPrintResourceViewController *printController = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:@"JMPrintResourceViewController"];
-        [printController setResourceLookup:self.resourceLookup withWebView:self.webView];
-        printController.printCompletion = @weakself(^){
-            [self webView].frame = self.view.bounds;
-            [self.view addSubview:[self webView]];
-        }@weakselfend;
-        [self.navigationController pushViewController:printController animated:YES];
-    });
 }
 
 #pragma mark - UIWebViewDelegate
