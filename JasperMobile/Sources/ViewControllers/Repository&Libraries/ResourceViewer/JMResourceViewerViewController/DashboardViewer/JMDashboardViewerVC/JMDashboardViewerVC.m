@@ -33,12 +33,13 @@
 #import "JMReportViewerVC.h"
 #import "JMDashboard.h"
 
-@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate>
+@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, UIPrintInteractionControllerDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
 @property (nonatomic, strong) UIBarButtonItem *leftButtonItem;
 
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
+@property (nonatomic, strong) UINavigationController *printNavController;
 @end
 
 
@@ -89,8 +90,8 @@
     UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
             if(error){
                 NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
-            } else if (completed) {
-
+            } else {
+                self.printNavController = nil;
             }
         }@weakselfend;
 
@@ -98,11 +99,32 @@
         if ([JMUtils isIphone]) {
             [printInteractionController presentAnimated:YES completionHandler:completionHandler];
         } else {
-            [printInteractionController presentFromBarButtonItem:self.navigationItem.rightBarButtonItems.firstObject
-                                                        animated:YES
-                                               completionHandler:completionHandler];
+            printInteractionController.delegate = self;
+            self.printNavController = [UINavigationController new];
+            self.printNavController.modalPresentationStyle = UIModalPresentationFormSheet;
+            [self presentViewController:self.printNavController animated:YES completion:^{
+                [printInteractionController presentFromBarButtonItem:self.printNavController.navigationItem.rightBarButtonItems.firstObject
+                                                            animated:YES
+                                                   completionHandler:completionHandler];
+            }];
         }
     });
+}
+
+#pragma mark - UIPrintInteractionControllerDelegate
+- (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController
+{
+    return self.printNavController;
+}
+
+- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController
+{
+    self.printNavController.topViewController.navigationController.navigationBar.barTintColor = kJMMainNavigationBarBackgroundColor;
+    self.printNavController.topViewController.navigationController.toolbar.barTintColor = kJMMainNavigationBarBackgroundColor;
+    self.printNavController.topViewController.navigationController.toolbar.tintColor = [UIColor whiteColor];
+    self.printNavController.topViewController.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+
+    self.printNavController.topViewController.view.backgroundColor = [UIColor lightGrayColor];
 }
 
 #pragma mark - Custom Accessors

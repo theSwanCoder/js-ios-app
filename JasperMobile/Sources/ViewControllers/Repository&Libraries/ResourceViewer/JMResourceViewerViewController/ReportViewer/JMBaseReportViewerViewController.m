@@ -38,13 +38,13 @@
 #import "JMJavascriptNativeBridgeProtocol.h"
 #import "JMReportSaver.h"
 
-@interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
+@interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate, UIPrintInteractionControllerDelegate>
 @property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;
 @property (assign, nonatomic) JMMenuActionsViewAction disabledMenuActionsViewAction;
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
-
+@property (nonatomic, strong) UINavigationController *printNavController;
 @end
 
 @implementation JMBaseReportViewerViewController
@@ -233,6 +233,7 @@
     }
 }
 
+#pragma mark - Print
 - (void)printResource
 {
     [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {
@@ -307,7 +308,8 @@
     UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
             if(error){
                 NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
-            } else if (completed) {
+            } else {
+                self.printNavController = nil;
                 NSString *directoryPath = [resourceURL.path stringByDeletingLastPathComponent];
                 if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
                     [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
@@ -319,9 +321,14 @@
         if ([JMUtils isIphone]) {
             [printInteractionController presentAnimated:YES completionHandler:completionHandler];
         } else {
-            [printInteractionController presentFromBarButtonItem:self.navigationItem.rightBarButtonItems.firstObject
-                                                        animated:YES
-                                               completionHandler:completionHandler];
+            printInteractionController.delegate = self;
+            self.printNavController = [UINavigationController new];
+            self.printNavController.modalPresentationStyle = UIModalPresentationFormSheet;
+            [self presentViewController:self.printNavController animated:YES completion:^{
+                [printInteractionController presentFromBarButtonItem:self.printNavController.navigationItem.rightBarButtonItems.firstObject
+                                                            animated:YES
+                                                   completionHandler:completionHandler];
+            }];
         }
     });
 }
@@ -329,6 +336,22 @@
 - (void)runReportWithPage:(NSInteger)page
 {
     // This method should be overrided in inherited classes.
+}
+
+#pragma mark - UIPrintInteractionControllerDelegate
+- (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController
+{
+    return self.printNavController;
+}
+
+- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController
+{
+    self.printNavController.topViewController.navigationController.navigationBar.barTintColor = kJMMainNavigationBarBackgroundColor;
+    self.printNavController.topViewController.navigationController.toolbar.barTintColor = kJMMainNavigationBarBackgroundColor;
+    self.printNavController.topViewController.navigationController.toolbar.tintColor = [UIColor whiteColor];
+    self.printNavController.topViewController.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+
+    self.printNavController.topViewController.view.backgroundColor = [UIColor lightGrayColor];
 }
 
 #pragma mark - Custom accessors
