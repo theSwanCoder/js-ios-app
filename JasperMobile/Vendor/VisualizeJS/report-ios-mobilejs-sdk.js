@@ -456,6 +456,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
           },
           success: (function(_this) {
             return function(parameters) {
+              _this._adjustScaleForReport(_this.report);
               return _this.report.container("#container").render().done(function() {
                 return _this._processSuccess(parameters);
               });
@@ -463,8 +464,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
           })(this)
         };
         actualParams = jQuery.extend({}, defaultParams, params);
-        this.report = this.v.report(actualParams);
-        return this._adjustScaleForReport(this.report);
+        return this.report = this.v.report(actualParams);
       };
 
       ReportController.prototype._executeFailedCallback = function(error) {
