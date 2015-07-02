@@ -33,13 +33,12 @@
 #import "JMReportViewerVC.h"
 #import "JMDashboard.h"
 
-@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, UIPrintInteractionControllerDelegate>
+@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
 @property (nonatomic, strong) UIBarButtonItem *leftButtonItem;
 
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
-@property (nonatomic, strong) UINavigationController *printNavController;
 @end
 
 
@@ -50,7 +49,8 @@
 {
     [self imageFromWebViewWithCompletion:^(UIImage *image) {
         if (image) {
-            [self printReportWithImage:image];
+            [self printItem:image
+                   withName:self.dashboard.resourceLookup.label];
         }
     }];
 }
@@ -73,58 +73,6 @@
             }
         });
     });
-}
-
-- (void)printReportWithImage:(UIImage *)resourceImage
-{
-    UIPrintInfo *printInfo = [UIPrintInfo printInfo];
-    printInfo.jobName = self.dashboard.resourceLookup.label;
-    printInfo.outputType = UIPrintInfoOutputGeneral;
-    printInfo.duplex = UIPrintInfoDuplexLongEdge;
-
-    UIPrintInteractionController *printInteractionController = [UIPrintInteractionController sharedPrintController];
-    printInteractionController.printInfo = printInfo;
-    printInteractionController.showsPageRange = YES;
-    printInteractionController.printingItem = resourceImage;
-
-    UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
-            if(error){
-                NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
-            } else {
-                self.printNavController = nil;
-            }
-        }@weakselfend;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([JMUtils isIphone]) {
-            [printInteractionController presentAnimated:YES completionHandler:completionHandler];
-        } else {
-            printInteractionController.delegate = self;
-            self.printNavController = [UINavigationController new];
-            self.printNavController.modalPresentationStyle = UIModalPresentationFormSheet;
-            [self presentViewController:self.printNavController animated:YES completion:^{
-                [printInteractionController presentFromBarButtonItem:self.printNavController.navigationItem.rightBarButtonItems.firstObject
-                                                            animated:YES
-                                                   completionHandler:completionHandler];
-            }];
-        }
-    });
-}
-
-#pragma mark - UIPrintInteractionControllerDelegate
-- (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController
-{
-    return self.printNavController;
-}
-
-- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController
-{
-    self.printNavController.topViewController.navigationController.navigationBar.barTintColor = kJMMainNavigationBarBackgroundColor;
-    self.printNavController.topViewController.navigationController.toolbar.barTintColor = kJMMainNavigationBarBackgroundColor;
-    self.printNavController.topViewController.navigationController.toolbar.tintColor = [UIColor whiteColor];
-    self.printNavController.topViewController.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-
-    self.printNavController.topViewController.view.backgroundColor = [UIColor lightGrayColor];
 }
 
 #pragma mark - Custom Accessors

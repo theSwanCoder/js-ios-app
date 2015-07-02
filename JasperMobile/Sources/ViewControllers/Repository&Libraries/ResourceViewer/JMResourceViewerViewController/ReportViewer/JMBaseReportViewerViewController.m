@@ -38,13 +38,13 @@
 #import "JMJavascriptNativeBridgeProtocol.h"
 #import "JMReportSaver.h"
 
-@interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate, UIPrintInteractionControllerDelegate>
+@interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
 @property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;
 @property (assign, nonatomic) JMMenuActionsViewAction disabledMenuActionsViewAction;
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
-@property (nonatomic, strong) UINavigationController *printNavController;
+@property (nonatomic, strong) NSURL *printResourceURL;
 @end
 
 @implementation JMBaseReportViewerViewController
@@ -53,6 +53,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self removeTempPrintResource:self.printResourceURL];
 }
 
 #pragma mark - UIViewController
@@ -236,11 +237,18 @@
 #pragma mark - Print
 - (void)printResource
 {
-    [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {
-        if (resourceURL) {
-            [self printReportWithURL:resourceURL];
-        }
-    }];
+    if (self.printResourceURL) {
+        [self printItem:self.printResourceURL
+               withName:self.report.resourceLookup.label];
+    } else {
+        [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {
+            if (resourceURL) {
+                self.printResourceURL = resourceURL;
+                [self printItem:self.printResourceURL
+                       withName:self.report.resourceLookup.label];
+            }
+        }];
+    }
 }
 
 - (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
@@ -293,65 +301,17 @@
     return pagesFormat;
 }
 
-- (void)printReportWithURL:(NSURL *)resourceURL
+- (void)removeTempPrintResource:(NSURL *)resourceURL
 {
-    UIPrintInfo *printInfo = [UIPrintInfo printInfo];
-    printInfo.jobName = self.report.resourceLookup.label;
-    printInfo.outputType = UIPrintInfoOutputGeneral;
-    printInfo.duplex = UIPrintInfoDuplexLongEdge;
-
-    UIPrintInteractionController *printInteractionController = [UIPrintInteractionController sharedPrintController];
-    printInteractionController.printInfo = printInfo;
-    printInteractionController.showsPageRange = YES;
-    printInteractionController.printingItem = resourceURL;
-
-    UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
-            if(error){
-                NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
-            } else {
-                self.printNavController = nil;
-                NSString *directoryPath = [resourceURL.path stringByDeletingLastPathComponent];
-                if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
-                    [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
-                }
-            }
-        }@weakselfend;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([JMUtils isIphone]) {
-            [printInteractionController presentAnimated:YES completionHandler:completionHandler];
-        } else {
-            printInteractionController.delegate = self;
-            self.printNavController = [UINavigationController new];
-            self.printNavController.modalPresentationStyle = UIModalPresentationFormSheet;
-            [self presentViewController:self.printNavController animated:YES completion:^{
-                [printInteractionController presentFromBarButtonItem:self.printNavController.navigationItem.rightBarButtonItems.firstObject
-                                                            animated:YES
-                                                   completionHandler:completionHandler];
-            }];
-        }
-    });
+    NSString *directoryPath = [resourceURL.path stringByDeletingLastPathComponent];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
+    }
 }
 
 - (void)runReportWithPage:(NSInteger)page
 {
     // This method should be overrided in inherited classes.
-}
-
-#pragma mark - UIPrintInteractionControllerDelegate
-- (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController
-{
-    return self.printNavController;
-}
-
-- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController
-{
-    self.printNavController.topViewController.navigationController.navigationBar.barTintColor = kJMMainNavigationBarBackgroundColor;
-    self.printNavController.topViewController.navigationController.toolbar.barTintColor = kJMMainNavigationBarBackgroundColor;
-    self.printNavController.topViewController.navigationController.toolbar.tintColor = [UIColor whiteColor];
-    self.printNavController.topViewController.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-
-    self.printNavController.topViewController.view.backgroundColor = [UIColor lightGrayColor];
 }
 
 #pragma mark - Custom accessors
