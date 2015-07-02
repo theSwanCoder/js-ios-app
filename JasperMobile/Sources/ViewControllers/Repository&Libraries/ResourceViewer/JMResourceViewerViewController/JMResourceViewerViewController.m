@@ -26,10 +26,11 @@
 #import "ALToastView.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMPrintResourceViewController.h"
+#import "JMMainNavigationController.h"
 
-@interface JMResourceViewerViewController ()
+@interface JMResourceViewerViewController () <UIPrintInteractionControllerDelegate>
 @property (nonatomic, weak, readwrite) IBOutlet UIWebView *webView;
-
+@property (nonatomic, strong) UINavigationController *printNavController;
 @end
 
 @implementation JMResourceViewerViewController
@@ -95,10 +96,64 @@
     }
 }
 
-#pragma mark - Public API
+#pragma mark - Print API
 - (void)printResource
 {
+    // override in child
+}
 
+- (void)printItem:(id)printingItem withName:(NSString *)itemName
+{
+    UIPrintInfo *printInfo = [UIPrintInfo printInfo];
+    printInfo.jobName = itemName;
+    printInfo.outputType = UIPrintInfoOutputGeneral;
+    printInfo.duplex = UIPrintInfoDuplexLongEdge;
+
+    UIPrintInteractionController *printInteractionController = [UIPrintInteractionController sharedPrintController];
+    printInteractionController.printInfo = printInfo;
+    printInteractionController.showsPageRange = YES;
+    printInteractionController.printingItem = printingItem;
+
+    UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
+            if(error){
+                NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
+            }
+        }@weakselfend;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([JMUtils isIphone]) {
+            [printInteractionController presentAnimated:YES completionHandler:completionHandler];
+        } else {
+            printInteractionController.delegate = self;
+            self.printNavController = [JMMainNavigationController new];
+            self.printNavController.view.backgroundColor = [UIColor colorWithRedComponent:239.f greenComponent:239.f blueComponent:244.f];
+            self.printNavController.modalPresentationStyle = UIModalPresentationFormSheet;
+            self.printNavController.preferredContentSize = CGSizeMake(320, 400);
+            [printInteractionController presentFromBarButtonItem:self.printNavController.navigationItem.rightBarButtonItems.firstObject
+                                                        animated:YES
+                                               completionHandler:completionHandler];
+        }
+    });
+}
+
+#pragma mark - UIPrintInteractionControllerDelegate
+- (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController
+{
+    return self.printNavController;
+}
+
+- (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController
+{
+    [self presentViewController:self.printNavController animated:YES completion:nil];
+    UIViewController *printSettingsVC = self.printNavController.topViewController;
+    printSettingsVC.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+}
+
+- (void)printInteractionControllerWillDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController
+{
+    [self.printNavController dismissViewControllerAnimated:YES completion:^{
+        self.printNavController = nil;
+    }];
 }
 
 #pragma mark - UIWebViewDelegate
