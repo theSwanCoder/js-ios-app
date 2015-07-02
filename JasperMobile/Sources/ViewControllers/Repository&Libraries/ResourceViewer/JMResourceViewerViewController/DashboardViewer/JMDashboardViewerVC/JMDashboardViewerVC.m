@@ -57,7 +57,7 @@
 
 - (void)imageFromWebViewWithCompletion:(void(^)(UIImage *image))completion
 {
-    [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title"];
+    [JMCancelRequestPopup presentWithMessage:@"status.loading"];
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         // Screenshot rendering from webView
         UIGraphicsBeginImageContextWithOptions(self.webView.bounds.size, self.webView.opaque, 0.0);

@@ -260,5 +260,5 @@
 /* Other */
 
 "status.loading" = "Loading...";
-"status.loading.ic" = "Loading IC...";
+"status.loading.ic" = "Loading...";
 "back.button.title" = "Back";

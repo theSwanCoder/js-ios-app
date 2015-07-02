@@ -254,7 +254,7 @@
 - (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
 {
     JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
-    [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title" cancelBlock:^{
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
         [reportSaver cancelReport];
     }];
     [reportSaver saveReportWithName:[self tempReportName]
