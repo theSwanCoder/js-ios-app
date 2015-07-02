@@ -31,6 +31,7 @@
 @interface JMResourceViewerViewController () <UIPrintInteractionControllerDelegate>
 @property (nonatomic, weak, readwrite) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) UINavigationController *printNavController;
+@property (nonatomic, assign) CGSize printSettingsPreferredContentSize;
 @end
 
 @implementation JMResourceViewerViewController
@@ -41,6 +42,13 @@
 }
 
 #pragma mark - UIViewController LifeCycle
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    self.printSettingsPreferredContentSize = CGSizeMake(540, 580);
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -50,6 +58,17 @@
         // old dashboards don't load empty page
         //[self.webView stopLoading];
     }
+}
+
+- (void)viewWillLayoutSubviews
+{
+    CGRect frame = self.printNavController.view.superview.frame;
+    frame.size = self.printSettingsPreferredContentSize;
+    self.printNavController.view.superview.frame = frame;
+
+    self.printNavController.preferredContentSize = self.printSettingsPreferredContentSize;
+
+    [super viewWillLayoutSubviews];
 }
 
 #pragma mark - Setups
@@ -128,7 +147,7 @@
             self.printNavController = [JMMainNavigationController new];
             self.printNavController.view.backgroundColor = [UIColor colorWithRedComponent:239.f greenComponent:239.f blueComponent:244.f];
             self.printNavController.modalPresentationStyle = UIModalPresentationFormSheet;
-            self.printNavController.preferredContentSize = CGSizeMake(320, 400);
+            self.printNavController.preferredContentSize = self.printSettingsPreferredContentSize;
             [printInteractionController presentFromBarButtonItem:self.printNavController.navigationItem.rightBarButtonItems.firstObject
                                                         animated:YES
                                                completionHandler:completionHandler];
