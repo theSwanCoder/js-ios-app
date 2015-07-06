@@ -207,7 +207,7 @@
 "action.title.markasfavorite" = "Marcar como favorito";
 "action.title.markasunfavorite" = "Remover dos favoritos";
 "action.title.info" = "Informações";
-"action.title.filter" = "Filtro:";
+"action.title.filter" = "Filtro";
 "action.title.sort" = "Classificar como";
 "action.title.selectall" = "Selecionar todos";
 "action.title.clearselections" = "Limpar seleções";
