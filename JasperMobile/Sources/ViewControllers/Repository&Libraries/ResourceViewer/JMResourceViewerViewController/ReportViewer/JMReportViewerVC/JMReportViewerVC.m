@@ -24,9 +24,11 @@
 #import "JMReportViewerVC.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMReportViewerConfigurator.h"
+#import "JMReportSaver.h"
 
 @interface JMReportViewerVC () <JMReportLoaderDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
+@property (nonatomic, copy) void(^exportCompletion)(NSString *resourcePath);
 @end
 
 @implementation JMReportViewerVC
@@ -169,6 +171,7 @@
 
             if (success) {
                 [self showReportView];
+                [self clearTempPrintResources];
             } else {
                 [self handleError:error];
             }
@@ -272,6 +275,10 @@
     // [self.reportLoader exportReportWithFormat:@"pdf"];
     // html format currently vis.js doesn't support
     // here we can receive link on file.
+    if (self.exportCompletion) {
+        self.exportCompletion(resourcePath);
+        self.exportCompletion = nil;
+    }
 }
 
 #pragma mark - UIWebView helpers
@@ -303,6 +310,49 @@
 - (void)showReportView
 {
     ((UIView *)self.configurator.webView).hidden = NO;
+}
+
+#pragma mark - Print
+- (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
+{
+
+    self.exportCompletion = @weakself(^(NSString *resourcePath)) {
+        [JMCancelRequestPopup dismiss];
+
+        JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
+        [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
+            [reportSaver cancelReport];
+        }];
+        [reportSaver saveReportWithName:[self tempReportName]
+                                 format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
+                           resourcePath:resourcePath
+                             completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                                     [JMCancelRequestPopup dismiss];
+
+                                     if (error) {
+                                         [reportSaver cancelReport];
+                                         if (error.code == JSSessionExpiredErrorCode) {
+                                             if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                                                 [self preparePreviewForPrintWithCompletion:completion];
+                                             } else {
+                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
+                                             }
+                                         } else {
+                                             [JMUtils showAlertViewWithError:error];
+                                         }
+                                     } else {
+                                         NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
+                                         if (completion) {
+                                             completion(resourceURL);
+                                         }
+                                     }
+                                 }@weakselfend];
+    }@weakselfend;
+
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
+        self.exportCompletion = nil;
+    }];
+    [self.reportLoader exportReportWithFormat:@"pdf"];
 }
 
 @end

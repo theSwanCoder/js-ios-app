@@ -53,7 +53,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self removeTempPrintResource:self.printResourceURL];
+    [self removeResourceWithURL:self.printResourceURL];
 }
 
 #pragma mark - UIViewController
@@ -237,52 +237,21 @@
 #pragma mark - Print
 - (void)printResource
 {
-    if (self.printResourceURL) {
-        [self printItem:self.printResourceURL
-               withName:self.report.resourceLookup.label];
-    } else {
-        [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {
-            if (resourceURL) {
-                self.printResourceURL = resourceURL;
-                [self printItem:self.printResourceURL
-                       withName:self.report.resourceLookup.label];
-            }
-        }];
-    }
+    // TODO: we don't have events when JIVE is applied to a report.
+    [self clearTempPrintResources];
+
+    [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {
+        if (resourceURL) {
+            self.printResourceURL = resourceURL;
+            [self printItem:self.printResourceURL
+                   withName:self.report.resourceLookup.label];
+        }
+    }];
 }
 
 - (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
 {
-    JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
-        [reportSaver cancelReport];
-    }];
-    [reportSaver saveReportWithName:[self tempReportName]
-                             format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
-                              pages:[self makePagesFormat]
-                            addToDB:NO
-                         completion:@weakself(^(NSString *reportURI, NSError *error)) {
-                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                     [JMCancelRequestPopup dismiss];
-                                 });
-                                 if (error) {
-                                     [reportSaver cancelReport];
-                                     if (error.code == JSSessionExpiredErrorCode) {
-                                         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                             [self preparePreviewForPrintWithCompletion:completion];
-                                         } else {
-                                             [JMUtils showLoginViewAnimated:YES completion:nil];
-                                         }
-                                     } else {
-                                         [JMUtils showAlertViewWithError:error];
-                                     }
-                                 } else {
-                                     NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
-                                     if (completion) {
-                                         completion(resourceURL);
-                                     }
-                                 }
-                             }@weakselfend];
+    // This method should be overrided in inherited classes.
 }
 
 - (NSString *)tempReportName
@@ -301,7 +270,13 @@
     return pagesFormat;
 }
 
-- (void)removeTempPrintResource:(NSURL *)resourceURL
+- (void)clearTempPrintResources
+{
+    [self removeResourceWithURL:self.printResourceURL];
+    self.printResourceURL = nil;
+}
+
+- (void)removeResourceWithURL:(NSURL *)resourceURL
 {
     NSString *directoryPath = [resourceURL.path stringByDeletingLastPathComponent];
     if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
