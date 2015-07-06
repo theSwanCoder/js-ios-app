@@ -194,7 +194,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileReport.exportReport(%@);";
-    request.parametersAsString = exportFormat;
+    request.parametersAsString = [NSString stringWithFormat:@"'%@'", exportFormat];
     [self.bridge sendRequest:request];
 }
 
