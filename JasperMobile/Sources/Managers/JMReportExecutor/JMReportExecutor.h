@@ -26,25 +26,42 @@
 //  TIBCO JasperMobile
 //
 
-@class JMReport;
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.1
 */
 
+@interface JSRESTBase(Export)
+- (void)exportExecutionStatusWithExecutionID:(NSString *)executionID exportOutput:(NSString *)exportOutput completion:(JSRequestCompletionBlock)block;
+@end
+
+@implementation JSRESTBase(Export)
+- (void)exportExecutionStatusWithExecutionID:(NSString *)executionID exportOutput:(NSString *)exportOutput completion:(JSRequestCompletionBlock)block
+{
+    NSString *uri = [NSString stringWithFormat:@"%@/%@/exports/%@/status", [JSConstants sharedInstance].REST_REPORT_EXECUTION_URI, executionID, exportOutput];
+    JSRequest *request = [[JSRequest alloc] initWithUri:uri];
+    request.expectedModelClass = [JSExecutionStatus class];
+    request.restVersion = JSRESTVersion_2;
+    request.completionBlock = block;
+    [self sendRequest:request];
+}
+@end
+
+@class JMReport;
+@class JMReportPagesRange;
 
 @interface JMReportExecutor : NSObject
 @property (nonatomic, assign) BOOL shouldExecuteAsync;
 // TODO: move to separate instance
 @property (nonatomic, copy) NSString *format;
-@property (nonatomic, copy) NSString *pages;
 @property (nonatomic, copy) NSString *attachmentsPrefix;
 @property (nonatomic, assign) BOOL interactive;
+@property (nonatomic, strong) JMReportPagesRange *pagesRange;
 
 - (instancetype)initWithReport:(JMReport *)report;
 + (instancetype)executorWithReport:(JMReport *)report;
 
 - (void)executeWithCompletion:(void(^)(JSReportExecutionResponse *executionResponse, NSError *error))completion;
-- (void)exportWithExecutionResponse:(JSReportExecutionResponse *)executionResponse completion:(void(^)(JSExportExecutionResponse *exportResponse, NSError *error))completion;
+- (void)exportWithCompletion:(void (^)(JSExportExecutionResponse *exportResponse, NSError *error))completion;
 @end

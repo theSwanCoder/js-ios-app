@@ -30,6 +30,7 @@
 #import "JMSavedResources+Helpers.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMReportExecutor.h"
+#import "JMReportPagesRange.h"
 
 NSString * const kJMAttachmentPrefix = @"_";
 NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessionConfigurationIdentifier.save.report";
@@ -41,6 +42,8 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 @property (nonatomic, strong) JSReportExecutionResponse *requestExecution;
 @property (nonatomic, strong) JSExportExecutionResponse *exportExecution;
 @property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
+@property (nonatomic, strong) JMReportExecutor *reportExecutor;
+@property (nonatomic, strong) JMReportPagesRange *pagesRange;
 @end
 
 @implementation JMReportSaver
@@ -51,6 +54,7 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
     self = [super init];
     if (self) {
         _report = report;
+        _reportExecutor = [JMReportExecutor executorWithReport:_report];
     }
     return self;
 }
@@ -70,6 +74,20 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
             completionBlock(nil, errorOfCreationLocation);
         }
     } else {
+        if (!self.pagesRange) {
+            NSArray *components = [pages componentsSeparatedByString:@"-"];
+            NSUInteger startPage = 0;
+            NSUInteger endPage = 0;
+            if (components.count == 2) {
+                startPage = ((NSNumber *)components[0]).integerValue;
+                endPage = ((NSNumber *)components[1]).integerValue;
+            } else if (components.count == 1) {
+                startPage = ((NSNumber *)components.firstObject).integerValue;
+                endPage = ((NSNumber *)components.firstObject).integerValue;
+            }
+            self.pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
+        }
+
         [self fetchOutputResourceURLForReportWithFileExtension:format
                                                          pages:pages
                                                     completion:@weakself(^(BOOL success, NSError *error)) {
@@ -122,6 +140,49 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
     }
 }
 
+- (void)saveReportWithName:(NSString *)name format:(NSString *)format resourcePath:(NSString *)resourcePath completion:(SaveReportCompletion)completion
+{
+    if ([format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+        [self preparePathsForName:name fileExtension:format];
+        NSError *errorOfCreationLocation = [self createLocationAtPath:self.temporaryDirectory];
+        if (errorOfCreationLocation) {
+            if (completion) {
+                completion(nil, errorOfCreationLocation);
+            }
+        } else {
+            [self downloadReportWithName:name
+                           fileExtension:format
+                              reportPath:resourcePath
+                              completion:@weakself(^(NSError *error)) {
+                                      if (error) {
+                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                              if (completion) {
+                                                  completion(nil, error);
+                                              }
+                                          });
+                                      } else {
+                                          // move saved report from temp location to origin
+
+                                          if ([self isExistSavedReportWithName:name fileExtension:format]) {
+                                              [self removeReportAtPath:self.originalDirectory];
+                                          }
+                                          [self moveResourceFromPath:self.temporaryDirectory
+                                                              toPath:self.originalDirectory];
+
+                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                              if (completion) {
+                                                  NSString *reportURI = [JMSavedResources uriForSavedReportWithName:name format:format];
+                                                  completion(reportURI, nil);
+                                              }
+                                          });
+                                      }
+                                  }@weakselfend];
+        }
+    } else{
+        // at the moment HTML doesn't support
+    }
+}
+
 - (void)cancelReport
 {
     [self.restClient cancelAllRequests];
@@ -144,34 +205,52 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
                  fileExtension:(NSString *)fileExtension
                     completion:(void(^)(NSError *error))completion
 {
+    [self downloadReportWithName:reportName
+                   fileExtension:fileExtension
+                      reportPath:[self outputResourceURL]
+                      completion:completion];
+}
+
+- (void)downloadReportWithName:(NSString *)reportName
+                 fileExtension:(NSString *)fileExtension
+                    reportPath:(NSString *)reportPath
+                    completion:(void(^)(NSError *error))completion
+{
     [JMUtils showNetworkActivityIndicator];
-    
-    [self downloadResourceFromURLString:[self outputResourceURL]
+    [self downloadResourceFromURLString:reportPath
                              completion:@weakself(^(NSURL *location, NSURLResponse *response, NSError *error)) {
-                                 if (!error) {
-                                     // save report to disk
-                                     NSURL *reportLocation = [self reportLocationForPath:self.temporaryDirectory withFileExtention:fileExtension];
-                                     NSError *error = [self moveResourceFromLocation:location toLocation:reportLocation];
-                                     if (error) {
+                                     [JMUtils hideNetworkActivityIndicator];
+
+                                     if (!error) {
+                                         // save report to disk
+                                         NSURL *reportLocation = [self reportLocationForPath:self.temporaryDirectory withFileExtention:fileExtension];
+                                         NSError *error = [self moveResourceFromLocation:location toLocation:reportLocation];
+                                         if (error) {
+                                             if (completion) {
+                                                 completion(error);
+                                             }
+                                         } else {
+                                             // save attachments or exit
+                                             if ([fileExtension isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+                                                 if (completion) {
+                                                     completion(nil);
+                                                 }
+                                             } else {
+                                                 [self downloadAttachmentsForReportWithName:reportName
+                                                                              fileExtension:fileExtension
+                                                                                 completion:@weakself(^(NSError *attError)) {
+                                                                                         if (completion) {
+                                                                                             completion(attError);
+                                                                                         }
+                                                                                     }@weakselfend];
+                                             }
+                                         }
+                                     }else {
                                          if (completion) {
                                              completion(error);
                                          }
-                                     } else {
-                                         // save attachments or exit
-                                         [self downloadAttachmentsForReportWithName:reportName
-                                                                      fileExtension:fileExtension
-                                                                         completion:@weakself(^(NSError *attError)) {
-                                                                             if (completion) {
-                                                                                 completion(attError);
-                                                                             }
-                                                                         }@weakselfend];
                                      }
-                                 }else {
-                                     if (completion) {
-                                         completion(error);
-                                     }
-                                 }
-                             }@weakselfend];
+                                 }@weakselfend];
 }
 
 - (void)downloadAttachmentsForReportWithName:(NSString *)reportName
@@ -187,8 +266,12 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
     if (attachmentCount) {
         for (NSString *attachmentName in attachmentNames) {
             NSString *attachmentURLString = [self attachmentURLWithName:attachmentName];
+
+            [JMUtils showNetworkActivityIndicator];
             [self downloadResourceFromURLString:attachmentURLString
                                      completion:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                                         [JMUtils hideNetworkActivityIndicator];
+
                                          if (error) {
                                              if (completion) {
                                                  completion(error);
@@ -219,14 +302,12 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 - (void)downloadResourceFromURLString:(NSString *)resourceURLString
                            completion:(void(^)(NSURL *location, NSURLResponse *response, NSError *error))completion
 {
-    [JMUtils showNetworkActivityIndicator];
     NSURL *URL = [NSURL URLWithString:resourceURLString];
     NSURLRequest *request = [NSURLRequest requestWithURL:URL];
 
     NSURLSession *session = [NSURLSession sharedSession];
     self.downloadTask = [session downloadTaskWithRequest:request
                                                             completionHandler:@weakself(^(NSURL *location, NSURLResponse *response, NSError *error)) {
-                                                                [JMUtils hideNetworkActivityIndicator];
                                                                 if (error) {
                                                                     [self cancelReport];
                                                                 }
@@ -330,18 +411,16 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
                                                    pages:(NSString *)pages
                                               completion:(void(^)(BOOL success, NSError *error))completion
 {
-    JMReportExecutor *executor = [JMReportExecutor executorWithReport:self.report];
-    executor.shouldExecuteAsync = YES;
+    self.reportExecutor.shouldExecuteAsync = YES;
+    self.reportExecutor.interactive = NO;
+    self.reportExecutor.attachmentsPrefix = kJMAttachmentPrefix;
+    self.reportExecutor.format = format;
+    self.reportExecutor.pagesRange = self.pagesRange;
 
-    executor.interactive = NO;
-    executor.attachmentsPrefix = kJMAttachmentPrefix;
-    executor.format = format;
-    executor.pages = pages;
-
-    [executor executeWithCompletion:@weakself(^(JSReportExecutionResponse *executionResponse, NSError *executionError)) {
+    [self.reportExecutor executeWithCompletion:@weakself(^(JSReportExecutionResponse *executionResponse, NSError *executionError)) {
         if (executionResponse) {
             self.requestExecution = executionResponse;
-            [executor exportWithExecutionResponse:executionResponse completion:@weakself(^(JSExportExecutionResponse *exportResponse, NSError *exportError)) {
+            [self.reportExecutor exportWithCompletion:@weakself(^(JSExportExecutionResponse *exportResponse, NSError *exportError)) {
                 if (exportResponse) {
                     self.exportExecution = exportResponse;
                     if (completion) {
