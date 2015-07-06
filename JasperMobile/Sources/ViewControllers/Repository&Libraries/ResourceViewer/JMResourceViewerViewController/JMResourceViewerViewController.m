@@ -123,6 +123,13 @@
 
 - (void)printItem:(id)printingItem withName:(NSString *)itemName
 {
+    [self printItem:printingItem
+           withName:itemName
+         completion:nil];
+}
+
+- (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(void))completion
+{
     UIPrintInfo *printInfo = [UIPrintInfo printInfo];
     printInfo.jobName = itemName;
     printInfo.outputType = UIPrintInfoOutputGeneral;
@@ -136,6 +143,10 @@
     UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
             if(error){
                 NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
+            } else {
+                if (completion) {
+                    completion();
+                }
             }
         }@weakselfend;
 

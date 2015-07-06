@@ -37,4 +37,5 @@
 @property (nonatomic, weak, readonly) IBOutlet UIWebView *webView;
 - (void)printResource;
 - (void)printItem:(id)printingItem withName:(NSString *)itemName;
+- (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void (^)(void))completion;
 @end
