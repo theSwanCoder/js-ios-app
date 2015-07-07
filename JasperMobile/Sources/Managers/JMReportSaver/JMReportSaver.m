@@ -308,9 +308,6 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
     NSURLSession *session = [NSURLSession sharedSession];
     self.downloadTask = [session downloadTaskWithRequest:request
                                                             completionHandler:@weakself(^(NSURL *location, NSURLResponse *response, NSError *error)) {
-                                                                if (error) {
-                                                                    [self cancelReport];
-                                                                }
                                                                 if (completion) {
                                                                     completion(location, response, error);
                                                                 }
