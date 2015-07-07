@@ -35,6 +35,7 @@ static NSString *const kJMReportExecutorRestStatusReady = @"ready";
 static NSString *const kJMReportExecutorRestStatusQueued = @"queued";
 static NSString *const kJMReportExecutorRestStatusExecution = @"execution";
 static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
+static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
 
 @interface JMReportExecutor()
 @property (nonatomic, weak) JMReport *report;
@@ -108,11 +109,13 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
                                             JSExecutionStatus *executionStatus = self.executionResponse.status;
                                             BOOL isExecutionStatusReady = [executionStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
                                             BOOL isExecutionStatusQueued = [executionStatus.status isEqualToString:kJMReportExecutorRestStatusQueued];
+                                            BOOL isExecutionStatusExecution = [executionStatus.status isEqualToString:kJMReportExecutorRestStatusExecution];
+
                                             if (isExecutionStatusReady) {
                                                 if (self.executeCompletion) {
                                                     self.executeCompletion(self.executionResponse, nil);
                                                 }
-                                            } else if (isExecutionStatusQueued) {
+                                            } else if (isExecutionStatusQueued || isExecutionStatusExecution) {
                                                 [self startCheckingExecutionStatus];
                                             } else {
                                                 if (self.executeCompletion) {
@@ -134,7 +137,6 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
 
         self.exportResponse = exports.firstObject;
         JSExecutionStatus *exportStatus = self.exportResponse.status;
-        NSLog(@"exportStatus: %@", exportStatus);
 
         BOOL isExportStatusReady = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
         if (isExportStatusReady) {
@@ -145,7 +147,6 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
             [self startCheckingExportStatus];
         }
     } else {
-        NSLog(@"pages format: %@", self.pagesRange.pagesFormat);
         [self.restClient runExportExecution:executionID
                                outputFormat:self.format
                                       pages:self.pagesRange.pagesFormat
@@ -153,24 +154,26 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
                             completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
 
                                     if (result.error) {
-                                        completion(nil, result.error);
+                                        if (self.exportCompletion) {
+                                            self.exportCompletion(nil, result.error);
+                                        }
                                     } else {
                                         self.exportResponse = result.objects.firstObject;
                                         JSExecutionStatus *exportStatus = self.exportResponse.status;
-                                        NSLog(@"exportStatus: %@", exportStatus);
 
                                         BOOL isExportStatusReady = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
                                         BOOL isExportStatusExecution = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusExecution];
                                         BOOL isExportStatusQueued = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusQueued];
                                         BOOL isExportStatusCancelled = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusCancelled];
+                                        BOOL isExportStatusFailed = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusFailed];
 
                                         if (isExportStatusReady) {
                                             if (self.exportCompletion) {
                                                 self.exportCompletion(self.exportResponse, nil);
                                             }
-                                        } else if (isExportStatusExecution || isExportStatusQueued) {
+                                        } else if (isExportStatusExecution || isExportStatusQueued || isExportStatusCancelled) {
                                             [self startCheckingExportStatus];
-                                        } else if (isExportStatusCancelled) {
+                                        } else if (isExportStatusFailed) {
                                             if (self.exportCompletion) {
                                                 self.exportCompletion(nil, nil);
                                             }
@@ -198,8 +201,8 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
                                        completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
                                                if (!result.error) {
                                                    JSExecutionStatus *executionStatus = result.objects.firstObject;
-                                                   NSLog(@"executionStatus: %@", executionStatus);
                                                    BOOL isExecutionStatusReady = [executionStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
+                                                   BOOL isExportStatusFailed = [executionStatus.status isEqualToString:kJMReportExecutorRestStatusFailed];
 
                                                    if (isExecutionStatusReady) {
                                                        if (self.executionStatusCheckingTimer.valid) {
@@ -209,6 +212,14 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
                                                        if (self.executeCompletion) {
                                                            self.executeCompletion(self.executionResponse, nil);
                                                        }
+                                                   } else if (isExportStatusFailed) {
+                                                       if (self.executeCompletion) {
+                                                           self.executeCompletion(nil, nil);
+                                                       }
+                                                   }
+                                               } else {
+                                                   if (self.executeCompletion) {
+                                                       self.executeCompletion(nil, result.error);
                                                    }
                                                }
                                            } @weakselfend];
@@ -234,23 +245,21 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
                                                completion:@weakselfnotnil(^(JSOperationResult *result)) {
                                                        if (!result.error) {
                                                            JSExecutionStatus *exportStatus = result.objects.firstObject;
-                                                           NSLog(@"exportStatus: %@", exportStatus);
 
                                                            BOOL isExportStatusReady = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
-                                                           BOOL isExportStatusCancelled = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusCancelled];
+                                                           BOOL isExportStatusFailed = [exportStatus.status isEqualToString:kJMReportExecutorRestStatusFailed];
 
                                                            if (isExportStatusReady) {
                                                                if (self.exportStatusCheckingTimer.valid) {
                                                                    [self.exportStatusCheckingTimer invalidate];
                                                                }
 
-                                                               [self fetchExportFromMetadataWithCompletion:^(JSExportExecutionResponse *exportResponse) {
+                                                               [self fetchExportFromMetadataWithCompletion:^(JSExportExecutionResponse *exportResponse, NSError *error) {
                                                                    if (self.exportCompletion) {
-                                                                       self.exportResponse.attachments = exportResponse.attachments;
-                                                                       self.exportCompletion(self.exportResponse, nil);
+                                                                       self.exportCompletion(exportResponse, nil);
                                                                    }
                                                                }];
-                                                           } else if (isExportStatusCancelled) {
+                                                           } else if (isExportStatusFailed) {
                                                                if (self.exportStatusCheckingTimer.valid) {
                                                                    [self.exportStatusCheckingTimer invalidate];
                                                                }
@@ -260,7 +269,9 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
                                                                }
                                                            }
                                                        } else {
-                                                           NSLog(@"error: %@", result.error);
+                                                           if (self.exportCompletion) {
+                                                               self.exportCompletion(nil, result.error);
+                                                           }
                                                        }
                                                    }@weakselfend];
 
@@ -270,26 +281,48 @@ static NSString *const kJMReportExecutorRestStatusCancelled = @"cancelled";
 - (BOOL)isExportForAllPages
 {
     // TODO: investigate all cases
+
     BOOL isMultipageReport = self.report.isMultiPageReport;
+    if (!isMultipageReport) {
+        return YES;
+    }
+
+    BOOL isEmptyRange = self.pagesRange.startPage == 0 && self.pagesRange.endPage == 0;
+    if (isEmptyRange) {
+        return YES;
+    }
+
     BOOL isExportForAllPages = self.pagesRange.endPage == self.report.countOfPages && self.pagesRange.startPage == 1;
-
-    NSLog(@"isExportForAllPages: %@", (!isMultipageReport || isExportForAllPages) ? @"YES": @"NO");
-
-    return !isMultipageReport || isExportForAllPages;
+    return isExportForAllPages;
 }
 
-- (void)fetchExportFromMetadataWithCompletion:(void(^)(JSExportExecutionResponse *exportResponse))completion
+- (void)fetchExportFromMetadataWithCompletion:(void(^)(JSExportExecutionResponse *exportResponse, NSError *error))completion
 {
     NSString *executionID = self.executionResponse.requestId;
     [self.restClient reportExecutionMetadataForRequestId:executionID
-                                         completionBlock:^(JSOperationResult *result) {
-                                             JSReportExecutionResponse *executionResponse = result.objects.firstObject;
-                                             JSExportExecutionResponse *exportResponse = executionResponse.exports.firstObject;
+                                         completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                                                 if (result.error) {
+                                                     if (completion) {
+                                                         completion(nil, result.error);
+                                                     }
+                                                 } else {
+                                                     JSReportExecutionResponse *executionResponse = result.objects.firstObject;
 
-                                             if (completion) {
-                                                 completion(exportResponse);
-                                             }
-                                         }];
+                                                     NSArray *exports = executionResponse.exports;
+
+                                                     JSExportExecutionResponse *exportResponse;
+                                                     for (JSExportExecutionResponse *export in exports) {
+                                                         if ([export.uuid isEqualToString:self.exportResponse.uuid]) {
+                                                             exportResponse = export;
+                                                             break;
+                                                         }
+                                                     }
+
+                                                     if (completion) {
+                                                         completion(exportResponse, nil);
+                                                     }
+                                                 }
+                                         }@weakselfend];
 }
 
 @end
