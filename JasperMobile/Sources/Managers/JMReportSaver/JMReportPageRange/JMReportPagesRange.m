@@ -50,7 +50,9 @@
 - (NSString *)pagesFormat
 {
     NSString *pagesFormat;
-    if (self.startPage == self.endPage) {
+    if(self.startPage == 0) {
+        pagesFormat = @"";
+    } else if (self.startPage == self.endPage) {
         pagesFormat = [NSString stringWithFormat:@"%@", @(self.startPage)];
     } else {
         pagesFormat = [NSString stringWithFormat:@"%@-%@", @(self.startPage), @(self.endPage)];
