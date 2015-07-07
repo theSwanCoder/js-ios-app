@@ -44,7 +44,6 @@
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
-@property (nonatomic, strong) NSURL *printResourceURL;
 @end
 
 @implementation JMBaseReportViewerViewController
@@ -53,7 +52,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self removeResourceWithURL:self.printResourceURL];
 }
 
 #pragma mark - UIViewController
@@ -238,20 +236,52 @@
 - (void)printResource
 {
     // TODO: we don't have events when JIVE is applied to a report.
-    [self clearTempPrintResources];
 
-    [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {
+    [self preparePreviewForPrintWithCompletion:@weakself(^(NSURL *resourceURL)) {
         if (resourceURL) {
-            self.printResourceURL = resourceURL;
-            [self printItem:self.printResourceURL
-                   withName:self.report.resourceLookup.label];
+            [self printItem:resourceURL
+                   withName:self.report.resourceLookup.label
+                 completion:@weakself(^){
+                            [self removeResourceWithURL:resourceURL];
+                    }@weakselfend];
         }
-    }];
+    }@weakselfend];
 }
 
 - (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
 {
-    // This method should be overrided in inherited classes.
+    JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
+        [reportSaver cancelReport];
+    }];
+    [reportSaver saveReportWithName:[self tempReportName]
+                             format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
+                              pages:[self makePagesFormat]
+                            addToDB:NO
+                         completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                                 [JMCancelRequestPopup dismiss];
+
+                                 if (reportURI) {
+                                     NSString *relativeReportPath = reportURI;
+                                     NSString *absolutePath = [self.restClient.serverProfile.alias stringByAppendingPathComponent:relativeReportPath];
+
+                                     NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:absolutePath]];
+                                     if (completion) {
+                                         completion(resourceURL);
+                                     }
+                                 } else {
+                                     [reportSaver cancelReport];
+                                     if (error.code == JSSessionExpiredErrorCode) {
+                                         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                                             [self preparePreviewForPrintWithCompletion:completion];
+                                         } else {
+                                             [JMUtils showLoginViewAnimated:YES completion:nil];
+                                         }
+                                     } else {
+                                         [JMUtils showAlertViewWithError:error];
+                                     }
+                                 }
+                             }@weakselfend];
 }
 
 - (NSString *)tempReportName
@@ -268,12 +298,6 @@
         pagesFormat = [NSString stringWithFormat:@"1"];
     }
     return pagesFormat;
-}
-
-- (void)clearTempPrintResources
-{
-    [self removeResourceWithURL:self.printResourceURL];
-    self.printResourceURL = nil;
 }
 
 - (void)removeResourceWithURL:(NSURL *)resourceURL
