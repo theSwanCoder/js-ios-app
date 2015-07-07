@@ -128,7 +128,7 @@
          completion:nil];
 }
 
-- (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(void))completion
+- (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(BOOL completed, NSError *error))completion
 {
     UIPrintInfo *printInfo = [UIPrintInfo printInfo];
     printInfo.jobName = itemName;
@@ -141,12 +141,8 @@
     printInteractionController.printingItem = printingItem;
 
     UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
-            if(error){
-                NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
-            } else {
-                if (completion) {
-                    completion();
-                }
+            if (completion) {
+                completion(completed, error);
             }
         }@weakselfend;
 
