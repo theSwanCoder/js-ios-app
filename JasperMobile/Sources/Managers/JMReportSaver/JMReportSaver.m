@@ -334,14 +334,26 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 #pragma mark - URI helpers
 - (NSString *)exportURL
 {
+    return [self exportURLWithExportID:self.exportExecution.uuid];
+}
+
+- (NSString *)exportURLWithExportID:(NSString *)exportID
+{
     // TODO: improve logic of making server URL
     NSString *serverURL = [self.restClient.serverProfile.serverUrl stringByAppendingString:@"/rest_v2"];
-    return [serverURL stringByAppendingFormat:@"%@/%@/exports/%@/", [JSConstants sharedInstance].REST_REPORT_EXECUTION_URI,self.requestExecution.requestId, self.exportExecution.uuid];
+    return [serverURL stringByAppendingFormat:@"%@/%@/exports/%@/", [JSConstants sharedInstance].REST_REPORT_EXECUTION_URI,self.requestExecution.requestId, exportID];
 }
 
 - (NSString *)outputResourceURL
 {
-    return [[self exportURL] stringByAppendingString:@"outputResource?sessionDecorator=no&decorate=no#"];
+    NSString *exportID = self.exportExecution.uuid;
+    // Fix for JRS version smaller 5.6.0
+    if (self.restClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) {
+        exportID = [NSString stringWithFormat:@"%@;pages=%@", @"html", self.pagesRange.pagesFormat];
+    }
+
+    NSString *outputResourceURLString = [[self exportURLWithExportID:exportID] stringByAppendingString:@"outputResource?sessionDecorator=no&decorate=no#"];
+    return outputResourceURLString;
 }
 
 - (NSString *)attachmentURLWithName:(NSString *)attachmentName
@@ -394,7 +406,7 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 
 - (NSURL *)attachmentLocationForPath:(NSString *)path withName:(NSString *)attachmentName
 {
-    NSString *fullPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@", kJMAttachmentPrefix, attachmentName]];
+    NSString *fullPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@", (kJMAttachmentPrefix ?: @""), attachmentName]];
     NSURL *reportLocation = [NSURL fileURLWithPath:fullPath];
     return reportLocation;
 }
