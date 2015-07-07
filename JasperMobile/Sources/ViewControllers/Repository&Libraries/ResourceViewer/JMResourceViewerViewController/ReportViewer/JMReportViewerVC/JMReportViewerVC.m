@@ -315,44 +315,47 @@
 #pragma mark - Print
 - (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
 {
+    if ([JMUtils isSupportVisualize]) {
+        self.exportCompletion = @weakself(^(NSString *resourcePath)) {
+                [JMCancelRequestPopup dismiss];
 
-    self.exportCompletion = @weakself(^(NSString *resourcePath)) {
-        [JMCancelRequestPopup dismiss];
+                JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
+                [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
+                    [reportSaver cancelReport];
+                }];
+                [reportSaver saveReportWithName:[self tempReportName]
+                                         format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
+                                   resourcePath:resourcePath
+                                     completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                                             [JMCancelRequestPopup dismiss];
 
-        JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
-        [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
-            [reportSaver cancelReport];
-        }];
-        [reportSaver saveReportWithName:[self tempReportName]
-                                 format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
-                           resourcePath:resourcePath
-                             completion:@weakself(^(NSString *reportURI, NSError *error)) {
-                                     [JMCancelRequestPopup dismiss];
-
-                                     if (error) {
-                                         [reportSaver cancelReport];
-                                         if (error.code == JSSessionExpiredErrorCode) {
-                                             if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                                 [self preparePreviewForPrintWithCompletion:completion];
+                                             if (error) {
+                                                 [reportSaver cancelReport];
+                                                 if (error.code == JSSessionExpiredErrorCode) {
+                                                     if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                                                         [self preparePreviewForPrintWithCompletion:completion];
+                                                     } else {
+                                                         [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                     }
+                                                 } else {
+                                                     [JMUtils showAlertViewWithError:error];
+                                                 }
                                              } else {
-                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                 NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
+                                                 if (completion) {
+                                                     completion(resourceURL);
+                                                 }
                                              }
-                                         } else {
-                                             [JMUtils showAlertViewWithError:error];
-                                         }
-                                     } else {
-                                         NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
-                                         if (completion) {
-                                             completion(resourceURL);
-                                         }
-                                     }
-                                 }@weakselfend];
-    }@weakselfend;
+                                         }@weakselfend];
+            }@weakselfend;
 
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
-        self.exportCompletion = nil;
-    }];
-    [self.reportLoader exportReportWithFormat:@"pdf"];
+        [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
+            self.exportCompletion = nil;
+        }];
+        [self.reportLoader exportReportWithFormat:@"pdf"];
+    } else {
+        [super preparePreviewForPrintWithCompletion:completion];
+    }
 }
 
 @end
