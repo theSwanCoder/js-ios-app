@@ -341,7 +341,10 @@
                                                      [JMUtils showAlertViewWithError:error];
                                                  }
                                              } else {
-                                                 NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
+                                                 NSString *relativeReportPath = reportURI;
+                                                 NSString *absolutePath = [self.restClient.serverProfile.alias stringByAppendingPathComponent:relativeReportPath];
+
+                                                 NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:absolutePath]];
                                                  if (completion) {
                                                      completion(resourceURL);
                                                  }
