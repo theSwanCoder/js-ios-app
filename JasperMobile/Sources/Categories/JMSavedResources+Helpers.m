@@ -138,21 +138,34 @@ NSString * const kJMSavedResources = @"SavedResources";
     return resource;
 }
 
-+ (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format
-{
-    NSAssert(name != nil || format != nil, @"There aren't name and format of saved report");
-    
-    NSString *uri = [[kJMReportsDirectory stringByAppendingPathComponent:[name stringByAppendingPathExtension:format]] stringByAppendingPathComponent:[kJMReportFilename stringByAppendingPathExtension:format]];
-    return [NSString stringWithFormat:@"/%@",uri];
-}
-
 + (NSString *)pathToReportDirectoryWithName:(NSString *)name format:(NSString *)format{
-    return [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:[kJMReportsDirectory stringByAppendingPathComponent:[name stringByAppendingPathExtension:format]]];
+
+    NSString *fullReportName = [name stringByAppendingPathExtension:format];
+    NSString *relativeReportPath = [kJMReportsDirectory stringByAppendingPathComponent:fullReportName];
+
+    NSString *absolutePath = [self.restClient.serverProfile.alias stringByAppendingPathComponent:relativeReportPath];
+    return [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:absolutePath];
 }
 
 + (NSString *)pathToReportWithName:(NSString *)name format:(NSString *)format
 {
-    return [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:[self uriForSavedReportWithName:name format:format]];
+    NSString *savedItemURI = [self uriForSavedReportWithName:name format:format];
+
+    NSString *absolutePath = [self.restClient.serverProfile.alias stringByAppendingPathComponent:savedItemURI];
+    return [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:absolutePath];
+}
+
++ (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format
+{
+    NSAssert(name != nil || format != nil, @"There aren't name and format of saved report");
+
+    NSString *constantReportName = [kJMReportFilename stringByAppendingPathExtension:format];
+
+    NSString *fullReportName = [name stringByAppendingPathExtension:format];
+    NSString *relativeReportPath = [kJMReportsDirectory stringByAppendingPathComponent:fullReportName];
+
+    NSString *savedItemURI = [relativeReportPath stringByAppendingPathComponent:constantReportName];
+    return [NSString stringWithFormat:@"/%@",savedItemURI];
 }
 
 #pragma mark - Private
