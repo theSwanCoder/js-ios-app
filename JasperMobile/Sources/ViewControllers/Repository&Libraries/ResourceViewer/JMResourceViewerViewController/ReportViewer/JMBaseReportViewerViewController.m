@@ -241,8 +241,11 @@
         if (resourceURL) {
             [self printItem:resourceURL
                    withName:self.report.resourceLookup.label
-                 completion:@weakself(^){
-                            [self removeResourceWithURL:resourceURL];
+                 completion:@weakself(^(BOOL completed, NSError *error)){
+                         [self removeResourceWithURL:resourceURL];
+                         if(error){
+                             NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
+                         }
                     }@weakselfend];
         }
     }@weakselfend];
