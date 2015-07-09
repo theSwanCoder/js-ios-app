@@ -32,22 +32,6 @@
 @since 2.1
 */
 
-@interface JSRESTBase(Export)
-- (void)exportExecutionStatusWithExecutionID:(NSString *)executionID exportOutput:(NSString *)exportOutput completion:(JSRequestCompletionBlock)block;
-@end
-
-@implementation JSRESTBase(Export)
-- (void)exportExecutionStatusWithExecutionID:(NSString *)executionID exportOutput:(NSString *)exportOutput completion:(JSRequestCompletionBlock)block
-{
-    NSString *uri = [NSString stringWithFormat:@"%@/%@/exports/%@/status", [JSConstants sharedInstance].REST_REPORT_EXECUTION_URI, executionID, exportOutput];
-    JSRequest *request = [[JSRequest alloc] initWithUri:uri];
-    request.expectedModelClass = [JSExecutionStatus class];
-    request.restVersion = JSRESTVersion_2;
-    request.completionBlock = block;
-    [self sendRequest:request];
-}
-@end
-
 @class JMReport;
 @class JMReportPagesRange;
 
