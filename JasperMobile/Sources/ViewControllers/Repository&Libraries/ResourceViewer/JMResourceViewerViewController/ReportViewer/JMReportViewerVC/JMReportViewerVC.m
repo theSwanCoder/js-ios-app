@@ -171,7 +171,6 @@
 
             if (success) {
                 [self showReportView];
-                [self clearTempPrintResources];
             } else {
                 [self handleError:error];
             }

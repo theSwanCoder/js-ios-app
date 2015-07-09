@@ -50,7 +50,6 @@
 
 - (void)preparePreviewForPrintWithCompletion:(void (^)(NSURL *resourceURL))completion;
 - (NSString *)tempReportName;
-- (void)clearTempPrintResources;
 
 - (void)runReportWithPage:(NSInteger)page;
 - (void)updateReportWithNewParameters;
