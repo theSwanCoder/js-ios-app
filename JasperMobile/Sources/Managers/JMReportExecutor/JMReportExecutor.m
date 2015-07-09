@@ -97,7 +97,6 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
                                         }
                                     } else {
                                         JSReportExecutionResponse *executionResponse = result.objects.firstObject;
-                                        JSExportExecutionResponse *exportResponse = executionResponse.exports.firstObject;
 
                                         self.executionResponse = executionResponse;
 
