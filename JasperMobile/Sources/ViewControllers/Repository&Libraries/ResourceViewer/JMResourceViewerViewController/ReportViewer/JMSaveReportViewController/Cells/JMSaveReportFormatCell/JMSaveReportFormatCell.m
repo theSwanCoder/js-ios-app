@@ -33,4 +33,10 @@
 #import "JMSaveReportFormatCell.h"
 
 @implementation JMSaveReportFormatCell
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.titleLabel.font = [JMFont tableViewCellTitleFont];
+    self.titleLabel.textColor = [UIColor darkGrayColor];
+}
 @end

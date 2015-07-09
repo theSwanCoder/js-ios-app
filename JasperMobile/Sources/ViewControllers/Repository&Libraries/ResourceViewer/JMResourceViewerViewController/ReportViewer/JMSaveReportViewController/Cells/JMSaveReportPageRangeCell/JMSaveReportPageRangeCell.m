@@ -48,6 +48,9 @@
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
+    
+    self.titleLabel.font = [JMFont tableViewCellTitleFont];
+    self.titleLabel.textColor = [UIColor darkGrayColor];
 
     UIPickerView *pickerView = [UIPickerView new];
 

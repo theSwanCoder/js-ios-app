@@ -195,7 +195,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
             }
             
             NSString *currentFormat = [JMUtils supportedFormatsForReportSaving][indexPath.row];
-            formatCell.textLabel.text = currentFormat;
+            formatCell.titleLabel.text = currentFormat;
             formatCell.accessoryType = [self.selectedReportFormat isEqualToString:currentFormat] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             return formatCell;
         }
@@ -213,10 +213,10 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                 pageRangeCell.cellDelegate = self;
                 
                 if (indexPath.row == 1) {
-                    pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.fromPage", nil);
+                    pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.fromPage", nil);
                     pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
                 } else if (indexPath.row == 2) {
-                    pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.toPage", nil);
+                    pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.toPage", nil);
                     pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
                 }
                 [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];

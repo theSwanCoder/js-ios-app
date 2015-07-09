@@ -20,6 +20,7 @@
 		0801DFBD1AAF2E7500DD072C /* JMIntroModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFB61AAF2E7500DD072C /* JMIntroModel.m */; };
 		0801DFBE1AAF2E7500DD072C /* JMIntroModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFB91AAF2E7500DD072C /* JMIntroModelManager.m */; };
 		0801DFBF1AAF2E7500DD072C /* JMOnboardIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */; };
+		080C80BE1B4D7CA0005B59B6 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 080C80BD1B4D7CA0005B59B6 /* MainStoryboard.storyboard */; };
 		081CE2701B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 081CE26F1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m */; };
 		08221C421AE54DA000F94F1D /* JMCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C411AE54DA000F94F1D /* JMCoreDataManager.m */; };
 		08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C921AE78CD300F94F1D /* JMMigrationManager.m */; };
@@ -86,7 +87,6 @@
 		089B15FA1AA756BD0021A915 /* JMSavedItemsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15761AA756BD0021A915 /* JMSavedItemsCollectionViewController.m */; };
 		089B15FB1AA756BD0021A915 /* JMBaseCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15791AA756BD0021A915 /* JMBaseCollectionView.m */; };
 		089B15FC1AA756BD0021A915 /* JMBaseCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 089B157A1AA756BD0021A915 /* JMBaseCollectionView.xib */; };
-		089B15FD1AA756BD0021A915 /* JMBaseCollectionView~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 089B157B1AA756BD0021A915 /* JMBaseCollectionView~ipad.xib */; };
 		089B15FE1AA756BD0021A915 /* JMMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B157E1AA756BD0021A915 /* JMMenuItem.m */; };
 		089B15FF1AA756BD0021A915 /* JMMenuItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15811AA756BD0021A915 /* JMMenuItemTableViewCell.m */; };
 		089B16001AA756BD0021A915 /* JMMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15841AA756BD0021A915 /* JMMenuViewController.m */; };
@@ -235,6 +235,7 @@
 		0801DFB91AAF2E7500DD072C /* JMIntroModelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMIntroModelManager.m; sourceTree = "<group>"; };
 		0801DFBA1AAF2E7500DD072C /* JMOnboardIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMOnboardIntroViewController.h; sourceTree = "<group>"; };
 		0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMOnboardIntroViewController.m; sourceTree = "<group>"; };
+		080C80BD1B4D7CA0005B59B6 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		081CE26E1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPrintPreviewTableViewCell.h; sourceTree = "<group>"; };
 		081CE26F1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPrintPreviewTableViewCell.m; sourceTree = "<group>"; };
 		08221C401AE54DA000F94F1D /* JMCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCoreDataManager.h; sourceTree = "<group>"; };
@@ -355,7 +356,6 @@
 		089B15781AA756BD0021A915 /* JMBaseCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseCollectionView.h; sourceTree = "<group>"; };
 		089B15791AA756BD0021A915 /* JMBaseCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseCollectionView.m; sourceTree = "<group>"; };
 		089B157A1AA756BD0021A915 /* JMBaseCollectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMBaseCollectionView.xib; sourceTree = "<group>"; };
-		089B157B1AA756BD0021A915 /* JMBaseCollectionView~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "JMBaseCollectionView~ipad.xib"; sourceTree = "<group>"; };
 		089B157D1AA756BD0021A915 /* JMMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMenuItem.h; sourceTree = "<group>"; };
 		089B157E1AA756BD0021A915 /* JMMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMenuItem.m; sourceTree = "<group>"; };
 		089B15801AA756BD0021A915 /* JMMenuItemTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMenuItemTableViewCell.h; sourceTree = "<group>"; };
@@ -1241,7 +1241,6 @@
 				089B15781AA756BD0021A915 /* JMBaseCollectionView.h */,
 				089B15791AA756BD0021A915 /* JMBaseCollectionView.m */,
 				089B157A1AA756BD0021A915 /* JMBaseCollectionView.xib */,
-				089B157B1AA756BD0021A915 /* JMBaseCollectionView~ipad.xib */,
 			);
 			path = JMBaseCollectionView;
 			sourceTree = "<group>";
@@ -1706,6 +1705,7 @@
 			children = (
 				BDABBD2A1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard */,
 				08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */,
+				080C80BD1B4D7CA0005B59B6 /* MainStoryboard.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -2182,7 +2182,6 @@
 				089B15C61AA756BD0021A915 /* JMGridResourceCollectionViewCell.xib in Resources */,
 				08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */,
 				930F8D481ABB1D9F005F93FB /* require.min.js in Resources */,
-				089B15FD1AA756BD0021A915 /* JMBaseCollectionView~ipad.xib in Resources */,
 				930F8D451ABB1CDF005F93FB /* dashboard.html in Resources */,
 				089B15C91AA756BD0021A915 /* JMHorizontalResourceCollectionViewCell~ipad.xib in Resources */,
 				089B15C81AA756BD0021A915 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
@@ -2193,6 +2192,7 @@
 				089B15C71AA756BD0021A915 /* JMGridResourceCollectionViewCell~ipad.xib in Resources */,
 				930F8D4A1ABB28B0005F93FB /* report_optimized.html in Resources */,
 				08E0D19F1B0CF27200BFBFE5 /* Icon-1024.png in Resources */,
+				080C80BE1B4D7CA0005B59B6 /* MainStoryboard.storyboard in Resources */,
 				089B15AF1AA756BD0021A915 /* JMListOptionsPopupView.xib in Resources */,
 				A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */,
 				A147874948067892B357C8A3 /* JMReportViewerToolBar~ipad.xib in Resources */,

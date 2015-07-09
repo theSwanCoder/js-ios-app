@@ -65,6 +65,9 @@
     }
     self.serverOptions.editable = self.editable;
     self.tableView.rowHeight = 50.f;
+    
+//    self.tableView.rowHeight = UITableViewAutomaticDimension;
+//    self.tableView.estimatedRowHeight = 44.0;
 }
 
 - (void)viewWillDisappear:(BOOL)animated

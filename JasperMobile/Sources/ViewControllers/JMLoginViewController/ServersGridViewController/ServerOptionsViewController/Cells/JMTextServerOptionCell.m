@@ -55,17 +55,6 @@
     self.textField.textColor = serverOption.editable ? [UIColor darkTextColor] : [UIColor lightGrayColor];
 }
 
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    if (self.serverOption.errorString) {
-        CGRect errorLabelRect = self.detailTextLabel.frame;
-        errorLabelRect.origin.y = 2 * self.textField.frame.origin.y + self.textField.frame.size.height;
-        self.detailTextLabel.frame = errorLabelRect;
-    }
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

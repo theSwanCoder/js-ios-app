@@ -23,16 +23,21 @@
 
 #import "JMServerOptionCell.h"
 
+@interface JMServerOptionCell ()
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet UILabel *errorLabel;
+@end
+
 @implementation JMServerOptionCell
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.textLabel.font = [JMFont tableViewCellTitleFont];
-    self.textLabel.textColor = [UIColor darkGrayColor];
+    self.titleLabel.font = [JMFont tableViewCellTitleFont];
+    self.titleLabel.textColor = [UIColor darkGrayColor];
     
-    self.detailTextLabel.font = [JMFont tableViewCellDetailErrorFont];
-    self.detailTextLabel.textColor = [UIColor redColor];
+    self.errorLabel.font = [JMFont tableViewCellDetailErrorFont];
+    self.errorLabel.textColor = [UIColor redColor];
     self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
 }
 
@@ -40,15 +45,15 @@
 {
     _serverOption = serverOption;
     
-    self.textLabel.text = serverOption.titleString;
+    self.titleLabel.text = serverOption.titleString;
     [self updateDisplayingOfErrorMessage];
 }
 
 - (void) updateDisplayingOfErrorMessage
 {
-    self.detailTextLabel.text = self.serverOption.errorString;
+    self.errorLabel.text = self.serverOption.errorString;
     [UIView beginAnimations:nil context:nil];
-    self.detailTextLabel.alpha = (self.serverOption.errorString.length == 0) ? 0 : 1;
+    self.errorLabel.alpha = (self.serverOption.errorString.length == 0) ? 0 : 1;
     [UIView commitAnimations];
     [self.delegate reloadTableViewCell:self];
 }

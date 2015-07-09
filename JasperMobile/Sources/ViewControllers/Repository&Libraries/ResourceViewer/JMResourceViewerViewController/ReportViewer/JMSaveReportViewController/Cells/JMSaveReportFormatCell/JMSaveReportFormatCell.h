@@ -34,5 +34,6 @@
 */
 
 @interface JMSaveReportFormatCell : UITableViewCell
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 
 @end

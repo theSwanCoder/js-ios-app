@@ -47,6 +47,7 @@ typedef NS_ENUM(NSInteger, JMSaveReportPagesType) {
 @end
 
 @interface JMSaveReportPagesCell : UITableViewCell
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic, assign) JMSaveReportPagesType pagesType;
 @property (nonatomic, weak) id <JMSaveReportPagesCellDelegate> cellDelegate;
 
