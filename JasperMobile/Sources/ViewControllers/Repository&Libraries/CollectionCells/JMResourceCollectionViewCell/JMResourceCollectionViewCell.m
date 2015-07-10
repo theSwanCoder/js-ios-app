@@ -47,7 +47,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 {
     [super awakeFromNib];
     self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-
+    self.resourceName.font = [JMFont collectionResourceNameFont];
+    self.resourceDescription.font = [JMFont collectionResourceDescriptionFont];
     self.infoButton.tintColor = [UIColor colorFromHexString:@"#909090"];
 }
 

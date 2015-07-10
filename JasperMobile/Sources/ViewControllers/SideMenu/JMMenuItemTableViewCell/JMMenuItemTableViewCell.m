@@ -31,6 +31,12 @@
 
 @implementation JMMenuItemTableViewCell
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.textLabel.font = [JMFont menuItemTitleFont];
+}
+
 #pragma mark - LifeCycle
 -(void)setFrame:(CGRect)frame
 {

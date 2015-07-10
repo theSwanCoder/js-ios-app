@@ -384,6 +384,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     }
     [navBarItems addObject:[self resourceRepresentationItem]];
     
+#warning WHAT IS THIS? WHY WE NEED TO ADD SEARCHBAR AS SUBVIEW TO PLACEHOLDER?
     JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
     UIView *searchContainerView = [[UIView alloc] initWithFrame:baseCollectionView.searchBar.bounds];
     searchContainerView.backgroundColor = [UIColor clearColor];
