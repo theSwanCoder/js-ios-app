@@ -41,7 +41,6 @@ extern NSString * const kJMDefaultsCurrentVersion;
 extern NSString * const kJMDefaultsIntroDidApear;
 
 // Notifications
-extern NSString * const kJMLoginDidSuccessNotification;
 extern NSString * const kJMResetApplicationNotification;
 extern NSString * const kJMFavoritesDidChangedNotification;
 extern NSString * const kJMSavedResourcesDidChangedNotification;

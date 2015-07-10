@@ -32,14 +32,15 @@
  */
 
 typedef NS_ENUM(NSInteger, JMResourceType){
-    JMResourceTypeNone,
     JMResourceTypeLibrary,
     JMResourceTypeRepository,
     JMResourceTypeRecentViews,
     JMResourceTypeSavedItems,
     JMResourceTypeFavorites,
     JMResourceTypeSettings,
-    JMResourceTypeLogout
+    JMResourceTypeLogout,
+    
+    JMResourceTypeNone
 };
 
 @interface JMMenuItem : NSObject

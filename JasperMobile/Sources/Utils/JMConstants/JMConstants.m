@@ -33,7 +33,6 @@ NSString * const kJMDefaultsCurrentVersion = @"jaspersoft.mobile.current.version
 NSString * const kJMDefaultsIntroDidApear = @"JMDefaultsIntroDidApear";
 
 // Notifications
-NSString * const kJMLoginDidSuccessNotification = @"JMLoginDidSuccessNotification";
 NSString * const kJMResetApplicationNotification = @"resetApplication";
 NSString * const kJMFavoritesDidChangedNotification = @"JMFavoritesDidChangedNotification";
 NSString * const kJMSavedResourcesDidChangedNotification = @"JMSavedResourcesDidChangedNotification";
