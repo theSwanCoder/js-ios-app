@@ -47,7 +47,6 @@
 - (void)awakeFromNib
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
     
     self.titleLabel.font = [JMFont tableViewCellTitleFont];
     self.titleLabel.textColor = [UIColor darkGrayColor];
@@ -62,12 +61,13 @@
     self.pickerView.dataSource = self;
     
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     self.activityIndicator.hidesWhenStopped = NO;
     self.activityIndicator.color = [UIColor darkGrayColor];
     
     [self.textField addSubview:self.activityIndicator];
-    self.activityIndicator.center = CGPointMake(CGRectGetMidX(self.textField.bounds), CGRectGetMidY(self.textField.bounds));
+    
+    [self.textField addConstraint:[NSLayoutConstraint constraintWithItem:self.textField attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.activityIndicator attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    [self.textField addConstraint:[NSLayoutConstraint constraintWithItem:self.textField attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.activityIndicator attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
 }
 
 - (void)setEditable:(BOOL)editable

@@ -38,7 +38,6 @@
     
     self.errorLabel.font = [JMFont tableViewCellDetailErrorFont];
     self.errorLabel.textColor = [UIColor redColor];
-    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
 }
 
 - (void)setServerOption:(JMServerOption *)serverOption
