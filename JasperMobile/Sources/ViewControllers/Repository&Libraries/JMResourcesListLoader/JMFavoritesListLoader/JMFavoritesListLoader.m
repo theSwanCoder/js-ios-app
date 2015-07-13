@@ -31,7 +31,6 @@
 {
     self = [super init];
     if (self) {
-        self.loadRecursively = YES;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setNeedsUpdate) name:kJMFavoritesDidChangedNotification object:nil];
     }
     return self;
@@ -83,17 +82,19 @@
             return [super listItemsWithOption:option];
         case JMResourcesListLoaderOption_Filter: {
             NSMutableArray *itemsArray = [@[
-                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.type.all", nil),
+                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
                                               kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT, [JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY, [JSConstants sharedInstance].WS_TYPE_FOLDER, kJMSavedReportUnit]},
-                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.type.reportUnit", nil),
-                                              kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT, kJMSavedReportUnit]},
-                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.type.folder", nil),
+                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil),
+                                              kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]},
+                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.saved.reportUnit", nil),
+                                              kJMResourceListLoaderOptionItemValueKey: @[kJMSavedReportUnit]},
+                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.folder", nil),
                                               kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_FOLDER]}
                                             ] mutableCopy];
             if ([JMUtils isServerProEdition]) {
-                id dashboardItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.type.dashboard", nil),
+                id dashboardItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil),
                                      kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY]};
-                [itemsArray insertObject:dashboardItem atIndex:2];
+                [itemsArray insertObject:dashboardItem atIndex:3];
             }
             return itemsArray;
         }
@@ -106,8 +107,8 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:kJMFavorites inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
     if ([self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]) {
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]
-                                                                       ascending:YES];
+        BOOL ascending = self.sortBySelectedIndex == 0;
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:ascending];
         [fetchRequest setSortDescriptors:@[sortDescriptor]];
     }
     [fetchRequest setEntity:entity];

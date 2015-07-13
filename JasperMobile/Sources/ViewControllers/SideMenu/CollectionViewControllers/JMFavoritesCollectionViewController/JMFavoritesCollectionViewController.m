@@ -27,14 +27,6 @@
 //
 
 #import "JMFavoritesCollectionViewController.h"
-#import "JMReportViewerViewController.h"
-#import "JMRepositoryCollectionViewController.h"
-#import "JMDashboardsViewerViewController.h"
-#import "JMVisualizeDashboard.h"
-#import "JMVisualizeReport.h"
-
-@interface JMFavoritesCollectionViewController()
-@end
 
 @implementation JMFavoritesCollectionViewController
 
@@ -42,18 +34,25 @@
 -(void)awakeFromNib
 {
     [super awakeFromNib];
-    
-    self.resourceListLoader = [NSClassFromString(@"JMFavoritesListLoader") new];
     self.title = JMCustomLocalizedString(@"menuitem.favorites.label", nil);
 }
 
-
 #pragma mark - Overloaded methods
+- (Class)resourceLoaderClass
+{
+    return NSClassFromString(@"JMFavoritesListLoader");
+}
+
 - (NSString *)defaultRepresentationTypeKey
 {
     NSString * keyString = @"RepresentationTypeKey";
     keyString = [@"Favorites" stringByAppendingString:keyString];
     return keyString;
+}
+
+- (NSString *)noResultText
+{
+    return JMCustomLocalizedString(@"resources.noresults.favorites.msg", nil);
 }
 
 @end

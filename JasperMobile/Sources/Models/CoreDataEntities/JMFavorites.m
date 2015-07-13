@@ -36,5 +36,7 @@
 @dynamic serverProfile;
 @dynamic creationDate;
 @dynamic resourceDescription;
+@dynamic version;
+@dynamic updateDate;
 
 @end

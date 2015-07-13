@@ -26,9 +26,8 @@
 #import "JMFavorites+Helpers.h"
 #import "JMSessionManager.h"
 
+
 NSString * const kJMSavedResources = @"SavedResources";
-NSString * const kJMSavedResourceFileExtensionPDF = @"pdf";
-NSString * const kJMSavedResourceFileExtensionHTML = @"html";
 
 
 @implementation JMSavedResources (Helpers)
@@ -53,24 +52,21 @@ NSString * const kJMSavedResourceFileExtensionHTML = @"html";
         savedReport.format = format;
         savedReport.username = sessionServerProfile.username;
         savedReport.wsType = [self wsTypeWithSourceWSType:resource.resourceType];
+        savedReport.version = resource.version;
         [activeServerProfile addSavedResourcesObject:savedReport];
     }
     savedReport.creationDate = [NSDate date];
-    
+    savedReport.updateDate = [NSDate date];
     [[JMCoreDataManager sharedInstance] save:nil];
 }
 
 - (void)removeReport
 {
-    NSString *pathToReport = [JMSavedResources pathToReportWithName:self.label format:self.format];
+    NSString *pathToReport = [JMSavedResources pathToReportDirectoryWithName:self.label format:self.format];
     [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
     
-    JMFavorites *favorites = [JMFavorites favoritesFromResourceLookup:[self wrapperFromSavedReports]];
-    if (favorites) {
-        [self.managedObjectContext deleteObject:favorites];
-        [self.managedObjectContext save:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
-    }
+    [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
+    
     [self.managedObjectContext deleteObject:self];
     [self.managedObjectContext save:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
@@ -98,10 +94,14 @@ NSString * const kJMSavedResourceFileExtensionHTML = @"html";
     return (!savedReport);
 }
 
-- (void)renameReportTo:(NSString *)newName
+- (BOOL)renameReportTo:(NSString *)newName
 {
     NSString *currentPath = [JMSavedResources pathToReportDirectoryWithName:self.label format:self.format];
     NSString *newPath = [JMSavedResources pathToReportDirectoryWithName:newName format:self.format];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:newPath isDirectory:nil]) {
+        [[NSFileManager defaultManager] removeItemAtPath:newPath error:nil];
+    }
     
     NSError *error = nil;
     [[NSFileManager defaultManager] moveItemAtPath:currentPath toPath:newPath error:&error];
@@ -116,8 +116,12 @@ NSString * const kJMSavedResourceFileExtensionHTML = @"html";
         
         self.label = newName;
         self.uri = [JMSavedResources uriForSavedReportWithName:newName format:self.format];
+        self.updateDate = [NSDate date];
         [self.managedObjectContext save:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
+        return YES;
+    } else {
+        return NO;
     }
 }
 
@@ -128,7 +132,9 @@ NSString * const kJMSavedResourceFileExtensionHTML = @"html";
     resource.label = self.label;
     resource.resourceType = self.wsType;
     resource.creationDate = self.creationDate;
+    resource.updateDate = self.updateDate;
     resource.resourceDescription = self.resourceDescription;
+    resource.version = self.version;
     return resource;
 }
 

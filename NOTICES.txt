@@ -24,24 +24,85 @@ along with Jaspersoft Mobile SDK for Android. If not, see
 
 THIRD PARTY COMPONENTS
 -------------------------------
-This software includes third party software subject to the associated copyrights, as follows:
-- ALToastView-v0.0.1 (MIT) - https://github.com/alexleutgoeb/ALToastView
-- Appirater-v2.0.4 (MIT) - https://github.com/arashpayan/appirater
-- Crashlytics-v2.2.9 (Apache) - https://github.com/twitterdev/cannonball-ios
-- Fabric-v1.1.1 (Apache) - https://github.com/twitterdev/cannonball-ios
-- GoogleAnalytics-v3.08 (Apache) - https://developers.google.com/analytics/devguides/collection/ios/resources
-- JaspersoftSDK-v1.9.0-beta (Apache) - https://github.com/Jaspersoft/js-ios-sdk
-- PopoverView-v0.0.2 (MIT) - https://github.com/runway20/PopoverView
-- RNCachingURLProtocol (MIT) - https://github.com/rnapier/RNCachingURLProtocol
-- SWRevealViewController-v2.3.0 (MIT) - https://github.com/John-Lluch/SWRevealViewController
+TIBCO JasperMobile iOS app includes third party software subject to the associated copyrights, as follows:
+- ALToastView-v0.0.1 - https://github.com/alexleutgoeb/ALToastView
+  Licence (MIT): https://github.com/alexleutgoeb/ALToastView/blob/master/LICENSE.txt
+  Reason: Using it for displaying toasts in app.
+  Cost of not using: All toasts in application will be deleted.
+  Alternative approaches: Need investigate another libraries, reinventing our own wheel
+  
 
+- Appirater-v2.0.5 - https://github.com/arashpayan/appirater
+
+  Licence (MIT/X11): https://github.com/arashpayan/appirater/blob/master/README.md
+  Reason: Using it for displaying appirater, for rating application.
+  Cost of not using: Appirater will be deleted.
+  Alternative approaches: There is no any alternatives, reinventing our own wheel
+  
+- Crashlytics-v2.2.9 - https://github.com/twitterdev/cannonball-ios
+
+  Licence (Apache): https://github.com/twitterdev/cannonball-ios/blob/master/LICENSE
+  Reason: Using it for sending crash reports.
+  Cost of not using: Crash reports will be not sent.
+  Alternative approaches: Need investigate another libraries
+
+- Fabric-v1.1.1 - https://github.com/twitterdev/cannonball-ios
+
+  Licence (Apache): https://github.com/twitterdev/cannonball-ios/blob/master/LICENSE
+  Reason: Using it for sending crash reports for using Crashlytics improvements.
+  Cost of not using: Crash reports will be not sent.
+  Alternative approaches: Need investigate another libraries
+  
+- GoogleAnalytics-v3.12 - https://developers.google.com/analytics/devguides/collection/ios/resources
+  Licence: No concrete license name, https://developers.google.com/analytics/devguides/collection/ios/resources.
+  the content of this page is licensed under the Creative Commons Attribution 3.0 License(http://creativecommons.org/licenses/by/3.0/), and code samples are licensed under the Apache 2.0 License(http://www.apache.org/licenses/LICENSE-2.0).
+  Reason: Using it for using analytics.
+  Cost of not using: Analytics wouldn't work.
+  Alternative approaches: Need investigate another libraries
+  
+
+- JaspersoftSDK-v2.0.0 - https://github.com/Jaspersoft/js-ios-sdk
+  Licence (Apache): https://github.com/Jaspersoft/js-ios-sdk/blob/master/LICENSE.txt
+  Reason: Using it for connect to JRS instance and working with it.
+  Cost of not using: Application wouldn't work.
+  Alternative approaches: There is no any alternatives
+
+- PopoverView-v0.0.2 - https://github.com/runway20/PopoverView
+
+  Licence (MIT): https://github.com/runway20/PopoverView
+  Reason: Using it for displaying popover view in app.
+  Cost of not using: All popovers in application will be deleted.
+  Alternative approaches: Need investigate another libraries, reinventing our own wheel
+  
+- RNCachingURLProtocol - https://github.com/rnapier/RNCachingURLProtocol
+
+  Licence (MIT): https://github.com/rnapier/RNCachingURLProtocol
+  Reason: Using it for Privacy Policy caching and using it in offline mode.
+  Cost of not using: Unable to use Privacy Policy in offline mode.
+  Alternative approaches: There is no any alternatives, reinventing our own wheel
+  
+- SWRevealViewController-v2.3.0 - https://github.com/John-Lluch/SWRevealViewController
+
+
+  Licence (MIT): https://github.com/John-Lluch/SWRevealViewController/blob/master/LICENSE.txt
+  Reason: Using it for left-side menu feature.
+  Cost of not using: Unable to use display left side menu.
+  Alternative approaches: Need investigate another libraries, reinventing our own wheel
+  
 
 This software is built using the Jaspersoft Mobile SDK for iOS, which depends on 
 third party software, subject to the associated copyrights, as follows:
-- RestKit v0.23.0 (Apache) - https://github.com/RestKit/RestKit
+- RestKit v0.23.0 - https://github.com/RestKit/RestKit/blob/development/LICENSE
+  Licence (Apache): https://github.com/Jaspersoft/js-ios-sdk/blob/master/LICENSE.txt
+  Reason: Using it for working with JRS instance via REST API, for serialisation and deserialisation data.
+  Cost of not using: Application wouldn't connect to JRS instance.
+  Alternative approaches: Need investigate another libraries, reinventing our own wheel
 
-The text of licenses for the above software is included with the
-JasperMobile for iOS source package, in the /licenses folder.
+- ServerReachability v0.0.1 - https://github.com/ogubariev/ServerReachability
+  Licence (MIT): https://github.com/ogubariev/ServerReachability/blob/master/LICENSE
+  Reason: Using it for checking connection to server with port.
+  Cost of not using: Unable to check connection to server.
+  Alternative approaches: There is no any alternatives
 
 
 

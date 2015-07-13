@@ -31,12 +31,6 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMSavedResources+Helpers.h"
 
-// Key for app version
-static NSString * const kJMApplicationVersion = @"CFBundleShortVersionString";
-
-// Error message
-static NSString * errorMessage = nil;
-
 // Old constants used in previous versions of application
 static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated.versions";
 
@@ -62,7 +56,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     
     // Add update methods
     [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_9)] forKey:@1.9];
-
+    BOOL updateDidSuccess = YES;
     for (NSNumber *version in versionsToUpdate.allKeys) {
         if (version.doubleValue <= currentAppVersion.doubleValue) continue;
         
@@ -72,18 +66,20 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         invocation.target = self;
         [invocation invoke];
         
-        BOOL *updateResult;
-        [invocation getReturnValue:&updateResult];
+        [invocation getReturnValue:&updateDidSuccess];
         
-        if (updateResult) {
+        if (updateDidSuccess) {
             // Update app version for each migration. This allows to track which migration was failed
             [self updateAppVersionTo:version];
-            errorMessage = nil;
+        } else {
+            break;
         }
     }
 
-    if ([self hasErrors]) {
+    if (!updateDidSuccess) {
         [self showErrors];
+    } else {
+        [self removeOldMobileDemo];
     }
 }
 
@@ -102,17 +98,12 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
 + (NSString *)latestAppVersionAsString
 {
-    return [[NSBundle mainBundle].infoDictionary objectForKey:kJMApplicationVersion];
+    return [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"];
 }
 
 + (NSNumber *)currentAppVersion
 {
     return [[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultsCurrentVersion];
-}
-
-+ (BOOL)hasErrors
-{
-    return errorMessage.length != 0;
 }
 
 + (BOOL)isRunningForTheFirstTime
@@ -139,7 +130,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
             
             JSResourceLookup *resource = [JSResourceLookup new];
             resource.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
-            
+            resource.version = @(0);
             [JMSavedResources addReport:resource withName:reportName format:[reportExtension stringByReplacingOccurrencesOfString:@"." withString:@""]];
         }
     }
@@ -166,11 +157,27 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 + (void)showErrors
 {
     [[UIAlertView localizedAlertWithTitle:@"error.upgrade.data.title"
-                                  message:errorMessage
+                                  message:@"error.upgrade.data.msg"
                                  delegate:JMAppUpdater.class
                         cancelButtonTitle:@"dialog.button.cancel"
                         otherButtonTitles:@"dialog.button.retry", @"dialog.button.applyUpdate", nil] show];
-    errorMessage = nil;
+}
+
+#pragma mark - Helpers
++ (void)removeOldMobileDemo
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"ServerProfile"];
+    NSMutableArray *predicates = [NSMutableArray array];
+    NSString *mobileDemoServerURLString = @"http://mobiledemo.jaspersoft.com/jasperserver-pro";
+    [predicates addObject:[NSPredicate predicateWithFormat:@"serverUrl == %@", mobileDemoServerURLString]];
+    fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+
+    NSArray *serverProfiles = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    if (serverProfiles.count == 1) {
+        JMServerProfile *serverProfile = serverProfiles.firstObject;
+        [[JMCoreDataManager sharedInstance].managedObjectContext deleteObject:serverProfile];
+        [[JMCoreDataManager sharedInstance] save:nil];
+    }
 }
 
 @end

@@ -63,12 +63,13 @@
     self.serverProfileTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"settings.item.server", nil) attributes:attributes];
 
     // setup "Login" button
-    self.loginButton.backgroundColor = kJMResourcePreviewBackgroundColor;
+    self.loginButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.tryDemoButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+
+    self.loginButton.backgroundColor = [UIColor grayColor];
     [self.loginButton setTitle:JMCustomLocalizedString(@"login.button.login", nil) forState:UIControlStateNormal];
     
-    [self.tryDemoButton setTitleColor:kJMDetailViewLightTextColor forState:UIControlStateNormal];
-    [self.tryDemoButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-
+    self.tryDemoButton.backgroundColor = kJMResourcePreviewBackgroundColor;
     [self.tryDemoButton setTitle:JMCustomLocalizedString(@"login.button.try.demo", nil) forState:UIControlStateNormal];
 }
 

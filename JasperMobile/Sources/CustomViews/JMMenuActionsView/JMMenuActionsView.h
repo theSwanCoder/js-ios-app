@@ -31,26 +31,10 @@
  @since 1.9
  */
 
-#import <UIKit/UIKit.h>
-
-typedef NS_OPTIONS(NSInteger, JMMenuActionsViewAction) {
-    JMMenuActionsViewAction_None            = 0,
-    JMMenuActionsViewAction_MakeFavorite    = 1 << 0,
-    JMMenuActionsViewAction_MakeUnFavorite  = 1 << 1,
-    JMMenuActionsViewAction_Refresh         = 1 << 2,
-    JMMenuActionsViewAction_Filter          = 1 << 3,
-    JMMenuActionsViewAction_Edit            = 1 << 4,
-    JMMenuActionsViewAction_Sort            = 1 << 5,
-    JMMenuActionsViewAction_Save            = 1 << 6,
-    JMMenuActionsViewAction_Delete          = 1 << 7,
-    JMMenuActionsViewAction_Rename          = 1 << 8,
-    JMMenuActionsViewAction_Info            = 1 << 9,
-    JMMenuActionsViewAction_SelectAll       = 1 << 10,
-    JMMenuActionsViewAction_ClearSelections = 1 << 11
-};
+#import "JMMenuAction.h"
 
 static inline JMMenuActionsViewAction JMMenuActionsViewActionFirst() { return JMMenuActionsViewAction_MakeFavorite; }
-static inline JMMenuActionsViewAction JMMenuActionsViewActionLast() { return JMMenuActionsViewAction_ClearSelections; }
+static inline JMMenuActionsViewAction JMMenuActionsViewActionLast() { return JMMenuActionsViewAction_Info; }
 
 @class JMMenuActionsView;
 
@@ -63,5 +47,8 @@ static inline JMMenuActionsViewAction JMMenuActionsViewActionLast() { return JMM
 @interface JMMenuActionsView : UIView
 @property (nonatomic, weak) id <JMMenuActionsViewDelegate> delegate;
 @property (nonatomic, assign) JMMenuActionsViewAction availableActions;
+@property (nonatomic, assign) JMMenuActionsViewAction disabledActions;
+
+- (void)setAvailableActions:(JMMenuActionsViewAction)availableActions disabledActions:(JMMenuActionsViewAction)disabledActions;
 
 @end

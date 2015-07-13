@@ -34,7 +34,6 @@
 {
     self = [super init];
     if (self) {
-        self.loadRecursively = NO;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setNeedsUpdate) name:kJMSavedResourcesDidChangedNotification object:nil];
     }
     return self;
@@ -85,7 +84,7 @@
             return [super listItemsWithOption:option];
         case JMResourcesListLoaderOption_Filter: {
             NSMutableArray *filterItems = [NSMutableArray array];
-            [filterItems addObject:@{kJMResourceListLoaderOptionItemTitleKey : JMCustomLocalizedString(@"resources.type.all", nil),
+            [filterItems addObject:@{kJMResourceListLoaderOptionItemTitleKey : JMCustomLocalizedString(@"resources.filterby.type.all", nil),
                                      kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
 
             for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
@@ -104,7 +103,8 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:kJMSavedResources inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
     if ([self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]) {
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:YES];
+        BOOL ascending = self.sortBySelectedIndex == 0;
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:ascending];
         [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
     }
     

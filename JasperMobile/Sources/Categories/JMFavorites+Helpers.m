@@ -39,19 +39,25 @@ NSString * const kJMFavorites = @"Favorites";
     favorites.label = resource.label;
     favorites.wsType = resource.resourceType;
     favorites.creationDate = resource.creationDate;
+    favorites.updateDate = resource.updateDate;
     favorites.resourceDescription = resource.resourceDescription;
     favorites.username = sessionServerProfile.username;
+    favorites.version = resource.version;
     [activeServerProfile  addFavoritesObject:favorites];
 
     [[JMCoreDataManager sharedInstance] save:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
 }
 
 + (void)removeFromFavorites:(JSResourceLookup *)resource
 {
     JMFavorites *favorites = [self favoritesFromResourceLookup:resource];
-    [[JMCoreDataManager sharedInstance].managedObjectContext deleteObject:favorites];
-    
-    [[JMCoreDataManager sharedInstance] save:nil];
+    if (favorites) {
+        [[JMCoreDataManager sharedInstance].managedObjectContext deleteObject:favorites];
+        
+        [[JMCoreDataManager sharedInstance] save:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMFavoritesDidChangedNotification object:nil];
+    }
 }
 
 + (BOOL)isResourceInFavorites:(JSResourceLookup *)resource
@@ -73,7 +79,9 @@ NSString * const kJMFavorites = @"Favorites";
     resource.label = self.label;
     resource.resourceType = self.wsType;
     resource.creationDate = self.creationDate;
+    resource.updateDate = self.updateDate;
     resource.resourceDescription = self.resourceDescription;
+    resource.version = self.version;
     return resource;
 }
 

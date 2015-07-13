@@ -56,8 +56,6 @@
 "servers.action.profile.delete" = "Delete";
 "servers.profile.delete.message" = "Confirm to delete this server profile.";
 "servers.profile.list.empty" = "There are no Server Profiles";
-// TODO: choose correct name
-"servers.profile.placeholder" = "enter new value";
 
 /* Onboarding Intro */
 "intro.title" = "Welcome to TIBCO JasperMobile";
@@ -75,6 +73,7 @@
 
 // Labels
 "menuitem.library.label" = "Library";
+"menuitem.recentviews.label" = "Recently Viewed";
 "menuitem.saveditems.label" = "Saved Items";
 "menuitem.settings.label" = "Settings";
 "menuitem.repository.label" = "Repository";
@@ -94,19 +93,25 @@
 "resources.loading.msg" = "Loading.\nPlease wait...";
 "resources.noresults.msg" = "No Results.";
 "resources.search.placeholder" = "Search resources";
+"resources.noresults.saveditems.msg" = "No Saved Items.";
+"resources.noresults.favorites.msg" = "No Favorited Items.";
+
 
 // Filter By
-"resources.title" = "Object Type";
-"resources.type.all" = "All";
-"resources.type.reportUnit" = "Reports";
-"resources.type.dashboard" = "Dashboards";
-"resources.type.folder" = "Folders";
+"resources.filterby.title" = "Resource Type";
+"resources.filterby.type.all" = "All";
+"resources.filterby.type.reportUnit" = "Reports";
+"resources.filterby.type.dashboard" = "Dashboards";
+"resources.filterby.type.folder" = "Folders";
+"resources.filterby.type.saved.reportUnit" = "Saved Items";
 
 // Sort by
 "resources.sortby.title" = "Sort Options";
-"resources.sortby.type.name" = "Name";
-"resources.sortby.type.date" = "Date";
-"resources.sortby.type.creator" = "Creator";
+"resources.sortby.name" = "Name";
+"resources.sortby.creationDate" = "Creation Date";
+"resources.sortby.modifiedDate" = "Modified Date";
+"resources.sortby.accessTime" = "Access Time";
+"resources.sortby.countViews" = "Count of Views";
 
 // Repository view
 "repository.root.organization" = "Organization";
@@ -117,6 +122,10 @@
 
 "resource.viewer.open.link" = "Do you want to open link in external browser?";
 "resource.viewer.can't.open.link" = "Link can't be opened.";
+"resource.viewer.print.operation.name" = "%@ print operation";
+"resource.viewer.print.button.title" = "Print...";
+"resource.viewer.print.preview.title" = "Preview";
+"resource.viewer.print.prepare.title" = "Prepare...";
 
 // Report viewer
 "report.viewer.error.title" = "Error while loading report.";
@@ -130,9 +139,10 @@
 "report.viewer.save.title" = "Save Report";
 "report.viewer.save.name" = "Report name";
 "report.viewer.save.format" = "Output format";
-"report.viewer.save.pagesRange" = "Page range";
-"report.viewer.save.pagesRange.fromPage" = "From page:";
-"report.viewer.save.pagesRange.toPage" = "To page:";
+"report.viewer.save.pages" = "Pages";
+"report.viewer.save.pages.all" = "All";
+"report.viewer.save.pages.range.fromPage" = "From page:";
+"report.viewer.save.pages.range.toPage" = "To page:";
 "report.viewer.save.saved" = "The report was saved successfully.";
 "report.viewer.save.name.errmsg.empty" = "This field is required.";
 "report.viewer.save.name.errmsg.notunique" = "This name already exists, choose a unique name.";
@@ -140,6 +150,7 @@
 "report.viewer.save.name.errmsg.maxlength" = "Must be less than %i characters.";
 "report.viewer.save.name.errmsg.characters" = "Characters %@ are not allowed.";
 "report.viewer.save.saving.status.title" = "Saving report...";
+"report.viewer.save.name.errmsg.tooBigRange" = "Can't save report of more than %@ pages in HTML format. Would you like to save it in PDF format?";
 
 // Report viewer Options view
 "report.viewer.options.title" = "Filter Options";
@@ -154,6 +165,7 @@
 "savedreport.viewer.modify.title" = "Rename Report";
 "savedreport.viewer.modify.reportname" = "Item name";
 "savedreport.viewer.delete.confirmation.message" = "Do you really want to delete this item?";
+"savedreport.viewer.show.resource.error.message" = "Report could not be loaded. Try to save a report with less count of pages.";
 
 /* Resource Info View */
 
@@ -163,13 +175,21 @@
 "resource.uri.title" = "URI";
 "resource.version.title" = "Version";
 "resource.creationDate.title" = "Creation Date";
+"resource.modifiedDate.title" = "Modified Date";
+"resource.format.title" = "Format";
+
+
+"resources.type.reportUnit" = "Report";
+"resources.type.dashboard" = "Dashboard";
+"resources.type.dashboard.legacy" = "Legacy Dashboard";
+"resources.type.folder" = "Folder";
+"resources.type.saved.reportUnit" = "Content Resource";
 
 /* Settings view */
-
+"settings.title" = "Settings";
 "settings.item.connection.timeout" = "Connection timeout (in seconds)";
 "settings.item.server" = "Server";
 "settings.item.intro" = "Show intro";
-"settings.crashtracking.toast" = "To change crash reports settings, go to Settings page.";
 "settings.crashtracking.title" = "Send crash reports";
 "settings.crashtracking.alert.title" = "Note";
 "settings.crashtracking.alert.message" = "Restart the app after changing this setting.";
@@ -193,26 +213,23 @@
 "action.title.sort" = "Sort by";
 "action.title.selectall" = "Select All";
 "action.title.clearselections" = "Clear selections";
+"action.title.run" = "Run";
+"action.title.print" = "Print";
 
 /* Error messages */
 
-"error.readingresponse.dialog.msg" = "Error reading the server.";
-
-"error.noconnection.dialog.title" = "No Connection";
+"error.readingresponse.dialog.msg" = "Failed to load data!";
+"error.noconnection.dialog.title" = "Network is not available";
 "error.noconnection.dialog.msg" = "Check your network settings (mobile data or wifi) and try again.";
-
 "error.authenication.dialog.title" = "Invalid credentials supplied.";
 "error.authenication.dialog.msg" = "Could not login to JasperReports Server.";
-
 "error.unknownhost.dialog.title" = "Unknown server";
 "error.unknownhost.dialog.msg" = "The specified hostname could not be found.";
-
 "error.upgrade.data.title" = "Upgrade Error - User Data Update";
 "error.upgrade.data.msg" = "There was an error updating user data (Servers, Favorites, Filter values & Settings) during the upgrade process. Press:\nRetry - to re-execute the data update again\nApply - to ignore the error and continue with upgrade, you may LOSE all user data\nCancel - to cancel the upgrade (this will leave you at the current version)";
-
 "error.server.notsupported.title" = "Wrong server version or URL";
-"error.server.notsupported.msg" = "The server version is older than %.1f (not supported), or the URL is incorrect.";
-
+// TODO: change for other languages.
+"error.server.notsupported.msg" = "The server version is not supported, or the URL is incorrect.";
 
 /* HTTP error messages */
 
@@ -228,14 +245,10 @@
 
 "dialog.button.applyUpdate" = "Apply";
 "dialog.button.ok" = "OK";
-"dialog.button.edit" = "Edit";
 "dialog.button.cancel" = "Cancel";
 "dialog.button.continue" = "Continue";
 "dialog.button.retry" = "Retry";
 "dialog.button.run.report" = "Run Report";
-"dialog.button.info" = "Info";
-"dialog.button.addfavorite" = "Add Favorite";
-"dialog.button.removefavorite" = "Remove Favorite";
 "dialog.button.save" = "Save";
 "dialog.button.delete" = "Delete";
 
@@ -247,5 +260,5 @@
 /* Other */
 
 "status.loading" = "Loading...";
-"status.loading.ic" = "Loading IC...";
+"status.loading.ic" = "Loading...";
 "back.button.title" = "Back";

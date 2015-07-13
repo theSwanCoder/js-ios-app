@@ -50,4 +50,6 @@ extern NSString * const kJMRepresentationTypeDidChangeNotification;
 @property (nonatomic, assign) JMResourcesRepresentationType representationType;
 @property (nonatomic, strong) NSString *representationTypeKey;
 
+- (NSString *)noResultText;
+- (JMMenuActionsViewAction)availableAction;
 @end

@@ -36,29 +36,23 @@
 
 #pragma mark -LifeCycle
 
--(void)awakeFromNib
+-(void)viewDidLoad
 {
-    [super awakeFromNib];
-    
-    self.resourceListLoader = [NSClassFromString(@"JMLibraryListLoader") new];
+    [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"menuitem.library.label", nil);
 }
 
 #pragma mark - Overloaded methods
-- (JMMenuActionsViewAction)availableAction
-{
-    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Sort;
-    if( [JMUtils isServerProEdition] ) {
-        availableAction |= JMMenuActionsViewAction_Filter;
-    }
-    return availableAction;
-}
-
 - (NSString *)defaultRepresentationTypeKey
 {
     NSString * keyString = @"RepresentationTypeKey";
     keyString = [@"Library" stringByAppendingString:keyString];
     return keyString;
+}
+
+- (Class)resourceLoaderClass
+{
+    return NSClassFromString(@"JMLibraryListLoader");
 }
 
 @end

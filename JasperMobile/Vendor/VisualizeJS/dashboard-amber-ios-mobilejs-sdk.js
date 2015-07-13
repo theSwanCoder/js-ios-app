@@ -69,21 +69,23 @@
 }).call(this);
 
 (function() {
-  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     hasProp = {}.hasOwnProperty;
 
-  define('js.mobile.ios.callbacks.IosCallback', ['require','js.mobile.callback_dispatcher'],function(require) {
+  define('js.mobile.amber.ios.dashboard.callback', ['require','js.mobile.callback_dispatcher'],function(require) {
     var CallbackDispatcher, IosCallback;
     CallbackDispatcher = require('js.mobile.callback_dispatcher');
     return IosCallback = (function(superClass) {
       extend(IosCallback, superClass);
 
       function IosCallback() {
+        this.onWindowResizeEnd = bind(this.onWindowResizeEnd, this);
         return IosCallback.__super__.constructor.apply(this, arguments);
       }
 
       IosCallback.prototype.onMaximizeStart = function(title) {
-        this._makeCallback("command:maximize&title:" + title);
+        this._makeCallback("didStartMaximazeDashlet&title=" + title);
       };
 
       IosCallback.prototype.onMaximizeEnd = function(title) {};
@@ -93,23 +95,23 @@
       IosCallback.prototype.onMinimizeEnd = function() {};
 
       IosCallback.prototype.onScriptLoaded = function() {
-        this._makeCallback("command:didScriptLoad");
+        this._makeCallback("scriptDidLoad");
       };
 
       IosCallback.prototype.onLoadStart = function() {};
 
       IosCallback.prototype.onLoadDone = function() {
-        this._makeCallback("command:didEndLoading");
+        this._makeCallback("onLoadDone");
       };
 
       IosCallback.prototype.onLoadError = function(error) {};
 
       IosCallback.prototype.onWindowResizeStart = function() {
-        this._makeCallback("command:didWindowResizeStart");
+        this._makeCallback("windowDidStartResize");
       };
 
       IosCallback.prototype.onWindowResizeEnd = function() {
-        this._makeCallback("command:didWindowResizeEnd");
+        this._makeCallback("windowDidEndResize");
       };
 
       IosCallback.prototype._makeCallback = function(command) {
@@ -271,14 +273,13 @@
       }
 
       DashboardController.prototype.initialize = function() {
+        this._injectViewport();
         this.callback.onLoadStart();
         return jQuery(document).ready((function(_this) {
           return function() {
             js_mobile.log("document ready");
-            _this.scaler.applyScale();
-            _this._removeRedundantArtifacts();
-            _this._injectViewport();
-            return _this._attachDashletLoadListeners();
+            _this._attachDashletLoadListeners();
+            return _this._removeRedundantArtifacts();
           };
         })(this));
       };
@@ -289,6 +290,7 @@
         this._removeOriginalScale();
         this._disableDashlets();
         this._hideDashletChartTypeSelector();
+        this._showDashlets();
         this.callback.onMinimizeStart();
         DOMTreeObserver.lastModify((function(_this) {
           return function() {
@@ -334,7 +336,7 @@
               return _this._scaleDashboard();
             }
           };
-        })(this), 500);
+        })(this), 50);
       };
 
       DashboardController.prototype._configureDashboard = function() {
@@ -347,6 +349,7 @@
       };
 
       DashboardController.prototype._scaleDashboard = function() {
+        this.scaler.applyScale();
         js_mobile.log("_scaleDashboard " + (jQuery('.dashboardCanvas').length));
         return jQuery('.dashboardCanvas').addClass('scaledCanvas');
       };
@@ -393,13 +396,15 @@
         dashlets.unbind();
         self = this;
         return dashlets.click(function() {
-          var dashlet, innerLabel, title;
-          dashlet = jQuery(this).parent();
+          var dashlet, innerLabel, overlay, title;
+          overlay = jQuery(this);
+          dashlet = overlay.parent();
           innerLabel = dashlet.find('.innerLabel > p');
           if ((innerLabel != null) && (innerLabel.text != null)) {
             title = innerLabel.text();
             if ((title != null) && title.length > 0) {
-              return self._maximizeDashlet(dashlet, title);
+              self._maximizeDashlet(dashlet, title);
+              return self._hideDashlets(overlay);
             }
           }
         });
@@ -433,6 +438,14 @@
 
       DashboardController.prototype._getOverlay = function() {
         return jQuery(".dashboardCanvas > .content > .body div.canvasOverlay");
+      };
+
+      DashboardController.prototype._showDashlets = function() {
+        return jQuery('.customOverlay').parent().css("opacity", 1);
+      };
+
+      DashboardController.prototype._hideDashlets = function(overlay) {
+        return jQuery('.customOverlay').not(overlay).parent().css("opacity", 0);
       };
 
       return DashboardController;
@@ -471,7 +484,7 @@
       ScaleStyleReport.prototype.applyFor = function(factor) {
         var scaledCanvasCss;
         jQuery("#scale_style").remove();
-        scaledCanvasCss = "#container { position: absolute; width: " + (100 / factor) + "%; height: " + (100 / factor) + "%; }";
+        scaledCanvasCss = "#container { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + factor + " ); -ms-transform: scale( " + factor + " ); -webkit-transform: scale( " + factor + " ); width: " + (100 / factor) + "% !important; height: " + (100 / factor) + "% !important; }";
         jQuery('<style id="scale_style"></style>').text(scaledCanvasCss).appendTo('head');
       };
 
@@ -627,9 +640,9 @@
 }).call(this);
 
 (function() {
-  define('js.mobile.amber.ios.dashboard.client', ['require','js.mobile.ios.callbacks.IosCallback','js.mobile.amber.dashboard','js.mobile.ios.viewport.dashboard.amber'],function(require) {
+  define('js.mobile.amber.ios.dashboard.client', ['require','js.mobile.amber.ios.dashboard.callback','js.mobile.amber.dashboard','js.mobile.ios.viewport.dashboard.amber'],function(require) {
     var IosCallback, IosClient, MobileDashboard, Viewport;
-    IosCallback = require('js.mobile.ios.callbacks.IosCallback');
+    IosCallback = require('js.mobile.amber.ios.dashboard.callback');
     MobileDashboard = require('js.mobile.amber.dashboard');
     Viewport = require('js.mobile.ios.viewport.dashboard.amber');
     return IosClient = (function() {
@@ -677,5 +690,5 @@
 
 }).call(this);
 
-define("ios/amber/dashboard/debug_main.js", function(){});
+define("ios/dashboard/amber/debug_main.js", function(){});
 

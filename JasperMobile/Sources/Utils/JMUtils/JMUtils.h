@@ -139,4 +139,12 @@
 + (BOOL)isServerProEdition;
 
 + (NSString *)localizedStringFromDate:(NSDate *)date;
+
++ (NSDateFormatter *)formatterForSimpleDate;
+
++ (NSDateFormatter *)formatterForSimpleTime;
+
++ (NSDateFormatter *)formatterForSimpleDateTime;
+
++ (UIStoryboard *)mainStoryBoard;
 @end

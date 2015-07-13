@@ -41,12 +41,12 @@
     [self addSubview: self.contentView];
 }
 
-- (void)setup
+- (void)setupWithNoResultText:(NSString *)noResult
 {
     self.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
     
     self.activityViewTitleLabel.text = JMCustomLocalizedString(@"resources.loading.msg", nil);
-    self.noResultsViewTitleLabel.text = JMCustomLocalizedString(@"resources.noresults.msg", nil);
+    self.noResultsViewTitleLabel.text = noResult;
     
     self.activityViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
     self.noResultsViewTitleLabel.font = [JMFont resourcesActivityTitleFont];

@@ -44,6 +44,7 @@
 @property (nonatomic, strong) NSString * serverUrl;
 @property (nonatomic, strong) NSSet *favorites;
 @property (nonatomic, strong) NSSet *savedResources;
+
 @end
 
 @interface JMServerProfile (CoreDataGeneratedAccessors)

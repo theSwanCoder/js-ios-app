@@ -21,6 +21,7 @@
  */
 
 #import "JMPopupView.h"
+#import "JasperMobileAppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 
 static NSMutableArray* visiblePopupsArray = nil;
@@ -117,6 +118,12 @@ static NSMutableArray* visiblePopupsArray = nil;
 
 - (void)setContentView:(UIView *)contentView
 {
+    // Fix for no-retina screens with correct displaying
+    CGRect contentViewFrame = contentView.frame;
+    contentViewFrame.size.width = 2 * ceil(contentViewFrame.size.width / 2);
+    contentViewFrame.size.height = 2 * ceil(contentViewFrame.size.height / 2);
+    contentView.frame = contentViewFrame;
+    
     _contentView = contentView;
     switch (self.type) {
         case JMPopupViewType_ContentViewOnly:
@@ -144,13 +151,9 @@ static NSMutableArray* visiblePopupsArray = nil;
         return;
     }
 
-    UIWindow *currentWindow = [[UIApplication sharedApplication] keyWindow];
-    if (currentWindow.windowLevel > UIWindowLevelNormal) {
-        currentWindow = [[[UIApplication sharedApplication] windows] lastObject];
-    }
+    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    UIWindow *currentWindow = appDelegate.window;
     UIView *topView = [[currentWindow subviews] lastObject];
-    
-//    UIView* topView = [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject];
 
     self.frame = topView.bounds;
     [topView addSubview:self];

@@ -89,6 +89,7 @@
     self.serverNameLabel.text = [NSString stringWithFormat:@"%@ (v.%@)", alias, version];
     self.userNameLabel.text = self.restClient.serverProfile.username;
     self.organizationNameLabel.text = self.restClient.serverProfile.organization;
+    _menuItems = nil;
 }
 
 - (void)unselectItems
@@ -116,10 +117,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 50.f;
-}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -161,14 +158,7 @@
 - (NSArray *)menuItems
 {
     if (!_menuItems) {
-        _menuItems = @[
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeLibrary],
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeRepository],
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeSettings],
-                       [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]
-                       ];
+        _menuItems = [self createMenuItems];
     }
     return _menuItems;
 }
@@ -181,6 +171,26 @@
         }
     }
     return nil;
+}
+
+#pragma mark - Helpers
+- (NSArray *)createMenuItems
+{
+    NSMutableArray *menuItems = [@[
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeLibrary],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeRepository],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeSettings],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]
+    ] mutableCopy];
+
+    if ([JMUtils isServerProEdition]) {
+        NSUInteger indexOfRepository = [menuItems indexOfObject:[JMMenuItem menuItemWithResourceType:JMResourceTypeRepository]];
+        [menuItems insertObject:[JMMenuItem menuItemWithResourceType:JMResourceTypeRecentViews] atIndex:indexOfRepository + 1];
+    }
+
+    return [menuItems copy];
 }
 
 @end

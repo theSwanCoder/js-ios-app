@@ -39,8 +39,6 @@
 -(void)awakeFromNib
 {
     [super awakeFromNib];
-    
-    self.resourceListLoader = [NSClassFromString(@"JMSavedResourcesListLoader") new];
     self.title = JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
 }
 
@@ -50,6 +48,16 @@
     NSString * keyString = @"RepresentationTypeKey";
     keyString = [@"SavedItems" stringByAppendingString:keyString];
     return keyString;
+}
+
+- (Class)resourceLoaderClass
+{
+    return NSClassFromString(@"JMSavedResourcesListLoader");
+}
+
+- (NSString *)noResultText
+{
+    return JMCustomLocalizedString(@"resources.noresults.saveditems.msg", nil);
 }
 
 @end

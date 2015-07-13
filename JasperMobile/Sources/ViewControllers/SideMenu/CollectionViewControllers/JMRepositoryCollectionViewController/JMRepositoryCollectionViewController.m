@@ -37,8 +37,7 @@
 -(void)awakeFromNib
 {
     [super awakeFromNib];
-    
-    self.resourceListLoader = [NSClassFromString(@"JMRepositoryListLoader") new];
+
     self.title = JMCustomLocalizedString(@"menuitem.repository.label", nil);
 }
 
@@ -64,6 +63,11 @@
     [resources addObjectsFromArray:reportUnits];
     
     return resources.count > 0 ? [resources objectAtIndex:indexPath.row] : nil;
+}
+
+- (Class)resourceLoaderClass
+{
+    return NSClassFromString(@"JMRepositoryListLoader");
 }
 
 @end

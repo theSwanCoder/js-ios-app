@@ -44,9 +44,11 @@
     self.textField.text = serverOption.optionValue;
 
     NSDictionary *attributes = @{
-            NSFontAttributeName : [UIFont boldSystemFontOfSize:11]
+            NSFontAttributeName : [UIFont systemFontOfSize:12]
     };
-    NSAttributedString *placeholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"servers.profile.placeholder", nil)
+    NSString *trimmedPlaceholderString = [serverOption.titleString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" *"]];
+    
+    NSAttributedString *placeholder = [[NSAttributedString alloc] initWithString:trimmedPlaceholderString
                                                                       attributes:attributes];
     self.textField.attributedPlaceholder = placeholder;
 

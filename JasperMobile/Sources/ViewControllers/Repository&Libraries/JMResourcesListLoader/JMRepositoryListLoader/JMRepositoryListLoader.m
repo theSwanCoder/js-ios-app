@@ -73,7 +73,7 @@
 
 - (void)loadResourceLookup:(NSString *)resourceURI
 {
-    [self.restClient resourceLookupForURI:resourceURI resourceType:[JSConstants sharedInstance].WS_TYPE_FOLDER completionBlock:@weakself(^(JSOperationResult *result)) {
+    [self.restClient resourceLookupForURI:resourceURI resourceType:[JSConstants sharedInstance].WS_TYPE_FOLDER modelClass:[JSResourceLookup class] completionBlock:@weakself(^(JSOperationResult *result)) {
         if (result.error) {
             if (result.error.code == JSSessionExpiredErrorCode) {
                 if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
@@ -91,11 +91,13 @@
                 if (!resourceLookup.resourceType) {
                     resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_FOLDER;
                 }
-                [self.rootFolders addObject:resourceLookup];
-                self.sections = @{
-                                  @(JMResourcesListSectionTypeFolder) : self.rootFolders,
-                                  @(JMResourcesListSectionTypeReportUnit) : @[],
-                                  };
+                if (self.rootFolders) {
+                    [self.rootFolders addObject:resourceLookup];
+                    self.sections = @{
+                                      @(JMResourcesListSectionTypeFolder) : self.rootFolders,
+                                      @(JMResourcesListSectionTypeReportUnit) : @[],
+                                      };
+                }
             }
 
             
@@ -142,7 +144,7 @@
             return [super listItemsWithOption:option];
         case JMResourcesListLoaderOption_Filter:
             return @[
-                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.type.all", nil),
+                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
                        kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT, [JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY, [JSConstants sharedInstance].WS_TYPE_FOLDER]}];
     }
 }

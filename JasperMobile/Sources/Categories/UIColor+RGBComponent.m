@@ -45,6 +45,14 @@
     return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }
 
++ (UIColor *)colorWithRedComponent:(CGFloat)redComponent greenComponent:(CGFloat)greenComponent blueComponent:(CGFloat)blueComponent
+{
+    return [UIColor colorWithRed:[self rgbComponent:redComponent]
+                           green:[self rgbComponent:greenComponent]
+                            blue:[self rgbComponent:blueComponent]
+                           alpha:1];
+}
+
 + (UIColor *)highlitedColorForColor:(UIColor *)color
 {
     CGFloat alphaComponent;

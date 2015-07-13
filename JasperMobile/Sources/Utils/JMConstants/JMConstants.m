@@ -39,6 +39,8 @@ NSString * const kJMFavoritesDidChangedNotification = @"JMFavoritesDidChangedNot
 NSString * const kJMSavedResourcesDidChangedNotification = @"JMSavedResourcesDidChangedNotification";
 
 // Shared keys for NSDictionary
+NSString * const kJMTitleKey = @"title";
+NSString * const kJMValueKey = @"value";
 NSString * const kJMServerProfileKey = @"serverProfile";
 NSString * const kJMResourceLookup = @"resourceLookup";
 NSString * const kJMInputControls = @"inputControls";
@@ -78,6 +80,13 @@ NSString * const kJMThumbnailImageFileName = @"_jaspersoftMobileThumbnailImageFi
 // Error domain for report loader
 NSString * const kJMReportLoaderErrorDomain = @"JMReportLoaderErrorDomain";
 
-
 // Privacy Policy Link
 NSString * const kJMPrivacyPolicyURI = @"http://www.tibco.com/company/privacy-cma";
+
+// Limit of pages for saving report to HTML format
+NSInteger  const kJMSaveReportMaxRangePages = 500;
+
+// Limit of resource for loading from JRS
+NSInteger  const kJMResourceLimit = 100;
+NSInteger  const kJMRecentResourcesLimit = 10;
+

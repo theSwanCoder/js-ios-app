@@ -44,6 +44,8 @@
  */
 + (UIColor *)colorFromHexString:(NSString *)hexString;
 
++ (UIColor *)colorWithRedComponent:(CGFloat)redComponent greenComponent:(CGFloat)greenComponent blueComponent:(CGFloat)blueComponent;
+
 + (UIColor *)highlitedColorForColor:(UIColor *)color;
 
 @end

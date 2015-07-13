@@ -33,9 +33,16 @@
 
 #import <UIKit/UIKit.h>
 #import "JMResourceClientHolder.h"
+#import "JMMenuActionsView.h"
 
 extern NSString * const kJMShowResourceInfoSegue;
 
-@interface JMResourceInfoViewController : UIViewController <JMResourceClientHolder>
+@interface JMResourceInfoViewController : UIViewController <JMResourceClientHolder, JMMenuActionsViewDelegate, JMBaseResourceViewerVCDelegate>
+
+- (NSArray *)resourceProperties;
+
+- (void)resetResourceProperties NS_REQUIRES_SUPER;
+
+- (JMMenuActionsViewAction)availableAction NS_REQUIRES_SUPER;
 
 @end

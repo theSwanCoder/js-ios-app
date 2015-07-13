@@ -45,10 +45,10 @@ extern NSString * const kJMLoginDidSuccessNotification;
 extern NSString * const kJMResetApplicationNotification;
 extern NSString * const kJMFavoritesDidChangedNotification;
 extern NSString * const kJMSavedResourcesDidChangedNotification;
-extern NSString * const kJMDemoServerUsername;
-extern NSString * const kJMDemoServerPassword;
 
 // Shared keys for dictionary
+extern NSString * const kJMTitleKey;
+extern NSString * const kJMValueKey;
 extern NSString * const kJMServerProfileKey;
 extern NSString * const kJMResourceLookup;
 extern NSString * const kJMInputControls;
@@ -69,6 +69,8 @@ extern NSString * const kJMDefaultUseVisualize;
 extern NSString * const kJMDemoServerAlias;
 extern NSString * const kJMDemoServerUrl;
 extern NSString * const kJMDemoServerOrganization;
+extern NSString * const kJMDemoServerUsername;
+extern NSString * const kJMDemoServerPassword;
 
 // Report directory
 extern NSString * const kJMReportsDirectory;
@@ -89,9 +91,12 @@ extern NSString * const kJMReportLoaderErrorDomain;
 // Privacy Policy Link
 extern NSString * const kJMPrivacyPolicyURI;
 
-#define kJMResourceLimit                                100
-#define kJMMasterViewWidth                              [JMUtils isIphone] ? 210.f : 240.f
-#define kJMMasterViewAnimationDuration                  0.2f
+// Limit of pages for saving report to HTML format
+NSInteger  const kJMSaveReportMaxRangePages;
+
+// Limit of resource for loading from JRS
+NSInteger  const kJMResourceLimit;
+NSInteger  const kJMRecentResourcesLimit;
 
 #define kJMDetailViewLightBackgroundColor               [UIColor colorFromHexString:@"#E5E9EB"]
 #define kJMDetailViewLightTextColor                     [UIColor colorFromHexString:@"#8F8F8F"]
@@ -102,5 +107,4 @@ extern NSString * const kJMPrivacyPolicyURI;
 
 #define kJMResourcePreviewBackgroundColor               [UIColor colorFromHexString:@"#428EC0"]
 
-#define kJMMasterResourceCellDefaultBackgroundColor     [UIColor colorFromHexString:@"#2E3138"]
 #define kJMMasterResourceCellSelectedBackgroundColor    [UIColor colorFromHexString:@"#484F59"]

@@ -39,42 +39,67 @@
     return [JMUtils isServerVersionUpOrEqual6] && [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD];
 }
 
-- (JMReport *)reportModelWithVCIdentifier:(NSString *__autoreleasing *)identifier
+- (NSString *)resourceViewerVCIdentifier
 {
-    // TODO: replace seque with constant
+    // TODO: identifiers with constant
+    if ([self isReport]) {
+        return @"JMReportViewerVC";
+    } else if ([self isDashboard]) {
+        return @"JMDashboardViewerVC";
+    } else if ([self isSavedReport]) {
+        return @"JMSavedResourceViewerViewController";
+    }
+    return nil;
+}
+
+- (NSString *)infoVCIdentifier
+{
+    if ([self isReport]) {
+        return @"JMReportInfoViewController";
+    } else if ([self isDashboard]) {
+        return @"JMDashboardInfoViewController";
+    } else if ([self isSavedReport]) {
+        return @"JMSavedItemsInfoViewController";
+    }
+    return @"JMResourceInfoViewController";
+}
+
+- (JMReport *)reportModel
+{
     if ([JMUtils isSupportVisualize]) {
-        *identifier = @"JMVisualizeReportViewerViewController";
         return [JMVisualizeReport reportWithResource:self inputControls:nil];
     } else {
-        *identifier = @"JMReportViewerViewController";
         return [JMRestReport reportWithResource:self inputControls:nil];
     }
 }
 
-- (JMDashboard *)dashboardModelWithVCIdentifier:(NSString *__autoreleasing *)identifier
+- (JMDashboard *)dashboardModel
 {
-    // TODO: replace seque with constant
     if ([self isNewDashboard]) {
-
         if ([JMUtils isServerAmber2] && [JMUtils isSystemVersion8] && [JMUtils isSupportVisualize]) {
-            *identifier = @"JMDashboardVC";
             return [JMVisualizeDashboard dashboardWithResource:self];
         } else {
-            *identifier = @"JMVisualizeDashboardViewerVC";
             return [JMVisualizeDashboard dashboardWithResource:self];
         }
-
     } else {
-        *identifier = @"JMDashboardsViewerViewController";
         return [JMDashboard dashboardWithResource:self];
     }
 }
 
-- (NSString *)thumbnailImageUrlString
+- (NSString *)localizedResourceType
 {
-    NSString *restURI = [JSConstants sharedInstance].REST_SERVICES_V2_URI;
-    NSString *resourceURI = self.uri;
-    return  [NSString stringWithFormat:@"%@/%@/thumbnails%@?defaultAllowed=false", self.restClient.serverProfile.serverUrl, restURI, resourceURI];
+    if ([self.resourceType isEqualToString:kJMSavedReportUnit]) {
+        return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
+    } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]) {
+        return JMCustomLocalizedString(@"resources.type.reportUnit", nil);
+    } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD]) {
+        return JMCustomLocalizedString(@"resources.type.dashboard", nil);
+    } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY]) {
+        return JMCustomLocalizedString(@"resources.type.dashboard.legacy", nil);
+    } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FOLDER]) {
+        return JMCustomLocalizedString(@"resources.type.folder", nil);
+    }
+    return nil;
 }
 
 @end
