@@ -32,6 +32,7 @@
 #import "JMIntroModelManager.h"
 #import "JMIntroModel.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMOnboardIntroViewController.h"
 
 @interface JMIntroModelManager()
 @property (nonatomic, copy) NSArray *pageData;
@@ -65,8 +66,27 @@
     ];
 }
 
-- (JMIntroModel *)modelAtIndex:(NSUInteger)index {
-    return self.pageData[index];
+- (JMIntroModel *)modelForIntroPage:(JMOnboardIntroPage)introPage
+{
+    JMIntroModel *model;
+    switch (introPage) {
+        case JMOnboardIntroPageWelcome: {
+            break;
+        }
+        case JMOnboardIntroPageStayConnected: {
+            model = self.pageData[0];
+            break;
+        }
+        case JMOnboardIntroPageInstanceAccess: {
+            model = self.pageData[1];
+            break;
+        }
+        case JMOnboardIntroPageSeemlessIntegration: {
+            model = self.pageData[2];
+            break;
+        }
+    };
+    return model;
 }
 
 @end
