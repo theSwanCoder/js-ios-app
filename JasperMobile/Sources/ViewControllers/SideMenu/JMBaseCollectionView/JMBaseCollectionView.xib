@@ -12,6 +12,7 @@
                 <outlet property="collectionView" destination="QyO-Hj-Qu3" id="lqp-0p-gH5"/>
                 <outlet property="contentView" destination="4nu-5s-lk1" id="3KP-t3-TlU"/>
                 <outlet property="noResultsViewTitleLabel" destination="Xz8-Cf-2if" id="OwP-8s-PAg"/>
+                <outlet property="searchBar" destination="C7s-iG-Tb2" id="Mg2-iA-fI6"/>
                 <outlet property="searchBarPlaceholder" destination="YRF-It-dh7" id="J2c-KI-9TC"/>
             </connections>
         </placeholder>
@@ -79,11 +80,16 @@ Please Wait...</string>
                     </collectionViewFlowLayout>
                     <cells/>
                 </collectionView>
+                <searchBar contentMode="redraw" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="C7s-iG-Tb2">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                    <textInputTraits key="textInputTraits"/>
+                </searchBar>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="YRF-It-dh7" firstAttribute="leading" secondItem="4nu-5s-lk1" secondAttribute="leading" id="6XI-hM-8Km"/>
                 <constraint firstItem="cyn-B9-2jg" firstAttribute="leading" secondItem="4nu-5s-lk1" secondAttribute="leading" id="8X1-kH-Abh"/>
+                <constraint firstItem="C7s-iG-Tb2" firstAttribute="top" secondItem="4nu-5s-lk1" secondAttribute="top" id="9Fu-Cr-kjJ"/>
                 <constraint firstAttribute="trailing" secondItem="YRF-It-dh7" secondAttribute="trailing" id="FP5-gf-A3w"/>
                 <constraint firstAttribute="centerY" secondItem="Xz8-Cf-2if" secondAttribute="centerY" id="IAS-99-COA"/>
                 <constraint firstAttribute="trailing" secondItem="Xz8-Cf-2if" secondAttribute="trailing" id="Nvz-S6-lQS"/>
@@ -96,6 +102,9 @@ Please Wait...</string>
                 <constraint firstItem="QyO-Hj-Qu3" firstAttribute="leading" secondItem="4nu-5s-lk1" secondAttribute="leading" id="ezt-LN-Hez"/>
                 <constraint firstAttribute="bottom" secondItem="QyO-Hj-Qu3" secondAttribute="bottom" id="gnA-Bk-A4O"/>
                 <constraint firstItem="YRF-It-dh7" firstAttribute="top" secondItem="4nu-5s-lk1" secondAttribute="top" id="mhT-1C-TK1"/>
+                <constraint firstAttribute="trailing" secondItem="C7s-iG-Tb2" secondAttribute="trailing" id="tfZ-KN-Qqu"/>
+                <constraint firstItem="C7s-iG-Tb2" firstAttribute="leading" secondItem="4nu-5s-lk1" secondAttribute="leading" id="vXZ-xi-Hpl"/>
+                <constraint firstItem="QyO-Hj-Qu3" firstAttribute="top" secondItem="C7s-iG-Tb2" secondAttribute="bottom" id="vjq-ty-ihy"/>
                 <constraint firstItem="Xz8-Cf-2if" firstAttribute="leading" secondItem="4nu-5s-lk1" secondAttribute="leading" id="ziY-ST-P3r"/>
             </constraints>
             <point key="canvasLocation" x="254" y="326"/>

@@ -47,8 +47,17 @@
 
 + (UIFont *)resourcesActivityTitleFont;
 
++ (UIFont *)collectionResourceNameFont;
+
++ (UIFont *)collectionResourceDescriptionFont;
+
++ (UIFont *)collectionLoadingFont;
+
 + (UIFont *)menuItemTitleFont;
 
 + (UIFont *)menuItemDescriptionFont;
+
++ (UIFont *)loginInputControlsFont;
+
 
 @end

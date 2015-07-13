@@ -46,7 +46,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UILabel *activityViewTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *noResultsViewTitleLabel;
-@property (nonatomic, strong) UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 
 - (void)setupWithNoResultText:(NSString *)noResult;

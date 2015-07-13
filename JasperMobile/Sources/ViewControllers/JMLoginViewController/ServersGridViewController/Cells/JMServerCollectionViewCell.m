@@ -34,6 +34,13 @@
 
 @implementation JMServerCollectionViewCell
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.titleLabel.font = [JMFont collectionResourceNameFont];
+    self.urlLabel.font = [JMFont collectionResourceDescriptionFont];
+}
+
 - (void)setServerProfile:(JMServerProfile *)serverProfile
 {
     _serverProfile = serverProfile;

@@ -55,13 +55,35 @@
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:20] : [UIFont systemFontOfSize:30];
 }
 
++ (UIFont *)collectionResourceNameFont
+{
+    return [JMUtils isIphone] ? [UIFont systemFontOfSize:15] : [UIFont systemFontOfSize:22];
+}
+
++ (UIFont *)collectionResourceDescriptionFont
+{
+    return [JMUtils isIphone] ? [UIFont systemFontOfSize:12] : [UIFont systemFontOfSize:14];
+}
+
++ (UIFont *)collectionLoadingFont
+{
+    return [JMUtils isIphone] ? [UIFont systemFontOfSize:20] : [UIFont systemFontOfSize:30];
+}
+
+
 + (UIFont *)menuItemTitleFont
 {
-    return [JMUtils isIphone] ? [UIFont boldSystemFontOfSize:15] : [UIFont systemFontOfSize:28];
+    return [JMUtils isIphone] ? [UIFont systemFontOfSize:16] : [UIFont systemFontOfSize:20];
 }
 
 + (UIFont *)menuItemDescriptionFont
 {
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:12] : [UIFont systemFontOfSize:15];
 }
+
++ (UIFont *)loginInputControlsFont
+{
+    return [JMUtils isIphone] ? [UIFont systemFontOfSize:15] : [UIFont systemFontOfSize:18];
+}
+
 @end

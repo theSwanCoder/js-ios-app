@@ -40,7 +40,6 @@
     self.titleLabel.textColor = [UIColor darkGrayColor];
     self.errorLabel.font = [JMFont tableViewCellDetailErrorFont];
     self.errorLabel.textColor = [UIColor redColor];
-    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
 }
 
 - (void) updateDisplayingOfErrorMessage

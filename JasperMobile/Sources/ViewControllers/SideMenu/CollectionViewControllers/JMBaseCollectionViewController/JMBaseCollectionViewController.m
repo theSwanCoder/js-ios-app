@@ -383,14 +383,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
     }
     [navBarItems addObject:[self resourceRepresentationItem]];
-    
-    JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-    UIView *searchContainerView = [[UIView alloc] initWithFrame:baseCollectionView.searchBar.bounds];
-    searchContainerView.backgroundColor = [UIColor clearColor];
-    [searchContainerView addSubview: baseCollectionView.searchBar];
-    
-    baseCollectionView.searchBar.autoresizingMask = searchContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    baseCollectionView.searchBarPlaceholder.topItem.titleView = searchContainerView;
     self.navigationItem.rightBarButtonItems = navBarItems;
 }
 

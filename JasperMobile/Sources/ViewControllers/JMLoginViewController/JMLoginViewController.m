@@ -56,7 +56,8 @@
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
     self.placeHolderView.backgroundColor = kJMMainNavigationBarBackgroundColor;
     [self.textfields makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:kJMSearchBarBackgroundColor];
-    
+    [self.textfields makeObjectsPerformSelector:@selector(setFont:) withObject:[JMFont loginInputControlsFont]];
+
     NSDictionary *attributes = @{NSForegroundColorAttributeName:kJMDetailViewLightTextColor};
     self.userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login.username.label", nil) attributes:attributes];
     self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login.password.label", nil) attributes:attributes];

@@ -37,8 +37,21 @@
 
 -(void)awakeFromNib {
     [[NSBundle mainBundle] loadNibNamed:@"JMBaseCollectionView" owner:self options:nil];
-    [self.contentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self addSubview: self.contentView];
+    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self addConstraints:[NSLayoutConstraint
+                          constraintsWithVisualFormat:@"H:|-0-[contentView]-0-|"
+                          options:NSLayoutFormatAlignAllLeading
+                          metrics:nil
+                          views:@{@"contentView": self.contentView}]];
+    [self addConstraints:[NSLayoutConstraint
+                          constraintsWithVisualFormat:@"V:|-0-[contentView]-0-|"
+                          options:NSLayoutFormatAlignAllTop
+                          metrics:nil
+                          views:@{@"contentView": self.contentView}]];
+    
+    self.searchBar.placeholder = JMCustomLocalizedString(@"resources.search.placeholder", nil);
 }
 
 - (void)setupWithNoResultText:(NSString *)noResult
@@ -71,16 +84,6 @@
     self.collectionView.alwaysBounceVertical = YES;
 }
 
-- (UISearchBar *)searchBar
-{
-    if (!_searchBar) {
-        _searchBar = [[UISearchBar alloc] initWithFrame:self.searchBarPlaceholder.bounds];
-        _searchBar.searchBarStyle = UISearchBarStyleMinimal;
-        _searchBar.placeholder = JMCustomLocalizedString(@"resources.search.placeholder", nil);
-    }
-    return _searchBar;
-}
-
 #pragma mark - Utils
 - (NSString *)resourceCellForRepresentationType:(JMResourcesRepresentationType)type
 {
@@ -93,7 +96,6 @@
             return nil;
     }
 }
-
 
 - (NSString *)loadingCellForRepresentationType:(JMResourcesRepresentationType)type
 {
