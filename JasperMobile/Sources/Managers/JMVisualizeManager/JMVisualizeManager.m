@@ -112,9 +112,9 @@
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScaleViewport).stringValue];
 
     // Visualize
-    NSString *baseURLString = self.restClient.serverProfile.serverUrl;
-    baseURLString = [baseURLString stringByAppendingString:@"/client/visualize.js?_showInputControls=true&_opt=true"];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:baseURLString];
+    NSString *visualizeURLString = self.visualizePath;
+    visualizeURLString = [visualizeURLString stringByAppendingString:@"&_showInputControls=true&_opt=true"];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:visualizeURLString];
 
     // REQUIRE_JS
     NSString *requireJSPath = [[NSBundle mainBundle] pathForResource:@"require.min" ofType:@"js"];
@@ -143,7 +143,9 @@
 - (NSString *)visualizePath
 {
     if (!_visualizePath) {
-        NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js", self.restClient.serverProfile.serverUrl];
+        NSString *baseURL = self.restClient.serverProfile.serverUrl;
+        baseURL = [baseURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+        NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js?baseUrl=%@", self.restClient.serverProfile.serverUrl, baseURL];
 
         if ([JMUtils isServerVersionUpOrEqual6] && ![JMUtils isServerAmber2]) {
             visualizePath = [visualizePath stringByAppendingString:@"?_opt=false"];
