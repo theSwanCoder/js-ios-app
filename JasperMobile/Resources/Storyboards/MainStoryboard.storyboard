@@ -401,7 +401,7 @@
                         <outletCollection property="textfields" destination="Biu-xJ-P2l" id="pVF-7u-Juz"/>
                         <outletCollection property="textfields" destination="8la-dV-F8G" id="nSk-xe-8pT"/>
                         <outletCollection property="textfields" destination="IlI-wL-7hQ" id="RSE-lD-yt9"/>
-                        <segue destination="csQ-Mx-H91" kind="push" identifier="showServerProfiles" id="s3R-3V-YMU"/>
+                        <segue destination="csQ-Mx-H91" kind="show" identifier="showServerProfiles" id="2s2-1a-KyK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fEF-dN-LmU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -509,7 +509,7 @@
                     <connections>
                         <outlet property="collectionView" destination="dhA-YR-l07" id="4zq-Fu-HJ1"/>
                         <outlet property="errorLabel" destination="wU2-jd-N5e" id="xj8-3u-HHl"/>
-                        <segue destination="Cud-Db-3p3" kind="push" identifier="ShowServerOptions" id="oBg-CS-3km"/>
+                        <segue destination="Cud-Db-3p3" kind="show" identifier="ShowServerOptions" id="OgL-0K-8uP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YRk-8F-Ubv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -525,7 +525,7 @@
                         <viewControllerLayoutGuide type="bottom" id="rpQ-dX-Oe6"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="g7t-cD-ord">
-                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="vTE-Fx-49C">
@@ -1188,7 +1188,7 @@ your business wherever you are.</string>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="titleLabel" destination="eIv-qN-a61" id="IMg-80-54p"/>
-                                            <segue destination="TRk-gt-NjK" kind="modal" id="kOt-qb-Ld0"/>
+                                            <segue destination="TRk-gt-NjK" kind="presentation" id="hn9-RK-qX4"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedbackCellIdentifier" id="rO5-Zp-xn9" customClass="JMSettingsTableViewCell">
@@ -1235,7 +1235,7 @@ your business wherever you are.</string>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="LIw-YN-WwC" kind="push" id="Izg-vL-wE5"/>
+                                    <segue destination="LIw-YN-WwC" kind="show" id="6LI-fb-Vo0"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fPq-km-pBs">
@@ -1352,7 +1352,7 @@ your business wherever you are.</string>
                     </navigationItem>
                     <connections>
                         <outlet property="menuButton" destination="SrG-of-vmT" id="gAl-DI-CwW"/>
-                        <segue destination="q5y-tT-ces" kind="push" identifier="ShowSavedRecourcesViewer" id="UCK-yY-l2o"/>
+                        <segue destination="q5y-tT-ces" kind="show" identifier="ShowSavedRecourcesViewer" id="d9e-0R-9dE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rOj-6o-aXF" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1607,8 +1607,8 @@ your business wherever you are.</string>
                     </navigationItem>
                     <connections>
                         <outlet property="menuButton" destination="ZFz-DE-DeR" id="QqS-2o-22v"/>
-                        <segue destination="ErU-ou-rS1" kind="push" identifier="ShowDashboardViewer" id="ofP-vW-2EC"/>
-                        <segue destination="CyQ-uv-PHh" kind="push" identifier="ShowReportViewer" id="2Wk-fd-ghF"/>
+                        <segue destination="ErU-ou-rS1" kind="show" identifier="ShowDashboardViewer" id="RHS-U1-mL5"/>
+                        <segue destination="CyQ-uv-PHh" kind="show" identifier="ShowReportViewer" id="IXG-JN-Ecs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3As-aU-PG2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1975,7 +1975,7 @@ your business wherever you are.</string>
                                             <outlet property="titleLabel" destination="GYI-mT-w6f" id="Vxe-0h-B1j"/>
                                             <outlet property="valueLabel" destination="Uau-LL-OP6" id="LL1-tx-MOl"/>
                                             <outlet property="valuePlaceHolderView" destination="Uau-LL-OP6" id="G9p-xi-Rr2"/>
-                                            <segue destination="RdG-S9-JPe" kind="push" id="Ccb-xv-hZR"/>
+                                            <segue destination="RdG-S9-JPe" kind="show" id="jnS-QV-dMA"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MultiSelectCell" id="cEK-7M-1JN" customClass="JMMultiSelectInputControlCell">
@@ -2026,7 +2026,7 @@ your business wherever you are.</string>
                                             <outlet property="titleLabel" destination="Ghn-fd-hzu" id="N2u-qF-pw1"/>
                                             <outlet property="valueLabel" destination="faG-YA-sAZ" id="pzN-Uj-dBF"/>
                                             <outlet property="valuePlaceHolderView" destination="faG-YA-sAZ" id="25o-rM-nrP"/>
-                                            <segue destination="XKV-Qe-rOa" kind="push" id="kZc-06-gWQ"/>
+                                            <segue destination="XKV-Qe-rOa" kind="show" id="wE2-un-rgX"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -2136,8 +2136,8 @@ your business wherever you are.</string>
                     <connections>
                         <outlet property="activityIndicator" destination="hwp-Zp-LYf" id="tWs-7H-8WU"/>
                         <outlet property="emptyReportMessageLabel" destination="XON-xy-195" id="qYd-k5-to1"/>
-                        <segue destination="Udh-pd-kGH" kind="push" identifier="ShowReportOptions" id="U0c-7Q-N61"/>
-                        <segue destination="r1t-0l-AbT" kind="push" identifier="SaveReportViewControllerSegue" id="8At-tP-xKb"/>
+                        <segue destination="Udh-pd-kGH" kind="show" identifier="ShowReportOptions" id="oVm-x8-oKE"/>
+                        <segue destination="r1t-0l-AbT" kind="show" identifier="SaveReportViewControllerSegue" id="y8h-Nv-5bi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ofm-F6-HRL" userLabel="First Responder" sceneMemberID="firstResponder"/>

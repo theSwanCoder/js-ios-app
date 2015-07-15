@@ -36,8 +36,6 @@
 static const CGFloat kDefaultAnimationDuration = 0.4f;
 static const CGFloat kDefaultStepValue = 1.0f;
 static const CGFloat kDefaultMinVelocity = 500.0f;
-static const CGFloat kTopPadding = 10.0f;
-static const CGFloat kImageScaleFactor = 5.0f;
 
 static NSString * const kPageIdentifierStartPage = @"kPageIdentifierStartPage";
 static NSString * const kPageIdentifierStayConnected = @"kPageIdentifierStayConnected";
