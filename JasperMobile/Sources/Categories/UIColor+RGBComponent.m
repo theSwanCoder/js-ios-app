@@ -82,7 +82,7 @@
 
 + (CGFloat) getHighlitedComponentFrom:(CGFloat)component
 {
-    CGFloat differents = 0.6f;
+    CGFloat differents = 0.25f;
     if (component + differents <= 1) {
         return component + differents;
     }

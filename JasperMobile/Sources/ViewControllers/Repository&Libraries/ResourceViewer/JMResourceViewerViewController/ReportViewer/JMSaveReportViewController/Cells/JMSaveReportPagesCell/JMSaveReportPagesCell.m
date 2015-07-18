@@ -38,7 +38,7 @@
 {
     [super awakeFromNib];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.titleLabel.font = [JMFont tableViewCellTitleFont];
+    self.titleLabel.font = [JMThemesManager tableViewCellTitleFont];
     self.titleLabel.textColor = [UIColor darkGrayColor];
     self.titleLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.all", nil);
 }

@@ -53,7 +53,7 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"settings.title", nil);
 
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     self.tableView.layer.cornerRadius = 4;
 
     [self.privacyPolicyButton setTitle:JMCustomLocalizedString(@"settings.privacy.policy.title", nil) forState:UIControlStateNormal];
@@ -62,9 +62,6 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 
     UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(applicationInfo:)];
     self.navigationItem.rightBarButtonItem = infoItem;
-    //self.navigationItem.rightBarButtonItems = @[infoItem];
-
-    [self setupMenu];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -96,17 +93,6 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 {
     self.detailSettings = [[JMSettings alloc] init];
     [self.tableView reloadData];
-}
-
-#pragma mark - Menu setup
-- (void)setupMenu
-{
-    SWRevealViewController *revealViewController = self.revealViewController;
-    if (revealViewController) {
-        [self.menuButton setTarget:revealViewController];
-        [self.menuButton setAction:@selector(revealToggle:)];
-        [self.view addGestureRecognizer:revealViewController.panGestureRecognizer];
-    }
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate

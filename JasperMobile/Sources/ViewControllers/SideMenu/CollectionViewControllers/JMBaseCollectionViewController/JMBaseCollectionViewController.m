@@ -77,7 +77,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     baseCollectionView.searchBar.delegate = self;
 
     [self addObservers];
-    [self setupMenu];
     
     self.isScrollToTop = NO;
     
@@ -171,13 +170,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 }
 
 #pragma mark - Actions
-- (void)menuButtonTapped:(id)sender
-{
-    [self.view endEditing:YES];
-    SWRevealViewController *revealViewController = self.revealViewController;
-    [revealViewController revealToggle:sender];
-}
-
 - (void)sortByButtonTapped:(id)sender
 {
     JMListOptionsPopupView *sortPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self
@@ -346,17 +338,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     }
 }
 
-#pragma mark - Menu setup
-- (void)setupMenu
-{
-    SWRevealViewController *revealViewController = self.revealViewController;
-    if (revealViewController) {
-        [self.menuButton setTarget:self];
-        [self.menuButton setAction:@selector(menuButtonTapped:)];
-        [self.view addGestureRecognizer:revealViewController.panGestureRecognizer];
-    }
-}
-
+#pragma mark - Setup Navigation Items
 - (void) showNavigationItems
 {
     NSMutableArray *navBarItems = [NSMutableArray array];
@@ -504,17 +486,18 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
-    
+
     CGFloat itemHeight = 80.f;
     CGFloat itemWidth = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
     
     if (self.representationType == JMResourcesRepresentationType_Grid) {
         NSInteger countOfCellsInRow = 1;
-        while (((countOfCellsInRow * flowLayout.itemSize.width) + (countOfCellsInRow + 1) * flowLayout.minimumInteritemSpacing) < collectionView.frame.size.width) {
+        itemWidth = [JMUtils isIphone] ? 150 : 310;
+        while (((countOfCellsInRow * itemWidth) + (countOfCellsInRow + 1) * flowLayout.minimumInteritemSpacing) < collectionView.frame.size.width) {
             countOfCellsInRow ++;
         }
         countOfCellsInRow --;
-        itemHeight = flowLayout.itemSize.height;
+        itemHeight = [JMUtils isIphone] ? 150 : 254;
         itemWidth = floor((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
     }
     

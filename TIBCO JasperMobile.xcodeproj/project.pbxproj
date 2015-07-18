@@ -110,7 +110,6 @@
 		08E0D1A01B0CF27200BFBFE5 /* Icon-512.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19C1B0CF27200BFBFE5 /* Icon-512.png */; };
 		08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19D1B0CF27200BFBFE5 /* Images.xcassets */; };
 		08E2AC251B1DFF2B00AC462B /* JMVisualizeClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC241B1DFF2B00AC462B /* JMVisualizeClient.m */; };
-		08E2AC261B1DFFE000AC462B /* JMFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15931AA756BD0021A915 /* JMFont.m */; };
 		08E2AC7C1B1E056900AC462B /* JMBaseResourceViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC291B1E056900AC462B /* JMBaseResourceViewerVC.m */; };
 		08E2AC821B1E056900AC462B /* JMPrintResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC371B1E056900AC462B /* JMPrintResourceViewController.m */; };
 		08E2AC841B1E056900AC462B /* JMResourceViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC3A1B1E056900AC462B /* JMResourceViewerViewController.m */; };
@@ -181,6 +180,9 @@
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDABBD2B1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDABBD2A1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard */; };
+		BDB8B9EE1B57D90B00758441 /* JMThemesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8B9ED1B57D90B00758441 /* JMThemesManager.m */; };
+		BDB8B9F41B57EB0A00758441 /* DefaultTheme.plist in Resources */ = {isa = PBXBuildFile; fileRef = BDB8B9F31B57EB0A00758441 /* DefaultTheme.plist */; };
+		BDE6A0861B5A891000A7FDEC /* JMTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BDE6A0851B5A891000A7FDEC /* JMTextField.m */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
 		F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */; };
@@ -355,8 +357,6 @@
 		089B15841AA756BD0021A915 /* JMMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMenuViewController.m; sourceTree = "<group>"; };
 		089B15871AA756BD0021A915 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRefreshable.h; sourceTree = "<group>"; };
 		089B15881AA756BD0021A915 /* JMResourceClientHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceClientHolder.h; sourceTree = "<group>"; };
-		089B15921AA756BD0021A915 /* JMFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFont.h; sourceTree = "<group>"; };
-		089B15931AA756BD0021A915 /* JMFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFont.m; sourceTree = "<group>"; };
 		089B15991AA756BD0021A915 /* JMWebConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMWebConsole.h; sourceTree = "<group>"; };
 		089B159A1AA756BD0021A915 /* JMWebConsole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMWebConsole.m; sourceTree = "<group>"; };
 		089B159B1AA756BD0021A915 /* weakself.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = weakself.h; sourceTree = "<group>"; };
@@ -541,6 +541,11 @@
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
 		BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCachingURLProtocol.m; sourceTree = "<group>"; };
 		BDABBD2A1A41DD5F00EDA100 /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		BDB8B9EC1B57D90B00758441 /* JMThemesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMThemesManager.h; sourceTree = "<group>"; };
+		BDB8B9ED1B57D90B00758441 /* JMThemesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMThemesManager.m; sourceTree = "<group>"; };
+		BDB8B9F31B57EB0A00758441 /* DefaultTheme.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DefaultTheme.plist; sourceTree = "<group>"; };
+		BDE6A0841B5A891000A7FDEC /* JMTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextField.h; sourceTree = "<group>"; };
+		BDE6A0851B5A891000A7FDEC /* JMTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextField.m; sourceTree = "<group>"; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F54C91A21752FAAD0009E2BE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -829,6 +834,7 @@
 		089B14AE1AA756BD0021A915 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				BDE6A0831B5A891000A7FDEC /* JMTextField */,
 				089B14AF1AA756BD0021A915 /* JMMenuActionsView */,
 				089B14B21AA756BD0021A915 /* JMPopupView */,
 				A14785D109B77F7AE4093F71 /* JMReportViewerToolBar */,
@@ -1271,19 +1277,9 @@
 				0801DFA61AAF2CFB00DD072C /* JMLocalization */,
 				0801DFA91AAF2CFB00DD072C /* JMUtils */,
 				089B15981AA756BD0021A915 /* JMWebConsole */,
-				089B15911AA756BD0021A915 /* JMFontManager */,
 				089B159B1AA756BD0021A915 /* weakself.h */,
 			);
 			path = Utils;
-			sourceTree = "<group>";
-		};
-		089B15911AA756BD0021A915 /* JMFontManager */ = {
-			isa = PBXGroup;
-			children = (
-				089B15921AA756BD0021A915 /* JMFont.h */,
-				089B15931AA756BD0021A915 /* JMFont.m */,
-			);
-			path = JMFontManager;
 			sourceTree = "<group>";
 		};
 		089B15981AA756BD0021A915 /* JMWebConsole */ = {
@@ -1668,6 +1664,7 @@
 				08E62CF719922BA40081CA83 /* Localizable */,
 				08B99F6C1A07CD7700E822B0 /* ServerProfiles */,
 				08E62D0219922BA40081CA83 /* Storyboards */,
+				BDB8B9F21B57EB0A00758441 /* Themes */,
 			);
 			name = Resources;
 			path = JasperMobile/Resources;
@@ -1797,6 +1794,7 @@
 		93D8C6411AAC7E9200117306 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				BDB8B9EB1B57D90B00758441 /* JMThemesManager */,
 				08B518781B18C79400B3F20A /* JMReportSaver */,
 				08221C3F1AE54DA000F94F1D /* JMCoreDataManager */,
 				0801DF921AAF2CC000DD072C /* JMSessionManager */,
@@ -1970,6 +1968,32 @@
 				BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */,
 			);
 			path = RNCachingURLProtocol;
+			sourceTree = "<group>";
+		};
+		BDB8B9EB1B57D90B00758441 /* JMThemesManager */ = {
+			isa = PBXGroup;
+			children = (
+				BDB8B9EC1B57D90B00758441 /* JMThemesManager.h */,
+				BDB8B9ED1B57D90B00758441 /* JMThemesManager.m */,
+			);
+			path = JMThemesManager;
+			sourceTree = "<group>";
+		};
+		BDB8B9F21B57EB0A00758441 /* Themes */ = {
+			isa = PBXGroup;
+			children = (
+				BDB8B9F31B57EB0A00758441 /* DefaultTheme.plist */,
+			);
+			path = Themes;
+			sourceTree = "<group>";
+		};
+		BDE6A0831B5A891000A7FDEC /* JMTextField */ = {
+			isa = PBXGroup;
+			children = (
+				BDE6A0841B5A891000A7FDEC /* JMTextField.h */,
+				BDE6A0851B5A891000A7FDEC /* JMTextField.m */,
+			);
+			path = JMTextField;
 			sourceTree = "<group>";
 		};
 		C29D4E3B2FABEFC512F0762C /* Pods */ = {
@@ -2147,6 +2171,7 @@
 				08E0D1A01B0CF27200BFBFE5 /* Icon-512.png in Resources */,
 				9348F4EA1A35D103006F5677 /* profiles.json in Resources */,
 				089B15C11AA756BD0021A915 /* JMGridLoadingCollectionViewCell.xib in Resources */,
+				BDB8B9F41B57EB0A00758441 /* DefaultTheme.plist in Resources */,
 				089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */,
 				930F8D421ABB1C35005F93FB /* report-ios-mobilejs-sdk.js in Resources */,
 				930F8D411ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js in Resources */,
@@ -2238,6 +2263,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDB8B9EE1B57D90B00758441 /* JMThemesManager.m in Sources */,
 				9342341E1AAC3DC100D34478 /* JMRestReport.m in Sources */,
 				08DD18391B136B8A00856112 /* JMDashboardInfoViewController.m in Sources */,
 				089B15B61AA756BD0021A915 /* JMLoginViewController.m in Sources */,
@@ -2321,7 +2347,6 @@
 				08E2AC8E1B1E056900AC462B /* JMTimeInputControlCell.m in Sources */,
 				089B15A51AA756BD0021A915 /* UITableViewCell+Additions.m in Sources */,
 				08E2AC871B1E056900AC462B /* JMDateInputControlCell.m in Sources */,
-				08E2AC261B1DFFE000AC462B /* JMFont.m in Sources */,
 				08B517BE1B15C60400B3F20A /* PopoverView.m in Sources */,
 				089590FF19E3D514001471DA /* ALToastView.m in Sources */,
 				08E2AC951B1E056900AC462B /* JMRestReportLoader.m in Sources */,
@@ -2346,6 +2371,7 @@
 				089B15B11AA756BD0021A915 /* JasperMobileAppDelegate.m in Sources */,
 				08E2AC891B1E056900AC462B /* JMInputControlCell.m in Sources */,
 				089B15AB1AA756BD0021A915 /* JMMenuActionsView.m in Sources */,
+				BDE6A0861B5A891000A7FDEC /* JMTextField.m in Sources */,
 				089B15FF1AA756BD0021A915 /* JMMenuItemTableViewCell.m in Sources */,
 				08E2AC931B1E056900AC462B /* JMReportOptionsViewController.m in Sources */,
 				089B15A11AA756BD0021A915 /* NSObject+Additions.m in Sources */,

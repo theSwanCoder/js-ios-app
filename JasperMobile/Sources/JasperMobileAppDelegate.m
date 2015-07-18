@@ -84,6 +84,7 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [[JMThemesManager sharedManager] applyCurrentTheme];
     [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:^(BOOL isSessionRestored) {
 
         SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;

@@ -23,9 +23,12 @@
 
 #import "JMTextServerOptionCell.h"
 #import "UITableViewCell+Additions.h"
+#import "JMTextField.h"
+#import "UIColor+RGBComponent.h"
+
 
 @interface JMTextServerOptionCell () <UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UITextField *textField;
+@property (weak, nonatomic) IBOutlet JMTextField *textField;
 
 @end
 
@@ -33,7 +36,6 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.textField.background = [self.textField.background resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10.0f, 0, 10.0f)];
     self.textField.inputAccessoryView = [self toolbarForInputAccessoryView];
 }
 
@@ -44,15 +46,14 @@
     self.textField.text = serverOption.optionValue;
 
     NSDictionary *attributes = @{
-            NSFontAttributeName : [UIFont systemFontOfSize:12]
+            NSFontAttributeName : [UIFont systemFontOfSize:12],
+            NSForegroundColorAttributeName : [UIColor highlitedColorForColor:self.textField.textColor]
     };
     NSString *trimmedPlaceholderString = [serverOption.titleString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" *"]];
     
     NSAttributedString *placeholder = [[NSAttributedString alloc] initWithString:trimmedPlaceholderString
                                                                       attributes:attributes];
     self.textField.attributedPlaceholder = placeholder;
-
-    self.textField.textColor = serverOption.editable ? [UIColor darkTextColor] : [UIColor lightGrayColor];
 }
 
 #pragma mark - UITextFieldDelegate

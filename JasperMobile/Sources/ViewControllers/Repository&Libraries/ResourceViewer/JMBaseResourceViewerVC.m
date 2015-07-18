@@ -110,7 +110,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle
 {
     // detect backButton text width to truncate with '...'
-    NSDictionary *textAttributes = @{NSFontAttributeName : [JMFont navigationBarTitleFont]};
+    NSDictionary *textAttributes = @{NSFontAttributeName : [JMThemesManager navigationBarTitleFont]};
     CGSize titleTextSize = [self.title sizeWithAttributes:textAttributes];
     CGFloat titleTextWidth = ceil(titleTextSize.width);
     CGSize backItemTextSize = [backButtonTitle sizeWithAttributes:textAttributes];

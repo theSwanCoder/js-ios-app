@@ -33,11 +33,11 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.titleLabel.font = [JMFont tableViewCellTitleFont];
-    self.titleLabel.textColor = [UIColor darkGrayColor];
+    self.titleLabel.font = [JMThemesManager tableViewCellTitleFont];
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleColor];
     
-    self.errorLabel.font = [JMFont tableViewCellDetailErrorFont];
-    self.errorLabel.textColor = [UIColor redColor];
+    self.errorLabel.font = [JMThemesManager tableViewCellDetailErrorFont];
+    self.errorLabel.textColor = [[JMThemesManager sharedManager] tableViewCellErrorColor];
 }
 
 - (void)setServerOption:(JMServerOption *)serverOption

@@ -24,7 +24,7 @@
     #import "weakself.h"
     #import "JMUtils.h"
     #import "JMCoreDataManager.h"
-    #import "JMFont.h"
+    #import "JMThemesManager.h"
     #import "JMLocalization.h"
     #import "UIAlertView+Additions.h"
 

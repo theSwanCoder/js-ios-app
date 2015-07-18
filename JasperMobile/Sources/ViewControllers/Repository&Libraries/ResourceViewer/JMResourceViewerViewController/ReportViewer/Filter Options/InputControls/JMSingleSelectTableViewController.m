@@ -49,11 +49,11 @@
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     UITextField *txfSearchField = [self.icSearchBar valueForKey:@"_searchField"];
     txfSearchField.backgroundColor = [UIColor whiteColor];
     [txfSearchField setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor darkTextColor]}];
-    self.icSearchBar.barTintColor = kJMDetailViewLightBackgroundColor;
+    self.icSearchBar.barTintColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     [self.icSearchBar setBackgroundImage:[UIImage new]];
     self.icSearchBar.placeholder = JMCustomLocalizedString(@"report.viewer.options.search.value.placeholder", nil);
 }
@@ -115,7 +115,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        cell.textLabel.font = [JMFont tableViewCellTitleFont];
+        cell.textLabel.font = [JMThemesManager tableViewCellTitleFont];
     }
     
     JSInputControlOption *option = [self.listOfValues objectAtIndex:indexPath.row];

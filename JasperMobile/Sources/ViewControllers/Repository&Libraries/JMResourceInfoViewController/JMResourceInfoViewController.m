@@ -50,6 +50,8 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+
     [self showNavigationItems];
     [self resetResourceProperties];
     [self addObservers];
@@ -261,8 +263,8 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
-        cell.textLabel.font = [JMFont tableViewCellTitleFont];
-        cell.detailTextLabel.font = [JMFont tableViewCellDetailFont];
+        cell.textLabel.font = [JMThemesManager tableViewCellTitleFont];
+        cell.detailTextLabel.font = [JMThemesManager tableViewCellDetailFont];
         cell.detailTextLabel.numberOfLines = 2;
     }
     

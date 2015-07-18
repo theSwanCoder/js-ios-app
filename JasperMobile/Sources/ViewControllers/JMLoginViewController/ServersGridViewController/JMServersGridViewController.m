@@ -46,11 +46,11 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 {
     [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"servers.profile.title", nil);
-    self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
-    self.collectionView.backgroundColor = kJMMainCollectionViewBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] serversViewBackgroundColor];
+    self.collectionView.backgroundColor = [UIColor clearColor];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(addButtonTapped:)];
     self.errorLabel.text = JMCustomLocalizedString(@"servers.profile.list.empty", nil);
-    self.errorLabel.font = [JMFont resourcesActivityTitleFont];
+    self.errorLabel.font = [JMThemesManager resourcesActivityTitleFont];
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self.collectionView selector:@selector(reloadData) name:UIDeviceOrientationDidChangeNotification object:nil];

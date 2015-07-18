@@ -25,7 +25,6 @@
 #import "UITableViewCell+Additions.h"
 #import "UIImage+Additions.h"
 #import "JMLocalization.h"
-#import "JMFont.h"
 #import "JMMenuAction.h"
 
 CGFloat static kJMMenuActionsViewCellHeight = 40;
@@ -172,7 +171,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.textLabel.font = [JMFont navigationBarTitleFont];
+        cell.textLabel.font = [JMThemesManager navigationBarTitleFont];
         cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
         cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         cell.imageView.backgroundColor = [UIColor clearColor];
@@ -238,7 +237,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     CGFloat maxTextWidth = .0f;
     for (JMMenuAction *menuAction in self.availableMenuActions) {
         NSString *titleAction = JMCustomLocalizedString(menuAction.actionTitle, nil);
-        NSDictionary *titleTextAttributes = @{NSFontAttributeName : [JMFont navigationBarTitleFont]};
+        NSDictionary *titleTextAttributes = @{NSFontAttributeName : [JMThemesManager navigationBarTitleFont]};
         CGSize titleActionContainerSize = [titleAction sizeWithAttributes:titleTextAttributes];
         if (maxTextWidth < titleActionContainerSize.width) {
             maxTextWidth = titleActionContainerSize.width;

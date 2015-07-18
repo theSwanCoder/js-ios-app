@@ -21,24 +21,25 @@
  */
 
 
-#import "JMSettingsTableViewCell.h"
+//
+//  JMTextField.h
+//  TIBCO JasperMobile
+//
 
-@interface JMSettingsTableViewCell ()
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
-@end
+#import "JMTextField.h"
 
-@implementation JMSettingsTableViewCell
+@implementation JMTextField
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.titleLabel.font = [JMThemesManager tableViewCellTitleFont];
-    self.titleLabel.textColor = [UIColor darkGrayColor];
+    self.backgroundColor = [[JMThemesManager sharedManager] textFieldBackgroundColor];
 }
 
-- (void)setSettingsItem:(JMSettingsItem *)settingsItem
+- (void)setEnabled:(BOOL)enabled
 {
-    _settingsItem = settingsItem;
-    self.titleLabel.text = settingsItem.titleString;
+    [super setEnabled:enabled];
+    self.textColor = enabled ? [[JMThemesManager sharedManager] textFieldEditableTextColor] : [[JMThemesManager sharedManager] textFieldUnEditableTextColor];
 }
 
 @end

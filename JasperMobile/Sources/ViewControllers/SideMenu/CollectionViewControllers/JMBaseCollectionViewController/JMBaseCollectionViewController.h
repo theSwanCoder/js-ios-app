@@ -43,7 +43,6 @@ extern NSString * const kJMShowFolderContetnSegue;
 extern NSString * const kJMRepresentationTypeDidChangeNotification;
 
 @interface JMBaseCollectionViewController : GAITrackedViewController
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *menuButton;
 @property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
 @property (nonatomic, assign) BOOL needReloadData;
 @property (nonatomic, assign) BOOL needLayoutUI;

@@ -48,7 +48,7 @@
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    self.titleLabel.font = [JMFont tableViewCellTitleFont];
+    self.titleLabel.font = [JMThemesManager tableViewCellTitleFont];
     self.titleLabel.textColor = [UIColor darkGrayColor];
 
     UIPickerView *pickerView = [UIPickerView new];

@@ -46,8 +46,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.resourceName.font = [JMFont collectionResourceNameFont];
-    self.resourceDescription.font = [JMFont collectionResourceDescriptionFont];
+    self.resourceName.font = [JMThemesManager collectionResourceNameFont];
+    self.resourceDescription.font = [JMThemesManager collectionResourceDescriptionFont];
     self.infoButton.tintColor = [UIColor colorFromHexString:@"#909090"];
 }
 

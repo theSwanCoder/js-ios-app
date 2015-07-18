@@ -76,8 +76,8 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
     self.pagesType = JMSaveReportPagesType_All;
     
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
-    self.tableView.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+    self.tableView.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     
     [self.tableView setRowHeight:[JMUtils isIphone] ? 44.f : 50.f];
 
@@ -166,7 +166,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
         CGRect textRect = [self.errorString boundingRectWithSize:maximumLabelSize
                                                          options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-                                                      attributes:@{NSFontAttributeName:[JMFont tableViewCellDetailErrorFont]}
+                                                      attributes:@{NSFontAttributeName:[JMThemesManager tableViewCellDetailErrorFont]}
                                                          context:nil];
         return tableView.rowHeight + ceil(textRect.size.height);
     }

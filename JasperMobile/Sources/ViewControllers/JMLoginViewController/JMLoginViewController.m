@@ -53,12 +53,12 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
-    self.placeHolderView.backgroundColor = kJMMainNavigationBarBackgroundColor;
-    [self.textfields makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:kJMSearchBarBackgroundColor];
-    [self.textfields makeObjectsPerformSelector:@selector(setFont:) withObject:[JMFont loginInputControlsFont]];
+    self.view.backgroundColor = [[JMThemesManager sharedManager] loginViewBackgroundColor];
+    self.placeHolderView.backgroundColor = [[JMThemesManager sharedManager] loginViewPlaceholderBackgroundColor];
+    [self.textfields makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] loginViewTextFieldsBackgroundColor]];
+    [self.textfields makeObjectsPerformSelector:@selector(setFont:) withObject:[JMThemesManager loginInputControlsFont]];
 
-    NSDictionary *attributes = @{NSForegroundColorAttributeName:kJMDetailViewLightTextColor};
+    NSDictionary *attributes = @{NSForegroundColorAttributeName:[[JMThemesManager sharedManager] loginViewTextFieldsTextColor]};
     self.userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login.username.label", nil) attributes:attributes];
     self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login.password.label", nil) attributes:attributes];
     self.serverProfileTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"settings.item.server", nil) attributes:attributes];
@@ -67,10 +67,12 @@
     self.loginButton.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.tryDemoButton.titleLabel.textAlignment = NSTextAlignmentCenter;
 
-    self.loginButton.backgroundColor = [UIColor grayColor];
+    self.loginButton.backgroundColor = [[JMThemesManager sharedManager] loginViewLoginButtonBackgroundColor];
+    [self.loginButton setTitleColor:[[JMThemesManager sharedManager] loginViewLoginButtonTextColor] forState:UIControlStateNormal];
     [self.loginButton setTitle:JMCustomLocalizedString(@"login.button.login", nil) forState:UIControlStateNormal];
     
-    self.tryDemoButton.backgroundColor = kJMResourcePreviewBackgroundColor;
+    self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
+    [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
     [self.tryDemoButton setTitle:JMCustomLocalizedString(@"login.button.try.demo", nil) forState:UIControlStateNormal];
 }
 

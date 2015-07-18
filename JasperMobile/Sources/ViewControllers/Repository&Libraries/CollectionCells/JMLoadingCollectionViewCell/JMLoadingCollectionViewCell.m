@@ -34,7 +34,7 @@ NSString * kJMGridLoadingCell = @"JMGridLoadingCollectionViewCell";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.titleLabel.font = [JMFont collectionLoadingFont];
+    self.titleLabel.font = [JMThemesManager collectionLoadingFont];
     self.titleLabel.text = JMCustomLocalizedString(@"resources.loading.msg", nil);
 }
 

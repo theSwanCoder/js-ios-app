@@ -57,17 +57,16 @@
     }
 
     [self.saveButton setTitle:JMCustomLocalizedString(@"dialog.button.save", nil) forState:UIControlStateNormal];
+    [self.saveButton setTitleColor:[[JMThemesManager sharedManager] serverProfileSaveButtonTextColor] forState:UIControlStateNormal];
+    self.saveButton.backgroundColor = [[JMThemesManager sharedManager] serverProfileSaveButtonBackgroundColor];
     
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     self.tableView.layer.cornerRadius = 4;
     if (!self.serverProfile) {
         self.serverOptions = [[JMServerOptions alloc] initWithServerProfile:nil];
     }
     self.serverOptions.editable = self.editable;
     self.tableView.rowHeight = 50.f;
-    
-//    self.tableView.rowHeight = UITableViewAutomaticDimension;
-//    self.tableView.estimatedRowHeight = 44.0;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -103,7 +102,7 @@
     JMServerOption *option = [self.serverOptions.optionsArray objectAtIndex:indexPath.row];
     
     JMServerOptionCell *cell = [tableView dequeueReusableCellWithIdentifier:option.cellIdentifier];
-    [cell setBottomSeparatorWithHeight:1 color:tableView.separatorColor tableViewStyle:tableView.style];
+    [cell setBottomSeparatorWithHeight:1 color:self.view.backgroundColor tableViewStyle:tableView.style];
     cell.serverOption = option;
     return cell;
 }
@@ -121,7 +120,7 @@
         CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
         CGRect textRect = [option.errorString boundingRectWithSize:maximumLabelSize
                                                            options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-                                                        attributes:@{NSFontAttributeName:[JMFont tableViewCellDetailErrorFont]}
+                                                        attributes:@{NSFontAttributeName:[JMThemesManager tableViewCellDetailErrorFont]}
                                                            context:nil];
         return tableView.rowHeight + ceil(textRect.size.height);
     }

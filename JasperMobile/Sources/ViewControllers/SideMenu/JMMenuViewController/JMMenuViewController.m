@@ -46,6 +46,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *organizationNameLabel;
 @property (strong, nonatomic) NSArray *menuItems;
 @property (weak, nonatomic) IBOutlet UILabel *appVersionLabel;
+
+@property (strong, nonatomic) IBOutletCollection(UIView) NSArray *separatorsCollection;
+
 @end
 
 @implementation JMMenuViewController
@@ -63,6 +66,14 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.view.backgroundColor = [[JMThemesManager sharedManager] menuViewBackgroundColor];
+    self.userNameLabel.textColor = [[JMThemesManager sharedManager] menuViewSelectedTextColorColor];
+    self.serverNameLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColorColor];
+    self.organizationNameLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColorColor];
+    self.appVersionLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColorColor];
+    
+    [self.separatorsCollection makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] menuViewSeparatorColor]];
     
     // version and build
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -143,6 +154,10 @@
                 [self.tableView reloadData];
                 if([item vcIdentifierForSelectedItem]) {
                     UINavigationController *nvc = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+                    UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonTapped:)];
+                    nvc.topViewController.navigationItem.leftBarButtonItem = menuItem;
+                    [nvc.topViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+
                     self.revealViewController.frontViewController = nvc;
                 }
             }
@@ -174,6 +189,16 @@
     }
     return nil;
 }
+
+#pragma mark - Actions
+- (void)menuButtonTapped:(id)sender
+{
+    
+#warning - NEED CHECK AND FIX THIS METHOD!!!!
+    [self.revealViewController.frontViewController.view endEditing:YES];
+    [self.revealViewController revealToggle:sender];
+}
+
 
 #pragma mark - Helpers
 - (NSArray *)createMenuItems

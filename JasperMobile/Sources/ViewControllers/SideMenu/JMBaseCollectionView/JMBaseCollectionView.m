@@ -30,7 +30,6 @@
 #import "JMBaseCollectionViewController.h"
 #import "JMResourceCollectionViewCell.h"
 #import "JMLoadingCollectionViewCell.h"
-#import "JMFont.h"
 #import "JMLocalization.h"
 
 @implementation JMBaseCollectionView
@@ -56,13 +55,13 @@
 
 - (void)setupWithNoResultText:(NSString *)noResult
 {
-    self.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
+    self.backgroundColor = [[JMThemesManager sharedManager] collectionViewBackgroundColor];
     
     self.activityViewTitleLabel.text = JMCustomLocalizedString(@"resources.loading.msg", nil);
     self.noResultsViewTitleLabel.text = noResult;
     
-    self.activityViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
-    self.noResultsViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
+    self.activityViewTitleLabel.font = [JMThemesManager resourcesActivityTitleFont];
+    self.noResultsViewTitleLabel.font = [JMThemesManager resourcesActivityTitleFont];
     
     [self setupCollectionView];
 }

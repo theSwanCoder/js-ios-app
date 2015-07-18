@@ -48,7 +48,7 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 {
     [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"report.viewer.options.title", nil);    
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -157,7 +157,7 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
         CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
         CGRect textRect = [[inputControlDescriptor errorString] boundingRectWithSize:maximumLabelSize
                                                                              options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-                                                                          attributes:@{NSFontAttributeName:[JMFont tableViewCellDetailErrorFont]}
+                                                                          attributes:@{NSFontAttributeName:[JMThemesManager tableViewCellDetailErrorFont]}
                                                                              context:nil];
         return kJMReportOptionsTableViewCellHeight + kJMReportOptionsTableViewCellVerticalOffset + ceil(textRect.size.height);
     }

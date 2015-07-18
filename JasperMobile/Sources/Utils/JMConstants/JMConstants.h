@@ -97,7 +97,13 @@ NSInteger  const kJMSaveReportMaxRangePages;
 NSInteger  const kJMResourceLimit;
 NSInteger  const kJMRecentResourcesLimit;
 
+// Name of the default theme file
+extern NSString * const kJMDefaultThemeFileName;
+extern NSString * const kJMThemesFileFormat;
+extern NSString * const kJMCurrentThemeFileName;
+
 #define kJMDetailViewLightBackgroundColor               [UIColor colorFromHexString:@"#E5E9EB"]
+
 #define kJMDetailViewLightTextColor                     [UIColor colorFromHexString:@"#8F8F8F"]
 #define kJMSearchBarBackgroundColor                     [UIColor colorFromHexString:@"#26282D"]
 

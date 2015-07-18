@@ -36,7 +36,7 @@
 
 - (void)awakeFromNib
 {
-    self.errorLabel.font = [JMFont tableViewCellDetailErrorFont];
+    self.errorLabel.font = [JMThemesManager tableViewCellDetailErrorFont];
     self.textField.placeholder = JMCustomLocalizedString(@"report.viewer.save.name", nil);
 }
 
