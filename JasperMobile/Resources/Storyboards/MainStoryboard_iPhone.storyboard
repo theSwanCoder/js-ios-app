@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ARf-6W-JXB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="ARf-6W-JXB">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -335,15 +335,6 @@ your business wherever you are.</string>
                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" allowsInlineMediaPlayback="NO" mediaPlaybackRequiresUserAction="NO" mediaPlaybackAllowsAirPlay="NO" keyboardDisplayRequiresUserAction="NO" pageLength="10" gapBetweenPages="2" id="Bwa-Zq-XMv">
-                                <rect key="frame" x="10" y="0.0" width="300" height="416"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="0.92941176469999998" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <dataDetectorType key="dataDetectorTypes"/>
-                                <connections>
-                                    <outlet property="delegate" destination="WGe-cw-zul" id="9o3-cZ-aPF"/>
-                                </connections>
-                            </webView>
                             <view contentMode="scaleToFill" id="xAX-rq-4s0">
                                 <rect key="frame" x="0.0" y="416" width="320" height="70"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -442,11 +433,77 @@ your business wherever you are.</string>
                                 </subviews>
                                 <color key="backgroundColor" red="0.14901960784313725" green="0.15686274509803921" blue="0.17647058823529413" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="yIa-EX-CB9">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="5dJ-wo-3Hm">
+                                    <size key="itemSize" width="150" height="150"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="5" minY="5" maxX="5" maxY="5"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="JMPrintResourceCollectionCell" id="EEi-XV-nnI" customClass="JMPrintResourceCollectionCell">
+                                        <rect key="frame" x="5" y="5" width="150" height="150"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" id="1np-d1-APx">
+                                                    <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <view contentMode="scaleToFill" id="6bJ-ji-uRQ">
+                                                            <rect key="frame" x="2" y="2" width="146" height="20"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kHX-cw-kUr">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="146" height="18"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <color key="backgroundColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </view>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="qLG-Us-9dQ">
+                                                            <rect key="frame" x="2" y="22" width="146" height="126"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="h8R-YK-i3M">
+                                                    <rect key="frame" x="65" y="65" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <size key="customSize" width="150" height="150"/>
+                                        <connections>
+                                            <outlet property="activityIndicator" destination="h8R-YK-i3M" id="F4x-WC-eML"/>
+                                            <outlet property="imageView" destination="qLG-Us-9dQ" id="qBA-JE-pZP"/>
+                                            <outlet property="titleLabel" destination="kHX-cw-kUr" id="tCF-bb-Klc"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="WGe-cw-zul" id="H3O-3e-HWk"/>
+                                    <outlet property="delegate" destination="WGe-cw-zul" id="Mqe-iA-nbe"/>
+                                </connections>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" red="0.92941176469999998" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="5Tm-gk-GHq"/>
                     <connections>
+                        <outlet property="collectionView" destination="yIa-EX-CB9" id="tZC-oa-pQ6"/>
                         <outlet property="footerView" destination="mVf-OG-nGd" id="Khh-dK-Tnd"/>
                         <outlet property="fromTextField" destination="N9W-4w-Zdy" id="aDA-Ue-Uxu"/>
                         <outlet property="headerView" destination="xDk-9G-HFG" id="7NE-OG-Oq6"/>
@@ -454,7 +511,6 @@ your business wherever you are.</string>
                         <outlet property="printButton" destination="9ZV-no-p5q" id="1nA-kc-4C1"/>
                         <outlet property="toTextField" destination="Ev3-Xq-4Cd" id="iLB-Sj-OGR"/>
                         <outlet property="uiSwitch" destination="eER-If-udh" id="IgI-m1-gRR"/>
-                        <outlet property="webView" destination="Bwa-Zq-XMv" id="o43-an-cO0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LxZ-3D-H2M" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -597,7 +653,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field" id="cyI-ld-frz">
-                                                    <rect key="frame" x="178" y="7" width="110" height="30"/>
+                                                    <rect key="frame" x="178.00000010403721" y="7" width="110" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
