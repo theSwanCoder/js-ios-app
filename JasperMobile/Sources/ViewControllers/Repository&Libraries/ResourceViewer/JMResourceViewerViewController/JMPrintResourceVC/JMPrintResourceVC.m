@@ -22,19 +22,9 @@ typedef NS_ENUM(NSInteger, JMPrintPreviewPresentationType) {
 
 @interface JMPrintResourceVC() <UITextFieldDelegate, UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (weak, nonatomic) IBOutlet UISwitch *uiSwitch;
-@property (weak, nonatomic) IBOutlet UIView *headerView;
-@property (weak, nonatomic) IBOutlet UIView *pagesView;
-@property (weak, nonatomic) IBOutlet UIView *footerView;
-@property (weak, nonatomic) IBOutlet UITextField *fromTextField;
-@property (weak, nonatomic) IBOutlet UITextField *toTextField;
-@property (weak, nonatomic) UITextField *activeTextField;
-@property (weak, nonatomic) IBOutlet UIButton *printButton;
 @property (strong, nonatomic) JMReportSaver *reportSaver;
 @property (assign, nonatomic) NSInteger downloadedPagesCount;
 @property (strong, nonatomic) NSURL *printReportURL;
-//@property (strong, nonatomic) NSString *imagesDirectoryPath;
-//@property (assign, nonatomic) NSInteger previewCount;
 @property (assign, nonatomic) JMPrintPreviewPresentationType presentationType;
 @end
 
@@ -54,15 +44,8 @@ typedef NS_ENUM(NSInteger, JMPrintPreviewPresentationType) {
 
     self.title = @"Print";
 
-    self.fromTextField.inputAccessoryView = [self textFieldToolbar];
-    self.toTextField.inputAccessoryView = [self textFieldToolbar];
-
-    self.fromTextField.text = @(1).stringValue;
-    self.toTextField.text = @(self.report.countOfPages).stringValue;
     self.reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
     [self prepareJob];
-
-    [self addKeyboardObservers];
 
     self.presentationType = JMPrintPreviewPresentationTypeFull;
 
@@ -102,56 +85,6 @@ typedef NS_ENUM(NSInteger, JMPrintPreviewPresentationType) {
 }
 
 
-- (void)keyboardWillAppear:(NSNotification *)notification
-{
-    CGFloat animationDuration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-
-    CGRect headerViewFrame = self.headerView.frame;
-    CGRect pagesViewFrame = self.pagesView.frame;
-    CGRect parentViewFrame = self.view.frame;
-
-    headerViewFrame.origin.y = CGRectGetHeight(parentViewFrame) -\
-                                (CGRectGetHeight(keyboardFrame) +\
-                               CGRectGetHeight(headerViewFrame) +\
-                                CGRectGetHeight(pagesViewFrame));
-
-    pagesViewFrame.origin.y = CGRectGetHeight(parentViewFrame) -\
-                               (CGRectGetHeight(keyboardFrame) +\
-                               CGRectGetHeight(pagesViewFrame));
-
-    [UIView animateWithDuration:animationDuration animations:^{
-        self.headerView.frame = headerViewFrame;
-        self.pagesView.frame = pagesViewFrame;
-    } completion:^(BOOL finished) {
-    }];
-}
-
-- (void)keyboardWillDisappear:(NSNotification *)notification
-{
-    CGFloat animationDuration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] floatValue];
-
-    CGRect headerViewFrame = self.headerView.frame;
-    CGRect footerViewFrame = self.footerView.frame;
-    CGRect pagesViewFrame = self.pagesView.frame;
-    CGRect parentViewFrame = self.view.frame;
-
-    headerViewFrame.origin.y = CGRectGetHeight(parentViewFrame) -\
-                              (CGRectGetHeight(footerViewFrame) +\
-                               CGRectGetHeight(headerViewFrame) +\
-                                CGRectGetHeight(pagesViewFrame));
-
-    pagesViewFrame.origin.y = CGRectGetHeight(parentViewFrame) -\
-                             (CGRectGetHeight(footerViewFrame) +\
-                               CGRectGetHeight(pagesViewFrame));
-
-    [UIView animateWithDuration:animationDuration animations:^{
-        self.headerView.frame = headerViewFrame;
-        self.pagesView.frame = pagesViewFrame;
-    } completion:^(BOOL finished) {
-    }];
-}
-
 #pragma mark - UICollectionViewDelegate
 
 #pragma mark - UICollectionViewDataSource
@@ -159,7 +92,7 @@ typedef NS_ENUM(NSInteger, JMPrintPreviewPresentationType) {
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     NSInteger count = self.downloadedPagesCount;
-    if (self.downloadedPagesCount < self.toTextField.text.integerValue) {
+    if (self.downloadedPagesCount < self.report.countOfPages) {
         count++;
     }
     return count;
@@ -172,8 +105,8 @@ typedef NS_ENUM(NSInteger, JMPrintPreviewPresentationType) {
 
         NSUInteger startPage = self.downloadedPagesCount + 1;
         NSUInteger endPage = self.downloadedPagesCount + kJMPrintResourceMaxCountDownloadPages;
-        if (endPage > self.toTextField.text.integerValue) {
-            endPage = self.toTextField.text.integerValue;
+        if (endPage > self.report.countOfPages) {
+            endPage = self.report.countOfPages;
         }
         JMReportPagesRange *pagesRange = [JMReportPagesRange rangeWithStartPage:startPage
                                                                         endPage:endPage];
@@ -189,6 +122,10 @@ typedef NS_ENUM(NSInteger, JMPrintPreviewPresentationType) {
 
     JMPrintResourceCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"JMPrintResourceCollectionCell"
                                                                            forIndexPath:indexPath];
+
+    UIView *subview = cell.subviews.firstObject;
+    subview.frame = cell.bounds;
+
     UIImage *image = [self imageAtIndex:indexPath.row
                           directoryPath:[self tempImagesDirectoryPath]];
     if (image) {
@@ -222,7 +159,11 @@ typedef NS_ENUM(NSInteger, JMPrintPreviewPresentationType) {
 
             }
         }
-        cell.imageView.frame = imageViewFrame;
+        cell.imageView.frame = CGRectIntegral(imageViewFrame);
+
+        NSLog(@"cell.imageView.frame: %@", NSStringFromCGRect(cell.imageView.frame));
+        NSLog(@"cell.frame: %@", NSStringFromCGRect(cell.frame));
+        NSLog(@"cell.subviews: %@", cell.subviews);
 
         cell.imageView.image = image;
         cell.imageView.hidden = NO;
@@ -254,114 +195,6 @@ typedef NS_ENUM(NSInteger, JMPrintPreviewPresentationType) {
 }
 
 #pragma mark - Actions
-- (IBAction)showPages:(UISwitch *)sender
-{
-//    CGRect webViewFrame = self.webView.frame;
-    CGRect collectionViewFrame = self.collectionView.frame;
-    CGRect headerViewFrame = self.headerView.frame;
-    CGRect footerViewFrame = self.footerView.frame;
-    CGFloat footerViewHeight = footerViewFrame.size.height;
-    CGRect pagesViewFrame = self.pagesView.frame;
-    CGFloat pagesViewHeight = pagesViewFrame.size.height;
-    if (!sender.on) {
-        NSLog(@"show pages");
-        headerViewFrame.origin.y -= pagesViewHeight;
-//        webViewFrame.size.height -= pagesViewHeight;
-        collectionViewFrame.size.height -= pagesViewHeight;
-        pagesViewFrame.origin.y -= pagesViewHeight - footerViewHeight;
-    } else {
-        NSLog(@"hide pages");
-        headerViewFrame.origin.y += pagesViewHeight;
-//        webViewFrame.size.height += pagesViewHeight;
-        collectionViewFrame.size.height += pagesViewHeight;
-        pagesViewFrame.origin.y += pagesViewHeight - footerViewHeight;
-    }
-
-    [UIView animateWithDuration:0.25 animations:^{
-        self.headerView.frame = headerViewFrame;
-//        self.webView.frame = webViewFrame;
-        self.collectionView.frame = collectionViewFrame;
-        self.pagesView.frame = pagesViewFrame;
-    } completion:^(BOOL finished) {
-    }];
-}
-
-- (void)done:(id)sender
-{
-    [self.activeTextField resignFirstResponder];
-}
-
-- (void)cancel:(id)sender
-{
-    [self.activeTextField resignFirstResponder];
-}
-
-- (IBAction)printAction:(UIButton *)sender
-{
-    if ([sender.titleLabel.text isEqualToString:@"Update preview"]) {
-        NSLog(@"update preview");
-        [self.printButton setTitle:@"Print" forState:UIControlStateNormal];
-        [self prepareJob];
-    } else {
-        [self printReport];
-    }
-}
-
-- (void)printReport
-{
-    NSUInteger startPage = self.fromTextField.text.integerValue;
-    NSUInteger endPage = self.toTextField.text.integerValue;
-
-    JMReportPagesRange *pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
-    [self downloadReportWithPagesRange:pagesRange completion:^(NSString *reportURI){
-        [JMCancelRequestPopup dismiss];
-        NSLog(@"report saved");
-
-        id printingItem = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
-
-        NSLog(@"printingItem: %@", printingItem);
-
-        UIPrintInfo *printInfo = [UIPrintInfo printInfo];
-        printInfo.jobName = self.report.resourceLookup.label;
-        printInfo.outputType = UIPrintInfoOutputGeneral;
-        printInfo.duplex = UIPrintInfoDuplexLongEdge;
-
-        UIPrintInteractionController *printController = [UIPrintInteractionController sharedPrintController];
-        printController.printInfo = printInfo;
-        printController.showsPageRange = NO;
-        printController.printingItem = printingItem;
-
-        UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
-                if(error){
-                    NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
-                } else if (completed) {
-                    if ([printingItem isKindOfClass:[NSURL class]]) {
-                        NSURL *fileURL = (NSURL *)printingItem;
-                        NSString *directoryPath = [fileURL.path stringByDeletingLastPathComponent];
-                        if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
-                            [[NSFileManager defaultManager] removeItemAtPath:directoryPath error:nil];
-                        }
-                    }
-//                if (self.printCompletion) {
-//                    self.printCompletion();
-//                }
-                    [self.navigationController popViewControllerAnimated:YES];
-                }
-            }@weakselfend;
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([JMUtils isIphone]) {
-                [printController presentAnimated:YES completionHandler:completionHandler];
-            } else {
-                [printController presentFromRect:self.printButton.frame inView:self.view animated:YES completionHandler:completionHandler];
-            }
-        });
-    }];
-
-
-
-}
-
 - (void)changePresenationView
 {
     UIImage *image;
@@ -411,10 +244,10 @@ typedef NS_ENUM(NSInteger, JMPrintPreviewPresentationType) {
 #pragma mark - Helpers
 - (void)prepareJob
 {
-    NSUInteger startPage = self.fromTextField.text.integerValue;
+    NSUInteger startPage = 1;
     NSUInteger endPage = startPage + kJMPrintResourceMaxCountDownloadPages - 1;
-    if (endPage > self.toTextField.text.integerValue) {
-        endPage = self.toTextField.text.integerValue;
+    if (endPage > self.report.countOfPages) {
+        endPage = self.report.countOfPages;
     }
 
     JMReportPagesRange *pagesRange = [JMReportPagesRange rangeWithStartPage:startPage
@@ -664,44 +497,6 @@ typedef NS_ENUM(NSInteger, JMPrintPreviewPresentationType) {
     if (error) {
         NSLog(@"error of removing temp images directory: %@", error.localizedDescription);
     }
-}
-
-#pragma mark - UITextFieldDelegate
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    self.activeTextField = textField;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if (textField.text.integerValue > self.report.countOfPages) {
-        // show alert
-        textField.text = @(self.report.countOfPages).stringValue;
-    }
-
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self.printButton setTitle:@"Update preview" forState:UIControlStateNormal];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [textField resignFirstResponder];
-    return YES;
-}
-
-#pragma mark - View Helpers
-- (UIToolbar *)textFieldToolbar
-{
-    UIToolbar *toolbar = [[UIToolbar alloc] init];
-    [toolbar sizeToFit];
-
-    UIBarButtonItem *cancel = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-    UIBarButtonItem *done = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
-    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    [toolbar setItems:@[cancel, flexibleSpace, done]];
-
-    return toolbar;
 }
 
 @end
