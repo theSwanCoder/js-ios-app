@@ -37,6 +37,7 @@
 
 -(void)awakeFromNib {
     [[NSBundle mainBundle] loadNibNamed:@"JMBaseCollectionView" owner:self options:nil];
+    self.contentView.frame = self.bounds;
     [self.contentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self addSubview: self.contentView];
 }
