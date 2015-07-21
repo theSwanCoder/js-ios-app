@@ -22,26 +22,19 @@
 
 
 //
-//  JMReportSaver.h
+//  JMReport.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 2.1
- */
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.2
+*/
 
-#import <Foundation/Foundation.h>
-#import "JMReport.h"
-
-typedef void(^SaveReportCompletion)(NSString *reportURI, NSError *error);
-
-@interface JMReportSaver : NSObject
-
-- (instancetype)initWithReport:(JMReport *)report;
-
-- (void)saveReportWithName:(NSString *)name format:(NSString *)format pages:(NSString *)pages addToDB:(BOOL)addToDB completion:(SaveReportCompletion)completionBlock;
-- (void)saveReportWithName:(NSString *)name format:(NSString *)format resourcePath:(NSString *)resourcePath completion:(SaveReportCompletion)completion;
-- (void) cancelReport;
-
+@interface JMReportPagesRange : NSObject
+@property (nonatomic, assign) NSUInteger startPage;
+@property (nonatomic, assign) NSUInteger endPage;
+@property (nonatomic, strong, readonly) NSString *pagesFormat;
+- (instancetype)initWithStartPage:(NSUInteger)startPage endPage:(NSUInteger)endPage;
++ (instancetype)rangeWithStartPage:(NSUInteger)startPage endPage:(NSUInteger)endPage;
 @end

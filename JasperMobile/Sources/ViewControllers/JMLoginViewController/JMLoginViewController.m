@@ -200,7 +200,6 @@
         [JMCancelRequestPopup dismiss];
         if (success) {
             self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
-            [[NSNotificationCenter defaultCenter] postNotificationName:kJMLoginDidSuccessNotification object:nil];
             [self dismissViewControllerAnimated:NO completion:nil];
             if (self.completion) {
                 self.completion();

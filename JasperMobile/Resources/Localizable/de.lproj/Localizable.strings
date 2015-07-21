@@ -58,7 +58,7 @@
 "servers.profile.list.empty" = "Es gibt keine Serverprofile.";
 
 /* Onboarding Intro */
-"intro.title" = "Willkommen bei TIBCO JasperMobile";
+"intro.title" = "Willkommen bei\nTIBCO JasperMobile";
 "intro.description" = "Zum Beginnen nach oben wischen";
 "intro.button.skip.skip" = "Einführung überspringen";
 "intro.button.skip.startUsing" = "Arbeit mit TIBCO JasperMobile beginnen";

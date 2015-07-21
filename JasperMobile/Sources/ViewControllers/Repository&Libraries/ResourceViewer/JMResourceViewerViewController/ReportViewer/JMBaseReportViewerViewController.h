@@ -47,8 +47,11 @@
 
 // start point
 - (void)startLoadReportWithPage:(NSInteger)page;
-- (void)runReportWithPage:(NSInteger)page;
 
+- (void)preparePreviewForPrintWithCompletion:(void (^)(NSURL *resourceURL))completion;
+- (NSString *)tempReportName;
+
+- (void)runReportWithPage:(NSInteger)page;
 - (void)updateReportWithNewParameters;
 
 // setups

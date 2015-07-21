@@ -386,7 +386,16 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                          completion:@weakself(^(NSString *reportURI, NSError *error)) {
                              [JMCancelRequestPopup dismiss];
 
-                             if (error) {
+                             if (reportURI) {
+                                 // Animation
+                                 [CATransaction begin];
+                                 [CATransaction setCompletionBlock:^{
+                                     [self.delegate reportDidSavedSuccessfully];
+                                 }];
+
+                                 [self.navigationController popViewControllerAnimated:YES];
+                                 [CATransaction commit];
+                             } else {
                                  [reportSaver cancelReport];
                                  if (error.code == JSSessionExpiredErrorCode) {
                                      if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
@@ -397,15 +406,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                  } else {
                                      [JMUtils showAlertViewWithError:error];
                                  }
-                             } else {
-                                 // Animation
-                                 [CATransaction begin];
-                                 [CATransaction setCompletionBlock:^{
-                                     [self.delegate reportDidSavedSuccessfully];
-                                 }];
-                                 
-                                 [self.navigationController popViewControllerAnimated:YES];
-                                 [CATransaction commit];
                              }
                          }@weakselfend];
 }
