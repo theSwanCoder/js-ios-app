@@ -46,9 +46,12 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.resourceName.font = [JMThemesManager collectionResourceNameFont];
-    self.resourceDescription.font = [JMThemesManager collectionResourceDescriptionFont];
-    self.infoButton.tintColor = [UIColor colorFromHexString:@"#909090"];
+    self.resourceName.font = [[JMThemesManager sharedManager] collectionResourceNameFont];
+    self.resourceName.textColor = [[JMThemesManager sharedManager] resourceViewResourceCellTitleTextColor];
+    
+    self.resourceDescription.font = [[JMThemesManager sharedManager] collectionResourceDescriptionFont];
+    self.resourceDescription.textColor = [[JMThemesManager sharedManager] resourceViewResourceCellDetailsTextColor];
+    self.infoButton.tintColor = [[JMThemesManager sharedManager] resourceViewResourceInfoButtonTintColor];
 }
 
 - (void)setResourceLookup:(JSResourceLookup *)resourceLookup
@@ -117,7 +120,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     UIImage *resourceImage = thumbnails ? [self cropedImageFromImage:image inRect:self.resourceImage.bounds] : image;
     BOOL shouldFitImage = ((resourceImage.size.height > self.resourceImage.frame.size.height) || (resourceImage.size.width > self.resourceImage.frame.size.width));
     self.resourceImage.contentMode = shouldFitImage ? UIViewContentModeScaleAspectFit : UIViewContentModeCenter;
-    self.resourceImage.backgroundColor = thumbnails ? [UIColor clearColor] : kJMResourcePreviewBackgroundColor;
+    self.resourceImage.backgroundColor = thumbnails ? [UIColor clearColor] : [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
     self.resourceImage.image = resourceImage;
 }
 

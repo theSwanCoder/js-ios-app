@@ -49,6 +49,7 @@ Please Wait...</string>
                 </constraint>
             </constraints>
             <connections>
+                <outlet property="activityIndicator" destination="6N8-ZV-sxn" id="fa4-9Z-NGN"/>
                 <outlet property="titleLabel" destination="msm-MO-HEg" id="kUI-NZ-uZV"/>
             </connections>
             <point key="canvasLocation" x="403" y="179"/>

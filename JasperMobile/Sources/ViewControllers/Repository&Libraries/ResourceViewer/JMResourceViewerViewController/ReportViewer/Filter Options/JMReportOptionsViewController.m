@@ -54,7 +54,9 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     // setup "Run Report" button
-    self.runReportButton.backgroundColor = kJMResourcePreviewBackgroundColor;
+    self.runReportButton.backgroundColor = [[JMThemesManager sharedManager] reportOptionsRunReportButtonBackgroundColor];
+    [self.runReportButton setTitleColor:[[JMThemesManager sharedManager] reportOptionsRunReportButtonTextColor]
+                               forState:UIControlStateNormal];
     [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog.button.run.report", nil)
                           forState:UIControlStateNormal];
 }
@@ -157,7 +159,7 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
         CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
         CGRect textRect = [[inputControlDescriptor errorString] boundingRectWithSize:maximumLabelSize
                                                                              options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-                                                                          attributes:@{NSFontAttributeName:[JMThemesManager tableViewCellDetailErrorFont]}
+                                                                          attributes:@{NSFontAttributeName:[[JMThemesManager sharedManager] tableViewCellErrorFont]}
                                                                              context:nil];
         return kJMReportOptionsTableViewCellHeight + kJMReportOptionsTableViewCellVerticalOffset + ceil(textRect.size.height);
     }

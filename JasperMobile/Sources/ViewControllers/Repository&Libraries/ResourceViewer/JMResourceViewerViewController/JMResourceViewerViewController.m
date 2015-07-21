@@ -152,7 +152,6 @@
         } else {
             printInteractionController.delegate = self;
             self.printNavController = [JMMainNavigationController new];
-            self.printNavController.view.backgroundColor = [UIColor colorWithRedComponent:239.f greenComponent:239.f blueComponent:244.f];
             self.printNavController.modalPresentationStyle = UIModalPresentationFormSheet;
             self.printNavController.preferredContentSize = self.printSettingsPreferredContentSize;
             [printInteractionController presentFromBarButtonItem:self.printNavController.navigationItem.rightBarButtonItems.firstObject
@@ -172,7 +171,7 @@
 {
     [self presentViewController:self.printNavController animated:YES completion:nil];
     UIViewController *printSettingsVC = self.printNavController.topViewController;
-    printSettingsVC.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    printSettingsVC.navigationItem.leftBarButtonItem.tintColor = [[JMThemesManager sharedManager] barItemsColor];
 }
 
 - (void)printInteractionControllerWillDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController

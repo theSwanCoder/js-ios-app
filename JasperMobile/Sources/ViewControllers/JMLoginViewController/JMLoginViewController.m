@@ -56,7 +56,7 @@
     self.view.backgroundColor = [[JMThemesManager sharedManager] loginViewBackgroundColor];
     self.placeHolderView.backgroundColor = [[JMThemesManager sharedManager] loginViewPlaceholderBackgroundColor];
     [self.textfields makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] loginViewTextFieldsBackgroundColor]];
-    [self.textfields makeObjectsPerformSelector:@selector(setFont:) withObject:[JMThemesManager loginInputControlsFont]];
+    [self.textfields makeObjectsPerformSelector:@selector(setFont:) withObject:[[JMThemesManager sharedManager] loginInputControlsFont]];
 
     NSDictionary *attributes = @{NSForegroundColorAttributeName:[[JMThemesManager sharedManager] loginViewTextFieldsTextColor]};
     self.userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login.username.label", nil) attributes:attributes];

@@ -120,7 +120,7 @@
         CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
         CGRect textRect = [option.errorString boundingRectWithSize:maximumLabelSize
                                                            options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-                                                        attributes:@{NSFontAttributeName:[JMThemesManager tableViewCellDetailErrorFont]}
+                                                        attributes:@{NSFontAttributeName:[[JMThemesManager sharedManager] tableViewCellErrorFont]}
                                                            context:nil];
         return tableView.rowHeight + ceil(textRect.size.height);
     }

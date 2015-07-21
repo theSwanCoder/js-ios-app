@@ -36,10 +36,10 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.titleLabel.font = [JMThemesManager tableViewCellTitleFont];
-    self.titleLabel.textColor = [UIColor darkGrayColor];
-    self.errorLabel.font = [JMThemesManager tableViewCellDetailErrorFont];
-    self.errorLabel.textColor = [UIColor redColor];
+    self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
+    self.errorLabel.font = [[JMThemesManager sharedManager] tableViewCellErrorFont];
+    self.errorLabel.textColor = [[JMThemesManager sharedManager] tableViewCellErrorColor];
 }
 
 - (void) updateDisplayingOfErrorMessage
@@ -63,11 +63,8 @@
 
 - (void)setEnabledCell:(BOOL)enabled
 {
-    if (enabled) {
-        self.titleLabel.textColor = [UIColor darkGrayColor];
-    } else {
-        self.titleLabel.textColor = [UIColor lightGrayColor];
-    }
+    UIColor *textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
+    self.titleLabel.textColor = [textColor colorWithAlphaComponent:enabled ? 1.0f : 0.5f];
 }
 
 - (BOOL)isValidData

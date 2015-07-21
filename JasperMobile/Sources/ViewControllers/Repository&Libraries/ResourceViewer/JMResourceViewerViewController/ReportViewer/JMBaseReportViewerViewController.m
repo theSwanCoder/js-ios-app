@@ -39,8 +39,6 @@
 #import "JMReportSaver.h"
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
-@property (assign, nonatomic) JMMenuActionsViewAction menuActionsViewAction;
-@property (assign, nonatomic) JMMenuActionsViewAction disabledMenuActionsViewAction;
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
@@ -60,7 +58,6 @@
 
     self.emptyReportMessageLabel.text = JMCustomLocalizedString(@"report.viewer.emptyreport.title", nil);
     [self addObservers];
-    [self setupMenuActions];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -132,7 +129,6 @@
 - (void)reportLoaderDidChangeCountOfPages:(NSNotification *)notification
 {
     self.toolbar.countOfPages = self.report.countOfPages;
-    [self updateMenuActions];
     [self handleReportLoaderDidChangeCountOfPages];
 }
 
@@ -444,46 +440,34 @@
 #pragma mark - Helpers
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    JMMenuActionsViewAction availableAction = ([super availableActionForResource:resource] & ~JMMenuActionsViewAction_Print ) | self.menuActionsViewAction;
+    JMMenuActionsViewAction availableAction = [super availableActionForResource:resource] | JMMenuActionsViewAction_Save;
     if (self.report.isReportWithInputControls) {
         availableAction |= JMMenuActionsViewAction_Edit;
+    }
+    if ([self isReportReady] && !self.report.isReportEmpty) {
+        availableAction |= JMMenuActionsViewAction_Refresh;
     }
     return availableAction;
 }
 
 - (JMMenuActionsViewAction)disabledActionForResource:(JSResourceLookup *)resource
 {
-    JMMenuActionsViewAction disabledAction = [super disabledActionForResource:resource] | self.disabledMenuActionsViewAction;
+    JMMenuActionsViewAction disabledAction = [super disabledActionForResource:resource];
+    if (![self isReportReady] || self.report.isReportEmpty) {
+        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Print;
+    }
     return disabledAction;
 }
 
 - (void)showEmptyReportMessage
 {
     self.emptyReportMessageLabel.hidden = NO;
-    self.menuActionsViewAction = JMMenuActionsViewAction_None;
     [self.navigationController setToolbarHidden:YES animated:YES];
 }
 
 - (void)hideEmptyReportMessage
 {
     self.emptyReportMessageLabel.hidden = YES;
-    [self setupMenuActions];
-}
-
-- (void)setupMenuActions
-{
-    self.menuActionsViewAction = JMMenuActionsViewAction_Save;
-    self.disabledMenuActionsViewAction = JMMenuActionsViewAction_Save;
-}
-
-- (void)updateMenuActions
-{
-    if ([self isReportReady]) {
-        self.menuActionsViewAction |= JMMenuActionsViewAction_Refresh | JMMenuActionsViewAction_Print;
-        self.disabledMenuActionsViewAction = JMMenuActionsViewAction_None;
-    } else {
-        self.disabledMenuActionsViewAction = JMMenuActionsViewAction_Save;
-    }
 }
 
 - (BOOL)isReportReady

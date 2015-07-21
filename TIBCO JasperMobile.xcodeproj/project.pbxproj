@@ -847,8 +847,8 @@
 			children = (
 				089B14B01AA756BD0021A915 /* JMMenuActionsView.h */,
 				089B14B11AA756BD0021A915 /* JMMenuActionsView.m */,
-				A1478B758E018C4B68EDB8F3 /* JMMenuAction.m */,
 				A14783E141F16BAE2FCA32F3 /* JMMenuAction.h */,
+				A1478B758E018C4B68EDB8F3 /* JMMenuAction.m */,
 			);
 			path = JMMenuActionsView;
 			sourceTree = "<group>";
@@ -1451,9 +1451,9 @@
 				08E2AC351B1E056900AC462B /* JMPrintResourceViewController */,
 				08E2AC3B1B1E056900AC462B /* JMSavedResourceViewerViewController */,
 				08E2AC3E1B1E056900AC462B /* ReportViewer */,
+				A1478624CCF4C28F681912E0 /* DashboardViewer */,
 				08E2AC391B1E056900AC462B /* JMResourceViewerViewController.h */,
 				08E2AC3A1B1E056900AC462B /* JMResourceViewerViewController.m */,
-				A1478624CCF4C28F681912E0 /* DashboardViewer */,
 			);
 			path = JMResourceViewerViewController;
 			sourceTree = "<group>";

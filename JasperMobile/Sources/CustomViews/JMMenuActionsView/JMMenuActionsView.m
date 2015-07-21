@@ -27,6 +27,9 @@
 #import "JMLocalization.h"
 #import "JMMenuAction.h"
 
+#import "UIColor+RGBComponent.h"
+
+
 CGFloat static kJMMenuActionsViewCellHeight = 40;
 
 @interface JMMenuActionsView () <UITableViewDataSource, UITableViewDelegate>
@@ -47,6 +50,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
         self.tableView = [self tableViewWithFrame:self.bounds];
         [self addSubview:_tableView];
         [self setupDatasource];
+        self.tableView.separatorColor = [UIColor darkGrayColor];
     }
     return self;
 }
@@ -56,7 +60,6 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     UITableView *tableView = [[UITableView alloc] initWithFrame:frame
                                                           style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor clearColor];
-    tableView.separatorColor = [UIColor blackColor];
     tableView.backgroundView = nil;
     tableView.delegate = self;
     tableView.dataSource = self;
@@ -171,7 +174,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.textLabel.font = [JMThemesManager navigationBarTitleFont];
+        cell.textLabel.font = [[JMThemesManager sharedManager] navigationBarTitleFont];
         cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
         cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
         cell.imageView.backgroundColor = [UIColor clearColor];
@@ -184,14 +187,12 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     }
     JMMenuAction *currentMenuAction = self.availableMenuActions[indexPath.row];
     cell.textLabel.text = JMCustomLocalizedString(currentMenuAction.actionTitle, nil);
+    
     cell.imageView.image = [UIImage imageNamed:currentMenuAction.actionImageName];
-    if (currentMenuAction.actionEnabled) {
-        cell.userInteractionEnabled = YES;
-        cell.textLabel.textColor = [UIColor whiteColor];
-    } else {
-        cell.userInteractionEnabled = NO;
-        cell.textLabel.textColor = [UIColor grayColor];
-    }
+    cell.imageView.alpha = currentMenuAction.actionEnabled ? 1.0f : 0.5f;
+    UIColor *textColor = [[JMThemesManager sharedManager] popupsTextColor];
+    cell.textLabel.textColor = [textColor colorWithAlphaComponent:currentMenuAction.actionEnabled ? 1.0f : 0.5f];
+    cell.userInteractionEnabled = currentMenuAction.actionEnabled;
     return cell;
 }
 
@@ -237,7 +238,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     CGFloat maxTextWidth = .0f;
     for (JMMenuAction *menuAction in self.availableMenuActions) {
         NSString *titleAction = JMCustomLocalizedString(menuAction.actionTitle, nil);
-        NSDictionary *titleTextAttributes = @{NSFontAttributeName : [JMThemesManager navigationBarTitleFont]};
+        NSDictionary *titleTextAttributes = @{NSFontAttributeName : [[JMThemesManager sharedManager] navigationBarTitleFont]};
         CGSize titleActionContainerSize = [titleAction sizeWithAttributes:titleTextAttributes];
         if (maxTextWidth < titleActionContainerSize.width) {
             maxTextWidth = titleActionContainerSize.width;

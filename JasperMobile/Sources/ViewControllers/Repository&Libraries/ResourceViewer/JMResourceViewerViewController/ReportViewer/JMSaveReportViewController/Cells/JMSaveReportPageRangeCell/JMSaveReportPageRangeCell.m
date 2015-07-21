@@ -31,10 +31,11 @@
 */
 
 #import "JMSaveReportPageRangeCell.h"
+#import "JMTextField.h"
 
 @interface JMSaveReportPageRangeCell() <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (weak, nonatomic) UIPickerView *pickerView;
-@property (nonatomic, weak) IBOutlet UITextField *textField;
+@property (nonatomic, weak) IBOutlet JMTextField *textField;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @property (nonatomic, assign) NSRange availableRange;
@@ -48,8 +49,8 @@
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    self.titleLabel.font = [JMThemesManager tableViewCellTitleFont];
-    self.titleLabel.textColor = [UIColor darkGrayColor];
+    self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
 
     UIPickerView *pickerView = [UIPickerView new];
 
@@ -74,7 +75,6 @@
 {
     _editable = editable;
     self.textField.enabled = editable;
-    self.textField.textColor = editable ? [UIColor darkTextColor] : [UIColor lightGrayColor];
 }
 
 #pragma mark - Custom Setters

@@ -137,6 +137,141 @@
 			<string>FFFFFF</string>
 		</dict>
 	</dict>
+	<key>ResourceView</key>
+	<dict>
+		<key>background_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>list_background_pattern</string>
+		</dict>
+		<key>loading_cell_title_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>5D5D5D</string>
+		</dict>
+		<key>loading_cell_activity_indicator_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>5D5D5D</string>
+		</dict>
+		<key>resource_cell_title_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>5D5D5D</string>
+		</dict>
+		<key>resource_cell_details_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>B0B0B0</string>
+		</dict>
+		<key>resource_cell_preview_background_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>428EC0</string>
+		</dict>
+		<key>noresult_label_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>999999</string>
+		</dict>
+		<key>activity_label_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>999999</string>
+		</dict>
+		<key>activity_activity_indicator_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>878787</string>
+		</dict>
+		<key>refresh_control_tint_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>FFFFFF</string>
+		</dict>
+		<key>resource_info_button_tint_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>909090</string>
+		</dict>
+		<key>resource_favorite_button_tint_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>FF0000</string>
+		</dict>
+	</dict>
+	<key>ReportOptions</key>
+	<dict>
+		<key>runreport_button_background_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>428EC0</string>
+		</dict>
+		<key>runreport_button_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>FFFFFF</string>
+		</dict>
+		<key>title_label_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>8F8F8F</string>
+		</dict>
+		<key>noresult_label_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>999999</string>
+		</dict>
+	</dict>
+	<key>SaveReport</key>
+	<dict>
+		<key>savereport_button_background_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>428EC0</string>
+		</dict>
+		<key>savereport_button_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>FFFFFF</string>
+		</dict>
+	</dict>
 	<key>Common</key>
 	<dict>
 		<key>views_background_color</key>
@@ -165,14 +300,28 @@
 			<key>AttributeType</key>
 			<string>Color</string>
 			<key>AttributeValue</key>
-			<string>123456</string>
+			<string>26282D</string>
+		</dict>
+		<key>popups_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>FFFFFF</string>
 		</dict>
 		<key>table_view_cell_title_text_color</key>
 		<dict>
 			<key>AttributeType</key>
 			<string>Color</string>
 			<key>AttributeValue</key>
-			<string>5D5D5D</string>
+			<string>3D3D3D</string>
+		</dict>
+		<key>table_view_cell_details_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>B0B0B0</string>
 		</dict>
 		<key>table_view_cell_error_text_color</key>
 		<dict>

@@ -68,10 +68,10 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [[JMThemesManager sharedManager] menuViewBackgroundColor];
-    self.userNameLabel.textColor = [[JMThemesManager sharedManager] menuViewSelectedTextColorColor];
-    self.serverNameLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColorColor];
-    self.organizationNameLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColorColor];
-    self.appVersionLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColorColor];
+    self.userNameLabel.textColor = [[JMThemesManager sharedManager] menuViewSelectedTextColor];
+    self.serverNameLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColor];
+    self.organizationNameLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColor];
+    self.appVersionLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColor];
     
     [self.separatorsCollection makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] menuViewSeparatorColor]];
     
@@ -193,8 +193,6 @@
 #pragma mark - Actions
 - (void)menuButtonTapped:(id)sender
 {
-    
-#warning - NEED CHECK AND FIX THIS METHOD!!!!
     [self.revealViewController.frontViewController.view endEditing:YES];
     [self.revealViewController revealToggle:sender];
 }

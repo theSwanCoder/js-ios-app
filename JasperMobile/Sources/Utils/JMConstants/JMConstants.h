@@ -34,7 +34,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "UIColor+RGBComponent.h"
 
 // Constants for NSUserDefaults
 extern NSString * const kJMDefaultsCurrentVersion;
@@ -101,15 +100,3 @@ NSInteger  const kJMRecentResourcesLimit;
 extern NSString * const kJMDefaultThemeFileName;
 extern NSString * const kJMThemesFileFormat;
 extern NSString * const kJMCurrentThemeFileName;
-
-#define kJMDetailViewLightBackgroundColor               [UIColor colorFromHexString:@"#E5E9EB"]
-
-#define kJMDetailViewLightTextColor                     [UIColor colorFromHexString:@"#8F8F8F"]
-#define kJMSearchBarBackgroundColor                     [UIColor colorFromHexString:@"#26282D"]
-
-#define kJMMainNavigationBarBackgroundColor             [UIColor colorFromHexString:@"#343841"]
-#define kJMMainCollectionViewBackgroundColor            [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]]
-
-#define kJMResourcePreviewBackgroundColor               [UIColor colorFromHexString:@"#428EC0"]
-
-#define kJMMasterResourceCellSelectedBackgroundColor    [UIColor colorFromHexString:@"#484F59"]

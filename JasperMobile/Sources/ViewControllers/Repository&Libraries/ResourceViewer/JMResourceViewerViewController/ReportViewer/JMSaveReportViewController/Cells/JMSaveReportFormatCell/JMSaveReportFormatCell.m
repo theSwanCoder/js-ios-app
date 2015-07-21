@@ -36,7 +36,7 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.titleLabel.font = [JMThemesManager tableViewCellTitleFont];
-    self.titleLabel.textColor = [UIColor darkGrayColor];
+    self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
 }
 @end

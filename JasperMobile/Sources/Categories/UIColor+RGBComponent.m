@@ -53,41 +53,50 @@
                            alpha:1];
 }
 
-+ (UIColor *)highlitedColorForColor:(UIColor *)color
++ (UIColor *)сolorFromColor:(UIColor *)color differents:(CGFloat)differents increase:(BOOL)increase
 {
     CGFloat alphaComponent;
     CGFloat whiteComponent;
-    if ([color getWhite:&whiteComponent alpha:&alphaComponent]) {
-        return [UIColor colorWithWhite:[self getHighlitedComponentFrom:whiteComponent]
-                                 alpha:alphaComponent];
-    }
     
     CGFloat redComponent, greenComponent, blueComponent;
     if ([color getRed:&redComponent green:&greenComponent blue:&blueComponent alpha:&alphaComponent]) {
-        return [UIColor colorWithRed:[self getHighlitedComponentFrom:redComponent]
-                               green:[self getHighlitedComponentFrom:greenComponent]
-                                blue:[self getHighlitedComponentFrom:blueComponent]
+        return [UIColor colorWithRed:[self getHighlitedComponentFrom:redComponent differents:differents increase:increase]
+                               green:[self getHighlitedComponentFrom:greenComponent differents:differents increase:increase]
+                                blue:[self getHighlitedComponentFrom:blueComponent differents:differents increase:increase]
                                alpha:alphaComponent];
     }
-    
+
+    if ([color getWhite:&whiteComponent alpha:&alphaComponent]) {
+        return [UIColor colorWithWhite:[self getHighlitedComponentFrom:whiteComponent differents:differents increase:increase]
+                                 alpha:alphaComponent];
+    }
+
     CGFloat hueComponent, saturationComponent, brightnessComponent;
     if ([color getHue:&hueComponent saturation:&saturationComponent brightness:&brightnessComponent alpha:&alphaComponent]) {
-        return [UIColor colorWithHue:[self getHighlitedComponentFrom:hueComponent]
-                          saturation:[self getHighlitedComponentFrom:saturationComponent]
-                          brightness:[self getHighlitedComponentFrom:brightnessComponent]
+        return [UIColor colorWithHue:[self getHighlitedComponentFrom:hueComponent differents:differents increase:increase]
+                          saturation:[self getHighlitedComponentFrom:saturationComponent differents:differents increase:increase]
+                          brightness:[self getHighlitedComponentFrom:brightnessComponent differents:differents increase:increase]
                                alpha:alphaComponent];
     }
     return [UIColor whiteColor];
 }
 
-+ (CGFloat) getHighlitedComponentFrom:(CGFloat)component
++ (CGFloat) getHighlitedComponentFrom:(CGFloat)component differents:(CGFloat)differents increase:(BOOL)increase
 {
-    CGFloat differents = 0.25f;
-    if (component + differents <= 1) {
-        return component + differents;
-    }
-    if (component - differents >= 0) {
-        return component - differents;
+    if (increase) {
+        if (component + differents <= 1) {
+            return component + differents;
+        }
+        if (component - differents >= 0) {
+            return component - differents;
+        }
+    } else {
+        if (component - differents <= 1) {
+            return component - differents;
+        }
+        if (component + differents >= 0) {
+            return component + differents;
+        }
     }
     return component;
 }

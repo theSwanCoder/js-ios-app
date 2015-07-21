@@ -27,6 +27,8 @@ NSString * kJMGridLoadingCell = @"JMGridLoadingCollectionViewCell";
 
 @interface JMLoadingCollectionViewCell ()
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
+
 @end
 
 @implementation JMLoadingCollectionViewCell
@@ -34,8 +36,10 @@ NSString * kJMGridLoadingCell = @"JMGridLoadingCollectionViewCell";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.titleLabel.font = [JMThemesManager collectionLoadingFont];
+    self.titleLabel.font = [[JMThemesManager sharedManager] collectionLoadingFont];
     self.titleLabel.text = JMCustomLocalizedString(@"resources.loading.msg", nil);
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] resourceViewLoadingCellTitleTextColor];
+    self.activityIndicator.color = [[JMThemesManager sharedManager] resourceViewLoadingCellActivityIndicatorColor];
 }
 
 @end

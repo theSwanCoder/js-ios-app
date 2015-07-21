@@ -1084,8 +1084,9 @@ your business wherever you are.</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" translatesAutoresizingMaskIntoConstraints="NO" id="kEF-bl-3nz">
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kEF-bl-3nz" customClass="JMTextField">
                                                     <rect key="frame" x="368" y="7" width="202" height="30"/>
+                                                    <color key="backgroundColor" white="0.95000000000000007" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="jHj-Dm-t6X"/>
                                                     </constraints>
@@ -2179,12 +2180,11 @@ your business wherever you are.</string>
                                             <rect key="frame" x="0.0" y="0.0" width="300" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" translatesAutoresizingMaskIntoConstraints="NO" id="pAq-nN-D8W">
+                                                <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pAq-nN-D8W" customClass="JMTextField">
                                                     <rect key="frame" x="10" y="7" width="560" height="27"/>
+                                                    <color key="backgroundColor" white="0.95000000000000007" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="27" id="9Ez-id-deb">
-                                                            <variation key="heightClass=regular-widthClass=regular" constant="30"/>
-                                                        </constraint>
+                                                        <constraint firstAttribute="height" constant="27" id="9Ez-id-deb"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -2241,7 +2241,7 @@ your business wherever you are.</string>
                                             <outlet property="titleLabel" destination="tP2-0d-Ueb" id="F0v-5s-KDL"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PagesCell" id="NuJ-gJ-fYO" customClass="JMSaveReportPagesCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="PagesCell" id="NuJ-gJ-fYO" customClass="JMSaveReportPagesCell">
                                         <rect key="frame" x="0.0" y="164" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NuJ-gJ-fYO" id="Caj-NL-z8T">
@@ -2277,7 +2277,7 @@ your business wherever you are.</string>
                                             <outlet property="titleLabel" destination="oHt-Bu-kgE" id="oqh-RO-bXO"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PageRangeCell" id="jxy-i5-dLH" customClass="JMSaveReportPageRangeCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="PageRangeCell" id="jxy-i5-dLH" customClass="JMSaveReportPageRangeCell">
                                         <rect key="frame" x="0.0" y="208" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jxy-i5-dLH" id="KFu-wN-sqC">
@@ -2291,8 +2291,9 @@ your business wherever you are.</string>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" translatesAutoresizingMaskIntoConstraints="NO" id="b8v-CJ-xrb">
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b8v-CJ-xrb" customClass="JMTextField">
                                                     <rect key="frame" x="370" y="7" width="200" height="30"/>
+                                                    <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>

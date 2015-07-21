@@ -46,6 +46,6 @@
 
 + (UIColor *)colorWithRedComponent:(CGFloat)redComponent greenComponent:(CGFloat)greenComponent blueComponent:(CGFloat)blueComponent;
 
-+ (UIColor *)highlitedColorForColor:(UIColor *)color;
++ (UIColor *)сolorFromColor:(UIColor *)color differents:(CGFloat)differents increase:(BOOL)increase;
 
 @end

@@ -59,6 +59,7 @@ static NSInteger _cancelRequestPopupCounter = 0;
     if (_cancelRequestPopupCounter++ == 0) { // there is no popup
         popup = [[JMCancelRequestPopup alloc] initWithDelegate:nil type:JMPopupViewType_ContentViewOnly];
         UIView *nibView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:popup options:nil] lastObject];
+        nibView.backgroundColor = [UIColor clearColor];
         popup->_backGroundView.layer.cornerRadius = 5.f;
         popup->_backGroundView.layer.masksToBounds = YES;
         popup.contentView = nibView;

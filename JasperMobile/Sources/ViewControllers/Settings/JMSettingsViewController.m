@@ -105,7 +105,7 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 {
     JMSettingsItem *currentItem = [self.detailSettings.itemsArray objectAtIndex:indexPath.row];
     JMSettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:currentItem.cellIdentifier];
-    [cell setBottomSeparatorWithHeight:1 color:tableView.separatorColor tableViewStyle:tableView.style];
+    [cell setBottomSeparatorWithHeight:1 color:self.view.backgroundColor tableViewStyle:tableView.style];
     cell.settingsItem = currentItem;
     return cell;
 }

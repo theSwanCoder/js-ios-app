@@ -44,14 +44,16 @@
     self.titleLabel.text = JMCustomLocalizedString(@"report.viewer.options.singleselect.titlelabel.title", nil);
     self.noResultLabel.text = JMCustomLocalizedString(@"resources.noresults.msg", nil);
 
-    self.titleLabel.textColor = kJMDetailViewLightTextColor;
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
+    self.noResultLabel.textColor = [[JMThemesManager sharedManager] reportOptionsNoResultLabelTextColor];
+    
     self.tableView.layer.cornerRadius = 4;
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     UITextField *txfSearchField = [self.icSearchBar valueForKey:@"_searchField"];
-    txfSearchField.backgroundColor = [UIColor whiteColor];
+    txfSearchField.backgroundColor = self.tableView.backgroundColor;
     [txfSearchField setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor darkTextColor]}];
     self.icSearchBar.barTintColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     [self.icSearchBar setBackgroundImage:[UIImage new]];
@@ -115,7 +117,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        cell.textLabel.font = [JMThemesManager tableViewCellTitleFont];
+        cell.textLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+        cell.textLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
     }
     
     JSInputControlOption *option = [self.listOfValues objectAtIndex:indexPath.row];

@@ -45,10 +45,11 @@
     self.textField.enabled = serverOption.editable;
     self.textField.text = serverOption.optionValue;
 
+    UIColor *placeholderColor = [UIColor сolorFromColor:self.textField.textColor differents:0.25 increase:NO];
     NSDictionary *attributes = @{
-            NSFontAttributeName : [UIFont systemFontOfSize:12],
-            NSForegroundColorAttributeName : [UIColor highlitedColorForColor:self.textField.textColor]
-    };
+                                 NSFontAttributeName : [UIFont systemFontOfSize:[JMUtils isIphone] ? 12 : 15],
+                                 NSForegroundColorAttributeName : placeholderColor
+                                 };
     NSString *trimmedPlaceholderString = [serverOption.titleString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" *"]];
     
     NSAttributedString *placeholder = [[NSAttributedString alloc] initWithString:trimmedPlaceholderString

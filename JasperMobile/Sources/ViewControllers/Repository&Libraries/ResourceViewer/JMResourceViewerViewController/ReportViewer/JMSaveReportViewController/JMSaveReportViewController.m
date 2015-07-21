@@ -77,10 +77,13 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
     self.pagesType = JMSaveReportPagesType_All;
     
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
-    self.tableView.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+    self.tableView.backgroundColor = [UIColor clearColor];
     
     [self.tableView setRowHeight:[JMUtils isIphone] ? 44.f : 50.f];
 
+    self.saveReportButton.backgroundColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
+    [self.saveReportButton setTitleColor:[[JMThemesManager sharedManager] saveReportSaveReportButtonTextColor]
+                                forState:UIControlStateNormal];
     [self.saveReportButton setTitle:JMCustomLocalizedString(@"dialog.button.save", nil)
                            forState:UIControlStateNormal];
 
@@ -166,7 +169,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
         CGRect textRect = [self.errorString boundingRectWithSize:maximumLabelSize
                                                          options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-                                                      attributes:@{NSFontAttributeName:[JMThemesManager tableViewCellDetailErrorFont]}
+                                                      attributes:@{NSFontAttributeName:[[JMThemesManager sharedManager] tableViewCellErrorFont]}
                                                          context:nil];
         return tableView.rowHeight + ceil(textRect.size.height);
     }
@@ -189,7 +192,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
             JMSaveReportFormatCell *formatCell = [tableView dequeueReusableCellWithIdentifier:kJMSaveReportFormatCellIdentifier
                                                                                  forIndexPath:indexPath];
             if (indexPath.row) {
-                [formatCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+                [formatCell setTopSeparatorWithHeight:1.f color:self.view.backgroundColor tableViewStyle:UITableViewStylePlain];
             } else {
                 [formatCell removeTopSeparator];
             }
@@ -219,7 +222,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                     pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.toPage", nil);
                     pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
                 }
-                [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+                [pageRangeCell setTopSeparatorWithHeight:1.f color:self.view.backgroundColor tableViewStyle:UITableViewStylePlain];
                 return pageRangeCell;
             }
         }

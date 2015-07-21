@@ -34,7 +34,7 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.textLabel.font = [JMThemesManager menuItemTitleFont];
+    self.textLabel.font = [[JMThemesManager sharedManager] menuItemTitleFont];
 }
 
 #pragma mark - LifeCycle
@@ -45,10 +45,8 @@
     // selected color
     UIView *selectedBackgroundView = [UIView new];
     selectedBackgroundView.frame = self.bounds;
-//    UIColor *darkOp = [UIColor colorWithRed:22/255.f green:23/255.f blue:27/255.f alpha:1.0f];
-//    UIColor *lightOp = [UIColor colorWithRed:22/255.f green:23/255.f blue:27/255.f alpha:0.0f];
+    UIColor *selectedMenuColor = [UIColor сolorFromColor:[[JMThemesManager sharedManager] menuViewBackgroundColor] differents:0.25 increase:YES];
     
-    UIColor *selectedMenuColor = [UIColor highlitedColorForColor:[[JMThemesManager sharedManager] menuViewBackgroundColor]];
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.colors = @[(id)[selectedMenuColor colorWithAlphaComponent:1.0f].CGColor, (id)[selectedMenuColor colorWithAlphaComponent:0.0f].CGColor];
     gradient.frame = selectedBackgroundView.frame;
@@ -63,10 +61,10 @@
 {
     super.selected = selected;
     if (selected) {
-        self.textLabel.textColor = [[JMThemesManager sharedManager] menuViewSelectedTextColorColor];
+        self.textLabel.textColor = [[JMThemesManager sharedManager] menuViewSelectedTextColor];
         self.imageView.image = self.menuItem.selectedItemIcon;
     } else {
-        self.textLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColorColor];
+        self.textLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColor];
         self.imageView.image = self.menuItem.itemIcon;
     }
 }

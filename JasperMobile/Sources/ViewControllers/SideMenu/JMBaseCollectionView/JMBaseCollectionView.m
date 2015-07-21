@@ -55,13 +55,17 @@
 
 - (void)setupWithNoResultText:(NSString *)noResult
 {
-    self.backgroundColor = [[JMThemesManager sharedManager] collectionViewBackgroundColor];
+    self.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
     
     self.activityViewTitleLabel.text = JMCustomLocalizedString(@"resources.loading.msg", nil);
     self.noResultsViewTitleLabel.text = noResult;
     
-    self.activityViewTitleLabel.font = [JMThemesManager resourcesActivityTitleFont];
-    self.noResultsViewTitleLabel.font = [JMThemesManager resourcesActivityTitleFont];
+    self.activityViewTitleLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
+    self.noResultsViewTitleLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
+    
+    self.activityViewTitleLabel.textColor = [[JMThemesManager sharedManager] resourceViewActivityLabelTextColor];
+    self.noResultsViewTitleLabel.textColor = [[JMThemesManager sharedManager] resourceViewNoResultLabelTextColor];
+    self.activityIndicator.color = [[JMThemesManager sharedManager] resourceViewActivityActivityIndicatorColor];
     
     [self setupCollectionView];
 }
@@ -77,7 +81,7 @@
     }
     
     self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.tintColor = [UIColor whiteColor];
+    self.refreshControl.tintColor = [[JMThemesManager sharedManager] resourceViewRefreshControlTintColor];
     
     [self.collectionView addSubview:self.refreshControl];
     self.collectionView.alwaysBounceVertical = YES;

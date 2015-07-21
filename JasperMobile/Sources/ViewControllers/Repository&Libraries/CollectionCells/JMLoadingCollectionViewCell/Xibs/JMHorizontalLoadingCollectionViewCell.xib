@@ -44,6 +44,7 @@ Please Wait...</string>
             </constraints>
             <size key="customSize" width="300" height="80"/>
             <connections>
+                <outlet property="activityIndicator" destination="3qA-8g-TAg" id="WQe-Nk-DCz"/>
                 <outlet property="titleLabel" destination="U0e-vQ-E9V" id="WLO-vu-nzk"/>
             </connections>
             <point key="canvasLocation" x="140" y="280"/>

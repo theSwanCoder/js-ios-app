@@ -46,29 +46,29 @@
 
 @interface JMThemesManager (UIFont)
 
-+ (UIFont *)navigationBarTitleFont;
+- (UIFont *)navigationBarTitleFont;
 
-+ (UIFont *)navigationItemsFont;
+- (UIFont *)navigationItemsFont;
 
-+ (UIFont *)tableViewCellTitleFont;
+- (UIFont *)tableViewCellTitleFont;
 
-+ (UIFont *)tableViewCellDetailFont;
+- (UIFont *)tableViewCellDetailFont;
 
-+ (UIFont *)tableViewCellDetailErrorFont;
+- (UIFont *)tableViewCellErrorFont;
 
-+ (UIFont *)resourcesActivityTitleFont;
+- (UIFont *)resourcesActivityTitleFont;
 
-+ (UIFont *)collectionResourceNameFont;
+- (UIFont *)collectionResourceNameFont;
 
-+ (UIFont *)collectionResourceDescriptionFont;
+- (UIFont *)collectionResourceDescriptionFont;
 
-+ (UIFont *)collectionLoadingFont;
+- (UIFont *)collectionLoadingFont;
 
-+ (UIFont *)menuItemTitleFont;
+- (UIFont *)menuItemTitleFont;
 
-+ (UIFont *)menuItemDescriptionFont;
+- (UIFont *)menuItemDescriptionFont;
 
-+ (UIFont *)loginInputControlsFont;
+- (UIFont *)loginInputControlsFont;
 
 @end
 
@@ -94,9 +94,9 @@
 // Menu View
 - (UIColor *)menuViewBackgroundColor;
 
-- (UIColor *)menuViewTextColorColor;
+- (UIColor *)menuViewTextColor;
 
-- (UIColor *)menuViewSelectedTextColorColor;
+- (UIColor *)menuViewSelectedTextColor;
 
 - (UIColor *)menuViewSeparatorColor;
 
@@ -113,7 +113,44 @@
 
 - (UIColor *)serverProfileSaveButtonTextColor;
 
+// Resource View
+- (UIColor *)resourceViewBackgroundColor;
 
+- (UIColor *)resourceViewLoadingCellTitleTextColor;
+
+- (UIColor *)resourceViewLoadingCellActivityIndicatorColor;
+
+- (UIColor *)resourceViewResourceCellTitleTextColor;
+
+- (UIColor *)resourceViewResourceCellDetailsTextColor;
+
+- (UIColor *)resourceViewResourceCellPreviewBackgroundColor;
+
+- (UIColor *)resourceViewNoResultLabelTextColor;
+
+- (UIColor *)resourceViewActivityLabelTextColor;
+
+- (UIColor *)resourceViewActivityActivityIndicatorColor;
+
+- (UIColor *)resourceViewRefreshControlTintColor;
+
+- (UIColor *)resourceViewResourceInfoButtonTintColor;
+
+- (UIColor *)resourceViewResourceFavoriteButtonTintColor;
+
+// Report Options
+- (UIColor *)reportOptionsRunReportButtonBackgroundColor;
+
+- (UIColor *)reportOptionsRunReportButtonTextColor;
+
+- (UIColor *)reportOptionsTitleLabelTextColor;
+
+- (UIColor *)reportOptionsNoResultLabelTextColor;
+
+// Save Report
+- (UIColor *)saveReportSaveReportButtonBackgroundColor;
+
+- (UIColor *)saveReportSaveReportButtonTextColor;
 
 // Common
 
@@ -121,11 +158,15 @@
 
 - (UIColor *)barsBackgroundColor;
 
-- (UIColor *)barItemsTextColor;
+- (UIColor *)barItemsColor;
 
 - (UIColor *)popupsBackgroundColor;
 
-- (UIColor *) tableViewCellTitleColor;
+- (UIColor *)popupsTextColor;
+
+- (UIColor *) tableViewCellTitleTextColor;
+
+- (UIColor *) tableViewCellDetailsTextColor;
 
 - (UIColor *) tableViewCellErrorColor;
 
@@ -134,10 +175,5 @@
 - (UIColor *) textFieldEditableTextColor;
 
 - (UIColor *) textFieldUnEditableTextColor;
-
-
-
-- (UIColor *)collectionViewBackgroundColor;
-
 
 @end

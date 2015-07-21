@@ -37,9 +37,9 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.titleLabel.font = [JMThemesManager collectionResourceNameFont];
+    self.titleLabel.font = [[JMThemesManager sharedManager] collectionResourceNameFont];
     self.titleLabel.textColor = [[JMThemesManager sharedManager] serverProfileTitleTextColor];
-    self.urlLabel.font = [JMThemesManager collectionResourceDescriptionFont];
+    self.urlLabel.font = [[JMThemesManager sharedManager] collectionResourceDescriptionFont];
     self.urlLabel.textColor = [[JMThemesManager sharedManager] serverProfileDetailsTextColor];
     
     self.titleImage.backgroundColor = [[JMThemesManager sharedManager] serverProfilePreviewBackgroundColor];

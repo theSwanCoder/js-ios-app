@@ -463,7 +463,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 - (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle
 {
     // detect backButton text width to truncate with '...'
-    NSDictionary *textAttributes = @{NSFontAttributeName : [JMThemesManager navigationBarTitleFont]};
+    NSDictionary *textAttributes = @{NSFontAttributeName : [[JMThemesManager sharedManager] navigationBarTitleFont]};
     CGSize titleTextSize = [self.title sizeWithAttributes:textAttributes];
     CGFloat titleTextWidth = ceil(titleTextSize.width);
     CGSize backItemTextSize = [backButtonTitle sizeWithAttributes:textAttributes];

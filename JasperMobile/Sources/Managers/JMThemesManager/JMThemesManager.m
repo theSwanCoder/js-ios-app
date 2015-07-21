@@ -71,12 +71,39 @@ NSString * const kJMThemeServerProfileDetailsTextColor = @"ServerProfiles.profil
 NSString * const kJMThemeServerProfileSaveButtonBackgroundColor = @"ServerProfiles.save_button_background_color";
 NSString * const kJMThemeServerProfileSaveButtonTextColor = @"ServerProfiles.save_button_text_color";
 
+// Resource View
+NSString * const kJMThemeResourceViewBackgroundColor = @"ResourceView.background_color";
+NSString * const kJMThemeResourceViewLoadingCellTitleTextColor = @"ResourceView.loading_cell_title_text_color";
+NSString * const kJMThemeResourceViewLoadingCellActivityIndicatorColor = @"ResourceView.loading_cell_activity_indicator_color";
+NSString * const kJMThemeResourceViewResourceCellTitleTextColor = @"ResourceView.resource_cell_title_text_color";
+NSString * const kJMThemeResourceViewResourceCellDetailsTextColor = @"ResourceView.resource_cell_details_text_color";
+NSString * const kJMThemeResourceViewResourceCellPreviewBackgroundColor = @"ResourceView.resource_cell_preview_background_color";
+NSString * const kJMThemeResourceViewNoResultLabelTextColor = @"ResourceView.noresult_label_text_color";
+NSString * const kJMThemeResourceViewActivityLabelTextColor = @"ResourceView.activity_label_text_color";
+NSString * const kJMThemeResourceViewActivityActivityIndicatorColor = @"ResourceView.activity_activity_indicator_color";
+NSString * const kJMThemeResourceViewRefreshControlTintColor = @"ResourceView.refresh_control_tint_color";
+NSString * const kJMThemeResourceViewResourceInfoButtonTintColor = @"ResourceView.resource_info_button_tint_color";
+NSString * const kJMThemeResourceViewResourceFavoriteBattonTintColor = @"ResourceView.resource_favorite_button_tint_color";
+
+// Report Options
+NSString * const kJMThemeReportOptionsRunReportButtonBackgroundColor = @"ReportOptions.runreport_button_background_color";
+NSString * const kJMThemeReportOptionsRunReportButtonTextColor = @"ReportOptions.runreport_button_text_color";
+NSString * const kJMThemeReportOptionsTitleLabelTextColor = @"ReportOptions.title_label_text_color";
+NSString * const kJMThemeReportOptionsNoResultLabelTextColor = @"ReportOptions.noresult_label_text_color";
+
+// Save Report
+NSString * const kJMThemeSaveReportSaveReportButtonBackgroundColor = @"SaveReport.savereport_button_background_color";
+NSString * const kJMThemeSaveReportSaveReportButtonTextColor = @"SaveReport.savereport_button_text_color";
+
+
 // Common
 NSString * const kJMThemeViewBackgroundColor = @"Common.views_background_color";
 NSString * const kJMThemeBarsBackgroundColor = @"Common.bars_background_color";
-NSString * const kJMThemeBarItemsTextColor = @"Common.bar_items_text_color";
+NSString * const kJMThemeBarItemsColor = @"Common.bar_items_text_color";
 NSString * const kJMThemePopupsBackgroundColor = @"Common.popups_background_color";
-NSString * const kJMThemeTableViewCellTitleColor = @"Common.table_view_cell_title_text_color";
+NSString * const kJMThemePopupsTextColor = @"Common.popups_text_color";
+NSString * const kJMThemeTableViewCellTitleTextColor = @"Common.table_view_cell_title_text_color";
+NSString * const kJMThemeTableViewCellDetailsTextColor = @"Common.table_view_cell_details_text_color";
 NSString * const kJMThemeTableViewCellErrorColor = @"Common.table_view_cell_error_text_color";
 
 NSString * const kJMThemeTextFieldBackgroundColor = @"Common.textfield_background_color";
@@ -122,20 +149,20 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
     
     
     
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[self barItemsTextColor]}];
-    [[UINavigationBar appearance] setTintColor:[self barItemsTextColor]];
-    [[UIToolbar appearance] setTintColor: [self barItemsTextColor]];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[self barItemsColor]}];
+    [[UINavigationBar appearance] setTintColor:[self barItemsColor]];
+    [[UIToolbar appearance] setTintColor: [self barItemsColor]];
     
-    NSDictionary *textTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[self barItemsTextColor], NSForegroundColorAttributeName, [JMThemesManager navigationBarTitleFont], NSFontAttributeName, nil];
+    NSDictionary *textTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[self barItemsColor], NSForegroundColorAttributeName, [[JMThemesManager sharedManager]navigationBarTitleFont], NSFontAttributeName, nil];
     [[UINavigationBar appearance] setTitleTextAttributes:textTitleOptions];
     
     if ([UIDevice currentDevice].systemVersion.integerValue < 8) {
         // Here is hack for using UIPrintInteractionController
-        NSDictionary *textTitleOptionsForPopover = [NSDictionary dictionaryWithObjectsAndKeys:[self barsBackgroundColor], NSForegroundColorAttributeName, [JMThemesManager navigationBarTitleFont], NSFontAttributeName, nil];
+        NSDictionary *textTitleOptionsForPopover = [NSDictionary dictionaryWithObjectsAndKeys:[self barsBackgroundColor], NSForegroundColorAttributeName, [[JMThemesManager sharedManager] navigationBarTitleFont], NSFontAttributeName, nil];
         [[UINavigationBar appearanceWhenContainedIn:[UIPopoverController class], nil] setTitleTextAttributes:textTitleOptionsForPopover];
     }
     
-    NSDictionary *barButtonTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[self barItemsTextColor], NSForegroundColorAttributeName, [JMThemesManager navigationItemsFont], NSFontAttributeName, nil];
+    NSDictionary *barButtonTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[self barItemsColor], NSForegroundColorAttributeName, [[JMThemesManager sharedManager] navigationItemsFont], NSFontAttributeName, nil];
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateDisabled];
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateNormal];
 
@@ -190,13 +217,6 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
 - (id) attributeValueFromDictionary:(NSDictionary *)themeDictionary forKeyPath:(NSString *)keyPath
 {
     if (themeDictionary) {
-        // Fix for implementing color from image pattern
-        if (themeDictionary == self.defaultThemesDictionary && ([keyPath isEqualToString:kJMThemeLoginViewBackgroundColor] ||
-            [keyPath isEqualToString:kJMThemeServerProfilesBackgroundColor])) {
-            return [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
-        }
-        
-        
         NSDictionary *attributeDictionary = [themeDictionary valueForKeyPath:keyPath];
         
         if (attributeDictionary && [attributeDictionary count] >= 2) {
@@ -205,6 +225,12 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
             if (attributeType && attributeValue && [attributeType isKindOfClass:[NSString class]]) {
                 if ([attributeType isEqualToString:kJMThemeAttributeTypeColor]) {
                     if ([attributeValue isKindOfClass:[NSString class]]) {
+                        
+                        // Fix for implementing color from image pattern
+                        UIImage *imagePattern = [UIImage imageNamed:attributeValue];
+                        if (imagePattern) {
+                            return [UIColor colorWithPatternImage:imagePattern];
+                        }
                         return [UIColor colorFromHexString:[NSString stringWithFormat:@"#%@", attributeValue]];
                     }
                 } else if ([attributeType isEqualToString:kJMThemeAttributeTypeFont]) {
@@ -249,63 +275,62 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
 
 @implementation JMThemesManager (UIFont)
 
-+ (UIFont *)navigationBarTitleFont
+- (UIFont *)navigationBarTitleFont
 {
     return [JMUtils isIphone] ? [UIFont boldSystemFontOfSize:14] : [UIFont boldSystemFontOfSize:17];
 }
 
-+ (UIFont *)navigationItemsFont
+- (UIFont *)navigationItemsFont
 {
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:14] : [UIFont systemFontOfSize:17];
 }
 
-+ (UIFont *)tableViewCellTitleFont
+- (UIFont *)tableViewCellTitleFont
 {
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:14] : [UIFont systemFontOfSize:17];
 }
 
-+ (UIFont *)tableViewCellDetailFont
+- (UIFont *)tableViewCellDetailFont
 {
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:14] : [UIFont systemFontOfSize:17];
 }
 
-+ (UIFont *)tableViewCellDetailErrorFont
+- (UIFont *)tableViewCellErrorFont
 {
     return [JMUtils isIphone] ? [UIFont italicSystemFontOfSize:10] : [UIFont italicSystemFontOfSize:16];
 }
 
-+ (UIFont *)resourcesActivityTitleFont
+- (UIFont *)resourcesActivityTitleFont
 {
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:20] : [UIFont systemFontOfSize:30];
 }
 
-+ (UIFont *)collectionResourceNameFont
+- (UIFont *)collectionResourceNameFont
 {
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:15] : [UIFont systemFontOfSize:22];
 }
 
-+ (UIFont *)collectionResourceDescriptionFont
+- (UIFont *)collectionResourceDescriptionFont
 {
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:12] : [UIFont systemFontOfSize:14];
 }
 
-+ (UIFont *)collectionLoadingFont
+- (UIFont *)collectionLoadingFont
 {
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:20] : [UIFont systemFontOfSize:30];
 }
 
-
-+ (UIFont *)menuItemTitleFont
+- (UIFont *)menuItemTitleFont
 {
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:16] : [UIFont systemFontOfSize:20];
 }
 
-+ (UIFont *)menuItemDescriptionFont
+- (UIFont *)menuItemDescriptionFont
 {
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:12] : [UIFont systemFontOfSize:15];
 }
 
-+ (UIFont *)loginInputControlsFont
+- (UIFont *)loginInputControlsFont
 {
     return [JMUtils isIphone] ? [UIFont systemFontOfSize:15] : [UIFont systemFontOfSize:18];
 }
@@ -318,7 +343,6 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
 - (UIColor *)loginViewBackgroundColor
 {
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeLoginViewBackgroundColor];
-    return [self collectionViewBackgroundColor];
 }
 
 - (UIColor *)loginViewPlaceholderBackgroundColor
@@ -362,12 +386,12 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeMenuViewBackgroundColor];
 }
 
-- (UIColor *)menuViewTextColorColor
+- (UIColor *)menuViewTextColor
 {
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeMenuViewTextColor];
 }
 
-- (UIColor *)menuViewSelectedTextColorColor
+- (UIColor *)menuViewSelectedTextColor
 {
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeMenuViewSelectedTextColor];
 }
@@ -409,11 +433,99 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeServerProfileSaveButtonTextColor];
 }
 
-
-- (UIColor *)collectionViewBackgroundColor
+// Resource View
+- (UIColor *)resourceViewBackgroundColor
 {
-    return [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewBackgroundColor];
 }
+
+- (UIColor *)resourceViewLoadingCellTitleTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewLoadingCellTitleTextColor];
+}
+
+- (UIColor *)resourceViewLoadingCellActivityIndicatorColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewLoadingCellActivityIndicatorColor];
+}
+
+- (UIColor *)resourceViewResourceCellTitleTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewResourceCellTitleTextColor];
+}
+
+- (UIColor *)resourceViewResourceCellDetailsTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewResourceCellDetailsTextColor];
+}
+
+- (UIColor *)resourceViewResourceCellPreviewBackgroundColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewResourceCellPreviewBackgroundColor];
+}
+
+- (UIColor *)resourceViewNoResultLabelTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewNoResultLabelTextColor];
+}
+
+- (UIColor *)resourceViewActivityLabelTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewActivityLabelTextColor];
+}
+
+- (UIColor *)resourceViewActivityActivityIndicatorColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewActivityActivityIndicatorColor];
+}
+
+- (UIColor *)resourceViewRefreshControlTintColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewRefreshControlTintColor];
+}
+
+- (UIColor *)resourceViewResourceInfoButtonTintColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewResourceInfoButtonTintColor];
+}
+
+- (UIColor *)resourceViewResourceFavoriteButtonTintColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeResourceViewResourceFavoriteBattonTintColor];
+}
+
+// Report Options
+- (UIColor *)reportOptionsRunReportButtonBackgroundColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeReportOptionsRunReportButtonBackgroundColor];
+}
+
+- (UIColor *)reportOptionsRunReportButtonTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeReportOptionsRunReportButtonTextColor];
+}
+
+- (UIColor *)reportOptionsTitleLabelTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeReportOptionsTitleLabelTextColor];
+}
+
+- (UIColor *)reportOptionsNoResultLabelTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeReportOptionsNoResultLabelTextColor];
+}
+
+// Save Report
+- (UIColor *)saveReportSaveReportButtonBackgroundColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeSaveReportSaveReportButtonBackgroundColor];
+}
+
+- (UIColor *)saveReportSaveReportButtonTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeSaveReportSaveReportButtonTextColor];
+}
+
 
 // Common
 - (UIColor *)viewBackgroundColor
@@ -426,9 +538,9 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeBarsBackgroundColor];
 }
 
-- (UIColor *)barItemsTextColor
+- (UIColor *)barItemsColor
 {
-    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeBarItemsTextColor];
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeBarItemsColor];
 }
 
 - (UIColor *)popupsBackgroundColor
@@ -436,9 +548,19 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemePopupsBackgroundColor];
 }
 
-- (UIColor *) tableViewCellTitleColor
+- (UIColor *)popupsTextColor
 {
-    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeTableViewCellTitleColor];
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemePopupsTextColor];
+}
+
+- (UIColor *) tableViewCellTitleTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeTableViewCellTitleTextColor];
+}
+
+- (UIColor *) tableViewCellDetailsTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeTableViewCellDetailsTextColor];
 }
 
 - (UIColor *) tableViewCellErrorColor
