@@ -45,7 +45,7 @@
     self.textField.enabled = serverOption.editable;
     self.textField.text = serverOption.optionValue;
 
-    UIColor *placeholderColor = [UIColor сolorFromColor:self.textField.textColor differents:0.25 increase:NO];
+    UIColor *placeholderColor = [UIColor сolorFromColor:self.textField.textColor differents:0.25 increase:YES];
     NSDictionary *attributes = @{
                                  NSFontAttributeName : [UIFont systemFontOfSize:[JMUtils isIphone] ? 12 : 15],
                                  NSForegroundColorAttributeName : placeholderColor

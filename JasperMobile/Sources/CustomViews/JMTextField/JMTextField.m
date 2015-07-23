@@ -42,4 +42,17 @@
     self.textColor = enabled ? [[JMThemesManager sharedManager] textFieldEditableTextColor] : [[JMThemesManager sharedManager] textFieldUnEditableTextColor];
 }
 
+- (void)setPlaceholder:(NSString *)placeholder
+{
+    NSDictionary *attributes = @{NSForegroundColorAttributeName:[self.textColor colorWithAlphaComponent: 0.5f]};
+    [self setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:placeholder attributes:attributes]];
+}
+
+- (void)setTextColor:(UIColor *)textColor
+{
+    [super setTextColor:textColor];
+    if (self.placeholder && self.placeholder.length) {
+        self.placeholder = self.placeholder;
+    }
+}
 @end

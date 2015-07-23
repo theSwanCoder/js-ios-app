@@ -58,7 +58,8 @@
     [self.textfields makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] loginViewTextFieldsBackgroundColor]];
     [self.textfields makeObjectsPerformSelector:@selector(setFont:) withObject:[[JMThemesManager sharedManager] loginInputControlsFont]];
 
-    NSDictionary *attributes = @{NSForegroundColorAttributeName:[[JMThemesManager sharedManager] loginViewTextFieldsTextColor]};
+    UIColor *placeholderColor = [[JMThemesManager sharedManager] loginViewTextFieldsTextColor];
+    NSDictionary *attributes = @{NSForegroundColorAttributeName:[placeholderColor colorWithAlphaComponent: 0.5f]};
     self.userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login.username.label", nil) attributes:attributes];
     self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login.password.label", nil) attributes:attributes];
     self.serverProfileTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"settings.item.server", nil) attributes:attributes];
