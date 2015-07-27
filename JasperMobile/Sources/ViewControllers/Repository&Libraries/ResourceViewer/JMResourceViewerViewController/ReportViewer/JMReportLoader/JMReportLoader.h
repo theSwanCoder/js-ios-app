@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
 - (void)exportReportWithFormat:(NSString *)exportFormat;
 - (void)destroyReport;
 - (void)authenticate;
-
+- (void)fitReportWithParameter:(NSString *)fitParameter;
 @end
 
 

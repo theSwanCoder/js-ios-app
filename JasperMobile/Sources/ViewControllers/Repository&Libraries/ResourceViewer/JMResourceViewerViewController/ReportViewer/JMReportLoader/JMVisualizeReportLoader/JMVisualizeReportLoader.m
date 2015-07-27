@@ -216,6 +216,14 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.bridge sendRequest:request];
 }
 
+- (void)fitReportWithParameter:(NSString *)fitParameter
+{
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileReport.fitReport(%@);";
+    request.parametersAsString = [NSString stringWithFormat:@"'%@'", fitParameter];
+    [self.bridge sendRequest:request];
+}
+
 #pragma mark - Private
 - (void)startLoadHTMLWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
@@ -269,6 +277,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         [self handleRefreshDidEndFailedWithParameters:callback.parameters];
     } else if ([callback.type isEqualToString:@"reportOnPageChange"]) {
         [self handleReportOnPageChangeWithParameters:callback.parameters];
+    } else if ([callback.type isEqualToString:@"logMessage"]) {
+        [self handleLoggingWithParameters:callback.parameters];
     }
 }
 
@@ -447,6 +457,14 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
     } else {
         NSLog(@"parse json with error: %@", jsonError.localizedDescription);
+    }
+}
+
+- (void)handleLoggingWithParameters:(NSDictionary *)parameters
+{
+    NSString *messageString = parameters[@"message"];
+    if (messageString) {
+        NSLog(@"Message from visualize: %@", messageString);
     }
 }
 
