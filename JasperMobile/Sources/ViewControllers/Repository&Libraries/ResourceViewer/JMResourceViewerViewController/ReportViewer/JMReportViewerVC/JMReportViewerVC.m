@@ -26,7 +26,7 @@
 #import "JMReportViewerConfigurator.h"
 #import "JMReportSaver.h"
 
-@interface JMReportViewerVC () <JMReportLoaderDelegate>
+@interface JMReportViewerVC () <JMReportLoaderDelegate, UIActionSheetDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, copy) void(^exportCompletion)(NSString *resourcePath);
 @end
@@ -73,6 +73,18 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)fitReport
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:@"Fit width", @"Fit height", @"Fit page", @"Actual Size", @"2x", nil];
+
+    [actionSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem
+                              animated:YES];
+}
+
 #pragma mark - Setups
 - (void)setupLeftBarButtonItems
 {
@@ -81,6 +93,15 @@
     } else {
         [super setupLeftBarButtonItems];
     }
+}
+
+- (void)setupRightBarButtonItems
+{
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"FIT"
+                                                                 style:UIBarButtonItemStyleBordered
+                                                                target:self
+                                                                action:@selector(fitReport)];
+    self.navigationItem.rightBarButtonItem = barButtonItem;
 }
 
 - (void)setupSubviews
@@ -358,6 +379,37 @@
     } else {
         [super preparePreviewForPrintWithCompletion:completion];
     }
+}
+
+#pragma mark - UIActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString *fitParameter = @"container";
+    switch (buttonIndex) {
+        case 0: {
+            fitParameter = @"width";
+            break;
+        }
+        case 1: {
+            fitParameter = @"height";
+            break;
+        }
+        case 2: {
+            fitParameter = @"container";
+            break;
+        }
+        case 3: {
+            fitParameter = @"1";
+            break;
+        }
+        case 4: {
+            fitParameter = @"2";
+            break;
+        }
+        default:
+            break;
+    }
+    [self.reportLoader fitReportWithParameter:fitParameter];
 }
 
 @end
