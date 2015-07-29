@@ -116,6 +116,13 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
     }];
 }
 
+- (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier {
+    if ([extensionPointIdentifier isEqualToString: UIApplicationKeyboardExtensionPointIdentifier]) {
+        return NO;
+    }
+    return YES;
+}
+
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
     NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
