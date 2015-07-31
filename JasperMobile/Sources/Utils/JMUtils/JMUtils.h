@@ -34,6 +34,11 @@
  @author Alexey Gubarev ogubarie@tibco.com
  @since 1.6
  */
+
+#define JMLog(...) jmDebugLog(__VA_ARGS__);
+void jmDebugLog(NSString *format, ...);
+
+
 @interface JMUtils : NSObject
 
 /**

@@ -90,7 +90,6 @@
 		089B15FE1AA756BD0021A915 /* JMMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B157E1AA756BD0021A915 /* JMMenuItem.m */; };
 		089B15FF1AA756BD0021A915 /* JMMenuItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15811AA756BD0021A915 /* JMMenuItemTableViewCell.m */; };
 		089B16001AA756BD0021A915 /* JMMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15841AA756BD0021A915 /* JMMenuViewController.m */; };
-		089B16071AA756BD0021A915 /* JMWebConsole.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B159A1AA756BD0021A915 /* JMWebConsole.m */; };
 		089B161A1AA757EA0021A915 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089B160E1AA757EA0021A915 /* Crashlytics.framework */; };
 		089B161B1AA757EA0021A915 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089B16101AA757EA0021A915 /* Fabric.framework */; };
 		089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16151AA757EA0021A915 /* jaspermobile.js */; };
@@ -366,8 +365,6 @@
 		089B15881AA756BD0021A915 /* JMResourceClientHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceClientHolder.h; sourceTree = "<group>"; };
 		089B15921AA756BD0021A915 /* JMFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFont.h; sourceTree = "<group>"; };
 		089B15931AA756BD0021A915 /* JMFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFont.m; sourceTree = "<group>"; };
-		089B15991AA756BD0021A915 /* JMWebConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMWebConsole.h; sourceTree = "<group>"; };
-		089B159A1AA756BD0021A915 /* JMWebConsole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMWebConsole.m; sourceTree = "<group>"; };
 		089B159B1AA756BD0021A915 /* weakself.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = weakself.h; sourceTree = "<group>"; };
 		089B160E1AA757EA0021A915 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		089B16101AA757EA0021A915 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -1289,7 +1286,6 @@
 				0801DFA31AAF2CFB00DD072C /* JMConstants */,
 				0801DFA61AAF2CFB00DD072C /* JMLocalization */,
 				0801DFA91AAF2CFB00DD072C /* JMUtils */,
-				089B15981AA756BD0021A915 /* JMWebConsole */,
 				089B15911AA756BD0021A915 /* JMFontManager */,
 				089B159B1AA756BD0021A915 /* weakself.h */,
 			);
@@ -1303,15 +1299,6 @@
 				089B15931AA756BD0021A915 /* JMFont.m */,
 			);
 			path = JMFontManager;
-			sourceTree = "<group>";
-		};
-		089B15981AA756BD0021A915 /* JMWebConsole */ = {
-			isa = PBXGroup;
-			children = (
-				089B15991AA756BD0021A915 /* JMWebConsole.h */,
-				089B159A1AA756BD0021A915 /* JMWebConsole.m */,
-			);
-			path = JMWebConsole;
 			sourceTree = "<group>";
 		};
 		089B160D1AA757EA0021A915 /* Crashlytics */ = {
@@ -2288,7 +2275,6 @@
 				08DD183A1B136B8A00856112 /* JMReportInfoViewController.m in Sources */,
 				08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */,
 				08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */,
-				089B16071AA756BD0021A915 /* JMWebConsole.m in Sources */,
 				0801DFAC1AAF2CFB00DD072C /* JMAppUpdater.m in Sources */,
 				0801DF9E1AAF2CC900DD072C /* JMSavedResources.m in Sources */,
 				9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */,
