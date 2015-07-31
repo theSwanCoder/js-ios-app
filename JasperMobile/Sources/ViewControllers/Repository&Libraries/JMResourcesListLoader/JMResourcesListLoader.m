@@ -179,6 +179,8 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                                  if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
                                      [self loadNextPage];
                                  } else {
+                                     self.isLoadingNow = NO;
+                                     [self setNeedsUpdate];
                                      [JMUtils showLoginViewAnimated:YES completion:nil];
                                  }
                              } else {
