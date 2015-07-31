@@ -82,6 +82,13 @@
 
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
 
+    // Initial Scale for ViewPort
+    CGFloat initialScaleViewport = 0.75;
+    if ([JMUtils isIphone]) {
+        initialScaleViewport = 0.25;
+    }
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScaleViewport).stringValue];
+
     // Visualize
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
 
