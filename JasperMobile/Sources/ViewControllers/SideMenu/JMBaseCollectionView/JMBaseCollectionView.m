@@ -46,8 +46,6 @@
     }
 
     [self addSubview: self.contentView];
-
-    NSLog(@"self.subviews: %@", self.subviews);
 }
 
 - (void)setupWithNoResultText:(NSString *)noResult
