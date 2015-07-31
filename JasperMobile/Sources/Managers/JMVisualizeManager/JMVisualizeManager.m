@@ -148,7 +148,7 @@
         NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js?baseUrl=%@", self.restClient.serverProfile.serverUrl, baseURL];
 
         if ([JMUtils isServerVersionUpOrEqual6] && ![JMUtils isServerAmber2]) {
-            visualizePath = [visualizePath stringByAppendingString:@"?_opt=false"];
+            visualizePath = [visualizePath stringByAppendingString:@"&_opt=false"];
         }
         _visualizePath = visualizePath;
     }
