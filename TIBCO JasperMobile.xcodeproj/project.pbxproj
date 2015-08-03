@@ -96,7 +96,6 @@
 		089B161E1AA757EA0021A915 /* jaspermobile_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */; };
 		08B517BE1B15C60400B3F20A /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B517BB1B15C60400B3F20A /* PopoverView.m */; };
 		08B5187B1B18C79400B3F20A /* JMReportSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B5187A1B18C79400B3F20A /* JMReportSaver.m */; };
-		08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C838191A1F5A0D0004BE78 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DB3D931A891640006F9620 /* MessageUI.framework */; };
 		08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18141B13390500856112 /* JMRecentViewsCollectionViewController.m */; };
 		08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD181E1B13426200856112 /* JMRecentViewsListLoader.m */; };
@@ -378,7 +377,6 @@
 		08B5187A1B18C79400B3F20A /* JMReportSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportSaver.m; sourceTree = "<group>"; };
 		08B99F6D1A07CD7700E822B0 /* profiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = profiles.json; sourceTree = "<group>"; };
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		08C838191A1F5A0D0004BE78 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		08DB3D931A891640006F9620 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		08DB677F1A137E370035F58F /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		08DD18131B13390500856112 /* JMRecentViewsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRecentViewsCollectionViewController.h; sourceTree = "<group>"; };
@@ -579,7 +577,6 @@
 				08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */,
 				9348F4E81A35C616006F5677 /* libsqlite3.0.dylib in Frameworks */,
 				93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */,
-				08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */,
 				F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */,
 				0871503E19F1266900C5875E /* libz.dylib in Frameworks */,
 				089B161B1AA757EA0021A915 /* Fabric.framework in Frameworks */,
@@ -2027,7 +2024,6 @@
 				F54C91A01752FAA90009E2BE /* CoreData.framework */,
 				F5663A321752FA5C007978BE /* CFNetwork.framework */,
 				F55CC332174CFFCE00CEB39E /* UIKit.framework */,
-				08C838191A1F5A0D0004BE78 /* StoreKit.framework */,
 				F55CC334174CFFCE00CEB39E /* Foundation.framework */,
 				F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */,
 				3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */,
@@ -2108,6 +2104,14 @@
 					};
 					F55CC32E174CFFCE00CEB39E = {
 						DevelopmentTeam = HD6C6SELJN;
+						SystemCapabilities = {
+							com.apple.DataProtection = {
+								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -2450,7 +2454,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaspersoft Corporation (HD6C6SELJN)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2481,7 +2486,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "TIBCO JasperMobile";
-				PROVISIONING_PROFILE = "19c611e3-5c19-487e-b5de-5ac45a90d20d";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2686,7 +2691,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Vlad Zavadskii (3F9737C33N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2717,7 +2723,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "TIBCO JasperMobile";
-				PROVISIONING_PROFILE = "232047f5-5edf-4a26-bdbd-25cef80232ab";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2735,7 +2741,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaspersoft Corporation (HD6C6SELJN)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2766,7 +2773,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "TIBCO JasperMobile";
-				PROVISIONING_PROFILE = "19c611e3-5c19-487e-b5de-5ac45a90d20d";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
