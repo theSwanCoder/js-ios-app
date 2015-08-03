@@ -70,6 +70,20 @@
 			<key>AttributeValue</key>
 			<string>23252C</string>
 		</dict>
+		<key>user_name_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>FFFFFF</string>
+		</dict>
+		<key>additional_info_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>8F8F8F</string>
+		</dict>
 		<key>text_color</key>
 		<dict>
 			<key>AttributeType</key>

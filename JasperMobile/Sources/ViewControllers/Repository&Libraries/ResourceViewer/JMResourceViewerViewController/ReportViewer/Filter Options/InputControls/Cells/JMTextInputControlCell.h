@@ -33,8 +33,9 @@
 
 
 #import "JMInputControlCell.h"
+#import "JMTextField.h"
 
 @interface JMTextInputControlCell : JMInputControlCell <UITextFieldDelegate>
-@property (nonatomic, weak) IBOutlet UITextField *textField;
+@property (nonatomic, weak) IBOutlet JMTextField *textField;
 
 @end

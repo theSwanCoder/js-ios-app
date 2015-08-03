@@ -60,6 +60,9 @@ NSString * const kJMThemeLoginTryDemoButtonTextColor = @"LoginView.trydemo_butto
 // Menu View
 NSString * const kJMThemeMenuViewBackgroundColor = @"MenuView.background_color";
 NSString * const kJMThemeMenuViewTextColor = @"MenuView.text_color";
+NSString * const kJMThemeMenuViewUserNameTextColor = @"MenuView.user_name_text_color";
+NSString * const kJMThemeMenuViewAdditionalInfoTextColor = @"MenuView.additional_info_text_color";
+
 NSString * const kJMThemeMenuViewSelectedTextColor = @"MenuView.selected_text_color";
 NSString * const kJMThemeMenuViewSeparatorColor = @"MenuView.separator_color";
 
@@ -384,6 +387,16 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
 - (UIColor *)menuViewBackgroundColor
 {
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeMenuViewBackgroundColor];
+}
+
+- (UIColor *)menuViewUserNameTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeMenuViewUserNameTextColor];
+}
+
+- (UIColor *)menuViewAdditionalInfoTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeMenuViewAdditionalInfoTextColor];
 }
 
 - (UIColor *)menuViewTextColor

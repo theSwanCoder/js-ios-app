@@ -1595,10 +1595,9 @@ your business wherever you are.</string>
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="70" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="4uN-am-072">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Xrc-ML-gfI">
                                 <rect key="frame" x="10" y="10" width="580" height="476"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BooleanCell" id="VEm-hm-4HK" customClass="JMBooleanInputControlCell">
                                         <rect key="frame" x="0.0" y="1" width="300" height="70"/>
@@ -1608,13 +1607,13 @@ your business wherever you are.</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kKe-LA-KdH">
-                                                    <rect key="frame" x="10" y="5" width="501" height="60"/>
+                                                    <rect key="frame" x="10" y="5" width="501" height="59"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z2K-QY-Ftv">
-                                                    <rect key="frame" x="521" y="20" width="51" height="31"/>
+                                                    <rect key="frame" x="521" y="19" width="51" height="31"/>
                                                     <connections>
                                                         <action selector="switchChanged:" destination="VEm-hm-4HK" eventType="valueChanged" id="res-xh-nGJ"/>
                                                     </connections>
@@ -1630,7 +1629,6 @@ your business wherever you are.</string>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accessoryView" destination="Z2K-QY-Ftv" id="47I-ih-Rkt"/>
                                             <outlet property="titleLabel" destination="kKe-LA-KdH" id="5qA-US-MeM"/>
                                             <outlet property="uiSwitch" destination="Z2K-QY-Ftv" id="diO-Z6-0JL"/>
                                         </connections>
@@ -1648,8 +1646,9 @@ your business wherever you are.</string>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" translatesAutoresizingMaskIntoConstraints="NO" id="LRc-CW-wq5">
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LRc-CW-wq5" customClass="JMTextField">
                                                     <rect key="frame" x="370" y="7" width="200" height="30"/>
+                                                    <color key="backgroundColor" white="0.95000000000000007" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="5gF-dP-57b"/>
                                                     </constraints>
@@ -1660,7 +1659,7 @@ your business wherever you are.</string>
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="t4n-n4-Knf">
-                                                    <rect key="frame" x="10" y="44" width="560" height="21"/>
+                                                    <rect key="frame" x="10" y="43" width="560" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1700,8 +1699,9 @@ your business wherever you are.</string>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" translatesAutoresizingMaskIntoConstraints="NO" id="KMg-a4-BVK">
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KMg-a4-BVK" customClass="JMTextField">
                                                     <rect key="frame" x="370" y="7" width="200" height="30"/>
+                                                    <color key="backgroundColor" white="0.95000000000000007" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="a5g-Ui-55L"/>
                                                     </constraints>
@@ -1712,7 +1712,7 @@ your business wherever you are.</string>
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="Oy8-Ht-Bhh">
-                                                    <rect key="frame" x="10" y="44" width="560" height="21"/>
+                                                    <rect key="frame" x="10" y="43" width="560" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1752,8 +1752,9 @@ your business wherever you are.</string>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field" translatesAutoresizingMaskIntoConstraints="NO" id="hIO-eJ-TGM">
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hIO-eJ-TGM" customClass="JMTextField">
                                                     <rect key="frame" x="370" y="7" width="200" height="30"/>
+                                                    <color key="backgroundColor" white="0.95000000000000007" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="6nA-yO-9Lh"/>
                                                     </constraints>
@@ -1764,7 +1765,7 @@ your business wherever you are.</string>
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="5cy-Q6-EKX">
-                                                    <rect key="frame" x="10" y="44" width="560" height="21"/>
+                                                    <rect key="frame" x="10" y="43" width="560" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1804,8 +1805,9 @@ your business wherever you are.</string>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field" translatesAutoresizingMaskIntoConstraints="NO" id="iwx-ay-zo5">
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iwx-ay-zo5" customClass="JMTextField">
                                                     <rect key="frame" x="370" y="7" width="200" height="30"/>
+                                                    <color key="backgroundColor" white="0.95000000000000007" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="Sad-6R-BQf"/>
                                                     </constraints>
@@ -1816,7 +1818,7 @@ your business wherever you are.</string>
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="MWf-Ep-pw9">
-                                                    <rect key="frame" x="10" y="44" width="560" height="21"/>
+                                                    <rect key="frame" x="10" y="43" width="560" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1856,8 +1858,9 @@ your business wherever you are.</string>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" background="gray_text_field" translatesAutoresizingMaskIntoConstraints="NO" id="Jtr-hn-e0z">
+                                                <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Jtr-hn-e0z" customClass="JMTextField">
                                                     <rect key="frame" x="370" y="7" width="200" height="30"/>
+                                                    <color key="backgroundColor" white="0.95000000000000007" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="lYV-JO-U51"/>
                                                     </constraints>
@@ -1868,7 +1871,7 @@ your business wherever you are.</string>
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="UFx-OL-3it">
-                                                    <rect key="frame" x="10" y="44" width="560" height="21"/>
+                                                    <rect key="frame" x="10" y="43" width="560" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1918,7 +1921,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="I1Z-wC-hax">
-                                                    <rect key="frame" x="10" y="44" width="527" height="21"/>
+                                                    <rect key="frame" x="10" y="43" width="527" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1969,7 +1972,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="mxM-Ba-4md">
-                                                    <rect key="frame" x="10" y="44" width="527" height="21"/>
+                                                    <rect key="frame" x="10" y="43" width="527" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1998,14 +2001,9 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="4"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <outlet property="dataSource" destination="Udh-pd-kGH" id="PQf-Ca-VYR"/>
-                                    <outlet property="delegate" destination="Udh-pd-kGH" id="xB5-PZ-wyV"/>
+                                    <outlet property="dataSource" destination="Udh-pd-kGH" id="i7A-uT-J3r"/>
+                                    <outlet property="delegate" destination="Udh-pd-kGH" id="0ej-NT-AK5"/>
                                 </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jv1-lW-hJw">
@@ -2031,12 +2029,12 @@ your business wherever you are.</string>
                         </subviews>
                         <color key="backgroundColor" red="0.8980392157" green="0.91372549020000005" blue="0.92156862750000001" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="4uN-am-072" secondAttribute="trailing" constant="10" id="9q9-r6-h4q"/>
-                            <constraint firstItem="jv1-lW-hJw" firstAttribute="top" secondItem="4uN-am-072" secondAttribute="bottom" constant="10" id="N0j-Jr-qbI"/>
+                            <constraint firstItem="Xrc-ML-gfI" firstAttribute="leading" secondItem="fI4-Ub-CqF" secondAttribute="leading" constant="10" id="50S-xf-Zro"/>
                             <constraint firstItem="UyR-xy-u50" firstAttribute="top" secondItem="jv1-lW-hJw" secondAttribute="bottom" constant="10" id="NqG-AR-eY6"/>
                             <constraint firstAttribute="trailing" secondItem="jv1-lW-hJw" secondAttribute="trailing" constant="10" id="UBe-mA-C0w"/>
-                            <constraint firstItem="4uN-am-072" firstAttribute="leading" secondItem="fI4-Ub-CqF" secondAttribute="leading" constant="10" id="akt-xI-YRb"/>
-                            <constraint firstItem="4uN-am-072" firstAttribute="top" secondItem="w9A-z5-0t8" secondAttribute="bottom" constant="10" id="h9F-05-ZSA"/>
+                            <constraint firstItem="Xrc-ML-gfI" firstAttribute="top" secondItem="w9A-z5-0t8" secondAttribute="bottom" constant="10" id="qqX-pi-opN"/>
+                            <constraint firstItem="jv1-lW-hJw" firstAttribute="top" secondItem="Xrc-ML-gfI" secondAttribute="bottom" constant="10" id="v0w-XW-Dee"/>
+                            <constraint firstAttribute="trailing" secondItem="Xrc-ML-gfI" secondAttribute="trailing" constant="10" id="vDi-mV-J4n"/>
                             <constraint firstItem="jv1-lW-hJw" firstAttribute="leading" secondItem="fI4-Ub-CqF" secondAttribute="leading" constant="10" id="zm4-Uw-cZK"/>
                         </constraints>
                     </view>
@@ -2045,7 +2043,7 @@ your business wherever you are.</string>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="runReportButton" destination="jv1-lW-hJw" id="9Ot-wN-wqC"/>
-                        <outlet property="tableView" destination="4uN-am-072" id="7sH-Yf-XtB"/>
+                        <outlet property="tableView" destination="Xrc-ML-gfI" id="Q2u-1B-iwg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BsW-5R-8ZT" userLabel="First Responder" sceneMemberID="firstResponder"/>

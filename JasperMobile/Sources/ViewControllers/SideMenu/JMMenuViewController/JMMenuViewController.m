@@ -68,10 +68,10 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [[JMThemesManager sharedManager] menuViewBackgroundColor];
-    self.userNameLabel.textColor = [[JMThemesManager sharedManager] menuViewSelectedTextColor];
-    self.serverNameLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColor];
-    self.organizationNameLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColor];
-    self.appVersionLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColor];
+    self.userNameLabel.textColor = [[JMThemesManager sharedManager] menuViewUserNameTextColor];
+    self.serverNameLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
+    self.organizationNameLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
+    self.appVersionLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
     
     [self.separatorsCollection makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] menuViewSeparatorColor]];
     

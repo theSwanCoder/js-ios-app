@@ -94,6 +94,10 @@
 // Menu View
 - (UIColor *)menuViewBackgroundColor;
 
+- (UIColor *)menuViewUserNameTextColor;
+
+- (UIColor *)menuViewAdditionalInfoTextColor;
+
 - (UIColor *)menuViewTextColor;
 
 - (UIColor *)menuViewSelectedTextColor;
