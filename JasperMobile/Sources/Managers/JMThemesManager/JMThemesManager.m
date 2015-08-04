@@ -168,7 +168,8 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
     NSDictionary *barButtonTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[self barItemsColor], NSForegroundColorAttributeName, [[JMThemesManager sharedManager] navigationItemsFont], NSFontAttributeName, nil];
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateDisabled];
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateNormal];
-
+    
+    [[UIBarButtonItem appearanceWhenContainedIn: [UISearchBar class], nil] setTitleTextAttributes:nil forState:UIControlStateNormal];
     
     
     

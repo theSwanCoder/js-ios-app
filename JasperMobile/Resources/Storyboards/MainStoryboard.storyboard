@@ -2191,7 +2191,7 @@ your business wherever you are.</string>
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="UqL-KA-4bM">
-                                                    <rect key="frame" x="10" y="37" width="560" height="21"/>
+                                                    <rect key="frame" x="10" y="39" width="560" height="26"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -2199,8 +2199,8 @@ your business wherever you are.</string>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstItem="UqL-KA-4bM" firstAttribute="top" secondItem="pAq-nN-D8W" secondAttribute="bottom" constant="3" id="0wX-HT-a9M"/>
-                                                <constraint firstAttribute="bottom" secondItem="UqL-KA-4bM" secondAttribute="bottom" constant="12" id="1hb-pg-FDE"/>
+                                                <constraint firstItem="UqL-KA-4bM" firstAttribute="top" secondItem="pAq-nN-D8W" secondAttribute="bottom" constant="5" id="0wX-HT-a9M"/>
+                                                <constraint firstAttribute="bottom" secondItem="UqL-KA-4bM" secondAttribute="bottom" constant="5" id="1hb-pg-FDE"/>
                                                 <constraint firstItem="UqL-KA-4bM" firstAttribute="leading" secondItem="zXL-lk-rz8" secondAttribute="leading" constant="10" id="Lnk-7t-ZIQ"/>
                                                 <constraint firstAttribute="trailing" secondItem="UqL-KA-4bM" secondAttribute="trailing" constant="10" id="ToP-ws-81m"/>
                                                 <constraint firstAttribute="trailing" secondItem="pAq-nN-D8W" secondAttribute="trailing" constant="10" id="kuM-37-etm"/>
@@ -2270,7 +2270,6 @@ your business wherever you are.</string>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accessoryView" destination="ucJ-OR-7nk" id="bvG-pg-2xG"/>
                                             <outlet property="pagesTypeSwitch" destination="ucJ-OR-7nk" id="tFk-U7-1mH"/>
                                             <outlet property="titleLabel" destination="oHt-Bu-kgE" id="oqh-RO-bXO"/>
                                         </connections>
@@ -2311,7 +2310,6 @@ your business wherever you are.</string>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="accessoryView" destination="b8v-CJ-xrb" id="Lmp-UO-k6n"/>
                                             <outlet property="textField" destination="b8v-CJ-xrb" id="VYt-fA-ngb"/>
                                             <outlet property="titleLabel" destination="Jji-Js-Kc6" id="EZ2-BX-xeu"/>
                                         </connections>

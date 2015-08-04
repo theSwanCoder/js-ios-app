@@ -56,6 +56,8 @@
     txfSearchField.backgroundColor = self.tableView.backgroundColor;
     [txfSearchField setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor darkTextColor]}];
     self.icSearchBar.barTintColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+    
+    self.icSearchBar.tintColor = [UIColor darkGrayColor];
     [self.icSearchBar setBackgroundImage:[UIImage new]];
     self.icSearchBar.placeholder = JMCustomLocalizedString(@"report.viewer.options.search.value.placeholder", nil);
 }

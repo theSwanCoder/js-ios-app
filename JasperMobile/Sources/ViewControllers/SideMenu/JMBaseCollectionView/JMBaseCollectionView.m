@@ -50,6 +50,7 @@
                           metrics:nil
                           views:@{@"contentView": self.contentView}]];
     
+    self.searchBar.tintColor = [[JMThemesManager sharedManager] barItemsColor];
     self.searchBar.placeholder = JMCustomLocalizedString(@"resources.search.placeholder", nil);
 }
 

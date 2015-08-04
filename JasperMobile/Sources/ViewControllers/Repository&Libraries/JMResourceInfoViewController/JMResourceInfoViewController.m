@@ -305,8 +305,10 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
                                          duration:(NSTimeInterval)duration
 {
-    [self.popoverView dismiss:NO];
-    [self showAvailableActions];
+    if (self.popoverView) {
+        [self.popoverView dismiss:NO];
+        [self showAvailableActions];
+    }
 }
 
 @end

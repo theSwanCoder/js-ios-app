@@ -168,11 +168,12 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 
 - (void)deleteServerProfileForCell:(JMServerCollectionViewCell *)cell
 {
+    JMServerProfile *serverProfile = cell.serverProfile;
     [[UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation"
                                   message:@"servers.profile.delete.message"
                                completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
                                    if (alertView.cancelButtonIndex != buttonIndex) {
-                                       [JMServerProfile deleteServerProfile:cell.serverProfile];
+                                       [JMServerProfile deleteServerProfile:serverProfile];
                                        [self refreshDatasource];
                                    }
                                } @weakselfend
