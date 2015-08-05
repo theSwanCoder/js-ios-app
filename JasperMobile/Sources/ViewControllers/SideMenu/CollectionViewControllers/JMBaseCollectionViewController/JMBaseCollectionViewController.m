@@ -532,6 +532,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 #pragma mark - JMResourceCollectionViewCellDelegate
 - (void)infoButtonDidTappedOnCell:(JMResourceCollectionViewCell *)cell
 {
+    if ([self isMenuShown]) {
+        [self closeMenu];
+    }
     [self showResourceInfoViewControllerWithResourceLookup:cell.resourceLookup];
 }
 
