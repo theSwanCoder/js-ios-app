@@ -77,4 +77,28 @@
     return [UIImage colorizeImage:self color:theColor];
 }
 
+- (UIImage *)cropedImageForRect:(CGRect)rect
+{
+    CGFloat imageWidth = self.size.width;
+    
+    CGFloat rectWidth = CGRectGetWidth(rect);
+    CGFloat rectHeight = CGRectGetHeight(rect);
+    
+    CGFloat croppedOriginX = 0;
+    CGFloat croppedOriginY = 0;
+    CGFloat croppedWidth = imageWidth; // always equal width of image
+    CGFloat croppedHeight = (imageWidth/rectWidth) * rectHeight; // changed to fill rect
+    
+    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
+    CGRect croppedRect = CGRectMake(croppedOriginX,
+                                    croppedOriginY,
+                                    croppedWidth * scaleFactor,
+                                    croppedHeight *scaleFactor);
+    
+    CGImageRef imageRef = CGImageCreateWithImageInRect([self CGImage], croppedRect);
+    UIImage *img = [UIImage imageWithCGImage:imageRef scale:scaleFactor orientation:UIImageOrientationUp];
+    CGImageRelease(imageRef);
+    return img;
+}
+
 @end

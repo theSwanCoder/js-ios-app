@@ -67,10 +67,4 @@
     self.titleLabel.textColor = [textColor colorWithAlphaComponent:enabled ? 1.0f : 0.5f];
 }
 
-- (BOOL)isValidData
-{
-    [self updateDisplayingOfErrorMessage];
-    return ![self.inputControlDescriptor errorString];
-}
-
 @end
