@@ -408,7 +408,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     CGFloat titleViewTopConstantMinValue = -70;
     if (velocity.y < 0) { // move up
 
-        if (self.titleViewTopConstraint.constant < titleViewTopConstantMinValue || fabsf(velocity.y) > kDefaultMinVelocity ) {
+        if (self.titleViewTopConstraint.constant < titleViewTopConstantMinValue || fabs(velocity.y) > kDefaultMinVelocity ) {
             // move to next page
             [self forwardToPage:JMOnboardIntroPageStayConnected animation:YES];
         } else {
@@ -466,14 +466,14 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 
     if (velocity.y < 0) { // move up
 
-        if ( self.homeScreenImageTopConstraint.constant > homeScreenImageTopConstantMaxValue - 1 || (fabsf(velocity.y) > kDefaultMinVelocity) ) {
+        if ( self.homeScreenImageTopConstraint.constant > homeScreenImageTopConstantMaxValue - 1 || (fabs(velocity.y) > kDefaultMinVelocity) ) {
             [self forwardToPage:JMOnboardIntroPageInstanceAccess animation:YES];
         } else {
             [self backToPage:JMOnboardIntroPageStayConnected animation:YES];
         }
     } else { // move down
 
-        if ( self.titleViewTopConstraint.constant > titleViewTopConstantMaxValue || fabsf(velocity.y) > kDefaultMinVelocity ) {
+        if ( self.titleViewTopConstraint.constant > titleViewTopConstantMaxValue || fabs(velocity.y) > kDefaultMinVelocity ) {
             [self forwardToPage:JMOnboardIntroPageWelcome animation:YES];
         } else {
             [self backToPage:JMOnboardIntroPageStayConnected animation:YES];
@@ -522,13 +522,13 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 {
     CGFloat maxYValue = 330;
     if (velocity.y < 0) { // move up
-        if ( self.serverScreenImageTopConstraint.constant > maxYValue || fabsf(velocity.y) > kDefaultMinVelocity ) {
+        if ( self.serverScreenImageTopConstraint.constant > maxYValue || fabs(velocity.y) > kDefaultMinVelocity ) {
             [self forwardToPage:JMOnboardIntroPageSeemlessIntegration animation:YES];
         } else {
             [self backToPage:JMOnboardIntroPageInstanceAccess animation:YES];
         }
     } else { // move down
-        if ( self.homeScreenImageTopConstraint.constant > maxYValue ||  fabsf(velocity.y) > kDefaultMinVelocity ) {
+        if ( self.homeScreenImageTopConstraint.constant > maxYValue ||  fabs(velocity.y) > kDefaultMinVelocity ) {
             [self forwardToPage:JMOnboardIntroPageStayConnected animation:YES];
         } else {
             [self backToPage:JMOnboardIntroPageInstanceAccess animation:YES];
@@ -575,7 +575,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     if (velocity.y < 0) { // move up
         [self backToPage:JMOnboardIntroPageSeemlessIntegration animation:YES];
     } else { // move down
-        if (self.serverScreenImageTopConstraint.constant > serverScreenImageTopConstantMaxValue - 1 || fabsf(velocity.y) > kDefaultMinVelocity ) {
+        if (self.serverScreenImageTopConstraint.constant > serverScreenImageTopConstantMaxValue - 1 || fabs(velocity.y) > kDefaultMinVelocity ) {
             [self forwardToPage:JMOnboardIntroPageInstanceAccess animation:YES];
         } else {
             // restore current state

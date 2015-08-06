@@ -62,6 +62,7 @@
     self.pickerView.dataSource = self;
     
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
     self.activityIndicator.hidesWhenStopped = NO;
     self.activityIndicator.color = [UIColor darkGrayColor];
     
