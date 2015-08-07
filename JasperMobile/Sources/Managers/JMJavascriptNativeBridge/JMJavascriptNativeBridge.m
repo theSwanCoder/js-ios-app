@@ -95,10 +95,12 @@
     }
 
     if ([self isExternalRequest:request]) {
-        if ([self.delegate respondsToSelector:@selector(javascriptNativeBridge:didReceiveExternalRequest:)]) {
-            [self.delegate javascriptNativeBridge:self didReceiveExternalRequest:request];
+        BOOL shouldStartLoad = NO;
+
+        if ([self.delegate respondsToSelector:@selector(javascriptNativeBridge:shouldLoadExternalRequest:)]) {
+            shouldStartLoad = [self.delegate javascriptNativeBridge:self shouldLoadExternalRequest:request];
         }
-        return NO;
+        return shouldStartLoad;
     }
 
     NSString *callback = @"http://jaspermobile.callback/";
