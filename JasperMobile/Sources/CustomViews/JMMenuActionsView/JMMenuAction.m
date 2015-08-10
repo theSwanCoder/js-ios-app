@@ -81,6 +81,8 @@
             return @"action.title.print";
         case JMMenuActionsViewAction_OpenIn:
             return @"action.title.openIn";
+        case JMMenuActionsViewAction_ExternalDisplay:
+            return @"action.title.externalDisplay";
     }
 }
 
@@ -119,6 +121,8 @@
             return @"print_action";
         case JMMenuActionsViewAction_OpenIn:
             return @"open_in_new";
+        case JMMenuActionsViewAction_ExternalDisplay:
+            return @"print_action";
     }
 }
 
