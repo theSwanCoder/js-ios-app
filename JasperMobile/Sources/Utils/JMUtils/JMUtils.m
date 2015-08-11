@@ -39,6 +39,19 @@
 #import <Crashlytics/Crashlytics.h>
 
 
+void jmDebugLog(NSString *format, ...) {
+#ifndef __RELEASE__
+    va_list argumentList;
+    va_start(argumentList, format);
+    NSMutableString * message = [[NSMutableString alloc] initWithFormat:format
+                                                              arguments:argumentList];
+    
+    [message insertString:@"<JM Debug> " atIndex:0]; //
+    NSLogv(message, argumentList); // Originally NSLog is a wrapper around NSLogv.
+    va_end(argumentList);
+#endif
+}
+
 @implementation JMUtils
 
 #define kJMNameMin 1

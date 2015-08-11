@@ -187,7 +187,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     NSDictionary *cachedPages = [self.report cachedReportPages];
     NSString *HTMLString = cachedPages[@(page)];
     if (HTMLString && self.loadPageCompletionBlock) { // show cached page
-        NSLog(@"load cached page");
+        JMLog(@"load cached page");
         [self.report updateHTMLString:HTMLString baseURLSring:self.report.baseURLString];
         [self startLoadReportHTML];
         self.loadPageCompletionBlock(YES, nil);

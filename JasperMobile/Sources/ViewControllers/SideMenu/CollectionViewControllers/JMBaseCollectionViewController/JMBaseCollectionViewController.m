@@ -579,8 +579,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    NSLog(@"search text %@", searchText);
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    JMLog(@"search text %@", searchText);
 }
 
 #pragma mark - JMPopupDelegate

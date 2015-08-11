@@ -149,16 +149,16 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 {
     switch (result) {
         case MFMailComposeResultCancelled:
-            NSLog(@"Mail cancelled");
+            JMLog(@"Mail cancelled");
             break;
         case MFMailComposeResultSaved:
-            NSLog(@"Mail saved");
+            JMLog(@"Mail saved");
             break;
         case MFMailComposeResultSent:
-            NSLog(@"Mail sent");
+            JMLog(@"Mail sent");
             break;
         case MFMailComposeResultFailed:
-            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            JMLog(@"Mail sent failure: %@", [error localizedDescription]);
             break;
         default:
             break;

@@ -235,7 +235,7 @@ static void * JMMigrationManagerContext = &JMMigrationManagerContext;
 {
       if (context == JMMigrationManagerContext) {
           if ([keyPath isEqualToString:@"migrationProgress"]) {
-              NSLog(@"progress: %f", [object migrationProgress]);
+              JMLog(@"progress: %f", [object migrationProgress]);
               if ([self.delegate respondsToSelector:@selector(migrationManager:migrationProgress:)]) {
                   [self.delegate migrationManager:self migrationProgress:[(NSMigrationManager *)object migrationProgress]];
               }

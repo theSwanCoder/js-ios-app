@@ -59,7 +59,7 @@
 #pragma mark - LifeCycle
 -(void)dealloc
 {
-    NSLog(@"%@ -%@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"%@ -%@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

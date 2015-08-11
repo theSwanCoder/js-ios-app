@@ -275,9 +275,9 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             }
         }
     } else if (gestureRecognizer.state == UIGestureRecognizerStateCancelled) {
-        NSLog(@"cancelled state");
+        JMLog(@"cancelled state");
     } else if (gestureRecognizer.state == UIGestureRecognizerStateFailed) {
-        NSLog(@"failed state");
+        JMLog(@"failed state");
     }
 }
 
