@@ -62,8 +62,8 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
-    self.tableView.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+    self.tableView.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 0.01f)];
     
@@ -463,7 +463,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 - (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle
 {
     // detect backButton text width to truncate with '...'
-    NSDictionary *textAttributes = @{NSFontAttributeName : [JMFont navigationBarTitleFont]};
+    NSDictionary *textAttributes = @{NSFontAttributeName : [[JMThemesManager sharedManager] navigationBarTitleFont]};
     CGSize titleTextSize = [self.title sizeWithAttributes:textAttributes];
     CGFloat titleTextWidth = ceil(titleTextSize.width);
     CGSize backItemTextSize = [backButtonTitle sizeWithAttributes:textAttributes];

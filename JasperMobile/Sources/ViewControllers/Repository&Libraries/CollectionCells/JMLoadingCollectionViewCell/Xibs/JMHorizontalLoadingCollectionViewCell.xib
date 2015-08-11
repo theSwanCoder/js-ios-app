@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,34 +14,40 @@
                 <rect key="frame" x="0.0" y="0.0" width="300" height="80"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="U0e-vQ-E9V" userLabel="Label - Loading,  Please Wait...">
-                        <rect key="frame" x="51" y="10" width="240" height="60"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="U0e-vQ-E9V" userLabel="Label - Loading,  Please Wait...">
+                        <rect key="frame" x="57" y="10" width="233" height="60"/>
                         <string key="text">Loading, 
 Please Wait...</string>
                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <activityIndicatorView opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" id="3qA-8g-TAg">
-                        <rect key="frame" x="6" y="21" width="37" height="37"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                    <activityIndicatorView opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="3qA-8g-TAg">
+                        <rect key="frame" x="10" y="21" width="37" height="37"/>
                         <color key="color" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     </activityIndicatorView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="centerY" secondItem="3qA-8g-TAg" secondAttribute="centerY" id="Aya-Mu-63D"/>
+                <constraint firstItem="U0e-vQ-E9V" firstAttribute="top" secondItem="UWd-66-UM5" secondAttribute="top" constant="10" id="JT9-J8-9FE"/>
+                <constraint firstItem="3qA-8g-TAg" firstAttribute="leading" secondItem="UWd-66-UM5" secondAttribute="leading" constant="10" id="RIE-74-M4p">
+                    <variation key="heightClass=regular-widthClass=regular" constant="25"/>
+                </constraint>
+                <constraint firstAttribute="bottom" secondItem="U0e-vQ-E9V" secondAttribute="bottom" constant="10" id="cfw-Ci-cA3"/>
+                <constraint firstItem="U0e-vQ-E9V" firstAttribute="leading" secondItem="3qA-8g-TAg" secondAttribute="trailing" constant="10" id="dHL-K4-rUe"/>
+                <constraint firstAttribute="trailing" secondItem="U0e-vQ-E9V" secondAttribute="trailing" constant="10" id="ojB-VU-2J3">
+                    <variation key="heightClass=regular-widthClass=regular" constant="25"/>
+                </constraint>
+            </constraints>
             <size key="customSize" width="300" height="80"/>
             <connections>
+                <outlet property="activityIndicator" destination="3qA-8g-TAg" id="WQe-Nk-DCz"/>
                 <outlet property="titleLabel" destination="U0e-vQ-E9V" id="WLO-vu-nzk"/>
             </connections>
             <point key="canvasLocation" x="140" y="280"/>
         </collectionViewCell>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

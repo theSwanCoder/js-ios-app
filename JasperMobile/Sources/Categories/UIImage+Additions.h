@@ -40,5 +40,6 @@
 
 - (UIImage *)colorizeImageWithColor:(id)theColor;
 
+- (UIImage *)cropedImageForRect:(CGRect)rect;
 
 @end

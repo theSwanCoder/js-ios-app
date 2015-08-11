@@ -11,8 +11,6 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-    #import <SystemConfiguration/SystemConfiguration.h>
-    #import <MobileCoreServices/MobileCoreServices.h>
 
     #import "JaspersoftSDK.h"
 
@@ -24,7 +22,7 @@
     #import "weakself.h"
     #import "JMUtils.h"
     #import "JMCoreDataManager.h"
-    #import "JMFont.h"
+    #import "JMThemesManager.h"
     #import "JMLocalization.h"
     #import "UIAlertView+Additions.h"
 

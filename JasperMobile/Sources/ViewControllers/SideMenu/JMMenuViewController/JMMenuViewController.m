@@ -46,6 +46,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *organizationNameLabel;
 @property (strong, nonatomic) NSArray *menuItems;
 @property (weak, nonatomic) IBOutlet UILabel *appVersionLabel;
+
+@property (strong, nonatomic) IBOutletCollection(UIView) NSArray *separatorsCollection;
+
 @end
 
 @implementation JMMenuViewController
@@ -56,13 +59,21 @@
 #pragma mark - LifeCycle
 -(void)dealloc
 {
-    NSLog(@"%@ -%@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"%@ -%@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.view.backgroundColor = [[JMThemesManager sharedManager] menuViewBackgroundColor];
+    self.userNameLabel.textColor = [[JMThemesManager sharedManager] menuViewUserNameTextColor];
+    self.serverNameLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
+    self.organizationNameLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
+    self.appVersionLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
+    
+    [self.separatorsCollection makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] menuViewSeparatorColor]];
     
     // version and build
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -143,6 +154,10 @@
                 [self.tableView reloadData];
                 if([item vcIdentifierForSelectedItem]) {
                     UINavigationController *nvc = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+                    UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonTapped:)];
+                    nvc.topViewController.navigationItem.leftBarButtonItem = menuItem;
+                    [nvc.topViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+
                     self.revealViewController.frontViewController = nvc;
                 }
             }
@@ -174,6 +189,14 @@
     }
     return nil;
 }
+
+#pragma mark - Actions
+- (void)menuButtonTapped:(id)sender
+{
+    [self.revealViewController.frontViewController.view endEditing:YES];
+    [self.revealViewController revealToggle:sender];
+}
+
 
 #pragma mark - Helpers
 - (NSArray *)createMenuItems

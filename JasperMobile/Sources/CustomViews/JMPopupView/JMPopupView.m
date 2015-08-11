@@ -51,7 +51,7 @@ static NSMutableArray* visiblePopupsArray = nil;
         
         _backGroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kJMPopupViewDefaultWidth, kJMPopupViewButtonsHeight)];
         _backGroundView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin |UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
-        _backGroundView.backgroundColor = [kJMSearchBarBackgroundColor colorWithAlphaComponent:0.98f];
+        _backGroundView.backgroundColor = [[[JMThemesManager sharedManager] popupsBackgroundColor] colorWithAlphaComponent:0.98f];
         _backGroundView.layer.borderColor = [UIColor whiteColor].CGColor;
         _backGroundView.layer.borderWidth = 1.f;
         _backGroundView.layer.masksToBounds = NO;
@@ -315,7 +315,13 @@ static NSMutableArray* visiblePopupsArray = nil;
     CGContextRef context = UIGraphicsGetCurrentContext();
     size_t locationsCount = 2;
     CGFloat locations[2] = {0.0f, 1.0f};
-    CGFloat colors[8] = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.75f};
+    UIColor *popupColor = [[JMThemesManager sharedManager] popupsBackgroundColor];
+    
+    CGFloat colors[8] = {0.0f};
+    [popupColor getRed:&colors[0] green:&colors[1] blue:&colors[2] alpha:nil];
+    [popupColor getRed:&colors[4] green:&colors[5] blue:&colors[6] alpha:nil];
+    colors[7] = 0.75f;
+    
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, colors, locations, locationsCount);
     CGColorSpaceRelease(colorSpace);

@@ -30,26 +30,43 @@
 #import "JMBaseCollectionViewController.h"
 #import "JMResourceCollectionViewCell.h"
 #import "JMLoadingCollectionViewCell.h"
-#import "JMFont.h"
 #import "JMLocalization.h"
 
 @implementation JMBaseCollectionView
 
 -(void)awakeFromNib {
     [[NSBundle mainBundle] loadNibNamed:@"JMBaseCollectionView" owner:self options:nil];
-    [self.contentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self addSubview: self.contentView];
+    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self addConstraints:[NSLayoutConstraint
+                          constraintsWithVisualFormat:@"H:|-0-[contentView]-0-|"
+                          options:NSLayoutFormatAlignAllLeading
+                          metrics:nil
+                          views:@{@"contentView": self.contentView}]];
+    [self addConstraints:[NSLayoutConstraint
+                          constraintsWithVisualFormat:@"V:|-0-[contentView]-0-|"
+                          options:NSLayoutFormatAlignAllTop
+                          metrics:nil
+                          views:@{@"contentView": self.contentView}]];
+    
+    self.searchBar.tintColor = [[JMThemesManager sharedManager] barItemsColor];
+    self.searchBar.placeholder = JMCustomLocalizedString(@"resources.search.placeholder", nil);
 }
 
 - (void)setupWithNoResultText:(NSString *)noResult
 {
-    self.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
+    self.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
     
     self.activityViewTitleLabel.text = JMCustomLocalizedString(@"resources.loading.msg", nil);
     self.noResultsViewTitleLabel.text = noResult;
     
-    self.activityViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
-    self.noResultsViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
+    self.activityViewTitleLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
+    self.noResultsViewTitleLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
+    
+    self.activityViewTitleLabel.textColor = [[JMThemesManager sharedManager] resourceViewActivityLabelTextColor];
+    self.noResultsViewTitleLabel.textColor = [[JMThemesManager sharedManager] resourceViewNoResultLabelTextColor];
+    self.activityIndicator.color = [[JMThemesManager sharedManager] resourceViewActivityActivityIndicatorColor];
     
     [self setupCollectionView];
 }
@@ -65,20 +82,10 @@
     }
     
     self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.tintColor = [UIColor whiteColor];
+    self.refreshControl.tintColor = [[JMThemesManager sharedManager] resourceViewRefreshControlTintColor];
     
     [self.collectionView addSubview:self.refreshControl];
     self.collectionView.alwaysBounceVertical = YES;
-}
-
-- (UISearchBar *)searchBar
-{
-    if (!_searchBar) {
-        _searchBar = [[UISearchBar alloc] initWithFrame:self.searchBarPlaceholder.bounds];
-        _searchBar.searchBarStyle = UISearchBarStyleMinimal;
-        _searchBar.placeholder = JMCustomLocalizedString(@"resources.search.placeholder", nil);
-    }
-    return _searchBar;
 }
 
 #pragma mark - Utils
@@ -93,7 +100,6 @@
             return nil;
     }
 }
-
 
 - (NSString *)loadingCellForRepresentationType:(JMResourcesRepresentationType)type
 {

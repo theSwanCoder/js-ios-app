@@ -34,13 +34,22 @@
 
 @implementation JMServerCollectionViewCell
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.titleLabel.font = [[JMThemesManager sharedManager] collectionResourceNameFont];
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] serverProfileTitleTextColor];
+    self.urlLabel.font = [[JMThemesManager sharedManager] collectionResourceDescriptionFont];
+    self.urlLabel.textColor = [[JMThemesManager sharedManager] serverProfileDetailsTextColor];
+    
+    self.titleImage.backgroundColor = [[JMThemesManager sharedManager] serverProfilePreviewBackgroundColor];
+}
+
 - (void)setServerProfile:(JMServerProfile *)serverProfile
 {
     _serverProfile = serverProfile;
     self.titleLabel.text = serverProfile.alias;
     self.urlLabel.text = serverProfile.serverUrl;
-    
-    self.titleImage.backgroundColor = kJMMasterResourceCellSelectedBackgroundColor;
 }
 
 - (void) cloneServerProfile:(id)sender

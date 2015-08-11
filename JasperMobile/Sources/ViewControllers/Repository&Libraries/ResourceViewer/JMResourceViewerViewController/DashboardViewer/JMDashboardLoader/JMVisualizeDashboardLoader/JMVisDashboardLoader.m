@@ -129,10 +129,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - Helpers
 - (void)startLoadHTMLWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    NSLog(@"visuzalise.js did start load");
+    JMLog(@"visuzalise.js did start load");
     [self.visualizeManager loadVisualizeJSWithCompletion:@weakself(^(BOOL success, NSError *error)){
             if (success) {
-                NSLog(@"visuzalise.js did end load");
+                JMLog(@"visuzalise.js did end load");
                 NSString *baseURLString = self.restClient.serverProfile.serverUrl;
                 NSString *htmlString = [self.visualizeManager htmlStringForDashboard];
                 [self.bridge startLoadHTMLString:htmlString baseURL:[NSURL URLWithString:baseURLString]];
@@ -142,7 +142,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                 }
             } else {
                 // TODO: handle this error
-                NSLog(@"Error loading visualize.js");
+                JMLog(@"Error loading visualize.js");
                 // TODO: add error code
                 NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
                                                      code:0
@@ -157,7 +157,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - JMJavascriptNativeBridgeDelegate
 - (void)javascriptNativeBridge:(id <JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback
 {
-    NSLog(@"callback parameters: %@", callback.parameters[@"parameters"]);
+    JMLog(@"callback parameters: %@", callback.parameters[@"parameters"]);
     if ([callback.type isEqualToString:@"onScriptLoaded"]) {
         [self handleOnScriptLoaded];
     } else if ([callback.type isEqualToString:@"onMaximizeStart"]) {
@@ -233,7 +233,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 //                errorType = JMDashboardLoaderErrorTypeAuthentification;
 //            }
         } else {
-            NSLog(@"objects: %@", result.objects);
+            JMLog(@"objects: %@", result.objects);
             JSResourceLookup *resourceLookup = [result.objects firstObject];
             if (resourceLookup) {
                 resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;

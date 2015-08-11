@@ -20,19 +20,39 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+
 //
-//  JMWebConsole.h
+//  JMTextField.h
 //  TIBCO JasperMobile
 //
 
-/**
- @since 1.9.1
- */
+#import "JMTextField.h"
 
-@interface JMWebConsole : NSURLProtocol
+@implementation JMTextField
 
-+ (void) enable;
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.backgroundColor = [[JMThemesManager sharedManager] textFieldBackgroundColor];
+}
 
-+ (void) disable;
+- (void)setEnabled:(BOOL)enabled
+{
+    [super setEnabled:enabled];
+    self.textColor = enabled ? [[JMThemesManager sharedManager] textFieldEditableTextColor] : [[JMThemesManager sharedManager] textFieldUnEditableTextColor];
+}
 
+- (void)setPlaceholder:(NSString *)placeholder
+{
+    NSDictionary *attributes = @{NSForegroundColorAttributeName:[self.textColor colorWithAlphaComponent: 0.5f]};
+    [self setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:placeholder attributes:attributes]];
+}
+
+- (void)setTextColor:(UIColor *)textColor
+{
+    [super setTextColor:textColor];
+    if (self.placeholder && self.placeholder.length) {
+        self.placeholder = self.placeholder;
+    }
+}
 @end

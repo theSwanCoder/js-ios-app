@@ -46,6 +46,14 @@
     [self showPrivacyPolicy];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.webView.isLoading) {
+        [self.webView stopLoading];
+    }
+}
+
 - (void)dealloc
 {
     [NSURLProtocol unregisterClass:[RNCachingURLProtocol class]];

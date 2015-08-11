@@ -28,8 +28,14 @@
 
 #import "JMMenuItemTableViewCell.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "UIColor+RGBComponent.h"
 @implementation JMMenuItemTableViewCell
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.textLabel.font = [[JMThemesManager sharedManager] menuItemTitleFont];
+}
 
 #pragma mark - LifeCycle
 -(void)setFrame:(CGRect)frame
@@ -39,16 +45,15 @@
     // selected color
     UIView *selectedBackgroundView = [UIView new];
     selectedBackgroundView.frame = self.bounds;
-    UIColor *darkOp = [UIColor colorWithRed:22/255.f green:23/255.f blue:27/255.f alpha:1.0f];
-    UIColor *lightOp = [UIColor colorWithRed:22/255.f green:23/255.f blue:27/255.f alpha:0.0f];
+    UIColor *selectedMenuColor = [UIColor сolorFromColor:[[JMThemesManager sharedManager] menuViewBackgroundColor] differents:0.25 increase:YES];
+    
     CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.colors = @[(id)darkOp.CGColor, (id)lightOp.CGColor];
+    gradient.colors = @[(id)[selectedMenuColor colorWithAlphaComponent:1.0f].CGColor, (id)[selectedMenuColor colorWithAlphaComponent:0.0f].CGColor];
     gradient.frame = selectedBackgroundView.frame;
     [gradient setStartPoint:CGPointMake(0.0, 0.5)];
     [gradient setEndPoint:CGPointMake(1.0, 0.5)];
     [selectedBackgroundView.layer insertSublayer:gradient atIndex:0];
     
-    //selectedBackgroundView.backgroundColor = [UIColor colorWithRed:22/255.f green:23/255.f blue:27/255.f alpha:1];
     self.selectedBackgroundView = selectedBackgroundView;
 }
 
@@ -56,10 +61,10 @@
 {
     super.selected = selected;
     if (selected) {
-        self.textLabel.textColor = [UIColor whiteColor];
+        self.textLabel.textColor = [[JMThemesManager sharedManager] menuViewSelectedTextColor];
         self.imageView.image = self.menuItem.selectedItemIcon;
     } else {
-        self.textLabel.textColor = [UIColor grayColor];
+        self.textLabel.textColor = [[JMThemesManager sharedManager] menuViewTextColor];
         self.imageView.image = self.menuItem.itemIcon;
     }
 }

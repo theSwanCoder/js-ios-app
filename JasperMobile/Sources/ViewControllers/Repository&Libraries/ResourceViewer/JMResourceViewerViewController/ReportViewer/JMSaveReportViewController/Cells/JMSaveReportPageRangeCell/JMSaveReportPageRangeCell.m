@@ -31,10 +31,11 @@
 */
 
 #import "JMSaveReportPageRangeCell.h"
+#import "JMTextField.h"
 
 @interface JMSaveReportPageRangeCell() <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 @property (weak, nonatomic) UIPickerView *pickerView;
-@property (nonatomic, weak) IBOutlet UITextField *textField;
+@property (nonatomic, weak) IBOutlet JMTextField *textField;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @property (nonatomic, assign) NSRange availableRange;
@@ -47,7 +48,9 @@
 - (void)awakeFromNib
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
+    
+    self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
 
     UIPickerView *pickerView = [UIPickerView new];
 
@@ -59,19 +62,20 @@
     self.pickerView.dataSource = self;
     
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
     self.activityIndicator.hidesWhenStopped = NO;
     self.activityIndicator.color = [UIColor darkGrayColor];
     
     [self.textField addSubview:self.activityIndicator];
-    self.activityIndicator.center = CGPointMake(CGRectGetMidX(self.textField.bounds), CGRectGetMidY(self.textField.bounds));
+    
+    [self.textField addConstraint:[NSLayoutConstraint constraintWithItem:self.textField attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.activityIndicator attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    [self.textField addConstraint:[NSLayoutConstraint constraintWithItem:self.textField attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.activityIndicator attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
 }
 
 - (void)setEditable:(BOOL)editable
 {
     _editable = editable;
     self.textField.enabled = editable;
-    self.textField.textColor = editable ? [UIColor darkTextColor] : [UIColor lightGrayColor];
 }
 
 #pragma mark - Custom Setters

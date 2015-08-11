@@ -33,5 +33,4 @@
 
 #import "JMEditabledViewController.h"
 @interface JMSettingsViewController : JMEditabledViewController 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *menuButton;
 @end

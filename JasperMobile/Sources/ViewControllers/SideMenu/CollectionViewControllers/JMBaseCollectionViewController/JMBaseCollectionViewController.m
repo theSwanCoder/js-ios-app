@@ -80,7 +80,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     baseCollectionView.searchBar.delegate = self;
 
     [self addObservers];
-    [self setupMenu];
     
     self.isScrollToTop = NO;
     
@@ -174,13 +173,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 }
 
 #pragma mark - Actions
-- (void)menuButtonTapped:(id)sender
-{
-    [self.view endEditing:YES];
-    SWRevealViewController *revealViewController = self.revealViewController;
-    [revealViewController revealToggle:sender];
-}
-
 - (void)sortByButtonTapped:(id)sender
 {
     JMListOptionsPopupView *sortPopup = [[JMListOptionsPopupView alloc] initWithDelegate:self
@@ -349,17 +341,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     }
 }
 
-#pragma mark - Menu setup
-- (void)setupMenu
-{
-    SWRevealViewController *revealViewController = self.revealViewController;
-    if (revealViewController) {
-        [self.menuButton setTarget:self];
-        [self.menuButton setAction:@selector(menuButtonTapped:)];
-        [self.view addGestureRecognizer:revealViewController.panGestureRecognizer];
-    }
-}
-
+#pragma mark - Setup Navigation Items
 - (void) showNavigationItems
 {
     NSMutableArray *navBarItems = [NSMutableArray array];
@@ -386,14 +368,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
     }
     [navBarItems addObject:[self resourceRepresentationItem]];
-    
-    JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-    UIView *searchContainerView = [[UIView alloc] initWithFrame:baseCollectionView.searchBar.bounds];
-    searchContainerView.backgroundColor = [UIColor clearColor];
-    [searchContainerView addSubview: baseCollectionView.searchBar];
-    
-    baseCollectionView.searchBar.autoresizingMask = searchContainerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    baseCollectionView.searchBarPlaceholder.topItem.titleView = searchContainerView;
     self.navigationItem.rightBarButtonItems = navBarItems;
 }
 
@@ -535,17 +509,18 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
-    
+
     CGFloat itemHeight = 80.f;
     CGFloat itemWidth = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
     
     if (self.representationType == JMResourcesRepresentationType_Grid) {
         NSInteger countOfCellsInRow = 1;
-        while (((countOfCellsInRow * flowLayout.itemSize.width) + (countOfCellsInRow + 1) * flowLayout.minimumInteritemSpacing) < collectionView.frame.size.width) {
+        itemWidth = [JMUtils isIphone] ? 150 : 310;
+        while (((countOfCellsInRow * itemWidth) + (countOfCellsInRow + 1) * flowLayout.minimumInteritemSpacing) < collectionView.frame.size.width) {
             countOfCellsInRow ++;
         }
         countOfCellsInRow --;
-        itemHeight = flowLayout.itemSize.height;
+        itemHeight = [JMUtils isIphone] ? 150 : 254;
         itemWidth = floor((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
     }
     
@@ -604,8 +579,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    NSLog(@"%@", NSStringFromSelector(_cmd));
-    NSLog(@"search text %@", searchText);
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    JMLog(@"search text %@", searchText);
 }
 
 #pragma mark - JMPopupDelegate

@@ -25,6 +25,8 @@
 //  TIBCO JasperMobile
 //
 
+#import "JMOnboardIntroViewController.h"
+
 @class JMIntroModel;
 
 /**
@@ -33,5 +35,5 @@
 
 
 @interface JMIntroModelManager : NSObject
-- (JMIntroModel *)modelAtIndex:(NSUInteger)index;
+- (JMIntroModel *)modelForIntroPage:(JMOnboardIntroPage)introPage;
 @end

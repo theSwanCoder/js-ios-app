@@ -26,7 +26,6 @@
 //
 
 #import "JMConstants.h"
-#import "UIColor+RGBComponent.h"
 
 // Constants for NSUserDefaults
 NSString * const kJMDefaultsCurrentVersion = @"jaspersoft.mobile.current.version";
@@ -88,4 +87,10 @@ NSInteger  const kJMSaveReportMaxRangePages = 500;
 // Limit of resource for loading from JRS
 NSInteger  const kJMResourceLimit = 100;
 NSInteger  const kJMRecentResourcesLimit = 10;
+
+
+// Name of the default theme file
+NSString * const kJMDefaultThemeFileName = @"DefaultTheme";
+NSString * const kJMThemesFileFormat= @"plist";
+NSString * const kJMCurrentThemeFileName = @"CurrentTheme";
 

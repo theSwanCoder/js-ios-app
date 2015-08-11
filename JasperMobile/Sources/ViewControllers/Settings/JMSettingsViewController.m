@@ -53,7 +53,7 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"settings.title", nil);
 
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     self.tableView.layer.cornerRadius = 4;
 
     [self.privacyPolicyButton setTitle:JMCustomLocalizedString(@"settings.privacy.policy.title", nil) forState:UIControlStateNormal];
@@ -62,9 +62,6 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 
     UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(applicationInfo:)];
     self.navigationItem.rightBarButtonItem = infoItem;
-    //self.navigationItem.rightBarButtonItems = @[infoItem];
-
-    [self setupMenu];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -98,17 +95,6 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     [self.tableView reloadData];
 }
 
-#pragma mark - Menu setup
-- (void)setupMenu
-{
-    SWRevealViewController *revealViewController = self.revealViewController;
-    if (revealViewController) {
-        [self.menuButton setTarget:revealViewController];
-        [self.menuButton setAction:@selector(revealToggle:)];
-        [self.view addGestureRecognizer:revealViewController.panGestureRecognizer];
-    }
-}
-
 #pragma mark - UITableViewDataSource, UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -119,7 +105,7 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 {
     JMSettingsItem *currentItem = [self.detailSettings.itemsArray objectAtIndex:indexPath.row];
     JMSettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:currentItem.cellIdentifier];
-    [cell setBottomSeparatorWithHeight:1 color:tableView.separatorColor tableViewStyle:tableView.style];
+    [cell setBottomSeparatorWithHeight:1 color:self.view.backgroundColor tableViewStyle:tableView.style];
     cell.settingsItem = currentItem;
     return cell;
 }
@@ -163,16 +149,16 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 {
     switch (result) {
         case MFMailComposeResultCancelled:
-            NSLog(@"Mail cancelled");
+            JMLog(@"Mail cancelled");
             break;
         case MFMailComposeResultSaved:
-            NSLog(@"Mail saved");
+            JMLog(@"Mail saved");
             break;
         case MFMailComposeResultSent:
-            NSLog(@"Mail sent");
+            JMLog(@"Mail sent");
             break;
         case MFMailComposeResultFailed:
-            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
+            JMLog(@"Mail sent failure: %@", [error localizedDescription]);
             break;
         default:
             break;

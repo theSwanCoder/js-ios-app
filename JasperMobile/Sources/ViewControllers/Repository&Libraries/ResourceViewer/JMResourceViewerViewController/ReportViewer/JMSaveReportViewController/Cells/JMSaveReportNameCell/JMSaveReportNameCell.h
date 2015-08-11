@@ -33,10 +33,12 @@
  @since 1.9.1
 */
 
+#import "JMTextField.h"
+
 @protocol JMSaveReportNameCellDelegate;
 
 @interface JMSaveReportNameCell : UITableViewCell <UITextFieldDelegate>
-@property (nonatomic, weak) IBOutlet UITextField *textField;
+@property (nonatomic, weak) IBOutlet JMTextField *textField;
 @property (nonatomic, weak) IBOutlet UILabel *errorLabel;
 @property (nonatomic, weak) id<JMSaveReportNameCellDelegate>cellDelegate;
 @end

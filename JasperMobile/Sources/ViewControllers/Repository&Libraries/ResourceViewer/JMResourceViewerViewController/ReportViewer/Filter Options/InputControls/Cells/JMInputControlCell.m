@@ -36,11 +36,26 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.titleLabel.font = [JMFont tableViewCellTitleFont];
-    self.titleLabel.textColor = [UIColor darkGrayColor];
-    self.errorLabel.font = [JMFont tableViewCellDetailErrorFont];
-    self.errorLabel.textColor = [UIColor redColor];
-    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
+    self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
+    self.errorLabel.font = [[JMThemesManager sharedManager] tableViewCellErrorFont];
+    self.errorLabel.textColor = [[JMThemesManager sharedManager] tableViewCellErrorColor];
+}
+
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    // Make sure the contentView does a layout pass here so that its subviews have their frames set, which we
+    // need to use to set the preferredMaxLayoutWidth below.
+    [self.contentView setNeedsLayout];
+    [self.contentView layoutIfNeeded];
+    
+    // Set the preferredMaxLayoutWidth of the mutli-line bodyLabel based on the evaluated width of the label's frame,
+    // as this will allow the text to wrap correctly, and as a result allow the label to take on the correct height.
+    self.titleLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.titleLabel.frame);
+    self.errorLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.errorLabel.frame);
 }
 
 - (void) updateDisplayingOfErrorMessage
@@ -64,17 +79,8 @@
 
 - (void)setEnabledCell:(BOOL)enabled
 {
-    if (enabled) {
-        self.titleLabel.textColor = [UIColor darkGrayColor];
-    } else {
-        self.titleLabel.textColor = [UIColor lightGrayColor];
-    }
-}
-
-- (BOOL)isValidData
-{
-    [self updateDisplayingOfErrorMessage];
-    return ![self.inputControlDescriptor errorString];
+    UIColor *textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
+    self.titleLabel.textColor = [textColor colorWithAlphaComponent:enabled ? 1.0f : 0.5f];
 }
 
 @end

@@ -31,5 +31,12 @@
  @since 2.0
  */
 
+typedef NS_ENUM(NSInteger, JMOnboardIntroPage) {
+    JMOnboardIntroPageWelcome,
+    JMOnboardIntroPageStayConnected,
+    JMOnboardIntroPageInstanceAccess,
+    JMOnboardIntroPageSeemlessIntegration
+};
+
 @interface JMOnboardIntroViewController : UIViewController
 @end

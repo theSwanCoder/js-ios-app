@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -14,14 +14,12 @@
                 <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <activityIndicatorView opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" id="6N8-ZV-sxn">
+                    <activityIndicatorView opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="6N8-ZV-sxn">
                         <rect key="frame" x="57" y="10" width="37" height="37"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                         <color key="color" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     </activityIndicatorView>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="msm-MO-HEg" userLabel="Label - Loading,  Please Wait...">
-                        <rect key="frame" x="0.0" y="55" width="150" height="95"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="msm-MO-HEg" userLabel="Label - Loading,  Please Wait...">
+                        <rect key="frame" x="0.0" y="57" width="150" height="93"/>
                         <string key="text">Loading, 
 Please Wait...</string>
                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
@@ -32,15 +30,29 @@ Please Wait...</string>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="6N8-ZV-sxn" firstAttribute="top" secondItem="Rqh-N7-Z2M" secondAttribute="top" constant="10" id="Ahe-Me-ZHM">
+                    <variation key="heightClass=regular-widthClass=regular" constant="30"/>
+                </constraint>
+                <constraint firstItem="msm-MO-HEg" firstAttribute="leading" secondItem="Rqh-N7-Z2M" secondAttribute="leading" id="Iur-AQ-RrG">
+                    <variation key="heightClass=regular-widthClass=regular" constant="20"/>
+                </constraint>
+                <constraint firstAttribute="trailing" secondItem="msm-MO-HEg" secondAttribute="trailing" id="LdT-gs-0ix">
+                    <variation key="heightClass=regular-widthClass=regular" constant="20"/>
+                </constraint>
+                <constraint firstAttribute="bottom" secondItem="msm-MO-HEg" secondAttribute="bottom" id="UGP-Vk-F2p">
+                    <variation key="heightClass=regular-widthClass=regular" constant="20"/>
+                </constraint>
+                <constraint firstAttribute="centerX" secondItem="6N8-ZV-sxn" secondAttribute="centerX" id="WFD-z8-vpj"/>
+                <constraint firstItem="msm-MO-HEg" firstAttribute="top" secondItem="6N8-ZV-sxn" secondAttribute="bottom" constant="10" id="a0V-h0-Nci">
+                    <variation key="heightClass=regular-widthClass=regular" constant="20"/>
+                </constraint>
+            </constraints>
             <connections>
+                <outlet property="activityIndicator" destination="6N8-ZV-sxn" id="fa4-9Z-NGN"/>
                 <outlet property="titleLabel" destination="msm-MO-HEg" id="kUI-NZ-uZV"/>
             </connections>
             <point key="canvasLocation" x="403" y="179"/>
         </collectionViewCell>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

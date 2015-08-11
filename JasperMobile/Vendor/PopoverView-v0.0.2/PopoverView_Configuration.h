@@ -62,10 +62,10 @@
 // BACKGROUND GRADIENT
 
 //bottom color white in gradient bg
-#define kGradientBottomColor [kJMSearchBarBackgroundColor colorWithAlphaComponent:0.9f]
+#define kGradientBottomColor [[[JMThemesManager sharedManager] popupsBackgroundColor] colorWithAlphaComponent:0.9f]
 
 //top color white value in gradient bg
-#define kGradientTopColor [kJMSearchBarBackgroundColor colorWithAlphaComponent:0.9f]
+#define kGradientTopColor [[[JMThemesManager sharedManager] popupsBackgroundColor] colorWithAlphaComponent:0.9f]
 
 
 // TITLE GRADIENT
@@ -74,10 +74,10 @@
 #define kDrawTitleGradient NO
 
 //bottom color white value in title gradient bg
-#define kGradientTitleBottomColor [kJMSearchBarBackgroundColor colorWithAlphaComponent:0.9f]
+#define kGradientTitleBottomColor [[[JMThemesManager sharedManager] popupsBackgroundColor] colorWithAlphaComponent:0.9f]
 
 //top color white value in title gradient bg
-#define kGradientTitleTopColor [kJMSearchBarBackgroundColor colorWithAlphaComponent:0.9f]
+#define kGradientTitleTopColor [[[JMThemesManager sharedManager] popupsBackgroundColor] colorWithAlphaComponent:0.9f]
 
 
 // FONTS

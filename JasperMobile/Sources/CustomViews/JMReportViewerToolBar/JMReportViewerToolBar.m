@@ -43,7 +43,7 @@
     self.currentPageField.layer.cornerRadius = 4.f;
     self.currentPageField.layer.masksToBounds = YES;
 
-    self.currentPageField.backgroundColor = kJMSearchBarBackgroundColor;
+    self.currentPageField.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
     self.currentPageField.inputView = self.pickerView;
     self.currentPageField.inputAccessoryView = [self pickerToolbar];
 }

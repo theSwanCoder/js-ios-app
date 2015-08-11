@@ -33,28 +33,6 @@
     [super viewDidLoad];
     self.delegate = self;
     
-    [[UINavigationBar appearance] setBarTintColor: kJMMainNavigationBarBackgroundColor];
-    [[UIToolbar appearance] setBarTintColor: kJMMainNavigationBarBackgroundColor];
-
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor lightTextColor]}];
-    
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    
-    [self.toolbar setTintColor: [UIColor whiteColor]];
-
-    NSDictionary *textTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [JMFont navigationBarTitleFont], NSFontAttributeName, nil];
-    [[UINavigationBar appearance] setTitleTextAttributes:textTitleOptions];
-    
-    if ([UIDevice currentDevice].systemVersion.integerValue <8) {
-        // Here is hack for using UIPrintInteractionController
-        NSDictionary *textTitleOptionsForPopover = [NSDictionary dictionaryWithObjectsAndKeys:kJMMainNavigationBarBackgroundColor, NSForegroundColorAttributeName, [JMFont navigationBarTitleFont], NSFontAttributeName, nil];
-        [[UINavigationBar appearanceWhenContainedIn:[UIPopoverController class], nil] setTitleTextAttributes:textTitleOptionsForPopover];
-    }
-
-    NSDictionary *barButtonTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor lightGrayColor], NSForegroundColorAttributeName, [JMFont navigationItemsFont], NSFontAttributeName, nil];
-    [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateDisabled];
-    [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateNormal];
-    
     [self.navigationBar setBarStyle:UIBarStyleDefault];
     
     self.navigationBar.opaque = YES;

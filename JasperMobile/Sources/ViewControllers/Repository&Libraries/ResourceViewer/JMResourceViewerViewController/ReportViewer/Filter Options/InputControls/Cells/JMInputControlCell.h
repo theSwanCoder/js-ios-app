@@ -50,6 +50,5 @@
 
 - (void) updateDisplayingOfErrorMessage;
 - (void) setEnabledCell:(BOOL) enabled;
-- (BOOL) isValidData;
 
 @end

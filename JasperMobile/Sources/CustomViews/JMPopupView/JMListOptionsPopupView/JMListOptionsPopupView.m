@@ -88,8 +88,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.textLabel.font = [JMFont navigationBarTitleFont];
-        cell.textLabel.textColor = [UIColor whiteColor];
+        cell.textLabel.font = [[JMThemesManager sharedManager] navigationBarTitleFont];
+        cell.textLabel.textColor = [[JMThemesManager sharedManager] popupsTextColor];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     

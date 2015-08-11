@@ -23,20 +23,22 @@
 
 #import "JMSettingsTableViewCell.h"
 
+@interface JMSettingsTableViewCell ()
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@end
+
 @implementation JMSettingsTableViewCell
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.detailTextLabel.font = [JMFont tableViewCellDetailFont];
-    self.textLabel.font = [JMFont tableViewCellTitleFont];
-    self.textLabel.textColor = [UIColor darkGrayColor];
-    self.contentView.autoresizingMask |= UIViewAutoresizingFlexibleWidth;
+    self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
 }
 
 - (void)setSettingsItem:(JMSettingsItem *)settingsItem
 {
     _settingsItem = settingsItem;
-    self.textLabel.text = settingsItem.titleString;
+    self.titleLabel.text = settingsItem.titleString;
 }
 
 @end

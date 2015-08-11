@@ -22,33 +22,18 @@
 
 
 //
-//  JMFont.h
+//  JMTextField.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
+ @since 2.2
  */
 
-#import <Foundation/Foundation.h>
 
-@interface JMFont : NSObject
+#import <UIKit/UIKit.h>
 
-+ (UIFont *)navigationBarTitleFont;
-
-+ (UIFont *)navigationItemsFont;
-
-+ (UIFont *)tableViewCellTitleFont;
-
-+ (UIFont *)tableViewCellDetailFont;
-
-+ (UIFont *)tableViewCellDetailErrorFont;
-
-+ (UIFont *)resourcesActivityTitleFont;
-
-+ (UIFont *)menuItemTitleFont;
-
-+ (UIFont *)menuItemDescriptionFont;
+@interface JMTextField : UITextField
 
 @end

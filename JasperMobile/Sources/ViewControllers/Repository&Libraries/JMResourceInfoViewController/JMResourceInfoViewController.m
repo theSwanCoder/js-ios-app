@@ -50,6 +50,8 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+
     [self showNavigationItems];
     [self resetResourceProperties];
     [self addObservers];
@@ -195,7 +197,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                               target:self
                                                                                               action:@selector(cancelButtonTapped:)];
-        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+        self.navigationItem.leftBarButtonItem.tintColor = [[JMThemesManager sharedManager] barItemsColor];
         self.navigationItem.rightBarButtonItem = [self favoriteBarButtonItem];
     } else {
         NSMutableArray *navBarItems = [NSMutableArray array];
@@ -224,7 +226,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
                                                                      style:UIBarButtonItemStyleBordered
                                                                     target:self
                                                                     action:@selector(favoriteButtonTapped:)];
-    favoriteItem.tintColor = isResourceInFavorites ? [UIColor yellowColor] : [UIColor whiteColor];
+    favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
     return favoriteItem;
 }
 
@@ -261,8 +263,10 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
-        cell.textLabel.font = [JMFont tableViewCellTitleFont];
-        cell.detailTextLabel.font = [JMFont tableViewCellDetailFont];
+        cell.textLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+        cell.textLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
+        cell.detailTextLabel.font = [[JMThemesManager sharedManager] tableViewCellDetailFont];
+        cell.detailTextLabel.textColor = [[JMThemesManager sharedManager] tableViewCellDetailsTextColor];
         cell.detailTextLabel.numberOfLines = 2;
     }
     
@@ -301,10 +305,10 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
                                          duration:(NSTimeInterval)duration
 {
-    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
-    [self.popoverView animateRotationToNewPoint:point
-                                         inView:self.view
-                                   withDuration:duration];
+    if (self.popoverView) {
+        [self.popoverView dismiss:NO];
+        [self showAvailableActions];
+    }
 }
 
 @end
