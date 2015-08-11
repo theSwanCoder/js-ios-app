@@ -46,7 +46,10 @@ NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 
 NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentationTypeDidChangeNotification";
 
-@interface JMBaseCollectionViewController() <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, JMPopupViewDelegate, JMResourceCollectionViewCellDelegate, PopoverViewDelegate, JMMenuActionsViewDelegate, JMResourcesListLoaderDelegate>
+@interface JMBaseCollectionViewController() <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout,
+                                            UISearchBarDelegate, JMPopupViewDelegate, JMResourceCollectionViewCellDelegate,
+                                            PopoverViewDelegate, JMMenuActionsViewDelegate, JMResourcesListLoaderDelegate,
+                                            UIDocumentInteractionControllerDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
 @property (nonatomic, assign) BOOL isScrollToTop;
 @end
@@ -412,6 +415,19 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         repositoryViewController.representationTypeKey = self.representationTypeKey;
         repositoryViewController.representationType = self.representationType;
         nextVC = repositoryViewController;
+    } else if ([resourceLookup isSavedReport]) {
+        JMSavedResources *savedResource = [JMSavedResources savedReportsFromResourceLookup:resourceLookup];
+        if ([savedResource.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+            nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
+            if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
+                [nextVC setResourceLookup:resourceLookup];
+            }
+        } else {
+            NSString *fullReportPath = [JMSavedResources pathToReportWithName:savedResource.label format:savedResource.format];
+            NSURL *url = [NSURL fileURLWithPath:fullReportPath];
+            UIDocumentInteractionController *controller = [self setupDocumentControllerWithURL:url usingDelegate:self];
+            [controller presentPreviewAnimated:YES];
+        }
     } else {
         nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
         if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
@@ -446,6 +462,13 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     JMResourceInfoViewController *vc = [NSClassFromString([resourceLookup infoVCIdentifier]) new];
     vc.resourceLookup = resourceLookup;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (UIDocumentInteractionController *) setupDocumentControllerWithURL: (NSURL *) fileURL
+                                                       usingDelegate: (id <UIDocumentInteractionControllerDelegate>) interactionDelegate {
+    UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
+    interactionController.delegate = interactionDelegate;
+    return interactionController;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -507,6 +530,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 #pragma mark - JMResourceCollectionViewCellDelegate
 - (void)infoButtonDidTappedOnCell:(JMResourceCollectionViewCell *)cell
 {
+    if ([self isMenuShown]) {
+        [self closeMenu];
+    }
     [self showResourceInfoViewControllerWithResourceLookup:cell.resourceLookup];
 }
 
@@ -621,5 +647,11 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [JMUtils showAlertViewWithError:error];
 }
 
+
+#pragma mark - UIDocumentInteractionControllerDelegate
+- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller
+{
+    return self.navigationController;
+}
 
 @end

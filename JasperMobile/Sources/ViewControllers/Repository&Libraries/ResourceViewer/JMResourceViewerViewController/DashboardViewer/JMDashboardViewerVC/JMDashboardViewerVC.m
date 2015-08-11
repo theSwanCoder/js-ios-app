@@ -44,6 +44,12 @@
 
 @implementation JMDashboardViewerVC
 
+#pragma mark - LifeCycle
+- (void)dealloc
+{
+    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
 #pragma mark - Print
 - (void)printResource
 {
@@ -172,9 +178,9 @@
                                  [super cancelResourceViewingAndExit:YES];
                              }@weakselfend];
 
-    [self.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
+    [self.dashboardLoader loadDashboardWithCompletion:@weakself(^(BOOL success, NSError *error)) {
         [self stopShowLoader];
-    }];
+    }@weakselfend];
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource

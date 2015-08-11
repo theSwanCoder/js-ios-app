@@ -130,6 +130,7 @@
         reportFormats = @[
                            [JSConstants sharedInstance].CONTENT_TYPE_HTML,
                            [JSConstants sharedInstance].CONTENT_TYPE_PDF,
+                           [JSConstants sharedInstance].CONTENT_TYPE_XLS,
                            ];
     }
     return reportFormats;
