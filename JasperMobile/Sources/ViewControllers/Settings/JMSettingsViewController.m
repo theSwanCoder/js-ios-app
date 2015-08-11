@@ -210,8 +210,14 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
                         otherButtonTitles:nil] show];
 }
 
-#pragma mark - 
-#pragma mrak - UIAlertViewDelegate
+- (IBAction)showPrivacyPolicy:(id)sender
+{
+    if ([self isMenuShown]) {
+        [self closeMenu];
+    }
+}
+
+#pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     [self.navigationController popViewControllerAnimated:YES];

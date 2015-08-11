@@ -1218,6 +1218,7 @@ your business wherever you are.</string>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
+                                    <action selector="showPrivacyPolicy:" destination="wEA-Vb-4Ky" eventType="touchUpInside" id="7A3-4d-tGN"/>
                                     <segue destination="LIw-YN-WwC" kind="show" id="6LI-fb-Vo0"/>
                                 </connections>
                             </button>
@@ -1286,8 +1287,8 @@ your business wherever you are.</string>
                                     <outlet property="delegate" destination="LIw-YN-WwC" id="GWM-0o-0c6"/>
                                 </connections>
                             </webView>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="q6S-L9-evz">
-                                <rect key="frame" x="150" y="242" width="20" height="20"/>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="q6S-L9-evz">
+                                <rect key="frame" x="290" y="258" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -1295,7 +1296,9 @@ your business wherever you are.</string>
                             <constraint firstAttribute="trailing" secondItem="Tvh-qk-jQR" secondAttribute="trailing" id="DO3-ZD-bWl"/>
                             <constraint firstItem="kZd-t2-ZYg" firstAttribute="top" secondItem="Tvh-qk-jQR" secondAttribute="bottom" id="L9s-5J-6La"/>
                             <constraint firstItem="Tvh-qk-jQR" firstAttribute="leading" secondItem="s0V-EP-0ec" secondAttribute="leading" id="O9i-aW-XWv"/>
+                            <constraint firstAttribute="centerX" secondItem="q6S-L9-evz" secondAttribute="centerX" id="W3z-wM-X9C"/>
                             <constraint firstItem="Tvh-qk-jQR" firstAttribute="top" secondItem="TBT-Sv-fWW" secondAttribute="bottom" id="lbB-5L-oSH"/>
+                            <constraint firstAttribute="centerY" secondItem="q6S-L9-evz" secondAttribute="centerY" id="rQ4-Vh-Wdj"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="sxq-IU-POL"/>
