@@ -120,6 +120,17 @@
     [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
 }
 
+- (BOOL)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge shouldLoadExternalRequest:(NSURLRequest *)request
+{
+    BOOL shouldLoad = NO;
+    // TODO: verify all cases
+
+    if (request.URL.host) {
+        shouldLoad = YES;
+    }
+    return shouldLoad;
+}
+
 #pragma mark - JS Handlers
 - (void)handleDidScriptLoad
 {
