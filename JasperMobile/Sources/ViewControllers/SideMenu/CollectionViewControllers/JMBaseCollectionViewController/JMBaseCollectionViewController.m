@@ -426,6 +426,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             NSString *fullReportPath = [JMSavedResources pathToReportWithName:savedResource.label format:savedResource.format];
             NSURL *url = [NSURL fileURLWithPath:fullReportPath];
             UIDocumentInteractionController *controller = [self setupDocumentControllerWithURL:url usingDelegate:self];
+            controller.name = resourceLookup.label;
             [controller presentPreviewAnimated:YES];
         }
     } else {
