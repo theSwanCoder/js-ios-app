@@ -69,6 +69,11 @@
       "mAlias" : "local 6.1",
       "mServerUrl" : "http://192.168.88.55:8085/jasperserver-pro-61",
       "mOrganization" : ""
+    },
+    {
+      "mAlias" : "local proxy 6.1",
+      "mServerUrl" : "http://www.jasperMobile.proxy/jasperserver-pro-61",
+      "mOrganization" : ""
     }
   ]
 }
