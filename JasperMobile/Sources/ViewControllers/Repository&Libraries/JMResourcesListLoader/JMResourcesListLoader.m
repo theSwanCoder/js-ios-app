@@ -29,6 +29,10 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 
 @interface JMResourcesListLoader ()
 @property (atomic, strong) NSMutableArray *resources;
+
+@property (atomic, strong) NSMutableArray *resourcesFolders;
+@property (atomic, strong) NSMutableArray *resourcesItems;
+
 @property (nonatomic, assign) BOOL needUpdateData;
 @property (nonatomic, assign) BOOL isLoadingNow;
 @property (nonatomic, assign, readwrite) BOOL hasNextPage;
@@ -48,14 +52,12 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     if (self) {
         _isLoadingNow = NO;
         _resources = [NSMutableArray array];
+        _resourcesFolders = [NSMutableArray array];
+        _resourcesItems = [NSMutableArray array];
         _filterBySelectedIndex = 0;
         _sortBySelectedIndex = 0;
         _needUpdateData = YES;
         _loadRecursively = YES;
-        _sections = @{
-                      @(JMResourcesListSectionTypeFolder) : @[],
-                      @(JMResourcesListSectionTypeReportUnit) : @[],
-                      };
     }
     return self;
 }
@@ -84,11 +86,9 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     self.totalCount = 0;
     self.hasNextPage = NO;
     [self.resources removeAllObjects];
+    [self.resourcesFolders removeAllObjects];
+    [self.resourcesItems removeAllObjects];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
-    self.sections = @{
-                      @(JMResourcesListSectionTypeFolder) : @[],
-                      @(JMResourcesListSectionTypeReportUnit) : @[],
-                      };
 }
 
 #pragma mark - Properties
@@ -187,22 +187,17 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                                  [self finishLoadingWithError:result.error];
                              }
                          } else {
-                             [self addResourcesWithResources:result.objects];
-                             
-                             NSMutableArray *folders = [NSMutableArray arrayWithArray:self.sections[@(JMResourcesListSectionTypeFolder)]];
-                             NSMutableArray *reportUnits = [NSMutableArray arrayWithArray:self.sections[@(JMResourcesListSectionTypeReportUnit)]];
                              for (JSResourceLookup *resourceLookup in result.objects) {
                                  if ([resourceLookup isFolder]) {
-                                     [folders addObject:resourceLookup];
+                                     [self.resourcesFolders addObject:resourceLookup];
                                  } else {
-                                     [reportUnits addObject:resourceLookup];
+                                     [self.resourcesItems addObject:resourceLookup];
                                  }
                              }
                              
-                             self.sections = @{
-                                               @(JMResourcesListSectionTypeFolder) : [folders copy],
-                                               @(JMResourcesListSectionTypeReportUnit) : [reportUnits copy],
-                                               };
+                             [self addResourcesWithResources:self.resourcesFolders];
+                             [self addResourcesWithResources:self.resourcesItems];
+
                              
                              if ([result.allHeaderFields objectForKey:@"Next-Offset"]) {
                                  self.offset = [[result.allHeaderFields objectForKey:@"Next-Offset"] integerValue];
