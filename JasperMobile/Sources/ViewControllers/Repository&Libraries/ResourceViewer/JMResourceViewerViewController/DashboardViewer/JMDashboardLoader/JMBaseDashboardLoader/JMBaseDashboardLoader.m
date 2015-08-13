@@ -34,9 +34,12 @@
 #import "JMDashboard.h"
 #import "JSResourceLookup+Helpers.h"
 
+static const NSInteger kDashboardLoadTimeoutSec = 30;
+
 @interface JMBaseDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
 @property (nonatomic, copy) void(^loadCompletion)(BOOL success, NSError *error);
+@property (nonatomic) BOOL isLoadDone;
 @end
 
 @implementation JMBaseDashboardLoader
@@ -71,6 +74,14 @@
     if ([self.dashboard.resourceLookup isNewDashboard]) {
         self.loadCompletion = completion;
         [self injectJSCode];
+
+        // There is issue with webpages in dashlets
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kDashboardLoadTimeoutSec * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (!self.isLoadDone && completion) {
+                completion(YES, nil);
+                self.loadCompletion = nil;
+            }
+        });
     } else {
         if (completion) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -142,6 +153,7 @@
 
 - (void)handleOnLoadDone
 {
+    self.isLoadDone = YES;
     if (self.loadCompletion) {
         self.loadCompletion(YES, nil);
     }
