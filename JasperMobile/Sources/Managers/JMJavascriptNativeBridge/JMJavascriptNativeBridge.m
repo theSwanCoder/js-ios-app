@@ -64,7 +64,7 @@
     NSString *javascriptString = request.command;
     NSString *parameters = request.parametersAsString;
     NSString *fullJavascriptString = [NSString stringWithFormat:javascriptString, parameters];
-//    NSLog(@"send request: %@", fullJavascriptString);
+//    JMLog(@"send request: %@", fullJavascriptString);
     [self.webView stringByEvaluatingJavaScriptFromString:fullJavascriptString];
 }
 
@@ -82,7 +82,7 @@
 #pragma mark - UIWebViewDelegate
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-//    NSLog(@"request from webView: %@", request);
+//    JMLog(@"request from webView: %@", request);
 
     if ([self isLoginRequest:request]) {
         [self.restClient deleteCookies];

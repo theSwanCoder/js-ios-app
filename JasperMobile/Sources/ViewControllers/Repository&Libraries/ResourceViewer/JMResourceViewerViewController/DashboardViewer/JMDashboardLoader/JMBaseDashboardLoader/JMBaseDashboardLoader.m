@@ -116,7 +116,7 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
 #pragma mark - JMJavascriptNativeBridgeProtocol
 - (void)javascriptNativeBridge:(id <JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback
 {
-    NSLog(@"callback parameters: %@", callback.parameters);
+    JMLog(@"callback parameters: %@", callback.parameters);
     if ([callback.type isEqualToString:@"scriptDidLoad"]) {
         [self handleDidScriptLoad];
     } else if ([callback.type isEqualToString:@"onLoadDone"]) {
