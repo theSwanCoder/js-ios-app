@@ -59,6 +59,23 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 
 #pragma mark - LifeCycle
+-(void)awakeFromNib {
+    JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
+    baseCollectionView.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+
+    id topGuide = self.topLayoutGuide;
+    [baseCollectionView addConstraints:[NSLayoutConstraint
+            constraintsWithVisualFormat:@"H:|-0-[contentView]-0-|"
+                                options:NSLayoutFormatAlignAllLeading
+                                metrics:nil
+                                  views:@{@"contentView": baseCollectionView.contentView}]];
+    [baseCollectionView addConstraints:[NSLayoutConstraint
+            constraintsWithVisualFormat:@"V:[topGuide]-0-[contentView]-0-|"
+                                options:0
+                                metrics:nil
+                                  views:@{@"contentView": baseCollectionView.contentView, @"topGuide" : topGuide}]];
+}
+
 - (void)dealloc
 {
     [self removeObservers];
@@ -67,7 +84,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
     [baseCollectionView setupWithNoResultText:[self noResultText]];
     baseCollectionView.collectionView.delegate = self;

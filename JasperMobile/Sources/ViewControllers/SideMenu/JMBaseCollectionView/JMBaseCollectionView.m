@@ -37,19 +37,7 @@
 -(void)awakeFromNib {
     [[NSBundle mainBundle] loadNibNamed:@"JMBaseCollectionView" owner:self options:nil];
     [self addSubview: self.contentView];
-    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [self addConstraints:[NSLayoutConstraint
-                          constraintsWithVisualFormat:@"H:|-0-[contentView]-0-|"
-                          options:NSLayoutFormatAlignAllLeading
-                          metrics:nil
-                          views:@{@"contentView": self.contentView}]];
-    [self addConstraints:[NSLayoutConstraint
-                          constraintsWithVisualFormat:@"V:|-0-[contentView]-0-|"
-                          options:NSLayoutFormatAlignAllTop
-                          metrics:nil
-                          views:@{@"contentView": self.contentView}]];
-    
+
     self.searchBar.tintColor = [[JMThemesManager sharedManager] barItemsColor];
     self.searchBar.placeholder = JMCustomLocalizedString(@"resources.search.placeholder", nil);
 }
