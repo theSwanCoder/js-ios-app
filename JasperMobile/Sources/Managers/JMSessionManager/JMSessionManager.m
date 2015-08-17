@@ -55,7 +55,7 @@ static JMSessionManager *_sharedManager = nil;
 - (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(BOOL success))completionBlock
 {
     self.restClient = [[JSRESTBase alloc] initWithServerProfile:serverProfile keepLogged:keepLogged];
-    if ([self.restClient isSessionAuthorized] && self.restClient.serverInfo) {
+    if (self.restClient.serverInfo && [self.restClient isSessionAuthorized]) {
         [self saveActiveSessionIfNeeded];
         if (completionBlock) {
             completionBlock(YES);
