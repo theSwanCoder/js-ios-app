@@ -103,6 +103,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                 resourceImage = [UIImage imageNamed:@"res_type_html"];
             } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
                 resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+            } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
+                resourceImage = [UIImage imageNamed:@"res_type_xls"];
             }
         }
     } else if ([self.resourceLookup isDashboard]) {
