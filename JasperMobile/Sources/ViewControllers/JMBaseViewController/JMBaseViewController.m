@@ -82,7 +82,7 @@ static const NSInteger kBlurViewTag = 100;
 #pragma mark - Helpers
 - (void)addBlurView
 {
-    if (![JMUtils isSystemVersion8]) {
+    if ([JMUtils isSystemVersion8]) {
         UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
         UIVisualEffectView *effectView = [[UIVisualEffectView alloc]initWithEffect:blur];
         effectView.frame = self.view.window.bounds;
