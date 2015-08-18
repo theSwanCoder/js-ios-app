@@ -32,7 +32,6 @@
  @since 2.0
  */
 
-#import "GAITrackedViewController.h"
 #import "JMMenuActionsView.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMResourcesListLoader.h"
@@ -42,7 +41,7 @@
 extern NSString * const kJMShowFolderContetnSegue;
 extern NSString * const kJMRepresentationTypeDidChangeNotification;
 
-@interface JMBaseCollectionViewController : GAITrackedViewController
+@interface JMBaseCollectionViewController : JMBaseViewController
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *menuButton;
 @property (nonatomic, strong) JMResourcesListLoader *resourceListLoader;
 @property (nonatomic, assign) BOOL needReloadData;

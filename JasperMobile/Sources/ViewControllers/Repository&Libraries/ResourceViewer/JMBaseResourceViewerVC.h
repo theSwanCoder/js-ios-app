@@ -31,7 +31,7 @@
  @since 2.1
  */
 
-#import "GAITrackedViewController.h"
+#import "JMBaseViewController.h"
 #import "JMResourceClientHolder.h"
 #import "JMMenuActionsView.h"
 #import "JMCancelRequestPopup.h"
@@ -49,7 +49,7 @@ extern NSString * const kJMShowMultiPageReportSegue;
 extern NSString * const kJMShowDashboardViewerSegue;
 extern NSString * const kJMShowSavedRecourcesViewerSegue;
 
-@interface JMBaseResourceViewerVC : GAITrackedViewController <JMResourceClientHolder, JMMenuActionsViewDelegate>
+@interface JMBaseResourceViewerVC : JMBaseViewController <JMResourceClientHolder, JMMenuActionsViewDelegate>
 @property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, assign) BOOL isResourceLoaded;
 @property (nonatomic, strong) NSURLRequest *resourceRequest;
