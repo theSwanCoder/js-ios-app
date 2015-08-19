@@ -65,7 +65,12 @@ static const NSInteger kBlurViewTag = 100;
 
 - (void)removeAllObservers
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationDidEnterBackgroundNotification
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationWillEnterForegroundNotification
+                                                  object:nil];
 }
 
 #pragma mark - Application LifeCycle
