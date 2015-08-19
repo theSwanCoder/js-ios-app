@@ -173,6 +173,8 @@
         return this._makeCallback("onWindowError&error=" + error);
       };
 
+      ReportCallback.prototype.onPageLoadError = function(error) {};
+
       ReportCallback.prototype._makeCallback = function(command) {
         return window.location.href = "http://jaspermobile.callback/" + command;
       };
@@ -328,6 +330,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         this._parseServerVersion = bind(this._parseServerVersion, this);
         this._getServerVersion = bind(this._getServerVersion, this);
         this._exportResource = bind(this._exportResource, this);
+        this._notifyPageChangeError = bind(this._notifyPageChangeError, this);
         this._notifyPageChange = bind(this._notifyPageChange, this);
         this._openRemoteLink = bind(this._openRemoteLink, this);
         this._navigateToPage = bind(this._navigateToPage, this);
@@ -370,7 +373,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       ReportController.prototype.selectPage = function(page) {
         if (this.report != null) {
-          return this.report.pages(page).run();
+          return this.report.pages(page).run().done(this._notifyPageChange).fail(this._notifyPageChangeError);
         }
       };
 
@@ -535,6 +538,10 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       ReportController.prototype._notifyPageChange = function() {
         return this.callback.onPageChange(parseInt(this.report.pages()));
+      };
+
+      ReportController.prototype._notifyPageChangeError = function(error) {
+        return this.callback.onPageLoadError(error.message, parseInt(this.report.pages()));
       };
 
       ReportController.prototype._exportReport = function(format) {
