@@ -147,6 +147,23 @@ NSString * const kJMSavedResources = @"SavedResources";
     return [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:absolutePath];
 }
 
++ (NSString *)pathToExportedReport:(JMSavedResources *)exportedReport
+{
+    // new paths
+    NSString *absolutePath = [self pathToReportWithName:exportedReport.label format:exportedReport.format];
+    if ([self isFileExistsForPath:absolutePath]) {
+        return absolutePath;
+    }
+
+    // old paths
+    absolutePath = [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:exportedReport.uri];
+    if ([self isFileExistsForPath:absolutePath]) {
+        return absolutePath;
+    }
+
+    return nil;
+}
+
 + (NSString *)pathToReportWithName:(NSString *)name format:(NSString *)format
 {
     NSString *savedItemURI = [self uriForSavedReportWithName:name format:format];
@@ -194,4 +211,11 @@ NSString * const kJMSavedResources = @"SavedResources";
     }
     return nil;
 }
+
++ (BOOL)isFileExistsForPath:(NSString *)path
+{
+    BOOL isFileExists = [[NSFileManager defaultManager] fileExistsAtPath:path];
+    return isFileExists;
+}
+
 @end
