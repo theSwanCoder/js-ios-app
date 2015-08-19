@@ -166,6 +166,7 @@
 "savedreport.viewer.modify.reportname" = "Item name";
 "savedreport.viewer.delete.confirmation.message" = "Do you really want to delete this item?";
 "savedreport.viewer.show.resource.error.message" = "Report could not be loaded. Try to save a report with less count of pages.";
+"savedreport.viewer.file.not.exists" = "File doesn't exists";
 
 /* Resource Info View */
 

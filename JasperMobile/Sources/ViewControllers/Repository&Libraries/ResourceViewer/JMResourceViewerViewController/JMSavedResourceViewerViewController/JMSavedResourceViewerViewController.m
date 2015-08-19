@@ -60,7 +60,22 @@
 
 - (void)startResourceViewing
 {
-    NSString *fullReportPath = [JMSavedResources pathToReportWithName:self.savedReports.label format:self.savedReports.format];
+    NSString *fullReportPath = [JMSavedResources pathToExportedReport:self.savedReports];
+
+    if (!fullReportPath) {
+        NSString *title = JMCustomLocalizedString(@"dialod.title.error", nil);
+        NSString *message = JMCustomLocalizedString(@"savedreport.viewer.file.not.exists", nil);
+        NSString *okButtonTitle = JMCustomLocalizedString(@"dialog.button.ok", nil);
+
+        [[UIAlertView alertWithTitle:title
+                             message:message
+                          completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                                  [self cancelResourceViewingAndExit:YES];
+                              }@weakselfend
+                   cancelButtonTitle:okButtonTitle
+                   otherButtonTitles:nil] show];
+        return;
+    }
 
     if (self.webView.isLoading) {
         [self.webView stopLoading];
