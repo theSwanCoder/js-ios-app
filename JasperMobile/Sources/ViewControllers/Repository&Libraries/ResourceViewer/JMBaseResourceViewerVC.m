@@ -36,6 +36,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 @interface JMBaseResourceViewerVC () <PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
+@property (nonatomic, assign) BOOL needLayoutUI;
 @end
 
 @implementation JMBaseResourceViewerVC
@@ -50,11 +51,13 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     self.title = self.resourceLookup.label;
 
     [self setupSubviews];
+    [self setupNavigationItems];
 
     // start point of loading resource
     [self startResourceViewing];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupRightBarButtonItems) name:kJMFavoritesDidChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(favoriteMarkDidChanged:) name:kJMFavoritesDidChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)dealloc
@@ -68,8 +71,35 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
     // Google Analitycs
     self.screenName = NSStringFromClass(self.class);
+    
+    [self updateIfNeeded];
+}
 
-    [self setupNavigationItems];
+#pragma mark - Private API
+- (void)setNeedLayoutUI:(BOOL)needLayoutUI
+{
+    _needLayoutUI = needLayoutUI;
+    if (self.isViewLoaded && self.view.window && needLayoutUI) {
+        [self updateIfNeeded];
+    }
+}
+
+- (void)updateIfNeeded
+{
+    if (self.needLayoutUI) {
+        [self setupNavigationItems];
+        self.needLayoutUI = NO;
+    }
+}
+
+- (void)interfaceOrientationDidChanged:(id)notification
+{
+    self.needLayoutUI = YES;
+}
+
+- (void)favoriteMarkDidChanged:(id)notification
+{
+    self.needLayoutUI = YES;
 }
 
 #pragma mark - Segues
@@ -88,18 +118,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
         _resourceRequest = resourceRequest;
     }
 }
-
-#pragma mark - Handle rotates
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-                                         duration:(NSTimeInterval)duration
-{
-    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
-    [self.popoverView animateRotationToNewPoint:point
-                                         inView:self.view
-                                   withDuration:duration];
-    [self setupNavigationItems];
-}
-
 
 #pragma mark - Setups
 - (void)setupSubviews
@@ -125,6 +143,17 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     return backButtonTitle;
 }
 
+- (void)resetSubViews
+{
+    // override in children
+}
+
+#pragma mark - Setup Navigation Items
+- (BOOL) favoriteItemShouldDisplaySeparately
+{
+    return (![JMUtils isIphone]) || ([JMUtils isIphone] && UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation));
+}
+
 - (void)setupNavigationItems
 {
     [self setupRightBarButtonItems];
@@ -141,22 +170,20 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)setupRightBarButtonItems
 {
-    NSMutableArray *items = [NSMutableArray array];
-    UIBarButtonItem *actionBarButtonItem = [self actionBarButtonItem];
-    if (actionBarButtonItem) {
-        [items addObject:actionBarButtonItem];
+    NSMutableArray *navBarItems = [NSMutableArray array];
+    JMMenuActionsViewAction availableAction = [self availableActionForResource:self.resourceLookup];
+    
+    if (availableAction && (availableAction ^ [self favoriteAction])) {
+        [navBarItems addObject:[self actionBarButtonItem]];
+    } else if (![self favoriteItemShouldDisplaySeparately]) {
+        [navBarItems addObject:[self favoriteBarButtonItem]];
     }
-
-    UIBarButtonItem *favoriteBarButtonItem = [self favoriteBarButtonItem];
-    if (favoriteBarButtonItem) {
-        [items addObject:favoriteBarButtonItem];
+    
+    if ([self favoriteItemShouldDisplaySeparately]) {
+        [navBarItems addObject:[self favoriteBarButtonItem]];
     }
-    self.navigationItem.rightBarButtonItems = [items copy];
-}
-
-- (void)resetSubViews
-{
-    // override in children
+    
+    self.navigationItem.rightBarButtonItems = [navBarItems copy];
 }
 
 
@@ -237,32 +264,36 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     self.popoverView = nil;
 }
 
+#pragma mark - Handle rotates
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+                                         duration:(NSTimeInterval)duration
+{
+    if (self.popoverView) {
+        [self.popoverView dismiss:NO];
+        [self showAvailableActions];
+    }
+}
+
 #pragma mark - Helpers
 
 - (UIBarButtonItem *) actionBarButtonItem
 {
-    if ([self availableActionForResource:self.resourceLookup]) {
-        return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                             target:self
-                                                             action:@selector(showAvailableActions)];
-    }
-    return nil;
+    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                         target:self
+                                                         action:@selector(showAvailableActions)];
 }
 
 - (UIBarButtonItem *) favoriteBarButtonItem
 {
-    if (![JMUtils isIphone]) {
-        BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
-        NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
-
-        UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
-                                                                         style:UIBarButtonItemStyleBordered
-                                                                        target:self
-                                                                        action:@selector(favoriteButtonTapped:)];
-        favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
-        return favoriteItem;
-    }
-    return nil;
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
+    NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
+    
+    UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(favoriteButtonTapped:)];
+    favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
+    return favoriteItem;
 }
 
 - (void) replaceRightNavigationItem:(UIBarButtonItem *)oldItem withItem:(UIBarButtonItem *)newItem
@@ -276,10 +307,16 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Info;
-    if (![self favoriteBarButtonItem]) {
-        availableAction |= [JMFavorites isResourceInFavorites:resource] ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite;
+    if (![self favoriteItemShouldDisplaySeparately]) {
+        availableAction |= [self favoriteAction];
     }
     return availableAction;
+}
+
+- (JMMenuActionsViewAction)favoriteAction
+{
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
+    return isResourceInFavorites ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite;
 }
 
 - (JMMenuActionsViewAction)disabledActionForResource:(JSResourceLookup *)resource
