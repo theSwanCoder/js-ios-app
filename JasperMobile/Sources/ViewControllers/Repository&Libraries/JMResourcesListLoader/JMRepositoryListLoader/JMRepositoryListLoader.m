@@ -97,19 +97,6 @@
     }@weakselfend];
 }
 
-- (void)finishLoadingWithError:(NSError *)error
-{
-    if (!error) {
-        [self sortLoadedResourcesUsingComparator:^NSComparisonResult(JSResourceLookup *obj1, JSResourceLookup *obj2) {
-            NSComparisonResult comparisonResultForLabel = [obj1.label compare:obj2.label options:NSCaseInsensitiveSearch];
-            NSComparisonResult comparisonResultForTypes = [obj1.resourceType compare:obj2.resourceType options:NSCaseInsensitiveSearch];
-            NSComparisonResult comparisonResult = comparisonResultForLabel | comparisonResultForTypes;
-            return comparisonResult;
-        }];
-    }
-    [super finishLoadingWithError:error];
-}
-
 #pragma mark - Utils
 - (BOOL) shouldBeAddedResourceLookup:(JSResourceLookup *)resource
 {
