@@ -100,14 +100,11 @@
 - (void)finishLoadingWithError:(NSError *)error
 {
     if (!error) {
-//        for (JSResourceLookup *lookup in self.rootFolders) {
-//            if ([self shouldBeAddedResourceLookup:lookup]) {
-//                [self addResourcesWithResource:lookup];
-//            }
-//        }
-
         [self sortLoadedResourcesUsingComparator:^NSComparisonResult(JSResourceLookup *obj1, JSResourceLookup *obj2) {
-            return [obj1.label compare:obj2.label options:NSCaseInsensitiveSearch];
+            NSComparisonResult comparisonResultForLabel = [obj1.label compare:obj2.label options:NSCaseInsensitiveSearch];
+            NSComparisonResult comparisonResultForTypes = [obj1.resourceType compare:obj2.resourceType options:NSCaseInsensitiveSearch];
+            NSComparisonResult comparisonResult = comparisonResultForLabel | comparisonResultForTypes;
+            return comparisonResult;
         }];
     }
     [super finishLoadingWithError:error];
