@@ -59,7 +59,7 @@
     [super viewDidLoad];
 
     self.emptyReportMessageLabel.text = JMCustomLocalizedString(@"report.viewer.emptyreport.title", nil);
-    [self addObservers];
+    [self configObservers];
     [self setupMenuActions];
 }
 
@@ -106,7 +106,7 @@
 }
 
 #pragma mark - Observe Notifications
-- (void)addObservers
+- (void)configObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(multipageNotification)
@@ -468,6 +468,7 @@
 {
     self.emptyReportMessageLabel.hidden = YES;
     [self setupMenuActions];
+    [self updateMenuActions];
 }
 
 - (void)setupMenuActions
