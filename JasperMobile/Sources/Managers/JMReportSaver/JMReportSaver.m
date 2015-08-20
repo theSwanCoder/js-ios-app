@@ -207,7 +207,7 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 {
     [self downloadReportWithName:reportName
                    fileExtension:fileExtension
-                      reportPath:[self outputResourceURL]
+                      reportPath:[self outputResourceURLWithFormat:fileExtension]
                       completion:completion];
 }
 
@@ -341,12 +341,14 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
     return [serverURL stringByAppendingFormat:@"%@/%@/exports/%@/", [JSConstants sharedInstance].REST_REPORT_EXECUTION_URI,self.requestExecution.requestId, exportID];
 }
 
-- (NSString *)outputResourceURL
+- (NSString *)outputResourceURLWithFormat:(NSString *)format
 {
     NSString *exportID = self.exportExecution.uuid;
     // Fix for JRS version smaller 5.6.0
     if (self.restClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) {
-        exportID = [NSString stringWithFormat:@"%@;pages=%@", @"html", self.pagesRange.pagesFormat];
+        exportID = [NSString stringWithFormat:@"%@;pages=%@;", format, self.pagesRange.pagesFormat];
+        NSString *attachmentPrefix = kJMAttachmentPrefix;
+        exportID = [exportID stringByAppendingFormat:@"attachmentsPrefix=%@;", attachmentPrefix];
     }
 
     NSString *outputResourceURLString = [[self exportURLWithExportID:exportID] stringByAppendingString:@"outputResource?sessionDecorator=no&decorate=no#"];
