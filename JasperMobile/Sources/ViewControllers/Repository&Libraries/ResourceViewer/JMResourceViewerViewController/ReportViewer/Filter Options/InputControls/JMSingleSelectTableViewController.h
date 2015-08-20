@@ -34,7 +34,7 @@
 #import <UIKit/UIKit.h>
 #import "JMSingleSelectInputControlCell.h"
 
-@interface JMSingleSelectTableViewController : UIViewController
+@interface JMSingleSelectTableViewController : JMBaseViewController
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 

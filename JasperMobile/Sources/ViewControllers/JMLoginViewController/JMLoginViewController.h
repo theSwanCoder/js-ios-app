@@ -31,11 +31,11 @@
  @since 2.0
  */
 
-#import <UIKit/UIKit.h>
+#import "JMBaseViewController.h"
 
 typedef void(^LoginCompletionBlock)(void);
 
-@interface JMLoginViewController : UIViewController
+@interface JMLoginViewController : JMBaseViewController
 
 @property (nonatomic, copy) LoginCompletionBlock completion;
 

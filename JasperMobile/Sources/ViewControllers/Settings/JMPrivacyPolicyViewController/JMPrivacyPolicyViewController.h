@@ -33,6 +33,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface JMPrivacyPolicyViewController : UIViewController
+@interface JMPrivacyPolicyViewController : JMBaseViewController
 
 @end

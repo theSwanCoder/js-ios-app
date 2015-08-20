@@ -33,7 +33,7 @@
  */
 #import "JMMenuItem.h"
 
-@interface JMMenuViewController : UIViewController
+@interface JMMenuViewController : JMBaseViewController
 
 @property (nonatomic, readonly) JMMenuItem *selectedItem;
 
