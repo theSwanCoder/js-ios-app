@@ -21,7 +21,7 @@
  */
 
 
-#import "JMReportOptionsViewController.h"
+#import "JMInputControlsViewController.h"
 #import "JMSingleSelectTableViewController.h"
 #import "UITableViewCell+Additions.h"
 
@@ -29,18 +29,14 @@
 #import "JMCancelRequestPopup.h"
 #import "JMInputControlCell.h"
 
-NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
-#define kJMReportOptionsTableViewCellHorizontalOffset ([JMUtils isIphone] ? 10.f : 15.f)
-#define kJMReportOptionsTableViewCellVerticalOffset ([JMUtils isIphone] ? 7.f : 7.f)
-
-@interface JMReportOptionsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate>
+@interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *runReportButton;
 @property (nonatomic, strong, readwrite) NSArray *inputControls;
 
 @end
 
-@implementation JMReportOptionsViewController
+@implementation JMInputControlsViewController
 
 #pragma mark - UIViewController
 
@@ -71,7 +67,6 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 
 - (void)backButtonTapped:(id)sender
 {
-    // TODO: Need to refactor here after adding "Always Prompt" flag support
     if (self.report.isReportAlreadyLoaded) {
         [self.navigationController popViewControllerAnimated:YES];
     } else {

@@ -1541,10 +1541,10 @@ your business wherever you are.</string>
             </objects>
             <point key="canvasLocation" x="-490" y="1305"/>
         </scene>
-        <!--Report Options View Controller-->
+        <!--Input Controls View Controller-->
         <scene sceneID="uzL-rJ-sfy">
             <objects>
-                <viewController storyboardIdentifier="JMReportOptionsViewController" id="Udh-pd-kGH" customClass="JMReportOptionsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMInputControlsViewController" id="Udh-pd-kGH" customClass="JMInputControlsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="w9A-z5-0t8"/>
                         <viewControllerLayoutGuide type="bottom" id="UyR-xy-u50"/>
@@ -2322,6 +2322,18 @@ your business wherever you are.</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xkR-0b-GHJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1145" y="593"/>
+        </scene>
+        <!--Single Select Table View Controller-->
+        <scene sceneID="y8l-eo-0y3">
+            <objects>
+                <viewController id="uVS-sp-S2C" customClass="JMSingleSelectTableViewController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="bOD-gt-qgj"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YIu-dO-8oR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1897" y="1305"/>
         </scene>
     </scenes>
     <resources>

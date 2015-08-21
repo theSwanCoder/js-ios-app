@@ -28,15 +28,20 @@
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
+ @author Alexey Gubarev ogubarie@tibco.com
  @since 2.0
  */
+
+#import "JSReportOption.h"
+#import "JSResourceReportUnit.h"
+
 extern NSString * const kJMReportIsMutlipageDidChangedNotification;
 extern NSString * const kJMReportCountOfPagesDidChangeNotification;
 extern NSString * const kJMReportCurrentPageDidChangeNotification;
 
 @interface JMReport : NSObject
 // getters
-@property (nonatomic, strong, readonly) JSResourceLookup *resourceLookup;
+@property (nonatomic, strong, readonly) JSResourceReportUnit *resourceReportUnit;
 @property (nonatomic, copy, readonly) NSArray *inputControls;
 @property (nonatomic, copy, readonly) NSArray *reportParameters;
 @property (nonatomic, copy, readonly) NSString *reportURI;
@@ -48,6 +53,10 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 @property (nonatomic, strong, readonly) NSString *requestId;
 @property (nonatomic, assign, readonly) BOOL isReportAlreadyLoaded;
 
+@property (nonatomic, copy) NSArray *reportOptions;
+@property (nonatomic, strong) JSReportOption *activeReportOption;
+
+
 // html
 @property (nonatomic, copy, readonly) NSString *HTMLString;
 @property (nonatomic, copy, readonly) NSString *baseURLString;
@@ -56,14 +65,17 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 // thumbnails
 @property (nonatomic, strong) UIImage *thumbnailImage;
 
-- (instancetype)initWithResource:(JSResourceLookup *)resourceLookup
-                   inputControls:(NSArray *)inputControls;
-+ (instancetype)reportWithResource:(JSResourceLookup *)resourceLookup
-                     inputControls:(NSArray *)inputControl;
+- (instancetype)initWithResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit
+                             inputControls:(NSArray *)inputControls;
++ (instancetype)reportWithResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit
+                               inputControls:(NSArray *)inputControl;
 
 // update state
+- (void)updateResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit;
+
 - (void)updateInputControls:(NSArray *)inputControls;
 - (void)updateReportParameters:(NSArray *)reportParameters;
+- (void)updateReportURI:(NSString *)reportURI;
 - (void)updateCurrentPage:(NSInteger)currentPage;
 - (void)updateCountOfPages:(NSInteger)countOfPages;
 - (void)updateHTMLString:(NSString *)HTMLString

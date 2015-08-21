@@ -36,7 +36,7 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 @property (nonatomic, copy, readwrite) NSArray *inputControls;
 @property (nonatomic, copy, readwrite) NSString *reportURI;
 // setters
-@property (nonatomic, strong, readwrite) JSResourceLookup *resourceLookup;
+@property (nonatomic, strong, readwrite) JSResourceReportUnit *resourceReportUnit;
 @property (nonatomic, assign, readwrite) NSInteger currentPage;
 @property (nonatomic, assign, readwrite) NSInteger countOfPages;
 @property (nonatomic, assign, readwrite) BOOL isMultiPageReport;
@@ -57,13 +57,13 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 @implementation JMReport
 
 #pragma mark - LifeCycle
-- (instancetype)initWithResource:(JSResourceLookup *)resourceLookup
-                   inputControls:(NSArray *)inputControls
+- (instancetype)initWithResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit
+                             inputControls:(NSArray *)inputControls
 {
     self = [super init];
     if (self) {
-        _resourceLookup = resourceLookup;
-        _reportURI = resourceLookup.uri;
+        _resourceReportUnit = resourceReportUnit;
+        _reportURI = resourceReportUnit.uri;
         
         [self updateInputControls:inputControls];
         
@@ -75,10 +75,10 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
     return self;
 }
 
-+ (instancetype)reportWithResource:(JSResourceLookup *)resourceLookup
-                     inputControls:(NSArray *)inputControl
++ (instancetype)reportWithResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit
+                               inputControls:(NSArray *)inputControl
 {
-    return [[self alloc] initWithResource:resourceLookup inputControls:inputControl];
+    return [[self alloc] initWithResourceReportUnit:resourceReportUnit inputControls:inputControl];
 }
 
 
@@ -102,19 +102,33 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 }
 
 #pragma mark - Public API
+- (void)updateResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit
+{
+    if (_resourceReportUnit != resourceReportUnit) {
+        _resourceReportUnit = resourceReportUnit;
+    }
+}
+
 - (void)updateInputControls:(NSArray *)inputControls
 {   
     _inputControls = [inputControls copy];
     _isReportWithInputControls = inputControls && inputControls.count;
-    _isInputControlsLoaded = YES;
-
-    self.reportParameters = nil;
+    _isInputControlsLoaded = inputControls != nil;
+    
+    _reportParameters = nil;
 }
 
 - (void)updateReportParameters:(NSArray *)reportParameters
 {
     _reportParameters = [reportParameters copy];
     _isInputControlsLoaded = YES;
+}
+
+- (void)updateReportURI:(NSString *)reportURI
+{
+    if (![_reportURI isEqualToString:reportURI]) {
+        _reportURI = reportURI;
+    }
 }
 
 - (void)updateCurrentPage:(NSInteger)currentPage
@@ -231,7 +245,7 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 
 - (NSString *)description
 {
-    NSString *description = [NSString stringWithFormat:@"\nReport: %@\ncount of pages: %@\nisEmpty: %@", self.resourceLookup.label, @(self.countOfPages), @(self.isReportEmpty)];
+    NSString *description = [NSString stringWithFormat:@"\nReport: %@\ncount of pages: %@\nisEmpty: %@", self.resourceReportUnit.label, @(self.countOfPages), @(self.isReportEmpty)];
     return description;
 }
 

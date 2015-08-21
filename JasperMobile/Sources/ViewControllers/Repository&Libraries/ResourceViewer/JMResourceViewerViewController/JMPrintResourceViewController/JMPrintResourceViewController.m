@@ -104,7 +104,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 - (NSString *)jobName
 {
     if (self.report) {
-        return self.report.resourceLookup.label;
+        return self.report.resourceReportUnit.label;
     } else if (self.resourceLookup) {
         return self.resourceLookup.label;
     } else {

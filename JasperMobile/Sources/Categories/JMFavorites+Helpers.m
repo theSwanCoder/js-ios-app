@@ -62,6 +62,9 @@ NSString * const kJMFavorites = @"Favorites";
 
 + (BOOL)isResourceInFavorites:(JSResourceLookup *)resource
 {
+    if (!resource.uri) {
+        return NO;
+    }
     NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resource.uri];
     return ([[JMCoreDataManager sharedInstance].managedObjectContext countForFetchRequest:fetchRequest error:nil] > 0);
 }

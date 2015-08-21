@@ -115,7 +115,18 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         NSString *parametersAsString = [self createParametersAsString];
         JMJavascriptRequest *request = [JMJavascriptRequest new];
         request.command = @"MobileReport.run(%@);";
-        request.parametersAsString = [NSString stringWithFormat:@"{'uri': '%@', 'params': %@, 'pages' : '%@'}", self.report.reportURI, parametersAsString, @(pageNumber)];
+        NSString *reportURI = self.report.reportURI;
+        if (self.report.activeReportOption) {
+            reportURI = self.report.activeReportOption.uri;
+            parametersAsString = @"''";
+        }
+        request.parametersAsString = [NSString stringWithFormat:@"{'uri': '%@', 'params': %@, 'pages' : '%@'}", reportURI, parametersAsString, @(pageNumber)];
+        [self.bridge sendRequest:request];
+    } else if (self.report.activeReportOption) {
+        JMJavascriptRequest *request = [JMJavascriptRequest new];
+        request.command = @"MobileReport.run(%@);";
+        NSString *reportURI = self.report.activeReportOption.uri;
+        request.parametersAsString = [NSString stringWithFormat:@"{'uri': '%@', 'params': '', 'pages' : '%@'}", reportURI, @(pageNumber)];
         [self.bridge sendRequest:request];
     } else {
         JMJavascriptRequest *request = [JMJavascriptRequest new];
@@ -382,7 +393,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     NSString *outputResourcesPath = parameters[@"link"];
     if (outputResourcesPath) {
         if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOutputResourcePath:fullReportName:)]) {
-            NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", self.report.resourceLookup.label, self.exportFormat];
+            NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", self.report.resourceReportUnit.label, self.exportFormat];
             [self.delegate reportLoader:self didReceiveOutputResourcePath:outputResourcesPath fullReportName:fullReportName];
         }
     }
