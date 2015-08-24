@@ -393,7 +393,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     NSString *outputResourcesPath = parameters[@"link"];
     if (outputResourcesPath) {
         if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOutputResourcePath:fullReportName:)]) {
-            NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", self.report.resourceReportUnit.label, self.exportFormat];
+            NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", self.report.resourceLookup.label, self.exportFormat];
             [self.delegate reportLoader:self didReceiveOutputResourcePath:outputResourcesPath fullReportName:fullReportName];
         }
     }

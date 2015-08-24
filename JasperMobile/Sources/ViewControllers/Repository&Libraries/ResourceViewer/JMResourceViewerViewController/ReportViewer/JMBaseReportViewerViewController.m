@@ -38,14 +38,15 @@
 #import "JMJavascriptNativeBridgeProtocol.h"
 #import "JMReportSaver.h"
 #import "JSReportOption.h"
+#import "JMReportManager.h"
+
 
 @interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
 
-@property (nonatomic, assign) BOOL areParametersChosen;
-
+@property (nonatomic, assign) BOOL isReportAlreadyConfigured;
 @end
 
 @implementation JMBaseReportViewerViewController
@@ -59,10 +60,10 @@
 #pragma mark - UIViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = self.report.resourceReportUnit.label;
-    
     self.emptyReportMessageLabel.text = JMCustomLocalizedString(@"report.viewer.emptyreport.title", nil);
 
+    [self configureReport];
+    
     [self addObservers];
 }
 
@@ -73,7 +74,7 @@
     [self updateToobarAppearence];
 
     // start point
-    if (!self.report.isReportAlreadyLoaded) {
+    if (!self.report.isReportAlreadyLoaded && self.isReportAlreadyConfigured) {
         [self startLoadReportWithPage:1];
     }
 }
@@ -184,18 +185,87 @@
 {
     BOOL isReportAlreadyLoaded = self.report.isReportAlreadyLoaded;
     BOOL isReportInLoadingProcess = self.reportLoader.isReportInLoadingProcess;
-    BOOL alwaysPromptInputControls = self.report.resourceReportUnit.alwaysPromptControls;
     
     JMLog(@"report parameters: %@", self.report.reportParameters);
     JMLog(@"report input controls: %@", self.report.inputControls);
     
-    if (alwaysPromptInputControls && !self.areParametersChosen) {
-        [self showReportOptionsViewControllerWithBackButton:YES];
-    } else if(!isReportAlreadyLoaded && !isReportInLoadingProcess) {
+    if(!isReportAlreadyLoaded && !isReportInLoadingProcess) {
         // show report with loaded input controls
         // when we start running a report from another report by tapping on hyperlink
         [self runReportWithPage:page];
     }
+}
+
+- (void)configureReport
+{
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
+        [self cancelResourceViewingAndExit:YES];
+    }];
+    
+    void(^errorHandlingBlock)(JSOperationResult *, NSString *) = @weakself(^(JSOperationResult *result, NSString *errorMessage)) {
+        NSLog(@"%@: %@", errorMessage, result.error);
+        if (result.error.code == JSSessionExpiredErrorCode) {
+            if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                [self configureReport];
+            } else {
+                [JMUtils showLoginViewAnimated:YES completion:@weakself(^){
+                    [self cancelResourceViewingAndExit:YES];
+                }@weakselfend];
+            }
+        } else {
+            [JMUtils showAlertViewWithError:result.error completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                [self cancelResourceViewingAndExit:YES];
+            }@weakselfend];
+        }
+    }@weakselfend;
+    
+    NSString *reportURI = self.resourceLookup.uri;
+    [JMReportManager fetchReportLookupWithResourceURI:reportURI
+                                completion:@weakself(^(JSOperationResult *result)) {
+                                    if (result.error) {
+                                        [JMCancelRequestPopup dismiss];
+                                        errorHandlingBlock(result, @"Report Unit Loading Error");
+                                    } else {
+                                        JSResourceReportUnit *reportUnit = [result.objects firstObject];
+                                        if (reportUnit) {
+                                            [self.report updateResourceReportUnit:reportUnit];
+
+                                            // get report input controls
+                                            [JMReportManager fetchInputControlsWithReportURI:reportURI
+                                                                       completion:@weakself(^(JSOperationResult *result)) {
+                                                                           [JMCancelRequestPopup dismiss];
+                                                                           if (result.error) {
+                                                                               errorHandlingBlock(result, @"Report Unit Input Controls Loading Error");
+                                                                           } else {
+                                                                               self.isReportAlreadyConfigured = YES;
+                                                                               NSMutableArray *visibleInputControls = [NSMutableArray array];
+                                                                               for (JSInputControlDescriptor *inputControl in result.objects) {
+                                                                                   if (inputControl.visible.boolValue) {
+                                                                                       [visibleInputControls addObject:inputControl];
+                                                                                   }
+                                                                               }
+                                                                               if ([visibleInputControls count]) {
+                                                                                   [self.report updateInputControls:[visibleInputControls copy]];
+                                                                               }
+                                                                               
+                                                                               [self.report updateReportParameters:self.initialReportParameters];
+                                                                               if ([visibleInputControls count] && reportUnit.alwaysPromptControls && !self.isChildReport) {
+                                                                                   [self showInputControlsViewControllerWithBackButton:YES];
+                                                                               } else  {
+                                                                                   [self startLoadReportWithPage:1];
+                                                                               }
+                                                                           }
+                                                                       }@weakselfend];
+                                        } else {
+                                            [JMCancelRequestPopup dismiss];
+                                            NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Report Unit Loading Error" forKey:NSURLErrorFailingURLErrorKey];
+                                            NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:JSClientErrorCode userInfo:userInfo];
+                                            [JMUtils showAlertViewWithError:error completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                                                [self cancelResourceViewingAndExit:YES];
+                                            }@weakselfend];
+                                        }
+                                    }
+                                }@weakselfend];
 }
 
 #pragma mark - Print
@@ -206,7 +276,7 @@
     [self preparePreviewForPrintWithCompletion:@weakself(^(NSURL *resourceURL)) {
         if (resourceURL) {
             [self printItem:resourceURL
-                   withName:self.report.resourceReportUnit.label
+                   withName:self.report.resourceLookup.label
                  completion:@weakself(^(BOOL completed, NSError *error)){
                          [self removeResourceWithURL:resourceURL];
                          if(error){
@@ -279,6 +349,14 @@
 }
 
 #pragma mark - Custom accessors
+- (JMReport *)report
+{
+    if (!_report) {
+        _report = [self.resourceLookup reportModel];
+    }
+    return _report;
+}
+
 - (JMReportViewerToolBar *)toolbar
 {
     if (!_toolbar) {
@@ -292,14 +370,6 @@
     return _toolbar;
 }
 
--(JMReport *)report
-{
-    if (!_report) {
-        _report = [self.resourceLookup reportModel];
-    }
-    return _report;
-}
-
 #pragma mark - JMMenuActionsViewDelegate
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
@@ -309,7 +379,7 @@
             [self refreshReport];
             break;
         case JMMenuActionsViewAction_Edit: {
-            [self showReportOptionsViewControllerWithBackButton:NO];
+            [self showInputControlsViewControllerWithBackButton:NO];
             break;
         }
         case JMMenuActionsViewAction_Save:
@@ -340,52 +410,8 @@
     [self refresh];
 }
 
-#pragma mark - Report Options (Input Controls)
-- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *inputControls, NSError *error))completion
-{
-    [self.restClient inputControlsForReport:reportURI
-                                        ids:nil
-                             selectedValues:nil
-                            completionBlock:@weakself(^(JSOperationResult *result)) {
-
-                                if (result.error) {
-                                    if (result.error.code == JSSessionExpiredErrorCode) {
-                                        if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                            [self loadInputControlsWithReportURI:reportURI completion:completion];
-                                        } else {
-                                            [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                                                [self cancelResourceViewingAndExit:YES];
-                                            } @weakselfend];
-                                        }
-                                    } else {
-                                        if (completion) {
-                                            completion(nil, result.error);
-                                        }
-                                    }
-                                } else {
-
-                                    NSMutableArray *invisibleInputControls = [NSMutableArray array];
-                                    for (JSInputControlDescriptor *inputControl in result.objects) {
-                                        if (!inputControl.visible.boolValue) {
-                                            [invisibleInputControls addObject:inputControl];
-                                        }
-                                    }
-
-                                    if (result.objects.count - invisibleInputControls.count == 0) {
-                                        completion(nil, nil);
-                                    } else {
-                                        NSMutableArray *inputControls = [result.objects mutableCopy];
-                                        if (invisibleInputControls.count) {
-                                            [inputControls removeObjectsInArray:invisibleInputControls];
-                                        }
-                                        completion([inputControls copy], nil);
-                                    }
-                                }
-
-                            }@weakselfend];
-}
-
-- (void)showReportOptionsViewControllerWithBackButton:(BOOL)isShowBackButton
+#pragma mark - Input Controls
+- (void)showInputControlsViewControllerWithBackButton:(BOOL)isShowBackButton
 {
     JMInputControlsViewController *inputControlsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
     inputControlsViewController.report = self.report;

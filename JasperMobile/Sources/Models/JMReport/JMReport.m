@@ -36,7 +36,7 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 @property (nonatomic, copy, readwrite) NSArray *inputControls;
 @property (nonatomic, copy, readwrite) NSString *reportURI;
 // setters
-@property (nonatomic, strong, readwrite) JSResourceReportUnit *resourceReportUnit;
+@property (nonatomic, strong, readwrite) JSResourceReportUnit *resourceLookup;
 @property (nonatomic, assign, readwrite) NSInteger currentPage;
 @property (nonatomic, assign, readwrite) NSInteger countOfPages;
 @property (nonatomic, assign, readwrite) BOOL isMultiPageReport;
@@ -57,13 +57,13 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 @implementation JMReport
 
 #pragma mark - LifeCycle
-- (instancetype)initWithResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit
-                             inputControls:(NSArray *)inputControls
+- (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup
+                         inputControls:(NSArray *)inputControls
 {
     self = [super init];
     if (self) {
-        _resourceReportUnit = resourceReportUnit;
-        _reportURI = resourceReportUnit.uri;
+        _resourceLookup = resourceLookup;
+        _reportURI = resourceLookup.uri;
         
         [self updateInputControls:inputControls];
         
@@ -75,10 +75,10 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
     return self;
 }
 
-+ (instancetype)reportWithResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit
-                               inputControls:(NSArray *)inputControl
++ (instancetype)reportWithResourceLookup:(JSResourceLookup *)resourceLookup
+                           inputControls:(NSArray *)inputControl
 {
-    return [[self alloc] initWithResourceReportUnit:resourceReportUnit inputControls:inputControl];
+    return [[self alloc] initWithResourceLookup:resourceLookup inputControls:inputControl];
 }
 
 
@@ -104,13 +104,13 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 #pragma mark - Public API
 - (void)updateResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit
 {
-    if (_resourceReportUnit != resourceReportUnit) {
-        _resourceReportUnit = resourceReportUnit;
+    if (_resourceLookup != resourceReportUnit) {
+        _resourceLookup = resourceReportUnit;
     }
 }
 
 - (void)updateInputControls:(NSArray *)inputControls
-{   
+{
     _inputControls = [inputControls copy];
     _isReportWithInputControls = inputControls && inputControls.count;
     _isInputControlsLoaded = inputControls != nil;
@@ -145,10 +145,10 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
     if (self.countOfPages == countOfPages) {
         return;
     }
-
+    
     self.isReportEmpty = countOfPages == 0 || countOfPages == NSNotFound;
     self.countOfPages = countOfPages;
-
+    
     if (countOfPages != NSNotFound) {
         self.isMultiPageReport = countOfPages > 1;
     }
@@ -221,7 +221,7 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 - (void)restoreDefaultState
 {
     [self clearCachedReportPages];
-
+    
     self.HTMLString = nil;
     self.baseURLString = nil;
     self.currentPage = NSNotFound;
@@ -245,7 +245,7 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 
 - (NSString *)description
 {
-    NSString *description = [NSString stringWithFormat:@"\nReport: %@\ncount of pages: %@\nisEmpty: %@", self.resourceReportUnit.label, @(self.countOfPages), @(self.isReportEmpty)];
+    NSString *description = [NSString stringWithFormat:@"\nReport: %@\ncount of pages: %@\nisEmpty: %@", self.resourceLookup.label, @(self.countOfPages), @(self.isReportEmpty)];
     return description;
 }
 

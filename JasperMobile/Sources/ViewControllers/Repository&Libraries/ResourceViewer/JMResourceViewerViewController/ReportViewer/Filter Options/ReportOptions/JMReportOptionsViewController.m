@@ -21,18 +21,26 @@
  */
 
 
-#import "JMSingleSelectTableViewController.h"
+//
+//  JMReportOptionsViewController.m
+//  TIBCO JasperMobile
+//
 
-@interface JMSingleSelectTableViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UISearchBarDelegate>
+#import "JMReportOptionsViewController.h"
+
+@interface JMReportOptionsViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UISearchBarDelegate>
+@property (nonatomic, weak) IBOutlet UITableView *tableView;
+
 @property (nonatomic, weak) IBOutlet UILabel     *noResultLabel;
-@property (nonatomic, weak) IBOutlet UISearchBar *icSearchBar;
+@property (nonatomic, weak) IBOutlet UISearchBar *searchBar;
 
 @property (nonatomic, strong) NSArray *filteredListOfValues;
-@property (nonatomic, strong) NSMutableSet *previousSelectedValues;
+
+@property (nonatomic, strong, readwrite) JSReportOption *selectedReportOption;
 
 @end
 
-@implementation JMSingleSelectTableViewController
+@implementation JMReportOptionsViewController
 
 #pragma mark - UIViewController
 
@@ -40,11 +48,9 @@
 {
     [super viewDidLoad];
     
-    self.title = self.cell.inputControlDescriptor.label;
-    self.titleLabel.text = JMCustomLocalizedString(@"report.viewer.options.singleselect.titlelabel.title", nil);
+    self.title = JMCustomLocalizedString(@"report.viewer.report.options.title", nil);
     self.noResultLabel.text = JMCustomLocalizedString(@"resources.noresults.msg", nil);
-
-    self.titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
+    
     self.noResultLabel.textColor = [[JMThemesManager sharedManager] reportOptionsNoResultLabelTextColor];
     
     self.tableView.layer.cornerRadius = 4;
@@ -52,55 +58,31 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
-    UITextField *txfSearchField = [self.icSearchBar valueForKey:@"_searchField"];
+    UITextField *txfSearchField = [self.searchBar valueForKey:@"_searchField"];
     txfSearchField.backgroundColor = self.tableView.backgroundColor;
     [txfSearchField setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor darkTextColor]}];
-    self.icSearchBar.barTintColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+    self.searchBar.barTintColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     
-    self.icSearchBar.tintColor = [UIColor darkGrayColor];
-    [self.icSearchBar setBackgroundImage:[UIImage new]];
-    self.icSearchBar.placeholder = JMCustomLocalizedString(@"report.viewer.options.search.value.placeholder", nil);
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    if (![self.previousSelectedValues isEqualToSet:self.selectedValues]) {
-        [self.cell updateWithParameters:[self.selectedValues allObjects]];
-    }
+    self.searchBar.tintColor = [UIColor darkGrayColor];
+    [self.searchBar setBackgroundImage:[UIImage new]];
+    self.searchBar.placeholder = JMCustomLocalizedString(@"report.viewer.options.search.value.placeholder", nil);
 }
 
 #pragma mark - Accessors
-
-- (NSMutableSet *)selectedValues
-{
-    if (!_selectedValues) {
-        _selectedValues = [NSMutableSet set];
-    }
-    
-    return _selectedValues;
-}
-
 - (NSArray *)listOfValues
 {
-    return self.filteredListOfValues ? self.filteredListOfValues : self.cell.inputControlDescriptor.state.options;
+    return self.filteredListOfValues ? self.filteredListOfValues : _listOfValues;
 }
 
-- (void)setCell:(JMSingleSelectInputControlCell *)cell
+- (void)setSelectedReportOption:(JSReportOption *)selectedReportOption
 {
-    _cell = cell;
-    
-    for (JSInputControlOption *option in cell.inputControlDescriptor.state.options) {
-        if (option.selected.boolValue) {
-            [self.selectedValues addObject:option];
+    if (_selectedReportOption != selectedReportOption) {
+        _selectedReportOption = selectedReportOption;
+        if ([self.listOfValues count] == 1) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.listOfValues indexOfObject:_selectedReportOption] inSection:0];
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle  animated:YES];
         }
     }
-    
-    if ([self.selectedValues count] == 1) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.cell.inputControlDescriptor.state.options indexOfObject:[self.selectedValues anyObject]] inSection:0];
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle  animated:YES];
-    }
-    self.previousSelectedValues = [self.selectedValues mutableCopy];
 }
 
 #pragma mark - Table view data source
@@ -112,8 +94,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"ListCell";
-
+    static NSString *cellIdentifier = @"ReportOptionsCell";
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
@@ -123,10 +105,10 @@
         cell.textLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
     }
     
-    JSInputControlOption *option = [self.listOfValues objectAtIndex:indexPath.row];
+    JSReportOption *option = [self.listOfValues objectAtIndex:indexPath.row];
     cell.textLabel.text = option.label;
-    cell.accessoryType = option.selected.boolValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-
+    cell.accessoryType = (option == self.selectedReportOption) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    
     return cell;
 }
 
@@ -134,21 +116,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSInputControlOption *selectedOption = [self.listOfValues objectAtIndex:indexPath.row];
-    JSInputControlOption *previousSelectedOption = [self.selectedValues anyObject];
-
-    if (previousSelectedOption != selectedOption) {
-        selectedOption.selected = [JSConstants stringFromBOOL:YES];
-        previousSelectedOption.selected = [JSConstants stringFromBOOL:NO];
-
-        [self.previousSelectedValues removeAllObjects];
-        [self.previousSelectedValues addObject:previousSelectedOption];
-
-        [self.selectedValues removeAllObjects];
-        [self.selectedValues addObject:selectedOption];
-    }
-
-    [self.navigationController popViewControllerAnimated:YES];
+    self.selectedReportOption = [self.listOfValues objectAtIndex:indexPath.row];
+    [self.delegate reportOptionsViewController:self didSelectOption:self.selectedReportOption];
 }
 
 
@@ -158,7 +127,7 @@
 {
     if (searchBar.text.length) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.label LIKE[cd] %@", [NSString stringWithFormat:@"*%@*", searchBar.text]];
-        self.filteredListOfValues = [self.cell.inputControlDescriptor.state.options filteredArrayUsingPredicate:predicate];
+        self.filteredListOfValues = [self.listOfValues filteredArrayUsingPredicate:predicate];
     } else {
         self.filteredListOfValues = nil;
     }
@@ -175,7 +144,7 @@
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
 {
     searchBar.text = nil;
-    [self searchBar:searchBar textDidChange:@""];
+    [self searchBar:searchBar textDidChange:nil];
     [searchBar resignFirstResponder];
 }
 
@@ -192,3 +161,4 @@
 }
 
 @end
+

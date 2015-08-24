@@ -25,13 +25,20 @@
 #import "JMSingleSelectTableViewController.h"
 #import "UITableViewCell+Additions.h"
 
-#import "JMResourceClientHolder.h"
 #import "JMCancelRequestPopup.h"
+#import "JMReportOptionsCell.h"
 #import "JMInputControlCell.h"
+#import "JMReportOptionsViewController.h"
+#import "JMReportManager.h"
 
-@interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate>
+
+@interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *runReportButton;
+
+@property (nonatomic, strong) JSReportOption *activeReportOption;
+@property (nonatomic, strong) NSArray *reportOptions;
+
 @property (nonatomic, strong, readwrite) NSArray *inputControls;
 
 @end
@@ -57,6 +64,7 @@
                           forState:UIControlStateNormal];
     
     self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
+    [self getReportOptionsList];
 }
 
 #pragma mark - Actions
@@ -137,18 +145,28 @@
     if ([destinationViewController respondsToSelector:@selector(setCell:)]) {
         [destinationViewController setCell:sender];
     }
+    if ([destinationViewController respondsToSelector:@selector(setDelegate:)]) {
+        [destinationViewController setDelegate:self];
+    }
 }
 
 #pragma mark - Table view data source
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return ([self.reportOptions count]) ? 2 : 1;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if ([self.reportOptions count] && section == 1) {
+        return 1;
+    }
     return self.inputControls.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
-    NSString *cellIdentifier = [[self inputControlDescriptorTypes] objectForKey:inputControlDescriptor.type];
+    NSString *cellIdentifier = [self cellIdentifierForIndexPath:indexPath];
  
     // This solution was taken form http://stackoverflow.com/a/18746930/2523825
     
@@ -156,10 +174,17 @@
     // it in the dictionary if one hasn't already been added for the reuse identifier.
     // WARNING: Don't call the table view's dequeueReusableCellWithIdentifier: method here because this will result
     // in a memory leak as the cell is created but never returned from the tableView:cellForRowAtIndexPath: method!
-    JMInputControlCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 
     // Configure the cell for this indexPath
-    [cell setInputControlDescriptor:inputControlDescriptor];
+    if ([self.reportOptions count] && indexPath.section == 1) {
+        JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
+        roCell.titleLabel.text = self.activeReportOption.label;
+    } else {
+        JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
+        JMInputControlCell *icCell = (JMInputControlCell *)cell;
+        [icCell setInputControlDescriptor:inputControlDescriptor];
+    }
     
     // The cell's width must be set to the same size it will end up at once it is in the table view.
     // This is important so that we'll get the correct height for different table view widths, since our cell's
@@ -189,14 +214,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
-    NSString *cellIdentifier = [[self inputControlDescriptorTypes] objectForKey:inputControlDescriptor.type];
-    JMInputControlCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    [cell setBottomSeparatorWithHeight:1
-                                 color:tableView.separatorColor
-                        tableViewStyle:tableView.style];
-    [cell setInputControlDescriptor:inputControlDescriptor];
-    cell.delegate = self;
+    NSString *cellIdentifier = [self cellIdentifierForIndexPath:indexPath];
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    // Configure the cell for this indexPath
+    if ([self.reportOptions count] && indexPath.section == 1) {
+        JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
+        roCell.titleLabel.text = self.activeReportOption.label;
+    } else {
+        JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
+        JMInputControlCell *icCell = (JMInputControlCell *)cell;
+        [icCell setInputControlDescriptor:inputControlDescriptor];
+        icCell.delegate = self;
+    }
     return cell;
 }
 
@@ -229,22 +259,34 @@
     }
 }
 
-#pragma mark - Private
-// Returns input control types
-- (NSDictionary *)inputControlDescriptorTypes
+#pragma mark - JMReportOptionsViewControllerDelegate
+- (void)reportOptionsViewController:(JMReportOptionsViewController *)controller didSelectOption:(JSReportOption *)option
 {
-    return @{
-             [JSConstants sharedInstance].ICD_TYPE_BOOL                     : @"BooleanCell",
-             [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_TEXT        : @"TextEditCell",
-             [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_NUMBER      : @"NumberCell",
-             [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_DATE        : @"DateCell",
-             [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_TIME        : @"TimeCell",
-             [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_DATETIME    : @"DateTimeCell",
-             [JSConstants sharedInstance].ICD_TYPE_SINGLE_SELECT            : @"SingleSelectCell",
-             [JSConstants sharedInstance].ICD_TYPE_SINGLE_SELECT_RADIO      : @"SingleSelectCell",
-             [JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT             : @"MultiSelectCell",
-             [JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT_CHECKBOX    : @"MultiSelectCell",
-             };
+    [self.tableView reloadData];
+}
+
+#pragma mark - Private
+
+- (NSString *)cellIdentifierForIndexPath:(NSIndexPath *)indexPath
+{
+    if ([self.reportOptions count] && indexPath.section == 1) {
+        return @"ReportOptionsCell";
+    }
+    JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
+    NSDictionary *inputControlDescriptorTypes = @{
+                                                  [JSConstants sharedInstance].ICD_TYPE_BOOL                     : @"BooleanCell",
+                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_TEXT        : @"TextEditCell",
+                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_NUMBER      : @"NumberCell",
+                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_DATE        : @"DateCell",
+                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_TIME        : @"TimeCell",
+                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_DATETIME    : @"DateTimeCell",
+                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_SELECT            : @"SingleSelectCell",
+                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_SELECT_RADIO      : @"SingleSelectCell",
+                                                  [JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT             : @"MultiSelectCell",
+                                                  [JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT_CHECKBOX    : @"MultiSelectCell",
+                                                  };
+
+    return [inputControlDescriptorTypes objectForKey:inputControlDescriptor.type];
 }
 
 - (BOOL)isSelectableCellAtIndexPath:(NSIndexPath *)indexPath
@@ -254,6 +296,34 @@
             [descriptor.type isEqualToString:[JSConstants sharedInstance].ICD_TYPE_SINGLE_SELECT_RADIO] ||
             [descriptor.type isEqualToString:[JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT] ||
             [descriptor.type isEqualToString:[JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT_CHECKBOX]);
+}
+
+- (void)getReportOptionsList
+{
+    [JMCancelRequestPopup presentWithMessage:@"status.loading"
+                                 cancelBlock:@weakself(^(void)) {
+                                     [self.restClient cancelAllRequests];
+                                 } @weakselfend];
+
+    [JMReportManager fetchReportOptionsWithReportURI:self.report.reportURI completion:@weakself(^(JSOperationResult *result)) {
+        [JMCancelRequestPopup dismiss];
+        if (result.error && result.error.code == JSSessionExpiredErrorCode) {
+            if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                [self getReportOptionsList];
+            } else {
+                [JMUtils showLoginViewAnimated:YES completion:nil];
+            }
+        } else {
+            NSMutableArray *reportOptions = [NSMutableArray array];
+            for (JSReportOption *reportOption in result.objects) {
+                if (reportOption.identifier) {
+                    [reportOptions addObject:reportOption];
+                }
+            }
+            self.reportOptions = reportOptions;
+            [self.tableView reloadData];
+        }
+    }@weakselfend];
 }
 
 - (void)updatedInputControlsValuesWithCompletion:(void(^)(BOOL dataIsValid))completion

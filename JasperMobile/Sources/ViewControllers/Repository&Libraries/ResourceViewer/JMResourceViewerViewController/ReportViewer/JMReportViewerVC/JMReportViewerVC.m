@@ -247,22 +247,11 @@
 #pragma mark - JMVisualizeReportLoaderDelegate
 - (void)reportLoader:(id<JMReportLoader>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSArray *)reportParameters
 {
-    NSString *reportURI = [resourceLookup.uri stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls, NSError *error)) {
-            if (error) {
-                [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                    [self cancelResourceViewingAndExit:YES];
-                }];
-            } else {
-                JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-                reportViewController.resourceLookup = resourceLookup;
-                [reportViewController.report updateInputControls:inputControls];
-                [reportViewController.report updateReportParameters:reportParameters];
-                reportViewController.isChildReport = YES;
-
-                [self.navigationController pushViewController:reportViewController animated:YES];
-            }
-        }@weakselfend];
+    JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
+    reportViewController.resourceLookup = resourceLookup;
+    reportViewController.initialReportParameters = reportParameters;
+    reportViewController.isChildReport = YES;
+    [self.navigationController pushViewController:reportViewController animated:YES];
 }
 
 -(void)reportLoader:(id<JMReportLoader>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference

@@ -40,6 +40,8 @@
 @interface JMBaseReportViewerViewController : JMResourceViewerViewController <JMRefreshable, JMReportViewerToolBarDelegate>
 @property (nonatomic, strong, readonly) id <JMReportLoader> reportLoader;
 @property (nonatomic, strong, readonly) JMReport *report;
+@property (nonatomic, assign) BOOL isChildReport;
+@property (nonatomic, strong) NSArray *initialReportParameters;
 @property (nonatomic, copy) void(^exitBlock)(void);
 
 - (void)handleReportLoaderDidChangeCountOfPages;
@@ -56,9 +58,6 @@
 
 // setups
 - (void)updateToobarAppearence;
-
-// input controls
-- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *, NSError *))completion;
 
 // empty report handle
 - (void)showEmptyReportMessage;

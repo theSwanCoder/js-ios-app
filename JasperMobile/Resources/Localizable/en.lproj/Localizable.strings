@@ -160,6 +160,8 @@
 "report.viewer.options.ic.title.date" = "Date";
 "report.viewer.options.ic.title.time" = "Time";
 "report.viewer.options.ic.title.unset" = "Unset";
+"report.viewer.report.options.title" = "Report Options";
+
 
 // Saved Reports viewer view
 "savedreport.viewer.modify.title" = "Rename Report";

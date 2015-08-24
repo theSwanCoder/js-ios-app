@@ -22,28 +22,30 @@
 
 
 //
-//  JMInputControlsManager.h
+//  JMReportOptionsViewController.h
 //  TIBCO JasperMobile
 //
 
-
 /**
- @author Aleksandr Dakhno odahno@tibco.com
  @author Alexey Gubarev ogubarie@tibco.com
-
  @since 2.2
  */
 
+
+#import "GAITrackedViewController.h"
 #import "JSReportOption.h"
-#import "JSRequest.h"
 
-@interface JMInputControlsManager : NSObject
+@class JMReportOptionsViewController;
+@protocol JMReportOptionsViewControllerDelegate <NSObject>
 
-- (void)fetchInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *inputControls, NSError *error))completion;
-- (void)fetchReportLookupWithResourceURI:(NSString *)reportURI completion:(void (^)(JSResourceReportUnit *reportUnit, NSError *error))completion;
-- (void)fetchReportOptionsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *reportOptions, NSError *error))completion;
-- (void)deleteReportOption:(JSReportOption *)reportOption withReportURI:(NSString *)reportURI completion:(void (^)(NSError *error))completion;
+@required
+- (void) reportOptionsViewController:(JMReportOptionsViewController *)controller didSelectOption:(JSReportOption *)option;
 
-- (void)createReportOptionWithReportURI:(NSString *)reportURI optionLabel:(NSString *)optionLabel reportParameters:(NSArray *)reportParameters completion:(void (^)(JSReportOption *reportOption))completion;
+@end
 
+@interface JMReportOptionsViewController : GAITrackedViewController
+
+@property (nonatomic, strong) NSArray *listOfValues;
+@property (nonatomic, strong, readonly) JSReportOption *selectedReportOption;
+@property (nonatomic, weak) id <JMReportOptionsViewControllerDelegate> delegate;
 @end

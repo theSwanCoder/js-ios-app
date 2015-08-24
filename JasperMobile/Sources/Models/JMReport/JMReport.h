@@ -41,7 +41,7 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 
 @interface JMReport : NSObject
 // getters
-@property (nonatomic, strong, readonly) JSResourceReportUnit *resourceReportUnit;
+@property (nonatomic, strong, readonly) JSResourceLookup *resourceLookup;
 @property (nonatomic, copy, readonly) NSArray *inputControls;
 @property (nonatomic, copy, readonly) NSArray *reportParameters;
 @property (nonatomic, copy, readonly) NSString *reportURI;
@@ -65,9 +65,9 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 // thumbnails
 @property (nonatomic, strong) UIImage *thumbnailImage;
 
-- (instancetype)initWithResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit
+- (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup
                              inputControls:(NSArray *)inputControls;
-+ (instancetype)reportWithResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit
++ (instancetype)reportWithResourceLookup:(JSResourceLookup *)resourceLookup
                                inputControls:(NSArray *)inputControl;
 
 // update state
