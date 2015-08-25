@@ -104,7 +104,7 @@
 
 - (void)doneButtonTapped:(id)sender
 {
-    self.inputControlDescriptor.state.value = [self.dateFormatter stringFromDate:self.datePicker.date];
+    [self updateValue:[self.dateFormatter stringFromDate:self.datePicker.date]];
     self.inputControlDescriptor.state.error = nil;
     [self updateDisplayingOfErrorMessage];
 
@@ -113,7 +113,7 @@
 
 - (void)unset:(id)sender
 {
-    self.inputControlDescriptor.state.value = nil;
+    [self updateValue:nil];
     self.inputControlDescriptor.state.error = nil;
     [self updateDisplayingOfErrorMessage];
 

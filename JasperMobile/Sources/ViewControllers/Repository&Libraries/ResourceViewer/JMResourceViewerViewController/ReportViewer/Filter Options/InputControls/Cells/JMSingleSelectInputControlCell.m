@@ -43,6 +43,7 @@
 {
     [self updateValueLabelWithParameters:parameters];
     [self.delegate updatedInputControlsValuesWithDescriptor:self.inputControlDescriptor];
+    [self.delegate inputControlCellDidChangedValue:self];
 }
 
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor

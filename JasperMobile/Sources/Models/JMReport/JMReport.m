@@ -27,6 +27,7 @@
 //
 
 #import "JMReport.h"
+#import "JMReportManager.h"
 
 NSString * const kJMReportIsMutlipageDidChangedNotification = @"kJMReportIsMutlipageDidChangedNotification";
 NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOfPagesDidChangeNotification";
@@ -177,7 +178,7 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 - (NSArray *)reportParameters
 {
     if (!_reportParameters) {
-        _reportParameters = [self reportParametersFromInputControls:self.inputControls];
+        _reportParameters = [JMReportManager reportParametersFromInputControls:self.inputControls];
     }
     return _reportParameters;
 }
@@ -233,16 +234,6 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 }
 
 #pragma mark - Helpers
-- (NSArray *)reportParametersFromInputControls:(NSArray *)inputControls
-{
-    NSMutableArray *parameters = [NSMutableArray array];
-    for (JSInputControlDescriptor *inputControlDescriptor in inputControls) {
-        [parameters addObject:[[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
-                                                                value:inputControlDescriptor.selectedValues]];
-    }
-    return [parameters copy];
-}
-
 - (NSString *)description
 {
     NSString *description = [NSString stringWithFormat:@"\nReport: %@\ncount of pages: %@\nisEmpty: %@", self.resourceLookup.label, @(self.countOfPages), @(self.isReportEmpty)];

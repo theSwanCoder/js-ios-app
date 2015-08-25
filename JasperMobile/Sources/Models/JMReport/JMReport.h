@@ -53,7 +53,6 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 @property (nonatomic, strong, readonly) NSString *requestId;
 @property (nonatomic, assign, readonly) BOOL isReportAlreadyLoaded;
 
-@property (nonatomic, copy) NSArray *reportOptions;
 @property (nonatomic, strong) JSReportOption *activeReportOption;
 
 
@@ -88,4 +87,5 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 - (void)cacheHTMLString:(NSString *)HTMLString forPageNumber:(NSInteger)pageNumber;
 - (NSDictionary *)cachedReportPages;
 - (void)clearCachedReportPages;
+
 @end

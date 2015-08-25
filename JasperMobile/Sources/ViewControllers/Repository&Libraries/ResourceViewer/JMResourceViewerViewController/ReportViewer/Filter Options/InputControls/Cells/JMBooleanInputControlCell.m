@@ -49,7 +49,7 @@
 
 - (IBAction)switchChanged:(id)sender
 {
-    self.inputControlDescriptor.state.value = [JSConstants stringFromBOOL:[sender isOn]];
+    [self updateValue:[JSConstants stringFromBOOL:[sender isOn]]];
 }
 
 @end

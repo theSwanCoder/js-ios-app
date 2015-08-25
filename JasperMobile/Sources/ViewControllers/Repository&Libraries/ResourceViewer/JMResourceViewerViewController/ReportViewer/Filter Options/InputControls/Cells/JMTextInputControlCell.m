@@ -56,7 +56,7 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    self.inputControlDescriptor.state.value = textField.text.length ? textField.text : nil;
+    [self updateValue:textField.text.length ? textField.text : nil];
     self.inputControlDescriptor.state.error = nil;
     [self updateDisplayingOfErrorMessage];
 }
@@ -64,7 +64,7 @@
 #pragma mark - Actions
 - (void)doneButtonTapped:(id)sender
 {
-    self.inputControlDescriptor.state.value = self.textField.text;
+    [self updateValue:self.textField.text];
     [self.textField resignFirstResponder];
 }
 @end

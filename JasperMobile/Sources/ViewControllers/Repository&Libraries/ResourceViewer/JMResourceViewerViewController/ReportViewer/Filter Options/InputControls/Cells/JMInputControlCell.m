@@ -65,6 +65,14 @@
     [self.delegate reloadTableViewCell:self];
 }
 
+- (void)updateValue:(NSString *)newValue
+{
+    if (![self.inputControlDescriptor.state.value isEqualToString:newValue]) {
+        self.inputControlDescriptor.state.value = newValue;
+        [self.delegate inputControlCellDidChangedValue:self];
+    }
+}
+
 - (void)setInputControlDescriptor:(JSInputControlDescriptor *)inputControlDescriptor
 {
     _inputControlDescriptor = inputControlDescriptor;

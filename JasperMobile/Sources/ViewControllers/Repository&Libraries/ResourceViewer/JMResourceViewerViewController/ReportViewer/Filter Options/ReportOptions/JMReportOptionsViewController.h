@@ -46,6 +46,6 @@
 @interface JMReportOptionsViewController : GAITrackedViewController
 
 @property (nonatomic, strong) NSArray *listOfValues;
-@property (nonatomic, strong, readonly) JSReportOption *selectedReportOption;
+@property (nonatomic, strong) JSReportOption *selectedReportOption;
 @property (nonatomic, weak) id <JMReportOptionsViewControllerDelegate> delegate;
 @end

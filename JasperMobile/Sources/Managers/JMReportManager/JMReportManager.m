@@ -104,4 +104,15 @@
                                           }];
 }
 
++ (NSArray *)reportParametersFromInputControls:(NSArray *)inputControls
+{
+    NSMutableArray *parameters = [NSMutableArray array];
+    for (JSInputControlDescriptor *inputControlDescriptor in inputControls) {
+        [parameters addObject:[[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
+                                                                value:inputControlDescriptor.selectedValues]];
+    }
+    return [parameters copy];
+}
+
+
 @end

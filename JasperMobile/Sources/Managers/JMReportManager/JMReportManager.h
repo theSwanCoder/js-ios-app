@@ -59,4 +59,7 @@
                        reportParameters:(NSArray *)reportParameters
                              completion:(void (^)(JSReportOption *reportOption))completion;
 
+// helper
++ (NSArray *)reportParametersFromInputControls:(NSArray *)inputControls;
+
 @end

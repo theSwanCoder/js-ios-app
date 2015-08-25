@@ -38,6 +38,8 @@
 @required
 - (void) reloadTableViewCell:(JMInputControlCell *)cell;
 
+- (void) inputControlCellDidChangedValue:(JMInputControlCell *)cell;
+
 - (void) updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor;
 @end
 
@@ -49,6 +51,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *errorLabel;
 
 - (void) updateDisplayingOfErrorMessage;
+- (void) updateValue:(NSString *)newValue;
 - (void) setEnabledCell:(BOOL) enabled;
 
 @end

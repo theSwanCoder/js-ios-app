@@ -36,8 +36,6 @@
 
 @property (nonatomic, strong) NSArray *filteredListOfValues;
 
-@property (nonatomic, strong, readwrite) JSReportOption *selectedReportOption;
-
 @end
 
 @implementation JMReportOptionsViewController
@@ -118,6 +116,7 @@
 {
     self.selectedReportOption = [self.listOfValues objectAtIndex:indexPath.row];
     [self.delegate reportOptionsViewController:self didSelectOption:self.selectedReportOption];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

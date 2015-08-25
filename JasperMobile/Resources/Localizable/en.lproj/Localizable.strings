@@ -161,7 +161,9 @@
 "report.viewer.options.ic.title.time" = "Time";
 "report.viewer.options.ic.title.unset" = "Unset";
 "report.viewer.report.options.title" = "Report Options";
-
+"report.viewer.report.options.active.option.title" = "-- None --";
+"report.viewer.report.options.new.option.title" = "Enter name of a new ReportOption";
+"report.viewer.report.options.new.option.title.alreadyexist" = "This report already has saved values with this name. Do you want to overwrite them?";
 
 // Saved Reports viewer view
 "savedreport.viewer.modify.title" = "Rename Report";

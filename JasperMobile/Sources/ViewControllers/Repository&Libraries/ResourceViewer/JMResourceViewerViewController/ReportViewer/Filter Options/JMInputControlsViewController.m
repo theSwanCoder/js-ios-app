@@ -32,7 +32,7 @@
 #import "JMReportManager.h"
 
 
-@interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate>
+@interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *runReportButton;
 
@@ -125,7 +125,6 @@
             }
         }
     }
-
     return NO;
 }
 
@@ -145,8 +144,12 @@
     if ([destinationViewController respondsToSelector:@selector(setCell:)]) {
         [destinationViewController setCell:sender];
     }
-    if ([destinationViewController respondsToSelector:@selector(setDelegate:)]) {
-        [destinationViewController setDelegate:self];
+
+    if ([destinationViewController isKindOfClass:[JMReportOptionsViewController class]]) {
+        JMReportOptionsViewController *reportOptionsVC = (JMReportOptionsViewController *)destinationViewController;
+        reportOptionsVC.listOfValues = self.reportOptions;
+        reportOptionsVC.delegate = self;
+        reportOptionsVC.selectedReportOption = self.report.activeReportOption;
     }
 }
 
@@ -156,9 +159,18 @@
     return ([self.reportOptions count]) ? 2 : 1;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section) {
+        return JMCustomLocalizedString(@"report.viewer.options.title", nil);
+    } else {
+        return JMCustomLocalizedString(@"report.viewer.report.options.title", nil);
+    }
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([self.reportOptions count] && section == 1) {
+    if ([self.reportOptions count] && section == 0) {
         return 1;
     }
     return self.inputControls.count;
@@ -177,9 +189,9 @@
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 
     // Configure the cell for this indexPath
-    if ([self.reportOptions count] && indexPath.section == 1) {
+    if ([self.reportOptions count] && indexPath.section == 0) {
         JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
-        roCell.titleLabel.text = self.activeReportOption.label;
+        roCell.titleLabel.text = [self activeReportOptionTitle];
     } else {
         JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
         JMInputControlCell *icCell = (JMInputControlCell *)cell;
@@ -209,7 +221,7 @@
     // of the cell's contentView and the bottom of the table view cell.
     height += 1;
     
-    return height;
+    return (height > 44) ? height : 44;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -218,9 +230,9 @@
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     // Configure the cell for this indexPath
-    if ([self.reportOptions count] && indexPath.section == 1) {
+    if ([self.reportOptions count] && indexPath.section == 0) {
         JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
-        roCell.titleLabel.text = self.activeReportOption.label;
+        roCell.titleLabel.text = [self activeReportOptionTitle];
     } else {
         JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
         JMInputControlCell *icCell = (JMInputControlCell *)cell;
@@ -259,17 +271,35 @@
     }
 }
 
+- (void)inputControlCellDidChangedValue:(JMInputControlCell *)cell
+{
+    if ([self.reportOptions count]) {
+        self.report.activeReportOption = nil;
+        [self updateRightBurButtonItem];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
 #pragma mark - JMReportOptionsViewControllerDelegate
 - (void)reportOptionsViewController:(JMReportOptionsViewController *)controller didSelectOption:(JSReportOption *)option
 {
+    self.report.activeReportOption = option;
+    [self updateRightBurButtonItem];
     [self.tableView reloadData];
 }
 
 #pragma mark - Private
+- (NSString *)activeReportOptionTitle
+{
+    if (self.report.activeReportOption) {
+        return self.report.activeReportOption.label;
+    }
+    return JMCustomLocalizedString(@"report.viewer.report.options.active.option.title", nil);
+}
 
 - (NSString *)cellIdentifierForIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self.reportOptions count] && indexPath.section == 1) {
+    if ([self.reportOptions count] && indexPath.section == 0) {
         return @"ReportOptionsCell";
     }
     JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
@@ -315,14 +345,15 @@
             }
         } else {
             NSMutableArray *reportOptions = [NSMutableArray array];
-            for (JSReportOption *reportOption in result.objects) {
-                if (reportOption.identifier) {
+            for (id reportOption in result.objects) {
+                if ([reportOption isKindOfClass:[JSReportOption class]] && [reportOption identifier]) {
                     [reportOptions addObject:reportOption];
                 }
             }
             self.reportOptions = reportOptions;
             [self.tableView reloadData];
         }
+        [self updateRightBurButtonItem];
     }@weakselfend];
 }
 
@@ -376,6 +407,15 @@
                                 } @weakselfend];
 }
 
+- (void)updateRightBurButtonItem
+{
+    if (self.report.activeReportOption) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete_item"] style:UIBarButtonItemStyleDone target:self action:@selector(deleteReportOptionTapped:)];
+    } else {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item"] style:UIBarButtonItemStyleDone target:self action:@selector(createReportOptionTapped:)];
+    }
+}
+
 - (NSArray *)inputControls
 {
     if (!_inputControls) {
@@ -384,4 +424,63 @@
     return _inputControls;
 }
 
+- (void)createReportOptionTapped:(id)sender
+{
+    if ([self validateInputControls]) { // Local validation
+        [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
+            if (dataIsValid) {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(@"report.viewer.report.options.new.option.title", nil)
+                                                                    message:nil
+                                                                   delegate:self
+                                                          cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
+                                                          otherButtonTitles:JMCustomLocalizedString(@"dialog.button.ok", nil), nil];
+                alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+                UITextField *textField = [alertView textFieldAtIndex:0];
+                textField.delegate = self;
+                [alertView show];
+            }
+        } @weakselfend];
+    } else {
+        [self.tableView reloadData];
+    }
+}
+
+- (void)deleteReportOptionTapped:(id)sender
+{
+    [JMReportManager deleteReportOption:self.report.activeReportOption withReportURI:self.report.reportURI completion:@weakself(^(NSError *error)) {
+        //
+    }@weakselfend];
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return NO;
+}
+
+- (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
+{
+    UITextField *textField = [alertView textFieldAtIndex:0];
+    BOOL nameIsValid = YES;
+    for (JSReportOption *reportOption in self.reportOptions) {
+        nameIsValid &= ![textField.text isEqualToString:reportOption.label];
+    }
+#warning HERE NEED CHECK!!!!!
+    alertView.message = nameIsValid ? nil : JMCustomLocalizedString(@"report.viewer.report.options.new.option.title.alreadyexist", nil);
+    [alertView setNeedsLayout];
+    [alertView layoutIfNeeded];
+    return textField.text.length > 0;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.cancelButtonIndex != buttonIndex) {
+        UITextField *textField = [alertView textFieldAtIndex:0];
+        NSArray *reportParameters = [JMReportManager reportParametersFromInputControls:self.inputControls];
+        [JMReportManager createReportOptionWithReportURI:self.report.reportURI optionLabel:textField.text reportParameters:reportParameters completion:^(JSReportOption *reportOption) {
+            
+        }];
+    }
+}
 @end
