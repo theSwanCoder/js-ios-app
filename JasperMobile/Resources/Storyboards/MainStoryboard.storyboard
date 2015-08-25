@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gNe-8U-f8m">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gNe-8U-f8m">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -326,7 +326,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="dqm-Y4-gBK">
                                         <rect key="frame" x="20" y="147" width="275" height="33"/>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                        <color key="backgroundColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Login">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -545,14 +545,14 @@
                                                     <rect key="frame" x="10" y="5" width="353" height="35"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="249" text="Error" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="cnl-Ng-EFT">
                                                     <rect key="frame" x="10" y="40" width="562" height="15"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CTm-82-Kya" customClass="JMTextField">
@@ -604,7 +604,7 @@
                                                         <constraint firstAttribute="height" constant="40" id="0JB-J8-nHA"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AOx-NF-B9l">
@@ -815,7 +815,7 @@
                         <viewControllerLayoutGuide type="bottom" id="auX-li-1Mj"/>
                     </layoutGuides>
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="ETr-4t-c5P">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yyh-gY-zel">
@@ -1067,7 +1067,7 @@ your business wherever you are.</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="sI5-qo-Cgd">
-                                <rect key="frame" x="10" y="10" width="580" height="446"/>
+                                <rect key="frame" x="10" y="10" width="580" height="476"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextCellIdentifier" id="oI1-jo-4x2" customClass="JMTextSettingsTableViewCell">
@@ -1081,7 +1081,7 @@ your business wherever you are.</string>
                                                     <rect key="frame" x="10" y="5" width="353" height="34"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kEF-bl-3nz" customClass="JMTextField">
@@ -1123,7 +1123,7 @@ your business wherever you are.</string>
                                                     <rect key="frame" x="10" y="5" width="485" height="34"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UiZ-lV-5Lx">
@@ -1147,7 +1147,7 @@ your business wherever you are.</string>
                                             <outlet property="valueSwitcher" destination="UiZ-lV-5Lx" id="VeU-v7-DMT"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IntroCellIdentifier" id="6jW-1y-mje" customClass="JMSettingsTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LabelCellIdentifier" id="6jW-1y-mje" customClass="JMSettingsTableViewCell">
                                         <rect key="frame" x="0.0" y="110" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6jW-1y-mje" id="aF0-lV-uJf">
@@ -1158,7 +1158,7 @@ your business wherever you are.</string>
                                                     <rect key="frame" x="10" y="5" width="560" height="34"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1171,33 +1171,6 @@ your business wherever you are.</string>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="titleLabel" destination="eIv-qN-a61" id="IMg-80-54p"/>
-                                            <segue destination="TRk-gt-NjK" kind="presentation" id="hn9-RK-qX4"/>
-                                        </connections>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedbackCellIdentifier" id="rO5-Zp-xn9" customClass="JMSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="154" width="300" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rO5-Zp-xn9" id="pxe-Go-cWT">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="ylk-9X-XbT">
-                                                    <rect key="frame" x="10" y="5" width="560" height="34"/>
-                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="ylk-9X-XbT" firstAttribute="top" secondItem="pxe-Go-cWT" secondAttribute="top" constant="5" id="0hb-Km-cMc"/>
-                                                <constraint firstAttribute="bottom" secondItem="ylk-9X-XbT" secondAttribute="bottom" constant="5" id="1Np-wg-9Zm"/>
-                                                <constraint firstItem="ylk-9X-XbT" firstAttribute="leading" secondItem="pxe-Go-cWT" secondAttribute="leading" constant="10" id="Jad-mS-zIK"/>
-                                                <constraint firstAttribute="trailing" secondItem="ylk-9X-XbT" secondAttribute="trailing" constant="10" id="qY8-Ua-xxL"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="titleLabel" destination="ylk-9X-XbT" id="cPt-Z5-rOf"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -1207,23 +1180,8 @@ your business wherever you are.</string>
                                     <outlet property="delegate" destination="wEA-Vb-4Ky" id="0pP-9v-0zW"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9mg-Ie-vdK">
-                                <rect key="frame" x="10" y="501" width="580" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="Sfp-IW-hT3"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <state key="normal" title="Privacy Policy">
-                                    <color key="titleColor" red="0.1037834928" green="0.21454571889999999" blue="0.6586568813" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="showPrivacyPolicy:" destination="wEA-Vb-4Ky" eventType="touchUpInside" id="7A3-4d-tGN"/>
-                                    <segue destination="LIw-YN-WwC" kind="show" id="6LI-fb-Vo0"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fPq-km-pBs">
-                                <rect key="frame" x="10" y="466" width="580" height="30"/>
+                                <rect key="frame" x="10" y="496" width="580" height="30"/>
                                 <color key="backgroundColor" red="0.25882352939999997" green="0.5568627451" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="lHo-2j-eIW">
@@ -1244,24 +1202,21 @@ your business wherever you are.</string>
                             </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="Rg8-qs-DTJ" firstAttribute="top" secondItem="fPq-km-pBs" secondAttribute="bottom" constant="10" id="0sY-f5-5kU"/>
                             <constraint firstItem="sI5-qo-Cgd" firstAttribute="top" secondItem="mzj-6L-OhT" secondAttribute="bottom" constant="10" id="3fO-Y1-N3m"/>
-                            <constraint firstItem="9mg-Ie-vdK" firstAttribute="leading" secondItem="Mky-P1-7P3" secondAttribute="leading" constant="10" id="8BT-un-dLf"/>
-                            <constraint firstItem="9mg-Ie-vdK" firstAttribute="top" secondItem="fPq-km-pBs" secondAttribute="bottom" constant="5" id="C36-2D-MQv"/>
                             <constraint firstAttribute="trailing" secondItem="sI5-qo-Cgd" secondAttribute="trailing" constant="10" id="No4-Ik-e1R"/>
                             <constraint firstItem="sI5-qo-Cgd" firstAttribute="leading" secondItem="Mky-P1-7P3" secondAttribute="leading" constant="10" id="clU-j4-Cs7"/>
                             <constraint firstAttribute="trailing" secondItem="fPq-km-pBs" secondAttribute="trailing" constant="10" id="oiN-2b-pCD"/>
-                            <constraint firstItem="Rg8-qs-DTJ" firstAttribute="top" secondItem="9mg-Ie-vdK" secondAttribute="bottom" constant="5" id="pOc-RJ-7MZ"/>
                             <constraint firstItem="fPq-km-pBs" firstAttribute="top" secondItem="sI5-qo-Cgd" secondAttribute="bottom" constant="10" id="prY-p0-OTh"/>
-                            <constraint firstAttribute="trailing" secondItem="9mg-Ie-vdK" secondAttribute="trailing" constant="10" id="slN-NN-Blv"/>
                             <constraint firstItem="fPq-km-pBs" firstAttribute="leading" secondItem="Mky-P1-7P3" secondAttribute="leading" constant="10" id="xsK-KY-1dO"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="D4H-X9-Y5w"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <outlet property="privacyPolicyButton" destination="9mg-Ie-vdK" id="AgK-XE-hle"/>
                         <outlet property="saveButton" destination="fPq-km-pBs" id="hiG-Ns-GnG"/>
                         <outlet property="tableView" destination="sI5-qo-Cgd" id="QIL-hQ-SHj"/>
+                        <segue destination="LIw-YN-WwC" kind="show" identifier="showPrivacyPolicy" id="UtP-Ok-49W"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7hL-FQ-7H5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1393,7 +1348,7 @@ your business wherever you are.</string>
                                                     <rect key="frame" x="10" y="5" width="501" height="34"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ncp-a4-ozg">
@@ -1430,7 +1385,7 @@ your business wherever you are.</string>
                                                     <rect key="frame" x="10" y="5" width="350" height="34"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" background="gray_text_field" translatesAutoresizingMaskIntoConstraints="NO" id="WLU-vH-m1e">
@@ -2228,7 +2183,7 @@ your business wherever you are.</string>
                                                     <rect key="frame" x="10" y="5" width="560" height="34"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -2254,7 +2209,7 @@ your business wherever you are.</string>
                                                     <rect key="frame" x="10" y="5" width="501" height="34"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ucJ-OR-7nk">
@@ -2289,7 +2244,7 @@ your business wherever you are.</string>
                                                     <rect key="frame" x="10" y="5" width="350" height="34"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b8v-CJ-xrb" customClass="JMTextField">

@@ -31,7 +31,13 @@
  @since 1.9
  */
 
-#import <Foundation/Foundation.h>
+extern NSString * const kJMTextCellIdentifier;
+extern NSString * const kJMLabelCellIdentifier;
+extern NSString * const kJMBooleanCellIdentifier;
+
+extern NSInteger const kJMFeedbackSettingValue;
+extern NSInteger const kJMPrivacyPolicySettingValue;
+extern NSInteger const kJMOnboardIntroSettingValue;
 
 @interface JMSettings : NSObject
 @property (nonatomic, readonly) NSArray *itemsArray;

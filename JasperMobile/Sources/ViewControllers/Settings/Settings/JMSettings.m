@@ -25,12 +25,13 @@
 #import "JMSettingsItem.h"
 #import "JMServerProfile+Helpers.h"
 
-static NSString * const kJMTextCellIdentifier = @"TextCellIdentifier";
-static NSString * const kJMBooleanCellIdentifier = @"BooleanCellIdentifier";
-static NSString * const kJMFeedbackCellIdentifier = @"FeedbackCellIdentifier";
-static NSString * const kJMIntroCellIdentifier = @"IntroCellIdentifier";
+NSString * const kJMTextCellIdentifier = @"TextCellIdentifier";
+NSString * const kJMLabelCellIdentifier = @"LabelCellIdentifier";
+NSString * const kJMBooleanCellIdentifier = @"BooleanCellIdentifier";
 
-
+NSInteger const kJMFeedbackSettingValue = 100;
+NSInteger const kJMPrivacyPolicySettingValue = 101;
+NSInteger const kJMOnboardIntroSettingValue = 102;
 
 @interface JMSettings ()
 @property (nonatomic, readwrite, strong) NSArray *itemsArray;
@@ -55,9 +56,10 @@ static NSString * const kJMIntroCellIdentifier = @"IntroCellIdentifier";
     @[
       @{@"title" : JMCustomLocalizedString(@"settings.item.connection.timeout", nil), @"value" : @(self.restClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.crashtracking.title", nil), @"value" : @([JMUtils crashReportsSendingEnable]), @"cellIdentifier" : kJMBooleanCellIdentifier},
-      @{@"title" : JMCustomLocalizedString(@"settings.feedback", nil), @"value" : @"", @"cellIdentifier" : kJMFeedbackCellIdentifier},
+      @{@"title" : JMCustomLocalizedString(@"settings.feedback", nil), @"value" : @"", @"cellIdentifier" : kJMLabelCellIdentifier},
+      @{@"title" : JMCustomLocalizedString(@"settings.privacy.policy.title", nil), @"value" : @(kJMPrivacyPolicySettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
       // used for test purpose
-//      @{@"title" : JMCustomLocalizedString(@"settings.item.intro", nil), @"value" : @"", @"cellIdentifier" : kJMIntroCellIdentifier},
+//      @{@"title" : JMCustomLocalizedString(@"settings.item.intro", nil), @"value" : @(kJMOnboardIntroSettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
 //      @{@"title" : @"Use Visualize", @"value" : @([JMUtils shouldUseVisualize]), @"cellIdentifier" : kJMBooleanCellIdentifier}
       ];
     

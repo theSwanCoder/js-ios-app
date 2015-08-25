@@ -33,6 +33,7 @@
 #import "UIView+Additions.h"
 #import <MessageUI/MessageUI.h>
 #import "ALToastView.h"
+#import "JMOnboardIntroViewController.h"
 
 static NSString const *kFeedbackPrimaryEmail = @"js-dev-mobile@tibco.com";
 static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
@@ -103,7 +104,7 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMSettingsItem *currentItem = [self.detailSettings.itemsArray objectAtIndex:indexPath.row];
+    JMSettingsItem *currentItem = self.detailSettings.itemsArray[indexPath.row];
     JMSettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:currentItem.cellIdentifier];
     [cell setBottomSeparatorWithHeight:1 color:self.view.backgroundColor tableViewStyle:tableView.style];
     cell.settingsItem = currentItem;
@@ -113,9 +114,18 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    JMSettingsItem *currentItem = [self.detailSettings.itemsArray objectAtIndex:indexPath.row];
-    if ([currentItem.cellIdentifier isEqualToString:@"FeedbackCellIdentifier"]) {
-        [self sendFeedback];
+    JMSettingsItem *currentItem = self.detailSettings.itemsArray[indexPath.row];
+
+    if ([currentItem.cellIdentifier isEqualToString:kJMLabelCellIdentifier]) {
+        NSInteger value = ((NSNumber *)currentItem.valueSettings).integerValue;
+
+        if (value == kJMPrivacyPolicySettingValue) {
+            [self showPrivacyPolicy];
+        } else if (value == kJMOnboardIntroSettingValue) {
+            [self showOnboardIntro];
+        } else if (value == kJMFeedbackSettingValue) {
+            [self sendFeedback];
+        }
     }
 }
 
@@ -210,8 +220,18 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
                         otherButtonTitles:nil] show];
 }
 
-- (IBAction)showPrivacyPolicy:(id)sender
+- (void)showPrivacyPolicy
 {
+    [self performSegueWithIdentifier:@"showPrivacyPolicy" sender:self];
+    if ([self isMenuShown]) {
+        [self closeMenu];
+    }
+}
+
+- (void)showOnboardIntro
+{
+    JMOnboardIntroViewController *introViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
+    [self presentViewController:introViewController animated:YES completion:nil];
     if ([self isMenuShown]) {
         [self closeMenu];
     }
