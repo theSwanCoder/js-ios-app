@@ -36,6 +36,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 
 @interface JMResourceCollectionViewCell()
 @property (nonatomic, weak) IBOutlet UIImageView *resourceImage;
+@property (nonatomic, weak) IBOutlet UILabel *typeLabel;
 @property (nonatomic, weak) IBOutlet UILabel *resourceName;
 @property (nonatomic, weak) IBOutlet UILabel *resourceDescription;
 @property (nonatomic, weak) IBOutlet UIButton *infoButton;
@@ -53,6 +54,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.resourceDescription.font = [[JMThemesManager sharedManager] collectionResourceDescriptionFont];
     self.resourceDescription.textColor = [[JMThemesManager sharedManager] resourceViewResourceCellDetailsTextColor];
     self.infoButton.tintColor = [[JMThemesManager sharedManager] resourceViewResourceInfoButtonTintColor];
+
+    self.typeLabel.backgroundColor = [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
 }
 
 - (void)setResourceLookup:(JSResourceLookup *)resourceLookup
@@ -77,8 +80,11 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 
 - (void)updateResourceImage
 {
+    self.typeLabel.text = [self.resourceLookup localizedResourceType];
+    self.typeLabel.hidden = YES;
     UIImage *resourceImage;
     if ([self.resourceLookup isReport]) {
+        self.typeLabel.hidden = NO;
         resourceImage = [UIImage imageNamed:@"res_type_report"];
         if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
             NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.restClient generateThumbnailImageUrl:self.resourceLookup.uri]]];
@@ -108,6 +114,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
             }
         }
     } else if ([self.resourceLookup isDashboard]) {
+        self.typeLabel.hidden = NO;
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
     } else if ([self.resourceLookup isFolder]) {
         resourceImage = [UIImage imageNamed:@"res_type_folder"];
