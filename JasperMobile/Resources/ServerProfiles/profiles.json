@@ -74,6 +74,11 @@
       "mAlias" : "proxy 6.1",
       "mServerUrl" : "http://192.168.88.59/jasperserver-pro-61",
       "mOrganization" : ""
+    },
+    {
+      "mAlias" : "mobile demo 5.5",
+      "mServerUrl" : "http://mobiledemo.jaspersoft.com/jasperserver-pro",
+      "mOrganization" : ""
     }
   ]
 }
