@@ -48,4 +48,6 @@
 
 - (void)executeWithCompletion:(void(^)(JSReportExecutionResponse *executionResponse, NSError *error))completion;
 - (void)exportWithCompletion:(void (^)(JSExportExecutionResponse *exportResponse, NSError *error))completion;
+
+- (void)cancel;
 @end

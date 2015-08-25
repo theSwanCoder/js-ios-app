@@ -181,6 +181,14 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
                                 }@weakselfend];
     }
 }
+
+- (void)cancel
+{
+    [self.restClient cancelAllRequests];
+    [self.executionStatusCheckingTimer invalidate];
+    [self.exportStatusCheckingTimer invalidate];
+}
+
 #pragma mark - Private API
 
 #pragma mark - Execution Status Checking
