@@ -440,7 +440,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
                 [nextVC setResourceLookup:resourceLookup];
             }
         } else {
-            NSString *fullReportPath = [JMSavedResources pathToReportWithName:savedResource.label format:savedResource.format];
+            NSString *fullReportPath = [JMSavedResources absolutePathToReportWithName:savedResource.label
+                                                                               format:savedResource.format];
             NSURL *url = [NSURL fileURLWithPath:fullReportPath];
             UIDocumentInteractionController *controller = [self setupDocumentControllerWithURL:url usingDelegate:self];
             controller.name = resourceLookup.label;

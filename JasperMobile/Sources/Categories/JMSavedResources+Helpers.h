@@ -58,10 +58,14 @@ extern NSString * const kJMSavedResources;
 // Returns wrapper from SavedReports. Wrapper is a JSResourceLookup
 - (JSResourceLookup *)wrapperFromSavedReports;
 
++ (NSString *)pathToTempReportsDirectory;
++ (NSString *)pathToReportsDirectory;
++ (NSString *)pathToTempReportDirectoryForReportWithName:(NSString *)reportName format:(NSString *)format;
++ (NSString *)pathToReportDirectoryForReportWithName:(NSString *)reportName format:(NSString *)format;
 + (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format;
-
-+ (NSString *)pathToReportDirectoryWithName:(NSString *)name format:(NSString *)format;
-
-+ (NSString *)pathToReportWithName:(NSString *)name format:(NSString *)format;
++ (NSString *)relativeReportPathWithName:(NSString *)reportName format:(NSString *)format;
++ (NSString *)savedReportNameWithName:(NSString *)reportName format:(NSString *)format;
++ (NSString *)absoluteTempPathToReportWithName:(NSString *)reportName format:(NSString *)format;
++ (NSString *)absolutePathToReportWithName:(NSString *)reportName format:(NSString *)format;
 
 @end

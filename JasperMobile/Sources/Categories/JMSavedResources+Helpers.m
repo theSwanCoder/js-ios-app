@@ -28,6 +28,7 @@
 
 
 NSString * const kJMSavedResources = @"SavedResources";
+static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 
 
 @implementation JMSavedResources (Helpers)
@@ -62,7 +63,7 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 - (void)removeReport
 {
-    NSString *pathToReport = [JMSavedResources pathToReportDirectoryWithName:self.label format:self.format];
+    NSString *pathToReport = [JMSavedResources pathToReportDirectoryForReportWithName:self.label format:self.format];
     [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
     
     [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
@@ -74,7 +75,7 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 - (UIImage *)thumbnailImage
 {
-    NSString *reportDirectoryPath = [JMSavedResources pathToReportDirectoryWithName:self.label format:self.format];
+    NSString *reportDirectoryPath = [JMSavedResources pathToReportDirectoryForReportWithName:self.label format:self.format];
     NSString *thumbnailImagePath = [reportDirectoryPath stringByAppendingPathComponent:kJMThumbnailImageFileName];
     
     if ([[NSFileManager defaultManager] fileExistsAtPath:thumbnailImagePath]) {
@@ -96,9 +97,9 @@ NSString * const kJMSavedResources = @"SavedResources";
 
 - (BOOL)renameReportTo:(NSString *)newName
 {
-    NSString *currentPath = [JMSavedResources pathToReportDirectoryWithName:self.label format:self.format];
-    NSString *newPath = [JMSavedResources pathToReportDirectoryWithName:newName format:self.format];
-    
+    NSString *currentPath = [JMSavedResources pathToReportDirectoryForReportWithName:self.label format:self.format];
+    NSString *newPath = [JMSavedResources pathToReportDirectoryForReportWithName:newName format:self.format];
+
     if ([[NSFileManager defaultManager] fileExistsAtPath:newPath isDirectory:nil]) {
         [[NSFileManager defaultManager] removeItemAtPath:newPath error:nil];
     }
@@ -138,34 +139,114 @@ NSString * const kJMSavedResources = @"SavedResources";
     return resource;
 }
 
-+ (NSString *)pathToReportDirectoryWithName:(NSString *)name format:(NSString *)format{
-
-    NSString *fullReportName = [name stringByAppendingPathExtension:format];
-    NSString *relativeReportPath = [kJMReportsDirectory stringByAppendingPathComponent:fullReportName];
-
-    NSString *absolutePath = [self.restClient.serverProfile.alias stringByAppendingPathComponent:relativeReportPath];
-    return [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:absolutePath];
++ (NSString *)pathToReportsDirectory
+{
+    // PathComponent
+    NSString *pathComponent = [self pathComponent];
+    // Documents
+    NSString *documentsPath = [JMUtils applicationDocumentsDirectory];
+    // Documents/PathComponent
+    NSString *pathToReport = [documentsPath stringByAppendingPathComponent:pathComponent];
+    return pathToReport;
 }
 
-+ (NSString *)pathToReportWithName:(NSString *)name format:(NSString *)format
++ (NSString *)pathToTempReportsDirectory
 {
-    NSString *savedItemURI = [self uriForSavedReportWithName:name format:format];
+    // TODO: move to /temp
+    // TempPathComponent
+    NSString *tempPathComponent = [self tempPathComponent];
+    // Documents
+    NSString *documentsPath = [JMUtils applicationDocumentsDirectory];
+    // Documents/TempPathComponent
+    NSString *pathToReport = [documentsPath stringByAppendingPathComponent:tempPathComponent];
+    return pathToReport;
+}
 
-    NSString *absolutePath = [self.restClient.serverProfile.alias stringByAppendingPathComponent:savedItemURI];
-    return [[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:absolutePath];
++ (NSString *)savedReportNameWithName:(NSString *)reportName format:(NSString *)format
+{
+    NSString *savedReportName = [reportName stringByAppendingPathExtension:format];
+    return savedReportName;
+}
+
++ (NSString *)relativeReportPathWithName:(NSString *)reportName format:(NSString *)format
+{
+    // reportName.format
+    NSString *savedReportName = [self savedReportNameWithName:reportName format:format];
+    // reportName.format/reportName.format
+    NSString *relativePath = [savedReportName stringByAppendingPathComponent:savedReportName];
+    // reports/reportName.format/reportName.format
+    relativePath = [kJMReportsDirectory stringByAppendingPathComponent:relativePath];
+    return relativePath;
+}
+
++ (NSString *)pathToTempReportDirectoryForReportWithName:(NSString *)reportName format:(NSString *)format
+{
+    // Documents/TempPathComponent/
+    NSString *pathToTempReportsDirectory = [self pathToTempReportsDirectory];
+    // reportName.format
+    NSString *savedReportName = [self savedReportNameWithName:reportName format:format];
+    // reports/reportName.format/
+    NSString *relativePath = [kJMReportsDirectory stringByAppendingPathComponent:savedReportName];
+    // Documents/TempPathComponent/reports/reportName.format/
+    NSString *pathToTempReportDirectory = [pathToTempReportsDirectory stringByAppendingPathComponent:relativePath];
+    return pathToTempReportDirectory;
+}
+
++ (NSString *)pathToReportDirectoryForReportWithName:(NSString *)reportName format:(NSString *)format
+{
+    // Documents/PathComponent/
+    NSString *pathToReportsDirectory = [self pathToReportsDirectory];
+    // reportName.format
+    NSString *savedReportName = [self savedReportNameWithName:reportName format:format];
+    // reports/reportName.format/
+    NSString *relativePath = [kJMReportsDirectory stringByAppendingPathComponent:savedReportName];
+    // Documents/PathComponent/reports/reportName.format/
+    NSString *pathToReportDirectory = [pathToReportsDirectory stringByAppendingPathComponent:relativePath];
+    return pathToReportDirectory;
+}
+
++ (NSString *)absoluteTempPathToReportWithName:(NSString *)reportName format:(NSString *)format
+{
+    // reports/reportName.format/reportName.format
+    NSString *relativeReportPath = [self relativeReportPathWithName:reportName format:format];
+    // Documents/TempPathComponent/
+    NSString *pathToTempReportsDirectory = [self pathToTempReportsDirectory];
+    // Documents/TempPathComponent/reports/reportName.format/reportName.format
+    NSString *absolutePath = [pathToTempReportsDirectory stringByAppendingPathComponent:relativeReportPath];
+    return absolutePath;
+}
+
++ (NSString *)absolutePathToReportWithName:(NSString *)reportName format:(NSString *)format
+{
+    // reports/reportName.format/reportName.format
+    NSString *relativeReportPath = [self relativeReportPathWithName:reportName format:format];
+    // Documents/PathComponent/
+    NSString *pathToDirectory = [self pathToReportsDirectory];
+    // Documents/PathComponent/reports/reportName.format/reportName.format
+    NSString *absolutePath = [pathToDirectory stringByAppendingPathComponent:relativeReportPath];
+    return absolutePath;
+}
+
++ (NSString *)pathComponent
+{
+    // TODO: replace with MD5 of (Alias + username)
+    NSString *path = self.restClient.serverProfile.alias;
+    return path;
+}
+
++ (NSString *)tempPathComponent
+{
+    NSString *path = [self pathComponent];
+    NSString *tempPath = [NSString stringWithFormat:@"%@%@", kJMSavedResourcesTempIdentifier, path];
+    return tempPath;
 }
 
 + (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format
 {
     NSAssert(name != nil || format != nil, @"There aren't name and format of saved report");
 
-    NSString *constantReportName = [kJMReportFilename stringByAppendingPathExtension:format];
-
-    NSString *fullReportName = [name stringByAppendingPathExtension:format];
-    NSString *relativeReportPath = [kJMReportsDirectory stringByAppendingPathComponent:fullReportName];
-
-    NSString *savedItemURI = [relativeReportPath stringByAppendingPathComponent:constantReportName];
-    return [NSString stringWithFormat:@"/%@",savedItemURI];
+    NSString *relativePath = [self relativeReportPathWithName:name format:format];
+    return [NSString stringWithFormat:@"/%@", relativePath];
 }
 
 #pragma mark - Private

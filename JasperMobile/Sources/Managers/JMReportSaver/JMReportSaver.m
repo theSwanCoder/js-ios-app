@@ -109,6 +109,7 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
                                                                                           }
                                                                                           [self moveResourceFromPath:self.temporaryDirectory
                                                                                                               toPath:self.originalDirectory];
+                                                                                          [self removeTempDirectory];
 
                                                                                           // save to DB
                                                                                           if (addToDB) {
@@ -162,13 +163,13 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
                                           });
                                       } else {
                                           // move saved report from temp location to origin
-
                                           if ([self isExistSavedReportWithName:name fileExtension:format]) {
                                               [self removeReportAtPath:self.originalDirectory];
                                           }
                                           [self moveResourceFromPath:self.temporaryDirectory
                                                               toPath:self.originalDirectory];
 
+                                          [self removeTempDirectory];
                                           dispatch_async(dispatch_get_main_queue(), ^{
                                               if (completion) {
                                                   NSString *reportURI = [JMSavedResources uriForSavedReportWithName:name format:format];
@@ -185,20 +186,19 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 
 - (void)cancelReport
 {
-    [self.restClient cancelAllRequests];
-    [self.downloadTask cancel];
+    [self.reportExecutor cancel];
+    [self.downloadTask cancelByProducingResumeData:nil];
     [self removeReportAtPath:self.temporaryDirectory];
+    [self removeTempDirectory];
 }
 
 #pragma mark - Private API
 - (void)preparePathsForName:(NSString *)name fileExtension:(NSString *)fileExtension
 {
-    NSString *tempName = [NSString stringWithFormat:@"Temp_%@", name];
-    self.temporaryDirectory = [JMSavedResources pathToReportDirectoryWithName:tempName
-                                                                       format:fileExtension];
-
-    self.originalDirectory = [JMSavedResources pathToReportDirectoryWithName:name
-                                                                      format:fileExtension];
+    self.temporaryDirectory = [JMSavedResources pathToTempReportDirectoryForReportWithName:name
+                                                                                    format:fileExtension];
+    self.originalDirectory = [JMSavedResources pathToReportDirectoryForReportWithName:name
+                                                                               format:fileExtension];
 }
 
 - (void)downloadReportWithName:(NSString *)reportName
@@ -223,8 +223,8 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 
                                      if (!error) {
                                          // save report to disk
-                                         NSURL *reportLocation = [self reportLocationForPath:self.temporaryDirectory withFileExtention:fileExtension];
-                                         NSError *error = [self moveResourceFromLocation:location toLocation:reportLocation];
+                                         NSString *tempReportPath = [JMSavedResources absoluteTempPathToReportWithName:reportName format:fileExtension];
+                                         NSError *error = [self moveResourceFromPath:location.path toPath:tempReportPath];
                                          if (error) {
                                              if (completion) {
                                                  completion(error);
@@ -277,8 +277,8 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
                                                  completion(error);
                                              }
                                          } else {
-                                             NSURL *attachmentLocation = [self attachmentLocationForPath:self.temporaryDirectory withName:attachmentName];
-                                             NSError *error = [self moveResourceFromLocation:location toLocation:attachmentLocation];
+                                             NSString *attachmentPath = [self attachmentPathWithName:attachmentName];
+                                             NSError *error = [self moveResourceFromPath:location.path toPath:attachmentPath];
                                              if (error) {
                                                  if (completion) {
                                                      completion(error);
@@ -322,8 +322,8 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
     [self downloadResourceFromURLString:resourceURLString
                              completion:^(NSURL *location, NSURLResponse *response, NSError *error) {
                                  if (!error) {
-                                     NSURL *thumbnailLocation = [self thumbnailLocationForPath:self.originalDirectory];
-                                     [self moveResourceFromLocation:location toLocation:thumbnailLocation];
+                                     NSString *thumbnailPath = [self thumbnailPath];
+                                     [self moveResourceFromPath:location.path toPath:thumbnailPath];
                                  }
                              }];
 }
@@ -359,15 +359,6 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 }
 
 #pragma mark - File manage helpers
-- (NSError *)moveResourceFromLocation:(NSURL *)fromLocation toLocation:(NSURL *)toLocation
-{
-    NSError *error;
-    [[NSFileManager defaultManager] moveItemAtURL:fromLocation
-                                            toURL:toLocation
-                                            error:&error];
-    return error;
-}
-
 - (NSError *)moveResourceFromPath:(NSString *)fromPath toPath:(NSString *)toPath
 {
     NSError *error;
@@ -394,25 +385,23 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
     return error;
 }
 
-- (NSURL *)reportLocationForPath:(NSString *)path withFileExtention:(NSString *)format
+- (NSString *)attachmentPathWithName:(NSString *)attachmentName
 {
-    NSString *fullPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", kJMReportFilename, format]];
-    NSURL *reportLocation = [NSURL fileURLWithPath:fullPath];
-    return reportLocation;
+    NSString *attachmentComponent = [NSString stringWithFormat:@"%@%@", (kJMAttachmentPrefix ?: @""), attachmentName];
+    NSString *attachmentPath = [self.temporaryDirectory stringByAppendingPathComponent:attachmentComponent];
+    return attachmentPath;
 }
 
-- (NSURL *)attachmentLocationForPath:(NSString *)path withName:(NSString *)attachmentName
+- (NSString *)thumbnailPath
 {
-    NSString *fullPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@", (kJMAttachmentPrefix ?: @""), attachmentName]];
-    NSURL *reportLocation = [NSURL fileURLWithPath:fullPath];
-    return reportLocation;
+    NSString *thumbnailPath = [self.originalDirectory stringByAppendingPathComponent:kJMThumbnailImageFileName];
+    return thumbnailPath;
 }
 
-- (NSURL *)thumbnailLocationForPath:(NSString *)path
+- (void)removeTempDirectory
 {
-    NSString *fullPath = [path stringByAppendingPathComponent:kJMThumbnailImageFileName];
-    NSURL *reportLocation = [NSURL fileURLWithPath:fullPath];
-    return reportLocation;
+    NSString *tempDirectory = [JMSavedResources pathToTempReportsDirectory];
+    [self removeReportAtPath:tempDirectory];
 }
 
 #pragma mark - Helpers
@@ -453,7 +442,9 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 {
     BOOL isExistInDB = ![JMSavedResources isAvailableReportName:name
                                                      format:fileExtension];
-    BOOL isExistInFS = [[NSFileManager defaultManager] fileExistsAtPath:self.originalDirectory];
+    NSString *fileReportPath = [JMSavedResources absolutePathToReportWithName:name
+                                                                       format:fileExtension];
+    BOOL isExistInFS = [[NSFileManager defaultManager] fileExistsAtPath:fileReportPath];
     return isExistInFS || isExistInDB;
 }
 
