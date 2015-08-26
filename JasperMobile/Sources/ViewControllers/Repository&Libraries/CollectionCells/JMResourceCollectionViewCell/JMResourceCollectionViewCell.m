@@ -48,7 +48,14 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.resourceName.font = [[JMThemesManager sharedManager] collectionResourceNameFont];
+    UIFont *resourceNameFont;
+    NSString *cellIdentifier = self.reuseIdentifier;
+    if ([cellIdentifier isEqualToString:kJMHorizontalResourceCell]) {
+        resourceNameFont = [[JMThemesManager sharedManager] collectionResourceNameFont];
+    } else if ([cellIdentifier isEqualToString:kJMGridResourceCell]) {
+        resourceNameFont = [[JMThemesManager sharedManager] collectionResourceDescriptionFont];
+    }
+    self.resourceName.font = resourceNameFont;
     self.resourceName.textColor = [[JMThemesManager sharedManager] resourceViewResourceCellTitleTextColor];
     
     self.resourceDescription.font = [[JMThemesManager sharedManager] collectionResourceDescriptionFont];
