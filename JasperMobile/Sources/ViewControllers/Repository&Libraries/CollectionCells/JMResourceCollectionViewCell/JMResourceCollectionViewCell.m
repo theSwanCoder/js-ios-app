@@ -52,17 +52,20 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     NSString *cellIdentifier = self.reuseIdentifier;
     if ([cellIdentifier isEqualToString:kJMHorizontalResourceCell]) {
         resourceNameFont = [[JMThemesManager sharedManager] collectionResourceNameFont];
+        self.infoButton.tintColor = [[JMThemesManager sharedManager] resourceViewResourceInfoButtonTintColor];
     } else if ([cellIdentifier isEqualToString:kJMGridResourceCell]) {
         resourceNameFont = [[JMThemesManager sharedManager] collectionResourceDescriptionFont];
+        self.infoButton.tintColor = [UIColor whiteColor];
     }
-    self.resourceName.font = resourceNameFont;
-    self.resourceName.textColor = [[JMThemesManager sharedManager] resourceViewResourceCellTitleTextColor];
+//    self.resourceName.font = resourceNameFont;
+//    self.resourceName.textColor = [[JMThemesManager sharedManager] resourceViewResourceCellTitleTextColor];
     
     self.resourceDescription.font = [[JMThemesManager sharedManager] collectionResourceDescriptionFont];
     self.resourceDescription.textColor = [[JMThemesManager sharedManager] resourceViewResourceCellDetailsTextColor];
-    self.infoButton.tintColor = [[JMThemesManager sharedManager] resourceViewResourceInfoButtonTintColor];
+//    self.infoButton.tintColor = [[JMThemesManager sharedManager] resourceViewResourceInfoButtonTintColor];
+    self.infoButton.tintColor = [UIColor whiteColor];
 
-    self.typeLabel.backgroundColor = [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
+//    self.typeLabel.backgroundColor = [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
 }
 
 - (void)setResourceLookup:(JSResourceLookup *)resourceLookup

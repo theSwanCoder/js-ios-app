@@ -533,7 +533,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             countOfCellsInRow ++;
         }
         countOfCellsInRow --;
-        itemHeight = [JMUtils isIphone] ? 150 : 254;
+        itemHeight = [JMUtils isIphone] ? 140 : 254;
         itemWidth = floor((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
     }
     
