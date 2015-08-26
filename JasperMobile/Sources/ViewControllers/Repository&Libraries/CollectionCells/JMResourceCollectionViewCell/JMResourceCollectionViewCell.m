@@ -63,7 +63,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.resourceDescription.font = [[JMThemesManager sharedManager] collectionResourceDescriptionFont];
     self.resourceDescription.textColor = [[JMThemesManager sharedManager] resourceViewResourceCellDetailsTextColor];
 //    self.infoButton.tintColor = [[JMThemesManager sharedManager] resourceViewResourceInfoButtonTintColor];
-    self.infoButton.tintColor = [UIColor whiteColor];
+//    self.infoButton.tintColor = [UIColor whiteColor];
 
 //    self.typeLabel.backgroundColor = [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
 }
