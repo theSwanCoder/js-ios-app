@@ -311,7 +311,7 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
 
 - (UIFont *)collectionResourceNameFont
 {
-    return [JMUtils isIphone] ? [UIFont systemFontOfSize:15] : [UIFont systemFontOfSize:22];
+    return [JMUtils isIphone] ? [UIFont systemFontOfSize:14] : [UIFont systemFontOfSize:22];
 }
 
 - (UIFont *)collectionResourceDescriptionFont
