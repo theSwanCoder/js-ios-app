@@ -37,6 +37,7 @@
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
+#import "JMAppUpdater.h"
 #import <Crashlytics/Crashlytics.h>
 
 @interface JMMenuViewController() <UITableViewDataSource, UITableViewDelegate>
@@ -79,6 +80,9 @@
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     self.appVersionLabel.text = [NSString stringWithFormat:@"v. %@ (%@)", version, build];
+
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showInfo)];
+    [self.appVersionLabel addGestureRecognizer:tapGesture];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -196,6 +200,18 @@
     [self.revealViewController revealToggle:sender];
 }
 
+- (void)showInfo
+{
+    NSString *appName = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"];
+    NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
+    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion], currentYear];
+
+    [[UIAlertView localizedAlertWithTitle:nil
+                                  message:message
+                                 delegate:nil
+                        cancelButtonTitle:@"dialog.button.ok"
+                        otherButtonTitles:nil] show];
+}
 
 #pragma mark - Helpers
 - (NSArray *)createMenuItems
