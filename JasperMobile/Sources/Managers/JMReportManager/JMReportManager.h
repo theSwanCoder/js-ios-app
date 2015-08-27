@@ -34,7 +34,7 @@
  @since 2.2
  */
 
-#import "JSReportOption.h"
+#import "JMExtendedReportOption.h"
 #import "JSRequest.h"
 #import "JMReport.h"
 #import "JSResourceLookup.h"
@@ -42,22 +42,22 @@
 @interface JMReportManager : NSObject
 
 + (void)fetchReportLookupWithResourceURI:(NSString *)reportURI
-                              completion:(void(^)(JSOperationResult *result))completion;
+                              completion:(void(^)(JSResourceReportUnit *reportUnit, NSError *error))completion;
 
 + (void)fetchInputControlsWithReportURI:(NSString *)reportURI
-                             completion:(void(^)(JSOperationResult *result))completion;
+                             completion:(void(^)(NSArray *inputControls, NSError *error))completion;
 
 + (void)fetchReportOptionsWithReportURI:(NSString *)reportURI
-                             completion:(void(^)(JSOperationResult *result))completion;
+                             completion:(void(^)(NSArray *reportOptions, NSError *error))completion;
 
-+ (void)deleteReportOption:(JSReportOption *)reportOption
++ (void)deleteReportOption:(JMExtendedReportOption *)reportOption
              withReportURI:(NSString *)reportURI
                 completion:(void (^)(NSError *error))completion;
 
 + (void)createReportOptionWithReportURI:(NSString *)reportURI
                             optionLabel:(NSString *)optionLabel
                        reportParameters:(NSArray *)reportParameters
-                             completion:(void (^)(JSReportOption *reportOption))completion;
+                             completion:(void (^)(JSReportOption *reportOption, NSError *error))completion;
 
 // helper
 + (NSArray *)reportParametersFromInputControls:(NSArray *)inputControls;

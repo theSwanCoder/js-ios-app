@@ -32,8 +32,7 @@
  @since 2.0
  */
 
-#import "JSReportOption.h"
-#import "JSResourceReportUnit.h"
+#import "JMExtendedReportOption.h"
 
 extern NSString * const kJMReportIsMutlipageDidChangedNotification;
 extern NSString * const kJMReportCountOfPagesDidChangeNotification;
@@ -53,7 +52,7 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 @property (nonatomic, strong, readonly) NSString *requestId;
 @property (nonatomic, assign, readonly) BOOL isReportAlreadyLoaded;
 
-@property (nonatomic, strong) JSReportOption *activeReportOption;
+@property (nonatomic, strong) JMExtendedReportOption *activeReportOption;
 
 
 // html
@@ -70,7 +69,6 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
                                inputControls:(NSArray *)inputControl;
 
 // update state
-- (void)updateResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit;
 
 - (void)updateInputControls:(NSArray *)inputControls;
 - (void)updateReportParameters:(NSArray *)reportParameters;

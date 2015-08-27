@@ -37,7 +37,6 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 @property (nonatomic, copy, readwrite) NSArray *inputControls;
 @property (nonatomic, copy, readwrite) NSString *reportURI;
 // setters
-@property (nonatomic, strong, readwrite) JSResourceReportUnit *resourceLookup;
 @property (nonatomic, assign, readwrite) NSInteger currentPage;
 @property (nonatomic, assign, readwrite) NSInteger countOfPages;
 @property (nonatomic, assign, readwrite) BOOL isMultiPageReport;
@@ -103,13 +102,6 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 }
 
 #pragma mark - Public API
-- (void)updateResourceReportUnit:(JSResourceReportUnit *)resourceReportUnit
-{
-    if (_resourceLookup != resourceReportUnit) {
-        _resourceLookup = resourceReportUnit;
-    }
-}
-
 - (void)updateInputControls:(NSArray *)inputControls
 {
     _inputControls = [inputControls copy];

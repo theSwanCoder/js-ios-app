@@ -22,7 +22,7 @@
 
 
 //
-//  JMReportOptionsViewController.h
+//  JMExtendedReportOption.h
 //  TIBCO JasperMobile
 //
 
@@ -31,21 +31,14 @@
  @since 2.2
  */
 
+#import <Foundation/Foundation.h>
+#import "JSReportOption.h"
 
-#import "GAITrackedViewController.h"
-#import "JMExtendedReportOption.h"
+@interface JMExtendedReportOption : NSObject
 
-@class JMReportOptionsViewController;
-@protocol JMReportOptionsViewControllerDelegate <NSObject>
+@property (nonatomic, strong) JSReportOption *reportOption;
+@property (nonatomic, strong) NSArray *inputControls;
 
-@required
-- (void) reportOptionsViewController:(JMReportOptionsViewController *)controller didSelectOption:(JMExtendedReportOption *)option;
 
-@end
-
-@interface JMReportOptionsViewController : GAITrackedViewController
-
-@property (nonatomic, strong) NSArray *listOfValues;
-@property (nonatomic, strong) JMExtendedReportOption *selectedReportOption;
-@property (nonatomic, weak) id <JMReportOptionsViewControllerDelegate> delegate;
++ (JMExtendedReportOption *)defaultReportOption;
 @end

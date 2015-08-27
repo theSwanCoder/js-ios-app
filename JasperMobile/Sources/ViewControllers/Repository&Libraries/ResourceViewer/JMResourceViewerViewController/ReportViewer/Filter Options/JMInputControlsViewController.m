@@ -30,16 +30,16 @@
 #import "JMInputControlCell.h"
 #import "JMReportOptionsViewController.h"
 #import "JMReportManager.h"
-
+#import "JMExtendedReportOption.h"
 
 @interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *runReportButton;
 
-@property (nonatomic, strong) JSReportOption *activeReportOption;
-@property (nonatomic, strong) NSArray *reportOptions;
+@property (nonatomic, strong) JMExtendedReportOption *activeReportOption;
+@property (nonatomic, strong) NSMutableArray *reportOptions;
 
-@property (nonatomic, strong, readwrite) NSArray *inputControls;
+@property (nonatomic, assign) BOOL isReportOptionsEditingAvailable;
 
 @end
 
@@ -63,14 +63,19 @@
     [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog.button.run.report", nil)
                           forState:UIControlStateNormal];
     
-    self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
     [self getReportOptionsList];
+
+    self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
 }
 
 #pragma mark - Actions
 - (IBAction)runReportAction:(id)sender
 {
-    [self runReport];
+    if (self.activeReportOption) {
+        
+    } else {
+        [self runReport];
+    }
 }
 
 - (void)backButtonTapped:(id)sender
@@ -149,19 +154,26 @@
         JMReportOptionsViewController *reportOptionsVC = (JMReportOptionsViewController *)destinationViewController;
         reportOptionsVC.listOfValues = self.reportOptions;
         reportOptionsVC.delegate = self;
-        reportOptionsVC.selectedReportOption = self.report.activeReportOption;
+        reportOptionsVC.selectedReportOption = self.activeReportOption;
     }
 }
 
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return ([self.reportOptions count]) ? 2 : 1;
+    NSInteger numberOfSections = 0;
+    if ([self isMultyReportOptions]) {
+        numberOfSections ++;
+    }
+    if ([self.inputControls count]) {
+        numberOfSections ++;
+    }
+    return numberOfSections;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section) {
+    if ([self isMultyReportOptions] && section == 0) {
         return JMCustomLocalizedString(@"report.viewer.options.title", nil);
     } else {
         return JMCustomLocalizedString(@"report.viewer.report.options.title", nil);
@@ -170,7 +182,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([self.reportOptions count] && section == 0) {
+    if ([self isMultyReportOptions] && section == 0) {
         return 1;
     }
     return self.inputControls.count;
@@ -189,9 +201,9 @@
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 
     // Configure the cell for this indexPath
-    if ([self.reportOptions count] && indexPath.section == 0) {
+    if ([self isMultyReportOptions] && indexPath.section == 0) {
         JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
-        roCell.titleLabel.text = [self activeReportOptionTitle];
+        roCell.titleLabel.text = self.activeReportOption.reportOption.label;
     } else {
         JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
         JMInputControlCell *icCell = (JMInputControlCell *)cell;
@@ -230,9 +242,9 @@
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     // Configure the cell for this indexPath
-    if ([self.reportOptions count] && indexPath.section == 0) {
+    if ([self isMultyReportOptions] && indexPath.section == 0) {
         JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
-        roCell.titleLabel.text = [self activeReportOptionTitle];
+        roCell.titleLabel.text = self.activeReportOption.reportOption.label;
     } else {
         JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
         JMInputControlCell *icCell = (JMInputControlCell *)cell;
@@ -273,33 +285,49 @@
 
 - (void)inputControlCellDidChangedValue:(JMInputControlCell *)cell
 {
-    if ([self.reportOptions count]) {
-        self.report.activeReportOption = nil;
-        [self updateRightBurButtonItem];
+    if ([self isMultyReportOptions]) {
+        [self resetActiveReportOption];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
 #pragma mark - JMReportOptionsViewControllerDelegate
-- (void)reportOptionsViewController:(JMReportOptionsViewController *)controller didSelectOption:(JSReportOption *)option
+- (void)reportOptionsViewController:(JMReportOptionsViewController *)controller didSelectOption:(JMExtendedReportOption *)option
 {
-    self.report.activeReportOption = option;
-    [self updateRightBurButtonItem];
-    [self.tableView reloadData];
+#warning HERE NEED REDESIGN LOGIC FOR EDIT COPY INPUT CONTROLS, NOT EXTENDEDREPORTOPTION'S CONTROLS!!!
+    if (self.activeReportOption != option) {
+        self.activeReportOption = option;
+        if (self.activeReportOption == self.reportOptions.firstObject) {
+            self.activeReportOption.inputControls = [[NSArray alloc] initWithArray:self.report.inputControls copyItems:YES];
+        }
+        [self updateRightBurButtonItem];
+        [self.tableView reloadData];
+
+        if (![self.inputControls count]) {
+            [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+            [JMReportManager fetchInputControlsWithReportURI:self.activeReportOption.reportOption.uri completion:@weakself(^(NSArray *inputControls, NSError *error)) {
+                [JMCancelRequestPopup dismiss];
+                if (error) {
+                    if (error.code == JSSessionExpiredErrorCode) {
+                        [JMUtils showLoginViewAnimated:YES completion:nil];
+                    } else {
+                        [JMUtils showAlertViewWithError:error completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                            [self resetActiveReportOption];
+                        }@weakselfend];
+                    }
+                } else {
+                    self.activeReportOption.inputControls = inputControls;
+                    [self.tableView reloadData];
+                }
+            }@weakselfend];
+        }
+    }
 }
 
 #pragma mark - Private
-- (NSString *)activeReportOptionTitle
-{
-    if (self.report.activeReportOption) {
-        return self.report.activeReportOption.label;
-    }
-    return JMCustomLocalizedString(@"report.viewer.report.options.active.option.title", nil);
-}
-
 - (NSString *)cellIdentifierForIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self.reportOptions count] && indexPath.section == 0) {
+    if ([self isMultyReportOptions] && indexPath.section == 0) {
         return @"ReportOptionsCell";
     }
     JSInputControlDescriptor *inputControlDescriptor = [self.inputControls objectAtIndex:indexPath.row];
@@ -328,29 +356,31 @@
             [descriptor.type isEqualToString:[JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT_CHECKBOX]);
 }
 
+- (BOOL)isMultyReportOptions
+{
+    return [self.reportOptions count] > 1;
+}
+
+- (void) resetActiveReportOption
+{
+    self.activeReportOption = [self.reportOptions firstObject];
+    [self updateRightBurButtonItem];
+}
+
 - (void)getReportOptionsList
 {
-    [JMCancelRequestPopup presentWithMessage:@"status.loading"
-                                 cancelBlock:@weakself(^(void)) {
-                                     [self.restClient cancelAllRequests];
-                                 } @weakselfend];
+    [self resetActiveReportOption];
+    
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
 
-    [JMReportManager fetchReportOptionsWithReportURI:self.report.reportURI completion:@weakself(^(JSOperationResult *result)) {
+    [JMReportManager fetchReportOptionsWithReportURI:self.report.reportURI completion:@weakself(^(NSArray *reportOptions, NSError *error)) {
         [JMCancelRequestPopup dismiss];
-        if (result.error && result.error.code == JSSessionExpiredErrorCode) {
-            if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                [self getReportOptionsList];
-            } else {
+        if (error) {
+            if (error.code == JSSessionExpiredErrorCode) {
                 [JMUtils showLoginViewAnimated:YES completion:nil];
             }
         } else {
-            NSMutableArray *reportOptions = [NSMutableArray array];
-            for (id reportOption in result.objects) {
-                if ([reportOption isKindOfClass:[JSReportOption class]] && [reportOption identifier]) {
-                    [reportOptions addObject:reportOption];
-                }
-            }
-            self.reportOptions = reportOptions;
+            [self.reportOptions addObjectsFromArray:reportOptions];
             [self.tableView reloadData];
         }
         [self updateRightBurButtonItem];
@@ -371,7 +401,7 @@
     [JMCancelRequestPopup presentWithMessage:@"status.loading"
                                  cancelBlock:@weakself(^(void)) {
                                      [self.restClient cancelAllRequests];
-                                     [self.navigationController popViewControllerAnimated:YES];
+                                     [self backButtonTapped:nil];
                                  } @weakselfend];
 
     [self.restClient updatedInputControlsValues:self.report.reportURI
@@ -409,19 +439,27 @@
 
 - (void)updateRightBurButtonItem
 {
-    if (self.report.activeReportOption) {
+#warning NEED ADD PERMISSION CHECKING
+    if (self.activeReportOption != [self.reportOptions firstObject]) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete_item"] style:UIBarButtonItemStyleDone target:self action:@selector(deleteReportOptionTapped:)];
     } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item"] style:UIBarButtonItemStyleDone target:self action:@selector(createReportOptionTapped:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"save_item"] style:UIBarButtonItemStyleDone target:self action:@selector(createReportOptionTapped:)];
     }
+}
+
+- (NSMutableArray *)reportOptions
+{
+    if (!_reportOptions) {
+        JMExtendedReportOption *defaultReportOption = [JMExtendedReportOption defaultReportOption];
+        defaultReportOption.inputControls = [[NSArray alloc] initWithArray:self.report.inputControls copyItems:YES];
+        _reportOptions = [@[defaultReportOption] mutableCopy];
+    }
+    return _reportOptions;
 }
 
 - (NSArray *)inputControls
 {
-    if (!_inputControls) {
-        _inputControls = [[NSArray alloc] initWithArray:self.report.inputControls copyItems:YES];
-    }
-    return _inputControls;
+    return self.activeReportOption.inputControls;
 }
 
 - (void)createReportOptionTapped:(id)sender
@@ -447,8 +485,20 @@
 
 - (void)deleteReportOptionTapped:(id)sender
 {
-    [JMReportManager deleteReportOption:self.report.activeReportOption withReportURI:self.report.reportURI completion:@weakself(^(NSError *error)) {
-        //
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+    [JMReportManager deleteReportOption:self.activeReportOption withReportURI:self.report.reportURI completion:@weakself(^(NSError *error)) {
+        [JMCancelRequestPopup dismiss];
+        if (error) {
+            if (error.code == JSSessionExpiredErrorCode) {
+                [JMUtils showLoginViewAnimated:YES completion:nil];
+            } else {
+                [JMUtils showAlertViewWithError:error];
+            }
+        } else {
+            [self.reportOptions removeObject:self.activeReportOption];
+            [self resetActiveReportOption];
+            [self.tableView reloadData];
+        }
     }@weakselfend];
 }
 
@@ -463,13 +513,10 @@
 {
     UITextField *textField = [alertView textFieldAtIndex:0];
     BOOL nameIsValid = YES;
-    for (JSReportOption *reportOption in self.reportOptions) {
-        nameIsValid &= ![textField.text isEqualToString:reportOption.label];
+    for (JMExtendedReportOption *reportOption in self.reportOptions) {
+        nameIsValid &= ![textField.text isEqualToString:reportOption.reportOption.label];
     }
-#warning HERE NEED CHECK!!!!!
-    alertView.message = nameIsValid ? nil : JMCustomLocalizedString(@"report.viewer.report.options.new.option.title.alreadyexist", nil);
-    [alertView setNeedsLayout];
-    [alertView layoutIfNeeded];
+    alertView.message = nameIsValid ? @"" : JMCustomLocalizedString(@"report.viewer.report.options.new.option.title.alreadyexist", nil);
     return textField.text.length > 0;
 }
 
@@ -477,9 +524,30 @@
 {
     if (alertView.cancelButtonIndex != buttonIndex) {
         UITextField *textField = [alertView textFieldAtIndex:0];
+        [textField resignFirstResponder];
+        
         NSArray *reportParameters = [JMReportManager reportParametersFromInputControls:self.inputControls];
-        [JMReportManager createReportOptionWithReportURI:self.report.reportURI optionLabel:textField.text reportParameters:reportParameters completion:^(JSReportOption *reportOption) {
-            
+        
+        [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+        [JMReportManager createReportOptionWithReportURI:self.report.reportURI optionLabel:textField.text reportParameters:reportParameters completion:^(JSReportOption *reportOption, NSError *error) {
+            [JMCancelRequestPopup dismiss];
+            if (error) {
+                if (error.code == JSSessionExpiredErrorCode) {
+                    [JMUtils showLoginViewAnimated:YES completion:nil];
+                } else {
+                    [JMUtils showAlertViewWithError:error];
+                }
+            } else {
+                if (reportOption) {
+                    JMExtendedReportOption *extendedReportOption = [JMExtendedReportOption new];
+                    extendedReportOption.reportOption = reportOption;
+                    extendedReportOption.inputControls = self.inputControls;
+                    [self.reportOptions addObject:extendedReportOption];
+                    self.activeReportOption = extendedReportOption;
+                    [self updateRightBurButtonItem];
+                    [self.tableView reloadData];
+                }
+            }
         }];
     }
 }

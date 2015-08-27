@@ -117,7 +117,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         request.command = @"MobileReport.run(%@);";
         NSString *reportURI = self.report.reportURI;
         if (self.report.activeReportOption) {
-            reportURI = self.report.activeReportOption.uri;
+            reportURI = self.report.activeReportOption.reportOption.uri;
             parametersAsString = @"''";
         }
         request.parametersAsString = [NSString stringWithFormat:@"{'uri': '%@', 'params': %@, 'pages' : '%@'}", reportURI, parametersAsString, @(pageNumber)];
@@ -125,7 +125,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     } else if (self.report.activeReportOption) {
         JMJavascriptRequest *request = [JMJavascriptRequest new];
         request.command = @"MobileReport.run(%@);";
-        NSString *reportURI = self.report.activeReportOption.uri;
+        NSString *reportURI = self.report.activeReportOption.reportOption.uri;
         request.parametersAsString = [NSString stringWithFormat:@"{'uri': '%@', 'params': '', 'pages' : '%@'}", reportURI, @(pageNumber)];
         [self.bridge sendRequest:request];
     } else {

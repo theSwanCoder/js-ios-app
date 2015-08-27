@@ -133,7 +133,6 @@
         errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
     }
     alertView.message = errorMessage;
-    
     return validData;
 }
 
