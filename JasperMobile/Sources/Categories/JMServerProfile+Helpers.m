@@ -95,8 +95,7 @@
 {
     NSArray *savedReports = [serverProfile.savedResources allObjects];
     for (JMSavedResources *savedResource in savedReports) {
-        NSString *fullPath = [JMSavedResources absolutePathToReportWithName:savedResource.label
-                                                                     format:savedResource.format];
+        NSString *fullPath = [JMSavedResources absolutePathToSavedReport:savedResource];
         [[NSFileManager defaultManager] removeItemAtPath:fullPath error:nil];
     }
     [serverProfile.managedObjectContext deleteObject:serverProfile];

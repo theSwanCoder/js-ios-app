@@ -386,20 +386,10 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                              format:self.selectedReportFormat
                               pages:[self makePagesFormat]
                             addToDB:YES
-                         completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                         completion:@weakself(^(JMSavedResources *savedReport, NSError *error)) {
                              [JMCancelRequestPopup dismiss];
 
-                             if (reportURI) {
-                                 // Animation
-                                 [CATransaction begin];
-                                 [CATransaction setCompletionBlock:^{
-                                     [self.delegate reportDidSavedSuccessfully];
-                                 }];
-
-                                 [self.navigationController popViewControllerAnimated:YES];
-                                 [CATransaction commit];
-                             } else {
-                                 [reportSaver cancelReport];
+                             if (error) {
                                  if (error.code == JSSessionExpiredErrorCode) {
                                      if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
                                          [self saveReport];
@@ -409,6 +399,15 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                  } else {
                                      [JMUtils showAlertViewWithError:error];
                                  }
+                             } else {
+                                 // Animation
+                                 [CATransaction begin];
+                                 [CATransaction setCompletionBlock:^{
+                                     [self.delegate reportDidSavedSuccessfully];
+                                 }];
+
+                                 [self.navigationController popViewControllerAnimated:YES];
+                                 [CATransaction commit];
                              }
                          }@weakselfend];
 }

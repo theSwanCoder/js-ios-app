@@ -41,7 +41,7 @@ extern NSString * const kJMSavedResources;
 + (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource;
 
 // Adds saved resource with path to CoreData
-+ (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format;
++ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format;
 
 // Returns YES if report with name reportName with format reportFormat is absent
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat;
@@ -58,14 +58,12 @@ extern NSString * const kJMSavedResources;
 // Returns wrapper from SavedReports. Wrapper is a JSResourceLookup
 - (JSResourceLookup *)wrapperFromSavedReports;
 
-+ (NSString *)pathToTempReportsDirectory;
-+ (NSString *)pathToReportsDirectory;
-+ (NSString *)pathToTempReportDirectoryForReportWithName:(NSString *)reportName format:(NSString *)format;
-+ (NSString *)pathToReportDirectoryForReportWithName:(NSString *)reportName format:(NSString *)format;
-+ (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format;
-+ (NSString *)relativeReportPathWithName:(NSString *)reportName format:(NSString *)format;
-+ (NSString *)savedReportNameWithName:(NSString *)reportName format:(NSString *)format;
-+ (NSString *)absoluteTempPathToReportWithName:(NSString *)reportName format:(NSString *)format;
-+ (NSString *)absolutePathToReportWithName:(NSString *)reportName format:(NSString *)format;
+// paths
++ (NSString *)pathToFolderForSavedReport:(JMSavedResources *)savedReport;
++ (NSString *)pathToTempFolderForSavedReport:(JMSavedResources *)savedReport;
++ (NSString *)absolutePathToSavedReport:(JMSavedResources *)savedReport;
++ (NSString *)absoluteTempPathToSavedReport:(JMSavedResources *)savedReport;
+
++ (NSString *)pathToTempReportsFolder;
 
 @end

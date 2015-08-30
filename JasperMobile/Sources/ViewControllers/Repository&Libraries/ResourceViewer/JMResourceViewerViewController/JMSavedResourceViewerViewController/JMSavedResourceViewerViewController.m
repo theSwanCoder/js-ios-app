@@ -60,8 +60,7 @@
 
 - (void)startResourceViewing
 {
-    NSString *fullReportPath = [JMSavedResources absolutePathToReportWithName:self.savedReports.label
-                                                                       format:self.savedReports.format];
+    NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
 
     if (self.webView.isLoading) {
         [self.webView stopLoading];

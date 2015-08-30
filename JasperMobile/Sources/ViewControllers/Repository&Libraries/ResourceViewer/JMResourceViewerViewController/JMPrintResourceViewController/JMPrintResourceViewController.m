@@ -32,6 +32,8 @@
 #import "JMSaveReportPageRangeCell.h"
 #import "UITableViewCell+Additions.h"
 #import "JMPrintPreviewTableViewCell.h"
+#import "JMCancelRequestPopup.h"
+#import "JMSavedResources+Helpers.h"
 
 
 NSString * const kJMPrintPageFromKey = @"kJMPrintPageFromKey";
@@ -281,12 +283,10 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                                      format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
                                       pages:[self makePagesFormat]
                                     addToDB:NO
-                                 completion:@weakself(^(NSString *reportURI, NSError *error)) {
-                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                         [JMCancelRequestPopup dismiss];
-                                     });
+                                 completion:@weakself(^(JMSavedResources *savedReport, NSError *error)) {
+                                     [JMCancelRequestPopup dismiss];
+
                                      if (error) {
-                                         [reportSaver cancelReport];
                                          if (error.code == JSSessionExpiredErrorCode) {
                                              if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
                                                  [self prepareForPrint];
@@ -297,7 +297,8 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                                              [JMUtils showAlertViewWithError:error];
                                          }
                                      } else {
-                                         self.printingItem = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
+                                         NSString *savedReportURL = [JMSavedResources absolutePathToSavedReport:savedReport];
+                                         self.printingItem = [NSURL fileURLWithPath:savedReportURL];
                                          [self printResource];
                                      }
                                  }@weakselfend];

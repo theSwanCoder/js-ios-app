@@ -34,7 +34,7 @@
 #import <Foundation/Foundation.h>
 #import "JMReport.h"
 
-typedef void(^SaveReportCompletion)(NSString *reportURI, NSError *error);
+typedef void(^SaveReportCompletion)(JMSavedResources *savedReport, NSError *error);
 
 @interface JMReportSaver : NSObject
 

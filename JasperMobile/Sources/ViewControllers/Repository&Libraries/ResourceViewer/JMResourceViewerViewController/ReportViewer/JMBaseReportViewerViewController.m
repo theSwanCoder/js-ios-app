@@ -257,19 +257,10 @@
                              format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
                               pages:[self makePagesFormat]
                             addToDB:NO
-                         completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                         completion:@weakself(^(JMSavedResources *savedReport, NSError *error)) {
                                  [JMCancelRequestPopup dismiss];
 
-                                 if (reportURI) {
-                                     NSString *relativeReportPath = reportURI;
-                                     NSString *absolutePath = [self.restClient.serverProfile.alias stringByAppendingPathComponent:relativeReportPath];
-
-                                     NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:absolutePath]];
-                                     if (completion) {
-                                         completion(resourceURL);
-                                     }
-                                 } else {
-                                     [reportSaver cancelReport];
+                                 if (error) {
                                      if (error.code == JSSessionExpiredErrorCode) {
                                          if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
                                              [self preparePreviewForPrintWithCompletion:completion];
@@ -278,6 +269,12 @@
                                          }
                                      } else {
                                          [JMUtils showAlertViewWithError:error];
+                                     }
+                                 } else {
+                                     NSString *savedReportURL = [JMSavedResources absolutePathToSavedReport:savedReport];
+                                     NSURL *resourceURL = [NSURL fileURLWithPath:savedReportURL];
+                                     if (completion) {
+                                         completion(resourceURL);
                                      }
                                  }
                              }@weakselfend];

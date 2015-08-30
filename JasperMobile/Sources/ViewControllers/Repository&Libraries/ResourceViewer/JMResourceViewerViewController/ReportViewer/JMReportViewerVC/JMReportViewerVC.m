@@ -25,6 +25,8 @@
 #import "JSResourceLookup+Helpers.h"
 #import "JMReportViewerConfigurator.h"
 #import "JMReportSaver.h"
+#import "JMSavedResources.h"
+#import "JMSavedResources+Helpers.h"
 
 @interface JMReportViewerVC () <JMReportLoaderDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
@@ -325,11 +327,10 @@
                 [reportSaver saveReportWithName:[self tempReportName]
                                          format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
                                    resourcePath:resourcePath
-                                     completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                                     completion:@weakself(^(JMSavedResources *savedReport, NSError *error)) {
                                              [JMCancelRequestPopup dismiss];
 
                                              if (error) {
-                                                 [reportSaver cancelReport];
                                                  if (error.code == JSSessionExpiredErrorCode) {
                                                      if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
                                                          [self preparePreviewForPrintWithCompletion:completion];
@@ -340,10 +341,8 @@
                                                      [JMUtils showAlertViewWithError:error];
                                                  }
                                              } else {
-                                                 NSString *relativeReportPath = reportURI;
-                                                 NSString *absolutePath = [self.restClient.serverProfile.alias stringByAppendingPathComponent:relativeReportPath];
-
-                                                 NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:absolutePath]];
+                                                 NSString *savedReportURL = [JMSavedResources absolutePathToSavedReport:savedReport];
+                                                 NSURL *resourceURL = [NSURL fileURLWithPath:savedReportURL];
                                                  if (completion) {
                                                      completion(resourceURL);
                                                  }
