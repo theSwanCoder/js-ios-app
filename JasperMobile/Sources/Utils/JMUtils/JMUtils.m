@@ -95,6 +95,15 @@ void jmDebugLog(NSString *format, ...) {
     return reportDirectory;
 }
 
++ (NSString *)applicationTempDirectory
+{
+    static NSString *tempDirectory;
+    if (!tempDirectory) {
+        tempDirectory = NSTemporaryDirectory();
+    }
+    return tempDirectory;
+}
+
 + (void)showNetworkActivityIndicator
 {
     [[AFNetworkActivityIndicatorManager sharedManager] incrementActivityCount];

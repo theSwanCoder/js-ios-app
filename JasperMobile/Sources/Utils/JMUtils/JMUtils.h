@@ -57,6 +57,8 @@ void jmDebugLog(NSString *format, ...);
 */
 + (NSString *)applicationDocumentsDirectory;
 
++ (NSString *)applicationTempDirectory;
+
 /**
  Shows network activity indicator
  */
