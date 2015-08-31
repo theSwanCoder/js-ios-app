@@ -35,6 +35,11 @@
 #import "JMReport.h"
 
 typedef void(^SaveReportCompletion)(JMSavedResources *savedReport, NSError *error);
+NSString * const kJMReportSaverErrorDomain;
+
+typedef NS_ENUM(NSInteger, JMReportSaverErrorTypes) {
+    JMReportSaverErrorTypesUndefined
+};
 
 @interface JMReportSaver : NSObject
 

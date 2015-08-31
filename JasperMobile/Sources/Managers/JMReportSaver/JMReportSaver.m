@@ -37,6 +37,7 @@ typedef void(^JMReportSaverDownloadCompletion)(BOOL sholdAddToDB);
 
 NSString * const kJMAttachmentPrefix = @"_";
 NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessionConfigurationIdentifier.save.report";
+NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
 
 @interface JMReportSaver()
 @property (nonatomic, weak, readonly) JMReport *report;
@@ -72,9 +73,7 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 
                 [self moveContentFromPath:temporaryDirectory
                                    toPath:originalDirectory];
-//                [self moveResourceFromPath:temporaryDirectory
-//                                    toPath:originalDirectory];
-//               [self removeTempDirectory];
+               [self removeTempDirectory];
 
                 // save to DB
                 if (shouldAddToDB) {
@@ -105,10 +104,11 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
     BOOL isPrepeared = [self preparePathsForSavedReport:self.savedReport];
     if (!isPrepeared) {
         if (completionBlock) {
-            // TODO: create error of creating the paths
-            NSError *error = [NSError new];
-//            completionBlock(nil, error);
-            completionBlock(nil, nil);
+            // TODO: add error of creating the paths
+            NSError *error = [NSError errorWithDomain:kJMReportSaverErrorDomain
+                                                 code:JMReportSaverErrorTypesUndefined
+                                             userInfo:nil];
+            completionBlock(nil, error);
         }
     } else {
         if (!self.pagesRange) {
@@ -172,8 +172,10 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
         BOOL isPrepeared = [self preparePathsForSavedReport:self.savedReport];
         if (isPrepeared) {
             if (completion) {
-                // TODO: create error of creating the paths
-                NSError *error = [NSError new];
+                // TODO: add error of creating the paths
+                NSError *error = [NSError errorWithDomain:kJMReportSaverErrorDomain
+                                                     code:JMReportSaverErrorTypesUndefined
+                                                 userInfo:nil];
                 completion(nil, error);
             }
         } else {
@@ -210,7 +212,7 @@ NSString * const kBackgroundSessionConfigurationIdentifier = @"kBackgroundSessio
 
     NSString *temporaryDirectory = [JMSavedResources pathToFolderForSavedReport:self.savedReport];
     [self removeReportAtPath:temporaryDirectory];
-//    [self removeTempDirectory];
+    [self removeTempDirectory];
     [self removeSavedReportFromDB];
 }
 
@@ -392,58 +394,39 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
 #pragma mark - File manage helpers
 - (NSError *)moveResourceFromPath:(NSString *)fromPath toPath:(NSString *)toPath
 {
-    NSLog(@"%@ - %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-
-    NSLog(@"from path: %@", fromPath);
-    NSLog(@"to path: %@", toPath);
     NSError *error;
     [[NSFileManager defaultManager] moveItemAtPath:fromPath
                                             toPath:toPath
                                              error:&error];
-    NSLog(@"error: %@", error.localizedDescription);
-    NSLog(@"error: %@", error.userInfo);
     return error;
 }
 
 - (NSError *)moveContentFromPath:(NSString *)fromPath toPath:(NSString *)toPath
 {
-    NSLog(@"%@ - %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSError *error;
-
     NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fromPath error:&error];
-    NSLog(@"items: %@", items);
-
     for (NSString *item in items) {
         NSString *itemFromPath = [fromPath stringByAppendingPathComponent:item];
         NSString *itemToPath = [toPath stringByAppendingPathComponent:item];
         [self moveResourceFromPath:itemFromPath toPath:itemToPath];
     }
-
-    NSLog(@"error: %@", error.localizedDescription);
-    NSLog(@"error: %@", error.userInfo);
     return error;
 }
 
 - (NSError *)removeReportAtPath:(NSString *)path
 {
-    NSLog(@"%@ - %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSError *error;
     [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
-    NSLog(@"error: %@", error.localizedDescription);
-    NSLog(@"error: %@", error.userInfo);
     return error;
 }
 
 - (NSError *)createLocationAtPath:(NSString *)path
 {
-    NSLog(@"%@ - %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
     NSError *error;
     [[NSFileManager defaultManager] createDirectoryAtPath:path
                               withIntermediateDirectories:YES
                                                attributes:nil
                                                     error:&error];
-    NSLog(@"error: %@", error.localizedDescription);
-    NSLog(@"error: %@", error.userInfo);
     return error;
 }
 
@@ -504,12 +487,8 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
 
 - (BOOL)isExistSavedReport:(JMSavedResources *)savedReport
 {
-    NSLog(@"%@ - %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
-
     NSString *fileReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReport];
     BOOL isExistInFS = [[NSFileManager defaultManager] fileExistsAtPath:fileReportPath];
-
-    NSLog(@"exists in fs: %@", isExistInFS ? @"YES" : @"NO");
     return isExistInFS;
 }
 
