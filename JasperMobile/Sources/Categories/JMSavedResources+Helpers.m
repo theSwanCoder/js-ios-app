@@ -98,6 +98,39 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return (!savedReport);
 }
 
++ (NSArray *)allSavedItems
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMSavedResources];
+    NSArray *savedItems = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    return savedItems;
+}
+
++ (BOOL)moveSavedItemFromPath:(NSString *)fromPath toPath:(NSString *)toPath
+{
+    NSString *currentFolderPath = [fromPath stringByDeletingLastPathComponent];
+    NSString *newFolderPath = [toPath stringByDeletingLastPathComponent];
+
+    BOOL isFileExists = [self isExistItemAtPath:toPath];
+
+    if (isFileExists) {
+        NSString *newFileName = toPath.stringByDeletingPathExtension;
+        NSString *newFileFormat = toPath.pathExtension;
+        BOOL isEntryInDBExists = [JMSavedResources isAvailableReportName:newFileName format:newFileFormat];
+        if (isEntryInDBExists) {
+            return NO;
+        } else {
+            [self removeResourceAtPath:toPath];
+        }
+    } else {
+        [self createFolderAtPath:newFolderPath];
+    }
+
+    NSError *moveContentError = [self moveResourceContentFromPath:currentFolderPath toPath:newFolderPath];
+    NSError *removeCurrentFolderError = [self removeResourceAtPath:currentFolderPath];
+
+    return !(moveContentError || removeCurrentFolderError);
+}
+
 - (BOOL)renameReportTo:(NSString *)newName
 {
     NSString *currentPath = [JMSavedResources absolutePathToSavedReport:self];
@@ -106,21 +139,21 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     NSString *currentFolderPath = [currentPath stringByDeletingLastPathComponent];
     NSString *newFolderPath = [newPath stringByDeletingLastPathComponent];
 
-    BOOL isFileExists = [self isExistItemAtPath:newPath];
+    BOOL isFileExists = [JMSavedResources isExistItemAtPath:newPath];
 
     if (isFileExists) {
         BOOL isEntryInDBExists = [JMSavedResources isAvailableReportName:newName format:self.format];
         if (isEntryInDBExists) {
             return NO;
         } else {
-            [self removeResourceAtPath:newPath];
+            [JMSavedResources removeResourceAtPath:newPath];
         }
     } else {
-        [self createFolderAtPath:newFolderPath];
+        [JMSavedResources createFolderAtPath:newFolderPath];
     }
 
-    NSError *moveContentError = [self moveResourceContentFromPath:currentFolderPath toPath:newFolderPath];
-    NSError *removeCurrentFolderError = [self removeResourceAtPath:currentFolderPath];
+    NSError *moveContentError = [JMSavedResources moveResourceContentFromPath:currentFolderPath toPath:newFolderPath];
+    NSError *removeCurrentFolderError = [JMSavedResources removeResourceAtPath:currentFolderPath];
 
     if (!(moveContentError || removeCurrentFolderError)) {
         JMFavorites *favorites = [JMFavorites favoritesFromResourceLookup:[self wrapperFromSavedReports]];
@@ -278,6 +311,18 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     NSString *serverURL = self.restClient.serverProfile.serverUrl;
     NSString *alias = self.restClient.serverProfile.alias;
 
+    NSString *uniqueString = [self createUniqueStringWithUserName:userName
+                                                     organization:organization
+                                                         severURL:serverURL
+                                                            alias:alias];
+    return uniqueString;
+}
+
++ (NSString *)createUniqueStringWithUserName:(NSString *)userName
+                                organization:(NSString *)organization
+                                    severURL:(NSString *)serverURL
+                                       alias:(NSString *)alias
+{
     NSString *combinedString = [NSString stringWithFormat:@"%@+%@+%@+%@", userName, organization, serverURL, alias];
     NSData *combinedStringData = [combinedString dataUsingEncoding:NSUTF8StringEncoding];
     NSString *result = [combinedStringData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
@@ -321,7 +366,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 }
 
 #pragma mark - File handlers
-- (NSError *)moveResourceContentFromPath:(NSString *)fromPath toPath:(NSString *)toPath
++ (NSError *)moveResourceContentFromPath:(NSString *)fromPath toPath:(NSString *)toPath
 {
     NSError *error;
 
@@ -340,14 +385,14 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return error;
 }
 
-- (NSError *)removeResourceAtPath:(NSString *)path
++ (NSError *)removeResourceAtPath:(NSString *)path
 {
     NSError *error;
     [[NSFileManager defaultManager] removeItemAtPath:path error:&error];
     return error;
 }
 
-- (NSError *)createFolderAtPath:(NSString *)path
++ (NSError *)createFolderAtPath:(NSString *)path
 {
     NSError *error;
     [[NSFileManager defaultManager] createDirectoryAtPath:path
@@ -357,7 +402,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return error;
 }
 
-- (BOOL)isExistItemAtPath:(NSString *)path
++ (BOOL)isExistItemAtPath:(NSString *)path
 {
     BOOL isExistInFS = [[NSFileManager defaultManager] fileExistsAtPath:path];
     return isExistInFS;

@@ -46,6 +46,10 @@ extern NSString * const kJMSavedResources;
 // Returns YES if report with name reportName with format reportFormat is absent
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat;
 
++ (NSArray *)allSavedItems;
+
++ (BOOL)moveSavedItemFromPath:(NSString *)fromPath toPath:(NSString *)toPath;
+
 // Rename saved resource
 - (BOOL)renameReportTo:(NSString *)newName;
 
@@ -66,4 +70,5 @@ extern NSString * const kJMSavedResources;
 
 + (NSString *)pathToTempReportsFolder;
 
++ (NSString *)createUniqueStringWithUserName:(NSString *)userName organization:(NSString *)organization severURL:(NSString *)serverURL alias:(NSString *)alias;
 @end
