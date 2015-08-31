@@ -374,7 +374,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 
     for (NSString *item in items) {
         NSString *newItem = item;
-        if ([newItem isEqualToString:[fromPath lastPathComponent]]) {
+        if ([newItem isEqualToString:[fromPath lastPathComponent]] || [newItem.stringByDeletingPathExtension isEqualToString:kJMReportFilename]) {
             newItem = [toPath lastPathComponent];
         }
         NSString *itemFromPath = [fromPath stringByAppendingPathComponent:item];
