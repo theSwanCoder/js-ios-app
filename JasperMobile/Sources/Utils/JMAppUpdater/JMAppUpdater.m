@@ -80,6 +80,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         [self showErrors];
     } else {
         [self removeOldMobileDemo];
+        [self updateSavedItems];
     }
 }
 
@@ -177,6 +178,44 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         JMServerProfile *serverProfile = serverProfiles.firstObject;
         [[JMCoreDataManager sharedInstance].managedObjectContext deleteObject:serverProfile];
         [[JMCoreDataManager sharedInstance] save:nil];
+    }
+}
+
++ (void)updateSavedItems
+{
+    NSArray *savedItems = [JMSavedResources allSavedItems];
+    for (JMSavedResources *savedResource in savedItems) {
+        // 1. get old path
+        NSString *oldPath = [JMUtils applicationDocumentsDirectory];
+        NSString *uri = savedResource.uri;
+        oldPath = [oldPath stringByAppendingPathComponent:uri];
+
+        // 2. create new path
+        NSString *newPath = [JMUtils applicationDocumentsDirectory];;
+        NSString *newUri = [uri stringByDeletingLastPathComponent];
+        NSString *newName = [newUri lastPathComponent];
+        newUri = [newUri stringByAppendingPathComponent:newName];
+
+        NSString *userName = savedResource.username;
+        NSString *organization = savedResource.serverProfile.organization;
+        if (!organization) {
+            organization = @"organization_1";
+        }
+        NSString *serverURL = savedResource.serverProfile.serverUrl;
+        NSString *alias = savedResource.serverProfile.alias;
+
+        NSString *pathComponent = [JMSavedResources createUniqueStringWithUserName:userName
+                                                                      organization:organization
+                                                                          severURL:serverURL
+                                                                             alias:alias];
+        newUri = [pathComponent stringByAppendingPathComponent:newUri];
+        newPath = [newPath stringByAppendingPathComponent:newUri];
+
+        // 3. move from old path to new path
+        [JMSavedResources moveSavedItemFromPath:oldPath toPath:newPath];
+
+        // 4. save new uri
+        savedResource.uri = newUri;
     }
 }
 
