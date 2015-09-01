@@ -34,6 +34,7 @@ NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOf
 NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentPageDidChangeNotification";
 
 @interface JMReport()
+@property (nonatomic, strong) NSMutableArray *availableReportOptions;
 @property (nonatomic, copy, readwrite) NSArray *inputControls;
 @property (nonatomic, copy, readwrite) NSString *reportURI;
 // setters
@@ -55,6 +56,8 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 @end
 
 @implementation JMReport
+
+@dynamic reportOptions;
 
 #pragma mark - LifeCycle
 - (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup
@@ -101,7 +104,30 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
     [self postNotificationCurrentPageChanged];
 }
 
+- (NSArray *)reportOptions
+{
+    return self.availableReportOptions;
+}
+
 #pragma mark - Public API
+
+- (void)generateReportOptionsWithInputControls:(NSArray *)inputControls;
+{
+    JMExtendedReportOption *defaultReportOption = [JMExtendedReportOption defaultReportOption];
+    defaultReportOption.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
+    self.availableReportOptions = [@[defaultReportOption] mutableCopy];
+}
+
+- (void)addReportOptions:(NSArray *)reportOptions
+{
+    [self.availableReportOptions addObjectsFromArray:reportOptions];
+}
+
+- (void)removeReportOption:(JMExtendedReportOption *)reportOption
+{
+    [self.availableReportOptions removeObject:reportOption];
+}
+
 - (void)updateInputControls:(NSArray *)inputControls
 {
     _inputControls = [inputControls copy];

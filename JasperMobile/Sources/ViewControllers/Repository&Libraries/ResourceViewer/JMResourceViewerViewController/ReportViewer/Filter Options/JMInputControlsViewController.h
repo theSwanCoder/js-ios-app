@@ -38,7 +38,7 @@
 @interface JMInputControlsViewController : JMEditabledViewController
 
 @property (nonatomic, strong) JMReport *report;
-@property (nonatomic, readonly) NSArray *inputControls;
+@property (nonatomic, strong, readonly) NSArray *currentInputControls;
 
-@property (nonatomic, copy) void(^completionBlock)(void);
+@property (nonatomic, copy) void(^completionBlock)(JMExtendedReportOption *reportOption);
 @end

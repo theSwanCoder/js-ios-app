@@ -401,8 +401,9 @@
 {
     JMInputControlsViewController *inputControlsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
     inputControlsViewController.report = self.report;
-    inputControlsViewController.completionBlock = @weakself(^(void)) {
-        [self.report updateInputControls:inputControlsViewController.inputControls];
+    inputControlsViewController.completionBlock = @weakself(^(JMExtendedReportOption *reportOption)) {
+#warning HERE NEED CHANGE LOGIC OF RUN REPORTS
+        [self.report updateInputControls:inputControlsViewController.currentInputControls];
         [self updateReportWithNewParameters];
     }@weakselfend;
 

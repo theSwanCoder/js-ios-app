@@ -118,8 +118,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         NSString *reportURI = self.report.reportURI;
         if (self.report.activeReportOption) {
             reportURI = self.report.activeReportOption.reportOption.uri;
-            parametersAsString = @"''";
         }
+            parametersAsString = @"''";
+//        }
         request.parametersAsString = [NSString stringWithFormat:@"{'uri': '%@', 'params': %@, 'pages' : '%@'}", reportURI, parametersAsString, @(pageNumber)];
         [self.bridge sendRequest:request];
     } else if (self.report.activeReportOption) {
