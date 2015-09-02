@@ -50,7 +50,7 @@
 + (void)fetchReportOptionsWithReportURI:(NSString *)reportURI
                              completion:(void(^)(NSArray *reportOptions, NSError *error))completion;
 
-+ (void)deleteReportOption:(JMExtendedReportOption *)reportOption
++ (void)deleteReportOption:(JSReportOption *)reportOption
              withReportURI:(NSString *)reportURI
                 completion:(void (^)(NSError *error))completion;
 

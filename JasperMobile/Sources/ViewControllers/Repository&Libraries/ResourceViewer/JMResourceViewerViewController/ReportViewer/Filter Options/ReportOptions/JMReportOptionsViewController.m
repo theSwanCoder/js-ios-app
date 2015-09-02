@@ -74,7 +74,7 @@
 
 - (void)setSelectedReportOption:(JMExtendedReportOption *)selectedReportOption
 {
-    if (_selectedReportOption != selectedReportOption && [self.listOfValues count] == 1 && [self.listOfValues indexOfObject:selectedReportOption] != NSNotFound) {
+    if (_selectedReportOption != selectedReportOption && [self.listOfValues indexOfObject:selectedReportOption] != NSNotFound) {
         _selectedReportOption = selectedReportOption;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.listOfValues indexOfObject:_selectedReportOption] inSection:0];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle  animated:YES];

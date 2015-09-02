@@ -39,4 +39,20 @@
     
     return defaultReportOption;
 }
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone {
+    if ([self isMemberOfClass: [JMExtendedReportOption class]]) {
+        JMExtendedReportOption *newExtendedReportOption = [[self class] allocWithZone:zone];
+        newExtendedReportOption.reportOption            = [self.reportOption copyWithZone:zone];
+        if (self.inputControls) {
+            newExtendedReportOption.inputControls  = [[NSArray alloc] initWithArray:self.inputControls copyItems:YES];
+        }
+        return newExtendedReportOption;
+    } else {
+        NSString *messageString = [NSString stringWithFormat:@"You need to implement \"copyWithZone:\" method in %@",NSStringFromClass([self class])];
+        @throw [NSException exceptionWithName:@"Method implementation is missing" reason:messageString userInfo:nil];
+    }
+}
 @end

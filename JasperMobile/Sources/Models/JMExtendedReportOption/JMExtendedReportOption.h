@@ -34,7 +34,7 @@
 #import <Foundation/Foundation.h>
 #import "JSReportOption.h"
 
-@interface JMExtendedReportOption : NSObject
+@interface JMExtendedReportOption : NSObject <NSCopying>
 
 @property (nonatomic, strong) JSReportOption *reportOption;
 @property (nonatomic, strong) NSArray *inputControls;

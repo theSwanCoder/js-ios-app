@@ -235,6 +235,9 @@
                                                                                }
                                                                                
                                                                                [self.report updateReportParameters:self.initialReportParameters];
+                                                                               
+                                                                               [self.report generateReportOptionsWithInputControls:inputControls];
+                                                                               
                                                                                if ([inputControls count] && reportUnit.alwaysPromptControls && !self.isChildReport) {
                                                                                    [self showInputControlsViewControllerWithBackButton:YES];
                                                                                } else  {
@@ -402,8 +405,7 @@
     JMInputControlsViewController *inputControlsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
     inputControlsViewController.report = self.report;
     inputControlsViewController.completionBlock = @weakself(^(JMExtendedReportOption *reportOption)) {
-#warning HERE NEED CHANGE LOGIC OF RUN REPORTS
-        [self.report updateInputControls:inputControlsViewController.currentInputControls];
+        self.report.activeReportOption = reportOption;
         [self updateReportWithNewParameters];
     }@weakselfend;
 

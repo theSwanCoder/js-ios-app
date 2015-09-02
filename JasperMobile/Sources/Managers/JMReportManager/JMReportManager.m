@@ -105,9 +105,9 @@
                                     }@weakselfend];
 }
 
-+ (void)deleteReportOption:(JMExtendedReportOption *)reportOption withReportURI:(NSString *)reportURI completion:(void(^)(NSError *error))completion
++ (void)deleteReportOption:(JSReportOption *)reportOption withReportURI:(NSString *)reportURI completion:(void(^)(NSError *error))completion
 {
-    [self.restClient deleteReportOption:reportOption.reportOption
+    [self.restClient deleteReportOption:reportOption
                           withReportURI:reportURI
                              completion:^(JSOperationResult *result) {
                                  if (result.error) {

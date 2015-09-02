@@ -109,6 +109,14 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
     return self.availableReportOptions;
 }
 
+- (JMExtendedReportOption *)activeReportOption
+{
+    if (_activeReportOption) {
+        return _activeReportOption;
+    }
+    return [self.reportOptions firstObject];
+}
+
 #pragma mark - Public API
 
 - (void)generateReportOptionsWithInputControls:(NSArray *)inputControls;
@@ -130,6 +138,7 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 
 - (void)updateInputControls:(NSArray *)inputControls
 {
+#warning NEED CHANGE LOGIC FOR USING REPORT OPTIONS INSTEAD OF INPUTCONTROLS
     _inputControls = [inputControls copy];
     _isReportWithInputControls = inputControls && inputControls.count;
     _isInputControlsLoaded = inputControls != nil;

@@ -41,7 +41,6 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 @interface JMReport : NSObject
 // getters
 @property (nonatomic, strong, readonly) JSResourceLookup *resourceLookup;
-@property (nonatomic, strong, readonly) NSArray *reportOptions;
 
 @property (nonatomic, copy, readonly) NSArray *inputControls;
 @property (nonatomic, copy, readonly) NSArray *reportParameters;
@@ -54,8 +53,6 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 @property (nonatomic, strong, readonly) NSString *requestId;
 @property (nonatomic, assign, readonly) BOOL isReportAlreadyLoaded;
 
-@property (nonatomic, strong) JMExtendedReportOption *activeReportOption;
-
 
 // html
 @property (nonatomic, copy, readonly) NSString *HTMLString;
@@ -64,6 +61,11 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 @property (nonatomic, assign, readonly) BOOL isInputControlsLoaded;
 // thumbnails
 @property (nonatomic, strong) UIImage *thumbnailImage;
+
+// report options
+@property (nonatomic, strong, readonly) NSArray *reportOptions;
+@property (nonatomic, strong) JMExtendedReportOption *activeReportOption;
+
 
 - (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup
                              inputControls:(NSArray *)inputControls;
