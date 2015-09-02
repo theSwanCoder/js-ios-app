@@ -225,7 +225,7 @@
                 } else {
                     JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
                     reportViewController.resourceLookup = resourceLookup;
-                    [reportViewController.report updateInputControls:inputControls];
+                    [reportViewController.report generateReportOptionsWithInputControls:inputControls];
                     [reportViewController.report updateReportParameters:parameters];
                     reportViewController.isChildReport = YES;
 

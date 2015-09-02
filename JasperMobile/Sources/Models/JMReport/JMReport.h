@@ -42,7 +42,6 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 // getters
 @property (nonatomic, strong, readonly) JSResourceLookup *resourceLookup;
 
-@property (nonatomic, copy, readonly) NSArray *inputControls;
 @property (nonatomic, copy, readonly) NSArray *reportParameters;
 @property (nonatomic, copy, readonly) NSString *reportURI;
 @property (nonatomic, assign, readonly) NSInteger currentPage;
@@ -67,19 +66,15 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 @property (nonatomic, strong) JMExtendedReportOption *activeReportOption;
 
 
-- (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup
-                             inputControls:(NSArray *)inputControls;
-+ (instancetype)reportWithResourceLookup:(JSResourceLookup *)resourceLookup
-                               inputControls:(NSArray *)inputControl;
+- (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup;
++ (instancetype)reportWithResourceLookup:(JSResourceLookup *)resourceLookup;
 
 // update state
 - (void)generateReportOptionsWithInputControls:(NSArray *)inputControls;
 - (void)addReportOptions:(NSArray *)reportOptions;
 - (void)removeReportOption:(JMExtendedReportOption *)reportOption;
 
-- (void)updateInputControls:(NSArray *)inputControls;
 - (void)updateReportParameters:(NSArray *)reportParameters;
-- (void)updateReportURI:(NSString *)reportURI;
 - (void)updateCurrentPage:(NSInteger)currentPage;
 - (void)updateCountOfPages:(NSInteger)countOfPages;
 - (void)updateHTMLString:(NSString *)HTMLString

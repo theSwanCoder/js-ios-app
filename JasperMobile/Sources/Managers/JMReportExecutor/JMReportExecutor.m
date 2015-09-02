@@ -77,7 +77,7 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
             self.executeCompletion(self.executionResponse, nil);
         }
     } else {
-        [self.restClient runReportExecution:self.report.resourceLookup.uri
+        [self.restClient runReportExecution:self.report.reportURI
                                       async:self.shouldExecuteAsync
                                outputFormat:self.format
                                 interactive:self.interactive

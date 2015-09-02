@@ -67,9 +67,9 @@
 - (JMReport *)reportModel
 {
     if ([JMUtils isSupportVisualize]) {
-        return [JMVisualizeReport reportWithResourceLookup:self inputControls:nil];
+        return [JMVisualizeReport reportWithResourceLookup:self];
     } else {
-        return [JMRestReport reportWithResourceLookup:self inputControls:nil];
+        return [JMRestReport reportWithResourceLookup:self];
     }
 }
 

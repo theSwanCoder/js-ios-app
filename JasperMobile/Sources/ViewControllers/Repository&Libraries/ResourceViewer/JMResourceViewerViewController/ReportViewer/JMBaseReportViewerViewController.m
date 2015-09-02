@@ -186,7 +186,7 @@
     BOOL isReportInLoadingProcess = self.reportLoader.isReportInLoadingProcess;
     
     JMLog(@"report parameters: %@", self.report.reportParameters);
-    JMLog(@"report input controls: %@", self.report.inputControls);
+    JMLog(@"report input controls: %@", self.report.activeReportOption.inputControls);
     
     if(!isReportAlreadyLoaded && !isReportInLoadingProcess) {
         // show report with loaded input controls
@@ -215,6 +215,7 @@
     }@weakselfend;
     
     NSString *reportURI = self.resourceLookup.uri;
+
     [JMReportManager fetchReportLookupWithResourceURI:reportURI
                                 completion:@weakself(^(JSResourceReportUnit *reportUnit, NSError *error)) {
                                     if (error) {
@@ -231,7 +232,6 @@
                                                                            } else {
                                                                                self.isReportAlreadyConfigured = YES;
                                                                                if ([inputControls count]) {
-                                                                                   [self.report updateInputControls:[inputControls copy]];
                                                                                }
                                                                                
                                                                                [self.report updateReportParameters:self.initialReportParameters];

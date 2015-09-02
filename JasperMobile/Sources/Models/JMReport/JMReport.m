@@ -35,8 +35,6 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 
 @interface JMReport()
 @property (nonatomic, strong) NSMutableArray *availableReportOptions;
-@property (nonatomic, copy, readwrite) NSArray *inputControls;
-@property (nonatomic, copy, readwrite) NSString *reportURI;
 // setters
 @property (nonatomic, assign, readwrite) NSInteger currentPage;
 @property (nonatomic, assign, readwrite) NSInteger countOfPages;
@@ -45,7 +43,6 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 @property (nonatomic, assign, readwrite) BOOL isReportEmpty;
 @property (nonatomic, strong, readwrite) NSString *requestId;
 @property (nonatomic, assign, readwrite) BOOL isReportAlreadyLoaded;
-@property (nonatomic, assign, readwrite) BOOL isInputControlsLoaded;
 
 // html
 @property (nonatomic, copy, readwrite) NSString *HTMLString;
@@ -56,32 +53,28 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 @end
 
 @implementation JMReport
-
+@synthesize activeReportOption = _activeReportOption;
 @dynamic reportOptions;
+@dynamic reportURI;
+
 
 #pragma mark - LifeCycle
 - (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup
-                         inputControls:(NSArray *)inputControls
 {
     self = [super init];
     if (self) {
         _resourceLookup = resourceLookup;
-        _reportURI = resourceLookup.uri;
-        
-        [self updateInputControls:inputControls];
         
         [self restoreDefaultState];
         
-        _isInputControlsLoaded = NO;
         _isReportEmpty = YES;
     }
     return self;
 }
 
 + (instancetype)reportWithResourceLookup:(JSResourceLookup *)resourceLookup
-                           inputControls:(NSArray *)inputControl
 {
-    return [[self alloc] initWithResourceLookup:resourceLookup inputControls:inputControl];
+    return [[self alloc] initWithResourceLookup:resourceLookup];
 }
 
 
@@ -117,13 +110,43 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
     return [self.reportOptions firstObject];
 }
 
+
+- (void)setActiveReportOption:(JMExtendedReportOption *)activeReportOption
+{
+    _activeReportOption = activeReportOption;
+    _reportParameters = nil;
+}
+
+- (NSString *)reportURI
+{
+    if ([self.activeReportOption.reportOption.uri length]) {
+        return self.activeReportOption.reportOption.uri;
+    }
+    return self.resourceLookup.uri;
+}
+
+- (NSArray *)reportParameters
+{
+    if (!_reportParameters) {
+//        if ([self.reportOptions indexOfObject:self.activeReportOption] == NSNotFound) {
+            _reportParameters = [JMReportManager reportParametersFromInputControls:self.activeReportOption.inputControls];
+//        }
+    }
+    return _reportParameters;
+}
+
+
 #pragma mark - Public API
 
 - (void)generateReportOptionsWithInputControls:(NSArray *)inputControls;
 {
-    JMExtendedReportOption *defaultReportOption = [JMExtendedReportOption defaultReportOption];
-    defaultReportOption.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
-    self.availableReportOptions = [@[defaultReportOption] mutableCopy];
+    if ([inputControls count]) {
+        _isReportWithInputControls = YES;
+        JMExtendedReportOption *defaultReportOption = [JMExtendedReportOption defaultReportOption];
+        defaultReportOption.inputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
+        self.availableReportOptions = [@[defaultReportOption] mutableCopy];
+        _reportParameters = nil;
+    }
 }
 
 - (void)addReportOptions:(NSArray *)reportOptions
@@ -136,27 +159,9 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
     [self.availableReportOptions removeObject:reportOption];
 }
 
-- (void)updateInputControls:(NSArray *)inputControls
-{
-#warning NEED CHANGE LOGIC FOR USING REPORT OPTIONS INSTEAD OF INPUTCONTROLS
-    _inputControls = [inputControls copy];
-    _isReportWithInputControls = inputControls && inputControls.count;
-    _isInputControlsLoaded = inputControls != nil;
-    
-    _reportParameters = nil;
-}
-
 - (void)updateReportParameters:(NSArray *)reportParameters
 {
     _reportParameters = [reportParameters copy];
-    _isInputControlsLoaded = YES;
-}
-
-- (void)updateReportURI:(NSString *)reportURI
-{
-    if (![_reportURI isEqualToString:reportURI]) {
-        _reportURI = reportURI;
-    }
 }
 
 - (void)updateCurrentPage:(NSInteger)currentPage
@@ -200,14 +205,6 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 {
     self.isReportEmpty = NO;
     self.isMultiPageReport = isMultiPageReport;
-}
-
-- (NSArray *)reportParameters
-{
-    if (!_reportParameters) {
-        _reportParameters = [JMReportManager reportParametersFromInputControls:self.inputControls];
-    }
-    return _reportParameters;
 }
 
 #pragma mark - Cache pages

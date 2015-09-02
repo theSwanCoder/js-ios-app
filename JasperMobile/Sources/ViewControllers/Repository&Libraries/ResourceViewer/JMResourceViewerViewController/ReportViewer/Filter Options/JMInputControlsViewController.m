@@ -92,16 +92,21 @@
 {
     [self.view endEditing:YES];
     BOOL isReportParametersChanged = [self isReportParametersChanged];
-    if (!self.report.isReportAlreadyLoaded || (self.report.isReportAlreadyLoaded && isReportParametersChanged)) {
+    if ([self currentReportOptionIsExisted]) {
+        if (self.completionBlock) {
+            self.completionBlock(self.currentReportOption);
+        }
+        [self.navigationController popViewControllerAnimated:YES];
+    } else if (!self.report.isReportAlreadyLoaded || (self.report.isReportAlreadyLoaded && isReportParametersChanged)) {
         if ([self validateInputControls]) { // Local validation
             [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
-                    if (dataIsValid) {
-                        if (self.completionBlock) {
-                            self.completionBlock(self.currentReportOption);
-                        }
-                        [self.navigationController popViewControllerAnimated:YES];
+                if (dataIsValid) {
+                    if (self.completionBlock) {
+                        self.completionBlock(self.currentReportOption);
                     }
-                } @weakselfend];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+            } @weakselfend];
         } else {
             [self.tableView reloadData];
         }
@@ -281,12 +286,13 @@
 
 - (void)inputControlCellDidChangedValue:(JMInputControlCell *)cell
 {
-    if ([self isMultyReportOptions]) {
-        if ([self.report.reportOptions indexOfObject:self.currentReportOption] != NSNotFound) {
-            JMExtendedReportOption *newCurrentOption = [JMExtendedReportOption defaultReportOption];
-            newCurrentOption.inputControls = self.currentInputControls;
-            self.currentReportOption = newCurrentOption;
-        }
+    if ([self.report.reportOptions indexOfObject:self.currentReportOption] != NSNotFound ||
+        self.report.activeReportOption == self.currentReportOption) {
+        _currentReportOption = [JMExtendedReportOption defaultReportOption];
+        _currentReportOption.inputControls = self.currentInputControls;
+        
+        [self updateRightBurButtonItem];
+        [self.tableView reloadData];
     }
 }
 
@@ -394,8 +400,12 @@
                                      [self.restClient cancelAllRequests];
                                      [self backButtonTapped:nil];
                                  } @weakselfend];
-
-    [self.restClient updatedInputControlsValues:self.report.reportURI
+    NSString *resourceURI = self.currentReportOption.reportOption.uri;
+    if (![resourceURI length]) {
+        resourceURI = self.report.resourceLookup.uri;
+    }
+    
+    [self.restClient updatedInputControlsValues:resourceURI
                                             ids:allInputControls
                                  selectedValues:selectedValues
                                 completionBlock:@weakself(^(JSOperationResult *result)) {
@@ -431,8 +441,7 @@
 - (void)updateRightBurButtonItem
 {
 #warning NEED ADD PERMISSION CHECKING
-    NSInteger indexOfCurrentOption = [self.report.reportOptions indexOfObject:self.currentReportOption];
-    if (indexOfCurrentOption != NSNotFound && indexOfCurrentOption != 0) {
+    if ([self currentReportOptionIsExisted]) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete_item"] style:UIBarButtonItemStyleDone target:self action:@selector(deleteReportOptionTapped:)];
     } else {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"save_item"] style:UIBarButtonItemStyleDone target:self action:@selector(createReportOptionTapped:)];
@@ -441,6 +450,7 @@
 
 - (void)createReportOptionTapped:(id)sender
 {
+#warning - Need check correction of server-side validation in this place
     if ([self validateInputControls]) { // Local validation
         [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
             if (dataIsValid) {
@@ -538,5 +548,12 @@
         }
     }
     return YES;
+}
+
+- (BOOL) currentReportOptionIsExisted
+{
+    NSInteger indexOfCurrentOption = [self.report.reportOptions indexOfObject:self.currentReportOption];
+    return (indexOfCurrentOption != NSNotFound && indexOfCurrentOption != 0);
+
 }
 @end
