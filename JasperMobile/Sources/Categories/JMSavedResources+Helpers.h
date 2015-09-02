@@ -70,5 +70,6 @@ extern NSString * const kJMSavedResources;
 
 + (NSString *)pathToTempReportsFolder;
 
-+ (NSString *)createUniqueStringWithUserName:(NSString *)userName organization:(NSString *)organization severURL:(NSString *)serverURL alias:(NSString *)alias;
++ (NSString *)oldPathForSavedReport:(JMSavedResources *)savedResource;
++ (NSString *)newURIForSavedReport:(JMSavedResources *)savedResource;
 @end

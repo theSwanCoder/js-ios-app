@@ -408,4 +408,54 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return isExistInFS;
 }
 
++ (BOOL)isExistsFolderAtPath:(NSString *)folderPath
+{
+    NSError *error;
+    NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:folderPath error:&error];
+    BOOL isExistsFolder = content.count > 0;
+    return isExistsFolder;
+}
+
+#pragma mark - Updater
++ (NSString *)oldPathForSavedReport:(JMSavedResources *)savedResource
+{
+    NSString *oldPath = @"";
+    NSString *documentFolderPath = [self pathToReportsFolder];
+    NSString *uri = savedResource.uri;
+    NSString *oldReportsFolder = [documentFolderPath stringByAppendingPathComponent:savedResource.serverProfile.alias];
+    BOOL isExistFolder = [self isExistsFolderAtPath:oldReportsFolder];
+    if (isExistFolder) {
+        oldPath = oldReportsFolder;
+    } else {
+        oldPath = documentFolderPath;
+    }
+    oldPath = [oldPath stringByAppendingPathComponent:uri];
+
+    return oldPath;
+}
+
++ (NSString *)newURIForSavedReport:(JMSavedResources *)savedResource
+{
+    NSString *uri = savedResource.uri;
+    NSString *newUri = [uri stringByDeletingLastPathComponent];
+    NSString *newName = [newUri lastPathComponent];
+    newUri = [newUri stringByAppendingPathComponent:newName];
+
+    NSString *userName = savedResource.username;
+    NSString *organization = savedResource.serverProfile.organization;
+    if (!organization) {
+        organization = kJMDemoServerOrganization;
+    }
+    NSString *serverURL = savedResource.serverProfile.serverUrl;
+    NSString *alias = savedResource.serverProfile.alias;
+
+    NSString *pathComponent = [JMSavedResources createUniqueStringWithUserName:userName
+                                                                  organization:organization
+                                                                      severURL:serverURL
+                                                                         alias:alias];
+    newUri = [pathComponent stringByAppendingPathComponent:newUri];
+
+    return newUri;
+}
+
 @end
