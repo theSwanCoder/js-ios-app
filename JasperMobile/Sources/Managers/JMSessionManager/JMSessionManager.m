@@ -30,6 +30,7 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMCancelRequestPopup.h"
 #import "JMWebViewManager.h"
+#import "JMServerProfile.h"
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 
@@ -55,16 +56,17 @@ static JMSessionManager *_sharedManager = nil;
 - (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(BOOL success))completionBlock
 {
     self.restClient = [[JSRESTBase alloc] initWithServerProfile:serverProfile keepLogged:keepLogged];
-    BOOL isSessionAuthorized = [self.restClient isSessionAuthorized];
-    BOOL isServerInfoExists = self.restClient.serverInfo != nil;
-    if (isServerInfoExists && isSessionAuthorized) {
-        [self saveActiveSessionIfNeeded];
-        if (completionBlock) {
-            completionBlock(YES);
+    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+        BOOL isServerInfoExists = self.restClient.serverInfo != nil;
+        if (isServerInfoExists && isSessionAuthorized) {
+            [self saveActiveSessionIfNeeded];
+            if (completionBlock) {
+                completionBlock(YES);
+            }
+        } else if (completionBlock) {
+            completionBlock(NO);
         }
-    } else if (completionBlock) {
-        completionBlock(NO);
-    }
+    }];
 }
 
 - (void) saveActiveSessionIfNeeded {
@@ -96,12 +98,14 @@ static JMSessionManager *_sharedManager = nil;
 
             JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
             if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
-                BOOL isRestoredSession = ([self.restClient isSessionAuthorized] && self.restClient.serverInfo);
-                dispatch_async(dispatch_get_main_queue(), ^(void){
-                    if (completion) {
-                        completion(isRestoredSession);
-                    }
-                });
+                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                    BOOL isRestoredSession = (isSessionAuthorized && self.restClient.serverInfo);
+                    dispatch_async(dispatch_get_main_queue(), ^(void){
+                        if (completion) {
+                            completion(isRestoredSession);
+                        }
+                    });
+                }];
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^(void){
                     if (completion) {

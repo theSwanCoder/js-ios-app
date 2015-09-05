@@ -288,8 +288,14 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                                      if (error) {
                                          [reportSaver cancelReport];
                                          if (error.code == JSSessionExpiredErrorCode) {
-                                             if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                                 [self prepareForPrint];
+                                             if (self.restClient.keepSession) {
+                                                 [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                     if (isSessionAuthorized) {
+                                                         [self prepareForPrint];
+                                                     } else {
+                                                         [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                     }
+                                                 }@weakselfend];
                                              } else {
                                                  [JMUtils showLoginViewAnimated:YES completion:nil];
                                              }

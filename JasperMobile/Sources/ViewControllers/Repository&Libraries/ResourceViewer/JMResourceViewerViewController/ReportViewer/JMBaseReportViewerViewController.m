@@ -275,8 +275,14 @@
                                  } else {
                                      [reportSaver cancelReport];
                                      if (error.code == JSSessionExpiredErrorCode) {
-                                         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                             [self preparePreviewForPrintWithCompletion:completion];
+                                         if (self.restClient.keepSession) {
+                                             [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                 if (isSessionAuthorized) {
+                                                     [self preparePreviewForPrintWithCompletion:completion];
+                                                 } else {
+                                                     [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                 }
+                                             }@weakselfend];
                                          } else {
                                              [JMUtils showLoginViewAnimated:YES completion:nil];
                                          }
@@ -388,12 +394,20 @@
 
                                 if (result.error) {
                                     if (result.error.code == JSSessionExpiredErrorCode) {
-                                        if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                            [self loadInputControlsWithReportURI:reportURI completion:completion];
+                                        if (self.restClient.keepSession) {
+                                            [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                if (isSessionAuthorized) {
+                                                    [self loadInputControlsWithReportURI:reportURI completion:completion];
+                                                } else {
+                                                    [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
+                                                            [self cancelResourceViewingAndExit:YES];
+                                                        } @weakselfend];
+                                                }
+                                            }@weakselfend];
                                         } else {
                                             [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                                                [self cancelResourceViewingAndExit:YES];
-                                            } @weakselfend];
+                                                    [self cancelResourceViewingAndExit:YES];
+                                                } @weakselfend];
                                         }
                                     } else {
                                         if (completion) {
