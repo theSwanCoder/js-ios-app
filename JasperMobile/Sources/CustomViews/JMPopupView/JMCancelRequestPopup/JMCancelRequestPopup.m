@@ -48,6 +48,7 @@ static NSInteger _cancelRequestPopupCounter = 0;
     self = [super initWithDelegate:delegate type:type];
     if (self) {
         self.isDissmissWithTapOutOfButton = NO;
+        self.accessibilityLabel = @"JMCancelRequestPopup";
     }
     return self;
 }

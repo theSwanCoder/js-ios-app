@@ -51,6 +51,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
         [self addSubview:_tableView];
         [self setupDatasource];
         self.tableView.separatorColor = [UIColor darkGrayColor];
+        self.accessibilityLabel = @"JMMenuActionsView";
     }
     return self;
 }
@@ -187,6 +188,8 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     }
     JMMenuAction *currentMenuAction = self.availableMenuActions[indexPath.row];
     cell.textLabel.text = JMCustomLocalizedString(currentMenuAction.actionTitle, nil);
+    
+    cell.accessibilityLabel = currentMenuAction.actionTitle;
     
     cell.imageView.image = [UIImage imageNamed:currentMenuAction.actionImageName];
     cell.imageView.alpha = currentMenuAction.actionEnabled ? 1.0f : 0.5f;
