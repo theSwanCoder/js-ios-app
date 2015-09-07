@@ -156,27 +156,34 @@
         }@weakselfend];
 }
 
-- (void)updateReportWithNewParameters
+- (void)updateReportWithNewActiveReportOption:(JMExtendedReportOption *)newActiveOption
 {
-
-    [self hideEmptyReportMessage];
-    [self hideToolbar];
-    [self hideReportView];
-
-    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
+    NSString *currentReportURI = self.report.reportURI;
+    self.report.activeReportOption = newActiveOption;
+    
+    BOOL uriDidChanged = (!currentReportURI && newActiveOption.reportOption.uri) || ![currentReportURI isEqualToString:newActiveOption.reportOption.uri];
+    
+    if (self.report.isReportAlreadyLoaded && !uriDidChanged) {
+        [self hideEmptyReportMessage];
+        [self hideToolbar];
+        [self hideReportView];
+        
+        [self startShowLoaderWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
             [self.reportLoader cancelReport];
             [self cancelResourceViewingAndExit:YES];
         }@weakselfend];
-
-    [self.reportLoader applyReportParametersWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+        [self.reportLoader applyReportParametersWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             [self stopShowLoader];
-
+            
             if (success) {
                 [self showReportView];
             } else {
                 [self handleError:error];
             }
         }@weakselfend];
+    } else {
+        [self runReportWithPage:1];
+    }
 }
 
 #pragma mark - JMRefreshable

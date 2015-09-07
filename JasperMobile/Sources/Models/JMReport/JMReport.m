@@ -128,9 +128,9 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 - (NSArray *)reportParameters
 {
     if (!_reportParameters) {
-//        if ([self.reportOptions indexOfObject:self.activeReportOption] == NSNotFound) {
+        if ([self.reportOptions indexOfObject:self.activeReportOption] == NSNotFound) {
             _reportParameters = [JMReportManager reportParametersFromInputControls:self.activeReportOption.inputControls];
-//        }
+        }
     }
     return _reportParameters;
 }

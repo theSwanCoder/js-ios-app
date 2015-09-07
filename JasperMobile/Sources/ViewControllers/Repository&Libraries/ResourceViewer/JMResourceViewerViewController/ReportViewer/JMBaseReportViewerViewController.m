@@ -393,9 +393,10 @@
                     withText:JMCustomLocalizedString(@"report.viewer.save.saved", nil)];
 }
 
-- (void)updateReportWithNewParameters
+- (void)updateReportWithNewActiveReportOption:(JMExtendedReportOption *)newActiveOption
 {
     // can be overriden in childs
+    self.report.activeReportOption = newActiveOption;
     [self refresh];
 }
 
@@ -405,8 +406,7 @@
     JMInputControlsViewController *inputControlsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
     inputControlsViewController.report = self.report;
     inputControlsViewController.completionBlock = @weakself(^(JMExtendedReportOption *reportOption)) {
-        self.report.activeReportOption = reportOption;
-        [self updateReportWithNewParameters];
+        [self updateReportWithNewActiveReportOption:reportOption];
     }@weakselfend;
 
     if (isShowBackButton) {

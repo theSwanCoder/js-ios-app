@@ -65,6 +65,8 @@
     
     [self setupReportOptions];
 
+    [self setupRightBarButtonItem];
+
     self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
 }
 
@@ -438,19 +440,44 @@
                                 } @weakselfend];
 }
 
+- (void)setupRightBarButtonItem
+{
+    NSString *resourceFolderURI = [self.report.resourceLookup.uri stringByDeletingLastPathComponent];
+    [self.restClient resourceLookupForURI:resourceFolderURI resourceType:@"folder"
+                               modelClass:[JSResourceLookup class]
+                          completionBlock:@weakself(^(JSOperationResult *result)) {
+                              if (result.error) {
+                                  if (result.error.code == JSSessionExpiredErrorCode) {
+                                      if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                                          [self setupRightBarButtonItem];
+                                      } else {
+                                          [JMUtils showLoginViewAnimated:YES completion:nil];
+                                      }
+                                  } else {
+                                      [JMUtils showAlertViewWithError:result.error];
+                                  }
+                              } else {
+                                  JSResourceLookup *resourceFolderLookup = [result.objects firstObject];
+                                  NSInteger permissionMask = resourceFolderLookup.permissionMask.integerValue;
+                                  self.isReportOptionsEditingAvailable = (permissionMask & JSPermissionMask_Administration || permissionMask & JSPermissionMask_Write);
+                                  [self updateRightBurButtonItem];
+                              }
+                          }@weakselfend];
+}
+
 - (void)updateRightBurButtonItem
 {
-#warning NEED ADD PERMISSION CHECKING
-    if ([self currentReportOptionIsExisted]) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete_item"] style:UIBarButtonItemStyleDone target:self action:@selector(deleteReportOptionTapped:)];
-    } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"save_item"] style:UIBarButtonItemStyleDone target:self action:@selector(createReportOptionTapped:)];
+    if (self.isReportOptionsEditingAvailable) {
+        if ([self currentReportOptionIsExisted]) {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete_item"] style:UIBarButtonItemStyleDone target:self action:@selector(deleteReportOptionTapped:)];
+        } else {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"save_item"] style:UIBarButtonItemStyleDone target:self action:@selector(createReportOptionTapped:)];
+        }
     }
 }
 
 - (void)createReportOptionTapped:(id)sender
 {
-#warning - Need check correction of server-side validation in this place
     if ([self validateInputControls]) { // Local validation
         [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
             if (dataIsValid) {
@@ -511,7 +538,7 @@
         NSArray *reportParameters = [JMReportManager reportParametersFromInputControls:self.currentInputControls];
         
         [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
-        [JMReportManager createReportOptionWithReportURI:self.report.reportURI optionLabel:textField.text reportParameters:reportParameters completion:@weakself(^(JSReportOption *reportOption, NSError *error)) {
+        [JMReportManager createReportOptionWithReportURI:self.report.resourceLookup.uri optionLabel:textField.text reportParameters:reportParameters completion:@weakself(^(JSReportOption *reportOption, NSError *error)) {
             [JMCancelRequestPopup dismiss];
             if (error) {
                 if (error.code == JSSessionExpiredErrorCode) {

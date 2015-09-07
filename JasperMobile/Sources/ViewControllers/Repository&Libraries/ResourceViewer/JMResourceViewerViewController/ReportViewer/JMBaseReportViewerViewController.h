@@ -54,7 +54,7 @@
 - (NSString *)tempReportName;
 
 - (void)runReportWithPage:(NSInteger)page;
-- (void)updateReportWithNewParameters;
+- (void)updateReportWithNewActiveReportOption:(JMExtendedReportOption *)newActiveOption;
 
 // setups
 - (void)updateToobarAppearence;
