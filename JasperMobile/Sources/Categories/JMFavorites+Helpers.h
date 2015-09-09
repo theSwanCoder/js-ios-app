@@ -48,7 +48,11 @@ extern NSString * const kJMFavorites;
 // Returns favorites report from JSResourceLookup
 + (JMFavorites *)favoritesFromResourceLookup:(JSResourceLookup *)resource;
 
+
 // Returns wrapper from favorites. Wrapper is a JSResourceLookup
 - (JSResourceLookup *)wrapperFromFavorite;
+
+// Returns all favorites.
++ (NSArray *)allFavorites;
 
 @end

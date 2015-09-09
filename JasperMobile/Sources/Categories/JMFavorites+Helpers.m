@@ -85,6 +85,13 @@ NSString * const kJMFavorites = @"Favorites";
     return resource;
 }
 
++ (NSArray *)allFavorites
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMFavorites];
+    NSArray *favoritesItems = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    return favoritesItems;
+}
+
 #pragma mark - Private
 
 + (NSFetchRequest *)favoritesFetchRequest:(NSString *)resourceUri
