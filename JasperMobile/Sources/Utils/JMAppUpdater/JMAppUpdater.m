@@ -30,6 +30,7 @@
 #import "JMFavorites.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMSavedResources+Helpers.h"
+#import "JMFavorites+Helpers.h"
 
 // Old constants used in previous versions of application
 static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated.versions";
@@ -187,6 +188,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     for (JMSavedResources *savedResource in savedItems) {
         // 1. get old path
         NSString *oldPath = [JMSavedResources oldPathForSavedReport:savedResource];
+        NSString *oldURI = savedResource.uri;
 
         // 2. create new path
         NSString *documentPath = [JMUtils applicationDocumentsDirectory];
@@ -198,6 +200,13 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 
         // 4. save new uri
         savedResource.uri = newURI;
+        // 5. update uri if saved item was marked as favorites
+        NSArray *allFavorites = [JMFavorites allFavorites];
+        for (JMFavorites *favorites in allFavorites) {
+            if ([favorites.uri isEqualToString:oldURI]) {
+                favorites.uri = newURI;
+            }
+        }
     }
 }
 
