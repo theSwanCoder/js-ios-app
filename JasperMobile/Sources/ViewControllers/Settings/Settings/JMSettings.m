@@ -55,9 +55,9 @@ static NSString * const kJMIntroCellIdentifier = @"IntroCellIdentifier";
     @[
       @{@"title" : JMCustomLocalizedString(@"settings.item.connection.timeout", nil), @"value" : @(self.restClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.crashtracking.title", nil), @"value" : @([JMUtils crashReportsSendingEnable]), @"cellIdentifier" : kJMBooleanCellIdentifier},
-      @{@"title" : JMCustomLocalizedString(@"settings.item.intro", nil), @"value" : @"", @"cellIdentifier" : kJMIntroCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.feedback", nil), @"value" : @"", @"cellIdentifier" : kJMFeedbackCellIdentifier},
       // used for test purpose
+      //@{@"title" : JMCustomLocalizedString(@"settings.item.intro", nil), @"value" : @"", @"cellIdentifier" : kJMIntroCellIdentifier},
       //@{@"title" : @"Use Visualize", @"value" : @([JMUtils shouldUseVisualize]), @"cellIdentifier" : kJMBooleanCellIdentifier}
       ];
     

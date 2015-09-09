@@ -26,25 +26,26 @@
 //  TIBCO JasperMobile
 //
 
-@class JMReport;
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.1
 */
 
+@class JMReport;
+@class JMReportPagesRange;
 
 @interface JMReportExecutor : NSObject
 @property (nonatomic, assign) BOOL shouldExecuteAsync;
 // TODO: move to separate instance
 @property (nonatomic, copy) NSString *format;
-@property (nonatomic, copy) NSString *pages;
 @property (nonatomic, copy) NSString *attachmentsPrefix;
 @property (nonatomic, assign) BOOL interactive;
+@property (nonatomic, strong) JMReportPagesRange *pagesRange;
 
 - (instancetype)initWithReport:(JMReport *)report;
 + (instancetype)executorWithReport:(JMReport *)report;
 
 - (void)executeWithCompletion:(void(^)(JSReportExecutionResponse *executionResponse, NSError *error))completion;
-- (void)exportWithExecutionResponse:(JSReportExecutionResponse *)executionResponse completion:(void(^)(JSExportExecutionResponse *exportResponse, NSError *error))completion;
+- (void)exportWithCompletion:(void (^)(JSExportExecutionResponse *exportResponse, NSError *error))completion;
 @end

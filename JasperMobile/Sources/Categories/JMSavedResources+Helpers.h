@@ -62,6 +62,8 @@ extern NSString * const kJMSavedResources;
 
 + (NSString *)pathToReportDirectoryWithName:(NSString *)name format:(NSString *)format;
 
++ (NSString *)pathToExportedReport:(JMSavedResources *)exportedReport;
+
 + (NSString *)pathToReportWithName:(NSString *)name format:(NSString *)format;
 
 @end

@@ -90,14 +90,12 @@
 		089B15FE1AA756BD0021A915 /* JMMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B157E1AA756BD0021A915 /* JMMenuItem.m */; };
 		089B15FF1AA756BD0021A915 /* JMMenuItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15811AA756BD0021A915 /* JMMenuItemTableViewCell.m */; };
 		089B16001AA756BD0021A915 /* JMMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15841AA756BD0021A915 /* JMMenuViewController.m */; };
-		089B16071AA756BD0021A915 /* JMWebConsole.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B159A1AA756BD0021A915 /* JMWebConsole.m */; };
 		089B161A1AA757EA0021A915 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089B160E1AA757EA0021A915 /* Crashlytics.framework */; };
 		089B161B1AA757EA0021A915 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089B16101AA757EA0021A915 /* Fabric.framework */; };
 		089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16151AA757EA0021A915 /* jaspermobile.js */; };
 		089B161E1AA757EA0021A915 /* jaspermobile_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */; };
 		08B517BE1B15C60400B3F20A /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B517BB1B15C60400B3F20A /* PopoverView.m */; };
 		08B5187B1B18C79400B3F20A /* JMReportSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B5187A1B18C79400B3F20A /* JMReportSaver.m */; };
-		08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C838191A1F5A0D0004BE78 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DB3D931A891640006F9620 /* MessageUI.framework */; };
 		08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18141B13390500856112 /* JMRecentViewsCollectionViewController.m */; };
 		08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD181E1B13426200856112 /* JMRecentViewsListLoader.m */; };
@@ -179,8 +177,10 @@
 		A1478A179D378E8F76BDD03C /* JMMenuAction.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478B758E018C4B68EDB8F3 /* JMMenuAction.m */; };
 		A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = A147833F01EC956738C2E56A /* JMReportViewerToolBar.xib */; };
 		A1478B843A55B9FA52664AA5 /* JMJavascriptRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478374AAA1B5E8D1DB41E5 /* JMJavascriptRequest.m */; };
+		A1478D310566300F565A1697 /* JMReportPagesRange.m in Sources */ = {isa = PBXBuildFile; fileRef = A147827F4B0F4B9D35B838E9 /* JMReportPagesRange.m */; };
 		A1478D49CA28213AC1C5FD4A /* JMReportExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = A14781B537B5076FA38FD7B7 /* JMReportExecutor.m */; };
 		A1478D6B609C61DEF3A3AC92 /* JMVisualizeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478AE10405430D44256CA0 /* JMVisualizeManager.m */; };
+		A1478E469EF43FD1BFC20A80 /* JMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478CEB43CD5DD1090EE7E9 /* JMBaseViewController.m */; };
 		A1478EFBFF648E171A39F2BF /* JMReportViewerToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
@@ -365,8 +365,6 @@
 		089B15881AA756BD0021A915 /* JMResourceClientHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceClientHolder.h; sourceTree = "<group>"; };
 		089B15921AA756BD0021A915 /* JMFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFont.h; sourceTree = "<group>"; };
 		089B15931AA756BD0021A915 /* JMFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMFont.m; sourceTree = "<group>"; };
-		089B15991AA756BD0021A915 /* JMWebConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMWebConsole.h; sourceTree = "<group>"; };
-		089B159A1AA756BD0021A915 /* JMWebConsole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMWebConsole.m; sourceTree = "<group>"; };
 		089B159B1AA756BD0021A915 /* weakself.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = weakself.h; sourceTree = "<group>"; };
 		089B160E1AA757EA0021A915 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		089B16101AA757EA0021A915 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -380,7 +378,6 @@
 		08B5187A1B18C79400B3F20A /* JMReportSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportSaver.m; sourceTree = "<group>"; };
 		08B99F6D1A07CD7700E822B0 /* profiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = profiles.json; sourceTree = "<group>"; };
 		08C816CF19A4B24D00371604 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		08C838191A1F5A0D0004BE78 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		08DB3D931A891640006F9620 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		08DB677F1A137E370035F58F /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		08DD18131B13390500856112 /* JMRecentViewsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRecentViewsCollectionViewController.h; sourceTree = "<group>"; };
@@ -524,10 +521,13 @@
 		A14781B537B5076FA38FD7B7 /* JMReportExecutor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportExecutor.m; sourceTree = "<group>"; };
 		A1478203D1D9D597184D040F /* JMDashboardViewerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardViewerVC.m; sourceTree = "<group>"; };
 		A147823C5CE47413BF9A93FC /* JMJavascriptNativeBridgeProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptNativeBridgeProtocol.h; sourceTree = "<group>"; };
+		A1478240E3C5FD2DB1A59789 /* JMBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseViewController.h; sourceTree = "<group>"; };
 		A1478266E2F8FDC96D2EEEC0 /* JMReportViewerToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportViewerToolBar.h; sourceTree = "<group>"; };
+		A147827F4B0F4B9D35B838E9 /* JMReportPagesRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportPagesRange.m; sourceTree = "<group>"; };
 		A147833F01EC956738C2E56A /* JMReportViewerToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JMReportViewerToolBar.xib; sourceTree = "<group>"; };
 		A1478374AAA1B5E8D1DB41E5 /* JMJavascriptRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptRequest.m; sourceTree = "<group>"; };
 		A14783E141F16BAE2FCA32F3 /* JMMenuAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMenuAction.h; sourceTree = "<group>"; };
+		A1478436F163AF086CC411BC /* JMReportPagesRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportPagesRange.h; sourceTree = "<group>"; };
 		A147843EA31EC3E684E7AB63 /* JMDashboardViewerConfigurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardViewerConfigurator.h; sourceTree = "<group>"; };
 		A147866AB6450EAF0CD1CE44 /* JMBaseDashboardLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseDashboardLoader.m; sourceTree = "<group>"; };
 		A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportViewerToolBar.m; sourceTree = "<group>"; };
@@ -542,6 +542,7 @@
 		A1478AE10405430D44256CA0 /* JMVisualizeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeManager.m; sourceTree = "<group>"; };
 		A1478B04CE024F4DDDFDF22D /* JMVisDashboardLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisDashboardLoader.m; sourceTree = "<group>"; };
 		A1478B758E018C4B68EDB8F3 /* JMMenuAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMenuAction.m; sourceTree = "<group>"; };
+		A1478CEB43CD5DD1090EE7E9 /* JMBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseViewController.m; sourceTree = "<group>"; };
 		A1478D6859B60B36A4F9FCC8 /* JMDashboardViewerConfigurator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardViewerConfigurator.m; sourceTree = "<group>"; };
 		A1478EA56C0D8D23BDD84C37 /* JMJavascriptCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptCallback.h; sourceTree = "<group>"; };
 		A1478EEB9FB0CCB7D652FF2F /* JMVisualizeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeManager.h; sourceTree = "<group>"; };
@@ -579,7 +580,6 @@
 				08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */,
 				9348F4E81A35C616006F5677 /* libsqlite3.0.dylib in Frameworks */,
 				93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */,
-				08C8381A1A1F5A0D0004BE78 /* StoreKit.framework in Frameworks */,
 				F5663A331752FA5C007978BE /* CFNetwork.framework in Frameworks */,
 				0871503E19F1266900C5875E /* libz.dylib in Frameworks */,
 				089B161B1AA757EA0021A915 /* Fabric.framework in Frameworks */,
@@ -898,6 +898,7 @@
 				089B14E51AA756BD0021A915 /* Repository&Libraries */,
 				089B15521AA756BD0021A915 /* Settings */,
 				089B15661AA756BD0021A915 /* SideMenu */,
+				A147839AC75B56F2B46F002C /* JMBaseViewController */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1286,7 +1287,6 @@
 				0801DFA31AAF2CFB00DD072C /* JMConstants */,
 				0801DFA61AAF2CFB00DD072C /* JMLocalization */,
 				0801DFA91AAF2CFB00DD072C /* JMUtils */,
-				089B15981AA756BD0021A915 /* JMWebConsole */,
 				089B15911AA756BD0021A915 /* JMFontManager */,
 				089B159B1AA756BD0021A915 /* weakself.h */,
 			);
@@ -1300,15 +1300,6 @@
 				089B15931AA756BD0021A915 /* JMFont.m */,
 			);
 			path = JMFontManager;
-			sourceTree = "<group>";
-		};
-		089B15981AA756BD0021A915 /* JMWebConsole */ = {
-			isa = PBXGroup;
-			children = (
-				089B15991AA756BD0021A915 /* JMWebConsole.h */,
-				089B159A1AA756BD0021A915 /* JMWebConsole.m */,
-			);
-			path = JMWebConsole;
 			sourceTree = "<group>";
 		};
 		089B160D1AA757EA0021A915 /* Crashlytics */ = {
@@ -1360,6 +1351,7 @@
 			children = (
 				08B518791B18C79400B3F20A /* JMReportSaver.h */,
 				08B5187A1B18C79400B3F20A /* JMReportSaver.m */,
+				A14782A8DF567686676089C8 /* JMReportPageRange */,
 			);
 			path = JMReportSaver;
 			sourceTree = "<group>";
@@ -1861,6 +1853,24 @@
 			path = JMJavascriptRequest;
 			sourceTree = "<group>";
 		};
+		A14782A8DF567686676089C8 /* JMReportPageRange */ = {
+			isa = PBXGroup;
+			children = (
+				A1478436F163AF086CC411BC /* JMReportPagesRange.h */,
+				A147827F4B0F4B9D35B838E9 /* JMReportPagesRange.m */,
+			);
+			path = JMReportPageRange;
+			sourceTree = "<group>";
+		};
+		A147839AC75B56F2B46F002C /* JMBaseViewController */ = {
+			isa = PBXGroup;
+			children = (
+				A1478CEB43CD5DD1090EE7E9 /* JMBaseViewController.m */,
+				A1478240E3C5FD2DB1A59789 /* JMBaseViewController.h */,
+			);
+			path = JMBaseViewController;
+			sourceTree = "<group>";
+		};
 		A14785D109B77F7AE4093F71 /* JMReportViewerToolBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -2027,7 +2037,6 @@
 				F54C91A01752FAA90009E2BE /* CoreData.framework */,
 				F5663A321752FA5C007978BE /* CFNetwork.framework */,
 				F55CC332174CFFCE00CEB39E /* UIKit.framework */,
-				08C838191A1F5A0D0004BE78 /* StoreKit.framework */,
 				F55CC334174CFFCE00CEB39E /* Foundation.framework */,
 				F55CC336174CFFCE00CEB39E /* CoreGraphics.framework */,
 				3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */,
@@ -2108,6 +2117,11 @@
 					};
 					F55CC32E174CFFCE00CEB39E = {
 						DevelopmentTeam = HD6C6SELJN;
+						SystemCapabilities = {
+							com.apple.DataProtection = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -2200,7 +2214,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n# Auto Increment Version Script\n# set CFBundleVersion to 1.0.1 first!!!\n# the perl regex splits out the last part of a build number (ie: 1.1.1) and increments it by one\n# if you have a build number that is more than 3 components, add a '\\.\\d+' into the first part of the regex.\n# Increment build number for release builds only!!!.\n\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\nbuildPlist=${INFOPLIST_FILE}\nappVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$buildPlist\"`\nbuildAppVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.\\d+)(\\.\\d+)/$1/eg'`\n\n\nif [ \"${appVersion}\" = \"${buildAppVersion}\" ]; then\nbuildVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.\\d+\\.)(\\d+)/($2+1)/eg'`\nelse\nbuildVersion=1\nfi\n\nnewBuildVersion=${appVersion}.${buildVersion}\necho $newBuildVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $newBuildVersion\" \"$buildPlist\"\nfi";
+			shellScript = "#!/bin/sh\n# Auto Increment Version Script\n# set CFBundleVersion to 1.0.1 first!!!\n# the perl regex splits out the last part of a build number (ie: 1.1.1) and increments it by one\n# if you have a build number that is more than 3 components, add a '\\.\\d+' into the first part of the regex.\n# Increment build number for release builds only!!!.\n\nif [ \"${CONFIGURATION}\" != \"Debug\" ]; then\nbuildPlist=${INFOPLIST_FILE}\nappVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"$buildPlist\"`\nbuildAppVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(.+\\d+)\\.\\d+/$1/eg'`\n\n\nif [ \"${appVersion}\" = \"${buildAppVersion}\" ]; then\nbuildVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/.+\\.(\\d+)/($1+1)/eg'`\nelse\nbuildVersion=1\nfi\n\nnewBuildVersion=${appVersion}.${buildVersion}\necho $newBuildVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $newBuildVersion\" \"$buildPlist\"\nfi";
 		};
 		6F5F5E6592158193EE742D9E /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2275,7 +2289,6 @@
 				08DD183A1B136B8A00856112 /* JMReportInfoViewController.m in Sources */,
 				08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */,
 				08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */,
-				089B16071AA756BD0021A915 /* JMWebConsole.m in Sources */,
 				0801DFAC1AAF2CFB00DD072C /* JMAppUpdater.m in Sources */,
 				0801DF9E1AAF2CC900DD072C /* JMSavedResources.m in Sources */,
 				9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */,
@@ -2379,6 +2392,8 @@
 				A14784AF61EB18E6AD372AEB /* JMDashboardViewerConfigurator.m in Sources */,
 				A1478A179D378E8F76BDD03C /* JMMenuAction.m in Sources */,
 				A1478D49CA28213AC1C5FD4A /* JMReportExecutor.m in Sources */,
+				A1478D310566300F565A1697 /* JMReportPagesRange.m in Sources */,
+				A1478E469EF43FD1BFC20A80 /* JMBaseViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2450,7 +2465,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaspersoft Corporation (HD6C6SELJN)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2481,7 +2497,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "TIBCO JasperMobile";
-				PROVISIONING_PROFILE = "19c611e3-5c19-487e-b5de-5ac45a90d20d";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2686,7 +2702,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Vlad Zavadskii (3F9737C33N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2717,7 +2734,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "TIBCO JasperMobile";
-				PROVISIONING_PROFILE = "232047f5-5edf-4a26-bdbd-25cef80232ab";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2735,7 +2752,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jaspersoft Corporation (HD6C6SELJN)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2766,7 +2784,7 @@
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "TIBCO JasperMobile";
-				PROVISIONING_PROFILE = "19c611e3-5c19-487e-b5de-5ac45a90d20d";
+				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";

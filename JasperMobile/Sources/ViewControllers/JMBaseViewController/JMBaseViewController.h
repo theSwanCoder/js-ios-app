@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -22,17 +22,16 @@
 
 
 //
-//  JMPrivacyPolicyViewController.h
+//  JMBaseViewController.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
- */
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.1.1
+*/
 
-#import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-@interface JMPrivacyPolicyViewController : JMBaseViewController
-
+@interface JMBaseViewController : GAITrackedViewController
 @end

@@ -54,17 +54,6 @@
     return keyString;
 }
 
-- (JSResourceLookup *)loadedResourceForIndexPath:(NSIndexPath *)indexPath
-{
-    NSArray *folders = self.resourceListLoader.sections[@(JMResourcesListSectionTypeFolder)];
-    NSArray *reportUnits = self.resourceListLoader.sections[@(JMResourcesListSectionTypeReportUnit)];
-    
-    NSMutableArray *resources = [NSMutableArray arrayWithArray:folders];
-    [resources addObjectsFromArray:reportUnits];
-    
-    return resources.count > 0 ? [resources objectAtIndex:indexPath.row] : nil;
-}
-
 - (Class)resourceLoaderClass
 {
     return NSClassFromString(@"JMRepositoryListLoader");

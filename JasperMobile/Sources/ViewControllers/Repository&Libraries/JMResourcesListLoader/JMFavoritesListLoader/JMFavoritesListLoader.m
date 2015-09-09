@@ -63,12 +63,7 @@
         }
         [self addResourcesWithResources:folders];
         [self addResourcesWithResources:resources];
-        
-        self.sections = @{
-                          @(JMResourcesListSectionTypeFolder) : [folders copy],
-                          @(JMResourcesListSectionTypeReportUnit) : [resources copy],
-                          };
-        
+                
         _needUpdateData = NO;
         
         [self finishLoadingWithError:nil];

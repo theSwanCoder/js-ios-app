@@ -194,7 +194,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileReport.exportReport(%@);";
-    request.parametersAsString = exportFormat;
+    request.parametersAsString = [NSString stringWithFormat:@"'%@'", exportFormat];
     [self.bridge sendRequest:request];
 }
 
@@ -219,10 +219,10 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 #pragma mark - Private
 - (void)startLoadHTMLWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    NSLog(@"visuzalise.js did start load");
+    JMLog(@"visuzalise.js did start load");
     [self.visualizeManager loadVisualizeJSWithCompletion:@weakself(^(BOOL success, NSError *error)){
         if (success) {
-            NSLog(@"visuzalise.js did end load");
+            JMLog(@"visuzalise.js did end load");
             NSString *baseURLString = self.restClient.serverProfile.serverUrl;
             [self.report updateHTMLString:[self.visualizeManager htmlStringForReport] baseURLSring:baseURLString];
 
@@ -231,7 +231,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
             }
         } else {
             // TODO: handle this error
-            NSLog(@"Error loading visualize.js");
+            JMLog(@"Error loading visualize.js");
             // TODO: add error code
 //            NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
 //                                                 code:0
@@ -246,7 +246,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 #pragma mark - JMJavascriptNativeBridgeDelegate
 - (void)javascriptNativeBridge:(JMJavascriptNativeBridge *)bridge didReceiveCallback:(JMJavascriptCallback *)callback
 {
-    NSLog(@"response parameters: %@", callback.parameters);
+    JMLog(@"response parameters: %@", callback.parameters);
     if ([callback.type isEqualToString:@"DOMContentLoaded"]) {
         [self handleDOMContentLoaded];
     } else if ([callback.type isEqualToString:@"runReport"]) {
@@ -312,7 +312,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 #pragma mark - Run report
 - (void)handleReportEndRenderSuccessfull
 {
-    NSLog(@"report rendering end");
+    JMLog(@"report rendering end");
 
     [self.report updateLoadingStatusWithValue:YES];
 

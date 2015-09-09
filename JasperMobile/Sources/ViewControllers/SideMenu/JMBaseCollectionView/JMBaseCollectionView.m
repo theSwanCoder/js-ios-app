@@ -38,6 +38,13 @@
 -(void)awakeFromNib {
     [[NSBundle mainBundle] loadNibNamed:@"JMBaseCollectionView" owner:self options:nil];
     [self.contentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+
+    // Correct frame of content view (when it loaded from nib its size looks like like universal size 600 x 600)
+    if ([JMUtils isSystemVersion8] && [JMUtils isIphone]) {
+        CGRect viewFrame = self.bounds;
+        self.contentView.frame = viewFrame;
+    }
+
     [self addSubview: self.contentView];
 }
 

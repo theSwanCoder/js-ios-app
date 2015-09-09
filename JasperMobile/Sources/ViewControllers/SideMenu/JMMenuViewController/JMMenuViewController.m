@@ -50,23 +50,19 @@
 
 @implementation JMMenuViewController
 + (NSInteger)defaultItemIndex {
-    return 0;
+    return JMResourceTypeLibrary;
 }
 
 #pragma mark - LifeCycle
 -(void)dealloc
 {
-    NSLog(@"%@ -%@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMLog(@"%@ -%@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateServerInfo) name:kJMLoginDidSuccessNotification object:nil];
-    
-    [self updateServerInfo];
     
     // version and build
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -78,6 +74,8 @@
 {
     [super viewWillAppear:animated];
     
+    [self updateServerInfo];
+
     [self.tableView reloadData];
 }
 
@@ -89,7 +87,6 @@
     self.serverNameLabel.text = [NSString stringWithFormat:@"%@ (v.%@)", alias, version];
     self.userNameLabel.text = self.restClient.serverProfile.username;
     self.organizationNameLabel.text = self.restClient.serverProfile.organization;
-    _menuItems = nil;
 }
 
 - (void)unselectItems
@@ -134,22 +131,27 @@
 #pragma mark - Public API
 - (void) setSelectedItemIndex:(NSUInteger)itemIndex
 {
-    [self unselectItems];
     if (itemIndex < self.menuItems.count) {
+        JMMenuItem *currentSelectedItem = self.selectedItem;
         JMMenuItem *item = [self.menuItems objectAtIndex:itemIndex];
-        item.selected = YES;
-        
         
         if (item.resourceType != JMResourceTypeLogout) {
-            if([item vcIdentifierForSelectedItem]) {
-                UINavigationController *nvc = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-                self.revealViewController.frontViewController = nvc;
-                [self.revealViewController setFrontViewPosition:FrontViewPositionLeft
-                                                       animated:YES];
+            if (!currentSelectedItem || currentSelectedItem != item) {
+                [self unselectItems];
+                item.selected = YES;
+                
+                [self.tableView reloadData];
+                if([item vcIdentifierForSelectedItem]) {
+                    UINavigationController *nvc = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+                    self.revealViewController.frontViewController = nvc;
+                }
             }
+            [self.revealViewController setFrontViewPosition:FrontViewPositionLeft
+                                                   animated:YES];
         } else {
             [[JMSessionManager sharedManager] logout];
             [JMUtils showLoginViewAnimated:YES completion:nil];
+            self.menuItems = nil;
         }
     }
 }

@@ -143,7 +143,7 @@ static NSString * const kJMProductName = @"JasperMobile";
         isMigrationNeeded = ![destinationModel isConfiguration:nil
                                    compatibleWithStoreMetadata:sourceMetadata];
     }
-    NSLog(@"isMigrationNeeded: %d", isMigrationNeeded);
+    JMLog(@"isMigrationNeeded: %d", isMigrationNeeded);
     return isMigrationNeeded;
 }
 

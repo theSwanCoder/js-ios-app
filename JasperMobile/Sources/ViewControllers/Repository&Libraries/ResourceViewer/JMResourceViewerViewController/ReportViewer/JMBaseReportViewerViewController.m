@@ -44,7 +44,6 @@
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
-@property (nonatomic, strong) NSURL *printResourceURL;
 @end
 
 @implementation JMBaseReportViewerViewController
@@ -53,7 +52,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self removeTempPrintResource:self.printResourceURL];
 }
 
 #pragma mark - UIViewController
@@ -61,7 +59,7 @@
     [super viewDidLoad];
 
     self.emptyReportMessageLabel.text = JMCustomLocalizedString(@"report.viewer.emptyreport.title", nil);
-    [self addObservers];
+    [self configObservers];
     [self setupMenuActions];
 }
 
@@ -108,7 +106,7 @@
 }
 
 #pragma mark - Observe Notifications
-- (void)addObservers
+- (void)configObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(multipageNotification)
@@ -237,18 +235,20 @@
 #pragma mark - Print
 - (void)printResource
 {
-    if (self.printResourceURL) {
-        [self printItem:self.printResourceURL
-               withName:self.report.resourceLookup.label];
-    } else {
-        [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {
-            if (resourceURL) {
-                self.printResourceURL = resourceURL;
-                [self printItem:self.printResourceURL
-                       withName:self.report.resourceLookup.label];
-            }
-        }];
-    }
+    // TODO: we don't have events when JIVE is applied to a report.
+
+    [self preparePreviewForPrintWithCompletion:@weakself(^(NSURL *resourceURL)) {
+        if (resourceURL) {
+            [self printItem:resourceURL
+                   withName:self.report.resourceLookup.label
+                 completion:@weakself(^(BOOL completed, NSError *error)){
+                         [self removeResourceWithURL:resourceURL];
+                         if(error){
+                             NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
+                         }
+                    }@weakselfend];
+        }
+    }@weakselfend];
 }
 
 - (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
@@ -262,10 +262,17 @@
                               pages:[self makePagesFormat]
                             addToDB:NO
                          completion:@weakself(^(NSString *reportURI, NSError *error)) {
-                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                     [JMCancelRequestPopup dismiss];
-                                 });
-                                 if (error) {
+                                 [JMCancelRequestPopup dismiss];
+
+                                 if (reportURI) {
+                                     NSString *relativeReportPath = reportURI;
+                                     NSString *absolutePath = [self.restClient.serverProfile.alias stringByAppendingPathComponent:relativeReportPath];
+
+                                     NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:absolutePath]];
+                                     if (completion) {
+                                         completion(resourceURL);
+                                     }
+                                 } else {
                                      [reportSaver cancelReport];
                                      if (error.code == JSSessionExpiredErrorCode) {
                                          if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
@@ -275,11 +282,6 @@
                                          }
                                      } else {
                                          [JMUtils showAlertViewWithError:error];
-                                     }
-                                 } else {
-                                     NSURL *resourceURL = [NSURL fileURLWithPath:[[JMUtils applicationDocumentsDirectory] stringByAppendingPathComponent:reportURI]];
-                                     if (completion) {
-                                         completion(resourceURL);
                                      }
                                  }
                              }@weakselfend];
@@ -301,7 +303,7 @@
     return pagesFormat;
 }
 
-- (void)removeTempPrintResource:(NSURL *)resourceURL
+- (void)removeResourceWithURL:(NSURL *)resourceURL
 {
     NSString *directoryPath = [resourceURL.path stringByDeletingLastPathComponent];
     if ([[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
@@ -466,6 +468,7 @@
 {
     self.emptyReportMessageLabel.hidden = YES;
     [self setupMenuActions];
+    [self updateMenuActions];
 }
 
 - (void)setupMenuActions

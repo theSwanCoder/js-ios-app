@@ -20,6 +20,7 @@
 
     #import "SWRevealViewController.h"
 
+    #import "JMBaseViewController.h"
     #import "JMConstants.h"
     #import "weakself.h"
     #import "JMUtils.h"

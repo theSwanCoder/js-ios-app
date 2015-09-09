@@ -41,7 +41,7 @@ typedef void(^SaveReportCompletion)(NSString *reportURI, NSError *error);
 - (instancetype)initWithReport:(JMReport *)report;
 
 - (void)saveReportWithName:(NSString *)name format:(NSString *)format pages:(NSString *)pages addToDB:(BOOL)addToDB completion:(SaveReportCompletion)completionBlock;
-
+- (void)saveReportWithName:(NSString *)name format:(NSString *)format resourcePath:(NSString *)resourcePath completion:(SaveReportCompletion)completion;
 - (void) cancelReport;
 
 @end

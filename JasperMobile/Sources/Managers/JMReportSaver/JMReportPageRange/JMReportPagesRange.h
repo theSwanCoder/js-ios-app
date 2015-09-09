@@ -20,19 +20,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+
 //
-//  JMWebConsole.h
+//  JMReport.h
 //  TIBCO JasperMobile
 //
 
 /**
- @since 1.9.1
- */
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.2
+*/
 
-@interface JMWebConsole : NSURLProtocol
-
-+ (void) enable;
-
-+ (void) disable;
-
+@interface JMReportPagesRange : NSObject
+@property (nonatomic, assign) NSUInteger startPage;
+@property (nonatomic, assign) NSUInteger endPage;
+@property (nonatomic, strong, readonly) NSString *pagesFormat;
+- (instancetype)initWithStartPage:(NSUInteger)startPage endPage:(NSUInteger)endPage;
++ (instancetype)rangeWithStartPage:(NSUInteger)startPage endPage:(NSUInteger)endPage;
 @end

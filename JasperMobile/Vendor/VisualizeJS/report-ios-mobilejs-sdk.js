@@ -169,6 +169,12 @@
         });
       };
 
+      ReportCallback.prototype.onWindowError = function(error) {
+        return this._makeCallback("onWindowError&error=" + error);
+      };
+
+      ReportCallback.prototype.onPageLoadError = function(error) {};
+
       ReportCallback.prototype._makeCallback = function(command) {
         return window.location.href = "http://jaspermobile.callback/" + command;
       };
@@ -324,6 +330,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         this._parseServerVersion = bind(this._parseServerVersion, this);
         this._getServerVersion = bind(this._getServerVersion, this);
         this._exportResource = bind(this._exportResource, this);
+        this._notifyPageChangeError = bind(this._notifyPageChangeError, this);
         this._notifyPageChange = bind(this._notifyPageChange, this);
         this._openRemoteLink = bind(this._openRemoteLink, this);
         this._navigateToPage = bind(this._navigateToPage, this);
@@ -347,6 +354,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       ReportController.prototype.runReport = function() {
         js_mobile.log("runReport");
+        this._setGlobalErrorListener();
         this.scaler.applyScale();
         this.callback.onLoadStart();
         return this._getServerVersion(this._runReportOnTheVersionBasis);
@@ -365,7 +373,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       ReportController.prototype.selectPage = function(page) {
         if (this.report != null) {
-          return this.report.pages(page).run();
+          return this.report.pages(page).run().done(this._notifyPageChange).fail(this._notifyPageChangeError);
         }
       };
 
@@ -456,7 +464,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
           },
           success: (function(_this) {
             return function(parameters) {
-              _this._adjustScaleForReport(_this.report);
+              _this._adjustScaleForReport();
               return _this.report.container("#container").render().done(function() {
                 return _this._processSuccess(parameters);
               });
@@ -530,6 +538,10 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       ReportController.prototype._notifyPageChange = function() {
         return this.callback.onPageChange(parseInt(this.report.pages()));
+      };
+
+      ReportController.prototype._notifyPageChangeError = function(error) {
+        return this.callback.onPageLoadError(error.message, parseInt(this.report.pages()));
       };
 
       ReportController.prototype._exportReport = function(format) {
@@ -650,12 +662,24 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         }
       };
 
-      ReportController.prototype._adjustScaleForReport = function(report) {
+      ReportController.prototype._adjustScaleForReport = function() {
         return jQuery(window).resize((function(_this) {
           return function() {
-            return report.scale("width").run();
+            var container;
+            container = jQuery("#container")[0];
+            container.style.display = 'none';
+            container.offsetHeight;
+            return container.style.display = '';
           };
         })(this));
+      };
+
+      ReportController.prototype._setGlobalErrorListener = function() {
+        return window.onerror = (function(_this) {
+          return function(errorMsg, url, lineNumber) {
+            return _this.callback.onWindowError(errorMsg);
+          };
+        })(this);
       };
 
       return ReportController;
@@ -666,19 +690,19 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 }).call(this);
 
 (function() {
-  define('js.mobile.scale.calculator', [],function() {
-    var ScaleCalculator;
-    return ScaleCalculator = (function() {
-      function ScaleCalculator(diagonal) {
+  define('js.mobile.factor.calculator', [],function() {
+    var FactorCalculator;
+    return FactorCalculator = (function() {
+      function FactorCalculator(diagonal) {
         this.diagonal = diagonal;
         this.diagonal || (this.diagonal = 10.1);
       }
 
-      ScaleCalculator.prototype.calculateFactor = function() {
+      FactorCalculator.prototype.calculateFactor = function() {
         return this.diagonal / 10.1;
       };
 
-      return ScaleCalculator;
+      return FactorCalculator;
 
     })();
   });
@@ -686,70 +710,20 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 }).call(this);
 
 (function() {
-  define('js.mobile.scale.style.report', [],function() {
-    var ScaleStyleReport;
-    return ScaleStyleReport = (function() {
-      function ScaleStyleReport() {}
-
-      ScaleStyleReport.prototype.applyFor = function(factor) {
-        var scaledCanvasCss;
-        jQuery("#scale_style").remove();
-        scaledCanvasCss = "#container { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + factor + " ); -ms-transform: scale( " + factor + " ); -webkit-transform: scale( " + factor + " ); width: " + (100 / factor) + "% !important; height: " + (100 / factor) + "% !important; }";
-        jQuery('<style id="scale_style"></style>').text(scaledCanvasCss).appendTo('head');
-      };
-
-      return ScaleStyleReport;
-
-    })();
-  });
-
-}).call(this);
-
-(function() {
-  define('js.mobile.scale.style.dashboard', [],function() {
-    var ScaleStyleDashboard;
-    return ScaleStyleDashboard = (function() {
-      function ScaleStyleDashboard() {}
-
-      ScaleStyleDashboard.prototype.applyFor = function(factor) {
-        var originalDashletInScaledCanvasCss, scaledCanvasCss;
-        jQuery("#scale_style").remove();
-        scaledCanvasCss = ".scaledCanvas { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + factor + " ); -ms-transform: scale( " + factor + " ); -webkit-transform: scale( " + factor + " ); width: " + (100 / factor) + "% !important; height: " + (100 / factor) + "% !important; }";
-        originalDashletInScaledCanvasCss = ".dashboardCanvas > .content > .body div.canvasOverlay.originalDashletInScaledCanvas { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + (1 / factor) + " ); -ms-transform: scale( " + (1 / factor) + " ); -webkit-transform: scale( " + (1 / factor) + " ); width: " + (100 * factor) + "% !important; height: " + (100 * factor) + "% !important; }";
-        jQuery('<style id="scale_style"></style>').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo('head');
-      };
-
-      return ScaleStyleDashboard;
-
-    })();
-  });
-
-}).call(this);
-
-(function() {
-  define('js.mobile.scale.manager', ['require','js.mobile.scale.calculator','js.mobile.scale.style.report','js.mobile.scale.style.dashboard'],function(require) {
-    var ScaleCalculator, ScaleManager, ScaleStyleDashboard, ScaleStyleReport;
-    ScaleCalculator = require('js.mobile.scale.calculator');
-    ScaleStyleReport = require('js.mobile.scale.style.report');
-    ScaleStyleDashboard = require('js.mobile.scale.style.dashboard');
+  define('js.mobile.scale.manager', ['js.mobile.factor.calculator'],function() {
+    var ScaleFactor, ScaleManager;
+    ScaleFactor = require('js.mobile.factor.calculator');
     return ScaleManager = (function() {
-      ScaleManager.getReportManager = function(diagonal) {
-        return new ScaleManager(diagonal, new ScaleStyleReport());
-      };
-
-      ScaleManager.getDashboardManager = function(diagonal) {
-        return new ScaleManager(diagonal, new ScaleStyleDashboard());
-      };
-
-      function ScaleManager(diagonal, scaleStyle) {
-        this.scaleStyle = scaleStyle;
-        this.calculator = new ScaleCalculator(diagonal);
+      function ScaleManager(configs) {
+        var diagonal;
+        this.scale_style = configs.scale_style, diagonal = configs.diagonal;
+        this.calculator = new ScaleFactor(diagonal);
       }
 
       ScaleManager.prototype.applyScale = function() {
         var factor;
         factor = this.calculator.calculateFactor();
-        return this.scaleStyle.applyFor(factor);
+        return this.scale_style.applyFor(factor);
       };
 
       return ScaleManager;
@@ -833,8 +807,10 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       function MobileReport(args) {
         this._getChartTypeList = bind(this._getChartTypeList, this);
-        this.callback = args.callback;
-        this.scaler = ScaleManager.getReportManager();
+        this.callback = args.callback, this.scale_style = args.scale_style;
+        this.scaler = new ScaleManager({
+          scale_style: this.scale_style
+        });
         this.callback.onScriptLoaded();
       }
 
@@ -843,7 +819,10 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       };
 
       MobileReport.prototype._configure = function(options) {
-        this.scaler = ScaleManager.getReportManager(options.diagonal);
+        this.scaler = new ScaleManager({
+          scale_style: this.scale_style,
+          diagonal: options.diagonal
+        });
         return this.session = new Session(options.auth);
       };
 
@@ -886,16 +865,38 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 }).call(this);
 
 (function() {
-  define('js.mobile.ios.report.client', ['require','js.mobile.ios.report.callback','js.mobile.report'],function(require) {
-    var MobileReport, ReportCallback, ReportClient;
+  define('js.mobile.ios.scale.style.report', [],function() {
+    var ScaleStyleReport;
+    return ScaleStyleReport = (function() {
+      function ScaleStyleReport() {}
+
+      ScaleStyleReport.prototype.applyFor = function(factor) {
+        var scaledCanvasCss;
+        jQuery("#scale_style").remove();
+        scaledCanvasCss = "#container { transform-origin: 0 0 0; -ms-transform-origin: 0 0 0; -webkit-transform-origin: 0 0 0; transform: scale( " + factor + " ); -ms-transform: scale( " + factor + " ); -webkit-transform: scale( " + factor + " ); width: " + (100 / factor) + "% !important; height: " + (100 / factor) + "% !important; }";
+        jQuery('<style id="scale_style"></style>').text(scaledCanvasCss).appendTo('head');
+      };
+
+      return ScaleStyleReport;
+
+    })();
+  });
+
+}).call(this);
+
+(function() {
+  define('js.mobile.ios.report.client', ['require','js.mobile.ios.report.callback','js.mobile.report','js.mobile.ios.scale.style.report'],function(require) {
+    var MobileReport, ReportCallback, ReportClient, ScaleStyleReport;
     ReportCallback = require('js.mobile.ios.report.callback');
     MobileReport = require('js.mobile.report');
+    ScaleStyleReport = require('js.mobile.ios.scale.style.report');
     return ReportClient = (function() {
       function ReportClient() {}
 
       ReportClient.prototype.run = function() {
         return MobileReport.getInstance({
-          callback: new ReportCallback()
+          callback: new ReportCallback(),
+          scale_style: new ScaleStyleReport()
         });
       };
 

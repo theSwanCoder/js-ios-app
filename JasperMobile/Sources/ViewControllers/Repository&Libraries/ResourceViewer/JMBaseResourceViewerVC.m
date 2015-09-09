@@ -66,9 +66,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 {
     [super viewWillAppear:animated];
 
-    // Google Analitycs
-    self.screenName = NSStringFromClass(self.class);
-
     [self setupNavigationItems];
 }
 
