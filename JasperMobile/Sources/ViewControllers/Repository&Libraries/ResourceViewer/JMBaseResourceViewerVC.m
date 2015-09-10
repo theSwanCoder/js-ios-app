@@ -68,10 +68,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    // Google Analitycs
-    self.screenName = NSStringFromClass(self.class);
-    
     [self updateIfNeeded];
 }
 
@@ -100,6 +96,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)favoriteMarkDidChanged:(id)notification
 {
     self.needLayoutUI = YES;
+    [self setupNavigationItems];
 }
 
 #pragma mark - Segues

@@ -51,5 +51,5 @@
 - (void)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback;
 - (void)javascriptNativeBridgeDidReceiveAuthRequest:(id<JMJavascriptNativeBridgeProtocol>)bridge;
 @optional
-- (void)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge didReceiveExternalRequest:(NSURLRequest *)request;
+- (BOOL)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge shouldLoadExternalRequest:(NSURLRequest *)request;
 @end

@@ -57,6 +57,7 @@
     [super viewDidLoad];
 
     self.emptyReportMessageLabel.text = JMCustomLocalizedString(@"report.viewer.emptyreport.title", nil);
+
     [self addObservers];
 }
 
@@ -259,7 +260,6 @@
                             addToDB:NO
                          completion:@weakself(^(JMSavedResources *savedReport, NSError *error)) {
                                  [JMCancelRequestPopup dismiss];
-
                                  if (error) {
                                      if (error.code == JSSessionExpiredErrorCode) {
                                          if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {

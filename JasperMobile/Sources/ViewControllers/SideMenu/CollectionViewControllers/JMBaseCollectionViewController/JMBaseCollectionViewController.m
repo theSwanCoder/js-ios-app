@@ -114,11 +114,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [self.resourceListLoader updateIfNeeded];
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
@@ -257,7 +252,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         
         _needReloadData = NO;
     }
-    
+
     if (self.needLayoutUI) {
         if ([JMUtils isIphone]) {
             [self.popoverView dismiss:YES];
@@ -593,12 +588,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [searchBar resignFirstResponder];
     searchBar.text = nil;
     [self.resourceListLoader clearSearchResults];
-}
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
-{
-    JMLog(@"%@", NSStringFromSelector(_cmd));
-    JMLog(@"search text %@", searchText);
 }
 
 #pragma mark - JMPopupDelegate

@@ -74,7 +74,7 @@
     self.appVersionLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
     
     [self.separatorsCollection makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] menuViewSeparatorColor]];
-    
+
     // version and build
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
@@ -157,7 +157,6 @@
                     UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonTapped:)];
                     nvc.topViewController.navigationItem.leftBarButtonItem = menuItem;
                     [nvc.topViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-
                     self.revealViewController.frontViewController = nvc;
                 }
             }

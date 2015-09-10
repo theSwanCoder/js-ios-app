@@ -24,19 +24,10 @@
 #import "JMRepositoryListLoader.h"
 
 @interface JMRepositoryListLoader ()
-@property (nonatomic, strong) NSMutableArray *rootFolders;
+@property (nonatomic, strong) NSMutableArray *rootFoldersURIs;
 @end
 
 @implementation JMRepositoryListLoader
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        self.rootFolders = [NSMutableArray array];
-    }
-    return self;
-}
 
 #pragma mark - Overloaded API
 - (void)loadNextPage
@@ -55,19 +46,22 @@
 {
     // load root contents
     // now there are next folders
-    // if PRO version - "/root" and "/public"
+    // if PRO version - "/root" and may be "/public"
     // if CE version - "/root"
     
-    
-    // TODO: Need clear this moment because it's hack for refresh control refreshing fix
-    [self.rootFolders removeAllObjects];
-    
-    
-    BOOL isAllRootFolderLoaded = (self.rootFolders.count == [self rootFoldersCount]);
-    if (isAllRootFolderLoaded) {
-        [self finishLoadingWithError:nil];
+    self.rootFoldersURIs = [@[[self rootResourceURI], [self publicResourceURI]] mutableCopy];
+    [self loadNextResourceForResource:nil];
+}
+
+- (void) loadNextResourceForResource:(NSString *)resource
+{
+    if (resource && [self.rootFoldersURIs indexOfObject:resource] != NSNotFound) {
+        [self.rootFoldersURIs removeObject:resource];
+    }
+    if (self.rootFoldersURIs.count) {
+        [self loadResourceLookup:[self.rootFoldersURIs firstObject]];
     } else {
-        [self loadResourceLookup:[self rootResourceURI]];
+        [self finishLoadingWithError:nil];
     }
 }
 
@@ -75,15 +69,19 @@
 {
     [self.restClient resourceLookupForURI:resourceURI resourceType:[JSConstants sharedInstance].WS_TYPE_FOLDER modelClass:[JSResourceLookup class] completionBlock:@weakself(^(JSOperationResult *result)) {
         if (result.error) {
-            if (result.error.code == JSSessionExpiredErrorCode) {
-                if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                    [self loadResourceLookup:resourceURI];
+            if ([resourceURI isEqualToString:[self rootResourceURI]]) {
+                if (result.error.code == JSSessionExpiredErrorCode) {
+                    if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+                        [self loadResourceLookup:resourceURI];
+                    } else {
+                        [self finishLoadingWithError:result.error];
+                        [JMUtils showLoginViewAnimated:YES completion:nil];
+                    }
                 } else {
                     [self finishLoadingWithError:result.error];
-                    [JMUtils showLoginViewAnimated:YES completion:nil];
                 }
             } else {
-                [self finishLoadingWithError:result.error];
+                [self loadNextResourceForResource:resourceURI];
             }
         } else {
             JSResourceLookup *resourceLookup = result.objects.firstObject;
@@ -91,40 +89,12 @@
                 if (!resourceLookup.resourceType) {
                     resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_FOLDER;
                 }
-                if (self.rootFolders) {
-                    [self.rootFolders addObject:resourceLookup];
-                    self.sections = @{
-                                      @(JMResourcesListSectionTypeFolder) : self.rootFolders,
-                                      @(JMResourcesListSectionTypeReportUnit) : @[],
-                                      };
-                }
+                [self addResourcesWithResource:resourceLookup];
             }
 
-            
-            BOOL isAllRootFolderLoaded = (self.rootFolders.count == [self rootFoldersCount]);
-            if (!isAllRootFolderLoaded) {
-                [self loadResourceLookup:[self publicResourceURI]];
-            } else {
-                [self finishLoadingWithError:nil];
-            }
+            [self loadNextResourceForResource:resourceURI];
         }
     }@weakselfend];
-}
-
-- (void)finishLoadingWithError:(NSError *)error
-{
-    if (!error) {
-        for (JSResourceLookup *lookup in self.rootFolders) {
-            if ([self shouldBeAddedResourceLookup:lookup]) {
-                [self addResourcesWithResource:lookup];
-            }
-        }
-
-        [self sortLoadedResourcesUsingComparator:^NSComparisonResult(JSResourceLookup *obj1, JSResourceLookup *obj2) {
-            return [obj1.label compare:obj2.label options:NSCaseInsensitiveSearch];
-        }];
-    }
-    [super finishLoadingWithError:error];
 }
 
 #pragma mark - Utils
@@ -162,11 +132,6 @@
 - (NSString *)publicResourceURI
 {
     return @"/public";
-}
-
-- (NSInteger)rootFoldersCount
-{
-    return [JMUtils isServerProEdition] ? 2 : 1;
 }
 
 @end

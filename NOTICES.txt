@@ -1,24 +1,24 @@
-Tibco JasperMobile for iOS
+TIBCO JasperMobile for iOS
 Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
 http://community.jaspersoft.com/project/jaspermobile-ios
 
-Unless you have purchased a commercial license agreement from Tibco Jaspersoft,
+Unless you have purchased a commercial license agreement from TIBCO Jaspersoft,
 the following license terms apply:
 
-This program is part of the Tibco JasperMobile for iOS mobile application.
+This program is part of the TIBCO JasperMobile for iOS mobile application.
 
-Tibco JasperMobile is free software: you can redistribute it and/or modify
+TIBCO JasperMobile is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-The Tibco JasperMobile app and source is distributed in the hope that it will be 
+The TIBCO JasperMobile app and source is distributed in the hope that it will be 
 useful,but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with Jaspersoft Mobile SDK for Android. If not, see 
+along with Jaspersoft Mobile SDK for iOS. If not, see 
 <http://www.gnu.org/licenses/lgpl>.
 
 
@@ -61,7 +61,7 @@ TIBCO JasperMobile iOS app includes third party software subject to the associat
   Alternative approaches: Need investigate another libraries
   
 
-- JaspersoftSDK-v2.0.0 - https://github.com/Jaspersoft/js-ios-sdk
+- JaspersoftSDK-v2.1 - https://github.com/Jaspersoft/js-ios-sdk
   Licence (Apache): https://github.com/Jaspersoft/js-ios-sdk/blob/master/LICENSE.txt
   Reason: Using it for connect to JRS instance and working with it.
   Cost of not using: Application wouldn't work.
@@ -92,13 +92,13 @@ TIBCO JasperMobile iOS app includes third party software subject to the associat
 
 This software is built using the Jaspersoft Mobile SDK for iOS, which depends on 
 third party software, subject to the associated copyrights, as follows:
-- RestKit v0.23.0 - https://github.com/RestKit/RestKit/blob/development/LICENSE
+- RestKit v0.24.0 - https://github.com/RestKit/RestKit/blob/development/LICENSE
   Licence (Apache): https://github.com/Jaspersoft/js-ios-sdk/blob/master/LICENSE.txt
   Reason: Using it for working with JRS instance via REST API, for serialisation and deserialisation data.
   Cost of not using: Application wouldn't connect to JRS instance.
   Alternative approaches: Need investigate another libraries, reinventing our own wheel
 
-- ServerReachability v0.0.1 - https://github.com/ogubariev/ServerReachability
+- ServerReachability v0.0.2 - https://github.com/ogubariev/ServerReachability
   Licence (MIT): https://github.com/ogubariev/ServerReachability/blob/master/LICENSE
   Reason: Using it for checking connection to server with port.
   Cost of not using: Unable to check connection to server.

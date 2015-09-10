@@ -178,9 +178,16 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
 }
 
-- (void)javascriptNativeBridge:(id <JMJavascriptNativeBridgeProtocol>)bridge didReceiveExternalRequest:(NSURLRequest *)request
+- (BOOL)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge shouldLoadExternalRequest:(NSURLRequest *)request
 {
-    self.externalURL = request.URL;
+    BOOL shouldLoad = NO;
+    // TODO: verify all cases
+
+    if (request.URL.host) {
+        self.externalURL = request.URL;
+        shouldLoad = YES;
+    }
+    return shouldLoad;
 }
 
 #pragma mark - Handle JS callbacks

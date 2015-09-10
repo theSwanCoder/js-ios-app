@@ -31,7 +31,7 @@
  @since 1.9
  */
 
-@interface JMEditabledViewController : UIViewController
+@interface JMEditabledViewController : JMBaseViewController
 
 - (UITableView *)tableView;
 

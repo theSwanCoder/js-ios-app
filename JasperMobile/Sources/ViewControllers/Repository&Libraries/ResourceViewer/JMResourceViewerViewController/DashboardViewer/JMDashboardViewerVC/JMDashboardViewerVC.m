@@ -159,9 +159,9 @@
                                      [super cancelResourceViewingAndExit:YES];
                                  }@weakselfend];
 
-        [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
+        [self.dashboardLoader reloadDashboardWithCompletion:@weakself(^(BOOL success, NSError *error)) {
             [self stopShowLoader];
-        }];
+        }@weakselfend];
     } else {
         [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
                 [self cancelResourceViewingAndExit:YES];

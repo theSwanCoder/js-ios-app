@@ -79,6 +79,11 @@
       "mAlias" : "mobile demo 5.5",
       "mServerUrl" : "http://mobiledemo.jaspersoft.com/jasperserver-pro",
       "mOrganization" : ""
+    },
+    {
+      "mAlias" : "local proxy 6.1",
+      "mServerUrl" : "http://www.jasperMobile.proxy/jasperserver-pro-61",
+      "mOrganization" : ""
     }
   ]
 }

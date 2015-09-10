@@ -329,7 +329,6 @@
                                    resourcePath:resourcePath
                                      completion:@weakself(^(JMSavedResources *savedReport, NSError *error)) {
                                              [JMCancelRequestPopup dismiss];
-
                                              if (error) {
                                                  if (error.code == JSSessionExpiredErrorCode) {
                                                      if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {

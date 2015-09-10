@@ -427,6 +427,8 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         this.container = dashboard.container();
         this._configureComponents();
         this._defineComponentsClickEvent();
+        this._setupFiltersApperance();
+        this._overrideApplyButton();
         return this.callback.onLoadDone(this.components);
       };
 
@@ -463,8 +465,12 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         js_mobile.log("Apply click events");
         dashboardId = this.v.dashboard.componentIdDomAttribute;
         self = this;
-        return this._getDashlets(dashboardId).on('click', function() {
-          var component, dashlet, id;
+        return this._getDashlets(dashboardId).on('click', function(event) {
+          var component, dashlet, id, targetClass;
+          targetClass = jQuery(event.target).attr('class');
+          if (targetClass !== 'overlay') {
+            return;
+          }
           $('.show_chartTypeSelector_wrapper').show();
           dashlet = $(this);
           id = dashlet.attr(dashboardId);
@@ -572,6 +578,30 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
             return _this.callback.onWindowError(errorMsg);
           };
         })(this);
+      };
+
+      DashboardController.prototype._setupFiltersApperance = function() {
+        var timeout;
+        js_mobile.log("setup filters appearence");
+        timeout = window.setTimeout((function(_this) {
+          return function() {
+            var divHeight;
+            divHeight = jQuery(".msPlaceholder > div").css("height");
+            if (divHeight !== 'undefined') {
+              window.clearInterval(timeout);
+              return jQuery(".msPlaceholder > div").css("height", "");
+            }
+          };
+        })(this), 500);
+        jQuery(".filterRow > div > div").css("height", "");
+      };
+
+      DashboardController.prototype._overrideApplyButton = function() {
+        return jQuery(".applyButton").click((function(_this) {
+          return function() {
+            return _this.minimizeDashlet();
+          };
+        })(this));
       };
 
       return DashboardController;
