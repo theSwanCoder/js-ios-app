@@ -208,7 +208,8 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
 - (void)cancelReport
 {
     [self.reportExecutor cancel];
-    [self.downloadTask cancelByProducingResumeData:nil];
+    [self.downloadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData){
+    }];
     
     NSString *temporaryDirectory = [JMSavedResources pathToFolderForSavedReport:self.savedReport];
     [self removeReportAtPath:temporaryDirectory];

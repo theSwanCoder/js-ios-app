@@ -121,7 +121,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     return ![JMUtils isIphone];
 }
 
--(NSUInteger)supportedInterfaceOrientations
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return [JMUtils isIphone] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
 }

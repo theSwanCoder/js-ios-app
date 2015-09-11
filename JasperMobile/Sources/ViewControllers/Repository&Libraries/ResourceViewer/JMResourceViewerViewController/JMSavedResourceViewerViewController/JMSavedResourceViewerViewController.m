@@ -37,7 +37,7 @@
 - (void)didReceiveMemoryWarning
 {
     [self.webView stopLoading];
-    [self.webView loadHTMLString:nil baseURL:nil];
+    [self.webView loadHTMLString:@"" baseURL:nil];
     [[UIAlertView alertWithTitle:JMCustomLocalizedString(@"dialod.title.error", nil)
                          message:JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil) // TODO: replace with the other message
                       completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {

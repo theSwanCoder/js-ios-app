@@ -84,7 +84,7 @@
 - (void)resetSubViews
 {
     [self.webView stopLoading];
-    [self.webView loadHTMLString:nil baseURL:nil];
+    [self.webView loadHTMLString:@"" baseURL:nil];
 }
 
 - (void)cancelResourceViewingAndExit:(BOOL)exit
