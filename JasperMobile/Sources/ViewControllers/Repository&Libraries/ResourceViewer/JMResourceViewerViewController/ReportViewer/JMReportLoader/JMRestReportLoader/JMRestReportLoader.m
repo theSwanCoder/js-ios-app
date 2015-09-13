@@ -31,6 +31,9 @@
 #import "NSObject+Additions.h"
 #import "JMBaseReportViewerViewController.h"
 #import "JMJavascriptNativeBridgeProtocol.h"
+#import "JMHTMLElement.h"
+#import "JMHTMLParser.h"
+#import "JasperMobileAppDelegate.h"
 
 static NSInteger const kJMReportViewerStatusCheckingInterval = 1.f;
 static NSString *const kJMRestStatusReady = @"ready";
@@ -287,13 +290,206 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 
 - (void)startLoadReportHTML
 {
-    NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"jaspermobile" ofType:@"js"];
-    NSError *error;
-    NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
-    [self.bridge injectJSInitCode:jsMobile];
+    //NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"jaspermobile" ofType:@"js"];
+    //NSError *error;
+    //NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
+    //[self.bridge injectJSInitCode:jsMobile];
+
+    NSString *script = [self findScriptInHTML:self.report.HTMLString];
+    NSString *HTMLString = [self.report.HTMLString stringByReplacingOccurrencesOfString:script withString:@""];
+
+    script = [self replaceParametersInScript:script];
+
+    [self.bridge injectJSInitCode:script];
+
+    [self.report updateHTMLString:HTMLString
+                     baseURLSring:self.report.baseURLString];
+
     [self.bridge startLoadHTMLString:self.report.HTMLString
                              baseURL:[NSURL URLWithString:self.report.baseURLString]];
+
 }
+
+#pragma mark - HTML manipulating
+- (NSString *)findScriptInHTML:(NSString *)HTMLString
+{
+    __block NSRange startRange = NSMakeRange(0,0);
+    __block NSRange endRange = NSMakeRange(0,0);;
+
+    [HTMLString enumerateSubstringsInRange:NSMakeRange(0,HTMLString.length) options:NSStringEnumerationByLines usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+
+        if ([substring isEqualToString:@"<script class=\"jasperreports\" type=\"text/javascript\">"]) {
+            startRange = substringRange;
+        }
+
+        if (startRange.location != 0 && endRange.location == 0 && [substring isEqualToString:@"</script>"]) {
+            endRange = substringRange;
+        }
+    }];
+
+    //NSLog(@"startRange: %@", NSStringFromRange(startRange));
+    //NSLog(@"endRange: %@", NSStringFromRange(endRange));
+
+    NSRange scriptRange = NSMakeRange(startRange.location + startRange.length, endRange.location - (startRange.location + startRange.length));
+    NSString *script = [HTMLString substringWithRange:scriptRange];
+
+    //NSLog(@"script: %@", script);
+    return script;
+}
+
+- (NSString *)replaceParametersInScript:(NSString *)script
+{
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    NSLog(@"%@", NSStringFromCGSize(screenSize));
+
+    // extraOptions
+    // chartDimensions
+
+
+    // services
+    // chartDimensions
+    // requirejsConfig
+    // renderTo
+    // globalOptions
+
+    NSRange jsonStartRange = [script rangeOfString:@"__renderHighcharts("];
+    NSRange jsonEndRange = [script rangeOfString:@");"];
+
+    NSRange jsonRange = NSMakeRange(jsonStartRange.location + jsonStartRange.length, jsonEndRange.location - (jsonStartRange.location + jsonStartRange.length) );
+    NSString *jsonString = [script substringWithRange:jsonRange];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"services:" withString:@"\"services\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"chartDimensions:" withString:@"\"chartDimensions\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"requirejsConfig:" withString:@"\"requirejsConfig\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"renderTo:" withString:@"\"renderTo\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"globalOptions:" withString:@"\"globalOptions\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"width:" withString:@"\"width\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"height:" withString:@"\"height\":"];
+    NSLog(@"json string: %@", jsonString);
+
+    NSError *error;
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:&error];
+    //NSLog(@"json: %@", json);
+    NSLog(@"error: %@", error);
+
+    if (!error) {
+        NSDictionary *chartDimensions = json[@"chartDimensions"];
+        NSLog(@"chartDimensions: %@", chartDimensions);
+
+        NSDictionary *extraOptions = json[@"services"][0][@"data"][@"extraOptions"];
+        NSLog(@"extraOptions: %@", extraOptions);
+    }
+
+    NSInteger originalWidth = 802;
+    NSInteger originalHeight = 495;
+
+    NSString *width = [NSString stringWithFormat:@"%@", @( originalWidth * 2)];
+    NSString *height = [NSString stringWithFormat:@"%@", @( originalHeight * 2)];
+    script = [script stringByReplacingOccurrencesOfString:@"802" withString:width];
+    script = [script stringByReplacingOccurrencesOfString:@"495" withString:height];
+
+    return script;
+}
+
+- (NSString *)findElementsInHTML:(NSString *)HTMLString
+{
+    // extraOptions
+    // chartDimensions
+
+
+
+    //HTMLString = [HTMLString stringByReplacingOccurrencesOfString:script withString:@""];
+
+    JasperMobileAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    NSLog(@"%@", NSStringFromCGSize(screenSize));
+
+    NSString *width = [NSString stringWithFormat:@"%@", @(screenSize.width * 2 * 2)];
+    NSString *height = [NSString stringWithFormat:@"%@", @( (screenSize.height - 80) * 2 * 2)];
+    HTMLString = [HTMLString stringByReplacingOccurrencesOfString:@"802" withString:width];
+    HTMLString = [HTMLString stringByReplacingOccurrencesOfString:@"495" withString:height];
+
+    return HTMLString;
+
+//    NSRange exrtaOptionsRange = [HTMLString rangeOfString:@"\"extraOptions\""];
+//    NSLog(@"extraOptions range: %@", NSStringFromRange(exrtaOptionsRange));
+//
+//    NSRange extraOptionsStartRange = [HTMLString rangeOfString:@"{" options:NSCaseInsensitiveSearch range:exrtaOptionsRange];
+//    NSRange extraOptionsEndRange = [HTMLString rangeOfString:@"}" options:NSCaseInsensitiveSearch range:exrtaOptionsRange];
+//
+//    NSLog(@"extraOptionsStartRange range: %@", NSStringFromRange(extraOptionsStartRange));
+//    NSLog(@"extraOptionsEndRange range: %@", NSStringFromRange(extraOptionsEndRange));
+//
+//    NSRange range = NSMakeRange(extraOptionsStartRange.location + extraOptionsStartRange.length, extraOptionsEndRange.location - (extraOptionsStartRange.location + extraOptionsStartRange.length) );
+//    NSString *extraOptions = [HTMLString substringWithRange:range];
+//
+//    NSLog(@"extraOptions: %@", extraOptions);
+//
+//    NSRange chartDimentionsRange = [HTMLString rangeOfString:@"\"chartDimensions\""];
+//    NSLog(@"chartDimensions range: %@", NSStringFromRange(chartDimentionsRange));
+
+//    JMHTMLParser *parser = [JMHTMLParser new];
+//    [parser parseHTMLString:HTMLString];
+//    JMHTMLElement *element = [JMHTMLElement new];
+//    element.level = 0;
+////    for (NSUInteger i = 0; i < HTMLString.length; i++) {
+//    for (NSUInteger i = 0; i < 100; i++) {
+//        NSRange range = NSMakeRange(i, 1);
+//        NSString *symbol = [HTMLString substringWithRange:range];
+//
+//        if ([symbol isEqualToString:@"<"]) { // open tag
+//            // create new element
+//            // continue
+//            JMHTMLElement *childElement = [JMHTMLElement new];
+//            NSArray *childElements = @[childElement];
+//            element.childElements = childElements;
+//            childElement.parentElement = element;
+//            childElement.elementType = @"";
+//            continue;
+//        }
+//
+//        if ([symbol isEqualToString:@">"]) { // close tag
+//            // mark of end element
+//            // start add childElements
+//            // continue
+//            break;
+//        }
+//
+//        if ([symbol isEqualToString:@"</"]) {
+//            // stop add childElements
+//            // continue
+//        }
+//
+//        JMHTMLElement *child = element.childElements.firstObject;
+//        if (child) {
+//            NSString *elementType = child.elementType;
+//            elementType = [elementType stringByAppendingString:symbol];
+//            child.elementType = elementType;
+//        }
+//
+////        NSLog(@"symbol: '%@'", symbol);
+//    }
+//    NSLog(@"element: '%@'", element);
+}
+
+- (void)createNewElementForElement:(JMHTMLElement *)element
+{
+    JMHTMLElement *childElement = [JMHTMLElement new];
+    childElement.parentElement = element;
+
+    NSArray *childElements = element.childElements;
+    if (!childElements) {
+        childElement.level = 1;
+        childElement.elementType = @"";
+        childElements = @[childElement];
+        element.childElements = childElements;
+        return;
+    } else {
+
+    }
+
+}
+
 
 #pragma mark - Check status
 

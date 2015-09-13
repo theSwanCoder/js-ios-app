@@ -60,7 +60,7 @@ NSInteger const kJMOnboardIntroSettingValue = 102;
       @{@"title" : JMCustomLocalizedString(@"settings.privacy.policy.title", nil), @"value" : @(kJMPrivacyPolicySettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
       // used for test purpose
 //      @{@"title" : JMCustomLocalizedString(@"settings.item.intro", nil), @"value" : @(kJMOnboardIntroSettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
-//      @{@"title" : @"Use Visualize", @"value" : @([JMUtils shouldUseVisualize]), @"cellIdentifier" : kJMBooleanCellIdentifier}
+      @{@"title" : @"Use Visualize", @"value" : @([JMUtils shouldUseVisualize]), @"cellIdentifier" : kJMBooleanCellIdentifier}
       ];
     
     for (NSDictionary *itemData in itemsSourceArray) {
@@ -84,7 +84,7 @@ NSInteger const kJMOnboardIntroSettingValue = 102;
     [defaults setObject:[[self.itemsArray objectAtIndex:0] valueSettings] forKey:kJMDefaultRequestTimeout];
     [defaults setObject:[[self.itemsArray objectAtIndex:1] valueSettings] forKey:kJMDefaultSendingCrashReport];
     // used for test purpose
-    //[defaults setObject:[[self.itemsArray objectAtIndex:4] valueSettings] forKey:kJMDefaultUseVisualize];
+    [defaults setObject:[[self.itemsArray objectAtIndex:4] valueSettings] forKey:kJMDefaultUseVisualize];
     [defaults synchronize];
     
     self.restClient.timeoutInterval = [[[self.itemsArray objectAtIndex:0] valueSettings] doubleValue];
