@@ -31,8 +31,6 @@
 #import "NSObject+Additions.h"
 #import "JMBaseReportViewerViewController.h"
 #import "JMJavascriptNativeBridgeProtocol.h"
-#import "JMHTMLElement.h"
-#import "JMHTMLParser.h"
 #import "JasperMobileAppDelegate.h"
 
 static NSInteger const kJMReportViewerStatusCheckingInterval = 1.f;
