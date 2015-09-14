@@ -55,6 +55,8 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 @property (nonatomic, assign, readonly) BOOL isInputControlsLoaded;
 // thumbnails
 @property (nonatomic, strong) UIImage *thumbnailImage;
+// script
+@property (nonatomic, strong) NSString *script;
 
 - (instancetype)initWithResource:(JSResourceLookup *)resourceLookup
                    inputControls:(NSArray *)inputControls;
@@ -70,10 +72,19 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
             baseURLSring:(NSString *)baseURLString;
 - (void)updateRequestId:(NSString *)requestId;
 - (void)updateIsMultiPageReport:(BOOL)isMultiPageReport;
+
+- (void)updatePaths;
+
+- (NSString *)destroyHighChartScriptString;
+
+- (void)updateHighchartContainerId;
+
 // restore state
 - (void)restoreDefaultState;
 // cache
 - (void)cacheHTMLString:(NSString *)HTMLString forPageNumber:(NSInteger)pageNumber;
 - (NSDictionary *)cachedReportPages;
 - (void)clearCachedReportPages;
+
+- (void)updateScriptWithWidth:(NSInteger)width height:(NSInteger)height;
 @end

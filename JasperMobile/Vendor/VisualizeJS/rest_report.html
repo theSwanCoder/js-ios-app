@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style type="text/css">a {text-decoration: none}</style>
+        <style type="text/css">.jrPage{margin-left: auto;margin-right: auto;}</style>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="highcharts" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/highcharts-4.0.3.src.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="heatmap" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/highcharts-heatmap-4.0.3.src.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="highcharts-more" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/highcharts-more-4.0.3.src.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="adhocHighchartsSettingService" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/reportresource?resource=com/jaspersoft/ji/adhoc/jr/require/adhocHighchartsSettingService.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="adhoc/highcharts.api" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/bi-report/src/adhoc/chart/adhocToHighchartsAdapter.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="json3" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/json3/lib/json3.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="adhoc/chart/Highcharts" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/bi-report/src/adhoc/chart/Highcharts.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="adhoc/chart/highchartsDataMapper" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/bi-report/src/adhoc/chart/highchartsDataMapper.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="adhoc/chart/adhocDataProcessor" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/bi-report/src/adhoc/chart/adhocDataProcessor.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="adhoc/chart/ext/multiplePieTitlesExt" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/bi-report/src/adhoc/chart/ext/multiplePieTitlesExt.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="underscore" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/lodash.custom/dist/lodash.custom.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="xssUtil" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/js-sdk/src/common/util/xssUtil.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="adhoc/chart/palette/defaultPalette" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/bi-report/src/adhoc/chart/palette/defaultPalette.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="adhoc/chart/enum/dateTimeFormats" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/bi-report/src/adhoc/chart/enum/dateTimeFormats.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="adhoc/chart/enum/adhocToHighchartsTypes" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/bi-report/src/adhoc/chart/enum/adhocToHighchartsTypes.js"></script>
+        <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="grouped-categories" src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/scripts/bower_components/highcharts-pack/highcharts/grouped-categories.js"></script>
+    </head>
+    <body text="#000000" link="#000000" alink="#000000" vlink="#000000" style="">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+            <tr>
+                <td width="50%">&nbsp;</td>
+                <td align="center">
+                    <a name="JR_PAGE_ANCHOR_0_1"></a>
+                    <table class="jrPage" cellpadding="0" cellspacing="0" border="0" style="empty-cells: show; width: 612px; border-collapse: separate; background-color: white;">
+                        <tbody>
+                        <tr valign="top" style="height:0">
+                            <td style="width:20px"></td>
+                            <td style="width:5px"></td>
+                            <td style="width:567px"></td>
+                            <td style="width:5px"></td>
+                            <td style="width:15px"></td>
+                        </tr>
+                        <tr valign="top" style="height:20px">
+                            <td colspan="5"></td>
+                        </tr>
+                        <tr valign="top" style="height:20px">
+                            <td></td>
+                            <td colspan="2" style="white-space: nowrap; text-indent: 0px;  vertical-align: middle;text-align: center;">
+                                <span style="font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif; color: #333333; font-size: 18px; line-height: 1.1640625;">&nbsp;</span>
+                            </td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr valign="top" style="height:5px">
+                            <td colspan="5"></td>
+                        </tr>
+                        <tr valign="top" style="height:353px">
+                            <td colspan="2"></td>
+                            <td colspan="2">
+                                <script src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/render/scripts/require/require-2.1.6.src.js"></script>
+                                <script src="http://mobiledemo2.jaspersoft.com/jasperserver-pro/reportresource?resource=com/jaspersoft/jasperreports/highcharts/charts/resources/highcharts.chart.producer.js"></script>
+
+                                <div class="highcharts_parent_container" id="HIGHCHARTS_ID"></div>
+                                <script class="jasperreports" type="text/javascript">HIGHCHARTS_SCRIPT</script>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr valign="top" style="height:394px">
+                            <td colspan="5"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td width="50%">&nbsp;</td>
+            </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

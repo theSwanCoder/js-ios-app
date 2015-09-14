@@ -27,6 +27,8 @@
 #import "JMReportSaver.h"
 #import "JMSavedResources.h"
 #import "JMSavedResources+Helpers.h"
+#import "JMWebViewManager.h"
+#import "JMJavascriptNativeBridgeProtocol.h"
 
 @interface JMReportViewerVC () <JMReportLoaderDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
@@ -35,6 +37,7 @@
 
 @implementation JMReportViewerVC
 
+#pragma mark - UIViewController LifeCycle
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -44,6 +47,23 @@
         // there is issue with webView, when we run report and device is in landscape mode
         [self webView].frame = self.view.bounds;
     }
+}
+
+
+#pragma mark - Rotation
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    NSString *destroyHightchartScript = [self.report destroyHighChartScriptString];
+    [self.reportLoader.bridge runScriptFromString:destroyHightchartScript];
+}
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    if (UIInterfaceOrientationIsPortrait(fromInterfaceOrientation)) {
+        [self.report updateScriptWithWidth:1500 height:700];
+    } else {
+        [self.report updateScriptWithWidth:900 height:1400];
+    }
+    [self.reportLoader.bridge runScriptFromString:self.report.script];
 }
 
 - (UIWebView *)webView
@@ -311,6 +331,15 @@
 - (void)showReportView
 {
     ((UIView *)self.configurator.webView).hidden = NO;
+
+    // width = 900
+    // hieght = 1500
+
+    [self.report updateScriptWithWidth:900 height:1400];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.reportLoader.bridge runScriptFromString:self.report.script];
+    });
 }
 
 #pragma mark - Print

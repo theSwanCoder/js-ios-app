@@ -73,6 +73,20 @@
     self.jsInitCode = jsCode;
 }
 
+- (void)runScriptFromString:(NSString *)script
+{
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        JMLog(@"run script: %@", script);
+//        NSString *response = [self.webView stringByEvaluatingJavaScriptFromString:script];
+//        NSLog(@"response: %@", response);
+//    });
+
+
+    JMLog(@"run script: %@", script);
+    NSString *response = [self.webView stringByEvaluatingJavaScriptFromString:script];
+    NSLog(@"response: %@", response);
+}
+
 - (void)reset
 {
     self.isJSInitCodeInjected = NO;

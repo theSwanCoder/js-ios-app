@@ -184,6 +184,97 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
     self.cachedPages = [@{} mutableCopy];
 }
 
+- (void)updateScriptWithWidth:(NSInteger)width height:(NSInteger)height
+{
+    NSDictionary *json = [self jsonScriptFromString:self.script];
+    NSMutableDictionary *mutableJSON = [json mutableCopy];
+
+    NSDictionary *chartDimensions = json[@"chartDimensions"];
+//    JMLog(@"chartDimensions: %@", chartDimensions);
+
+    NSInteger orignalWidth = ((NSNumber *)chartDimensions[@"width"]).integerValue;
+    NSInteger originalHeight = ((NSNumber *)chartDimensions[@"height"]).integerValue;
+
+    NSInteger newWidth = width;
+    NSInteger newHeight = height;
+
+//    if (orignalWidth > originalHeight) {
+//        CGFloat k = (float) orignalWidth/ originalHeight;
+//        newHeight = (NSInteger)(newWidth / k);
+//    } else {
+//        CGFloat k = (float) originalHeight / orignalWidth;
+//        newWidth = (NSInteger)(newHeight / k);
+//    }
+
+    NSDictionary *newChartDimensions = @{
+            @"width": @(newWidth),
+            @"height": @(newHeight)
+    };
+
+    mutableJSON[@"chartDimensions"] = newChartDimensions;
+
+    NSError *error;
+    NSData *newJsonData = [NSJSONSerialization dataWithJSONObject:mutableJSON
+                                                          options:NULL
+                                                            error:&error];
+    NSString *script;
+    if (!error) {
+        NSString *jsonString = [[NSString alloc] initWithData:newJsonData
+                                                     encoding:NSUTF8StringEncoding];
+        script = [NSString stringWithFormat:@"__renderHighcharts(%@);", jsonString];
+    } else {
+        JMLog(@"error: %@", error);
+    }
+    self.script = [script stringByReplacingOccurrencesOfString:@"\\/" withString:@"/"];
+}
+
+- (NSString *)destroyHighChartScriptString
+{
+//    NSDictionary *json = [self jsonScriptFromString:self.script];
+//    NSString *container = json[@"renderTo"];
+
+//    NSString *desctroyHighchartScript = @"var destroyHightChart = funtion() {jQuery('.highcharts_parent_container').highcharts().destroy();} destroyHightChart();";
+    NSString *desctroyHighchartScript = @"jQuery('.highcharts_parent_container').highcharts().destroy();";
+    return desctroyHighchartScript;
+}
+
+- (void)updateHighchartContainerId
+{
+    NSDictionary *json = [self jsonScriptFromString:self.script];
+    NSString *renderTo = json[@"renderTo"];
+    NSString *html = self.HTMLString;
+    self.HTMLString = [html stringByReplacingOccurrencesOfString:@"HIGHCHARTS_ID" withString:renderTo];
+
+    html = self.HTMLString;
+    self.HTMLString = [html stringByReplacingOccurrencesOfString:@"HIGHCHARTS_SCRIPT" withString:self.script];
+}
+
+- (id)jsonScriptFromString:(NSString *)scriptString
+{
+    NSRange jsonStartRange = [self.script rangeOfString:@"__renderHighcharts("];
+    NSRange jsonEndRange = [self.script rangeOfString:@");"];
+
+    NSRange jsonRange = NSMakeRange(jsonStartRange.location + jsonStartRange.length, jsonEndRange.location - (jsonStartRange.location + jsonStartRange.length) );
+    NSString *jsonString = [self.script substringWithRange:jsonRange];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"services:" withString:@"\"services\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"chartDimensions:" withString:@"\"chartDimensions\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"requirejsConfig:" withString:@"\"requirejsConfig\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"renderTo:" withString:@"\"renderTo\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"globalOptions:" withString:@"\"globalOptions\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"width:" withString:@"\"width\":"];
+    jsonString = [jsonString stringByReplacingOccurrencesOfString:@"height:" withString:@"\"height\":"];
+
+    NSError *error;
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                         options:NULL
+                                                           error:&error];
+    if (error) {
+        JMLog(@"error: %@", error);
+    }
+    return json;
+}
+
 #pragma mark - Notifications
 - (void)postNotificationMultipageReport
 {
