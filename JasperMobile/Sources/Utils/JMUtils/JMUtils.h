@@ -45,10 +45,9 @@ void jmDebugLog(NSString *format, ...);
  Validates report name and directory to store report
 
  @param reportName A report name to validate. It needs to be unique, without /: characters, not empty, and less or equals than 250 symbols (last 5 are reserved for extension)
- @param extension A report file extension. Optional, can be provided to validate uniqueness in file system
  @return YES if report name is valid, otherwise returns NO
  */
-+ (BOOL)validateReportName:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage;
++ (BOOL)validateReportName:(NSString *)reportName errorMessage:(NSString **)errorMessage;
 
 /**
  Returns full path of NSDocumentDirectory directory for NSUserDomainMask domain

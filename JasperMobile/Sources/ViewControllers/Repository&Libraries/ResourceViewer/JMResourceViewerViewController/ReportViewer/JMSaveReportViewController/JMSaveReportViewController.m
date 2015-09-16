@@ -308,7 +308,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 {
     [self.view endEditing:YES];
     NSString *errorMessageString = nil;
-    BOOL isValidReportName = [JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessageString];
+    BOOL isValidReportName = [JMUtils validateReportName:self.reportName errorMessage:&errorMessageString];
     self.errorString = errorMessageString;
 
     if (!self.errorString && isValidReportName) {

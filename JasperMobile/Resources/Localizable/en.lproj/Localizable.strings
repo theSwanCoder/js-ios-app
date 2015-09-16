@@ -164,6 +164,9 @@
 "report.viewer.report.options.active.option.title" = "-- None --";
 "report.viewer.report.options.new.option.title" = "Enter name of a new ReportOption";
 "report.viewer.report.options.new.option.title.alreadyexist" = "This report already has saved values with this name. Do you want to overwrite them?";
+"report.viewer.report.options.create.permission.error" = "You do not have permission to save this option for the report. Log in as a permitted user if you can.";
+"report.viewer.report.options.remove.permission.error" = "You do not have permission to remove this option for the report. Log in as a permitted user if you can.";
+"report.viewer.report.options.remove.confirmation.message" = "Do you really want to remove \n%@?";
 
 // Saved Reports viewer view
 "savedreport.viewer.modify.title" = "Rename Report";

@@ -58,7 +58,7 @@ void jmDebugLog(NSString *format, ...) {
 #define kJMNameMax 250
 #define kJMInvalidCharacters     @"~!#$%^|`@&*()-+={}[]:;\"'<>,?/|\\"
 
-+ (BOOL)validateReportName:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage
++ (BOOL)validateReportName:(NSString *)reportName errorMessage:(NSString **)errorMessage
 {
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
     reportName = [reportName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
