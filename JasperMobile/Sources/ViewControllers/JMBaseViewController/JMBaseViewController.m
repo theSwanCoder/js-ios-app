@@ -27,8 +27,9 @@
 //
 
 #import "JMBaseViewController.h"
+#import "UIImage+Additions.h"
 
-static const NSInteger kBlurViewTag = 100;
+static const NSInteger kSplashViewTag = 100;
 
 @implementation JMBaseViewController
 
@@ -87,24 +88,17 @@ static const NSInteger kBlurViewTag = 100;
 #pragma mark - Helpers
 - (void)addBlurView
 {
-    if ([JMUtils isSystemVersion8]) {
-        UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-        UIVisualEffectView *effectView = [[UIVisualEffectView alloc]initWithEffect:blur];
-        effectView.frame = self.view.window.bounds;
-        effectView.tag = kBlurViewTag;
-        [self.view addSubview:effectView];
-    } else {
-        UIToolbar* blur = [[UIToolbar alloc] initWithFrame:self.view.window.bounds];
-        blur.barStyle = UIBarStyleBlack;
-        blur.tag = kBlurViewTag;
-        [self.view addSubview:blur];
-    }
+    NSString *splashImageName = [UIImage splashImageNameForOrientation:self.interfaceOrientation];
+    UIImage *splashImage = [UIImage imageNamed:splashImageName];
+    UIImageView *splashView = [[UIImageView alloc] initWithImage:splashImage];
+    splashView.tag = kSplashViewTag;
+    [self.view.window addSubview:splashView];
 }
 
 - (void)removeBlurView
 {
-    for (UIView *subView in self.view.subviews) {
-        if (subView.tag == kBlurViewTag) {
+    for (UIView *subView in self.view.window.subviews) {
+        if (subView.tag == kSplashViewTag) {
             [subView removeFromSuperview];
         }
     }
