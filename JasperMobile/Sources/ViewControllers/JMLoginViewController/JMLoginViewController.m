@@ -177,7 +177,7 @@
     return [JMUtils isIphone] ? UIInterfaceOrientationPortrait : [super preferredInterfaceOrientationForPresentation];
 }
 
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return [JMUtils isIphone] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
 }
