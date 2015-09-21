@@ -43,7 +43,7 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-    return [self initWithNibName:NSStringFromClass([JMSingleSelectTableViewController class]) bundle:nil];
+    return [super initWithNibName:NSStringFromClass([JMSingleSelectTableViewController class]) bundle:nil];
 }
 
 #pragma mark - Table view delegate

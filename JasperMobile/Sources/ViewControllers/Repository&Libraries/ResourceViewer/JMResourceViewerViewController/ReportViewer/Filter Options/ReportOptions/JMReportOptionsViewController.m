@@ -141,7 +141,7 @@
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
 {
     searchBar.text = nil;
-    [self searchBar:searchBar textDidChange:nil];
+    [self searchBar:searchBar textDidChange:searchBar.text];
     [searchBar resignFirstResponder];
 }
 

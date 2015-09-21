@@ -197,11 +197,8 @@
 
 - (void)configureReport
 {
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
-        [self cancelResourceViewingAndExit:YES];
-    }];
-    
     void(^errorHandlingBlock)(NSError *, NSString *) = @weakself(^(NSError *error, NSString *errorMessage)) {
+        [JMCancelRequestPopup dismiss];
         NSLog(@"%@: %@", errorMessage, error);
         if (error.code == JSSessionExpiredErrorCode) {
             [JMUtils showLoginViewAnimated:YES completion:@weakself(^){
@@ -216,37 +213,52 @@
     
     NSString *reportURI = self.resourceLookup.uri;
 
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:@weakself(^void){
+        [self cancelResourceViewingAndExit:YES];
+    }@weakselfend];
     [JMReportManager fetchReportLookupWithResourceURI:reportURI
                                 completion:@weakself(^(JSResourceReportUnit *reportUnit, NSError *error)) {
                                     if (error) {
-                                        [JMCancelRequestPopup dismiss];
                                         errorHandlingBlock(error, @"Report Unit Loading Error");
                                     } else {
                                         if (reportUnit) {
-                                            // get report input controls
-                                            [JMReportManager fetchInputControlsWithReportURI:reportURI
-                                                                       completion:@weakself(^(NSArray *inputControls, NSError *error)) {
-                                                                           [JMCancelRequestPopup dismiss];
-                                                                           if (error) {
-                                                                               errorHandlingBlock(error, @"Report Unit Input Controls Loading Error");
-                                                                           } else {
-                                                                               self.isReportAlreadyConfigured = YES;
-                                                                               if ([inputControls count]) {
-                                                                               }
-                                                                               
-                                                                               [self.report updateReportParameters:self.initialReportParameters];
-                                                                               
-                                                                               [self.report generateReportOptionsWithInputControls:inputControls];
-                                                                               
-                                                                               if ([inputControls count] && reportUnit.alwaysPromptControls && !self.isChildReport) {
-                                                                                   [self showInputControlsViewControllerWithBackButton:YES];
-                                                                               } else  {
-                                                                                   [self startLoadReportWithPage:1];
-                                                                               }
-                                                                           }
-                                                                       }@weakselfend];
+                                            if (self.isChildReport) {
+                                                [self.report updateReportParameters:self.initialReportParameters];
+                                                [self startLoadReportWithPage:1];
+                                            } else {
+                                                // get report input controls
+                                                [JMReportManager fetchInputControlsWithReportURI:reportURI
+                                                                                      completion:@weakself(^(NSArray *inputControls, NSError *error)) {
+                                                                                          if (error) {
+                                                                                              errorHandlingBlock(error, @"Report Input Controls Loading Error");
+                                                                                          } else {
+                                                                                              if ([inputControls count]) {
+                                                                                                  [self.report generateReportOptionsWithInputControls:inputControls];
+                                                                                                  
+                                                                                                  // get report options
+                                                                                                  [JMReportManager fetchReportOptionsWithReportURI:self.report.reportURI completion:@weakself(^(NSArray *reportOptions, NSError *error)) {
+                                                                                                      if (error && error.code == JSSessionExpiredErrorCode) {
+                                                                                                          errorHandlingBlock(error, @"Report Options Loading Error");
+                                                                                                      } else {
+                                                                                                          [JMCancelRequestPopup dismiss];
+                                                                                                          self.isReportAlreadyConfigured = YES;
+                                                                                                          
+                                                                                                          [self.report addReportOptions:reportOptions];
+                                                                                                          
+                                                                                                          if ([reportOptions count] || (reportUnit.alwaysPromptControls && [inputControls count])) {
+                                                                                                              [self showInputControlsViewControllerWithBackButton:YES];
+                                                                                                          } else  {
+                                                                                                              [self startLoadReportWithPage:1];
+                                                                                                          }
+                                                                                                      }
+                                                                                                  }@weakselfend];
+                                                                                              } else {                                                                                                          [JMCancelRequestPopup dismiss];
+                                                                                                  [self startLoadReportWithPage:1];
+                                                                                              }
+                                                                                          }
+                                                                                      }@weakselfend];
+                                            }
                                         } else {
-                                            [JMCancelRequestPopup dismiss];
                                             NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Report Unit Loading Error" forKey:NSURLErrorFailingURLErrorKey];
                                             NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:JSClientErrorCode userInfo:userInfo];
                                             [JMUtils showAlertViewWithError:error completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
