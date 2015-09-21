@@ -75,11 +75,14 @@
 
 - (NSString *)htmlStringForReport
 {
-    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"report_optimized" ofType:@"html"];
-    if ([JMUtils isServerVersionUpOrEqual6] && ![JMUtils isServerAmber2]) {
-        htmlPath = [[NSBundle mainBundle] pathForResource:@"report" ofType:@"html"];
+    BOOL isNeedNonOptimizedVisualize = [self isAmberServer];
+    NSString *htmlName = @"report_optimized";
+
+    if (isNeedNonOptimizedVisualize) {
+        htmlName = @"report";
     }
 
+    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:htmlName ofType:@"html"];
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
 
     // Initial Scale for ViewPort
@@ -93,9 +96,11 @@
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
 
     // REQUIRE_JS
-    NSString *requireJSPath = [[NSBundle mainBundle] pathForResource:@"require.min" ofType:@"js"];
-    NSString *requirejsString = [NSString stringWithContentsOfFile:requireJSPath encoding:NSUTF8StringEncoding error:nil];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"REQUIRE_JS" withString:requirejsString];
+    if (!isNeedNonOptimizedVisualize) {
+        NSString *requireJSPath = [[NSBundle mainBundle] pathForResource:@"require.min" ofType:@"js"];
+        NSString *requirejsString = [NSString stringWithContentsOfFile:requireJSPath encoding:NSUTF8StringEncoding error:nil];
+        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"REQUIRE_JS" withString:requirejsString];
+    }
 
     // JasperMobile
     NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"report-ios-mobilejs-sdk" ofType:@"js"];
@@ -154,15 +159,25 @@
         baseURL = [baseURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
         NSString *visualizePath = [NSString stringWithFormat:@"%@/client/visualize.js?baseUrl=%@", self.restClient.serverProfile.serverUrl, baseURL];
 
-        if ([JMUtils isServerVersionUpOrEqual6] && ![JMUtils isServerAmber2]) {
+        BOOL isNeedNonOptimizedVisualize = [self isAmberServer];
+        if (isNeedNonOptimizedVisualize) {
             visualizePath = [visualizePath stringByAppendingString:@"&_opt=false"];
         }
+
         _visualizePath = visualizePath;
     }
     return _visualizePath;
 }
 
 #pragma mark - Helpers
-
+- (BOOL)isAmberServer
+{
+    BOOL isAmberServer = NO;
+    CGFloat versionNumber = self.restClient.serverProfile.serverInfo.versionAsFloat;
+    if (versionNumber >= 6.0 && versionNumber < 6.1f) {
+        isAmberServer = YES;
+    }
+    return isAmberServer;
+}
 
 @end
