@@ -136,7 +136,7 @@
 #pragma mark - Helpers
 - (NSDictionary *)parseCommand:(NSString *)command
 {
-    NSString *decodedCommand = [command stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *decodedCommand = [command stringByRemovingPercentEncoding];
     NSArray *components = [decodedCommand componentsSeparatedByString:@"&"];
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
@@ -154,7 +154,7 @@
             result[@"parameters"] = json[@"parameters"];
         } else {
             result[@"callback.type"] = @"Error";
-            result[@"parameters"] = error.localizedDescription;
+            result[@"description"] = error.localizedDescription;
         }
     } else {
         result[@"callback.type"] = callbackType;
