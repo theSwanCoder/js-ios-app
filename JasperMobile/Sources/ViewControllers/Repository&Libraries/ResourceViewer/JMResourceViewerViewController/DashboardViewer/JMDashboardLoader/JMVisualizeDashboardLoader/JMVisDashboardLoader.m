@@ -87,15 +87,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
             }
         }@weakselfend];
     } else {
-
+        [self destroyDashboard];
+        [self loadDashboardWithCompletion:completion];
     }
 }
 
 - (void)reloadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
 {
-    if (completion) {
-        completion(YES, nil);
-    }
+    self.loadCompletion = completion;
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileDashboard.refresh();";
@@ -170,11 +169,17 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         [self handleOnAdHocExecution:callback.parameters[@"parameters"]];
     } else if ([callback.type isEqualToString:@"onReferenceClick"]) {
         [self handleOnReferenceClick:callback.parameters[@"parameters"]];
+    } else if ([callback.type isEqualToString:@"onAuthError"]) {
+        [self javascriptNativeBridgeDidReceiveAuthRequest:self.bridge];
     }
 }
 
 - (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
 {
+    if (self.loadCompletion) {
+        // Add auth error
+        self.loadCompletion(NO, nil);
+    }
     [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
 }
 

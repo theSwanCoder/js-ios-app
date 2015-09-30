@@ -157,6 +157,15 @@
         });
       };
 
+      IosCallback.prototype.onAuthError = function(error) {
+        this._makeCallback({
+          "command": "onAuthError",
+          "parameters": {
+            "error": error
+          }
+        });
+      };
+
       IosCallback.prototype.onLoadError = function(error) {
         this._makeCallback({
           "command": "onLoadError",
@@ -181,14 +190,14 @@
       };
 
       IosCallback.prototype.onReportExecution = function(data) {
-        return this._makeCallback({
+        this._makeCallback({
           "command": "onReportExecution",
           "parameters": data
         });
       };
 
       IosCallback.prototype.onReferenceClick = function(href) {
-        return this._makeCallback({
+        this._makeCallback({
           "command": "onReferenceClick",
           "parameters": {
             "href": href
@@ -197,17 +206,26 @@
       };
 
       IosCallback.prototype.onAdHocExecution = function() {
-        return this._makeCallback({
+        this._makeCallback({
           "command": "onAdHocExecution",
           "parameters": {}
         });
       };
 
       IosCallback.prototype.onWindowError = function(error) {
-        return this._makeCallback({
-          "command": "onAdHocExecution",
-          "onWindowError": {
+        this._makeCallback({
+          "command": "onWindowError",
+          "parameters": {
             "error": error
+          }
+        });
+      };
+
+      IosCallback.prototype.logging = function(message) {
+        this._makeCallback({
+          "command": "logging",
+          "parameters": {
+            "message": message
           }
         });
       };
@@ -338,6 +356,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         this._startReportExecution = bind(this._startReportExecution, this);
         this._processLinkClicks = bind(this._processLinkClicks, this);
         this._processErrors = bind(this._processErrors, this);
+        this._refreshSuccess = bind(this._refreshSuccess, this);
         this._processSuccess = bind(this._processSuccess, this);
         this._executeDashboard = bind(this._executeDashboard, this);
         this.uri = params.uri, this.session = params.session;
@@ -355,11 +374,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       };
 
       DashboardController.prototype.refresh = function() {
-        return this.components.forEach((function(_this) {
-          return function(component) {
-            return _this.dashboard.refresh(component.id);
-          };
-        })(this));
+        return this.dashboard.refresh().done(this._refreshSuccess).fail(this._processErrors);
       };
 
       DashboardController.prototype.minimizeDashlet = function() {
@@ -429,6 +444,10 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         this._defineComponentsClickEvent();
         this._setupFiltersApperance();
         this._overrideApplyButton();
+        return this.callback.onLoadDone(this.components);
+      };
+
+      DashboardController.prototype._refreshSuccess = function(dashboard) {
         return this.callback.onLoadDone(this.components);
       };
 

@@ -243,7 +243,8 @@
 
 - (void)dashboardLoaderDidReceiveAuthRequest:(id <JMDashboardLoader>)loader
 {
-    [self reloadDashboard];
+    [self.restClient deleteCookies];
+    [self startResourceViewing];
 }
 
 #pragma mark - Report Options (Input Controls)
