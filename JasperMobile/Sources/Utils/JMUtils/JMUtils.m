@@ -260,6 +260,11 @@ void jmDebugLog(NSString *format, ...) {
     return self.restClient.serverProfile.serverInfo.versionAsFloat == [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_1_0;
 }
 
++ (BOOL)isServerAmber2OrHigher
+{
+    return self.restClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_1_0;
+}
+
 + (BOOL)isServerProEdition
 {
     return [self.restClient.serverProfile.serverInfo.edition isEqualToString: [JSConstants sharedInstance].SERVER_EDITION_PRO];

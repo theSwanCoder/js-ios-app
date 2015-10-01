@@ -135,6 +135,8 @@ void jmDebugLog(NSString *format, ...);
 
 + (BOOL)isServerAmber2;
 
++ (BOOL)isServerAmber2OrHigher;
+
 /**
  Returns YES if visualize is supported on current JRS instance
 
