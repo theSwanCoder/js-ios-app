@@ -65,7 +65,7 @@
 
 - (id <JMDashboardLoader>)dashboardLoader {
     if (!_dashboardLoader) {
-        if ([JMUtils isServerAmber2]) {
+        if ([JMUtils isServerAmber2OrHigher]) {
             if ([self.dashboard.resourceLookup isNewDashboard]) {
                 _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard];
             } else {
