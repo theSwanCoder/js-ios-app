@@ -85,7 +85,6 @@
 //    JMLog(@"request from webView: %@", request);
 
     if ([self isLoginRequest:request]) {
-        [self.restClient deleteCookies];
         [self.delegate javascriptNativeBridgeDidReceiveAuthRequest:self];
         return NO;
     }
