@@ -128,6 +128,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.resourceImage.contentMode = shouldFitImage ? UIViewContentModeScaleAspectFit : UIViewContentModeCenter;
     self.resourceImage.backgroundColor = thumbnails ? [UIColor clearColor] : [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
     self.resourceImage.image = resourceImage;
+    [self layoutIfNeeded];
 }
 
 @end
