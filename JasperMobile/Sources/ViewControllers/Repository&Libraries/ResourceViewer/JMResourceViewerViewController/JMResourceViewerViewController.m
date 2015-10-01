@@ -168,13 +168,11 @@
 #pragma mark - UIPrintInteractionControllerDelegate
 - (UIViewController *)printInteractionControllerParentViewController:(UIPrintInteractionController *)printInteractionController
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return self.printNavController;
 }
 
 - (void)printInteractionControllerDidPresentPrinterOptions:(UIPrintInteractionController *)printInteractionController
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self presentViewController:self.printNavController animated:YES completion:nil];
     UIViewController *printSettingsVC = self.printNavController.topViewController;
     printSettingsVC.navigationItem.leftBarButtonItem.tintColor = [[JMThemesManager sharedManager] barItemsColor];
@@ -182,7 +180,6 @@
 
 - (void)printInteractionControllerWillDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self.printNavController dismissViewControllerAnimated:YES completion:^{
         self.printNavController = nil;
     }];
