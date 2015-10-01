@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gNe-8U-f8m">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gNe-8U-f8m">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -102,13 +102,14 @@
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMMenuItemTableViewCell" textLabel="61y-7J-9Ud" style="IBUITableViewCellStyleDefault" id="g0e-tg-QOQ" customClass="JMMenuItemTableViewCell">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="22" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="g0e-tg-QOQ" id="R33-Bs-qhf">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="61y-7J-9Ud">
+                                                    <rect key="frame" x="15" y="0.0" width="570" height="44"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -419,7 +420,7 @@
                         <viewControllerLayoutGuide type="bottom" id="DZo-TK-rAn"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="foW-XN-j1U">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="dhA-YR-l07">
@@ -432,7 +433,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ServerCell" id="82C-GT-gxn" customClass="JMServerCollectionViewCell">
-                                        <rect key="frame" x="5" y="5" width="310" height="60"/>
+                                        <rect key="frame" x="5" y="5" width="590" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="590" height="60"/>
@@ -518,7 +519,7 @@
             </objects>
             <point key="canvasLocation" x="315" y="3560"/>
         </scene>
-        <!--Server Options View Controller-->
+        <!--Delegate-->
         <scene sceneID="Qhv-Fb-n1J">
             <objects>
                 <viewController id="Cud-Db-3p3" customClass="JMServerOptionsViewController" sceneMemberID="viewController">
@@ -527,7 +528,7 @@
                         <viewControllerLayoutGuide type="bottom" id="rpQ-dX-Oe6"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="g7t-cD-ord">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="vTE-Fx-49C">
@@ -535,10 +536,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextEditCell" rowHeight="60" id="1lk-fV-rW8" customClass="JMTextServerOptionCell">
-                                        <rect key="frame" x="0.0" y="1" width="300" height="50"/>
+                                        <rect key="frame" x="0.0" y="1" width="580" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" tableViewCell="1lk-fV-rW8" id="KAE-f4-NnI">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="tVI-4K-BmR">
@@ -591,10 +592,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BooleanCell" id="FXf-7g-1p8" customClass="JMBooleanServerOptionCell">
-                                        <rect key="frame" x="0.0" y="101" width="300" height="50"/>
+                                        <rect key="frame" x="0.0" y="61" width="580" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FXf-7g-1p8" id="abQ-zA-yLk">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="u9G-0I-P3I">
@@ -710,7 +711,7 @@
                         <viewControllerLayoutGuide type="bottom" id="2QH-Zh-G0B"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="BJm-TS-TQz" customClass="JMBaseCollectionView">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -761,7 +762,7 @@
                         <viewControllerLayoutGuide type="bottom" id="2or-HS-NWu"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="a0G-W6-nCG" customClass="JMBaseCollectionView">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -796,7 +797,7 @@
                         <viewControllerLayoutGuide type="bottom" id="IDM-Up-oKi"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="LWy-T0-XFS" customClass="JMBaseCollectionView">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -815,7 +816,7 @@
                         <viewControllerLayoutGuide type="bottom" id="auX-li-1Mj"/>
                     </layoutGuides>
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="ETr-4t-c5P">
-                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yyh-gY-zel">
@@ -828,7 +829,7 @@
                                                 <rect key="frame" x="223" y="30" width="155" height="155"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to TIBCO JasperMobile" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="UXr-aE-8ZE">
-                                                <rect key="frame" x="160" y="195" width="281" height="23"/>
+                                                <rect key="frame" x="20" y="195" width="561" height="23"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -840,7 +841,7 @@
                                                 <rect key="frame" x="290" y="233" width="21" height="12"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="swipe up to begin" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="oum-N8-hus">
-                                                <rect key="frame" x="243" y="255" width="115" height="17"/>
+                                                <rect key="frame" x="20" y="255" width="561" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -856,8 +857,10 @@
                                             <constraint firstItem="bvC-m9-gjN" firstAttribute="top" secondItem="1a3-2a-V5A" secondAttribute="top" constant="30" id="L6h-mf-THT"/>
                                             <constraint firstItem="kPL-bw-lyk" firstAttribute="top" secondItem="UXr-aE-8ZE" secondAttribute="bottom" constant="15" id="ROx-41-Cgr"/>
                                             <constraint firstAttribute="centerX" secondItem="kPL-bw-lyk" secondAttribute="centerX" id="SSX-0r-Vi8"/>
+                                            <constraint firstItem="oum-N8-hus" firstAttribute="leading" secondItem="1a3-2a-V5A" secondAttribute="leading" constant="20" id="UgY-H8-8aL"/>
                                             <constraint firstItem="oum-N8-hus" firstAttribute="top" secondItem="kPL-bw-lyk" secondAttribute="bottom" constant="10" id="VSs-Xo-HnL"/>
                                             <constraint firstItem="UXr-aE-8ZE" firstAttribute="top" secondItem="bvC-m9-gjN" secondAttribute="bottom" constant="10" id="VUS-Cm-pH9"/>
+                                            <constraint firstItem="UXr-aE-8ZE" firstAttribute="leading" secondItem="1a3-2a-V5A" secondAttribute="leading" constant="20" id="WdW-ff-t8f"/>
                                             <constraint firstAttribute="centerX" secondItem="oum-N8-hus" secondAttribute="centerX" id="dH4-t5-ruG"/>
                                             <constraint firstAttribute="centerX" secondItem="bvC-m9-gjN" secondAttribute="centerX" id="xcv-n0-mVW"/>
                                         </constraints>
@@ -869,7 +872,7 @@
                                                 <rect key="frame" x="290" y="5" width="21" height="12"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stay Connected" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="JQx-ee-94i">
-                                                <rect key="frame" x="232" y="22" width="136" height="23"/>
+                                                <rect key="frame" x="20" y="22" width="560" height="23"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -878,7 +881,7 @@
                                                 </variation>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="cMO-DM-wvE">
-                                                <rect key="frame" x="202" y="55" width="197" height="27"/>
+                                                <rect key="frame" x="20" y="55" width="561" height="27"/>
                                                 <string key="text">JasperMobile keeps you connected to
 your business wherever you are.</string>
                                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
@@ -894,10 +897,12 @@ your business wherever you are.</string>
                                             <constraint firstItem="cMO-DM-wvE" firstAttribute="top" secondItem="JQx-ee-94i" secondAttribute="bottom" constant="10" id="4Rt-pE-leJ">
                                                 <variation key="heightClass=regular-widthClass=regular" constant="30"/>
                                             </constraint>
+                                            <constraint firstItem="cMO-DM-wvE" firstAttribute="leading" secondItem="O55-dv-wkE" secondAttribute="leading" constant="20" id="Ebb-ny-DIj"/>
                                             <constraint firstAttribute="centerX" secondItem="cMO-DM-wvE" secondAttribute="centerX" id="I2u-SU-WaG"/>
                                             <constraint firstItem="1d3-rZ-D6r" firstAttribute="top" secondItem="O55-dv-wkE" secondAttribute="top" constant="5" id="P5D-Ar-zWw">
                                                 <variation key="heightClass=regular-widthClass=regular" constant="50"/>
                                             </constraint>
+                                            <constraint firstItem="JQx-ee-94i" firstAttribute="leading" secondItem="O55-dv-wkE" secondAttribute="leading" constant="20" id="PYB-VO-PR3"/>
                                             <constraint firstItem="JQx-ee-94i" firstAttribute="top" secondItem="1d3-rZ-D6r" secondAttribute="bottom" constant="5" id="Qrq-zL-uhk">
                                                 <variation key="heightClass=regular-widthClass=regular" constant="30"/>
                                             </constraint>
@@ -1071,10 +1076,10 @@ your business wherever you are.</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextCellIdentifier" id="oI1-jo-4x2" customClass="JMTextSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="22" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="22" width="580" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oI1-jo-4x2" id="oad-f0-Qd5">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="1F8-xS-719">
@@ -1113,10 +1118,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BooleanCellIdentifier" id="TSZ-MS-FRQ" customClass="JMBooleanSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="66" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="66" width="580" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TSZ-MS-FRQ" id="PFf-1y-ozD">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="kco-Op-bcV">
@@ -1148,10 +1153,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LabelCellIdentifier" id="6jW-1y-mje" customClass="JMSettingsTableViewCell">
-                                        <rect key="frame" x="0.0" y="110" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="110" width="580" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6jW-1y-mje" id="aF0-lV-uJf">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="eIv-qN-a61">
@@ -1277,7 +1282,7 @@ your business wherever you are.</string>
                         <viewControllerLayoutGuide type="bottom" id="rRM-0M-jLA"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="xO9-Hs-G7B" customClass="JMBaseCollectionView">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1299,7 +1304,7 @@ your business wherever you are.</string>
                         <viewControllerLayoutGuide type="bottom" id="522-cp-Uxa"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="pDH-le-xKQ">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="L0s-M7-TL7">
@@ -1338,10 +1343,10 @@ your business wherever you are.</string>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PagesCell" id="aA7-yi-BEU" customClass="JMSaveReportPagesCell">
-                                        <rect key="frame" x="0.0" y="50" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="50" width="580" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aA7-yi-BEU" id="Seu-K5-Xd9">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="wtt-S8-xCc">
@@ -1375,10 +1380,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PageRangeCell" id="X5B-od-GgA" customClass="JMSaveReportPageRangeCell">
-                                        <rect key="frame" x="0.0" y="94" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="94" width="580" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="X5B-od-GgA" id="0pu-TL-T4e">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="Swa-bz-Zdb">
@@ -1414,10 +1419,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PreviewCell" id="0U3-jj-J1l" customClass="JMPrintPreviewTableViewCell">
-                                        <rect key="frame" x="0.0" y="138" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="138" width="580" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0U3-jj-J1l" id="H6V-qW-RWK">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k3L-ol-H6S">
@@ -1527,7 +1532,7 @@ your business wherever you are.</string>
                         <viewControllerLayoutGuide type="bottom" id="mmO-WU-J0N"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="yrd-Nr-oSs" customClass="JMBaseCollectionView">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
@@ -1558,9 +1563,10 @@ your business wherever you are.</string>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ReportOptionsCell" id="5C7-Xl-E7c" customClass="JMReportOptionsCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
+                                        <rect key="frame" x="0.0" y="50" width="580" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5C7-Xl-E7c" id="Lrh-eY-7Bv">
+                                            <rect key="frame" x="0.0" y="0.0" width="547" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="s4a-9f-UXf">
@@ -1583,10 +1589,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="BooleanCell" id="VEm-hm-4HK" customClass="JMBooleanInputControlCell">
-                                        <rect key="frame" x="0.0" y="1" width="300" height="70"/>
+                                        <rect key="frame" x="0.0" y="123" width="580" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VEm-hm-4HK" id="MVc-Xa-UDo">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="kKe-LA-KdH">
@@ -1618,10 +1624,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TextEditCell" id="U9l-1z-g0C" customClass="JMTextInputControlCell">
-                                        <rect key="frame" x="0.0" y="71" width="300" height="70"/>
+                                        <rect key="frame" x="0.0" y="196" width="580" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="U9l-1z-g0C" id="nkr-sT-9NZ">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="spl-B7-uWL">
@@ -1671,10 +1677,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NumberCell" id="R2p-Wz-V0j" customClass="JMNumberInputControlCell">
-                                        <rect key="frame" x="0.0" y="141" width="300" height="70"/>
+                                        <rect key="frame" x="0.0" y="269" width="580" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="R2p-Wz-V0j" id="6aO-Ou-RWl">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="KD7-xa-JiJ">
@@ -1724,10 +1730,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DateCell" id="63Q-G0-eep" customClass="JMDateInputControlCell">
-                                        <rect key="frame" x="0.0" y="211" width="300" height="70"/>
+                                        <rect key="frame" x="0.0" y="342" width="580" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="63Q-G0-eep" id="Yn0-sO-db1">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="emg-8a-4Yg">
@@ -1777,10 +1783,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TimeCell" id="Xr7-SH-oV8" customClass="JMTimeInputControlCell">
-                                        <rect key="frame" x="0.0" y="281" width="300" height="70"/>
+                                        <rect key="frame" x="0.0" y="415" width="580" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xr7-SH-oV8" id="uha-uc-bTh">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="TWn-Hi-jSK">
@@ -1830,10 +1836,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DateTimeCell" id="MXo-7x-cbg" customClass="JMDateTimeInputControlCell">
-                                        <rect key="frame" x="0.0" y="351" width="300" height="70"/>
+                                        <rect key="frame" x="0.0" y="488" width="580" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MXo-7x-cbg" id="NV7-z3-Q0i">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="Elr-8P-Iav">
@@ -1883,10 +1889,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SingleSelectCell" id="l4T-o9-kjD" customClass="JMSingleSelectInputControlCell">
-                                        <rect key="frame" x="0.0" y="421" width="300" height="70"/>
+                                        <rect key="frame" x="0.0" y="561" width="580" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="l4T-o9-kjD" id="HZb-Pc-rQm">
-                                            <rect key="frame" x="0.0" y="0.0" width="267" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="547" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="GYI-mT-w6f">
@@ -1934,10 +1940,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MultiSelectCell" id="cEK-7M-1JN" customClass="JMMultiSelectInputControlCell">
-                                        <rect key="frame" x="0.0" y="491" width="300" height="70"/>
+                                        <rect key="frame" x="0.0" y="634" width="580" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cEK-7M-1JN" id="Aqa-x7-DQd">
-                                            <rect key="frame" x="0.0" y="0.0" width="267" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="547" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="title" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="Ghn-fd-hzu">
@@ -2062,7 +2068,7 @@ your business wherever you are.</string>
                                 <rect key="frame" x="290" y="258" width="20" height="20"/>
                             </activityIndicatorView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Report is empty!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XON-xy-195">
-                                <rect key="frame" x="26" y="258" width="548" height="21"/>
+                                <rect key="frame" x="30" y="258" width="540" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="iGX-j1-k8w"/>
                                 </constraints>
@@ -2156,10 +2162,10 @@ your business wherever you are.</string>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ReportNameCell" rowHeight="70" id="MYs-xi-QEE" customClass="JMSaveReportNameCell">
-                                        <rect key="frame" x="0.0" y="50" width="300" height="70"/>
+                                        <rect key="frame" x="0.0" y="50" width="580" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MYs-xi-QEE" id="zXL-lk-rz8">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pAq-nN-D8W" customClass="JMTextField">
@@ -2198,10 +2204,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FormatSelectionCell" id="zek-dZ-cgt" customClass="JMSaveReportFormatCell">
-                                        <rect key="frame" x="0.0" y="120" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="120" width="580" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zek-dZ-cgt" id="oLD-37-ED4">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="tP2-0d-Ueb">
@@ -2224,10 +2230,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="PagesCell" id="NuJ-gJ-fYO" customClass="JMSaveReportPagesCell">
-                                        <rect key="frame" x="0.0" y="164" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="164" width="580" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NuJ-gJ-fYO" id="Caj-NL-z8T">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="oHt-Bu-kgE">
@@ -2259,10 +2265,10 @@ your business wherever you are.</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="PageRangeCell" id="jxy-i5-dLH" customClass="JMSaveReportPageRangeCell">
-                                        <rect key="frame" x="0.0" y="208" width="300" height="44"/>
+                                        <rect key="frame" x="0.0" y="208" width="580" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jxy-i5-dLH" id="KFu-wN-sqC">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="580" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="Jji-Js-Kc6">
@@ -2357,7 +2363,7 @@ your business wherever you are.</string>
                         <viewControllerLayoutGuide type="bottom" id="bBv-vb-6Nn"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="s1V-7A-6os">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar opaque="NO" contentMode="redraw" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6hp-7x-3qx">
