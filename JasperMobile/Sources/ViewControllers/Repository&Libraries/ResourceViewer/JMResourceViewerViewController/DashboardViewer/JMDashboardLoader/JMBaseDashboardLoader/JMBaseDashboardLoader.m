@@ -128,6 +128,10 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
 
 - (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
 {
+    if (self.loadCompletion) {
+        // TODO: Need add auth error
+        self.loadCompletion(NO, nil);
+    }
     [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
 }
 
