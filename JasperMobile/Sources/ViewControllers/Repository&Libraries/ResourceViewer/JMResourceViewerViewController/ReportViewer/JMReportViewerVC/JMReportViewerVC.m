@@ -225,25 +225,29 @@
 
         NSInteger reportCurrentPage = self.report.currentPage;
         [self.report restoreDefaultState];
-        if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-            // TODO: Need add restoring for current page
-            [self runReportWithPage:reportCurrentPage];
-        } else {
-            [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                    [self cancelResourceViewingAndExit:YES];
-                } @weakselfend];
-        }
+        [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                if (self.restClient.keepSession && isSessionAuthorized) {
+                    // TODO: Need add restoring for current page
+                    [self runReportWithPage:reportCurrentPage];
+                } else {
+                    [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
+                            [self cancelResourceViewingAndExit:YES];
+                        } @weakselfend];
+                }
+            }@weakselfend];
 
     } else if (error.code == JMReportLoaderErrorTypeEmtpyReport) {
         [self showEmptyReportMessage];
     } else if (error.code == JSSessionExpiredErrorCode) {
-        if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-            [self runReportWithPage:self.report.currentPage];
-        } else {
-            [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                    [self cancelResourceViewingAndExit:YES];
-                } @weakselfend];
-        }
+        [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                if (self.restClient.keepSession && isSessionAuthorized) {
+                    [self runReportWithPage:self.report.currentPage];
+                } else {
+                    [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
+                            [self cancelResourceViewingAndExit:YES];
+                        } @weakselfend];
+                }
+            }@weakselfend];
     } else {
         [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
             [self cancelResourceViewingAndExit:YES];
@@ -327,11 +331,13 @@
                                              [JMCancelRequestPopup dismiss];
                                              if (error) {
                                                  if (error.code == JSSessionExpiredErrorCode) {
-                                                     if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                                         [self preparePreviewForPrintWithCompletion:completion];
-                                                     } else {
-                                                         [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                     }
+                                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                             if (self.restClient.keepSession && isSessionAuthorized) {
+                                                                 [self preparePreviewForPrintWithCompletion:completion];
+                                                             } else {
+                                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                             }
+                                                         }@weakselfend];
                                                  } else {
                                                      [JMUtils showAlertViewWithError:error];
                                                  }

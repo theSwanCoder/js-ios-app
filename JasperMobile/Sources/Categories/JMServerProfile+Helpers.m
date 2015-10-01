@@ -122,10 +122,7 @@
                                                  username:nil
                                                  password:nil];
     
-    __block JSRESTBase *restBase = [[JSRESTBase alloc] init];
-    restBase.serverProfile = profile;
-    
-
+    __block JSRESTBase *restBase = [[JSRESTBase alloc] initWithServerProfile:profile keepLogged:YES];
 
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         JSServerInfo *serverInfo = restBase.serverInfo;

@@ -42,11 +42,13 @@
                                modelClass:[JSResourceReportUnit class]
                           completionBlock:@weakself(^(JSOperationResult *result)) {
                               if (result.error) {
-                                  if (result.error.code == JSSessionExpiredErrorCode && self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                    [self fetchReportLookupWithResourceURI:reportURI completion:completion];
-                                  } else if (completion) {
-                                      completion(nil, result.error);
-                                  }
+                                  [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                          if (result.error.code == JSSessionExpiredErrorCode && self.restClient.keepSession && isSessionAuthorized) {
+                                              [self fetchReportLookupWithResourceURI:reportURI completion:completion];
+                                          } else if (completion) {
+                                              completion(nil, result.error);
+                                          }
+                                  }@weakselfend];
                               } else if (completion) {
                                   JSResourceReportUnit *reportUnit = [result.objects firstObject];
                                   completion(reportUnit, nil);
@@ -62,11 +64,13 @@
                              selectedValues:nil
                             completionBlock:@weakself(^(JSOperationResult *result)) {
                                 if (result.error) {
-                                    if (result.error.code == JSSessionExpiredErrorCode && self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                        [self fetchInputControlsWithReportURI:reportURI completion:completion];
-                                    } else if (completion) {
-                                        completion(nil, result.error);
-                                    }
+                                    [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                            if (result.error.code == JSSessionExpiredErrorCode && self.restClient.keepSession && isSessionAuthorized) {
+                                                [self fetchInputControlsWithReportURI:reportURI completion:completion];
+                                            } else if (completion) {
+                                                completion(nil, result.error);
+                                            }
+                                        }@weakselfend];
                                 } else if (completion) {
                                     NSMutableArray *visibleInputControls = [NSMutableArray array];
                                     for (JSInputControlDescriptor *inputControl in result.objects) {
@@ -85,11 +89,13 @@
     [self.restClient reportOptionsForReportURI:reportURI
                                     completion:@weakself(^(JSOperationResult *result)) {
                                         if (result.error) {
-                                            if (result.error.code == JSSessionExpiredErrorCode && self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                                [self fetchInputControlsWithReportURI:reportURI completion:completion];
-                                            } else if (completion) {
-                                                completion(nil, result.error);
-                                            }
+                                            [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                    if (result.error.code == JSSessionExpiredErrorCode && self.restClient.keepSession && isSessionAuthorized) {
+                                                        [self fetchInputControlsWithReportURI:reportURI completion:completion];
+                                                    } else if (completion) {
+                                                        completion(nil, result.error);
+                                                    }
+                                                }@weakselfend];
                                         } else if (completion) {
                                             NSMutableArray *reportOptions = [NSMutableArray array];
 
@@ -111,11 +117,13 @@
                           withReportURI:reportURI
                              completion:^(JSOperationResult *result) {
                                  if (result.error) {
-                                     if (result.error.code == JSSessionExpiredErrorCode && self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                         [self deleteReportOption:reportOption withReportURI:reportURI completion:completion];
-                                     } else if (completion) {
-                                         completion(result.error);
-                                     }
+                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                             if (result.error.code == JSSessionExpiredErrorCode && self.restClient.keepSession && isSessionAuthorized) {
+                                                 [self deleteReportOption:reportOption withReportURI:reportURI completion:completion];
+                                             } else if (completion) {
+                                                 completion(result.error);
+                                             }
+                                         }@weakselfend];
                                  } else if (completion) {
                                      completion(nil);
                                  }
@@ -132,11 +140,13 @@
                                     reportParameters:reportParameters
                                           completion:^(JSOperationResult *result) {
                                               if (result.error) {
-                                                  if (result.error.code == JSSessionExpiredErrorCode && self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                                      [self createReportOptionWithReportURI:reportURI optionLabel:optionLabel reportParameters:reportParameters completion:completion];
-                                                  } else if (completion) {
-                                                      completion(nil, result.error);
-                                                  }
+                                                  [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                          if (result.error.code == JSSessionExpiredErrorCode && self.restClient.keepSession && isSessionAuthorized) {
+                                                              [self createReportOptionWithReportURI:reportURI optionLabel:optionLabel reportParameters:reportParameters completion:completion];
+                                                          } else if (completion) {
+                                                              completion(nil, result.error);
+                                                          }
+                                                      }@weakselfend];
                                               } else if (completion) {
                                                   JSReportOption *reportOption = [result.objects firstObject];
                                                   completion(reportOption, nil);

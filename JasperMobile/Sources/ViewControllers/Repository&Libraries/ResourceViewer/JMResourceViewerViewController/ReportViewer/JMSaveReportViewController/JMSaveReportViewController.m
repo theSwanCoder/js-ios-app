@@ -391,11 +391,13 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
                              if (error) {
                                  if (error.code == JSSessionExpiredErrorCode) {
-                                     if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                         [self saveReport];
-                                     } else {
-                                         [JMUtils showLoginViewAnimated:YES completion:nil];
-                                     }
+                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                             if (self.restClient.keepSession && isSessionAuthorized) {
+                                                 [self saveReport];
+                                             } else {
+                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
+                                             }
+                                         }@weakselfend];
                                  } else {
                                      [JMUtils showAlertViewWithError:error];
                                  }

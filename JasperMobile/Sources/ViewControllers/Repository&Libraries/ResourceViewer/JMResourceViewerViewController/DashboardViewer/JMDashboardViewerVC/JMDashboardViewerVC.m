@@ -151,22 +151,24 @@
 
 - (void)reloadDashboard
 {
-    if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
+    [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+            if (self.restClient.keepSession && isSessionAuthorized) {
 
-        [self startShowLoaderWithMessage:@"status.loading"
-                             cancelBlock:@weakself(^(void)) {
-                                     [self.dashboardLoader reset];
-                                     [super cancelResourceViewingAndExit:YES];
-                                 }@weakselfend];
+                [self startShowLoaderWithMessage:@"status.loading"
+                                     cancelBlock:@weakself(^(void)) {
+                                             [self.dashboardLoader reset];
+                                             [super cancelResourceViewingAndExit:YES];
+                                         }@weakselfend];
 
-        [self.dashboardLoader reloadDashboardWithCompletion:@weakself(^(BOOL success, NSError *error)) {
-            [self stopShowLoader];
+                [self.dashboardLoader reloadDashboardWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+                        [self stopShowLoader];
+                    }@weakselfend];
+            } else {
+                [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
+                        [self cancelResourceViewingAndExit:YES];
+                    } @weakselfend];
+            }
         }@weakselfend];
-    } else {
-        [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                [self cancelResourceViewingAndExit:YES];
-            } @weakselfend];
-    }
 }
 
 #pragma mark - Overriden methods
@@ -257,13 +259,15 @@
 
                                     if (result.error) {
                                         if (result.error.code == JSSessionExpiredErrorCode) {
-                                            if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                                [self loadInputControlsWithReportURI:reportURI completion:completion];
-                                            } else {
-                                                [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                                                        [self cancelResourceViewingAndExit:YES];
-                                                    } @weakselfend];
-                                            }
+                                            [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                    if (self.restClient.keepSession && isSessionAuthorized) {
+                                                        [self loadInputControlsWithReportURI:reportURI completion:completion];
+                                                    } else {
+                                                        [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
+                                                                [self cancelResourceViewingAndExit:YES];
+                                                            } @weakselfend];
+                                                    }
+                                                }@weakselfend];
                                         } else {
                                             if (completion) {
                                                 completion(nil, result.error);

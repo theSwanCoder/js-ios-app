@@ -176,13 +176,15 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                      completionBlock:@weakself(^(JSOperationResult *result)) {
                          if (result.error) {
                              if (result.error.code == JSSessionExpiredErrorCode) {
-                                 if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                     [self loadNextPage];
-                                 } else {
-                                     self.isLoadingNow = NO;
-                                     [self setNeedsUpdate];
-                                     [JMUtils showLoginViewAnimated:YES completion:nil];
-                                 }
+                                 [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                         if (self.restClient.keepSession && isSessionAuthorized) {
+                                             [self loadNextPage];
+                                         } else {
+                                             self.isLoadingNow = NO;
+                                             [self setNeedsUpdate];
+                                             [JMUtils showLoginViewAnimated:YES completion:nil];
+                                         }
+                                     }@weakselfend];
                              } else {
                                  [self finishLoadingWithError:result.error];
                              }

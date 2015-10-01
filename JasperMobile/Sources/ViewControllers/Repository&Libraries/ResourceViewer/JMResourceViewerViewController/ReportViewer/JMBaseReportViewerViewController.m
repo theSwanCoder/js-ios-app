@@ -302,11 +302,13 @@
                                  [JMCancelRequestPopup dismiss];
                                  if (error) {
                                      if (error.code == JSSessionExpiredErrorCode) {
-                                         if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                             [self preparePreviewForPrintWithCompletion:completion];
-                                         } else {
-                                             [JMUtils showLoginViewAnimated:YES completion:nil];
-                                         }
+                                         [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                 if (self.restClient.keepSession && isSessionAuthorized) {
+                                                     [self preparePreviewForPrintWithCompletion:completion];
+                                                 } else {
+                                                     [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                 }
+                                             }@weakselfend];
                                      } else {
                                          [JMUtils showAlertViewWithError:error];
                                      }

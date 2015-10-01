@@ -429,11 +429,13 @@
 
                                     if (result.error) {
                                         if (result.error.code == JSSessionExpiredErrorCode) {
-                                            if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                                [self updatedInputControlsValuesWithCompletion:completion];
-                                            } else {
-                                                [JMUtils showLoginViewAnimated:YES completion:nil];
-                                            }
+                                            [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                    if (self.restClient.keepSession && isSessionAuthorized) {
+                                                        [self updatedInputControlsValuesWithCompletion:completion];
+                                                    } else {
+                                                        [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                    }
+                                                }@weakselfend];
                                         } else {
                                             [JMUtils showAlertViewWithError:result.error];
                                         }
@@ -480,11 +482,13 @@
                                   
                                   if (result.error) {
                                       if (result.error.code == JSSessionExpiredErrorCode) {
-                                          if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                              [self checkParentFolderPermissionWithCompletion:completion];
-                                          } else {
-                                              [JMUtils showLoginViewAnimated:YES completion:nil];
-                                          }
+                                          [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                  if (self.restClient.keepSession && isSessionAuthorized) {
+                                                      [self checkParentFolderPermissionWithCompletion:completion];
+                                                  } else {
+                                                      [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                  }
+                                              }@weakselfend];
                                       } else {
                                           [JMUtils showAlertViewWithError:result.error];
                                       }
