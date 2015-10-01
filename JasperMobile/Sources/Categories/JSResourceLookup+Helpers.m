@@ -75,12 +75,8 @@
 
 - (JMDashboard *)dashboardModel
 {
-    if ([self isNewDashboard]) {
-        if ([JMUtils isServerAmber2] && [JMUtils isSystemVersion8] && [JMUtils isSupportVisualize]) {
-            return [JMVisualizeDashboard dashboardWithResource:self];
-        } else {
-            return [JMVisualizeDashboard dashboardWithResource:self];
-        }
+    if ([self isNewDashboard] && [JMUtils isSupportVisualize]) {
+        return [JMVisualizeDashboard dashboardWithResource:self];
     } else {
         return [JMDashboard dashboardWithResource:self];
     }
