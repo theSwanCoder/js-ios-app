@@ -246,7 +246,11 @@
 - (void)dashboardLoaderDidReceiveAuthRequest:(id <JMDashboardLoader>)loader
 {
     [self.restClient deleteCookies];
-    [self startResourceViewing];
+    if ([JMUtils isServerAmber2OrHigher]) {
+        [self startResourceViewing];
+    } else {
+        [self reloadDashboard];
+    }
 }
 
 #pragma mark - Report Options (Input Controls)
