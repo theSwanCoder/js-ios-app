@@ -177,7 +177,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
 {
     if (self.loadCompletion) {
-        // Add auth error
+        // TODO: Need add auth error
         self.loadCompletion(NO, nil);
     }
     [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
