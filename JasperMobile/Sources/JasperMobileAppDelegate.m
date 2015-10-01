@@ -34,9 +34,11 @@
 #import "JMCancelRequestPopup.h"
 #import "JMMenuViewController.h"
 #import "JMOnboardIntroViewController.h"
+#import "UIImage+Additions.h"
 
 
 static NSString * const kGAITrackingID = @"UA-57445224-1";
+static const NSInteger kSplashViewTag = 100;
 
 @implementation JasperMobileAppDelegate
 
@@ -84,6 +86,8 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [self removeSplashView];
+
     [[JMThemesManager sharedManager] applyCurrentTheme];
     [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:^(BOOL isSessionRestored) {
 
@@ -117,6 +121,11 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
     }];
 }
 
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    [self addSplashView];
+}
+
 - (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier {
     if ([extensionPointIdentifier isEqualToString: UIApplicationKeyboardExtensionPointIdentifier]) {
         return NO;
@@ -126,7 +135,6 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
@@ -170,6 +178,26 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
         SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
         JMOnboardIntroViewController *introViewController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
         [revealViewController presentViewController:introViewController animated:YES completion:nil];
+    }
+}
+
+#pragma mark - Splash View
+- (void)addSplashView
+{
+    // TODO: replace this approach for getting right splash image
+    NSString *splashImageName = [UIImage splashImageNameForOrientation:[UIApplication sharedApplication].statusBarOrientation];
+    UIImage *splashImage = [UIImage imageNamed:splashImageName];
+    UIImageView *splashView = [[UIImageView alloc] initWithImage:splashImage];
+    splashView.tag = kSplashViewTag;
+    [self.window addSubview:splashView];
+}
+
+- (void)removeSplashView
+{
+    for (UIView *subView in self.window.subviews) {
+        if (subView.tag == kSplashViewTag) {
+            [subView removeFromSuperview];
+        }
     }
 }
 

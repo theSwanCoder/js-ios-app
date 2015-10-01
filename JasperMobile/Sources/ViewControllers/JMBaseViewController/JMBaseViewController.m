@@ -27,9 +27,6 @@
 //
 
 #import "JMBaseViewController.h"
-#import "UIImage+Additions.h"
-
-static const NSInteger kSplashViewTag = 100;
 
 @implementation JMBaseViewController
 
@@ -40,68 +37,6 @@ static const NSInteger kSplashViewTag = 100;
 
     // Google Analitycs
     self.screenName = NSStringFromClass(self.class);
-
-    [self addObserversForApplicationStates];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-
-    [self removeAllObservers];
-}
-
-#pragma mark - Observers
-- (void)addObserversForApplicationStates
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleApplicationEnterBackground)
-                                                 name:UIApplicationDidEnterBackgroundNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleApplicationWillEnterForeground)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
-}
-
-- (void)removeAllObservers
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIApplicationDidEnterBackgroundNotification
-                                                  object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIApplicationWillEnterForegroundNotification
-                                                  object:nil];
-}
-
-#pragma mark - Application LifeCycle
-- (void)handleApplicationEnterBackground
-{
-    [self addBlurView];
-}
-
-- (void)handleApplicationWillEnterForeground
-{
-    [self removeBlurView];
-}
-
-#pragma mark - Helpers
-- (void)addBlurView
-{
-    NSString *splashImageName = [UIImage splashImageNameForOrientation:self.interfaceOrientation];
-    UIImage *splashImage = [UIImage imageNamed:splashImageName];
-    UIImageView *splashView = [[UIImageView alloc] initWithImage:splashImage];
-    splashView.tag = kSplashViewTag;
-    [self.view.window addSubview:splashView];
-}
-
-- (void)removeBlurView
-{
-    for (UIView *subView in self.view.window.subviews) {
-        if (subView.tag == kSplashViewTag) {
-            [subView removeFromSuperview];
-        }
-    }
 }
 
 @end
