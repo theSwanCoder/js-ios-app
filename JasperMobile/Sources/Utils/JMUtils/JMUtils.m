@@ -125,6 +125,11 @@ void jmDebugLog(NSString *format, ...) {
     return [UIDevice currentDevice].systemVersion.integerValue == 8;
 }
 
++ (BOOL)isSystemVersion9
+{
+    return [UIDevice currentDevice].systemVersion.integerValue == 9;
+}
+
 + (BOOL)crashReportsSendingEnable
 {
     if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultSendingCrashReport]) {
