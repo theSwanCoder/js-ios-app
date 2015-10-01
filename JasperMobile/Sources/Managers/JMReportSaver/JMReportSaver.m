@@ -170,7 +170,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                                         name:name
                                       format:format];
         BOOL isPrepeared = [self preparePathsForSavedReport:self.savedReport];
-        if (isPrepeared) {
+        if (!isPrepeared) {
             if (completion) {
                 // TODO: add error of creating the paths
                 NSError *error = [NSError errorWithDomain:kJMReportSaverErrorDomain
