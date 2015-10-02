@@ -369,7 +369,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       DashboardController.prototype.refreshDashlet = function() {
         if (this.maximizedComponent) {
-          return this.dashboard.refresh(this.maximizedComponent.id);
+          return this.dashboard.refresh(this.maximizedComponent.id).done(this._refreshSuccess).fail(this._processErrors);
         }
       };
 
