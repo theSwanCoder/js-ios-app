@@ -66,7 +66,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 
 - (void)removeReport
 {
-    NSString *pathToReport = [JMSavedResources absolutePathToSavedReport:self];
+    NSString *pathToReport = [JMSavedResources pathToFolderForSavedReport:self];
     [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
     
     [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
