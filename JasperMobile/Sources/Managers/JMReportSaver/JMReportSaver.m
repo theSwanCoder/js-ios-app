@@ -111,19 +111,8 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
             completionBlock(nil, error);
         }
     } else {
-        if (!self.pagesRange) {
-            NSArray *components = [pages componentsSeparatedByString:@"-"];
-            NSUInteger startPage = 0;
-            NSUInteger endPage = 0;
-            if (components.count == 2) {
-                startPage = ((NSNumber *)components[0]).unsignedIntegerValue;
-                endPage = ((NSNumber *)components[1]).unsignedIntegerValue;
-            } else if (components.count == 1) {
-                startPage = ((NSNumber *)components.firstObject).unsignedIntegerValue;
-                endPage = ((NSNumber *)components.firstObject).unsignedIntegerValue;
-            }
-            self.pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
-        }
+
+        [self createPagesRangeFromPagesString:pages];
         
         [self fetchOutputResourceURLForReportWithFileExtension:format
                                                          pages:pages
@@ -491,6 +480,21 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
     NSString *fileReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReport];
     BOOL isExistInFS = [[NSFileManager defaultManager] fileExistsAtPath:fileReportPath];
     return isExistInFS;
+}
+
+- (void)createPagesRangeFromPagesString:(NSString *)pages
+{
+    NSArray *components = [pages componentsSeparatedByString:@"-"];
+    NSUInteger startPage = 0;
+    NSUInteger endPage = 0;
+    if (components.count == 2) {
+        startPage = ((NSString *)components[0]).integerValue;
+        endPage = ((NSString *)components[1]).integerValue;
+    } else if (components.count == 1) {
+        startPage = endPage = (NSUInteger) ((NSString *)components.firstObject).integerValue;
+    }
+
+    self.pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
 }
 
 @end
