@@ -37,6 +37,13 @@
 
     // Google Analitycs
     self.screenName = NSStringFromClass(self.class);
+
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 @end

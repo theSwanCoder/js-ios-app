@@ -39,11 +39,18 @@
     self.navigationBar.translucent = NO;
     self.toolbar.translucent = NO;
     self.interactivePopGestureRecognizer.enabled = NO;
+
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     [navigationController setToolbarHidden:YES animated:YES];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 #pragma mark - AutoRotation
