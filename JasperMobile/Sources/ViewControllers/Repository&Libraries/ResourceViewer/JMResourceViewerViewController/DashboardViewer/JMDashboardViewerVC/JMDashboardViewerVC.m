@@ -153,7 +153,6 @@
 {
     [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
             if (self.restClient.keepSession && isSessionAuthorized) {
-
                 [self startShowLoaderWithMessage:@"status.loading"
                                      cancelBlock:@weakself(^(void)) {
                                              [self.dashboardLoader reset];
@@ -171,18 +170,53 @@
         }@weakselfend];
 }
 
+- (void)reloadDashlet
+{
+    if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
+        [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                if (self.restClient.keepSession && isSessionAuthorized) {
+
+                    [self startShowLoaderWithMessage:@"status.loading"
+                                         cancelBlock:@weakself(^(void)) {
+                                                 [self.dashboardLoader reset];
+                                                 [super cancelResourceViewingAndExit:YES];
+                                             }@weakselfend];
+                    [self.dashboardLoader reloadMaximizedDashletWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+                            [self stopShowLoader];
+                        }@weakselfend];
+                } else {
+                    [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
+                            [self cancelResourceViewingAndExit:YES];
+                        } @weakselfend];
+                }
+            }@weakselfend];
+    } else {
+        [self minimizeDashlet];
+        [self reloadDashboard];
+    }
+}
+
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
-    [self startShowLoaderWithMessage:@"status.loading"
-                         cancelBlock:@weakself(^(void)) {
-                                 [self.dashboardLoader reset];
-                                 [super cancelResourceViewingAndExit:YES];
-                             }@weakselfend];
+    [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+            if (self.restClient.keepSession && isSessionAuthorized) {
 
-    [self.dashboardLoader loadDashboardWithCompletion:@weakself(^(BOOL success, NSError *error)) {
-        [self stopShowLoader];
-    }@weakselfend];
+                [self startShowLoaderWithMessage:@"status.loading"
+                                     cancelBlock:@weakself(^(void)) {
+                                             [self.dashboardLoader reset];
+                                             [super cancelResourceViewingAndExit:YES];
+                                         }@weakselfend];
+                [self.dashboardLoader loadDashboardWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+                        [self stopShowLoader];
+                    }@weakselfend];
+
+            } else {
+                [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
+                        [self cancelResourceViewingAndExit:YES];
+                    } @weakselfend];
+            }
+        }@weakselfend];
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
@@ -203,7 +237,15 @@
 - (void)dashboardLoader:(id <JMDashboardLoader>)loader didStartMaximazeDashletWithTitle:(NSString *)title
 {
     [[self webView].scrollView setZoomScale:0.1 animated:YES];
+
     self.navigationItem.rightBarButtonItems = nil;
+    if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
+        UIBarButtonItem *refreshDashlet = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_action"]
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(reloadDashlet)];
+        self.navigationItem.rightBarButtonItem = refreshDashlet;
+    }
 
     self.leftButtonItem = self.navigationItem.leftBarButtonItem;
     self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title

@@ -73,7 +73,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 
 #pragma mark - Public API
-- (void)loadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
+- (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion
 {
     self.loadCompletion = completion;
 
@@ -88,16 +88,26 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         }@weakselfend];
     } else {
         [self destroyDashboard];
-        [self loadDashboardWithCompletion:completion];
+        [self handleOnScriptLoaded];
     }
 }
 
-- (void)reloadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
+- (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion
 {
     self.loadCompletion = completion;
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileDashboard.refresh();";
+    request.parametersAsString = @"";
+    [self.bridge sendRequest:request];
+}
+
+- (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion) completion
+{
+    self.loadCompletion = completion;
+
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileDashboard.refreshDashlet();";
     request.parametersAsString = @"";
     [self.bridge sendRequest:request];
 }
