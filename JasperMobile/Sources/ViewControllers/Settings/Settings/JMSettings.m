@@ -56,7 +56,7 @@ NSInteger const kJMOnboardIntroSettingValue = 102;
     @[
       @{@"title" : JMCustomLocalizedString(@"settings.item.connection.timeout", nil), @"value" : @(self.restClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.crashtracking.title", nil), @"value" : @([JMUtils crashReportsSendingEnable]), @"cellIdentifier" : kJMBooleanCellIdentifier},
-      @{@"title" : JMCustomLocalizedString(@"settings.feedback", nil), @"value" : @"", @"cellIdentifier" : kJMLabelCellIdentifier},
+      @{@"title" : JMCustomLocalizedString(@"settings.feedback", nil), @"value" : @(kJMFeedbackSettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.privacy.policy.title", nil), @"value" : @(kJMPrivacyPolicySettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
       // used for test purpose
 //      @{@"title" : JMCustomLocalizedString(@"settings.item.intro", nil), @"value" : @(kJMOnboardIntroSettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
