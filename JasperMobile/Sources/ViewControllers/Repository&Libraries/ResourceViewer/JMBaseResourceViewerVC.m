@@ -361,6 +361,13 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     [self.activityIndicator stopAnimating];
 }
 
+- (void)startShowLoaderWithMessage:(NSString *)message
+{
+    [JMUtils showNetworkActivityIndicator];
+    [JMCancelRequestPopup presentWithMessage:message];
+    [self.activityIndicator startAnimating];
+}
+
 - (void)startShowLoaderWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock
 {
     [JMUtils showNetworkActivityIndicator];

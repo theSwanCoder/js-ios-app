@@ -73,6 +73,9 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 // Loaders
 - (void)startShowLoadingIndicators;
 - (void)stopShowLoadingIndicators;
+
+- (void)startShowLoaderWithMessage:(NSString *)message;
+
 - (void)startShowLoaderWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock;
 - (void)stopShowLoader;
 
