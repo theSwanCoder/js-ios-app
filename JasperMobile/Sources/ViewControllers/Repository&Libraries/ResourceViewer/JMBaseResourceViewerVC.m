@@ -127,13 +127,13 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     // detect backButton text width to truncate with '...'
     NSDictionary *textAttributes = @{NSFontAttributeName : [[JMThemesManager sharedManager] navigationBarTitleFont]};
     CGSize titleTextSize = [self.title sizeWithAttributes:textAttributes];
-    CGFloat titleTextWidth = ceil(titleTextSize.width);
+    CGFloat titleTextWidth = ceilf(titleTextSize.width);
     CGSize backItemTextSize = [backButtonTitle sizeWithAttributes:textAttributes];
-    CGFloat backItemTextWidth = ceil(backItemTextSize.width);
+    CGFloat backItemTextWidth = ceilf(backItemTextSize.width);
     CGFloat backItemOffset = 12;
     
-    CGFloat viewWidth = CGRectGetWidth(self.view.bounds);
-    
+    CGFloat viewWidth = CGRectGetWidth(self.navigationController.navigationBar.frame);
+
     if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMCustomLocalizedString(@"back.button.title", nil)]) {
         return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back.button.title", nil)];
     }
