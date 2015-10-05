@@ -71,11 +71,6 @@
     [super viewDidAppear:animated];
 
     [self updateToobarAppearence];
-
-    // start point
-    if (!self.report.isReportAlreadyLoaded && self.isReportAlreadyConfigured) {
-        [self startLoadReportWithPage:1];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
