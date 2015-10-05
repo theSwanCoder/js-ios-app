@@ -153,7 +153,7 @@
 {
     [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
             if (self.restClient.keepSession && isSessionAuthorized) {
-                [self startShowLoaderWithMessage:@"status.loading"
+                [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
                                      cancelBlock:@weakself(^(void)) {
                                              [self.dashboardLoader reset];
                                              [super cancelResourceViewingAndExit:YES];
@@ -176,11 +176,8 @@
         [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
                 if (self.restClient.keepSession && isSessionAuthorized) {
 
-                    [self startShowLoaderWithMessage:@"status.loading"
-                                         cancelBlock:@weakself(^(void)) {
-                                                 [self.dashboardLoader reset];
-                                                 [super cancelResourceViewingAndExit:YES];
-                                             }@weakselfend];
+                    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)];
+
                     [self.dashboardLoader reloadMaximizedDashletWithCompletion:@weakself(^(BOOL success, NSError *error)) {
                             [self stopShowLoader];
                         }@weakselfend];
@@ -202,7 +199,7 @@
     [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
             if (self.restClient.keepSession && isSessionAuthorized) {
 
-                [self startShowLoaderWithMessage:@"status.loading"
+                [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
                                      cancelBlock:@weakself(^(void)) {
                                              [self.dashboardLoader reset];
                                              [super cancelResourceViewingAndExit:YES];
