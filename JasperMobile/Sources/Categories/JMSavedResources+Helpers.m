@@ -64,6 +64,14 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return savedReport;
 }
 
+- (void)removeFromDB
+{
+    [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
+    [self.managedObjectContext deleteObject:self];
+    [self.managedObjectContext save:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
+}
+
 - (void)removeReport
 {
     NSString *pathToReport = [JMSavedResources pathToFolderForSavedReport:self];
@@ -247,9 +255,11 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 {
     // tmp/PathComponent/reports/reportName.format/
     NSString *pathToTempFolder = [self pathToTempFolderForSavedReport:savedReport];
+    NSLog(@"pathToTempFolder: %@", pathToTempFolder);
     // reportName.format
     NSString *savedReportName = [self savedReportNameWithName:savedReport.label
                                                        format:savedReport.format];
+    NSLog(@"savedReportName: %@", savedReportName);
     // Documents/TempPathComponent/reports/reportName.format/reportName.format
     NSString *absolutePath = [pathToTempFolder stringByAppendingPathComponent:savedReportName];
     return absolutePath;
@@ -268,10 +278,10 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     // tmp/
     NSString *tempPath = [JMUtils applicationTempDirectory];
     // PathComponent
-    NSString *pathComponent = [self pathComponent];
+    //NSString *pathComponent = [self pathComponent];
     // tmp/PathComponent
-    NSString *result = [tempPath stringByAppendingPathComponent:pathComponent];
-    return result;
+    //NSString *result = [tempPath stringByAppendingPathComponent:pathComponent];
+    return tempPath;
 }
 
 + (NSString *)savedReportNameWithName:(NSString *)reportName format:(NSString *)format

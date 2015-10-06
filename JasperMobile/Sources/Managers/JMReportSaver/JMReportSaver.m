@@ -82,8 +82,6 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                 [self downloadThumbnailForSavedReport:self.savedReport
                                     resourceURLString:thumbnailURLString
                                            completion:nil];
-            } else {
-                [self removeSavedReportFromDB];
             }
         }@weakselfend;
     }
@@ -207,11 +205,6 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
 - (void)createNewSavedReportWithReport:(JMReport *)report name:(NSString *)name format:(NSString *)format
 {
     self.savedReport = [JMSavedResources addReport:report.resourceLookup withName:name format:format];
-}
-
-- (void)removeSavedReportFromDB
-{
-    [self.savedReport removeReport];
 }
 
 - (BOOL)preparePathsForSavedReport:(JMSavedResources *)savedReport

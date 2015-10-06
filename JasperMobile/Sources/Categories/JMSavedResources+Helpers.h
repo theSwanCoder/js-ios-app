@@ -53,6 +53,9 @@ extern NSString * const kJMSavedResources;
 // Rename saved resource
 - (BOOL)renameReportTo:(NSString *)newName;
 
+// Remove saved resource from DB
+- (void)removeFromDB;
+
 // Removes saved resource
 - (void)removeReport;
 
