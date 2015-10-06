@@ -337,6 +337,9 @@
                                     <constraint firstItem="Biu-xJ-P2l" firstAttribute="leading" secondItem="8dE-ta-sCn" secondAttribute="leading" constant="184" id="Oeb-gd-ezL">
                                         <variation key="widthClass=compact" constant="20"/>
                                     </constraint>
+                                    <constraint firstItem="Biu-xJ-P2l" firstAttribute="leading" secondItem="8dE-ta-sCn" secondAttribute="leading" constant="20" id="Oeb-gd-ezL">
+                                        <variation key="widthClass=regular" constant="184"/>
+                                    </constraint>
                                     <constraint firstItem="IlI-wL-7hQ" firstAttribute="height" secondItem="Biu-xJ-P2l" secondAttribute="height" id="PSW-z4-PrE"/>
                                     <constraint firstItem="dqm-Y4-gBK" firstAttribute="top" secondItem="z2N-OC-qP7" secondAttribute="top" id="R3a-yt-OcK"/>
                                     <constraint firstItem="IlI-wL-7hQ" firstAttribute="centerX" secondItem="8la-dV-F8G" secondAttribute="centerX" id="aaJ-xB-boq"/>
