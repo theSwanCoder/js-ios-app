@@ -151,21 +151,22 @@
                 
                 [self.tableView reloadData];
 
+                id nextVC;
                 if([item vcIdentifierForSelectedItem]) {
                     // Crashlytics
                     [Answers logCustomEventWithName:@"User opened section"
                                    customAttributes:@{
-                                           @"Section's Name" : [item nameForCrashlytics]
-                                   }];
+                                                      @"Section's Name" : [item nameForCrashlytics]
+                                                      }];
 
-                    // Show VC
-                    UINavigationController *nvc = (UINavigationController *) [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-                    UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonTapped:)];
-                    nvc.topViewController.navigationItem.leftBarButtonItem = menuItem;
-                    [nvc.topViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-                    self.revealViewController.frontViewController = nvc;
+                    nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+                    UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStylePlain target:self action:@selector(menuButtonTapped:)];
+                    [nextVC topViewController].navigationItem.leftBarButtonItem = menuItem;
+                    [[nextVC topViewController].view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+                } else {
+                    nextVC = [JMUtils launchScreenViewController];
                 }
-
+                self.revealViewController.frontViewController = nextVC;
             }
             [self.revealViewController setFrontViewPosition:FrontViewPositionLeft
                                                    animated:YES];

@@ -70,8 +70,6 @@
             return @"JMRepositoryNavigationViewController";
         case JMResourceTypeSettings:
             return @"JMSettingsNavigationViewController";
-        case JMResourceTypeNone:
-            return @"JMSplashViewController";
         default:
             return nil;
     }
@@ -94,8 +92,6 @@
             return JMCustomLocalizedString(@"menuitem.settings.label", nil);
         case JMResourceTypeLogout:
             return JMCustomLocalizedString(@"menuitem.logout.label", nil);
-        case JMResourceTypeNone:
-            return @"JMSplashViewController";
         default:
             return nil;
     }

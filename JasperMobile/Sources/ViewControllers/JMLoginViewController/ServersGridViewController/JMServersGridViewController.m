@@ -48,7 +48,7 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
     self.title = JMCustomLocalizedString(@"servers.profile.title", nil);
     self.view.backgroundColor = [[JMThemesManager sharedManager] serversViewBackgroundColor];
     self.collectionView.backgroundColor = [UIColor clearColor];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(addButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item"] style:UIBarButtonItemStylePlain  target:self action:@selector(addButtonTapped:)];
     self.errorLabel.text = JMCustomLocalizedString(@"servers.profile.list.empty", nil);
     self.errorLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
 
@@ -89,6 +89,14 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
     if (sender) {
         [destinationViewController setServerProfile:[sender objectForKey:kJMServerProfileKey]];
         destinationViewController.editable = [[sender objectForKey:kJMServerProfileEditableKey] boolValue];
+    }
+}
+
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+    if (self.isViewLoaded && self.view.window) {
+        [self.collectionView reloadData];
     }
 }
 

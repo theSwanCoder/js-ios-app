@@ -62,7 +62,7 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 
     [self.saveButton setTitle:JMCustomLocalizedString(@"dialog.button.save", nil) forState:UIControlStateNormal];
 
-    UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(applicationInfo:)];
+    UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStylePlain target:self action:@selector(applicationInfo:)];
     self.navigationItem.rightBarButtonItem = infoItem;
 }
 

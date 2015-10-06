@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0801DF891AAF2B2A00DD072C /* JMSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF881AAF2B2A00DD072C /* JMSplashViewController.m */; };
 		0801DF951AAF2CC000DD072C /* JMSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF941AAF2CC000DD072C /* JMSessionManager.m */; };
 		0801DF9D1AAF2CC900DD072C /* JMFavorites.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF981AAF2CC900DD072C /* JMFavorites.m */; };
 		0801DF9E1AAF2CC900DD072C /* JMSavedResources.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DF9A1AAF2CC900DD072C /* JMSavedResources.m */; };
@@ -20,7 +19,6 @@
 		0801DFBD1AAF2E7500DD072C /* JMIntroModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFB61AAF2E7500DD072C /* JMIntroModel.m */; };
 		0801DFBE1AAF2E7500DD072C /* JMIntroModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFB91AAF2E7500DD072C /* JMIntroModelManager.m */; };
 		0801DFBF1AAF2E7500DD072C /* JMOnboardIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */; };
-		080C80BE1B4D7CA0005B59B6 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 080C80BD1B4D7CA0005B59B6 /* MainStoryboard.storyboard */; };
 		081CE2701B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 081CE26F1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m */; };
 		08221C421AE54DA000F94F1D /* JMCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C411AE54DA000F94F1D /* JMCoreDataManager.m */; };
 		08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C921AE78CD300F94F1D /* JMMigrationManager.m */; };
@@ -178,6 +176,8 @@
 		A1478D6B609C61DEF3A3AC92 /* JMVisualizeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478AE10405430D44256CA0 /* JMVisualizeManager.m */; };
 		A1478E469EF43FD1BFC20A80 /* JMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478CEB43CD5DD1090EE7E9 /* JMBaseViewController.m */; };
 		A1478EFBFF648E171A39F2BF /* JMReportViewerToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */; };
+		BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */; settings = {ASSET_TAGS = (); }; };
+		BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */; settings = {ASSET_TAGS = (); }; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDB8B9EE1B57D90B00758441 /* JMThemesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8B9ED1B57D90B00758441 /* JMThemesManager.m */; };
@@ -209,8 +209,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0801DF871AAF2B2A00DD072C /* JMSplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSplashViewController.h; sourceTree = "<group>"; };
-		0801DF881AAF2B2A00DD072C /* JMSplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSplashViewController.m; sourceTree = "<group>"; };
 		0801DF931AAF2CC000DD072C /* JMSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSessionManager.h; sourceTree = "<group>"; };
 		0801DF941AAF2CC000DD072C /* JMSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSessionManager.m; sourceTree = "<group>"; };
 		0801DF971AAF2CC900DD072C /* JMFavorites.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFavorites.h; sourceTree = "<group>"; };
@@ -235,7 +233,6 @@
 		0801DFB91AAF2E7500DD072C /* JMIntroModelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMIntroModelManager.m; sourceTree = "<group>"; };
 		0801DFBA1AAF2E7500DD072C /* JMOnboardIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMOnboardIntroViewController.h; sourceTree = "<group>"; };
 		0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMOnboardIntroViewController.m; sourceTree = "<group>"; };
-		080C80BD1B4D7CA0005B59B6 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		081CE26E1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPrintPreviewTableViewCell.h; sourceTree = "<group>"; };
 		081CE26F1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPrintPreviewTableViewCell.m; sourceTree = "<group>"; };
 		08221C401AE54DA000F94F1D /* JMCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCoreDataManager.h; sourceTree = "<group>"; };
@@ -540,6 +537,8 @@
 		A1478D6859B60B36A4F9FCC8 /* JMDashboardViewerConfigurator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardViewerConfigurator.m; sourceTree = "<group>"; };
 		A1478EA56C0D8D23BDD84C37 /* JMJavascriptCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptCallback.h; sourceTree = "<group>"; };
 		A1478EEB9FB0CCB7D652FF2F /* JMVisualizeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeManager.h; sourceTree = "<group>"; };
+		BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		BDABBD241A41D8CC00EDA100 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		BDABBD251A41D8CC00EDA100 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		BDABBD261A41D8CC00EDA100 /* RNCachingURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCachingURLProtocol.h; sourceTree = "<group>"; };
@@ -605,15 +604,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0801DF861AAF2B2A00DD072C /* JMSplashViewController */ = {
-			isa = PBXGroup;
-			children = (
-				0801DF871AAF2B2A00DD072C /* JMSplashViewController.h */,
-				0801DF881AAF2B2A00DD072C /* JMSplashViewController.m */,
-			);
-			path = JMSplashViewController;
-			sourceTree = "<group>";
-		};
 		0801DF921AAF2CC000DD072C /* JMSessionManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -897,7 +887,6 @@
 			children = (
 				93618E141BD4BFE8007995D7 /* JMEULAViewController */,
 				089B14C91AA756BD0021A915 /* JMLoginViewController */,
-				0801DF861AAF2B2A00DD072C /* JMSplashViewController */,
 				0801DFB01AAF2E7500DD072C /* JMOnboardIntroViewController */,
 				089B14E51AA756BD0021A915 /* Repository&Libraries */,
 				089B15521AA756BD0021A915 /* Settings */,
@@ -1667,7 +1656,8 @@
 		08E62D0219922BA40081CA83 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				080C80BD1B4D7CA0005B59B6 /* MainStoryboard.storyboard */,
+				BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */,
+				BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -2218,6 +2208,7 @@
 				9348F4EA1A35D103006F5677 /* profiles.json in Resources */,
 				089B15C11AA756BD0021A915 /* JMGridLoadingCollectionViewCell.xib in Resources */,
 				BDB8B9F41B57EB0A00758441 /* DefaultTheme.plist in Resources */,
+				BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */,
 				089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */,
 				930F8D421ABB1C35005F93FB /* report-ios-mobilejs-sdk.js in Resources */,
 				930F8D411ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js in Resources */,
@@ -2230,6 +2221,7 @@
 				089B15C61AA756BD0021A915 /* JMGridResourceCollectionViewCell.xib in Resources */,
 				08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */,
 				930F8D481ABB1D9F005F93FB /* require.min.js in Resources */,
+				BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */,
 				930F8D451ABB1CDF005F93FB /* dashboard.html in Resources */,
 				089B15C81AA756BD0021A915 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
 				9386BA2D1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf in Resources */,
@@ -2238,7 +2230,6 @@
 				089B15C31AA756BD0021A915 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */,
 				930F8D4A1ABB28B0005F93FB /* report_optimized.html in Resources */,
 				08E0D19F1B0CF27200BFBFE5 /* Icon-1024.png in Resources */,
-				080C80BE1B4D7CA0005B59B6 /* MainStoryboard.storyboard in Resources */,
 				089B15AF1AA756BD0021A915 /* JMListOptionsPopupView.xib in Resources */,
 				A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */,
 				A147874948067892B357C8A3 /* JMReportViewerToolBar~ipad.xib in Resources */,
@@ -2362,7 +2353,6 @@
 				089B15F21AA756BD0021A915 /* JMPrivacyPolicyViewController.m in Sources */,
 				08DD182D1B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel in Sources */,
 				089B15BD1AA756BD0021A915 /* JMServerOption.m in Sources */,
-				0801DF891AAF2B2A00DD072C /* JMSplashViewController.m in Sources */,
 				081CE2701B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m in Sources */,
 				BDF3D25E1B8B2DF20005AA28 /* JMReportManager.m in Sources */,
 				93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */,
@@ -2510,7 +2500,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
@@ -2527,7 +2517,6 @@
 			baseConfigurationReference = 9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2723,7 +2712,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -2752,7 +2741,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "";
@@ -2769,7 +2758,6 @@
 			baseConfigurationReference = 36BDBF8F8314608DC124B942 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -2820,7 +2808,6 @@
 			baseConfigurationReference = 20A5E8D0860C986563FB740C /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

@@ -187,10 +187,7 @@ static const NSInteger kSplashViewTag = 100;
 #pragma mark - Splash View
 - (void)addSplashView
 {
-    // TODO: replace this approach for getting right splash image
-    NSString *splashImageName = [UIImage splashImageNameForOrientation:[UIApplication sharedApplication].statusBarOrientation];
-    UIImage *splashImage = [UIImage imageNamed:splashImageName];
-    UIImageView *splashView = [[UIImageView alloc] initWithImage:splashImage];
+    UIView *splashView = [JMUtils launchScreenViewController].view;
     splashView.tag = kSplashViewTag;
     [self.window addSubview:splashView];
 }

@@ -394,4 +394,16 @@ void jmDebugLog(NSString *format, ...) {
     return mainStoryboard;
 }
 
++ (UIViewController *)launchScreenViewController
+{
+    static dispatch_once_t onceToken;
+    static UIStoryboard * launchStoryboard;
+    dispatch_once(&onceToken, ^{
+        NSBundle *bundle = [NSBundle mainBundle];
+        NSString *storyboardName = [bundle objectForInfoDictionaryKey:@"UILaunchStoryboardName"];
+        launchStoryboard = [UIStoryboard storyboardWithName:storyboardName bundle:bundle];
+    });
+    return [launchStoryboard instantiateInitialViewController];
+}
+
 @end

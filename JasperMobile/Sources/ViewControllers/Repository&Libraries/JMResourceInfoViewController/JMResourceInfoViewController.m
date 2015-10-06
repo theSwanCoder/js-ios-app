@@ -227,7 +227,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
     
     UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
-                                                                     style:UIBarButtonItemStyleBordered
+                                                                     style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(favoriteButtonTapped:)];
     favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];

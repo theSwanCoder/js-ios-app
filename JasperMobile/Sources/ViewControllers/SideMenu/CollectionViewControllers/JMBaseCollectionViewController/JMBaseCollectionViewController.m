@@ -127,6 +127,15 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     }
 }
 
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+    if (self.isViewLoaded && self.view.window) {
+        JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
+        [baseCollectionView.collectionView reloadData];
+    }
+}
+
 #pragma mark - Custom accessors
 - (void)setNeedReloadData:(BOOL)needReloadData
 {
@@ -359,14 +368,14 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     JMMenuActionsViewAction availableAction = [self availableAction];
     if (availableAction & JMMenuActionsViewAction_Filter) {
         UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"]
-                                                                       style:UIBarButtonItemStyleBordered
+                                                                       style:UIBarButtonItemStylePlain
                                                                       target:self
                                                                       action:@selector(filterByButtonTapped:)];
         [navBarItems addObject:filterItem];
     }
     if (availableAction & JMMenuActionsViewAction_Sort) {
         UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"]
-                                                                     style:UIBarButtonItemStyleBordered
+                                                                     style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(sortByButtonTapped:)];
         [navBarItems addObject:sortItem];
@@ -401,7 +410,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     NSString *imageName = ([self nextRepresentationTypeForType:self.representationType] == JMResourcesRepresentationType_Grid) ? @"grid_button" : @"horizontal_list_button";
     return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
-                                            style:UIBarButtonItemStyleBordered
+                                            style:UIBarButtonItemStylePlain
                                            target:self
                                            action:@selector(representationTypeButtonTapped:)];
 }
@@ -520,12 +529,11 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     CGFloat itemWidth = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
     
     if (self.representationType == JMResourcesRepresentationType_Grid) {
-        NSInteger countOfCellsInRow = 1;
+        NSInteger countOfCellsInRow = 0;
         itemWidth = [JMUtils isIphone] ? 150 : 310;
-        while (((countOfCellsInRow * itemWidth) + (countOfCellsInRow + 1) * flowLayout.minimumInteritemSpacing) < collectionView.frame.size.width) {
+        while (((countOfCellsInRow * itemWidth) + (countOfCellsInRow - 1) * flowLayout.minimumInteritemSpacing) < (collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right)) {
             countOfCellsInRow ++;
         }
-        countOfCellsInRow --;
         itemHeight = [JMUtils isIphone] ? 150 : 254;
         itemWidth = floorf((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
     }

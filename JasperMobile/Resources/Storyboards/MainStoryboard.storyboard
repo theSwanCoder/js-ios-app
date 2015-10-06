@@ -23,7 +23,6 @@
                     </view>
                     <connections>
                         <segue destination="nPj-SH-9U9" kind="custom" identifier="sw_rear" customClass="SWRevealViewControllerSegueSetController" id="UgH-GO-hO2"/>
-                        <segue destination="9b7-pT-rR8" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegueSetController" id="zEB-t9-op5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KJn-u4-pOZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -199,40 +198,6 @@
             </objects>
             <point key="canvasLocation" x="-2138" y="593"/>
         </scene>
-        <!--Splash View Controller-->
-        <scene sceneID="ku3-Su-yPe">
-            <objects>
-                <viewController storyboardIdentifier="JMSplashViewController" id="9b7-pT-rR8" customClass="JMSplashViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="S1n-rb-wRu"/>
-                        <viewControllerLayoutGuide type="bottom" id="r7j-mH-Ky6"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="iiz-03-p4X">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zkb-jC-C4j">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <animations/>
-                            </imageView>
-                        </subviews>
-                        <animations/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="r7j-mH-Ky6" firstAttribute="top" secondItem="zkb-jC-C4j" secondAttribute="bottom" id="MB4-Gb-2jg"/>
-                            <constraint firstItem="zkb-jC-C4j" firstAttribute="leading" secondItem="iiz-03-p4X" secondAttribute="leading" id="PQ2-WS-e1a"/>
-                            <constraint firstItem="zkb-jC-C4j" firstAttribute="top" secondItem="iiz-03-p4X" secondAttribute="topMargin" id="UYJ-Ne-rxp"/>
-                            <constraint firstAttribute="trailing" secondItem="zkb-jC-C4j" secondAttribute="trailing" id="kAS-T6-856"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="splashImageView" destination="zkb-jC-C4j" id="biz-U7-RR9"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Wmf-EZ-gKr" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2138" y="1305"/>
-        </scene>
         <!--Login View Controller-->
         <scene sceneID="Vc7-wh-cKK">
             <objects>
@@ -369,14 +334,11 @@
                                     <constraint firstAttribute="bottom" secondItem="dqm-Y4-gBK" secondAttribute="bottom" constant="10" id="LkI-rv-Rlf">
                                         <variation key="heightClass=regular-widthClass=regular" constant="20"/>
                                     </constraint>
+                                    <constraint firstItem="Biu-xJ-P2l" firstAttribute="leading" secondItem="8dE-ta-sCn" secondAttribute="leading" constant="20" id="Oeb-gd-ezL">
+                                        <variation key="widthClass=regular" constant="184"/>
+                                    </constraint>
                                     <constraint firstItem="IlI-wL-7hQ" firstAttribute="height" secondItem="Biu-xJ-P2l" secondAttribute="height" id="PSW-z4-PrE"/>
                                     <constraint firstItem="dqm-Y4-gBK" firstAttribute="top" secondItem="z2N-OC-qP7" secondAttribute="top" id="R3a-yt-OcK"/>
-                                    <constraint firstItem="Biu-xJ-P2l" firstAttribute="leading" secondItem="8dE-ta-sCn" secondAttribute="leading" constant="20" id="VcN-98-sTd">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="184"/>
-                                    </constraint>
-                                    <constraint firstAttribute="trailing" secondItem="Biu-xJ-P2l" secondAttribute="trailing" constant="20" id="WQp-bw-eoy">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="184"/>
-                                    </constraint>
                                     <constraint firstItem="IlI-wL-7hQ" firstAttribute="centerX" secondItem="8la-dV-F8G" secondAttribute="centerX" id="aaJ-xB-boq"/>
                                     <constraint firstItem="IlI-wL-7hQ" firstAttribute="top" secondItem="8la-dV-F8G" secondAttribute="bottom" constant="15" id="dN2-Gs-qP0">
                                         <variation key="heightClass=regular-widthClass=regular" constant="30"/>

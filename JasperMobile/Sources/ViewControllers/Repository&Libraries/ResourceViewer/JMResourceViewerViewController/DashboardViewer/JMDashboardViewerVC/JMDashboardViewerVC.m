@@ -253,7 +253,7 @@
     self.navigationItem.rightBarButtonItems = nil;
     if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
         UIBarButtonItem *refreshDashlet = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_action"]
-                                                                     style:UIBarButtonItemStyleBordered
+                                                                     style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(reloadDashlet)];
         self.navigationItem.rightBarButtonItem = refreshDashlet;
