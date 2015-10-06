@@ -86,6 +86,62 @@
     }
 }
 
+- (void)createReportOptionTapped:(id)sender
+{
+    if ([self validateInputControls]) { // Local validation
+        [self checkParentFolderPermissionWithCompletion:@weakself(^(BOOL reportOptionsEditingAvailable)) {
+                if (reportOptionsEditingAvailable) {
+                    [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
+                            if (dataIsValid) {
+                                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(@"report.viewer.report.options.new.option.title", nil)
+                                                                                    message:nil
+                                                                                   delegate:self
+                                                                          cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
+                                                                          otherButtonTitles:JMCustomLocalizedString(@"dialog.button.ok", nil), nil];
+                                alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+                                UITextField *textField = [alertView textFieldAtIndex:0];
+                                textField.delegate = self;
+                                [alertView show];
+                            }
+                        } @weakselfend];
+                } else {
+                    [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.report.options.create.permission.error" delegate:nil cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles: nil] show];
+                }
+            }@weakselfend];
+    } else {
+        [self.tableView reloadData];
+    }
+}
+
+- (void)deleteReportOptionTapped:(id)sender
+{
+    [self checkParentFolderPermissionWithCompletion:@weakself(^(BOOL reportOptionsEditingAvailable)) {
+            if (reportOptionsEditingAvailable) {
+                NSString *confirmationMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.report.options.remove.confirmation.message", nil), self.currentReportOption.reportOption.label];
+                [[UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation" message:confirmationMessage completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                        if (buttonIndex != alertView.cancelButtonIndex) {
+                            [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+                            [JMReportManager deleteReportOption:self.currentReportOption.reportOption withReportURI:self.report.reportURI completion:@weakself(^(NSError *error)) {
+                                    [JMCancelRequestPopup dismiss];
+                                    if (error) {
+                                        if (error.code == JSSessionExpiredErrorCode) {
+                                            [JMUtils showLoginViewAnimated:YES completion:nil];
+                                        } else {
+                                            [JMUtils showAlertViewWithError:error];
+                                        }
+                                    } else {
+                                        [self.report removeReportOption:self.currentReportOption];
+                                        self.currentReportOption = [self.report.reportOptions firstObject];
+                                    }
+                                }@weakselfend];
+                        }
+                    }@weakselfend cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
+            } else {
+                [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.report.options.remove.permission.error" delegate:nil cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles: nil] show];
+            }
+        }@weakselfend];
+}
+
 #pragma mark - Private API
 - (void)runReport
 {
@@ -273,7 +329,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 #pragma mark - JMInputControlCellDelegate
@@ -293,7 +349,7 @@
                                          [self.restClient cancelAllRequests];
                                          [self.navigationController popViewControllerAnimated:YES];
                                      } @weakselfend];
-        
+
         [self updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) {
             [JMCancelRequestPopup dismiss];
         }];
@@ -306,7 +362,7 @@
         self.report.activeReportOption == self.currentReportOption) {
         _currentReportOption = [JMExtendedReportOption defaultReportOption];
         _currentReportOption.inputControls = self.currentInputControls;
-        
+
         [self updateRightBurButtonItem];
         [self.tableView reloadData];
     }
@@ -509,62 +565,6 @@
     } else {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"save_item"] style:UIBarButtonItemStyleDone target:self action:@selector(createReportOptionTapped:)];
     }
-}
-
-- (void)createReportOptionTapped:(id)sender
-{
-    [self checkParentFolderPermissionWithCompletion:@weakself(^(BOOL reportOptionsEditingAvailable)) {
-        if (reportOptionsEditingAvailable) {
-            if ([self validateInputControls]) { // Local validation
-                [self updatedInputControlsValuesWithCompletion:@weakself(^(BOOL dataIsValid)) { // Server validation
-                    if (dataIsValid) {
-                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(@"report.viewer.report.options.new.option.title", nil)
-                                                                            message:nil
-                                                                           delegate:self
-                                                                  cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
-                                                                  otherButtonTitles:JMCustomLocalizedString(@"dialog.button.ok", nil), nil];
-                        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-                        UITextField *textField = [alertView textFieldAtIndex:0];
-                        textField.delegate = self;
-                        [alertView show];
-                    }
-                } @weakselfend];
-            } else {
-                [self.tableView reloadData];
-            }
-        } else {
-            [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.report.options.create.permission.error" delegate:nil cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles: nil] show];
-        }
-    }@weakselfend];
-}
-
-- (void)deleteReportOptionTapped:(id)sender
-{
-    [self checkParentFolderPermissionWithCompletion:@weakself(^(BOOL reportOptionsEditingAvailable)) {
-        if (reportOptionsEditingAvailable) {
-            NSString *confirmationMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.report.options.remove.confirmation.message", nil), self.currentReportOption.reportOption.label];
-            [[UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation" message:confirmationMessage completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
-                if (buttonIndex != alertView.cancelButtonIndex) {
-                    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
-                    [JMReportManager deleteReportOption:self.currentReportOption.reportOption withReportURI:self.report.reportURI completion:@weakself(^(NSError *error)) {
-                        [JMCancelRequestPopup dismiss];
-                        if (error) {
-                            if (error.code == JSSessionExpiredErrorCode) {
-                                [JMUtils showLoginViewAnimated:YES completion:nil];
-                            } else {
-                                [JMUtils showAlertViewWithError:error];
-                            }
-                        } else {
-                            [self.report removeReportOption:self.currentReportOption];
-                            self.currentReportOption = [self.report.reportOptions firstObject];
-                        }
-                    }@weakselfend];
-                }
-            }@weakselfend cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
-        } else {
-            [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.report.options.remove.permission.error" delegate:nil cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles: nil] show];
-        }
-    }@weakselfend];
 }
 
 #pragma mark - UITextFieldDelegate
