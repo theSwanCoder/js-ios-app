@@ -24,9 +24,10 @@
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
 
-@interface JMSavedResourceViewerViewController () <UIAlertViewDelegate, UITextFieldDelegate>
+@interface JMSavedResourceViewerViewController () <UIAlertViewDelegate, UITextFieldDelegate, UIDocumentInteractionControllerDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) NSString *changedReportName;
+@property (nonatomic) UIDocumentInteractionController *documentController;
 
 @end
 
@@ -67,22 +68,14 @@
     }
     self.isResourceLoaded = NO;
 
-    if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-        NSString* content = [NSString stringWithContentsOfFile:fullReportPath
-                                                      encoding:NSUTF8StringEncoding
-                                                         error:NULL];
-        NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-        [self.webView loadHTMLString:content baseURL:url];
-    } else {
-        NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-        self.resourceRequest = [NSURLRequest requestWithURL:url];
-        [self.webView loadRequest:self.resourceRequest];
-    }
+    NSURL *url = [NSURL fileURLWithPath:fullReportPath];
+    self.resourceRequest = [NSURLRequest requestWithURL:url];
+    [self.webView loadRequest:self.resourceRequest];
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    return ([super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete);
+    return ([super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn);
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -111,6 +104,19 @@
                                                      otherButtonTitles:@"dialog.button.ok", nil];
         alertView.tag = action;
         [alertView show];
+    } else if (action == JMMenuActionsViewAction_OpenIn) {
+        self.documentController = [self setupDocumentControllerWithURL:self.resourceRequest.URL
+                                                                             usingDelegate:self];
+
+        BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+        if (!canOpen) {
+            UIAlertView *alertView  = [UIAlertView localizedAlertWithTitle:nil
+                                                                   message:@"error.openIn.message"
+                                                                  delegate:self
+                                                         cancelButtonTitle:@"dialog.button.ok"
+                                                         otherButtonTitles:nil];
+            [alertView show];
+        }
     }
 }
 
@@ -158,6 +164,16 @@
             }
         }
     }
+}
+
+
+#pragma mark - Helpers
+- (UIDocumentInteractionController *) setupDocumentControllerWithURL: (NSURL *) fileURL
+                                                       usingDelegate: (id <UIDocumentInteractionControllerDelegate>) interactionDelegate {
+    UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
+    interactionController.delegate = interactionDelegate;
+    NSLog(@"interactionController: %@", interactionController);
+    return interactionController;
 }
 
 @end

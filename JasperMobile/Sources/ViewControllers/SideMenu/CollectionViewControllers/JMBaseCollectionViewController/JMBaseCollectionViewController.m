@@ -48,8 +48,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 @interface JMBaseCollectionViewController() <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout,
                                             UISearchBarDelegate, JMPopupViewDelegate, JMResourceCollectionViewCellDelegate,
-                                            PopoverViewDelegate, JMMenuActionsViewDelegate, JMResourcesListLoaderDelegate,
-                                            UIDocumentInteractionControllerDelegate>
+                                            PopoverViewDelegate, JMMenuActionsViewDelegate, JMResourcesListLoaderDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
 @property (nonatomic, assign) BOOL isScrollToTop;
 @end
@@ -428,18 +427,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         repositoryViewController.representationType = self.representationType;
         nextVC = repositoryViewController;
     } else if ([resourceLookup isSavedReport]) {
-        JMSavedResources *savedResource = [JMSavedResources savedReportsFromResourceLookup:resourceLookup];
-        if ([savedResource.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-            nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-            if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
-                [nextVC setResourceLookup:resourceLookup];
-            }
-        } else {
-            NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:savedResource];
-            NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-            UIDocumentInteractionController *controller = [self setupDocumentControllerWithURL:url usingDelegate:self];
-            controller.name = resourceLookup.label;
-            [controller presentPreviewAnimated:YES];
+        nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
+        if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
+            [nextVC setResourceLookup:resourceLookup];
         }
     } else {
         nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
@@ -652,13 +642,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [baseCollectionView hideLoadingView];
     
     [JMUtils showAlertViewWithError:error];
-}
-
-
-#pragma mark - UIDocumentInteractionControllerDelegate
-- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller
-{
-    return self.navigationController;
 }
 
 @end
