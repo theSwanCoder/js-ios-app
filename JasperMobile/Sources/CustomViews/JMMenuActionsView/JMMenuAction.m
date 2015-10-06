@@ -79,6 +79,8 @@
             return @"action.title.run";
         case JMMenuActionsViewAction_Print:
             return @"action.title.print";
+        case JMMenuActionsViewAction_OpenIn:
+            return @"action.title.openIn";
     }
 }
 
@@ -115,6 +117,8 @@
             return @"run_action";
         case JMMenuActionsViewAction_Print:
             return @"print_action";
+        case JMMenuActionsViewAction_OpenIn:
+            return @"open_in_new";
     }
 }
 
