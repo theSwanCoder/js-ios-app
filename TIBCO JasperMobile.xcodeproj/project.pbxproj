@@ -107,7 +107,6 @@
 		08E0D19F1B0CF27200BFBFE5 /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19B1B0CF27200BFBFE5 /* Icon-1024.png */; };
 		08E0D1A01B0CF27200BFBFE5 /* Icon-512.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19C1B0CF27200BFBFE5 /* Icon-512.png */; };
 		08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19D1B0CF27200BFBFE5 /* Images.xcassets */; };
-		08E2AC251B1DFF2B00AC462B /* JMVisualizeClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC241B1DFF2B00AC462B /* JMVisualizeClient.m */; };
 		08E2AC7C1B1E056900AC462B /* JMBaseResourceViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC291B1E056900AC462B /* JMBaseResourceViewerVC.m */; };
 		08E2AC821B1E056900AC462B /* JMPrintResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC371B1E056900AC462B /* JMPrintResourceViewController.m */; };
 		08E2AC841B1E056900AC462B /* JMResourceViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC3A1B1E056900AC462B /* JMResourceViewerViewController.m */; };
@@ -394,8 +393,6 @@
 		08E0D19B1B0CF27200BFBFE5 /* Icon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024.png"; sourceTree = "<group>"; };
 		08E0D19C1B0CF27200BFBFE5 /* Icon-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-512.png"; sourceTree = "<group>"; };
 		08E0D19D1B0CF27200BFBFE5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		08E2AC231B1DFF2B00AC462B /* JMVisualizeClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeClient.h; sourceTree = "<group>"; };
-		08E2AC241B1DFF2B00AC462B /* JMVisualizeClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeClient.m; sourceTree = "<group>"; };
 		08E2AC281B1E056900AC462B /* JMBaseResourceViewerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseResourceViewerVC.h; sourceTree = "<group>"; };
 		08E2AC291B1E056900AC462B /* JMBaseResourceViewerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourceViewerVC.m; sourceTree = "<group>"; };
 		08E2AC361B1E056900AC462B /* JMPrintResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPrintResourceViewController.h; sourceTree = "<group>"; };
@@ -1420,15 +1417,6 @@
 			path = Icons;
 			sourceTree = "<group>";
 		};
-		08E2AC221B1DFF2B00AC462B /* JMVisualizeClient */ = {
-			isa = PBXGroup;
-			children = (
-				08E2AC231B1DFF2B00AC462B /* JMVisualizeClient.h */,
-				08E2AC241B1DFF2B00AC462B /* JMVisualizeClient.m */,
-			);
-			path = JMVisualizeClient;
-			sourceTree = "<group>";
-		};
 		08E2AC271B1E056900AC462B /* ResourceViewer */ = {
 			isa = PBXGroup;
 			children = (
@@ -1805,7 +1793,6 @@
 				93D8C6421AAC7E9200117306 /* JMWebViewManager */,
 				A147898DB80B9E88171DCD17 /* JMJavascriptNativeBridge */,
 				A14786A84BEF08E4A786B76A /* JMVisualizeManager */,
-				08E2AC221B1DFF2B00AC462B /* JMVisualizeClient */,
 				A1478A5C788015F2AC6CBC1E /* JMReportExecutor */,
 			);
 			path = Managers;
@@ -2399,7 +2386,6 @@
 				08E2AC951B1E056900AC462B /* JMRestReportLoader.m in Sources */,
 				089B15FB1AA756BD0021A915 /* JMBaseCollectionView.m in Sources */,
 				BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */,
-				08E2AC251B1DFF2B00AC462B /* JMVisualizeClient.m in Sources */,
 				089B16001AA756BD0021A915 /* JMMenuViewController.m in Sources */,
 				089B15BB1AA756BD0021A915 /* JMTextServerOptionCell.m in Sources */,
 				0801DF9F1AAF2CC900DD072C /* JMServerProfile.m in Sources */,

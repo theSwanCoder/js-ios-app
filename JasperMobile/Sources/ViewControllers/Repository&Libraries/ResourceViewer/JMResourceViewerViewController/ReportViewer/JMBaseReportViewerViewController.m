@@ -257,7 +257,7 @@
                                                                                           }];
                                                 }
                                             } else {
-                                                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Report Unit Loading Error" forKey:NSURLErrorFailingURLErrorKey];
+                                                NSDictionary *userInfo = @{NSURLErrorFailingURLErrorKey : @"Report Unit Loading Error"};
                                                 NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:JSClientErrorCode userInfo:userInfo];
                                                 [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                                     [self cancelResourceViewingAndExit:YES];
@@ -279,7 +279,7 @@
                  completion:^(BOOL completed, NSError *error){
                          [self removeResourceWithURL:resourceURL];
                          if(error){
-                             NSLog(@"FAILED! due to error in domain %@ with error code %d", error.domain, error.code);
+                             JMLog(@"FAILED! due to error in domain %@ with error code %ld", error.domain, (long)error.code);
                          }
                     }];
         }
@@ -416,7 +416,7 @@
 #pragma mark - Input Controls
 - (void)showInputControlsViewControllerWithBackButton:(BOOL)isShowBackButton
 {
-    JMInputControlsViewController *inputControlsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
+    JMInputControlsViewController *inputControlsViewController = (JMInputControlsViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
     inputControlsViewController.report = self.report;
     inputControlsViewController.completionBlock = ^(JMExtendedReportOption *reportOption) {
         [self updateReportWithNewActiveReportOption:reportOption];

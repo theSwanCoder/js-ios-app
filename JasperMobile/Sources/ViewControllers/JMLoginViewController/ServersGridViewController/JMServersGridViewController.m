@@ -85,7 +85,7 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    JMServerOptionsViewController *destinationViewController = segue.destinationViewController;
+    JMServerOptionsViewController *destinationViewController = (JMServerOptionsViewController *) segue.destinationViewController;
     if (sender) {
         [destinationViewController setServerProfile:[sender objectForKey:kJMServerProfileKey]];
         destinationViewController.editable = [[sender objectForKey:kJMServerProfileEditableKey] boolValue];
@@ -102,8 +102,8 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIdentifier = @"ServerCell";
-    JMServerCollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
-    cell.serverProfile = [self.servers objectAtIndex:indexPath.row];
+    JMServerCollectionViewCell *cell = (JMServerCollectionViewCell *) [self.collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
+    cell.serverProfile = self.servers[indexPath.row];
     cell.delegate = self;
     return cell;
 }
@@ -146,10 +146,7 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
-    if (action == @selector(cloneServerProfile:) || action == @selector(deleteServerProfile:)) {
-        return YES;
-    }
-    return NO;
+    return action == @selector(cloneServerProfile:) || action == @selector(deleteServerProfile:);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender

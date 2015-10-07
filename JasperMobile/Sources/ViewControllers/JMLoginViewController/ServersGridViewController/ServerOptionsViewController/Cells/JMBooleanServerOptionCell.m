@@ -35,7 +35,7 @@
 - (IBAction)checkButtonTapped:(id)sender
 {
     self.checkBoxButton.selected = !self.checkBoxButton.selected;
-    self.serverOption.optionValue = [NSNumber numberWithBool:self.checkBoxButton.selected];
+    self.serverOption.optionValue = @(self.checkBoxButton.selected);
 }
 
 @end

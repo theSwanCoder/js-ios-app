@@ -120,11 +120,7 @@
     self.activityIndicator.hidden = YES;
     self.collectionView.hidden = NO;
 
-    if ([self collectionViewNotEmpty]) {
-        self.noResultsViewTitleLabel.hidden = YES;
-    } else {
-        self.noResultsViewTitleLabel.hidden = NO;
-    }
+    self.noResultsViewTitleLabel.hidden = [self collectionViewNotEmpty];
 }
 
 - (BOOL) collectionViewNotEmpty

@@ -129,7 +129,7 @@
 
 - (BOOL)loadRecursively
 {
-    return !!self.searchQuery;
+    return self.searchQuery != nil;
 }
 
 - (NSString *)rootResourceURI

@@ -101,7 +101,7 @@
         cell.textLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
     }
     
-    JMExtendedReportOption *option = [self.listOfValues objectAtIndex:indexPath.row];
+    JMExtendedReportOption *option = self.listOfValues[indexPath.row];
     cell.textLabel.text = option.reportOption.label;
     cell.accessoryType = (option == self.selectedReportOption) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     
@@ -112,7 +112,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.selectedReportOption = [self.listOfValues objectAtIndex:indexPath.row];
+    self.selectedReportOption = self.listOfValues[indexPath.row];
     [self.delegate reportOptionsViewController:self didSelectOption:self.selectedReportOption];
     [self.navigationController popViewControllerAnimated:YES];
 }

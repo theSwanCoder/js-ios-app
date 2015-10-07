@@ -76,8 +76,8 @@
     [self.separatorsCollection makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] menuViewSeparatorColor]];
 
     // version and build
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    NSString *version = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+    NSString *build = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
     self.appVersionLabel.text = [NSString stringWithFormat:@"v. %@ (%@)", version, build];
 }
 
@@ -144,7 +144,7 @@
 {
     if (itemIndex < self.menuItems.count) {
         JMMenuItem *currentSelectedItem = self.selectedItem;
-        JMMenuItem *item = [self.menuItems objectAtIndex:itemIndex];
+        JMMenuItem *item = self.menuItems[itemIndex];
         
         if (item.resourceType != JMResourceTypeLogout) {
             if (!currentSelectedItem || currentSelectedItem != item) {
@@ -153,7 +153,7 @@
                 
                 [self.tableView reloadData];
                 if([item vcIdentifierForSelectedItem]) {
-                    UINavigationController *nvc = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+                    UINavigationController *nvc = (UINavigationController *) [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
                     UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonTapped:)];
                     nvc.topViewController.navigationItem.leftBarButtonItem = menuItem;
                     [nvc.topViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];

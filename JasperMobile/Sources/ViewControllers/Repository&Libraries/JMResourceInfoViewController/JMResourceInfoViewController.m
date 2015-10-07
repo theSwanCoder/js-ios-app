@@ -274,9 +274,9 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         [cell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
     }
     
-    NSDictionary *item = [self.resourceProperties objectAtIndex:indexPath.row];
-    cell.textLabel.text = JMCustomLocalizedString([NSString stringWithFormat:@"resource.%@.title", [item objectForKey:kJMTitleKey]], nil);
-    cell.detailTextLabel.text = [item objectForKey:kJMValueKey];
+    NSDictionary *item = self.resourceProperties[indexPath.row];
+    cell.textLabel.text = JMCustomLocalizedString([NSString stringWithFormat:@"resource.%@.title", item[kJMTitleKey]], nil);
+    cell.detailTextLabel.text = item[kJMValueKey];
     return cell;
 }
 

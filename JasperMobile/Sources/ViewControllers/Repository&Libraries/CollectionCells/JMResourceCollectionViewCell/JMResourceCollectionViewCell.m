@@ -119,7 +119,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     }
     
     if (resourceImage || _thumbnailImage) {
-        [self updateResourceImage:_thumbnailImage ?:resourceImage thumbnails:!!_thumbnailImage];
+        [self updateResourceImage:_thumbnailImage ?: resourceImage thumbnails:_thumbnailImage != nil];
     }
 }
 

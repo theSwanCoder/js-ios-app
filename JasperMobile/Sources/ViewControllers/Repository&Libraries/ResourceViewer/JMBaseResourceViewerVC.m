@@ -229,7 +229,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)showInfoPage
 {
-    JMResourceInfoViewController *vc = [NSClassFromString([self.resourceLookup infoVCIdentifier]) new];
+    JMResourceInfoViewController *vc = (JMResourceInfoViewController *) [NSClassFromString([self.resourceLookup infoVCIdentifier]) new];
     vc.resourceLookup = self.resourceLookup;
     JMMainNavigationController *nextNC = [[JMMainNavigationController alloc] initWithRootViewController:vc];
 
@@ -297,7 +297,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 {
     NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
     NSInteger index = [rightItems indexOfObject:oldItem];
-    [rightItems replaceObjectAtIndex:index withObject:newItem];
+    rightItems[index] = newItem;
     self.navigationItem.rightBarButtonItems = rightItems;
 }
 
@@ -334,7 +334,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     NSString *backItemTitle = title;
     if (!backItemTitle) {
         NSArray *viewControllers = self.navigationController.viewControllers;
-        UIViewController *previousViewController = [viewControllers objectAtIndex:[viewControllers indexOfObject:self] - 1];
+        UIViewController *previousViewController = viewControllers[[viewControllers indexOfObject:self] - 1];
         backItemTitle = previousViewController.title;
     }
 

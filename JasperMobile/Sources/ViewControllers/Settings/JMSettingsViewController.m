@@ -105,7 +105,7 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JMSettingsItem *currentItem = self.detailSettings.itemsArray[indexPath.row];
-    JMSettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:currentItem.cellIdentifier];
+    JMSettingsTableViewCell *cell = (JMSettingsTableViewCell *) [tableView dequeueReusableCellWithIdentifier:currentItem.cellIdentifier];
     [cell setBottomSeparatorWithHeight:1 color:self.view.backgroundColor tableViewStyle:tableView.style];
     cell.settingsItem = currentItem;
     return cell;
@@ -209,7 +209,8 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 
 - (void)applicationInfo:(id)sender
 {
-    NSString *appName = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"];
+    NSString *appName;
+    appName = [NSBundle mainBundle].infoDictionary[@"CFBundleDisplayName"];
     NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
     NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion], currentYear];
 
@@ -230,7 +231,7 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 
 - (void)showOnboardIntro
 {
-    JMOnboardIntroViewController *introViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
+    JMOnboardIntroViewController *introViewController = (JMOnboardIntroViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
     [self presentViewController:introViewController animated:YES completion:nil];
     if ([self isMenuShown]) {
         [self closeMenu];

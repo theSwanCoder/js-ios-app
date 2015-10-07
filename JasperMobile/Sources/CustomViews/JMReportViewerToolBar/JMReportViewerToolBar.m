@@ -76,11 +76,11 @@
     self.pageCountLabel.text = [NSString stringWithFormat:keyString, self.countOfPages];
     self.currentPageField.text = [NSString stringWithFormat:@"%ld", (long)self.currentPage];
     
-    self.previousButton.enabled = !(self.currentPage <= 1);
-    self.firstButton.enabled = !(self.currentPage <= 1);
+    self.previousButton.enabled = self.currentPage > 1;
+    self.firstButton.enabled = self.currentPage > 1;
 
-    self.nextButton.enabled = !(self.currentPage >= self.countOfPages);
-    self.lastButton.enabled = !(self.currentPage >= self.countOfPages) && (_countOfPages != NSNotFound);
+    self.nextButton.enabled = self.currentPage < self.countOfPages;
+    self.lastButton.enabled = self.currentPage < self.countOfPages && (_countOfPages != NSNotFound);
 }
 
 #pragma mark - Actions
@@ -168,7 +168,7 @@
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [NSString stringWithFormat:@"%d", row + 1];
+    return [NSString stringWithFormat:@"%ld", (long)(row + 1)];
 }
 
 - (UIToolbar *)pickerToolbar

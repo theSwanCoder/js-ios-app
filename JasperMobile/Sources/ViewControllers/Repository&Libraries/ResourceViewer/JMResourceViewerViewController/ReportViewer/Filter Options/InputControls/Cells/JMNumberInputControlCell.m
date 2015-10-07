@@ -39,10 +39,7 @@
     NSString *stringSet = [NSString stringWithFormat:@"1234567890%@", decimalSeparator];
     NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:stringSet] invertedSet];
     NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
-    if ([string isEqualToString:filtered]) {
-        return YES;
-    }
-    return NO;
+    return [string isEqualToString:filtered];
 }
 
 @end

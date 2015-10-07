@@ -32,7 +32,6 @@
 #import "JMIntroModelManager.h"
 #import "JMIntroModel.h"
 #import "JMServerProfile+Helpers.h"
-#import "JMOnboardIntroViewController.h"
 
 @interface JMIntroModelManager()
 @property (nonatomic, copy) NSArray *pageData;
@@ -54,13 +53,13 @@
 
     JMIntroModel *stayConnectedPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.firstScreen.title", nil)
                                                               description:JMCustomLocalizedString(@"intro.model.firstScreen.description", nil)
-                                                                    image:[UIImage imageNamed:@"stay_connect_image"]];
+                                                                    image:nil];
     JMIntroModel *instantAccessPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.secondScreen.title", nil)
                                                               description:JMCustomLocalizedString(@"intro.model.secondScreen.description", nil)
-                                                                    image:[UIImage imageNamed:@"instant_access_image"]];
+                                                                    image:nil];
     JMIntroModel *seemlessIntegrationPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.thirdScreen.title", nil)
                                                                     description:seemlessIntegrationPageDescription
-                                                                          image:[UIImage imageNamed:@"seemless_integration_image"]];
+                                                                          image:nil];
     self.pageData = @[
             stayConnectedPage, instantAccessPage, seemlessIntegrationPage
     ];

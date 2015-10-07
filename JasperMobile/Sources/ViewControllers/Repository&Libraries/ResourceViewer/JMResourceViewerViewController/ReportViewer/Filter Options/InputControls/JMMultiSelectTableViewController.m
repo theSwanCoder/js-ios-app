@@ -41,7 +41,7 @@
 
 #pragma mark - Initialization
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     return [super initWithNibName:NSStringFromClass([JMSingleSelectTableViewController class]) bundle:nil];
 }
@@ -50,7 +50,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSInputControlOption *option = [self.listOfValues objectAtIndex:indexPath.row];
+    JSInputControlOption *option = self.listOfValues[indexPath.row];
     option.selected = [JSConstants stringFromBOOL:!option.selected.boolValue];
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];

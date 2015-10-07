@@ -129,7 +129,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 - (id)resourceAtIndex:(NSInteger)index
 {
     if (index < self.resources.count) {
-        return [self.resources objectAtIndex:index];
+        return self.resources[index];
     }
     return nil;
 }
@@ -280,7 +280,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                                        if ([options count] > 1) {
                                            NSMutableArray *allAvailableItems = [NSMutableArray array];
                                            for (NSDictionary *item in options) {
-                                               [allAvailableItems addObjectsFromArray:[item objectForKey:kJMResourceListLoaderOptionItemValueKey]];
+                                               [allAvailableItems addObjectsFromArray:item[kJMResourceListLoaderOptionItemValueKey]];
                                            }
                                            id allItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil), kJMResourceListLoaderOptionItemValueKey: allAvailableItems};
                                            [options insertObject:allItem atIndex:0];
@@ -298,12 +298,12 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     switch (option) {
         case JMResourcesListLoaderOption_Sort:
             if ([[self listItemsWithOption:option] count] > self.sortBySelectedIndex) {
-                return [[[self listItemsWithOption:option] objectAtIndex:self.sortBySelectedIndex] objectForKey:kJMResourceListLoaderOptionItemValueKey];
+                return [[self listItemsWithOption:option][self.sortBySelectedIndex] objectForKey:kJMResourceListLoaderOptionItemValueKey];
             }
             break;
         case JMResourcesListLoaderOption_Filter:
             if ([[self listItemsWithOption:option] count] > self.filterBySelectedIndex) {
-                return [[[self listItemsWithOption:option] objectAtIndex:self.filterBySelectedIndex] objectForKey:kJMResourceListLoaderOptionItemValueKey];
+                return [[self listItemsWithOption:option][self.filterBySelectedIndex] objectForKey:kJMResourceListLoaderOptionItemValueKey];
             }
             break;
     }

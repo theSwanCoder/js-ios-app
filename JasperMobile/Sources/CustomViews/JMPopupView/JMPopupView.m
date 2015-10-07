@@ -110,18 +110,15 @@ static NSMutableArray* visiblePopupsArray = nil;
 
 + (BOOL)isShowedPopup
 {
-    if ([visiblePopupsArray count]) {
-        return YES;
-    }
-    return NO;
+    return visiblePopupsArray.count != 0;
 }
 
 - (void)setContentView:(UIView *)contentView
 {
     // Fix for no-retina screens with correct displaying
     CGRect contentViewFrame = contentView.frame;
-    contentViewFrame.size.width = 2 * ceil(contentViewFrame.size.width / 2);
-    contentViewFrame.size.height = 2 * ceil(contentViewFrame.size.height / 2);
+    contentViewFrame.size.width = (CGFloat) (2 * ceil(contentViewFrame.size.width / 2));
+    contentViewFrame.size.height = (CGFloat) (2 * ceil(contentViewFrame.size.height / 2));
     contentView.frame = contentViewFrame;
     
     _contentView = contentView;
@@ -235,7 +232,7 @@ static NSMutableArray* visiblePopupsArray = nil;
     CGPoint point = [tap locationInView:_backGroundView];
     BOOL found = NO;
     
-    if (!found && CGRectContainsPoint(_backGroundView.bounds, point)) {
+    if (CGRectContainsPoint(_backGroundView.bounds, point)) {
         found = YES;
     }
     

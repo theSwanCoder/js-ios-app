@@ -257,14 +257,14 @@
 {
     if (hyperlinkType == JMHyperlinkTypeReportExecution) {
 
-        NSString *reportURI = [resourceLookup.uri stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *reportURI = [resourceLookup.uri stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
         [self loadInputControlsWithReportURI:reportURI completion:^(NSArray *inputControls, NSError *error) {
                 if (error) {
                     [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                         [self cancelResourceViewingAndExit:YES];
                     }];
                 } else {
-                    JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
+                    JMReportViewerVC *reportViewController = (JMReportViewerVC *) [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
                     reportViewController.resourceLookup = resourceLookup;
                     [reportViewController.report generateReportOptionsWithInputControls:inputControls];
                     [reportViewController.report updateReportParameters:parameters];

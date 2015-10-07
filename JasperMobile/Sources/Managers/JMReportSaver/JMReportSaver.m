@@ -120,11 +120,11 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                                                     completion:^(BOOL success, NSError *error) {
                                                         if (success) {
                                                             [self downloadSavedReport:self.savedReport
-                                                                           completion:^(NSError *error) {
-                                                                               if (error) {
+                                                                           completion:^(NSError *downloadError) {
+                                                                               if (downloadError) {
                                                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                                                        if (completionBlock) {
-                                                                                           completionBlock(nil, error);
+                                                                                           completionBlock(nil, downloadError);
                                                                                        }
                                                                                    });
                                                                                } else {
@@ -243,10 +243,10 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
                                  if (!error) {
                                      // save report to disk
                                      NSString *tempReportPath = [JMSavedResources absoluteTempPathToSavedReport:self.savedReport];
-                                     NSError *error = [self moveResourceFromPath:location.path toPath:tempReportPath];
-                                     if (error) {
+                                     NSError *moveError = [self moveResourceFromPath:location.path toPath:tempReportPath];
+                                     if (moveError) {
                                          if (completion) {
-                                             completion(error);
+                                             completion(moveError);
                                          }
                                      } else {
                                          // save attachments or exit
@@ -294,10 +294,10 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
                                              }
                                          } else {
                                              NSString *attachmentPath = [self attachmentPathWithName:attachmentName];
-                                             NSError *error = [self moveResourceFromPath:location.path toPath:attachmentPath];
-                                             if (error) {
+                                             NSError *moveError = [self moveResourceFromPath:location.path toPath:attachmentPath];
+                                             if (moveError) {
                                                  if (completion) {
-                                                     completion(error);
+                                                     completion(moveError);
                                                  }
                                              } else if (--attachmentCount == 0) {
                                                  if (completion) {

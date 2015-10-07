@@ -123,7 +123,7 @@
         cell.textLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
     }
     
-    JSInputControlOption *option = [self.listOfValues objectAtIndex:indexPath.row];
+    JSInputControlOption *option = self.listOfValues[indexPath.row];
     cell.textLabel.text = option.label;
     cell.accessoryType = option.selected.boolValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 
@@ -134,7 +134,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSInputControlOption *selectedOption = [self.listOfValues objectAtIndex:indexPath.row];
+    JSInputControlOption *selectedOption = self.listOfValues[indexPath.row];
     JSInputControlOption *previousSelectedOption = [self.selectedValues anyObject];
 
     if (previousSelectedOption != selectedOption) {

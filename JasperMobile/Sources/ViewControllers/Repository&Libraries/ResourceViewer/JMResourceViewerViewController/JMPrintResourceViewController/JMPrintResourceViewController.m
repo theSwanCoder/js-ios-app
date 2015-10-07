@@ -77,7 +77,8 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                       forState:UIControlStateNormal];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reportLoaderDidChangeCountOfPages:) name:kJMReportCountOfPagesDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupSections) name:kJMReportIsMutlipageDidChangedNotification object:nil];
+    // TODO: setup this notification
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupSections) name:kJMReportIsMutlipageDidChangedNotification object:nil];
 
     [self setupNavigationItems];
 }
@@ -91,11 +92,11 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 - (NSMutableDictionary *)pages
 {
     if (!_pages) {
-        _pages = [NSMutableDictionary dictionaryWithObjectsAndKeys:@(1), kJMPrintPageFromKey, nil];
+        _pages = [@{kJMPrintPageFromKey : @(1)} mutableCopy];
         if (self.report && self.report.isMultiPageReport) {
-            [_pages setObject:@(self.report.countOfPages) forKey:kJMPrintPageToKey];
+            _pages[kJMPrintPageToKey] = @(self.report.countOfPages);
         } else {
-            [_pages setObject:@(1) forKey:kJMPrintPageToKey];
+            _pages[kJMPrintPageToKey] = @(1);
         }
     }
     return _pages;
@@ -108,7 +109,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     } else if (self.resourceLookup) {
         return self.resourceLookup.label;
     } else {
-        NSString *applicationName = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"];
+        NSString *applicationName = [NSBundle mainBundle].infoDictionary[@"CFBundleDisplayName"];
         return [NSString stringWithFormat:JMCustomLocalizedString(@"resource.viewer.print.operation.name", nil), applicationName];
     }
 }
@@ -232,15 +233,15 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 {
     if ([self shouldShowRangeCells] && !indexPath.section) {
         if (indexPath.row == 0) {
-            JMSaveReportPagesCell *pagesCell = [tableView dequeueReusableCellWithIdentifier:kJMPrintReportPagesCellIdentifier
-                                                                               forIndexPath:indexPath];
+            JMSaveReportPagesCell *pagesCell = (JMSaveReportPagesCell *) [tableView dequeueReusableCellWithIdentifier:kJMPrintReportPagesCellIdentifier
+                                                                                                         forIndexPath:indexPath];
             pagesCell.cellDelegate = self;
             pagesCell.pagesType = self.pagesType;
             [pagesCell removeTopSeparator];
             return pagesCell;
         } else {
-            JMSaveReportPageRangeCell *pageRangeCell = [tableView dequeueReusableCellWithIdentifier:kJMPrintReportPageRangeCellIdentifier
-                                                                                       forIndexPath:indexPath];
+            JMSaveReportPageRangeCell *pageRangeCell = (JMSaveReportPageRangeCell *) [tableView dequeueReusableCellWithIdentifier:kJMPrintReportPageRangeCellIdentifier
+                                                                                                                     forIndexPath:indexPath];
             pageRangeCell.cellDelegate = self;
             if (indexPath.row == 1) {
                 pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.fromPage", nil);
@@ -253,8 +254,8 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
             return pageRangeCell;
         }
     } else {
-        JMPrintPreviewTableViewCell *previewCell = [tableView dequeueReusableCellWithIdentifier:kJMPrintReportPagePreviewIdentifier
-                                                                                   forIndexPath:indexPath];
+        JMPrintPreviewTableViewCell *previewCell = (JMPrintPreviewTableViewCell *) [tableView dequeueReusableCellWithIdentifier:kJMPrintReportPagePreviewIdentifier
+                                                                                                                   forIndexPath:indexPath];
         CGRect containerBounds = previewCell.containerForWebView.bounds;
         self.webView.frame = containerBounds;
         [previewCell.containerForWebView addSubview:self.webView];
@@ -336,7 +337,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     
     UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
         if(error){
-            NSLog(@"FAILED! due to error in domain %@ with error code %d", error.domain, error.code);
+            JMLog(@"FAILED! due to error in domain %@ with error code %ld", error.domain, (long)error.code);
         } else if (completed) {
             if ([self.printingItem isKindOfClass:[NSURL class]]) {
                 NSURL *fileURL = (NSURL *)self.printingItem;
@@ -450,7 +451,6 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 - (NSString *)tempReportName
 {
     return [[NSUUID UUID] UUIDString];
-    return [[NSProcessInfo processInfo] globallyUniqueString];
 }
 
 - (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
@@ -460,7 +460,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     NSString *backItemTitle = title;
     if (!backItemTitle) {
         NSArray *viewControllers = self.navigationController.viewControllers;
-        UIViewController *previousViewController = [viewControllers objectAtIndex:[viewControllers indexOfObject:self] - 1];
+        UIViewController *previousViewController = viewControllers[[viewControllers indexOfObject:self] - 1];
         backItemTitle = previousViewController.title;
     }
 
@@ -479,9 +479,9 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     // detect backButton text width to truncate with '...'
     NSDictionary *textAttributes = @{NSFontAttributeName : [[JMThemesManager sharedManager] navigationBarTitleFont]};
     CGSize titleTextSize = [self.title sizeWithAttributes:textAttributes];
-    CGFloat titleTextWidth = ceil(titleTextSize.width);
+    CGFloat titleTextWidth = ceilf(titleTextSize.width);
     CGSize backItemTextSize = [backButtonTitle sizeWithAttributes:textAttributes];
-    CGFloat backItemTextWidth = ceil(backItemTextSize.width);
+    CGFloat backItemTextWidth = ceilf(backItemTextSize.width);
     CGFloat backItemOffset = 12;
 
     CGFloat viewWidth = CGRectGetWidth(self.view.bounds);

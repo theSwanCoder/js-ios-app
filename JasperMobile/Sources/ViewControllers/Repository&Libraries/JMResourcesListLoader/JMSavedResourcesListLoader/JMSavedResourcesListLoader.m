@@ -100,7 +100,7 @@
     if ([self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort]) {
         BOOL ascending = self.sortBySelectedIndex == 0;
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:ascending];
-        [fetchRequest setSortDescriptors:[NSArray arrayWithObjects:sortDescriptor, nil]];
+        [fetchRequest setSortDescriptors:@[sortDescriptor]];
     }
     
     [fetchRequest setEntity:entity];
@@ -110,7 +110,7 @@
 
 - (NSPredicate *)predicates
 {
-    NSMutableArray *predicates = [NSMutableArray arrayWithObject:[[JMSessionManager sharedManager] predicateForCurrentServerProfile]];
+    NSMutableArray *predicates = [@[[[JMSessionManager sharedManager] predicateForCurrentServerProfile]] mutableCopy];
     [predicates addObject:[NSPredicate predicateWithFormat:@"format IN %@", [self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]]];
     if (self.searchQuery && self.searchQuery.length) {
         NSMutableArray *queryPredicates = [NSMutableArray array];

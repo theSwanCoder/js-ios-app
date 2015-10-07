@@ -38,6 +38,6 @@
 #pragma mark - Actions
 - (IBAction)switcherValueDidChanged:(id)sender
 {
-    self.settingsItem.valueSettings = [NSNumber numberWithBool:self.valueSwitcher.on];
+    self.settingsItem.valueSettings = @(self.valueSwitcher.on);
 }
 @end

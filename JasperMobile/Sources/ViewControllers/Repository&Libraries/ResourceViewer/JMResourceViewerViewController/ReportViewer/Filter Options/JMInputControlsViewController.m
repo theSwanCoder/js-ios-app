@@ -282,7 +282,7 @@
         JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
         roCell.titleLabel.text = self.currentReportOption.reportOption.label;
     } else {
-        JSInputControlDescriptor *inputControlDescriptor = [self.currentInputControls objectAtIndex:indexPath.row];
+        JSInputControlDescriptor *inputControlDescriptor = self.currentInputControls[indexPath.row];
         JMInputControlCell *icCell = (JMInputControlCell *)cell;
         [icCell setInputControlDescriptor:inputControlDescriptor];
     }
@@ -323,7 +323,7 @@
         JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
         roCell.titleLabel.text = self.currentReportOption.reportOption.label;
     } else {
-        JSInputControlDescriptor *inputControlDescriptor = [self.currentInputControls objectAtIndex:indexPath.row];
+        JSInputControlDescriptor *inputControlDescriptor = self.currentInputControls[indexPath.row];
         JMInputControlCell *icCell = (JMInputControlCell *)cell;
         [icCell setInputControlDescriptor:inputControlDescriptor];
         icCell.delegate = self;

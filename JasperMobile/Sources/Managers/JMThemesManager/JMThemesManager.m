@@ -156,16 +156,16 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
     [[UINavigationBar appearance] setTintColor:[self barItemsColor]];
     [[UIToolbar appearance] setTintColor: [self barItemsColor]];
     
-    NSDictionary *textTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[self barItemsColor], NSForegroundColorAttributeName, [[JMThemesManager sharedManager]navigationBarTitleFont], NSFontAttributeName, nil];
+    NSDictionary *textTitleOptions = @{NSForegroundColorAttributeName : [self barItemsColor], NSFontAttributeName : [[JMThemesManager sharedManager] navigationBarTitleFont]};
     [[UINavigationBar appearance] setTitleTextAttributes:textTitleOptions];
     
     if ([UIDevice currentDevice].systemVersion.integerValue < 8) {
         // Here is hack for using UIPrintInteractionController
-        NSDictionary *textTitleOptionsForPopover = [NSDictionary dictionaryWithObjectsAndKeys:[self barsBackgroundColor], NSForegroundColorAttributeName, [[JMThemesManager sharedManager] navigationBarTitleFont], NSFontAttributeName, nil];
+        NSDictionary *textTitleOptionsForPopover = @{NSForegroundColorAttributeName : [self barsBackgroundColor], NSFontAttributeName : [[JMThemesManager sharedManager] navigationBarTitleFont]};
         [[UINavigationBar appearanceWhenContainedIn:[UIPopoverController class], nil] setTitleTextAttributes:textTitleOptionsForPopover];
     }
     
-    NSDictionary *barButtonTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[self barItemsColor], NSForegroundColorAttributeName, [[JMThemesManager sharedManager] navigationItemsFont], NSFontAttributeName, nil];
+    NSDictionary *barButtonTitleOptions = @{NSForegroundColorAttributeName : [self barItemsColor], NSFontAttributeName : [[JMThemesManager sharedManager] navigationItemsFont]};
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateDisabled];
     [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateNormal];
     
@@ -224,8 +224,8 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
         NSDictionary *attributeDictionary = [themeDictionary valueForKeyPath:keyPath];
         
         if (attributeDictionary && [attributeDictionary count] >= 2) {
-            id attributeType  = [attributeDictionary objectForKey:kJMThemeAttributeTypeKey];
-            id attributeValue = [attributeDictionary objectForKey:kJMThemeAttributeValueKey];
+            id attributeType  = attributeDictionary[kJMThemeAttributeTypeKey];
+            id attributeValue = attributeDictionary[kJMThemeAttributeValueKey];
             if (attributeType && attributeValue && [attributeType isKindOfClass:[NSString class]]) {
                 if ([attributeType isEqualToString:kJMThemeAttributeTypeColor]) {
                     if ([attributeValue isKindOfClass:[NSString class]]) {
@@ -268,7 +268,7 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
     UIFontDescriptor* fd = [UIFontDescriptor
                             fontDescriptorWithFontAttributes:@{UIFontDescriptorFamilyAttribute: family,
                                                                UIFontDescriptorTraitsAttribute: @{UIFontSymbolicTrait:
-                                                                                                      [NSNumber numberWithInteger:traits]}}];
+                                            @(traits)}}];
     NSArray* matches = [fd matchingFontDescriptorsWithMandatoryKeys:
                         [NSSet setWithObjects:UIFontDescriptorFamilyAttribute, UIFontDescriptorTraitsAttribute, nil]];
     if (matches.count == 0) return nil;

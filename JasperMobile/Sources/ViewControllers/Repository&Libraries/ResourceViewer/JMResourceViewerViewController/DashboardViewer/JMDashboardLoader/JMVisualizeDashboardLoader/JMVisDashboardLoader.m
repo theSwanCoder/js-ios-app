@@ -153,7 +153,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                 // TODO: handle this error
                 JMLog(@"Error loading visualize.js");
                 // TODO: add error code
-                NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
+                error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
                                                      code:0
                                                  userInfo:nil];
                 if (completion) {

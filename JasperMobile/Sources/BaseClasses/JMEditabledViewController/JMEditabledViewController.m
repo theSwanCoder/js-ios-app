@@ -101,7 +101,7 @@
 
 - (CGFloat) getKeyboardHeightFromUserInfo:(NSDictionary *)userInfo key:(NSString *)key
 {
-    CGSize keyboardSize = [[userInfo objectForKey:key] CGRectValue].size;
+    CGSize keyboardSize = [userInfo[key] CGRectValue].size;
     return MIN(keyboardSize.height, keyboardSize.width);    // Fixing bug on iOS 7
 }
 

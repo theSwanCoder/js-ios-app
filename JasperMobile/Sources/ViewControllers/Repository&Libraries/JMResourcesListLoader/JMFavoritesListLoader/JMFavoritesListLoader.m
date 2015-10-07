@@ -113,7 +113,7 @@
 
 - (NSPredicate *)predicates
 {
-    NSMutableArray *predicates = [NSMutableArray arrayWithObject:[[JMSessionManager sharedManager] predicateForCurrentServerProfile]];
+    NSMutableArray *predicates = [@[[[JMSessionManager sharedManager] predicateForCurrentServerProfile]] mutableCopy];
     [predicates addObject:[NSPredicate predicateWithFormat:@"wsType IN %@", [self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]]];
     if (self.searchQuery && self.searchQuery.length) {
         NSMutableArray *queryPredicates = [NSMutableArray array];

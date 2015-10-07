@@ -90,7 +90,7 @@ void jmDebugLog(NSString *format, ...) {
     static NSString *reportDirectory;
     if (!reportDirectory) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        reportDirectory = [paths objectAtIndex:0];
+        reportDirectory = paths[0];
     }
     return reportDirectory;
 }
@@ -187,7 +187,7 @@ void jmDebugLog(NSString *format, ...) {
         return;
     }
 
-    UINavigationController *loginNavController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
+    UINavigationController *loginNavController = (UINavigationController *) [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
     JMLoginViewController *loginViewController = (JMLoginViewController *)loginNavController.topViewController;
     loginViewController.completion = ^(void){
         if (loginCompletion) {
