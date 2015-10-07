@@ -91,7 +91,6 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
                             completionBlock:@weakself(^(JSOperationResult *result)) {
 
                                     if (result.error) {
-                                        NSLog(@"error: %@", result.error);
                                         if (self.executeCompletion) {
                                             self.executeCompletion(nil, result.error);
                                         }

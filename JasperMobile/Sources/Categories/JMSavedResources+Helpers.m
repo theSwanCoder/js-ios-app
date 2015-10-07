@@ -255,11 +255,9 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 {
     // tmp/PathComponent/reports/reportName.format/
     NSString *pathToTempFolder = [self pathToTempFolderForSavedReport:savedReport];
-    NSLog(@"pathToTempFolder: %@", pathToTempFolder);
     // reportName.format
     NSString *savedReportName = [self savedReportNameWithName:savedReport.label
                                                        format:savedReport.format];
-    NSLog(@"savedReportName: %@", savedReportName);
     // Documents/TempPathComponent/reports/reportName.format/reportName.format
     NSString *absolutePath = [pathToTempFolder stringByAppendingPathComponent:savedReportName];
     return absolutePath;
