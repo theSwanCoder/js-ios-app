@@ -241,32 +241,33 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     NSString *resource = parameters[@"resource"];
     NSDictionary *params = parameters[@"params"];
 
+    __weak typeof(self)weakSelf = self;
     [self.restClient resourceLookupForURI:resource
                              resourceType:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT
                                modelClass:[JSResourceLookup class]
                           completionBlock:^(JSOperationResult *result) {
+                              __strong typeof(self)strongSelf = weakSelf;
+                                NSError *error = result.error;
+                                if (error) {
+                                    // TODO: add error handling
+//                                    NSString *errorString = error.localizedDescription;
+//                                    JMDashboardLoaderErrorType errorType = JMDashboardLoaderErrorTypeUndefined;
+//                                    if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
+//                                        errorType = JMDashboardLoaderErrorTypeAuthentification;
+//                                    }
+                                } else {
+                                    JMLog(@"objects: %@", result.objects);
+                                    JSResourceLookup *resourceLookup = [result.objects firstObject];
+                                    if (resourceLookup) {
+                                        resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
 
-        NSError *error = result.error;
-        if (error) {
-            // TODO: add error handling
-//            NSString *errorString = error.localizedDescription;
-//            JMDashboardLoaderErrorType errorType = JMDashboardLoaderErrorTypeUndefined;
-//            if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
-//                errorType = JMDashboardLoaderErrorTypeAuthentification;
-//            }
-        } else {
-            JMLog(@"objects: %@", result.objects);
-            JSResourceLookup *resourceLookup = [result.objects firstObject];
-            if (resourceLookup) {
-                resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
-
-                NSArray *reportParameters = [self createReportParametersFromParameters:params];
-                [self.delegate dashboardLoader:self
-                   didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
-                                resourceLookup:resourceLookup
-                                    parameters:reportParameters];
-            }
-        }
+                                        NSArray *reportParameters = [self createReportParametersFromParameters:params];
+                                        [strongSelf.delegate dashboardLoader:self
+                                                 didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
+                                                              resourceLookup:resourceLookup
+                                                                  parameters:reportParameters];
+                                    }
+                                }
     }];
 
 }

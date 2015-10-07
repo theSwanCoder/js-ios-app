@@ -103,32 +103,35 @@
 - (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage completion:(void (^)(BOOL success))completion
 {
     [[self webView].scrollView setZoomScale:0.1 animated:YES];
+    __weak typeof(self)weakSelf = self;
     if ([self.reportLoader respondsToSelector:@selector(changeFromPage:toPage:withCompletion:)]) {
         [self.reportLoader changeFromPage:fromPage toPage:toPage withCompletion:^(BOOL success, NSError *error) {
-                if (success) {
-                    if (completion) {
-                        completion(YES);
-                    }
-                } else {
-                    if (completion) {
-                        completion(NO);
-                    }
-                    [self handleError:error];
+            __strong typeof(self)strongSelf = weakSelf;
+            if (success) {
+                if (completion) {
+                    completion(YES);
                 }
+            } else {
+                if (completion) {
+                    completion(NO);
+                }
+                [strongSelf handleError:error];
+            }
             }];
     } else {
         [self.reportLoader fetchPageNumber:toPage withCompletion:^(BOOL success, NSError *error) {
-                if (success) {
-                    if (completion) {
-                        completion(YES);
-                    }
-                } else {
-                    if (completion) {
-                        completion(NO);
-                    }
-                    [self handleError:error];
+            __strong typeof(self)strongSelf = weakSelf;
+            if (success) {
+                if (completion) {
+                    completion(YES);
                 }
-            }];
+            } else {
+                if (completion) {
+                    completion(NO);
+                }
+                [strongSelf handleError:error];
+            }
+        }];
     }
 }
 
@@ -140,20 +143,23 @@
     [self hideToolbar];
     [self hideReportView];
 
+    __weak typeof(self)weakSelf = self;
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
-            [self.reportLoader cancelReport];
-            [self cancelResourceViewingAndExit:YES];
-        }];
+        __strong typeof(self)strongSelf = weakSelf;
+        [strongSelf.reportLoader cancelReport];
+        [strongSelf cancelResourceViewingAndExit:YES];
+    }];
 
     [self.reportLoader runReportWithPage:page completion:^(BOOL success, NSError *error) {
-            [self stopShowLoader];
+        __strong typeof(self)strongSelf = weakSelf;
+        [strongSelf stopShowLoader];
 
-            if (success) {
-                [self showReportView];
-            } else {
-                [self handleError:error];
-            }
-        }];
+        if (success) {
+            [strongSelf showReportView];
+        } else {
+            [strongSelf handleError:error];
+        }
+    }];
 }
 
 - (void)updateReportWithNewActiveReportOption:(JMExtendedReportOption *)newActiveOption
@@ -167,18 +173,21 @@
         [self hideEmptyReportMessage];
         [self hideToolbar];
         [self hideReportView];
-        
+
+        __weak typeof(self)weakSelf = self;
         [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
-            [self.reportLoader cancelReport];
-            [self cancelResourceViewingAndExit:YES];
+            __strong typeof(self)strongSelf = weakSelf;
+            [strongSelf.reportLoader cancelReport];
+            [strongSelf cancelResourceViewingAndExit:YES];
         }];
         [self.reportLoader applyReportParametersWithCompletion:^(BOOL success, NSError *error) {
-            [self stopShowLoader];
+            __strong typeof(self)strongSelf = weakSelf;
+            [strongSelf stopShowLoader];
             
             if (success) {
-                [self showReportView];
+                [strongSelf showReportView];
             } else {
-                [self handleError:error];
+                [strongSelf handleError:error];
             }
         }];
     } else {
@@ -200,20 +209,23 @@
     [self hideToolbar];
     [self hideReportView];
 
+    __weak typeof(self)weakSelf = self;
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
-            [self.reportLoader cancelReport];
-            [self cancelResourceViewingAndExit:YES];
-        }];
+        __strong typeof(self)strongSelf = weakSelf;
+        [strongSelf.reportLoader cancelReport];
+        [strongSelf cancelResourceViewingAndExit:YES];
+    }];
 
     [self.reportLoader refreshReportWithCompletion:^(BOOL success, NSError *error) {
-            [self stopShowLoader];
+        __strong typeof(self)strongSelf = weakSelf;
+        [strongSelf stopShowLoader];
 
-            if (success) {
-                [self showReportView];
-            } else {
-                [self handleError:error];
-            }
-        }];
+        if (success) {
+            [strongSelf showReportView];
+        } else {
+            [strongSelf handleError:error];
+        }
+    }];
 }
 
 - (void)handleError:(NSError *)error
@@ -225,29 +237,34 @@
 
         NSInteger reportCurrentPage = self.report.currentPage;
         [self.report restoreDefaultState];
+
+        __weak typeof(self)weakSelf = self;
         [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                if (self.restClient.keepSession && isSessionAuthorized) {
-                    // TODO: Need add restoring for current page
-                    [self runReportWithPage:reportCurrentPage];
-                } else {
-                    [JMUtils showLoginViewAnimated:YES completion:^{
-                        [self cancelResourceViewingAndExit:YES];
-                    }];
-                }
-            }];
+            __strong typeof(self)strongSelf = weakSelf;
+            if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+                // TODO: Need add restoring for current page
+                [strongSelf runReportWithPage:reportCurrentPage];
+            } else {
+                [JMUtils showLoginViewAnimated:YES completion:^{
+                    [strongSelf cancelResourceViewingAndExit:YES];
+                }];
+            }
+        }];
 
     } else if (error.code == JMReportLoaderErrorTypeEmtpyReport) {
         [self showEmptyReportMessage];
     } else if (error.code == JSSessionExpiredErrorCode) {
+        __weak typeof(self)weakSelf = self;
         [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                if (self.restClient.keepSession && isSessionAuthorized) {
-                    [self runReportWithPage:self.report.currentPage];
-                } else {
-                    [JMUtils showLoginViewAnimated:YES completion:^{
-                        [self cancelResourceViewingAndExit:YES];
-                    }];
-                }
-            }];
+            __strong typeof(self)strongSelf = weakSelf;
+            if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+                [strongSelf runReportWithPage:strongSelf.report.currentPage];
+            } else {
+                [JMUtils showLoginViewAnimated:YES completion:^{
+                    [strongSelf cancelResourceViewingAndExit:YES];
+                }];
+            }
+        }];
     } else {
         [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
             [self cancelResourceViewingAndExit:YES];
@@ -258,7 +275,7 @@
 #pragma mark - JMVisualizeReportLoaderDelegate
 - (void)reportLoader:(id<JMReportLoader>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSArray *)reportParameters
 {
-    JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
+    JMReportViewerVC *reportViewController = (JMReportViewerVC *) [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
     reportViewController.resourceLookup = resourceLookup;
     reportViewController.initialReportParameters = reportParameters;
     reportViewController.isChildReport = YES;
@@ -334,12 +351,12 @@
                                          if (error) {
                                              if (error.code == JSSessionExpiredErrorCode) {
                                                  [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                                         if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                                             [strongSelf preparePreviewForPrintWithCompletion:completion];
-                                                         } else {
-                                                             [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                         }
-                                                     }];
+                                                     if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                                         [strongSelf preparePreviewForPrintWithCompletion:completion];
+                                                     } else {
+                                                         [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                     }
+                                                 }];
                                              } else {
                                                  [JMUtils showAlertViewWithError:error];
                                              }
