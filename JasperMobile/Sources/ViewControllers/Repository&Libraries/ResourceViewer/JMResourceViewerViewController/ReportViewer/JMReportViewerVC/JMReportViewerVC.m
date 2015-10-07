@@ -365,6 +365,7 @@
                                              NSURL *resourceURL = [NSURL fileURLWithPath:savedReportURL];
                                              if (completion) {
                                                  completion(resourceURL);
+                                                 [savedReport removeFromDB];
                                              }
                                          }
                                      }];
