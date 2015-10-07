@@ -81,6 +81,8 @@ static const NSInteger kSplashViewTag = 100;
     //[[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
     [[GAI sharedInstance] trackerWithTrackingId:kGAITrackingID];
     
+    SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
+    revealViewController.frontViewController = [JMUtils launchScreenViewController];
     return YES;
 }
 
@@ -177,6 +179,10 @@ static const NSInteger kSplashViewTag = 100;
 - (void)showOnboardIntroIfNeeded
 {
     BOOL shouldDisplayIntro = ![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultsIntroDidApear];
+    UITraitCollection *currentTraitCollection = self.window.rootViewController.traitCollection;
+    
+    shouldDisplayIntro &= !(currentTraitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad && currentTraitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact);
+    
     if (shouldDisplayIntro) {
         SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
         JMOnboardIntroViewController *introViewController = (JMOnboardIntroViewController *) [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];

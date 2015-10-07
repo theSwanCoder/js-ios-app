@@ -115,6 +115,14 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 }
 
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+    if (self.isViewLoaded && self.view.window) {
+        [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+    }
+}
+
 #pragma mark - Rotation
 - (BOOL)shouldAutorotate
 {

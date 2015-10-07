@@ -127,9 +127,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     }
 }
 
-- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     if (self.isViewLoaded && self.view.window) {
         JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
         [baseCollectionView.collectionView reloadData];
