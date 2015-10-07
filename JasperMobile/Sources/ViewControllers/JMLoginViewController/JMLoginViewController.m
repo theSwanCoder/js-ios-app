@@ -196,17 +196,21 @@
                                                          username:username
                                                          password:password];
 
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
-        [self.restClient cancelAllRequests];
-    } @weakselfend];
+    __weak typeof(self)weakSelf = self;
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^(void) {
+        __strong typeof(self)strongSelf = weakSelf;
+        [strongSelf.restClient cancelAllRequests];
+    }];
     
-    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:@weakself(^(BOOL success)) {
+    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:^(BOOL success) {
+        __strong typeof(self)strongSelf = weakSelf;
+
         [JMCancelRequestPopup dismiss];
         if (success) {
-            self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
-            [self dismissViewControllerAnimated:NO completion:nil];
-            if (self.completion) {
-                self.completion();
+            strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
+            [strongSelf dismissViewControllerAnimated:NO completion:nil];
+            if (strongSelf.completion) {
+                strongSelf.completion();
             }
         } else {
             [[UIAlertView localizedAlertWithTitle:@"error.authenication.dialog.title"
@@ -215,7 +219,7 @@
                                 cancelButtonTitle:@"dialog.button.ok"
                                 otherButtonTitles:nil] show];
         }
-    } @weakselfend];
+    }];
 }
 
 @end

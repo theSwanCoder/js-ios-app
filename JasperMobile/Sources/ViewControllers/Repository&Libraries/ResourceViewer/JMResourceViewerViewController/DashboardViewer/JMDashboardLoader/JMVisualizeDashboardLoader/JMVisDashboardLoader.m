@@ -79,13 +79,13 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
     if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
 
-        [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+        [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
             if (success) {
 
             } else {
                 NSLog(@"Error loading HTML%@", error.localizedDescription);
             }
-        }@weakselfend];
+        }];
     } else {
         [self destroyDashboard];
         [self handleOnScriptLoaded];
@@ -139,7 +139,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)startLoadHTMLWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
     JMLog(@"visuzalise.js did start load");
-    [self.visualizeManager loadVisualizeJSWithCompletion:@weakself(^(BOOL success, NSError *error)){
+    [self.visualizeManager loadVisualizeJSWithCompletion:^(BOOL success, NSError *error){
             if (success) {
                 JMLog(@"visuzalise.js did end load");
                 NSString *baseURLString = self.restClient.serverProfile.serverUrl;
@@ -160,7 +160,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                     completion(NO, error);
                 }
             }
-        }@weakselfend];
+        }];
 }
 
 #pragma mark - JMJavascriptNativeBridgeDelegate

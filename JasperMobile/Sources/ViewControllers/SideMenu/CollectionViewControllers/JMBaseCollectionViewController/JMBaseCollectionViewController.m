@@ -438,12 +438,13 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         }
         // Customizing report viewer view controller
         if ([resourceLookup isReport]) {
-            JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-            JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [baseCollectionView.collectionView cellForItemAtIndexPath:indexPath];
+            JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
             [nextVC report].thumbnailImage = cell.thumbnailImage;
-            [nextVC setExitBlock:@weakself(^(void)) {
-                [baseCollectionView.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-            }@weakselfend];
+            __weak typeof(self)weakSelf = self;
+            [nextVC setExitBlock:^(void) {
+                __strong typeof(self)strongSelf = weakSelf;
+                [((JMBaseCollectionView *)strongSelf.view).collectionView reloadItemsAtIndexPaths:@[indexPath]];
+            }];
         }
     }
     

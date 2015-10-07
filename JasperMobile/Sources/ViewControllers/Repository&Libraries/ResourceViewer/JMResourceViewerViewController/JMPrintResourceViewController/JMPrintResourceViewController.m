@@ -274,27 +274,34 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 - (void)prepareForPrint
 {
     if (!self.printingItem) {
+
         if (self.report && self.report.isMultiPageReport) {
+
             JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
+
             [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title" cancelBlock:^{
                 [reportSaver cancelReport];
             }];
+
             [reportSaver saveReportWithName:[self tempReportName]
                                      format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
                                       pages:[self makePagesFormat]
                                     addToDB:NO
-                                 completion:@weakself(^(JMSavedResources *savedReport, NSError *error)) {
+                                 completion:^(JMSavedResources *savedReport, NSError *error) {
                                      [JMCancelRequestPopup dismiss];
 
                                      if (error) {
                                          if (error.code == JSSessionExpiredErrorCode) {
-                                             [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
-                                                     if (self.restClient.keepSession && isSessionAuthorized) {
-                                                         [self prepareForPrint];
-                                                     } else {
-                                                         [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                     }
-                                                 }@weakselfend];
+                                             __weak typeof(self)weakSelf = self;
+                                             [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                                 __strong typeof(self)strongSelf = weakSelf;
+                                                 if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                                     [strongSelf prepareForPrint];
+                                                 } else {
+                                                     [JMUtils showLoginViewAnimated:YES
+                                                                         completion:nil];
+                                                 }
+                                             }];
                                          } else {
                                              [JMUtils showAlertViewWithError:error];
                                          }
@@ -303,7 +310,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                                          self.printingItem = [NSURL fileURLWithPath:savedReportURL];
                                          [self printResource];
                                      }
-                                 }@weakselfend];
+                                 }];
         } else {
             [self imageFromWebViewWithCompletion:^(UIImage *image) {
                 self.printingItem = image;
@@ -327,9 +334,9 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     printController.showsPageRange = NO;
     printController.printingItem = self.printingItem;
     
-    UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
+    UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
         if(error){
-            NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
+            NSLog(@"FAILED! due to error in domain %@ with error code %d", error.domain, error.code);
         } else if (completed) {
             if ([self.printingItem isKindOfClass:[NSURL class]]) {
                 NSURL *fileURL = (NSURL *)self.printingItem;
@@ -343,13 +350,17 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
             }
             [self.navigationController popViewControllerAnimated:YES];
         }
-    }@weakselfend;
+    };
     
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([JMUtils isIphone]) {
-            [printController presentAnimated:YES completionHandler:completionHandler];
+            [printController presentAnimated:YES
+                           completionHandler:completionHandler];
         } else {
-            [printController presentFromRect:self.printButton.frame inView:self.view animated:YES completionHandler:completionHandler];
+            [printController presentFromRect:self.printButton.frame
+                                      inView:self.view
+                                    animated:YES
+                           completionHandler:completionHandler];
         }
     });
 }

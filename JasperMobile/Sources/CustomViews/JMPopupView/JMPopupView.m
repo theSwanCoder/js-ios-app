@@ -259,30 +259,33 @@ static NSMutableArray* visiblePopupsArray = nil;
 
 - (void)dismiss:(BOOL)animated
 {
-    self.dismissBlock = @weakself(^(void)) {
+    __weak typeof(self)weakSelf = self;
+    self.dismissBlock = ^(void) {
+        __strong typeof(self)strongSelf = weakSelf;
+
         if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewWillDismissed:)]) {
-            [self.delegate popupViewWillDismissed:self];
+            [strongSelf.delegate popupViewWillDismissed:strongSelf];
         }
         if (!animated) {
-            [self removeFromSuperview];
-            if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
-                [self.delegate popupViewDidDismissed:self];
+            [strongSelf removeFromSuperview];
+            if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
+                [strongSelf.delegate popupViewDidDismissed:strongSelf];
             }
         } else {
-            self.animatedNow = YES;
+            strongSelf.animatedNow = YES;
             [UIView animateWithDuration:0.3f animations:^{
-                self->_backGroundView.alpha = 0.1f;
-                self->_backGroundView.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
+                strongSelf->_backGroundView.alpha = 0.1f;
+                strongSelf->_backGroundView.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
             } completion:^(BOOL finished) {
-                [self removeFromSuperview];
-                self.animatedNow = NO;
-                if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
-                    [self.delegate popupViewDidDismissed:self];
+                [strongSelf removeFromSuperview];
+                strongSelf.animatedNow = NO;
+                if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
+                    [strongSelf.delegate popupViewDidDismissed:strongSelf];
                 }
-                self.dismissBlock = nil;
+                strongSelf.dismissBlock = nil;
             }];
         }
-    }@weakselfend;
+    };
     
     [visiblePopupsArray removeObject:self];
     

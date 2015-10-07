@@ -67,36 +67,42 @@
 
 - (void)loadResourceLookup:(NSString *)resourceURI
 {
-    [self.restClient resourceLookupForURI:resourceURI resourceType:[JSConstants sharedInstance].WS_TYPE_FOLDER modelClass:[JSResourceLookup class] completionBlock:@weakself(^(JSOperationResult *result)) {
-        if (result.error) {
-            if ([resourceURI isEqualToString:[self rootResourceURI]]) {
-                if (result.error.code == JSSessionExpiredErrorCode) {
-                    [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
-                            if (self.restClient.keepSession && isSessionAuthorized) {
-                                [self loadResourceLookup:resourceURI];
+    __weak typeof(self)weakSelf = self;
+    [self.restClient resourceLookupForURI:resourceURI
+                             resourceType:[JSConstants sharedInstance].WS_TYPE_FOLDER
+                               modelClass:[JSResourceLookup class]
+                          completionBlock:^(JSOperationResult *result) {
+                    __strong typeof(self)strongSelf = weakSelf;
+                    if (result.error) {
+                        if ([resourceURI isEqualToString:[strongSelf rootResourceURI]]) {
+                            if (result.error.code == JSSessionExpiredErrorCode) {
+                                [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                    if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                        [strongSelf loadResourceLookup:resourceURI];
+                                    } else {
+                                        [strongSelf finishLoadingWithError:result.error];
+                                        [JMUtils showLoginViewAnimated:YES
+                                                            completion:nil];
+                                    }
+                                }];
                             } else {
-                                [self finishLoadingWithError:result.error];
-                                [JMUtils showLoginViewAnimated:YES completion:nil];
+                                [strongSelf finishLoadingWithError:result.error];
                             }
-                        }@weakselfend];
-                } else {
-                    [self finishLoadingWithError:result.error];
-                }
-            } else {
-                [self loadNextResourceForResource:resourceURI];
-            }
-        } else {
-            JSResourceLookup *resourceLookup = result.objects.firstObject;
-            if (resourceLookup) {
-                if (!resourceLookup.resourceType) {
-                    resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_FOLDER;
-                }
-                [self addResourcesWithResource:resourceLookup];
-            }
+                        } else {
+                            [strongSelf loadNextResourceForResource:resourceURI];
+                        }
+                    } else {
+                        JSResourceLookup *resourceLookup = result.objects.firstObject;
+                        if (resourceLookup) {
+                            if (!resourceLookup.resourceType) {
+                                resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_FOLDER;
+                            }
+                            [strongSelf addResourcesWithResource:resourceLookup];
+                        }
 
-            [self loadNextResourceForResource:resourceURI];
-        }
-    }@weakselfend];
+                        [strongSelf loadNextResourceForResource:resourceURI];
+                    }
+    }];
 }
 
 #pragma mark - Utils

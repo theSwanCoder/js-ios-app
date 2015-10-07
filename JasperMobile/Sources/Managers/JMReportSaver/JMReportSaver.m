@@ -61,29 +61,32 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
     if (self) {
         _report = report;
         _reportExecutor = [JMReportExecutor executorWithReport:_report];
-        self.downloadCompletion = @weakself(^(BOOL shouldAddToDB)) {
-            
-            NSString *originalDirectory = [JMSavedResources pathToFolderForSavedReport:self.savedReport];
-            NSString *temporaryDirectory = [JMSavedResources pathToTempFolderForSavedReport:self.savedReport];
+
+        __weak typeof(self)weakSelf = self;
+        self.downloadCompletion = ^(BOOL shouldAddToDB) {
+            __strong typeof(self)strongSelf = weakSelf;
+
+            NSString *originalDirectory = [JMSavedResources pathToFolderForSavedReport:strongSelf.savedReport];
+            NSString *temporaryDirectory = [JMSavedResources pathToTempFolderForSavedReport:strongSelf.savedReport];
             
             // move saved report from temp location to origin
-            if ([self isExistSavedReport:self.savedReport]) {
-                [self removeReportAtPath:originalDirectory];
+            if ([strongSelf isExistSavedReport:strongSelf.savedReport]) {
+                [strongSelf removeReportAtPath:originalDirectory];
             }
             
-            [self moveContentFromPath:temporaryDirectory
+            [strongSelf moveContentFromPath:temporaryDirectory
                                toPath:originalDirectory];
-            [self removeTempDirectory];
+            [strongSelf removeTempDirectory];
             
             // save to DB
             if (shouldAddToDB) {
                 // Save thumbnail image
-                NSString *thumbnailURLString = [self.restClient generateThumbnailImageUrl:self.report.resourceLookup.uri];
-                [self downloadThumbnailForSavedReport:self.savedReport
-                                    resourceURLString:thumbnailURLString
-                                           completion:nil];
+                NSString *thumbnailURLString = [strongSelf.restClient generateThumbnailImageUrl:strongSelf.report.resourceLookup.uri];
+                [strongSelf downloadThumbnailForSavedReport:strongSelf.savedReport
+                                          resourceURLString:thumbnailURLString
+                                                 completion:nil];
             }
-        }@weakselfend;
+        };
     }
     return self;
 }
@@ -111,13 +114,13 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
     } else {
 
         [self createPagesRangeFromPagesString:pages];
-        
+
         [self fetchOutputResourceURLForReportWithFileExtension:format
                                                          pages:pages
-                                                    completion:@weakself(^(BOOL success, NSError *error)) {
+                                                    completion:^(BOOL success, NSError *error) {
                                                         if (success) {
                                                             [self downloadSavedReport:self.savedReport
-                                                                           completion:@weakself(^(NSError *error)) {
+                                                                           completion:^(NSError *error) {
                                                                                if (error) {
                                                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                                                        if (completionBlock) {
@@ -133,7 +136,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                                                                                        }
                                                                                    });
                                                                                }
-                                                                           }@weakselfend];
+                                                                           }];
                                                         } else {
                                                             [self cancelReport];
                                                             dispatch_async(dispatch_get_main_queue(), ^{
@@ -142,7 +145,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                                                                 }
                                                             });
                                                         }
-                                                    }@weakselfend];
+                                                    }];
     }
 }
 
@@ -168,7 +171,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
         } else {
             [self downloadSavedReport:self.savedReport
           withOutputResourceURLString:resourcePath
-                           completion:@weakself(^(NSError *error)) {
+                           completion:^(NSError *error) {
                                if (error) {
                                    [self cancelReport];
                                    dispatch_async(dispatch_get_main_queue(), ^{
@@ -185,7 +188,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                                        }
                                    });
                                }
-                           }@weakselfend];
+                           }];
         }
     } else{
         // at the moment HTML doesn't support
@@ -234,7 +237,7 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
 {
     [JMUtils showNetworkActivityIndicator];
     [self downloadResourceFromURLString:outputResourceURLString
-                             completion:@weakself(^(NSURL *location, NSURLResponse *response, NSError *error)) {
+                             completion:^(NSURL *location, NSURLResponse *response, NSError *error) {
                                  [JMUtils hideNetworkActivityIndicator];
                                  
                                  if (!error) {
@@ -253,11 +256,11 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
                                              }
                                          } else {
                                              [self downloadAttachmentsForSavedReport:self.savedReport
-                                                                          completion:@weakself(^(NSError *attError)) {
+                                                                          completion:^(NSError *attError) {
                                                                               if (completion) {
                                                                                   completion(attError);
                                                                               }
-                                                                          }@weakselfend];
+                                                                          }];
                                          }
                                      }
                                  }else {
@@ -265,7 +268,7 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
                                          completion(error);
                                      }
                                  }
-                             }@weakselfend];
+                             }];
 }
 
 - (void)downloadAttachmentsForSavedReport:(JMSavedResources *)savedReport completion:(JMReportSaverCompletion)completion
@@ -320,11 +323,11 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
     
     NSURLSession *session = [NSURLSession sharedSession];
     self.downloadTask = [session downloadTaskWithRequest:request
-                                       completionHandler:@weakself(^(NSURL *location, NSURLResponse *response, NSError *error)) {
+                                       completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
                                            if (completion) {
                                                completion(location, response, error);
                                            }
-                                       } @weakselfend];
+                                       }];
     [self.downloadTask resume];
 }
 
@@ -442,10 +445,10 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
     self.reportExecutor.format = format;
     self.reportExecutor.pagesRange = self.pagesRange;
     
-    [self.reportExecutor executeWithCompletion:@weakself(^(JSReportExecutionResponse *executionResponse, NSError *executionError)) {
+    [self.reportExecutor executeWithCompletion:^(JSReportExecutionResponse *executionResponse, NSError *executionError) {
         if (executionResponse) {
             self.requestExecution = executionResponse;
-            [self.reportExecutor exportWithCompletion:@weakself(^(JSExportExecutionResponse *exportResponse, NSError *exportError)) {
+            [self.reportExecutor exportWithCompletion:^(JSExportExecutionResponse *exportResponse, NSError *exportError) {
                 if (exportResponse) {
                     self.exportExecution = exportResponse;
                     if (completion) {
@@ -456,13 +459,13 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
                         completion(NO, exportError);
                     }
                 }
-            }@weakselfend];
+            }];
         } else {
             if (completion) {
                 completion(NO, executionError);
             }
         }
-    }@weakselfend];
+    }];
 }
 
 - (BOOL)isExistSavedReport:(JMSavedResources *)savedReport

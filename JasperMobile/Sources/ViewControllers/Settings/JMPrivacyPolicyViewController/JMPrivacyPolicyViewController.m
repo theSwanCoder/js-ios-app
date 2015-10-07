@@ -67,9 +67,12 @@
     
     NSString *cachePath = [[RNCachingURLProtocol new] cachePathForRequest:ppRequest];
     if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath] && [[Reachability reachabilityWithHostName:[ppURL host]] currentReachabilityStatus] == NotReachable) {
-        [[UIAlertView localizedAlertWithTitle:@"error.noconnection.dialog.title" message:@"error.noconnection.dialog.msg" completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
-            [self.navigationController popViewControllerAnimated:YES];
-        } @weakselfend cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil] show];
+        [[UIAlertView localizedAlertWithTitle:@"error.noconnection.dialog.title"
+                                      message:@"error.noconnection.dialog.msg"
+                                   completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                       [self.navigationController popViewControllerAnimated:YES];
+                                   }
+                            cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil] show];
     } else {
         [self.webView loadRequest:ppRequest];
     }

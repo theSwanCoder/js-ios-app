@@ -41,9 +41,9 @@
     [self.webView loadHTMLString:@"" baseURL:nil];
     [[UIAlertView alertWithTitle:JMCustomLocalizedString(@"dialod.title.error", nil)
                          message:JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil) // TODO: replace with the other message
-                      completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                      completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                               [self cancelResourceViewingAndExit:YES];
-                          }@weakselfend
+                          }
                cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil)
                otherButtonTitles:nil] show];
     

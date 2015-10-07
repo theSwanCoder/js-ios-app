@@ -56,7 +56,7 @@ static JMSessionManager *_sharedManager = nil;
 {
     self.restClient = [[JSRESTBase alloc] initWithServerProfile:serverProfile keepLogged:keepLogged];
 
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
             if (completionBlock) {
                 BOOL isServerInfoExists = self.restClient.serverInfo != nil;
                 if (isServerInfoExists && isSessionAuthorized) {
@@ -66,7 +66,7 @@ static JMSessionManager *_sharedManager = nil;
                     completionBlock(NO);
                 }
             }
-    }@weakselfend];
+    }];
 }
 
 - (void) saveActiveSessionIfNeeded {
@@ -98,14 +98,14 @@ static JMSessionManager *_sharedManager = nil;
 
             JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
             if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
-                [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
                         BOOL isRestoredSession = (isSessionAuthorized && self.restClient.serverInfo);
                         dispatch_async(dispatch_get_main_queue(), ^(void){
                             if (completion) {
                                 completion(isRestoredSession);
                             }
                         });
-                    }@weakselfend];
+                    }];
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^(void){
                     if (completion) {

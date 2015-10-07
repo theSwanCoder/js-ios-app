@@ -165,6 +165,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 - (void)loadNextPage
 {
     self.needUpdateData = NO;
+    __weak typeof(self)weakSelf = self;
     [self.restClient resourceLookups:self.resourceLookup.uri
                                query:self.searchQuery
                                types:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]
@@ -173,27 +174,34 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                            recursive:self.loadRecursively
                               offset:self.offset
                                limit:[self limitOfLoadingResources]
-                     completionBlock:@weakself(^(JSOperationResult *result)) {
+                     completionBlock:^(JSOperationResult *result) {
+                         __strong typeof(self)strongSelf = weakSelf;
                          if (result.error) {
+
                              if (result.error.code == JSSessionExpiredErrorCode) {
-                                 [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
-                                         if (self.restClient.keepSession && isSessionAuthorized) {
-                                             [self loadNextPage];
+                                 [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+
+                                         if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                             [strongSelf loadNextPage];
                                          } else {
-                                             self.isLoadingNow = NO;
-                                             [self setNeedsUpdate];
-                                             [JMUtils showLoginViewAnimated:YES completion:nil];
+                                             strongSelf.isLoadingNow = NO;
+                                             [strongSelf setNeedsUpdate];
+                                             [JMUtils showLoginViewAnimated:YES
+                                                                 completion:nil];
                                          }
-                                     }@weakselfend];
+
+                                     }];
                              } else {
                                  [self finishLoadingWithError:result.error];
                              }
+
                          } else {
+
                              for (JSResourceLookup *resourceLookup in result.objects) {
                                  if ([resourceLookup isFolder]) {
-                                     [self.resourcesFolders addObject:resourceLookup];
+                                     [strongSelf.resourcesFolders addObject:resourceLookup];
                                  } else {
-                                     [self.resourcesItems addObject:resourceLookup];
+                                     [strongSelf.resourcesItems addObject:resourceLookup];
                                  }
                              }
                              
@@ -201,19 +209,20 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                              [self addResourcesWithResources:self.resourcesItems];
 
                              
-                             if ([result.allHeaderFields objectForKey:@"Next-Offset"]) {
-                                 self.offset = [[result.allHeaderFields objectForKey:@"Next-Offset"] integerValue];
-                                 self.hasNextPage = [result.objects count] == kJMResourceLimit;
+                             if (result.allHeaderFields[@"Next-Offset"]) {
+                                 strongSelf.offset = [result.allHeaderFields[@"Next-Offset"] integerValue];
+                                 strongSelf.hasNextPage = [result.objects count] == kJMResourceLimit;
                              } else {
-                                 self.offset += kJMResourceLimit;
-                                 if (!self.totalCount) {
-                                     self.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
+                                 strongSelf.offset += kJMResourceLimit;
+                                 if (!strongSelf.totalCount) {
+                                     strongSelf.totalCount = [result.allHeaderFields[@"Total-Count"] integerValue];
                                  }
-                                 self.hasNextPage = self.offset < self.totalCount;
+                                 strongSelf.hasNextPage = strongSelf.offset < strongSelf.totalCount;
                              }
-                             [self finishLoadingWithError:nil];
+                             [strongSelf finishLoadingWithError:nil];
+
                          }
-                     } @weakselfend];
+                     }];
 }
 
 - (void)finishLoadingWithError:(NSError *)error

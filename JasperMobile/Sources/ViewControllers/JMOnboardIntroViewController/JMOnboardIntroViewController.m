@@ -151,10 +151,10 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 #pragma mark - Actions
 - (IBAction)skipAction:(id)sender
 {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:@weakself(^){
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultsIntroDidApear];
         [[NSUserDefaults standardUserDefaults] synchronize];
-    }@weakselfend];
+    }];
 }
 
 #pragma mark - Setup

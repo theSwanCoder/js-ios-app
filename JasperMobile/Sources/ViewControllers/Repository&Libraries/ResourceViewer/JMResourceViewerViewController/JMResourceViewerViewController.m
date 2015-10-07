@@ -140,11 +140,11 @@
     printInteractionController.showsPageRange = YES;
     printInteractionController.printingItem = printingItem;
 
-    UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
+    UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
             if (completion) {
                 completion(completed, error);
             }
-        }@weakselfend;
+        };
 
     if ([JMUtils isIphone]) {
         [printInteractionController presentAnimated:YES completionHandler:completionHandler];
