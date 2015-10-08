@@ -42,8 +42,6 @@
 
     // Google Analitycs
     self.screenName = NSStringFromClass(self.class);
-
-    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 @end
