@@ -26,6 +26,7 @@
 #import "UITableViewCell+Additions.h"
 #import "JSResourceLookup+Helpers.h"
 #import "PopoverView.h"
+#import "JMSavedResources+Helpers.h"
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
@@ -34,7 +35,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) PopoverView *popoverView;
 @property (nonatomic, assign) BOOL needLayoutUI;
-
+@property (nonatomic) UIDocumentInteractionController *documentController;
 @end
 
 @implementation JMResourceInfoViewController
@@ -157,6 +158,9 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_None;
     if (![self favoriteItemShouldDisplaySeparately]) {
         availableAction |= [self favoriteAction];
+    }
+    if ([self.resourceLookup isSavedReport]) {
+        availableAction |= JMMenuActionsViewAction_OpenIn;
     }
     return availableAction;
 }
@@ -288,6 +292,26 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         case JMMenuActionsViewAction_MakeUnFavorite:
             [self favoriteButtonTapped:nil];
             break;
+        case JMMenuActionsViewAction_OpenIn: {
+            JMSavedResources *savedResources = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
+            NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:savedResources];
+
+            NSURL *url = [NSURL fileURLWithPath:fullReportPath];
+
+            self.documentController = [self setupDocumentControllerWithURL:url
+                                                             usingDelegate:nil];
+
+            BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+            if (!canOpen) {
+                UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:nil
+                                                                      message:@"error.openIn.message"
+                                                                     delegate:self
+                                                            cancelButtonTitle:@"dialog.button.ok"
+                                                            otherButtonTitles:nil];
+                [alertView show];
+            }
+            break;
+        }
         default:
             break;
     }
@@ -309,6 +333,14 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         [self.popoverView dismiss:NO];
         [self showAvailableActions];
     }
+}
+
+#pragma mark - Helpers
+- (UIDocumentInteractionController *) setupDocumentControllerWithURL: (NSURL *) fileURL
+                                                       usingDelegate: (id <UIDocumentInteractionControllerDelegate>) interactionDelegate {
+    UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
+    interactionController.delegate = interactionDelegate;
+    return interactionController;
 }
 
 @end
