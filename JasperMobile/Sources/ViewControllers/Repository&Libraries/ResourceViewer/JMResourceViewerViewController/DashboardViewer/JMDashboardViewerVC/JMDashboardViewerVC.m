@@ -170,24 +170,15 @@
 - (void)reloadDashlet
 {
     if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
+
         __weak typeof(self)weakSelf = self;
-        [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-            __strong typeof(self)strongSelf = weakSelf;
-            if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)];
 
-                [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)];
-
-                __weak typeof(self)weakSelf = strongSelf;
-                [strongSelf.dashboardLoader reloadMaximizedDashletWithCompletion:^(BOOL success, NSError *error){
-                    __weak typeof(self)strongSelf = weakSelf;
-                    [strongSelf stopShowLoader];
-                }];
-            } else {
-                [JMUtils showLoginViewAnimated:YES completion:^{
-                    [strongSelf cancelResourceViewingAndExit:YES];
-                }];
-            }
+        [self.dashboardLoader reloadMaximizedDashletWithCompletion:^(BOOL success, NSError *error){
+            __weak typeof(self)strongSelf = weakSelf;
+            [strongSelf stopShowLoader];
         }];
+
     } else {
         [self minimizeDashlet];
         [self reloadDashboard];
@@ -290,6 +281,10 @@
 
 - (void)dashboardLoaderDidReceiveAuthRequest:(id <JMDashboardLoader>)loader
 {
+    if ([self isDashletShown]) {
+        [self minimizeDashlet];
+    }
+
     [self.restClient deleteCookies];
     if ([JMUtils isServerAmber2OrHigher]) {
         [self startResourceViewing];
