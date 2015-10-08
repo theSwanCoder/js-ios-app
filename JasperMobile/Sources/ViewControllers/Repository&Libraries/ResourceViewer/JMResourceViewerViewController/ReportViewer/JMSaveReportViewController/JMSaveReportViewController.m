@@ -400,6 +400,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                          }];
                                  } else {
                                      [JMUtils showAlertViewWithError:error];
+                                     [savedReport removeReport];
                                  }
                              } else {
                                  // Animation
