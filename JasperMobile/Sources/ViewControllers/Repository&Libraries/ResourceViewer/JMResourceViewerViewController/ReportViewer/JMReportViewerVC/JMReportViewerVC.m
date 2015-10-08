@@ -27,6 +27,8 @@
 #import "JMReportSaver.h"
 #import "JMSavedResources.h"
 #import "JMSavedResources+Helpers.h"
+#import "JMJavascriptRequest.h"
+#import "JMJavascriptNativeBridge.h"
 
 @interface JMReportViewerVC () <JMReportLoaderDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
@@ -121,6 +123,14 @@
     } else {
         [self.reportLoader fetchPageNumber:toPage withCompletion:^(BOOL success, NSError *error) {
             __strong typeof(self)strongSelf = weakSelf;
+
+            // fix an issue in webview after zooming and changing page (black areas)
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
+                runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
+                [((JMJavascriptNativeBridge *)[self reportLoader].bridge) sendRequest:runRequest];
+            });
+
             if (success) {
                 if (completion) {
                     completion(YES);
