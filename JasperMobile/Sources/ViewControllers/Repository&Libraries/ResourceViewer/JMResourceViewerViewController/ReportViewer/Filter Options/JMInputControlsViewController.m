@@ -62,8 +62,13 @@
                                forState:UIControlStateNormal];
     [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog.button.run.report", nil)
                           forState:UIControlStateNormal];
-    
-    [self setupReportOptions];
+
+    if ([JMUtils isServerProEdition]) {
+        [self setupReportOptions];
+    } else {
+        self.navigationItem.rightBarButtonItem = nil;
+    }
+
     self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
 }
 
