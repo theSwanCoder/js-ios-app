@@ -214,7 +214,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
 {
     NSString *originalDirectory = [JMSavedResources pathToFolderForSavedReport:self.savedReport];
     NSString *temporaryDirectory = [JMSavedResources pathToTempFolderForSavedReport:self.savedReport];
-    
+
     NSError *errorOfCreationLocation = [self createLocationAtPath:originalDirectory];
     NSError *errorOfCreationTempLocation = [self createLocationAtPath:temporaryDirectory];
     BOOL isPrepared = NO;
@@ -362,9 +362,11 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
     NSString *exportID = self.exportExecution.uuid;
     // Fix for JRS version smaller 5.6.0
     if (self.restClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) {
-        exportID = [NSString stringWithFormat:@"%@;pages=%@", @"html", self.pagesRange.pagesFormat];
+        exportID = [NSString stringWithFormat:@"%@;pages=%@;", self.savedReport.format, self.pagesRange.pagesFormat];
+        NSString *attachmentPrefix = kJMAttachmentPrefix;
+        exportID = [exportID stringByAppendingFormat:@"attachmentsPrefix=%@;", attachmentPrefix];
     }
-    
+
     NSString *outputResourceURLString = [[self exportURLWithExportID:exportID] stringByAppendingString:@"outputResource?sessionDecorator=no&decorate=no#"];
     return outputResourceURLString;
 }
