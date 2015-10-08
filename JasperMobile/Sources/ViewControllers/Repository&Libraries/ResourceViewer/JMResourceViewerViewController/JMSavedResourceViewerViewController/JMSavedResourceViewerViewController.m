@@ -50,6 +50,12 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)cancelResourceViewingAndExit:(BOOL)exit
+{
+    [self.documentController dismissMenuAnimated:YES];
+    [super cancelResourceViewingAndExit:exit];
+}
+
 - (JMSavedResources *)savedReports
 {
     if (!_savedReports) {
@@ -172,7 +178,6 @@
                                                        usingDelegate: (id <UIDocumentInteractionControllerDelegate>) interactionDelegate {
     UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
     interactionController.delegate = interactionDelegate;
-    NSLog(@"interactionController: %@", interactionController);
     return interactionController;
 }
 
