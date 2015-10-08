@@ -38,6 +38,6 @@ typedef void(^LoginCompletionBlock)(void);
 @interface JMLoginViewController : JMBaseViewController
 
 @property (nonatomic, copy) LoginCompletionBlock completion;
-
+@property (nonatomic) BOOL showForRestoreSession;
 
 @end

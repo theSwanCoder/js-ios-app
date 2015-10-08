@@ -109,6 +109,8 @@ void jmDebugLog(NSString *format, ...);
 
 + (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion;
 
++ (void)showLoginViewForRestoreSessionWithCompletion:(LoginCompletionBlock)loginCompletion;
+
 + (void)showAlertViewWithError:(NSError *)error;
 
 + (void)showAlertViewWithError:(NSError *)error completion:(void (^)(UIAlertView *alertView, NSInteger buttonIndex))completion;

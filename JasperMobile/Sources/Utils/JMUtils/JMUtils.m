@@ -177,8 +177,20 @@ void jmDebugLog(NSString *format, ...) {
 
 + (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion
 {
-    [[JMSessionManager sharedManager] logout];
-    
+    [self showLoginViewWithRestoreSession:NO animated:animated completion:completion loginCompletion:loginCompletion];
+}
+
++ (void)showLoginViewForRestoreSessionWithCompletion:(LoginCompletionBlock)loginCompletion
+{
+    [self showLoginViewWithRestoreSession:YES animated:YES completion:nil loginCompletion:loginCompletion];
+}
+
++ (void)showLoginViewWithRestoreSession:(BOOL)restoreSession animated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion
+{
+    if (!restoreSession) {
+        [[JMSessionManager sharedManager] logout];
+    }
+
     SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
     JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
 
@@ -189,6 +201,7 @@ void jmDebugLog(NSString *format, ...) {
 
     UINavigationController *loginNavController = (UINavigationController *) [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
     JMLoginViewController *loginViewController = (JMLoginViewController *)loginNavController.topViewController;
+    loginViewController.showForRestoreSession = restoreSession;
     loginViewController.completion = ^(void){
         if (loginCompletion) {
             loginCompletion();
@@ -196,7 +209,7 @@ void jmDebugLog(NSString *format, ...) {
             [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
         }
     };
-    
+
     [revealViewController presentViewController:loginNavController animated:animated completion:completion];
 }
 

@@ -115,7 +115,14 @@ static const NSInteger kSplashViewTag = 100;
                 loginCompletionBlock();
             }
         } else {
-            [JMUtils showLoginViewAnimated:NO completion:nil loginCompletion:loginCompletionBlock];
+            JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+            if (activeServerProfile && activeServerProfile.askPassword.boolValue) {
+                [JMUtils showLoginViewForRestoreSessionWithCompletion:loginCompletionBlock];
+            } else {
+                [JMUtils showLoginViewAnimated:NO
+                                    completion:nil
+                               loginCompletion:loginCompletionBlock];
+            }
         }
 
     }];

@@ -83,6 +83,18 @@
     [super viewWillAppear:animated];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    if (self.showForRestoreSession) {
+        // setup previous session
+        self.userNameTextField.text = self.restClient.serverProfile.username;
+        self.selectedServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+        self.tryDemoButton.enabled = NO;
+    }
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -150,6 +162,12 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
+    if (self.showForRestoreSession) {
+        if (textField == self.serverProfileTextField || textField == self.userNameTextField) {
+            return NO;
+        }
+    }
+
     if (textField == self.serverProfileTextField) {
         self.selectedServerProfile = nil;
         [self performSegueWithIdentifier:@"showServerProfiles" sender:nil];
