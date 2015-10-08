@@ -126,6 +126,11 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     return [JMUtils isIphone] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [self forwardToPage:self.introPage animation:YES];
+}
+
 #pragma mark - Setup
 - (void)setupImages
 {
@@ -354,21 +359,48 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
         case JMOnboardIntroPageWelcome: {
             self.welcomeView.hidden = NO;
             self.messageView.hidden = YES;
+
+            self.homeScreenImage.hidden = NO;
+
+            self.reportScreenIpadImage.hidden = YES;
+            self.reportScreenIphoneImage.hidden = YES;
+
+            self.serverScreenImage.hidden = YES;
             break;
         };
         case JMOnboardIntroPageStayConnected: {
             self.welcomeView.hidden = YES;
             self.messageView.hidden = NO;
 
+            self.homeScreenImage.hidden = NO;
+
             self.reportScreenIpadImage.hidden = NO;
             self.reportScreenIphoneImage.hidden = NO;
+
+            self.serverScreenImage.hidden = YES;
             break;
         };
         case JMOnboardIntroPageInstanceAccess: {
+            self.welcomeView.hidden = YES;
+            self.messageView.hidden = NO;
+
+            self.homeScreenImage.hidden = NO;
+
+            self.reportScreenIpadImage.hidden = NO;
+            self.reportScreenIphoneImage.hidden = NO;
+
             self.serverScreenImage.hidden = NO;
             break;
         };
         case JMOnboardIntroPageSeemlessIntegration: {
+            self.welcomeView.hidden = YES;
+            self.messageView.hidden = NO;
+
+            self.homeScreenImage.hidden = YES;
+
+            self.reportScreenIpadImage.hidden = NO;
+            self.reportScreenIphoneImage.hidden = NO;
+
             self.serverScreenImage.hidden = NO;
             break;
         };
