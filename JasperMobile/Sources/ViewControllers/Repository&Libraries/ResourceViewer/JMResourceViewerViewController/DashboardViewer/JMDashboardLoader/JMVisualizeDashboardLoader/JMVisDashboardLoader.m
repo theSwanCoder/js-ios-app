@@ -79,13 +79,13 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
     if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
 
-        [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+        [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
             if (success) {
 
             } else {
                 NSLog(@"Error loading HTML%@", error.localizedDescription);
             }
-        }@weakselfend];
+        }];
     } else {
         [self destroyDashboard];
         [self handleOnScriptLoaded];
@@ -139,7 +139,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)startLoadHTMLWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
     JMLog(@"visuzalise.js did start load");
-    [self.visualizeManager loadVisualizeJSWithCompletion:@weakself(^(BOOL success, NSError *error)){
+    [self.visualizeManager loadVisualizeJSWithCompletion:^(BOOL success, NSError *error){
             if (success) {
                 JMLog(@"visuzalise.js did end load");
                 NSString *baseURLString = self.restClient.serverProfile.serverUrl;
@@ -153,14 +153,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                 // TODO: handle this error
                 JMLog(@"Error loading visualize.js");
                 // TODO: add error code
-                NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
+                error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
                                                      code:0
                                                  userInfo:nil];
                 if (completion) {
                     completion(NO, error);
                 }
             }
-        }@weakselfend];
+        }];
 }
 
 #pragma mark - JMJavascriptNativeBridgeDelegate
@@ -241,32 +241,33 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     NSString *resource = parameters[@"resource"];
     NSDictionary *params = parameters[@"params"];
 
+    __weak typeof(self)weakSelf = self;
     [self.restClient resourceLookupForURI:resource
                              resourceType:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT
                                modelClass:[JSResourceLookup class]
                           completionBlock:^(JSOperationResult *result) {
+                              __strong typeof(self)strongSelf = weakSelf;
+                                NSError *error = result.error;
+                                if (error) {
+                                    // TODO: add error handling
+//                                    NSString *errorString = error.localizedDescription;
+//                                    JMDashboardLoaderErrorType errorType = JMDashboardLoaderErrorTypeUndefined;
+//                                    if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
+//                                        errorType = JMDashboardLoaderErrorTypeAuthentification;
+//                                    }
+                                } else {
+                                    JMLog(@"objects: %@", result.objects);
+                                    JSResourceLookup *resourceLookup = [result.objects firstObject];
+                                    if (resourceLookup) {
+                                        resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
 
-        NSError *error = result.error;
-        if (error) {
-            // TODO: add error handling
-//            NSString *errorString = error.localizedDescription;
-//            JMDashboardLoaderErrorType errorType = JMDashboardLoaderErrorTypeUndefined;
-//            if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
-//                errorType = JMDashboardLoaderErrorTypeAuthentification;
-//            }
-        } else {
-            JMLog(@"objects: %@", result.objects);
-            JSResourceLookup *resourceLookup = [result.objects firstObject];
-            if (resourceLookup) {
-                resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
-
-                NSArray *reportParameters = [self createReportParametersFromParameters:params];
-                [self.delegate dashboardLoader:self
-                   didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
-                                resourceLookup:resourceLookup
-                                    parameters:reportParameters];
-            }
-        }
+                                        NSArray *reportParameters = [self createReportParametersFromParameters:params];
+                                        [strongSelf.delegate dashboardLoader:self
+                                                 didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
+                                                              resourceLookup:resourceLookup
+                                                                  parameters:reportParameters];
+                                    }
+                                }
     }];
 
 }

@@ -138,7 +138,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                                   pages:nil
                       attachmentsPrefix:[JSConstants sharedInstance].REST_EXPORT_EXECUTION_ATTACHMENTS_PREFIX_URI
                              parameters:self.report.reportParameters
-                        completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                        completionBlock:^(JSOperationResult *result) {
                             
                                  if (result.error) {
                                      self.loadPageCompletionBlock(NO, result.error);
@@ -179,7 +179,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                                          }
                                      }
                                  }
-                             } @weakselfend];
+                             }];
 }
 
 - (void) startExportExecutionForPage:(NSInteger)page
@@ -202,7 +202,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                                    outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML
                                           pages:@(page).stringValue
                               attachmentsPrefix:[JSConstants sharedInstance].REST_EXPORT_EXECUTION_ATTACHMENTS_PREFIX_URI
-                                completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                                completionBlock:^(JSOperationResult *result) {
                                     
                                     if (result.error) {
                                         self.loadPageCompletionBlock(NO, result.error);
@@ -223,7 +223,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                                             }
                                         }
                                     }
-                                } @weakselfend];
+                                }];
         }
     }
 }
@@ -245,7 +245,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                          exportOutput:fullExportID
                         loadForSaving:NO
                                  path:nil
-                      completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                      completionBlock:^(JSOperationResult *result) {
                           
                           if (result.error && result.error.code != JSOtherErrorCode) {
                               [self handleErrorWithOperationResult:result forPage:page];
@@ -282,7 +282,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                                   }
                               }
                           }
-                      } @weakselfend];
+                      }];
 }
 
 - (void)startLoadReportHTML
@@ -290,6 +290,11 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"jaspermobile" ofType:@"js"];
     NSError *error;
     NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
+    CGFloat initialZoom = 2;
+    if ([JMUtils isIphone]) {
+        initialZoom = 1;
+    }
+    jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"INITIAL_ZOOM" withString:@(initialZoom).stringValue];
     [self.bridge injectJSInitCode:jsMobile];
     [self.bridge startLoadHTMLString:self.report.HTMLString
                              baseURL:[NSURL URLWithString:self.report.baseURLString]];
@@ -317,7 +322,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     }
     
     [self.restClient reportExecutionMetadataForRequestId:self.report.requestId
-                                         completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                                         completionBlock:^(JSOperationResult *result) {
         if (!result.error) {
             JSReportExecutionResponse *response = [result.objects firstObject];
             NSInteger countOfPages = response.totalPages.integerValue;
@@ -327,13 +332,13 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                 [self handleEmptyReport];
             }
         }
-    } @weakselfend];
+    }];
 }
 
 - (void) makeStatusChecking
 {
     [self.restClient reportExecutionStatusForRequestId:self.report.requestId
-                                       completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                                       completionBlock:^(JSOperationResult *result) {
         if (!result.error) {
             JSExecutionStatus *status = [result.objects firstObject];
             if (!self.isReportExecutingStatusReady) {
@@ -348,7 +353,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                 }
             }
         }
-    } @weakselfend];
+    }];
 }
 
 #pragma mark - Handels

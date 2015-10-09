@@ -36,11 +36,12 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
 {
     self = [super init];
     if (self) {
-        self.isExistingServerProfile = !!serverProfile;
+        self.isExistingServerProfile = serverProfile != nil;
         if (serverProfile) {
             self.serverProfile = serverProfile;
         } else {
-            self.serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
+            self.serverProfile = (JMServerProfile *) [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile"
+                                                                                   inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
         }
     }
     return self;
@@ -56,7 +57,7 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
 
 - (BOOL)isValidData
 {
-    JMServerOption *serverOption = [self.optionsArray objectAtIndex:0];
+    JMServerOption *serverOption = self.optionsArray[0];
     if (serverOption.optionValue && [[serverOption.optionValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
         // Check if alias is unique
         if ([self.serverProfile isValidNameForServerProfile:serverOption.optionValue]) {
@@ -68,7 +69,7 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
         serverOption.errorString = JMCustomLocalizedString(@"servers.name.errmsg.empty", nil);
     }
     
-    serverOption = [self.optionsArray objectAtIndex:1];
+    serverOption = self.optionsArray[1];
     if (serverOption.optionValue && [serverOption.optionValue length]) {
         NSURL *url = [NSURL URLWithString:serverOption.optionValue];
         if (!url || !url.scheme || !url.host) {
@@ -80,9 +81,9 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
         serverOption.errorString = JMCustomLocalizedString(@"servers.url.errmsg", nil);
     }
     
-    self.serverProfile.organization = [[self.optionsArray objectAtIndex:2] optionValue];
-    self.serverProfile.askPassword  = [[self.optionsArray objectAtIndex:3] optionValue];
-    self.serverProfile.keepSession  = [[self.optionsArray objectAtIndex:4] optionValue];
+    self.serverProfile.organization = [self.optionsArray[2] optionValue];
+    self.serverProfile.askPassword  = [self.optionsArray[3] optionValue];
+    self.serverProfile.keepSession  = [self.optionsArray[4] optionValue];
     
     for (JMServerOption *option in self.optionsArray) {
         if (option.errorString) {
@@ -117,10 +118,10 @@ static NSString * const kJMTextCellIdentifier = @"TextEditCell";
     
     for (NSDictionary *optionData in optionsSourceArray) {
         JMServerOption *option = [[JMServerOption alloc] init];
-        option.titleString      = [optionData objectForKey:@"title"];
-        option.optionValue      = [optionData objectForKey:@"value"];
-        option.cellIdentifier   = [optionData objectForKey:@"cellIdentifier"];
-        option.editable         = [[optionData objectForKey:@"editable"] boolValue];
+        option.titleString      = optionData[@"title"];
+        option.optionValue      = optionData[@"value"];
+        option.cellIdentifier   = optionData[@"cellIdentifier"];
+        option.editable         = [optionData[@"editable"] boolValue];
         [optionsArray addObject:option];
     }
     self.optionsArray = optionsArray;

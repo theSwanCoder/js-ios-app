@@ -99,9 +99,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMServerOption *option = [self.serverOptions.optionsArray objectAtIndex:indexPath.row];
+    JMServerOption *option = self.serverOptions.optionsArray[indexPath.row];
     
-    JMServerOptionCell *cell = [tableView dequeueReusableCellWithIdentifier:option.cellIdentifier];
+    JMServerOptionCell *cell = (JMServerOptionCell *) [tableView dequeueReusableCellWithIdentifier:option.cellIdentifier];
     [cell setBottomSeparatorWithHeight:1 color:self.view.backgroundColor tableViewStyle:tableView.style];
     cell.serverOption = option;
     return cell;
@@ -114,7 +114,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMServerOption *option = [self.serverOptions.optionsArray objectAtIndex:indexPath.row];
+    JMServerOption *option = self.serverOptions.optionsArray[indexPath.row];
     if (option.errorString) {
         CGFloat maxWidth = tableView.frame.size.width - 30;
         CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
@@ -122,7 +122,7 @@
                                                            options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
                                                         attributes:@{NSFontAttributeName:[[JMThemesManager sharedManager] tableViewCellErrorFont]}
                                                            context:nil];
-        return tableView.rowHeight + ceil(textRect.size.height);
+        return tableView.rowHeight + ceilf(textRect.size.height);
     }
     return tableView.rowHeight;
 }

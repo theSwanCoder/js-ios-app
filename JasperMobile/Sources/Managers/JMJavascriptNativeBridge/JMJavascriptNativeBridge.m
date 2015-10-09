@@ -62,7 +62,7 @@
 - (void)sendRequest:(JMJavascriptRequest *)request
 {
     NSString *javascriptString = request.command;
-    NSString *parameters = request.parametersAsString;
+    NSString *parameters = request.parametersAsString ?: @"";
     NSString *fullJavascriptString = [NSString stringWithFormat:javascriptString, parameters];
 //    JMLog(@"send request: %@", fullJavascriptString);
     [self.webView stringByEvaluatingJavaScriptFromString:fullJavascriptString];
@@ -70,6 +70,7 @@
 
 - (void)injectJSInitCode:(NSString *)jsCode
 {
+    self.isJSInitCodeInjected = NO;
     self.jsInitCode = jsCode;
 }
 

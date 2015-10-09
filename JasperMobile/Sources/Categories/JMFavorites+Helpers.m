@@ -100,7 +100,7 @@ NSString * const kJMFavorites = @"Favorites";
 + (NSFetchRequest *)favoritesFetchRequest:(NSString *)resourceUri
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMFavorites];
-    NSMutableArray *predicates = [NSMutableArray arrayWithObject:[[JMSessionManager sharedManager] predicateForCurrentServerProfile]];
+    NSMutableArray *predicates = [@[[[JMSessionManager sharedManager] predicateForCurrentServerProfile]] mutableCopy];
     [predicates addObject:[NSPredicate predicateWithFormat:@"uri LIKE[cd] %@", resourceUri]];
     fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
     

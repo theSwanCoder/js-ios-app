@@ -126,6 +126,11 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     return [JMUtils isIphone] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [self forwardToPage:self.introPage animation:YES];
+}
+
 #pragma mark - Setup
 - (void)setupImages
 {
@@ -143,18 +148,18 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     self.homeScreenImageWidthConstraint.constant = self.homeScreenImage.image.size.width;
 
     // server screen
-    self.serverScreenImageHeightConstraint.constant = self.serverScreenImage.image.size.height * 0.2;
-    self.serverScreenImageWidthConstraint.constant = self.serverScreenImage.image.size.width * 0.2;
+    self.serverScreenImageHeightConstraint.constant = (CGFloat) (self.serverScreenImage.image.size.height * 0.2);
+    self.serverScreenImageWidthConstraint.constant = (CGFloat) (self.serverScreenImage.image.size.width * 0.2);
 }
 
 
 #pragma mark - Actions
 - (IBAction)skipAction:(id)sender
 {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:@weakself(^){
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultsIntroDidApear];
         [[NSUserDefaults standardUserDefaults] synchronize];
-    }@weakselfend];
+    }];
 }
 
 #pragma mark - Setup
@@ -301,8 +306,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             CGFloat reportScreenIpadWidth = CGRectGetWidth(self.reportScreenIpadImage.frame);
             CGFloat reportScreenIphoneWidth = CGRectGetWidth(self.reportScreenIphoneImage.frame);
 
-            self.reportScreenIpadCenterXConstraint.constant = (contentViewWidth/2.0 + reportScreenIpadWidth/2.0) ;
-            self.reportScreenIphoneCenterXConstraint.constant = -(contentViewWidth/2.0 + reportScreenIphoneWidth/2.0);
+            self.reportScreenIpadCenterXConstraint.constant = (CGFloat) (contentViewWidth/2.0 + reportScreenIpadWidth/2.0);
+            self.reportScreenIphoneCenterXConstraint.constant = (CGFloat) -(contentViewWidth/2.0 + reportScreenIphoneWidth/2.0);
 
             // home screen
             self.homeScreenImageTopConstraint.constant = homeScreenImageTopConstantStartValue;
@@ -314,16 +319,16 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
         case JMOnboardIntroPageInstanceAccess: {
             // home screen
             self.homeScreenImageTopConstraint.constant = CGRectGetHeight(self.contentView.frame);
-            self.homeScreenImageHeightConstraint.constant = self.homeScreenImage.image.size.height * 0.2;
-            self.homeScreenImageWidthConstraint.constant = self.homeScreenImage.image.size.width * 0.2;
+            self.homeScreenImageHeightConstraint.constant = (CGFloat) (self.homeScreenImage.image.size.height * 0.2);
+            self.homeScreenImageWidthConstraint.constant = (CGFloat) (self.homeScreenImage.image.size.width * 0.2);
 
             // server screen
             self.serverScreenImageTopConstraint.constant = CGRectGetHeight(self.contentView.frame);
-            self.serverScreenImageHeightConstraint.constant = self.serverScreenImage.image.size.height * 0.2;
-            self.serverScreenImageWidthConstraint.constant = self.serverScreenImage.image.size.width * 0.2;
+            self.serverScreenImageHeightConstraint.constant = (CGFloat) (self.serverScreenImage.image.size.height * 0.2);
+            self.serverScreenImageWidthConstraint.constant = (CGFloat) (self.serverScreenImage.image.size.width * 0.2);
 
             // reports screens
-            self.reportScreenIpadCenterXConstraint.constant = self.reportScreenIpadImage.image.size.width / 6.0;
+            self.reportScreenIpadCenterXConstraint.constant = (CGFloat) (self.reportScreenIpadImage.image.size.width / 6.0);
             self.reportScreenIphoneCenterXConstraint.constant = -self.reportScreenIphoneImage.image.size.width;
 
             break;
@@ -335,8 +340,8 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
             CGFloat reportScreenIpadWidth = CGRectGetWidth(self.reportScreenIpadImage.frame);
             CGFloat reportScreenIphoneWidth = CGRectGetWidth(self.reportScreenIphoneImage.frame);
 
-            self.reportScreenIpadCenterXConstraint.constant = (contentViewWidth/2.0 + reportScreenIpadWidth/2.0) ;
-            self.reportScreenIphoneCenterXConstraint.constant = -(contentViewWidth/2.0 + reportScreenIphoneWidth/2.0);
+            self.reportScreenIpadCenterXConstraint.constant = (CGFloat) (contentViewWidth/2.0 + reportScreenIpadWidth/2.0);
+            self.reportScreenIphoneCenterXConstraint.constant = (CGFloat) -(contentViewWidth/2.0 + reportScreenIphoneWidth/2.0);
 
             // server screen
             self.serverScreenImageTopConstraint.constant = serverScreenImageTopConstantStartValue;
@@ -354,21 +359,48 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
         case JMOnboardIntroPageWelcome: {
             self.welcomeView.hidden = NO;
             self.messageView.hidden = YES;
+
+            self.homeScreenImage.hidden = NO;
+
+            self.reportScreenIpadImage.hidden = YES;
+            self.reportScreenIphoneImage.hidden = YES;
+
+            self.serverScreenImage.hidden = YES;
             break;
         };
         case JMOnboardIntroPageStayConnected: {
             self.welcomeView.hidden = YES;
             self.messageView.hidden = NO;
 
+            self.homeScreenImage.hidden = NO;
+
             self.reportScreenIpadImage.hidden = NO;
             self.reportScreenIphoneImage.hidden = NO;
+
+            self.serverScreenImage.hidden = YES;
             break;
         };
         case JMOnboardIntroPageInstanceAccess: {
+            self.welcomeView.hidden = YES;
+            self.messageView.hidden = NO;
+
+            self.homeScreenImage.hidden = NO;
+
+            self.reportScreenIpadImage.hidden = NO;
+            self.reportScreenIphoneImage.hidden = NO;
+
             self.serverScreenImage.hidden = NO;
             break;
         };
         case JMOnboardIntroPageSeemlessIntegration: {
+            self.welcomeView.hidden = YES;
+            self.messageView.hidden = NO;
+
+            self.homeScreenImage.hidden = YES;
+
+            self.reportScreenIpadImage.hidden = NO;
+            self.reportScreenIphoneImage.hidden = NO;
+
             self.serverScreenImage.hidden = NO;
             break;
         };

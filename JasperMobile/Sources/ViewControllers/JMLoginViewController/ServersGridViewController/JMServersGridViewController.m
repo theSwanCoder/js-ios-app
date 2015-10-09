@@ -85,7 +85,7 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    JMServerOptionsViewController *destinationViewController = segue.destinationViewController;
+    JMServerOptionsViewController *destinationViewController = (JMServerOptionsViewController *) segue.destinationViewController;
     if (sender) {
         [destinationViewController setServerProfile:[sender objectForKey:kJMServerProfileKey]];
         destinationViewController.editable = [[sender objectForKey:kJMServerProfileEditableKey] boolValue];
@@ -102,8 +102,8 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIdentifier = @"ServerCell";
-    JMServerCollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
-    cell.serverProfile = [self.servers objectAtIndex:indexPath.row];
+    JMServerCollectionViewCell *cell = (JMServerCollectionViewCell *) [self.collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
+    cell.serverProfile = self.servers[indexPath.row];
     cell.delegate = self;
     return cell;
 }
@@ -115,19 +115,26 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
         requestDidCancelled = YES;
     }];
     
-    JMServerProfile *serverProfile = [self.servers objectAtIndex:indexPath.row];
-    [serverProfile checkServerProfileWithCompletionBlock:@weakself(^(NSError *error)) {
+    JMServerProfile *serverProfile = self.servers[indexPath.row];
+    __weak typeof(self)weakSelf = self;
+    [serverProfile checkServerProfileWithCompletionBlock:^(NSError *error) {
+        __strong typeof(self)strongSelf = weakSelf;
+
         [JMCancelRequestPopup dismiss];
         if (!requestDidCancelled) {
             if (error) {
-                [[UIAlertView localizedAlertWithTitle:error.domain message:error.localizedDescription delegate:nil cancelButtonTitle:@"dialog.button.ok" otherButtonTitles:nil] show];
+                [[UIAlertView localizedAlertWithTitle:error.domain
+                                              message:error.localizedDescription
+                                             delegate:nil
+                                    cancelButtonTitle:@"dialog.button.ok"
+                                    otherButtonTitles:nil] show];
             } else {
-                if ([self.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
-                    [self.delegate serverGridControllerDidSelectProfile:serverProfile];
+                if ([strongSelf.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
+                    [strongSelf.delegate serverGridControllerDidSelectProfile:serverProfile];
                 }
             }
         }
-    } @weakselfend];
+    }];
 }
 
 // These methods provide support for copy/paste actions on cells.
@@ -139,10 +146,7 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
-    if (action == @selector(cloneServerProfile:) || action == @selector(deleteServerProfile:)) {
-        return YES;
-    }
-    return NO;
+    return action == @selector(cloneServerProfile:) || action == @selector(deleteServerProfile:);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
@@ -171,12 +175,12 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
     JMServerProfile *serverProfile = cell.serverProfile;
     [[UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation"
                                   message:@"servers.profile.delete.message"
-                               completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                               completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                    if (alertView.cancelButtonIndex != buttonIndex) {
                                        [JMServerProfile deleteServerProfile:serverProfile];
                                        [self refreshDatasource];
                                    }
-                               } @weakselfend
+                               }
                         cancelButtonTitle:@"dialog.button.cancel"
                         otherButtonTitles:@"dialog.button.delete", nil] show];
 }

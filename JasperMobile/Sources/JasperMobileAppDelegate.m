@@ -115,7 +115,14 @@ static const NSInteger kSplashViewTag = 100;
                 loginCompletionBlock();
             }
         } else {
-            [JMUtils showLoginViewAnimated:NO completion:nil loginCompletion:loginCompletionBlock];
+            JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+            if (activeServerProfile && activeServerProfile.askPassword.boolValue) {
+                [JMUtils showLoginViewForRestoreSessionWithCompletion:loginCompletionBlock];
+            } else {
+                [JMUtils showLoginViewAnimated:NO
+                                    completion:nil
+                               loginCompletion:loginCompletionBlock];
+            }
         }
 
     }];
@@ -127,10 +134,7 @@ static const NSInteger kSplashViewTag = 100;
 }
 
 - (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier {
-    if ([extensionPointIdentifier isEqualToString: UIApplicationKeyboardExtensionPointIdentifier]) {
-        return NO;
-    }
-    return YES;
+    return ![extensionPointIdentifier isEqualToString: UIApplicationKeyboardExtensionPointIdentifier];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
@@ -145,12 +149,12 @@ static const NSInteger kSplashViewTag = 100;
     NSString *profilesPath = [[NSBundle mainBundle] pathForResource:@"profiles" ofType:@"json"];
     NSData *profilesData = [NSData dataWithContentsOfFile:profilesPath];
     NSArray *profilesArray = [[NSJSONSerialization JSONObjectWithData:profilesData options:NSJSONReadingAllowFragments error:nil] objectForKey:@"profiles"];
-    if (profilesArray && [profilesArray isKindOfClass:[NSArray class]] && profilesArray.count) {
+    if (profilesArray && profilesArray.count) {
         for (NSDictionary *profileDictionary in profilesArray) {
-            JMServerProfile *serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
-            serverProfile.alias = [profileDictionary objectForKey:@"mAlias"];
-            serverProfile.organization = [profileDictionary objectForKey:@"mOrganization"];
-            serverProfile.serverUrl = [profileDictionary objectForKey:@"mServerUrl"];
+            JMServerProfile *serverProfile = (JMServerProfile *) [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
+            serverProfile.alias = profileDictionary[@"mAlias"];
+            serverProfile.organization = profileDictionary[@"mOrganization"];
+            serverProfile.serverUrl = profileDictionary[@"mServerUrl"];
             [[JMCoreDataManager sharedInstance] save:nil];
         }
     }
@@ -176,7 +180,7 @@ static const NSInteger kSplashViewTag = 100;
     BOOL shouldDisplayIntro = ![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultsIntroDidApear];
     if (shouldDisplayIntro) {
         SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
-        JMOnboardIntroViewController *introViewController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
+        JMOnboardIntroViewController *introViewController = (JMOnboardIntroViewController *) [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
         [revealViewController presentViewController:introViewController animated:YES completion:nil];
     }
 }

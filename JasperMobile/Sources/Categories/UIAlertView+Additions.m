@@ -95,7 +95,7 @@ static NSMutableArray *_showedAlertsCompetionBlocks;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if ([_showedAlertsCompetionBlocks count] > alertView.tag - 1) {
-        clickedButtonAtIndexCompletion completionBlock = [_showedAlertsCompetionBlocks objectAtIndex:alertView.tag - 1];
+        clickedButtonAtIndexCompletion completionBlock = _showedAlertsCompetionBlocks[alertView.tag - 1];
         if (completionBlock) {
             [_showedAlertsCompetionBlocks removeObject:completionBlock];
             completionBlock(self, buttonIndex);

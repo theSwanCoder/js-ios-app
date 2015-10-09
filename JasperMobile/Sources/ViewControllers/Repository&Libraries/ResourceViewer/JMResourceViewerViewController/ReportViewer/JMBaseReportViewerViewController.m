@@ -192,27 +192,28 @@
 
 - (void)configureReport
 {
-    void(^errorHandlingBlock)(NSError *, NSString *) = @weakself(^(NSError *error, NSString *errorMessage)) {
+    void(^errorHandlingBlock)(NSError *, NSString *) = ^(NSError *error, NSString *errorMessage) {
         [JMCancelRequestPopup dismiss];
         NSLog(@"%@: %@", errorMessage, error);
         if (error.code == JSSessionExpiredErrorCode) {
-            [JMUtils showLoginViewAnimated:YES completion:@weakself(^){
+            [JMUtils showLoginViewAnimated:YES completion:^{
                 [self cancelResourceViewingAndExit:YES];
-            }@weakselfend];
+            }];
         } else {
-            [JMUtils showAlertViewWithError:error completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+            [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                 [self cancelResourceViewingAndExit:YES];
-            }@weakselfend];
+            }];
         }
-    }@weakselfend;
+    };
     
     NSString *reportURI = self.resourceLookup.uri;
 
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:@weakself(^void){
+    [JMCancelRequestPopup presentWithMessage:@"status.loading"
+                                 cancelBlock:^{
         [self cancelResourceViewingAndExit:YES];
-    }@weakselfend];
+    }];
     [JMReportManager fetchReportLookupWithResourceURI:reportURI
-                                completion:@weakself(^(JSResourceReportUnit *reportUnit, NSError *error)) {
+                                completion:^(JSResourceReportUnit *reportUnit, NSError *error) {
                                         [self stopShowLoader];
                                         if (error) {
                                             errorHandlingBlock(error, @"Report Unit Loading Error");
@@ -224,7 +225,7 @@
                                                 } else {
                                                     // get report input controls
                                                     [JMReportManager fetchInputControlsWithReportURI:reportURI
-                                                                                          completion:@weakself(^(NSArray *inputControls, NSError *error)) {
+                                                                                          completion:^(NSArray *inputControls, NSError *error) {
                                                                                               if (error) {
                                                                                                   errorHandlingBlock(error, @"Report Input Controls Loading Error");
                                                                                               } else {
@@ -232,7 +233,7 @@
                                                                                                       [self.report generateReportOptionsWithInputControls:inputControls];
 
                                                                                                       // get report options
-                                                                                                      [JMReportManager fetchReportOptionsWithReportURI:self.report.reportURI completion:@weakself(^(NSArray *reportOptions, NSError *error)) {
+                                                                                                      [JMReportManager fetchReportOptionsWithReportURI:self.report.reportURI completion:^(NSArray *reportOptions, NSError *error) {
                                                                                                           if (error && error.code == JSSessionExpiredErrorCode) {
                                                                                                               errorHandlingBlock(error, @"Report Options Loading Error");
                                                                                                           } else {
@@ -247,22 +248,23 @@
                                                                                                                   [self startLoadReportWithPage:1];
                                                                                                               }
                                                                                                           }
-                                                                                                      }@weakselfend];
-                                                                                                  } else {                                                                                                          [JMCancelRequestPopup dismiss];
+                                                                                                      }];
+                                                                                                  } else {
+                                                                                                      [JMCancelRequestPopup dismiss];
                                                                                                       [self startLoadReportWithPage:1];
                                                                                                   }
                                                                                               }
-                                                                                          }@weakselfend];
+                                                                                          }];
                                                 }
                                             } else {
-                                                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:@"Report Unit Loading Error" forKey:NSURLErrorFailingURLErrorKey];
+                                                NSDictionary *userInfo = @{NSURLErrorFailingURLErrorKey : @"Report Unit Loading Error"};
                                                 NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:JSClientErrorCode userInfo:userInfo];
-                                                [JMUtils showAlertViewWithError:error completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                                                [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                                                     [self cancelResourceViewingAndExit:YES];
-                                                }@weakselfend];
+                                                }];
                                             }
                                         }
-                                }@weakselfend];
+                                }];
 }
 
 #pragma mark - Print
@@ -270,18 +272,18 @@
 {
     // TODO: we don't have events when JIVE is applied to a report.
 
-    [self preparePreviewForPrintWithCompletion:@weakself(^(NSURL *resourceURL)) {
+    [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {
         if (resourceURL) {
             [self printItem:resourceURL
                    withName:self.report.resourceLookup.label
-                 completion:@weakself(^(BOOL completed, NSError *error)){
+                 completion:^(BOOL completed, NSError *error){
                          [self removeResourceWithURL:resourceURL];
                          if(error){
-                             NSLog(@"FAILED! due to error in domain %@ with error code %zd", error.domain, error.code);
+                             JMLog(@"FAILED! due to error in domain %@ with error code %ld", error.domain, (long)error.code);
                          }
-                    }@weakselfend];
+                    }];
         }
-    }@weakselfend];
+    }];
 }
 
 - (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
@@ -294,17 +296,17 @@
                              format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
                               pages:[self makePagesFormat]
                             addToDB:NO
-                         completion:@weakself(^(JMSavedResources *savedReport, NSError *error)) {
+                         completion:^(JMSavedResources *savedReport, NSError *error) {
                                  [JMCancelRequestPopup dismiss];
                                  if (error) {
                                      if (error.code == JSSessionExpiredErrorCode) {
-                                         [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                         [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
                                                  if (self.restClient.keepSession && isSessionAuthorized) {
                                                      [self preparePreviewForPrintWithCompletion:completion];
                                                  } else {
                                                      [JMUtils showLoginViewAnimated:YES completion:nil];
                                                  }
-                                             }@weakselfend];
+                                             }];
                                      } else {
                                          [JMUtils showAlertViewWithError:error];
                                      }
@@ -313,9 +315,10 @@
                                      NSURL *resourceURL = [NSURL fileURLWithPath:savedReportURL];
                                      if (completion) {
                                          completion(resourceURL);
+                                         [savedReport removeFromDB];
                                      }
                                  }
-                             }@weakselfend];
+                             }];
 }
 
 - (NSString *)tempReportName
@@ -413,11 +416,11 @@
 #pragma mark - Input Controls
 - (void)showInputControlsViewControllerWithBackButton:(BOOL)isShowBackButton
 {
-    JMInputControlsViewController *inputControlsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
+    JMInputControlsViewController *inputControlsViewController = (JMInputControlsViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
     inputControlsViewController.report = self.report;
-    inputControlsViewController.completionBlock = @weakself(^(JMExtendedReportOption *reportOption)) {
+    inputControlsViewController.completionBlock = ^(JMExtendedReportOption *reportOption) {
         [self updateReportWithNewActiveReportOption:reportOption];
-    }@weakselfend;
+    };
 
     if (isShowBackButton) {
         UIBarButtonItem *backItem = [self backBarButtonItemWithTarget:inputControlsViewController
@@ -425,7 +428,14 @@
         inputControlsViewController.navigationItem.leftBarButtonItem = backItem;
     }
 
+    // There is issue in iOS 7 if self.view is not appeared, we can see white screen after pushing another VC
+    while (!self.view.superview) {
+        // wait
+        [NSThread sleepForTimeInterval:0.25f];
+    }
+
     [self.navigationController pushViewController:inputControlsViewController animated:YES];
+
 }
 
 #pragma mark - Helpers

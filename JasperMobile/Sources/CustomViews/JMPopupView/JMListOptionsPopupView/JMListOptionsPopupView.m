@@ -93,7 +93,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    cell.textLabel.text = [[self.items objectAtIndex:indexPath.row] objectForKey:kJMResourceListLoaderOptionItemTitleKey];
+    cell.textLabel.text = [self.items[indexPath.row] objectForKey:kJMResourceListLoaderOptionItemTitleKey];
     cell.accessoryType = indexPath.row == self.selectedIndex ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     if (indexPath.row) {
         [cell setTopSeparatorWithHeight:0.55f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];

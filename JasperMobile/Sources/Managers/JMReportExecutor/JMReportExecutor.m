@@ -88,10 +88,9 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
                                       pages:nil
                           attachmentsPrefix:self.attachmentsPrefix
                                  parameters:self.report.reportParameters
-                            completionBlock:@weakself(^(JSOperationResult *result)) {
+                            completionBlock:^(JSOperationResult *result) {
 
                                     if (result.error) {
-                                        NSLog(@"error: %@", result.error);
                                         if (self.executeCompletion) {
                                             self.executeCompletion(nil, result.error);
                                         }
@@ -123,7 +122,7 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
                                             }
                                         }
                                     }
-                                }@weakselfend];
+                                }];
     }
 }
 
@@ -150,7 +149,7 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
                                outputFormat:self.format
                                       pages:self.pagesRange.pagesFormat
                           attachmentsPrefix:self.attachmentsPrefix
-                            completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                            completionBlock:^(JSOperationResult *result) {
 
                                     if (result.error) {
                                         if (self.exportCompletion) {
@@ -178,7 +177,7 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
                                             }
                                         }
                                     }
-                                }@weakselfend];
+                                }];
     }
 }
 
@@ -205,7 +204,7 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
 {
     NSString *executionID = self.executionResponse.requestId;
     [self.restClient reportExecutionStatusForRequestId:executionID
-                                       completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                                       completionBlock:^(JSOperationResult *result) {
                                                if (!result.error) {
                                                    JSExecutionStatus *executionStatus = result.objects.firstObject;
                                                    BOOL isExecutionStatusReady = [executionStatus.status isEqualToString:kJMReportExecutorRestStatusReady];
@@ -229,7 +228,7 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
                                                        self.executeCompletion(nil, result.error);
                                                    }
                                                }
-                                           } @weakselfend];
+                                           }];
 
 }
 
@@ -249,7 +248,7 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
     NSString *exportOutput = self.exportResponse.uuid;
     [self.restClient exportExecutionStatusWithExecutionID:executionID
                                              exportOutput:exportOutput
-                                               completion:@weakselfnotnil(^(JSOperationResult *result)) {
+                                               completion:^(JSOperationResult *result) {
                                                        if (!result.error) {
                                                            JSExecutionStatus *exportStatus = result.objects.firstObject;
 
@@ -280,7 +279,7 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
                                                                self.exportCompletion(nil, result.error);
                                                            }
                                                        }
-                                                   }@weakselfend];
+                                                   }];
 
 }
 
@@ -307,7 +306,7 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
 {
     NSString *executionID = self.executionResponse.requestId;
     [self.restClient reportExecutionMetadataForRequestId:executionID
-                                         completionBlock:@weakselfnotnil(^(JSOperationResult *result)) {
+                                         completionBlock:^(JSOperationResult *result) {
                                                  if (result.error) {
                                                      if (completion) {
                                                          completion(nil, result.error);
@@ -329,7 +328,7 @@ static NSString *const kJMReportExecutorRestStatusFailed = @"failed";
                                                          completion(exportResponse, nil);
                                                      }
                                                  }
-                                         }@weakselfend];
+                                         }];
 }
 
 @end

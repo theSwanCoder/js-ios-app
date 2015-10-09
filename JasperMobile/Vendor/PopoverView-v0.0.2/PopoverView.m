@@ -148,7 +148,7 @@
     {
         size = CGSizeMake(size.height, size.width);
     }
-    if (application.statusBarHidden == NO)
+    if (!application.statusBarHidden)
     {
         size.height -= MIN(application.statusBarFrame.size.width, application.statusBarFrame.size.height);
     }
@@ -173,8 +173,8 @@
     textView.textAlignment = kTextAlignment;
     textView.textColor = kTextColor;
     textView.text = text;
-    
-    [self showAtPoint:point inView:view withViewArray:[NSArray arrayWithObject:[textView AUTORELEASE]]];
+
+    [self showAtPoint:point inView:view withViewArray:@[[textView AUTORELEASE]]];
 }
 
 - (void)showAtPoint:(CGPoint)point inView:(UIView *)view withTitle:(NSString *)title withText:(NSString *)text
@@ -195,8 +195,8 @@
     textView.textAlignment = kTextAlignment;
     textView.textColor = kTextColor;
     textView.text = text;
-    
-    [self showAtPoint:point inView:view withTitle:title withViewArray:[NSArray arrayWithObject:[textView AUTORELEASE]]];
+
+    [self showAtPoint:point inView:view withTitle:title withViewArray:@[[textView AUTORELEASE]]];
 }
 
 - (void)showAtPoint:(CGPoint)point inView:(UIView *)view withViewArray:(NSArray *)viewArray
@@ -431,7 +431,7 @@
     UIFont *font = kTextFont;
     
     for (int i = 0; i < stringArray.count; i++) {
-        NSString *string = [stringArray objectAtIndex:i];
+        NSString *string = stringArray[i];
         
         //First we build a label for the text to set in.
         CGSize textSize = [string sizeWithAttributes:@{NSFontAttributeName:font}];
@@ -445,7 +445,7 @@
         
         //Now we grab the image at the same index in the imageArray, and create
         //a UIImageView for it.
-        UIImage *image = [imageArray objectAtIndex:i];
+        UIImage *image = imageArray[i];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
         
         //Take the larger of the two widths as the width for the container
@@ -474,7 +474,7 @@
 
 - (void)showAtPoint:(CGPoint)point inView:(UIView *)view withTitle:(NSString *)title withContentView:(UIView *)cView
 {
-    [self showAtPoint:point inView:view withTitle:title withViewArray:[NSArray arrayWithObject:cView]];
+    [self showAtPoint:point inView:view withTitle:title withViewArray:@[cView]];
 }
 
 - (void)showAtPoint:(CGPoint)point inView:(UIView *)view withContentView:(UIView *)cView {
@@ -694,6 +694,7 @@
 
 - (void)showError
 {
+    // TODO: verify image
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"error"]];
     imageView.alpha = 0.f;
     imageView.frame = CGRectMake(CGRectGetMidX(contentView.bounds) - 20.f, CGRectGetMidY(contentView.bounds) - 20.f + ((self.titleView) ? 20 : 0.f), 40.f, 40.f);
@@ -725,6 +726,7 @@
 
 - (void)showSuccess
 {
+    // TODO: verify image
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"success"]];
     imageView.alpha = 0.f;
     imageView.frame = CGRectMake(CGRectGetMidX(contentView.bounds) - 20.f, CGRectGetMidY(contentView.bounds) - 20.f + ((self.titleView) ? 20 : 0.f), 40.f, 40.f);
@@ -767,7 +769,7 @@
     //NSLog(@"subviewsArray:%@", subviewsArray);
     
     for (int i = 0; i < subviewsArray.count && !found; i++) {
-        UIView *view = [subviewsArray objectAtIndex:i];
+        UIView *view = subviewsArray[i];
         
         //NSLog(@"Rect:(%f,%f,%f,%f)", view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
         
@@ -929,9 +931,10 @@
     CGFloat shadowBlurRadius = kShadowBlur;
     
     //// Gradient Declarations
-    NSArray* gradientColors = [NSArray arrayWithObjects:
-                               (id)kGradientTopColor.CGColor,
-                               (id)kGradientBottomColor.CGColor, nil];
+    NSArray* gradientColors = @[
+            (id) kGradientTopColor.CGColor,
+            (id) kGradientBottomColor.CGColor
+    ];
     CGFloat gradientLocations[] = {0, 1};
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFTYPECAST(CFArrayRef)gradientColors), gradientLocations);
     
@@ -995,9 +998,10 @@
             CGContextRef context = UIGraphicsGetCurrentContext();
             
             //// Gradient Declarations
-            NSArray* gradientColors = [NSArray arrayWithObjects:
-                                       (id)kGradientTitleTopColor.CGColor,
-                                       (id)kGradientTitleBottomColor.CGColor, nil];
+            NSArray* gradientColors = @[
+                    (id) kGradientTitleTopColor.CGColor,
+                    (id) kGradientTitleBottomColor.CGColor
+            ];
             CGFloat gradientLocations[] = {0, 1};
             CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (CFTYPECAST(CFArrayRef)gradientColors), gradientLocations);
             

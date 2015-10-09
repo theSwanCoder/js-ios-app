@@ -76,6 +76,11 @@ void jmDebugLog(NSString *format, ...);
 + (BOOL)isIphone;
 
 /**
+ Verify system version is 7
+ */
++ (BOOL)isSystemVersion7;
+
+/**
  Verify system version is 8
  */
 
@@ -108,6 +113,8 @@ void jmDebugLog(NSString *format, ...);
 + (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion;
 
 + (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion;
+
++ (void)showLoginViewForRestoreSessionWithCompletion:(LoginCompletionBlock)loginCompletion;
 
 + (void)showAlertViewWithError:(NSError *)error;
 

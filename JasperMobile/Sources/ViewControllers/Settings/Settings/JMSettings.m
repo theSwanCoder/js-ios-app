@@ -65,13 +65,13 @@ NSInteger const kJMOnboardIntroSettingValue = 102;
     
     for (NSDictionary *itemData in itemsSourceArray) {
         JMSettingsItem *item = [[JMSettingsItem alloc] init];
-        item.titleString = [itemData objectForKey:@"title"];
-        if ([[itemData objectForKey:@"value"] isKindOfClass:[NSNumber class]]) {
-            item.valueSettings = [NSString stringWithFormat:@"%.0f", [[itemData objectForKey:@"value"] doubleValue]];
+        item.titleString = itemData[@"title"];
+        if ([itemData[@"value"] isKindOfClass:[NSNumber class]]) {
+            item.valueSettings = [NSString stringWithFormat:@"%.0f", [itemData[@"value"] doubleValue]];
         } else {
-            item.valueSettings = [itemData objectForKey:@"value"];
+            item.valueSettings = itemData[@"value"];
         }
-        item.cellIdentifier = [itemData objectForKey:@"cellIdentifier"];
+        item.cellIdentifier = itemData[@"cellIdentifier"];
         [itemsArray addObject:item];
     }
     
@@ -81,13 +81,13 @@ NSInteger const kJMOnboardIntroSettingValue = 102;
 - (void) saveSettings
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:[[self.itemsArray objectAtIndex:0] valueSettings] forKey:kJMDefaultRequestTimeout];
-    [defaults setObject:[[self.itemsArray objectAtIndex:1] valueSettings] forKey:kJMDefaultSendingCrashReport];
+    [defaults setObject:[self.itemsArray[0] valueSettings] forKey:kJMDefaultRequestTimeout];
+    [defaults setObject:[self.itemsArray[1] valueSettings] forKey:kJMDefaultSendingCrashReport];
     // used for test purpose
     //[defaults setObject:[[self.itemsArray objectAtIndex:4] valueSettings] forKey:kJMDefaultUseVisualize];
     [defaults synchronize];
     
-    self.restClient.timeoutInterval = [[[self.itemsArray objectAtIndex:0] valueSettings] doubleValue];
+    self.restClient.timeoutInterval = [[self.itemsArray[0] valueSettings] doubleValue];
     [JMUtils activateCrashReportSendingIfNeeded];
 }
 

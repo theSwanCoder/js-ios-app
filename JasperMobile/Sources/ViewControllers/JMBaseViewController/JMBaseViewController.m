@@ -30,6 +30,11 @@
 
 @implementation JMBaseViewController
 
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
 #pragma mark - UIViewController LifeCycle
 - (void)viewWillAppear:(BOOL)animated
 {

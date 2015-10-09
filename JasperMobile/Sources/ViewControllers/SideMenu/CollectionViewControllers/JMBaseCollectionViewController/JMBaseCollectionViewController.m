@@ -376,7 +376,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     BOOL shouldConcateItems = [JMUtils isIphone] && (navBarItems.count > 1) && (isPortraitOrientationStatusBar);
 
     if (shouldConcateItems) {
-        navBarItems = [NSMutableArray arrayWithObject:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)]];
+        navBarItems = [@[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                       target:self
+                                                                       action:@selector(actionButtonClicked:)]] mutableCopy];
     }
     [navBarItems addObject:[self resourceRepresentationItem]];
     self.navigationItem.rightBarButtonItems = navBarItems;
@@ -419,7 +421,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     
     if ([resourceLookup isFolder]) {
         // TODO: replace identifier with constant
-        JMRepositoryCollectionViewController *repositoryViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMRepositoryCollectionViewController"];
+        JMRepositoryCollectionViewController *repositoryViewController = (JMRepositoryCollectionViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMRepositoryCollectionViewController"];
         repositoryViewController.resourceListLoader.resourceLookup = resourceLookup;
         repositoryViewController.navigationItem.leftBarButtonItem = nil;
         repositoryViewController.navigationItem.title = resourceLookup.label;
@@ -438,12 +440,13 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         }
         // Customizing report viewer view controller
         if ([resourceLookup isReport]) {
-            JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-            JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [baseCollectionView.collectionView cellForItemAtIndexPath:indexPath];
+            JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
             [nextVC report].thumbnailImage = cell.thumbnailImage;
-            [nextVC setExitBlock:@weakself(^(void)) {
-                [baseCollectionView.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-            }@weakselfend];
+            __weak typeof(self)weakSelf = self;
+            [nextVC setExitBlock:^(void) {
+                __strong typeof(self)strongSelf = weakSelf;
+                [((JMBaseCollectionView *)strongSelf.view).collectionView reloadItemsAtIndexPaths:@[indexPath]];
+            }];
         }
     }
     
@@ -456,13 +459,13 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 {
     NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
     NSInteger index = [rightItems indexOfObject:oldItem];
-    [rightItems replaceObjectAtIndex:index withObject:newItem];
+    rightItems[index] = newItem;
     self.navigationItem.rightBarButtonItems = rightItems;
 }
 
 - (void)showResourceInfoViewControllerWithResourceLookup:(JSResourceLookup *)resourceLookup
 {
-    JMResourceInfoViewController *vc = [NSClassFromString([resourceLookup infoVCIdentifier]) new];
+    JMResourceInfoViewController *vc = (JMResourceInfoViewController *) [NSClassFromString([resourceLookup infoVCIdentifier]) new];
     vc.resourceLookup = resourceLookup;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -491,8 +494,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         return [collectionView dequeueReusableCellWithReuseIdentifier:[baseCollectionView loadingCellForRepresentationType:self.representationType] forIndexPath:indexPath];
     }
     
-    JMResourceCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[baseCollectionView resourceCellForRepresentationType:self.representationType]
-                                                                                   forIndexPath:indexPath];
+    JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [collectionView dequeueReusableCellWithReuseIdentifier:[baseCollectionView resourceCellForRepresentationType:self.representationType]
+                                                                                                                    forIndexPath:indexPath];
     cell.resourceLookup = [self loadedResourceForIndexPath:indexPath];
     cell.delegate = self;
     return cell;
@@ -524,7 +527,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         }
         countOfCellsInRow --;
         itemHeight = [JMUtils isIphone] ? 150 : 254;
-        itemWidth = floor((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
+        itemWidth = floorf((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
     }
     
     return CGSizeMake(itemWidth, itemHeight);

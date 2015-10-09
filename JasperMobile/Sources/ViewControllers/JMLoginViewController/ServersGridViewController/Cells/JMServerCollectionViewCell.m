@@ -68,9 +68,6 @@
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    if (action == @selector(cloneServerProfile:) || action == @selector(deleteServerProfile:) || action == @selector(editServerProfile:)) {
-        return YES;
-    }
-    return NO;
+    return action == @selector(cloneServerProfile:) || action == @selector(deleteServerProfile:) || action == @selector(editServerProfile:);
 }
 @end

@@ -42,7 +42,8 @@
     fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
     JMServerProfile *demoServerProfile = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] firstObject];
     if (!demoServerProfile) {
-        demoServerProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
+        demoServerProfile = (JMServerProfile *) [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile"
+                                                                              inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
         demoServerProfile.alias = kJMDemoServerAlias;
         demoServerProfile.organization = kJMDemoServerOrganization;
         demoServerProfile.serverUrl = kJMDemoServerUrl;
@@ -73,14 +74,13 @@
     NSString *entityName = [[serverProfile entity] name];
     
     //create new object in data store
-    JMServerProfile *newServerProfile = [NSEntityDescription
-                                         insertNewObjectForEntityForName:entityName
-                                         inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
+    JMServerProfile *newServerProfile = (JMServerProfile *) [NSEntityDescription insertNewObjectForEntityForName:entityName
+                                                                                          inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
 
     NSInteger cloneNumber = 0;
     NSString *serverName = nil;
     do {
-        serverName = (cloneNumber++ > 0) ? [serverProfile.alias stringByAppendingFormat:@" %zd", cloneNumber] : serverProfile.alias;
+        serverName = (cloneNumber++ > 0) ? [serverProfile.alias stringByAppendingFormat:@" %d", cloneNumber] : serverProfile.alias;
     } while (![newServerProfile isValidNameForServerProfile:serverName]);
     
     newServerProfile.alias          = serverName;

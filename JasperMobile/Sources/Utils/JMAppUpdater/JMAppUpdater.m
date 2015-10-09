@@ -56,7 +56,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     NSMutableDictionary *versionsToUpdate = [NSMutableDictionary dictionary];
     
     // Add update methods
-    [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_9)] forKey:@1.9];
+    versionsToUpdate[@1.9] = [NSValue valueWithPointer:@selector(update_1_9)];
     BOOL updateDidSuccess = YES;
     for (NSNumber *version in versionsToUpdate.allKeys) {
         if (version.doubleValue <= currentAppVersion.doubleValue) continue;
@@ -95,12 +95,12 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 + (NSNumber *)latestAppVersion
 {
     NSString *appVersion = [self latestAppVersionAsString];
-    return [NSNumber numberWithDouble:[appVersion doubleValue]];
+    return @([appVersion doubleValue]);
 }
 
 + (NSString *)latestAppVersionAsString
 {
-    return [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    return [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
 }
 
 + (NSNumber *)currentAppVersion

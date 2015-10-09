@@ -112,7 +112,7 @@
 
 - (void)runReport
 {
-    JMSavedResourceViewerViewController *nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
+    JMSavedResourceViewerViewController *nextVC = (JMSavedResourceViewerViewController *) [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
     nextVC.resourceLookup = self.resourceLookup;
     nextVC.delegate = self;
     
@@ -171,7 +171,7 @@
 - (void)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer didDeleteResource:(JSResourceLookup *)resourceLookup
 {
     NSArray *viewControllers = self.navigationController.viewControllers;
-    UIViewController *previousViewController = [viewControllers objectAtIndex:[viewControllers indexOfObject:self] - 1];
+    UIViewController *previousViewController = viewControllers[[viewControllers indexOfObject:self] - 1];
     [self.navigationController popToViewController:previousViewController animated:YES];
 }
 

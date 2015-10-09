@@ -45,13 +45,13 @@
     NSArray *destinationKeys = destinationInstance.entity.attributesByName.allKeys;
     
     if ([[sourceInstance entity].name isEqualToString:@"SavedResources"]) {
-        [sourceValues setObject:kJMSavedReportUnit forKey:@"wsType"];
+        sourceValues[@"wsType"] = kJMSavedReportUnit;
     }
     
     if ([[sourceInstance entity].name isEqualToString:@"Favorites"]) {
         JMFavorites *favorite = (JMFavorites *)sourceInstance;
         if ([favorite.wsType isEqualToString:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT] && [self isSavedItem:favorite]) {
-            [sourceValues setObject:kJMSavedReportUnit forKey:@"wsType"];
+            sourceValues[@"wsType"] = kJMSavedReportUnit;
         }
     }
     
@@ -89,10 +89,7 @@
     // Check request to login and handle it
     NSString *savedReportURIRegex = [NSString stringWithFormat:@"/%@/%@.[A-Z,a-z]{2,10}/%@.[A-Z,a-z]{2,10}", kJMReportsDirectory, item.label, kJMReportFilename];
     NSPredicate *savedReportURIValidator = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", savedReportURIRegex];
-    if ([savedReportURIValidator evaluateWithObject:item.uri]) {
-        return YES;
-    }
-    return NO;
+    return [savedReportURIValidator evaluateWithObject:item.uri];
 }
 
 @end

@@ -44,12 +44,6 @@
 
 @implementation JMDashboardViewerVC
 
-#pragma mark - LifeCycle
-- (void)dealloc
-{
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-}
-
 #pragma mark - Print
 - (void)printResource
 {
@@ -151,42 +145,40 @@
 
 - (void)reloadDashboard
 {
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
-            if (self.restClient.keepSession && isSessionAuthorized) {
-                [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
-                                     cancelBlock:@weakself(^(void)) {
-                                             [self.dashboardLoader reset];
-                                             [super cancelResourceViewingAndExit:YES];
-                                         }@weakselfend];
-
-                [self.dashboardLoader reloadDashboardWithCompletion:@weakself(^(BOOL success, NSError *error)) {
-                        [self stopShowLoader];
-                    }@weakselfend];
-            } else {
-                [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                        [self cancelResourceViewingAndExit:YES];
-                    } @weakselfend];
-            }
-        }@weakselfend];
+    __weak typeof(self)weakSelf = self;
+    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+        __strong typeof(self)strongSelf = weakSelf;
+        if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+            [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+                                 cancelBlock:^(void) {
+                                         [strongSelf.dashboardLoader reset];
+                                         [super cancelResourceViewingAndExit:YES];
+                                     }];
+            __weak typeof(self)weakSelf = strongSelf;
+            [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
+                __weak typeof(self)strongSelf = weakSelf;
+                [strongSelf stopShowLoader];
+            }];
+        } else {
+            [JMUtils showLoginViewAnimated:YES completion:^{
+                [strongSelf cancelResourceViewingAndExit:YES];
+            }];
+        }
+    }];
 }
 
 - (void)reloadDashlet
 {
     if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
-        [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
-                if (self.restClient.keepSession && isSessionAuthorized) {
 
-                    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)];
+        __weak typeof(self)weakSelf = self;
+        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)];
 
-                    [self.dashboardLoader reloadMaximizedDashletWithCompletion:@weakself(^(BOOL success, NSError *error)) {
-                            [self stopShowLoader];
-                        }@weakselfend];
-                } else {
-                    [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                            [self cancelResourceViewingAndExit:YES];
-                        } @weakselfend];
-                }
-            }@weakselfend];
+        [self.dashboardLoader reloadMaximizedDashletWithCompletion:^(BOOL success, NSError *error){
+            __weak typeof(self)strongSelf = weakSelf;
+            [strongSelf stopShowLoader];
+        }];
+
     } else {
         [self minimizeDashlet];
         [self reloadDashboard];
@@ -196,24 +188,28 @@
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
-            if (self.restClient.keepSession && isSessionAuthorized) {
+    __weak typeof(self)weakSelf = self;
+    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+        __strong typeof(self)strongSelf = weakSelf;
+        if (strongSelf.restClient.keepSession && isSessionAuthorized) {
 
-                [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
-                                     cancelBlock:@weakself(^(void)) {
-                                             [self.dashboardLoader reset];
-                                             [super cancelResourceViewingAndExit:YES];
-                                         }@weakselfend];
-                [self.dashboardLoader loadDashboardWithCompletion:@weakself(^(BOOL success, NSError *error)) {
-                        [self stopShowLoader];
-                    }@weakselfend];
+            [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+                                 cancelBlock:^(void) {
+                                         [strongSelf.dashboardLoader reset];
+                                         [super cancelResourceViewingAndExit:YES];
+                                     }];
+            __weak typeof(self)weakSelf = strongSelf;
+            [strongSelf.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
+                __weak typeof(self)strongSelf = weakSelf;
+                [strongSelf stopShowLoader];
+            }];
 
-            } else {
-                [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                        [self cancelResourceViewingAndExit:YES];
-                    } @weakselfend];
-            }
-        }@weakselfend];
+        } else {
+            [JMUtils showLoginViewAnimated:YES completion:^(void) {
+                [strongSelf cancelResourceViewingAndExit:YES];
+            }];
+        }
+    }];
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
@@ -257,23 +253,24 @@
 {
     if (hyperlinkType == JMHyperlinkTypeReportExecution) {
 
-        NSString *reportURI = [resourceLookup.uri stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        [self loadInputControlsWithReportURI:reportURI completion:@weakself(^(NSArray *inputControls, NSError *error)) {
-                if (error) {
-                    [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                        [self cancelResourceViewingAndExit:YES];
-                    }];
-                } else {
-                    JMReportViewerVC *reportViewController = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
-                    reportViewController.resourceLookup = resourceLookup;
-                    [reportViewController.report generateReportOptionsWithInputControls:inputControls];
-                    [reportViewController.report updateReportParameters:parameters];
-                    reportViewController.isChildReport = YES;
+        NSString *reportURI = resourceLookup.uri;
+        __weak typeof(self)weakSelf = self;
+        [self loadInputControlsWithReportURI:reportURI completion:^(NSArray *inputControls, NSError *error) {
+            __strong typeof(self)strongSelf = weakSelf;
+            if (error) {
+                [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                    [strongSelf cancelResourceViewingAndExit:YES];
+                }];
+            } else {
+                JMReportViewerVC *reportViewController = (JMReportViewerVC *) [strongSelf.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
+                reportViewController.resourceLookup = resourceLookup;
+                [reportViewController.report generateReportOptionsWithInputControls:inputControls];
+                [reportViewController.report updateReportParameters:parameters];
+                reportViewController.isChildReport = YES;
 
-                    //[self resetSubViews];
-                    [self.navigationController pushViewController:reportViewController animated:YES];
-                }
-            }@weakselfend];
+                [strongSelf.navigationController pushViewController:reportViewController animated:YES];
+            }
+        }];
     } else if (hyperlinkType == JMHyperlinkTypeReference) {
         NSURL *URL = parameters.firstObject;
         if (URL) {
@@ -284,6 +281,10 @@
 
 - (void)dashboardLoaderDidReceiveAuthRequest:(id <JMDashboardLoader>)loader
 {
+    if ([self isDashletShown]) {
+        [self minimizeDashlet];
+    }
+
     [self.restClient deleteCookies];
     if ([JMUtils isServerAmber2OrHigher]) {
         [self startResourceViewing];
@@ -295,48 +296,49 @@
 #pragma mark - Report Options (Input Controls)
 - (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *inputControls, NSError *error))completion
 {
+    __weak typeof(self)weakSelf = self;
     [self.restClient inputControlsForReport:reportURI
                                         ids:nil
                              selectedValues:nil
-                            completionBlock:@weakself(^(JSOperationResult *result)) {
-
-                                    if (result.error) {
-                                        if (result.error.code == JSSessionExpiredErrorCode) {
-                                            [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
-                                                    if (self.restClient.keepSession && isSessionAuthorized) {
-                                                        [self loadInputControlsWithReportURI:reportURI completion:completion];
-                                                    } else {
-                                                        [JMUtils showLoginViewAnimated:YES completion:@weakself(^(void)) {
-                                                                [self cancelResourceViewingAndExit:YES];
-                                                            } @weakselfend];
-                                                    }
-                                                }@weakselfend];
-                                        } else {
-                                            if (completion) {
-                                                completion(nil, result.error);
+                            completionBlock:^(JSOperationResult *result) {
+                                __strong typeof(self)strongSelf = weakSelf;
+                                if (result.error) {
+                                    if (result.error.code == JSSessionExpiredErrorCode) {
+                                        [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                            if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                                [strongSelf loadInputControlsWithReportURI:reportURI completion:completion];
+                                            } else {
+                                                [JMUtils showLoginViewAnimated:YES completion:^{
+                                                    [strongSelf cancelResourceViewingAndExit:YES];
+                                                }];
                                             }
-                                        }
+                                        }];
                                     } else {
-
-                                        NSMutableArray *invisibleInputControls = [NSMutableArray array];
-                                        for (JSInputControlDescriptor *inputControl in result.objects) {
-                                            if (!inputControl.visible.boolValue) {
-                                                [invisibleInputControls addObject:inputControl];
-                                            }
+                                        if (completion) {
+                                            completion(nil, result.error);
                                         }
+                                    }
+                                } else {
 
-                                        if (result.objects.count - invisibleInputControls.count == 0) {
-                                            completion(nil, nil);
-                                        } else {
-                                            NSMutableArray *inputControls = [result.objects mutableCopy];
-                                            if (invisibleInputControls.count) {
-                                                [inputControls removeObjectsInArray:invisibleInputControls];
-                                            }
-                                            completion([inputControls copy], nil);
+                                    NSMutableArray *invisibleInputControls = [NSMutableArray array];
+                                    for (JSInputControlDescriptor *inputControl in result.objects) {
+                                        if (!inputControl.visible.boolValue) {
+                                            [invisibleInputControls addObject:inputControl];
                                         }
                                     }
 
-                                }@weakselfend];
+                                    if (result.objects.count - invisibleInputControls.count == 0) {
+                                        completion(nil, nil);
+                                    } else {
+                                        NSMutableArray *inputControls = [result.objects mutableCopy];
+                                        if (invisibleInputControls.count) {
+                                            [inputControls removeObjectsInArray:invisibleInputControls];
+                                        }
+                                        completion([inputControls copy], nil);
+                                    }
+                                }
+
+                            }];
 }
 
 #pragma mark - Helpers

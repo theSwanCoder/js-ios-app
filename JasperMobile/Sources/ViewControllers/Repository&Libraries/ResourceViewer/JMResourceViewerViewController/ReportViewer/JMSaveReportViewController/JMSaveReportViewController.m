@@ -314,7 +314,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
     if (!self.errorString && isValidReportName) {
         if (![JMSavedResources isAvailableReportName:self.reportName format:self.selectedReportFormat]) {
             self.errorString = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
-            [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.save.name.errmsg.notunique.rewrite" completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+            [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.save.name.errmsg.notunique.rewrite" completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                 if (alertView.cancelButtonIndex != buttonIndex) {
 
                     self.errorString = nil;
@@ -324,7 +324,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                         [self saveReport];
                     }];
                 }
-            } @weakselfend cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
+            } cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
         } else {
             [self verifyRangePagesWithCompletion:^{
                 [self saveReport];
@@ -386,20 +386,21 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                              format:self.selectedReportFormat
                               pages:[self makePagesFormat]
                             addToDB:YES
-                         completion:@weakself(^(JMSavedResources *savedReport, NSError *error)) {
+                         completion:^(JMSavedResources *savedReport, NSError *error) {
                              [JMCancelRequestPopup dismiss];
 
                              if (error) {
                                  if (error.code == JSSessionExpiredErrorCode) {
-                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
                                              if (self.restClient.keepSession && isSessionAuthorized) {
                                                  [self saveReport];
                                              } else {
                                                  [JMUtils showLoginViewAnimated:YES completion:nil];
                                              }
-                                         }@weakselfend];
+                                         }];
                                  } else {
                                      [JMUtils showAlertViewWithError:error];
+                                     [savedReport removeReport];
                                  }
                              } else {
                                  // Animation
@@ -411,7 +412,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                  [self.navigationController popViewControllerAnimated:YES];
                                  [CATransaction commit];
                              }
-                         }@weakselfend];
+                         }];
 }
 
 - (NSString *)makePagesFormat

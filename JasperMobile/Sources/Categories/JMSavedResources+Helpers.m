@@ -64,6 +64,14 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return savedReport;
 }
 
+- (void)removeFromDB
+{
+    [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
+    [self.managedObjectContext deleteObject:self];
+    [self.managedObjectContext save:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
+}
+
 - (void)removeReport
 {
     NSString *pathToReport = [JMSavedResources pathToFolderForSavedReport:self];
@@ -268,10 +276,10 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     // tmp/
     NSString *tempPath = [JMUtils applicationTempDirectory];
     // PathComponent
-    NSString *pathComponent = [self pathComponent];
+    //NSString *pathComponent = [self pathComponent];
     // tmp/PathComponent
-    NSString *result = [tempPath stringByAppendingPathComponent:pathComponent];
-    return result;
+    //NSString *result = [tempPath stringByAppendingPathComponent:pathComponent];
+    return tempPath;
 }
 
 + (NSString *)savedReportNameWithName:(NSString *)reportName format:(NSString *)format
@@ -343,7 +351,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 + (NSFetchRequest *)savedReportsFetchRequestWithValuesAndFields:(id)firstValue, ... NS_REQUIRES_NIL_TERMINATION
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMSavedResources];
-    NSMutableArray *predicates = [NSMutableArray arrayWithObject:[[JMSessionManager sharedManager] predicateForCurrentServerProfile]];
+    NSMutableArray *predicates = [@[[[JMSessionManager sharedManager] predicateForCurrentServerProfile]] mutableCopy];
 
     va_list args;
     va_start(args, firstValue);

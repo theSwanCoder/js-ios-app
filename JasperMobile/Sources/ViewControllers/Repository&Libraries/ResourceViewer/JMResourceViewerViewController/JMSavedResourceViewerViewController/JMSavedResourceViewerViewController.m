@@ -41,13 +41,19 @@
     [self.webView loadHTMLString:@"" baseURL:nil];
     [[UIAlertView alertWithTitle:JMCustomLocalizedString(@"dialod.title.error", nil)
                          message:JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil) // TODO: replace with the other message
-                      completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                      completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                               [self cancelResourceViewingAndExit:YES];
-                          }@weakselfend
+                          }
                cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil)
                otherButtonTitles:nil] show];
     
     [super didReceiveMemoryWarning];
+}
+
+- (void)cancelResourceViewingAndExit:(BOOL)exit
+{
+    [self.documentController dismissMenuAnimated:YES];
+    [super cancelResourceViewingAndExit:exit];
 }
 
 - (JMSavedResources *)savedReports
@@ -172,7 +178,6 @@
                                                        usingDelegate: (id <UIDocumentInteractionControllerDelegate>) interactionDelegate {
     UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
     interactionController.delegate = interactionDelegate;
-    NSLog(@"interactionController: %@", interactionController);
     return interactionController;
 }
 

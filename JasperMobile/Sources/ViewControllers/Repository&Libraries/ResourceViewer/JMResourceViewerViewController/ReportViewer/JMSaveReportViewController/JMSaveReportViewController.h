@@ -44,8 +44,6 @@
 
 @end
 
-@class JMReportViewer;
-
 extern NSString * const kJMSaveReportViewControllerSegue;
 
 @interface JMSaveReportViewController : JMEditabledViewController
