@@ -63,9 +63,8 @@
     [self.runReportButton setTitle:JMCustomLocalizedString(@"dialog.button.run.report", nil)
                           forState:UIControlStateNormal];
 
-    if ([JMUtils isServerProEdition]) {
-        [self setupReportOptions];
-    } else {
+    [self setupReportOptions];
+    if (![JMUtils isServerProEdition]) {
         self.navigationItem.rightBarButtonItem = nil;
     }
 
