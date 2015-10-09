@@ -12,7 +12,7 @@
     #import <UIKit/UIKit.h>
 
     #import "NSObject+Additions.h"
-    #import "UIAlertView+Additions.h"
+    #import "UIAlertController+Additions.h"
 
     #import "JaspersoftSDK.h"
 
@@ -22,7 +22,6 @@
     #import "JMCoreDataManager.h"
     #import "JMThemesManager.h"
     #import "JMLocalization.h"
-
     #import "SWRevealViewController.h"
 
 // Google Analitycs

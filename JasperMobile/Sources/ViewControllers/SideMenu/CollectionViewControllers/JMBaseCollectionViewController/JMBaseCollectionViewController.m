@@ -652,7 +652,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
     [baseCollectionView hideLoadingView];
     
-    [JMUtils showAlertViewWithError:error];
+    [JMUtils presentAlertControllerWithError:error completion:nil];
 }
 
 @end

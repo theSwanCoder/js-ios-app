@@ -40,7 +40,7 @@
 #import "JMReportManager.h"
 
 
-@interface JMBaseReportViewerViewController () <UIAlertViewDelegate, JMSaveReportViewControllerDelegate>
+@interface JMBaseReportViewerViewController () <JMSaveReportViewControllerDelegate>
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
@@ -200,8 +200,12 @@
                 [self cancelResourceViewingAndExit:YES];
             }];
         } else {
-            [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                [self cancelResourceViewingAndExit:YES];
+            __weak typeof(self) weakSelf = self;
+            [JMUtils presentAlertControllerWithError:error completion:^{
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                if (strongSelf) {
+                    [strongSelf cancelResourceViewingAndExit:YES];
+                }
             }];
         }
     };
@@ -259,8 +263,12 @@
                                             } else {
                                                 NSDictionary *userInfo = @{NSURLErrorFailingURLErrorKey : @"Report Unit Loading Error"};
                                                 NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:JSClientErrorCode userInfo:userInfo];
-                                                [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                                    [self cancelResourceViewingAndExit:YES];
+                                                __weak typeof(self) weakSelf = self;
+                                                [JMUtils presentAlertControllerWithError:error completion:^{
+                                                    __strong typeof(weakSelf) strongSelf = weakSelf;
+                                                    if (strongSelf) {
+                                                        [strongSelf cancelResourceViewingAndExit:YES];
+                                                    }
                                                 }];
                                             }
                                         }
@@ -308,7 +316,7 @@
                                                  }
                                              }];
                                      } else {
-                                         [JMUtils showAlertViewWithError:error];
+                                         [JMUtils presentAlertControllerWithError:error completion:nil];
                                      }
                                  } else {
                                      NSString *savedReportURL = [JMSavedResources absolutePathToSavedReport:savedReport];

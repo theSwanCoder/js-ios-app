@@ -39,7 +39,7 @@
 static NSString const *kFeedbackPrimaryEmail = @"js-dev-mobile@tibco.com";
 static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 
-@interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
+@interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
@@ -152,7 +152,10 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
         
         [self presentViewController:mc animated:YES completion:NULL];
     } else {
-        [self showErrorWithMessage:@"settings.feedback.errorShowClient"];
+        NSString *errorTitle = JMCustomLocalizedString(@"dialod.title.error", nil);
+        NSString *errorMessage = JMCustomLocalizedString(@"settings.feedback.errorShowClient", nil);
+        NSError *error = [NSError errorWithDomain:errorTitle code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        [JMUtils presentAlertControllerWithError:error completion:nil];
     }
 #endif
 }
@@ -180,15 +183,6 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (void)showErrorWithMessage:(NSString *)errorMessage
-{
-    [[UIAlertView localizedAlertWithTitle:@"dialod.title.error"
-                                  message:errorMessage
-                                 delegate:self
-                        cancelButtonTitle:@"dialog.button.ok"
-                        otherButtonTitles: nil] show];
-}
-
 #pragma mark - Actions
 - (IBAction)saveButtonTapped:(id)sender
 {
@@ -200,11 +194,18 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     [self.detailSettings saveSettings];
     
     if (previousSendingCrashReports != [JMUtils crashReportsSendingEnable]) {
-        [[UIAlertView localizedAlertWithTitle:@"settings.crashtracking.alert.title"
-                                      message:@"settings.crashtracking.alert.message"
-                                     delegate:self
-                            cancelButtonTitle:@"dialog.button.ok"
-                            otherButtonTitles: nil] show];
+        
+        __weak typeof(self) weakSelf = self;
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"settings.crashtracking.alert.title"
+                                                                                          message:@"settings.crashtracking.alert.title"
+                                                                                cancelButtonTitle:@"dialog.button.ok"
+                                                                          cancelCompletionHandler:^(UIAlertAction * _Nonnull action) {
+                                                                              __strong typeof(weakSelf) strongSelf = weakSelf;
+                                                                              if (strongSelf) {
+                                                                                  [strongSelf.navigationController popViewControllerAnimated:YES];
+                                                                              }
+                                                                          }];
+        [self presentViewController:alertController animated:YES completion:nil];
     } else {
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -220,11 +221,11 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
                     [JMServerProfile minSupportedServerVersion],
                     currentYear];
 
-    [[UIAlertView localizedAlertWithTitle:nil
-                                  message:message
-                                 delegate:nil
-                        cancelButtonTitle:@"dialog.button.ok"
-                        otherButtonTitles:nil] show];
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:nil
+                                                                                      message:message
+                                                                            cancelButtonTitle:@"dialog.button.ok"
+                                                                      cancelCompletionHandler:nil];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)showPrivacyPolicy
@@ -253,11 +254,4 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     [self.navigationController pushViewController:EULAViewController
                                          animated:YES];
 }
-
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 @end

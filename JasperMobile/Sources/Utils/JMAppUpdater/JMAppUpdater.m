@@ -35,6 +35,10 @@
 // Old constants used in previous versions of application
 static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated.versions";
 
+@interface JMAppUpdater()
+
+@end
+
 @implementation JMAppUpdater
 
 // Fill migrations with update methods for different versions
@@ -142,29 +146,31 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     return YES;
 }
 
-#pragma mark - Alert view delegate methods
-
-+ (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 1) {
-        [JMAppUpdater update];
-    } else if (buttonIndex == 2) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kJMResetApplicationNotification
-                                                            object:nil];
-    } else {
-        abort();
-    }
-}
-
 #pragma mark - Private
 
 + (void)showErrors
 {
-    [[UIAlertView localizedAlertWithTitle:@"error.upgrade.data.title"
-                                  message:@"error.upgrade.data.msg"
-                                 delegate:JMAppUpdater.class
-                        cancelButtonTitle:@"dialog.button.cancel"
-                        otherButtonTitles:@"dialog.button.retry", @"dialog.button.applyUpdate", nil] show];
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"error.upgrade.data.title"
+                                                                                      message:@"error.upgrade.data.msg"
+                                                                            cancelButtonTitle:@"dialog.button.cancel"
+                                                                      cancelCompletionHandler:^(UIAlertAction * _Nonnull action) {
+                                                                          abort();
+                                                                      }];
+    
+    __weak typeof(self) weakSelf = self;
+    [alertController addActionWithLocalizedTitle:@"dialog.button.retry" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        __strong typeof(self) strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf update];
+        }
+    }];
+    
+    [alertController addActionWithLocalizedTitle:@"dialog.button.applyUpdate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kJMResetApplicationNotification object:nil];
+    }];
+    
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    [rootViewController presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - Helpers

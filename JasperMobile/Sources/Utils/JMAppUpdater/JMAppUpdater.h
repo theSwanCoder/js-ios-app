@@ -40,7 +40,7 @@
 
  @since 1.6
  */
-@interface JMAppUpdater : NSObject <UIAlertViewDelegate>
+@interface JMAppUpdater : NSObject 
 
 /**
  Performs all migrations and updates app to latest version

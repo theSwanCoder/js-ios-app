@@ -295,8 +295,12 @@
             }
         }];
     } else {
-        [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-            [self cancelResourceViewingAndExit:YES];
+        __weak typeof(self) weakSelf = self;
+        [JMUtils presentAlertControllerWithError:error completion:^{
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf) {
+                [strongSelf cancelResourceViewingAndExit:YES];
+            }
         }];
     }
 }
@@ -387,7 +391,7 @@
                                                      }
                                                  }];
                                              } else {
-                                                 [JMUtils showAlertViewWithError:error];
+                                                 [JMUtils presentAlertControllerWithError:error completion:nil];
                                              }
                                          } else {
                                              NSString *savedReportURL = [JMSavedResources absolutePathToSavedReport:savedReport];

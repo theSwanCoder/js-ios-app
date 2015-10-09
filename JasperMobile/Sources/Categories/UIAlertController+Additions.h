@@ -21,28 +21,23 @@
  */
 
 //
-//  UIAlertView+Additions.h
+//  UIAlertController+Additions.h
 //  TIBCO JasperMobile
 //
 
 #import <UIKit/UIKit.h>
 
 /**
- @author Giulio Toffoli giulio@jaspersoft.com
- @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @author Alexey Gubarev ogubarie@tibco.com
- @since 1.3
+ @since 2.2
  */
 
-typedef void(^clickedButtonAtIndexCompletion)(UIAlertView *alertView, NSInteger buttonIndex);
+@interface UIAlertController (Additions)
 
-@interface UIAlertView (Additions)
++ (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message;
 
-+ (UIAlertView *)localizedAlertWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
++ (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message cancelButtonTitle:(nonnull NSString *)cancelButtonTitle cancelCompletionHandler:(void (^ __nullable)(UIAlertAction * __nonnull action))handler;
 
-
-+ (UIAlertView *)localizedAlertWithTitle:(NSString *)title message:(NSString *)message completion:(clickedButtonAtIndexCompletion)completion cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
-
-+ (UIAlertView *)alertWithTitle:(NSString *)title message:(NSString *)message completion:(clickedButtonAtIndexCompletion)completion cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
+- (void)addActionWithLocalizedTitle:(nonnull NSString *)title style:(UIAlertActionStyle)style handler:(void (^ __nullable)(UIAlertAction * __nonnull action))handler;
 
 @end

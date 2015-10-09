@@ -271,14 +271,17 @@
              parameters:(NSArray *)parameters
 {
     if (hyperlinkType == JMHyperlinkTypeReportExecution) {
-
         NSString *reportURI = resourceLookup.uri;
         __weak typeof(self)weakSelf = self;
         [self loadInputControlsWithReportURI:reportURI completion:^(NSArray *inputControls, NSError *error) {
             __strong typeof(self)strongSelf = weakSelf;
             if (error) {
-                [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                    [strongSelf cancelResourceViewingAndExit:YES];
+                __weak typeof(self) weakSelf = strongSelf;
+                [JMUtils presentAlertControllerWithError:error completion:^{
+                    __strong typeof(weakSelf) strongSelf = weakSelf;
+                    if (strongSelf) {
+                        [strongSelf cancelResourceViewingAndExit:YES];
+                    }
                 }];
             } else {
                 JMReportViewerVC *reportViewController = (JMReportViewerVC *) [strongSelf.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];

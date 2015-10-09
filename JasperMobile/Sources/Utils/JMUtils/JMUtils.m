@@ -272,7 +272,7 @@ void jmDebugLog(NSString *format, ...) {
 
 #pragma mark - Alerts
 
-+ (void)showAlertViewWithError:(NSError *)error
++ (void)presentAlertControllerWithError:(NSError *)error completion:(void (^)(void))completion
 {
     NSString *title = JMCustomLocalizedString(@"error.readingresponse.dialog.msg", nil);
     NSString *message = error.localizedDescription;
@@ -281,27 +281,14 @@ void jmDebugLog(NSString *format, ...) {
         message = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
     }
 
-    [[[UIAlertView alloc] initWithTitle:title
-                                message:message
-                               delegate:nil
-                      cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil)
-                      otherButtonTitles: nil] show];
-}
-
-+ (void)showAlertViewWithError:(NSError *)error completion:(void(^)(UIAlertView *alertView, NSInteger buttonIndex))completion
-{
-    NSString *title = @"error.readingresponse.dialog.msg";
-    NSString *message = error.localizedDescription;
-    if (error.code == JSInvalidCredentialsErrorCode) {
-        title = @"error.authenication.dialog.title";
-        message = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
-    }
-
-    [[UIAlertView localizedAlertWithTitle:title
-                                  message:message
-                               completion:completion
-                        cancelButtonTitle:@"dialog.button.ok"
-                        otherButtonTitles:nil] show];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        if (completion) {
+            completion();
+        }
+    }];
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    [rootViewController presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - Helpers

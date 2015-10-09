@@ -131,11 +131,7 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
         [JMCancelRequestPopup dismiss];
         if (!requestDidCancelled) {
             if (error) {
-                [[UIAlertView localizedAlertWithTitle:error.domain
-                                              message:error.localizedDescription
-                                             delegate:nil
-                                    cancelButtonTitle:@"dialog.button.ok"
-                                    otherButtonTitles:nil] show];
+                [JMUtils presentAlertControllerWithError:error completion:nil];
             } else {
                 if ([strongSelf.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
                     [strongSelf.delegate serverGridControllerDidSelectProfile:serverProfile];
@@ -181,16 +177,20 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 - (void)deleteServerProfileForCell:(JMServerCollectionViewCell *)cell
 {
     JMServerProfile *serverProfile = cell.serverProfile;
-    [[UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation"
-                                  message:@"servers.profile.delete.message"
-                               completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                   if (alertView.cancelButtonIndex != buttonIndex) {
-                                       [JMServerProfile deleteServerProfile:serverProfile];
-                                       [self refreshDatasource];
-                                   }
-                               }
-                        cancelButtonTitle:@"dialog.button.cancel"
-                        otherButtonTitles:@"dialog.button.delete", nil] show];
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
+                                                                                      message:@"servers.profile.delete.message"
+                                                                            cancelButtonTitle:@"dialog.button.cancel"
+                                                                      cancelCompletionHandler:nil];
+    
+    __weak typeof(self) weakSelf = self;
+    [alertController addActionWithLocalizedTitle:@"dialog.button.delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        __strong typeof(self) strongSelf = weakSelf;
+        if (strongSelf) {
+            [JMServerProfile deleteServerProfile:serverProfile];
+            [strongSelf refreshDatasource];
+        }
+    }];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)editServerProfileForCell:(JMServerCollectionViewCell *)cell

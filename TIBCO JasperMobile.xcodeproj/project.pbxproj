@@ -25,6 +25,7 @@
 		08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */; };
 		082D1E921AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */; };
 		0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */; settings = {ASSET_TAGS = (); }; };
+		0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */; settings = {ASSET_TAGS = (); }; };
 		0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503B19F1265B00C5875E /* CoreTelephony.framework */; };
 		0871503E19F1266900C5875E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503D19F1266900C5875E /* libz.dylib */; };
 		089590FF19E3D514001471DA /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E019E3D514001471DA /* ALToastView.m */; };
@@ -35,7 +36,6 @@
 		089B159F1AA756BD0021A915 /* JMSavedResources+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14961AA756BD0021A915 /* JMSavedResources+Helpers.m */; };
 		089B15A01AA756BD0021A915 /* JMServerProfile+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14981AA756BD0021A915 /* JMServerProfile+Helpers.m */; };
 		089B15A11AA756BD0021A915 /* NSObject+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B149A1AA756BD0021A915 /* NSObject+Additions.m */; };
-		089B15A21AA756BD0021A915 /* UIAlertView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B149C1AA756BD0021A915 /* UIAlertView+Additions.m */; };
 		089B15A31AA756BD0021A915 /* UIColor+RGBComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B149E1AA756BD0021A915 /* UIColor+RGBComponent.m */; };
 		089B15A41AA756BD0021A915 /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14A01AA756BD0021A915 /* UIImage+Additions.m */; };
 		089B15A51AA756BD0021A915 /* UITableViewCell+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B14A21AA756BD0021A915 /* UITableViewCell+Additions.m */; };
@@ -246,6 +246,8 @@
 		082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSResourceLookup+Helpers.m"; sourceTree = "<group>"; };
 		0854B36E1BC54FFB0004E5B8 /* JMBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseViewController.h; sourceTree = "<group>"; };
 		0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseViewController.m; sourceTree = "<group>"; };
+		0854B3711BC6A53E0004E5B8 /* UIAlertController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Additions.h"; sourceTree = "<group>"; };
+		0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Additions.m"; sourceTree = "<group>"; };
 		0871503B19F1265B00C5875E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		0871503D19F1266900C5875E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		089590DF19E3D514001471DA /* ALToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALToastView.h; sourceTree = "<group>"; };
@@ -264,8 +266,6 @@
 		089B14981AA756BD0021A915 /* JMServerProfile+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JMServerProfile+Helpers.m"; sourceTree = "<group>"; };
 		089B14991AA756BD0021A915 /* NSObject+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Additions.h"; sourceTree = "<group>"; };
 		089B149A1AA756BD0021A915 /* NSObject+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Additions.m"; sourceTree = "<group>"; };
-		089B149B1AA756BD0021A915 /* UIAlertView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Additions.h"; sourceTree = "<group>"; };
-		089B149C1AA756BD0021A915 /* UIAlertView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Additions.m"; sourceTree = "<group>"; };
 		089B149D1AA756BD0021A915 /* UIColor+RGBComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+RGBComponent.h"; sourceTree = "<group>"; };
 		089B149E1AA756BD0021A915 /* UIColor+RGBComponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+RGBComponent.m"; sourceTree = "<group>"; };
 		089B149F1AA756BD0021A915 /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Additions.h"; sourceTree = "<group>"; };
@@ -815,6 +815,8 @@
 		089B14921AA756BD0021A915 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				0854B3711BC6A53E0004E5B8 /* UIAlertController+Additions.h */,
+				0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */,
 				082D1E901AB70FB700E0C0C6 /* JSResourceLookup+Helpers.h */,
 				082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */,
 				089B14931AA756BD0021A915 /* JMFavorites+Helpers.h */,
@@ -825,8 +827,6 @@
 				089B14981AA756BD0021A915 /* JMServerProfile+Helpers.m */,
 				089B14991AA756BD0021A915 /* NSObject+Additions.h */,
 				089B149A1AA756BD0021A915 /* NSObject+Additions.m */,
-				089B149B1AA756BD0021A915 /* UIAlertView+Additions.h */,
-				089B149C1AA756BD0021A915 /* UIAlertView+Additions.m */,
 				089B149D1AA756BD0021A915 /* UIColor+RGBComponent.h */,
 				089B149E1AA756BD0021A915 /* UIColor+RGBComponent.m */,
 				089B149F1AA756BD0021A915 /* UIImage+Additions.h */,
@@ -2322,7 +2322,6 @@
 				93618E171BD4BFFE007995D7 /* JMEULAViewController.m in Sources */,
 				089B15F01AA756BD0021A915 /* JMSettingsTableViewCell.m in Sources */,
 				08E2AC8D1B1E056900AC462B /* JMTextInputControlCell.m in Sources */,
-				089B15A21AA756BD0021A915 /* UIAlertView+Additions.m in Sources */,
 				089B15FA1AA756BD0021A915 /* JMSavedItemsCollectionViewController.m in Sources */,
 				089B159C1AA756BD0021A915 /* JMEditabledViewController.m in Sources */,
 				08E62C8319922B0B0081CA83 /* main.m in Sources */,
@@ -2342,6 +2341,7 @@
 				089B15F81AA756BD0021A915 /* JMLibraryCollectionViewController.m in Sources */,
 				08DD183A1B136B8A00856112 /* JMReportInfoViewController.m in Sources */,
 				08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */,
+				0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */,
 				08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */,
 				0801DFAC1AAF2CFB00DD072C /* JMAppUpdater.m in Sources */,
 				0801DF9E1AAF2CC900DD072C /* JMSavedResources.m in Sources */,

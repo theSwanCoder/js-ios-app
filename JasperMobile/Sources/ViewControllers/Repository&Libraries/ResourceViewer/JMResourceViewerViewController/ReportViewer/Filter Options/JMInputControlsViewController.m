@@ -32,7 +32,7 @@
 #import "JMReportManager.h"
 #import "JMExtendedReportOption.h"
 
-@interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
+@interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate, UITextFieldDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *runReportButton;
 
@@ -109,7 +109,10 @@
                             }
                         }];
                 } else {
-                    [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.report.options.create.permission.error" delegate:nil cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles: nil] show];
+                    NSString *errorTitle = JMCustomLocalizedString(@"dialod.title.error", nil);
+                    NSString *errorMessage = JMCustomLocalizedString(@"report.viewer.report.options.create.permission.error", nil);
+                    NSError *error = [NSError errorWithDomain:errorTitle code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                    [JMUtils presentAlertControllerWithError:error completion:nil];
                 }
             }];
     } else {
@@ -122,30 +125,36 @@
     [self checkParentFolderPermissionWithCompletion:^(BOOL reportOptionsEditingAvailable) {
             if (reportOptionsEditingAvailable) {
                 NSString *confirmationMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.report.options.remove.confirmation.message", nil), self.currentReportOption.reportOption.label];
-                [[UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation" message:confirmationMessage completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                        if (buttonIndex != alertView.cancelButtonIndex) {
-                            [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
-                            [JMReportManager deleteReportOption:self.currentReportOption.reportOption withReportURI:self.report.reportURI completion:^(NSError *error) {
-                                    [JMCancelRequestPopup dismiss];
-                                    if (error) {
-                                        if (error.code == JSSessionExpiredErrorCode) {
-                                            [JMUtils showLoginViewAnimated:YES completion:nil];
-                                        } else {
-                                            [JMUtils showAlertViewWithError:error];
-                                        }
-                                    } else {
-                                        [self.report removeReportOption:self.currentReportOption];
-                                        self.currentReportOption = [self.report.reportOptions firstObject];
-                                    }
-                                }];
-                        }
-                    } cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
+                UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
+                                                                                                  message:confirmationMessage
+                                                                                        cancelButtonTitle:@"dialog.button.cancel"
+                                                                                  cancelCompletionHandler:nil];
+                __weak typeof(self) weakSelf = self;
+                [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    __strong typeof(weakSelf) strongSelf = weakSelf;
+                    if (strongSelf) {
+                        [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+                        [JMReportManager deleteReportOption:strongSelf.currentReportOption.reportOption withReportURI:strongSelf.report.reportURI completion:@weakself(^(NSError *error)) {
+                            [JMCancelRequestPopup dismiss];
+                            if (error) {
+                                if (error.code == JSSessionExpiredErrorCode) {
+                                    [JMUtils showLoginViewAnimated:YES completion:nil];
+                                } else {
+                                    [JMUtils presentAlertControllerWithError:error completion:nil];
+                                }
+                            } else {
+                                [strongSelf.report removeReportOption:strongSelf.currentReportOption];
+                                strongSelf.currentReportOption = [strongSelf.report.reportOptions firstObject];
+                            }
+                        }@weakselfend];
+                    }
+                }];
+                [self presentViewController:alertController animated:YES completion:nil];
             } else {
-                [[UIAlertView localizedAlertWithTitle:@"dialod.title.error"
-                                              message:@"report.viewer.report.options.remove.permission.error"
-                                             delegate:nil
-                                    cancelButtonTitle:@"dialog.button.cancel"
-                                    otherButtonTitles: nil] show];
+                NSString *errorTitle = JMCustomLocalizedString(@"dialod.title.error", nil);
+                NSString *errorMessage = JMCustomLocalizedString(@"report.viewer.report.options.remove.permission.error", nil);
+                NSError *error = [NSError errorWithDomain:errorTitle code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                [JMUtils presentAlertControllerWithError:error completion:nil];
             }
         }];
 }
@@ -391,8 +400,12 @@
                     if (error.code == JSSessionExpiredErrorCode) {
                         [JMUtils showLoginViewAnimated:YES completion:nil];
                     } else {
-                        [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                            self.currentReportOption = oldActiveReportOption;
+                        __weak typeof(self) weakSelf = self;
+                        [JMUtils presentAlertControllerWithError:error completion:^{
+                            __strong typeof(weakSelf) strongSelf = weakSelf;
+                            if (strongSelf) {
+                                strongSelf.currentReportOption = oldActiveReportOption;
+                            }
                         }];
                     }
                 } else {
@@ -501,7 +514,7 @@
                                                     }
                                                 }];
                                         } else {
-                                            [JMUtils showAlertViewWithError:result.error];
+                                            [JMUtils presentAlertControllerWithError:result.error completion:nil];
                                         }
                                     } else {
                                         for (JSInputControlState *state in result.objects) {
@@ -554,7 +567,7 @@
                                                   }
                                               }];
                                       } else {
-                                          [JMUtils showAlertViewWithError:result.error];
+                                          [JMUtils presentAlertControllerWithError:result.error completion:nil];
                                       }
                                   } else {
                                       self.parentFolderLookup = [result.objects firstObject];
@@ -617,7 +630,7 @@
                                                       if (error.code == JSSessionExpiredErrorCode) {
                                                           [JMUtils showLoginViewAnimated:YES completion:nil];
                                                       } else {
-                                                          [JMUtils showAlertViewWithError:error];
+                                                          [JMUtils presentAlertControllerWithError:error completion:nil];
                                                       }
                                                   } else {
                                                       if (reportOption) {

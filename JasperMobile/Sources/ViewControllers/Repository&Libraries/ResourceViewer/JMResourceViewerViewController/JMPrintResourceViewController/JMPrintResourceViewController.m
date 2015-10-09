@@ -304,7 +304,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                                                  }
                                              }];
                                          } else {
-                                             [JMUtils showAlertViewWithError:error];
+                                             [JMUtils presentAlertControllerWithError:error completion:nil];
                                          }
                                      } else {
                                          NSString *savedReportURL = [JMSavedResources absolutePathToSavedReport:savedReport];

@@ -122,9 +122,7 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (void)setUserAcceptAgreement:(BOOL)isAccept;
 
-+ (void)showAlertViewWithError:(NSError * __nullable)error;
-
-+ (void)showAlertViewWithError:(NSError *__nullable)error completion:(void (^ __nonnull)(UIAlertView * __nonnull alertView, NSInteger buttonIndex))completion;
++ (void)presentAlertControllerWithError:(NSError *__nonnull)error completion:(void (^__nullable)(void))completion;
 
 /**
  Returns YES if User want to use Visualize for watching reports and dashboards
