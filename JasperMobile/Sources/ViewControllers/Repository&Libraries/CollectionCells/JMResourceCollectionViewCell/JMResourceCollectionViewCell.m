@@ -40,6 +40,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 @property (nonatomic, weak) IBOutlet UILabel *resourceDescription;
 @property (nonatomic, weak) IBOutlet UIButton *infoButton;
 @property (nonatomic, readwrite) UIImage *thumbnailImage;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageWidthConstraint;
 @end
 
 @implementation JMResourceCollectionViewCell
@@ -80,21 +81,21 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     UIImage *resourceImage;
     if ([self.resourceLookup isReport]) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
-        if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
-            NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.restClient generateThumbnailImageUrl:self.resourceLookup.uri]]];
-            [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
-            __weak typeof(self)weakSelf = self;
-            [self.resourceImage setImageWithURLRequest:imageRequest
-                                      placeholderImage:resourceImage
-                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                                   __strong typeof(self)strongSelf = weakSelf;
-                                                   if (image) {
-                                                       strongSelf.thumbnailImage = image;
-                                                       [strongSelf updateResourceImage:self.thumbnailImage thumbnails:YES];
-                                                   }
-                                               }
-                                               failure:nil];
-        }
+//        if ([JMUtils isServerVersionUpOrEqual6]) { // Thumbnails supported on server
+//            NSMutableURLRequest *imageRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[self.restClient generateThumbnailImageUrl:self.resourceLookup.uri]]];
+//            [imageRequest setValue:@"image/jpeg" forHTTPHeaderField:@"Accept"];
+//            __weak typeof(self)weakSelf = self;
+//            [self.resourceImage setImageWithURLRequest:imageRequest
+//                                      placeholderImage:resourceImage
+//                                               success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+//                                                   __strong typeof(self)strongSelf = weakSelf;
+//                                                   if (image) {
+//                                                       strongSelf.thumbnailImage = image;
+//                                                       [strongSelf updateResourceImage:self.thumbnailImage thumbnails:YES];
+//                                                   }
+//                                               }
+//                                               failure:nil];
+//        }
     } else if ([self.resourceLookup isSavedReport]) {
 //        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
 //        self.thumbnailImage = [savedReport thumbnailImage];
@@ -134,6 +135,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.resourceImage.backgroundColor = thumbnails ? [UIColor clearColor] : [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
     self.resourceImage.image = resourceImage;
     [self layoutIfNeeded];
+    self.imageWidthConstraint.constant = [JMUtils isIphone] ? 100: 115;
+    [self setNeedsUpdateConstraints];
 }
 
 @end
