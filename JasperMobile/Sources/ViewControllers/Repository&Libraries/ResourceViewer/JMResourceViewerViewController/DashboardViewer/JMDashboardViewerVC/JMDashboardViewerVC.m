@@ -253,7 +253,7 @@
 {
     if (hyperlinkType == JMHyperlinkTypeReportExecution) {
 
-        NSString *reportURI = [resourceLookup.uri stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+        NSString *reportURI = resourceLookup.uri;
         __weak typeof(self)weakSelf = self;
         [self loadInputControlsWithReportURI:reportURI completion:^(NSArray *inputControls, NSError *error) {
             __strong typeof(self)strongSelf = weakSelf;
