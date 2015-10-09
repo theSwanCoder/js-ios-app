@@ -428,7 +428,14 @@
         inputControlsViewController.navigationItem.leftBarButtonItem = backItem;
     }
 
+    // There is issue in iOS 7 if self.view is not appeared, we can see white screen after pushing another VC
+    while (!self.view.superview) {
+        // wait
+        [NSThread sleepForTimeInterval:0.25f];
+    }
+
     [self.navigationController pushViewController:inputControlsViewController animated:YES];
+
 }
 
 #pragma mark - Helpers
