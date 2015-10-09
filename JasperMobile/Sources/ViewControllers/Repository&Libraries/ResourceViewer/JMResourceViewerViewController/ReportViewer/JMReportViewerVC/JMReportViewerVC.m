@@ -29,6 +29,7 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptNativeBridge.h"
+#import "JMWebViewManager.h"
 
 @interface JMReportViewerVC () <JMReportLoaderDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
