@@ -120,6 +120,11 @@ void jmDebugLog(NSString *format, ...) {
 
 }
 
++ (BOOL)isSystemVersion7
+{
+    return [UIDevice currentDevice].systemVersion.integerValue == 7;
+}
+
 + (BOOL)isSystemVersion8
 {
     return [UIDevice currentDevice].systemVersion.integerValue == 8;
