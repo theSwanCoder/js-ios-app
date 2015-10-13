@@ -27,6 +27,19 @@
 
 #import "UIAlertController+Additions.h"
 
+@interface UIAlertController (UITextFieldDelegate) <UITextFieldDelegate>
+
+@end
+
+@implementation UIAlertController (UITextFieldDelegate)
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return NO;
+}
+@end
+
+
 @implementation UIAlertController (Additions)
 
 + (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message
@@ -37,16 +50,67 @@
     return alertController;
 }
 
-+ (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message cancelButtonTitle:(nonnull NSString *)cancelButtonTitle cancelCompletionHandler:(void (^ __nullable)(UIAlertAction * __nonnull action))handler
++ (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message cancelButtonTitle:(nonnull NSString *)cancelButtonTitle cancelCompletionHandler:(__nullable UIAlertControllerCompletionBlock)handler
 {
     UIAlertController *alertController = [self alertControllerWithLocalizedTitle:title message:message];
     [alertController addActionWithLocalizedTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:handler];
     return alertController;
 }
 
-- (void)addActionWithLocalizedTitle:(nonnull NSString *)title style:(UIAlertActionStyle)style handler:(void (^ __nullable)(UIAlertAction * __nonnull action))handler
++ (nonnull instancetype)alertTextDialogueControllerWithLocalizedTitle:(nullable NSString *)title
+                                                              message:(nullable NSString *)message
+                                        textFieldConfigurationHandler:(void (^ __nullable)(UITextField * __nonnull textField))configurationHandler
+                                                textValidationHandler:(NSString * __nonnull (^ __nullable)(NSString * __nullable text))validationHandler
+                                            textEditCompletionHandler:(void (^ __nullable)(NSString * __nullable text))editCompletionHandler
 {
-    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:JMCustomLocalizedString(title, nil) style:style handler:handler];
+    UIAlertController *alertController = [self alertControllerWithLocalizedTitle:title message:message];
+    __block id textFieldObserver;
+    
+    [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+        if (editCompletionHandler) {
+            NSString *text = [controller.textFields objectAtIndex:0].text;
+            editCompletionHandler(text);
+        }
+        [[NSNotificationCenter defaultCenter] removeObserver:textFieldObserver name:UITextFieldTextDidChangeNotification object:controller.textFields[0]];
+    }];
+    
+    [alertController addActionWithLocalizedTitle:@"dialog.button.cancel" style:UIAlertActionStyleCancel handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+        [[NSNotificationCenter defaultCenter] removeObserver:textFieldObserver name:UITextFieldTextDidChangeNotification object:controller.textFields[0]];
+    }];
+    
+    __weak typeof(alertController) weakAlertController = alertController;
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        __strong typeof (weakAlertController) strongAlertController = weakAlertController;
+        if (strongAlertController) {
+            
+            if (validationHandler) {
+                textFieldObserver = [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:textField queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+                    NSString *errorMessage = validationHandler(textField.text);
+                    strongAlertController.message = errorMessage;
+                    [[strongAlertController.actions objectAtIndex:0] setEnabled:!errorMessage];
+                }];
+            }
+            if (configurationHandler) {
+                configurationHandler(textField);
+                [[NSNotificationCenter defaultCenter] postNotificationName:UITextFieldTextDidChangeNotification object:textField];
+            }
+        }
+    }];
+    
+    return alertController;
+}
+
+- (void)addActionWithLocalizedTitle:(nonnull NSString *)title style:(UIAlertActionStyle)style handler:(UIAlertControllerCompletionBlock _Nullable)handler
+{
+    __weak typeof(self) weakSelf = self;
+    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:JMCustomLocalizedString(title, nil) style:style handler:^(UIAlertAction * _Nonnull action) {
+        if (handler) {
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf) {
+                handler(strongSelf, action);
+            }
+        }
+    }];
     [self addAction:alertAction];
 }
 

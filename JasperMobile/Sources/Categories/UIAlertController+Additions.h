@@ -32,12 +32,20 @@
  @since 2.2
  */
 
+typedef void(^UIAlertControllerCompletionBlock)(UIAlertController * __nonnull controller, UIAlertAction * __nonnull action);
+
 @interface UIAlertController (Additions)
 
 + (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message;
 
-+ (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message cancelButtonTitle:(nonnull NSString *)cancelButtonTitle cancelCompletionHandler:(void (^ __nullable)(UIAlertAction * __nonnull action))handler;
++ (nonnull instancetype)alertControllerWithLocalizedTitle:(nullable NSString *)title message:(nullable NSString *)message cancelButtonTitle:(nonnull NSString *)cancelButtonTitle cancelCompletionHandler:(__nullable UIAlertControllerCompletionBlock)handler;
 
-- (void)addActionWithLocalizedTitle:(nonnull NSString *)title style:(UIAlertActionStyle)style handler:(void (^ __nullable)(UIAlertAction * __nonnull action))handler;
++ (nonnull instancetype)alertTextDialogueControllerWithLocalizedTitle:(nullable NSString *)title
+                                                              message:(nullable NSString *)message
+                                        textFieldConfigurationHandler:(void (^ __nullable)(UITextField * __nonnull textField))configurationHandler // Not set delegate for textField here!
+                                                textValidationHandler:(NSString * __nonnull (^ __nullable)(NSString * __nullable text))validationHandler
+                                            textEditCompletionHandler:(void (^ __nullable)(NSString * __nullable text))editCompletionHandler;
+
+- (void)addActionWithLocalizedTitle:(nonnull NSString *)title style:(UIAlertActionStyle)style handler:(__nullable UIAlertControllerCompletionBlock)handler;
 
 @end

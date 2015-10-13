@@ -199,7 +199,7 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
         UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"settings.crashtracking.alert.title"
                                                                                           message:@"settings.crashtracking.alert.title"
                                                                                 cancelButtonTitle:@"dialog.button.ok"
-                                                                          cancelCompletionHandler:^(UIAlertAction * _Nonnull action) {
+                                                                          cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                                                                               __strong typeof(weakSelf) strongSelf = weakSelf;
                                                                               if (strongSelf) {
                                                                                   [strongSelf.navigationController popViewControllerAnimated:YES];

@@ -274,19 +274,19 @@ void jmDebugLog(NSString *format, ...) {
 
 + (void)presentAlertControllerWithError:(NSError *)error completion:(void (^)(void))completion
 {
-    NSString *title = JMCustomLocalizedString(@"error.readingresponse.dialog.msg", nil);
+    NSString *title = @"error.readingresponse.dialog.msg";
     NSString *message = error.localizedDescription;
     if (error.code == JSInvalidCredentialsErrorCode) {
-        title = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
-        message = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
+        title = @"error.authenication.dialog.title";
+        message = @"error.authenication.dialog.msg";
     }
 
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title message:message cancelButtonTitle:@"dialog.button.ok" cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
         if (completion) {
             completion();
         }
     }];
+
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     [rootViewController presentViewController:alertController animated:YES completion:nil];
 }

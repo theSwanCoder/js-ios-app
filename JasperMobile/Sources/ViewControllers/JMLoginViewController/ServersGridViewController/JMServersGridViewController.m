@@ -183,8 +183,8 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
                                                                       cancelCompletionHandler:nil];
     
     __weak typeof(self) weakSelf = self;
-    [alertController addActionWithLocalizedTitle:@"dialog.button.delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        __strong typeof(self) strongSelf = weakSelf;
+    [alertController addActionWithLocalizedTitle:@"dialog.button.delete" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         if (strongSelf) {
             [JMServerProfile deleteServerProfile:serverProfile];
             [strongSelf refreshDatasource];

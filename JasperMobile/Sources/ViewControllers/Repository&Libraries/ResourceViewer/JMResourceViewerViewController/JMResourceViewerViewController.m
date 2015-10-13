@@ -210,7 +210,7 @@
                                                                                               message:@"resource.viewer.open.link"
                                                                                     cancelButtonTitle:@"dialog.button.cancel"
                                                                               cancelCompletionHandler:nil];
-            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                 [[UIApplication sharedApplication] openURL:request.URL];
             }];
             [self presentViewController:alertController animated:YES completion:nil];

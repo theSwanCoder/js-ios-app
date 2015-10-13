@@ -318,7 +318,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                                                                     cancelButtonTitle:@"dialog.button.cancel"
                                                                               cancelCompletionHandler:nil];
             __weak typeof(self) weakSelf = self;
-            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 if (strongSelf) {
                     strongSelf.errorString = nil;
@@ -355,7 +355,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                                                                     cancelButtonTitle:@"dialog.button.cancel"
                                                                               cancelCompletionHandler:nil];
             __weak typeof(self) weakSelf = self;
-            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 if (strongSelf) {
                     strongSelf.selectedReportFormat = [JSConstants sharedInstance].CONTENT_TYPE_PDF;
