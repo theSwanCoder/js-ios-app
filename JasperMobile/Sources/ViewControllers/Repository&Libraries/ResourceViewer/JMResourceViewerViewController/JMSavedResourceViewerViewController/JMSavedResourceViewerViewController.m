@@ -39,17 +39,14 @@
 {
     [self.webView stopLoading];
     [self.webView loadHTMLString:@"" baseURL:nil];
-
+    
 #warning WHY ONLY FOR SAVED REPORT VIEWER WE HANDLE MEMORY WARNINGS???
-    NSString *errorTitle = JMCustomLocalizedString(@"dialod.title.error", nil);
     NSString *errorMessage = JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil);
     NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
     __weak typeof(self) weakSelf = self;
     [JMUtils presentAlertControllerWithError:error completion:^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            [strongSelf cancelResourceViewingAndExit:YES];
-        }
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf cancelResourceViewingAndExit:YES];
     }];
     
     [super didReceiveMemoryWarning];
@@ -73,12 +70,12 @@
 - (void)startResourceViewing
 {
     NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
-
+    
     if (self.webView.isLoading) {
         [self.webView stopLoading];
     }
     self.isResourceLoaded = NO;
-
+    
     NSURL *url = [NSURL fileURLWithPath:fullReportPath];
     self.resourceRequest = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:self.resourceRequest];
@@ -113,14 +110,12 @@
         UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"savedreport.viewer.modify.title"
                                                                                                       message:nil
                                                                                 textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
-                                                                                    __strong typeof (weakSelf) strongSelf = weakSelf;
-                                                                                    if (strongSelf) {
-                                                                                        textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
-                                                                                        textField.text = [strongSelf.resourceLookup.label copy];
-                                                                                    }
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
+                                                                                    textField.text = [strongSelf.resourceLookup.label copy];
                                                                                 } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
                                                                                     NSString *errorMessage = nil;
-                                                                                    __strong typeof (weakSelf) strongSelf = weakSelf;
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
                                                                                     if (strongSelf) {
                                                                                         [JMUtils validateReportName:text errorMessage:&errorMessage];
                                                                                         if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
@@ -129,14 +124,12 @@
                                                                                     }
                                                                                     return errorMessage;
                                                                                 } textEditCompletionHandler:^(NSString * _Nullable text) {
-                                                                                    __strong typeof(weakSelf) strongSelf = weakSelf;
-                                                                                    if (strongSelf) {
-                                                                                        if ([strongSelf.savedReports renameReportTo:text]) {
-                                                                                            strongSelf.title = text;
-                                                                                            strongSelf.resourceLookup = [strongSelf.savedReports wrapperFromSavedReports];
-                                                                                            [strongSelf setupRightBarButtonItems];
-                                                                                            [strongSelf startResourceViewing];
-                                                                                        }
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    if ([strongSelf.savedReports renameReportTo:text]) {
+                                                                                        strongSelf.title = text;
+                                                                                        strongSelf.resourceLookup = [strongSelf.savedReports wrapperFromSavedReports];
+                                                                                        [strongSelf setupRightBarButtonItems];
+                                                                                        [strongSelf startResourceViewing];
                                                                                     }
                                                                                 }];
         [self presentViewController:alertController animated:YES completion:nil];
@@ -147,25 +140,23 @@
                                                                           cancelCompletionHandler:nil];
         __weak typeof(self) weakSelf = self;
         [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf) {
-                BOOL shouldCloseViewer = YES;
-                if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:shouldCloseViewerAfterDeletingResource:)]) {
-                    shouldCloseViewer = [strongSelf.delegate resourceViewer:strongSelf shouldCloseViewerAfterDeletingResource:strongSelf.resourceLookup];
-                }
-                [strongSelf cancelResourceViewingAndExit:shouldCloseViewer];
-                [strongSelf.savedReports removeReport];
-                
-                if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:didDeleteResource:)]) {
-                    [strongSelf.delegate resourceViewer:strongSelf didDeleteResource:strongSelf.resourceLookup];
-                }
+            __strong typeof(self) strongSelf = weakSelf;
+            BOOL shouldCloseViewer = YES;
+            if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:shouldCloseViewerAfterDeletingResource:)]) {
+                shouldCloseViewer = [strongSelf.delegate resourceViewer:strongSelf shouldCloseViewerAfterDeletingResource:strongSelf.resourceLookup];
+            }
+            [strongSelf cancelResourceViewingAndExit:shouldCloseViewer];
+            [strongSelf.savedReports removeReport];
+            
+            if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:didDeleteResource:)]) {
+                [strongSelf.delegate resourceViewer:strongSelf didDeleteResource:strongSelf.resourceLookup];
             }
         }];
         [self presentViewController:alertController animated:YES completion:nil];
     } else if (action == JMMenuActionsViewAction_OpenIn) {
         self.documentController = [self setupDocumentControllerWithURL:self.resourceRequest.URL
-                                                                             usingDelegate:self];
-
+                                                         usingDelegate:self];
+        
         BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
         if (!canOpen) {
             NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);

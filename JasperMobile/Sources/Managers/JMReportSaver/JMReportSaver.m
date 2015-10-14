@@ -61,11 +61,11 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
     if (self) {
         _report = report;
         _reportExecutor = [JMReportExecutor executorWithReport:_report];
-
+        
         __weak typeof(self)weakSelf = self;
         self.downloadCompletion = ^(BOOL shouldAddToDB) {
             __strong typeof(self)strongSelf = weakSelf;
-
+            
             NSString *originalDirectory = [JMSavedResources pathToFolderForSavedReport:strongSelf.savedReport];
             NSString *temporaryDirectory = [JMSavedResources pathToTempFolderForSavedReport:strongSelf.savedReport];
             
@@ -75,7 +75,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
             }
             
             [strongSelf moveContentFromPath:temporaryDirectory
-                               toPath:originalDirectory];
+                                     toPath:originalDirectory];
             [strongSelf removeTempDirectory];
             
             // save to DB
@@ -112,33 +112,37 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
             completionBlock(nil, error);
         }
     } else {
-
+        
         [self createPagesRangeFromPagesString:pages];
-
+        
+        __weak typeof(self)weakSelf = self;
         [self fetchOutputResourceURLForReportWithFileExtension:format
                                                          pages:pages
                                                     completion:^(BOOL success, NSError *error) {
+                                                        __strong typeof(self)strongSelf = weakSelf;
                                                         if (success) {
-                                                            [self downloadSavedReport:self.savedReport
-                                                                           completion:^(NSError *downloadError) {
-                                                                               if (downloadError) {
-                                                                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                                                                       if (completionBlock) {
-                                                                                           completionBlock(nil, downloadError);
-                                                                                       }
-                                                                                   });
-                                                                               } else {
-                                                                                   self.downloadCompletion(addToDB);
-                                                                                   
-                                                                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                                                                       if (completionBlock) {
-                                                                                           completionBlock(self.savedReport, nil);
-                                                                                       }
-                                                                                   });
-                                                                               }
-                                                                           }];
+                                                            __weak typeof(self)weakSelf = strongSelf;
+                                                            [strongSelf downloadSavedReport:strongSelf.savedReport
+                                                                                 completion:^(NSError *downloadError) {
+                                                                                     __strong typeof(self)strongSelf = weakSelf;
+                                                                                     if (downloadError) {
+                                                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                                                             if (completionBlock) {
+                                                                                                 completionBlock(nil, downloadError);
+                                                                                             }
+                                                                                         });
+                                                                                     } else {
+                                                                                         strongSelf.downloadCompletion(addToDB);
+                                                                                         
+                                                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                                                             if (completionBlock) {
+                                                                                                 completionBlock(strongSelf.savedReport, nil);
+                                                                                             }
+                                                                                         });
+                                                                                     }
+                                                                                 }];
                                                         } else {
-                                                            [self cancelReport];
+                                                            [strongSelf cancelReport];
                                                             dispatch_async(dispatch_get_main_queue(), ^{
                                                                 if (completionBlock) {
                                                                     completionBlock(nil, error);
@@ -169,22 +173,25 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                 completion(nil, error);
             }
         } else {
+            __weak typeof(self)weakSelf = self;
             [self downloadSavedReport:self.savedReport
           withOutputResourceURLString:resourcePath
                            completion:^(NSError *error) {
+                               __strong typeof(self)strongSelf = weakSelf;
+                               
                                if (error) {
-                                   [self cancelReport];
+                                   [strongSelf cancelReport];
                                    dispatch_async(dispatch_get_main_queue(), ^{
                                        if (completion) {
                                            completion(nil, error);
                                        }
                                    });
                                } else {
-                                   self.downloadCompletion(YES);
+                                   strongSelf.downloadCompletion(YES);
                                    
                                    dispatch_async(dispatch_get_main_queue(), ^{
                                        if (completion) {
-                                           completion(self.savedReport, nil);
+                                           completion(strongSelf.savedReport, nil);
                                        }
                                    });
                                }
@@ -200,7 +207,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
     [self.reportExecutor cancel];
     [self.downloadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData){
     }];
-
+    
     [self removeTempDirectory];
 }
 
@@ -214,7 +221,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
 {
     NSString *originalDirectory = [JMSavedResources pathToFolderForSavedReport:self.savedReport];
     NSString *temporaryDirectory = [JMSavedResources pathToTempFolderForSavedReport:self.savedReport];
-
+    
     NSError *errorOfCreationLocation = [self createLocationAtPath:originalDirectory];
     NSError *errorOfCreationTempLocation = [self createLocationAtPath:temporaryDirectory];
     BOOL isPrepared = NO;
@@ -236,14 +243,18 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
                  completion:(JMReportSaverCompletion)completion
 {
     [JMUtils showNetworkActivityIndicator];
+    
+    __weak typeof(self)weakSelf = self;
     [self downloadResourceFromURLString:outputResourceURLString
                              completion:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                                 __strong typeof(self)strongSelf = weakSelf;
+
                                  [JMUtils hideNetworkActivityIndicator];
                                  
                                  if (!error) {
                                      // save report to disk
-                                     NSString *tempReportPath = [JMSavedResources absoluteTempPathToSavedReport:self.savedReport];
-                                     NSError *moveError = [self moveResourceFromPath:location.path toPath:tempReportPath];
+                                     NSString *tempReportPath = [JMSavedResources absoluteTempPathToSavedReport:strongSelf.savedReport];
+                                     NSError *moveError = [strongSelf moveResourceFromPath:location.path toPath:tempReportPath];
                                      if (moveError) {
                                          if (completion) {
                                              completion(moveError);
@@ -255,12 +266,8 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
                                                  completion(nil);
                                              }
                                          } else {
-                                             [self downloadAttachmentsForSavedReport:self.savedReport
-                                                                          completion:^(NSError *attError) {
-                                                                              if (completion) {
-                                                                                  completion(attError);
-                                                                              }
-                                                                          }];
+                                             [strongSelf downloadAttachmentsForSavedReport:strongSelf.savedReport
+                                                                          completion:completion];
                                          }
                                      }
                                  }else {
@@ -284,8 +291,11 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
             NSString *attachmentURLString = [self attachmentURLWithName:attachmentName];
             
             [JMUtils showNetworkActivityIndicator];
+            __weak typeof(self)weakSelf = self;
             [self downloadResourceFromURLString:attachmentURLString
                                      completion:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                                         __strong typeof(self)strongSelf = weakSelf;
+
                                          [JMUtils hideNetworkActivityIndicator];
                                          
                                          if (error) {
@@ -293,8 +303,8 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
                                                  completion(error);
                                              }
                                          } else {
-                                             NSString *attachmentPath = [self attachmentPathWithName:attachmentName];
-                                             NSError *moveError = [self moveResourceFromPath:location.path toPath:attachmentPath];
+                                             NSString *attachmentPath = [strongSelf attachmentPathWithName:attachmentName];
+                                             NSError *moveError = [strongSelf moveResourceFromPath:location.path toPath:attachmentPath];
                                              if (moveError) {
                                                  if (completion) {
                                                      completion(moveError);
@@ -335,11 +345,13 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
                       resourceURLString:(NSString *)resourceURLString
                              completion:(JMReportSaverCompletion)completion
 {
+    __weak typeof(self)weakSelf = self;
     [self downloadResourceFromURLString:resourceURLString
                              completion:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                                 __strong typeof(self)strongSelf = weakSelf;
                                  if (!error) {
-                                     NSString *thumbnailPath = [self thumbnailPath];
-                                     [self moveResourceFromPath:location.path toPath:thumbnailPath];
+                                     NSString *thumbnailPath = [strongSelf thumbnailPath];
+                                     [strongSelf moveResourceFromPath:location.path toPath:thumbnailPath];
                                  }
                              }];
 }
@@ -366,7 +378,7 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
         NSString *attachmentPrefix = kJMAttachmentPrefix;
         exportID = [exportID stringByAppendingFormat:@"attachmentsPrefix=%@;", attachmentPrefix];
     }
-
+    
     NSString *outputResourceURLString = [[self exportURLWithExportID:exportID] stringByAppendingString:@"outputResource?sessionDecorator=no&decorate=no#"];
     return outputResourceURLString;
 }
@@ -447,12 +459,17 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
     self.reportExecutor.format = format;
     self.reportExecutor.pagesRange = self.pagesRange;
     
+    __weak typeof (self) weakSelf = self;
     [self.reportExecutor executeWithCompletion:^(JSReportExecutionResponse *executionResponse, NSError *executionError) {
+        __strong typeof(self)strongSelf = weakSelf;
         if (executionResponse) {
             self.requestExecution = executionResponse;
+
+            __weak typeof (self) weakSelf = strongSelf;
             [self.reportExecutor exportWithCompletion:^(JSExportExecutionResponse *exportResponse, NSError *exportError) {
+                __strong typeof(self)strongSelf = weakSelf;
                 if (exportResponse) {
-                    self.exportExecution = exportResponse;
+                    strongSelf.exportExecution = exportResponse;
                     if (completion) {
                         completion(YES, nil);
                     }
@@ -488,7 +505,7 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
     } else if (components.count == 1) {
         startPage = endPage = (NSUInteger) ((NSString *)components.firstObject).integerValue;
     }
-
+    
     self.pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
 }
 

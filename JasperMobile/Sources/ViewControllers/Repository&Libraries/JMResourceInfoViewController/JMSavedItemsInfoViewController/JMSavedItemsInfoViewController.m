@@ -90,14 +90,12 @@
         UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"savedreport.viewer.modify.title"
                                                                                                       message:nil
                                                                                 textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
-                                                                                    __strong typeof (weakSelf) strongSelf = weakSelf;
-                                                                                    if (strongSelf) {
-                                                                                        textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
-                                                                                        textField.text = [strongSelf.resourceLookup.label copy];
-                                                                                    }
+                                                                                    __strong typeof (self) strongSelf = weakSelf;
+                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
+                                                                                    textField.text = [strongSelf.resourceLookup.label copy];
                                                                                 } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
                                                                                     NSString *errorMessage = nil;
-                                                                                    __strong typeof (weakSelf) strongSelf = weakSelf;
+                                                                                    __strong typeof (self) strongSelf = weakSelf;
                                                                                     if (strongSelf) {
                                                                                         [JMUtils validateReportName:text errorMessage:&errorMessage];
                                                                                         if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
@@ -106,11 +104,9 @@
                                                                                     }
                                                                                     return errorMessage;
                                                                                 } textEditCompletionHandler:^(NSString * _Nullable text) {
-                                                                                    __strong typeof(weakSelf) strongSelf = weakSelf;
-                                                                                    if (strongSelf) {
-                                                                                        if ([strongSelf.savedReports renameReportTo:text]) {
-                                                                                            [strongSelf resetResourceProperties];
-                                                                                        }
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    if ([strongSelf.savedReports renameReportTo:text]) {
+                                                                                        [strongSelf resetResourceProperties];
                                                                                     }
                                                                                 }];
         [self presentViewController:alertController animated:YES completion:nil];
@@ -122,11 +118,9 @@
         
         __weak typeof(self) weakSelf = self;
         [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf) {
-                [strongSelf.savedReports removeReport];
-                [strongSelf.navigationController popViewControllerAnimated:YES];
-            }
+            __strong typeof(self) strongSelf = weakSelf;
+            [strongSelf.savedReports removeReport];
+            [strongSelf.navigationController popViewControllerAnimated:YES];
         }];
         [self presentViewController:alertController animated:YES completion:nil];
     }

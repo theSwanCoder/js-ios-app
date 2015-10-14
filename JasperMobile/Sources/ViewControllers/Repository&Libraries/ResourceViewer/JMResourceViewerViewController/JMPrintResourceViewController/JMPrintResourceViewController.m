@@ -284,16 +284,19 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                 [reportSaver cancelReport];
             }];
 
+            __weak typeof(self)weakSelf = self;
             [reportSaver saveReportWithName:[self tempReportName]
                                      format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
                                       pages:[self makePagesFormat]
                                     addToDB:NO
                                  completion:^(JMSavedResources *savedReport, NSError *error) {
+                                     __strong typeof(self)strongSelf = weakSelf;
+
                                      [JMCancelRequestPopup dismiss];
 
                                      if (error) {
                                          if (error.code == JSSessionExpiredErrorCode) {
-                                             __weak typeof(self)weakSelf = self;
+                                             __weak typeof(self)weakSelf = strongSelf;
                                              [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
                                                  __strong typeof(self)strongSelf = weakSelf;
                                                  if (strongSelf.restClient.keepSession && isSessionAuthorized) {
@@ -308,8 +311,8 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                                          }
                                      } else {
                                          NSString *savedReportURL = [JMSavedResources absolutePathToSavedReport:savedReport];
-                                         self.printingItem = [NSURL fileURLWithPath:savedReportURL];
-                                         [self printResource];
+                                         strongSelf.printingItem = [NSURL fileURLWithPath:savedReportURL];
+                                         [strongSelf printResource];
                                      }
                                  }];
         } else {

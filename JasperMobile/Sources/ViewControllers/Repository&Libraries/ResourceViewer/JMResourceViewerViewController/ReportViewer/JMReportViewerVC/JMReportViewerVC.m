@@ -41,7 +41,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    
     if (![JMUtils isSystemVersion8]) {
         // need update frame for ios7
         // there is issue with webView, when we run report and device is in landscape mode
@@ -93,18 +93,18 @@
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
     UIWebView *webView = [self.configurator webViewWithFrame:self.view.bounds asSecondary:self.isChildReport];
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
-
+    
     webView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
                                                                         views:@{@"webView": webView}]];
-
+    
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
                                                                         views:@{@"webView": webView}]];
-
+    
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
@@ -132,18 +132,18 @@
                 }
                 [strongSelf handleError:error];
             }
-            }];
+        }];
     } else {
         [self.reportLoader fetchPageNumber:toPage withCompletion:^(BOOL success, NSError *error) {
             __strong typeof(self)strongSelf = weakSelf;
-
+            
             // fix an issue in webview after zooming and changing page (black areas)
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
                 runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
-                [((JMJavascriptNativeBridge *)[self reportLoader].bridge) sendRequest:runRequest];
+                [((JMJavascriptNativeBridge *)[strongSelf reportLoader].bridge) sendRequest:runRequest];
             });
-
+            
             if (success) {
                 if (completion) {
                     completion(YES);
@@ -164,18 +164,18 @@
     [self hideEmptyReportMessage];
     [self hideToolbar];
     [self hideReportView];
-
+    
     __weak typeof(self)weakSelf = self;
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf.reportLoader cancelReport];
         [strongSelf cancelResourceViewingAndExit:YES];
     }];
-
+    
     [self.reportLoader runReportWithPage:page completion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf stopShowLoader];
-
+        
         if (success) {
             // Crashlytics
             NSString *resourcesType = [JMUtils isSupportVisualize] ? @"Report (Visualize)" : @"Report (REST)";
@@ -202,7 +202,7 @@
         [self hideEmptyReportMessage];
         [self hideToolbar];
         [self hideReportView];
-
+        
         __weak typeof(self)weakSelf = self;
         [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
             __strong typeof(self)strongSelf = weakSelf;
@@ -237,18 +237,18 @@
     [self hideEmptyReportMessage];
     [self hideToolbar];
     [self hideReportView];
-
+    
     __weak typeof(self)weakSelf = self;
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf.reportLoader cancelReport];
         [strongSelf cancelResourceViewingAndExit:YES];
     }];
-
+    
     [self.reportLoader refreshReportWithCompletion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf stopShowLoader];
-
+        
         if (success) {
             [strongSelf showReportView];
         } else {
@@ -260,13 +260,13 @@
 - (void)handleError:(NSError *)error
 {
     if (error.code == JMReportLoaderErrorTypeAuthentification) {
-
+        
         [self.restClient deleteCookies];
         [self resetSubViews];
-
+        
         NSInteger reportCurrentPage = self.report.currentPage;
         [self.report restoreDefaultState];
-
+        
         __weak typeof(self)weakSelf = self;
         [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
             __strong typeof(self)strongSelf = weakSelf;
@@ -279,7 +279,7 @@
                 }];
             }
         }];
-
+        
     } else if (error.code == JMReportLoaderErrorTypeEmtpyReport) {
         [self showEmptyReportMessage];
     } else if (error.code == JSSessionExpiredErrorCode) {
@@ -289,7 +289,9 @@
             if (strongSelf.restClient.keepSession && isSessionAuthorized) {
                 [strongSelf runReportWithPage:strongSelf.report.currentPage];
             } else {
+                __weak typeof(self)weakSelf = strongSelf;
                 [JMUtils showLoginViewAnimated:YES completion:^{
+                    __strong typeof(self)strongSelf = weakSelf;
                     [strongSelf cancelResourceViewingAndExit:YES];
                 }];
             }
@@ -297,10 +299,8 @@
     } else {
         __weak typeof(self) weakSelf = self;
         [JMUtils presentAlertControllerWithError:error completion:^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf) {
-                [strongSelf cancelResourceViewingAndExit:YES];
-            }
+            __strong typeof(self) strongSelf = weakSelf;
+            [strongSelf cancelResourceViewingAndExit:YES];
         }];
     }
 }
@@ -371,41 +371,46 @@
         self.exportCompletion = ^(NSString *resourcePath) {
             __strong typeof(self)strongSelf = weakSelf;
             [JMCancelRequestPopup dismiss];
-
+            
             JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:strongSelf.report];
             [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
                 [reportSaver cancelReport];
             }];
+            __weak typeof(self)weakSelf = strongSelf;
             [reportSaver saveReportWithName:[strongSelf tempReportName]
                                      format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
                                resourcePath:resourcePath
                                  completion:^(JMSavedResources *savedReport, NSError *error) {
-                                         [JMCancelRequestPopup dismiss];
-                                         if (error) {
-                                             if (error.code == JSSessionExpiredErrorCode) {
-                                                 [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                                     if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                                         [strongSelf preparePreviewForPrintWithCompletion:completion];
-                                                     } else {
-                                                         [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                     }
-                                                 }];
-                                             } else {
-                                                 [JMUtils presentAlertControllerWithError:error completion:nil];
-                                             }
+                                     __strong typeof(self)strongSelf = weakSelf;
+                                     [JMCancelRequestPopup dismiss];
+                                     if (error) {
+                                         if (error.code == JSSessionExpiredErrorCode) {
+                                             __weak typeof(self)weakSelf = strongSelf;
+                                             [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                                 __strong typeof(self)strongSelf = weakSelf;
+                                                 if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                                     [strongSelf preparePreviewForPrintWithCompletion:completion];
+                                                 } else {
+                                                     [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                 }
+                                             }];
                                          } else {
-                                             NSString *savedReportURL = [JMSavedResources absolutePathToSavedReport:savedReport];
-                                             NSURL *resourceURL = [NSURL fileURLWithPath:savedReportURL];
-                                             if (completion) {
-                                                 completion(resourceURL);
-                                                 [savedReport removeFromDB];
-                                             }
+                                             [JMUtils presentAlertControllerWithError:error completion:nil];
                                          }
-                                     }];
-            };
-
+                                     } else {
+                                         NSString *savedReportURL = [JMSavedResources absolutePathToSavedReport:savedReport];
+                                         NSURL *resourceURL = [NSURL fileURLWithPath:savedReportURL];
+                                         if (completion) {
+                                             completion(resourceURL);
+                                             [savedReport removeFromDB];
+                                         }
+                                     }
+                                 }];
+        };
+        
         [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
-            self.exportCompletion = nil;
+            __strong typeof(self)strongSelf = weakSelf;
+            strongSelf.exportCompletion = nil;
         }];
         [self.reportLoader exportReportWithFormat:@"pdf"];
     } else {

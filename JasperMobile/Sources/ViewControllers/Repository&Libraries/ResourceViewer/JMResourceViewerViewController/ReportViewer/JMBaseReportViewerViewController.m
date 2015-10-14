@@ -192,20 +192,20 @@
 
 - (void)configureReport
 {
+    __weak typeof(self) weakSelf = self;
     void(^errorHandlingBlock)(NSError *, NSString *) = ^(NSError *error, NSString *errorMessage) {
+        __strong typeof(self) strongSelf = weakSelf;
         [JMCancelRequestPopup dismiss];
-        NSLog(@"%@: %@", errorMessage, error);
+        JMLog(@"%@: %@", errorMessage, error);
         if (error.code == JSSessionExpiredErrorCode) {
             [JMUtils showLoginViewAnimated:YES completion:^{
-                [self cancelResourceViewingAndExit:YES];
+                [strongSelf cancelResourceViewingAndExit:YES];
             }];
         } else {
-            __weak typeof(self) weakSelf = self;
+            __weak typeof(self) weakSelf = strongSelf;
             [JMUtils presentAlertControllerWithError:error completion:^{
-                __strong typeof(weakSelf) strongSelf = weakSelf;
-                if (strongSelf) {
-                    [strongSelf cancelResourceViewingAndExit:YES];
-                }
+                __strong typeof(self) strongSelf = weakSelf;
+                [strongSelf cancelResourceViewingAndExit:YES];
             }];
         }
     };
@@ -214,65 +214,69 @@
 
     [JMCancelRequestPopup presentWithMessage:@"status.loading"
                                  cancelBlock:^{
-        [self cancelResourceViewingAndExit:YES];
-    }];
+                                     __strong typeof(self) strongSelf = weakSelf;
+                                     [strongSelf cancelResourceViewingAndExit:YES];
+                                 }];
     [JMReportManager fetchReportLookupWithResourceURI:reportURI
-                                completion:^(JSResourceReportUnit *reportUnit, NSError *error) {
-                                        [self stopShowLoader];
-                                        if (error) {
-                                            errorHandlingBlock(error, @"Report Unit Loading Error");
-                                        } else {
-                                            if (reportUnit) {
-                                                if (self.isChildReport) {
-                                                    [self.report updateReportParameters:self.initialReportParameters];
-                                                    [self startLoadReportWithPage:1];
-                                                } else {
-                                                    // get report input controls
-                                                    [JMReportManager fetchInputControlsWithReportURI:reportURI
-                                                                                          completion:^(NSArray *inputControls, NSError *error) {
-                                                                                              if (error) {
-                                                                                                  errorHandlingBlock(error, @"Report Input Controls Loading Error");
-                                                                                              } else {
-                                                                                                  if ([inputControls count]) {
-                                                                                                      [self.report generateReportOptionsWithInputControls:inputControls];
-
-                                                                                                      // get report options
-                                                                                                      [JMReportManager fetchReportOptionsWithReportURI:self.report.reportURI completion:^(NSArray *reportOptions, NSError *error) {
-                                                                                                          if (error && error.code == JSSessionExpiredErrorCode) {
-                                                                                                              errorHandlingBlock(error, @"Report Options Loading Error");
-                                                                                                          } else {
-                                                                                                              [JMCancelRequestPopup dismiss];
-                                                                                                              self.isReportAlreadyConfigured = YES;
-
-                                                                                                              [self.report addReportOptions:reportOptions];
-
-                                                                                                              if ([reportOptions count] || (reportUnit.alwaysPromptControls && [inputControls count])) {
-                                                                                                                  [self showInputControlsViewControllerWithBackButton:YES];
-                                                                                                              } else  {
-                                                                                                                  [self startLoadReportWithPage:1];
-                                                                                                              }
-                                                                                                          }
-                                                                                                      }];
-                                                                                                  } else {
-                                                                                                      [JMCancelRequestPopup dismiss];
-                                                                                                      [self startLoadReportWithPage:1];
-                                                                                                  }
-                                                                                              }
-                                                                                          }];
-                                                }
-                                            } else {
-                                                NSDictionary *userInfo = @{NSURLErrorFailingURLErrorKey : @"Report Unit Loading Error"};
-                                                NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:JSClientErrorCode userInfo:userInfo];
-                                                __weak typeof(self) weakSelf = self;
-                                                [JMUtils presentAlertControllerWithError:error completion:^{
-                                                    __strong typeof(weakSelf) strongSelf = weakSelf;
-                                                    if (strongSelf) {
-                                                        [strongSelf cancelResourceViewingAndExit:YES];
-                                                    }
-                                                }];
-                                            }
-                                        }
-                                }];
+                                           completion:^(JSResourceReportUnit *reportUnit, NSError *error) {
+                                               __strong typeof(self) strongSelf = weakSelf;
+                                               [strongSelf stopShowLoader];
+                                               if (error) {
+                                                   errorHandlingBlock(error, @"Report Unit Loading Error");
+                                               } else {
+                                                   if (reportUnit) {
+                                                       if (strongSelf.isChildReport) {
+                                                           [strongSelf.report updateReportParameters:strongSelf.initialReportParameters];
+                                                           [strongSelf startLoadReportWithPage:1];
+                                                       } else {
+                                                           // get report input controls
+                                                           __weak typeof(self) weakSelf = strongSelf;
+                                                           [JMReportManager fetchInputControlsWithReportURI:reportURI
+                                                                                                 completion:^(NSArray *inputControls, NSError *error) {
+                                                                                                     __strong typeof(self) strongSelf = weakSelf;
+                                                                                                     if (error) {
+                                                                                                         errorHandlingBlock(error, @"Report Input Controls Loading Error");
+                                                                                                     } else {
+                                                                                                         if ([inputControls count]) {
+                                                                                                             [strongSelf.report generateReportOptionsWithInputControls:inputControls];
+                                                                                                             
+                                                                                                             // get report options
+                                                                                                             __weak typeof(self) weakSelf = strongSelf;
+                                                                                                             [JMReportManager fetchReportOptionsWithReportURI:self.report.reportURI completion:^(NSArray *reportOptions, NSError *error) {
+                                                                                                                 __strong typeof(self) strongSelf = weakSelf;
+                                                                                                                 if (error && error.code == JSSessionExpiredErrorCode) {
+                                                                                                                     errorHandlingBlock(error, @"Report Options Loading Error");
+                                                                                                                 } else {
+                                                                                                                     [JMCancelRequestPopup dismiss];
+                                                                                                                     strongSelf.isReportAlreadyConfigured = YES;
+                                                                                                                     
+                                                                                                                     [strongSelf.report addReportOptions:reportOptions];
+                                                                                                                     
+                                                                                                                     if ([reportOptions count] || (reportUnit.alwaysPromptControls && [inputControls count])) {
+                                                                                                                         [strongSelf showInputControlsViewControllerWithBackButton:YES];
+                                                                                                                     } else  {
+                                                                                                                         [strongSelf startLoadReportWithPage:1];
+                                                                                                                     }
+                                                                                                                 }
+                                                                                                             }];
+                                                                                                         } else {
+                                                                                                             [JMCancelRequestPopup dismiss];
+                                                                                                             [strongSelf startLoadReportWithPage:1];
+                                                                                                         }
+                                                                                                     }
+                                                                                                 }];
+                                                       }
+                                                   } else {
+                                                       NSDictionary *userInfo = @{NSURLErrorFailingURLErrorKey : @"Report Unit Loading Error"};
+                                                       NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:JSClientErrorCode userInfo:userInfo];
+                                                       __weak typeof(self) weakSelf = strongSelf;
+                                                       [JMUtils presentAlertControllerWithError:error completion:^{
+                                                           __strong typeof(self) strongSelf = weakSelf;
+                                                           [strongSelf cancelResourceViewingAndExit:YES];
+                                                       }];
+                                                   }
+                                               }
+                                           }];
 }
 
 #pragma mark - Print

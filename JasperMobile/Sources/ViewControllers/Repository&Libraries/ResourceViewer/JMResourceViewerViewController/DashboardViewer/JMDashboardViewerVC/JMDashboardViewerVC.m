@@ -159,18 +159,21 @@
     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
         __strong typeof(self)strongSelf = weakSelf;
         if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-            [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
-                                 cancelBlock:^(void) {
-                                         [strongSelf.dashboardLoader reset];
-                                         [super cancelResourceViewingAndExit:YES];
-                                     }];
             __weak typeof(self)weakSelf = strongSelf;
+            [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+                                       cancelBlock:^(void) {
+                                           __strong typeof(self)strongSelf = weakSelf;
+                                           [strongSelf.dashboardLoader reset];
+                                           [super cancelResourceViewingAndExit:YES];
+                                       }];
             [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
                 __weak typeof(self)strongSelf = weakSelf;
                 [strongSelf stopShowLoader];
             }];
         } else {
+            __weak typeof(self)weakSelf = strongSelf;
             [JMUtils showLoginViewAnimated:YES completion:^{
+                __weak typeof(self)strongSelf = weakSelf;
                 [strongSelf cancelResourceViewingAndExit:YES];
             }];
         }
@@ -278,10 +281,8 @@
             if (error) {
                 __weak typeof(self) weakSelf = strongSelf;
                 [JMUtils presentAlertControllerWithError:error completion:^{
-                    __strong typeof(weakSelf) strongSelf = weakSelf;
-                    if (strongSelf) {
-                        [strongSelf cancelResourceViewingAndExit:YES];
-                    }
+                    __strong typeof(self) strongSelf = weakSelf;
+                    [strongSelf cancelResourceViewingAndExit:YES];
                 }];
             } else {
                 JMReportViewerVC *reportViewController = (JMReportViewerVC *) [strongSelf.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];

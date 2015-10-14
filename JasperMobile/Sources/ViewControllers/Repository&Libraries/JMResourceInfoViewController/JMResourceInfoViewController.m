@@ -303,12 +303,9 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
             BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
             if (!canOpen) {
-                UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:nil
-                                                                      message:@"error.openIn.message"
-                                                                     delegate:self
-                                                            cancelButtonTitle:@"dialog.button.ok"
-                                                            otherButtonTitles:nil];
-                [alertView show];
+                NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);
+                NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                [JMUtils presentAlertControllerWithError:error completion:nil];
             }
             break;
         }

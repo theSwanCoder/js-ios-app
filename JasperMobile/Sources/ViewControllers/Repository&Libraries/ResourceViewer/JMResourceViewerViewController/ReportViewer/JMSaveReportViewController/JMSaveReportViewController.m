@@ -319,15 +319,13 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                                                               cancelCompletionHandler:nil];
             __weak typeof(self) weakSelf = self;
             [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                __strong typeof(weakSelf) strongSelf = weakSelf;
-                if (strongSelf) {
-                    strongSelf.errorString = nil;
-                    [strongSelf.tableView reloadData];
-                    
-                    [strongSelf verifyRangePagesWithCompletion:^{
-                        [strongSelf saveReport];
-                    }];
-                }
+                __strong typeof(self) strongSelf = weakSelf;
+                strongSelf.errorString = nil;
+                [strongSelf.tableView reloadData];
+                
+                [strongSelf verifyRangePagesWithCompletion:^{
+                    [strongSelf saveReport];
+                }];
             }];
             
             [self presentViewController:alertController animated:YES completion:nil];
@@ -356,17 +354,15 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                                                               cancelCompletionHandler:nil];
             __weak typeof(self) weakSelf = self;
             [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                __strong typeof(weakSelf) strongSelf = weakSelf;
-                if (strongSelf) {
-                    strongSelf.selectedReportFormat = [JSConstants sharedInstance].CONTENT_TYPE_PDF;
-                    // update format section
-                    JMSaveReportSection *formatSection = [strongSelf sectionForType:JMSaveReportSectionTypeFormat];
-                    NSInteger formatSectionIndex = [strongSelf.sections indexOfObject:formatSection];
-                    NSIndexSet *sectionsForUpdate = [NSIndexSet indexSetWithIndex:formatSectionIndex];
-                    [strongSelf.tableView reloadSections:sectionsForUpdate withRowAnimation:UITableViewRowAnimationAutomatic];
-                    // try save report in format PDF
-                    [strongSelf runSaveAction];
-                }
+                __strong typeof(self) strongSelf = weakSelf;
+                strongSelf.selectedReportFormat = [JSConstants sharedInstance].CONTENT_TYPE_PDF;
+                // update format section
+                JMSaveReportSection *formatSection = [strongSelf sectionForType:JMSaveReportSectionTypeFormat];
+                NSInteger formatSectionIndex = [strongSelf.sections indexOfObject:formatSection];
+                NSIndexSet *sectionsForUpdate = [NSIndexSet indexSetWithIndex:formatSectionIndex];
+                [strongSelf.tableView reloadSections:sectionsForUpdate withRowAnimation:UITableViewRowAnimationAutomatic];
+                // try save report in format PDF
+                [strongSelf runSaveAction];
             }];
             [self presentViewController:alertController animated:YES completion:nil];
         } else {

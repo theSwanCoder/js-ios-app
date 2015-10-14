@@ -105,9 +105,11 @@
     __weak typeof(self) weakSelf = self;
     UIAlertAction *alertAction = [UIAlertAction actionWithTitle:JMCustomLocalizedString(title, nil) style:style handler:^(UIAlertAction * _Nonnull action) {
         if (handler) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
+            __strong typeof(self) strongSelf = weakSelf;
             if (strongSelf) {
                 handler(strongSelf, action);
+            } else {
+                @throw [NSException exceptionWithName:@"UIAlertController is nil" reason:@"It's impossible, but somthing went wrong!" userInfo:nil];
             }
         }
     }];

@@ -70,10 +70,8 @@
         NSError *error = [NSError errorWithDomain:@"error.noconnection.dialog.title" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         __weak typeof(self) weakSelf = self;
         [JMUtils presentAlertControllerWithError:error completion:^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (strongSelf) {
-                [strongSelf.navigationController popViewControllerAnimated:YES];
-            }
+            __strong typeof(self) strongSelf = weakSelf;
+            [strongSelf.navigationController popViewControllerAnimated:YES];
         }];
     } else {
         [self.webView loadRequest:ppRequest];

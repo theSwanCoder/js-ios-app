@@ -159,10 +159,8 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     
     __weak typeof(self) weakSelf = self;
     [alertController addActionWithLocalizedTitle:@"dialog.button.retry" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        if (strongSelf) {
-            [strongSelf update];
-        }
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf update];
     }];
     
     [alertController addActionWithLocalizedTitle:@"dialog.button.applyUpdate" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
