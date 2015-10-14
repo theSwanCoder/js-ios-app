@@ -93,6 +93,18 @@
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
     UIWebView *webView = [self.configurator webViewWithFrame:self.view.bounds asSecondary:self.isChildReport];
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
+
+    webView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"webView": webView}]];
+
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"webView": webView}]];
+
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 

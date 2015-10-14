@@ -104,6 +104,16 @@
     id dashboardView = [self.configurator webViewWithFrame:rootViewBounds asSecondary:NO];
     [self.view addSubview:dashboardView];
 
+    ((UIView *)dashboardView).translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[dashboardView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"dashboardView": dashboardView}]];
+
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[dashboardView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"dashboardView": dashboardView}]];
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
