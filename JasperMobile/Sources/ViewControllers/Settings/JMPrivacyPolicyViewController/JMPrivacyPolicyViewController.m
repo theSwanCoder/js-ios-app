@@ -66,9 +66,8 @@
     
     NSString *cachePath = [[RNCachingURLProtocol new] cachePathForRequest:ppRequest];
     if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath] && [[Reachability reachabilityWithHostName:[ppURL host]] currentReachabilityStatus] == NotReachable) {
-        NSString *errorTitle = JMCustomLocalizedString(@"error.noconnection.dialog.title", nil);
         NSString *errorMessage = JMCustomLocalizedString(@"error.noconnection.dialog.msg", nil);
-        NSError *error = [NSError errorWithDomain:errorTitle code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        NSError *error = [NSError errorWithDomain:@"error.noconnection.dialog.title" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         __weak typeof(self) weakSelf = self;
         [JMUtils presentAlertControllerWithError:error completion:^{
             __strong typeof(weakSelf) strongSelf = weakSelf;

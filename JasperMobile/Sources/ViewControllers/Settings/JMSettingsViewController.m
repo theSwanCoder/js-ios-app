@@ -152,9 +152,8 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
         
         [self presentViewController:mc animated:YES completion:NULL];
     } else {
-        NSString *errorTitle = JMCustomLocalizedString(@"dialod.title.error", nil);
         NSString *errorMessage = JMCustomLocalizedString(@"settings.feedback.errorShowClient", nil);
-        NSError *error = [NSError errorWithDomain:errorTitle code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         [JMUtils presentAlertControllerWithError:error completion:nil];
     }
 #endif

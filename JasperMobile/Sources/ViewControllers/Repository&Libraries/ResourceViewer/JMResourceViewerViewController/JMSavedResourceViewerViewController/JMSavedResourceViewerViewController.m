@@ -39,10 +39,11 @@
 {
     [self.webView stopLoading];
     [self.webView loadHTMLString:@"" baseURL:nil];
+
 #warning WHY ONLY FOR SAVED REPORT VIEWER WE HANDLE MEMORY WARNINGS???
     NSString *errorTitle = JMCustomLocalizedString(@"dialod.title.error", nil);
     NSString *errorMessage = JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil);
-    NSError *error = [NSError errorWithDomain:errorTitle code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
     __weak typeof(self) weakSelf = self;
     [JMUtils presentAlertControllerWithError:error completion:^{
         __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -132,8 +133,9 @@
                                                                                     if (strongSelf) {
                                                                                         if ([strongSelf.savedReports renameReportTo:text]) {
                                                                                             strongSelf.title = text;
-#warning HERE NEED CHECK WORKING WITH RESOURCELOOKUP
                                                                                             strongSelf.resourceLookup = [strongSelf.savedReports wrapperFromSavedReports];
+                                                                                            [strongSelf setupRightBarButtonItems];
+                                                                                            [strongSelf startResourceViewing];
                                                                                         }
                                                                                     }
                                                                                 }];
@@ -166,9 +168,8 @@
 
         BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
         if (!canOpen) {
-            NSString *errorTitle = JMCustomLocalizedString(@"dialod.title.error", nil);
             NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);
-            NSError *error = [NSError errorWithDomain:errorTitle code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     }

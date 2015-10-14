@@ -143,7 +143,7 @@
     }
     
     if ([errorMessage length]) {
-        NSError *error = [NSError errorWithDomain:JMCustomLocalizedString(@"dialod.title.error", nil) code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:0 userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
         [JMUtils presentAlertControllerWithError:error completion:nil];
     } else {
 
@@ -245,7 +245,7 @@
 
             NSString *errorTitle = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
             NSString *errorMessage = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
-            NSError *error = [NSError errorWithDomain:errorTitle code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            NSError *error = [NSError errorWithDomain:errorTitle code:JSInvalidCredentialsErrorCode userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     }];

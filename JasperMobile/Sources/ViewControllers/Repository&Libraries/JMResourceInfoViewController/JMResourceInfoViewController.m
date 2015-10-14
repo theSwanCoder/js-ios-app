@@ -82,6 +82,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     self.title = self.resourceLookup.label;
     self.resourceProperties = nil;
     [self.tableView reloadData];
+    self.needLayoutUI = YES;
 }
 
 - (void)interfaceOrientationDidChanged:(id)notification
@@ -102,7 +103,6 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     } else {
         [JMFavorites addToFavorites:self.resourceLookup];
     }
-    [self setNeedLayoutUI:YES];
 }
 
 - (void)cancelButtonTapped:(id)sender

@@ -125,9 +125,8 @@
                     } @weakselfend];
                 }
             } else {
-                NSString *errorTitle = JMCustomLocalizedString(@"dialod.title.error", nil);
                 NSString *errorMessage = JMCustomLocalizedString(@"report.viewer.report.options.create.permission.error", nil);
-                NSError *error = [NSError errorWithDomain:errorTitle code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:0 userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
                 [JMUtils presentAlertControllerWithError:error completion:nil];
             }
         }];
@@ -169,9 +168,8 @@
                 }];
                 [self presentViewController:alertController animated:YES completion:nil];
             } else {
-                NSString *errorTitle = JMCustomLocalizedString(@"dialod.title.error", nil);
                 NSString *errorMessage = JMCustomLocalizedString(@"report.viewer.report.options.remove.permission.error", nil);
-                NSError *error = [NSError errorWithDomain:errorTitle code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
                 [JMUtils presentAlertControllerWithError:error completion:nil];
             }
         }];

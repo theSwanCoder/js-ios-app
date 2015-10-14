@@ -274,8 +274,11 @@ void jmDebugLog(NSString *format, ...) {
 
 + (void)presentAlertControllerWithError:(NSError *)error completion:(void (^)(void))completion
 {
-    NSString *title = @"error.readingresponse.dialog.msg";
+    NSString *title = error.domain;
     NSString *message = error.localizedDescription;
+//    if (![title isEqualToString:@"dialod.title.error"]) {
+//        title = @"error.readingresponse.dialog.msg";
+//    }
     if (error.code == JSInvalidCredentialsErrorCode) {
         title = @"error.authenication.dialog.title";
         message = @"error.authenication.dialog.msg";

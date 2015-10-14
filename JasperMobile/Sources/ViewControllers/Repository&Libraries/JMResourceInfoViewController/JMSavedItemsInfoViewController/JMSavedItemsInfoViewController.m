@@ -109,9 +109,7 @@
                                                                                     __strong typeof(weakSelf) strongSelf = weakSelf;
                                                                                     if (strongSelf) {
                                                                                         if ([strongSelf.savedReports renameReportTo:text]) {
-                                                                                            strongSelf.title = text;
-#warning HERE NEED CHECK WORKING WITH RESOURCELOOKUP
-                                                                                            strongSelf.resourceLookup = [strongSelf.savedReports wrapperFromSavedReports];
+                                                                                            [strongSelf resetResourceProperties];
                                                                                         }
                                                                                     }
                                                                                 }];
