@@ -131,7 +131,7 @@
 "report.viewer.error.title" = "Error while loading report.";
 "report.viewer.visualize.render.error" = "Report rendering failed.";
 "report.viewer.emptyreport.title" = "Report is empty.";
-"report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options, or tap 'Cancel' to return to the previous report.";
+"report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filters, or tap 'Cancel' to return to the previous report.";
 "report.viewer.pagecount" = "of %d";
 "report.viewer.wrongNumberOfCurrentPage" = "The requested page is out of range (%@).";
 
@@ -153,14 +153,14 @@
 "report.viewer.save.name.errmsg.tooBigRange" = "Can't save report of more than %@ pages in HTML format. Would you like to save it in PDF format?";
 
 // Report viewer Options view
-"report.viewer.options.title" = "Filter Options";
+"report.viewer.options.title" = "Filters";
 "report.viewer.options.singleselect.titlelabel.title" = "Select a single item";
 "report.viewer.options.multiselect.titlelabel.title" = "Select one or more items";
 "report.viewer.options.search.value.placeholder" = "Search Values";
 "report.viewer.options.ic.title.date" = "Date";
 "report.viewer.options.ic.title.time" = "Time";
 "report.viewer.options.ic.title.unset" = "Unset";
-"report.viewer.report.options.title" = "Report Options";
+"report.viewer.report.options.title" = "Saved Values";
 "report.viewer.report.options.active.option.title" = "-- None --";
 "report.viewer.report.options.new.option.title" = "Enter name of a new ReportOption";
 "report.viewer.report.options.new.option.title.alreadyexist" = "This report already has saved values with this name. Do you want to overwrite them?";
@@ -211,7 +211,7 @@
 
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
-"action.title.edit" = "Edit Filter Options";
+"action.title.edit" = "Edit Filters";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
 "action.title.markasfavorite" = "Mark as Favorite";

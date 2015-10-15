@@ -153,7 +153,6 @@
 "report.viewer.save.name.errmsg.tooBigRange" = "No se puede guardar un informe de más de %@ páginas en formato HTML. ¿Desea guardarlo en formato PDF?";
 
 // Report viewer Options view
-"report.viewer.options.title" = "Operación de filtro";
 "report.viewer.options.singleselect.titlelabel.title" = "Seleccione un único elemento";
 "report.viewer.options.multiselect.titlelabel.title" = "Seleccione uno o más elementos";
 "report.viewer.options.search.value.placeholder" = "Buscar valores";
@@ -201,7 +200,6 @@
 
 "action.title.refresh" = "Actualizar";
 "action.title.save" = "Guardar";
-"action.title.edit" = "Editar opciones de filtro";
 "action.title.delete" = "Eliminar";
 "action.title.rename" = "Cambiar nombre";
 "action.title.markasfavorite" = "Marcar como favorito";

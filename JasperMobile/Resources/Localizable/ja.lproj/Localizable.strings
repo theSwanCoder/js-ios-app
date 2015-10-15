@@ -153,7 +153,6 @@
 "report.viewer.save.name.errmsg.tooBigRange" = "%@ページ以上のレポートを、HTML形式で保存できませんでした。PDF形式で保存しますか？";
 
 // Report viewer Options view
-"report.viewer.options.title" = "フィルタ オプション";
 "report.viewer.options.singleselect.titlelabel.title" = "1 つのアイテムを選択";
 "report.viewer.options.multiselect.titlelabel.title" = "1 つまたは複数のアイテムを選択";
 "report.viewer.options.search.value.placeholder" = "値を検索";
@@ -201,7 +200,6 @@
 
 "action.title.refresh" = "更新";
 "action.title.save" = "保存";
-"action.title.edit" = "フィルタ オプションの編集";
 "action.title.delete" = "削除";
 "action.title.rename" = "名前の変更";
 "action.title.markasfavorite" = "お気に入りとしてマーク";

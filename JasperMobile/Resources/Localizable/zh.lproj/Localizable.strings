@@ -153,7 +153,6 @@
 "report.viewer.save.name.errmsg.tooBigRange" = "无法保存多于%@页的HTML格式报告。您想将其保存为PDF格式吗？";
 
 // Report viewer Options view
-"report.viewer.options.title" = "过滤器选项";
 "report.viewer.options.singleselect.titlelabel.title" = "选择一个项目";
 "report.viewer.options.multiselect.titlelabel.title" = "选择一个或多个项目";
 "report.viewer.options.search.value.placeholder" = "搜索值";
@@ -201,7 +200,6 @@
 
 "action.title.refresh" = "刷新";
 "action.title.save" = "保存";
-"action.title.edit" = "编辑过滤器选项";
 "action.title.delete" = "删除";
 "action.title.rename" = "重命名";
 "action.title.markasfavorite" = "标记为收藏项";
