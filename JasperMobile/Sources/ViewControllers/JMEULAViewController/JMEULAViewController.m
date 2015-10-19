@@ -29,9 +29,7 @@
 #import "JMEULAViewController.h"
 
 @interface JMEULAViewController()
-@property (weak, nonatomic) IBOutlet UIButton *agreeButton;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
-@property (nonatomic, readwrite) BOOL isAgree;
 @end
 
 @implementation JMEULAViewController
@@ -47,6 +45,16 @@
 {
     [super viewDidLoad];
 
+    self.title = JMCustomLocalizedString(@"settings.privacy.EULA.title", nil);
+
+    if (self.shouldUserAccept) {
+        UIBarButtonItem *acceptButton = [[UIBarButtonItem alloc] initWithTitle:@"Accept"
+                                                                         style:UIBarButtonItemStyleDone
+                                                                        target:self
+                                                                        action:@selector(agreeAction:)];
+        self.navigationItem.rightBarButtonItem = acceptButton;
+    }
+
     NSString *path = [[NSBundle mainBundle] pathForResource:@"TIB_jsm-ios_2.2.0_license" ofType:@"pdf"];
     NSURL *url = [NSURL fileURLWithPath:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -56,9 +64,9 @@
 #pragma mark - Actions
 - (IBAction)agreeAction:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:^{
+    if (self.completion) {
         self.completion();
-    }];
+    }
 }
 
 @end

@@ -32,6 +32,7 @@ NSString * const kJMBooleanCellIdentifier = @"BooleanCellIdentifier";
 NSInteger const kJMFeedbackSettingValue = 100;
 NSInteger const kJMPrivacyPolicySettingValue = 101;
 NSInteger const kJMOnboardIntroSettingValue = 102;
+NSInteger const kJMEULASettingValue = 103;
 
 @interface JMSettings ()
 @property (nonatomic, readwrite, strong) NSArray *itemsArray;
@@ -58,6 +59,7 @@ NSInteger const kJMOnboardIntroSettingValue = 102;
       @{@"title" : JMCustomLocalizedString(@"settings.crashtracking.title", nil), @"value" : @([JMUtils crashReportsSendingEnable]), @"cellIdentifier" : kJMBooleanCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.feedback", nil), @"value" : @(kJMFeedbackSettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.privacy.policy.title", nil), @"value" : @(kJMPrivacyPolicySettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
+      @{@"title" : JMCustomLocalizedString(@"settings.privacy.EULA.title", nil), @"value" : @(kJMEULASettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
       // used for test purpose
 //      @{@"title" : JMCustomLocalizedString(@"settings.item.intro", nil), @"value" : @(kJMOnboardIntroSettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
 //      @{@"title" : @"Use Visualize", @"value" : @([JMUtils shouldUseVisualize]), @"cellIdentifier" : kJMBooleanCellIdentifier}

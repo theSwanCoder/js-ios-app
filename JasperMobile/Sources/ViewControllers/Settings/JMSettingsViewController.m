@@ -34,6 +34,7 @@
 #import <MessageUI/MessageUI.h>
 #import "ALToastView.h"
 #import "JMOnboardIntroViewController.h"
+#import "JMEULAViewController.h"
 
 static NSString const *kFeedbackPrimaryEmail = @"js-dev-mobile@tibco.com";
 static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
@@ -125,6 +126,8 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
             [self showOnboardIntro];
         } else if (value == kJMFeedbackSettingValue) {
             [self sendFeedback];
+        } else if (value == kJMEULASettingValue) {
+            [self showEULA];
         }
     }
 }
@@ -236,6 +239,16 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     if ([self isMenuShown]) {
         [self closeMenu];
     }
+}
+
+- (void)showEULA
+{
+    JMEULAViewController *EULAViewController = (JMEULAViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMEULAViewController"];
+    EULAViewController.completion = nil;
+    EULAViewController.shouldUserAccept = NO;
+
+    [self.navigationController pushViewController:EULAViewController
+                                         animated:YES];
 }
 
 #pragma mark - UIAlertViewDelegate

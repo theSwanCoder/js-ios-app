@@ -32,5 +32,6 @@
  */
 
 @interface JMEULAViewController : UIViewController
-@property (nonatomic, copy) void(^ __nonnull completion)(void);
+@property (nonatomic, copy) void(^ __nullable completion)(void);
+@property (nonatomic) BOOL shouldUserAccept;
 @end

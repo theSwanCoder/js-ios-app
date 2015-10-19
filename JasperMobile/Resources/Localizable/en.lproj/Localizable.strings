@@ -202,6 +202,7 @@
 "settings.crashtracking.alert.title" = "Note";
 "settings.crashtracking.alert.message" = "Restart the app after changing this setting.";
 "settings.privacy.policy.title" = "Privacy Policy";
+"settings.privacy.EULA.title" = "End user license agreement";
 "settings.feedback" = "Feedback by email";
 "settings.feedback.errorShowClient" = "An email address is required.";
 "settings.save.message" = "Saving Settings...";
@@ -224,6 +225,7 @@
 "action.title.run" = "Run";
 "action.title.print" = "Print";
 "action.title.openIn" = "Open in...";
+"action.title.accept" = "Accept";
 
 /* Error messages */
 

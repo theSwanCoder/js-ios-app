@@ -201,7 +201,8 @@ void jmDebugLog(NSString *format, ...) {
     SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
     JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
 
-    if ([revealViewController.presentedViewController isKindOfClass:[UINavigationController class]]) {
+    if ([revealViewController.presentedViewController isKindOfClass:[UINavigationController class]] &&
+            [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMLoginViewController class]]) {
         // if a nav view controller was loaded previously
         return;
     }
@@ -232,18 +233,21 @@ void jmDebugLog(NSString *format, ...) {
         UIViewController *rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
 
         JMEULAViewController *EULAViewController = (JMEULAViewController *) [rootViewController.storyboard instantiateViewControllerWithIdentifier:@"JMEULAViewController"];
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:EULAViewController];
+        EULAViewController.shouldUserAccept = YES;
         EULAViewController.completion = ^{
+            [rootViewController dismissViewControllerAnimated:YES completion:nil];
             [self setUserAcceptAgreement:YES];
             completion(YES);
         };
 
-        if (rootViewController.presentedViewController && [rootViewController.presentedViewController isKindOfClass:[JMEULAViewController class]]) {
+        if (rootViewController.presentedViewController && [rootViewController.presentedViewController isKindOfClass:[UINavigationController class]]) {
             return;
-        } else if (rootViewController.presentedViewController && ![rootViewController.presentedViewController isKindOfClass:[JMEULAViewController class]]) {
+        } else if (rootViewController.presentedViewController && ![rootViewController.presentedViewController isKindOfClass:[UINavigationController class]]) {
             [rootViewController dismissViewControllerAnimated:YES completion:nil];
         }
 
-        [rootViewController presentViewController:EULAViewController
+        [rootViewController presentViewController:navController
                                          animated:YES
                                        completion:nil];
     }

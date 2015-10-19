@@ -38,6 +38,7 @@ extern NSString * const kJMBooleanCellIdentifier;
 extern NSInteger const kJMFeedbackSettingValue;
 extern NSInteger const kJMPrivacyPolicySettingValue;
 extern NSInteger const kJMOnboardIntroSettingValue;
+extern NSInteger const kJMEULASettingValue;
 
 @interface JMSettings : NSObject
 @property (nonatomic, readonly) NSArray *itemsArray;
