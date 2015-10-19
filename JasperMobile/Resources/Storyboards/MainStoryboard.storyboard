@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15B30a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gNe-8U-f8m">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15B38b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="gNe-8U-f8m">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
@@ -736,6 +736,52 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b5v-nb-zoW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1247" y="3560"/>
+        </scene>
+        <!--EULA View Controller-->
+        <scene sceneID="Mtf-cY-kum">
+            <objects>
+                <viewController storyboardIdentifier="JMEULAViewController" id="Hb9-jY-nAU" customClass="JMEULAViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="onV-l4-bNQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="bwr-fh-tFn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="wey-Wl-oOm">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gkd-xd-WuR">
+                                <rect key="frame" x="0.0" y="20" width="600" height="510"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </webView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lTr-km-f9V">
+                                <rect key="frame" x="280" y="550" width="41" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Agree"/>
+                                <connections>
+                                    <action selector="agreeAction:" destination="Hb9-jY-nAU" eventType="touchUpInside" id="W3y-oa-LvC"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="lTr-km-f9V" firstAttribute="centerX" secondItem="wey-Wl-oOm" secondAttribute="centerX" id="ODx-03-9va"/>
+                            <constraint firstAttribute="trailing" secondItem="gkd-xd-WuR" secondAttribute="trailing" id="PHr-rn-6AA"/>
+                            <constraint firstItem="gkd-xd-WuR" firstAttribute="top" secondItem="onV-l4-bNQ" secondAttribute="bottom" id="QbQ-Fk-l3C"/>
+                            <constraint firstItem="bwr-fh-tFn" firstAttribute="top" secondItem="lTr-km-f9V" secondAttribute="bottom" constant="20" id="cap-bX-fsF"/>
+                            <constraint firstItem="lTr-km-f9V" firstAttribute="top" secondItem="gkd-xd-WuR" secondAttribute="bottom" constant="20" id="h5s-tC-DuH"/>
+                            <constraint firstItem="gkd-xd-WuR" firstAttribute="leading" secondItem="wey-Wl-oOm" secondAttribute="leading" id="qO1-Eo-jMw"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="agreeButton" destination="lTr-km-f9V" id="zrz-1m-C4t"/>
+                        <outlet property="webView" destination="gkd-xd-WuR" id="Hli-QR-3Ly"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IgG-or-THe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1250" y="4318"/>
         </scene>
         <!--Favorites Collection View Controller-->
         <scene sceneID="qHV-w6-yY6">

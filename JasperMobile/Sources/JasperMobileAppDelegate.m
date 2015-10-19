@@ -88,43 +88,46 @@ static const NSInteger kSplashViewTag = 100;
 {
     [self removeSplashView];
 
-    [[JMThemesManager sharedManager] applyCurrentTheme];
-    [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:^(BOOL isSessionRestored) {
+    [JMUtils askUserAgreementWithCompletion:^(BOOL isAgree) {
+        if (isAgree) {
+            [[JMThemesManager sharedManager] applyCurrentTheme];
+            [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:^(BOOL isSessionRestored) {
 
-        SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
-        JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
+                SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
+                JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
 
-        LoginCompletionBlock loginCompletionBlock = ^{
-            [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
+                LoginCompletionBlock loginCompletionBlock = ^{
+                    [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
 
-            // Configure Appirater
-            [Appirater setAppId:@"467317446"];
-            [Appirater setDaysUntilPrompt:0];
-            [Appirater setUsesUntilPrompt:5];
-            [Appirater setTimeBeforeReminding:2];
-            [Appirater setDebug:NO];
-            [Appirater appLaunched:YES];
+                    // Configure Appirater
+                    [Appirater setAppId:@"467317446"];
+                    [Appirater setDaysUntilPrompt:0];
+                    [Appirater setUsesUntilPrompt:5];
+                    [Appirater setTimeBeforeReminding:2];
+                    [Appirater setDebug:NO];
+                    [Appirater appLaunched:YES];
 
-            [self showOnboardIntroIfNeeded];
-        };
+                    [self showOnboardIntroIfNeeded];
+                };
 
-        if (isSessionRestored) {
-            self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
+                if (isSessionRestored) {
+                    self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
 
-            if (!menuViewController.selectedItem) {
-                loginCompletionBlock();
-            }
-        } else {
-            JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
-            if (activeServerProfile && activeServerProfile.askPassword.boolValue) {
-                [JMUtils showLoginViewForRestoreSessionWithCompletion:loginCompletionBlock];
-            } else {
-                [JMUtils showLoginViewAnimated:NO
-                                    completion:nil
-                               loginCompletion:loginCompletionBlock];
-            }
+                    if (!menuViewController.selectedItem) {
+                        loginCompletionBlock();
+                    }
+                } else {
+                    JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+                    if (activeServerProfile && activeServerProfile.askPassword.boolValue) {
+                        [JMUtils showLoginViewForRestoreSessionWithCompletion:loginCompletionBlock];
+                    } else {
+                        [JMUtils showLoginViewAnimated:NO
+                                            completion:nil
+                                       loginCompletion:loginCompletionBlock];
+                    }
+                }
+            }];
         }
-
     }];
 }
 
@@ -204,5 +207,6 @@ static const NSInteger kSplashViewTag = 100;
         }
     }
 }
+
 
 @end

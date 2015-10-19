@@ -116,6 +116,12 @@ void jmDebugLog(NSString *format, ...);
 
 + (void)showLoginViewForRestoreSessionWithCompletion:(LoginCompletionBlock)loginCompletion;
 
++ (void)askUserAgreementWithCompletion:(void (^ __nonnull)(BOOL isAgree))completion;
+
++ (BOOL)isUserAcceptAgreement;
+
++ (void)setUserAcceptAgreement:(BOOL)isAccept;
+
 + (void)showAlertViewWithError:(NSError *)error;
 
 + (void)showAlertViewWithError:(NSError *)error completion:(void (^)(UIAlertView *alertView, NSInteger buttonIndex))completion;

@@ -54,6 +54,7 @@ NSString * const kJMDashboardKey = @"dashboardKey";
 NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";
 NSString * const kJMDefaultSendingCrashReport = @"jaspersoft.crashreportsending.enabled";
 NSString * const kJMDefaultUseVisualize = @"jaspersoft.use.visualize";
+NSString * const kJMUserAcceptAgreement = @"kJMUserAcceptAgreement";
 
 // Demo server parameters
 NSString * const kJMDemoServerAlias = @"Jaspersoft Mobile Demo";

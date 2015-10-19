@@ -82,6 +82,8 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     } else {
         [self removeOldMobileDemo];
         [self updateSavedItems];
+        // skip user agreement
+        [JMUtils setUserAcceptAgreement:NO];
     }
 }
 

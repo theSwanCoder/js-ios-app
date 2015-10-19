@@ -152,6 +152,8 @@
 		9348F4EA1A35D103006F5677 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
 		9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */; };
 		9356ECA51A3075F500ACE2C6 /* JMUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */; };
+		93618E131BD4BFCE007995D7 /* TIB_jsm-sdk-ios_2.1.1_license.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 93618E121BD4BFCE007995D7 /* TIB_jsm-sdk-ios_2.1.1_license.pdf */; settings = {ASSET_TAGS = (); }; };
+		93618E171BD4BFFE007995D7 /* JMEULAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93618E161BD4BFFE007995D7 /* JMEULAViewController.m */; settings = {ASSET_TAGS = (); }; };
 		937AD98E1AC83D6900076855 /* JMResourcesListLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */; };
 		9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9397F97C1AAACADF006B89C6 /* JMReport.m */; };
 		939917321BC67737006CC2A7 /* old_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = A14785AF90B597E785B4A30A /* old_dashboard.js */; };
@@ -492,6 +494,9 @@
 		9356EC9A1A30752900ACE2C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptionsTests.m; sourceTree = "<group>"; };
 		9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUtilsTests.m; sourceTree = "<group>"; };
+		93618E121BD4BFCE007995D7 /* TIB_jsm-sdk-ios_2.1.1_license.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "TIB_jsm-sdk-ios_2.1.1_license.pdf"; sourceTree = "<group>"; };
+		93618E151BD4BFFE007995D7 /* JMEULAViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMEULAViewController.h; sourceTree = "<group>"; };
+		93618E161BD4BFFE007995D7 /* JMEULAViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMEULAViewController.m; sourceTree = "<group>"; };
 		937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesListLoaderTests.m; sourceTree = "<group>"; };
 		9397F97B1AAACADF006B89C6 /* JMReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReport.h; sourceTree = "<group>"; };
 		9397F97C1AAACADF006B89C6 /* JMReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReport.m; sourceTree = "<group>"; };
@@ -890,6 +895,7 @@
 		089B14BF1AA756BD0021A915 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				93618E141BD4BFE8007995D7 /* JMEULAViewController */,
 				089B14C91AA756BD0021A915 /* JMLoginViewController */,
 				0801DF861AAF2B2A00DD072C /* JMSplashViewController */,
 				0801DFB01AAF2E7500DD072C /* JMOnboardIntroViewController */,
@@ -1654,6 +1660,7 @@
 		08E62C8419922BA40081CA83 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				93618E111BD4BFBF007995D7 /* EULA */,
 				08E62D6F19922F5A0081CA83 /* CoreData */,
 				08E0D1981B0CF27200BFBFE5 /* Images */,
 				08E62CF719922BA40081CA83 /* Localizable */,
@@ -1760,6 +1767,23 @@
 				9356EC9A1A30752900ACE2C6 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		93618E111BD4BFBF007995D7 /* EULA */ = {
+			isa = PBXGroup;
+			children = (
+				93618E121BD4BFCE007995D7 /* TIB_jsm-sdk-ios_2.1.1_license.pdf */,
+			);
+			path = EULA;
+			sourceTree = "<group>";
+		};
+		93618E141BD4BFE8007995D7 /* JMEULAViewController */ = {
+			isa = PBXGroup;
+			children = (
+				93618E151BD4BFFE007995D7 /* JMEULAViewController.h */,
+				93618E161BD4BFFE007995D7 /* JMEULAViewController.m */,
+			);
+			path = JMEULAViewController;
 			sourceTree = "<group>";
 		};
 		9397F9791AAACA94006B89C6 /* Models */ = {
@@ -2218,6 +2242,7 @@
 				930F8D461ABB1CDF005F93FB /* report.html in Resources */,
 				08E0D19E1B0CF27200BFBFE5 /* AppIcon120x120.png in Resources */,
 				08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */,
+				93618E131BD4BFCE007995D7 /* TIB_jsm-sdk-ios_2.1.1_license.pdf in Resources */,
 				089B15C61AA756BD0021A915 /* JMGridResourceCollectionViewCell.xib in Resources */,
 				08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */,
 				930F8D481ABB1D9F005F93FB /* require.min.js in Resources */,
@@ -2304,6 +2329,7 @@
 				08DD18391B136B8A00856112 /* JMDashboardInfoViewController.m in Sources */,
 				089B15B61AA756BD0021A915 /* JMLoginViewController.m in Sources */,
 				08DD183C1B136B8A00856112 /* JMSavedItemsInfoViewController.m in Sources */,
+				93618E171BD4BFFE007995D7 /* JMEULAViewController.m in Sources */,
 				089B15F01AA756BD0021A915 /* JMSettingsTableViewCell.m in Sources */,
 				08E2AC8D1B1E056900AC462B /* JMTextInputControlCell.m in Sources */,
 				089B15A21AA756BD0021A915 /* UIAlertView+Additions.m in Sources */,
@@ -2542,7 +2568,7 @@
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/../\"/**";
 				VALID_ARCHS = "i386 armv7 armv7s x86_64 arm64";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2786,7 +2812,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/../\"/**";
 				VALID_ARCHS = "i386 armv7 armv7s x86_64 arm64";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2837,7 +2863,7 @@
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/../\"/**";
 				VALID_ARCHS = "i386 armv7 armv7s x86_64 arm64";
 				WRAPPER_EXTENSION = app;
 			};

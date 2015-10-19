@@ -34,6 +34,7 @@
 #import "JMMainNavigationController.h"
 #import "SWRevealViewController.h"
 #import "JMMenuViewController.h"
+#import "JMEULAViewController.h"
 
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
@@ -174,6 +175,7 @@ void jmDebugLog(NSString *format, ...) {
     return infoDictionary[(NSString*)kCFBundleVersionKey];
 }
 
+#pragma mark - Login VC
 
 + (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion
 {
@@ -218,6 +220,55 @@ void jmDebugLog(NSString *format, ...) {
     [revealViewController presentViewController:loginNavController animated:animated completion:completion];
 }
 
+#pragma mark - EULA
++ (void)askUserAgreementWithCompletion:(void(^ __nonnull)(BOOL isAgree))completion
+{
+    // get key
+    BOOL isAccept = [self isUserAcceptAgreement];
+    if (isAccept) {
+        completion(YES);
+    } else {
+        // show text of agreement
+        UIViewController *rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
+
+        JMEULAViewController *EULAViewController = (JMEULAViewController *) [rootViewController.storyboard instantiateViewControllerWithIdentifier:@"JMEULAViewController"];
+        EULAViewController.completion = ^{
+            [self setUserAcceptAgreement:YES];
+            completion(YES);
+        };
+
+        if (rootViewController.presentedViewController && [rootViewController.presentedViewController isKindOfClass:[JMEULAViewController class]]) {
+            return;
+        } else if (rootViewController.presentedViewController && ![rootViewController.presentedViewController isKindOfClass:[JMEULAViewController class]]) {
+            [rootViewController dismissViewControllerAnimated:YES completion:nil];
+        }
+
+        [rootViewController presentViewController:EULAViewController
+                                         animated:YES
+                                       completion:nil];
+    }
+}
+
++ (BOOL)isUserAcceptAgreement
+{
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMUserAcceptAgreement]) {
+        [[NSUserDefaults standardUserDefaults] setObject:@(NO)
+                                                  forKey:kJMUserAcceptAgreement];
+    }
+
+    BOOL isAccept = ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:kJMUserAcceptAgreement]).boolValue;
+
+    return isAccept;
+}
+
++ (void)setUserAcceptAgreement:(BOOL)isAccept
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@(isAccept)
+                                              forKey:kJMUserAcceptAgreement];
+}
+
+#pragma mark - Alerts
+
 + (void)showAlertViewWithError:(NSError *)error
 {
     NSString *title = JMCustomLocalizedString(@"error.readingresponse.dialog.msg", nil);
@@ -249,6 +300,8 @@ void jmDebugLog(NSString *format, ...) {
                         cancelButtonTitle:@"dialog.button.ok"
                         otherButtonTitles:nil] show];
 }
+
+#pragma mark - Helpers
 
 + (BOOL)shouldUseVisualize
 {
