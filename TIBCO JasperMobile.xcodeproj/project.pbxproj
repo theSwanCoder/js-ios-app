@@ -152,7 +152,6 @@
 		9348F4EA1A35D103006F5677 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
 		9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */; };
 		9356ECA51A3075F500ACE2C6 /* JMUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */; };
-		93618E131BD4BFCE007995D7 /* TIB_jsm-sdk-ios_2.1.1_license.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 93618E121BD4BFCE007995D7 /* TIB_jsm-sdk-ios_2.1.1_license.pdf */; settings = {ASSET_TAGS = (); }; };
 		93618E171BD4BFFE007995D7 /* JMEULAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93618E161BD4BFFE007995D7 /* JMEULAViewController.m */; settings = {ASSET_TAGS = (); }; };
 		937AD98E1AC83D6900076855 /* JMResourcesListLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */; };
 		9386BA2D1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */; settings = {ASSET_TAGS = (); }; };
@@ -495,7 +494,6 @@
 		9356EC9A1A30752900ACE2C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptionsTests.m; sourceTree = "<group>"; };
 		9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUtilsTests.m; sourceTree = "<group>"; };
-		93618E121BD4BFCE007995D7 /* TIB_jsm-sdk-ios_2.1.1_license.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "TIB_jsm-sdk-ios_2.1.1_license.pdf"; sourceTree = "<group>"; };
 		93618E151BD4BFFE007995D7 /* JMEULAViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMEULAViewController.h; sourceTree = "<group>"; };
 		93618E161BD4BFFE007995D7 /* JMEULAViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMEULAViewController.m; sourceTree = "<group>"; };
 		937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesListLoaderTests.m; sourceTree = "<group>"; };
@@ -1775,7 +1773,6 @@
 			isa = PBXGroup;
 			children = (
 				9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */,
-				93618E121BD4BFCE007995D7 /* TIB_jsm-sdk-ios_2.1.1_license.pdf */,
 			);
 			path = EULA;
 			sourceTree = "<group>";
@@ -2245,7 +2242,6 @@
 				930F8D461ABB1CDF005F93FB /* report.html in Resources */,
 				08E0D19E1B0CF27200BFBFE5 /* AppIcon120x120.png in Resources */,
 				08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */,
-				93618E131BD4BFCE007995D7 /* TIB_jsm-sdk-ios_2.1.1_license.pdf in Resources */,
 				089B15C61AA756BD0021A915 /* JMGridResourceCollectionViewCell.xib in Resources */,
 				08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */,
 				930F8D481ABB1D9F005F93FB /* require.min.js in Resources */,
