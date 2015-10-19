@@ -47,7 +47,7 @@
 {
     [super viewDidLoad];
 
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"TIB_jsm-sdk-ios_2.1.1_license" ofType:@"pdf"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"TIB_jsm-ios_2.2.0_license" ofType:@"pdf"];
     NSURL *url = [NSURL fileURLWithPath:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:request];
