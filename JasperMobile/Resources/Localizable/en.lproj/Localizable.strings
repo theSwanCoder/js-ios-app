@@ -224,7 +224,7 @@
 "action.title.clearselections" = "Clear selections";
 "action.title.run" = "Run";
 "action.title.print" = "Print";
-"action.title.openIn" = "Open in...";
+"action.title.openIn" = "Open with...";
 "action.title.accept" = "Accept";
 
 /* Error messages */
@@ -241,7 +241,7 @@
 "error.server.notsupported.title" = "Wrong server version or URL";
 // TODO: change for other languages.
 "error.server.notsupported.msg" = "The server version is not supported, or the URL is incorrect.";
-"error.openIn.message" = "There isn't an application to open resource";
+"error.openIn.message" = "There is no application to open this resource.";
 
 /* HTTP error messages */
 
