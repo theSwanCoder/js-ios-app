@@ -36,7 +36,7 @@
     {
       "orientation" : "portrait",
       "idiom" : "ipad",
-      "filename" : "ipad_portait_normal.png",
+      "filename" : "launch_image_portrait~ipad.png",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
       "scale" : "1x"
@@ -52,7 +52,7 @@
     {
       "orientation" : "portrait",
       "idiom" : "ipad",
-      "filename" : "ipad_portait_retina.png",
+      "filename" : "launch_image_portrait@2x~ipad.png",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
       "scale" : "2x"
@@ -60,7 +60,7 @@
     {
       "orientation" : "landscape",
       "idiom" : "ipad",
-      "filename" : "ipad_landscape_retina.png",
+      "filename" : "launch_image_landscape@2x~ipad.png",
       "extent" : "full-screen",
       "minimum-system-version" : "7.0",
       "scale" : "2x"
