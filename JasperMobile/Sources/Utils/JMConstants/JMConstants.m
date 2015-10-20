@@ -27,6 +27,9 @@
 
 #import "JMConstants.h"
 
+NSString * const kJMAppName = @"TIBCO\u00AE JasperMobile\u2122";
+NSString * const kJMCompanyName = @"TIBCO\u00AE";
+
 // Constants for NSUserDefaults
 NSString * const kJMDefaultsCurrentVersion = @"jaspersoft.mobile.current.version";
 NSString * const kJMDefaultsIntroDidApear = @"JMDefaultsIntroDidApear";

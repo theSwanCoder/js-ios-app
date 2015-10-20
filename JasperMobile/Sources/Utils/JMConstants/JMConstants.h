@@ -35,6 +35,10 @@
 
 #import <Foundation/Foundation.h>
 
+// Application name with trademarks
+extern NSString * const kJMAppName;
+extern NSString * const kJMCompanyName;
+
 // Constants for NSUserDefaults
 extern NSString * const kJMDefaultsCurrentVersion;
 extern NSString * const kJMDefaultsIntroDidApear;

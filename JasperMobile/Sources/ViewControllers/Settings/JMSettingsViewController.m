@@ -212,10 +212,13 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 
 - (void)applicationInfo:(id)sender
 {
-    NSString *appName;
-    appName = [NSBundle mainBundle].infoDictionary[@"CFBundleDisplayName"];
     NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
-    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion], currentYear];
+    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil),
+                    kJMAppName,
+                    [JMAppUpdater latestAppVersionAsString],
+                    kJMCompanyName,
+                    [JMServerProfile minSupportedServerVersion],
+                    currentYear];
 
     [[UIAlertView localizedAlertWithTitle:nil
                                   message:message
