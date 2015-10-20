@@ -49,16 +49,18 @@
 }
 
 - (void)setupModel {
-    NSString *seemlessIntegrationPageDescription = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.model.thirdScreen.description", nil), [JMServerProfile minSupportedServerVersion]];
 
+    NSString *description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.model.firstScreen.description", nil), kJMAppName];
     JMIntroModel *stayConnectedPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.firstScreen.title", nil)
-                                                              description:JMCustomLocalizedString(@"intro.model.firstScreen.description", nil)
+                                                              description:description
                                                                     image:nil];
     JMIntroModel *instantAccessPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.secondScreen.title", nil)
                                                               description:JMCustomLocalizedString(@"intro.model.secondScreen.description", nil)
                                                                     image:nil];
+
+    description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.model.thirdScreen.description", nil), kJMCompanyName, [JMServerProfile minSupportedServerVersion]];
     JMIntroModel *seemlessIntegrationPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.thirdScreen.title", nil)
-                                                                    description:seemlessIntegrationPageDescription
+                                                                    description:description
                                                                           image:nil];
     self.pageData = @[
             stayConnectedPage, instantAccessPage, seemlessIntegrationPage

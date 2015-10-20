@@ -96,7 +96,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
     [self addGestureRecognizer];
     
     [self setButtonTitleForPage:self.introPage];
-    self.titleLabel.text = JMCustomLocalizedString(@"intro.title", nil);
+    self.titleLabel.text = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.title", nil), kJMAppName];
     self.descriptionLabel.text = JMCustomLocalizedString(@"intro.description", nil);
 }
 
@@ -415,7 +415,7 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
         case JMOnboardIntroPageStayConnected:
         case JMOnboardIntroPageInstanceAccess: break;
         case JMOnboardIntroPageSeemlessIntegration: {
-            buttonTitle = JMCustomLocalizedString(@"intro.button.skip.startUsing", nil);
+            buttonTitle = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.button.skip.startUsing", nil), kJMAppName];
             break;
         }
     };

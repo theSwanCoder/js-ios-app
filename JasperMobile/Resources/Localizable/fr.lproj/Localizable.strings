@@ -59,16 +59,16 @@
 "servers.profile.list.empty" = "Aucun profil de serveur";
 
 /* Onboarding Intro */
-"intro.title" = "Bienvenue dans\nTIBCO JasperMobile";
+"intro.title" = "Bienvenue dans\n%@";
 "intro.description" = "Faire glisser vers le haut pour commencer";
 "intro.button.skip.skip" = "Passer l’intro";
-"intro.button.skip.startUsing" = "Commencer à utiliser\nTIBCO JasperMobile";
+"intro.button.skip.startUsing" = "Commencer à utiliser\n%@";
 "intro.model.firstScreen.title" = "Rester connecté";
-"intro.model.firstScreen.description" = "TIBCO JasperMobile vous permet de rester connecté à\nvotre entreprise où que vous soyez.";
+"intro.model.firstScreen.description" = "%@ vous permet de rester connecté à\nvotre entreprise où que vous soyez.";
 "intro.model.secondScreen.title" = "Accès immédiat";
 "intro.model.secondScreen.description" = "Accédez aux rapports interactifs en direct\nà partir de vos applications opérationnelles.";
 "intro.model.thirdScreen.title" = "Intégration facile";
-"intro.model.thirdScreen.description" = "Affichez et interagissez avec votre TIBCO JasperReports\nServer v%.1f ou environnement ultérieur.";
+"intro.model.thirdScreen.description" = "Affichez et interagissez avec votre %@ JasperReports\nServer v%.1f ou environnement ultérieur.";
 
 /* Menu View */
 

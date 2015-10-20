@@ -58,16 +58,16 @@
 "servers.profile.list.empty" = "没有服务器配置文件";
 
 /* Onboarding Intro */
-"intro.title" = "欢迎使用 TIBCO JasperMobile";
+"intro.title" = "欢迎使用 %@";
 "intro.description" = "向上轻扫以开始";
 "intro.button.skip.skip" = "跳过简介";
-"intro.button.skip.startUsing" = "开始使用 TIBCO JasperMobile";
+"intro.button.skip.startUsing" = "开始使用 %@";
 "intro.model.firstScreen.title" = "保持连接";
-"intro.model.firstScreen.description" = "TIBCO JasperMobile 可随时随地让您连接到您的企业。";
+"intro.model.firstScreen.description" = "%@ 可随时随地让您连接到您的企业。";
 "intro.model.secondScreen.title" = "即时访问";
 "intro.model.secondScreen.description" = "访问通过您运行的应用程序生成的实时交互报表。";
 "intro.model.thirdScreen.title" = "无缝集成";
-"intro.model.thirdScreen.description" = "查看并与您的 TIBCO JasperReports Server v%.1f 或更大的环境交互。";
+"intro.model.thirdScreen.description" = "查看并与您的 %@ JasperReports Server v%.1f 或更大的环境交互。";
 
 /* Menu View */
 
