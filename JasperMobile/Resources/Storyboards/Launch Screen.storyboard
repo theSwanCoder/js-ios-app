@@ -47,8 +47,6 @@
                                 <constraints>
                                     <constraint firstItem="gir-rm-44v" firstAttribute="centerX" secondItem="4jc-dp-eGS" secondAttribute="centerX" id="OMz-Bs-vxS"/>
                                     <constraint firstItem="gir-rm-44v" firstAttribute="centerY" secondItem="4jc-dp-eGS" secondAttribute="centerY" id="aE6-cb-HCl"/>
-                                    <constraint firstItem="gir-rm-44v" firstAttribute="top" relation="greaterThanOrEqual" secondItem="4jc-dp-eGS" secondAttribute="top" id="uwN-SZ-VRJ"/>
-                                    <constraint firstItem="gir-rm-44v" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="4jc-dp-eGS" secondAttribute="leading" constant="20" id="ypP-AN-GUm"/>
                                 </constraints>
                             </view>
                         </subviews>

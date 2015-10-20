@@ -80,7 +80,7 @@
     NSInteger cloneNumber = 0;
     NSString *serverName = nil;
     do {
-        serverName = (cloneNumber++ > 0) ? [serverProfile.alias stringByAppendingFormat:@" %@", @(cloneNumber)] : serverProfile.alias;
+        serverName = (cloneNumber++ > 0) ? [serverProfile.alias stringByAppendingFormat:@" %zd", cloneNumber] : serverProfile.alias;
     } while (![newServerProfile isValidNameForServerProfile:serverName]);
     
     newServerProfile.alias          = serverName;

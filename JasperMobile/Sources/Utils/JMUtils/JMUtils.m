@@ -291,6 +291,9 @@ void jmDebugLog(NSString *format, ...) {
     }];
 
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    if (rootViewController.presentedViewController) {
+        rootViewController = rootViewController.presentedViewController;
+    }
     [rootViewController presentViewController:alertController animated:YES completion:nil];
 }
 
