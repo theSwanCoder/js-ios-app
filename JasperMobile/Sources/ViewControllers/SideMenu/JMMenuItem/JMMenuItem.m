@@ -141,6 +141,26 @@
     }
 }
 
+- (NSString *)nameForCrashlytics
+{
+    switch (self.resourceType) {
+        case JMResourceTypeLibrary:
+            return @"Library";
+        case JMResourceTypeRecentViews:
+            return @"Recenlty Viewed";
+        case JMResourceTypeRepository:
+            return @"Repository";
+        case JMResourceTypeSavedItems:
+            return @"Saved Items";
+        case JMResourceTypeFavorites:
+            return @"Favorites";
+        case JMResourceTypeSettings:
+            return @"Settings";
+        default:
+            return nil;
+    }
+}
+
 #pragma mark - NSObject
 - (BOOL)isEqual:(id)object
 {

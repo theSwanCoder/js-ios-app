@@ -77,6 +77,21 @@
     NSURL *url = [NSURL fileURLWithPath:fullReportPath];
     self.resourceRequest = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:self.resourceRequest];
+
+    // Crashlytics
+    NSString *resourcesType;
+    if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+        resourcesType = @"Saved Item (HTML)";
+    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+        resourcesType = @"Saved Item (PDF)";
+    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
+        resourcesType = @"Saved Item (XLS)";
+    }
+
+    [Answers logCustomEventWithName:@"User opened resource"
+                   customAttributes:@{
+                           @"Resource's Type" : resourcesType
+                   }];
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource

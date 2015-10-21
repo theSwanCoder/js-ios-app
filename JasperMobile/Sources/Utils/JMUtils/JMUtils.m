@@ -36,9 +36,6 @@
 #import "JMMenuViewController.h"
 #import "JMEULAViewController.h"
 
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
-
 
 void jmDebugLog(NSString *format, ...) {
 #ifndef __RELEASE__
@@ -152,7 +149,9 @@ void jmDebugLog(NSString *format, ...) {
 + (void)activateCrashReportSendingIfNeeded
 {
     if ([self crashReportsSendingEnable]) {
-        [Fabric with:@[CrashlyticsKit]];
+        [Fabric with:@[
+                       [Crashlytics class]
+                       ]];
     }
 }
 

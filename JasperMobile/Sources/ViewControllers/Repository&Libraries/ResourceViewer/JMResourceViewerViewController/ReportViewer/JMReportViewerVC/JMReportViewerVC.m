@@ -161,7 +161,6 @@
 #pragma mark - Run report
 - (void)runReportWithPage:(NSInteger)page
 {
-
     [self hideEmptyReportMessage];
     [self hideToolbar];
     [self hideReportView];
@@ -178,6 +177,13 @@
         [strongSelf stopShowLoader];
 
         if (success) {
+            // Crashlytics
+            NSString *resourcesType = [JMUtils isSupportVisualize] ? @"Report (Visualize)" : @"Report (REST)";
+            [Answers logCustomEventWithName:@"User opened resource"
+                           customAttributes:@{
+                                   @"Resource's Type" : resourcesType
+                           }];
+
             [strongSelf showReportView];
         } else {
             [strongSelf handleError:error];
