@@ -111,8 +111,6 @@ static const NSInteger kSplashViewTag = 100;
         };
 
         if (isSessionRestored) {
-            self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
-
             if (!menuViewController.selectedItem) {
                 loginCompletionBlock();
             }

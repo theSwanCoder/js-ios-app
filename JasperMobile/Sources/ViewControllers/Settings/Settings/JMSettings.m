@@ -55,8 +55,8 @@ NSInteger const kJMEULASettingValue = 103;
     NSMutableArray *itemsArray = [NSMutableArray array];
     NSArray *itemsSourceArray =
     @[
-      @{@"title" : JMCustomLocalizedString(@"settings.item.connection.timeout", nil), @"value" : @(self.restClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier},
-      @{@"title" : JMCustomLocalizedString(@"settings.crashtracking.title", nil), @"value" : @([JMUtils crashReportsSendingEnable]), @"cellIdentifier" : kJMBooleanCellIdentifier},
+//      @{@"title" : JMCustomLocalizedString(@"settings.item.connection.timeout", nil), @"value" : @(self.restClient.timeoutInterval), @"cellIdentifier" : kJMTextCellIdentifier},
+//      @{@"title" : JMCustomLocalizedString(@"settings.crashtracking.title", nil), @"value" : @([JMUtils crashReportsSendingEnable]), @"cellIdentifier" : kJMBooleanCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.feedback", nil), @"value" : @(kJMFeedbackSettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.privacy.policy.title", nil), @"value" : @(kJMPrivacyPolicySettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
       @{@"title" : JMCustomLocalizedString(@"settings.privacy.EULA.title", nil), @"value" : @(kJMEULASettingValue), @"cellIdentifier" : kJMLabelCellIdentifier},
@@ -82,15 +82,15 @@ NSInteger const kJMEULASettingValue = 103;
 
 - (void) saveSettings
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:[self.itemsArray[0] valueSettings] forKey:kJMDefaultRequestTimeout];
-    [defaults setObject:[self.itemsArray[1] valueSettings] forKey:kJMDefaultSendingCrashReport];
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    [defaults setObject:[self.itemsArray[0] valueSettings] forKey:kJMDefaultRequestTimeout];
+//    [defaults setObject:[self.itemsArray[1] valueSettings] forKey:kJMDefaultSendingCrashReport];
     // used for test purpose
-    //[defaults setObject:[[self.itemsArray objectAtIndex:4] valueSettings] forKey:kJMDefaultUseVisualize];
-    [defaults synchronize];
+//    [defaults setObject:[[self.itemsArray objectAtIndex:4] valueSettings] forKey:kJMDefaultUseVisualize];
+//    [defaults synchronize];
     
-    self.restClient.timeoutInterval = [[self.itemsArray[0] valueSettings] doubleValue];
-    [JMUtils activateCrashReportSendingIfNeeded];
+//    self.restClient.timeoutInterval = [[self.itemsArray[0] valueSettings] doubleValue];
+//    [JMUtils activateCrashReportSendingIfNeeded];
 }
 
 @end
