@@ -225,12 +225,26 @@
 
         [JMCancelRequestPopup dismiss];
         if (success) {
+            // Crashlytics
+
+            [Answers logLoginWithMethod:@"Digits"
+                                success:@YES
+                       customAttributes:@{}];
+
             strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
             [strongSelf dismissViewControllerAnimated:NO completion:nil];
             if (strongSelf.completion) {
                 strongSelf.completion();
             }
         } else {
+            // Crashlytics
+
+            [Answers logLoginWithMethod:@"Digits"
+                                success:@NO
+                       customAttributes:@{
+                               @"Reason of failure" : @"Wrong Credentials"
+                       }];
+
             [[UIAlertView localizedAlertWithTitle:@"error.authenication.dialog.title"
                                           message:@"error.authenication.dialog.msg"
                                          delegate: nil
