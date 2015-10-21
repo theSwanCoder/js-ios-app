@@ -37,7 +37,6 @@
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
-#import <Crashlytics/Crashlytics.h>
 
 @interface JMMenuViewController() <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
