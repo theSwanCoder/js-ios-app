@@ -149,7 +149,9 @@ void jmDebugLog(NSString *format, ...) {
 + (void)activateCrashReportSendingIfNeeded
 {
     if ([self crashReportsSendingEnable]) {
-//        [Fabric with:@[CrashlyticsKit]];
+        [Fabric with:@[
+                       [Crashlytics class]
+                       ]];
     }
 }
 
