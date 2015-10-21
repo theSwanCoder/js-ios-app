@@ -229,7 +229,9 @@
 
             [Answers logLoginWithMethod:@"Digits"
                                 success:@YES
-                       customAttributes:@{}];
+                       customAttributes:@{
+                               @"Server version" : jsServerProfile.serverInfo.version
+                       }];
 
             strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
             [strongSelf dismissViewControllerAnimated:NO completion:nil];
