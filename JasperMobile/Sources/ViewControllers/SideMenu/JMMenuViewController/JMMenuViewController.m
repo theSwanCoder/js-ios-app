@@ -58,7 +58,6 @@
 #pragma mark - LifeCycle
 -(void)dealloc
 {
-    JMLog(@"%@ -%@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -151,13 +150,22 @@
                 item.selected = YES;
                 
                 [self.tableView reloadData];
+
                 if([item vcIdentifierForSelectedItem]) {
+                    // Crashlytics
+                    [Answers logCustomEventWithName:@"User opened section"
+                                   customAttributes:@{
+                                           @"Section's Name" : [item nameForCrashlytics]
+                                   }];
+
+                    // Show VC
                     UINavigationController *nvc = (UINavigationController *) [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
                     UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonTapped:)];
                     nvc.topViewController.navigationItem.leftBarButtonItem = menuItem;
                     [nvc.topViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
                     self.revealViewController.frontViewController = nvc;
                 }
+
             }
             [self.revealViewController setFrontViewPosition:FrontViewPositionLeft
                                                    animated:YES];
