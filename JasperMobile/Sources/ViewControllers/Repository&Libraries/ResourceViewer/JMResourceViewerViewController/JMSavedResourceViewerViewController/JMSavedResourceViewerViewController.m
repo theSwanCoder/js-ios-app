@@ -79,7 +79,7 @@
     [self.webView loadRequest:self.resourceRequest];
 
     // Crashlytics
-    NSString *resourcesType;
+    NSString *resourcesType = @"Saved Item (Unknown type)";
     if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
         resourcesType = @"Saved Item (HTML)";
     } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
