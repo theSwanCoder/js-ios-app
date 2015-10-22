@@ -28,6 +28,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
+
 /**
  @author Vlad Zavadskii vzavadskii@jaspersoft.com
  @author Alexey Gubarev ogubarie@tibco.com

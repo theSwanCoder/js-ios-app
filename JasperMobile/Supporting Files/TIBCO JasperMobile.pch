@@ -39,4 +39,8 @@
 // Swift
     #import "TIBCO_JasperMobile-Swift.h"
 
+// Crashlytics
+    #import <Fabric/Fabric.h>
+    #import <Crashlytics/Crashlytics.h>
+
 #endif

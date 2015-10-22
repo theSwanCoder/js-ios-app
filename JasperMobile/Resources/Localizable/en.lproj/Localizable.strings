@@ -58,16 +58,16 @@
 "servers.profile.list.empty" = "There are no Server Profiles";
 
 /* Onboarding Intro */
-"intro.title" = "Welcome to\nTIBCO JasperMobile";
+"intro.title" = "Welcome to\n%@";
 "intro.description" = "Swipe up to begin";
 "intro.button.skip.skip" = "Skip Intro";
-"intro.button.skip.startUsing" = "Start using TIBCO JasperMobile";
+"intro.button.skip.startUsing" = "Start using %@";
 "intro.model.firstScreen.title" = "Stay Connected";
-"intro.model.firstScreen.description" = "TIBCO JasperMobile keeps you connected to\nyour business wherever you are.";
+"intro.model.firstScreen.description" = "%@ keeps you connected to\nyour business wherever you are.";
 "intro.model.secondScreen.title" = "Instant Access";
 "intro.model.secondScreen.description" = "Get access to live interactive reports\ndriven from your operational applications.";
 "intro.model.thirdScreen.title" = "Seemless Integration";
-"intro.model.thirdScreen.description" = "View and interact with your TIBCO JasperReports\nServer v%.1f or greater environment.";
+"intro.model.thirdScreen.description" = "View and interact with your %@ JasperReports\nServer v%.1f or greater environment.";
 
 /* Menu View */
 
@@ -224,7 +224,7 @@
 "action.title.clearselections" = "Clear selections";
 "action.title.run" = "Run";
 "action.title.print" = "Print";
-"action.title.openIn" = "Open in...";
+"action.title.openIn" = "Open with...";
 "action.title.accept" = "Accept";
 
 /* Error messages */
@@ -241,7 +241,7 @@
 "error.server.notsupported.title" = "Wrong server version or URL";
 // TODO: change for other languages.
 "error.server.notsupported.msg" = "The server version is not supported, or the URL is incorrect.";
-"error.openIn.message" = "There isn't an application to open resource";
+"error.openIn.message" = "There is no application to open this resource.";
 
 /* HTTP error messages */
 

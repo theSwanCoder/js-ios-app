@@ -212,6 +212,15 @@
             [strongSelf.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
                 __weak typeof(self)strongSelf = weakSelf;
                 [strongSelf stopShowLoader];
+
+                if (success) {
+                    // Crashlytics
+                    NSString *resourcesType = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? @"Dashboard (Visualize)" : @"Dashboard (REST)";
+                    [Answers logCustomEventWithName:@"User opened resource"
+                                   customAttributes:@{
+                                           @"Resource's Type" : resourcesType
+                                   }];
+                }
             }];
 
         } else {

@@ -36,7 +36,7 @@
  */
 
 #define JMLog(...) jmDebugLog(__VA_ARGS__);
-void jmDebugLog(NSString *format, ...);
+void jmDebugLog(NSString * __nonnull format, ...);
 
 
 @interface JMUtils : NSObject
@@ -47,16 +47,16 @@ void jmDebugLog(NSString *format, ...);
  @param reportName A report name to validate. It needs to be unique, without /: characters, not empty, and less or equals than 250 symbols (last 5 are reserved for extension)
  @return YES if report name is valid, otherwise returns NO
  */
-+ (BOOL)validateReportName:(NSString *)reportName errorMessage:(NSString **)errorMessage;
++ (BOOL)validateReportName:(NSString *__nonnull)reportName errorMessage:(NSString *__nullable*__nullable)errorMessage;
 
 /**
  Returns full path of NSDocumentDirectory directory for NSUserDomainMask domain
 
  @return full path of document directory
 */
-+ (NSString *)applicationDocumentsDirectory;
++ (NSString *__nonnull)applicationDocumentsDirectory;
 
-+ (NSString *)applicationTempDirectory;
++ (NSString *__nonnull)applicationTempDirectory;
 
 /**
  Shows network activity indicator
@@ -103,18 +103,18 @@ void jmDebugLog(NSString *format, ...);
  */
 + (void)activateCrashReportSendingIfNeeded;
 
-+ (NSArray *)supportedFormatsForReportSaving;
++ (NSArray  * __nonnull)supportedFormatsForReportSaving;
 
 /**
  Build Version
  */
-+ (NSString *)buildVersion;
++ (NSString * __nonnull)buildVersion;
 
-+ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion;
++ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion;
 
-+ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion;
++ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion loginCompletion:(LoginCompletionBlock __nullable)loginCompletion;
 
-+ (void)showLoginViewForRestoreSessionWithCompletion:(LoginCompletionBlock)loginCompletion;
++ (void)showLoginViewForRestoreSessionWithCompletion:(LoginCompletionBlock __nonnull)loginCompletion;
 
 + (void)askUserAgreementWithCompletion:(void (^ __nonnull)(BOOL isAgree))completion;
 
@@ -122,9 +122,9 @@ void jmDebugLog(NSString *format, ...);
 
 + (void)setUserAcceptAgreement:(BOOL)isAccept;
 
-+ (void)showAlertViewWithError:(NSError *)error;
++ (void)showAlertViewWithError:(NSError * __nullable)error;
 
-+ (void)showAlertViewWithError:(NSError *)error completion:(void (^)(UIAlertView *alertView, NSInteger buttonIndex))completion;
++ (void)showAlertViewWithError:(NSError *__nullable)error completion:(void (^ __nonnull)(UIAlertView * __nonnull alertView, NSInteger buttonIndex))completion;
 
 /**
  Returns YES if User want to use Visualize for watching reports and dashboards
@@ -164,13 +164,13 @@ void jmDebugLog(NSString *format, ...);
  */
 + (BOOL)isServerProEdition;
 
-+ (NSString *)localizedStringFromDate:(NSDate *)date;
++ (NSString *__nonnull)localizedStringFromDate:(NSDate *__nonnull)date;
 
-+ (NSDateFormatter *)formatterForSimpleDate;
++ (NSDateFormatter *__nonnull)formatterForSimpleDate;
 
-+ (NSDateFormatter *)formatterForSimpleTime;
++ (NSDateFormatter *__nonnull)formatterForSimpleTime;
 
-+ (NSDateFormatter *)formatterForSimpleDateTime;
++ (NSDateFormatter *__nonnull)formatterForSimpleDateTime;
 
-+ (UIStoryboard *)mainStoryBoard;
++ (UIStoryboard *__nonnull)mainStoryBoard;
 @end
