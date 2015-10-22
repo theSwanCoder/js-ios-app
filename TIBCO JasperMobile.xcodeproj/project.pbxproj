@@ -24,8 +24,8 @@
 		08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C921AE78CD300F94F1D /* JMMigrationManager.m */; };
 		08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */; };
 		082D1E921AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */; };
-		0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */; settings = {ASSET_TAGS = (); }; };
-		0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */; settings = {ASSET_TAGS = (); }; };
+		0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */; };
+		0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */; };
 		0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503B19F1265B00C5875E /* CoreTelephony.framework */; };
 		0871503E19F1266900C5875E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503D19F1266900C5875E /* libz.dylib */; };
 		089590FF19E3D514001471DA /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E019E3D514001471DA /* ALToastView.m */; };
@@ -149,9 +149,9 @@
 		9348F4EA1A35D103006F5677 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
 		9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */; };
 		9356ECA51A3075F500ACE2C6 /* JMUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */; };
-		93618E171BD4BFFE007995D7 /* JMEULAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93618E161BD4BFFE007995D7 /* JMEULAViewController.m */; settings = {ASSET_TAGS = (); }; };
+		93618E171BD4BFFE007995D7 /* JMEULAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93618E161BD4BFFE007995D7 /* JMEULAViewController.m */; };
 		937AD98E1AC83D6900076855 /* JMResourcesListLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */; };
-		9386BA2D1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */; settings = {ASSET_TAGS = (); }; };
+		9386BA2D1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */; };
 		9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9397F97C1AAACADF006B89C6 /* JMReport.m */; };
 		939917321BC67737006CC2A7 /* old_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = A14785AF90B597E785B4A30A /* old_dashboard.js */; };
 		93C37C6A1A39D49900CEE7CF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08E62CF819922BA40081CA83 /* Localizable.strings */; };
@@ -160,14 +160,13 @@
 		93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */; };
 		93EEB4621AC54761000718C7 /* JMVisualizeWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */; };
 		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
-		93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FD91BD7975E00355A30 /* Fabric.framework */; settings = {ASSET_TAGS = (); }; };
-		93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FDA1BD7975E00355A30 /* Crashlytics.framework */; settings = {ASSET_TAGS = (); }; };
+		93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FD91BD7975E00355A30 /* Fabric.framework */; };
+		93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FDA1BD7975E00355A30 /* Crashlytics.framework */; };
 		A147820FB57EFF402452B6E9 /* JMVisDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478B04CE024F4DDDFDF22D /* JMVisDashboardLoader.m */; };
 		A14782BCF3499821EAB23934 /* JMJavascriptCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A147810144F2E290F3B7FF83 /* JMJavascriptCallback.m */; };
 		A147840152F978C37C268CD9 /* JMJavascriptNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = A147880E387FEFB88BBD19B4 /* JMJavascriptNativeBridge.m */; };
 		A14784AF61EB18E6AD372AEB /* JMDashboardViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478D6859B60B36A4F9FCC8 /* JMDashboardViewerConfigurator.m */; };
 		A14785D6EB9D46719DE946BD /* JMBaseDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A147866AB6450EAF0CD1CE44 /* JMBaseDashboardLoader.m */; };
-		A147874948067892B357C8A3 /* JMReportViewerToolBar~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = A14789D933A44C3C32D79FBC /* JMReportViewerToolBar~ipad.xib */; };
 		A14789C39DF01A718B92E97C /* JMDashboardViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478203D1D9D597184D040F /* JMDashboardViewerVC.m */; };
 		A1478A179D378E8F76BDD03C /* JMMenuAction.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478B758E018C4B68EDB8F3 /* JMMenuAction.m */; };
 		A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = A147833F01EC956738C2E56A /* JMReportViewerToolBar.xib */; };
@@ -176,8 +175,8 @@
 		A1478D49CA28213AC1C5FD4A /* JMReportExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = A14781B537B5076FA38FD7B7 /* JMReportExecutor.m */; };
 		A1478D6B609C61DEF3A3AC92 /* JMVisualizeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478AE10405430D44256CA0 /* JMVisualizeManager.m */; };
 		A1478EFBFF648E171A39F2BF /* JMReportViewerToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */; };
-		BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */; settings = {ASSET_TAGS = (); }; };
-		BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */; settings = {ASSET_TAGS = (); }; };
+		BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD3A1E4B1BC3F3830007552C /* Launch Screen.storyboard */; };
+		BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BD5921F41BC420EB001B5EDB /* MainStoryboard.storyboard */; };
 		BDABBD281A41D8CC00EDA100 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD251A41D8CC00EDA100 /* Reachability.m */; };
 		BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = BDABBD271A41D8CC00EDA100 /* RNCachingURLProtocol.m */; };
 		BDB8B9EE1B57D90B00758441 /* JMThemesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB8B9ED1B57D90B00758441 /* JMThemesManager.m */; };
@@ -529,7 +528,6 @@
 		A147880E387FEFB88BBD19B4 /* JMJavascriptNativeBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptNativeBridge.m; sourceTree = "<group>"; };
 		A1478935CB12E39D40C6D7BF /* JMDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardLoader.h; sourceTree = "<group>"; };
 		A14789AD990EF711BFEA8CCA /* JMReportExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportExecutor.h; sourceTree = "<group>"; };
-		A14789D933A44C3C32D79FBC /* JMReportViewerToolBar~ipad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "JMReportViewerToolBar~ipad.xib"; sourceTree = "<group>"; };
 		A1478A35341BFE2392AC1191 /* JMBaseDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseDashboardLoader.h; sourceTree = "<group>"; };
 		A1478AE10405430D44256CA0 /* JMVisualizeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeManager.m; sourceTree = "<group>"; };
 		A1478B04CE024F4DDDFDF22D /* JMVisDashboardLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisDashboardLoader.m; sourceTree = "<group>"; };
@@ -1860,7 +1858,6 @@
 				A1478266E2F8FDC96D2EEEC0 /* JMReportViewerToolBar.h */,
 				A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */,
 				A147833F01EC956738C2E56A /* JMReportViewerToolBar.xib */,
-				A14789D933A44C3C32D79FBC /* JMReportViewerToolBar~ipad.xib */,
 			);
 			path = JMReportViewerToolBar;
 			sourceTree = "<group>";
@@ -2232,7 +2229,6 @@
 				08E0D19F1B0CF27200BFBFE5 /* Icon-1024.png in Resources */,
 				089B15AF1AA756BD0021A915 /* JMListOptionsPopupView.xib in Resources */,
 				A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */,
-				A147874948067892B357C8A3 /* JMReportViewerToolBar~ipad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
