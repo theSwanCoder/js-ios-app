@@ -394,4 +394,12 @@ void jmDebugLog(NSString *format, ...) {
     return mainStoryboard;
 }
 
+#pragma mark - Analytics
++ (void)logEventWithName:(NSString *)eventName additionInfo:(NSDictionary *)additionInfo
+{
+    // Crashlytics - Answers
+    [Answers logCustomEventWithName:eventName
+                   customAttributes:additionInfo];
+}
+
 @end

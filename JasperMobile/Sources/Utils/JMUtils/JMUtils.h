@@ -173,4 +173,6 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (NSDateFormatter *__nonnull)formatterForSimpleDateTime;
 
 + (UIStoryboard *__nonnull)mainStoryBoard;
+
++ (void)logEventWithName:(NSString *)eventName additionInfo:(NSDictionary *)additionInfo;
 @end
