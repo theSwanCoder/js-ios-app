@@ -27,7 +27,7 @@
 
 /* Application Info */
 
-"application.info" = "%@ v %@\n\n%@ JasperReports Server %.1f 以降向けの管理ツール/レポートビューア。\n\n詳細は以下の URL をご覧ください。\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
+"application.info" = "%@ v %@\n\nTIBCO JasperReports%@ Server %.1f 以降向けの管理ツール/レポートビューア。\n\n詳細は以下の URL をご覧ください。\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
 
 /* Login Page */
 
@@ -67,7 +67,7 @@
 "intro.model.secondScreen.title" = "簡易アクセス";
 "intro.model.secondScreen.description" = "操作中のアプリケーションから実行されている\nインタラクティブなライブ レポートにアクセスします。";
 "intro.model.thirdScreen.title" = "シームレスな統合";
-"intro.model.thirdScreen.description" = "%@ JasperReports Server v%.1f 以降の環境を\n表示して連携します。";
+"intro.model.thirdScreen.description" = "TIBCO JasperReports%@ Server v%.1f 以降の環境を\n表示して連携します。";
 
 /* Menu View */
 
