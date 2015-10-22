@@ -28,6 +28,10 @@
 		0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */; };
 		0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503B19F1265B00C5875E /* CoreTelephony.framework */; };
 		0871503E19F1266900C5875E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503D19F1266900C5875E /* libz.dylib */; };
+		087A71AD1BD95FBF007B98A4 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 087A71AC1BD95FBF007B98A4 /* Settings.bundle */; };
+		087A71B41BD95FD1007B98A4 /* JMAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087A71B01BD95FD1007B98A4 /* JMAboutViewController.m */; };
+		087A71B51BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087A71B31BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m */; };
+		087A71B91BD95FEE007B98A4 /* JMEULAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 087A71B81BD95FEE007B98A4 /* JMEULAViewController.m */; };
 		089590FF19E3D514001471DA /* ALToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 089590E019E3D514001471DA /* ALToastView.m */; };
 		08982CCF1AC98A0700368522 /* JMRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08982CCE1AC98A0700368522 /* JMRevealViewController.m */; };
 		089B159C1AA756BD0021A915 /* JMEditabledViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B148E1AA756BD0021A915 /* JMEditabledViewController.m */; };
@@ -149,7 +153,6 @@
 		9348F4EA1A35D103006F5677 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
 		9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */; };
 		9356ECA51A3075F500ACE2C6 /* JMUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */; };
-		93618E171BD4BFFE007995D7 /* JMEULAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93618E161BD4BFFE007995D7 /* JMEULAViewController.m */; };
 		937AD98E1AC83D6900076855 /* JMResourcesListLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */; };
 		9386BA2D1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */; };
 		9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9397F97C1AAACADF006B89C6 /* JMReport.m */; };
@@ -249,6 +252,13 @@
 		0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Additions.m"; sourceTree = "<group>"; };
 		0871503B19F1265B00C5875E /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		0871503D19F1266900C5875E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		087A71AC1BD95FBF007B98A4 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		087A71AF1BD95FD1007B98A4 /* JMAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAboutViewController.h; sourceTree = "<group>"; };
+		087A71B01BD95FD1007B98A4 /* JMAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMAboutViewController.m; sourceTree = "<group>"; };
+		087A71B21BD95FD1007B98A4 /* JMPrivacyPolicyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPrivacyPolicyViewController.h; sourceTree = "<group>"; };
+		087A71B31BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPrivacyPolicyViewController.m; sourceTree = "<group>"; };
+		087A71B71BD95FED007B98A4 /* JMEULAViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMEULAViewController.h; sourceTree = "<group>"; };
+		087A71B81BD95FEE007B98A4 /* JMEULAViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMEULAViewController.m; sourceTree = "<group>"; };
 		089590DF19E3D514001471DA /* ALToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALToastView.h; sourceTree = "<group>"; };
 		089590E019E3D514001471DA /* ALToastView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALToastView.m; sourceTree = "<group>"; };
 		08982CCE1AC98A0700368522 /* JMRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRevealViewController.m; sourceTree = "<group>"; };
@@ -490,8 +500,6 @@
 		9356EC9A1A30752900ACE2C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptionsTests.m; sourceTree = "<group>"; };
 		9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUtilsTests.m; sourceTree = "<group>"; };
-		93618E151BD4BFFE007995D7 /* JMEULAViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMEULAViewController.h; sourceTree = "<group>"; };
-		93618E161BD4BFFE007995D7 /* JMEULAViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMEULAViewController.m; sourceTree = "<group>"; };
 		937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesListLoaderTests.m; sourceTree = "<group>"; };
 		9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "TIB_jsm-ios_2.2.0_license.pdf"; sourceTree = "<group>"; };
 		9397F97B1AAACADF006B89C6 /* JMReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReport.h; sourceTree = "<group>"; };
@@ -746,6 +754,43 @@
 			path = JMBaseViewController;
 			sourceTree = "<group>";
 		};
+		087A71AB1BD95FBF007B98A4 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				087A71AC1BD95FBF007B98A4 /* Settings.bundle */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		087A71AE1BD95FD1007B98A4 /* JMAboutViewController */ = {
+			isa = PBXGroup;
+			children = (
+				087A71B61BD95FED007B98A4 /* JMEULAViewController */,
+				087A71B11BD95FD1007B98A4 /* JMPrivacyPolicyViewController */,
+				087A71AF1BD95FD1007B98A4 /* JMAboutViewController.h */,
+				087A71B01BD95FD1007B98A4 /* JMAboutViewController.m */,
+			);
+			path = JMAboutViewController;
+			sourceTree = "<group>";
+		};
+		087A71B11BD95FD1007B98A4 /* JMPrivacyPolicyViewController */ = {
+			isa = PBXGroup;
+			children = (
+				087A71B21BD95FD1007B98A4 /* JMPrivacyPolicyViewController.h */,
+				087A71B31BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m */,
+			);
+			path = JMPrivacyPolicyViewController;
+			sourceTree = "<group>";
+		};
+		087A71B61BD95FED007B98A4 /* JMEULAViewController */ = {
+			isa = PBXGroup;
+			children = (
+				087A71B71BD95FED007B98A4 /* JMEULAViewController.h */,
+				087A71B81BD95FEE007B98A4 /* JMEULAViewController.m */,
+			);
+			path = JMEULAViewController;
+			sourceTree = "<group>";
+		};
 		089590DE19E3D514001471DA /* ALToastView-v0.0.1 */ = {
 			isa = PBXGroup;
 			children = (
@@ -893,12 +938,12 @@
 		089B14BF1AA756BD0021A915 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				93618E141BD4BFE8007995D7 /* JMEULAViewController */,
 				089B14C91AA756BD0021A915 /* JMLoginViewController */,
 				0801DFB01AAF2E7500DD072C /* JMOnboardIntroViewController */,
 				089B14E51AA756BD0021A915 /* Repository&Libraries */,
 				089B15521AA756BD0021A915 /* Settings */,
 				089B15661AA756BD0021A915 /* SideMenu */,
+				087A71AE1BD95FD1007B98A4 /* JMAboutViewController */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1640,6 +1685,7 @@
 		08E62C8419922BA40081CA83 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				087A71AB1BD95FBF007B98A4 /* Settings */,
 				93618E111BD4BFBF007995D7 /* EULA */,
 				08E62D6F19922F5A0081CA83 /* CoreData */,
 				08E0D1981B0CF27200BFBFE5 /* Images */,
@@ -1756,15 +1802,6 @@
 				9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */,
 			);
 			path = EULA;
-			sourceTree = "<group>";
-		};
-		93618E141BD4BFE8007995D7 /* JMEULAViewController */ = {
-			isa = PBXGroup;
-			children = (
-				93618E151BD4BFFE007995D7 /* JMEULAViewController.h */,
-				93618E161BD4BFFE007995D7 /* JMEULAViewController.m */,
-			);
-			path = JMEULAViewController;
 			sourceTree = "<group>";
 		};
 		9397F9791AAACA94006B89C6 /* Models */ = {
@@ -2206,6 +2243,7 @@
 				089B15C11AA756BD0021A915 /* JMGridLoadingCollectionViewCell.xib in Resources */,
 				BDB8B9F41B57EB0A00758441 /* DefaultTheme.plist in Resources */,
 				BD5921F51BC420EB001B5EDB /* MainStoryboard.storyboard in Resources */,
+				087A71AD1BD95FBF007B98A4 /* Settings.bundle in Resources */,
 				089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */,
 				930F8D421ABB1C35005F93FB /* report-ios-mobilejs-sdk.js in Resources */,
 				930F8D411ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js in Resources */,
@@ -2315,7 +2353,6 @@
 				08DD18391B136B8A00856112 /* JMDashboardInfoViewController.m in Sources */,
 				089B15B61AA756BD0021A915 /* JMLoginViewController.m in Sources */,
 				08DD183C1B136B8A00856112 /* JMSavedItemsInfoViewController.m in Sources */,
-				93618E171BD4BFFE007995D7 /* JMEULAViewController.m in Sources */,
 				089B15F01AA756BD0021A915 /* JMSettingsTableViewCell.m in Sources */,
 				08E2AC8D1B1E056900AC462B /* JMTextInputControlCell.m in Sources */,
 				089B15FA1AA756BD0021A915 /* JMSavedItemsCollectionViewController.m in Sources */,
@@ -2336,6 +2373,7 @@
 				089B15F41AA756BD0021A915 /* JMSettings.m in Sources */,
 				089B15F81AA756BD0021A915 /* JMLibraryCollectionViewController.m in Sources */,
 				08DD183A1B136B8A00856112 /* JMReportInfoViewController.m in Sources */,
+				087A71B41BD95FD1007B98A4 /* JMAboutViewController.m in Sources */,
 				08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */,
 				0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */,
 				08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */,
@@ -2353,6 +2391,7 @@
 				BDF3D25E1B8B2DF20005AA28 /* JMReportManager.m in Sources */,
 				93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */,
 				08E2AC851B1E056900AC462B /* JMSavedResourceViewerViewController.m in Sources */,
+				087A71B91BD95FEE007B98A4 /* JMEULAViewController.m in Sources */,
 				089B15CF1AA756BD0021A915 /* JMSavedResourcesListLoader.m in Sources */,
 				08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */,
 				089B15A61AA756BD0021A915 /* UIView+Additions.m in Sources */,
@@ -2396,6 +2435,7 @@
 				089B15F71AA756BD0021A915 /* JMFavoritesCollectionViewController.m in Sources */,
 				08E2AC8E1B1E056900AC462B /* JMTimeInputControlCell.m in Sources */,
 				089B15A51AA756BD0021A915 /* UITableViewCell+Additions.m in Sources */,
+				087A71B51BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m in Sources */,
 				08E2AC871B1E056900AC462B /* JMDateInputControlCell.m in Sources */,
 				08B517BE1B15C60400B3F20A /* PopoverView.m in Sources */,
 				089590FF19E3D514001471DA /* ALToastView.m in Sources */,

@@ -68,8 +68,8 @@
             return @"JMFavoritesNavigationViewController";
         case JMResourceTypeRepository:
             return @"JMRepositoryNavigationViewController";
-        case JMResourceTypeSettings:
-            return @"JMSettingsNavigationViewController";
+        case JMResourceTypeAbout:
+            return @"JMAboutNavigationViewController";
         default:
             return nil;
     }
@@ -88,8 +88,8 @@
             return JMCustomLocalizedString(@"menuitem.favorites.label", nil);
         case JMResourceTypeRepository:
             return JMCustomLocalizedString(@"menuitem.repository.label", nil);
-        case JMResourceTypeSettings:
-            return JMCustomLocalizedString(@"menuitem.settings.label", nil);
+        case JMResourceTypeAbout:
+            return JMCustomLocalizedString(@"menuitem.about.label", nil);
         case JMResourceTypeLogout:
             return JMCustomLocalizedString(@"menuitem.logout.label", nil);
         default:
@@ -110,7 +110,8 @@
             return [UIImage imageNamed:@"ic_saved_items"];
         case JMResourceTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites"];
-        case JMResourceTypeSettings:
+        case JMResourceTypeAbout:
+#warning NEED TO ADD NEW ICON!
             return [UIImage imageNamed:@"ic_settings"];
         default:
             return nil;
@@ -130,7 +131,8 @@
             return [UIImage imageNamed:@"ic_saved_items_selected"];
         case JMResourceTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites_selected"];
-        case JMResourceTypeSettings:
+        case JMResourceTypeAbout:
+#warning NEED TO ADD NEW ICON!
             return [UIImage imageNamed:@"ic_settings_selected"];
         default:
             return nil;

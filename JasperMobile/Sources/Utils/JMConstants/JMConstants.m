@@ -65,6 +65,11 @@ NSString * const kJMDemoServerOrganization = @"organization_1";
 NSString * const kJMDemoServerUsername = @"phoneuser";
 NSString * const kJMDemoServerPassword = @"phoneuser";
 
+// Emails for feedbacks
+NSString * const kFeedbackPrimaryEmail = @"js-dev-mobile@tibco.com";
+NSString * const kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
+
+
 // Directory to store downloaded reports
 NSString * const kJMReportsDirectory = @"reports";
 

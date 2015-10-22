@@ -22,7 +22,7 @@
 
 
 //
-//  JMSettingsViewController.h
+//  JMAboutViewController.h
 //  TIBCO JasperMobile
 //
 
@@ -31,6 +31,6 @@
  @since 1.9
  */
 
-#import "JMEditabledViewController.h"
-@interface JMSettingsViewController : JMEditabledViewController 
+#import "JMBaseViewController.h"
+@interface JMAboutViewController : JMBaseViewController
 @end

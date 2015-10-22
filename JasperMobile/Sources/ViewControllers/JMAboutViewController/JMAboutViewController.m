@@ -21,11 +21,9 @@
  */
 
 
-#import "JMSettingsViewController.h"
+#import "JMAboutViewController.h"
 #import "UITableViewCell+Additions.h"
 #import <QuartzCore/QuartzCore.h>
-#import "JMSettingsTableViewCell.h"
-#import "JMSettings.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMPopupView.h"
 
@@ -36,40 +34,51 @@
 #import "JMOnboardIntroViewController.h"
 #import "JMEULAViewController.h"
 
-static NSString const *kFeedbackPrimaryEmail = @"js-dev-mobile@tibco.com";
-static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
+@interface JMAboutViewController () <MFMailComposeViewControllerDelegate, UITextViewDelegate>
 
-@interface JMSettingsViewController () <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *privacyPolicyButton;
+@property (weak, nonatomic) IBOutlet UIButton *showEULAButton;
+@property (weak, nonatomic) IBOutlet UIButton *sendFeedbackButton;
 
-@property (nonatomic, strong) JMSettings *detailSettings;
+@property (weak, nonatomic) IBOutlet UITextView *aboutAppTextView;
+
 @end
 
-@implementation JMSettingsViewController
+@implementation JMAboutViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"settings.title", nil);
+    self.title = JMCustomLocalizedString(@"menuitem.about.label", nil);
 
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
-    self.tableView.layer.cornerRadius = 4;
-
+    
     [self.privacyPolicyButton setTitle:JMCustomLocalizedString(@"settings.privacy.policy.title", nil) forState:UIControlStateNormal];
+    [self.showEULAButton setTitle:JMCustomLocalizedString(@"settings.privacy.EULA.title", nil) forState:UIControlStateNormal];
+    [self.sendFeedbackButton setTitle:JMCustomLocalizedString(@"settings.feedback", nil) forState:UIControlStateNormal];
 
-    [self.saveButton setTitle:JMCustomLocalizedString(@"dialog.button.save", nil) forState:UIControlStateNormal];
+    NSString *appName;
+    appName = [NSBundle mainBundle].infoDictionary[@"CFBundleDisplayName"];
+    NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
+    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion], currentYear];
 
-    UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStylePlain target:self action:@selector(applicationInfo:)];
-    self.navigationItem.rightBarButtonItem = infoItem;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self refreshDataSource];
+    NSDictionary *attributes = @{
+                                 NSFontAttributeName : [UIFont systemFontOfSize:[JMUtils isIphone] ? 15 : 20],
+                                 NSForegroundColorAttributeName : [UIColor blackColor]
+                                 };
+    NSMutableAttributedString *aboutString = [[NSMutableAttributedString alloc] initWithString:message attributes:attributes];
+    
+//    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:@"www.google.com"];
+//    NSDictionary *linkDic = @{ NSLinkAttributeName : [NSURL URLWithString:@"http://www.google.com"] };
+//    [str setAttributes:linkDic range:[[str string] rangeOfString:@"www.google.com"]];
+//    [aboutString appendAttributedString:str];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init] ;
+    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    [aboutString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [aboutString length])];
+    
+    self.aboutAppTextView.attributedText = aboutString;
 }
 
 #pragma mark - Auto rotate
@@ -91,29 +100,18 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     [self.revealViewController setFrontViewPosition:FrontViewPositionLeft];
 }
 
-- (void) refreshDataSource
+#pragma mark - Actions
+- (IBAction)privacyPolicyButtonTapped:(id)sender
 {
-    self.detailSettings = [[JMSettings alloc] init];
-    [self.tableView reloadData];
+    [self performSegueWithIdentifier:@"showPrivacyPolicy" sender:self];
+    if ([self isMenuShown]) {
+        [self closeMenu];
+    }
 }
 
-#pragma mark - UITableViewDataSource, UITableViewDelegate
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (IBAction)showEULAButtonTapped:(id)sender
 {
-    return [self.detailSettings.itemsArray count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    JMSettingsItem *currentItem = self.detailSettings.itemsArray[indexPath.row];
-    JMSettingsTableViewCell *cell = (JMSettingsTableViewCell *) [tableView dequeueReusableCellWithIdentifier:currentItem.cellIdentifier];
-    [cell setBottomSeparatorWithHeight:1 color:self.view.backgroundColor tableViewStyle:tableView.style];
-    cell.settingsItem = currentItem;
-    return cell;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+<<<<<<< HEAD:JasperMobile/Sources/ViewControllers/Settings/JMSettingsViewController.m
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     JMSettingsItem *currentItem = self.detailSettings.itemsArray[indexPath.row];
 
@@ -129,11 +127,14 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
         } else if (value == kJMEULASettingValue) {
             [self showEULA];
         }
+=======
+    if ([self isMenuShown]) {
+        [self closeMenu];
+>>>>>>> Redesign and rename settings screen:JasperMobile/Sources/ViewControllers/JMAboutViewController/JMAboutViewController.m
     }
 }
 
-#pragma mark - Feedback by email
-- (void)sendFeedback
+- (IBAction)sendFeedbackButtonTapped:(id)sender
 {
 #if !TARGET_IPHONE_SIMULATOR
     if ([MFMailComposeViewController canSendMail]) {
@@ -182,34 +183,10 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
-#pragma mark - Actions
-- (IBAction)saveButtonTapped:(id)sender
+#pragma mark - UITextViewDelegate
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
-    [self.view endEditing:YES];
-    [ALToastView toastInView:self.tableView
-                    withText:JMCustomLocalizedString(@"settings.save.message", nil)];
-    
-    BOOL previousSendingCrashReports = [JMUtils crashReportsSendingEnable];
-    [self.detailSettings saveSettings];
-    
-    if (previousSendingCrashReports != [JMUtils crashReportsSendingEnable]) {
-        
-        __weak typeof(self) weakSelf = self;
-        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"settings.crashtracking.alert.title"
-                                                                                          message:@"settings.crashtracking.alert.title"
-                                                                                cancelButtonTitle:@"dialog.button.ok"
-                                                                          cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                                                              __strong typeof(self) strongSelf = weakSelf;
-                                                                              [strongSelf.navigationController popViewControllerAnimated:YES];
-                                                                          }];
-        [self presentViewController:alertController animated:YES completion:nil];
-    } else {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-}
-
-- (void)applicationInfo:(id)sender
-{
+<<<<<<< HEAD:JasperMobile/Sources/ViewControllers/Settings/JMSettingsViewController.m
     NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
     NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil),
                     kJMAppName,
@@ -231,6 +208,9 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     if ([self isMenuShown]) {
         [self closeMenu];
     }
+=======
+    return [[UIApplication sharedApplication] canOpenURL:URL];
+>>>>>>> Redesign and rename settings screen:JasperMobile/Sources/ViewControllers/JMAboutViewController/JMAboutViewController.m
 }
 
 - (void)showOnboardIntro

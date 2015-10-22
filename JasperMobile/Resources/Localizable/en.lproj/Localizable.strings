@@ -76,6 +76,7 @@
 "menuitem.recentviews.label" = "Recently Viewed";
 "menuitem.saveditems.label" = "Saved Items";
 "menuitem.settings.label" = "Settings";
+"menuitem.about.label" = "About";
 "menuitem.repository.label" = "Repository";
 "menuitem.favorites.label" = "Favorites";
 "menuitem.logout.label" = "Log Out";

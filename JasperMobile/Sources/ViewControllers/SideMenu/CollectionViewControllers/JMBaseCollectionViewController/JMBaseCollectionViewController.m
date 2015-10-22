@@ -35,7 +35,7 @@
 #import "PopoverView.h"
 #import "JMListOptionsPopupView.h"
 #import "JMCancelRequestPopup.h"
-#import "JMSettingsViewController.h"
+#import "JMAboutViewController.h"
 
 #import "JMRepositoryCollectionViewController.h"
 #import "JSResourceLookup+Helpers.h"

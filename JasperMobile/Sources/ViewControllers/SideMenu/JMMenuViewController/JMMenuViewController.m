@@ -33,7 +33,7 @@
 #import "JMLibraryCollectionViewController.h"
 #import "JMSavedItemsCollectionViewController.h"
 #import "JMFavoritesCollectionViewController.h"
-#import "JMSettingsViewController.h"
+#import "JMAboutViewController.h"
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
@@ -213,7 +213,7 @@
             [JMMenuItem menuItemWithResourceType:JMResourceTypeRepository],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeSettings],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeAbout],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]
     ] mutableCopy];
 
