@@ -40,7 +40,7 @@
 #import "JMReportManager.h"
 
 
-@interface JMBaseReportViewerViewController () <JMSaveReportViewControllerDelegate>
+@interface JMBaseReportViewerViewController () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate>
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;

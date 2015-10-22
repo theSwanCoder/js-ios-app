@@ -118,16 +118,6 @@ void jmDebugLog(NSString *format, ...) {
 
 }
 
-+ (BOOL)isSystemVersion7
-{
-    return [UIDevice currentDevice].systemVersion.integerValue == 7;
-}
-
-+ (BOOL)isSystemVersion8
-{
-    return [UIDevice currentDevice].systemVersion.integerValue == 8;
-}
-
 + (BOOL)isSystemVersion9
 {
     return [UIDevice currentDevice].systemVersion.integerValue == 9;
@@ -301,6 +291,7 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)shouldUseVisualize
 {
+    return NO;
     if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize]) {
         [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultUseVisualize];
     }

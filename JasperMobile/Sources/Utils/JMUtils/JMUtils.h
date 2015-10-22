@@ -76,17 +76,6 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (BOOL)isIphone;
 
 /**
- Verify system version is 7
- */
-+ (BOOL)isSystemVersion7;
-
-/**
- Verify system version is 8
- */
-
-+ (BOOL)isSystemVersion8;
-
-/**
  Verify system version is 9
  */
 + (BOOL)isSystemVersion9;
