@@ -150,9 +150,9 @@
 		9348F4EA1A35D103006F5677 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
 		9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */; };
 		9356ECA51A3075F500ACE2C6 /* JMUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */; };
-		93618E171BD4BFFE007995D7 /* JMEULAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93618E161BD4BFFE007995D7 /* JMEULAViewController.m */; settings = {ASSET_TAGS = (); }; };
+		93618E171BD4BFFE007995D7 /* JMEULAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93618E161BD4BFFE007995D7 /* JMEULAViewController.m */; };
 		937AD98E1AC83D6900076855 /* JMResourcesListLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */; };
-		9386BA2D1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */; settings = {ASSET_TAGS = (); }; };
+		9386BA2D1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */; };
 		9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9397F97C1AAACADF006B89C6 /* JMReport.m */; };
 		939917321BC67737006CC2A7 /* old_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = A14785AF90B597E785B4A30A /* old_dashboard.js */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
@@ -160,8 +160,8 @@
 		93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */; };
 		93EEB4621AC54761000718C7 /* JMVisualizeWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */; };
 		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
-		93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FD91BD7975E00355A30 /* Fabric.framework */; settings = {ASSET_TAGS = (); }; };
-		93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FDA1BD7975E00355A30 /* Crashlytics.framework */; settings = {ASSET_TAGS = (); }; };
+		93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FD91BD7975E00355A30 /* Fabric.framework */; };
+		93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FDA1BD7975E00355A30 /* Crashlytics.framework */; };
 		A147820FB57EFF402452B6E9 /* JMVisDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478B04CE024F4DDDFDF22D /* JMVisDashboardLoader.m */; };
 		A14782BCF3499821EAB23934 /* JMJavascriptCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A147810144F2E290F3B7FF83 /* JMJavascriptCallback.m */; };
 		A147840152F978C37C268CD9 /* JMJavascriptNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = A147880E387FEFB88BBD19B4 /* JMJavascriptNativeBridge.m */; };
