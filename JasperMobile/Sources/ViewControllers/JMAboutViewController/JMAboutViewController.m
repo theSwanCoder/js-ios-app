@@ -41,6 +41,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *showEULAButton;
 @property (weak, nonatomic) IBOutlet UIButton *sendFeedbackButton;
 
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttonsCollection;
+
 @property (weak, nonatomic) IBOutlet UITextView *aboutAppTextView;
 
 @end
@@ -58,35 +60,60 @@
     [self.showEULAButton setTitle:JMCustomLocalizedString(@"settings.privacy.EULA.title", nil) forState:UIControlStateNormal];
     [self.sendFeedbackButton setTitle:JMCustomLocalizedString(@"settings.feedback", nil) forState:UIControlStateNormal];
 
-    NSString *appName;
-    appName = [NSBundle mainBundle].infoDictionary[@"CFBundleDisplayName"];
-    NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
-    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion], currentYear];
-
-    NSDictionary *attributes = @{
-                                 NSFontAttributeName : [UIFont systemFontOfSize:[JMUtils isIphone] ? 15 : 20],
-                                 NSForegroundColorAttributeName : [UIColor blackColor]
-                                 };
-    NSMutableAttributedString *aboutString = [[NSMutableAttributedString alloc] initWithString:message attributes:attributes];
+    for (UIButton * button in self.buttonsCollection) {
+        [button setBackgroundColor:[[JMThemesManager sharedManager] aboutAppButtonsBackgroundColor]];
+        [button setTitleColor:[[JMThemesManager sharedManager] aboutAppButtonsTextColor] forState:UIControlStateNormal];
+    }
     
-//    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:@"www.google.com"];
-//    NSDictionary *linkDic = @{ NSLinkAttributeName : [NSURL URLWithString:@"http://www.google.com"] };
-//    [str setAttributes:linkDic range:[[str string] rangeOfString:@"www.google.com"]];
-//    [aboutString appendAttributedString:str];
+    NSDictionary *appNameAttributes = @{
+                                 NSFontAttributeName : [UIFont boldSystemFontOfSize:[JMUtils isIphone] ? 16 : 25],
+                                 NSForegroundColorAttributeName : [[JMThemesManager sharedManager] aboutAppAppNameTextColor]
+                                 };
+
+    NSString *appNameString = [NSString stringWithFormat:@"%@ v %@\n\n", kJMAppName, [JMAppUpdater latestAppVersionAsString]];
+    NSAttributedString *appNameAttributedString = [[NSAttributedString alloc] initWithString:appNameString attributes:appNameAttributes];
+    
+    NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
+    NSString *appAboutString = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil),
+                         @"\u00AE",
+                         [JMServerProfile minSupportedServerVersion],
+                         currentYear];
+    
+    NSDictionary *appAboutAttributes = @{
+                                 NSFontAttributeName : [UIFont systemFontOfSize:[JMUtils isIphone] ? 14 : 20],
+                                 NSForegroundColorAttributeName : [[JMThemesManager sharedManager] aboutAppAppAboutTextColor]
+                                 };
+    NSAttributedString *appAboutAttributedString = [[NSAttributedString alloc] initWithString:appAboutString attributes:appAboutAttributes];
+    
+    NSMutableAttributedString *aboutString = [[NSMutableAttributedString alloc] initWithAttributedString:appNameAttributedString];
+    [aboutString appendAttributedString:appAboutAttributedString];
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc]init] ;
     [paragraphStyle setAlignment:NSTextAlignmentCenter];
     [aboutString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [aboutString length])];
     
     self.aboutAppTextView.attributedText = aboutString;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(interfaceOrientationDidChanged:)
+                                                 name:UIApplicationDidChangeStatusBarOrientationNotification
+                                               object:nil];
+
 }
 
 #pragma mark - Auto rotate
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     if ([self isMenuShown]) {
        [self closeMenu];
     }
+}
+
+- (void)interfaceOrientationDidChanged:(NSNotification *)notification
+{
+    CGSize size = [self.aboutAppTextView sizeThatFits:self.aboutAppTextView.bounds.size];
+    
 }
 
 #pragma mark - Menu Utils
@@ -111,27 +138,14 @@
 
 - (IBAction)showEULAButtonTapped:(id)sender
 {
-<<<<<<< HEAD:JasperMobile/Sources/ViewControllers/Settings/JMSettingsViewController.m
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    JMSettingsItem *currentItem = self.detailSettings.itemsArray[indexPath.row];
-
-    if ([currentItem.cellIdentifier isEqualToString:kJMLabelCellIdentifier]) {
-        NSInteger value = ((NSNumber *)currentItem.valueSettings).integerValue;
-
-        if (value == kJMPrivacyPolicySettingValue) {
-            [self showPrivacyPolicy];
-        } else if (value == kJMOnboardIntroSettingValue) {
-            [self showOnboardIntro];
-        } else if (value == kJMFeedbackSettingValue) {
-            [self sendFeedback];
-        } else if (value == kJMEULASettingValue) {
-            [self showEULA];
-        }
-=======
     if ([self isMenuShown]) {
         [self closeMenu];
->>>>>>> Redesign and rename settings screen:JasperMobile/Sources/ViewControllers/JMAboutViewController/JMAboutViewController.m
     }
+    JMEULAViewController *EULAViewController = (JMEULAViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMEULAViewController"];
+    EULAViewController.completion = nil;
+    EULAViewController.shouldUserAccept = NO;
+    
+    [self.navigationController pushViewController:EULAViewController animated:YES];
 }
 
 - (IBAction)sendFeedbackButtonTapped:(id)sender
@@ -186,31 +200,7 @@
 #pragma mark - UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange
 {
-<<<<<<< HEAD:JasperMobile/Sources/ViewControllers/Settings/JMSettingsViewController.m
-    NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
-    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil),
-                    kJMAppName,
-                    [JMAppUpdater latestAppVersionAsString],
-                    @"\u00AE",
-                    [JMServerProfile minSupportedServerVersion],
-                    currentYear];
-
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:nil
-                                                                                      message:message
-                                                                            cancelButtonTitle:@"dialog.button.ok"
-                                                                      cancelCompletionHandler:nil];
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
-- (void)showPrivacyPolicy
-{
-    [self performSegueWithIdentifier:@"showPrivacyPolicy" sender:self];
-    if ([self isMenuShown]) {
-        [self closeMenu];
-    }
-=======
     return [[UIApplication sharedApplication] canOpenURL:URL];
->>>>>>> Redesign and rename settings screen:JasperMobile/Sources/ViewControllers/JMAboutViewController/JMAboutViewController.m
 }
 
 - (void)showOnboardIntro
@@ -222,13 +212,4 @@
     }
 }
 
-- (void)showEULA
-{
-    JMEULAViewController *EULAViewController = (JMEULAViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMEULAViewController"];
-    EULAViewController.completion = nil;
-    EULAViewController.shouldUserAccept = NO;
-
-    [self.navigationController pushViewController:EULAViewController
-                                         animated:YES];
-}
 @end

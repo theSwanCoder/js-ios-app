@@ -152,8 +152,8 @@
             return @"Saved Items";
         case JMResourceTypeFavorites:
             return @"Favorites";
-        case JMResourceTypeSettings:
-            return @"Settings";
+        case JMResourceTypeAbout:
+            return @"AboutApp";
         default:
             return nil;
     }

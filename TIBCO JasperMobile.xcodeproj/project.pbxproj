@@ -72,13 +72,6 @@
 		089B15CD1AA756BD0021A915 /* JMRepositoryListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15031AA756BD0021A915 /* JMRepositoryListLoader.m */; };
 		089B15CE1AA756BD0021A915 /* JMResourcesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15051AA756BD0021A915 /* JMResourcesListLoader.m */; };
 		089B15CF1AA756BD0021A915 /* JMSavedResourcesListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15081AA756BD0021A915 /* JMSavedResourcesListLoader.m */; };
-		089B15EF1AA756BD0021A915 /* JMBooleanSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15561AA756BD0021A915 /* JMBooleanSettingsTableViewCell.m */; };
-		089B15F01AA756BD0021A915 /* JMSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15581AA756BD0021A915 /* JMSettingsTableViewCell.m */; };
-		089B15F11AA756BD0021A915 /* JMTextSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B155A1AA756BD0021A915 /* JMTextSettingsTableViewCell.m */; };
-		089B15F21AA756BD0021A915 /* JMPrivacyPolicyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B155D1AA756BD0021A915 /* JMPrivacyPolicyViewController.m */; };
-		089B15F31AA756BD0021A915 /* JMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B155F1AA756BD0021A915 /* JMSettingsViewController.m */; };
-		089B15F41AA756BD0021A915 /* JMSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15621AA756BD0021A915 /* JMSettings.m */; };
-		089B15F51AA756BD0021A915 /* JMSettingsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15651AA756BD0021A915 /* JMSettingsItem.m */; };
 		089B15F61AA756BD0021A915 /* JMBaseCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B156A1AA756BD0021A915 /* JMBaseCollectionViewController.m */; };
 		089B15F71AA756BD0021A915 /* JMFavoritesCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B156D1AA756BD0021A915 /* JMFavoritesCollectionViewController.m */; };
 		089B15F81AA756BD0021A915 /* JMLibraryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15701AA756BD0021A915 /* JMLibraryCollectionViewController.m */; };
@@ -333,20 +326,6 @@
 		089B15051AA756BD0021A915 /* JMResourcesListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesListLoader.m; sourceTree = "<group>"; };
 		089B15071AA756BD0021A915 /* JMSavedResourcesListLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedResourcesListLoader.h; sourceTree = "<group>"; };
 		089B15081AA756BD0021A915 /* JMSavedResourcesListLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSavedResourcesListLoader.m; sourceTree = "<group>"; };
-		089B15551AA756BD0021A915 /* JMBooleanSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBooleanSettingsTableViewCell.h; sourceTree = "<group>"; };
-		089B15561AA756BD0021A915 /* JMBooleanSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBooleanSettingsTableViewCell.m; sourceTree = "<group>"; };
-		089B15571AA756BD0021A915 /* JMSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSettingsTableViewCell.h; sourceTree = "<group>"; };
-		089B15581AA756BD0021A915 /* JMSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSettingsTableViewCell.m; sourceTree = "<group>"; };
-		089B15591AA756BD0021A915 /* JMTextSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMTextSettingsTableViewCell.h; sourceTree = "<group>"; };
-		089B155A1AA756BD0021A915 /* JMTextSettingsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMTextSettingsTableViewCell.m; sourceTree = "<group>"; };
-		089B155C1AA756BD0021A915 /* JMPrivacyPolicyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPrivacyPolicyViewController.h; sourceTree = "<group>"; };
-		089B155D1AA756BD0021A915 /* JMPrivacyPolicyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPrivacyPolicyViewController.m; sourceTree = "<group>"; };
-		089B155E1AA756BD0021A915 /* JMSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSettingsViewController.h; sourceTree = "<group>"; };
-		089B155F1AA756BD0021A915 /* JMSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSettingsViewController.m; sourceTree = "<group>"; };
-		089B15611AA756BD0021A915 /* JMSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSettings.h; sourceTree = "<group>"; };
-		089B15621AA756BD0021A915 /* JMSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSettings.m; sourceTree = "<group>"; };
-		089B15641AA756BD0021A915 /* JMSettingsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSettingsItem.h; sourceTree = "<group>"; };
-		089B15651AA756BD0021A915 /* JMSettingsItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSettingsItem.m; sourceTree = "<group>"; };
 		089B15691AA756BD0021A915 /* JMBaseCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseCollectionViewController.h; sourceTree = "<group>"; };
 		089B156A1AA756BD0021A915 /* JMBaseCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseCollectionViewController.m; sourceTree = "<group>"; };
 		089B156C1AA756BD0021A915 /* JMFavoritesCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMFavoritesCollectionViewController.h; sourceTree = "<group>"; };
@@ -941,7 +920,6 @@
 				089B14C91AA756BD0021A915 /* JMLoginViewController */,
 				0801DFB01AAF2E7500DD072C /* JMOnboardIntroViewController */,
 				089B14E51AA756BD0021A915 /* Repository&Libraries */,
-				089B15521AA756BD0021A915 /* Settings */,
 				089B15661AA756BD0021A915 /* SideMenu */,
 				087A71AE1BD95FD1007B98A4 /* JMAboutViewController */,
 			);
@@ -1140,67 +1118,6 @@
 				089B15081AA756BD0021A915 /* JMSavedResourcesListLoader.m */,
 			);
 			path = JMSavedResourcesListLoader;
-			sourceTree = "<group>";
-		};
-		089B15521AA756BD0021A915 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				089B15601AA756BD0021A915 /* Settings */,
-				089B15531AA756BD0021A915 /* Cells */,
-				089B155B1AA756BD0021A915 /* JMPrivacyPolicyViewController */,
-				089B155E1AA756BD0021A915 /* JMSettingsViewController.h */,
-				089B155F1AA756BD0021A915 /* JMSettingsViewController.m */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		089B15531AA756BD0021A915 /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				089B15541AA756BD0021A915 /* JMBooleanSettingsTableViewCell */,
-				089B15571AA756BD0021A915 /* JMSettingsTableViewCell.h */,
-				089B15581AA756BD0021A915 /* JMSettingsTableViewCell.m */,
-				089B15591AA756BD0021A915 /* JMTextSettingsTableViewCell.h */,
-				089B155A1AA756BD0021A915 /* JMTextSettingsTableViewCell.m */,
-			);
-			path = Cells;
-			sourceTree = "<group>";
-		};
-		089B15541AA756BD0021A915 /* JMBooleanSettingsTableViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				089B15551AA756BD0021A915 /* JMBooleanSettingsTableViewCell.h */,
-				089B15561AA756BD0021A915 /* JMBooleanSettingsTableViewCell.m */,
-			);
-			path = JMBooleanSettingsTableViewCell;
-			sourceTree = "<group>";
-		};
-		089B155B1AA756BD0021A915 /* JMPrivacyPolicyViewController */ = {
-			isa = PBXGroup;
-			children = (
-				089B155C1AA756BD0021A915 /* JMPrivacyPolicyViewController.h */,
-				089B155D1AA756BD0021A915 /* JMPrivacyPolicyViewController.m */,
-			);
-			path = JMPrivacyPolicyViewController;
-			sourceTree = "<group>";
-		};
-		089B15601AA756BD0021A915 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				089B15611AA756BD0021A915 /* JMSettings.h */,
-				089B15621AA756BD0021A915 /* JMSettings.m */,
-				089B15631AA756BD0021A915 /* SettingsItem */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		089B15631AA756BD0021A915 /* SettingsItem */ = {
-			isa = PBXGroup;
-			children = (
-				089B15641AA756BD0021A915 /* JMSettingsItem.h */,
-				089B15651AA756BD0021A915 /* JMSettingsItem.m */,
-			);
-			path = SettingsItem;
 			sourceTree = "<group>";
 		};
 		089B15661AA756BD0021A915 /* SideMenu */ = {
@@ -2353,7 +2270,6 @@
 				08DD18391B136B8A00856112 /* JMDashboardInfoViewController.m in Sources */,
 				089B15B61AA756BD0021A915 /* JMLoginViewController.m in Sources */,
 				08DD183C1B136B8A00856112 /* JMSavedItemsInfoViewController.m in Sources */,
-				089B15F01AA756BD0021A915 /* JMSettingsTableViewCell.m in Sources */,
 				08E2AC8D1B1E056900AC462B /* JMTextInputControlCell.m in Sources */,
 				089B15FA1AA756BD0021A915 /* JMSavedItemsCollectionViewController.m in Sources */,
 				089B159C1AA756BD0021A915 /* JMEditabledViewController.m in Sources */,
@@ -2370,7 +2286,6 @@
 				0801DFBD1AAF2E7500DD072C /* JMIntroModel.m in Sources */,
 				089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */,
 				93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */,
-				089B15F41AA756BD0021A915 /* JMSettings.m in Sources */,
 				089B15F81AA756BD0021A915 /* JMLibraryCollectionViewController.m in Sources */,
 				08DD183A1B136B8A00856112 /* JMReportInfoViewController.m in Sources */,
 				087A71B41BD95FD1007B98A4 /* JMAboutViewController.m in Sources */,
@@ -2384,7 +2299,6 @@
 				0801DFAE1AAF2CFB00DD072C /* JMLocalization.m in Sources */,
 				089B15BE1AA756BD0021A915 /* JMServerOptions.m in Sources */,
 				089B15BA1AA756BD0021A915 /* JMServerOptionCell.m in Sources */,
-				089B15F21AA756BD0021A915 /* JMPrivacyPolicyViewController.m in Sources */,
 				08DD182D1B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel in Sources */,
 				089B15BD1AA756BD0021A915 /* JMServerOption.m in Sources */,
 				081CE2701B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m in Sources */,
@@ -2398,14 +2312,10 @@
 				089B15B01AA756BD0021A915 /* JMPopupView.m in Sources */,
 				089B159D1AA756BD0021A915 /* JMMainNavigationController.m in Sources */,
 				089B15F61AA756BD0021A915 /* JMBaseCollectionViewController.m in Sources */,
-				089B15F31AA756BD0021A915 /* JMSettingsViewController.m in Sources */,
 				08E2AC7C1B1E056900AC462B /* JMBaseResourceViewerVC.m in Sources */,
 				089B15A31AA756BD0021A915 /* UIColor+RGBComponent.m in Sources */,
 				93EEB4621AC54761000718C7 /* JMVisualizeWebViewManager.swift in Sources */,
 				0801DF9D1AAF2CC900DD072C /* JMFavorites.m in Sources */,
-				089B15F51AA756BD0021A915 /* JMSettingsItem.m in Sources */,
-				089B15EF1AA756BD0021A915 /* JMBooleanSettingsTableViewCell.m in Sources */,
-				089B15F11AA756BD0021A915 /* JMTextSettingsTableViewCell.m in Sources */,
 				9342341A1AAC3D5300D34478 /* JMVisualizeReport.m in Sources */,
 				089B159E1AA756BD0021A915 /* JMFavorites+Helpers.m in Sources */,
 				089B15C51AA756BD0021A915 /* JMResourceCollectionViewCell.m in Sources */,

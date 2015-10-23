@@ -98,6 +98,12 @@ NSString * const kJMThemeReportOptionsNoResultLabelTextColor = @"ReportOptions.n
 NSString * const kJMThemeSaveReportSaveReportButtonBackgroundColor = @"SaveReport.savereport_button_background_color";
 NSString * const kJMThemeSaveReportSaveReportButtonTextColor = @"SaveReport.savereport_button_text_color";
 
+// About App
+NSString * const kJMThemeAboutAppAppNameTextColorColor = @"AboutApp.app_name_text_color";
+NSString * const kJMThemeAboutAppAppAboutTextColor = @"AboutApp.app_about_text_color";
+NSString * const kJMThemeAboutAppButtonsBackgroundColor = @"AboutApp.buttons_background_color";
+NSString * const kJMThemeAboutAppButtonsTextColor = @"AboutApp.buttons_text_color";
+
 
 // Common
 NSString * const kJMThemeViewBackgroundColor = @"Common.views_background_color";
@@ -538,6 +544,27 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
 - (UIColor *)saveReportSaveReportButtonTextColor
 {
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeSaveReportSaveReportButtonTextColor];
+}
+
+// About App
+- (UIColor *)aboutAppAppNameTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeAboutAppAppNameTextColorColor];
+}
+
+- (UIColor *)aboutAppAppAboutTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeAboutAppAppAboutTextColor];
+}
+
+- (UIColor *)aboutAppButtonsBackgroundColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeAboutAppButtonsBackgroundColor];
+}
+
+- (UIColor *)aboutAppButtonsTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeAboutAppButtonsTextColor];
 }
 
 
