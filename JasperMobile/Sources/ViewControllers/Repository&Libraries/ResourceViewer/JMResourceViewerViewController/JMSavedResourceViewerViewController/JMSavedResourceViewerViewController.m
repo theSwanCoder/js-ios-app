@@ -87,7 +87,6 @@
     } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
         resourcesType = @"Saved Item (XLS)";
     }
-
     [JMUtils logEventWithName:@"User opened resource"
                  additionInfo:@{
                          @"Resource's Type" : resourcesType

@@ -157,6 +157,7 @@
                                  additionInfo:@{
                                          @"Section's Name" : [item nameForCrashlytics]
                                  }];
+
                     // Show VC
                     UINavigationController *nvc = (UINavigationController *) [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
                     UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonTapped:)];
