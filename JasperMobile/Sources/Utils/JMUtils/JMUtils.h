@@ -174,7 +174,7 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (UIStoryboard *__nonnull)mainStoryBoard;
 
-+ (void)logEventWithName:(NSString *)eventName additionInfo:(NSDictionary *)additionInfo;
++ (void)logEventWithName:(NSString *__nonnull)eventName additionInfo:(NSDictionary *__nonnull)additionInfo;
 
-+ (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo;
++ (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
 @end
