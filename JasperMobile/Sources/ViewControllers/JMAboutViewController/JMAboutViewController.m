@@ -93,27 +93,14 @@
     [aboutString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [aboutString length])];
     
     self.aboutAppTextView.attributedText = aboutString;
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(interfaceOrientationDidChanged:)
-                                                 name:UIApplicationDidChangeStatusBarOrientationNotification
-                                               object:nil];
-
-}
-
-#pragma mark - Auto rotate
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    if ([self isMenuShown]) {
-       [self closeMenu];
-    }
-}
-
-- (void)interfaceOrientationDidChanged:(NSNotification *)notification
-{
     CGSize size = [self.aboutAppTextView sizeThatFits:self.aboutAppTextView.bounds.size];
-    
+    self.aboutAppTextView.contentSize = size;
 }
 
 #pragma mark - Menu Utils
