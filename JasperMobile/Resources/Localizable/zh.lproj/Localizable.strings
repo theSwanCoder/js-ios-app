@@ -27,7 +27,7 @@
 
 /* Application Info */
 
-"application.info" = "%@ v %@\n\n%@ JasperReports Server %.1f 及更高版本的管理工具和报告查看程序。\n\n有关更多信息，请访问: \nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\n版权所有 © 2005-%zd TIBCO Software, Inc.";
+"application.info" = "%@ v %@\n\nTIBCO JasperReports%@ Server %.1f 及更高版本的管理工具和报告查看程序。\n\n有关更多信息，请访问: \nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\n版权所有 © 2005-%zd TIBCO Software, Inc.";
 
 /* Login Page */
 
@@ -67,7 +67,11 @@
 "intro.model.secondScreen.title" = "即时访问";
 "intro.model.secondScreen.description" = "访问通过您运行的应用程序生成的实时交互报表。";
 "intro.model.thirdScreen.title" = "无缝集成";
+<<<<<<< HEAD
+"intro.model.thirdScreen.description" = "查看并与您的 TIBCO JasperReports%@ Server v%.1f 或更大的环境交互。";
+=======
 "intro.model.thirdScreen.description" = "查看并与您的 %@ JasperReports Server v%.1f 或更大的环境交互。";
+>>>>>>> 232b631fcbfb12fa43c8e014524a5561f2e75eeb
 
 /* Menu View */
 

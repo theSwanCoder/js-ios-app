@@ -153,11 +153,11 @@
 
                 id nextVC;
                 if([item vcIdentifierForSelectedItem]) {
-                    // Crashlytics
-                    [Answers logCustomEventWithName:@"User opened section"
-                                   customAttributes:@{
-                                                      @"Section's Name" : [item nameForCrashlytics]
-                                                      }];
+                    // Analytics
+                    [JMUtils logEventWithName:@"User opened section"
+                                 additionInfo:@{
+                                         @"Section's Name" : [item nameForCrashlytics]
+                                 }];
 
                     nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
                     UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStylePlain target:self action:@selector(menuButtonTapped:)];

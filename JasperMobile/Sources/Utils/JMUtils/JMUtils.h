@@ -163,4 +163,8 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (UIViewController *__nonnull)launchScreenViewController;
 
++ (void)logEventWithName:(NSString *__nonnull)eventName additionInfo:(NSDictionary *__nonnull)additionInfo;
+
++ (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
+
 @end

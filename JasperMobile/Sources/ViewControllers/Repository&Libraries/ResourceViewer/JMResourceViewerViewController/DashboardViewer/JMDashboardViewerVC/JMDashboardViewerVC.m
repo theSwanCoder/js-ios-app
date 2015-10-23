@@ -217,12 +217,12 @@
                 [strongSelf stopShowLoader];
 
                 if (success) {
-                    // Crashlytics
+                    // Analytics
                     NSString *resourcesType = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? @"Dashboard (Visualize)" : @"Dashboard (REST)";
-                    [Answers logCustomEventWithName:@"User opened resource"
-                                   customAttributes:@{
-                                           @"Resource's Type" : resourcesType
-                                   }];
+                     [JMUtils logEventWithName:@"User opened resource"
+                                 additionInfo:@{
+                                         @"Resource's Type" : resourcesType
+                                 }];
                 }
             }];
 

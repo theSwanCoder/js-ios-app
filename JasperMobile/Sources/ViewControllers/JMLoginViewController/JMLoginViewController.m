@@ -222,13 +222,11 @@
 
         [JMCancelRequestPopup dismiss];
         if (success) {
-            // Crashlytics
-
-            [Answers logLoginWithMethod:@"Digits"
-                                success:@YES
-                       customAttributes:@{
-                               @"Server version" : jsServerProfile.serverInfo.version
-                       }];
+            // Analytics
+            [JMUtils logLoginSuccess:YES
+                        additionInfo:@{
+                                @"Server version" : jsServerProfile.serverInfo.version
+                        }];
 
             strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
             [strongSelf dismissViewControllerAnimated:NO completion:nil];
@@ -236,12 +234,11 @@
                 strongSelf.completion();
             }
         } else {
-            // Crashlytics
-            [Answers logLoginWithMethod:@"Digits"
-                                success:@NO
-                       customAttributes:@{
-                               @"Reason of failure" : @"Wrong Credentials"
-                       }];
+            // Analytics
+            [JMUtils logLoginSuccess:NO
+                        additionInfo:@{
+                                @"Reason of failure" : @"Wrong Credentials"
+                        }];
 
             NSString *errorTitle = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
             NSString *errorMessage = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);

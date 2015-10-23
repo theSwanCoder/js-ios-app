@@ -214,7 +214,7 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil),
                     kJMAppName,
                     [JMAppUpdater latestAppVersionAsString],
-                    kJMCompanyName,
+                    @"\u00AE",
                     [JMServerProfile minSupportedServerVersion],
                     currentYear];
 

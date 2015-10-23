@@ -27,7 +27,7 @@
 
 /* Application Info */
 
-"application.info" = "%@ v %@\n\nStrumento di gestione e visualizzatore report per server %@ JasperReports %.1f e versioni successive.\n\nPer ulteriori informazioni visitare la pagina:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
+"application.info" = "%@ v %@\n\nStrumento di gestione e visualizzatore report per server TIBCO JasperReports%@ %.1f e versioni successive.\n\nPer ulteriori informazioni visitare la pagina:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
 
 /* Login Page */
 
@@ -67,7 +67,8 @@
 "intro.model.secondScreen.title" = "Accesso istantaneo";
 "intro.model.secondScreen.description" = "Accedi a report interattivi in tempo reale\nrealizzati dalle tue applicazioni operative.";
 "intro.model.thirdScreen.title" = "Integrazione senza interruzioni";
-"intro.model.thirdScreen.description" = "Visualizza e interagisci con il tuo ambiente\n%@ JasperReports Server v%.1f o versioni successive.";
+"intro.model.thirdScreen.description" = "Visualizza e interagisci con il tuo ambiente\nTIBCO JasperReports%@ Server v%.1f o versioni successive.";
+
 
 /* Menu View */
 

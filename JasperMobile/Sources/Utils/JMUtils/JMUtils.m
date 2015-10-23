@@ -390,4 +390,36 @@ void jmDebugLog(NSString *format, ...) {
     return [launchStoryboard instantiateInitialViewController];
 }
 
+#pragma mark - Analytics
++ (void)logEventWithName:(NSString *)eventName additionInfo:(NSDictionary *)additionInfo
+{
+    // Crashlytics - Answers
+    [Answers logCustomEventWithName:eventName
+                   customAttributes:additionInfo];
+
+    // Google Analytics
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:eventName                                           // Event category (required)
+                                                          action:[additionInfo allKeys].firstObject                  // Event action (required)
+                                                           label:[additionInfo allValues].firstObject                // Event label
+                                                           value:nil] build]];                                       // Event value
+
+}
+
++ (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
+{
+    // Crashlytics - Answers
+    [Answers logLoginWithMethod:@"Digits"
+                        success:@(success)
+               customAttributes:additionInfo];
+
+    // Google Analytics
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    NSString *action = success ? @"Login_Success" : @"Login_Failed";
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:action                                              // Event category (required)
+                                                          action:[additionInfo allKeys].firstObject                  // Event action (required)
+                                                           label:[additionInfo allValues].firstObject                // Event label
+                                                           value:nil] build]];                                       // Event value
+}
+
 @end
