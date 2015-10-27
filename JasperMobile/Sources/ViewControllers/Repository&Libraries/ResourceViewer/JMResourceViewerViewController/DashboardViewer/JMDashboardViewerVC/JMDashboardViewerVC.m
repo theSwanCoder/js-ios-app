@@ -100,6 +100,14 @@
 {
     self.configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard];
 
+    // Setup viewport scale factor
+    CGFloat initialScaleViewport = 0.75;
+    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+    if (isCompactWidth) {
+        initialScaleViewport = 0.25;
+    }
+    self.configurator.viewportScaleFactor = initialScaleViewport;
+
     CGRect rootViewBounds = self.navigationController.view.bounds;
     id dashboardView = [self.configurator webViewWithFrame:rootViewBounds asSecondary:NO];
     [self.view addSubview:dashboardView];

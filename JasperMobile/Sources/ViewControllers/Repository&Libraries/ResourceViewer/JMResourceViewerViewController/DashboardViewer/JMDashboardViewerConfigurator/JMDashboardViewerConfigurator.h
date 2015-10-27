@@ -28,6 +28,7 @@
 
 @protocol JMDashboardLoader;
 @protocol JMDashboardLoaderDelegate;
+@class JMDashboard;
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
@@ -36,6 +37,7 @@
 
 
 @interface JMDashboardViewerConfigurator : NSObject
+@property (nonatomic, assign) CGFloat viewportScaleFactor;
 @property (nonatomic, weak) id webView;
 
 - (instancetype)initWithDashboard:(JMDashboard *)dashboard;

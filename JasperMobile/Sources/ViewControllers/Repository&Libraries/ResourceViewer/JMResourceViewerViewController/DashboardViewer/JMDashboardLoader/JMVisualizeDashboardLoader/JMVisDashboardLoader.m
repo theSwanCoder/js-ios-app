@@ -41,7 +41,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 @interface JMVisDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
 @property (nonatomic, copy) void(^loadCompletion)(BOOL success, NSError *error);
 @property (nonatomic, copy) NSURL *externalURL;
 @end
@@ -61,7 +60,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     self = [super init];
     if (self) {
         _dashboard = dashboard;
-        _visualizeManager = [JMVisualizeManager new];
     }
     return self;
 }
