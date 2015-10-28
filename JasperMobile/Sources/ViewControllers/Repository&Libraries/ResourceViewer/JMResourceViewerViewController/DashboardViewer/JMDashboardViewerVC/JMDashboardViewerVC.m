@@ -44,6 +44,20 @@
 
 @implementation JMDashboardViewerVC
 
+#pragma mark -
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        CGFloat initialScaleViewport = 0.75;
+        BOOL isCompactWidth = newCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+        if (isCompactWidth) {
+            initialScaleViewport = 0.25;
+        }
+        [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+    }
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+}
+
 #pragma mark - Print
 - (void)printResource
 {

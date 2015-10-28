@@ -124,6 +124,18 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     [self.bridge sendRequest:request];
 }
 
+- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
+{
+    if ( fabsf(self.visualizeManager.viewportScaleFactor - scaleFactor) >= 0.49 ) {
+        self.visualizeManager.viewportScaleFactor = scaleFactor;
+
+        JMJavascriptRequest *request = [JMJavascriptRequest new];
+        request.command = @"jQuery(\"meta[name='viewport']\")[0].content = \"initial-scale=%@, width=device-width, minimum-scale=0.1, maximum-scale=2, user-scalable=yes\";";
+        request.parametersAsString = [NSString stringWithFormat:@"%@", @(scaleFactor)];
+        [self.bridge sendRequest:request];
+    }
+}
+
 #pragma mark - Private API
 - (void)destroyDashboard
 {
