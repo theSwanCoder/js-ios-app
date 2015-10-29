@@ -1,12 +1,13 @@
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, "7.0"
+use_frameworks!
 
 pod 'Appirater'
 pod 'SWRevealViewController', '>=2.3.0'
 pod 'JaspersoftSDK', :git => 'https://github.com/Jaspersoft/js-ios-sdk.git', :branch => 'develop'
 
 post_install do |installer_representation|
-  installer_representation.project.targets.each do |target|
+  installer_representation.pods_project.targets.each do |target|
     if target.name == "Pods-JaspersoftSDK"
       target.build_configurations.each do |config|
 		if config.build_settings['GCC_PREPROCESSOR_DEFINITIONS']
