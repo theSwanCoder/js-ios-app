@@ -1,6 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, "7.0"
-use_frameworks!
+use_frameworks! #used for swift
 
 pod 'Appirater'
 pod 'SWRevealViewController', '>=2.3.0'
