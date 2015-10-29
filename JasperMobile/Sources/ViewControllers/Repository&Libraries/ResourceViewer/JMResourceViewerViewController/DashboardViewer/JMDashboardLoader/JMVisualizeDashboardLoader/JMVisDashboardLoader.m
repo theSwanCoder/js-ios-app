@@ -41,7 +41,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 @interface JMVisDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
 @property (nonatomic, copy) void(^loadCompletion)(BOOL success, NSError *error);
 @property (nonatomic, copy) NSURL *externalURL;
 @end
@@ -61,7 +60,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     self = [super init];
     if (self) {
         _dashboard = dashboard;
-        _visualizeManager = [JMVisualizeManager new];
     }
     return self;
 }
@@ -124,6 +122,18 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     request.command = @"MobileDashboard.minimizeDashlet();";
     request.parametersAsString = @"";
     [self.bridge sendRequest:request];
+}
+
+- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
+{
+    if ( fabsf(self.visualizeManager.viewportScaleFactor - scaleFactor) >= 0.49 ) {
+        self.visualizeManager.viewportScaleFactor = scaleFactor;
+
+        JMJavascriptRequest *request = [JMJavascriptRequest new];
+        request.command = @"jQuery(\"meta[name='viewport']\")[0].content = \"initial-scale=%@, width=device-width, minimum-scale=0.1, maximum-scale=2, user-scalable=yes\";";
+        request.parametersAsString = [NSString stringWithFormat:@"%@", @(scaleFactor)];
+        [self.bridge sendRequest:request];
+    }
 }
 
 #pragma mark - Private API

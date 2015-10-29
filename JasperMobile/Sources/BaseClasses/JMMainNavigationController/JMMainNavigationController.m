@@ -48,11 +48,6 @@
     [navigationController setToolbarHidden:YES animated:YES];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
-
 #pragma mark - AutoRotation
 - (BOOL)shouldAutorotate
 {

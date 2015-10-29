@@ -32,7 +32,7 @@
 #import "JMReportManager.h"
 #import "JMExtendedReportOption.h"
 
-@interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate, UITextFieldDelegate, UIAlertViewDelegate>
+@interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *runReportButton;
 
@@ -93,25 +93,41 @@
 - (void)createReportOptionTapped:(id)sender
 {
     if ([self validateInputControls]) { // Local validation
+        __weak typeof(self) weakSelf = self;
         [self checkParentFolderPermissionWithCompletion:^(BOOL reportOptionsEditingAvailable) {
-                if (reportOptionsEditingAvailable) {
-                    [self updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) { // Server validation
-                            if (dataIsValid) {
-                                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(@"report.viewer.report.options.new.option.title", nil)
-                                                                                    message:nil
-                                                                                   delegate:self
-                                                                          cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
-                                                                          otherButtonTitles:JMCustomLocalizedString(@"dialog.button.ok", nil), nil];
-                                alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-                                UITextField *textField = [alertView textFieldAtIndex:0];
-                                textField.delegate = self;
-                                [alertView show];
-                            }
-                        }];
-                } else {
-                    [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.report.options.create.permission.error" delegate:nil cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles: nil] show];
-                }
-            }];
+            __strong typeof(self) strongSelf = weakSelf;
+            if (reportOptionsEditingAvailable) {
+                __weak typeof(self) weakSelf = strongSelf;
+                [strongSelf updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) { // Server validation
+                    __strong typeof(self) strongSelf = weakSelf;
+                    if (dataIsValid) {
+                        __weak typeof(self) weakSelf = strongSelf;
+                        UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"report.viewer.report.options.new.option.title"
+                                                                                                                      message:nil
+                                                                                                textFieldConfigurationHandler:nil
+                                                                                                        textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
+                                                                                                            NSString *errorMessage = nil;
+                                                                                                            __strong typeof(self) strongSelf = weakSelf;
+                                                                                                            if (strongSelf) {
+                                                                                                                [JMUtils validateReportName:text errorMessage:&errorMessage];
+                                                                                                                if (!errorMessage && ![strongSelf isUniqueNewReportOptionName:text]) {
+                                                                                                                    errorMessage = JMCustomLocalizedString(@"report.viewer.report.options.new.option.title.alreadyexist", nil);
+                                                                                                                }
+                                                                                                            }
+                                                                                                            return errorMessage;
+                                                                                                        } textEditCompletionHandler:^(NSString * _Nullable text) {
+                                                                                                            __strong typeof(self) strongSelf = weakSelf;
+                                                                                                            [strongSelf createNewReportOptionWithName:text];
+                                                                                                        }];
+                        [strongSelf presentViewController:alertController animated:YES completion:nil];
+                    }
+                }];
+            } else {
+                NSString *errorMessage = JMCustomLocalizedString(@"report.viewer.report.options.create.permission.error", nil);
+                NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:0 userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                [JMUtils presentAlertControllerWithError:error completion:nil];
+            }
+        }];
     } else {
         [self.tableView reloadData];
     }
@@ -119,33 +135,40 @@
 
 - (void)deleteReportOptionTapped:(id)sender
 {
+    __weak typeof(self) weakSelf = self;
     [self checkParentFolderPermissionWithCompletion:^(BOOL reportOptionsEditingAvailable) {
-            if (reportOptionsEditingAvailable) {
-                NSString *confirmationMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.report.options.remove.confirmation.message", nil), self.currentReportOption.reportOption.label];
-                [[UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation" message:confirmationMessage completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                        if (buttonIndex != alertView.cancelButtonIndex) {
-                            [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
-                            [JMReportManager deleteReportOption:self.currentReportOption.reportOption withReportURI:self.report.reportURI completion:^(NSError *error) {
-                                    [JMCancelRequestPopup dismiss];
-                                    if (error) {
-                                        if (error.code == JSSessionExpiredErrorCode) {
-                                            [JMUtils showLoginViewAnimated:YES completion:nil];
-                                        } else {
-                                            [JMUtils showAlertViewWithError:error];
-                                        }
-                                    } else {
-                                        [self.report removeReportOption:self.currentReportOption];
-                                        self.currentReportOption = [self.report.reportOptions firstObject];
-                                    }
-                                }];
-                        }
-                    } cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
+        __strong typeof(self) strongSelf = weakSelf;
+        if (reportOptionsEditingAvailable) {
+                NSString *confirmationMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.report.options.remove.confirmation.message", nil), strongSelf.currentReportOption.reportOption.label];
+                UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
+                                                                                                  message:confirmationMessage
+                                                                                        cancelButtonTitle:@"dialog.button.cancel"
+                                                                                  cancelCompletionHandler:nil];
+                __weak typeof(self) weakSelf = strongSelf;
+                [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                    __strong typeof(self) strongSelf = weakSelf;
+                    if (strongSelf) {
+                        [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+                        [JMReportManager deleteReportOption:strongSelf.currentReportOption.reportOption withReportURI:strongSelf.report.reportURI completion:^(NSError *error) {
+                            [JMCancelRequestPopup dismiss];
+                            if (error) {
+                                if (error.code == JSSessionExpiredErrorCode) {
+                                    [JMUtils showLoginViewAnimated:YES completion:nil];
+                                } else {
+                                    [JMUtils presentAlertControllerWithError:error completion:nil];
+                                }
+                            } else {
+                                [strongSelf.report removeReportOption:strongSelf.currentReportOption];
+                                strongSelf.currentReportOption = [strongSelf.report.reportOptions firstObject];
+                            }
+                        }];
+                    }
+                }];
+                [strongSelf presentViewController:alertController animated:YES completion:nil];
             } else {
-                [[UIAlertView localizedAlertWithTitle:@"dialod.title.error"
-                                              message:@"report.viewer.report.options.remove.permission.error"
-                                             delegate:nil
-                                    cancelButtonTitle:@"dialog.button.cancel"
-                                    otherButtonTitles: nil] show];
+                NSString *errorMessage = JMCustomLocalizedString(@"report.viewer.report.options.remove.permission.error", nil);
+                NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                [JMUtils presentAlertControllerWithError:error completion:nil];
             }
         }];
 }
@@ -385,20 +408,25 @@
 
         if (![self.currentInputControls count]) {
             [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+            
+            __weak typeof(self) weakSelf = self;
             [JMReportManager fetchInputControlsWithReportURI:self.currentReportOption.reportOption.uri completion:^(NSArray *inputControls, NSError *error) {
+                __strong typeof(self) strongSelf = weakSelf;
                 [JMCancelRequestPopup dismiss];
                 if (error) {
                     if (error.code == JSSessionExpiredErrorCode) {
                         [JMUtils showLoginViewAnimated:YES completion:nil];
                     } else {
-                        [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                            self.currentReportOption = oldActiveReportOption;
+                        __weak typeof(self) weakSelf = strongSelf;
+                        [JMUtils presentAlertControllerWithError:error completion:^{
+                            __strong typeof(self) strongSelf = weakSelf;
+                            strongSelf.currentReportOption = oldActiveReportOption;
                         }];
                     }
                 } else {
-                    self.currentReportOption.inputControls = inputControls;
-                    self.currentInputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
-                    [self.tableView reloadData];
+                    strongSelf.currentReportOption.inputControls = inputControls;
+                    strongSelf.currentInputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
+                    [strongSelf.tableView reloadData];
                 }
             }];
         }
@@ -501,7 +529,7 @@
                                                     }
                                                 }];
                                         } else {
-                                            [JMUtils showAlertViewWithError:result.error];
+                                            [JMUtils presentAlertControllerWithError:result.error completion:nil];
                                         }
                                     } else {
                                         for (JSInputControlState *state in result.objects) {
@@ -554,7 +582,7 @@
                                                   }
                                               }];
                                       } else {
-                                          [JMUtils showAlertViewWithError:result.error];
+                                          [JMUtils presentAlertControllerWithError:result.error completion:nil];
                                       }
                                   } else {
                                       self.parentFolderLookup = [result.objects firstObject];
@@ -577,67 +605,39 @@
     }
 }
 
-#pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+- (void)createNewReportOptionWithName:(NSString *)name
 {
-    [textField resignFirstResponder];
-    return NO;
-}
+    NSArray *reportParameters = [JMReportManager reportParametersFromInputControls:self.currentInputControls];
 
-- (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
-{
-    UITextField *textField = [alertView textFieldAtIndex:0];
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
+    NSString *newReportOptionName = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
-    NSString *errorMessageString = nil;
-    BOOL validData = [JMUtils validateReportName:textField.text errorMessage:&errorMessageString];
-    if (validData && ![self isUniqueNewReportOptionName:textField.text]) {
-        errorMessageString = JMCustomLocalizedString(@"report.viewer.report.options.new.option.title.alreadyexist", nil);
-    }
-    alertView.message = errorMessageString;
-    return validData;
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.cancelButtonIndex != buttonIndex) {
-        UITextField *textField = [alertView textFieldAtIndex:0];
-        [textField resignFirstResponder];
-        
-        NSArray *reportParameters = [JMReportManager reportParametersFromInputControls:self.currentInputControls];
-        
-        [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
-        NSString *newReportOptionName = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        [JMReportManager createReportOptionWithReportURI:self.report.resourceLookup.uri
-                                             optionLabel:newReportOptionName
-                                        reportParameters:reportParameters
-                                              completion:^(JSReportOption *reportOption, NSError *error) {
-                                                  [JMCancelRequestPopup dismiss];
-                                                  if (error) {
-                                                      if (error.code == JSSessionExpiredErrorCode) {
-                                                          [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                      } else {
-                                                          [JMUtils showAlertViewWithError:error];
-                                                      }
-                                                  } else {
-                                                      if (reportOption) {
-                                                          JMExtendedReportOption *extendedReportOption = [JMExtendedReportOption new];
-                                                          extendedReportOption.reportOption = reportOption;
-                                                          extendedReportOption.inputControls = self.currentInputControls;
-                                                          if (![self isUniqueNewReportOptionName:reportOption.label]) {
-                                                              for (JMExtendedReportOption *existedReportOption in self.report.reportOptions) {
-                                                                  if ([reportOption.label isEqualToString:existedReportOption.reportOption.label]) {
-                                                                      [self.report removeReportOption:existedReportOption];
-                                                                      break;
-                                                                  }
-                                                              }
-                                                          }
-                                                          [self.report addReportOptions:@[extendedReportOption]];
-                                                          self.currentReportOption= extendedReportOption;
-                                                      }
-                                                  }
-                                              }];
-    }
+    [JMReportManager createReportOptionWithReportURI:self.report.resourceLookup.uri optionLabel:newReportOptionName reportParameters:reportParameters completion:^(JSReportOption *reportOption, NSError *error) {
+        [JMCancelRequestPopup dismiss];
+        if (error) {
+            if (error.code == JSSessionExpiredErrorCode) {
+                [JMUtils showLoginViewAnimated:YES completion:nil];
+            } else {
+                [JMUtils presentAlertControllerWithError:error completion:nil];
+            }
+        } else {
+            if (reportOption) {
+                JMExtendedReportOption *extendedReportOption = [JMExtendedReportOption new];
+                extendedReportOption.reportOption = reportOption;
+                extendedReportOption.inputControls = self.currentInputControls;
+                if (![self isUniqueNewReportOptionName:reportOption.label]) {
+                    for (JMExtendedReportOption *existedReportOption in self.report.reportOptions) {
+                        if ([reportOption.label isEqualToString:existedReportOption.reportOption.label]) {
+                            [self.report removeReportOption:existedReportOption];
+                            break;
+                        }
+                    }
+                }
+                [self.report addReportOptions:@[extendedReportOption]];
+                self.currentReportOption= extendedReportOption;
+            }
+        }
+    }];
 }
 
 - (BOOL)isUniqueNewReportOptionName:(NSString *)name

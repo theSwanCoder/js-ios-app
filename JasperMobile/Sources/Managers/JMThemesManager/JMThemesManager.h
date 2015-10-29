@@ -156,6 +156,16 @@
 
 - (UIColor *)saveReportSaveReportButtonTextColor;
 
+// About App
+- (UIColor *)aboutAppAppNameTextColor;
+
+- (UIColor *)aboutAppAppAboutTextColor;
+
+- (UIColor *)aboutAppButtonsBackgroundColor;
+
+- (UIColor *)aboutAppButtonsTextColor;
+
+
 // Common
 
 - (UIColor *)viewBackgroundColor;

@@ -27,7 +27,6 @@
 //
 
 #import "JMRestReportLoader.h"
-#import "UIAlertView+Additions.h"
 #import "NSObject+Additions.h"
 #import "JMBaseReportViewerViewController.h"
 #import "JMJavascriptNativeBridgeProtocol.h"

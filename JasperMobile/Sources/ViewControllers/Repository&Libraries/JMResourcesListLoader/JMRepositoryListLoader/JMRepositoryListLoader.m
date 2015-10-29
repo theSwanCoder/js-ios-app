@@ -76,7 +76,9 @@
                     if (result.error) {
                         if ([resourceURI isEqualToString:[strongSelf rootResourceURI]]) {
                             if (result.error.code == JSSessionExpiredErrorCode) {
+                                __weak typeof(self)weakSelf = strongSelf;
                                 [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                    __strong typeof(self)strongSelf = weakSelf;
                                     if (strongSelf.restClient.keepSession && isSessionAuthorized) {
                                         [strongSelf loadResourceLookup:resourceURI];
                                     } else {

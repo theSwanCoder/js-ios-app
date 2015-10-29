@@ -1,105 +1,149 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JMReportViewerToolBar"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="IiV-DY-Skz" customClass="JMReportViewerToolBar">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+        <view contentMode="scaleToFill" id="Voq-c6-bAb" customClass="JMReportViewerToolBar">
+            <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" id="jwD-dQ-J4N">
-                    <rect key="frame" x="10" y="0.0" width="30" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bkn-r1-Gp4">
+                    <rect key="frame" x="92" y="0.0" width="40" height="44"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="oLL-2k-Zdo">
+                            <variation key="widthClass=compact" constant="30"/>
+                        </constraint>
+                    </constraints>
                     <state key="normal" image="first_action_item.png"/>
                     <connections>
-                        <action selector="firstButtonTapped:" destination="IiV-DY-Skz" eventType="touchUpInside" id="362-ap-1UX"/>
+                        <action selector="firstButtonTapped:" destination="Voq-c6-bAb" eventType="touchUpInside" id="6WC-qZ-GYS"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Owa-Hx-AKZ">
-                    <rect key="frame" x="40" y="0.0" width="30" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YEp-ta-n3P">
+                    <rect key="frame" x="140" y="0.0" width="40" height="44"/>
+                    <animations/>
                     <state key="normal" image="previous_action_item.png"/>
                     <connections>
-                        <action selector="previousButtonTapped:" destination="IiV-DY-Skz" eventType="touchUpInside" id="dSo-En-nR7"/>
+                        <action selector="previousButtonTapped:" destination="Voq-c6-bAb" eventType="touchUpInside" id="uw3-Hp-Pld"/>
                     </connections>
                 </button>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" id="Qgm-KF-UD8">
-                    <rect key="frame" x="70" y="4" width="88" height="36"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
-                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="1" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ikS-NI-Ncx">
+                    <rect key="frame" x="192" y="4" width="192" height="36"/>
+                    <animations/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="go"/>
                     <connections>
-                        <outlet property="delegate" destination="IiV-DY-Skz" id="SgE-8B-HLc"/>
+                        <outlet property="delegate" destination="Voq-c6-bAb" id="wEM-rz-djp"/>
                     </connections>
                 </textField>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="of 37" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Qfk-TE-iuQ">
-                    <rect key="frame" x="163" y="7" width="88" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="of 37" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OoP-TP-EdA">
+                    <rect key="frame" x="384" y="4" width="192" height="36"/>
+                    <animations/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cI8-sq-vFi">
-                    <rect key="frame" x="249.99999962069776" y="0.0" width="30" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="oGY-Tb-98f">
+                    <rect key="frame" x="470" y="12" width="20" height="20"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="GJ3-Z6-vUI"/>
+                        <constraint firstAttribute="width" constant="20" id="GYX-Xm-qqH"/>
+                    </constraints>
+                </activityIndicatorView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2DD-th-6en">
+                    <rect key="frame" x="588" y="0.0" width="40" height="44"/>
+                    <animations/>
                     <state key="normal" image="next_action_item.png"/>
                     <connections>
-                        <action selector="nextButtonTapped:" destination="IiV-DY-Skz" eventType="touchUpInside" id="a13-12-AOW"/>
+                        <action selector="nextButtonTapped:" destination="Voq-c6-bAb" eventType="touchUpInside" id="n9y-cX-nMR"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qJL-Fn-UuF">
-                    <rect key="frame" x="280" y="0.0" width="30" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nwg-DN-VVY">
+                    <rect key="frame" x="636" y="0.0" width="40" height="44"/>
+                    <animations/>
                     <state key="normal" image="last_action_item.png"/>
                     <connections>
-                        <action selector="lastButtonTapped:" destination="IiV-DY-Skz" eventType="touchUpInside" id="31e-3e-Fgc"/>
+                        <action selector="lastButtonTapped:" destination="Voq-c6-bAb" eventType="touchUpInside" id="EXp-77-tKE"/>
                     </connections>
                 </button>
-                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" id="tJa-wa-vsS">
-                    <rect key="frame" x="197" y="12" width="20" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                </activityIndicatorView>
             </subviews>
+            <animations/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="YEp-ta-n3P" firstAttribute="centerY" secondItem="Voq-c6-bAb" secondAttribute="centerY" id="0lf-PF-J39"/>
+                <constraint firstItem="YEp-ta-n3P" firstAttribute="height" secondItem="bkn-r1-Gp4" secondAttribute="height" id="2Hg-Uh-jFz"/>
+                <constraint firstItem="OoP-TP-EdA" firstAttribute="leading" secondItem="Voq-c6-bAb" secondAttribute="centerX" id="8oq-Ja-oOV"/>
+                <constraint firstItem="2DD-th-6en" firstAttribute="leading" secondItem="OoP-TP-EdA" secondAttribute="trailing" constant="12" id="8p4-Rd-U0n">
+                    <variation key="widthClass=compact" constant="0.0"/>
+                </constraint>
+                <constraint firstItem="Nwg-DN-VVY" firstAttribute="height" secondItem="bkn-r1-Gp4" secondAttribute="height" id="CtR-7U-vVo"/>
+                <constraint firstItem="Nwg-DN-VVY" firstAttribute="leading" secondItem="2DD-th-6en" secondAttribute="trailing" constant="8" id="Fvn-cj-ObN">
+                    <variation key="widthClass=compact" constant="0.0"/>
+                </constraint>
+                <constraint firstItem="YEp-ta-n3P" firstAttribute="width" secondItem="bkn-r1-Gp4" secondAttribute="width" id="Gd5-2h-6Sd"/>
+                <constraint firstItem="OoP-TP-EdA" firstAttribute="height" secondItem="ikS-NI-Ncx" secondAttribute="height" id="Gfl-KP-5jA"/>
+                <constraint firstItem="bkn-r1-Gp4" firstAttribute="top" secondItem="Voq-c6-bAb" secondAttribute="top" id="JVi-t0-2aR"/>
+                <constraint firstItem="2DD-th-6en" firstAttribute="width" secondItem="bkn-r1-Gp4" secondAttribute="width" id="JcL-11-FuR"/>
+                <constraint firstItem="ikS-NI-Ncx" firstAttribute="width" secondItem="Voq-c6-bAb" secondAttribute="width" multiplier="1/4" id="KDk-jz-Tfc"/>
+                <constraint firstItem="ikS-NI-Ncx" firstAttribute="top" secondItem="Voq-c6-bAb" secondAttribute="top" constant="4" id="MJK-qC-G5V"/>
+                <constraint firstItem="Nwg-DN-VVY" firstAttribute="width" secondItem="bkn-r1-Gp4" secondAttribute="width" id="Ofx-i6-Cv4"/>
+                <constraint firstItem="bkn-r1-Gp4" firstAttribute="centerY" secondItem="Voq-c6-bAb" secondAttribute="centerY" id="Sby-eJ-NOv"/>
+                <constraint firstItem="2DD-th-6en" firstAttribute="centerY" secondItem="Voq-c6-bAb" secondAttribute="centerY" id="Ygk-gW-Wp4"/>
+                <constraint firstItem="YEp-ta-n3P" firstAttribute="leading" secondItem="bkn-r1-Gp4" secondAttribute="trailing" constant="8" id="ZbA-I7-rcT">
+                    <variation key="widthClass=compact" constant="0.0"/>
+                </constraint>
+                <constraint firstItem="ikS-NI-Ncx" firstAttribute="leading" secondItem="YEp-ta-n3P" secondAttribute="trailing" constant="12" id="bW1-Rt-kdv">
+                    <variation key="widthClass=compact" constant="0.0"/>
+                </constraint>
+                <constraint firstItem="Nwg-DN-VVY" firstAttribute="centerY" secondItem="Voq-c6-bAb" secondAttribute="centerY" id="bss-pe-Vxw"/>
+                <constraint firstItem="2DD-th-6en" firstAttribute="height" secondItem="bkn-r1-Gp4" secondAttribute="height" id="hZR-On-eNh"/>
+                <constraint firstItem="OoP-TP-EdA" firstAttribute="width" secondItem="ikS-NI-Ncx" secondAttribute="width" id="kKD-F4-lSs"/>
+                <constraint firstItem="oGY-Tb-98f" firstAttribute="centerY" secondItem="OoP-TP-EdA" secondAttribute="centerY" id="kVs-GK-P2h"/>
+                <constraint firstItem="ikS-NI-Ncx" firstAttribute="centerY" secondItem="Voq-c6-bAb" secondAttribute="centerY" id="lIf-11-4YP"/>
+                <constraint firstItem="oGY-Tb-98f" firstAttribute="centerX" secondItem="OoP-TP-EdA" secondAttribute="centerX" id="mfW-2g-qSw"/>
+                <constraint firstAttribute="centerX" secondItem="ikS-NI-Ncx" secondAttribute="trailing" id="ufU-mG-D06"/>
+                <constraint firstItem="OoP-TP-EdA" firstAttribute="centerY" secondItem="Voq-c6-bAb" secondAttribute="centerY" id="wJb-v7-5iQ"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="currentPageField" destination="Qgm-KF-UD8" id="NGw-O0-nOb"/>
-                <outlet property="firstButton" destination="jwD-dQ-J4N" id="U3t-y8-NOc"/>
-                <outlet property="lastButton" destination="qJL-Fn-UuF" id="wzG-jf-Oge"/>
-                <outlet property="nextButton" destination="cI8-sq-vFi" id="YlL-hS-GYv"/>
-                <outlet property="pageCountActivityIndicator" destination="tJa-wa-vsS" id="JsA-Jb-8cj"/>
-                <outlet property="pageCountLabel" destination="Qfk-TE-iuQ" id="Mro-5w-ckg"/>
-                <outlet property="pickerView" destination="897-OP-VVU" id="3ef-nz-N4o"/>
-                <outlet property="previousButton" destination="Owa-Hx-AKZ" id="1NJ-PP-aCj"/>
+                <outlet property="currentPageField" destination="ikS-NI-Ncx" id="lgJ-Rt-mLD"/>
+                <outlet property="firstButton" destination="bkn-r1-Gp4" id="zc4-t6-WL6"/>
+                <outlet property="lastButton" destination="Nwg-DN-VVY" id="GKH-AA-hVD"/>
+                <outlet property="nextButton" destination="2DD-th-6en" id="Jb2-ka-MGB"/>
+                <outlet property="pageCountActivityIndicator" destination="oGY-Tb-98f" id="gUt-N7-AqZ"/>
+                <outlet property="pageCountLabel" destination="OoP-TP-EdA" id="BhT-Ve-3QU"/>
+                <outlet property="pickerView" destination="bRC-Kt-Zq0" id="R00-ht-fIL"/>
+                <outlet property="previousButton" destination="YEp-ta-n3P" id="9zj-mn-TT1"/>
             </connections>
-            <point key="canvasLocation" x="426" y="305"/>
+            <point key="canvasLocation" x="516" y="139"/>
         </view>
-        <pickerView contentMode="scaleToFill" id="897-OP-VVU">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
+        <pickerView contentMode="scaleToFill" id="bRC-Kt-Zq0">
+            <rect key="frame" x="0.0" y="0.0" width="768" height="216"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+            <animations/>
             <connections>
-                <outlet property="dataSource" destination="IiV-DY-Skz" id="s34-im-E68"/>
-                <outlet property="delegate" destination="IiV-DY-Skz" id="Fbf-2G-i2m"/>
+                <outlet property="dataSource" destination="Voq-c6-bAb" id="d0I-PE-xiO"/>
+                <outlet property="delegate" destination="Voq-c6-bAb" id="HuQ-fq-rsp"/>
             </connections>
-            <point key="canvasLocation" x="426" y="483"/>
+            <point key="canvasLocation" x="516" y="359"/>
         </pickerView>
     </objects>
     <resources>
-        <image name="first_action_item.png" width="24" height="24"/>
-        <image name="last_action_item.png" width="24" height="24"/>
-        <image name="next_action_item.png" width="24" height="24"/>
-        <image name="previous_action_item.png" width="24" height="24"/>
+        <image name="first_action_item.png" width="30" height="30"/>
+        <image name="last_action_item.png" width="30" height="30"/>
+        <image name="next_action_item.png" width="30" height="30"/>
+        <image name="previous_action_item.png" width="30" height="30"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

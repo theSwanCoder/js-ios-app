@@ -118,16 +118,6 @@ void jmDebugLog(NSString *format, ...) {
 
 }
 
-+ (BOOL)isSystemVersion7
-{
-    return [UIDevice currentDevice].systemVersion.integerValue == 7;
-}
-
-+ (BOOL)isSystemVersion8
-{
-    return [UIDevice currentDevice].systemVersion.integerValue == 8;
-}
-
 + (BOOL)isSystemVersion9
 {
     return [UIDevice currentDevice].systemVersion.integerValue == 9;
@@ -272,36 +262,29 @@ void jmDebugLog(NSString *format, ...) {
 
 #pragma mark - Alerts
 
-+ (void)showAlertViewWithError:(NSError *)error
++ (void)presentAlertControllerWithError:(NSError *)error completion:(void (^)(void))completion
 {
-    NSString *title = JMCustomLocalizedString(@"error.readingresponse.dialog.msg", nil);
+    NSString *title = error.domain;
     NSString *message = error.localizedDescription;
-    if (error.code == JSInvalidCredentialsErrorCode) {
-        title = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
-        message = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
-    }
-
-    [[[UIAlertView alloc] initWithTitle:title
-                                message:message
-                               delegate:nil
-                      cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil)
-                      otherButtonTitles: nil] show];
-}
-
-+ (void)showAlertViewWithError:(NSError *)error completion:(void(^)(UIAlertView *alertView, NSInteger buttonIndex))completion
-{
-    NSString *title = @"error.readingresponse.dialog.msg";
-    NSString *message = error.localizedDescription;
+//    if (![title isEqualToString:@"dialod.title.error"]) {
+//        title = @"error.readingresponse.dialog.msg";
+//    }
     if (error.code == JSInvalidCredentialsErrorCode) {
         title = @"error.authenication.dialog.title";
-        message = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
+        message = @"error.authenication.dialog.msg";
     }
 
-    [[UIAlertView localizedAlertWithTitle:title
-                                  message:message
-                               completion:completion
-                        cancelButtonTitle:@"dialog.button.ok"
-                        otherButtonTitles:nil] show];
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:title message:message cancelButtonTitle:@"dialog.button.ok" cancelCompletionHandler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+        if (completion) {
+            completion();
+        }
+    }];
+
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    if (rootViewController.presentedViewController) {
+        rootViewController = rootViewController.presentedViewController;
+    }
+    [rootViewController presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - Helpers
@@ -392,6 +375,18 @@ void jmDebugLog(NSString *format, ...) {
         mainStoryboard = [UIStoryboard storyboardWithName:storyboardName bundle:bundle];
     });
     return mainStoryboard;
+}
+
++ (UIViewController *)launchScreenViewController
+{
+    static dispatch_once_t onceToken;
+    static UIStoryboard * launchStoryboard;
+    dispatch_once(&onceToken, ^{
+        NSBundle *bundle = [NSBundle mainBundle];
+        NSString *storyboardName = [bundle objectForInfoDictionaryKey:@"UILaunchStoryboardName"];
+        launchStoryboard = [UIStoryboard storyboardWithName:storyboardName bundle:bundle];
+    });
+    return [launchStoryboard instantiateInitialViewController];
 }
 
 #pragma mark - Analytics

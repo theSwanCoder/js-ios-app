@@ -82,6 +82,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     self.title = self.resourceLookup.label;
     self.resourceProperties = nil;
     [self.tableView reloadData];
+    self.needLayoutUI = YES;
 }
 
 - (void)interfaceOrientationDidChanged:(id)notification
@@ -102,7 +103,6 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     } else {
         [JMFavorites addToFavorites:self.resourceLookup];
     }
-    [self setNeedLayoutUI:YES];
 }
 
 - (void)cancelButtonTapped:(id)sender
@@ -227,7 +227,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
     
     UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
-                                                                     style:UIBarButtonItemStyleBordered
+                                                                     style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(favoriteButtonTapped:)];
     favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
@@ -303,12 +303,9 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
             BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
             if (!canOpen) {
-                UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:nil
-                                                                      message:@"error.openIn.message"
-                                                                     delegate:self
-                                                            cancelButtonTitle:@"dialog.button.ok"
-                                                            otherButtonTitles:nil];
-                [alertView show];
+                NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);
+                NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                [JMUtils presentAlertControllerWithError:error completion:nil];
             }
             break;
         }

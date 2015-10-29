@@ -32,7 +32,7 @@
 - (NSArray *)rightInputAccessoryViewToolbarItems
 {
     NSMutableArray *items = [NSMutableArray arrayWithArray:[super rightInputAccessoryViewToolbarItems]];
-    UIBarButtonItem *datePickerSwitcher = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"report.viewer.options.ic.title.time", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(datePickerSwitched:)];
+    UIBarButtonItem *datePickerSwitcher = [[UIBarButtonItem alloc] initWithTitle:JMCustomLocalizedString(@"report.viewer.options.ic.title.time", nil) style:UIBarButtonItemStylePlain target:self action:@selector(datePickerSwitched:)];
     [items insertObject:datePickerSwitcher atIndex:items.count - 1];
     return items;
 }

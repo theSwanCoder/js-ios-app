@@ -22,21 +22,26 @@
 
 
 //
-//  JMSettingsItem.h
+//  JMBaseViewController.m
 //  TIBCO JasperMobile
 //
 
-/**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
- */
+#import "JMBaseViewController.h"
 
-#import <Foundation/Foundation.h>
+@implementation JMBaseViewController
 
-@interface JMSettingsItem : NSObject
-@property (nonatomic, strong) NSString *titleString;
-@property (nonatomic, strong) id        valueSettings;
-@property (nonatomic, assign) NSRange   availableRange;
-@property (nonatomic, strong) NSString *cellIdentifier;
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
+#pragma mark - UIViewController LifeCycle
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    // Google Analitycs
+    self.screenName = NSStringFromClass(self.class);
+}
 
 @end

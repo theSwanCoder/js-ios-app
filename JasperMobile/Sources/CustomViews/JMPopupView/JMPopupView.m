@@ -260,7 +260,7 @@ static NSMutableArray* visiblePopupsArray = nil;
     self.dismissBlock = ^(void) {
         __strong typeof(self)strongSelf = weakSelf;
 
-        if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewWillDismissed:)]) {
+        if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(popupViewWillDismissed:)]) {
             [strongSelf.delegate popupViewWillDismissed:strongSelf];
         }
         if (!animated) {
