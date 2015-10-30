@@ -23,12 +23,15 @@
 
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
+#import "JMReportSaver.h"
+#import "JSResourceLookup+Helpers.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
-
+@property (nonatomic, strong) JMReportSaver *reportSaver;
+@property (nonatomic, strong) NSString *savedResourcePath;
 @end
 
 @implementation JMSavedResourceViewerViewController
@@ -41,6 +44,7 @@
     [self.webView loadHTMLString:@"" baseURL:nil];
     
 #warning WHY ONLY FOR SAVED REPORT VIEWER WE HANDLE MEMORY WARNINGS???
+    // Because only at this point we had memory pressure from really big HTML ))
     NSString *errorMessage = JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil);
     NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
     __weak typeof(self) weakSelf = self;
@@ -55,6 +59,11 @@
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
     [self.documentController dismissMenuAnimated:YES];
+
+    if (self.savedResourcePath) {
+        [self removeSavedResource];
+    }
+
     [super cancelResourceViewingAndExit:exit];
 }
 
@@ -69,30 +78,11 @@
 
 - (void)startResourceViewing
 {
-    NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
-    
-    if (self.webView.isLoading) {
-        [self.webView stopLoading];
+    if ([self.resourceLookup.resourceType isEqualToString:@"file"]) {
+        [self showRemoteResource];
+    } else {
+        [self showSavedResource];
     }
-    self.isResourceLoaded = NO;
-    
-    NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-    self.resourceRequest = [NSURLRequest requestWithURL:url];
-    [self.webView loadRequest:self.resourceRequest];
-
-    // Analytics
-    NSString *resourcesType = @"Saved Item (Unknown type)";
-    if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-        resourcesType = @"Saved Item (HTML)";
-    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
-        resourcesType = @"Saved Item (PDF)";
-    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
-        resourcesType = @"Saved Item (XLS)";
-    }
-    [JMUtils logEventWithName:@"User opened resource"
-                 additionInfo:@{
-                         @"Resource's Type" : resourcesType
-                 }];
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
@@ -165,12 +155,118 @@
     }
 }
 
-#pragma mark - Helpers
+#pragma mark - Document interaction
 - (UIDocumentInteractionController *) setupDocumentControllerWithURL: (NSURL *) fileURL
                                                        usingDelegate: (id <UIDocumentInteractionControllerDelegate>) interactionDelegate {
     UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
     interactionController.delegate = interactionDelegate;
     return interactionController;
+}
+
+#pragma mark - Viewers
+- (void)showSavedResource
+{
+    NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
+    NSURL *url = [NSURL fileURLWithPath:fullReportPath];
+    [self showResourceWithURL:url];
+
+    // Analytics
+    NSString *resourcesType = @"Saved Item (Unknown type)";
+    if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+        resourcesType = @"Saved Item (HTML)";
+    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+        resourcesType = @"Saved Item (PDF)";
+    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
+        resourcesType = @"Saved Item (XLS)";
+    }
+    [JMUtils logEventWithName:@"User opened resource"
+                 additionInfo:@{
+                         @"Resource's Type" : resourcesType
+                 }];
+}
+
+- (void)showRemoteResource
+{
+    if ([self isSupportedResource:self.resourceLookup]) {
+        [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
+            [self cancelResourceViewingAndExit:YES];
+        }];
+
+        NSString *resourcePath = [NSString stringWithFormat:@"%@/fileview/fileview%@", self.restClient.serverProfile.serverUrl, self.resourceLookup.uri];
+        NSURL *url = [NSURL URLWithString:resourcePath];
+        __typeof(self) weakSelf = self;
+        [self.reportSaver downloadResourceFromURL:url
+                                       completion:^(NSString *outputResourcePath, NSError *error) {
+                                           __typeof(self) strongSelf = weakSelf;
+                                           [strongSelf stopShowLoader];
+                                           if (error) {
+                                               [strongSelf showErrorWithMessage:error.localizedDescription
+                                                                     completion:^{
+                                                                         [strongSelf cancelResourceViewingAndExit:YES];
+                                                                     }];
+                                           } else {
+                                               NSURL *savedResourceURL = [NSURL fileURLWithPath:outputResourcePath];
+                                               [strongSelf showResourceWithURL:savedResourceURL];
+                                               strongSelf.savedResourcePath = outputResourcePath;
+                                           }
+                                       }];
+    } else {
+        [self showErrorWithMessage:JMCustomLocalizedString(@"savedreport.viewer.format.not.supported", nil)
+                        completion:^{
+                            [self cancelResourceViewingAndExit:YES];
+                        }];
+    }
+
+}
+
+- (void)showResourceWithURL:(NSURL *)url
+{
+    if (self.webView.isLoading) {
+        [self.webView stopLoading];
+    }
+    self.isResourceLoaded = NO;
+
+    self.resourceRequest = [NSURLRequest requestWithURL:url];
+    [self.webView loadRequest:self.resourceRequest];
+
+}
+
+#pragma mark - Helpers
+- (JMReportSaver *)reportSaver
+{
+    if (!_reportSaver) {
+        _reportSaver = [JMReportSaver new];
+    }
+    return _reportSaver;
+}
+- (void)removeSavedResource
+{
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.savedResourcePath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:self.savedResourcePath error:nil];
+    }
+}
+
+- (void)showErrorWithMessage:(NSString *)message completion:(void(^)(void))completion
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.error"
+                                                                                      message:message
+                                                                            cancelButtonTitle:@"dialog.button.ok"
+                                                                      cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
+                                                                          if (completion) {
+                                                                              completion();
+                                                                          }
+                                                                      }];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (BOOL)isSupportedResource:(JSResourceLookup *)resource
+{
+    NSString *resourceFullName = resource.uri.lastPathComponent;
+    NSString *format = resourceFullName.pathExtension;
+    BOOL isPDF = [format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF];
+    BOOL isXLS = [format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS];
+    BOOL isXLSX = [format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLSX];
+    return isPDF || isXLS || isXLSX;
 }
 
 @end

@@ -437,7 +437,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         repositoryViewController.representationTypeKey = self.representationTypeKey;
         repositoryViewController.representationType = self.representationType;
         nextVC = repositoryViewController;
-    } else if ([resourceLookup isSavedReport]) {
+    } else if ([resourceLookup isSavedReport] || [resourceLookup isFile]) {
         nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
         if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
             [nextVC setResourceLookup:resourceLookup];
