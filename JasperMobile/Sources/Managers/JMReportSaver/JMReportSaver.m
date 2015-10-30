@@ -202,6 +202,38 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
     }
 }
 
+- (void)downloadResourceFromURL:(NSURL *)url completion:(void(^)(NSString *resourcePath, NSError *error))completion {
+
+    if (!completion) {
+        return;
+    }
+
+    [JMUtils showNetworkActivityIndicator];
+
+    __weak typeof(self) weakSelf = self;
+    [self downloadResourceFromURLString:url.absoluteString
+                             completion:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                                 [JMUtils hideNetworkActivityIndicator];
+
+                                 __strong typeof(self) strongSelf = weakSelf;
+
+                                 if (!error) {
+                                     NSString *tempDirectory = [JMSavedResources pathToTempReportsFolder];
+                                     NSString *resourceName = url.lastPathComponent;
+                                     NSString *tempReportPath = [NSString stringWithFormat:@"%@/%@", tempDirectory, resourceName];
+                                     NSError *moveError = [strongSelf moveResourceFromPath:location.path toPath:tempReportPath];
+                                     if (moveError) {
+                                         completion(nil, moveError);
+                                     } else {
+                                         completion(tempReportPath, nil);
+                                     }
+                                 } else {
+                                     completion(nil, error);
+                                 }
+
+                             }];
+}
+
 - (void)cancelReport
 {
     [self.reportExecutor cancel];
