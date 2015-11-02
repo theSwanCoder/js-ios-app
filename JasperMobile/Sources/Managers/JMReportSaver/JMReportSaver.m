@@ -220,12 +220,14 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                                  if (!error) {
                                      NSString *tempDirectory = [JMSavedResources pathToTempReportsFolder];
                                      NSString *resourceName = url.lastPathComponent;
-                                     NSString *tempReportPath = [NSString stringWithFormat:@"%@/%@", tempDirectory, resourceName];
+                                     NSString *tempReportPath = [NSString stringWithFormat:@"%@%@", tempDirectory, resourceName];
                                      NSError *moveError = [strongSelf moveResourceFromPath:location.path toPath:tempReportPath];
                                      if (moveError) {
                                          completion(nil, moveError);
                                      } else {
-                                         completion(tempReportPath, nil);
+                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                             completion(tempReportPath, nil);
+                                         });
                                      }
                                  } else {
                                      completion(nil, error);
