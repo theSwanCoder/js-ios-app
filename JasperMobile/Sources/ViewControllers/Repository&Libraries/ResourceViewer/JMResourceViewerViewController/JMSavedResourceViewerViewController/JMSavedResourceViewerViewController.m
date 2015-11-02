@@ -23,6 +23,7 @@
 
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
+#import "JMReportSaver.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
@@ -171,6 +172,142 @@
     UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
     interactionController.delegate = interactionDelegate;
     return interactionController;
+}
+
+#pragma mark - Viewers
+- (void)showSavedResource
+{
+    NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
+    NSURL *url = [NSURL fileURLWithPath:fullReportPath];
+    [self showResourceWithURL:url];
+
+    // Analytics
+    NSString *resourcesType = @"Saved Item (Unknown type)";
+    if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+        resourcesType = @"Saved Item (HTML)";
+    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+        resourcesType = @"Saved Item (PDF)";
+    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
+        resourcesType = @"Saved Item (XLS)";
+    }
+    [JMUtils logEventWithName:@"User opened resource"
+                 additionInfo:@{
+                         @"Resource's Type" : resourcesType
+                 }];
+}
+
+- (void)showRemoteResource
+{
+    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
+        [self cancelResourceViewingAndExit:YES];
+    }];
+
+    __typeof(self) weakSelf = self;
+    [self.restClient contentResourceWithResourceLookup:self.resourceLookup
+                                            completion:^(JSContentResource *resource, NSError *error) {
+                                                __typeof(self) strongSelf = weakSelf;
+                                                [strongSelf stopShowLoader];
+                                                if (error) {
+                                                    [strongSelf showErrorWithMessage:error.localizedDescription
+                                                                          completion:^{
+                                                                              [strongSelf cancelResourceViewingAndExit:YES];
+                                                                          }];
+                                                } else {
+                                                    if ([strongSelf isSupportedResource:resource]) {
+
+                                                        [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
+                                                            [self cancelResourceViewingAndExit:YES];
+                                                        }];
+
+                                                        NSString *resourcePath = [NSString stringWithFormat:@"%@/rest_v2/resources%@", strongSelf.restClient.serverProfile.serverUrl, resource.uri];
+                                                        NSURL *url = [NSURL URLWithString:resourcePath];
+                                                        __typeof(self) weakSelf = strongSelf;
+                                                        [strongSelf.reportSaver downloadResourceFromURL:url
+                                                                                             completion:^(NSString *outputResourcePath, NSError *error) {
+                                                                                                 __typeof(self) strongSelf = weakSelf;
+                                                                                                 [strongSelf stopShowLoader];
+                                                                                                 if (error) {
+                                                                                                     [strongSelf showErrorWithMessage:error.localizedDescription
+                                                                                                                           completion:^{
+                                                                                                                               [strongSelf cancelResourceViewingAndExit:YES];
+                                                                                                                           }];
+                                                                                                 } else {
+                                                                                                     strongSelf.savedResourcePath = outputResourcePath;
+                                                                                                     NSURL *savedResourceURL = [NSURL fileURLWithPath:outputResourcePath];
+                                                                                                     if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_IMG]) {
+                                                                                                         [strongSelf showImageWithURL:savedResourceURL];
+                                                                                                     } else {
+                                                                                                         [strongSelf showResourceWithURL:savedResourceURL];
+                                                                                                     }
+                                                                                                 }
+                                                                                             }];
+                                                    } else {
+                                                        [strongSelf showErrorWithMessage:JMCustomLocalizedString(@"savedreport.viewer.format.not.supported", nil)
+                                                                              completion:^{
+                                                                                  [strongSelf cancelResourceViewingAndExit:YES];
+                                                                              }];
+                                                    }
+
+                                                }
+                                            }];
+}
+
+- (void)showResourceWithURL:(NSURL *)url
+{
+    if (self.webView.isLoading) {
+        [self.webView stopLoading];
+    }
+    self.isResourceLoaded = NO;
+
+    self.resourceRequest = [NSURLRequest requestWithURL:url];
+    [self.webView loadRequest:self.resourceRequest];
+
+}
+
+- (void)showImageWithURL:(NSURL *)url
+{
+    [self.webView removeFromSuperview];
+
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    UIImage *image = [UIImage imageWithData:data];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    [self.view addSubview:imageView];
+}
+
+#pragma mark - Helpers
+- (JMReportSaver *)reportSaver
+{
+    if (!_reportSaver) {
+        _reportSaver = [JMReportSaver new];
+    }
+    return _reportSaver;
+}
+- (void)removeSavedResource
+{
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.savedResourcePath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:self.savedResourcePath error:nil];
+    }
+}
+
+- (void)showErrorWithMessage:(NSString *)message completion:(void(^)(void))completion
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.error"
+                                                                                      message:message
+                                                                            cancelButtonTitle:@"dialog.button.ok"
+                                                                      cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
+                                                                          if (completion) {
+                                                                              completion();
+                                                                          }
+                                                                      }];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (BOOL)isSupportedResource:(JSContentResource *)resource
+{
+    NSString *resourceFullName = resource.uri.lastPathComponent;
+    NSString *format = resourceFullName.pathExtension;
+    BOOL isHTML = [format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML];
+    return !isHTML;
 }
 
 @end
