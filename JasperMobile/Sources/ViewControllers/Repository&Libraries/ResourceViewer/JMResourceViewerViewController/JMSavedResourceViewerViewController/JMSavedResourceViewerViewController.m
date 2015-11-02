@@ -25,10 +25,13 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMReportSaver.h"
 
-@interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate>
+@interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
+@property (nonatomic, strong) JMReportSaver *reportSaver;
+@property (nonatomic, strong) NSString *savedResourcePath;
+@property (nonatomic, weak) UIImageView *imageView;
 
 @end
 
@@ -270,8 +273,10 @@
 
     NSData *data = [NSData dataWithContentsOfURL:url];
     UIImage *image = [UIImage imageWithData:data];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-    [self.view addSubview:imageView];
+    UIScrollView *scrollView = [self createScrollViewWithImage:image];
+    [self.view addSubview:scrollView];
+
+    [self addConstraintsForScrollView:scrollView];
 }
 
 #pragma mark - Helpers
@@ -308,6 +313,132 @@
     NSString *format = resourceFullName.pathExtension;
     BOOL isHTML = [format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML];
     return !isHTML;
+}
+
+- (UIScrollView *)createScrollViewWithImage:(UIImage *)image
+{
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
+    [scrollView addSubview:imageView];
+    self.imageView = imageView;
+
+    CGFloat contentViewHeight = CGRectGetHeight(self.imageView.frame);
+    CGFloat contentViewWidth = CGRectGetWidth(self.imageView.frame);
+
+    CGFloat containerViewHeight = CGRectGetHeight(scrollView.frame);
+    CGFloat containerViewWidth = CGRectGetWidth(scrollView.frame);
+
+    self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
+
+    NSLayoutConstraint *constraint;
+    if (contentViewHeight > containerViewHeight || contentViewWidth > containerViewWidth) {
+        JMLog(@"big content");
+        scrollView.delegate = self;
+        scrollView.clipsToBounds = YES;
+        scrollView.contentSize = image.size;
+
+        CGFloat minScaleFactor = CGRectGetWidth(self.view.frame)/image.size.width;
+        scrollView.minimumZoomScale = minScaleFactor;
+        scrollView.maximumZoomScale = 1;
+
+        [scrollView setZoomScale:minScaleFactor animated:YES];
+
+        constraint = [NSLayoutConstraint constraintWithItem:self.imageView
+                                                  attribute:NSLayoutAttributeTrailing
+                                                  relatedBy:NSLayoutRelationEqual
+                                                     toItem:scrollView
+                                                  attribute:NSLayoutAttributeTrailing
+                                                 multiplier:1
+                                                   constant:0];
+        [scrollView addConstraint:constraint];
+
+        constraint = [NSLayoutConstraint constraintWithItem:self.imageView
+                                                  attribute:NSLayoutAttributeLeading
+                                                  relatedBy:NSLayoutRelationEqual
+                                                     toItem:scrollView
+                                                  attribute:NSLayoutAttributeLeading
+                                                 multiplier:1
+                                                   constant:0];
+        [scrollView addConstraint:constraint];
+
+        constraint = [NSLayoutConstraint constraintWithItem:self.imageView
+                                                  attribute:NSLayoutAttributeTop
+                                                  relatedBy:NSLayoutRelationEqual
+                                                     toItem:scrollView
+                                                  attribute:NSLayoutAttributeTop
+                                                 multiplier:1
+                                                   constant:0];
+        [scrollView addConstraint:constraint];
+
+        constraint = [NSLayoutConstraint constraintWithItem:self.imageView
+                                                  attribute:NSLayoutAttributeBottom
+                                                  relatedBy:NSLayoutRelationEqual
+                                                     toItem:scrollView
+                                                  attribute:NSLayoutAttributeBottom
+                                                 multiplier:1
+                                                   constant:0];
+        [scrollView addConstraint:constraint];
+    } else {
+        JMLog(@"small content");
+        constraint = [NSLayoutConstraint constraintWithItem:self.imageView
+                                                  attribute:NSLayoutAttributeCenterX
+                                                  relatedBy:NSLayoutRelationEqual
+                                                     toItem:scrollView
+                                                  attribute:NSLayoutAttributeCenterX
+                                                 multiplier:1
+                                                   constant:0];
+        [scrollView addConstraint:constraint];
+
+        constraint = [NSLayoutConstraint constraintWithItem:self.imageView
+                                                  attribute:NSLayoutAttributeCenterY
+                                                  relatedBy:NSLayoutRelationEqual
+                                                     toItem:scrollView
+                                                  attribute:NSLayoutAttributeCenterY
+                                                 multiplier:1
+                                                   constant:0];
+        [scrollView addConstraint:constraint];
+    }
+
+    constraint = [NSLayoutConstraint constraintWithItem:self.imageView
+                                              attribute:NSLayoutAttributeWidth
+                                              relatedBy:NSLayoutRelationEqual
+                                                 toItem:nil
+                                              attribute:NSLayoutAttributeNotAnAttribute
+                                             multiplier:1
+                                               constant:contentViewWidth];
+    [scrollView addConstraint:constraint];
+
+    constraint = [NSLayoutConstraint constraintWithItem:self.imageView
+                                              attribute:NSLayoutAttributeHeight
+                                              relatedBy:NSLayoutRelationEqual
+                                                 toItem:nil
+                                              attribute:NSLayoutAttributeNotAnAttribute
+                                             multiplier:1
+                                               constant:contentViewHeight];
+    [scrollView addConstraint:constraint];
+
+    return scrollView;
+}
+
+- (void)addConstraintsForScrollView:(UIScrollView *)scrollView
+{
+    scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[scrollView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"scrollView": scrollView}]];
+
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[scrollView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"scrollView": scrollView}]];
+}
+
+
+#pragma mark - UIScrollViewDelegate
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return self.imageView;
 }
 
 @end
