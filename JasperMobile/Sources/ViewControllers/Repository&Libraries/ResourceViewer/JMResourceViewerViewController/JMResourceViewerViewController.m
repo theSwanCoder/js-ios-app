@@ -95,7 +95,7 @@
 - (void)resetSubViews
 {
     [self.webView stopLoading];
-    [self.webView loadHTMLString:@"" baseURL:nil];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
 }
 
 - (void)cancelResourceViewingAndExit:(BOOL)exit
