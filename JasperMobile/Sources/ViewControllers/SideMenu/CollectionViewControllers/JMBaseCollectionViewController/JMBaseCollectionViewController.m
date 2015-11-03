@@ -529,11 +529,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     CGFloat itemWidth = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
     
     if (self.representationType == JMResourcesRepresentationType_Grid) {
-        NSInteger countOfCellsInRow = 0;
+        NSInteger countOfCellsInRow = 1;
         itemWidth = [JMUtils isIphone] ? 150 : 310;
-        while (((countOfCellsInRow * itemWidth) + (countOfCellsInRow - 1) * flowLayout.minimumInteritemSpacing) < (collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right)) {
+        while (((countOfCellsInRow * itemWidth) + (countOfCellsInRow + 1) * flowLayout.minimumInteritemSpacing) < collectionView.frame.size.width) {
             countOfCellsInRow ++;
         }
+        countOfCellsInRow --;
         itemHeight = [JMUtils isIphone] ? 150 : 254;
         itemWidth = floorf((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
     }
