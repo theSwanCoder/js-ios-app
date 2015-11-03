@@ -38,7 +38,7 @@
 - (void)didReceiveMemoryWarning
 {
     [self.webView stopLoading];
-    [self.webView loadHTMLString:@"" baseURL:nil];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
 
 #warning WHY ONLY FOR SAVED REPORT VIEWER WE HANDLE MEMORY WARNINGS???
     NSString *errorMessage = JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil);

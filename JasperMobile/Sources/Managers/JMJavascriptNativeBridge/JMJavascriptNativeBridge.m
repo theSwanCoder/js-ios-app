@@ -77,7 +77,7 @@
 - (void)reset
 {
     self.isJSInitCodeInjected = NO;
-    [(UIWebView *) self.webView loadHTMLString:@"" baseURL:nil];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
 }
 
 #pragma mark - UIWebViewDelegate
