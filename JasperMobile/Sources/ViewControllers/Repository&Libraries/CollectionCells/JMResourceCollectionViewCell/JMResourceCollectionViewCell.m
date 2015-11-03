@@ -120,6 +120,19 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
     } else if ([self.resourceLookup isFolder]) {
         resourceImage = [UIImage imageNamed:@"res_type_folder"];
+    } else if([self.resourceLookup isFile]) {
+        resourceImage = [UIImage imageNamed:@"res_type_report"];
+
+        // TODO: change this hack with request for getting resource type
+        NSString *resourceFullName = self.resourceLookup.uri.lastPathComponent;
+        NSString *format = resourceFullName.pathExtension;
+        if ([format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+            resourceImage = [UIImage imageNamed:@"res_type_html"];
+        } else if ([format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+            resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+        } else if ([format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS] || [format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLSX]) {
+            resourceImage = [UIImage imageNamed:@"res_type_xls"];
+        }
     }
     
     if (resourceImage || _thumbnailImage) {
