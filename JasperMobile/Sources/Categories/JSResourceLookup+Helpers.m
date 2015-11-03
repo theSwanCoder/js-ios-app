@@ -39,11 +39,6 @@
     return [JMUtils isServerVersionUpOrEqual6] && [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD];
 }
 
-- (BOOL)isFile
-{
-    return [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FILE];
-}
-
 - (NSString *)resourceViewerVCIdentifier
 {
     // TODO: identifiers with constant
@@ -51,7 +46,7 @@
         return @"JMReportViewerVC";
     } else if ([self isDashboard]) {
         return @"JMDashboardViewerVC";
-    } else if ([self isSavedReport] || [self isFile]) {
+    } else if ([self isSavedReport]) {
         return @"JMSavedResourceViewerViewController";
     }
     return nil;
