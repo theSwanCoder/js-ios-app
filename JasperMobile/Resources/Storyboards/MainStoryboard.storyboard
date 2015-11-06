@@ -1124,64 +1124,9 @@ your business wherever you are.</string>
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fPq-km-pBs">
-                                <rect key="frame" x="10" y="356" width="580" height="50"/>
+                            <textView autoresizesSubviews="NO" multipleTouchEnabled="YES" contentMode="scaleAspectFit" bounces="NO" showsHorizontalScrollIndicator="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gH8-9L-pQq">
+                                <rect key="frame" x="0.0" y="15" width="600" height="506"/>
                                 <animations/>
-                                <color key="backgroundColor" red="0.25882352939999997" green="0.5568627451" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="lHo-2j-eIW">
-                                        <variation key="heightClass=compact" constant="30"/>
-                                        <variation key="widthClass=compact" constant="30"/>
-                                    </constraint>
-                                </constraints>
-                                <state key="normal" title="Privacy Policy">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="4"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="privacyPolicyButtonTapped:" destination="wEA-Vb-4Ky" eventType="touchUpInside" id="NLR-jK-6rv"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rFf-kw-rBz">
-                                <rect key="frame" x="10" y="476" width="580" height="50"/>
-                                <animations/>
-                                <color key="backgroundColor" red="0.25882352939999997" green="0.5568627451" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Send feedback">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="4"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="sendFeedbackButtonTapped:" destination="wEA-Vb-4Ky" eventType="touchUpInside" id="3pG-Pu-c4v"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ymq-6g-giQ">
-                                <rect key="frame" x="10" y="416" width="580" height="50"/>
-                                <animations/>
-                                <color key="backgroundColor" red="0.25882352939999997" green="0.5568627451" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Show EULA">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="4"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="showEULAButtonTapped:" destination="wEA-Vb-4Ky" eventType="touchUpInside" id="ho9-sI-CNr"/>
-                                </connections>
-                            </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gH8-9L-pQq">
-                                <rect key="frame" x="20" y="20" width="560" height="326"/>
-                                <animations/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
@@ -1193,45 +1138,16 @@ your business wherever you are.</string>
                         </subviews>
                         <animations/>
                         <constraints>
-                            <constraint firstItem="gH8-9L-pQq" firstAttribute="centerX" secondItem="Mky-P1-7P3" secondAttribute="centerX" id="1E7-jh-z1q"/>
-                            <constraint firstItem="fPq-km-pBs" firstAttribute="centerX" secondItem="Mky-P1-7P3" secondAttribute="centerX" id="6pY-aw-nGs"/>
-                            <constraint firstItem="Rg8-qs-DTJ" firstAttribute="top" secondItem="rFf-kw-rBz" secondAttribute="bottom" constant="10" id="AfS-Wl-9R4">
-                                <variation key="heightClass=compact" constant="5"/>
-                            </constraint>
-                            <constraint firstItem="Ymq-6g-giQ" firstAttribute="top" secondItem="fPq-km-pBs" secondAttribute="bottom" constant="10" id="De5-q5-2xq">
-                                <variation key="heightClass=compact" constant="5"/>
-                            </constraint>
-                            <constraint firstItem="rFf-kw-rBz" firstAttribute="height" secondItem="fPq-km-pBs" secondAttribute="height" id="Gk1-TS-EpR"/>
-                            <constraint firstItem="Ymq-6g-giQ" firstAttribute="width" secondItem="fPq-km-pBs" secondAttribute="width" id="JtA-qe-1LY"/>
-                            <constraint firstItem="gH8-9L-pQq" firstAttribute="leading" secondItem="Mky-P1-7P3" secondAttribute="leading" constant="20" id="Kw6-n7-iay">
-                                <variation key="widthClass=compact" constant="5"/>
-                            </constraint>
-                            <constraint firstItem="rFf-kw-rBz" firstAttribute="top" secondItem="Ymq-6g-giQ" secondAttribute="bottom" constant="10" id="UXV-d6-dND">
-                                <variation key="heightClass=compact" constant="5"/>
-                            </constraint>
-                            <constraint firstItem="fPq-km-pBs" firstAttribute="leading" secondItem="Mky-P1-7P3" secondAttribute="leading" constant="10" id="Yn0-0g-9XB"/>
-                            <constraint firstItem="fPq-km-pBs" firstAttribute="top" secondItem="gH8-9L-pQq" secondAttribute="bottom" constant="10" id="ecb-ZE-Lgu">
-                                <variation key="heightClass=compact" constant="0.0"/>
-                            </constraint>
-                            <constraint firstItem="rFf-kw-rBz" firstAttribute="width" secondItem="fPq-km-pBs" secondAttribute="width" id="fQe-yX-rxJ"/>
-                            <constraint firstItem="Ymq-6g-giQ" firstAttribute="height" secondItem="fPq-km-pBs" secondAttribute="height" id="gJd-gc-jFu"/>
-                            <constraint firstItem="gH8-9L-pQq" firstAttribute="top" secondItem="mzj-6L-OhT" secondAttribute="bottom" constant="20" id="jcq-Fc-HHD">
-                                <variation key="heightClass=compact" constant="0.0"/>
-                            </constraint>
-                            <constraint firstItem="rFf-kw-rBz" firstAttribute="centerX" secondItem="Mky-P1-7P3" secondAttribute="centerX" id="kh4-KJ-0v8"/>
-                            <constraint firstItem="Ymq-6g-giQ" firstAttribute="centerX" secondItem="Mky-P1-7P3" secondAttribute="centerX" id="vAM-z0-RL4"/>
+                            <constraint firstItem="Rg8-qs-DTJ" firstAttribute="top" secondItem="gH8-9L-pQq" secondAttribute="bottom" constant="15" id="MPT-hp-9qw"/>
+                            <constraint firstItem="gH8-9L-pQq" firstAttribute="top" secondItem="mzj-6L-OhT" secondAttribute="bottom" constant="15" id="djk-cg-jbv"/>
+                            <constraint firstAttribute="trailing" secondItem="gH8-9L-pQq" secondAttribute="trailing" id="u1Y-u5-WO9"/>
+                            <constraint firstAttribute="leading" secondItem="gH8-9L-pQq" secondAttribute="leading" id="yYH-E8-KjD"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="D4H-X9-Y5w"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="aboutAppTextView" destination="gH8-9L-pQq" id="rgQ-Oy-rmg"/>
-                        <outlet property="privacyPolicyButton" destination="fPq-km-pBs" id="jlW-wt-1vP"/>
-                        <outlet property="sendFeedbackButton" destination="rFf-kw-rBz" id="4BX-F3-JY6"/>
-                        <outlet property="showEULAButton" destination="Ymq-6g-giQ" id="FQG-pJ-ks4"/>
-                        <outletCollection property="buttonsCollection" destination="fPq-km-pBs" id="3sP-gr-8me"/>
-                        <outletCollection property="buttonsCollection" destination="Ymq-6g-giQ" id="zg4-W4-xGr"/>
-                        <outletCollection property="buttonsCollection" destination="rFf-kw-rBz" id="Wuc-Io-eGc"/>
                         <segue destination="LIw-YN-WwC" kind="show" identifier="showPrivacyPolicy" id="UtP-Ok-49W"/>
                     </connections>
                 </viewController>

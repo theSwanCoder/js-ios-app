@@ -144,11 +144,23 @@
         JMMenuItem *currentSelectedItem = self.selectedItem;
         JMMenuItem *item = self.menuItems[itemIndex];
         
-        if (item.resourceType != JMResourceTypeLogout) {
+        if (item.resourceType == JMResourceTypeLogout) {
+            [[JMSessionManager sharedManager] logout];
+            [JMUtils showLoginViewAnimated:YES completion:nil];
+            self.menuItems = nil;
+        } else if (item.resourceType == JMResourceTypeAbout) {
+            [self.revealViewController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+            JMAboutViewController *aboutViewController = (JMAboutViewController *) [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+            aboutViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+
+            [self.revealViewController.frontViewController presentViewController:aboutViewController
+                                                                        animated:YES
+                                                                      completion:nil];
+        } else {
             if (!currentSelectedItem || currentSelectedItem != item) {
                 [self unselectItems];
                 item.selected = YES;
-                
+
                 [self.tableView reloadData];
 
                 id nextVC;
@@ -170,10 +182,6 @@
             }
             [self.revealViewController setFrontViewPosition:FrontViewPositionLeft
                                                    animated:YES];
-        } else {
-            [[JMSessionManager sharedManager] logout];
-            [JMUtils showLoginViewAnimated:YES completion:nil];
-            self.menuItems = nil;
         }
     }
 }
