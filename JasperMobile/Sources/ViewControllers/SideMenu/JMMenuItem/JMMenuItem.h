@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, JMResourceType){
     JMResourceTypeSavedItems,
     JMResourceTypeFavorites,
     JMResourceTypeAbout,
+    JMResourceTypeFeedback,
     JMResourceTypeLogout,
     
     JMResourceTypeNone

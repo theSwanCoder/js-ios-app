@@ -42,7 +42,7 @@ NSString * const kJMPrivacyPolicyInternalLink = @"privacy_policy";
 NSString * const kJMEULAInternalLink = @"eula";
 NSString * const kJMWhatsNewInternalLink = @"whats_new";
 
-@interface JMAboutViewController () <MFMailComposeViewControllerDelegate, UITextViewDelegate>
+@interface JMAboutViewController () <UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextView *aboutAppTextView;
 @end
 
