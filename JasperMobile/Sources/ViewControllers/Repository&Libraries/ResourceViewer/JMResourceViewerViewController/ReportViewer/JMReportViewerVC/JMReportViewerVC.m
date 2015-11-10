@@ -407,4 +407,13 @@
     }
 }
 
+#pragma mark - Work with external screen
+- (UIView *)viewForAddingToExternalWindow
+{
+    [self.reportLoader updateViewportScaleFactorWithValue:0.75];
+    UIView *reportView = self.configurator.webView;;
+    reportView.translatesAutoresizingMaskIntoConstraints = YES;
+    return reportView;
+}
+
 @end

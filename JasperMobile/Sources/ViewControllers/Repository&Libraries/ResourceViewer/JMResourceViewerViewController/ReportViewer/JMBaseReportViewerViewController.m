@@ -61,8 +61,10 @@
     [super viewDidLoad];
     self.emptyReportMessageLabel.text = JMCustomLocalizedString(@"report.viewer.emptyreport.title", nil);
 
-    [self configureReport];
-    
+    if (![self isExternalScreenAvailable]) {
+        [self configureReport];
+    }
+
     [self addObservers];
 }
 
@@ -403,6 +405,13 @@
             // TODO: change save action
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
+        case JMMenuActionsViewAction_ExternalDisplay: {
+            if ( [self createExternalWindow] ) {
+                [self showExternalWindow];
+                [self configureReport];
+            }
+            break;
+        }
         default:
             break;
     }
@@ -462,6 +471,10 @@
     }
     if ([self isReportReady] && !self.report.isReportEmpty) {
         availableAction |= JMMenuActionsViewAction_Refresh;
+    }
+
+    if ([self isExternalScreenAvailable]) {
+        availableAction |= JMMenuActionsViewAction_ExternalDisplay;
     }
     return availableAction;
 }
