@@ -36,7 +36,7 @@
 #import "UIColor+RGBComponent.h"
 
 NSString * const kJMCommunitySiteURL = @"http://community.jaspersoft.com/project/jaspermobile-ios";
-NSString * const kJMWhatsNewURL = @"https://github.com/Jaspersoft/js-android-app/wiki/What's-new";
+NSString * const kJMWhatsNewURL = @"https://github.com/Jaspersoft/js-ios-app/wiki/What's-new";
 NSString * const kJMCommunitySiteInternalLink = @"community_site";
 NSString * const kJMPrivacyPolicyInternalLink = @"privacy_policy";
 NSString * const kJMEULAInternalLink = @"eula";
