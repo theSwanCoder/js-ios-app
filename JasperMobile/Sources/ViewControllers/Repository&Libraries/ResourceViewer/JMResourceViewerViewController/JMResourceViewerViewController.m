@@ -80,16 +80,21 @@
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
 
+    [self setupWebViewLayout];
+}
+
+- (void)setupWebViewLayout
+{
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": webView}]];
+                                                                        views:@{@"webView": self.webView}]];
 
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": webView}]];
+                                                                        views:@{@"webView": self.webView}]];
 }
 
 - (void)resetSubViews
