@@ -28,6 +28,10 @@
 
 #import "JMBaseViewController.h"
 
+@interface JMBaseViewController()
+@property (nonatomic, strong) UIWindow *externalWindow;
+@end
+
 @implementation JMBaseViewController
 
 - (void)dealloc
@@ -42,6 +46,63 @@
 
     // Google Analitycs
     self.screenName = NSStringFromClass(self.class);
+}
+
+#pragma mark - Work with external screens
+- (BOOL)isExternalScreenAvailable
+{
+    return [UIScreen screens].count > 1;
+}
+
+- (BOOL)createExternalWindow
+{
+    NSArray *screens = [UIScreen screens];
+
+    if (screens.count > 1) {
+        self.externalWindow = [UIWindow new];
+
+        UIScreen *externalScreen = [UIScreen screens][1];
+        UIScreenMode *desiredMode = externalScreen.availableModes.firstObject;
+        externalScreen.currentMode = desiredMode;
+
+        // Setup external window
+        self.externalWindow.screen = externalScreen;
+        self.externalWindow.backgroundColor = [UIColor whiteColor];
+
+        CGRect rect = CGRectZero;
+        rect.size = desiredMode.size;
+        self.externalWindow.frame = rect;
+        self.externalWindow.clipsToBounds = YES;
+
+        UIView *viewForAdding = [self viewForAddingToExternalWindow];
+        viewForAdding.frame = rect;
+        [self.externalWindow addSubview:viewForAdding];
+
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
+- (void)showExternalWindow
+{
+    self.externalWindow.hidden = NO;
+}
+
+- (void)hideExternalWindow
+{
+    self.externalWindow = nil;
+}
+
+- (UIView *)viewForAddingToExternalWindow
+{
+    // override
+    return nil;
+}
+
+- (UIView *)viewForRemovingFromExternalWindow
+{
+    return self.externalWindow.subviews.firstObject;
 }
 
 @end
