@@ -233,6 +233,7 @@
 "action.title.print" = "Print";
 "action.title.openIn" = "Open with...";
 "action.title.accept" = "Accept";
+"action.title.externalDisplay" = "Show on TV";
 
 /* Error messages */
 
