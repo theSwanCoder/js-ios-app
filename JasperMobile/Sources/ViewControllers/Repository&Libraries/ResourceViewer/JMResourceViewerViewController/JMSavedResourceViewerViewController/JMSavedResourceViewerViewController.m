@@ -28,75 +28,10 @@
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
-
-@property (nonatomic, strong) UIButton *unplugButton;
-@property (nonatomic, strong) UIButton *upButton;
-@property (nonatomic, strong) UIButton *downButton;
-@property (nonatomic, assign) CGFloat currentOffset;
 @end
 
 @implementation JMSavedResourceViewerViewController
 @synthesize changedReportName;
-
-#pragma mark - LifeCycle
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    // unplug button
-    CGRect buttonFrame = CGRectMake(0, 0, 200, 50);
-    self.unplugButton = [[UIButton alloc] initWithFrame:buttonFrame];
-    [self.unplugButton setTitle:@"Unplug" forState:UIControlStateNormal];
-    [self.unplugButton setBackgroundColor:[UIColor lightGrayColor]];
-    [self.unplugButton addTarget:self action:@selector(unplugExternalWindow) forControlEvents:UIControlEventTouchUpInside];
-
-    // up button
-    UIImage *arrowUPImage = [UIImage imageNamed:@"arrow_up"];
-    buttonFrame = CGRectMake(0, 0, arrowUPImage.size.width, arrowUPImage.size.height);
-    self.upButton = [[UIButton alloc] initWithFrame:buttonFrame];
-    [self.upButton setImage:arrowUPImage forState:UIControlStateNormal];
-    [self.upButton addTarget:self action:@selector(upAction) forControlEvents:UIControlEventTouchUpInside];
-
-    // up button
-    UIImage *arrowDownImage = [UIImage imageNamed:@"arrow_down"];
-    buttonFrame = CGRectMake(0, 0, arrowDownImage.size.width, arrowDownImage.size.height);
-    self.downButton = [[UIButton alloc] initWithFrame:buttonFrame];
-    [self.downButton setImage:arrowDownImage forState:UIControlStateNormal];
-    [self.downButton addTarget:self action:@selector(downAction) forControlEvents:UIControlEventTouchUpInside];
-}
-
-#pragma mark - Actions
-- (void)unplugExternalWindow
-{
-    [self.unplugButton removeFromSuperview];
-    [self.upButton removeFromSuperview];
-    [self.downButton removeFromSuperview];
-
-    [self.webView.scrollView setContentOffset:CGPointMake(0, self.currentOffset)];
-    [self.view addSubview:self.webView];
-
-    [self setupWebViewLayout];
-    [self hideExternalWindow];
-}
-
-- (void)upAction
-{
-//    self.currentOffset -= 20;
-//    if (self.currentOffset < 0) {
-//        self.currentOffset = 0;
-//    }
-//    [self.webView.scrollView setContentOffset:CGPointMake(0, self.currentOffset)];
-}
-
-- (void)downAction
-{
-//    self.currentOffset += 20;
-//    CGFloat maxOffset = self.webView.scrollView.contentSize.height - self.externalWindow.bounds.size.height;
-//    if (self.currentOffset > maxOffset) {
-//        self.currentOffset = maxOffset;
-//    }
-//    [self.webView.scrollView setContentOffset:CGPointMake(0, self.currentOffset)];
-}
 
 #pragma mark - Handle Memory Warnings
 - (void)didReceiveMemoryWarning
@@ -161,7 +96,11 @@
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    return ([super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn | JMMenuActionsViewAction_ExternalDisplay);
+    JMMenuActionsViewAction menuActions = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn;
+    if ([self isExternalScreenAvailable]) {
+        menuActions |= JMMenuActionsViewAction_ExternalDisplay;
+    }
+    return menuActions;
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -227,13 +166,9 @@
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     } else if (action == JMMenuActionsViewAction_ExternalDisplay) {
-        [self setupUnplugButton];
-        [self.view addSubview:self.unplugButton];
-        
-        [self setupUpButton];
-        [self.view addSubview:self.upButton];
-        [self setupDownButton];
-        [self.view addSubview:self.downButton];
+        if ( [self createExternalWindow] ) {
+            [self showExternalWindow];
+        }
     }
 }
 
@@ -243,30 +178,6 @@
     UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
     interactionController.delegate = interactionDelegate;
     return interactionController;
-}
-
-- (void)setupUnplugButton
-{
-    CGRect buttonRect = self.unplugButton.frame;
-    buttonRect.origin.x = (CGRectGetWidth(self.view.bounds) - CGRectGetWidth(buttonRect))/ 2.0f;
-    buttonRect.origin.y = (CGRectGetHeight(self.view.bounds) - CGRectGetHeight(buttonRect))/ 2.0f;
-    self.unplugButton.frame = buttonRect;
-}
-
-- (void)setupUpButton
-{
-    CGRect buttonFrame = self.upButton.frame;
-    buttonFrame.origin.x = CGRectGetMaxX(self.unplugButton.frame) + 10;
-    buttonFrame.origin.y = CGRectGetMinY(self.unplugButton.frame);
-    self.upButton.frame = buttonFrame;
-}
-
-- (void)setupDownButton
-{
-    CGRect buttonFrame = self.downButton.frame;
-    buttonFrame.origin.x = CGRectGetMaxX(self.unplugButton.frame) + 10;
-    buttonFrame.origin.y = CGRectGetMaxY(self.unplugButton.frame) - CGRectGetHeight(buttonFrame);
-    self.downButton.frame = buttonFrame;
 }
 
 #pragma mark - Work with external screen
