@@ -37,6 +37,7 @@
 @protocol JMReportLoaderDelegate;
 
 @interface JMReportViewerConfigurator : NSObject
+@property (nonatomic, assign) CGFloat viewportScaleFactor;
 @property (nonatomic, weak) id webView;
 
 - (instancetype)initWithReport:(JMReport *)report;

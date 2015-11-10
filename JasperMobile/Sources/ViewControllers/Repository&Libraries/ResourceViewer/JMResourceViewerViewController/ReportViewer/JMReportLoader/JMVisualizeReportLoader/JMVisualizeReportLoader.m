@@ -46,7 +46,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 @property (nonatomic, copy) void(^reportLoadCompletion)(BOOL success, NSError *error);
 @property (nonatomic, copy) void(^reportChangePageCompletion)(BOOL success, NSError *error);
 @property (nonatomic, copy) NSString *exportFormat;
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
 @end
 
 @implementation JMVisualizeReportLoader
@@ -215,6 +214,18 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     request.command = @"MobileReport.authorize(%@);";
     request.parametersAsString = [NSString stringWithFormat:@"{'username': '%@', 'password': '%@', 'organization': '%@'}", self.restClient.serverProfile.username, self.restClient.serverProfile.password, self.restClient.serverProfile.organization];
     [self.bridge sendRequest:request];
+}
+
+- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
+{
+    if ( fabsf(self.visualizeManager.viewportScaleFactor - scaleFactor) >= 0.49 ) {
+        self.visualizeManager.viewportScaleFactor = scaleFactor;
+
+        JMJavascriptRequest *request = [JMJavascriptRequest new];
+        request.command = @"jQuery(\"meta[name='viewport']\")[0].content = \"initial-scale=%@, width=device-width, minimum-scale=0.1, maximum-scale=2, user-scalable=yes\";";
+        request.parametersAsString = [NSString stringWithFormat:@"%@", @(scaleFactor)];
+        [self.bridge sendRequest:request];
+    }
 }
 
 #pragma mark - Private

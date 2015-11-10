@@ -32,6 +32,7 @@
 #import "JMVisualizeReportLoader.h"
 #import "JMRestReportLoader.h"
 #import "JMReport.h"
+#import "JMVisualizeManager.h"
 
 @interface JMReportViewerConfigurator()
 @property (nonatomic, weak) JMReport *report;
@@ -68,6 +69,9 @@
     if (!_reportLoader) {
         if ([JMUtils isSupportVisualize]) {
             _reportLoader = [JMVisualizeReportLoader loaderWithReport:self.report];
+            JMVisualizeManager *visualizeManager = [JMVisualizeManager new];
+            visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
+            ((JMVisualizeReportLoader *)_reportLoader).visualizeManager = visualizeManager;
         } else {
             _reportLoader = [JMRestReportLoader loaderWithReport:self.report];
         }
