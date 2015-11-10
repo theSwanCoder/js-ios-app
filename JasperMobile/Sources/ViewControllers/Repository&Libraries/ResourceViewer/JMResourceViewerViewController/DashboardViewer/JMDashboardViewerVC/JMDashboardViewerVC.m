@@ -223,16 +223,23 @@
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
+    if (![self isExternalScreenAvailable]) {
+        [self startShowDashboard];
+    }
+}
+
+- (void)startShowDashboard
+{
     __weak typeof(self)weakSelf = self;
     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
         __strong typeof(self)strongSelf = weakSelf;
         if (strongSelf.restClient.keepSession && isSessionAuthorized) {
 
             [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
-                                 cancelBlock:^(void) {
-                                         [strongSelf.dashboardLoader reset];
-                                         [super cancelResourceViewingAndExit:YES];
-                                     }];
+                                       cancelBlock:^(void) {
+                                           [strongSelf.dashboardLoader reset];
+                                           [super cancelResourceViewingAndExit:YES];
+                                       }];
             __weak typeof(self)weakSelf = strongSelf;
             [strongSelf.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
                 __weak typeof(self)strongSelf = weakSelf;
@@ -241,7 +248,7 @@
                 if (success) {
                     // Analytics
                     NSString *resourcesType = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? @"Dashboard (Visualize)" : @"Dashboard (REST)";
-                     [JMUtils logEventWithName:@"User opened resource"
+                    [JMUtils logEventWithName:@"User opened resource"
                                  additionInfo:@{
                                          @"Resource's Type" : resourcesType
                                  }];
@@ -258,7 +265,11 @@
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    return [super availableActionForResource:resource] | JMMenuActionsViewAction_Refresh;
+    JMMenuActionsViewAction menuActions = [super availableActionForResource:resource] | JMMenuActionsViewAction_Refresh;
+    if ([self isExternalScreenAvailable]) {
+        menuActions |= JMMenuActionsViewAction_ExternalDisplay;
+    }
+    return menuActions;
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -267,6 +278,11 @@
     [super actionsView:view didSelectAction:action];
     if (action == JMMenuActionsViewAction_Refresh) {
         [self reloadDashboard];
+    } else if (action == JMMenuActionsViewAction_ExternalDisplay) {
+        if ( [self createExternalWindow] ) {
+            [self showExternalWindow];
+            [self startShowDashboard];
+        }
     }
 }
 
@@ -390,6 +406,15 @@
 - (BOOL)isDashletShown
 {
     return self.leftButtonItem != nil;
+}
+
+#pragma mark - Work with external screen
+- (UIView *)viewForAddingToExternalWindow
+{
+    [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
+    UIView *dashboardView = self.configurator.webView;
+    dashboardView.translatesAutoresizingMaskIntoConstraints = YES;
+    return dashboardView;
 }
 
 @end
