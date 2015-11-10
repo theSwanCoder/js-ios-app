@@ -80,6 +80,15 @@
 - (void)setupSubviews
 {
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
+
+    // Setup viewport scale factor
+    CGFloat initialScaleViewport = 0.75;
+    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+    if (isCompactWidth) {
+        initialScaleViewport = 0.25;
+    }
+    self.configurator.viewportScaleFactor = initialScaleViewport;
+
     UIWebView *webView = [self.configurator webViewWithFrame:self.view.bounds asSecondary:self.isChildReport];
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     
