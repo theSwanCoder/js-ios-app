@@ -29,7 +29,6 @@
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
 
-@property (nonatomic, strong) UIWindow *externalWindow;
 @property (nonatomic, strong) UIButton *unplugButton;
 @property (nonatomic, strong) UIButton *upButton;
 @property (nonatomic, strong) UIButton *downButton;
@@ -43,8 +42,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.externalWindow = [UIWindow new];
 
     // unplug button
     CGRect buttonFrame = CGRectMake(0, 0, 200, 50);
@@ -71,37 +68,34 @@
 #pragma mark - Actions
 - (void)unplugExternalWindow
 {
-    NSLog(@"unplugExternalWindow");
-
     [self.unplugButton removeFromSuperview];
     [self.upButton removeFromSuperview];
     [self.downButton removeFromSuperview];
 
-    self.webView.frame = self.view.bounds;
     [self.webView.scrollView setContentOffset:CGPointMake(0, self.currentOffset)];
     [self.view addSubview:self.webView];
 
-    [self.view.window makeKeyAndVisible];
-//    self.externalWindow.screen = nil;
+    [self setupWebViewLayout];
+    [self hideExternalWindow];
 }
 
 - (void)upAction
 {
-    self.currentOffset -= 20;
-    if (self.currentOffset < 0) {
-        self.currentOffset = 0;
-    }
-    [self.webView.scrollView setContentOffset:CGPointMake(0, self.currentOffset)];
+//    self.currentOffset -= 20;
+//    if (self.currentOffset < 0) {
+//        self.currentOffset = 0;
+//    }
+//    [self.webView.scrollView setContentOffset:CGPointMake(0, self.currentOffset)];
 }
 
 - (void)downAction
 {
-    self.currentOffset += 20;
-    CGFloat maxOffset = self.webView.scrollView.contentSize.height - self.externalWindow.bounds.size.height;
-    if (self.currentOffset > maxOffset) {
-        self.currentOffset = maxOffset;
-    }
-    [self.webView.scrollView setContentOffset:CGPointMake(0, self.currentOffset)];
+//    self.currentOffset += 20;
+//    CGFloat maxOffset = self.webView.scrollView.contentSize.height - self.externalWindow.bounds.size.height;
+//    if (self.currentOffset > maxOffset) {
+//        self.currentOffset = maxOffset;
+//    }
+//    [self.webView.scrollView setContentOffset:CGPointMake(0, self.currentOffset)];
 }
 
 #pragma mark - Handle Memory Warnings
@@ -178,29 +172,29 @@
         __weak typeof(self) weakSelf = self;
         UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"savedreport.viewer.modify.title"
                                                                                                       message:nil
-        textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
-            __strong typeof(self) strongSelf = weakSelf;
-            textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
-            textField.text = [strongSelf.resourceLookup.label copy];
-        } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
-            NSString *errorMessage = nil;
-            __strong typeof(self) strongSelf = weakSelf;
-            if (strongSelf) {
-                [JMUtils validateReportName:text errorMessage:&errorMessage];
-                if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
-                    errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
-                }
-            }
-            return errorMessage;
-        } textEditCompletionHandler:^(NSString * _Nullable text) {
-            __strong typeof(self) strongSelf = weakSelf;
-            if ([strongSelf.savedReports renameReportTo:text]) {
-                strongSelf.title = text;
-                strongSelf.resourceLookup = [strongSelf.savedReports wrapperFromSavedReports];
-                [strongSelf setupRightBarButtonItems];
-                [strongSelf startResourceViewing];
-            }
-        }];
+                                                                                textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
+                                                                                    textField.text = [strongSelf.resourceLookup.label copy];
+                                                                                } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
+                                                                                    NSString *errorMessage = nil;
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    if (strongSelf) {
+                                                                                        [JMUtils validateReportName:text errorMessage:&errorMessage];
+                                                                                        if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
+                                                                                            errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
+                                                                                        }
+                                                                                    }
+                                                                                    return errorMessage;
+                                                                                } textEditCompletionHandler:^(NSString * _Nullable text) {
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    if ([strongSelf.savedReports renameReportTo:text]) {
+                                                                                        strongSelf.title = text;
+                                                                                        strongSelf.resourceLookup = [strongSelf.savedReports wrapperFromSavedReports];
+                                                                                        [strongSelf setupRightBarButtonItems];
+                                                                                        [strongSelf startResourceViewing];
+                                                                                    }
+                                                                                }];
         [self presentViewController:alertController animated:YES completion:nil];
     } else if(action == JMMenuActionsViewAction_Delete) {
         UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
@@ -233,24 +227,13 @@
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     } else if (action == JMMenuActionsViewAction_ExternalDisplay) {
-        NSArray *screens = [UIScreen screens];
-
-        [self setupExternalWindow];
-        self.currentOffset = self.webView.scrollView.contentOffset.y;
-        [self.externalWindow addSubview:self.webView];
-
-        self.externalWindow.hidden = NO;
-        [self.externalWindow makeKeyAndVisible];
-
         [self setupUnplugButton];
         [self.view addSubview:self.unplugButton];
-
+        
         [self setupUpButton];
         [self.view addSubview:self.upButton];
         [self setupDownButton];
         [self.view addSubview:self.downButton];
-
-        NSLog(@"screens: %@", screens);
     }
 }
 
@@ -286,22 +269,11 @@
     self.downButton.frame = buttonFrame;
 }
 
-- (void)setupExternalWindow
+#pragma mark - Work with external screen
+- (UIView *)viewForAddingToExternalWindow
 {
-    UIScreen *externalScreen = [UIScreen screens][1];
-    UIScreenMode *desiredMode = externalScreen.availableModes.firstObject;
-    externalScreen.currentMode = desiredMode;
-
-    // Setup external window
-    self.externalWindow.screen = externalScreen;
-    self.externalWindow.backgroundColor = [UIColor whiteColor];
-
-    CGRect rect = CGRectZero;
-    rect.size = desiredMode.size;
-    self.externalWindow.frame = rect;
-    self.externalWindow.clipsToBounds = YES;
-
-    self.webView.frame = rect;
+    self.webView.translatesAutoresizingMaskIntoConstraints = YES;
+    return self.webView;
 }
 
 @end
