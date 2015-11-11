@@ -42,6 +42,10 @@
 #import "JMBaseReportViewerViewController.h"
 #import "JMResourceInfoViewController.h"
 
+CGFloat const kJMBaseCollectionViewGridWidth = 310;
+
+CGFloat const kJMBaseCollectionViewCompactGridWidth = 150;
+
 NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 
 NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentationTypeDidChangeNotification";
@@ -98,8 +102,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [self addObservers];
     
     self.isScrollToTop = NO;
-    
-    [self showNavigationItems];
+    self.needLayoutUI = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -130,19 +133,20 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    if (self.isViewLoaded && self.view.window) {
-        JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-        [baseCollectionView.collectionView reloadData];
-    }
+    self.needReloadData = YES;
+}
+
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+    [self showNavigationItemsForTraitCollection:newCollection];
 }
 
 #pragma mark - Custom accessors
 - (void)setNeedReloadData:(BOOL)needReloadData
 {
     _needReloadData = needReloadData;
-    if (self.isViewLoaded && self.view.window && needReloadData) {
-        [self updateIfNeeded];
-    }
+    [self updateIfNeeded];
 }
 
 - (void)setNeedLayoutUI:(BOOL)needLayoutUI
@@ -150,9 +154,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     _needLayoutUI = needLayoutUI;
     _needReloadData = needLayoutUI;
     
-    if (self.isViewLoaded && self.view.window && needLayoutUI) {
-        [self updateIfNeeded];
-    }
+    [self updateIfNeeded];
 }
 
 - (JMResourcesRepresentationType)representationType
@@ -244,29 +246,29 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 #pragma mark - Private API
 - (void)updateIfNeeded
 {
-    if (self.needReloadData) {
-        JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-        [baseCollectionView.collectionView reloadData];
-        
-        if (self.isScrollToTop) {
-            self.isScrollToTop = NO;
-            NSIndexPath *firstItemIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-            if ([baseCollectionView.collectionView cellForItemAtIndexPath:firstItemIndexPath]) {
-                [baseCollectionView.collectionView scrollToItemAtIndexPath:firstItemIndexPath
-                                                          atScrollPosition:UICollectionViewScrollPositionBottom
-                                                                  animated:NO];
+    if (self.isViewLoaded && self.view.window) {
+        if (self.needReloadData) {
+            JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
+            [baseCollectionView.collectionView reloadData];
+            
+            if (self.isScrollToTop) {
+                self.isScrollToTop = NO;
+                NSIndexPath *firstItemIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                if ([baseCollectionView.collectionView cellForItemAtIndexPath:firstItemIndexPath]) {
+                    [baseCollectionView.collectionView scrollToItemAtIndexPath:firstItemIndexPath
+                                                              atScrollPosition:UICollectionViewScrollPositionBottom
+                                                                      animated:NO];
+                }
             }
+            
+            _needReloadData = NO;
         }
         
-        _needReloadData = NO;
-    }
-
-    if (self.needLayoutUI) {
-        if ([JMUtils isIphone]) {
+        if (self.needLayoutUI) {
             [self.popoverView dismiss:YES];
-            [self showNavigationItems];
+            [self showNavigationItemsForTraitCollection:self.traitCollection];
+            _needLayoutUI = NO;
         }
-        self.needLayoutUI = NO;
     }
 }
 
@@ -311,11 +313,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)addObservers
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(interfaceOrientationDidChanged:)
-                                                 name:UIApplicationDidChangeStatusBarOrientationNotification
-                                               object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(representationTypeDidChange)
                                                  name:kJMRepresentationTypeDidChangeNotification
                                                object:nil];
@@ -324,11 +321,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)removeObservers
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)interfaceOrientationDidChanged:(NSNotification *)notification
-{
-    self.needLayoutUI = YES;
 }
 
 - (void)representationTypeDidChange
@@ -362,35 +354,39 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 }
 
 #pragma mark - Setup Navigation Items
-- (void) showNavigationItems
+- (void) showNavigationItemsForTraitCollection:(UITraitCollection *)traitCollection
 {
-    NSMutableArray *navBarItems = [NSMutableArray array];
-    JMMenuActionsViewAction availableAction = [self availableAction];
-    if (availableAction & JMMenuActionsViewAction_Filter) {
-        UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"]
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:self
-                                                                      action:@selector(filterByButtonTapped:)];
-        [navBarItems addObject:filterItem];
+    if (traitCollection) {
+        NSMutableArray *navBarItems = [NSMutableArray array];
+        JMMenuActionsViewAction availableAction = [self availableAction];
+        if (availableAction & JMMenuActionsViewAction_Filter) {
+            UIBarButtonItem *filterItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"filter_action"]
+                                                                           style:UIBarButtonItemStylePlain
+                                                                          target:self
+                                                                          action:@selector(filterByButtonTapped:)];
+            [navBarItems addObject:filterItem];
+        }
+        if (availableAction & JMMenuActionsViewAction_Sort) {
+            UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"]
+                                                                         style:UIBarButtonItemStylePlain
+                                                                        target:self
+                                                                        action:@selector(sortByButtonTapped:)];
+            [navBarItems addObject:sortItem];
+        }
+        
+        BOOL shouldConcateItems = (navBarItems.count > 1) && (traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact) &&
+                                                             (traitCollection.verticalSizeClass != UIUserInterfaceSizeClassCompact);
+        
+        if (shouldConcateItems) {
+            navBarItems = [@[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                           target:self
+                                                                           action:@selector(actionButtonClicked:)]] mutableCopy];
+        }
+        [navBarItems addObject:[self resourceRepresentationItem]];
+        self.navigationItem.rightBarButtonItems = navBarItems;
+    } else {
+        self.needLayoutUI = YES;
     }
-    if (availableAction & JMMenuActionsViewAction_Sort) {
-        UIBarButtonItem *sortItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sort_action"]
-                                                                     style:UIBarButtonItemStylePlain
-                                                                    target:self
-                                                                    action:@selector(sortByButtonTapped:)];
-        [navBarItems addObject:sortItem];
-    }
-    
-    BOOL isPortraitOrientationStatusBar = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
-    BOOL shouldConcateItems = [JMUtils isIphone] && (navBarItems.count > 1) && (isPortraitOrientationStatusBar);
-
-    if (shouldConcateItems) {
-        navBarItems = [@[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                                       target:self
-                                                                       action:@selector(actionButtonClicked:)]] mutableCopy];
-    }
-    [navBarItems addObject:[self resourceRepresentationItem]];
-    self.navigationItem.rightBarButtonItems = navBarItems;
 }
 
 #pragma mark - Menu Utils
@@ -524,19 +520,28 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewFlowLayout *flowLayout = (id)collectionView.collectionViewLayout;
-
+    
     CGFloat itemHeight = 80.f;
     CGFloat itemWidth = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
     
     if (self.representationType == JMResourcesRepresentationType_Grid) {
-        NSInteger countOfCellsInRow = 1;
-        itemWidth = [JMUtils isIphone] ? 150 : 310;
-        while (((countOfCellsInRow * itemWidth) + (countOfCellsInRow + 1) * flowLayout.minimumInteritemSpacing) < collectionView.frame.size.width) {
+        NSInteger countOfCellsInRow = 0;
+        CGFloat minItemWidth = [JMUtils isIphone] ? kJMBaseCollectionViewCompactGridWidth : kJMBaseCollectionViewGridWidth;
+        itemWidth = minItemWidth;
+        while (((countOfCellsInRow + 1) * itemWidth + countOfCellsInRow * flowLayout.minimumInteritemSpacing) <= (collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right)) {
             countOfCellsInRow ++;
         }
-        countOfCellsInRow --;
-        itemHeight = [JMUtils isIphone] ? 150 : 254;
-        itemWidth = floorf((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
+        
+        CGFloat (^getItemWidth)(NSInteger) = ^CGFloat (NSInteger countOfCellsInRow){
+            return floorf((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
+        };
+
+        itemWidth = getItemWidth(countOfCellsInRow);
+        if (itemWidth >= 1.5 * minItemWidth) {
+            itemWidth = getItemWidth(++countOfCellsInRow);
+        }
+        
+        itemHeight = [JMUtils isIphone] ? itemWidth : 0.8*itemWidth;
     }
     
     return CGSizeMake(itemWidth, itemHeight);

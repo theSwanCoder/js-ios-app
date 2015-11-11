@@ -115,7 +115,6 @@ void jmDebugLog(NSString *format, ...) {
 + (BOOL)isIphone
 {
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
-
 }
 
 + (BOOL)isSystemVersion9

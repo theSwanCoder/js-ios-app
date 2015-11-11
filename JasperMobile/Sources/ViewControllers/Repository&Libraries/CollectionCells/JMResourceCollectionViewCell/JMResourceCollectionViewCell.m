@@ -48,6 +48,9 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.resourceName.adjustsFontSizeToFitWidth = YES;
+    self.resourceName.minimumScaleFactor = [JMUtils isIphone] ? 0.7 : 0.5;
+    
     self.resourceName.font = [[JMThemesManager sharedManager] collectionResourceNameFont];
     self.resourceName.textColor = [[JMThemesManager sharedManager] resourceViewResourceCellTitleTextColor];
     
