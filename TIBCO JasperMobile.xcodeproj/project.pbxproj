@@ -147,6 +147,8 @@
 		9348F4EA1A35D103006F5677 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
 		9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */; };
 		9356ECA51A3075F500ACE2C6 /* JMUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */; };
+		93713C391BF341D4001F5CC1 /* JMExternalWindowControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93713C371BF341D4001F5CC1 /* JMExternalWindowControlViewController.m */; };
+		93713C3A1BF341D4001F5CC1 /* JMExternalWindowControlViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93713C381BF341D4001F5CC1 /* JMExternalWindowControlViewController.xib */; };
 		937AD98E1AC83D6900076855 /* JMResourcesListLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */; };
 		9386BA2D1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */; };
 		9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9397F97C1AAACADF006B89C6 /* JMReport.m */; };
@@ -482,6 +484,9 @@
 		9356EC9A1A30752900ACE2C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptionsTests.m; sourceTree = "<group>"; };
 		9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUtilsTests.m; sourceTree = "<group>"; };
+		93713C361BF341D4001F5CC1 /* JMExternalWindowControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowControlViewController.h; sourceTree = "<group>"; };
+		93713C371BF341D4001F5CC1 /* JMExternalWindowControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowControlViewController.m; sourceTree = "<group>"; };
+		93713C381BF341D4001F5CC1 /* JMExternalWindowControlViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMExternalWindowControlViewController.xib; sourceTree = "<group>"; };
 		937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesListLoaderTests.m; sourceTree = "<group>"; };
 		9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "TIB_jsm-ios_2.2.0_license.pdf"; sourceTree = "<group>"; };
 		9397F97B1AAACADF006B89C6 /* JMReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReport.h; sourceTree = "<group>"; };
@@ -922,6 +927,7 @@
 		089B14BF1AA756BD0021A915 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				93713C351BF341A4001F5CC1 /* JMExternalWindowControlViewController */,
 				089B14C91AA756BD0021A915 /* JMLoginViewController */,
 				0801DFB01AAF2E7500DD072C /* JMOnboardIntroViewController */,
 				089B14E51AA756BD0021A915 /* Repository&Libraries */,
@@ -1726,6 +1732,16 @@
 			path = EULA;
 			sourceTree = "<group>";
 		};
+		93713C351BF341A4001F5CC1 /* JMExternalWindowControlViewController */ = {
+			isa = PBXGroup;
+			children = (
+				93713C361BF341D4001F5CC1 /* JMExternalWindowControlViewController.h */,
+				93713C371BF341D4001F5CC1 /* JMExternalWindowControlViewController.m */,
+				93713C381BF341D4001F5CC1 /* JMExternalWindowControlViewController.xib */,
+			);
+			path = JMExternalWindowControlViewController;
+			sourceTree = "<group>";
+		};
 		9397F9791AAACA94006B89C6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -2174,6 +2190,7 @@
 				089B15FC1AA756BD0021A915 /* JMBaseCollectionView.xib in Resources */,
 				930F8D461ABB1CDF005F93FB /* report.html in Resources */,
 				08E0D19E1B0CF27200BFBFE5 /* AppIcon120x120.png in Resources */,
+				93713C3A1BF341D4001F5CC1 /* JMExternalWindowControlViewController.xib in Resources */,
 				08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */,
 				089B15C61AA756BD0021A915 /* JMGridResourceCollectionViewCell.xib in Resources */,
 				08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */,
@@ -2374,6 +2391,7 @@
 				08DD182B1B135BE500856112 /* JasperMobile.xcdatamodeld in Sources */,
 				08DF00941B25F87C0056F683 /* JMSaveReportPagesCell.m in Sources */,
 				089B15B11AA756BD0021A915 /* JasperMobileAppDelegate.m in Sources */,
+				93713C391BF341D4001F5CC1 /* JMExternalWindowControlViewController.m in Sources */,
 				08E2AC891B1E056900AC462B /* JMInputControlCell.m in Sources */,
 				089B15AB1AA756BD0021A915 /* JMMenuActionsView.m in Sources */,
 				BDE6A0861B5A891000A7FDEC /* JMTextField.m in Sources */,
