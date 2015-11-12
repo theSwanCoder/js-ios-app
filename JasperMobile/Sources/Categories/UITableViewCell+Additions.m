@@ -90,7 +90,7 @@ NSInteger static kJMBottomSeparatorTagIndex = 11;
     toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [toolbar setItems:[self inputAccessoryViewToolbarItems]];
     [toolbar sizeToFit];
-    if ([JMUtils isIphone]) {
+    if (([JMUtils isCompactWidth] || [JMUtils isCompactHeight])) {
         CGRect toolBarRect = toolbar.frame;
         toolBarRect.size.height = 34;
         toolbar.frame = toolBarRect;

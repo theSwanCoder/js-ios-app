@@ -70,6 +70,10 @@
 
 - (UIFont *)loginInputControlsFont;
 
+- (UIFont *)appAboutTitleFont;
+
+- (UIFont *)appAboutCommonTextFont;
+
 @end
 
 @interface JMThemesManager (UIColor)

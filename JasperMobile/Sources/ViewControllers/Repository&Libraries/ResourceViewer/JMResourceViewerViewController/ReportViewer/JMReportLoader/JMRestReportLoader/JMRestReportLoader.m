@@ -290,7 +290,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     NSError *error;
     NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
     CGFloat initialZoom = 2;
-    if ([JMUtils isIphone]) {
+    if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
         initialZoom = 1;
     }
     jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"INITIAL_ZOOM" withString:@(initialZoom).stringValue];

@@ -87,7 +87,7 @@
 
     // Initial Scale for ViewPort
     CGFloat initialScaleViewport = 0.75;
-    if ([JMUtils isIphone]) {
+    if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
         initialScaleViewport = 0.25;
     }
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScaleViewport).stringValue];

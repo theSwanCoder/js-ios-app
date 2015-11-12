@@ -148,7 +148,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 #pragma mark - Setup Navigation Items
 - (BOOL) favoriteItemShouldDisplaySeparately
 {
-    return (![JMUtils isIphone]) || ([JMUtils isIphone] && UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation));
+    return (![JMUtils isCompactWidth] || ([JMUtils isCompactWidth] && [JMUtils isCompactHeight]));
 }
 
 - (void)setupNavigationItems

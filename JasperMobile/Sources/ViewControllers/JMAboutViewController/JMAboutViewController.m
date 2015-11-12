@@ -233,7 +233,7 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
     paragraphStyle.firstLineHeadIndent = 20;
 
     NSDictionary *attributes = @{
-            NSFontAttributeName : [UIFont systemFontOfSize:[JMUtils isIphone] ? 14 : 18],
+            NSFontAttributeName : [[JMThemesManager sharedManager] appAboutCommonTextFont],
             NSForegroundColorAttributeName : [[JMThemesManager sharedManager] aboutAppAppAboutTextColor],
             NSParagraphStyleAttributeName: paragraphStyle
     };
@@ -247,7 +247,7 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
     paragraphStyle.alignment = NSTextAlignmentCenter;
 
     NSDictionary *attributes = @{
-            NSFontAttributeName : [UIFont boldSystemFontOfSize:[JMUtils isIphone] ? 16 : 22],
+            NSFontAttributeName : [[JMThemesManager sharedManager] appAboutTitleFont],
             NSForegroundColorAttributeName : [[JMThemesManager sharedManager] aboutAppAppNameTextColor],
             NSParagraphStyleAttributeName: paragraphStyle
     };

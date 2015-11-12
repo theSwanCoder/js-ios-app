@@ -78,7 +78,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     self.tableView.backgroundColor = [UIColor clearColor];
     
-    [self.tableView setRowHeight:[JMUtils isIphone] ? 44.f : 50.f];
+    [self.tableView setRowHeight:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 44.f : 50.f];
 
     self.saveReportButton.backgroundColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
     [self.saveReportButton setTitleColor:[[JMThemesManager sharedManager] saveReportSaveReportButtonTextColor]

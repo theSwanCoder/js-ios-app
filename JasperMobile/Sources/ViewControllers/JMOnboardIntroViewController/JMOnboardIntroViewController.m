@@ -126,12 +126,12 @@ static NSString * const kPageIdentifierSeemlessIntegration = @"kPageIdentifierSe
 #pragma mark - Rotation
 - (BOOL)shouldAutorotate
 {
-    return ![JMUtils isIphone];
+    return ![JMUtils isCompactWidth];
 }
 
 -(UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return [JMUtils isIphone] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
+    return [JMUtils isCompactWidth] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation

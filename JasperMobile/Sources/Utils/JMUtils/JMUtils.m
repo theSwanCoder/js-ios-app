@@ -420,4 +420,16 @@ void jmDebugLog(NSString *format, ...) {
                                                            value:nil] build]];                                       // Event value
 }
 
++ (BOOL)isCompactWidth
+{
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    return (rootViewController.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact);
+}
+
++ (BOOL)isCompactHeight
+{
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    return (rootViewController.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact);
+}
+
 @end

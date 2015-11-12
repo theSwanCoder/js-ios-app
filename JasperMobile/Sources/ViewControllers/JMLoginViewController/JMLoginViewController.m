@@ -188,17 +188,17 @@
 #pragma mark - Autorotation
 - (BOOL)shouldAutorotate
 {
-    return ![JMUtils isIphone];
+    return ![JMUtils isCompactWidth];
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
-    return [JMUtils isIphone] ? UIInterfaceOrientationPortrait : [super preferredInterfaceOrientationForPresentation];
+    return [JMUtils isCompactWidth] ? UIInterfaceOrientationPortrait : [super preferredInterfaceOrientationForPresentation];
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return [JMUtils isIphone] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
+    return [JMUtils isCompactWidth] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
 }
 
 
