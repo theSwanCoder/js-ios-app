@@ -23,11 +23,13 @@
 
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
+#import "JMExternalWindowControlViewController.h"
 
-@interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate>
+@interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate, JMExternalWindowControlViewControllerDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
+@property (nonatomic) JMExternalWindowControlViewController *controlViewController;
 @end
 
 @implementation JMSavedResourceViewerViewController
@@ -168,6 +170,7 @@
     } else if (action == JMMenuActionsViewAction_ExternalDisplay) {
         if ( [self createExternalWindow] ) {
             [self showExternalWindow];
+            [self addControlsForExternalWindow];
         }
     }
 }
@@ -185,6 +188,27 @@
 {
     self.webView.translatesAutoresizingMaskIntoConstraints = YES;
     return self.webView;
+}
+
+- (void)addControlsForExternalWindow
+{
+    CGRect controlViewFrame = self.view.frame;
+    controlViewFrame.origin.y = 0;
+
+    self.controlViewController = [[JMExternalWindowControlViewController alloc] initWithContentWebView:self.webView];
+    self.controlViewController.view.frame = controlViewFrame;
+    self.controlViewController.delegate = self;
+
+    [self.view addSubview:self.controlViewController.view];
+}
+
+#pragma mark - JMExternalWindowControlViewControllerDelegate
+- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlViewController *)viewController
+{
+    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.webView];
+    [self setupWebViewLayout];
+    [self.controlViewController.view removeFromSuperview];
 }
 
 @end

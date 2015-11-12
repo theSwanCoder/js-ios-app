@@ -30,13 +30,23 @@
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMWebViewManager.h"
+#import "JMExternalWindowControlViewController.h"
 
-@interface JMReportViewerVC () <JMReportLoaderDelegate>
+@interface JMReportViewerVC () <JMReportLoaderDelegate, JMExternalWindowControlViewControllerDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, copy) void(^exportCompletion)(NSString *resourcePath);
+@property (nonatomic) JMExternalWindowControlViewController *controlViewController;
 @end
 
 @implementation JMReportViewerVC
+
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    NSLog(@"horizontal size class: %@", @(newCollection.horizontalSizeClass));
+    NSLog(@"vertical size class: %@", @(newCollection.verticalSizeClass));
+
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+}
 
 - (UIWebView *)webView
 {
@@ -422,7 +432,45 @@
     [self.reportLoader updateViewportScaleFactorWithValue:0.75];
     UIView *reportView = self.configurator.webView;;
     reportView.translatesAutoresizingMaskIntoConstraints = YES;
+
+    JMLog(@"webView content size: %@", NSStringFromCGSize(self.webView.scrollView.contentSize));
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self addControlsForExternalWindow];
+    });
+
     return reportView;
+}
+
+
+#pragma mark - Work with external window
+- (void)addControlsForExternalWindow
+{
+    self.controlViewController = [[JMExternalWindowControlViewController alloc] initWithContentWebView:self.webView];
+    self.controlViewController.delegate = self;
+
+    CGRect controlViewFrame = self.view.frame;
+    controlViewFrame.origin.y = 0;
+    self.controlViewController.view.frame = controlViewFrame;
+
+    [self.view addSubview:self.controlViewController.view];
+}
+
+#pragma mark - JMExternalWindowControlViewControllerDelegate
+- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlViewController *)viewController
+{
+    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.webView];
+    [self setupWebViewLayout];
+
+    CGFloat initialScaleViewport = 0.75;
+    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+    if (isCompactWidth) {
+        initialScaleViewport = 0.25;
+    }
+    [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+
+    [self.controlViewController.view removeFromSuperview];
+    [self hideExternalWindow];
 }
 
 @end

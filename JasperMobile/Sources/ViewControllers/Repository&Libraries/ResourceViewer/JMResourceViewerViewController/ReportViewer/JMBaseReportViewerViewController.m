@@ -61,9 +61,7 @@
     [super viewDidLoad];
     self.emptyReportMessageLabel.text = JMCustomLocalizedString(@"report.viewer.emptyreport.title", nil);
 
-    if (![self isExternalScreenAvailable]) {
-        [self configureReport];
-    }
+    [self configureReport];
 
     [self addObservers];
 }
@@ -408,7 +406,6 @@
         case JMMenuActionsViewAction_ExternalDisplay: {
             if ( [self createExternalWindow] ) {
                 [self showExternalWindow];
-                [self configureReport];
             }
             break;
         }

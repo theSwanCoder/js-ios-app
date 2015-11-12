@@ -223,9 +223,7 @@
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
-    if (![self isExternalScreenAvailable]) {
-        [self startShowDashboard];
-    }
+    [self startShowDashboard];
 }
 
 - (void)startShowDashboard
@@ -281,7 +279,6 @@
     } else if (action == JMMenuActionsViewAction_ExternalDisplay) {
         if ( [self createExternalWindow] ) {
             [self showExternalWindow];
-            [self startShowDashboard];
         }
     }
 }
