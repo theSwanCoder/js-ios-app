@@ -155,6 +155,14 @@
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
 		93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */; };
+		93E4D7AF1BF4AE320016D3FC /* JMServersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E4D7AE1BF4AE320016D3FC /* JMServersView.m */; };
+		93E4D7B11BF4AE470016D3FC /* JMServersView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E4D7B01BF4AE470016D3FC /* JMServersView.xib */; };
+		93E4D7B41BF4C9A50016D3FC /* JMLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E4D7B31BF4C9A50016D3FC /* JMLoginView.m */; };
+		93E4D7B61BF4C9B30016D3FC /* JMLoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E4D7B51BF4C9B30016D3FC /* JMLoginView.xib */; };
+		93E4D7B91BF4C9FE0016D3FC /* JMNewServerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E4D7B81BF4C9FE0016D3FC /* JMNewServerView.m */; };
+		93E4D7BB1BF4CA130016D3FC /* JMAddServerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E4D7BA1BF4CA130016D3FC /* JMAddServerView.xib */; };
+		93E4D7BF1BF4E1300016D3FC /* JMServerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E4D7BE1BF4E1300016D3FC /* JMServerView.m */; };
+		93E4D7C11BF4E13E0016D3FC /* JMServerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93E4D7C01BF4E13E0016D3FC /* JMServerView.xib */; };
 		93EEB4621AC54761000718C7 /* JMVisualizeWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */; };
 		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
 		93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FD91BD7975E00355A30 /* Fabric.framework */; };
@@ -492,6 +500,18 @@
 		93D8C6541AAD69CD00117306 /* JMDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboard.m; sourceTree = "<group>"; };
 		93D8C6571AAD778400117306 /* JMVisualizeDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeDashboard.h; sourceTree = "<group>"; };
 		93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeDashboard.m; sourceTree = "<group>"; };
+		93E4D7AD1BF4AE320016D3FC /* JMServersView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMServersView.h; sourceTree = "<group>"; };
+		93E4D7AE1BF4AE320016D3FC /* JMServersView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServersView.m; sourceTree = "<group>"; };
+		93E4D7B01BF4AE470016D3FC /* JMServersView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMServersView.xib; sourceTree = "<group>"; };
+		93E4D7B21BF4C9A50016D3FC /* JMLoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMLoginView.h; sourceTree = "<group>"; };
+		93E4D7B31BF4C9A50016D3FC /* JMLoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMLoginView.m; sourceTree = "<group>"; };
+		93E4D7B51BF4C9B30016D3FC /* JMLoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMLoginView.xib; sourceTree = "<group>"; };
+		93E4D7B71BF4C9FE0016D3FC /* JMAddServerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMAddServerView.h; sourceTree = "<group>"; };
+		93E4D7B81BF4C9FE0016D3FC /* JMNewServerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMNewServerView.m; sourceTree = "<group>"; };
+		93E4D7BA1BF4CA130016D3FC /* JMAddServerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMAddServerView.xib; sourceTree = "<group>"; };
+		93E4D7BD1BF4E1300016D3FC /* JMServerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMServerView.h; sourceTree = "<group>"; };
+		93E4D7BE1BF4E1300016D3FC /* JMServerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerView.m; sourceTree = "<group>"; };
+		93E4D7C01BF4E13E0016D3FC /* JMServerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMServerView.xib; sourceTree = "<group>"; };
 		93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMVisualizeWebViewManager.swift; sourceTree = "<group>"; };
 		93EEB4651AC55430000718C7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		93F54FD91BD7975E00355A30 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -934,6 +954,7 @@
 		089B14C91AA756BD0021A915 /* JMLoginViewController */ = {
 			isa = PBXGroup;
 			children = (
+				93E4D7A91BF4ADFF0016D3FC /* Views */,
 				089B14CC1AA756BD0021A915 /* ServersGridViewController */,
 				089B14CA1AA756BD0021A915 /* JMLoginViewController.h */,
 				089B14CB1AA756BD0021A915 /* JMLoginViewController.m */,
@@ -1793,6 +1814,57 @@
 			path = JMVisualizeDashboard;
 			sourceTree = "<group>";
 		};
+		93E4D7A91BF4ADFF0016D3FC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				93E4D7BC1BF4E1200016D3FC /* JMServerView */,
+				93E4D7AA1BF4ADFF0016D3FC /* JMLoginView */,
+				93E4D7AB1BF4ADFF0016D3FC /* JMNewServerView */,
+				93E4D7AC1BF4ADFF0016D3FC /* JMServersView */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		93E4D7AA1BF4ADFF0016D3FC /* JMLoginView */ = {
+			isa = PBXGroup;
+			children = (
+				93E4D7B21BF4C9A50016D3FC /* JMLoginView.h */,
+				93E4D7B31BF4C9A50016D3FC /* JMLoginView.m */,
+				93E4D7B51BF4C9B30016D3FC /* JMLoginView.xib */,
+			);
+			path = JMLoginView;
+			sourceTree = "<group>";
+		};
+		93E4D7AB1BF4ADFF0016D3FC /* JMNewServerView */ = {
+			isa = PBXGroup;
+			children = (
+				93E4D7B71BF4C9FE0016D3FC /* JMAddServerView.h */,
+				93E4D7B81BF4C9FE0016D3FC /* JMNewServerView.m */,
+				93E4D7BA1BF4CA130016D3FC /* JMAddServerView.xib */,
+			);
+			path = JMNewServerView;
+			sourceTree = "<group>";
+		};
+		93E4D7AC1BF4ADFF0016D3FC /* JMServersView */ = {
+			isa = PBXGroup;
+			children = (
+				93E4D7AD1BF4AE320016D3FC /* JMServersView.h */,
+				93E4D7AE1BF4AE320016D3FC /* JMServersView.m */,
+				93E4D7B01BF4AE470016D3FC /* JMServersView.xib */,
+			);
+			path = JMServersView;
+			sourceTree = "<group>";
+		};
+		93E4D7BC1BF4E1200016D3FC /* JMServerView */ = {
+			isa = PBXGroup;
+			children = (
+				93E4D7BD1BF4E1300016D3FC /* JMServerView.h */,
+				93E4D7BE1BF4E1300016D3FC /* JMServerView.m */,
+				93E4D7C01BF4E13E0016D3FC /* JMServerView.xib */,
+			);
+			path = JMServerView;
+			sourceTree = "<group>";
+		};
 		A1478114D887FD01093A3B51 /* JMJavascriptRequest */ = {
 			isa = PBXGroup;
 			children = (
@@ -2175,6 +2247,7 @@
 				930F8D461ABB1CDF005F93FB /* report.html in Resources */,
 				08E0D19E1B0CF27200BFBFE5 /* AppIcon120x120.png in Resources */,
 				08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */,
+				93E4D7B11BF4AE470016D3FC /* JMServersView.xib in Resources */,
 				089B15C61AA756BD0021A915 /* JMGridResourceCollectionViewCell.xib in Resources */,
 				08DD183B1B136B8A00856112 /* JMResourceInfoViewController.xib in Resources */,
 				930F8D481ABB1D9F005F93FB /* require.min.js in Resources */,
@@ -2187,7 +2260,10 @@
 				089B15C31AA756BD0021A915 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */,
 				930F8D4A1ABB28B0005F93FB /* report_optimized.html in Resources */,
 				08E0D19F1B0CF27200BFBFE5 /* Icon-1024.png in Resources */,
+				93E4D7B61BF4C9B30016D3FC /* JMLoginView.xib in Resources */,
 				089B15AF1AA756BD0021A915 /* JMListOptionsPopupView.xib in Resources */,
+				93E4D7BB1BF4CA130016D3FC /* JMAddServerView.xib in Resources */,
+				93E4D7C11BF4E13E0016D3FC /* JMServerView.xib in Resources */,
 				A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2310,10 +2386,12 @@
 				081CE2701B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m in Sources */,
 				BDF3D25E1B8B2DF20005AA28 /* JMReportManager.m in Sources */,
 				93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */,
+				93E4D7B91BF4C9FE0016D3FC /* JMNewServerView.m in Sources */,
 				08E2AC851B1E056900AC462B /* JMSavedResourceViewerViewController.m in Sources */,
 				087A71B91BD95FEE007B98A4 /* JMEULAViewController.m in Sources */,
 				089B15CF1AA756BD0021A915 /* JMSavedResourcesListLoader.m in Sources */,
 				08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */,
+				93E4D7AF1BF4AE320016D3FC /* JMServersView.m in Sources */,
 				089B15A61AA756BD0021A915 /* UIView+Additions.m in Sources */,
 				089B15B01AA756BD0021A915 /* JMPopupView.m in Sources */,
 				089B159D1AA756BD0021A915 /* JMMainNavigationController.m in Sources */,
@@ -2364,6 +2442,7 @@
 				08221C421AE54DA000F94F1D /* JMCoreDataManager.m in Sources */,
 				089B15FE1AA756BD0021A915 /* JMMenuItem.m in Sources */,
 				0801DF951AAF2CC000DD072C /* JMSessionManager.m in Sources */,
+				93E4D7BF1BF4E1300016D3FC /* JMServerView.m in Sources */,
 				089B15CC1AA756BD0021A915 /* JMLibraryListLoader.m in Sources */,
 				BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */,
 				082D1E921AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m in Sources */,
@@ -2396,6 +2475,7 @@
 				A14785D6EB9D46719DE946BD /* JMBaseDashboardLoader.m in Sources */,
 				A147820FB57EFF402452B6E9 /* JMVisDashboardLoader.m in Sources */,
 				A14789C39DF01A718B92E97C /* JMDashboardViewerVC.m in Sources */,
+				93E4D7B41BF4C9A50016D3FC /* JMLoginView.m in Sources */,
 				A14784AF61EB18E6AD372AEB /* JMDashboardViewerConfigurator.m in Sources */,
 				A1478A179D378E8F76BDD03C /* JMMenuAction.m in Sources */,
 				A1478D49CA28213AC1C5FD4A /* JMReportExecutor.m in Sources */,

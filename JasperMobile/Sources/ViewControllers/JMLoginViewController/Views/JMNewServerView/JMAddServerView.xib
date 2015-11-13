@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JMLoginViewController">
+            <connections>
+                <outlet property="addServerAliasTextField" destination="HcE-JB-gFx" id="vYq-Hv-ZuK"/>
+                <outlet property="addServerURLTextField" destination="PZI-hM-CFD" id="5x3-oc-XCm"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="adB-lQ-bzE" customClass="JMAddServerView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Server Alias" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HcE-JB-gFx">
+                    <rect key="frame" x="20" y="80" width="280" height="35"/>
+                    <animations/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="35" id="Xnp-Ya-Lb7"/>
+                    </constraints>
+                    <color key="textColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Server URL" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PZI-hM-CFD">
+                    <rect key="frame" x="20" y="139" width="280" height="35"/>
+                    <animations/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+                    <color key="textColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Moq-Yr-bm1">
+                    <rect key="frame" x="262" y="261" width="33" height="34"/>
+                    <animations/>
+                    <state key="normal" title="Add"/>
+                    <connections>
+                        <action selector="addNewServerAction:" destination="-1" eventType="touchUpInside" id="p2s-Sr-wE2"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="78T-Ue-2j4">
+                    <rect key="frame" x="25" y="261" width="56" height="34"/>
+                    <animations/>
+                    <state key="normal" title="Cancel"/>
+                    <connections>
+                        <action selector="cancelAddNewServer:" destination="-1" eventType="touchUpInside" id="sxh-mv-1xp"/>
+                    </connections>
+                </button>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="Moq-Yr-bm1" secondAttribute="bottom" constant="25" id="2ZZ-aa-7Cd"/>
+                <constraint firstItem="PZI-hM-CFD" firstAttribute="trailing" secondItem="HcE-JB-gFx" secondAttribute="trailing" id="4FO-p2-Th2"/>
+                <constraint firstItem="HcE-JB-gFx" firstAttribute="leading" secondItem="adB-lQ-bzE" secondAttribute="leading" constant="20" id="959-0d-RDr"/>
+                <constraint firstItem="PZI-hM-CFD" firstAttribute="top" secondItem="HcE-JB-gFx" secondAttribute="bottom" constant="24" id="OE4-O1-xw7"/>
+                <constraint firstAttribute="bottom" secondItem="78T-Ue-2j4" secondAttribute="bottom" constant="25" id="Ock-od-OVE"/>
+                <constraint firstAttribute="trailing" secondItem="HcE-JB-gFx" secondAttribute="trailing" constant="20" id="Q1B-qM-ibI"/>
+                <constraint firstAttribute="trailing" secondItem="Moq-Yr-bm1" secondAttribute="trailing" constant="25" id="VDz-SV-gPd"/>
+                <constraint firstItem="PZI-hM-CFD" firstAttribute="leading" secondItem="HcE-JB-gFx" secondAttribute="leading" id="acc-mi-M2a"/>
+                <constraint firstItem="HcE-JB-gFx" firstAttribute="top" secondItem="adB-lQ-bzE" secondAttribute="top" constant="80" id="an9-ek-QM1"/>
+                <constraint firstItem="78T-Ue-2j4" firstAttribute="leading" secondItem="adB-lQ-bzE" secondAttribute="leading" constant="25" id="ds0-kX-nvZ"/>
+                <constraint firstItem="PZI-hM-CFD" firstAttribute="height" secondItem="HcE-JB-gFx" secondAttribute="height" id="dyS-hg-VF6"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-12" y="455"/>
+        </view>
+    </objects>
+</document>
