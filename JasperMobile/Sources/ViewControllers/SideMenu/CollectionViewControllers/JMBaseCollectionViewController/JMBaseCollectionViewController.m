@@ -41,6 +41,7 @@
 #import "JSResourceLookup+Helpers.h"
 #import "JMBaseReportViewerViewController.h"
 #import "JMResourceInfoViewController.h"
+#import "UIViewController+Additions.h"
 
 CGFloat const kJMBaseCollectionViewGridWidth = 310;
 
@@ -246,7 +247,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 #pragma mark - Private API
 - (void)updateIfNeeded
 {
-    if (self.isViewLoaded && self.view.window) {
+    if ([self isVisible]) {
         if (self.needReloadData) {
             JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
             [baseCollectionView.collectionView reloadData];
@@ -541,7 +542,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             itemWidth = getItemWidth(++countOfCellsInRow);
         }
         
-        itemHeight = [JMUtils isIphone] ? itemWidth : 0.8*itemWidth;
+        itemHeight = [JMUtils isIphone] ? itemWidth : ceil(0.8*itemWidth);
     }
     
     return CGSizeMake(itemWidth, itemHeight);

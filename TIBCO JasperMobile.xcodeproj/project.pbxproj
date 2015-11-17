@@ -24,6 +24,7 @@
 		08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C921AE78CD300F94F1D /* JMMigrationManager.m */; };
 		08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */; };
 		082D1E921AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */; };
+		084D23DE1BFB4F9F00CF4322 /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 084D23DD1BFB4F9E00CF4322 /* UIViewController+Additions.m */; };
 		0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */; };
 		0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */; };
 		0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503B19F1265B00C5875E /* CoreTelephony.framework */; };
@@ -239,6 +240,8 @@
 		08221C9F1AE7A3B100F94F1D /* TIBCO JasperMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TIBCO JasperMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		082D1E901AB70FB700E0C0C6 /* JSResourceLookup+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JSResourceLookup+Helpers.h"; sourceTree = "<group>"; };
 		082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSResourceLookup+Helpers.m"; sourceTree = "<group>"; };
+		084D23DC1BFB4F9E00CF4322 /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Additions.h"; sourceTree = "<group>"; };
+		084D23DD1BFB4F9E00CF4322 /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Additions.m"; sourceTree = "<group>"; };
 		0854B36E1BC54FFB0004E5B8 /* JMBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseViewController.h; sourceTree = "<group>"; };
 		0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseViewController.m; sourceTree = "<group>"; };
 		0854B3711BC6A53E0004E5B8 /* UIAlertController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Additions.h"; sourceTree = "<group>"; };
@@ -857,6 +860,8 @@
 				089B14A21AA756BD0021A915 /* UITableViewCell+Additions.m */,
 				089B14A31AA756BD0021A915 /* UIView+Additions.h */,
 				089B14A41AA756BD0021A915 /* UIView+Additions.m */,
+				084D23DC1BFB4F9E00CF4322 /* UIViewController+Additions.h */,
+				084D23DD1BFB4F9E00CF4322 /* UIViewController+Additions.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -2282,6 +2287,7 @@
 				08E2AC821B1E056900AC462B /* JMPrintResourceViewController.m in Sources */,
 				089B15CA1AA756BD0021A915 /* JMResourceInfoViewController.m in Sources */,
 				089B15A41AA756BD0021A915 /* UIImage+Additions.m in Sources */,
+				084D23DE1BFB4F9F00CF4322 /* UIViewController+Additions.m in Sources */,
 				BDF3D25A1B8B166B0005AA28 /* JMReportOptionsCell.m in Sources */,
 				0801DFBD1AAF2E7500DD072C /* JMIntroModel.m in Sources */,
 				089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */,

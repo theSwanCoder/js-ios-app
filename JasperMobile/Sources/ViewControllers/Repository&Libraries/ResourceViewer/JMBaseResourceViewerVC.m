@@ -28,6 +28,7 @@
 #import "JMUtils.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMMainNavigationController.h"
+#import "UIViewController+Additions.h"
 
 NSString * const kJMShowReportOptionsSegue = @"ShowReportOptions";
 NSString * const kJMShowMultiPageReportSegue = @"ShowMultiPageReport";
@@ -75,14 +76,12 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)setNeedLayoutUI:(BOOL)needLayoutUI
 {
     _needLayoutUI = needLayoutUI;
-    if (self.isViewLoaded && self.view.window && needLayoutUI) {
-        [self updateIfNeeded];
-    }
+    [self updateIfNeeded];
 }
 
 - (void)updateIfNeeded
 {
-    if (self.needLayoutUI) {
+    if (self.needLayoutUI && [self isVisible]) {
         [self setupNavigationItems];
         self.needLayoutUI = NO;
     }
