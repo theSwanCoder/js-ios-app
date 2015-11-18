@@ -19,6 +19,7 @@
 		0801DFBD1AAF2E7500DD072C /* JMIntroModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFB61AAF2E7500DD072C /* JMIntroModel.m */; };
 		0801DFBE1AAF2E7500DD072C /* JMIntroModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFB91AAF2E7500DD072C /* JMIntroModelManager.m */; };
 		0801DFBF1AAF2E7500DD072C /* JMOnboardIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */; };
+		081675121BFCD81D00FE4BBD /* JMRateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 081675111BFCD81D00FE4BBD /* JMRateViewController.m */; };
 		081CE2701B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 081CE26F1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m */; };
 		08221C421AE54DA000F94F1D /* JMCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C411AE54DA000F94F1D /* JMCoreDataManager.m */; };
 		08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C921AE78CD300F94F1D /* JMMigrationManager.m */; };
@@ -229,6 +230,8 @@
 		0801DFB91AAF2E7500DD072C /* JMIntroModelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMIntroModelManager.m; sourceTree = "<group>"; };
 		0801DFBA1AAF2E7500DD072C /* JMOnboardIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMOnboardIntroViewController.h; sourceTree = "<group>"; };
 		0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMOnboardIntroViewController.m; sourceTree = "<group>"; };
+		081675101BFCD81D00FE4BBD /* JMRateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRateViewController.h; sourceTree = "<group>"; };
+		081675111BFCD81D00FE4BBD /* JMRateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRateViewController.m; sourceTree = "<group>"; };
 		081CE26E1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPrintPreviewTableViewCell.h; sourceTree = "<group>"; };
 		081CE26F1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPrintPreviewTableViewCell.m; sourceTree = "<group>"; };
 		08221C401AE54DA000F94F1D /* JMCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCoreDataManager.h; sourceTree = "<group>"; };
@@ -689,6 +692,15 @@
 			path = JMIntroModelManager;
 			sourceTree = "<group>";
 		};
+		0816750F1BFCD81D00FE4BBD /* JMRateViewController */ = {
+			isa = PBXGroup;
+			children = (
+				081675101BFCD81D00FE4BBD /* JMRateViewController.h */,
+				081675111BFCD81D00FE4BBD /* JMRateViewController.m */,
+			);
+			path = JMRateViewController;
+			sourceTree = "<group>";
+		};
 		081CE26D1B21BBDE00F923FB /* JMPrintPreviewTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -922,6 +934,7 @@
 		089B14BF1AA756BD0021A915 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				0816750F1BFCD81D00FE4BBD /* JMRateViewController */,
 				089B14C91AA756BD0021A915 /* JMLoginViewController */,
 				0801DFB01AAF2E7500DD072C /* JMOnboardIntroViewController */,
 				089B14E51AA756BD0021A915 /* Repository&Libraries */,
@@ -2312,6 +2325,7 @@
 				93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */,
 				08E2AC851B1E056900AC462B /* JMSavedResourceViewerViewController.m in Sources */,
 				087A71B91BD95FEE007B98A4 /* JMEULAViewController.m in Sources */,
+				081675121BFCD81D00FE4BBD /* JMRateViewController.m in Sources */,
 				089B15CF1AA756BD0021A915 /* JMSavedResourcesListLoader.m in Sources */,
 				08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */,
 				089B15A61AA756BD0021A915 /* UIView+Additions.m in Sources */,

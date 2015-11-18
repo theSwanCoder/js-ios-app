@@ -160,6 +160,8 @@
                                                                       completion:nil];
         } else if (item.resourceType == JMResourceTypeFeedback) {
             [self showFeedback];
+        } else if (item.resourceType == JMResourceTypeRate) {
+            [self showRateView];
         } else {
             if (!currentSelectedItem || currentSelectedItem != item) {
                 [self unselectItems];
@@ -227,6 +229,7 @@
             [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeAbout],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeFeedback],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeRate],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]
     ] mutableCopy];
 
@@ -268,6 +271,14 @@
         [JMUtils presentAlertControllerWithError:error completion:nil];
     }
 #endif
+}
+
+- (void)showRateView
+{
+    UIViewController *rateVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMRateViewController"];
+    [self presentViewController:rateVC animated:YES completion:^{
+        [self closeMenu];
+    }];
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate

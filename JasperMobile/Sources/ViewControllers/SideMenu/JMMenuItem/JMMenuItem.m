@@ -92,6 +92,8 @@
             return JMCustomLocalizedString(@"menuitem.about.label", nil);
         case JMResourceTypeFeedback:
             return JMCustomLocalizedString(@"menuitem.feedback.label", nil);
+        case JMResourceTypeRate:
+            return JMCustomLocalizedString(@"menuitem.rate.label", nil);
         case JMResourceTypeLogout:
             return JMCustomLocalizedString(@"menuitem.logout.label", nil);
         default:
