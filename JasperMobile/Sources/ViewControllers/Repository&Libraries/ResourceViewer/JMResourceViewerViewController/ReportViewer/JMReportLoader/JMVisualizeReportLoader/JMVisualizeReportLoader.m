@@ -139,6 +139,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void) cancelReport
 {
     // TODO: need cancel?
+#warning WHY NOT??????
 }
 
 - (void)applyReportParametersWithCompletion:(void(^)(BOOL success, NSError *error))completion

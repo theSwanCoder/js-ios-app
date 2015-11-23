@@ -152,6 +152,9 @@
 #pragma mark - Actions
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
+    if (![self.restClient isRequestPoolEmpty]) {
+        [self.restClient cancelAllRequests];
+    }
     [self.reportLoader cancelReport];
     if (self.exitBlock) {
         self.exitBlock();
