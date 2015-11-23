@@ -33,17 +33,6 @@
 
 @implementation JMReportViewerVC
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    if (![JMUtils isSystemVersion8]) {
-        // need update frame for ios7
-        // there is issue with webView, when we run report and device is in landscape mode
-        [self webView].frame = self.view.bounds;
-    }
-}
-
 - (UIWebView *)webView
 {
     return self.configurator.webView;
