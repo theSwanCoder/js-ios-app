@@ -71,8 +71,15 @@
         if (result.error) {
             if ([resourceURI isEqualToString:[self rootResourceURI]]) {
                 if (result.error.code == JSSessionExpiredErrorCode) {
-                    if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                        [self loadResourceLookup:resourceURI];
+                    if (self.restClient.keepSession) {
+                        [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                            if (isSessionAuthorized) {
+                                [self loadResourceLookup:resourceURI];
+                            } else {
+                                [self finishLoadingWithError:result.error];
+                                [JMUtils showLoginViewAnimated:YES completion:nil];
+                            }
+                        }@weakselfend];
                     } else {
                         [self finishLoadingWithError:result.error];
                         [JMUtils showLoginViewAnimated:YES completion:nil];

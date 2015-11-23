@@ -258,8 +258,14 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
 
                                     if (result.error) {
                                         if (result.error.code == JSSessionExpiredErrorCode) {
-                                            if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                                [self updatedInputControlsValuesWithCompletion:completion];
+                                            if (self.restClient.keepSession) {
+                                                [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                    if (isSessionAuthorized) {
+                                                        [self updatedInputControlsValuesWithCompletion:completion];
+                                                    } else {
+                                                        [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                    }
+                                                }@weakselfend];
                                             } else {
                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
                                             }

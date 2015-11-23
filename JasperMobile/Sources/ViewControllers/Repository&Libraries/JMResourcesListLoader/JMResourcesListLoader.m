@@ -23,6 +23,7 @@
 
 #import "JMResourcesListLoader.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMUtils.h"
 
 NSString * const kJMResourceListLoaderOptionItemTitleKey = @"JMResourceListLoaderFilterItemTitleKey";
 NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoaderFilterItemValueKey";
@@ -176,8 +177,16 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                      completionBlock:@weakself(^(JSOperationResult *result)) {
                          if (result.error) {
                              if (result.error.code == JSSessionExpiredErrorCode) {
-                                 if (self.restClient.keepSession && [self.restClient isSessionAuthorized]) {
-                                     [self loadNextPage];
+                                 if (self.restClient.keepSession) {
+                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                         if (isSessionAuthorized) {
+                                             [self loadNextPage];
+                                         } else {
+                                             self.isLoadingNow = NO;
+                                             [self setNeedsUpdate];
+                                             [JMUtils showLoginViewAnimated:YES completion:nil];
+                                         }
+                                     }@weakselfend];
                                  } else {
                                      self.isLoadingNow = NO;
                                      [self setNeedsUpdate];
