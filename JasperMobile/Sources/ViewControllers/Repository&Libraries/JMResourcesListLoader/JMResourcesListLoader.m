@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -23,7 +23,6 @@
 
 #import "JMResourcesListLoader.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMUtils.h"
 
 NSString * const kJMResourceListLoaderOptionItemTitleKey = @"JMResourceListLoaderFilterItemTitleKey";
 NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoaderFilterItemValueKey";
@@ -130,7 +129,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 - (id)resourceAtIndex:(NSInteger)index
 {
     if (index < self.resources.count) {
-        return [self.resources objectAtIndex:index];
+        return self.resources[index];
     }
     return nil;
 }
@@ -166,6 +165,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
 - (void)loadNextPage
 {
     self.needUpdateData = NO;
+    __weak typeof(self)weakSelf = self;
     [self.restClient resourceLookups:self.resourceLookup.uri
                                query:self.searchQuery
                                types:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Filter]
@@ -174,33 +174,34 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                            recursive:self.loadRecursively
                               offset:self.offset
                                limit:[self limitOfLoadingResources]
-                     completionBlock:@weakself(^(JSOperationResult *result)) {
+                     completionBlock:^(JSOperationResult *result) {
+                         __strong typeof(self)strongSelf = weakSelf;
                          if (result.error) {
+
                              if (result.error.code == JSSessionExpiredErrorCode) {
-                                 if (self.restClient.keepSession) {
-                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
-                                         if (isSessionAuthorized) {
-                                             [self loadNextPage];
+                                 [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+
+                                         if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                             [strongSelf loadNextPage];
                                          } else {
-                                             self.isLoadingNow = NO;
-                                             [self setNeedsUpdate];
-                                             [JMUtils showLoginViewAnimated:YES completion:nil];
+                                             strongSelf.isLoadingNow = NO;
+                                             [strongSelf setNeedsUpdate];
+                                             [JMUtils showLoginViewAnimated:YES
+                                                                 completion:nil];
                                          }
-                                     }@weakselfend];
-                                 } else {
-                                     self.isLoadingNow = NO;
-                                     [self setNeedsUpdate];
-                                     [JMUtils showLoginViewAnimated:YES completion:nil];
-                                 }
+
+                                     }];
                              } else {
                                  [self finishLoadingWithError:result.error];
                              }
+
                          } else {
+
                              for (JSResourceLookup *resourceLookup in result.objects) {
                                  if ([resourceLookup isFolder]) {
-                                     [self.resourcesFolders addObject:resourceLookup];
+                                     [strongSelf.resourcesFolders addObject:resourceLookup];
                                  } else {
-                                     [self.resourcesItems addObject:resourceLookup];
+                                     [strongSelf.resourcesItems addObject:resourceLookup];
                                  }
                              }
                              
@@ -208,19 +209,20 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                              [self addResourcesWithResources:self.resourcesItems];
 
                              
-                             if ([result.allHeaderFields objectForKey:@"Next-Offset"]) {
-                                 self.offset = [[result.allHeaderFields objectForKey:@"Next-Offset"] integerValue];
-                                 self.hasNextPage = [result.objects count] == kJMResourceLimit;
+                             if (result.allHeaderFields[@"Next-Offset"]) {
+                                 strongSelf.offset = [result.allHeaderFields[@"Next-Offset"] integerValue];
+                                 strongSelf.hasNextPage = [result.objects count] == kJMResourceLimit;
                              } else {
-                                 self.offset += kJMResourceLimit;
-                                 if (!self.totalCount) {
-                                     self.totalCount = [[result.allHeaderFields objectForKey:@"Total-Count"] integerValue];
+                                 strongSelf.offset += kJMResourceLimit;
+                                 if (!strongSelf.totalCount) {
+                                     strongSelf.totalCount = [result.allHeaderFields[@"Total-Count"] integerValue];
                                  }
-                                 self.hasNextPage = self.offset < self.totalCount;
+                                 strongSelf.hasNextPage = strongSelf.offset < strongSelf.totalCount;
                              }
-                             [self finishLoadingWithError:nil];
+                             [strongSelf finishLoadingWithError:nil];
+
                          }
-                     } @weakselfend];
+                     }];
 }
 
 - (void)finishLoadingWithError:(NSError *)error
@@ -278,7 +280,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                                        if ([options count] > 1) {
                                            NSMutableArray *allAvailableItems = [NSMutableArray array];
                                            for (NSDictionary *item in options) {
-                                               [allAvailableItems addObjectsFromArray:[item objectForKey:kJMResourceListLoaderOptionItemValueKey]];
+                                               [allAvailableItems addObjectsFromArray:item[kJMResourceListLoaderOptionItemValueKey]];
                                            }
                                            id allItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil), kJMResourceListLoaderOptionItemValueKey: allAvailableItems};
                                            [options insertObject:allItem atIndex:0];
@@ -296,12 +298,12 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     switch (option) {
         case JMResourcesListLoaderOption_Sort:
             if ([[self listItemsWithOption:option] count] > self.sortBySelectedIndex) {
-                return [[[self listItemsWithOption:option] objectAtIndex:self.sortBySelectedIndex] objectForKey:kJMResourceListLoaderOptionItemValueKey];
+                return [[self listItemsWithOption:option][self.sortBySelectedIndex] objectForKey:kJMResourceListLoaderOptionItemValueKey];
             }
             break;
         case JMResourcesListLoaderOption_Filter:
             if ([[self listItemsWithOption:option] count] > self.filterBySelectedIndex) {
-                return [[[self listItemsWithOption:option] objectAtIndex:self.filterBySelectedIndex] objectForKey:kJMResourceListLoaderOptionItemValueKey];
+                return [[self listItemsWithOption:option][self.filterBySelectedIndex] objectForKey:kJMResourceListLoaderOptionItemValueKey];
             }
             break;
     }

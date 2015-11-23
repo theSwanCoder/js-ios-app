@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -73,6 +73,9 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 // Loaders
 - (void)startShowLoadingIndicators;
 - (void)stopShowLoadingIndicators;
+
+- (void)startShowLoaderWithMessage:(NSString *)message;
+
 - (void)startShowLoaderWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock;
 - (void)stopShowLoader;
 

@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -91,6 +91,17 @@
     webView.delegate = self;
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
+
+    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"webView": webView}]];
+
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"webView": webView}]];
 }
 
 - (void)resetSubViews
@@ -152,26 +163,29 @@
     printInteractionController.showsPageRange = YES;
     printInteractionController.printingItem = printingItem;
 
-    UIPrintInteractionCompletionHandler completionHandler = @weakself(^(UIPrintInteractionController *printController, BOOL completed, NSError *error)) {
+    UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
             if (completion) {
                 completion(completed, error);
             }
-        }@weakselfend;
+        };
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([JMUtils isIphone]) {
-            [printInteractionController presentAnimated:YES completionHandler:completionHandler];
+    if ([JMUtils isIphone]) {
+        [printInteractionController presentAnimated:YES completionHandler:completionHandler];
+    } else {
+        if ([JMUtils isSystemVersion9]) {
+            [printInteractionController presentFromBarButtonItem:self.printNavController.navigationItem.rightBarButtonItems.firstObject
+                                                        animated:YES
+                                               completionHandler:completionHandler];
         } else {
             printInteractionController.delegate = self;
             self.printNavController = [JMMainNavigationController new];
-            self.printNavController.view.backgroundColor = [UIColor colorWithRedComponent:239.f greenComponent:239.f blueComponent:244.f];
             self.printNavController.modalPresentationStyle = UIModalPresentationFormSheet;
             self.printNavController.preferredContentSize = self.printSettingsPreferredContentSize;
             [printInteractionController presentFromBarButtonItem:self.printNavController.navigationItem.rightBarButtonItems.firstObject
                                                         animated:YES
                                                completionHandler:completionHandler];
         }
-    });
+    }
 }
 
 #pragma mark - UIPrintInteractionControllerDelegate
@@ -184,7 +198,7 @@
 {
     [self presentViewController:self.printNavController animated:YES completion:nil];
     UIViewController *printSettingsVC = self.printNavController.topViewController;
-    printSettingsVC.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    printSettingsVC.navigationItem.leftBarButtonItem.tintColor = [[JMThemesManager sharedManager] barItemsColor];
 }
 
 - (void)printInteractionControllerWillDismissPrinterOptions:(UIPrintInteractionController *)printInteractionController

@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -57,8 +57,10 @@
     }
 
     [self.saveButton setTitle:JMCustomLocalizedString(@"dialog.button.save", nil) forState:UIControlStateNormal];
+    [self.saveButton setTitleColor:[[JMThemesManager sharedManager] serverProfileSaveButtonTextColor] forState:UIControlStateNormal];
+    self.saveButton.backgroundColor = [[JMThemesManager sharedManager] serverProfileSaveButtonBackgroundColor];
     
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     self.tableView.layer.cornerRadius = 4;
     if (!self.serverProfile) {
         self.serverOptions = [[JMServerOptions alloc] initWithServerProfile:nil];
@@ -97,10 +99,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMServerOption *option = [self.serverOptions.optionsArray objectAtIndex:indexPath.row];
+    JMServerOption *option = self.serverOptions.optionsArray[indexPath.row];
     
-    JMServerOptionCell *cell = [tableView dequeueReusableCellWithIdentifier:option.cellIdentifier];
-    [cell setBottomSeparatorWithHeight:1 color:tableView.separatorColor tableViewStyle:tableView.style];
+    JMServerOptionCell *cell = (JMServerOptionCell *) [tableView dequeueReusableCellWithIdentifier:option.cellIdentifier];
+    [cell setBottomSeparatorWithHeight:1 color:self.view.backgroundColor tableViewStyle:tableView.style];
     cell.serverOption = option;
     return cell;
 }
@@ -112,15 +114,15 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMServerOption *option = [self.serverOptions.optionsArray objectAtIndex:indexPath.row];
+    JMServerOption *option = self.serverOptions.optionsArray[indexPath.row];
     if (option.errorString) {
         CGFloat maxWidth = tableView.frame.size.width - 30;
         CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
         CGRect textRect = [option.errorString boundingRectWithSize:maximumLabelSize
                                                            options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-                                                        attributes:@{NSFontAttributeName:[JMFont tableViewCellDetailErrorFont]}
+                                                        attributes:@{NSFontAttributeName:[[JMThemesManager sharedManager] tableViewCellErrorFont]}
                                                            context:nil];
-        return tableView.rowHeight + ceil(textRect.size.height);
+        return tableView.rowHeight + ceilf(textRect.size.height);
     }
     return tableView.rowHeight;
 }

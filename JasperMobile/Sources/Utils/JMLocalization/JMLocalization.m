@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -35,7 +35,7 @@ NSString * const JMLocalizationBundleType = @"lproj";
 + (NSString *)localizedStringForKey:(NSString *)key
 {
     NSString *localizedString = NSLocalizedString(key, nil);
-    if (![[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:JMPreferredLanguage] &&
+    if (![[NSLocale preferredLanguages][0] isEqualToString:JMPreferredLanguage] &&
         [localizedString isEqualToString:key]) {
         NSString *path = [[NSBundle mainBundle] pathForResource:JMPreferredLanguage ofType:JMLocalizationBundleType];
         NSBundle *preferredLanguageBundle = [NSBundle bundleWithPath:path];

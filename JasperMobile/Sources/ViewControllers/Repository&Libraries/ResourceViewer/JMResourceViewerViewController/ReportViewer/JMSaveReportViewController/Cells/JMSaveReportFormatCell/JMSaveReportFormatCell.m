@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -33,4 +33,10 @@
 #import "JMSaveReportFormatCell.h"
 
 @implementation JMSaveReportFormatCell
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
+}
 @end

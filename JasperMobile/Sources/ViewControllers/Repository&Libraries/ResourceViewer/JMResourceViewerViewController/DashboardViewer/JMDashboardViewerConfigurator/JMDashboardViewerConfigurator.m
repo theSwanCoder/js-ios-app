@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -65,7 +65,7 @@
 
 - (id <JMDashboardLoader>)dashboardLoader {
     if (!_dashboardLoader) {
-        if ([JMUtils isServerAmber2]) {
+        if ([JMUtils isServerAmber2OrHigher]) {
             if ([self.dashboard.resourceLookup isNewDashboard]) {
                 _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard];
             } else {

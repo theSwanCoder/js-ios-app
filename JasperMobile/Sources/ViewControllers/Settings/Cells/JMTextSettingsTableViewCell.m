@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -23,6 +23,7 @@
 
 #import "JMTextSettingsTableViewCell.h"
 #import "UITableViewCell+Additions.h"
+#import "JMTextField.h"
 
 @interface JMTextSettingsTableViewCell ()
 @property (weak, nonatomic) IBOutlet UITextField *textField;
@@ -33,7 +34,6 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.textField.background = [self.textField.background resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10.0f, 0, 10.0f)];
     self.textField.inputAccessoryView = [self toolbarForInputAccessoryView];
 }
 

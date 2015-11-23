@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -62,6 +62,9 @@ NSString * const kJMFavorites = @"Favorites";
 
 + (BOOL)isResourceInFavorites:(JSResourceLookup *)resource
 {
+    if (!resource.uri) {
+        return NO;
+    }
     NSFetchRequest *fetchRequest = [self favoritesFetchRequest:resource.uri];
     return ([[JMCoreDataManager sharedInstance].managedObjectContext countForFetchRequest:fetchRequest error:nil] > 0);
 }
@@ -85,12 +88,19 @@ NSString * const kJMFavorites = @"Favorites";
     return resource;
 }
 
++ (NSArray *)allFavorites
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMFavorites];
+    NSArray *favoritesItems = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    return favoritesItems;
+}
+
 #pragma mark - Private
 
 + (NSFetchRequest *)favoritesFetchRequest:(NSString *)resourceUri
 {
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:kJMFavorites];
-    NSMutableArray *predicates = [NSMutableArray arrayWithObject:[[JMSessionManager sharedManager] predicateForCurrentServerProfile]];
+    NSMutableArray *predicates = [@[[[JMSessionManager sharedManager] predicateForCurrentServerProfile]] mutableCopy];
     [predicates addObject:[NSPredicate predicateWithFormat:@"uri LIKE[cd] %@", resourceUri]];
     fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
     

@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -53,11 +53,13 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
-    self.placeHolderView.backgroundColor = kJMMainNavigationBarBackgroundColor;
-    [self.textfields makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:kJMSearchBarBackgroundColor];
-    
-    NSDictionary *attributes = @{NSForegroundColorAttributeName:kJMDetailViewLightTextColor};
+    self.view.backgroundColor = [[JMThemesManager sharedManager] loginViewBackgroundColor];
+    self.placeHolderView.backgroundColor = [[JMThemesManager sharedManager] loginViewPlaceholderBackgroundColor];
+    [self.textfields makeObjectsPerformSelector:@selector(setBackgroundColor:) withObject:[[JMThemesManager sharedManager] loginViewTextFieldsBackgroundColor]];
+    [self.textfields makeObjectsPerformSelector:@selector(setFont:) withObject:[[JMThemesManager sharedManager] loginInputControlsFont]];
+
+    UIColor *placeholderColor = [[JMThemesManager sharedManager] loginViewTextFieldsTextColor];
+    NSDictionary *attributes = @{NSForegroundColorAttributeName:[placeholderColor colorWithAlphaComponent: 0.5f]};
     self.userNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login.username.label", nil) attributes:attributes];
     self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"login.password.label", nil) attributes:attributes];
     self.serverProfileTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:JMCustomLocalizedString(@"settings.item.server", nil) attributes:attributes];
@@ -66,10 +68,12 @@
     self.loginButton.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.tryDemoButton.titleLabel.textAlignment = NSTextAlignmentCenter;
 
-    self.loginButton.backgroundColor = [UIColor grayColor];
+    self.loginButton.backgroundColor = [[JMThemesManager sharedManager] loginViewLoginButtonBackgroundColor];
+    [self.loginButton setTitleColor:[[JMThemesManager sharedManager] loginViewLoginButtonTextColor] forState:UIControlStateNormal];
     [self.loginButton setTitle:JMCustomLocalizedString(@"login.button.login", nil) forState:UIControlStateNormal];
     
-    self.tryDemoButton.backgroundColor = kJMResourcePreviewBackgroundColor;
+    self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
+    [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
     [self.tryDemoButton setTitle:JMCustomLocalizedString(@"login.button.try.demo", nil) forState:UIControlStateNormal];
 }
 
@@ -77,6 +81,18 @@
 {
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    if (self.showForRestoreSession) {
+        // setup previous session
+        self.userNameTextField.text = self.restClient.serverProfile.username;
+        self.selectedServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+        self.tryDemoButton.enabled = NO;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -146,6 +162,12 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
+    if (self.showForRestoreSession) {
+        if (textField == self.serverProfileTextField || textField == self.userNameTextField) {
+            return NO;
+        }
+    }
+
     if (textField == self.serverProfileTextField) {
         self.selectedServerProfile = nil;
         [self performSegueWithIdentifier:@"showServerProfiles" sender:nil];
@@ -192,26 +214,42 @@
                                                          username:username
                                                          password:password];
 
-    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:@weakself(^(void)) {
-        [self.restClient cancelAllRequests];
-    } @weakselfend];
+    __weak typeof(self)weakSelf = self;
+    [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^(void) {
+        __strong typeof(self)strongSelf = weakSelf;
+        [strongSelf.restClient cancelAllRequests];
+    }];
     
-    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:@weakself(^(BOOL success)) {
+    [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:^(BOOL success) {
+        __strong typeof(self)strongSelf = weakSelf;
+
         [JMCancelRequestPopup dismiss];
         if (success) {
-            self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
-            [self dismissViewControllerAnimated:NO completion:nil];
-            if (self.completion) {
-                self.completion();
+            // Analytics
+            [JMUtils logLoginSuccess:YES
+                        additionInfo:@{
+                                @"Server version" : jsServerProfile.serverInfo.version
+                        }];
+
+            strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
+            [strongSelf dismissViewControllerAnimated:NO completion:nil];
+            if (strongSelf.completion) {
+                strongSelf.completion();
             }
         } else {
+            // Analytics
+            [JMUtils logLoginSuccess:NO
+                        additionInfo:@{
+                                @"Reason of failure" : @"Wrong Credentials"
+                        }];
+
             [[UIAlertView localizedAlertWithTitle:@"error.authenication.dialog.title"
                                           message:@"error.authenication.dialog.msg"
                                          delegate: nil
                                 cancelButtonTitle:@"dialog.button.ok"
                                 otherButtonTitles:nil] show];
         }
-    } @weakselfend];
+    }];
 }
 
 @end

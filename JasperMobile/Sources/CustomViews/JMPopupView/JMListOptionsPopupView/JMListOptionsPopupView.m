@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -88,12 +88,12 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.textLabel.font = [JMFont navigationBarTitleFont];
-        cell.textLabel.textColor = [UIColor whiteColor];
+        cell.textLabel.font = [[JMThemesManager sharedManager] navigationBarTitleFont];
+        cell.textLabel.textColor = [[JMThemesManager sharedManager] popupsTextColor];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    cell.textLabel.text = [[self.items objectAtIndex:indexPath.row] objectForKey:kJMResourceListLoaderOptionItemTitleKey];
+    cell.textLabel.text = [self.items[indexPath.row] objectForKey:kJMResourceListLoaderOptionItemTitleKey];
     cell.accessoryType = indexPath.row == self.selectedIndex ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     if (indexPath.row) {
         [cell setTopSeparatorWithHeight:0.55f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];

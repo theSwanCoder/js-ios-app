@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -42,7 +42,8 @@
     fetchRequest.predicate = [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
     JMServerProfile *demoServerProfile = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] firstObject];
     if (!demoServerProfile) {
-        demoServerProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
+        demoServerProfile = (JMServerProfile *) [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile"
+                                                                              inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
         demoServerProfile.alias = kJMDemoServerAlias;
         demoServerProfile.organization = kJMDemoServerOrganization;
         demoServerProfile.serverUrl = kJMDemoServerUrl;
@@ -73,14 +74,13 @@
     NSString *entityName = [[serverProfile entity] name];
     
     //create new object in data store
-    JMServerProfile *newServerProfile = [NSEntityDescription
-                                         insertNewObjectForEntityForName:entityName
-                                         inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
+    JMServerProfile *newServerProfile = (JMServerProfile *) [NSEntityDescription insertNewObjectForEntityForName:entityName
+                                                                                          inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
 
     NSInteger cloneNumber = 0;
     NSString *serverName = nil;
     do {
-        serverName = (cloneNumber++ > 0) ? [serverProfile.alias stringByAppendingFormat:@" %zd", cloneNumber] : serverProfile.alias;
+        serverName = (cloneNumber++ > 0) ? [serverProfile.alias stringByAppendingFormat:@" %@", @(cloneNumber)] : serverProfile.alias;
     } while (![newServerProfile isValidNameForServerProfile:serverName]);
     
     newServerProfile.alias          = serverName;
@@ -95,7 +95,7 @@
 {
     NSArray *savedReports = [serverProfile.savedResources allObjects];
     for (JMSavedResources *savedResource in savedReports) {
-        NSString *fullPath = [JMSavedResources pathToReportDirectoryWithName:savedResource.label format:savedResource.format];
+        NSString *fullPath = [JMSavedResources absolutePathToSavedReport:savedResource];
         [[NSFileManager defaultManager] removeItemAtPath:fullPath error:nil];
     }
     [serverProfile.managedObjectContext deleteObject:serverProfile];
@@ -122,10 +122,7 @@
                                                  username:nil
                                                  password:nil];
     
-    __block JSRESTBase *restBase = [[JSRESTBase alloc] init];
-    restBase.serverProfile = profile;
-    
-
+    __block JSRESTBase *restBase = [[JSRESTBase alloc] initWithServerProfile:profile keepLogged:YES];
 
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         JSServerInfo *serverInfo = restBase.serverInfo;

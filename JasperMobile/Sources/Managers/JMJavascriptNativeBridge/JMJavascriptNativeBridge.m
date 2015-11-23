@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -62,7 +62,7 @@
 - (void)sendRequest:(JMJavascriptRequest *)request
 {
     NSString *javascriptString = request.command;
-    NSString *parameters = request.parametersAsString;
+    NSString *parameters = request.parametersAsString ?: @"";
     NSString *fullJavascriptString = [NSString stringWithFormat:javascriptString, parameters];
 //    JMLog(@"send request: %@", fullJavascriptString);
     [self.webView stringByEvaluatingJavaScriptFromString:fullJavascriptString];
@@ -70,6 +70,7 @@
 
 - (void)injectJSInitCode:(NSString *)jsCode
 {
+    self.isJSInitCodeInjected = NO;
     self.jsInitCode = jsCode;
 }
 
@@ -85,7 +86,6 @@
 //    JMLog(@"request from webView: %@", request);
 
     if ([self isLoginRequest:request]) {
-        [self.restClient deleteCookies];
         [self.delegate javascriptNativeBridgeDidReceiveAuthRequest:self];
         return NO;
     }
@@ -136,7 +136,7 @@
 #pragma mark - Helpers
 - (NSDictionary *)parseCommand:(NSString *)command
 {
-    NSString *decodedCommand = [command stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *decodedCommand = [command stringByRemovingPercentEncoding];
     NSArray *components = [decodedCommand componentsSeparatedByString:@"&"];
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
 
@@ -154,7 +154,7 @@
             result[@"parameters"] = json[@"parameters"];
         } else {
             result[@"callback.type"] = @"Error";
-            result[@"parameters"] = error.localizedDescription;
+            result[@"description"] = error.localizedDescription;
         }
     } else {
         result[@"callback.type"] = callbackType;

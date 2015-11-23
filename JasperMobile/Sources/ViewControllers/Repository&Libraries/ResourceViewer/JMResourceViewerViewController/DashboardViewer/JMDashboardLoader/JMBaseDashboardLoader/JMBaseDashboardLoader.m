@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -83,6 +83,7 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
             }
         });
     } else {
+        [self injectJSCodeOldDashboard];
         if (completion) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 completion(YES, nil);
@@ -128,6 +129,10 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
 
 - (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
 {
+    if (self.loadCompletion) {
+        // TODO: Need add auth error
+        self.loadCompletion(NO, nil);
+    }
     [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
 }
 
@@ -188,6 +193,19 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
     NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"dashboard-amber-ios-mobilejs-sdk" ofType:@"js"];
     NSError *error;
     NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
+    [self.bridge injectJSInitCode:jsMobile];
+}
+
+- (void)injectJSCodeOldDashboard
+{
+    NSString *jsMobilePath = [[NSBundle mainBundle] pathForResource:@"old_dashboard" ofType:@"js"];
+    NSError *error;
+    NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
+    CGFloat initialScale = 0.5;
+    if ([JMUtils isIphone]) {
+        initialScale = 0.25;
+    }
+    jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScale).stringValue];
     [self.bridge injectJSInitCode:jsMobile];
 }
 

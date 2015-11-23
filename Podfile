@@ -3,7 +3,8 @@ platform :ios, "7.0"
 
 pod 'Appirater'
 pod 'SWRevealViewController', '>=2.3.0'
-pod 'JaspersoftSDK', :git => 'https://github.com/Jaspersoft/js-ios-sdk.git', :tag => '2.1.1'
+pod 'JaspersoftSDK', :git => 'https://github.com/Jaspersoft/js-ios-sdk.git', :tag => '2.2'
+
 
 post_install do |installer_representation|
   installer_representation.project.targets.each do |target|

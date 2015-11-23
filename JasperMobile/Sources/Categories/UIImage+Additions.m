@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -75,6 +75,30 @@
 
 - (UIImage *)colorizeImageWithColor:(id)theColor{
     return [UIImage colorizeImage:self color:theColor];
+}
+
+- (UIImage *)cropedImageForRect:(CGRect)rect
+{
+    CGFloat imageWidth = self.size.width;
+    
+    CGFloat rectWidth = CGRectGetWidth(rect);
+    CGFloat rectHeight = CGRectGetHeight(rect);
+    
+    CGFloat croppedOriginX = 0;
+    CGFloat croppedOriginY = 0;
+    CGFloat croppedWidth = imageWidth; // always equal width of image
+    CGFloat croppedHeight = (imageWidth/rectWidth) * rectHeight; // changed to fill rect
+    
+    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
+    CGRect croppedRect = CGRectMake(croppedOriginX,
+                                    croppedOriginY,
+                                    croppedWidth * scaleFactor,
+                                    croppedHeight *scaleFactor);
+    
+    CGImageRef imageRef = CGImageCreateWithImageInRect([self CGImage], croppedRect);
+    UIImage *img = [UIImage imageWithCGImage:imageRef scale:scaleFactor orientation:UIImageOrientationUp];
+    CGImageRelease(imageRef);
+    return img;
 }
 
 @end

@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -35,6 +35,8 @@
 @protocol JMDashboardLoaderDelegate;
 @class JMDashboard;
 
+typedef void(^JMDashboardLoaderCompletion)(BOOL success, NSError *error);
+
 typedef NS_ENUM(NSInteger, JMDashboardLoaderErrorType) {
     JMDashboardLoaderErrorTypeUndefined,
     JMDashboardLoaderErrorTypeEmtpyReport,
@@ -58,10 +60,12 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 - (instancetype)initWithDashboard:(JMDashboard *)dashboard;
 + (instancetype)loaderWithDashboard:(JMDashboard *)dashboard;
 
-- (void)loadDashboardWithCompletion:(void(^)(BOOL success, NSError *error))completion;
-- (void)reloadDashboardWithCompletion:(void(^)(BOOL success, NSError *error))completion;
+- (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion;
+- (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion;
 - (void)reset;
 - (void)minimizeDashlet;
+@optional
+- (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion) completion;
 @end
 
 

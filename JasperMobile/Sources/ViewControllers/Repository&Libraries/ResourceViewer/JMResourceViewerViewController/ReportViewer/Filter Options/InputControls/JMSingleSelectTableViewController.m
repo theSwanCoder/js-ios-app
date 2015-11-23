@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -25,7 +25,7 @@
 
 @interface JMSingleSelectTableViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UISearchBarDelegate>
 @property (nonatomic, weak) IBOutlet UILabel     *noResultLabel;
-@property (nonatomic, strong) IBOutlet UISearchBar *icSearchBar;
+@property (nonatomic, weak) IBOutlet UISearchBar *icSearchBar;
 
 @property (nonatomic, strong) NSArray *filteredListOfValues;
 @property (nonatomic, strong) NSMutableSet *previousSelectedValues;
@@ -44,16 +44,20 @@
     self.titleLabel.text = JMCustomLocalizedString(@"report.viewer.options.singleselect.titlelabel.title", nil);
     self.noResultLabel.text = JMCustomLocalizedString(@"resources.noresults.msg", nil);
 
-    self.titleLabel.textColor = kJMDetailViewLightTextColor;
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] reportOptionsTitleLabelTextColor];
+    self.noResultLabel.textColor = [[JMThemesManager sharedManager] reportOptionsNoResultLabelTextColor];
+    
     self.tableView.layer.cornerRadius = 4;
     // Remove extra separators
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     UITextField *txfSearchField = [self.icSearchBar valueForKey:@"_searchField"];
-    txfSearchField.backgroundColor = [UIColor whiteColor];
+    txfSearchField.backgroundColor = self.tableView.backgroundColor;
     [txfSearchField setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor darkTextColor]}];
-    self.icSearchBar.barTintColor = kJMDetailViewLightBackgroundColor;
+    self.icSearchBar.barTintColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+    
+    self.icSearchBar.tintColor = [UIColor darkGrayColor];
     [self.icSearchBar setBackgroundImage:[UIImage new]];
     self.icSearchBar.placeholder = JMCustomLocalizedString(@"report.viewer.options.search.value.placeholder", nil);
 }
@@ -115,10 +119,11 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        cell.textLabel.font = [JMFont tableViewCellTitleFont];
+        cell.textLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+        cell.textLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
     }
     
-    JSInputControlOption *option = [self.listOfValues objectAtIndex:indexPath.row];
+    JSInputControlOption *option = self.listOfValues[indexPath.row];
     cell.textLabel.text = option.label;
     cell.accessoryType = option.selected.boolValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 
@@ -129,7 +134,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSInputControlOption *selectedOption = [self.listOfValues objectAtIndex:indexPath.row];
+    JSInputControlOption *selectedOption = self.listOfValues[indexPath.row];
     JSInputControlOption *previousSelectedOption = [self.selectedValues anyObject];
 
     if (previousSelectedOption != selectedOption) {

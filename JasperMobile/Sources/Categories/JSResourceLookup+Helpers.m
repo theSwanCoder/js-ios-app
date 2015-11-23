@@ -67,20 +67,16 @@
 - (JMReport *)reportModel
 {
     if ([JMUtils isSupportVisualize]) {
-        return [JMVisualizeReport reportWithResource:self inputControls:nil];
+        return [JMVisualizeReport reportWithResourceLookup:self];
     } else {
-        return [JMRestReport reportWithResource:self inputControls:nil];
+        return [JMRestReport reportWithResourceLookup:self];
     }
 }
 
 - (JMDashboard *)dashboardModel
 {
-    if ([self isNewDashboard]) {
-        if ([JMUtils isServerAmber2] && [JMUtils isSystemVersion8] && [JMUtils isSupportVisualize]) {
-            return [JMVisualizeDashboard dashboardWithResource:self];
-        } else {
-            return [JMVisualizeDashboard dashboardWithResource:self];
-        }
+    if ([self isNewDashboard] && [JMUtils isSupportVisualize]) {
+        return [JMVisualizeDashboard dashboardWithResource:self];
     } else {
         return [JMDashboard dashboardWithResource:self];
     }

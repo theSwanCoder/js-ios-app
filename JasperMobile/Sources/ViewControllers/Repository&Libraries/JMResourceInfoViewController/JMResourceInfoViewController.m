@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -26,6 +26,7 @@
 #import "UITableViewCell+Additions.h"
 #import "JSResourceLookup+Helpers.h"
 #import "PopoverView.h"
+#import "JMSavedResources+Helpers.h"
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
@@ -34,7 +35,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) PopoverView *popoverView;
 @property (nonatomic, assign) BOOL needLayoutUI;
-
+@property (nonatomic) UIDocumentInteractionController *documentController;
 @end
 
 @implementation JMResourceInfoViewController
@@ -50,6 +51,8 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+
     [self showNavigationItems];
     [self resetResourceProperties];
     [self addObservers];
@@ -156,6 +159,9 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     if (![self favoriteItemShouldDisplaySeparately]) {
         availableAction |= [self favoriteAction];
     }
+    if ([self.resourceLookup isSavedReport]) {
+        availableAction |= JMMenuActionsViewAction_OpenIn;
+    }
     return availableAction;
 }
 
@@ -195,7 +201,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                               target:self
                                                                                               action:@selector(cancelButtonTapped:)];
-        self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+        self.navigationItem.leftBarButtonItem.tintColor = [[JMThemesManager sharedManager] barItemsColor];
         self.navigationItem.rightBarButtonItem = [self favoriteBarButtonItem];
     } else {
         NSMutableArray *navBarItems = [NSMutableArray array];
@@ -224,7 +230,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
                                                                      style:UIBarButtonItemStyleBordered
                                                                     target:self
                                                                     action:@selector(favoriteButtonTapped:)];
-    favoriteItem.tintColor = isResourceInFavorites ? [UIColor yellowColor] : [UIColor whiteColor];
+    favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
     return favoriteItem;
 }
 
@@ -261,8 +267,10 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
-        cell.textLabel.font = [JMFont tableViewCellTitleFont];
-        cell.detailTextLabel.font = [JMFont tableViewCellDetailFont];
+        cell.textLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+        cell.textLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
+        cell.detailTextLabel.font = [[JMThemesManager sharedManager] tableViewCellDetailFont];
+        cell.detailTextLabel.textColor = [[JMThemesManager sharedManager] tableViewCellDetailsTextColor];
         cell.detailTextLabel.numberOfLines = 2;
     }
     
@@ -270,9 +278,9 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         [cell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
     }
     
-    NSDictionary *item = [self.resourceProperties objectAtIndex:indexPath.row];
-    cell.textLabel.text = JMCustomLocalizedString([NSString stringWithFormat:@"resource.%@.title", [item objectForKey:kJMTitleKey]], nil);
-    cell.detailTextLabel.text = [item objectForKey:kJMValueKey];
+    NSDictionary *item = self.resourceProperties[indexPath.row];
+    cell.textLabel.text = JMCustomLocalizedString([NSString stringWithFormat:@"resource.%@.title", item[kJMTitleKey]], nil);
+    cell.detailTextLabel.text = item[kJMValueKey];
     return cell;
 }
 
@@ -284,6 +292,26 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
         case JMMenuActionsViewAction_MakeUnFavorite:
             [self favoriteButtonTapped:nil];
             break;
+        case JMMenuActionsViewAction_OpenIn: {
+            JMSavedResources *savedResources = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
+            NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:savedResources];
+
+            NSURL *url = [NSURL fileURLWithPath:fullReportPath];
+
+            self.documentController = [self setupDocumentControllerWithURL:url
+                                                             usingDelegate:nil];
+
+            BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+            if (!canOpen) {
+                UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:nil
+                                                                      message:@"error.openIn.message"
+                                                                     delegate:self
+                                                            cancelButtonTitle:@"dialog.button.ok"
+                                                            otherButtonTitles:nil];
+                [alertView show];
+            }
+            break;
+        }
         default:
             break;
     }
@@ -301,10 +329,18 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
                                          duration:(NSTimeInterval)duration
 {
-    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
-    [self.popoverView animateRotationToNewPoint:point
-                                         inView:self.view
-                                   withDuration:duration];
+    if (self.popoverView) {
+        [self.popoverView dismiss:NO];
+        [self showAvailableActions];
+    }
+}
+
+#pragma mark - Helpers
+- (UIDocumentInteractionController *) setupDocumentControllerWithURL: (NSURL *) fileURL
+                                                       usingDelegate: (id <UIDocumentInteractionControllerDelegate>) interactionDelegate {
+    UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
+    interactionController.delegate = interactionDelegate;
+    return interactionController;
 }
 
 @end

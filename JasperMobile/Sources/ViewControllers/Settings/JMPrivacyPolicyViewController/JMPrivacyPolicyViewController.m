@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -46,6 +46,14 @@
     [self showPrivacyPolicy];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.webView.isLoading) {
+        [self.webView stopLoading];
+    }
+}
+
 - (void)dealloc
 {
     [NSURLProtocol unregisterClass:[RNCachingURLProtocol class]];
@@ -59,9 +67,12 @@
     
     NSString *cachePath = [[RNCachingURLProtocol new] cachePathForRequest:ppRequest];
     if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath] && [[Reachability reachabilityWithHostName:[ppURL host]] currentReachabilityStatus] == NotReachable) {
-        [[UIAlertView localizedAlertWithTitle:@"error.noconnection.dialog.title" message:@"error.noconnection.dialog.msg" completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
-            [self.navigationController popViewControllerAnimated:YES];
-        } @weakselfend cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil] show];
+        [[UIAlertView localizedAlertWithTitle:@"error.noconnection.dialog.title"
+                                      message:@"error.noconnection.dialog.msg"
+                                   completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                                       [self.navigationController popViewControllerAnimated:YES];
+                                   }
+                            cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil] show];
     } else {
         [self.webView loadRequest:ppRequest];
     }

@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -56,7 +56,7 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    self.inputControlDescriptor.state.value = textField.text.length ? textField.text : nil;
+    [self updateValue:textField.text.length ? textField.text : nil];
     self.inputControlDescriptor.state.error = nil;
     [self updateDisplayingOfErrorMessage];
 }
@@ -64,7 +64,7 @@
 #pragma mark - Actions
 - (void)doneButtonTapped:(id)sender
 {
-    self.inputControlDescriptor.state.value = self.textField.text;
+    [self updateValue:self.textField.text];
     [self.textField resignFirstResponder];
 }
 @end

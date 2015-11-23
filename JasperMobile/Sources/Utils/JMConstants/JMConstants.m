@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -26,7 +26,8 @@
 //
 
 #import "JMConstants.h"
-#import "UIColor+RGBComponent.h"
+
+NSString * const kJMAppName = @"TIBCO\u00AE JasperMobile\u2122";
 
 // Constants for NSUserDefaults
 NSString * const kJMDefaultsCurrentVersion = @"jaspersoft.mobile.current.version";
@@ -55,6 +56,7 @@ NSString * const kJMDashboardKey = @"dashboardKey";
 NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";
 NSString * const kJMDefaultSendingCrashReport = @"jaspersoft.crashreportsending.enabled";
 NSString * const kJMDefaultUseVisualize = @"jaspersoft.use.visualize";
+NSString * const kJMUserAcceptAgreement = @"kJMUserAcceptAgreement";
 
 // Demo server parameters
 NSString * const kJMDemoServerAlias = @"Jaspersoft Mobile Demo";
@@ -88,4 +90,10 @@ NSInteger  const kJMSaveReportMaxRangePages = 500;
 // Limit of resource for loading from JRS
 NSInteger  const kJMResourceLimit = 100;
 NSInteger  const kJMRecentResourcesLimit = 10;
+
+
+// Name of the default theme file
+NSString * const kJMDefaultThemeFileName = @"DefaultTheme";
+NSString * const kJMThemesFileFormat= @"plist";
+NSString * const kJMCurrentThemeFileName = @"CurrentTheme";
 

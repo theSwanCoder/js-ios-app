@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -30,6 +30,7 @@
 #import "JMFavorites.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMSavedResources+Helpers.h"
+#import "JMFavorites+Helpers.h"
 
 // Old constants used in previous versions of application
 static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated.versions";
@@ -55,7 +56,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
     NSMutableDictionary *versionsToUpdate = [NSMutableDictionary dictionary];
     
     // Add update methods
-    [versionsToUpdate setObject:[NSValue valueWithPointer:@selector(update_1_9)] forKey:@1.9];
+    versionsToUpdate[@1.9] = [NSValue valueWithPointer:@selector(update_1_9)];
     BOOL updateDidSuccess = YES;
     for (NSNumber *version in versionsToUpdate.allKeys) {
         if (version.doubleValue <= currentAppVersion.doubleValue) continue;
@@ -80,6 +81,9 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         [self showErrors];
     } else {
         [self removeOldMobileDemo];
+        [self updateSavedItems];
+        // skip user agreement
+        [JMUtils setUserAcceptAgreement:NO];
     }
 }
 
@@ -93,12 +97,12 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
 + (NSNumber *)latestAppVersion
 {
     NSString *appVersion = [self latestAppVersionAsString];
-    return [NSNumber numberWithDouble:[appVersion doubleValue]];
+    return @([appVersion doubleValue]);
 }
 
 + (NSString *)latestAppVersionAsString
 {
-    return [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    return [NSBundle mainBundle].infoDictionary[@"CFBundleShortVersionString"];
 }
 
 + (NSNumber *)currentAppVersion
@@ -177,6 +181,34 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         JMServerProfile *serverProfile = serverProfiles.firstObject;
         [[JMCoreDataManager sharedInstance].managedObjectContext deleteObject:serverProfile];
         [[JMCoreDataManager sharedInstance] save:nil];
+    }
+}
+
++ (void)updateSavedItems
+{
+    NSArray *savedItems = [JMSavedResources allSavedItems];
+    for (JMSavedResources *savedResource in savedItems) {
+        // 1. get old path
+        NSString *oldPath = [JMSavedResources oldPathForSavedReport:savedResource];
+        NSString *oldURI = savedResource.uri;
+
+        // 2. create new path
+        NSString *documentPath = [JMUtils applicationDocumentsDirectory];
+        NSString *newURI = [JMSavedResources newURIForSavedReport:savedResource];
+        NSString *newPath = [documentPath stringByAppendingPathComponent:newURI];
+
+        // 3. move from old path to new path
+        [JMSavedResources moveSavedItemFromPath:oldPath toPath:newPath];
+
+        // 4. save new uri
+        savedResource.uri = newURI;
+        // 5. update uri if saved item was marked as favorites
+        NSArray *allFavorites = [JMFavorites allFavorites];
+        for (JMFavorites *favorites in allFavorites) {
+            if ([favorites.uri isEqualToString:oldURI]) {
+                favorites.uri = newURI;
+            }
+        }
     }
 }
 

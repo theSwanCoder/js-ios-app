@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -34,13 +34,22 @@
 
 @implementation JMServerCollectionViewCell
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.titleLabel.font = [[JMThemesManager sharedManager] collectionResourceNameFont];
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] serverProfileTitleTextColor];
+    self.urlLabel.font = [[JMThemesManager sharedManager] collectionResourceDescriptionFont];
+    self.urlLabel.textColor = [[JMThemesManager sharedManager] serverProfileDetailsTextColor];
+    
+    self.titleImage.backgroundColor = [[JMThemesManager sharedManager] serverProfilePreviewBackgroundColor];
+}
+
 - (void)setServerProfile:(JMServerProfile *)serverProfile
 {
     _serverProfile = serverProfile;
     self.titleLabel.text = serverProfile.alias;
     self.urlLabel.text = serverProfile.serverUrl;
-    
-    self.titleImage.backgroundColor = kJMMasterResourceCellSelectedBackgroundColor;
 }
 
 - (void) cloneServerProfile:(id)sender
@@ -59,9 +68,6 @@
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    if (action == @selector(cloneServerProfile:) || action == @selector(deleteServerProfile:) || action == @selector(editServerProfile:)) {
-        return YES;
-    }
-    return NO;
+    return action == @selector(cloneServerProfile:) || action == @selector(deleteServerProfile:) || action == @selector(editServerProfile:);
 }
 @end

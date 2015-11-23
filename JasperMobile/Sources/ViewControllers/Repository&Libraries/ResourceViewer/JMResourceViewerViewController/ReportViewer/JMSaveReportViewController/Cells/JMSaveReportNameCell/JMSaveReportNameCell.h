@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -33,10 +33,12 @@
  @since 1.9.1
 */
 
+#import "JMTextField.h"
+
 @protocol JMSaveReportNameCellDelegate;
 
 @interface JMSaveReportNameCell : UITableViewCell <UITextFieldDelegate>
-@property (nonatomic, weak) IBOutlet UITextField *textField;
+@property (nonatomic, weak) IBOutlet JMTextField *textField;
 @property (nonatomic, weak) IBOutlet UILabel *errorLabel;
 @property (nonatomic, weak) id<JMSaveReportNameCellDelegate>cellDelegate;
 @end

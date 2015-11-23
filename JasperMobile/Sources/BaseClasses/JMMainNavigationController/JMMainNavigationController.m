@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -33,39 +33,24 @@
     [super viewDidLoad];
     self.delegate = self;
     
-    [[UINavigationBar appearance] setBarTintColor: kJMMainNavigationBarBackgroundColor];
-    [[UIToolbar appearance] setBarTintColor: kJMMainNavigationBarBackgroundColor];
-
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setDefaultTextAttributes:@{NSForegroundColorAttributeName:[UIColor lightTextColor]}];
-    
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    
-    [self.toolbar setTintColor: [UIColor whiteColor]];
-
-    NSDictionary *textTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [JMFont navigationBarTitleFont], NSFontAttributeName, nil];
-    [[UINavigationBar appearance] setTitleTextAttributes:textTitleOptions];
-    
-    if ([UIDevice currentDevice].systemVersion.integerValue <8) {
-        // Here is hack for using UIPrintInteractionController
-        NSDictionary *textTitleOptionsForPopover = [NSDictionary dictionaryWithObjectsAndKeys:kJMMainNavigationBarBackgroundColor, NSForegroundColorAttributeName, [JMFont navigationBarTitleFont], NSFontAttributeName, nil];
-        [[UINavigationBar appearanceWhenContainedIn:[UIPopoverController class], nil] setTitleTextAttributes:textTitleOptionsForPopover];
-    }
-
-    NSDictionary *barButtonTitleOptions = [NSDictionary dictionaryWithObjectsAndKeys:[UIColor lightGrayColor], NSForegroundColorAttributeName, [JMFont navigationItemsFont], NSFontAttributeName, nil];
-    [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateDisabled];
-    [[UIBarButtonItem appearance] setTitleTextAttributes:barButtonTitleOptions forState:UIControlStateNormal];
-    
     [self.navigationBar setBarStyle:UIBarStyleDefault];
     
     self.navigationBar.opaque = YES;
     self.navigationBar.translucent = NO;
     self.toolbar.translucent = NO;
     self.interactivePopGestureRecognizer.enabled = NO;
+
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     [navigationController setToolbarHidden:YES animated:YES];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 #pragma mark - AutoRotation

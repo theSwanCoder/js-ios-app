@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -27,6 +27,8 @@ NSString * kJMGridLoadingCell = @"JMGridLoadingCollectionViewCell";
 
 @interface JMLoadingCollectionViewCell ()
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activityIndicator;
+
 @end
 
 @implementation JMLoadingCollectionViewCell
@@ -34,8 +36,10 @@ NSString * kJMGridLoadingCell = @"JMGridLoadingCollectionViewCell";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.contentView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.titleLabel.font = [[JMThemesManager sharedManager] collectionLoadingFont];
     self.titleLabel.text = JMCustomLocalizedString(@"resources.loading.msg", nil);
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] resourceViewLoadingCellTitleTextColor];
+    self.activityIndicator.color = [[JMThemesManager sharedManager] resourceViewLoadingCellActivityIndicatorColor];
 }
 
 @end

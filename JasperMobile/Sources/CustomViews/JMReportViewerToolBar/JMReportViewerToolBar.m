@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -43,7 +43,7 @@
     self.currentPageField.layer.cornerRadius = 4.f;
     self.currentPageField.layer.masksToBounds = YES;
 
-    self.currentPageField.backgroundColor = kJMSearchBarBackgroundColor;
+    self.currentPageField.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
     self.currentPageField.inputView = self.pickerView;
     self.currentPageField.inputAccessoryView = [self pickerToolbar];
 }
@@ -76,11 +76,11 @@
     self.pageCountLabel.text = [NSString stringWithFormat:keyString, self.countOfPages];
     self.currentPageField.text = [NSString stringWithFormat:@"%ld", (long)self.currentPage];
     
-    self.previousButton.enabled = !(self.currentPage <= 1);
-    self.firstButton.enabled = !(self.currentPage <= 1);
+    self.previousButton.enabled = self.currentPage > 1;
+    self.firstButton.enabled = self.currentPage > 1;
 
-    self.nextButton.enabled = !(self.currentPage >= self.countOfPages);
-    self.lastButton.enabled = !(self.currentPage >= self.countOfPages) && (_countOfPages != NSNotFound);
+    self.nextButton.enabled = self.currentPage < self.countOfPages;
+    self.lastButton.enabled = self.currentPage < self.countOfPages && (_countOfPages != NSNotFound);
 }
 
 #pragma mark - Actions
@@ -91,13 +91,13 @@
     NSInteger nextPage = 1;
     self.previousButton.enabled = NO;
     self.firstButton.enabled = NO;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:@weakself(^(BOOL success)) {
+    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
             self.previousButton.enabled = YES;
             self.firstButton.enabled = YES;
             if (success) {
                 self.currentPage = nextPage;
             }
-        }@weakselfend];
+        }];
 }
 
 - (IBAction)lastButtonTapped:(id)sender
@@ -106,13 +106,13 @@
     NSInteger nextPage = self.countOfPages;
     self.nextButton.enabled = NO;
     self.lastButton.enabled = NO;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:@weakself(^(BOOL success)) {
+    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
             self.nextButton.enabled = YES;
             self.lastButton.enabled = YES;
             if (success) {
                 self.currentPage = nextPage;
             }
-        }@weakselfend];
+        }];
 }
 
 - (IBAction)nextButtonTapped:(id)sender
@@ -121,13 +121,13 @@
     NSInteger nextPage = currentPage+1;
     self.nextButton.enabled = NO;
     self.lastButton.enabled = NO;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:@weakself(^(BOOL success)) {
+    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
         self.nextButton.enabled = YES;
         self.lastButton.enabled = YES;
         if (success) {
             self.currentPage = nextPage;
         }
-    }@weakselfend];
+    }];
 }
 
 - (IBAction)previousButtonTapped:(id)sender
@@ -136,13 +136,13 @@
     NSInteger nextPage = currentPage-1;
     self.previousButton.enabled = NO;
     self.firstButton.enabled = NO;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:@weakself(^(BOOL success)) {
+    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
             self.previousButton.enabled = YES;
             self.firstButton.enabled = YES;
             if (success) {
                 self.currentPage = nextPage;
             }
-        }@weakselfend];
+        }];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -168,7 +168,7 @@
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [NSString stringWithFormat:@"%zd", row + 1];
+    return [NSString stringWithFormat:@"%ld", (long)(row + 1)];
 }
 
 - (UIToolbar *)pickerToolbar
@@ -194,7 +194,7 @@
     self.firstButton.enabled = NO;
     self.nextButton.enabled = NO;
     self.lastButton.enabled = NO;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:@weakself(^(BOOL success)) {
+    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
             self.previousButton.enabled = YES;
             self.firstButton.enabled = YES;
             self.nextButton.enabled = YES;
@@ -202,7 +202,7 @@
             if (success) {
                 self.currentPage = nextPage;
             }
-        }@weakselfend];
+        }];
 
     [self hidePicker];
 }

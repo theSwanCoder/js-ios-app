@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright Â© 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright Â© 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -27,7 +27,7 @@
 
 /* Application Info */
 
-"application.info" = "%@™ v %@\n\nManagementtool und Berichts-Viewer für TIBCO JasperReports Server %.1f und höher.\n\nWeitere Informationen erhalten Sie unter:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
+"application.info" = "%@ v %@\n\nManagementtool und Berichts-Viewer für TIBCO JasperReports%@ Server %.1f und höher.\n\nWeitere Informationen erhalten Sie unter:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
 
 /* Login Page */
 
@@ -58,16 +58,16 @@
 "servers.profile.list.empty" = "Es gibt keine Serverprofile.";
 
 /* Onboarding Intro */
-"intro.title" = "Willkommen bei\nTIBCO JasperMobile";
+"intro.title" = "Willkommen bei\n%@";
 "intro.description" = "Zum Beginnen nach oben wischen";
 "intro.button.skip.skip" = "Einführung überspringen";
-"intro.button.skip.startUsing" = "Arbeit mit TIBCO JasperMobile beginnen";
+"intro.button.skip.startUsing" = "Arbeit mit %@ beginnen";
 "intro.model.firstScreen.title" = "In Kontakt bleiben";
-"intro.model.firstScreen.description" = "Durch TIBCO JasperMobile bleiben Sie in Kontakt\nmit Ihrem Geschäft. Egal wo Sie sich aufhalten.";
+"intro.model.firstScreen.description" = "Durch %@ bleiben Sie in Kontakt\nmit Ihrem Geschäft. Egal wo Sie sich aufhalten.";
 "intro.model.secondScreen.title" = "Unmittelbarer Zugriff";
 "intro.model.secondScreen.description" = "Lesen Sie in Echtzeit erstellte interaktive Berichte,\ndie auf Ihren betrieblichen Anwendungen beruhen.";
 "intro.model.thirdScreen.title" = "Nahtlose Integration";
-"intro.model.thirdScreen.description" = "Nutzen Sie die Arbeitsumgebung Ihres TIBCO\nJasperReports Servers v%.1f oder höher.";
+"intro.model.thirdScreen.description" = "Nutzen Sie die Arbeitsumgebung Ihres TIBCO\nJasperReports%@ Servers v%.1f oder höher.";
 
 /* Menu View */
 
@@ -153,7 +153,6 @@
 "report.viewer.save.name.errmsg.tooBigRange" = "Bericht mit mehr als %@ Seiten im HTML-Format konnte nicht gespeichert werden. Möchten Sie ihn im PDF-Format speichern?";
 
 // Report viewer Options view
-"report.viewer.options.title" = "Filteroptionen";
 "report.viewer.options.singleselect.titlelabel.title" = "Ein einzelnes Element auswählen";
 "report.viewer.options.multiselect.titlelabel.title" = "Ein oder mehr Elemente auswählen";
 "report.viewer.options.search.value.placeholder" = "Werte durchsuchen";
@@ -201,7 +200,6 @@
 
 "action.title.refresh" = "Aktualisieren";
 "action.title.save" = "Speichern";
-"action.title.edit" = "Filteroptionen bearbeiten";
 "action.title.delete" = "Löschen";
 "action.title.rename" = "Umbenennen";
 "action.title.markasfavorite" = "Als Favorit kennzeichnen";

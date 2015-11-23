@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -34,9 +34,7 @@
 #import "JMMainNavigationController.h"
 #import "SWRevealViewController.h"
 #import "JMMenuViewController.h"
-
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
+#import "JMEULAViewController.h"
 
 
 void jmDebugLog(NSString *format, ...) {
@@ -58,7 +56,7 @@ void jmDebugLog(NSString *format, ...) {
 #define kJMNameMax 250
 #define kJMInvalidCharacters     @"~!#$%^|`@&*()-+={}[]:;\"'<>,?/|\\"
 
-+ (BOOL)validateReportName:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage
++ (BOOL)validateReportName:(NSString *)reportName errorMessage:(NSString **)errorMessage
 {
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:kJMInvalidCharacters];
     reportName = [reportName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -90,9 +88,18 @@ void jmDebugLog(NSString *format, ...) {
     static NSString *reportDirectory;
     if (!reportDirectory) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        reportDirectory = [paths objectAtIndex:0];
+        reportDirectory = paths[0];
     }
     return reportDirectory;
+}
+
++ (NSString *)applicationTempDirectory
+{
+    static NSString *tempDirectory;
+    if (!tempDirectory) {
+        tempDirectory = NSTemporaryDirectory();
+    }
+    return tempDirectory;
 }
 
 + (void)showNetworkActivityIndicator
@@ -111,9 +118,19 @@ void jmDebugLog(NSString *format, ...) {
 
 }
 
++ (BOOL)isSystemVersion7
+{
+    return [UIDevice currentDevice].systemVersion.integerValue == 7;
+}
+
 + (BOOL)isSystemVersion8
 {
     return [UIDevice currentDevice].systemVersion.integerValue == 8;
+}
+
++ (BOOL)isSystemVersion9
+{
+    return [UIDevice currentDevice].systemVersion.integerValue == 9;
 }
 
 + (BOOL)crashReportsSendingEnable
@@ -132,7 +149,9 @@ void jmDebugLog(NSString *format, ...) {
 + (void)activateCrashReportSendingIfNeeded
 {
     if ([self crashReportsSendingEnable]) {
-        [Fabric with:@[CrashlyticsKit]];
+        [Fabric with:@[
+                       [Crashlytics class]
+                       ]];
     }
 }
 
@@ -143,6 +162,7 @@ void jmDebugLog(NSString *format, ...) {
         reportFormats = @[
                            [JSConstants sharedInstance].CONTENT_TYPE_HTML,
                            [JSConstants sharedInstance].CONTENT_TYPE_PDF,
+                           [JSConstants sharedInstance].CONTENT_TYPE_XLS,
                            ];
     }
     return reportFormats;
@@ -154,6 +174,7 @@ void jmDebugLog(NSString *format, ...) {
     return infoDictionary[(NSString*)kCFBundleVersionKey];
 }
 
+#pragma mark - Login VC
 
 + (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion
 {
@@ -162,18 +183,32 @@ void jmDebugLog(NSString *format, ...) {
 
 + (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion
 {
-    [[JMSessionManager sharedManager] logout];
-    
+    [self showLoginViewWithRestoreSession:NO animated:animated completion:completion loginCompletion:loginCompletion];
+}
+
++ (void)showLoginViewForRestoreSessionWithCompletion:(LoginCompletionBlock)loginCompletion
+{
+    [self showLoginViewWithRestoreSession:YES animated:YES completion:nil loginCompletion:loginCompletion];
+}
+
++ (void)showLoginViewWithRestoreSession:(BOOL)restoreSession animated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion
+{
+    if (!restoreSession) {
+        [[JMSessionManager sharedManager] logout];
+    }
+
     SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
     JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
 
-    if ([revealViewController.presentedViewController isKindOfClass:[UINavigationController class]]) {
+    if ([revealViewController.presentedViewController isKindOfClass:[UINavigationController class]] &&
+            [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMLoginViewController class]]) {
         // if a nav view controller was loaded previously
         return;
     }
 
-    UINavigationController *loginNavController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
+    UINavigationController *loginNavController = (UINavigationController *) [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMLoginNavigationViewController"];
     JMLoginViewController *loginViewController = (JMLoginViewController *)loginNavController.topViewController;
+    loginViewController.showForRestoreSession = restoreSession;
     loginViewController.completion = ^(void){
         if (loginCompletion) {
             loginCompletion();
@@ -181,9 +216,61 @@ void jmDebugLog(NSString *format, ...) {
             [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
         }
     };
-    
+
     [revealViewController presentViewController:loginNavController animated:animated completion:completion];
 }
+
+#pragma mark - EULA
++ (void)askUserAgreementWithCompletion:(void(^ __nonnull)(BOOL isAgree))completion
+{
+    // get key
+    BOOL isAccept = [self isUserAcceptAgreement];
+    if (isAccept) {
+        completion(YES);
+    } else {
+        // show text of agreement
+        UIViewController *rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
+
+        JMEULAViewController *EULAViewController = (JMEULAViewController *) [rootViewController.storyboard instantiateViewControllerWithIdentifier:@"JMEULAViewController"];
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:EULAViewController];
+        EULAViewController.shouldUserAccept = YES;
+        EULAViewController.completion = ^{
+            [rootViewController dismissViewControllerAnimated:YES completion:nil];
+            [self setUserAcceptAgreement:YES];
+            completion(YES);
+        };
+
+        if (rootViewController.presentedViewController && [rootViewController.presentedViewController isKindOfClass:[UINavigationController class]]) {
+            return;
+        } else if (rootViewController.presentedViewController && ![rootViewController.presentedViewController isKindOfClass:[UINavigationController class]]) {
+            [rootViewController dismissViewControllerAnimated:YES completion:nil];
+        }
+
+        [rootViewController presentViewController:navController
+                                         animated:YES
+                                       completion:nil];
+    }
+}
+
++ (BOOL)isUserAcceptAgreement
+{
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMUserAcceptAgreement]) {
+        [[NSUserDefaults standardUserDefaults] setObject:@(NO)
+                                                  forKey:kJMUserAcceptAgreement];
+    }
+
+    BOOL isAccept = ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:kJMUserAcceptAgreement]).boolValue;
+
+    return isAccept;
+}
+
++ (void)setUserAcceptAgreement:(BOOL)isAccept
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@(isAccept)
+                                              forKey:kJMUserAcceptAgreement];
+}
+
+#pragma mark - Alerts
 
 + (void)showAlertViewWithError:(NSError *)error
 {
@@ -217,6 +304,8 @@ void jmDebugLog(NSString *format, ...) {
                         otherButtonTitles:nil] show];
 }
 
+#pragma mark - Helpers
+
 + (BOOL)shouldUseVisualize
 {
     if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize]) {
@@ -243,6 +332,11 @@ void jmDebugLog(NSString *format, ...) {
 + (BOOL)isServerAmber2
 {
     return self.restClient.serverProfile.serverInfo.versionAsFloat == [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_1_0;
+}
+
++ (BOOL)isServerAmber2OrHigher
+{
+    return self.restClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_1_0;
 }
 
 + (BOOL)isServerProEdition
@@ -298,6 +392,38 @@ void jmDebugLog(NSString *format, ...) {
         mainStoryboard = [UIStoryboard storyboardWithName:storyboardName bundle:bundle];
     });
     return mainStoryboard;
+}
+
+#pragma mark - Analytics
++ (void)logEventWithName:(NSString *)eventName additionInfo:(NSDictionary *)additionInfo
+{
+    // Crashlytics - Answers
+    [Answers logCustomEventWithName:eventName
+                   customAttributes:additionInfo];
+
+    // Google Analytics
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:eventName                                           // Event category (required)
+                                                          action:[additionInfo allKeys].firstObject                  // Event action (required)
+                                                           label:[additionInfo allValues].firstObject                // Event label
+                                                           value:nil] build]];                                       // Event value
+
+}
+
++ (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
+{
+    // Crashlytics - Answers
+    [Answers logLoginWithMethod:@"Digits"
+                        success:@(success)
+               customAttributes:additionInfo];
+
+    // Google Analytics
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    NSString *action = success ? @"Login_Success" : @"Login_Failed";
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:action                                              // Event category (required)
+                                                          action:[additionInfo allKeys].firstObject                  // Event action (required)
+                                                           label:[additionInfo allValues].firstObject                // Event label
+                                                           value:nil] build]];                                       // Event value
 }
 
 @end

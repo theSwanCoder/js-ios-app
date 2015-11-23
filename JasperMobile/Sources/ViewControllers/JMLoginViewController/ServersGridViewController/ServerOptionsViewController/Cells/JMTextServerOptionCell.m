@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -23,9 +23,12 @@
 
 #import "JMTextServerOptionCell.h"
 #import "UITableViewCell+Additions.h"
+#import "JMTextField.h"
+#import "UIColor+RGBComponent.h"
+
 
 @interface JMTextServerOptionCell () <UITextFieldDelegate>
-@property (weak, nonatomic) IBOutlet UITextField *textField;
+@property (weak, nonatomic) IBOutlet JMTextField *textField;
 
 @end
 
@@ -33,7 +36,6 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.textField.background = [self.textField.background resizableImageWithCapInsets:UIEdgeInsetsMake(0, 10.0f, 0, 10.0f)];
     self.textField.inputAccessoryView = [self toolbarForInputAccessoryView];
 }
 
@@ -43,27 +45,16 @@
     self.textField.enabled = serverOption.editable;
     self.textField.text = serverOption.optionValue;
 
+    UIColor *placeholderColor = [UIColor сolorFromColor:self.textField.textColor differents:0.25 increase:YES];
     NSDictionary *attributes = @{
-            NSFontAttributeName : [UIFont systemFontOfSize:12]
-    };
+                                 NSFontAttributeName : [UIFont systemFontOfSize:[JMUtils isIphone] ? 12 : 15],
+                                 NSForegroundColorAttributeName : placeholderColor
+                                 };
     NSString *trimmedPlaceholderString = [serverOption.titleString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" *"]];
     
     NSAttributedString *placeholder = [[NSAttributedString alloc] initWithString:trimmedPlaceholderString
                                                                       attributes:attributes];
     self.textField.attributedPlaceholder = placeholder;
-
-    self.textField.textColor = serverOption.editable ? [UIColor darkTextColor] : [UIColor lightGrayColor];
-}
-
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    if (self.serverOption.errorString) {
-        CGRect errorLabelRect = self.detailTextLabel.frame;
-        errorLabelRect.origin.y = 2 * self.textField.frame.origin.y + self.textField.frame.size.height;
-        self.detailTextLabel.frame = errorLabelRect;
-    }
 }
 
 #pragma mark - UITextFieldDelegate

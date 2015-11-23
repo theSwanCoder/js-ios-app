@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -24,9 +24,10 @@
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
 
-@interface JMSavedResourceViewerViewController () <UIAlertViewDelegate, UITextFieldDelegate>
+@interface JMSavedResourceViewerViewController () <UIAlertViewDelegate, UITextFieldDelegate, UIDocumentInteractionControllerDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) NSString *changedReportName;
+@property (nonatomic) UIDocumentInteractionController *documentController;
 
 @end
 
@@ -40,13 +41,19 @@
     [self.webView loadHTMLString:@"" baseURL:nil];
     [[UIAlertView alertWithTitle:JMCustomLocalizedString(@"dialod.title.error", nil)
                          message:JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil) // TODO: replace with the other message
-                      completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+                      completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                               [self cancelResourceViewingAndExit:YES];
-                          }@weakselfend
+                          }
                cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil)
                otherButtonTitles:nil] show];
     
     [super didReceiveMemoryWarning];
+}
+
+- (void)cancelResourceViewingAndExit:(BOOL)exit
+{
+    [self.documentController dismissMenuAnimated:YES];
+    [super cancelResourceViewingAndExit:exit];
 }
 
 - (JMSavedResources *)savedReports
@@ -60,44 +67,35 @@
 
 - (void)startResourceViewing
 {
-    NSString *fullReportPath = [JMSavedResources pathToExportedReport:self.savedReports];
-
-    if (!fullReportPath) {
-        NSString *title = JMCustomLocalizedString(@"dialod.title.error", nil);
-        NSString *message = JMCustomLocalizedString(@"savedreport.viewer.file.not.exists", nil);
-        NSString *okButtonTitle = JMCustomLocalizedString(@"dialog.button.ok", nil);
-
-        [[UIAlertView alertWithTitle:title
-                             message:message
-                          completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
-                                  [self cancelResourceViewingAndExit:YES];
-                              }@weakselfend
-                   cancelButtonTitle:okButtonTitle
-                   otherButtonTitles:nil] show];
-        return;
-    }
+    NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
 
     if (self.webView.isLoading) {
         [self.webView stopLoading];
     }
     self.isResourceLoaded = NO;
 
+    NSURL *url = [NSURL fileURLWithPath:fullReportPath];
+    self.resourceRequest = [NSURLRequest requestWithURL:url];
+    [self.webView loadRequest:self.resourceRequest];
+
+    // Analytics
+    NSString *resourcesType = @"Saved Item (Unknown type)";
     if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-        NSString* content = [NSString stringWithContentsOfFile:fullReportPath
-                                                      encoding:NSUTF8StringEncoding
-                                                         error:NULL];
-        NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-        [self.webView loadHTMLString:content baseURL:url];
-    } else {
-        NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-        self.resourceRequest = [NSURLRequest requestWithURL:url];
-        [self.webView loadRequest:self.resourceRequest];
+        resourcesType = @"Saved Item (HTML)";
+    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+        resourcesType = @"Saved Item (PDF)";
+    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
+        resourcesType = @"Saved Item (XLS)";
     }
+    [JMUtils logEventWithName:@"User opened resource"
+                 additionInfo:@{
+                         @"Resource's Type" : resourcesType
+                 }];
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    return ([super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete);
+    return ([super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn);
 }
 
 #pragma mark - JMMenuActionsViewDelegate
@@ -126,6 +124,19 @@
                                                      otherButtonTitles:@"dialog.button.ok", nil];
         alertView.tag = action;
         [alertView show];
+    } else if (action == JMMenuActionsViewAction_OpenIn) {
+        self.documentController = [self setupDocumentControllerWithURL:self.resourceRequest.URL
+                                                                             usingDelegate:self];
+
+        BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+        if (!canOpen) {
+            UIAlertView *alertView  = [UIAlertView localizedAlertWithTitle:nil
+                                                                   message:@"error.openIn.message"
+                                                                  delegate:self
+                                                         cancelButtonTitle:@"dialog.button.ok"
+                                                         otherButtonTitles:nil];
+            [alertView show];
+        }
     }
 }
 
@@ -142,13 +153,12 @@
 {
     NSString *errorMessage = @"";
     UITextField *textField = [alertView textFieldAtIndex:0];
-    BOOL validData = [JMUtils validateReportName:textField.text extension:self.savedReports.format errorMessage:&errorMessage];
+    BOOL validData = [JMUtils validateReportName:textField.text errorMessage:&errorMessage];
     if (validData && ![JMSavedResources isAvailableReportName:textField.text format:self.savedReports.format]) {
         validData = NO;
         errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
     }
     alertView.message = errorMessage;
-    
     return validData;
 }
 
@@ -174,6 +184,15 @@
             }
         }
     }
+}
+
+
+#pragma mark - Helpers
+- (UIDocumentInteractionController *) setupDocumentControllerWithURL: (NSURL *) fileURL
+                                                       usingDelegate: (id <UIDocumentInteractionControllerDelegate>) interactionDelegate {
+    UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
+    interactionController.delegate = interactionDelegate;
+    return interactionController;
 }
 
 @end

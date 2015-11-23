@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -51,7 +51,7 @@ static NSMutableArray* visiblePopupsArray = nil;
         
         _backGroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kJMPopupViewDefaultWidth, kJMPopupViewButtonsHeight)];
         _backGroundView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin |UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
-        _backGroundView.backgroundColor = [kJMSearchBarBackgroundColor colorWithAlphaComponent:0.98f];
+        _backGroundView.backgroundColor = [[[JMThemesManager sharedManager] popupsBackgroundColor] colorWithAlphaComponent:0.98f];
         _backGroundView.layer.borderColor = [UIColor whiteColor].CGColor;
         _backGroundView.layer.borderWidth = 1.f;
         _backGroundView.layer.masksToBounds = NO;
@@ -110,18 +110,15 @@ static NSMutableArray* visiblePopupsArray = nil;
 
 + (BOOL)isShowedPopup
 {
-    if ([visiblePopupsArray count]) {
-        return YES;
-    }
-    return NO;
+    return visiblePopupsArray.count != 0;
 }
 
 - (void)setContentView:(UIView *)contentView
 {
     // Fix for no-retina screens with correct displaying
     CGRect contentViewFrame = contentView.frame;
-    contentViewFrame.size.width = 2 * ceil(contentViewFrame.size.width / 2);
-    contentViewFrame.size.height = 2 * ceil(contentViewFrame.size.height / 2);
+    contentViewFrame.size.width = (CGFloat) (2 * ceil(contentViewFrame.size.width / 2));
+    contentViewFrame.size.height = (CGFloat) (2 * ceil(contentViewFrame.size.height / 2));
     contentView.frame = contentViewFrame;
     
     _contentView = contentView;
@@ -235,7 +232,7 @@ static NSMutableArray* visiblePopupsArray = nil;
     CGPoint point = [tap locationInView:_backGroundView];
     BOOL found = NO;
     
-    if (!found && CGRectContainsPoint(_backGroundView.bounds, point)) {
+    if (CGRectContainsPoint(_backGroundView.bounds, point)) {
         found = YES;
     }
     
@@ -259,30 +256,33 @@ static NSMutableArray* visiblePopupsArray = nil;
 
 - (void)dismiss:(BOOL)animated
 {
-    self.dismissBlock = @weakself(^(void)) {
+    __weak typeof(self)weakSelf = self;
+    self.dismissBlock = ^(void) {
+        __strong typeof(self)strongSelf = weakSelf;
+
         if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewWillDismissed:)]) {
-            [self.delegate popupViewWillDismissed:self];
+            [strongSelf.delegate popupViewWillDismissed:strongSelf];
         }
         if (!animated) {
-            [self removeFromSuperview];
-            if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
-                [self.delegate popupViewDidDismissed:self];
+            [strongSelf removeFromSuperview];
+            if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
+                [strongSelf.delegate popupViewDidDismissed:strongSelf];
             }
         } else {
-            self.animatedNow = YES;
+            strongSelf.animatedNow = YES;
             [UIView animateWithDuration:0.3f animations:^{
-                self->_backGroundView.alpha = 0.1f;
-                self->_backGroundView.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
+                strongSelf->_backGroundView.alpha = 0.1f;
+                strongSelf->_backGroundView.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
             } completion:^(BOOL finished) {
-                [self removeFromSuperview];
-                self.animatedNow = NO;
-                if (self.delegate && [self.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
-                    [self.delegate popupViewDidDismissed:self];
+                [strongSelf removeFromSuperview];
+                strongSelf.animatedNow = NO;
+                if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(popupViewDidDismissed:)]) {
+                    [strongSelf.delegate popupViewDidDismissed:strongSelf];
                 }
-                self.dismissBlock = nil;
+                strongSelf.dismissBlock = nil;
             }];
         }
-    }@weakselfend;
+    };
     
     [visiblePopupsArray removeObject:self];
     
@@ -315,7 +315,13 @@ static NSMutableArray* visiblePopupsArray = nil;
     CGContextRef context = UIGraphicsGetCurrentContext();
     size_t locationsCount = 2;
     CGFloat locations[2] = {0.0f, 1.0f};
-    CGFloat colors[8] = {0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.75f};
+    UIColor *popupColor = [[JMThemesManager sharedManager] popupsBackgroundColor];
+    
+    CGFloat colors[8] = {0.0f};
+    [popupColor getRed:&colors[0] green:&colors[1] blue:&colors[2] alpha:nil];
+    [popupColor getRed:&colors[4] green:&colors[5] blue:&colors[6] alpha:nil];
+    colors[7] = 0.75f;
+    
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGGradientRef gradient = CGGradientCreateWithColorComponents(colorSpace, colors, locations, locationsCount);
     CGColorSpaceRelease(colorSpace);

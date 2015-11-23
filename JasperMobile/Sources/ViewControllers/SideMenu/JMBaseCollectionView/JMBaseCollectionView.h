@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -46,7 +46,7 @@ static inline JMResourcesRepresentationType JMResourcesRepresentationTypeLast() 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UILabel *activityViewTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *noResultsViewTitleLabel;
-@property (nonatomic, strong) UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 
 - (void)setupWithNoResultText:(NSString *)noResult;

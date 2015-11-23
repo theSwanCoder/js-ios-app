@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -33,8 +33,8 @@
  @since 1.6
  */
 
-#import <Foundation/Foundation.h>
-#import "UIColor+RGBComponent.h"
+// Application name with trademarks
+extern NSString * const kJMAppName;
 
 // Constants for NSUserDefaults
 extern NSString * const kJMDefaultsCurrentVersion;
@@ -63,6 +63,7 @@ extern NSString * const kJMDashboardKey;
 extern NSString * const kJMDefaultRequestTimeout;
 extern NSString * const kJMDefaultSendingCrashReport;
 extern NSString * const kJMDefaultUseVisualize;
+extern NSString * const kJMUserAcceptAgreement;
 
 // Demo server parameters
 extern NSString * const kJMDemoServerAlias;
@@ -97,13 +98,7 @@ NSInteger  const kJMSaveReportMaxRangePages;
 NSInteger  const kJMResourceLimit;
 NSInteger  const kJMRecentResourcesLimit;
 
-#define kJMDetailViewLightBackgroundColor               [UIColor colorFromHexString:@"#E5E9EB"]
-#define kJMDetailViewLightTextColor                     [UIColor colorFromHexString:@"#8F8F8F"]
-#define kJMSearchBarBackgroundColor                     [UIColor colorFromHexString:@"#26282D"]
-
-#define kJMMainNavigationBarBackgroundColor             [UIColor colorFromHexString:@"#343841"]
-#define kJMMainCollectionViewBackgroundColor            [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]]
-
-#define kJMResourcePreviewBackgroundColor               [UIColor colorFromHexString:@"#428EC0"]
-
-#define kJMMasterResourceCellSelectedBackgroundColor    [UIColor colorFromHexString:@"#484F59"]
+// Name of the default theme file
+extern NSString * const kJMDefaultThemeFileName;
+extern NSString * const kJMThemesFileFormat;
+extern NSString * const kJMCurrentThemeFileName;

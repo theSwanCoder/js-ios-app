@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -48,4 +48,6 @@
 
 - (void)executeWithCompletion:(void(^)(JSReportExecutionResponse *executionResponse, NSError *error))completion;
 - (void)exportWithCompletion:(void (^)(JSExportExecutionResponse *exportResponse, NSError *error))completion;
+
+- (void)cancel;
 @end

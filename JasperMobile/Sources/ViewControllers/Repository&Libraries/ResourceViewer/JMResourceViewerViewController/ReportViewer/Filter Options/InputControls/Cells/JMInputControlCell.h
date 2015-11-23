@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -38,6 +38,8 @@
 @required
 - (void) reloadTableViewCell:(JMInputControlCell *)cell;
 
+- (void) inputControlCellDidChangedValue:(JMInputControlCell *)cell;
+
 - (void) updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor;
 @end
 
@@ -49,7 +51,7 @@
 @property (nonatomic, weak) IBOutlet UILabel *errorLabel;
 
 - (void) updateDisplayingOfErrorMessage;
+- (void) updateValue:(NSString *)newValue;
 - (void) setEnabledCell:(BOOL) enabled;
-- (BOOL) isValidData;
 
 @end

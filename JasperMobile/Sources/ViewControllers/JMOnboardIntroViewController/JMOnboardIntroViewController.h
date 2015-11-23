@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -30,6 +30,13 @@
  @author Aleksandr Dakhno odahno@tibco.com
  @since 2.0
  */
+
+typedef NS_ENUM(NSInteger, JMOnboardIntroPage) {
+    JMOnboardIntroPageWelcome,
+    JMOnboardIntroPageStayConnected,
+    JMOnboardIntroPageInstanceAccess,
+    JMOnboardIntroPageSeemlessIntegration
+};
 
 @interface JMOnboardIntroViewController : UIViewController
 @end

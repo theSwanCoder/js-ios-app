@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -33,5 +33,4 @@
 
 #import "JMEditabledViewController.h"
 @interface JMSettingsViewController : JMEditabledViewController 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *menuButton;
 @end

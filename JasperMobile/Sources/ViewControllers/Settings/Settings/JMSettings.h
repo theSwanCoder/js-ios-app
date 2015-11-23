@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -31,7 +31,14 @@
  @since 1.9
  */
 
-#import <Foundation/Foundation.h>
+extern NSString * const kJMTextCellIdentifier;
+extern NSString * const kJMLabelCellIdentifier;
+extern NSString * const kJMBooleanCellIdentifier;
+
+extern NSInteger const kJMFeedbackSettingValue;
+extern NSInteger const kJMPrivacyPolicySettingValue;
+extern NSInteger const kJMOnboardIntroSettingValue;
+extern NSInteger const kJMEULASettingValue;
 
 @interface JMSettings : NSObject
 @property (nonatomic, readonly) NSArray *itemsArray;

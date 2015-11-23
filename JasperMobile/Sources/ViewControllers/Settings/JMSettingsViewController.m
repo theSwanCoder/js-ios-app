@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -33,6 +33,8 @@
 #import "UIView+Additions.h"
 #import <MessageUI/MessageUI.h>
 #import "ALToastView.h"
+#import "JMOnboardIntroViewController.h"
+#import "JMEULAViewController.h"
 
 static NSString const *kFeedbackPrimaryEmail = @"js-dev-mobile@tibco.com";
 static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
@@ -53,7 +55,7 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     [super viewDidLoad];
     self.title = JMCustomLocalizedString(@"settings.title", nil);
 
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     self.tableView.layer.cornerRadius = 4;
 
     [self.privacyPolicyButton setTitle:JMCustomLocalizedString(@"settings.privacy.policy.title", nil) forState:UIControlStateNormal];
@@ -62,9 +64,6 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 
     UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"info_item"] style:UIBarButtonItemStyleBordered target:self action:@selector(applicationInfo:)];
     self.navigationItem.rightBarButtonItem = infoItem;
-    //self.navigationItem.rightBarButtonItems = @[infoItem];
-
-    [self setupMenu];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -98,17 +97,6 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
     [self.tableView reloadData];
 }
 
-#pragma mark - Menu setup
-- (void)setupMenu
-{
-    SWRevealViewController *revealViewController = self.revealViewController;
-    if (revealViewController) {
-        [self.menuButton setTarget:revealViewController];
-        [self.menuButton setAction:@selector(revealToggle:)];
-        [self.view addGestureRecognizer:revealViewController.panGestureRecognizer];
-    }
-}
-
 #pragma mark - UITableViewDataSource, UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -117,9 +105,9 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMSettingsItem *currentItem = [self.detailSettings.itemsArray objectAtIndex:indexPath.row];
-    JMSettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:currentItem.cellIdentifier];
-    [cell setBottomSeparatorWithHeight:1 color:tableView.separatorColor tableViewStyle:tableView.style];
+    JMSettingsItem *currentItem = self.detailSettings.itemsArray[indexPath.row];
+    JMSettingsTableViewCell *cell = (JMSettingsTableViewCell *) [tableView dequeueReusableCellWithIdentifier:currentItem.cellIdentifier];
+    [cell setBottomSeparatorWithHeight:1 color:self.view.backgroundColor tableViewStyle:tableView.style];
     cell.settingsItem = currentItem;
     return cell;
 }
@@ -127,9 +115,20 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    JMSettingsItem *currentItem = [self.detailSettings.itemsArray objectAtIndex:indexPath.row];
-    if ([currentItem.cellIdentifier isEqualToString:@"FeedbackCellIdentifier"]) {
-        [self sendFeedback];
+    JMSettingsItem *currentItem = self.detailSettings.itemsArray[indexPath.row];
+
+    if ([currentItem.cellIdentifier isEqualToString:kJMLabelCellIdentifier]) {
+        NSInteger value = ((NSNumber *)currentItem.valueSettings).integerValue;
+
+        if (value == kJMPrivacyPolicySettingValue) {
+            [self showPrivacyPolicy];
+        } else if (value == kJMOnboardIntroSettingValue) {
+            [self showOnboardIntro];
+        } else if (value == kJMFeedbackSettingValue) {
+            [self sendFeedback];
+        } else if (value == kJMEULASettingValue) {
+            [self showEULA];
+        }
     }
 }
 
@@ -213,9 +212,13 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
 
 - (void)applicationInfo:(id)sender
 {
-    NSString *appName = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"];
     NSInteger currentYear = [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]] year];
-    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil), appName, [JMAppUpdater latestAppVersionAsString], [JMServerProfile minSupportedServerVersion], currentYear];
+    NSString *message = [NSString stringWithFormat:JMCustomLocalizedString(@"application.info", nil),
+                    kJMAppName,
+                    [JMAppUpdater latestAppVersionAsString],
+                    @"\u00AE",
+                    [JMServerProfile minSupportedServerVersion],
+                    currentYear];
 
     [[UIAlertView localizedAlertWithTitle:nil
                                   message:message
@@ -224,8 +227,34 @@ static NSString const *kFeedbackSecondaryEmail = @"js.testdevice@gmail.com";
                         otherButtonTitles:nil] show];
 }
 
-#pragma mark - 
-#pragma mrak - UIAlertViewDelegate
+- (void)showPrivacyPolicy
+{
+    [self performSegueWithIdentifier:@"showPrivacyPolicy" sender:self];
+    if ([self isMenuShown]) {
+        [self closeMenu];
+    }
+}
+
+- (void)showOnboardIntro
+{
+    JMOnboardIntroViewController *introViewController = (JMOnboardIntroViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
+    [self presentViewController:introViewController animated:YES completion:nil];
+    if ([self isMenuShown]) {
+        [self closeMenu];
+    }
+}
+
+- (void)showEULA
+{
+    JMEULAViewController *EULAViewController = (JMEULAViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMEULAViewController"];
+    EULAViewController.completion = nil;
+    EULAViewController.shouldUserAccept = NO;
+
+    [self.navigationController pushViewController:EULAViewController
+                                         animated:YES];
+}
+
+#pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     [self.navigationController popViewControllerAnimated:YES];

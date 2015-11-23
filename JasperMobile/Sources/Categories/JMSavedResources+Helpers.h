@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -41,13 +41,20 @@ extern NSString * const kJMSavedResources;
 + (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource;
 
 // Adds saved resource with path to CoreData
-+ (void)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format;
++ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format;
 
 // Returns YES if report with name reportName with format reportFormat is absent
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat;
 
++ (NSArray *)allSavedItems;
+
++ (BOOL)moveSavedItemFromPath:(NSString *)fromPath toPath:(NSString *)toPath;
+
 // Rename saved resource
 - (BOOL)renameReportTo:(NSString *)newName;
+
+// Remove saved resource from DB
+- (void)removeFromDB;
 
 // Removes saved resource
 - (void)removeReport;
@@ -58,12 +65,14 @@ extern NSString * const kJMSavedResources;
 // Returns wrapper from SavedReports. Wrapper is a JSResourceLookup
 - (JSResourceLookup *)wrapperFromSavedReports;
 
-+ (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format;
+// paths
++ (NSString *)pathToFolderForSavedReport:(JMSavedResources *)savedReport;
++ (NSString *)pathToTempFolderForSavedReport:(JMSavedResources *)savedReport;
++ (NSString *)absolutePathToSavedReport:(JMSavedResources *)savedReport;
++ (NSString *)absoluteTempPathToSavedReport:(JMSavedResources *)savedReport;
 
-+ (NSString *)pathToReportDirectoryWithName:(NSString *)name format:(NSString *)format;
++ (NSString *)pathToTempReportsFolder;
 
-+ (NSString *)pathToExportedReport:(JMSavedResources *)exportedReport;
-
-+ (NSString *)pathToReportWithName:(NSString *)name format:(NSString *)format;
-
++ (NSString *)oldPathForSavedReport:(JMSavedResources *)savedResource;
++ (NSString *)newURIForSavedReport:(JMSavedResources *)savedResource;
 @end

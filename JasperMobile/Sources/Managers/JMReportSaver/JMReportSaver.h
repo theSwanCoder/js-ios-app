@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -34,7 +34,12 @@
 #import <Foundation/Foundation.h>
 #import "JMReport.h"
 
-typedef void(^SaveReportCompletion)(NSString *reportURI, NSError *error);
+typedef void(^SaveReportCompletion)(JMSavedResources *savedReport, NSError *error);
+NSString * const kJMReportSaverErrorDomain;
+
+typedef NS_ENUM(NSInteger, JMReportSaverErrorTypes) {
+    JMReportSaverErrorTypesUndefined
+};
 
 @interface JMReportSaver : NSObject
 

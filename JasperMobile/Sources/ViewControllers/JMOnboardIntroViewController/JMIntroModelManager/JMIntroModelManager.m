@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -49,24 +49,45 @@
 }
 
 - (void)setupModel {
-    NSString *seemlessIntegrationPageDescription = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.model.thirdScreen.description", nil), [JMServerProfile minSupportedServerVersion]];
 
+    NSString *description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.model.firstScreen.description", nil), kJMAppName];
     JMIntroModel *stayConnectedPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.firstScreen.title", nil)
-                                                              description:JMCustomLocalizedString(@"intro.model.firstScreen.description", nil)
-                                                                    image:[UIImage imageNamed:@"stay_connect_image"]];
+                                                              description:description
+                                                                    image:nil];
     JMIntroModel *instantAccessPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.secondScreen.title", nil)
                                                               description:JMCustomLocalizedString(@"intro.model.secondScreen.description", nil)
-                                                                    image:[UIImage imageNamed:@"instant_access_image"]];
+                                                                    image:nil];
+
+    description = [NSString stringWithFormat:JMCustomLocalizedString(@"intro.model.thirdScreen.description", nil), @"\u00AE", [JMServerProfile minSupportedServerVersion]];
     JMIntroModel *seemlessIntegrationPage = [[JMIntroModel alloc] initWithTitle:JMCustomLocalizedString(@"intro.model.thirdScreen.title", nil)
-                                                                    description:seemlessIntegrationPageDescription
-                                                                          image:[UIImage imageNamed:@"seemless_integration_image"]];
+                                                                    description:description
+                                                                          image:nil];
     self.pageData = @[
             stayConnectedPage, instantAccessPage, seemlessIntegrationPage
     ];
 }
 
-- (JMIntroModel *)modelAtIndex:(NSUInteger)index {
-    return self.pageData[index];
+- (JMIntroModel *)modelForIntroPage:(JMOnboardIntroPage)introPage
+{
+    JMIntroModel *model;
+    switch (introPage) {
+        case JMOnboardIntroPageWelcome: {
+            break;
+        }
+        case JMOnboardIntroPageStayConnected: {
+            model = self.pageData[0];
+            break;
+        }
+        case JMOnboardIntroPageInstanceAccess: {
+            model = self.pageData[1];
+            break;
+        }
+        case JMOnboardIntroPageSeemlessIntegration: {
+            model = self.pageData[2];
+            break;
+        }
+    };
+    return model;
 }
 
 @end

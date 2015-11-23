@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -40,6 +40,8 @@
 @interface JMBaseReportViewerViewController : JMResourceViewerViewController <JMRefreshable, JMReportViewerToolBarDelegate>
 @property (nonatomic, strong, readonly) id <JMReportLoader> reportLoader;
 @property (nonatomic, strong, readonly) JMReport *report;
+@property (nonatomic, assign) BOOL isChildReport;
+@property (nonatomic, strong) NSArray *initialReportParameters;
 @property (nonatomic, copy) void(^exitBlock)(void);
 
 - (void)handleReportLoaderDidChangeCountOfPages;
@@ -52,13 +54,10 @@
 - (NSString *)tempReportName;
 
 - (void)runReportWithPage:(NSInteger)page;
-- (void)updateReportWithNewParameters;
+- (void)updateReportWithNewActiveReportOption:(JMExtendedReportOption *)newActiveOption;
 
 // setups
 - (void)updateToobarAppearence;
-
-// input controls
-- (void)loadInputControlsWithReportURI:(NSString *)reportURI completion:(void (^)(NSArray *, NSError *))completion;
 
 // empty report handle
 - (void)showEmptyReportMessage;

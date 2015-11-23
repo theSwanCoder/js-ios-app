@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -30,7 +30,6 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMCancelRequestPopup.h"
 #import "JMWebViewManager.h"
-#import "JMServerProfile.h"
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 
@@ -56,16 +55,17 @@ static JMSessionManager *_sharedManager = nil;
 - (void) createSessionWithServerProfile:(JSProfile *)serverProfile keepLogged:(BOOL)keepLogged completion:(void(^)(BOOL success))completionBlock
 {
     self.restClient = [[JSRESTBase alloc] initWithServerProfile:serverProfile keepLogged:keepLogged];
+
     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-        BOOL isServerInfoExists = self.restClient.serverInfo != nil;
-        if (isServerInfoExists && isSessionAuthorized) {
-            [self saveActiveSessionIfNeeded];
             if (completionBlock) {
-                completionBlock(YES);
+                BOOL isServerInfoExists = self.restClient.serverInfo != nil;
+                if (isServerInfoExists && isSessionAuthorized) {
+                    [self saveActiveSessionIfNeeded];
+                    completionBlock(YES);
+                } else {
+                    completionBlock(NO);
+                }
             }
-        } else if (completionBlock) {
-            completionBlock(NO);
-        }
     }];
 }
 
@@ -99,13 +99,13 @@ static JMSessionManager *_sharedManager = nil;
             JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
             if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                    BOOL isRestoredSession = (isSessionAuthorized && self.restClient.serverInfo);
-                    dispatch_async(dispatch_get_main_queue(), ^(void){
-                        if (completion) {
-                            completion(isRestoredSession);
-                        }
-                    });
-                }];
+                        BOOL isRestoredSession = (isSessionAuthorized && self.restClient.serverInfo);
+                        dispatch_async(dispatch_get_main_queue(), ^(void){
+                            if (completion) {
+                                completion(isRestoredSession);
+                            }
+                        });
+                    }];
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^(void){
                     if (completion) {

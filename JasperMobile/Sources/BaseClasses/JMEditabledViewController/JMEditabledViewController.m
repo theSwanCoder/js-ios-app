@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -101,7 +101,7 @@
 
 - (CGFloat) getKeyboardHeightFromUserInfo:(NSDictionary *)userInfo key:(NSString *)key
 {
-    CGSize keyboardSize = [[userInfo objectForKey:key] CGRectValue].size;
+    CGSize keyboardSize = [userInfo[key] CGRectValue].size;
     return MIN(keyboardSize.height, keyboardSize.width);    // Fixing bug on iOS 7
 }
 

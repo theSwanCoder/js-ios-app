@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -33,8 +33,9 @@
 
 
 #import "JMInputControlCell.h"
+#import "JMTextField.h"
 
 @interface JMTextInputControlCell : JMInputControlCell <UITextFieldDelegate>
-@property (nonatomic, weak) IBOutlet UITextField *textField;
+@property (nonatomic, weak) IBOutlet JMTextField *textField;
 
 @end

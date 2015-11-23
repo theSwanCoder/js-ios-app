@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -79,6 +79,8 @@
             return @"action.title.run";
         case JMMenuActionsViewAction_Print:
             return @"action.title.print";
+        case JMMenuActionsViewAction_OpenIn:
+            return @"action.title.openIn";
     }
 }
 
@@ -94,11 +96,7 @@
         case JMMenuActionsViewAction_Refresh:
             return @"refresh_action";
         case JMMenuActionsViewAction_Save:
-            if (self.actionEnabled) {
-                return @"save_action";
-            } else {
-                return @"save_action_disabled";
-            }
+            return @"save_action";
         case JMMenuActionsViewAction_Delete:
             return @"delete_action";
         case JMMenuActionsViewAction_Rename:
@@ -119,6 +117,8 @@
             return @"run_action";
         case JMMenuActionsViewAction_Print:
             return @"print_action";
+        case JMMenuActionsViewAction_OpenIn:
+            return @"open_in_new";
     }
 }
 

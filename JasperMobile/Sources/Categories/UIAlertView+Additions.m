@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -95,7 +95,7 @@ static NSMutableArray *_showedAlertsCompetionBlocks;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if ([_showedAlertsCompetionBlocks count] > alertView.tag - 1) {
-        clickedButtonAtIndexCompletion completionBlock = [_showedAlertsCompetionBlocks objectAtIndex:alertView.tag - 1];
+        clickedButtonAtIndexCompletion completionBlock = _showedAlertsCompetionBlocks[alertView.tag - 1];
         if (completionBlock) {
             [_showedAlertsCompetionBlocks removeObject:completionBlock];
             completionBlock(self, buttonIndex);

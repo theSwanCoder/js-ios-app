@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright Ac 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright Ac 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -27,7 +27,7 @@
 
 /* Application Info */
 
-"application.info" = "%@™ v %@\n\nTIBCO JasperReports Server %.1f 以降向けの管理ツール/レポートビューア。\n\n詳細は以下の URL をご覧ください。\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
+"application.info" = "%@ v %@\n\nTIBCO JasperReports%@ Server %.1f 以降向けの管理ツール/レポートビューア。\n\n詳細は以下の URL をご覧ください。\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
 
 /* Login Page */
 
@@ -58,16 +58,16 @@
 "servers.profile.list.empty" = "サーバー プロファイルがありません";
 
 /* Onboarding Intro */
-"intro.title" = "TIBCO JasperMobile へようこそ";
+"intro.title" = "%@ へようこそ";
 "intro.description" = "最初までスワイプします";
 "intro.button.skip.skip" = "イントロをスキップ";
-"intro.button.skip.startUsing" = "TIBCO JasperMobile の使用を開始";
+"intro.button.skip.startUsing" = "%@ の使用を開始";
 "intro.model.firstScreen.title" = "接続を維持する";
-"intro.model.firstScreen.description" = "TIBCO JasperMobile を使用すると、場所を問わず業務を続けることができます。";
+"intro.model.firstScreen.description" = "%@ を使用すると、場所を問わず業務を続けることができます。";
 "intro.model.secondScreen.title" = "簡易アクセス";
 "intro.model.secondScreen.description" = "操作中のアプリケーションから実行されている\nインタラクティブなライブ レポートにアクセスします。";
 "intro.model.thirdScreen.title" = "シームレスな統合";
-"intro.model.thirdScreen.description" = "TIBCO JasperReports Server v%.1f 以降の環境を\n表示して連携します。";
+"intro.model.thirdScreen.description" = "TIBCO JasperReports%@ Server v%.1f 以降の環境を\n表示して連携します。";
 
 /* Menu View */
 
@@ -153,7 +153,6 @@
 "report.viewer.save.name.errmsg.tooBigRange" = "%@ページ以上のレポートを、HTML形式で保存できませんでした。PDF形式で保存しますか？";
 
 // Report viewer Options view
-"report.viewer.options.title" = "フィルタ オプション";
 "report.viewer.options.singleselect.titlelabel.title" = "1 つのアイテムを選択";
 "report.viewer.options.multiselect.titlelabel.title" = "1 つまたは複数のアイテムを選択";
 "report.viewer.options.search.value.placeholder" = "値を検索";
@@ -201,7 +200,6 @@
 
 "action.title.refresh" = "更新";
 "action.title.save" = "保存";
-"action.title.edit" = "フィルタ オプションの編集";
 "action.title.delete" = "削除";
 "action.title.rename" = "名前の変更";
 "action.title.markasfavorite" = "お気に入りとしてマーク";

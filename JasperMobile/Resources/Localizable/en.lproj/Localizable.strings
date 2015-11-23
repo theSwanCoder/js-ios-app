@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -27,7 +27,7 @@
 
 /* Application Info */
 
-"application.info" = "%@™ v %@\n\nManagement tool and report viewer for TIBCO JasperReports Server %.1f and greater.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
+"application.info" = "%@ v %@\n\nManagement tool and report viewer for TIBCO JasperReports%@ Server %.1f and greater.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
 
 /* Login Page */
 
@@ -58,16 +58,16 @@
 "servers.profile.list.empty" = "There are no Server Profiles";
 
 /* Onboarding Intro */
-"intro.title" = "Welcome to\nTIBCO JasperMobile";
+"intro.title" = "Welcome to\n%@";
 "intro.description" = "Swipe up to begin";
 "intro.button.skip.skip" = "Skip Intro";
-"intro.button.skip.startUsing" = "Start using TIBCO JasperMobile";
+"intro.button.skip.startUsing" = "Start using %@";
 "intro.model.firstScreen.title" = "Stay Connected";
-"intro.model.firstScreen.description" = "TIBCO JasperMobile keeps you connected to\nyour business wherever you are.";
+"intro.model.firstScreen.description" = "%@ keeps you connected to\nyour business wherever you are.";
 "intro.model.secondScreen.title" = "Instant Access";
 "intro.model.secondScreen.description" = "Get access to live interactive reports\ndriven from your operational applications.";
 "intro.model.thirdScreen.title" = "Seemless Integration";
-"intro.model.thirdScreen.description" = "View and interact with your TIBCO JasperReports\nServer v%.1f or greater environment.";
+"intro.model.thirdScreen.description" = "View and interact with your TIBCO JasperReports%@\nServer v%.1f or greater environment.";
 
 /* Menu View */
 
@@ -131,7 +131,7 @@
 "report.viewer.error.title" = "Error while loading report.";
 "report.viewer.visualize.render.error" = "Report rendering failed.";
 "report.viewer.emptyreport.title" = "Report is empty.";
-"report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filter options, or tap 'Cancel' to return to the previous report.";
+"report.viewer.emptyreport.message" = "Tap 'Ok' if you want to change filters, or tap 'Cancel' to return to the previous report.";
 "report.viewer.pagecount" = "of %d";
 "report.viewer.wrongNumberOfCurrentPage" = "The requested page is out of range (%@).";
 
@@ -153,13 +153,20 @@
 "report.viewer.save.name.errmsg.tooBigRange" = "Can't save report of more than %@ pages in HTML format. Would you like to save it in PDF format?";
 
 // Report viewer Options view
-"report.viewer.options.title" = "Filter Options";
+"report.viewer.options.title" = "Filters";
 "report.viewer.options.singleselect.titlelabel.title" = "Select a single item";
 "report.viewer.options.multiselect.titlelabel.title" = "Select one or more items";
 "report.viewer.options.search.value.placeholder" = "Search Values";
 "report.viewer.options.ic.title.date" = "Date";
 "report.viewer.options.ic.title.time" = "Time";
 "report.viewer.options.ic.title.unset" = "Unset";
+"report.viewer.report.options.title" = "Saved Values";
+"report.viewer.report.options.active.option.title" = "-- None --";
+"report.viewer.report.options.new.option.title" = "Enter name of a new ReportOption";
+"report.viewer.report.options.new.option.title.alreadyexist" = "This report already has saved values with this name. Do you want to overwrite them?";
+"report.viewer.report.options.create.permission.error" = "You do not have permission to save this option for the report. Log in as a permitted user if you can.";
+"report.viewer.report.options.remove.permission.error" = "You do not have permission to remove this option for the report. Log in as a permitted user if you can.";
+"report.viewer.report.options.remove.confirmation.message" = "Do you really want to remove \n%@?";
 
 // Saved Reports viewer view
 "savedreport.viewer.modify.title" = "Rename Report";
@@ -195,6 +202,7 @@
 "settings.crashtracking.alert.title" = "Note";
 "settings.crashtracking.alert.message" = "Restart the app after changing this setting.";
 "settings.privacy.policy.title" = "Privacy Policy";
+"settings.privacy.EULA.title" = "End user license agreement";
 "settings.feedback" = "Feedback by email";
 "settings.feedback.errorShowClient" = "An email address is required.";
 "settings.save.message" = "Saving Settings...";
@@ -204,7 +212,7 @@
 
 "action.title.refresh" = "Refresh";
 "action.title.save" = "Save";
-"action.title.edit" = "Edit Filter Options";
+"action.title.edit" = "Edit Filters";
 "action.title.delete" = "Delete";
 "action.title.rename" = "Rename";
 "action.title.markasfavorite" = "Mark as Favorite";
@@ -216,6 +224,8 @@
 "action.title.clearselections" = "Clear selections";
 "action.title.run" = "Run";
 "action.title.print" = "Print";
+"action.title.openIn" = "Open with...";
+"action.title.accept" = "Accept";
 
 /* Error messages */
 
@@ -231,6 +241,7 @@
 "error.server.notsupported.title" = "Wrong server version or URL";
 // TODO: change for other languages.
 "error.server.notsupported.msg" = "The server version is not supported, or the URL is incorrect.";
+"error.openIn.message" = "There is no application to open this resource.";
 
 /* HTTP error messages */
 

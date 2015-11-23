@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -94,14 +94,14 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         [self.report updateCurrentPage:page];
         [self.report updateCountOfPages:NSNotFound];
 
-        [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+        [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
             if (success) {
                 [self.bridge startLoadHTMLString:self.report.HTMLString
                                          baseURL:[NSURL URLWithString:self.report.baseURLString]];
             } else {
                 NSLog(@"Error loading HTML%@", error.localizedDescription);
             }
-        }@weakselfend];
+        }];
     } else {
         [self fetchPageNumber:page withCompletion:completionBlock];
     }
@@ -150,14 +150,14 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         self.reportLoadCompletion = completion;
         [self.report updateCurrentPage:1];
 
-        [self startLoadHTMLWithCompletion:@weakself(^(BOOL success, NSError *error)) {
+        [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
                 if (success) {
                     [self.bridge startLoadHTMLString:self.report.HTMLString
                                              baseURL:[NSURL URLWithString:self.report.baseURLString]];
                 } else {
                     NSLog(@"Error loading HTML%@", error.localizedDescription);
                 }
-            }@weakselfend];
+            }];
     } else if (!self.report.isReportAlreadyLoaded) {
         self.isReportInLoadingProcess = YES;
         [self.report updateLoadingStatusWithValue:NO];
@@ -220,7 +220,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)startLoadHTMLWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
     JMLog(@"visuzalise.js did start load");
-    [self.visualizeManager loadVisualizeJSWithCompletion:@weakself(^(BOOL success, NSError *error)){
+    [self.visualizeManager loadVisualizeJSWithCompletion:^(BOOL success, NSError *error){
         if (success) {
             JMLog(@"visuzalise.js did end load");
             NSString *baseURLString = self.restClient.serverProfile.serverUrl;
@@ -240,7 +240,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                 completion(NO, error);
             }
         }
-    }@weakselfend];
+    }];
 }
 
 #pragma mark - JMJavascriptNativeBridgeDelegate

@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -41,16 +41,16 @@
 
 #pragma mark - Initialization
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    return [self initWithNibName:NSStringFromClass([JMSingleSelectTableViewController class]) bundle:nil];
+    return [super initWithNibName:NSStringFromClass([JMSingleSelectTableViewController class]) bundle:nil];
 }
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSInputControlOption *option = [self.listOfValues objectAtIndex:indexPath.row];
+    JSInputControlOption *option = self.listOfValues[indexPath.row];
     option.selected = [JSConstants stringFromBOOL:!option.selected.boolValue];
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];

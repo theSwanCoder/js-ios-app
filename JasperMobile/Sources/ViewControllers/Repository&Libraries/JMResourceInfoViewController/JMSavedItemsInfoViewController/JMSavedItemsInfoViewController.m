@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -112,7 +112,7 @@
 
 - (void)runReport
 {
-    JMSavedResourceViewerViewController *nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
+    JMSavedResourceViewerViewController *nextVC = (JMSavedResourceViewerViewController *) [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
     nextVC.resourceLookup = self.resourceLookup;
     nextVC.delegate = self;
     
@@ -134,7 +134,7 @@
 {
     NSString *errorMessage = @"";
     UITextField *textField = [alertView textFieldAtIndex:0];
-    BOOL validData = [JMUtils validateReportName:textField.text extension:self.savedReports.format errorMessage:&errorMessage];
+    BOOL validData = [JMUtils validateReportName:textField.text errorMessage:&errorMessage];
     if (validData && ![JMSavedResources isAvailableReportName:textField.text format:self.savedReports.format]) {
         validData = NO;
         errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
@@ -171,7 +171,7 @@
 - (void)resourceViewer:(JMBaseResourceViewerVC *)resourceViewer didDeleteResource:(JSResourceLookup *)resourceLookup
 {
     NSArray *viewControllers = self.navigationController.viewControllers;
-    UIViewController *previousViewController = [viewControllers objectAtIndex:[viewControllers indexOfObject:self] - 1];
+    UIViewController *previousViewController = viewControllers[[viewControllers indexOfObject:self] - 1];
     [self.navigationController popToViewController:previousViewController animated:YES];
 }
 

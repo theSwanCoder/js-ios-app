@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -28,8 +28,12 @@
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
+ @author Alexey Gubarev ogubarie@tibco.com
  @since 2.0
  */
+
+#import "JMExtendedReportOption.h"
+
 extern NSString * const kJMReportIsMutlipageDidChangedNotification;
 extern NSString * const kJMReportCountOfPagesDidChangeNotification;
 extern NSString * const kJMReportCurrentPageDidChangeNotification;
@@ -37,7 +41,7 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 @interface JMReport : NSObject
 // getters
 @property (nonatomic, strong, readonly) JSResourceLookup *resourceLookup;
-@property (nonatomic, copy, readonly) NSArray *inputControls;
+
 @property (nonatomic, copy, readonly) NSArray *reportParameters;
 @property (nonatomic, copy, readonly) NSString *reportURI;
 @property (nonatomic, assign, readonly) NSInteger currentPage;
@@ -48,6 +52,7 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 @property (nonatomic, strong, readonly) NSString *requestId;
 @property (nonatomic, assign, readonly) BOOL isReportAlreadyLoaded;
 
+
 // html
 @property (nonatomic, copy, readonly) NSString *HTMLString;
 @property (nonatomic, copy, readonly) NSString *baseURLString;
@@ -56,13 +61,19 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 // thumbnails
 @property (nonatomic, strong) UIImage *thumbnailImage;
 
-- (instancetype)initWithResource:(JSResourceLookup *)resourceLookup
-                   inputControls:(NSArray *)inputControls;
-+ (instancetype)reportWithResource:(JSResourceLookup *)resourceLookup
-                     inputControls:(NSArray *)inputControl;
+// report options
+@property (nonatomic, strong, readonly) NSArray *reportOptions;
+@property (nonatomic, strong) JMExtendedReportOption *activeReportOption;
+
+
+- (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup;
++ (instancetype)reportWithResourceLookup:(JSResourceLookup *)resourceLookup;
 
 // update state
-- (void)updateInputControls:(NSArray *)inputControls;
+- (void)generateReportOptionsWithInputControls:(NSArray *)inputControls;
+- (void)addReportOptions:(NSArray *)reportOptions;
+- (void)removeReportOption:(JMExtendedReportOption *)reportOption;
+
 - (void)updateReportParameters:(NSArray *)reportParameters;
 - (void)updateCurrentPage:(NSInteger)currentPage;
 - (void)updateCountOfPages:(NSInteger)countOfPages;
@@ -76,4 +87,5 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 - (void)cacheHTMLString:(NSString *)HTMLString forPageNumber:(NSInteger)pageNumber;
 - (NSDictionary *)cachedReportPages;
 - (void)clearCachedReportPages;
+
 @end

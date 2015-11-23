@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -39,10 +39,7 @@
     NSString *stringSet = [NSString stringWithFormat:@"1234567890%@", decimalSeparator];
     NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:stringSet] invertedSet];
     NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
-    if ([string isEqualToString:filtered]) {
-        return YES;
-    }
-    return NO;
+    return [string isEqualToString:filtered];
 }
 
 @end

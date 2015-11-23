@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -34,9 +34,11 @@
 #import "JMCancelRequestPopup.h"
 #import "JMMenuViewController.h"
 #import "JMOnboardIntroViewController.h"
+#import "UIImage+Additions.h"
 
 
 static NSString * const kGAITrackingID = @"UA-57445224-1";
+static const NSInteger kSplashViewTag = 100;
 
 @implementation JasperMobileAppDelegate
 
@@ -84,6 +86,9 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [self removeSplashView];
+
+    [[JMThemesManager sharedManager] applyCurrentTheme];
     [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:^(BOOL isSessionRestored) {
 
         SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
@@ -110,22 +115,29 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
                 loginCompletionBlock();
             }
         } else {
-            [JMUtils showLoginViewAnimated:NO completion:nil loginCompletion:loginCompletionBlock];
+            JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
+            if (activeServerProfile && activeServerProfile.askPassword.boolValue) {
+                [JMUtils showLoginViewForRestoreSessionWithCompletion:loginCompletionBlock];
+            } else {
+                [JMUtils showLoginViewAnimated:NO
+                                    completion:nil
+                               loginCompletion:loginCompletionBlock];
+            }
         }
-
     }];
 }
 
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    [self addSplashView];
+}
+
 - (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier {
-    if ([extensionPointIdentifier isEqualToString: UIApplicationKeyboardExtensionPointIdentifier]) {
-        return NO;
-    }
-    return YES;
+    return ![extensionPointIdentifier isEqualToString: UIApplicationKeyboardExtensionPointIdentifier];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
-    NSLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
@@ -136,12 +148,12 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
     NSString *profilesPath = [[NSBundle mainBundle] pathForResource:@"profiles" ofType:@"json"];
     NSData *profilesData = [NSData dataWithContentsOfFile:profilesPath];
     NSArray *profilesArray = [[NSJSONSerialization JSONObjectWithData:profilesData options:NSJSONReadingAllowFragments error:nil] objectForKey:@"profiles"];
-    if (profilesArray && [profilesArray isKindOfClass:[NSArray class]] && profilesArray.count) {
+    if (profilesArray && profilesArray.count) {
         for (NSDictionary *profileDictionary in profilesArray) {
-            JMServerProfile *serverProfile = [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
-            serverProfile.alias = [profileDictionary objectForKey:@"mAlias"];
-            serverProfile.organization = [profileDictionary objectForKey:@"mOrganization"];
-            serverProfile.serverUrl = [profileDictionary objectForKey:@"mServerUrl"];
+            JMServerProfile *serverProfile = (JMServerProfile *) [NSEntityDescription insertNewObjectForEntityForName:@"ServerProfile" inManagedObjectContext:[JMCoreDataManager sharedInstance].managedObjectContext];
+            serverProfile.alias = profileDictionary[@"mAlias"];
+            serverProfile.organization = profileDictionary[@"mOrganization"];
+            serverProfile.serverUrl = profileDictionary[@"mServerUrl"];
             [[JMCoreDataManager sharedInstance] save:nil];
         }
     }
@@ -167,9 +179,30 @@ static NSString * const kGAITrackingID = @"UA-57445224-1";
     BOOL shouldDisplayIntro = ![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultsIntroDidApear];
     if (shouldDisplayIntro) {
         SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
-        JMOnboardIntroViewController *introViewController = [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
+        JMOnboardIntroViewController *introViewController = (JMOnboardIntroViewController *) [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
         [revealViewController presentViewController:introViewController animated:YES completion:nil];
     }
 }
+
+#pragma mark - Splash View
+- (void)addSplashView
+{
+    // TODO: replace this approach for getting right splash image
+    NSString *splashImageName = [UIImage splashImageNameForOrientation:[UIApplication sharedApplication].statusBarOrientation];
+    UIImage *splashImage = [UIImage imageNamed:splashImageName];
+    UIImageView *splashView = [[UIImageView alloc] initWithImage:splashImage];
+    splashView.tag = kSplashViewTag;
+    [self.window addSubview:splashView];
+}
+
+- (void)removeSplashView
+{
+    for (UIView *subView in self.window.subviews) {
+        if (subView.tag == kSplashViewTag) {
+            [subView removeFromSuperview];
+        }
+    }
+}
+
 
 @end

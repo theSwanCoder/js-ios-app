@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -36,7 +36,7 @@
  */
 
 #define JMLog(...) jmDebugLog(__VA_ARGS__);
-void jmDebugLog(NSString *format, ...);
+void jmDebugLog(NSString * __nonnull format, ...);
 
 
 @interface JMUtils : NSObject
@@ -45,17 +45,18 @@ void jmDebugLog(NSString *format, ...);
  Validates report name and directory to store report
 
  @param reportName A report name to validate. It needs to be unique, without /: characters, not empty, and less or equals than 250 symbols (last 5 are reserved for extension)
- @param extension A report file extension. Optional, can be provided to validate uniqueness in file system
  @return YES if report name is valid, otherwise returns NO
  */
-+ (BOOL)validateReportName:(NSString *)reportName extension:(NSString *)extension errorMessage:(NSString **)errorMessage;
++ (BOOL)validateReportName:(NSString *__nonnull)reportName errorMessage:(NSString *__nullable*__nullable)errorMessage;
 
 /**
  Returns full path of NSDocumentDirectory directory for NSUserDomainMask domain
 
  @return full path of document directory
 */
-+ (NSString *)applicationDocumentsDirectory;
++ (NSString *__nonnull)applicationDocumentsDirectory;
+
++ (NSString *__nonnull)applicationTempDirectory;
 
 /**
  Shows network activity indicator
@@ -75,10 +76,20 @@ void jmDebugLog(NSString *format, ...);
 + (BOOL)isIphone;
 
 /**
+ Verify system version is 7
+ */
++ (BOOL)isSystemVersion7;
+
+/**
  Verify system version is 8
  */
 
 + (BOOL)isSystemVersion8;
+
+/**
+ Verify system version is 9
+ */
++ (BOOL)isSystemVersion9;
 
 /**
  Returns YES if crash reports sending is available
@@ -92,20 +103,28 @@ void jmDebugLog(NSString *format, ...);
  */
 + (void)activateCrashReportSendingIfNeeded;
 
-+ (NSArray *)supportedFormatsForReportSaving;
++ (NSArray  * __nonnull)supportedFormatsForReportSaving;
 
 /**
  Build Version
  */
-+ (NSString *)buildVersion;
++ (NSString * __nonnull)buildVersion;
 
-+ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion;
++ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion;
 
-+ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^)(void))completion loginCompletion:(LoginCompletionBlock)loginCompletion;
++ (void)showLoginViewAnimated:(BOOL)animated completion:(void (^ __nullable)(void))completion loginCompletion:(LoginCompletionBlock __nullable)loginCompletion;
 
-+ (void)showAlertViewWithError:(NSError *)error;
++ (void)showLoginViewForRestoreSessionWithCompletion:(LoginCompletionBlock __nonnull)loginCompletion;
 
-+ (void)showAlertViewWithError:(NSError *)error completion:(void (^)(UIAlertView *alertView, NSInteger buttonIndex))completion;
++ (void)askUserAgreementWithCompletion:(void (^ __nonnull)(BOOL isAgree))completion;
+
++ (BOOL)isUserAcceptAgreement;
+
++ (void)setUserAcceptAgreement:(BOOL)isAccept;
+
++ (void)showAlertViewWithError:(NSError * __nullable)error;
+
++ (void)showAlertViewWithError:(NSError *__nullable)error completion:(void (^ __nonnull)(UIAlertView * __nonnull alertView, NSInteger buttonIndex))completion;
 
 /**
  Returns YES if User want to use Visualize for watching reports and dashboards
@@ -129,6 +148,8 @@ void jmDebugLog(NSString *format, ...);
 
 + (BOOL)isServerAmber2;
 
++ (BOOL)isServerAmber2OrHigher;
+
 /**
  Returns YES if visualize is supported on current JRS instance
 
@@ -143,13 +164,17 @@ void jmDebugLog(NSString *format, ...);
  */
 + (BOOL)isServerProEdition;
 
-+ (NSString *)localizedStringFromDate:(NSDate *)date;
++ (NSString *__nonnull)localizedStringFromDate:(NSDate *__nonnull)date;
 
-+ (NSDateFormatter *)formatterForSimpleDate;
++ (NSDateFormatter *__nonnull)formatterForSimpleDate;
 
-+ (NSDateFormatter *)formatterForSimpleTime;
++ (NSDateFormatter *__nonnull)formatterForSimpleTime;
 
-+ (NSDateFormatter *)formatterForSimpleDateTime;
++ (NSDateFormatter *__nonnull)formatterForSimpleDateTime;
 
-+ (UIStoryboard *)mainStoryBoard;
++ (UIStoryboard *__nonnull)mainStoryBoard;
+
++ (void)logEventWithName:(NSString *__nonnull)eventName additionInfo:(NSDictionary *__nonnull)additionInfo;
++ (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
+
 @end

@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -76,11 +76,14 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
     self.pagesType = JMSaveReportPagesType_All;
     
-    self.view.backgroundColor = kJMDetailViewLightBackgroundColor;
-    self.tableView.backgroundColor = kJMDetailViewLightBackgroundColor;
+    self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
+    self.tableView.backgroundColor = [UIColor clearColor];
     
     [self.tableView setRowHeight:[JMUtils isIphone] ? 44.f : 50.f];
 
+    self.saveReportButton.backgroundColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
+    [self.saveReportButton setTitleColor:[[JMThemesManager sharedManager] saveReportSaveReportButtonTextColor]
+                                forState:UIControlStateNormal];
     [self.saveReportButton setTitle:JMCustomLocalizedString(@"dialog.button.save", nil)
                            forState:UIControlStateNormal];
 
@@ -166,7 +169,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         CGSize maximumLabelSize = CGSizeMake(maxWidth, CGFLOAT_MAX);
         CGRect textRect = [self.errorString boundingRectWithSize:maximumLabelSize
                                                          options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-                                                      attributes:@{NSFontAttributeName:[JMFont tableViewCellDetailErrorFont]}
+                                                      attributes:@{NSFontAttributeName:[[JMThemesManager sharedManager] tableViewCellErrorFont]}
                                                          context:nil];
         return tableView.rowHeight + ceil(textRect.size.height);
     }
@@ -189,13 +192,13 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
             JMSaveReportFormatCell *formatCell = [tableView dequeueReusableCellWithIdentifier:kJMSaveReportFormatCellIdentifier
                                                                                  forIndexPath:indexPath];
             if (indexPath.row) {
-                [formatCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+                [formatCell setTopSeparatorWithHeight:1.f color:self.view.backgroundColor tableViewStyle:UITableViewStylePlain];
             } else {
                 [formatCell removeTopSeparator];
             }
             
             NSString *currentFormat = [JMUtils supportedFormatsForReportSaving][indexPath.row];
-            formatCell.textLabel.text = currentFormat;
+            formatCell.titleLabel.text = currentFormat;
             formatCell.accessoryType = [self.selectedReportFormat isEqualToString:currentFormat] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             return formatCell;
         }
@@ -213,13 +216,13 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                 pageRangeCell.cellDelegate = self;
                 
                 if (indexPath.row == 1) {
-                    pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.fromPage", nil);
+                    pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.fromPage", nil);
                     pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
                 } else if (indexPath.row == 2) {
-                    pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.toPage", nil);
+                    pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.toPage", nil);
                     pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
                 }
-                [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
+                [pageRangeCell setTopSeparatorWithHeight:1.f color:self.view.backgroundColor tableViewStyle:UITableViewStylePlain];
                 return pageRangeCell;
             }
         }
@@ -305,13 +308,13 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 {
     [self.view endEditing:YES];
     NSString *errorMessageString = nil;
-    BOOL isValidReportName = [JMUtils validateReportName:self.reportName extension:self.selectedReportFormat errorMessage:&errorMessageString];
+    BOOL isValidReportName = [JMUtils validateReportName:self.reportName errorMessage:&errorMessageString];
     self.errorString = errorMessageString;
 
     if (!self.errorString && isValidReportName) {
         if (![JMSavedResources isAvailableReportName:self.reportName format:self.selectedReportFormat]) {
             self.errorString = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
-            [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.save.name.errmsg.notunique.rewrite" completion:@weakself(^(UIAlertView *alertView, NSInteger buttonIndex)) {
+            [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.save.name.errmsg.notunique.rewrite" completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
                 if (alertView.cancelButtonIndex != buttonIndex) {
 
                     self.errorString = nil;
@@ -321,7 +324,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                         [self saveReport];
                     }];
                 }
-            } @weakselfend cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
+            } cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
         } else {
             [self verifyRangePagesWithCompletion:^{
                 [self saveReport];
@@ -383,10 +386,23 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                              format:self.selectedReportFormat
                               pages:[self makePagesFormat]
                             addToDB:YES
-                         completion:@weakself(^(NSString *reportURI, NSError *error)) {
+                         completion:^(JMSavedResources *savedReport, NSError *error) {
                              [JMCancelRequestPopup dismiss];
 
-                             if (reportURI) {
+                             if (error) {
+                                 if (error.code == JSSessionExpiredErrorCode) {
+                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                             if (self.restClient.keepSession && isSessionAuthorized) {
+                                                 [self saveReport];
+                                             } else {
+                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
+                                             }
+                                         }];
+                                 } else {
+                                     [JMUtils showAlertViewWithError:error];
+                                     [savedReport removeReport];
+                                 }
+                             } else {
                                  // Animation
                                  [CATransaction begin];
                                  [CATransaction setCompletionBlock:^{
@@ -395,25 +411,8 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
                                  [self.navigationController popViewControllerAnimated:YES];
                                  [CATransaction commit];
-                             } else {
-                                 [reportSaver cancelReport];
-                                 if (error.code == JSSessionExpiredErrorCode) {
-                                     if (self.restClient.keepSession) {
-                                         [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
-                                             if (isSessionAuthorized) {
-                                                 [self saveReport];
-                                             } else {
-                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
-                                             }
-                                         }@weakselfend];
-                                     } else {
-                                         [JMUtils showLoginViewAnimated:YES completion:nil];
-                                     }
-                                 } else {
-                                     [JMUtils showAlertViewWithError:error];
-                                 }
                              }
-                         }@weakselfend];
+                         }];
 }
 
 - (NSString *)makePagesFormat

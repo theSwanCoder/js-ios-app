@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -50,7 +50,8 @@ typedef NS_OPTIONS(NSInteger, JMMenuActionsViewAction) {
     JMMenuActionsViewAction_ClearSelections = 1 << 10,
     JMMenuActionsViewAction_Run             = 1 << 11,
     JMMenuActionsViewAction_Print           = 1 << 12,
-    JMMenuActionsViewAction_Info            = 1 << 13
+    JMMenuActionsViewAction_Info            = 1 << 13,
+    JMMenuActionsViewAction_OpenIn          = 1 << 14
 };
 
 @interface JMMenuAction : NSObject

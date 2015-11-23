@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -36,6 +36,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 @interface JMBaseResourceViewerVC () <PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
+@property (nonatomic, assign) BOOL needLayoutUI;
 @end
 
 @implementation JMBaseResourceViewerVC
@@ -50,11 +51,13 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     self.title = self.resourceLookup.label;
 
     [self setupSubviews];
+    [self setupNavigationItems];
 
     // start point of loading resource
     [self startResourceViewing];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupRightBarButtonItems) name:kJMFavoritesDidChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(favoriteMarkDidChanged:) name:kJMFavoritesDidChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)dealloc
@@ -65,7 +68,34 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self updateIfNeeded];
+}
 
+#pragma mark - Private API
+- (void)setNeedLayoutUI:(BOOL)needLayoutUI
+{
+    _needLayoutUI = needLayoutUI;
+    if (self.isViewLoaded && self.view.window && needLayoutUI) {
+        [self updateIfNeeded];
+    }
+}
+
+- (void)updateIfNeeded
+{
+    if (self.needLayoutUI) {
+        [self setupNavigationItems];
+        self.needLayoutUI = NO;
+    }
+}
+
+- (void)interfaceOrientationDidChanged:(id)notification
+{
+    self.needLayoutUI = YES;
+}
+
+- (void)favoriteMarkDidChanged:(id)notification
+{
+    self.needLayoutUI = YES;
     [self setupNavigationItems];
 }
 
@@ -86,18 +116,6 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     }
 }
 
-#pragma mark - Handle rotates
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-                                         duration:(NSTimeInterval)duration
-{
-    CGPoint point = CGPointMake(self.view.frame.size.width, -10);
-    [self.popoverView animateRotationToNewPoint:point
-                                         inView:self.view
-                                   withDuration:duration];
-    [self setupNavigationItems];
-}
-
-
 #pragma mark - Setups
 - (void)setupSubviews
 {
@@ -107,19 +125,30 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 - (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle
 {
     // detect backButton text width to truncate with '...'
-    NSDictionary *textAttributes = @{NSFontAttributeName : [JMFont navigationBarTitleFont]};
+    NSDictionary *textAttributes = @{NSFontAttributeName : [[JMThemesManager sharedManager] navigationBarTitleFont]};
     CGSize titleTextSize = [self.title sizeWithAttributes:textAttributes];
-    CGFloat titleTextWidth = ceil(titleTextSize.width);
+    CGFloat titleTextWidth = ceilf(titleTextSize.width);
     CGSize backItemTextSize = [backButtonTitle sizeWithAttributes:textAttributes];
-    CGFloat backItemTextWidth = ceil(backItemTextSize.width);
+    CGFloat backItemTextWidth = ceilf(backItemTextSize.width);
     CGFloat backItemOffset = 12;
     
-    CGFloat viewWidth = CGRectGetWidth(self.view.bounds);
-    
+    CGFloat viewWidth = CGRectGetWidth(self.navigationController.navigationBar.frame);
+
     if (( (backItemOffset + backItemTextWidth) > (viewWidth - titleTextWidth) / 2 ) && ![backButtonTitle isEqualToString:JMCustomLocalizedString(@"back.button.title", nil)]) {
         return [self croppedBackButtonTitle:JMCustomLocalizedString(@"back.button.title", nil)];
     }
     return backButtonTitle;
+}
+
+- (void)resetSubViews
+{
+    // override in children
+}
+
+#pragma mark - Setup Navigation Items
+- (BOOL) favoriteItemShouldDisplaySeparately
+{
+    return (![JMUtils isIphone]) || ([JMUtils isIphone] && UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation));
 }
 
 - (void)setupNavigationItems
@@ -138,22 +167,20 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)setupRightBarButtonItems
 {
-    NSMutableArray *items = [NSMutableArray array];
-    UIBarButtonItem *actionBarButtonItem = [self actionBarButtonItem];
-    if (actionBarButtonItem) {
-        [items addObject:actionBarButtonItem];
+    NSMutableArray *navBarItems = [NSMutableArray array];
+    JMMenuActionsViewAction availableAction = [self availableActionForResource:self.resourceLookup];
+    
+    if (availableAction && (availableAction ^ [self favoriteAction])) {
+        [navBarItems addObject:[self actionBarButtonItem]];
+    } else if (![self favoriteItemShouldDisplaySeparately]) {
+        [navBarItems addObject:[self favoriteBarButtonItem]];
     }
-
-    UIBarButtonItem *favoriteBarButtonItem = [self favoriteBarButtonItem];
-    if (favoriteBarButtonItem) {
-        [items addObject:favoriteBarButtonItem];
+    
+    if ([self favoriteItemShouldDisplaySeparately]) {
+        [navBarItems addObject:[self favoriteBarButtonItem]];
     }
-    self.navigationItem.rightBarButtonItems = [items copy];
-}
-
-- (void)resetSubViews
-{
-    // override in children
+    
+    self.navigationItem.rightBarButtonItems = [navBarItems copy];
 }
 
 
@@ -202,7 +229,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
 - (void)showInfoPage
 {
-    JMResourceInfoViewController *vc = [NSClassFromString([self.resourceLookup infoVCIdentifier]) new];
+    JMResourceInfoViewController *vc = (JMResourceInfoViewController *) [NSClassFromString([self.resourceLookup infoVCIdentifier]) new];
     vc.resourceLookup = self.resourceLookup;
     JMMainNavigationController *nextNC = [[JMMainNavigationController alloc] initWithRootViewController:vc];
 
@@ -234,49 +261,59 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     self.popoverView = nil;
 }
 
+#pragma mark - Handle rotates
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+                                         duration:(NSTimeInterval)duration
+{
+    if (self.popoverView) {
+        [self.popoverView dismiss:NO];
+        [self showAvailableActions];
+    }
+}
+
 #pragma mark - Helpers
 
 - (UIBarButtonItem *) actionBarButtonItem
 {
-    if ([self availableActionForResource:self.resourceLookup]) {
-        return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                             target:self
-                                                             action:@selector(showAvailableActions)];
-    }
-    return nil;
+    return [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                         target:self
+                                                         action:@selector(showAvailableActions)];
 }
 
 - (UIBarButtonItem *) favoriteBarButtonItem
 {
-    if (![JMUtils isIphone]) {
-        BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
-        NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
-
-        UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
-                                                                         style:UIBarButtonItemStyleBordered
-                                                                        target:self
-                                                                        action:@selector(favoriteButtonTapped:)];
-        favoriteItem.tintColor = isResourceInFavorites ? [UIColor yellowColor] : [UIColor whiteColor];
-        return favoriteItem;
-    }
-    return nil;
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
+    NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
+    
+    UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
+                                                                     style:UIBarButtonItemStyleBordered
+                                                                    target:self
+                                                                    action:@selector(favoriteButtonTapped:)];
+    favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
+    return favoriteItem;
 }
 
 - (void) replaceRightNavigationItem:(UIBarButtonItem *)oldItem withItem:(UIBarButtonItem *)newItem
 {
     NSMutableArray *rightItems = [self.navigationItem.rightBarButtonItems mutableCopy];
     NSInteger index = [rightItems indexOfObject:oldItem];
-    [rightItems replaceObjectAtIndex:index withObject:newItem];
+    rightItems[index] = newItem;
     self.navigationItem.rightBarButtonItems = rightItems;
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
     JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_Info;
-    if (![self favoriteBarButtonItem]) {
-        availableAction |= [JMFavorites isResourceInFavorites:resource] ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite;
+    if (![self favoriteItemShouldDisplaySeparately]) {
+        availableAction |= [self favoriteAction];
     }
     return availableAction;
+}
+
+- (JMMenuActionsViewAction)favoriteAction
+{
+    BOOL isResourceInFavorites = [JMFavorites isResourceInFavorites:self.resourceLookup];
+    return isResourceInFavorites ? JMMenuActionsViewAction_MakeUnFavorite : JMMenuActionsViewAction_MakeFavorite;
 }
 
 - (JMMenuActionsViewAction)disabledActionForResource:(JSResourceLookup *)resource
@@ -297,7 +334,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     NSString *backItemTitle = title;
     if (!backItemTitle) {
         NSArray *viewControllers = self.navigationController.viewControllers;
-        UIViewController *previousViewController = [viewControllers objectAtIndex:[viewControllers indexOfObject:self] - 1];
+        UIViewController *previousViewController = viewControllers[[viewControllers indexOfObject:self] - 1];
         backItemTitle = previousViewController.title;
     }
 
@@ -322,6 +359,13 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 {
     [JMUtils hideNetworkActivityIndicator];
     [self.activityIndicator stopAnimating];
+}
+
+- (void)startShowLoaderWithMessage:(NSString *)message
+{
+    [JMUtils showNetworkActivityIndicator];
+    [JMCancelRequestPopup presentWithMessage:message];
+    [self.activityIndicator startAnimating];
 }
 
 - (void)startShowLoaderWithMessage:(NSString *)message cancelBlock:(JMCancelRequestBlock)cancelBlock

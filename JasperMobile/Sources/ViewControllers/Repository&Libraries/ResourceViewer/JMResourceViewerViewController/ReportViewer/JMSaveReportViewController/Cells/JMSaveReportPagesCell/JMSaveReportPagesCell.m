@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -38,7 +38,10 @@
 {
     [super awakeFromNib];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.all", nil);
+    self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
+    self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
+    self.titleLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.all", nil);
+    self.pagesTypeSwitch.onTintColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
 }
 
 #pragma mark - Private API

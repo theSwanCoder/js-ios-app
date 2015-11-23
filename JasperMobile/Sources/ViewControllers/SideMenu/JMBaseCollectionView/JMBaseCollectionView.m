@@ -1,6 +1,6 @@
 /*
  * TIBCO JasperMobile for iOS
- * Copyright © 2005-2014 TIBCO Software, Inc. All rights reserved.
+ * Copyright © 2005-2015 TIBCO Software, Inc. All rights reserved.
  * http://community.jaspersoft.com/project/jaspermobile-ios
  *
  * Unless you have purchased a commercial license agreement from Jaspersoft,
@@ -30,33 +30,31 @@
 #import "JMBaseCollectionViewController.h"
 #import "JMResourceCollectionViewCell.h"
 #import "JMLoadingCollectionViewCell.h"
-#import "JMFont.h"
 #import "JMLocalization.h"
 
 @implementation JMBaseCollectionView
 
 -(void)awakeFromNib {
     [[NSBundle mainBundle] loadNibNamed:@"JMBaseCollectionView" owner:self options:nil];
-    [self.contentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-
-    // Correct frame of content view (when it loaded from nib its size looks like like universal size 600 x 600)
-    if ([JMUtils isSystemVersion8] && [JMUtils isIphone]) {
-        CGRect viewFrame = self.bounds;
-        self.contentView.frame = viewFrame;
-    }
-
     [self addSubview: self.contentView];
+
+    self.searchBar.tintColor = [[JMThemesManager sharedManager] barItemsColor];
+    self.searchBar.placeholder = JMCustomLocalizedString(@"resources.search.placeholder", nil);
 }
 
 - (void)setupWithNoResultText:(NSString *)noResult
 {
-    self.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"list_background_pattern"]];
+    self.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
     
     self.activityViewTitleLabel.text = JMCustomLocalizedString(@"resources.loading.msg", nil);
     self.noResultsViewTitleLabel.text = noResult;
     
-    self.activityViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
-    self.noResultsViewTitleLabel.font = [JMFont resourcesActivityTitleFont];
+    self.activityViewTitleLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
+    self.noResultsViewTitleLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
+    
+    self.activityViewTitleLabel.textColor = [[JMThemesManager sharedManager] resourceViewActivityLabelTextColor];
+    self.noResultsViewTitleLabel.textColor = [[JMThemesManager sharedManager] resourceViewNoResultLabelTextColor];
+    self.activityIndicator.color = [[JMThemesManager sharedManager] resourceViewActivityActivityIndicatorColor];
     
     [self setupCollectionView];
 }
@@ -72,20 +70,10 @@
     }
     
     self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.tintColor = [UIColor whiteColor];
+    self.refreshControl.tintColor = [[JMThemesManager sharedManager] resourceViewRefreshControlTintColor];
     
     [self.collectionView addSubview:self.refreshControl];
     self.collectionView.alwaysBounceVertical = YES;
-}
-
-- (UISearchBar *)searchBar
-{
-    if (!_searchBar) {
-        _searchBar = [[UISearchBar alloc] initWithFrame:self.searchBarPlaceholder.bounds];
-        _searchBar.searchBarStyle = UISearchBarStyleMinimal;
-        _searchBar.placeholder = JMCustomLocalizedString(@"resources.search.placeholder", nil);
-    }
-    return _searchBar;
 }
 
 #pragma mark - Utils
@@ -100,7 +88,6 @@
             return nil;
     }
 }
-
 
 - (NSString *)loadingCellForRepresentationType:(JMResourcesRepresentationType)type
 {
@@ -133,11 +120,7 @@
     self.activityIndicator.hidden = YES;
     self.collectionView.hidden = NO;
 
-    if ([self collectionViewNotEmpty]) {
-        self.noResultsViewTitleLabel.hidden = YES;
-    } else {
-        self.noResultsViewTitleLabel.hidden = NO;
-    }
+    self.noResultsViewTitleLabel.hidden = [self collectionViewNotEmpty];
 }
 
 - (BOOL) collectionViewNotEmpty
