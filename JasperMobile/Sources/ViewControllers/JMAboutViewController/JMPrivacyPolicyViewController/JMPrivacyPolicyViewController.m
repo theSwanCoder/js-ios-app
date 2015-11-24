@@ -22,7 +22,6 @@
 
 
 #import "JMPrivacyPolicyViewController.h"
-#import "UIAlertView+Additions.h"
 #import "ALToastView.h"
 #import "RNCachingURLProtocol.h"
 #import "Reachability.h"
@@ -37,7 +36,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = JMCustomLocalizedString(@"settings.privacy.policy.title", nil);
+    self.title = JMCustomLocalizedString(@"about.privacy_policy.title", nil);
     
     self.webView.scrollView.bounces = NO;
     
@@ -67,12 +66,13 @@
     
     NSString *cachePath = [[RNCachingURLProtocol new] cachePathForRequest:ppRequest];
     if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath] && [[Reachability reachabilityWithHostName:[ppURL host]] currentReachabilityStatus] == NotReachable) {
-        [[UIAlertView localizedAlertWithTitle:@"error.noconnection.dialog.title"
-                                      message:@"error.noconnection.dialog.msg"
-                                   completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                       [self.navigationController popViewControllerAnimated:YES];
-                                   }
-                            cancelButtonTitle:@"dialog.button.ok" otherButtonTitles: nil] show];
+        NSString *errorMessage = JMCustomLocalizedString(@"error.noconnection.dialog.msg", nil);
+        NSError *error = [NSError errorWithDomain:@"error.noconnection.dialog.title" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        __weak typeof(self) weakSelf = self;
+        [JMUtils presentAlertControllerWithError:error completion:^{
+            __strong typeof(self) strongSelf = weakSelf;
+            [strongSelf.navigationController popViewControllerAnimated:YES];
+        }];
     } else {
         [self.webView loadRequest:ppRequest];
     }
@@ -84,11 +84,14 @@
 {
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
         if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
-            [[UIAlertView localizedAlertWithTitle:@"dialod.title.attention" message:@"resource.viewer.open.link" completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                if (alertView.cancelButtonIndex != buttonIndex) {
-                    [[UIApplication sharedApplication] openURL:request.URL];
-                }
-            } cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
+            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
+                                                                                              message:@"resource.viewer.open.link"
+                                                                                    cancelButtonTitle:@"dialog.button.cancel"
+                                                                              cancelCompletionHandler:nil];
+            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                [[UIApplication sharedApplication] openURL:request.URL];
+            }];
+            [self presentViewController:alertController animated:YES completion:nil];
         } else {
             [ALToastView toastInView:webView withText:JMCustomLocalizedString(@"resource.viewer.can't.open.link", nil)];
         }

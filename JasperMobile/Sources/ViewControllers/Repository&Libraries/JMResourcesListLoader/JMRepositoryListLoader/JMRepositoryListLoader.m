@@ -76,7 +76,9 @@
                     if (result.error) {
                         if ([resourceURI isEqualToString:[strongSelf rootResourceURI]]) {
                             if (result.error.code == JSSessionExpiredErrorCode) {
+                                __weak typeof(self)weakSelf = strongSelf;
                                 [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                    __strong typeof(self)strongSelf = weakSelf;
                                     if (strongSelf.restClient.keepSession && isSessionAuthorized) {
                                         [strongSelf loadResourceLookup:resourceURI];
                                     } else {
@@ -122,8 +124,16 @@
             return [super listItemsWithOption:option];
         case JMResourcesListLoaderOption_Filter:
             return @[
-                     @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
-                       kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT, [JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY, [JSConstants sharedInstance].WS_TYPE_FOLDER]}];
+                     @{
+                             kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
+                             kJMResourceListLoaderOptionItemValueKey: @[
+                                                                        [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT,
+                                                                        [JSConstants sharedInstance].WS_TYPE_DASHBOARD,
+                                                                        [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY,
+                                                                        [JSConstants sharedInstance].WS_TYPE_FOLDER
+                                                                        ]
+                     }
+            ];
     }
 }
 

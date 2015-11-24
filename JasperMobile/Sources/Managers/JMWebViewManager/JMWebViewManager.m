@@ -114,19 +114,7 @@
 
 - (void)updateFrame:(CGRect)frame forWebView:(UIWebView *)webView
 {
-    if (![JMUtils isSystemVersion8]) {
-        UIInterfaceOrientation statusBarOrientation = [UIApplication sharedApplication].statusBarOrientation;
-        CGRect webViewFrame = CGRectZero;
-        if ( UIInterfaceOrientationIsPortrait(statusBarOrientation) ) {
-            webViewFrame = frame;
-        } else {
-            webViewFrame = CGRectMake(0, 0, CGRectGetHeight(frame), CGRectGetWidth(frame));
-        }
-
-        webView.frame = webViewFrame;
-    } else {
-        webView.frame = frame;
-    }
+    webView.frame = frame;
 }
 
 

@@ -202,7 +202,7 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
     NSError *error;
     NSString *jsMobile = [NSString stringWithContentsOfFile:jsMobilePath encoding:NSUTF8StringEncoding error:&error];
     CGFloat initialScale = 0.5;
-    if ([JMUtils isIphone]) {
+    if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
         initialScale = 0.25;
     }
     jsMobile = [jsMobile stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScale).stringValue];

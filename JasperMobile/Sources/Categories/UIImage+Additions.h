@@ -34,8 +34,6 @@
 #import <UIKit/UIKit.h>
 
 @interface UIImage (Additions)
-+ (NSString *)splashImageNameForOrientation:(UIInterfaceOrientation)orientation;
-
 +(UIImage *)colorizeImage:(UIImage *)baseImage color:(UIColor *)theColor;
 
 - (UIImage *)colorizeImageWithColor:(id)theColor;

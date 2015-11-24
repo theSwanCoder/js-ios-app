@@ -32,6 +32,9 @@
 #import "JMJavascriptNativeBridge.h"
 #import "JMVisDashboardLoader.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMWebViewManager.h"
+#import "JMVisualizeManager.h"
+#import "JMDashboard.h"
 
 @interface JMDashboardViewerConfigurator()
 @property (nonatomic, weak) JMDashboard *dashboard;
@@ -50,7 +53,8 @@
     return self;
 }
 
-+ (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard {
++ (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard
+{
     return [[self alloc] initWithDashboard:dashboard];
 }
 
@@ -63,11 +67,15 @@
     return _webView;
 }
 
-- (id <JMDashboardLoader>)dashboardLoader {
+- (id <JMDashboardLoader>)dashboardLoader
+{
     if (!_dashboardLoader) {
         if ([JMUtils isServerAmber2OrHigher]) {
             if ([self.dashboard.resourceLookup isNewDashboard]) {
                 _dashboardLoader = [JMVisDashboardLoader loaderWithDashboard:self.dashboard];
+                JMVisualizeManager *visualizeManager = [JMVisualizeManager new];
+                visualizeManager.viewportScaleFactor = self.viewportScaleFactor;
+                ((JMVisDashboardLoader *)_dashboardLoader).visualizeManager = visualizeManager;
             } else {
                 _dashboardLoader = [JMBaseDashboardLoader loaderWithDashboard:self.dashboard];
             }

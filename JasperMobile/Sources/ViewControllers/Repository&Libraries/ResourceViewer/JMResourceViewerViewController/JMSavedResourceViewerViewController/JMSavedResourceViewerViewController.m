@@ -24,7 +24,7 @@
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
 
-@interface JMSavedResourceViewerViewController () <UIAlertViewDelegate, UITextFieldDelegate, UIDocumentInteractionControllerDelegate>
+@interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
@@ -39,14 +39,16 @@
 {
     [self.webView stopLoading];
     [self.webView loadHTMLString:@"" baseURL:nil];
-    [[UIAlertView alertWithTitle:JMCustomLocalizedString(@"dialod.title.error", nil)
-                         message:JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil) // TODO: replace with the other message
-                      completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                              [self cancelResourceViewingAndExit:YES];
-                          }
-               cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.ok", nil)
-               otherButtonTitles:nil] show];
-    
+
+#warning WHY ONLY FOR SAVED REPORT VIEWER WE HANDLE MEMORY WARNINGS???
+    NSString *errorMessage = JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil);
+    NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    __weak typeof(self) weakSelf = self;
+    [JMUtils presentAlertControllerWithError:error completion:^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf cancelResourceViewingAndExit:YES];
+    }];
+
     [super didReceiveMemoryWarning];
 }
 
@@ -61,7 +63,7 @@
     if (!_savedReports) {
         _savedReports = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
     }
-    
+
     return _savedReports;
 }
 
@@ -103,89 +105,65 @@
 {
     [super actionsView:view didSelectAction:action];
     if (action == JMMenuActionsViewAction_Rename) {
-        UIAlertView *alertView  = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(@"savedreport.viewer.modify.title", nil)
-                                                     message:nil
-                                                    delegate:self
-                                           cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
-                                           otherButtonTitles:JMCustomLocalizedString(@"dialog.button.ok", nil), nil];
-        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-        UITextField *textField = [alertView textFieldAtIndex:0];
-        textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
-        textField.delegate = self;
-        textField.text = [self.savedReports.label copy];
-        
-        alertView.tag = action;
-        [alertView show];
+        __weak typeof(self) weakSelf = self;
+        UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"savedreport.viewer.modify.title"
+                                                                                                      message:nil
+        textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
+            __strong typeof(self) strongSelf = weakSelf;
+            textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
+            textField.text = [strongSelf.resourceLookup.label copy];
+        } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
+            NSString *errorMessage = nil;
+            __strong typeof(self) strongSelf = weakSelf;
+            if (strongSelf) {
+                [JMUtils validateReportName:text errorMessage:&errorMessage];
+                if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
+                    errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
+                }
+            }
+            return errorMessage;
+        } textEditCompletionHandler:^(NSString * _Nullable text) {
+            __strong typeof(self) strongSelf = weakSelf;
+            if ([strongSelf.savedReports renameReportTo:text]) {
+                strongSelf.title = text;
+                strongSelf.resourceLookup = [strongSelf.savedReports wrapperFromSavedReports];
+                [strongSelf setupRightBarButtonItems];
+                [strongSelf startResourceViewing];
+            }
+        }];
+        [self presentViewController:alertController animated:YES completion:nil];
     } else if(action == JMMenuActionsViewAction_Delete) {
-        UIAlertView *alertView  = [UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation"
-                                                               message:@"savedreport.viewer.delete.confirmation.message"
-                                                              delegate:self
-                                                     cancelButtonTitle:@"dialog.button.cancel"
-                                                     otherButtonTitles:@"dialog.button.ok", nil];
-        alertView.tag = action;
-        [alertView show];
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
+                                                                                          message:@"savedreport.viewer.delete.confirmation.message"
+                                                                                cancelButtonTitle:@"dialog.button.cancel"
+                                                                          cancelCompletionHandler:nil];
+        __weak typeof(self) weakSelf = self;
+        [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+            __strong typeof(self) strongSelf = weakSelf;
+            BOOL shouldCloseViewer = YES;
+            if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:shouldCloseViewerAfterDeletingResource:)]) {
+                shouldCloseViewer = [strongSelf.delegate resourceViewer:strongSelf shouldCloseViewerAfterDeletingResource:strongSelf.resourceLookup];
+            }
+            [strongSelf cancelResourceViewingAndExit:shouldCloseViewer];
+            [strongSelf.savedReports removeReport];
+
+            if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:didDeleteResource:)]) {
+                [strongSelf.delegate resourceViewer:strongSelf didDeleteResource:strongSelf.resourceLookup];
+            }
+        }];
+        [self presentViewController:alertController animated:YES completion:nil];
     } else if (action == JMMenuActionsViewAction_OpenIn) {
         self.documentController = [self setupDocumentControllerWithURL:self.resourceRequest.URL
-                                                                             usingDelegate:self];
+                                                         usingDelegate:self];
 
         BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
         if (!canOpen) {
-            UIAlertView *alertView  = [UIAlertView localizedAlertWithTitle:nil
-                                                                   message:@"error.openIn.message"
-                                                                  delegate:self
-                                                         cancelButtonTitle:@"dialog.button.ok"
-                                                         otherButtonTitles:nil];
-            [alertView show];
+            NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);
+            NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     }
 }
-
-#pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return NO;
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
-{
-    NSString *errorMessage = @"";
-    UITextField *textField = [alertView textFieldAtIndex:0];
-    BOOL validData = [JMUtils validateReportName:textField.text errorMessage:&errorMessage];
-    if (validData && ![JMSavedResources isAvailableReportName:textField.text format:self.savedReports.format]) {
-        validData = NO;
-        errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
-    }
-    alertView.message = errorMessage;
-    return validData;
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.cancelButtonIndex != buttonIndex) {
-        if (alertView.tag == JMMenuActionsViewAction_Rename) {
-            NSString *newName = [alertView textFieldAtIndex:0].text;
-            if ([self.savedReports renameReportTo:newName]) {
-                self.title = newName;
-                self.resourceLookup = [self.savedReports wrapperFromSavedReports];
-            }
-        } else if (alertView.tag == JMMenuActionsViewAction_Delete) {
-            BOOL shouldCloseViewer = YES;
-            if (self.delegate && [self.delegate respondsToSelector:@selector(resourceViewer:shouldCloseViewerAfterDeletingResource:)]) {
-                shouldCloseViewer = [self.delegate resourceViewer:self shouldCloseViewerAfterDeletingResource:self.resourceLookup];
-            }
-            [self cancelResourceViewingAndExit:shouldCloseViewer];
-            [self.savedReports removeReport];
-            
-            if (self.delegate && [self.delegate respondsToSelector:@selector(resourceViewer:didDeleteResource:)]) {
-                [self.delegate resourceViewer:self didDeleteResource:self.resourceLookup];
-            }
-        }
-    }
-}
-
 
 #pragma mark - Helpers
 - (UIDocumentInteractionController *) setupDocumentControllerWithURL: (NSURL *) fileURL

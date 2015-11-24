@@ -143,11 +143,8 @@
     }
     
     if ([errorMessage length]) {
-        [[UIAlertView localizedAlertWithTitle:@"dialod.title.error"
-                                      message:errorMessage
-                                     delegate: nil
-                            cancelButtonTitle:@"dialog.button.ok"
-                            otherButtonTitles:nil] show];
+        NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:0 userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        [JMUtils presentAlertControllerWithError:error completion:nil];
     } else {
 
         [self loginWithServerProfile:self.selectedServerProfile userName:self.userNameTextField.text password:self.passwordTextField.text];
@@ -191,17 +188,17 @@
 #pragma mark - Autorotation
 - (BOOL)shouldAutorotate
 {
-    return ![JMUtils isIphone];
+    return ![JMUtils isCompactWidth];
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
 {
-    return [JMUtils isIphone] ? UIInterfaceOrientationPortrait : [super preferredInterfaceOrientationForPresentation];
+    return [JMUtils isCompactWidth] ? UIInterfaceOrientationPortrait : [super preferredInterfaceOrientationForPresentation];
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return [JMUtils isIphone] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
+    return [JMUtils isCompactWidth] ? UIInterfaceOrientationMaskPortrait : UIInterfaceOrientationMaskAll;
 }
 
 
@@ -243,11 +240,10 @@
                                 @"Reason of failure" : @"Wrong Credentials"
                         }];
 
-            [[UIAlertView localizedAlertWithTitle:@"error.authenication.dialog.title"
-                                          message:@"error.authenication.dialog.msg"
-                                         delegate: nil
-                                cancelButtonTitle:@"dialog.button.ok"
-                                otherButtonTitles:nil] show];
+            NSString *errorTitle = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
+            NSString *errorMessage = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
+            NSError *error = [NSError errorWithDomain:errorTitle code:JSInvalidCredentialsErrorCode userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     }];
 }

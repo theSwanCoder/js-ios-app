@@ -17,7 +17,6 @@
 - (BOOL) isReport;
 - (BOOL) isSavedReport;
 - (BOOL) isDashboard;
-
 - (BOOL) isNewDashboard;
 
 - (NSString *) resourceViewerVCIdentifier;

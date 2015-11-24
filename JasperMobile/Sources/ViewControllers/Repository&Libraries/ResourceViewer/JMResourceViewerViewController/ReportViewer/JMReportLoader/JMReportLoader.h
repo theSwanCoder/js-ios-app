@@ -11,7 +11,8 @@
 typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
     JMReportLoaderErrorTypeUndefined,
     JMReportLoaderErrorTypeEmtpyReport,
-    JMReportLoaderErrorTypeAuthentification
+    JMReportLoaderErrorTypeAuthentification,
+    JMReportLoaderErrorTypeLoadingCanceled
 };
 
 @class JMReport;

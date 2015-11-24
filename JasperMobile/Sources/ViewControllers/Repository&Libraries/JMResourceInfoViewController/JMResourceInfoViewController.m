@@ -27,6 +27,7 @@
 #import "JSResourceLookup+Helpers.h"
 #import "PopoverView.h"
 #import "JMSavedResources+Helpers.h"
+#import "UIViewController+Additions.h"
 
 NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
@@ -82,6 +83,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     self.title = self.resourceLookup.label;
     self.resourceProperties = nil;
     [self.tableView reloadData];
+    self.needLayoutUI = YES;
 }
 
 - (void)interfaceOrientationDidChanged:(id)notification
@@ -102,7 +104,6 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     } else {
         [JMFavorites addToFavorites:self.resourceLookup];
     }
-    [self setNeedLayoutUI:YES];
 }
 
 - (void)cancelButtonTapped:(id)sender
@@ -169,14 +170,12 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 - (void)setNeedLayoutUI:(BOOL)needLayoutUI
 {
     _needLayoutUI = needLayoutUI;
-    if (self.isViewLoaded && self.view.window && needLayoutUI) {
-        [self updateIfNeeded];
-    }
+    [self updateIfNeeded];
 }
 
 - (void)updateIfNeeded
 {
-    if (self.needLayoutUI) {
+    if (self.needLayoutUI && [self isVisible]) {
         [self showNavigationItems];
         self.needLayoutUI = NO;
     }
@@ -191,7 +190,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 #pragma mark - Setup Navigation Items
 - (BOOL) favoriteItemShouldDisplaySeparately
 {
-    return (![JMUtils isIphone]) || ([JMUtils isIphone] && UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation));
+    return (![JMUtils isCompactWidth] || ([JMUtils isCompactWidth] && [JMUtils isCompactHeight]));
 }
 
 - (void) showNavigationItems
@@ -227,7 +226,7 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
     NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
     
     UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
-                                                                     style:UIBarButtonItemStyleBordered
+                                                                     style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(favoriteButtonTapped:)];
     favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
@@ -303,12 +302,9 @@ NSString * const kJMShowResourceInfoSegue  = @"ShowResourceInfoSegue";
 
             BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
             if (!canOpen) {
-                UIAlertView *alertView = [UIAlertView localizedAlertWithTitle:nil
-                                                                      message:@"error.openIn.message"
-                                                                     delegate:self
-                                                            cancelButtonTitle:@"dialog.button.ok"
-                                                            otherButtonTitles:nil];
-                [alertView show];
+                NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);
+                NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+                [JMUtils presentAlertControllerWithError:error completion:nil];
             }
             break;
         }

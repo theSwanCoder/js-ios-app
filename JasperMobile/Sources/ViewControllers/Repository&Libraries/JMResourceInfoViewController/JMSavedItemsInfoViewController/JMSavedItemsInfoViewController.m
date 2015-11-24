@@ -33,7 +33,7 @@
 #import "JMFavorites.h"
 #import "JMFavorites+Helpers.h"
 
-@interface JMSavedItemsInfoViewController () <UIAlertViewDelegate, UITextFieldDelegate>
+@interface JMSavedItemsInfoViewController () <UITextFieldDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @end
 
@@ -86,27 +86,43 @@
     if (action == JMMenuActionsViewAction_Run) {
         [self runReport];
     }else if (action == JMMenuActionsViewAction_Rename) {
-        UIAlertView *alertView  = [[UIAlertView alloc] initWithTitle:JMCustomLocalizedString(@"savedreport.viewer.modify.title", nil)
-                                                             message:nil
-                                                            delegate:self
-                                                   cancelButtonTitle:JMCustomLocalizedString(@"dialog.button.cancel", nil)
-                                                   otherButtonTitles:JMCustomLocalizedString(@"dialog.button.ok", nil), nil];
-        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-        UITextField *textField = [alertView textFieldAtIndex:0];
-        textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
-        textField.delegate = self;
-        textField.text = [self.resourceLookup.label copy];
-        
-        alertView.tag = action;
-        [alertView show];
+        __weak typeof(self) weakSelf = self;
+        UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"savedreport.viewer.modify.title"
+                                                                                                      message:nil
+                                                                                textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
+                                                                                    __strong typeof (self) strongSelf = weakSelf;
+                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
+                                                                                    textField.text = [strongSelf.resourceLookup.label copy];
+                                                                                } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
+                                                                                    NSString *errorMessage = nil;
+                                                                                    __strong typeof (self) strongSelf = weakSelf;
+                                                                                    if (strongSelf) {
+                                                                                        [JMUtils validateReportName:text errorMessage:&errorMessage];
+                                                                                        if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
+                                                                                            errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
+                                                                                        }
+                                                                                    }
+                                                                                    return errorMessage;
+                                                                                } textEditCompletionHandler:^(NSString * _Nullable text) {
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    if ([strongSelf.savedReports renameReportTo:text]) {
+                                                                                        [strongSelf resetResourceProperties];
+                                                                                    }
+                                                                                }];
+        [self presentViewController:alertController animated:YES completion:nil];
     } else if(action == JMMenuActionsViewAction_Delete) {
-        UIAlertView *alertView  = [UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation"
-                                                               message:@"savedreport.viewer.delete.confirmation.message"
-                                                              delegate:self
-                                                     cancelButtonTitle:@"dialog.button.cancel"
-                                                     otherButtonTitles:@"dialog.button.ok", nil];
-        alertView.tag = action;
-        [alertView show];
+        UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
+                                                                                          message:@"savedreport.viewer.delete.confirmation.message"
+                                                                                cancelButtonTitle:@"dialog.button.cancel"
+                                                                          cancelCompletionHandler:nil];
+        
+        __weak typeof(self) weakSelf = self;
+        [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+            __strong typeof(self) strongSelf = weakSelf;
+            [strongSelf.savedReports removeReport];
+            [strongSelf.navigationController popViewControllerAnimated:YES];
+        }];
+        [self presentViewController:alertController animated:YES completion:nil];
     }
 }
 
@@ -126,45 +142,6 @@
 {
     [textField resignFirstResponder];
     return NO;
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
-{
-    NSString *errorMessage = @"";
-    UITextField *textField = [alertView textFieldAtIndex:0];
-    BOOL validData = [JMUtils validateReportName:textField.text errorMessage:&errorMessage];
-    if (validData && ![JMSavedResources isAvailableReportName:textField.text format:self.savedReports.format]) {
-        validData = NO;
-        errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
-    }
-    alertView.message = errorMessage;
-    
-    return validData;
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.cancelButtonIndex != buttonIndex) {
-        if (alertView.tag == JMMenuActionsViewAction_Rename) {
-            NSString *newName = [alertView textFieldAtIndex:0].text;
-            if ([self.savedReports renameReportTo:newName]) {
-                self.title = newName;
-
-                BOOL isResourceFavorite = [JMFavorites isResourceInFavorites:self.resourceLookup];
-                JSResourceLookup *newSavedReport = [self.savedReports wrapperFromSavedReports];
-                if (isResourceFavorite) {
-                    [JMFavorites removeFromFavorites:self.resourceLookup];
-                    [JMFavorites addToFavorites:newSavedReport];
-                }
-                self.resourceLookup = newSavedReport;
-            }
-        } else if (alertView.tag == JMMenuActionsViewAction_Delete) {
-            [self.savedReports removeReport];
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    }
 }
 
 #pragma mark - JMBaseResourceViewerVCDelegate

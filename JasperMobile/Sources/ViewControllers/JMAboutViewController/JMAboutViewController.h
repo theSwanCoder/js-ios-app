@@ -21,23 +21,16 @@
  */
 
 
-#import "JMBooleanSettingsTableViewCell.h"
+//
+//  JMAboutViewController.h
+//  TIBCO JasperMobile
+//
 
-@interface JMBooleanSettingsTableViewCell()
-@property (nonatomic, weak) IBOutlet UISwitch *valueSwitcher;
-@end
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 1.9
+ */
 
-@implementation JMBooleanSettingsTableViewCell
-
--(void)setSettingsItem:(JMSettingsItem *)settingsItem
-{
-    [super setSettingsItem:settingsItem];
-    self.valueSwitcher.on = [settingsItem.valueSettings boolValue];
-}
-
-#pragma mark - Actions
-- (IBAction)switcherValueDidChanged:(id)sender
-{
-    self.settingsItem.valueSettings = @(self.valueSwitcher.on);
-}
+#import "JMBaseViewController.h"
+@interface JMAboutViewController : JMBaseViewController
 @end

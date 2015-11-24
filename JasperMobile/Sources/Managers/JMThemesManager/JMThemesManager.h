@@ -70,6 +70,10 @@
 
 - (UIFont *)loginInputControlsFont;
 
+- (UIFont *)appAboutTitleFont;
+
+- (UIFont *)appAboutCommonTextFont;
+
 @end
 
 @interface JMThemesManager (UIColor)
@@ -155,6 +159,16 @@
 - (UIColor *)saveReportSaveReportButtonBackgroundColor;
 
 - (UIColor *)saveReportSaveReportButtonTextColor;
+
+// About App
+- (UIColor *)aboutAppAppNameTextColor;
+
+- (UIColor *)aboutAppAppAboutTextColor;
+
+- (UIColor *)aboutAppButtonsBackgroundColor;
+
+- (UIColor *)aboutAppButtonsTextColor;
+
 
 // Common
 

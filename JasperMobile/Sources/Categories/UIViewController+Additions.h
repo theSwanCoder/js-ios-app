@@ -21,15 +21,20 @@
  */
 
 
-#import "JMSettingsItem.h"
+//
+//  UIViewController+Additions.h
+//  TIBCO JasperMobile
+//
 
-@implementation JMSettingsItem
-- (id)init{
-    self = [super init];
-    if (self) {
-        self.availableRange = NSMakeRange(0, INT32_MAX);
-    }
-    return self;
-}
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.3
+ */
+
+#import <UIKit/UIKit.h>
+
+@interface UIViewController(Additions)
+
+- (BOOL)isVisible;
 
 @end

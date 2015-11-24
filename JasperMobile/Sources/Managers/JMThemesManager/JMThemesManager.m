@@ -98,6 +98,12 @@ NSString * const kJMThemeReportOptionsNoResultLabelTextColor = @"ReportOptions.n
 NSString * const kJMThemeSaveReportSaveReportButtonBackgroundColor = @"SaveReport.savereport_button_background_color";
 NSString * const kJMThemeSaveReportSaveReportButtonTextColor = @"SaveReport.savereport_button_text_color";
 
+// About App
+NSString * const kJMThemeAboutAppAppNameTextColorColor = @"AboutApp.app_name_text_color";
+NSString * const kJMThemeAboutAppAppAboutTextColor = @"AboutApp.app_about_text_color";
+NSString * const kJMThemeAboutAppButtonsBackgroundColor = @"AboutApp.buttons_background_color";
+NSString * const kJMThemeAboutAppButtonsTextColor = @"AboutApp.buttons_text_color";
+
 
 // Common
 NSString * const kJMThemeViewBackgroundColor = @"Common.views_background_color";
@@ -281,62 +287,73 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
 
 - (UIFont *)navigationBarTitleFont
 {
-    return [JMUtils isIphone] ? [UIFont boldSystemFontOfSize:14] : [UIFont boldSystemFontOfSize:17];
+    return [UIFont boldSystemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 14 : 17];
 }
 
 - (UIFont *)navigationItemsFont
 {
-    return [JMUtils isIphone] ? [UIFont systemFontOfSize:14] : [UIFont systemFontOfSize:17];
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 14 : 17];
 }
 
 - (UIFont *)tableViewCellTitleFont
 {
-    return [JMUtils isIphone] ? [UIFont systemFontOfSize:14] : [UIFont systemFontOfSize:17];
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 14 : 17];
 }
 
 - (UIFont *)tableViewCellDetailFont
 {
-    return [JMUtils isIphone] ? [UIFont systemFontOfSize:14] : [UIFont systemFontOfSize:17];
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 14 : 17];
 }
 
 - (UIFont *)tableViewCellErrorFont
 {
-    return [JMUtils isIphone] ? [UIFont italicSystemFontOfSize:10] : [UIFont italicSystemFontOfSize:16];
+    return [UIFont italicSystemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 10 : 16];
 }
 
 - (UIFont *)resourcesActivityTitleFont
 {
-    return [JMUtils isIphone] ? [UIFont systemFontOfSize:20] : [UIFont systemFontOfSize:30];
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 20 : 30];
 }
 
 - (UIFont *)collectionResourceNameFont
 {
-    return [JMUtils isIphone] ? [UIFont systemFontOfSize:15] : [UIFont systemFontOfSize:22];
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 15 : 22];
 }
 
 - (UIFont *)collectionResourceDescriptionFont
 {
-    return [JMUtils isIphone] ? [UIFont systemFontOfSize:12] : [UIFont systemFontOfSize:14];
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 12 : 14];
 }
 
 - (UIFont *)collectionLoadingFont
 {
-    return [JMUtils isIphone] ? [UIFont systemFontOfSize:20] : [UIFont systemFontOfSize:30];
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 20 : 30];
 }
 
 - (UIFont *)menuItemTitleFont
 {
-    return [JMUtils isIphone] ? [UIFont systemFontOfSize:16] : [UIFont systemFontOfSize:20];
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 16 : 20];
 }
 
 - (UIFont *)menuItemDescriptionFont
 {
-    return [JMUtils isIphone] ? [UIFont systemFontOfSize:12] : [UIFont systemFontOfSize:15];
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 12 : 15];
 }
 
 - (UIFont *)loginInputControlsFont
 {
-    return [JMUtils isIphone] ? [UIFont systemFontOfSize:15] : [UIFont systemFontOfSize:18];
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 15 : 18];
+}
+
+
+- (UIFont *)appAboutTitleFont
+{
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 16 : 22];
+}
+
+- (UIFont *)appAboutCommonTextFont
+{
+    return [UIFont systemFontOfSize:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 14 : 18];
 }
 
 @end
@@ -538,6 +555,27 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
 - (UIColor *)saveReportSaveReportButtonTextColor
 {
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeSaveReportSaveReportButtonTextColor];
+}
+
+// About App
+- (UIColor *)aboutAppAppNameTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeAboutAppAppNameTextColorColor];
+}
+
+- (UIColor *)aboutAppAppAboutTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeAboutAppAppAboutTextColor];
+}
+
+- (UIColor *)aboutAppButtonsBackgroundColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeAboutAppButtonsBackgroundColor];
+}
+
+- (UIColor *)aboutAppButtonsTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeAboutAppButtonsTextColor];
 }
 
 

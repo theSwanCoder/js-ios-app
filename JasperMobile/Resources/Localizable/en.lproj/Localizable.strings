@@ -27,7 +27,14 @@
 
 /* Application Info */
 
-"application.info" = "%@ v %@\n\nManagement tool and report viewer for TIBCO JasperReports%@ Server %.1f and greater.\n\nFor more information visit:\nhttp://community.jaspersoft.com/project/jaspermobile-ios\n\nCopyright © 2005-%zd TIBCO Software, Inc.";
+"application.info" = "Management tool and report viewer for TIBCO JasperReports%@ Server %.1f and greater.\n\n%@\n\n\nFor more information visit:\n\n%@";
+
+/* About */
+"about.copyright" = "© 2005-%zd TIBCO Software, Inc.";
+"about.comminity.title" = "Jaspersoft Community";
+"about.whats_new.title" = "What's New";
+"about.privacy_policy.title" = "Privacy Policy";
+"about.eula.title" = "End user license agreement";
 
 /* Login Page */
 
@@ -76,9 +83,11 @@
 "menuitem.recentviews.label" = "Recently Viewed";
 "menuitem.saveditems.label" = "Saved Items";
 "menuitem.settings.label" = "Settings";
+"menuitem.about.label" = "About";
 "menuitem.repository.label" = "Repository";
 "menuitem.favorites.label" = "Favorites";
 "menuitem.logout.label" = "Log Out";
+"menuitem.feedback.label" = "Feedback by email";
 
 // Descriptions
 
@@ -174,6 +183,7 @@
 "savedreport.viewer.delete.confirmation.message" = "Do you really want to delete this item?";
 "savedreport.viewer.show.resource.error.message" = "Report could not be loaded. Try to save a report with less count of pages.";
 "savedreport.viewer.file.not.exists" = "File doesn't exists";
+"savedreport.viewer.format.not.supported" = "Format not supported";
 
 /* Resource Info View */
 
@@ -201,9 +211,6 @@
 "settings.crashtracking.title" = "Send crash reports";
 "settings.crashtracking.alert.title" = "Note";
 "settings.crashtracking.alert.message" = "Restart the app after changing this setting.";
-"settings.privacy.policy.title" = "Privacy Policy";
-"settings.privacy.EULA.title" = "End user license agreement";
-"settings.feedback" = "Feedback by email";
 "settings.feedback.errorShowClient" = "An email address is required.";
 "settings.save.message" = "Saving Settings...";
 

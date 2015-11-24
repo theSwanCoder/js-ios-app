@@ -218,15 +218,14 @@
 
     if (!isParentHost && isLinkClicked) {
         if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
-            [[UIAlertView localizedAlertWithTitle:@"dialod.title.attention"
-                                          message:@"resource.viewer.open.link"
-                                       completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                                        if (alertView.cancelButtonIndex != buttonIndex) {
-                                                            [[UIApplication sharedApplication] openURL:request.URL];
-                                                        }
-                                                    }
-                                cancelButtonTitle:@"dialog.button.cancel"
-                                otherButtonTitles:@"dialog.button.ok", nil] show];
+            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
+                                                                                              message:@"resource.viewer.open.link"
+                                                                                    cancelButtonTitle:@"dialog.button.cancel"
+                                                                              cancelCompletionHandler:nil];
+            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                [[UIApplication sharedApplication] openURL:request.URL];
+            }];
+            [self presentViewController:alertController animated:YES completion:nil];
         } else {
             [ALToastView toastInView:webView
                             withText:JMCustomLocalizedString(@"resource.viewer.can't.open.link", nil)];

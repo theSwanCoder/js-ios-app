@@ -26,6 +26,7 @@
 //  TIBCO JasperMobile
 //
 
+#import <MessageUI/MessageUI.h>
 #import "JMMenuViewController.h"
 #import "SWRevealViewController.h"
 #import "JMMenuItemTableViewCell.h"
@@ -33,12 +34,12 @@
 #import "JMLibraryCollectionViewController.h"
 #import "JMSavedItemsCollectionViewController.h"
 #import "JMFavoritesCollectionViewController.h"
-#import "JMSettingsViewController.h"
+#import "JMAboutViewController.h"
 #import "JMServerProfile.h"
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
 
-@interface JMMenuViewController() <UITableViewDataSource, UITableViewDelegate>
+@interface JMMenuViewController() <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *serverNameLabel;
@@ -144,13 +145,29 @@
         JMMenuItem *currentSelectedItem = self.selectedItem;
         JMMenuItem *item = self.menuItems[itemIndex];
         
-        if (item.resourceType != JMResourceTypeLogout) {
+        if (item.resourceType == JMResourceTypeLogout) {
+            [[JMSessionManager sharedManager] logout];
+            [JMUtils showLoginViewAnimated:YES completion:nil];
+            self.menuItems = nil;
+        } else if (item.resourceType == JMResourceTypeAbout) {
+            [self closeMenu];
+
+            JMAboutViewController *aboutViewController = (JMAboutViewController *) [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+            aboutViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+
+            [self.revealViewController.frontViewController presentViewController:aboutViewController
+                                                                        animated:YES
+                                                                      completion:nil];
+        } else if (item.resourceType == JMResourceTypeFeedback) {
+            [self showFeedback];
+        } else {
             if (!currentSelectedItem || currentSelectedItem != item) {
                 [self unselectItems];
                 item.selected = YES;
-                
+
                 [self.tableView reloadData];
 
+                id nextVC;
                 if([item vcIdentifierForSelectedItem]) {
                     // Analytics
                     [JMUtils logEventWithName:@"User opened section"
@@ -158,21 +175,17 @@
                                          @"Section's Name" : [item nameForCrashlytics]
                                  }];
 
-                    // Show VC
-                    UINavigationController *nvc = (UINavigationController *) [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-                    UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStyleBordered target:self action:@selector(menuButtonTapped:)];
-                    nvc.topViewController.navigationItem.leftBarButtonItem = menuItem;
-                    [nvc.topViewController.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-                    self.revealViewController.frontViewController = nvc;
+                    nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+                    UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStylePlain target:self action:@selector(menuButtonTapped:)];
+                    [nextVC topViewController].navigationItem.leftBarButtonItem = menuItem;
+                    [[nextVC topViewController].view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+                } else {
+                    nextVC = [JMUtils launchScreenViewController];
                 }
-
+                self.revealViewController.frontViewController = nextVC;
             }
             [self.revealViewController setFrontViewPosition:FrontViewPositionLeft
                                                    animated:YES];
-        } else {
-            [[JMSessionManager sharedManager] logout];
-            [JMUtils showLoginViewAnimated:YES completion:nil];
-            self.menuItems = nil;
         }
     }
 }
@@ -212,7 +225,8 @@
             [JMMenuItem menuItemWithResourceType:JMResourceTypeRepository],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
-            [JMMenuItem menuItemWithResourceType:JMResourceTypeSettings],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeAbout],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeFeedback],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]
     ] mutableCopy];
 
@@ -222,6 +236,63 @@
     }
 
     return [menuItems copy];
+}
+
+- (void)closeMenu
+{
+    [self.revealViewController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+}
+
+#pragma mark - Feedback
+- (void)showFeedback
+{
+#if !TARGET_IPHONE_SIMULATOR
+    if ([MFMailComposeViewController canSendMail]) {
+        // Email Subject
+        NSString *emailTitle = @"JasperMobile (iOS)";
+        // Email Content
+        NSString *messageBody = [NSString stringWithFormat:@"Send from build version: %@", [JMUtils buildVersion]];
+        // To address
+        NSArray *toRecipents = @[kFeedbackPrimaryEmail, kFeedbackSecondaryEmail];
+
+        MFMailComposeViewController *mc = [MFMailComposeViewController new];
+        mc.mailComposeDelegate = self;
+        [mc setSubject:emailTitle];
+        [mc setMessageBody:messageBody isHTML:NO];
+        [mc setToRecipients:toRecipents];
+
+        [self presentViewController:mc animated:YES completion:NULL];
+    } else {
+        NSString *errorMessage = JMCustomLocalizedString(@"settings.feedback.errorShowClient", nil);
+        NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        [JMUtils presentAlertControllerWithError:error completion:nil];
+    }
+#endif
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+- (void) mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            JMLog(@"Mail cancelled");
+            break;
+        case MFMailComposeResultSaved:
+            JMLog(@"Mail saved");
+            break;
+        case MFMailComposeResultSent:
+            JMLog(@"Mail sent");
+            break;
+        case MFMailComposeResultFailed:
+            JMLog(@"Mail sent failure: %@", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+
+    [self dismissViewControllerAnimated:YES completion:NULL];
+
+    [self closeMenu];
 }
 
 @end

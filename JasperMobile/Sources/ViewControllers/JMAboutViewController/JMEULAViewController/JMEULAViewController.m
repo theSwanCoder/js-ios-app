@@ -45,7 +45,7 @@
 {
     [super viewDidLoad];
 
-    self.title = JMCustomLocalizedString(@"settings.privacy.EULA.title", nil);
+    self.title = JMCustomLocalizedString(@"about.eula.title", nil);
 
     if (self.shouldUserAccept) {
         UIBarButtonItem *acceptButton = [[UIBarButtonItem alloc] initWithTitle:@"Accept"

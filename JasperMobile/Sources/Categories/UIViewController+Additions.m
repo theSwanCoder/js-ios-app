@@ -21,24 +21,22 @@
  */
 
 
-#import "JMSettingsTableViewCell.h"
+//
+//  UIViewController+Additions.m
+//  TIBCO JasperMobile
+//
 
-@interface JMSettingsTableViewCell ()
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
-@end
+#import "UIViewController+Additions.h"
 
-@implementation JMSettingsTableViewCell
-- (void)awakeFromNib
-{
-    [super awakeFromNib];
-    self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
-    self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
-}
+@implementation UIViewController(Additions)
 
-- (void)setSettingsItem:(JMSettingsItem *)settingsItem
-{
-    _settingsItem = settingsItem;
-    self.titleLabel.text = settingsItem.titleString;
+- (BOOL)isVisible {
+    //TODO: Here you can add UITabBarController support
+    if (self.navigationController) {
+        return self.navigationController.visibleViewController == self;
+    }
+    
+    return [self isViewLoaded] && self.view.window;
 }
 
 @end

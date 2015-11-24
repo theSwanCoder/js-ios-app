@@ -48,6 +48,9 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.resourceName.adjustsFontSizeToFitWidth = YES;
+    self.resourceName.minimumScaleFactor = [JMUtils isCompactWidth] ? 0.7 : 0.5;
+    
     self.resourceName.font = [[JMThemesManager sharedManager] collectionResourceNameFont];
     self.resourceName.textColor = [[JMThemesManager sharedManager] resourceViewResourceCellTitleTextColor];
     
@@ -135,7 +138,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.resourceImage.backgroundColor = thumbnails ? [UIColor clearColor] : [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
     self.resourceImage.image = resourceImage;
     [self layoutIfNeeded];
-    self.imageWidthConstraint.constant = [JMUtils isIphone] ? 100: 115;
+#warning HERE NEED CHECK CONSTRAINTS - MAY BE IT'S CORRECT FOR LIST ONLY, NOT FOR GRID!!!
+    self.imageWidthConstraint.constant = [JMUtils isCompactWidth] ? 100: 115;
     [self setNeedsUpdateConstraints];
 }
 
