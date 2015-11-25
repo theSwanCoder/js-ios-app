@@ -39,6 +39,11 @@
     return [JMUtils isServerVersionUpOrEqual6] && [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD];
 }
 
+- (BOOL)isFile
+{
+    return [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FILE];
+}
+
 - (NSString *)resourceViewerVCIdentifier
 {
     // TODO: identifiers with constant
