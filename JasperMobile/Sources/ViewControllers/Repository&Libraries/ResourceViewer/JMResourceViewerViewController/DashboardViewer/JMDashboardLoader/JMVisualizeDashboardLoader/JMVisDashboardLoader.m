@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #import "JMJavascriptRequest.h"
 #import "JMDashboardLoader.h"
 #import "JMDashboard.h"
+#import "JMWebViewManager.h"
 
 @interface JMVisDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
@@ -75,7 +76,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     self.loadCompletion = completion;
 
-    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
+    if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
 
         [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
             if (success) {

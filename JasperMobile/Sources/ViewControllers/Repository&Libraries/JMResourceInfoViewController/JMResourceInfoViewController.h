@@ -31,9 +31,9 @@
  @since 1.9
  */
 
-#import <UIKit/UIKit.h>
 #import "JMResourceClientHolder.h"
 #import "JMMenuActionsView.h"
+#import "JMBaseResourceViewerVC.h"
 
 extern NSString * const kJMShowResourceInfoSegue;
 

@@ -36,11 +36,6 @@
 
 @implementation JMResourceViewerViewController
 
-- (void)dealloc
-{
-    [[JMWebViewManager sharedInstance] reset];
-}
-
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
 {

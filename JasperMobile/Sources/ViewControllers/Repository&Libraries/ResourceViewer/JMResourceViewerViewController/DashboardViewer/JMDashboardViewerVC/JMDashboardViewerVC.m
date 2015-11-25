@@ -32,6 +32,7 @@
 #import "JMDashboardLoader.h"
 #import "JMReportViewerVC.h"
 #import "JMDashboard.h"
+#import "JMWebViewManager.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -160,7 +161,7 @@
 
 - (void)resetSubViews
 {
-    [[JMVisualizeWebViewManager sharedInstance] reset];
+    [[JMWebViewManager sharedInstance] reset];
 }
 
 

@@ -36,7 +36,11 @@
 
 @implementation JMWebViewManager
 
-#pragma mark - Public API
+#pragma mark - Lifecycle
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
 
 + (instancetype)sharedInstance {
     static JMWebViewManager *sharedMyManager = nil;
@@ -47,6 +51,7 @@
     return sharedMyManager;
 }
 
+#pragma mark - Public API
 - (UIWebView *)webViewWithParentFrame:(CGRect)frame
 {
     return [self webViewWithParentFrame:frame asSecondary:NO];
@@ -67,6 +72,14 @@
     webView.scrollView.maximumZoomScale = 2;
 
     return webView;
+}
+
+- (BOOL)isWebViewEmpty:(UIWebView *)webView
+{
+    NSString *jsCommand = @"document.getElementsByTagName('body')[0].innerHTML";
+    NSString *result = [webView stringByEvaluatingJavaScriptFromString:jsCommand];
+    BOOL isWebViewEmpty = result.length == 0;
+    return isWebViewEmpty;
 }
 
 - (void)reset

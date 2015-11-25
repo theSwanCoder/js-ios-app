@@ -33,6 +33,7 @@
 #import "JMJavascriptRequest.h"
 #import "JMVisualizeManager.h"
 #import "JMJavascriptCallback.h"
+#import "JMWebViewManager.h"
 
 typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     JMReportViewerAlertViewTypeEmptyReport,
@@ -89,7 +90,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.report updateLoadingStatusWithValue:NO];
     [self.report updateCountOfPages:NSNotFound];
 
-    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
+    if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
         self.reportLoadCompletion = completionBlock;
         [self.report updateCurrentPage:page];
         [self.report updateCountOfPages:NSNotFound];
@@ -144,7 +145,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)applyReportParametersWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
+    if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
         self.isReportInLoadingProcess = YES;
         [self.report updateLoadingStatusWithValue:NO];
 

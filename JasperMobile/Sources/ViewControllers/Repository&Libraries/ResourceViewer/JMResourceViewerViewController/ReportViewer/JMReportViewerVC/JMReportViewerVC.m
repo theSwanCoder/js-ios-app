@@ -164,7 +164,7 @@
 
 - (void)closeChildReport
 {
-    [[JMVisualizeWebViewManager sharedInstance] resetChildWebView];
+    [[JMWebViewManager sharedInstance] resetChildWebView];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -642,9 +642,9 @@
 - (void)resetSubViews
 {
     if (self.isChildReport) {
-        [[JMVisualizeWebViewManager sharedInstance] resetChildWebView];
+        [[JMWebViewManager sharedInstance] resetChildWebView];
     } else {
-        [[JMVisualizeWebViewManager sharedInstance] reset];
+        [[JMWebViewManager sharedInstance] reset];
     }
 }
 

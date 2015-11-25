@@ -154,7 +154,6 @@
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
 		93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */; };
-		93EEB4621AC54761000718C7 /* JMVisualizeWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */; };
 		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
 		93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FD91BD7975E00355A30 /* Fabric.framework */; };
 		93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FDA1BD7975E00355A30 /* Crashlytics.framework */; };
@@ -489,7 +488,6 @@
 		93D8C6541AAD69CD00117306 /* JMDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboard.m; sourceTree = "<group>"; };
 		93D8C6571AAD778400117306 /* JMVisualizeDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeDashboard.h; sourceTree = "<group>"; };
 		93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeDashboard.m; sourceTree = "<group>"; };
-		93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JMVisualizeWebViewManager.swift; sourceTree = "<group>"; };
 		93EEB4651AC55430000718C7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		93F54FD91BD7975E00355A30 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		93F54FDA1BD7975E00355A30 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -1765,7 +1763,6 @@
 			children = (
 				93D8C6431AAC7E9200117306 /* JMWebViewManager.h */,
 				93D8C6441AAC7E9200117306 /* JMWebViewManager.m */,
-				93EEB4611AC54761000718C7 /* JMVisualizeWebViewManager.swift */,
 			);
 			path = JMWebViewManager;
 			sourceTree = "<group>";
@@ -2315,7 +2312,6 @@
 				089B15F61AA756BD0021A915 /* JMBaseCollectionViewController.m in Sources */,
 				08E2AC7C1B1E056900AC462B /* JMBaseResourceViewerVC.m in Sources */,
 				089B15A31AA756BD0021A915 /* UIColor+RGBComponent.m in Sources */,
-				93EEB4621AC54761000718C7 /* JMVisualizeWebViewManager.swift in Sources */,
 				0801DF9D1AAF2CC900DD072C /* JMFavorites.m in Sources */,
 				9342341A1AAC3D5300D34478 /* JMVisualizeReport.m in Sources */,
 				089B159E1AA756BD0021A915 /* JMFavorites+Helpers.m in Sources */,
