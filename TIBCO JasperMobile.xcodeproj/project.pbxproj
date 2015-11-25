@@ -119,7 +119,6 @@
 		08E2AC901B1E056900AC462B /* JMSingleSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC571B1E056900AC462B /* JMSingleSelectTableViewController.m */; };
 		08E2AC911B1E056900AC462B /* JMSingleSelectTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08E2AC581B1E056900AC462B /* JMSingleSelectTableViewController.xib */; };
 		08E2AC931B1E056900AC462B /* JMInputControlsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC5B1B1E056900AC462B /* JMInputControlsViewController.m */; };
-		08E2AC941B1E056900AC462B /* JMBaseReportViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC5D1B1E056900AC462B /* JMBaseReportViewerViewController.m */; };
 		08E2AC951B1E056900AC462B /* JMRestReportLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC621B1E056900AC462B /* JMRestReportLoader.m */; };
 		08E2AC961B1E056900AC462B /* JMVisualizeReportLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC651B1E056900AC462B /* JMVisualizeReportLoader.m */; };
 		08E2AC971B1E056900AC462B /* JMReportViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC681B1E056900AC462B /* JMReportViewerConfigurator.m */; };
@@ -417,8 +416,6 @@
 		08E2AC581B1E056900AC462B /* JMSingleSelectTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMSingleSelectTableViewController.xib; sourceTree = "<group>"; };
 		08E2AC5A1B1E056900AC462B /* JMInputControlsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMInputControlsViewController.h; sourceTree = "<group>"; };
 		08E2AC5B1B1E056900AC462B /* JMInputControlsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMInputControlsViewController.m; sourceTree = "<group>"; };
-		08E2AC5C1B1E056900AC462B /* JMBaseReportViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseReportViewerViewController.h; sourceTree = "<group>"; };
-		08E2AC5D1B1E056900AC462B /* JMBaseReportViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseReportViewerViewController.m; sourceTree = "<group>"; };
 		08E2AC5F1B1E056900AC462B /* JMReportLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportLoader.h; sourceTree = "<group>"; };
 		08E2AC611B1E056900AC462B /* JMRestReportLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRestReportLoader.h; sourceTree = "<group>"; };
 		08E2AC621B1E056900AC462B /* JMRestReportLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRestReportLoader.m; sourceTree = "<group>"; };
@@ -1423,8 +1420,6 @@
 				08E2AC5E1B1E056900AC462B /* JMReportLoader */,
 				08E2AC661B1E056900AC462B /* JMReportViewerConfigurator */,
 				08E2AC691B1E056900AC462B /* JMReportViewerVC */,
-				08E2AC5C1B1E056900AC462B /* JMBaseReportViewerViewController.h */,
-				08E2AC5D1B1E056900AC462B /* JMBaseReportViewerViewController.m */,
 			);
 			path = ReportViewer;
 			sourceTree = "<group>";
@@ -2339,7 +2334,6 @@
 				0801DFBF1AAF2E7500DD072C /* JMOnboardIntroViewController.m in Sources */,
 				08E2AC8A1B1E056900AC462B /* JMMultiSelectInputControlCell.m in Sources */,
 				0801DFBE1AAF2E7500DD072C /* JMIntroModelManager.m in Sources */,
-				08E2AC941B1E056900AC462B /* JMBaseReportViewerViewController.m in Sources */,
 				08E2AC991B1E056900AC462B /* JMSaveReportFormatCell.m in Sources */,
 				0801DFAF1AAF2CFB00DD072C /* JMUtils.m in Sources */,
 				0801DFBC1AAF2E7500DD072C /* JMIntroImageView.m in Sources */,

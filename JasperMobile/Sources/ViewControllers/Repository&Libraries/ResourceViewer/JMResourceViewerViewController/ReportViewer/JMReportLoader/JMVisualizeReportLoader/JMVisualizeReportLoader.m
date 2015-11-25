@@ -26,7 +26,7 @@
 //  TIBCO JasperMobile
 //
 
-#import "JMBaseReportViewerViewController.h"
+#import "JMReportViewerVC.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMVisualizeReport.h"
 #import "JMJavascriptNativeBridge.h"

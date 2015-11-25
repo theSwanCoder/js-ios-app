@@ -28,7 +28,7 @@
 
 #import "JMRestReportLoader.h"
 #import "NSObject+Additions.h"
-#import "JMBaseReportViewerViewController.h"
+#import "JMReportViewerVC.h"
 #import "JMJavascriptNativeBridgeProtocol.h"
 
 static NSInteger const kJMReportViewerStatusCheckingInterval = 1.f;
