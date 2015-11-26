@@ -33,8 +33,6 @@
 @since 2.1
 */
 
-#import "JMMenuActionsView.h"
-
 typedef NS_OPTIONS(NSInteger, JMMenuActionsViewAction) {
     JMMenuActionsViewAction_None            = 0,
     JMMenuActionsViewAction_MakeFavorite    = 1 << 0,

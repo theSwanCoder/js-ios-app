@@ -36,7 +36,7 @@
     #import "GAITracker.h"
 
 // Swift
-    #import "TIBCO_JasperMobile-Swift.h"
+//    #import "TIBCO_JasperMobile-Swift.h"
 
 // Crashlytics
     #import <Fabric/Fabric.h>

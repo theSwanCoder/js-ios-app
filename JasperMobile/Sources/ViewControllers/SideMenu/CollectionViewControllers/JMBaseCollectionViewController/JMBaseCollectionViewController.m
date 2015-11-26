@@ -39,7 +39,7 @@
 
 #import "JMRepositoryCollectionViewController.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMBaseReportViewerViewController.h"
+#import "JMReportViewerVC.h"
 #import "JMResourceInfoViewController.h"
 #import "UIViewController+Additions.h"
 

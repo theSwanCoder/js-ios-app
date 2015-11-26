@@ -62,8 +62,9 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 
 - (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion;
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion;
-- (void)reset;
 - (void)minimizeDashlet;
+- (void)cancel;
+- (void)destroy;
 @optional
 - (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion) completion;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
