@@ -52,12 +52,12 @@
 }
 
 #pragma mark - Public API
-- (UIWebView *)webViewWithParentFrame:(CGRect)frame
+- (UIWebView *)webView
 {
-    return [self webViewWithParentFrame:frame asSecondary:NO];
+    return [self webViewAsSecondary:NO];
 }
 
-- (UIWebView *)webViewWithParentFrame:(CGRect)frame asSecondary:(BOOL)asSecondary
+- (UIWebView *)webViewAsSecondary:(BOOL)asSecondary
 {
     UIWebView *webView;
     if (asSecondary) {
@@ -65,8 +65,6 @@
     } else {
         webView = self.primaryWebView;
     }
-
-    [self updateFrame:frame forWebView:webView];
 
     webView.scrollView.minimumZoomScale = 1;
     webView.scrollView.maximumZoomScale = 2;
@@ -84,6 +82,7 @@
 
 - (void)reset
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     _primaryWebView.delegate = nil;
     _primaryWebView = nil;
 
@@ -92,6 +91,7 @@
 
 - (void)resetChildWebView
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     _secondaryWebView.delegate = nil;
     _secondaryWebView = nil;
 }
@@ -116,19 +116,13 @@
 
 - (UIWebView *)createWebView
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     webView.scrollView.bounces = NO;
     webView.scalesPageToFit = YES;
     webView.dataDetectorTypes = UIDataDetectorTypeNone;
     webView.suppressesIncrementalRendering = YES;
     return webView;
 }
-
-- (void)updateFrame:(CGRect)frame forWebView:(UIWebView *)webView
-{
-    webView.frame = frame;
-}
-
 
 @end

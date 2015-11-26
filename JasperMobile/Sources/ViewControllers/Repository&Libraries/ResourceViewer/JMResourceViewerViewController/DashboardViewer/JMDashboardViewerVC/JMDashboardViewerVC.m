@@ -123,8 +123,7 @@
     }
     self.configurator.viewportScaleFactor = initialScaleViewport;
 
-    CGRect rootViewBounds = self.navigationController.view.bounds;
-    id dashboardView = [self.configurator webViewWithFrame:rootViewBounds asSecondary:NO];
+    id dashboardView = [self.configurator webViewAsSecondary:NO];
     [self.view addSubview:dashboardView];
 
     ((UIView *)dashboardView).translatesAutoresizingMaskIntoConstraints = NO;

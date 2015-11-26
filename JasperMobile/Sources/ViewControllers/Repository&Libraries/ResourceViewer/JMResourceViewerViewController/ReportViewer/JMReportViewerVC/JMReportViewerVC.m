@@ -181,7 +181,7 @@
 - (void)setupSubviews
 {
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
-    UIWebView *webView = [self.configurator webViewWithFrame:self.view.bounds asSecondary:self.isChildReport];
+    UIWebView *webView = [self.configurator webViewAsSecondary:self.isChildReport];
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     
     webView.translatesAutoresizingMaskIntoConstraints = NO;

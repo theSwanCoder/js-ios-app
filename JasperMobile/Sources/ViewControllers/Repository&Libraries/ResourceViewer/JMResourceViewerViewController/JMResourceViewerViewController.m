@@ -69,8 +69,7 @@
 #pragma mark - Setups
 - (void)setupSubviews
 {
-    CGRect rootViewBounds = self.navigationController.view.bounds;
-    UIWebView *webView = [[JMWebViewManager sharedInstance] webViewWithParentFrame:rootViewBounds];
+    UIWebView *webView = [[JMWebViewManager sharedInstance] webView];
     webView.delegate = self;
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;

@@ -43,7 +43,7 @@
 - (instancetype)initWithDashboard:(JMDashboard *)dashboard;
 + (instancetype)configuratorWithDashboard:(JMDashboard *)dashboard;
 
-- (id)webViewWithFrame:(CGRect)frame asSecondary:(BOOL)asSecondary;
+- (id)webViewAsSecondary:(BOOL)asSecondary;
 - (id<JMDashboardLoader>)dashboardLoader;
 - (void)updateReportLoaderDelegateWithObject:(id <JMDashboardLoaderDelegate>)delegate;
 @end

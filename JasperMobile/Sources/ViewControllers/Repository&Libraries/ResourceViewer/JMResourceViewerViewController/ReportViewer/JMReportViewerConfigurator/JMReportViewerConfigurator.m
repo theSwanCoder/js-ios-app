@@ -56,10 +56,10 @@
     return [[self alloc] initWithReport:report];
 }
 
-- (id)webViewWithFrame:(CGRect)frame asSecondary:(BOOL)asSecondary
+- (id)webViewAsSecondary:(BOOL)asSecondary
 {
     if (!_webView) {
-        _webView = [[JMWebViewManager sharedInstance] webViewWithParentFrame:frame asSecondary:asSecondary];
+        _webView = [[JMWebViewManager sharedInstance] webViewAsSecondary:asSecondary];
     }
     return _webView;
 }
