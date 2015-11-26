@@ -641,11 +641,7 @@
 #pragma mark - UIWebView helpers
 - (void)resetSubViews
 {
-    if (self.isChildReport) {
-        [[JMWebViewManager sharedInstance] resetChildWebView];
-    } else {
-        [[JMWebViewManager sharedInstance] reset];
-    }
+    [self.reportLoader destroyReport];
 }
 
 #pragma mark - JMMenuActionsViewDelegate

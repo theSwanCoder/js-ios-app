@@ -89,6 +89,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     self.isReportInLoadingProcess = YES;
     [self.report updateLoadingStatusWithValue:NO];
     [self.report updateCountOfPages:NSNotFound];
+    [self.report updateCurrentPage:page];
 
     if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
         self.reportLoadCompletion = completionBlock;
@@ -249,6 +250,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)javascriptNativeBridge:(JMJavascriptNativeBridge *)bridge didReceiveCallback:(JMJavascriptCallback *)callback
 {
     JMLog(@"response parameters: %@", callback.parameters);
+    JMLog(@"callback type: %@", callback.type);
     if ([callback.type isEqualToString:@"DOMContentLoaded"]) {
         [self handleDOMContentLoaded];
     } else if ([callback.type isEqualToString:@"runReport"]) {
@@ -271,12 +273,31 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         [self handleRefreshDidEndFailedWithParameters:callback.parameters];
     } else if ([callback.type isEqualToString:@"reportOnPageChange"]) {
         [self handleReportOnPageChangeWithParameters:callback.parameters];
+    } else if ([callback.type isEqualToString:@"onWindowError"]) {
+        [self.bridge reset];
+        // waiting for resetting of webview
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self runReportWithPage:self.report.currentPage completion:self.reportLoadCompletion];
+        });
     }
 }
 
 - (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
 {
     // TODO: handle auth requests.
+}
+
+- (BOOL)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge shouldLoadExternalRequest:(NSURLRequest *)request
+{
+    BOOL shouldLoad = NO;
+    // TODO: verify all cases
+
+    // Request for cleaning webview
+    if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
+        shouldLoad = YES;
+    }
+
+    return shouldLoad;
 }
 
 #pragma mark - Helpers

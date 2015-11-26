@@ -122,6 +122,11 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     [self runReportWithPage:1 completion:completion];
 }
 
+- (void)destroyReport
+{
+    [self.bridge reset];
+}
+
 #pragma mark - Private API
 
 - (void) runReportExecution
