@@ -161,6 +161,7 @@
 - (void)resetSubViews
 {
     [self.dashboardLoader destroy];
+    [[JMWebViewManager sharedInstance] resetZoom];
 }
 
 

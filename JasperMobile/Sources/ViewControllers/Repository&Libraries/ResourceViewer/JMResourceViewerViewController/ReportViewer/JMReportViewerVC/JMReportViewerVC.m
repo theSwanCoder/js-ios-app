@@ -642,6 +642,7 @@
 - (void)resetSubViews
 {
     [self.reportLoader destroy];
+    [[JMWebViewManager sharedInstance] resetZoom];
 }
 
 #pragma mark - JMMenuActionsViewDelegate

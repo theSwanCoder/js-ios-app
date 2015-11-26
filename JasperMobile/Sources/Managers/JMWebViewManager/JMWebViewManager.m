@@ -66,6 +66,7 @@
         webView = self.primaryWebView;
     }
 
+    webView.scrollView.zoomScale = 1;
     webView.scrollView.minimumZoomScale = 1;
     webView.scrollView.maximumZoomScale = 2;
 
@@ -83,8 +84,8 @@
 - (void)reset
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    _primaryWebView.delegate = nil;
-    _primaryWebView = nil;
+    self.primaryWebView.delegate = nil;
+    self.primaryWebView = nil;
 
     [self resetChildWebView];
 }
@@ -92,8 +93,14 @@
 - (void)resetChildWebView
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    _secondaryWebView.delegate = nil;
-    _secondaryWebView = nil;
+    self.secondaryWebView.delegate = nil;
+    self.secondaryWebView = nil;
+}
+
+- (void)resetZoom
+{
+    [self.primaryWebView.scrollView setZoomScale:0.1 animated:YES];
+    [self.secondaryWebView.scrollView setZoomScale:0.1 animated:YES];
 }
 
 #pragma mark - Private API

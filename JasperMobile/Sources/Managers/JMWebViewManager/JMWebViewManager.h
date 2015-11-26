@@ -36,6 +36,7 @@
 - (UIWebView *)webView;
 - (UIWebView *)webViewAsSecondary:(BOOL)asSecondary;
 - (BOOL)isWebViewEmpty:(UIWebView *)webView;
+- (void)resetZoom;
 - (void)reset;
 - (void)resetChildWebView;
 @end
