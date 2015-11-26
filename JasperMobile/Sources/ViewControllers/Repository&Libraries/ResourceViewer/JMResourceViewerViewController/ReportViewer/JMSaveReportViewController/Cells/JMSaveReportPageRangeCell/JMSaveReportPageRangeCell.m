@@ -51,12 +51,12 @@
     
     self.titleLabel.font = [[JMThemesManager sharedManager] tableViewCellTitleFont];
     self.titleLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
-
+    
     UIPickerView *pickerView = [UIPickerView new];
-
+    
     self.textField.inputView = pickerView;
     self.textField.inputAccessoryView = [self pickerToolbar];
-
+    
     self.pickerView = pickerView;
     self.pickerView.delegate = self;
     self.pickerView.dataSource = self;
@@ -64,35 +64,26 @@
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.activityIndicator.hidesWhenStopped = NO;
     self.activityIndicator.color = [UIColor darkGrayColor];
-
+    
     [self.textField addSubview:self.activityIndicator];
-
-    if (![JMUtils isSystemVersion7]) {
-
-        self.activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
-
-        [self.textField addConstraint:[NSLayoutConstraint constraintWithItem:self.textField
-                                                                   attribute:NSLayoutAttributeCenterX
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:self.activityIndicator
-                                                                   attribute:NSLayoutAttributeCenterX
-                                                                  multiplier:1
-                                                                    constant:0]];
-
-        [self.textField addConstraint:[NSLayoutConstraint constraintWithItem:self.textField
-                                                                   attribute:NSLayoutAttributeCenterY
-                                                                   relatedBy:NSLayoutRelationEqual
-                                                                      toItem:self.activityIndicator
-                                                                   attribute:NSLayoutAttributeCenterY
-                                                                  multiplier:1
-                                                                    constant:0]];
-    } else {
-        CGRect activityIndicatorFrame = self.activityIndicator.frame;
-        activityIndicatorFrame.origin.x = CGRectGetMidX(self.textField.frame) - CGRectGetWidth(activityIndicatorFrame) / 2;
-        activityIndicatorFrame.origin.y = CGRectGetMidY(self.textField.frame) - CGRectGetHeight(activityIndicatorFrame) / 2;
-        self.activityIndicator.frame = activityIndicatorFrame;
-        self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-    }
+    
+    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self.textField addConstraint:[NSLayoutConstraint constraintWithItem:self.textField
+                                                               attribute:NSLayoutAttributeCenterX
+                                                               relatedBy:NSLayoutRelationEqual
+                                                                  toItem:self.activityIndicator
+                                                               attribute:NSLayoutAttributeCenterX
+                                                              multiplier:1
+                                                                constant:0]];
+    
+    [self.textField addConstraint:[NSLayoutConstraint constraintWithItem:self.textField
+                                                               attribute:NSLayoutAttributeCenterY
+                                                               relatedBy:NSLayoutRelationEqual
+                                                                  toItem:self.activityIndicator
+                                                               attribute:NSLayoutAttributeCenterY
+                                                              multiplier:1
+                                                                constant:0]];
 }
 
 - (void)setEditable:(BOOL)editable

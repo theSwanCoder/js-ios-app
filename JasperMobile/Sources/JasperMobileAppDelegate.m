@@ -81,6 +81,8 @@ static const NSInteger kSplashViewTag = 100;
     //[[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
     [[GAI sharedInstance] trackerWithTrackingId:kGAITrackingID];
     
+    SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
+    revealViewController.frontViewController = [JMUtils launchScreenViewController];
     return YES;
 }
 
@@ -109,8 +111,6 @@ static const NSInteger kSplashViewTag = 100;
         };
 
         if (isSessionRestored) {
-            self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
-
             if (!menuViewController.selectedItem) {
                 loginCompletionBlock();
             }
@@ -177,6 +177,10 @@ static const NSInteger kSplashViewTag = 100;
 - (void)showOnboardIntroIfNeeded
 {
     BOOL shouldDisplayIntro = ![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultsIntroDidApear];
+    UITraitCollection *currentTraitCollection = self.window.rootViewController.traitCollection;
+    
+    shouldDisplayIntro &= !(currentTraitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad && currentTraitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact);
+    
     if (shouldDisplayIntro) {
         SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
         JMOnboardIntroViewController *introViewController = (JMOnboardIntroViewController *) [revealViewController.storyboard instantiateViewControllerWithIdentifier:@"JMOnboardIntroViewController"];
@@ -187,10 +191,7 @@ static const NSInteger kSplashViewTag = 100;
 #pragma mark - Splash View
 - (void)addSplashView
 {
-    // TODO: replace this approach for getting right splash image
-    NSString *splashImageName = [UIImage splashImageNameForOrientation:[UIApplication sharedApplication].statusBarOrientation];
-    UIImage *splashImage = [UIImage imageNamed:splashImageName];
-    UIImageView *splashView = [[UIImageView alloc] initWithImage:splashImage];
+    UIView *splashView = [JMUtils launchScreenViewController].view;
     splashView.tag = kSplashViewTag;
     [self.window addSubview:splashView];
 }

@@ -44,13 +44,15 @@
                           completionBlock:^(JSOperationResult *result) {
                               __strong typeof(self)strongSelf = weakSelf;
                               if (result.error) {
+                                  __weak typeof(self)weakSelf = strongSelf;
                                   [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                          if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                              [strongSelf fetchReportLookupWithResourceURI:reportURI
-                                                                                completion:completion];
-                                          } else if (completion) {
-                                              completion(nil, result.error);
-                                          }
+                                      __strong typeof(self)strongSelf = weakSelf;
+                                      if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                          [strongSelf fetchReportLookupWithResourceURI:reportURI
+                                                                            completion:completion];
+                                      } else if (completion) {
+                                          completion(nil, result.error);
+                                      }
                                   }];
                               } else if (completion) {
                                   JSResourceReportUnit *reportUnit = [result.objects firstObject];
@@ -69,14 +71,17 @@
                             completionBlock:^(JSOperationResult *result) {
                                 __strong typeof(self)strongSelf = weakSelf;
                                 if (result.error) {
+                                    __weak typeof(self)weakSelf = strongSelf;
                                     [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                            if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                                [strongSelf fetchInputControlsWithReportURI:reportURI
-                                                                                 completion:completion];
-                                            } else if (completion) {
-                                                completion(nil, result.error);
-                                            }
-                                        }];
+                                        __strong typeof(self)strongSelf = weakSelf;
+                                        
+                                        if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                            [strongSelf fetchInputControlsWithReportURI:reportURI
+                                                                             completion:completion];
+                                        } else if (completion) {
+                                            completion(nil, result.error);
+                                        }
+                                    }];
                                 } else if (completion) {
                                     NSMutableArray *visibleInputControls = [NSMutableArray array];
                                     for (JSInputControlDescriptor *inputControl in result.objects) {
@@ -97,17 +102,19 @@
                                     completion:^(JSOperationResult *result) {
                                         __strong typeof(self)strongSelf = weakSelf;
                                         if (result.error) {
+                                            __weak typeof(self)weakSelf = strongSelf;
                                             [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                                    if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                                        [strongSelf fetchInputControlsWithReportURI:reportURI
-                                                                                         completion:completion];
-                                                    } else if (completion) {
-                                                        completion(nil, result.error);
-                                                    }
-                                                }];
+                                                __strong typeof(self)strongSelf = weakSelf;
+                                                if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                                    [strongSelf fetchInputControlsWithReportURI:reportURI
+                                                                                     completion:completion];
+                                                } else if (completion) {
+                                                    completion(nil, result.error);
+                                                }
+                                            }];
                                         } else if (completion) {
                                             NSMutableArray *reportOptions = [NSMutableArray array];
-
+                                            
                                             for (id reportOption in result.objects) {
                                                 if ([reportOption isKindOfClass:[JSReportOption class]] && [reportOption identifier]) {
                                                     JMExtendedReportOption *extendedOption = [JMExtendedReportOption new];
@@ -128,15 +135,17 @@
                              completion:^(JSOperationResult *result) {
                                  __strong typeof(self)strongSelf = weakSelf;
                                  if (result.error) {
+                                     __weak typeof(self)weakSelf = strongSelf;
                                      [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                             if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                                 [strongSelf deleteReportOption:reportOption
-                                                                  withReportURI:reportURI
-                                                                     completion:completion];
-                                             } else if (completion) {
-                                                 completion(result.error);
-                                             }
-                                         }];
+                                         __strong typeof(self)strongSelf = weakSelf;
+                                         if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                             [strongSelf deleteReportOption:reportOption
+                                                              withReportURI:reportURI
+                                                                 completion:completion];
+                                         } else if (completion) {
+                                             completion(result.error);
+                                         }
+                                     }];
                                  } else if (completion) {
                                      completion(nil);
                                  }
@@ -155,16 +164,18 @@
                                           completion:^(JSOperationResult *result) {
                                               __strong typeof(self)strongSelf = weakSelf;
                                               if (result.error) {
+                                                  __weak typeof(self)weakSelf = strongSelf;
                                                   [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                                          if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                                              [strongSelf createReportOptionWithReportURI:reportURI
-                                                                                              optionLabel:optionLabel
-                                                                                         reportParameters:reportParameters
-                                                                                               completion:completion];
-                                                          } else if (completion) {
-                                                              completion(nil, result.error);
-                                                          }
-                                                      }];
+                                                      __strong typeof(self)strongSelf = weakSelf;
+                                                      if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
+                                                          [strongSelf createReportOptionWithReportURI:reportURI
+                                                                                          optionLabel:optionLabel
+                                                                                     reportParameters:reportParameters
+                                                                                           completion:completion];
+                                                      } else if (completion) {
+                                                          completion(nil, result.error);
+                                                      }
+                                                  }];
                                               } else if (completion) {
                                                   JSReportOption *reportOption = [result.objects firstObject];
                                                   completion(reportOption, nil);

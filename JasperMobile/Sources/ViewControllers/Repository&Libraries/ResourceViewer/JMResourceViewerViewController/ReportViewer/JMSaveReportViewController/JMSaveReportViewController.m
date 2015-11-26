@@ -30,7 +30,6 @@
 #import "JMSaveReportFormatCell.h"
 #import "JMSaveReportPagesCell.h"
 #import "JMSaveReportPageRangeCell.h"
-#import "UIAlertView+Additions.h"
 #import "JMReport.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMReportSaver.h"
@@ -314,17 +313,22 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
     if (!self.errorString && isValidReportName) {
         if (![JMSavedResources isAvailableReportName:self.reportName format:self.selectedReportFormat]) {
             self.errorString = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
-            [[UIAlertView localizedAlertWithTitle:@"dialod.title.error" message:@"report.viewer.save.name.errmsg.notunique.rewrite" completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                if (alertView.cancelButtonIndex != buttonIndex) {
-
-                    self.errorString = nil;
-                    [self.tableView reloadData];
-
-                    [self verifyRangePagesWithCompletion:^{
-                        [self saveReport];
-                    }];
-                }
-            } cancelButtonTitle:@"dialog.button.cancel" otherButtonTitles:@"dialog.button.ok", nil] show];
+            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.error"
+                                                                                              message:@"report.viewer.save.name.errmsg.notunique.rewrite"
+                                                                                    cancelButtonTitle:@"dialog.button.cancel"
+                                                                              cancelCompletionHandler:nil];
+            __weak typeof(self) weakSelf = self;
+            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                __strong typeof(self) strongSelf = weakSelf;
+                strongSelf.errorString = nil;
+                [strongSelf.tableView reloadData];
+                
+                [strongSelf verifyRangePagesWithCompletion:^{
+                    [strongSelf saveReport];
+                }];
+            }];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
         } else {
             [self verifyRangePagesWithCompletion:^{
                 [self saveReport];
@@ -343,22 +347,24 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         NSInteger toPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
         if ( (toPage - fromPage) + 1 > kJMSaveReportMaxRangePages ) {
             NSString *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.tooBigRange", nil), @(kJMSaveReportMaxRangePages)];
-            [[UIAlertView localizedAlertWithTitle:@"dialod.title.error"
-                                          message:errorMessage
-                                       completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                           if (alertView.cancelButtonIndex != buttonIndex) {
-                                               self.selectedReportFormat = [JSConstants sharedInstance].CONTENT_TYPE_PDF;
-                                               // update format section
-                                               JMSaveReportSection *formatSection = [self sectionForType:JMSaveReportSectionTypeFormat];
-                                               NSInteger formatSectionIndex = [self.sections indexOfObject:formatSection];
-                                               NSIndexSet *sectionsForUpdate = [NSIndexSet indexSetWithIndex:formatSectionIndex];
-                                               [self.tableView reloadSections:sectionsForUpdate withRowAnimation:UITableViewRowAnimationAutomatic];
-                                               // try save report in format PDF
-                                               [self runSaveAction];
-                                           }
-                                       }
-                                cancelButtonTitle:@"dialog.button.cancel"
-                                otherButtonTitles:@"dialog.button.ok", nil] show];
+            
+            UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.error"
+                                                                                              message:errorMessage
+                                                                                    cancelButtonTitle:@"dialog.button.cancel"
+                                                                              cancelCompletionHandler:nil];
+            __weak typeof(self) weakSelf = self;
+            [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                __strong typeof(self) strongSelf = weakSelf;
+                strongSelf.selectedReportFormat = [JSConstants sharedInstance].CONTENT_TYPE_PDF;
+                // update format section
+                JMSaveReportSection *formatSection = [strongSelf sectionForType:JMSaveReportSectionTypeFormat];
+                NSInteger formatSectionIndex = [strongSelf.sections indexOfObject:formatSection];
+                NSIndexSet *sectionsForUpdate = [NSIndexSet indexSetWithIndex:formatSectionIndex];
+                [strongSelf.tableView reloadSections:sectionsForUpdate withRowAnimation:UITableViewRowAnimationAutomatic];
+                // try save report in format PDF
+                [strongSelf runSaveAction];
+            }];
+            [self presentViewController:alertController animated:YES completion:nil];
         } else {
             if (completion) {
                 completion();
@@ -399,7 +405,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                              }
                                          }];
                                  } else {
-                                     [JMUtils showAlertViewWithError:error];
+                                     [JMUtils presentAlertControllerWithError:error completion:nil];
                                      [savedReport removeReport];
                                  }
                              } else {

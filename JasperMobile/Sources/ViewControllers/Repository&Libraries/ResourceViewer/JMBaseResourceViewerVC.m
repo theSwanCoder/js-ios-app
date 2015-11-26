@@ -286,7 +286,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     NSString *imageName = isResourceInFavorites ? @"favorited_item" : @"make_favorite_item";
     
     UIBarButtonItem *favoriteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
-                                                                     style:UIBarButtonItemStyleBordered
+                                                                     style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(favoriteButtonTapped:)];
     favoriteItem.tintColor = isResourceInFavorites ? [[JMThemesManager sharedManager] resourceViewResourceFavoriteButtonTintColor] : [[JMThemesManager sharedManager] barItemsColor];
@@ -341,7 +341,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];
     UIImage *resizebleBackButtonImage = [backButtonImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backButtonImage.size.width, 0, backButtonImage.size.width) resizingMode:UIImageResizingModeStretch];
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:[self croppedBackButtonTitle:backItemTitle]
-                                                                 style:UIBarButtonItemStyleBordered
+                                                                 style:UIBarButtonItemStylePlain
                                                                 target:target
                                                                 action:action];
     [backItem setBackgroundImage:resizebleBackButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];

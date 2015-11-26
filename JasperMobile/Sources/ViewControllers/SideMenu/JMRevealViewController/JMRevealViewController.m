@@ -27,7 +27,6 @@
 //
 
 #import "JMRevealViewController.h"
-#import "JMSplashViewController.h"
 
 @interface JMRevealViewController ()
 
@@ -39,12 +38,6 @@
     [super viewDidLoad];
 
     self.rearViewRevealOverdraw = 0.f;
-}
-
-- (BOOL)shouldAutorotate
-{
-    id frontViewController = self.frontViewController;
-    return !(frontViewController && [frontViewController isKindOfClass:[JMSplashViewController class]]);
 }
 
 @end

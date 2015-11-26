@@ -76,17 +76,6 @@ void jmDebugLog(NSString * __nonnull format, ...);
 + (BOOL)isIphone;
 
 /**
- Verify system version is 7
- */
-+ (BOOL)isSystemVersion7;
-
-/**
- Verify system version is 8
- */
-
-+ (BOOL)isSystemVersion8;
-
-/**
  Verify system version is 9
  */
 + (BOOL)isSystemVersion9;
@@ -122,9 +111,7 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (void)setUserAcceptAgreement:(BOOL)isAccept;
 
-+ (void)showAlertViewWithError:(NSError * __nullable)error;
-
-+ (void)showAlertViewWithError:(NSError *__nullable)error completion:(void (^ __nonnull)(UIAlertView * __nonnull alertView, NSInteger buttonIndex))completion;
++ (void)presentAlertControllerWithError:(NSError *__nonnull)error completion:(void (^__nullable)(void))completion;
 
 /**
  Returns YES if User want to use Visualize for watching reports and dashboards
@@ -174,7 +161,10 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (UIStoryboard *__nonnull)mainStoryBoard;
 
++ (UIViewController *__nonnull)launchScreenViewController;
+
 + (void)logEventWithName:(NSString *__nonnull)eventName additionInfo:(NSDictionary *__nonnull)additionInfo;
+
 + (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *__nonnull)additionInfo;
 
 @end

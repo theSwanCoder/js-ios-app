@@ -48,7 +48,7 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
     self.title = JMCustomLocalizedString(@"servers.profile.title", nil);
     self.view.backgroundColor = [[JMThemesManager sharedManager] serversViewBackgroundColor];
     self.collectionView.backgroundColor = [UIColor clearColor];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item"] style:UIBarButtonItemStyleBordered  target:self action:@selector(addButtonTapped:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add_item"] style:UIBarButtonItemStylePlain  target:self action:@selector(addButtonTapped:)];
     self.errorLabel.text = JMCustomLocalizedString(@"servers.profile.list.empty", nil);
     self.errorLabel.font = [[JMThemesManager sharedManager] resourcesActivityTitleFont];
 
@@ -92,6 +92,14 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
     }
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    if (self.isViewLoaded && self.view.window) {
+        [self.collectionView reloadData];
+    }
+}
+
 #pragma mark - UICollectionViewDelegate
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -123,11 +131,7 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
         [JMCancelRequestPopup dismiss];
         if (!requestDidCancelled) {
             if (error) {
-                [[UIAlertView localizedAlertWithTitle:error.domain
-                                              message:error.localizedDescription
-                                             delegate:nil
-                                    cancelButtonTitle:@"dialog.button.ok"
-                                    otherButtonTitles:nil] show];
+                [JMUtils presentAlertControllerWithError:error completion:nil];
             } else {
                 if ([strongSelf.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
                     [strongSelf.delegate serverGridControllerDidSelectProfile:serverProfile];
@@ -173,16 +177,18 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 - (void)deleteServerProfileForCell:(JMServerCollectionViewCell *)cell
 {
     JMServerProfile *serverProfile = cell.serverProfile;
-    [[UIAlertView localizedAlertWithTitle:@"dialod.title.confirmation"
-                                  message:@"servers.profile.delete.message"
-                               completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                                   if (alertView.cancelButtonIndex != buttonIndex) {
-                                       [JMServerProfile deleteServerProfile:serverProfile];
-                                       [self refreshDatasource];
-                                   }
-                               }
-                        cancelButtonTitle:@"dialog.button.cancel"
-                        otherButtonTitles:@"dialog.button.delete", nil] show];
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
+                                                                                      message:@"servers.profile.delete.message"
+                                                                            cancelButtonTitle:@"dialog.button.cancel"
+                                                                      cancelCompletionHandler:nil];
+    
+    __weak typeof(self) weakSelf = self;
+    [alertController addActionWithLocalizedTitle:@"dialog.button.delete" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+        __strong typeof(self) strongSelf = weakSelf;
+        [JMServerProfile deleteServerProfile:serverProfile];
+        [strongSelf refreshDatasource];
+    }];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)editServerProfileForCell:(JMServerCollectionViewCell *)cell

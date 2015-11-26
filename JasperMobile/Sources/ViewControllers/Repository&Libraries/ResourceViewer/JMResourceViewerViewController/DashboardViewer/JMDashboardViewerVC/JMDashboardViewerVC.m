@@ -44,6 +44,20 @@
 
 @implementation JMDashboardViewerVC
 
+#pragma mark -
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        CGFloat initialScaleViewport = 0.75;
+        BOOL isCompactWidth = newCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+        if (isCompactWidth) {
+            initialScaleViewport = 0.25;
+        }
+        [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+    }
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+}
+
 #pragma mark - Print
 - (void)printResource
 {
@@ -99,6 +113,14 @@
 - (void)setupSubviews
 {
     self.configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard];
+
+    // Setup viewport scale factor
+    CGFloat initialScaleViewport = 0.75;
+    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+    if (isCompactWidth) {
+        initialScaleViewport = 0.25;
+    }
+    self.configurator.viewportScaleFactor = initialScaleViewport;
 
     CGRect rootViewBounds = self.navigationController.view.bounds;
     id dashboardView = [self.configurator webViewWithFrame:rootViewBounds asSecondary:NO];
@@ -159,18 +181,21 @@
     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
         __strong typeof(self)strongSelf = weakSelf;
         if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-            [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
-                                 cancelBlock:^(void) {
-                                         [strongSelf.dashboardLoader reset];
-                                         [super cancelResourceViewingAndExit:YES];
-                                     }];
             __weak typeof(self)weakSelf = strongSelf;
+            [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+                                       cancelBlock:^(void) {
+                                           __strong typeof(self)strongSelf = weakSelf;
+                                           [strongSelf.dashboardLoader reset];
+                                           [super cancelResourceViewingAndExit:YES];
+                                       }];
             [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
                 __weak typeof(self)strongSelf = weakSelf;
                 [strongSelf stopShowLoader];
             }];
         } else {
+            __weak typeof(self)weakSelf = strongSelf;
             [JMUtils showLoginViewAnimated:YES completion:^{
+                __weak typeof(self)strongSelf = weakSelf;
                 [strongSelf cancelResourceViewingAndExit:YES];
             }];
         }
@@ -253,7 +278,7 @@
     self.navigationItem.rightBarButtonItems = nil;
     if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
         UIBarButtonItem *refreshDashlet = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_action"]
-                                                                     style:UIBarButtonItemStyleBordered
+                                                                     style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(reloadDashlet)];
         self.navigationItem.rightBarButtonItem = refreshDashlet;
@@ -271,13 +296,14 @@
              parameters:(NSArray *)parameters
 {
     if (hyperlinkType == JMHyperlinkTypeReportExecution) {
-
         NSString *reportURI = resourceLookup.uri;
         __weak typeof(self)weakSelf = self;
         [self loadInputControlsWithReportURI:reportURI completion:^(NSArray *inputControls, NSError *error) {
             __strong typeof(self)strongSelf = weakSelf;
             if (error) {
-                [JMUtils showAlertViewWithError:error completion:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                __weak typeof(self) weakSelf = strongSelf;
+                [JMUtils presentAlertControllerWithError:error completion:^{
+                    __strong typeof(self) strongSelf = weakSelf;
                     [strongSelf cancelResourceViewingAndExit:YES];
                 }];
             } else {

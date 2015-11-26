@@ -286,6 +286,37 @@
 			<string>FFFFFF</string>
 		</dict>
 	</dict>
+	<key>AboutApp</key>
+	<dict>
+		<key>app_name_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>000000</string>
+		</dict>
+		<key>app_about_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>343841</string>
+		</dict>
+		<key>buttons_background_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>428EC0</string>
+		</dict>
+		<key>buttons_text_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>FFFFFF</string>
+		</dict>
+	</dict>
 	<key>Common</key>
 	<dict>
 		<key>views_background_color</key>

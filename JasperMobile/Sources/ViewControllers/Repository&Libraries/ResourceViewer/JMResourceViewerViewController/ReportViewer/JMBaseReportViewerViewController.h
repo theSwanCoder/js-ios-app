@@ -37,7 +37,7 @@
 #import "JMReport.h"
 #import "JMReportLoader.h"
 
-@interface JMBaseReportViewerViewController : JMResourceViewerViewController <JMRefreshable, JMReportViewerToolBarDelegate>
+@interface JMBaseReportViewerViewController : JMResourceViewerViewController <JMRefreshable>
 @property (nonatomic, strong, readonly) id <JMReportLoader> reportLoader;
 @property (nonatomic, strong, readonly) JMReport *report;
 @property (nonatomic, assign) BOOL isChildReport;
