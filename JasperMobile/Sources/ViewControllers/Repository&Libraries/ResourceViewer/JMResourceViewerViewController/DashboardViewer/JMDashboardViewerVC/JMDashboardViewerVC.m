@@ -161,7 +161,7 @@
 
 - (void)resetSubViews
 {
-    [[JMWebViewManager sharedInstance] reset];
+    [self.dashboardLoader destroy];
 }
 
 
@@ -186,7 +186,7 @@
             [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
                                        cancelBlock:^(void) {
                                            __strong typeof(self)strongSelf = weakSelf;
-                                           [strongSelf.dashboardLoader reset];
+                                           [strongSelf.dashboardLoader cancel];
                                            [super cancelResourceViewingAndExit:YES];
                                        }];
             [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
@@ -231,7 +231,7 @@
 
             [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
                                  cancelBlock:^(void) {
-                                         [strongSelf.dashboardLoader reset];
+                                         [strongSelf.dashboardLoader cancel];
                                          [super cancelResourceViewingAndExit:YES];
                                      }];
             __weak typeof(self)weakSelf = strongSelf;
