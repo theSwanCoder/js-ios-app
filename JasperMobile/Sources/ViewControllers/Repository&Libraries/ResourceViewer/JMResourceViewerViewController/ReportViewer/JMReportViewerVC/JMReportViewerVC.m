@@ -146,7 +146,7 @@
         if (![self.restClient isRequestPoolEmpty]) {
             [self.restClient cancelAllRequests];
         }
-        [self.reportLoader cancelReport];
+        [self.reportLoader cancel];
         if (self.exitBlock) {
             self.exitBlock();
         }
@@ -474,7 +474,7 @@
     __weak typeof(self)weakSelf = self;
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
         __strong typeof(self)strongSelf = weakSelf;
-        [strongSelf.reportLoader cancelReport];
+        [strongSelf.reportLoader cancel];
         [strongSelf cancelResourceViewingAndExit:YES];
     }];
     
@@ -512,7 +512,7 @@
         __weak typeof(self)weakSelf = self;
         [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
             __strong typeof(self)strongSelf = weakSelf;
-            [strongSelf.reportLoader cancelReport];
+            [strongSelf.reportLoader cancel];
             [strongSelf cancelResourceViewingAndExit:YES];
         }];
         [self.reportLoader applyReportParametersWithCompletion:^(BOOL success, NSError *error) {
@@ -547,7 +547,7 @@
     __weak typeof(self)weakSelf = self;
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
         __strong typeof(self)strongSelf = weakSelf;
-        [strongSelf.reportLoader cancelReport];
+        [strongSelf.reportLoader cancel];
         [strongSelf cancelResourceViewingAndExit:YES];
     }];
     
@@ -641,7 +641,7 @@
 #pragma mark - UIWebView helpers
 - (void)resetSubViews
 {
-    [self.reportLoader destroyReport];
+    [self.reportLoader destroy];
 }
 
 #pragma mark - JMMenuActionsViewDelegate

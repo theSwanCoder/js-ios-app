@@ -138,7 +138,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.bridge sendRequest:request];
 }
 
-- (void) cancelReport
+- (void)cancel
 {
     // TODO: need cancel?
 #warning WHY NOT??????
@@ -201,7 +201,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.bridge sendRequest:request];
 }
 
-- (void)destroyReport
+- (void)destroy
 {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileReport.destroy(%@);";

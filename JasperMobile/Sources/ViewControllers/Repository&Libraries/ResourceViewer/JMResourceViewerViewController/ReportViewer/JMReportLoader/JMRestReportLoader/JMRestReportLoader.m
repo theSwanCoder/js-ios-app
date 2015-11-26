@@ -101,7 +101,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     [self startExportExecutionForPage:pageNumber];
 }
 
-- (void) cancelReport
+- (void)cancel
 {
     [self.restClient cancelAllRequests];
     [self.statusCheckingTimer invalidate];
@@ -122,7 +122,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     [self runReportWithPage:1 completion:completion];
 }
 
-- (void)destroyReport
+- (void)destroy
 {
     [self.bridge reset];
 }
