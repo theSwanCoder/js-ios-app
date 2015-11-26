@@ -49,18 +49,6 @@
     self.printSettingsPreferredContentSize = CGSizeMake(540, 580);
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    // TODO: remove after moving to autolayout
-    if (![JMUtils isSystemVersion8]) {
-        // need update frame for ios7 and ios9
-        // there is issue with webView, when we run report and device is in landscape mode
-        [self webView].frame = self.view.bounds;
-    }
-}
-
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
