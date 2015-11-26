@@ -54,17 +54,9 @@
     if (error) {
         [self finishLoadingWithError:error];
     } else {
-        NSMutableArray *folders = [NSMutableArray array];
-        NSMutableArray *resources = [NSMutableArray array];
         for(JMSavedResources *savedResource in fetchedObjects) {
-            if ([savedResource.wsType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FOLDER]) {
-                [folders addObject:[savedResource wrapperFromSavedReports]];
-            } else {
-                [resources addObject:[savedResource wrapperFromSavedReports]];
-            }
+            [self addResourcesWithResource:[savedResource wrapperFromSavedReports]];
         }
-        [self addResourcesWithResources:folders];
-        [self addResourcesWithResources:resources];
 
         _needUpdateData = NO;
         

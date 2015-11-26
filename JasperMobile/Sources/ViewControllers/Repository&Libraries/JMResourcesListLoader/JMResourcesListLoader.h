@@ -77,7 +77,6 @@ typedef NS_ENUM(NSInteger, JMResourcesListLoaderOption) {
 - (void)addResourcesWithResource:(id)resource;
 - (void)addResourcesWithResources:(NSArray *)resources;
 - (id)resourceAtIndex:(NSInteger)index;
-- (void)sortLoadedResourcesUsingComparator:(NSComparator)compartor;
 
 // search
 - (void)searchWithQuery:(NSString *)query;
