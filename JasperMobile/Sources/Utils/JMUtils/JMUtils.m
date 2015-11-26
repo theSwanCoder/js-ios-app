@@ -35,6 +35,7 @@
 #import "SWRevealViewController.h"
 #import "JMMenuViewController.h"
 #import "JMEULAViewController.h"
+#import "JMServerProfile+Helpers.h"
 
 
 void jmDebugLog(NSString *format, ...) {
@@ -389,9 +390,20 @@ void jmDebugLog(NSString *format, ...) {
     return [launchStoryboard instantiateInitialViewController];
 }
 
++ (BOOL)isDemoAccount
+{
+    BOOL isDemoAccount = [self.restClient.serverProfile.serverUrl isEqualToString:[JMServerProfile demoServerProfile].serverUrl];
+    return isDemoAccount;
+}
+
 #pragma mark - Analytics
 + (void)logEventWithName:(NSString *)eventName additionInfo:(NSDictionary *)additionInfo
 {
+    // Disable analytics for demo profile
+    if ([self isDemoAccount]) {
+        return;
+    }
+
     // Crashlytics - Answers
     [Answers logCustomEventWithName:eventName
                    customAttributes:additionInfo];
@@ -407,6 +419,11 @@ void jmDebugLog(NSString *format, ...) {
 
 + (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
 {
+    // Disable analytics for demo profile
+    if ([self isDemoAccount]) {
+        return;
+    }
+
     // Crashlytics - Answers
     [Answers logLoginWithMethod:@"Digits"
                         success:@(success)
