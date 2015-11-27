@@ -132,11 +132,16 @@
 {
     [self.view endEditing:YES];
     if ([self.serverOptions isValidData]) {
-        [self.serverOptions saveChanges];
-        [self.navigationController popViewControllerAnimated:YES];
-
-        if ([self.delegate respondsToSelector:@selector(serverProfileDidChanged:)]) {
-            [self.delegate serverProfileDidChanged:self.serverProfile];
+        // verify http protocol
+        NSArray *pathComponents = self.serverProfile.serverUrl.pathComponents;
+        NSString *protocol = [((NSString *) pathComponents.firstObject) stringByReplacingOccurrencesOfString:@":" withString:@""];
+        BOOL isHTTPProtocol = [protocol isEqualToString:@"http"];
+        if (isHTTPProtocol) {
+            // show alert
+            [self showAlert];
+        } else {
+            [self saveServerOptions];
+            [self.navigationController popViewControllerAnimated:YES];
         }
     } else {
         [self.tableView reloadData];
@@ -150,6 +155,30 @@
     if (indexPath) {
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+}
+
+#pragma mark - Helpers
+- (void)saveServerOptions
+{
+    [self.serverOptions saveChanges];
+
+    if ([self.delegate respondsToSelector:@selector(serverProfileDidChanged:)]) {
+        [self.delegate serverProfileDidChanged:self.serverProfile];
+    }
+}
+
+- (void)showAlert
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
+                                                                                      message:@"secutiry.http.message"
+                                                                            cancelButtonTitle:@"ok"
+                                                                      cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
+                                                                          [self saveServerOptions];
+                                                                          [self.navigationController popViewControllerAnimated:YES];
+                                                                      }];
+    [self presentViewController:alertController
+                       animated:YES
+                     completion:nil];
 }
 
 @end
