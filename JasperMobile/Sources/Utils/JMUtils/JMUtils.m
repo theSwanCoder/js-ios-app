@@ -392,7 +392,10 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)isDemoAccount
 {
-    BOOL isDemoAccount = [self.restClient.serverProfile.serverUrl isEqualToString:[JMServerProfile demoServerProfile].serverUrl];
+    BOOL isDemoServer = [self.restClient.serverProfile.serverUrl isEqualToString:kJMDemoServerUrl];
+    BOOL isDemoUser = [self.restClient.serverProfile.username isEqualToString:kJMDemoServerUsername];
+    BOOL isDemoOrganization = [self.restClient.serverProfile.organization isEqualToString:kJMDemoServerOrganization];
+    BOOL isDemoAccount = isDemoServer && isDemoUser && isDemoOrganization;
     return isDemoAccount;
 }
 
@@ -421,6 +424,7 @@ void jmDebugLog(NSString *format, ...) {
 {
     // Disable analytics for demo profile
     if ([self isDemoAccount]) {
+        JMLog(@"Demo account");
         return;
     }
 
