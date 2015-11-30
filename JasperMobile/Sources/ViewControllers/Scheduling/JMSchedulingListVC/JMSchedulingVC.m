@@ -6,6 +6,7 @@
 #import "JMSchedulingVC.h"
 #import "JMSchedulingManager.h"
 #import "JMJobCell.h"
+#import "JMNewJobVC.h"
 
 @interface JMSchedulingVC() <UITableViewDelegate, UITableViewDataSource, JMJobCellDelegate>
 @property (nonatomic, copy) NSArray *jobs;
@@ -79,81 +80,17 @@
 - (IBAction)addJob:(id)sender
 {
     JMLog(@"add job");
-//    {
-//        "label": "Sample Job Name",
-//        "description": "Sample desctiption",
-//        "trigger": {
-//            "simpleTrigger": {
-//                "timezone": "America/Los_Angeles",
-//                "startType": 2,
-//                "startDate": "2013-10-26 10:00",
-//                "occurrenceCount": 1
-//            }
-//        },
-//        "source": {
-//            "reportUnitURI": "/adhoc/topics/Cascading_multi_select_topic",
-//            "parameters": {
-//                "parameterValues": {
-//                    "Country_multi_select": ["Mexico"],
-//                            "Cascading_name_single_select": ["Chin-Lovell Engineering Associates"],
-//                            "Cascading_state_multi_select": ["DF",
-//                            "Jalisco",
-//                            "Mexico"]
-//                }
-//            }
-//        },
-//        "baseOutputFilename": "Cascading_multi_select_report",
-//        "outputTimeZone": "America/Los_Angeles",
-//        "repositoryDestination": {
-//            "folderURI": "/temp"
-//        },
-//        "outputFormats": {
-//            "outputFormat": ["PDF", "XLS"]
-//        }
-//    }
 
-    NSMutableDictionary *newJob = [NSMutableDictionary dictionary];
-    newJob[@"label"] = @"Test Job Name (05. All Account) 3";
-    // trigger
-
-    NSDictionary *simpleTrigger = @{
-        @"simpleTrigger" : @{
-                    @"timezone" : @"Europe/Helsinki",
-                    @"startType" : @2,
-                    @"startDate" : @"2015-11-30 22:00",
-                    @"occurrenceCount" : @1,
-            }
-    };
-    newJob[@"trigger"] = simpleTrigger;
-
-    // source
-    newJob[@"source"] = @{
-//            @"parameters" : @"<null>",
-            @"reportUnitURI" : @"/public/Samples/Reports/AllAccounts",
-    };
-
-    // output file name
-    newJob[@"baseOutputFilename"] = @"AllAccounts_Test3";
-
-    // destination
-    newJob[@"repositoryDestination"] =  @{
-            @"folderURI" : @"/public/Samples/Reports"
-    };
-
-    // time zone
-    newJob[@"outputTimeZone"] = @"Europe/Helsinki";
-
-    // outputFormats
-    newJob[@"outputFormats"] = @{
-            @"outputFormat" : @[@"PDF"]
-    };
-
-    [self.jobsManager createJobWithData:newJob completion:^(NSDictionary *job, NSError *error) {
-        [self.jobsManager loadJobsWithCompletion:^(NSArray *jobs, NSError *error) {
-            self.jobs = jobs;
-            [self.tableView reloadData];
+    JMNewJobVC *newJobVC = (JMNewJobVC *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMNewJobVC"];
+    newJobVC.exitBlock = ^(NSDictionary *jobData){
+        [self.jobsManager createJobWithData:jobData completion:^(NSDictionary *job, NSError *error) {
+            [self.jobsManager loadJobsWithCompletion:^(NSArray *jobs, NSError *error) {
+                self.jobs = jobs;
+                [self.tableView reloadData];
+            }];
         }];
-    }];
+    };
+    [self.navigationController pushViewController:newJobVC animated:YES];
 }
 
 #pragma mark - JMJobCellDelegate
