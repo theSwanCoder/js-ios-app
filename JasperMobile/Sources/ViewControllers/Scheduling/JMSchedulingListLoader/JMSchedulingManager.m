@@ -103,9 +103,22 @@
                                                    completion(nil, jsonParseError);
                                                });
                                            } else {
-                                               dispatch_async(dispatch_get_main_queue(), ^{
-                                                   completion(json, nil);
-                                               });
+                                               NSDictionary *errorData = ((NSArray *)json[@"error"]).firstObject;
+                                               if (errorData) {
+                                                   NSString *errorCode = errorData[@"errorCode"];
+                                                   NSString *field = errorData[@"field"];
+                                                   NSString *errorMessage = [NSString stringWithFormat:@"%@ in %@", errorCode, field];
+                                                   NSError *logicError = [NSError errorWithDomain:@"CreateJobLogicError" code:0 userInfo:@{
+                                                           NSLocalizedDescriptionKey : errorMessage
+                                                   }];
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                       completion(nil, logicError);
+                                                   });
+                                               } else {
+                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                       completion(json, nil);
+                                                   });
+                                               }
                                            }
                                        } else {
                                            dispatch_async(dispatch_get_main_queue(), ^{

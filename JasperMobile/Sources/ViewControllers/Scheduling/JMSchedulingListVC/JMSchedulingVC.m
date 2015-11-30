@@ -61,7 +61,7 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    return 80;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -77,21 +77,6 @@
 }
 
 #pragma mark - Actions
-- (IBAction)addJob:(id)sender
-{
-    JMLog(@"add job");
-
-    JMNewJobVC *newJobVC = (JMNewJobVC *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMNewJobVC"];
-    newJobVC.exitBlock = ^(NSDictionary *jobData){
-        [self.jobsManager createJobWithData:jobData completion:^(NSDictionary *job, NSError *error) {
-            [self.jobsManager loadJobsWithCompletion:^(NSArray *jobs, NSError *error) {
-                self.jobs = jobs;
-                [self.tableView reloadData];
-            }];
-        }];
-    };
-    [self.navigationController pushViewController:newJobVC animated:YES];
-}
 
 #pragma mark - JMJobCellDelegate
 - (void)jobCellDidReceiveDeleteJobAction:(JMJobCell *)cell

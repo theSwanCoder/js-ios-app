@@ -4,9 +4,12 @@
 //
 
 #import "JMNewJobVC.h"
+#import "JMSchedulingManager.h"
+
 @interface JMNewJobVC() <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *jobNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *fileNameTextField;
+@property (weak, nonatomic) IBOutlet UILabel *errorLabel;
 
 @end
 
@@ -19,8 +22,8 @@
     self.title = @"New Job";
     self.view.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
 
-//    self.jobNameTextField.text = self.resourceLookup.label;
-//    self.fileNameTextField.text = self.resourceLookup.label;
+    self.jobNameTextField.text = self.resourceLookup.label;
+    self.errorLabel.text = @"";
 }
 
 #pragma mark - UITextFieldDelegate
@@ -34,14 +37,35 @@
 - (IBAction)saveJob:(id)sender
 {
     JMLog(@"save job");
-    if (self.exitBlock) {
-        self.exitBlock([self createJob]);
-    }
-    [self.navigationController popViewControllerAnimated:YES];
+    [self createJobWithCompletion:^(NSError *error) {
+        if (error) {
+            self.errorLabel.text = error.localizedDescription;
+        } else {
+            if (self.exitBlock) {
+                self.exitBlock();
+            }
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }];
 }
 
 #pragma mark - Private API
-- (NSDictionary *)createJob
+- (void)createJobWithCompletion:(void(^)(NSError *error))completion
+{
+    if (!completion) {
+        return;
+    }
+
+    NSDictionary *jobData = [self createJobData];
+    JMSchedulingManager *jobsManager = [JMSchedulingManager new];
+    [jobsManager createJobWithData:jobData completion:^(NSDictionary *job, NSError *error) {
+        JMLog(@"error of creating new job: %@", error);
+        JMLog(@"job: %@", job);
+        completion(error);
+    }];
+}
+
+- (NSDictionary *)createJobData
 {
     //    {
 //        "label": "Sample Job Name",
@@ -93,7 +117,7 @@
     // source
     newJob[@"source"] = @{
 //            @"parameters" : @"<null>",
-            @"reportUnitURI" : @"/public/Samples/Reports/AllAccounts",
+            @"reportUnitURI" : self.resourceLookup.uri,
     };
 
     // output file name

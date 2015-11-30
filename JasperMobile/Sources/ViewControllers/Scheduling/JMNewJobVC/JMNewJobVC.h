@@ -5,5 +5,5 @@
 
 @interface JMNewJobVC : JMBaseViewController
 @property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, copy) void(^exitBlock)(NSDictionary *jobData);
+@property (nonatomic, copy) void(^exitBlock)(void);
 @end
