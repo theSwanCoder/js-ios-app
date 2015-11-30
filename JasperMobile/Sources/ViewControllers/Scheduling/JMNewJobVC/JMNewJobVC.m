@@ -11,6 +11,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *fileNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *dateTextField;
 @property (weak, nonatomic) IBOutlet UILabel *errorLabel;
+@property (weak, nonatomic) IBOutlet UIButton *formatButton;
+@property (nonatomic) NSString *format;
 @end
 
 @implementation JMNewJobVC
@@ -22,9 +24,13 @@
     self.title = @"New Job";
     self.view.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
 
+    // textfields
     self.jobNameTextField.text = self.resourceLookup.label;
+
+    // error label
     self.errorLabel.text = @"";
 
+    // date text field
     UIDatePicker *datePicker = [[UIDatePicker alloc]init];
     [datePicker setDate:[NSDate date]];
     [datePicker addTarget:self
@@ -38,6 +44,9 @@
     self.dateTextField.inputAccessoryView = toolbar;
 
     self.dateTextField.text = [self dateStringFromDate:[NSDate date]];
+
+    // format button
+    [self.formatButton setTitle:@"PDF" forState:UIControlStateNormal];
 }
 
 #pragma mark - Actions
@@ -54,6 +63,36 @@
     self.dateTextField.text = [self dateStringFromDate:date];
 
     [self.dateTextField resignFirstResponder];
+}
+
+- (IBAction)selectFormat:(id)sender
+{
+    JMLog(@"select format");
+
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Output Format"
+                                                                                      message:nil
+                                                                            cancelButtonTitle:@"dialog.button.cancel"
+                                                                      cancelCompletionHandler:nil];
+
+    [alertController addActionWithLocalizedTitle:@"HTML" style:UIAlertActionStyleDefault
+                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                             self.format = @"HTML";
+                                             [self.formatButton setTitle:self.format forState:UIControlStateNormal];
+                                         }];
+
+    [alertController addActionWithLocalizedTitle:@"PDF" style:UIAlertActionStyleDefault
+                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                             self.format = @"PDF";
+                                             [self.formatButton setTitle:self.format forState:UIControlStateNormal];
+                                         }];
+
+    [alertController addActionWithLocalizedTitle:@"XLS" style:UIAlertActionStyleDefault
+                                         handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
+                                             self.format = @"XLS";
+                                             [self.formatButton setTitle:self.format forState:UIControlStateNormal];
+                                         }];
+
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -131,7 +170,7 @@
 
     // outputFormats
     newJob[@"outputFormats"] = @{
-            @"outputFormat" : @[@"PDF"]
+            @"outputFormat" : @[self.format]
     };
     return newJob;
 }
