@@ -9,8 +9,8 @@
 @interface JMNewJobVC() <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *jobNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *fileNameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *dateTextField;
 @property (weak, nonatomic) IBOutlet UILabel *errorLabel;
-
 @end
 
 @implementation JMNewJobVC
@@ -24,6 +24,36 @@
 
     self.jobNameTextField.text = self.resourceLookup.label;
     self.errorLabel.text = @"";
+
+    UIDatePicker *datePicker = [[UIDatePicker alloc]init];
+    [datePicker setDate:[NSDate date]];
+    [datePicker addTarget:self
+                   action:@selector(updateDate:)
+         forControlEvents:UIControlEventValueChanged];
+    self.dateTextField.inputView = datePicker;
+
+    UIToolbar *toolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, -40, 320, 40)];
+    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(setDate:)];
+    [toolbar setItems:@[doneButton] animated:YES];
+    self.dateTextField.inputAccessoryView = toolbar;
+
+    self.dateTextField.text = [self dateStringFromDate:[NSDate date]];
+}
+
+#pragma mark - Actions
+- (void)updateDate:(UIDatePicker *)sender
+{
+    JMLog(@"new date: %@", sender.date);
+}
+
+- (void)setDate:(UIButton *)sender
+{
+    JMLog(@"set date");
+
+    NSDate *date = ((UIDatePicker *)self.dateTextField.inputView).date;
+    self.dateTextField.text = [self dateStringFromDate:date];
+
+    [self.dateTextField resignFirstResponder];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -67,54 +97,22 @@
 
 - (NSDictionary *)createJobData
 {
-    //    {
-//        "label": "Sample Job Name",
-//        "description": "Sample desctiption",
-//        "trigger": {
-//            "simpleTrigger": {
-//                "timezone": "America/Los_Angeles",
-//                "startType": 2,
-//                "startDate": "2013-10-26 10:00",
-//                "occurrenceCount": 1
-//            }
-//        },
-//        "source": {
-//            "reportUnitURI": "/adhoc/topics/Cascading_multi_select_topic",
-//            "parameters": {
-//                "parameterValues": {
-//                    "Country_multi_select": ["Mexico"],
-//                            "Cascading_name_single_select": ["Chin-Lovell Engineering Associates"],
-//                            "Cascading_state_multi_select": ["DF",
-//                            "Jalisco",
-//                            "Mexico"]
-//                }
-//            }
-//        },
-//        "baseOutputFilename": "Cascading_multi_select_report",
-//        "outputTimeZone": "America/Los_Angeles",
-//        "repositoryDestination": {
-//            "folderURI": "/temp"
-//        },
-//        "outputFormats": {
-//            "outputFormat": ["PDF", "XLS"]
-//        }
-//    }
-
     NSMutableDictionary *newJob = [NSMutableDictionary dictionary];
     newJob[@"label"] = self.jobNameTextField.text;
-    // trigger
 
+    // trigger
     NSDictionary *simpleTrigger = @{
             @"simpleTrigger" : @{
                     @"timezone" : @"Europe/Helsinki",
                     @"startType" : @2,
-                    @"startDate" : @"2015-11-30 22:00",
+                    @"startDate" : self.dateTextField.text,
                     @"occurrenceCount" : @1,
             }
     };
     newJob[@"trigger"] = simpleTrigger;
 
     // source
+    // TODO: add params
     newJob[@"source"] = @{
 //            @"parameters" : @"<null>",
             @"reportUnitURI" : self.resourceLookup.uri,
@@ -136,6 +134,21 @@
             @"outputFormat" : @[@"PDF"]
     };
     return newJob;
+}
+
+- (NSString *)dateStringFromDate:(NSDate *)date
+{
+    NSDateFormatter* outputFormatter = [[NSDateFormatter alloc]init];
+    [outputFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+
+    // Increase to 1 min for test purposes
+    // TODO: remove this
+    NSTimeInterval timeInterval = [date timeIntervalSince1970];
+    timeInterval += 60;
+    date = [NSDate dateWithTimeIntervalSince1970:timeInterval];
+
+    NSString *dateString = [outputFormatter stringFromDate:date];
+    return dateString;
 }
 
 @end

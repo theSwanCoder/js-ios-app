@@ -12,6 +12,7 @@
 @property (nonatomic, copy) NSArray *jobs;
 @property (nonatomic) JMSchedulingManager *jobsManager;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) UIRefreshControl *refreshControl;
 @end
 
 @implementation JMSchedulingVC
@@ -31,6 +32,15 @@
         self.jobs = jobs;
         [self.tableView reloadData];
     }];
+
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.backgroundColor = [UIColor purpleColor];
+    refreshControl.tintColor = [UIColor whiteColor];
+    [refreshControl addTarget:self
+                       action:@selector(refresh:)
+             forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
+    self.refreshControl = refreshControl;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -77,6 +87,14 @@
 }
 
 #pragma mark - Actions
+- (IBAction)refresh:(id)sender
+{
+    [self.jobsManager loadJobsWithCompletion:^(NSArray *jobs, NSError *error) {
+        [self.refreshControl endRefreshing];
+        self.jobs = jobs;
+        [self.tableView reloadData];
+    }];
+}
 
 #pragma mark - JMJobCellDelegate
 - (void)jobCellDidReceiveDeleteJobAction:(JMJobCell *)cell
@@ -86,10 +104,10 @@
     NSInteger jobIdendifier = ((NSNumber *)job[@"id"]).integerValue;
     [self.jobsManager deleteJobWithJobIdentifier:jobIdendifier
                                       completion:^(NSError *error) {
-                                          [self.jobsManager loadJobsWithCompletion:^(NSArray *jobs, NSError *error) {
-                                              self.jobs = jobs;
-                                              [self.tableView reloadData];
-                                          }];
+                                          NSMutableArray *jobs = [self.jobs mutableCopy];
+                                          [jobs removeObject:job];
+                                          self.jobs = [jobs copy];
+                                          [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
                                       }];
 }
 

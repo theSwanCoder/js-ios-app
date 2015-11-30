@@ -955,7 +955,7 @@
                                         <rect key="frame" x="5" y="0.0" width="70" height="18"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" red="0.0" green="0.73725490199999999" blue="0.89411764709999997" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Job Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yu3-bN-Vax">
@@ -990,7 +990,7 @@
                                         <rect key="frame" x="5" y="0.0" width="120" height="18"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" red="0.0" green="0.73725490199999999" blue="0.89411764709999997" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Output File Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="drY-04-JdH">
@@ -1018,6 +1018,37 @@
                                     <constraint firstAttribute="bottom" secondItem="drY-04-JdH" secondAttribute="bottom" id="zbL-h0-szS"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cO7-2Q-aRg">
+                                <rect key="frame" x="20" y="142" width="560" height="60"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Schedule Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Eq-tq-i2Q">
+                                        <rect key="frame" x="5" y="0.0" width="112" height="21"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.73725490196078436" blue="0.89411764705882346" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Select Date" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZTs-lx-NjG">
+                                        <rect key="frame" x="5" y="30" width="550" height="30"/>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="e4R-sB-JyP"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="9Eq-tq-i2Q" firstAttribute="top" secondItem="cO7-2Q-aRg" secondAttribute="top" id="2Ff-6C-3oq"/>
+                                    <constraint firstItem="9Eq-tq-i2Q" firstAttribute="leading" secondItem="cO7-2Q-aRg" secondAttribute="leading" constant="5" id="Fhe-Ds-xN2"/>
+                                    <constraint firstAttribute="bottom" secondItem="ZTs-lx-NjG" secondAttribute="bottom" id="QdS-uR-Ono"/>
+                                    <constraint firstItem="ZTs-lx-NjG" firstAttribute="leading" secondItem="cO7-2Q-aRg" secondAttribute="leading" constant="5" id="Ypi-WM-6G4"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZTs-lx-NjG" secondAttribute="trailing" constant="5" id="n9Q-dw-r3Q"/>
+                                    <constraint firstAttribute="height" constant="60" id="rWd-ab-Jqt"/>
+                                </constraints>
+                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jWZ-4J-Tod">
                                 <rect key="frame" x="279" y="495" width="42" height="21"/>
                                 <animations/>
@@ -1029,7 +1060,9 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="cO7-2Q-aRg" firstAttribute="top" secondItem="Ke5-Rq-NoQ" secondAttribute="bottom" constant="1" id="3Jh-Ww-LLS"/>
                             <constraint firstItem="fID-P4-Zex" firstAttribute="top" secondItem="jWZ-4J-Tod" secondAttribute="bottom" constant="20" id="9OC-if-Cao"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="cO7-2Q-aRg" secondAttribute="trailing" id="B9r-oU-hJN"/>
                             <constraint firstItem="jWZ-4J-Tod" firstAttribute="centerX" secondItem="CcA-kB-BZr" secondAttribute="centerX" id="BKd-CO-P7S"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ke5-Rq-NoQ" secondAttribute="trailing" id="Cz4-5G-LHf"/>
                             <constraint firstItem="Ke5-Rq-NoQ" firstAttribute="top" secondItem="Ohk-VP-Tc4" secondAttribute="bottom" constant="1" id="LmQ-He-YTm"/>
@@ -1037,6 +1070,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="Ohk-VP-Tc4" secondAttribute="trailing" id="QCv-F1-GsV"/>
                             <constraint firstAttribute="leadingMargin" secondItem="Ohk-VP-Tc4" secondAttribute="leading" id="brP-sd-eKK"/>
                             <constraint firstItem="Ohk-VP-Tc4" firstAttribute="top" secondItem="gIg-cO-5KQ" secondAttribute="bottom" constant="20" id="mtb-s0-16v"/>
+                            <constraint firstItem="cO7-2Q-aRg" firstAttribute="leading" secondItem="CcA-kB-BZr" secondAttribute="leadingMargin" id="v0N-2I-Lvf"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="c4R-ev-g6u">
@@ -1048,6 +1082,7 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
+                        <outlet property="dateTextField" destination="ZTs-lx-NjG" id="fLk-g8-KGU"/>
                         <outlet property="errorLabel" destination="jWZ-4J-Tod" id="Vfw-tO-tp1"/>
                         <outlet property="fileNameTextField" destination="drY-04-JdH" id="xEk-Xn-Cq0"/>
                         <outlet property="jobNameTextField" destination="yu3-bN-Vax" id="gua-5s-RJE"/>
