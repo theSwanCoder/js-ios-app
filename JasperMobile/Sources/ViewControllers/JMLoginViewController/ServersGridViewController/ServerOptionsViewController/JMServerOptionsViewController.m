@@ -132,16 +132,15 @@
 {
     [self.view endEditing:YES];
     if ([self.serverOptions isValidData]) {
-        // verify http protocol
-        NSArray *pathComponents = self.serverProfile.serverUrl.pathComponents;
-        NSString *protocol = [((NSString *) pathComponents.firstObject) stringByReplacingOccurrencesOfString:@":" withString:@""];
-        BOOL isHTTPProtocol = [protocol isEqualToString:@"http"];
-        if (isHTTPProtocol) {
-            // show alert
-            [self showAlert];
-        } else {
+        // verify https scheme
+        NSString *scheme = [NSURL URLWithString:self.serverProfile.serverUrl].scheme;
+        BOOL isHTTPSScheme = [scheme isEqualToString:@"https"];
+        if (isHTTPSScheme) {
             [self saveServerOptions];
             [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            // show alert
+            [self showSecurityHTTPAlert];
         }
     } else {
         [self.tableView reloadData];
@@ -167,7 +166,7 @@
     }
 }
 
-- (void)showAlert
+- (void)showSecurityHTTPAlert
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
                                                                                       message:@"secutiry.http.message"

@@ -133,9 +133,18 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
             if (error) {
                 [JMUtils presentAlertControllerWithError:error completion:nil];
             } else {
-                if ([strongSelf.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
-                    [strongSelf.delegate serverGridControllerDidSelectProfile:serverProfile];
+                // verify https scheme
+                NSString *scheme = [NSURL URLWithString:serverProfile.serverUrl].scheme;
+                BOOL isHTTPSScheme = [scheme isEqualToString:@"https"];
+                if (isHTTPSScheme) {
+                    if ([strongSelf.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
+                        [strongSelf.delegate serverGridControllerDidSelectProfile:serverProfile];
+                    }
+                } else {
+                    // show alert about http
+                    [self showSecurityHTTPAlertForServerProfile:serverProfile];
                 }
+
             }
         }
     }];
@@ -203,6 +212,22 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 {
     NSDictionary *info = @{ kJMServerProfileEditableKey : @(YES)};
     [self performSegueWithIdentifier:kJMShowServerOptionsSegue sender:info];
+}
+
+#pragma mark - Helpers
+- (void)showSecurityHTTPAlertForServerProfile:(JMServerProfile *)serverProfile
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
+                                                                                      message:@"secutiry.http.message"
+                                                                            cancelButtonTitle:@"ok"
+                                                                      cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
+                                                                          if ([self.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
+                                                                              [self.delegate serverGridControllerDidSelectProfile:serverProfile];
+                                                                          }
+                                                                      }];
+    [self presentViewController:alertController
+                       animated:YES
+                     completion:nil];
 }
 
 @end
