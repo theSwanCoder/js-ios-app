@@ -225,6 +225,7 @@
             [JMMenuItem menuItemWithResourceType:JMResourceTypeRepository],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeSavedItems],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeFavorites],
+            [JMMenuItem menuItemWithResourceType:JMResourceTypeScheduling],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeAbout],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeFeedback],
             [JMMenuItem menuItemWithResourceType:JMResourceTypeLogout]
