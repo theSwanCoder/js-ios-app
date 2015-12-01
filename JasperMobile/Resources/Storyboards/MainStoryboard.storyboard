@@ -1109,7 +1109,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="c4R-ev-g6u">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Noe-Pt-g0F">
+                        <barButtonItem key="rightBarButtonItem" title="Create" id="Noe-Pt-g0F">
                             <connections>
                                 <action selector="saveJob:" destination="Rfc-7O-lBF" id="Sse-sD-q5G"/>
                             </connections>
