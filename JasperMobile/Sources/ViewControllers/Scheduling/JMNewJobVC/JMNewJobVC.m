@@ -46,7 +46,8 @@
     self.dateTextField.text = [self dateStringFromDate:[NSDate date]];
 
     // format button
-    [self.formatButton setTitle:@"PDF" forState:UIControlStateNormal];
+    self.format = @"PDF";
+    [self.formatButton setTitle:self.format forState:UIControlStateNormal];
 }
 
 #pragma mark - Actions
