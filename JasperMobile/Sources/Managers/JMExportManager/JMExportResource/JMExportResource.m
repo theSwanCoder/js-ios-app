@@ -22,7 +22,7 @@
 
 
 //
-//  JMExportResource.h
+//  JMExportResource.m
 //  TIBCO JasperMobile
 //
 

@@ -31,5 +31,15 @@
  @since 2.3
  */
 
+typedef NS_ENUM(NSInteger, JMExportResourceType) {
+    JMExportResourceTypeReport
+};
+
 @interface JMExportResource : NSObject
+@property (nonatomic, strong) id resource;
+@property (nonatomic, assign) JMExportResourceType resourceType;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *format;
+@property (nonatomic, assign) NSUInteger startPage;
+@property (nonatomic, assign) NSUInteger endPage;
 @end

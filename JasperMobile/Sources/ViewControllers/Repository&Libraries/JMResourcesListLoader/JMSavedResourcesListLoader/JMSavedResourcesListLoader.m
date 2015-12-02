@@ -27,6 +27,9 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMExportTask.h"
+#import "JMExportManager.h"
+#import "JMExportResource.h"
 
 @implementation JMSavedResourcesListLoader
 
@@ -45,21 +48,35 @@
 }
 
 - (void)loadNextPage {
+    NSArray *exportTasks = [JMExportManager sharedInstance].activeExportTasks;
+    for (JMExportTask *exportTask in exportTasks) {
+        if (exportTask.resourceLookup) {
+            [self addResourcesWithResource:exportTask.resourceLookup];
+        }
+    }
+
     NSFetchRequest *fetchRequest = [self fetchRequest];
     fetchRequest.predicate = [self predicates];
-    
+
     NSError *error;
     NSArray *fetchedObjects = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest
                                                                                                      error:&error];
-    if (error) {
-        [self finishLoadingWithError:error];
-    } else {
+    if (fetchedObjects) {
         for(JMSavedResources *savedResource in fetchedObjects) {
+            // TODO: improve
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"exportResource.name LIKE[cd] %@", savedResource.label];
+            NSArray *existingItems = [exportTasks filteredArrayUsingPredicate:predicate];
+            if (existingItems.count > 0) {
+                continue;
+            }
             [self addResourcesWithResource:[savedResource wrapperFromSavedReports]];
         }
+    }
 
-        _needUpdateData = NO;
-        
+    _needUpdateData = NO;
+    if (error && exportTasks.count == 0) {
+        [self finishLoadingWithError:error];
+    } else {
         [self finishLoadingWithError:nil];
     }
 }

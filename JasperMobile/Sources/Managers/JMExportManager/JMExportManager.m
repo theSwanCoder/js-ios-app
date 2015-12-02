@@ -27,7 +27,124 @@
 //
 
 #import "JMExportManager.h"
+#import "JMExportTask.h"
+#import "JMExportResource.h"
+#import "JMReportSaver.h"
+#import "JMSaveReportPagesCell.h"
+#import "JMSavedResources+Helpers.h"
 
+@interface JMExportManager() {
+    NSMutableArray *_activeExportTasks;
+}
+@end
 
 @implementation JMExportManager
+
+#pragma mark - Life Cycle
++ (instancetype)sharedInstance {
+    static JMExportManager *sharedInstance;
+    static dispatch_once_t token;
+    dispatch_once(&token, ^{
+       sharedInstance = [JMExportManager new];
+    });
+    return sharedInstance;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _activeExportTasks = [NSMutableArray array];
+    }
+    return self;
+}
+
+#pragma mark - Custom Accessors
+- (NSArray *)activeExportTasks
+{
+    return _activeExportTasks;
+}
+
+#pragma mark - Public API
+- (void)addTaskWithResource:(JMExportResource *)resource
+{
+    JMExportTask *task = [JMExportTask taskWithResource:resource];
+    [self addTaskToQueue:task];
+}
+
+#pragma mark - Private API
+- (void)addTaskToQueue:(JMExportTask *)task
+{
+    [_activeExportTasks addObject:task];
+    if (self.activeExportTasks.count == 1) {
+        [self start];
+    }
+}
+
+- (void)start
+{
+    JMExportTask *task = self.activeExportTasks.firstObject;
+    task.taskState = JMExportTaskStateProgress;
+    [self executeTask:task completion:^{
+        task.taskState = JMExportTaskStateFinish;
+        [self notifyTaskDidEnd:task];
+        [_activeExportTasks removeObject:task];
+        if (self.activeExportTasks.count > 0) {
+            [self start];
+        }
+    }];
+}
+
+- (void)executeTask:(JMExportTask *)task completion:(void(^)(void))completion
+{
+    JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:task.exportResource.resource];
+    [reportSaver saveReportWithName:task.exportResource.name
+                             format:task.exportResource.format
+                              pages:[self makePagesFormatFromPage:task.exportResource.startPage toPage:task.exportResource.endPage]
+                            addToDB:YES
+                         completion:^(JMSavedResources *savedReport, NSError *error) {
+
+                             if (error) {
+                                 if (error.code == JSSessionExpiredErrorCode) {
+                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                             if (self.restClient.keepSession && isSessionAuthorized) {
+                                                 [self executeTask:task completion:completion];
+                                             } else {
+                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
+                                             }
+                                         }];
+                                 } else {
+                                     [JMUtils presentAlertControllerWithError:error completion:nil];
+                                     [savedReport removeReport];
+                                 }
+                             } else {
+                                 completion();
+                             }
+                         }];
+
+}
+
+#pragma mark - Helpers
+- (void)notifyTaskDidEnd:(JMExportTask *)task
+{
+    UILocalNotification* notification = [UILocalNotification new];
+    notification.fireDate = [NSDate date];
+    notification.alertBody = task.exportResource.name;
+    notification.userInfo = @{
+            kJMLocalNotificationKey : kJMExportResourceLocalNotification
+    };
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+}
+
+- (NSString *)makePagesFormatFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage
+{
+    NSString *pagesFormat = nil;
+    if (fromPage == toPage) {
+        pagesFormat = [NSString stringWithFormat:@"%@", @(fromPage)];
+    } else {
+        pagesFormat = [NSString stringWithFormat:@"%@-%@", @(fromPage), @(toPage)];
+    }
+    return pagesFormat;
+}
+
 @end

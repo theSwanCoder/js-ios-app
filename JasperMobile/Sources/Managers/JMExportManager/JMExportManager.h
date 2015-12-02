@@ -26,11 +26,16 @@
 //  TIBCO JasperMobile
 //
 
+
 /**
  @author Aleksandr Dakhno odahno@tibco.com
  @since 2.3
  */
 
+@class JMExportResource;
 
 @interface JMExportManager : NSObject
+@property (nonatomic, readonly) NSArray *activeExportTasks;
++ (instancetype)sharedInstance;
+- (void)addTaskWithResource:(JMExportResource *)resource;
 @end

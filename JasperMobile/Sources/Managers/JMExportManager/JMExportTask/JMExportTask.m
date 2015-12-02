@@ -27,7 +27,38 @@
 //
 
 #import "JMExportTask.h"
+#import "JMExportResource.h"
 
 
 @implementation JMExportTask
+
+#pragma mark - Life Cycle
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
+- (instancetype)initWithResource:(JMExportResource *)resource {
+    self = [super init];
+    if (self) {
+        _exportResource = resource;
+        _taskState = JMExportTaskStateUndefined;
+    }
+    return self;
+}
+
++ (instancetype)taskWithResource:(JMExportResource *)resource {
+    return [[self alloc] initWithResource:resource];
+}
+
+#pragma mark - Public API
+- (JSResourceLookup *)resourceLookup
+{
+    JSResourceLookup *resource = [[JSResourceLookup alloc] init];
+    resource.uri = nil;
+    resource.label = self.exportResource.name;
+    resource.resourceType = kJMTempExportedReportUnit;
+    return resource;
+}
+
 @end

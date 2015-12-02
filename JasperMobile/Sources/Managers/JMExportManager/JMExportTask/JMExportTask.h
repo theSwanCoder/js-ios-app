@@ -31,5 +31,19 @@
  @since 2.3
  */
 
+@class JMExportResource;
+
+typedef NS_ENUM(NSInteger, JMExportTaskState) {
+    JMExportTaskStateUndefined,
+    JMExportTaskStateProgress,
+    JMExportTaskStateCancel,
+    JMExportTaskStateFinish
+};
+
 @interface JMExportTask : NSObject
+@property (nonatomic, strong) JMExportResource *exportResource;
+@property (nonatomic, assign) JMExportTaskState taskState;
+- (instancetype)initWithResource:(JMExportResource *)resource;
++ (instancetype)taskWithResource:(JMExportResource *)resource;
+- (JSResourceLookup *)resourceLookup;
 @end

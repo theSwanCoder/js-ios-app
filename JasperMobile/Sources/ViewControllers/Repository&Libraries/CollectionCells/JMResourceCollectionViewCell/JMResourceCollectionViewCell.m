@@ -116,6 +116,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                 resourceImage = [UIImage imageNamed:@"res_type_xls"];
             }
         }
+    } else if ([self.resourceLookup isTempExportedReport]) {
+        JMLog(@"temp exported report");
     } else if ([self.resourceLookup isDashboard]) {
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
     } else if ([self.resourceLookup isFolder]) {
