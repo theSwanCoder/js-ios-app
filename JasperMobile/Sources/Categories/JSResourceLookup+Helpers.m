@@ -29,6 +29,11 @@
     return [self.resourceType isEqualToString:kJMSavedReportUnit];
 }
 
+- (BOOL) isTempExportedReport
+{
+    return [self.resourceType isEqualToString:kJMTempExportedReportUnit];
+}
+
 - (BOOL) isDashboard
 {
     return [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD] || [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY];
