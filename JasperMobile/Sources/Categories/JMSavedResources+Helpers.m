@@ -81,7 +81,6 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 
 - (void)removeFromDB
 {
-    [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
     [self.managedObjectContext deleteObject:self];
     [self.managedObjectContext save:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
@@ -89,14 +88,12 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 
 - (void)removeReport
 {
+    [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
+
     NSString *pathToReport = [JMSavedResources pathToFolderForSavedReport:self];
     [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
-    
-    [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
-    
-    [self.managedObjectContext deleteObject:self];
-    [self.managedObjectContext save:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
+
+    [self removeFromDB];
 }
 
 - (UIImage *)thumbnailImage
