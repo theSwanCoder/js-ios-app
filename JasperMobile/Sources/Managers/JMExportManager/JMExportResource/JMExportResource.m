@@ -30,20 +30,4 @@
 #import "JMSavedResources+Helpers.h"
 
 @implementation JMExportResource
-
-#pragma mark - Public API
-- (JSResourceLookup *)resourceLookup
-{
-    JSResourceLookup *resourceLookup = [self.savedResource wrapperFromSavedReports];
-    if (!resourceLookup) {
-        resourceLookup = [[JSResourceLookup alloc] init];
-        resourceLookup.uri = nil;
-        resourceLookup.label = self.name;
-    }
-    resourceLookup.resourceType = kJMTempExportedReportUnit;
-    JMLog(@"resource lookup: %@", resourceLookup);
-    JMLog(@"resource lookup uri: %@", resourceLookup.uri);
-    return resourceLookup;
-}
-
 @end
