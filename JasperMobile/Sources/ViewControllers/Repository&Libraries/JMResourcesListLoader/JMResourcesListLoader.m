@@ -254,10 +254,10 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
         case JMResourcesListLoaderOption_Filter:{
             NSMutableArray *options = [@[
                                          @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil),
-                                           kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]}] mutableCopy];
+                                           kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_REPORT_UNIT]}] mutableCopy];
             if ([JMUtils isServerProEdition]) {
                 id dashboardItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil),
-                                     kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY]};
+                                     kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY]};
                 [options addObject:dashboardItem];
             }
             

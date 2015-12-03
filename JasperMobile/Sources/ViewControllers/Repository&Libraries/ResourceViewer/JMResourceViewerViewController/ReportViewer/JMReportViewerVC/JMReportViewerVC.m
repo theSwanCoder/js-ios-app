@@ -336,7 +336,7 @@
         [reportSaver cancelReport];
     }];
     [reportSaver saveReportWithName:[self tempReportName]
-                             format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
+                             format:kJS_CONTENT_TYPE_PDF
                               pages:[self makePagesFormat]
                             addToDB:NO
                          completion:^(JMSavedResources *savedReport, NSError *error) {

@@ -367,7 +367,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 
 + (NSString *)wsTypeWithSourceWSType:(NSString *)wsType
 {
-    if ([wsType isEqualToString:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]) {
+    if ([wsType isEqualToString:kJS_WS_TYPE_REPORT_UNIT]) {
         return kJMSavedReportUnit;
     }
     return nil;

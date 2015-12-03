@@ -69,7 +69,7 @@
 {
     __weak typeof(self)weakSelf = self;
     [self.restClient resourceLookupForURI:resourceURI
-                             resourceType:[JSConstants sharedInstance].WS_TYPE_FOLDER
+                             resourceType:kJS_WS_TYPE_FOLDER
                                modelClass:[JSResourceLookup class]
                           completionBlock:^(JSOperationResult *result) {
                     __strong typeof(self)strongSelf = weakSelf;
@@ -97,7 +97,7 @@
                         JSResourceLookup *resourceLookup = result.objects.firstObject;
                         if (resourceLookup) {
                             if (!resourceLookup.resourceType) {
-                                resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_FOLDER;
+                                resourceLookup.resourceType = kJS_WS_TYPE_FOLDER;
                             }
                             [strongSelf addResourcesWithResource:resourceLookup];
                         }
@@ -127,10 +127,10 @@
                      @{
                              kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
                              kJMResourceListLoaderOptionItemValueKey: @[
-                                                                        [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT,
-                                                                        [JSConstants sharedInstance].WS_TYPE_DASHBOARD,
-                                                                        [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY,
-                                                                        [JSConstants sharedInstance].WS_TYPE_FOLDER
+                                                                        kJS_WS_TYPE_REPORT_UNIT,
+                                                                        kJS_WS_TYPE_DASHBOARD,
+                                                                        kJS_WS_TYPE_DASHBOARD_LEGACY,
+                                                                        kJS_WS_TYPE_FOLDER
                                                                         ]
                      }
             ];

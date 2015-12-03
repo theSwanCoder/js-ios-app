@@ -82,11 +82,11 @@
 
     // Analytics
     NSString *resourcesType = @"Saved Item (Unknown type)";
-    if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+    if ([self.savedReports.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
         resourcesType = @"Saved Item (HTML)";
-    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+    } else if ([self.savedReports.format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
         resourcesType = @"Saved Item (PDF)";
-    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
+    } else if ([self.savedReports.format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
         resourcesType = @"Saved Item (XLS)";
     }
     [JMUtils logEventWithName:@"User opened resource"

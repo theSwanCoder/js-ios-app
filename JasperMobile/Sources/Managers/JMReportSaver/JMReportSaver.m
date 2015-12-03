@@ -158,7 +158,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
               resourcePath:(NSString *)resourcePath
                 completion:(SaveReportCompletion)completion
 {
-    if ([format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+    if ([format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
         
         [self createNewSavedReportWithReport:self.report
                                         name:name
@@ -293,7 +293,7 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
                                          }
                                      } else {
                                          // save attachments or exit
-                                         if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+                                         if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
                                              if (completion) {
                                                  completion(nil);
                                              }
@@ -398,14 +398,14 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
 {
     // TODO: improve logic of making server URL
     NSString *serverURL = [self.restClient.serverProfile.serverUrl stringByAppendingString:@"/rest_v2"];
-    return [serverURL stringByAppendingFormat:@"%@/%@/exports/%@/", [JSConstants sharedInstance].REST_REPORT_EXECUTION_URI,self.requestExecution.requestId, exportID];
+    return [serverURL stringByAppendingFormat:@"%@/%@/exports/%@/", kJS_REST_REPORT_EXECUTION_URI,self.requestExecution.requestId, exportID];
 }
 
 - (NSString *)outputResourceURL
 {
     NSString *exportID = self.exportExecution.uuid;
     // Fix for JRS version smaller 5.6.0
-    if (self.restClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) {
+    if (self.restClient.serverInfo.versionAsFloat < kJS_SERVER_VERSION_CODE_EMERALD_5_6_0) {
         exportID = [NSString stringWithFormat:@"%@;pages=%@;", self.savedReport.format, self.pagesRange.pagesFormat];
         NSString *attachmentPrefix = kJMAttachmentPrefix;
         exportID = [exportID stringByAppendingFormat:@"attachmentsPrefix=%@;", attachmentPrefix];

@@ -286,7 +286,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 
             __weak typeof(self)weakSelf = self;
             [reportSaver saveReportWithName:[self tempReportName]
-                                     format:[JSConstants sharedInstance].CONTENT_TYPE_PDF
+                                     format:kJS_CONTENT_TYPE_PDF
                                       pages:[self makePagesFormat]
                                     addToDB:NO
                                  completion:^(JMSavedResources *savedReport, NSError *error) {

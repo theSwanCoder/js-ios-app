@@ -442,16 +442,16 @@
     }
     JSInputControlDescriptor *inputControlDescriptor = self.currentInputControls[indexPath.row];
     NSDictionary *inputControlDescriptorTypes = @{
-                                                  [JSConstants sharedInstance].ICD_TYPE_BOOL                     : @"BooleanCell",
-                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_TEXT        : @"TextEditCell",
-                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_NUMBER      : @"NumberCell",
-                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_DATE        : @"DateCell",
-                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_TIME        : @"TimeCell",
-                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_VALUE_DATETIME    : @"DateTimeCell",
-                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_SELECT            : @"SingleSelectCell",
-                                                  [JSConstants sharedInstance].ICD_TYPE_SINGLE_SELECT_RADIO      : @"SingleSelectCell",
-                                                  [JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT             : @"MultiSelectCell",
-                                                  [JSConstants sharedInstance].ICD_TYPE_MULTI_SELECT_CHECKBOX    : @"MultiSelectCell",
+                                                  kJS_ICD_TYPE_BOOL                     : @"BooleanCell",
+                                                  kJS_ICD_TYPE_SINGLE_VALUE_TEXT        : @"TextEditCell",
+                                                  kJS_ICD_TYPE_SINGLE_VALUE_NUMBER      : @"NumberCell",
+                                                  kJS_ICD_TYPE_SINGLE_VALUE_DATE        : @"DateCell",
+                                                  kJS_ICD_TYPE_SINGLE_VALUE_TIME        : @"TimeCell",
+                                                  kJS_ICD_TYPE_SINGLE_VALUE_DATETIME    : @"DateTimeCell",
+                                                  kJS_ICD_TYPE_SINGLE_SELECT            : @"SingleSelectCell",
+                                                  kJS_ICD_TYPE_SINGLE_SELECT_RADIO      : @"SingleSelectCell",
+                                                  kJS_ICD_TYPE_MULTI_SELECT             : @"MultiSelectCell",
+                                                  kJS_ICD_TYPE_MULTI_SELECT_CHECKBOX    : @"MultiSelectCell",
                                                   };
 
     return inputControlDescriptorTypes[inputControlDescriptor.type];
@@ -567,7 +567,7 @@
                                      }];
 
         NSString *resourceFolderURI = [self.report.resourceLookup.uri stringByDeletingLastPathComponent];
-        [self.restClient resourceLookupForURI:resourceFolderURI resourceType:[JSConstants sharedInstance].WS_TYPE_FOLDER
+        [self.restClient resourceLookupForURI:resourceFolderURI resourceType:kJS_WS_TYPE_FOLDER
                                    modelClass:[JSResourceLookup class]
                               completionBlock:^(JSOperationResult *result) {
                                   [JMCancelRequestPopup dismiss];

@@ -138,8 +138,8 @@
     JSInputControlOption *previousSelectedOption = [self.selectedValues anyObject];
 
     if (previousSelectedOption != selectedOption) {
-        selectedOption.selected = [JSConstants stringFromBOOL:YES];
-        previousSelectedOption.selected = [JSConstants stringFromBOOL:NO];
+        selectedOption.selected = [JSUtils stringFromBOOL:YES];
+        previousSelectedOption.selected = [JSUtils stringFromBOOL:NO];
 
         [self.previousSelectedValues removeAllObjects];
         [self.previousSelectedValues addObject:previousSelectedOption];

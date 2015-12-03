@@ -438,7 +438,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         reportPath = json[@"resource"];
 
         if (reportPath) {
-            [self.restClient resourceLookupForURI:reportPath resourceType:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT modelClass:[JSResourceLookup class] completionBlock:^(JSOperationResult *result) {
+            [self.restClient resourceLookupForURI:reportPath resourceType:kJS_WS_TYPE_REPORT_UNIT modelClass:[JSResourceLookup class] completionBlock:^(JSOperationResult *result) {
                 NSError *error = result.error;
                 if (error) {
                     NSString *errorString = error.localizedDescription;
@@ -450,7 +450,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                 } else {
                     JSResourceLookup *resourceLookup = [result.objects firstObject];
                     if (resourceLookup) {
-                        resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
+                        resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
 
                         NSMutableArray *reportParameters = [NSMutableArray array];
                         NSDictionary *rawParameters = json[@"params"];

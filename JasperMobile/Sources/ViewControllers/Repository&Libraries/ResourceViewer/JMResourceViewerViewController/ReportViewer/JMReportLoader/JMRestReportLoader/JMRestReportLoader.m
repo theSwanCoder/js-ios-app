@@ -133,14 +133,14 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 {
     [self.restClient runReportExecution:self.report.reportURI
                                   async:YES
-                           outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML
+                           outputFormat:kJS_CONTENT_TYPE_HTML
                             interactive:[self isInteractive]
                               freshData:YES
                        saveDataSnapshot:NO
                        ignorePagination:NO
                          transformerKey:nil
                                   pages:nil
-                      attachmentsPrefix:[JSConstants sharedInstance].REST_EXPORT_EXECUTION_ATTACHMENTS_PREFIX_URI
+                      attachmentsPrefix:kJS_REST_EXPORT_EXECUTION_ATTACHMENTS_PREFIX_URI
                              parameters:self.report.reportParameters
                         completionBlock:^(JSOperationResult *result) {
                             
@@ -203,9 +203,9 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
             }
         } else if (page <= self.report.countOfPages) {
             [self.restClient runExportExecution:self.report.requestId
-                                   outputFormat:[JSConstants sharedInstance].CONTENT_TYPE_HTML
+                                   outputFormat:kJS_CONTENT_TYPE_HTML
                                           pages:@(page).stringValue
-                              attachmentsPrefix:[JSConstants sharedInstance].REST_EXPORT_EXECUTION_ATTACHMENTS_PREFIX_URI
+                              attachmentsPrefix:kJS_REST_EXPORT_EXECUTION_ATTACHMENTS_PREFIX_URI
                                 completionBlock:^(JSOperationResult *result) {
                                     
                                     if (result.error) {
@@ -241,7 +241,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     
     // Fix for JRS version smaller 5.6.0
     NSString *fullExportID = exportID;
-    if (self.restClient.serverInfo.versionAsFloat < [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0) {
+    if (self.restClient.serverInfo.versionAsFloat < kJS_SERVER_VERSION_CODE_EMERALD_5_6_0) {
         fullExportID = [NSString stringWithFormat:@"%@;pages=%@", exportID, @(page)];
     }
     
@@ -255,7 +255,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                               [self handleErrorWithOperationResult:result forPage:page];
                           } else {
                               
-                              if ([result.MIMEType isEqualToString:[JSConstants sharedInstance].REST_SDK_MIMETYPE_USED]) {
+                              if ([result.MIMEType isEqualToString:[JSUtils usedMimeType]]) {
                                   [self handleErrorWithOperationResult:result forPage:page];
                               } else {
                                   self.outputResourceType = [result.allHeaderFields[@"output-final"] boolValue]? JMReportViewerOutputResourceType_Final : JMReportViewerOutputResourceType_NotFinal;
@@ -380,7 +380,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 - (BOOL)isInteractive
 {
     CGFloat currentVersion = self.restClient.serverInfo.versionAsFloat;
-    CGFloat currentVersion_const = [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_6_0;
+    CGFloat currentVersion_const = kJS_SERVER_VERSION_CODE_EMERALD_5_6_0;
     BOOL interactive = (currentVersion > currentVersion_const || currentVersion < currentVersion_const);
     return interactive;
 }

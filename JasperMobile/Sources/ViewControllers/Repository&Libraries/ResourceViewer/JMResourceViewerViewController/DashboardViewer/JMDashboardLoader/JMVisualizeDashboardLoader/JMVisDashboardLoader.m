@@ -270,7 +270,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
     __weak typeof(self)weakSelf = self;
     [self.restClient resourceLookupForURI:resource
-                             resourceType:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT
+                             resourceType:kJS_WS_TYPE_REPORT_UNIT
                                modelClass:[JSResourceLookup class]
                           completionBlock:^(JSOperationResult *result) {
                               __strong typeof(self)strongSelf = weakSelf;
@@ -286,7 +286,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                     JMLog(@"objects: %@", result.objects);
                                     JSResourceLookup *resourceLookup = [result.objects firstObject];
                                     if (resourceLookup) {
-                                        resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
+                                        resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
 
                                         NSArray *reportParameters = [self createReportParametersFromParameters:params];
                                         [strongSelf.delegate dashboardLoader:self

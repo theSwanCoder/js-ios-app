@@ -341,7 +341,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
 - (void)verifyRangePagesWithCompletion:(void(^)(void))completion
 {
-    BOOL isHTML = [self.selectedReportFormat isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML];
+    BOOL isHTML = [self.selectedReportFormat isEqualToString:kJS_CONTENT_TYPE_HTML];
     if (isHTML) {
         NSInteger fromPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
         NSInteger toPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
@@ -355,7 +355,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
             __weak typeof(self) weakSelf = self;
             [alertController addActionWithLocalizedTitle:@"dialog.button.ok" style:UIAlertActionStyleDefault handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
                 __strong typeof(self) strongSelf = weakSelf;
-                strongSelf.selectedReportFormat = [JSConstants sharedInstance].CONTENT_TYPE_PDF;
+                strongSelf.selectedReportFormat = kJS_CONTENT_TYPE_PDF;
                 // update format section
                 JMSaveReportSection *formatSection = [strongSelf sectionForType:JMSaveReportSectionTypeFormat];
                 NSInteger formatSectionIndex = [strongSelf.sections indexOfObject:formatSection];
