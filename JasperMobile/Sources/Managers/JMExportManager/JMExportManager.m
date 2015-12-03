@@ -55,6 +55,8 @@
     self = [super init];
     if (self) {
         _activeExportTasks = [NSMutableArray array];
+
+        // add nsoperationqueue
     }
     return self;
 }
@@ -74,15 +76,16 @@
 
 - (void)cancelAll
 {
-    JMExportTask *task = [self currentTask];
-    [self cancelTask:task];
-    _activeExportTasks = [NSMutableArray array];
+    for (JMExportTask *task in self.activeExportTasks) {
+        [self cancelTask:task];
+    }
 }
 
 - (void)cancelTask:(JMExportTask *)task
 {
     if (task.taskState == JMExportTaskStateProgress) {
         [task.reportSaver cancelReport];
+        [task.exportResource.savedResource removeFromDB];
     }
     [_activeExportTasks removeObject:task];
     [self notifyTaskDidCancel];
@@ -100,7 +103,10 @@
 #pragma mark - Private API
 - (void)addTaskToQueue:(JMExportTask *)task
 {
+    // add to nsoperationqueue
+
     [_activeExportTasks addObject:task];
+    [JMSavedResources createSavedResourceWithExportedResource:task.exportResource];
     if (self.activeExportTasks.count == 1) {
         [self start];
     }
@@ -112,6 +118,7 @@
     task.taskState = JMExportTaskStateProgress;
     [self executeTask:task completion:^{
         task.taskState = JMExportTaskStateFinish;
+        [task.exportResource.savedResource updateWSTypeWith:kJMSavedReportUnit];
         [self notifyTaskDidEnd:task];
         [_activeExportTasks removeObject:task];
         if (self.activeExportTasks.count > 0) {
@@ -123,29 +130,29 @@
 - (void)executeTask:(JMExportTask *)task completion:(void(^)(void))completion
 {
     JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:task.exportResource.resource];
-    JMSavedResources *savedResource = [reportSaver exportReportWithName:task.exportResource.name
-                                                                 format:task.exportResource.format
-                                                                  pages:[self makePagesFormatFromPage:task.exportResource.startPage
-                                                                                               toPage:task.exportResource.endPage]
-                                                             completion:^(JMSavedResources *savedReport, NSError *error) {
-                                                                  if (error) {
-                                                                      if (error.code == JSSessionExpiredErrorCode) {
-                                                                          [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                                                              if (self.restClient.keepSession && isSessionAuthorized) {
-                                                                                  [self executeTask:task completion:completion];
-                                                                              } else {
-                                                                                  [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                                              }
-                                                                          }];
-                                                                      } else {
-                                                                          [JMUtils presentAlertControllerWithError:error completion:nil];
-                                                                          [savedReport removeReport];
-                                                                      }
-                                                                  } else {
-                                                                      completion();
-                                                                  }
-                                                             }];
-    task.exportResource.savedResource = savedResource;
+    [reportSaver saveReportWithName:task.exportResource.name
+                             format:task.exportResource.format
+                              pages:[self makePagesFormatFromPage:task.exportResource.startPage
+                                                           toPage:task.exportResource.endPage]
+                            addToDB:YES
+                         completion:^(JMSavedResources *savedReport, NSError *error) {
+                             if (error) {
+                                 if (error.code == JSSessionExpiredErrorCode) {
+                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                         if (self.restClient.keepSession && isSessionAuthorized) {
+                                             [self executeTask:task completion:completion];
+                                         } else {
+                                             [JMUtils showLoginViewAnimated:YES completion:nil];
+                                         }
+                                     }];
+                                 } else {
+                                     [JMUtils presentAlertControllerWithError:error completion:nil];
+                                     [savedReport removeReport];
+                                 }
+                             } else {
+                                 completion();
+                             }
+                         }];
     task.reportSaver = reportSaver;
 }
 
@@ -189,13 +196,6 @@
         }
     }
     return exportTask;
-}
-
-- (JMExportTask *)currentTask
-{
-    // TODO: improve
-    JMExportTask *task = self.activeExportTasks.firstObject;
-    return task;
 }
 
 @end
