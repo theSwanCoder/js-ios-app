@@ -33,9 +33,13 @@
  */
 
 @class JMExportResource;
+@class JMExportTask;
 
 @interface JMExportManager : NSObject
 @property (nonatomic, readonly) NSArray *activeExportTasks;
 + (instancetype)sharedInstance;
 - (void)addTaskWithResource:(JMExportResource *)resource;
+- (void)cancelAll;
+- (void)cancelTask:(JMExportTask *)task;
+- (void)cancelTaskForSavedResource:(JMSavedResources *)savedResource;
 @end

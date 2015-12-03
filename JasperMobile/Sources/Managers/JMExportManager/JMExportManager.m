@@ -72,6 +72,31 @@
     [self addTaskToQueue:task];
 }
 
+- (void)cancelAll
+{
+    JMExportTask *task = [self currentTask];
+    [self cancelTask:task];
+    _activeExportTasks = [NSMutableArray array];
+}
+
+- (void)cancelTask:(JMExportTask *)task
+{
+    if (task.taskState == JMExportTaskStateProgress) {
+        [task.reportSaver cancelReport];
+    }
+    [_activeExportTasks removeObject:task];
+    [self notifyTaskDidCancel];
+    [self start];
+}
+
+- (void)cancelTaskForSavedResource:(JMSavedResources *)savedResource
+{
+    JMExportTask *task = [self taskForSavedResource:savedResource];
+    if (task) {
+        [self cancelTask:task];
+    }
+}
+
 #pragma mark - Private API
 - (void)addTaskToQueue:(JMExportTask *)task
 {
@@ -98,30 +123,30 @@
 - (void)executeTask:(JMExportTask *)task completion:(void(^)(void))completion
 {
     JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:task.exportResource.resource];
-    [reportSaver saveReportWithName:task.exportResource.name
-                             format:task.exportResource.format
-                              pages:[self makePagesFormatFromPage:task.exportResource.startPage toPage:task.exportResource.endPage]
-                            addToDB:YES
-                         completion:^(JMSavedResources *savedReport, NSError *error) {
-
-                             if (error) {
-                                 if (error.code == JSSessionExpiredErrorCode) {
-                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                             if (self.restClient.keepSession && isSessionAuthorized) {
-                                                 [self executeTask:task completion:completion];
-                                             } else {
-                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
-                                             }
-                                         }];
-                                 } else {
-                                     [JMUtils presentAlertControllerWithError:error completion:nil];
-                                     [savedReport removeReport];
-                                 }
-                             } else {
-                                 completion();
-                             }
-                         }];
-
+    JMSavedResources *savedResource = [reportSaver exportReportWithName:task.exportResource.name
+                                                                 format:task.exportResource.format
+                                                                  pages:[self makePagesFormatFromPage:task.exportResource.startPage
+                                                                                               toPage:task.exportResource.endPage]
+                                                             completion:^(JMSavedResources *savedReport, NSError *error) {
+                                                                  if (error) {
+                                                                      if (error.code == JSSessionExpiredErrorCode) {
+                                                                          [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                                                              if (self.restClient.keepSession && isSessionAuthorized) {
+                                                                                  [self executeTask:task completion:completion];
+                                                                              } else {
+                                                                                  [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                                              }
+                                                                          }];
+                                                                      } else {
+                                                                          [JMUtils presentAlertControllerWithError:error completion:nil];
+                                                                          [savedReport removeReport];
+                                                                      }
+                                                                  } else {
+                                                                      completion();
+                                                                  }
+                                                             }];
+    task.exportResource.savedResource = savedResource;
+    task.reportSaver = reportSaver;
 }
 
 #pragma mark - Helpers
@@ -136,6 +161,12 @@
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
 }
 
+- (void)notifyTaskDidCancel
+{
+    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:kJMExportedResourceDidCancelNotification
+                                                                                         object:nil]];
+}
+
 - (NSString *)makePagesFormatFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage
 {
     NSString *pagesFormat = nil;
@@ -145,6 +176,26 @@
         pagesFormat = [NSString stringWithFormat:@"%@-%@", @(fromPage), @(toPage)];
     }
     return pagesFormat;
+}
+
+
+- (JMExportTask *)taskForSavedResource:(JMSavedResources *)savedResource
+{
+    JMExportTask *exportTask;
+    for (JMExportTask *task in self.activeExportTasks) {
+        if ([task.exportResource.savedResource isEqual:savedResource]) {
+            exportTask = task;
+            break;
+        }
+    }
+    return exportTask;
+}
+
+- (JMExportTask *)currentTask
+{
+    // TODO: improve
+    JMExportTask *task = self.activeExportTasks.firstObject;
+    return task;
 }
 
 @end
