@@ -25,6 +25,7 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JMSessionManager.h"
+#import "JMExportResource.h"
 
 
 NSString * const kJMSavedResources = @"SavedResources";
@@ -62,6 +63,20 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     [[JMCoreDataManager sharedInstance] save:nil];
 
     return savedReport;
+}
+
++ (void)createSavedResourceWithExportedResource:(JMExportResource *)exportResource
+{
+    JSResourceLookup *resourceLookup = [exportResource.resource performSelector:@selector(resourceLookup)];
+    JMSavedResources *savedReport = [self addReport:resourceLookup withName:exportResource.name format:exportResource.format];
+    savedReport.wsType = kJMTempExportedReportUnit;
+    exportResource.savedResource = savedReport;
+}
+
+- (void)updateWSTypeWith:(NSString *)wsType
+{
+    self.wsType = wsType;
+    [[JMCoreDataManager sharedInstance] save:nil];
 }
 
 - (void)removeFromDB

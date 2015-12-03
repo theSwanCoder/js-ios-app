@@ -33,6 +33,8 @@
 
 #import "JMSavedResources.h"
 
+@class JMExportResource;
+
 extern NSString * const kJMSavedResources;
 
 @interface JMSavedResources (Helpers)
@@ -52,6 +54,10 @@ extern NSString * const kJMSavedResources;
 
 // Rename saved resource
 - (BOOL)renameReportTo:(NSString *)newName;
+
++ (void)createSavedResourceWithExportedResource:(JMExportResource *)exportResource;
+
+- (void)updateWSTypeWith:(NSString *)wsType;
 
 // Remove saved resource from DB
 - (void)removeFromDB;
