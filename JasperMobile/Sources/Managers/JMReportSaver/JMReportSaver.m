@@ -153,6 +153,19 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
     }
 }
 
+- (JMSavedResources *)exportReportWithName:(NSString *)name
+                                    format:(NSString *)format
+                                     pages:(NSString *)pages
+                                completion:(SaveReportCompletion)completion
+{
+    [self saveReportWithName:name
+                      format:format
+                       pages:pages
+                     addToDB:YES
+                  completion:completion];
+    return self.savedReport;
+}
+
 - (void)saveReportWithName:(NSString *)name
                     format:(NSString *)format
               resourcePath:(NSString *)resourcePath
@@ -241,6 +254,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
     }];
     
     [self removeTempDirectory];
+    [self.savedReport removeFromDB];
 }
 
 #pragma mark - Private API

@@ -46,6 +46,7 @@ typedef NS_ENUM(NSInteger, JMReportSaverErrorTypes) {
 - (instancetype)initWithReport:(JMReport *)report;
 
 - (void)saveReportWithName:(NSString *)name format:(NSString *)format pages:(NSString *)pages addToDB:(BOOL)addToDB completion:(SaveReportCompletion)completionBlock;
+- (JMSavedResources *)exportReportWithName:(NSString *)name format:(NSString *)format pages:(NSString *)pages completion:(SaveReportCompletion)completion;
 - (void)saveReportWithName:(NSString *)name format:(NSString *)format resourcePath:(NSString *)resourcePath completion:(SaveReportCompletion)completion;
 - (void)downloadResourceFromURL:(NSURL *)url completion:(void (^)(NSString *resourcePath, NSError *error))completion;
 - (void) cancelReport;
