@@ -72,6 +72,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
             // move saved report from temp location to origin
             if ([strongSelf isExistSavedReport:strongSelf.savedReport]) {
                 [strongSelf removeReportAtPath:originalDirectory];
+                [strongSelf createLocationAtPath:originalDirectory];
             }
             
             [strongSelf moveContentFromPath:temporaryDirectory
@@ -151,19 +152,6 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                                                         }
                                                     }];
     }
-}
-
-- (JMSavedResources *)exportReportWithName:(NSString *)name
-                                    format:(NSString *)format
-                                     pages:(NSString *)pages
-                                completion:(SaveReportCompletion)completion
-{
-    [self saveReportWithName:name
-                      format:format
-                       pages:pages
-                     addToDB:YES
-                  completion:completion];
-    return self.savedReport;
 }
 
 - (void)saveReportWithName:(NSString *)name
