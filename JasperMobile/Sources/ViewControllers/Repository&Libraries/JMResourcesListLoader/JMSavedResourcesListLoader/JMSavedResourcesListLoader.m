@@ -27,9 +27,6 @@
 #import "JMSavedResources+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMExportTask.h"
-#import "JMExportManager.h"
-#import "JMExportResource.h"
 
 @implementation JMSavedResourcesListLoader
 
@@ -48,40 +45,21 @@
 }
 
 - (void)loadNextPage {
-    // TODO: rewrite
-
     NSFetchRequest *fetchRequest = [self fetchRequest];
     fetchRequest.predicate = [self predicates];
 
     NSError *error;
     NSArray *fetchedObjects = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest
                                                                                                      error:&error];
-    NSMutableArray *exportTasks = [[JMExportManager sharedInstance].activeExportTasks mutableCopy];
-
-    if (fetchedObjects) {
-        for(JMSavedResources *savedResource in fetchedObjects) {
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"exportResource.name LIKE[cd] %@", savedResource.label];
-            NSArray *existingItems = [exportTasks filteredArrayUsingPredicate:predicate];
-            if (existingItems.count > 0) {
-                JSResourceLookup *resourceLookup = ((JMExportTask *)existingItems.firstObject).exportResource.resourceLookup;
-                [self addResourcesWithResource:resourceLookup];
-                [exportTasks removeObject:existingItems.firstObject];
-                continue;
-            }
-            [self addResourcesWithResource:[savedResource wrapperFromSavedReports]];
-        }
-    }
-
-    for (JMExportTask *exportTask in exportTasks) {
-        if (exportTask.exportResource.resourceLookup) {
-            [self addResourcesWithResource:exportTask.exportResource.resourceLookup];
-        }
-    }
-
-    _needUpdateData = NO;
-    if (error && exportTasks.count == 0) {
+    if (error) {
         [self finishLoadingWithError:error];
     } else {
+        for(JMSavedResources *savedResource in fetchedObjects) {
+            [self addResourcesWithResource:[savedResource wrapperFromSavedReports]];
+        }
+
+        _needUpdateData = NO;
+
         [self finishLoadingWithError:nil];
     }
 }
@@ -94,12 +72,12 @@
         case JMResourcesListLoaderOption_Filter: {
             NSMutableArray *filterItems = [NSMutableArray array];
             [filterItems addObject:@{kJMResourceListLoaderOptionItemTitleKey : JMCustomLocalizedString(@"resources.filterby.type.all", nil),
-                                     kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
+                    kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
 
             for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
                 [filterItems addObject:
-                 @{kJMResourceListLoaderOptionItemTitleKey: [format uppercaseString],
-                   kJMResourceListLoaderOptionItemValueKey: @[format]}];
+                        @{kJMResourceListLoaderOptionItemTitleKey: [format uppercaseString],
+                                kJMResourceListLoaderOptionItemValueKey: @[format]}];
             }
             return filterItems;
         }
@@ -116,9 +94,9 @@
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:ascending];
         [fetchRequest setSortDescriptors:@[sortDescriptor]];
     }
-    
+
     [fetchRequest setEntity:entity];
-    
+
     return fetchRequest;
 }
 
