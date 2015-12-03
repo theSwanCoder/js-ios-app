@@ -48,12 +48,7 @@
 }
 
 - (void)loadNextPage {
-    NSArray *exportTasks = [JMExportManager sharedInstance].activeExportTasks;
-    for (JMExportTask *exportTask in exportTasks) {
-        if (exportTask.resourceLookup) {
-            [self addResourcesWithResource:exportTask.resourceLookup];
-        }
-    }
+    // TODO: rewrite
 
     NSFetchRequest *fetchRequest = [self fetchRequest];
     fetchRequest.predicate = [self predicates];
@@ -61,15 +56,25 @@
     NSError *error;
     NSArray *fetchedObjects = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest
                                                                                                      error:&error];
+    NSMutableArray *exportTasks = [[JMExportManager sharedInstance].activeExportTasks mutableCopy];
+
     if (fetchedObjects) {
         for(JMSavedResources *savedResource in fetchedObjects) {
-            // TODO: improve
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"exportResource.name LIKE[cd] %@", savedResource.label];
             NSArray *existingItems = [exportTasks filteredArrayUsingPredicate:predicate];
             if (existingItems.count > 0) {
+                JSResourceLookup *resourceLookup = ((JMExportTask *)existingItems.firstObject).exportResource.resourceLookup;
+                [self addResourcesWithResource:resourceLookup];
+                [exportTasks removeObject:existingItems.firstObject];
                 continue;
             }
             [self addResourcesWithResource:[savedResource wrapperFromSavedReports]];
+        }
+    }
+
+    for (JMExportTask *exportTask in exportTasks) {
+        if (exportTask.exportResource.resourceLookup) {
+            [self addResourcesWithResource:exportTask.exportResource.resourceLookup];
         }
     }
 
