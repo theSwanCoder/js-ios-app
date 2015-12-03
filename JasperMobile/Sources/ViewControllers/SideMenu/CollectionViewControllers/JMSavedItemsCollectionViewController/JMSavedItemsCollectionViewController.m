@@ -40,6 +40,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:kJMExportedResourceDidLoadNotification
                                                   object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:kJMExportedResourceDidCancelNotification
+                                                  object:nil];
 }
 
 -(void)awakeFromNib
@@ -57,6 +60,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(exportedResourceDidLoad:)
                                                  name:kJMExportedResourceDidLoadNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(exportedResourceDidCancel:)
+                                                 name:kJMExportedResourceDidCancelNotification
                                                object:nil];
 }
 
@@ -80,6 +87,13 @@
 
 #pragma mark - Exported Resource Notifications
 - (void)exportedResourceDidLoad:(NSNotification *)notification
+{
+    [self.resourceListLoader setNeedsUpdate];
+    [self.resourceListLoader updateIfNeeded];
+    self.needReloadData = YES;
+}
+
+- (void)exportedResourceDidCancel:(NSNotification *)notification
 {
     [self.resourceListLoader setNeedsUpdate];
     [self.resourceListLoader updateIfNeeded];
