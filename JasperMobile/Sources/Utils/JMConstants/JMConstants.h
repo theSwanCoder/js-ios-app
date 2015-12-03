@@ -45,6 +45,7 @@ extern NSString * const kJMResetApplicationNotification;
 extern NSString * const kJMFavoritesDidChangedNotification;
 extern NSString * const kJMSavedResourcesDidChangedNotification;
 extern NSString * const kJMExportedResourceDidLoadNotification;
+extern NSString * const kJMExportedResourceDidCancelNotification;
 
 // Local Notifications
 extern NSString * const kJMLocalNotificationKey;
