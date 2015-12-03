@@ -28,6 +28,7 @@
 
 #import "JMExportTask.h"
 #import "JMExportResource.h"
+#import "JMReportSaver.h"
 
 
 @implementation JMExportTask
@@ -49,16 +50,6 @@
 
 + (instancetype)taskWithResource:(JMExportResource *)resource {
     return [[self alloc] initWithResource:resource];
-}
-
-#pragma mark - Public API
-- (JSResourceLookup *)resourceLookup
-{
-    JSResourceLookup *resource = [[JSResourceLookup alloc] init];
-    resource.uri = nil;
-    resource.label = self.exportResource.name;
-    resource.resourceType = kJMTempExportedReportUnit;
-    return resource;
 }
 
 @end

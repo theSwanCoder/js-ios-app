@@ -37,9 +37,11 @@ typedef NS_ENUM(NSInteger, JMExportResourceType) {
 
 @interface JMExportResource : NSObject
 @property (nonatomic, strong) id resource;
+@property (nonatomic, strong) JMSavedResources *savedResource;
 @property (nonatomic, assign) JMExportResourceType resourceType;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *format;
 @property (nonatomic, assign) NSUInteger startPage;
 @property (nonatomic, assign) NSUInteger endPage;
+- (JSResourceLookup *)resourceLookup;
 @end
