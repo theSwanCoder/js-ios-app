@@ -43,8 +43,9 @@ typedef NS_ENUM(NSInteger, JMExportTaskState) {
 
 @interface JMExportTask : NSObject
 @property (nonatomic, strong) JMExportResource *exportResource;
-@property (nonatomic, strong) JMReportSaver *reportSaver;
 @property (nonatomic, assign) JMExportTaskState taskState;
+@property (nonatomic, copy) void(^cancelCompletion)(void);
+@property (nonatomic, copy) void(^finishCompletion)(void);
 - (instancetype)initWithResource:(JMExportResource *)resource;
 + (instancetype)taskWithResource:(JMExportResource *)resource;
 @end

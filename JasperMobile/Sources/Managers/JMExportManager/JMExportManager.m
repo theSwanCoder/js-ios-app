@@ -79,17 +79,16 @@
     for (JMExportTask *task in self.activeExportTasks) {
         [self cancelTask:task];
     }
+    [self notifyTaskDidCancel];
 }
 
 - (void)cancelTask:(JMExportTask *)task
 {
     if (task.taskState == JMExportTaskStateProgress) {
-        [task.reportSaver cancelReport];
-        [task.exportResource.savedResource removeFromDB];
+        task.cancelCompletion();
     }
+    [task.exportResource.savedResource removeFromDB];
     [_activeExportTasks removeObject:task];
-    [self notifyTaskDidCancel];
-    [self start];
 }
 
 - (void)cancelTaskForSavedResource:(JMSavedResources *)savedResource
@@ -97,7 +96,11 @@
     JMExportTask *task = [self taskForSavedResource:savedResource];
     if (task) {
         [self cancelTask:task];
+        [self start];
+    } else {
+        [savedResource removeFromDB];
     }
+    [self notifyTaskDidCancel];
 }
 
 #pragma mark - Private API
@@ -153,7 +156,9 @@
                                  completion();
                              }
                          }];
-    task.reportSaver = reportSaver;
+    task.cancelCompletion = ^{
+        [reportSaver cancelReport];
+    };
 }
 
 #pragma mark - Helpers
