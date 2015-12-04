@@ -91,6 +91,8 @@
 {
     if ([self.resourceType isEqualToString:kJMSavedReportUnit]) {
         return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
+    } else if ([self.resourceType isEqualToString:kJMTempExportedReportUnit]) {
+        return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
     } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]) {
         return JMCustomLocalizedString(@"resources.type.reportUnit", nil);
     } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD]) {
