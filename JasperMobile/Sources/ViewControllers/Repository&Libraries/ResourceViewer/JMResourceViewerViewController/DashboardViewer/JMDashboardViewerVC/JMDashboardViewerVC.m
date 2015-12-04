@@ -350,14 +350,8 @@
                                 __strong typeof(self)strongSelf = weakSelf;
                                 if (result.error) {
                                     if (result.error.code == JSSessionExpiredErrorCode) {
-                                        [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                            if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                                [strongSelf loadInputControlsWithReportURI:reportURI completion:completion];
-                                            } else {
-                                                [JMUtils showLoginViewAnimated:YES completion:^{
-                                                    [strongSelf cancelResourceViewingAndExit:YES];
-                                                }];
-                                            }
+                                        [JMUtils showLoginViewAnimated:YES completion:^{
+                                            [strongSelf cancelResourceViewingAndExit:YES];
                                         }];
                                     } else {
                                         if (completion) {

@@ -179,7 +179,6 @@
 		BDE6A0861B5A891000A7FDEC /* JMTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BDE6A0851B5A891000A7FDEC /* JMTextField.m */; };
 		BDF3D2531B8B03F40005AA28 /* JMReportOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF3D2521B8B03F40005AA28 /* JMReportOptionsViewController.m */; };
 		BDF3D25A1B8B166B0005AA28 /* JMReportOptionsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF3D2591B8B166B0005AA28 /* JMReportOptionsCell.m */; };
-		BDF3D25E1B8B2DF20005AA28 /* JMReportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF3D25D1B8B2DF20005AA28 /* JMReportManager.m */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
 		F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */; };
@@ -535,8 +534,6 @@
 		BDF3D2521B8B03F40005AA28 /* JMReportOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportOptionsViewController.m; sourceTree = "<group>"; };
 		BDF3D2581B8B166B0005AA28 /* JMReportOptionsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportOptionsCell.h; sourceTree = "<group>"; };
 		BDF3D2591B8B166B0005AA28 /* JMReportOptionsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportOptionsCell.m; sourceTree = "<group>"; };
-		BDF3D25C1B8B2DF20005AA28 /* JMReportManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportManager.h; sourceTree = "<group>"; };
-		BDF3D25D1B8B2DF20005AA28 /* JMReportManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportManager.m; sourceTree = "<group>"; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F54C91A21752FAAD0009E2BE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -1745,7 +1742,6 @@
 		93D8C6411AAC7E9200117306 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				BDF3D25B1B8B2DF20005AA28 /* JMReportManager */,
 				BDB8B9EB1B57D90B00758441 /* JMThemesManager */,
 				08B518781B18C79400B3F20A /* JMReportSaver */,
 				08221C3F1AE54DA000F94F1D /* JMCoreDataManager */,
@@ -1962,15 +1958,6 @@
 				BDF3D2591B8B166B0005AA28 /* JMReportOptionsCell.m */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		BDF3D25B1B8B2DF20005AA28 /* JMReportManager */ = {
-			isa = PBXGroup;
-			children = (
-				BDF3D25C1B8B2DF20005AA28 /* JMReportManager.h */,
-				BDF3D25D1B8B2DF20005AA28 /* JMReportManager.m */,
-			);
-			path = JMReportManager;
 			sourceTree = "<group>";
 		};
 		C29D4E3B2FABEFC512F0762C /* Pods */ = {
@@ -2300,7 +2287,6 @@
 				08DD182D1B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel in Sources */,
 				089B15BD1AA756BD0021A915 /* JMServerOption.m in Sources */,
 				081CE2701B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m in Sources */,
-				BDF3D25E1B8B2DF20005AA28 /* JMReportManager.m in Sources */,
 				93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */,
 				08E2AC851B1E056900AC462B /* JMSavedResourceViewerViewController.m in Sources */,
 				087A71B91BD95FEE007B98A4 /* JMEULAViewController.m in Sources */,

@@ -29,7 +29,6 @@
 #import "JMReportOptionsCell.h"
 #import "JMInputControlCell.h"
 #import "JMReportOptionsViewController.h"
-#import "JMReportManager.h"
 #import "JMExtendedReportOption.h"
 
 @interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate>
@@ -149,13 +148,13 @@
                     __strong typeof(self) strongSelf = weakSelf;
                     if (strongSelf) {
                         [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
-                        [JMReportManager deleteReportOption:strongSelf.currentReportOption.reportOption withReportURI:strongSelf.report.reportURI completion:^(NSError *error) {
+                        [self.restClient deleteReportOption:strongSelf.currentReportOption.reportOption withReportURI:strongSelf.report.reportURI completion:^(JSOperationResult * _Nullable result) {
                             [JMCancelRequestPopup dismiss];
-                            if (error) {
-                                if (error.code == JSSessionExpiredErrorCode) {
+                            if (result.error) {
+                                if (result.error.code == JSSessionExpiredErrorCode) {
                                     [JMUtils showLoginViewAnimated:YES completion:nil];
                                 } else {
-                                    [JMUtils presentAlertControllerWithError:error completion:nil];
+                                    [JMUtils presentAlertControllerWithError:result.error completion:nil];
                                 }
                             } else {
                                 [strongSelf.report removeReportOption:strongSelf.currentReportOption];
@@ -405,30 +404,39 @@
     if (self.currentReportOption != option) {
         JMExtendedReportOption *oldActiveReportOption = self.currentReportOption;
         self.currentReportOption = option;
-
+        
         if (![self.currentInputControls count]) {
             [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
             
-            __weak typeof(self) weakSelf = self;
-            [JMReportManager fetchInputControlsWithReportURI:self.currentReportOption.reportOption.uri completion:^(NSArray *inputControls, NSError *error) {
-                __strong typeof(self) strongSelf = weakSelf;
-                [JMCancelRequestPopup dismiss];
-                if (error) {
-                    if (error.code == JSSessionExpiredErrorCode) {
-                        [JMUtils showLoginViewAnimated:YES completion:nil];
-                    } else {
-                        __weak typeof(self) weakSelf = strongSelf;
-                        [JMUtils presentAlertControllerWithError:error completion:^{
-                            __strong typeof(self) strongSelf = weakSelf;
-                            strongSelf.currentReportOption = oldActiveReportOption;
-                        }];
-                    }
-                } else {
-                    strongSelf.currentReportOption.inputControls = inputControls;
-                    strongSelf.currentInputControls = [[NSArray alloc] initWithArray:inputControls copyItems:YES];
-                    [strongSelf.tableView reloadData];
-                }
-            }];
+            __weak typeof(self)weakSelf = self;
+            [self.restClient inputControlsForReport:self.currentReportOption.reportOption.uri
+                                                ids:nil
+                                     selectedValues:nil
+                                    completionBlock:^(JSOperationResult *result) {
+                                        __strong typeof(self) strongSelf = weakSelf;
+                                        [JMCancelRequestPopup dismiss];
+                                        if (result.error) {
+                                            if (result.error.code == JSSessionExpiredErrorCode) {
+                                                [JMUtils showLoginViewAnimated:YES completion:nil];
+                                            } else {
+                                                __weak typeof(self) weakSelf = strongSelf;
+                                                [JMUtils presentAlertControllerWithError:result.error completion:^{
+                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                    strongSelf.currentReportOption = oldActiveReportOption;
+                                                }];
+                                            }
+                                        } else {
+                                            NSMutableArray *visibleInputControls = [NSMutableArray array];
+                                            for (JSInputControlDescriptor *inputControl in result.objects) {
+                                                if (inputControl.visible.boolValue) {
+                                                    [visibleInputControls addObject:inputControl];
+                                                }
+                                            }
+                                            strongSelf.currentReportOption.inputControls = visibleInputControls;
+                                            strongSelf.currentInputControls = [[NSArray alloc] initWithArray:visibleInputControls copyItems:YES];
+                                            [strongSelf.tableView reloadData];
+                                        }
+                                    }];
         }
     }
 }
@@ -468,15 +476,25 @@
     if (![self isMultyReportOptions]) {
         [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
         
-        [JMReportManager fetchReportOptionsWithReportURI:self.report.reportURI completion:^(NSArray *reportOptions, NSError *error) {
+        __weak typeof(self) weakSelf = self;
+        [self.restClient reportOptionsForReportURI:self.report.reportURI completion:^(JSOperationResult * _Nullable result) {
             [JMCancelRequestPopup dismiss];
-            if (error) {
-                if (error.code == JSSessionExpiredErrorCode) {
+            if (result.error) {
+                if (result.error.code == JSSessionExpiredErrorCode) {
                     [JMUtils showLoginViewAnimated:YES completion:nil];
                 }
             } else {
-                [self.report addReportOptions:reportOptions];
-                [self.tableView reloadData];
+                __strong typeof(self) strongSelf = weakSelf;
+                NSMutableArray *reportOptions = [NSMutableArray array];
+                for (id reportOption in result.objects) {
+                    if ([reportOption isKindOfClass:[JSReportOption class]] && [reportOption identifier]) {
+                        JMExtendedReportOption *extendedOption = [JMExtendedReportOption new];
+                        extendedOption.reportOption = reportOption;
+                        [reportOptions addObject:extendedOption];
+                    }
+                }
+                [strongSelf.report addReportOptions:reportOptions];
+                [strongSelf.tableView reloadData];
             }
         }];
     }
@@ -521,13 +539,7 @@
 
                                     if (result.error) {
                                         if (result.error.code == JSSessionExpiredErrorCode) {
-                                            [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                                    if (self.restClient.keepSession && isSessionAuthorized) {
-                                                        [self updatedInputControlsValuesWithCompletion:completion];
-                                                    } else {
-                                                        [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                    }
-                                                }];
+                                            [JMUtils showLoginViewAnimated:YES completion:nil];
                                         } else {
                                             [JMUtils presentAlertControllerWithError:result.error completion:nil];
                                         }
@@ -574,13 +586,7 @@
                                   
                                   if (result.error) {
                                       if (result.error.code == JSSessionExpiredErrorCode) {
-                                          [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                                  if (self.restClient.keepSession && isSessionAuthorized) {
-                                                      [self checkParentFolderPermissionWithCompletion:completion];
-                                                  } else {
-                                                      [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                  }
-                                              }];
+                                          [JMUtils showLoginViewAnimated:YES completion:nil];
                                       } else {
                                           [JMUtils presentAlertControllerWithError:result.error completion:nil];
                                       }
@@ -607,34 +613,37 @@
 
 - (void)createNewReportOptionWithName:(NSString *)name
 {
-    NSArray *reportParameters = [JMReportManager reportParametersFromInputControls:self.currentInputControls];
+    NSArray *reportParameters = [JSUtils reportParametersFromInputControls:self.currentInputControls];
 
     [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
     NSString *newReportOptionName = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
-    [JMReportManager createReportOptionWithReportURI:self.report.resourceLookup.uri optionLabel:newReportOptionName reportParameters:reportParameters completion:^(JSReportOption *reportOption, NSError *error) {
+    __weak typeof(self) weakSelf = self;
+    [self.restClient createReportOptionWithReportURI:self.report.resourceLookup.uri optionLabel:newReportOptionName reportParameters:reportParameters completion:^(JSOperationResult * _Nullable result) {
         [JMCancelRequestPopup dismiss];
-        if (error) {
-            if (error.code == JSSessionExpiredErrorCode) {
+        if (result.error) {
+            if (result.error.code == JSSessionExpiredErrorCode) {
                 [JMUtils showLoginViewAnimated:YES completion:nil];
             } else {
-                [JMUtils presentAlertControllerWithError:error completion:nil];
+                [JMUtils presentAlertControllerWithError:result.error completion:nil];
             }
         } else {
+            JSReportOption *reportOption = [result.objects objectAtIndex:0];
             if (reportOption) {
+                __strong typeof(self)strongSelf = weakSelf;
                 JMExtendedReportOption *extendedReportOption = [JMExtendedReportOption new];
                 extendedReportOption.reportOption = reportOption;
-                extendedReportOption.inputControls = self.currentInputControls;
-                if (![self isUniqueNewReportOptionName:reportOption.label]) {
-                    for (JMExtendedReportOption *existedReportOption in self.report.reportOptions) {
+                extendedReportOption.inputControls = strongSelf.currentInputControls;
+                if (![strongSelf isUniqueNewReportOptionName:reportOption.label]) {
+                    for (JMExtendedReportOption *existedReportOption in strongSelf.report.reportOptions) {
                         if ([reportOption.label isEqualToString:existedReportOption.reportOption.label]) {
-                            [self.report removeReportOption:existedReportOption];
+                            [strongSelf.report removeReportOption:existedReportOption];
                             break;
                         }
                     }
                 }
-                [self.report addReportOptions:@[extendedReportOption]];
-                self.currentReportOption= extendedReportOption;
+                [strongSelf.report addReportOptions:@[extendedReportOption]];
+                strongSelf.currentReportOption= extendedReportOption;
             }
         }
     }];

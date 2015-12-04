@@ -27,7 +27,6 @@
 //
 
 #import "JMReport.h"
-#import "JMReportManager.h"
 
 NSString * const kJMReportIsMutlipageDidChangedNotification = @"kJMReportIsMutlipageDidChangedNotification";
 NSString * const kJMReportCountOfPagesDidChangeNotification = @"kJMReportCountOfPagesDidChangeNotification";
@@ -129,7 +128,7 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 {
     if (!_reportParameters) {
         if ([self.reportOptions indexOfObject:self.activeReportOption] == NSNotFound) {
-            _reportParameters = [JMReportManager reportParametersFromInputControls:self.activeReportOption.inputControls];
+            _reportParameters = [JSUtils reportParametersFromInputControls:self.activeReportOption.inputControls];
         }
     }
     return _reportParameters;
