@@ -478,7 +478,7 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
 
 - (void)removeTempDirectory
 {
-    NSString *tempDirectory = [JMSavedResources pathToTempReportsFolder];
+    NSString *tempDirectory = [JMSavedResources pathToTempFolderForSavedReport:self.savedReport];
     [self removeReportAtPath:tempDirectory];
 }
 
