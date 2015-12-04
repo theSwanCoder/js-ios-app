@@ -670,7 +670,7 @@
 - (void)reportDidSavedSuccessfully
 {
     [ALToastView toastInView:self.view
-                    withText:JMCustomLocalizedString(@"report.viewer.save.saved", nil)];
+                    withText:JMCustomLocalizedString(@"report.viewer.save.addedToQueue", nil)];
 }
 
 #pragma mark - Input Controls

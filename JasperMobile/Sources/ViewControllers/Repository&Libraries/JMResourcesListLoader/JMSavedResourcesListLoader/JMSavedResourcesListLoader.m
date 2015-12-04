@@ -47,7 +47,7 @@
 - (void)loadNextPage {
     NSFetchRequest *fetchRequest = [self fetchRequest];
     fetchRequest.predicate = [self predicates];
-    
+
     NSError *error;
     NSArray *fetchedObjects = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest
                                                                                                      error:&error];
@@ -59,7 +59,7 @@
         }
 
         _needUpdateData = NO;
-        
+
         [self finishLoadingWithError:nil];
     }
 }
@@ -72,12 +72,12 @@
         case JMResourcesListLoaderOption_Filter: {
             NSMutableArray *filterItems = [NSMutableArray array];
             [filterItems addObject:@{kJMResourceListLoaderOptionItemTitleKey : JMCustomLocalizedString(@"resources.filterby.type.all", nil),
-                                     kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
+                    kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
 
             for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
                 [filterItems addObject:
-                 @{kJMResourceListLoaderOptionItemTitleKey: [format uppercaseString],
-                   kJMResourceListLoaderOptionItemValueKey: @[format]}];
+                        @{kJMResourceListLoaderOptionItemTitleKey: [format uppercaseString],
+                                kJMResourceListLoaderOptionItemValueKey: @[format]}];
             }
             return filterItems;
         }
@@ -94,9 +94,9 @@
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:ascending];
         [fetchRequest setSortDescriptors:@[sortDescriptor]];
     }
-    
+
     [fetchRequest setEntity:entity];
-    
+
     return fetchRequest;
 }
 

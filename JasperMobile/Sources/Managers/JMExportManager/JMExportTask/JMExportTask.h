@@ -22,42 +22,30 @@
 
 
 //
-//  JMMenuItem.h
+//  JMExportTask.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
+ @since 2.3
  */
 
-typedef NS_ENUM(NSInteger, JMResourceType){
-    JMResourceTypeLibrary,
-    JMResourceTypeRepository,
-    JMResourceTypeRecentViews,
-    JMResourceTypeSavedItems,
-    JMResourceTypeFavorites,
-    JMResourceTypeAbout,
-    JMResourceTypeFeedback,
-    JMResourceTypeLogout,
-    
-    JMResourceTypeNone
+@class JMExportResource;
+@class JMReportSaver;
+
+typedef NS_ENUM(NSInteger, JMExportTaskState) {
+    JMExportTaskStateUndefined,
+    JMExportTaskStateProgress,
+    JMExportTaskStateCancel,
+    JMExportTaskStateFinish
 };
 
-@interface JMMenuItem : NSObject
-@property (nonatomic, readonly) JMResourceType resourceType;
-@property (nonatomic, readonly) NSString *itemTitle;
-@property (nonatomic, readonly) UIImage  *itemIcon;
-@property (nonatomic, readonly) UIImage  *selectedItemIcon;
-
-@property (assign, nonatomic) BOOL selected;
-
-- (instancetype)initWithResourceType:(JMResourceType)resourceType;
-+ (instancetype)menuItemWithResourceType:(JMResourceType)resourceType;
-
-- (void)showNote;
-- (void)hideNote;
-
-- (NSString *) vcIdentifierForSelectedItem;
-- (NSString *)nameForCrashlytics;
+@interface JMExportTask : NSObject
+@property (nonatomic, strong) JMExportResource *exportResource;
+@property (nonatomic, assign) JMExportTaskState taskState;
+@property (nonatomic, copy) void(^cancelCompletion)(void);
+@property (nonatomic, copy) void(^finishCompletion)(void);
+- (instancetype)initWithResource:(JMExportResource *)resource;
++ (instancetype)taskWithResource:(JMExportResource *)resource;
 @end

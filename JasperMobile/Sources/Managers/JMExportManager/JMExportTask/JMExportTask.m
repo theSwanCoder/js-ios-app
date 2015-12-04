@@ -22,42 +22,34 @@
 
 
 //
-//  JMMenuItem.h
+//  JMExportTask.m
 //  TIBCO JasperMobile
 //
 
-/**
- @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
- */
+#import "JMExportTask.h"
+#import "JMExportResource.h"
+#import "JMReportSaver.h"
 
-typedef NS_ENUM(NSInteger, JMResourceType){
-    JMResourceTypeLibrary,
-    JMResourceTypeRepository,
-    JMResourceTypeRecentViews,
-    JMResourceTypeSavedItems,
-    JMResourceTypeFavorites,
-    JMResourceTypeAbout,
-    JMResourceTypeFeedback,
-    JMResourceTypeLogout,
-    
-    JMResourceTypeNone
-};
 
-@interface JMMenuItem : NSObject
-@property (nonatomic, readonly) JMResourceType resourceType;
-@property (nonatomic, readonly) NSString *itemTitle;
-@property (nonatomic, readonly) UIImage  *itemIcon;
-@property (nonatomic, readonly) UIImage  *selectedItemIcon;
+@implementation JMExportTask
 
-@property (assign, nonatomic) BOOL selected;
+#pragma mark - Life Cycle
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
 
-- (instancetype)initWithResourceType:(JMResourceType)resourceType;
-+ (instancetype)menuItemWithResourceType:(JMResourceType)resourceType;
+- (instancetype)initWithResource:(JMExportResource *)resource {
+    self = [super init];
+    if (self) {
+        _exportResource = resource;
+        _taskState = JMExportTaskStateUndefined;
+    }
+    return self;
+}
 
-- (void)showNote;
-- (void)hideNote;
++ (instancetype)taskWithResource:(JMExportResource *)resource {
+    return [[self alloc] initWithResource:resource];
+}
 
-- (NSString *) vcIdentifierForSelectedItem;
-- (NSString *)nameForCrashlytics;
 @end

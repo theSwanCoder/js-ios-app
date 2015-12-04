@@ -44,6 +44,12 @@ extern NSString * const kJMDefaultsIntroDidApear;
 extern NSString * const kJMResetApplicationNotification;
 extern NSString * const kJMFavoritesDidChangedNotification;
 extern NSString * const kJMSavedResourcesDidChangedNotification;
+extern NSString * const kJMExportedResourceDidLoadNotification;
+extern NSString * const kJMExportedResourceDidCancelNotification;
+
+// Local Notifications
+extern NSString * const kJMLocalNotificationKey;
+extern NSString * const kJMExportResourceLocalNotification;
 
 // Shared keys for dictionary
 extern NSString * const kJMTitleKey;
@@ -81,6 +87,8 @@ extern NSString * const kJMReportsDirectory;
 
 // Saved Items ws types
 extern NSString * const kJMSavedReportUnit;
+//extern NSString * const kJMExportedReportUnit;
+extern NSString * const kJMTempExportedReportUnit;
 
 // Name of the main report file (outputResource)
 extern NSString * const kJMReportFilename;

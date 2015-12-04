@@ -31,7 +31,6 @@
  @since 2.1
  */
 
-#import <Foundation/Foundation.h>
 #import "JMReport.h"
 
 typedef void(^SaveReportCompletion)(JMSavedResources *savedReport, NSError *error);

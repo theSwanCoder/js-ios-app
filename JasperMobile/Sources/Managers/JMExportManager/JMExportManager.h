@@ -22,42 +22,23 @@
 
 
 //
-//  JMMenuItem.h
+//  JMExportManager.h
 //  TIBCO JasperMobile
 //
 
+
 /**
  @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
+ @since 2.3
  */
 
-typedef NS_ENUM(NSInteger, JMResourceType){
-    JMResourceTypeLibrary,
-    JMResourceTypeRepository,
-    JMResourceTypeRecentViews,
-    JMResourceTypeSavedItems,
-    JMResourceTypeFavorites,
-    JMResourceTypeAbout,
-    JMResourceTypeFeedback,
-    JMResourceTypeLogout,
-    
-    JMResourceTypeNone
-};
+@class JMExportResource;
+@class JMExportTask;
 
-@interface JMMenuItem : NSObject
-@property (nonatomic, readonly) JMResourceType resourceType;
-@property (nonatomic, readonly) NSString *itemTitle;
-@property (nonatomic, readonly) UIImage  *itemIcon;
-@property (nonatomic, readonly) UIImage  *selectedItemIcon;
-
-@property (assign, nonatomic) BOOL selected;
-
-- (instancetype)initWithResourceType:(JMResourceType)resourceType;
-+ (instancetype)menuItemWithResourceType:(JMResourceType)resourceType;
-
-- (void)showNote;
-- (void)hideNote;
-
-- (NSString *) vcIdentifierForSelectedItem;
-- (NSString *)nameForCrashlytics;
+@interface JMExportManager : NSObject
++ (instancetype)sharedInstance;
+- (void)addTaskWithResource:(JMExportResource *)resource;
+- (void)cancelAll;
+- (void)cancelTask:(JMExportTask *)task;
+- (void)cancelTaskForSavedResource:(JMSavedResources *)savedResource;
 @end

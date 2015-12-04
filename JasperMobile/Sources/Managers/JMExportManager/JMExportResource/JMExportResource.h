@@ -22,42 +22,25 @@
 
 
 //
-//  JMMenuItem.h
+//  JMExportResource.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
+ @since 2.3
  */
 
-typedef NS_ENUM(NSInteger, JMResourceType){
-    JMResourceTypeLibrary,
-    JMResourceTypeRepository,
-    JMResourceTypeRecentViews,
-    JMResourceTypeSavedItems,
-    JMResourceTypeFavorites,
-    JMResourceTypeAbout,
-    JMResourceTypeFeedback,
-    JMResourceTypeLogout,
-    
-    JMResourceTypeNone
+typedef NS_ENUM(NSInteger, JMExportResourceType) {
+    JMExportResourceTypeReport
 };
 
-@interface JMMenuItem : NSObject
-@property (nonatomic, readonly) JMResourceType resourceType;
-@property (nonatomic, readonly) NSString *itemTitle;
-@property (nonatomic, readonly) UIImage  *itemIcon;
-@property (nonatomic, readonly) UIImage  *selectedItemIcon;
-
-@property (assign, nonatomic) BOOL selected;
-
-- (instancetype)initWithResourceType:(JMResourceType)resourceType;
-+ (instancetype)menuItemWithResourceType:(JMResourceType)resourceType;
-
-- (void)showNote;
-- (void)hideNote;
-
-- (NSString *) vcIdentifierForSelectedItem;
-- (NSString *)nameForCrashlytics;
+@interface JMExportResource : NSObject
+@property (nonatomic, strong) id resource;
+@property (nonatomic, strong) JMSavedResources *savedResource;
+@property (nonatomic, assign) JMExportResourceType resourceType;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *format;
+@property (nonatomic, assign) NSUInteger startPage;
+@property (nonatomic, assign) NSUInteger endPage;
 @end
