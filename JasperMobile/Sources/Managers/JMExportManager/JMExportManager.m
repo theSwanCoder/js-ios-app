@@ -33,9 +33,8 @@
 #import "JMSaveReportPagesCell.h"
 #import "JMSavedResources+Helpers.h"
 
-@interface JMExportManager() {
-    NSMutableArray *_activeExportTasks;
-}
+@interface JMExportManager()
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
 @end
 
 @implementation JMExportManager
@@ -54,17 +53,10 @@
 {
     self = [super init];
     if (self) {
-        _activeExportTasks = [NSMutableArray array];
-
-        // add nsoperationqueue
+        _operationQueue = [NSOperationQueue new];
+        _operationQueue.maxConcurrentOperationCount = 1;
     }
     return self;
-}
-
-#pragma mark - Custom Accessors
-- (NSArray *)activeExportTasks
-{
-    return _activeExportTasks;
 }
 
 #pragma mark - Public API
@@ -76,57 +68,30 @@
 
 - (void)cancelAll
 {
-    for (JMExportTask *task in self.activeExportTasks) {
-        [self cancelTask:task];
-    }
-    [self notifyTaskDidCancel];
+    // TODO: implement
 }
 
 - (void)cancelTask:(JMExportTask *)task
 {
-    if (task.taskState == JMExportTaskStateProgress) {
-        task.cancelCompletion();
-    }
-    [task.exportResource.savedResource removeFromDB];
-    [_activeExportTasks removeObject:task];
+    // TODO: implement
 }
 
 - (void)cancelTaskForSavedResource:(JMSavedResources *)savedResource
 {
-    JMExportTask *task = [self taskForSavedResource:savedResource];
-    if (task) {
-        [self cancelTask:task];
-        [self start];
-    } else {
-        [savedResource removeFromDB];
-    }
-    [self notifyTaskDidCancel];
+    // TODO: implement
 }
 
 #pragma mark - Private API
 - (void)addTaskToQueue:(JMExportTask *)task
 {
-    // add to nsoperationqueue
-
-    [_activeExportTasks addObject:task];
-    [JMSavedResources createSavedResourceWithExportedResource:task.exportResource];
-    if (self.activeExportTasks.count == 1) {
-        [self start];
-    }
-}
-
-- (void)start
-{
-    JMExportTask *task = self.activeExportTasks.firstObject;
-    task.taskState = JMExportTaskStateProgress;
-    [self executeTask:task completion:^{
-        task.taskState = JMExportTaskStateFinish;
-        [task.exportResource.savedResource updateWSTypeWith:kJMSavedReportUnit];
-        [self notifyTaskDidEnd:task];
-        [_activeExportTasks removeObject:task];
-        if (self.activeExportTasks.count > 0) {
-            [self start];
-        }
+    [self.operationQueue addOperationWithBlock:^{
+        [JMSavedResources createSavedResourceWithExportedResource:task.exportResource];
+        task.taskState = JMExportTaskStateProgress;
+        [self executeTask:task completion:^{
+            task.taskState = JMExportTaskStateFinish;
+            [task.exportResource.savedResource updateWSTypeWith:kJMSavedReportUnit];
+            [self notifyTaskDidEnd:task];
+        }];
     }];
 }
 
@@ -188,19 +153,6 @@
         pagesFormat = [NSString stringWithFormat:@"%@-%@", @(fromPage), @(toPage)];
     }
     return pagesFormat;
-}
-
-
-- (JMExportTask *)taskForSavedResource:(JMSavedResources *)savedResource
-{
-    JMExportTask *exportTask;
-    for (JMExportTask *task in self.activeExportTasks) {
-        if ([task.exportResource.savedResource isEqual:savedResource]) {
-            exportTask = task;
-            break;
-        }
-    }
-    return exportTask;
 }
 
 @end
