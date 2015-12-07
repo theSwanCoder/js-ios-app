@@ -50,7 +50,7 @@ extern NSString * const kJMReportCurrentPageDidChangeNotification;
 @property (nonatomic, assign, readonly) BOOL isReportWithInputControls;
 @property (nonatomic, assign, readonly) BOOL isReportEmpty;
 @property (nonatomic, strong, readonly) NSString *requestId;
-@property (nonatomic, assign, readonly) BOOL isReportAlreadyLoaded;
+@property (nonatomic, assign) BOOL isReportAlreadyLoaded;
 
 
 // html

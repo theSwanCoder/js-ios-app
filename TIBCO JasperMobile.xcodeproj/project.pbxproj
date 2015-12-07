@@ -140,8 +140,6 @@
 		930F8D461ABB1CDF005F93FB /* report.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D441ABB1CDF005F93FB /* report.html */; };
 		930F8D481ABB1D9F005F93FB /* require.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D471ABB1D9F005F93FB /* require.min.js */; };
 		930F8D4A1ABB28B0005F93FB /* report_optimized.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D491ABB28B0005F93FB /* report_optimized.html */; };
-		9342341A1AAC3D5300D34478 /* JMVisualizeReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 934234191AAC3D5300D34478 /* JMVisualizeReport.m */; };
-		9342341E1AAC3DC100D34478 /* JMRestReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9342341D1AAC3DC100D34478 /* JMRestReport.m */; };
 		9348F4E81A35C616006F5677 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */; };
 		9348F4EA1A35D103006F5677 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
 		9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */; };
@@ -468,10 +466,6 @@
 		930F8D441ABB1CDF005F93FB /* report.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = report.html; sourceTree = "<group>"; };
 		930F8D471ABB1D9F005F93FB /* require.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = require.min.js; sourceTree = "<group>"; };
 		930F8D491ABB28B0005F93FB /* report_optimized.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = report_optimized.html; sourceTree = "<group>"; };
-		934234181AAC3D5300D34478 /* JMVisualizeReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeReport.h; sourceTree = "<group>"; };
-		934234191AAC3D5300D34478 /* JMVisualizeReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeReport.m; sourceTree = "<group>"; };
-		9342341C1AAC3DC100D34478 /* JMRestReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRestReport.h; sourceTree = "<group>"; };
-		9342341D1AAC3DC100D34478 /* JMRestReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRestReport.m; sourceTree = "<group>"; };
 		9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		9356EC971A30752800ACE2C6 /* TIBCO JasperMobile Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TIBCO JasperMobile Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9356EC9A1A30752900ACE2C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1671,24 +1665,6 @@
 			path = Library;
 			sourceTree = "<group>";
 		};
-		934234171AAC3D3900D34478 /* JMVisualizeReport */ = {
-			isa = PBXGroup;
-			children = (
-				934234181AAC3D5300D34478 /* JMVisualizeReport.h */,
-				934234191AAC3D5300D34478 /* JMVisualizeReport.m */,
-			);
-			path = JMVisualizeReport;
-			sourceTree = "<group>";
-		};
-		9342341B1AAC3DB100D34478 /* JMRestReport */ = {
-			isa = PBXGroup;
-			children = (
-				9342341C1AAC3DC100D34478 /* JMRestReport.h */,
-				9342341D1AAC3DC100D34478 /* JMRestReport.m */,
-			);
-			path = JMRestReport;
-			sourceTree = "<group>";
-		};
 		9356EC981A30752900ACE2C6 /* TIBCO JasperMobile Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -1723,8 +1699,6 @@
 				0801DF961AAF2CC900DD072C /* CoreDataEntities */,
 				93D8C6561AAD777200117306 /* JMVisualizeDashboard */,
 				93D8C6521AAD69BE00117306 /* JMDashboard */,
-				9342341B1AAC3DB100D34478 /* JMRestReport */,
-				934234171AAC3D3900D34478 /* JMVisualizeReport */,
 				9397F97A1AAACAD1006B89C6 /* JMReport */,
 			);
 			path = Models;
@@ -2250,7 +2224,6 @@
 			files = (
 				BDB8B9EE1B57D90B00758441 /* JMThemesManager.m in Sources */,
 				08E31CF71B8DE141008C0B49 /* JMExtendedReportOption.m in Sources */,
-				9342341E1AAC3DC100D34478 /* JMRestReport.m in Sources */,
 				08DD18391B136B8A00856112 /* JMDashboardInfoViewController.m in Sources */,
 				089B15B61AA756BD0021A915 /* JMLoginViewController.m in Sources */,
 				08DD183C1B136B8A00856112 /* JMSavedItemsInfoViewController.m in Sources */,
@@ -2299,7 +2272,6 @@
 				08E2AC7C1B1E056900AC462B /* JMBaseResourceViewerVC.m in Sources */,
 				089B15A31AA756BD0021A915 /* UIColor+RGBComponent.m in Sources */,
 				0801DF9D1AAF2CC900DD072C /* JMFavorites.m in Sources */,
-				9342341A1AAC3D5300D34478 /* JMVisualizeReport.m in Sources */,
 				089B159E1AA756BD0021A915 /* JMFavorites+Helpers.m in Sources */,
 				089B15C51AA756BD0021A915 /* JMResourceCollectionViewCell.m in Sources */,
 				08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */,

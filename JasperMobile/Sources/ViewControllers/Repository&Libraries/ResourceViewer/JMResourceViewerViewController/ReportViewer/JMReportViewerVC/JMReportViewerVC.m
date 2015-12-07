@@ -577,6 +577,7 @@
 
 - (void)handleError:(NSError *)error
 {
+#warning NEED IMPROVE ERROR HANDLING - use should one method for handling error on all cases
     if (error.code == JMReportLoaderErrorTypeAuthentification) {
         
         [self.restClient deleteCookies];

@@ -28,7 +28,6 @@
 
 #import "JMReportViewerVC.h"
 #import "JMVisualizeReportLoader.h"
-#import "JMVisualizeReport.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMJavascriptRequest.h"
 #import "JMVisualizeManager.h"
@@ -41,7 +40,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 };
 
 @interface JMVisualizeReportLoader() <JMJavascriptNativeBridgeDelegate>
-@property (nonatomic, weak) JMVisualizeReport *report;
 @property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
 
 @property (nonatomic, copy) void(^reportLoadCompletion)(BOOL success, NSError *error);
@@ -54,17 +52,16 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 @synthesize bridge = _bridge, delegate = _delegate;
 
 #pragma mark - Lifecycle
-- (instancetype)initWithReport:(JMVisualizeReport *)report
+- (instancetype)initWithReport:(JMReport *)report
 {
     self = [super init];
     if (self) {
-        _report = report;
         _visualizeManager = [JMVisualizeManager new];
     }
     return self;
 }
 
-+ (instancetype)loaderWithReport:(JMVisualizeReport *)report
++ (instancetype)loaderWithReport:(JMReport *)report
 {
     return [[self alloc] initWithReport:report];
 }
@@ -87,7 +84,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)runReportWithPage:(NSInteger)page completion:(void(^)(BOOL success, NSError *error))completionBlock
 {
     self.isReportInLoadingProcess = YES;
-    [self.report updateLoadingStatusWithValue:NO];
+    self.report.isReportAlreadyLoaded = NO;
     [self.report updateCountOfPages:NSNotFound];
     [self.report updateCurrentPage:page];
 
@@ -148,8 +145,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
         self.isReportInLoadingProcess = YES;
-        [self.report updateLoadingStatusWithValue:NO];
-
+        self.report.isReportAlreadyLoaded = NO;
+        
         self.reportLoadCompletion = completion;
         [self.report updateCurrentPage:1];
 
@@ -163,7 +160,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
             }];
     } else if (!self.report.isReportAlreadyLoaded) {
         self.isReportInLoadingProcess = YES;
-        [self.report updateLoadingStatusWithValue:NO];
+        self.report.isReportAlreadyLoaded = NO;
         [self.report updateCountOfPages:NSNotFound];
 
         [self fetchPageNumber:1 withCompletion:completion];
@@ -208,7 +205,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     request.parametersAsString = @"";
     [self.bridge sendRequest:request];
 
-    [self.report updateLoadingStatusWithValue:NO];
+    self.report.isReportAlreadyLoaded = NO;
 }
 
 - (void)authenticate
@@ -337,7 +334,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     JMLog(@"report rendering end");
 
-    [self.report updateLoadingStatusWithValue:YES];
+    self.report.isReportAlreadyLoaded = YES;
 
     if (self.reportLoadCompletion) {
         self.reportLoadCompletion(YES, nil);
@@ -384,7 +381,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 #pragma mark - Handle refresh
 - (void)handleRefreshDidEndSuccessful
 {
-    [self.report updateLoadingStatusWithValue:YES];
+    self.report.isReportAlreadyLoaded = YES;
 
     if (self.reportLoadCompletion) {
         self.reportLoadCompletion(YES, nil);

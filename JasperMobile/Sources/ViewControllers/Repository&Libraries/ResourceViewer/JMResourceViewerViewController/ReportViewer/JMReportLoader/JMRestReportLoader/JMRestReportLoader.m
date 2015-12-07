@@ -193,6 +193,8 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     if (HTMLString && self.loadPageCompletionBlock) { // show cached page
         JMLog(@"load cached page");
         [self.report updateHTMLString:HTMLString baseURLSring:self.report.baseURLString];
+        self.report.isReportAlreadyLoaded = (HTMLString.length > 0);
+
         [self startLoadReportHTML];
         self.loadPageCompletionBlock(YES, nil);
     } else { // export page
@@ -269,6 +271,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                                       if (self.loadPageCompletionBlock) {
                                           [self.report updateHTMLString:result.bodyAsString
                                                            baseURLSring:self.restClient.serverProfile.serverUrl];
+                                          self.report.isReportAlreadyLoaded = (result.bodyAsString.length > 0);
                                           [self startLoadReportHTML];
                                           self.loadPageCompletionBlock(YES, nil);
                                       }

@@ -9,8 +9,7 @@
 #import "JSResourceLookup+Helpers.h"
 #import "JMVisualizeDashboard.h"
 #import "JMDashboard.h"
-#import "JMVisualizeReport.h"
-#import "JMRestReport.h"
+#import "JMReport.h"
 
 @implementation JSResourceLookup (Helpers)
 
@@ -66,11 +65,7 @@
 
 - (JMReport *)reportModel
 {
-    if ([JMUtils isSupportVisualize]) {
-        return [JMVisualizeReport reportWithResourceLookup:self];
-    } else {
-        return [JMRestReport reportWithResourceLookup:self];
-    }
+    return [JMReport reportWithResourceLookup:self];
 }
 
 - (JMDashboard *)dashboardModel

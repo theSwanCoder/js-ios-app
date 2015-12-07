@@ -41,7 +41,6 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 @property (nonatomic, assign, readwrite) BOOL isReportWithInputControls;
 @property (nonatomic, assign, readwrite) BOOL isReportEmpty;
 @property (nonatomic, strong, readwrite) NSString *requestId;
-@property (nonatomic, assign, readwrite) BOOL isReportAlreadyLoaded;
 
 // html
 @property (nonatomic, copy, readwrite) NSString *HTMLString;
@@ -191,8 +190,6 @@ NSString * const kJMReportCurrentPageDidChangeNotification = @"kJMReportCurrentP
 {
     self.HTMLString = HTMLString;
     self.baseURLString = baseURLString;
-    
-    self.isReportAlreadyLoaded = (HTMLString.length > 0);
 }
 
 - (void)updateRequestId:(NSString *)requestId
