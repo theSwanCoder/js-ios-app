@@ -24,6 +24,7 @@
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMReportSaver.h"
+#import "JSResourceLookup+Helpers.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
@@ -59,6 +60,11 @@
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
     [self.documentController dismissMenuAnimated:YES];
+
+    if (self.savedResourcePath) {
+        [self removeSavedResource];
+    }
+
     [super cancelResourceViewingAndExit:exit];
 }
 
@@ -73,16 +79,11 @@
 
 - (void)startResourceViewing
 {
-    NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
-
-    if (self.webView.isLoading) {
-        [self.webView stopLoading];
+    if ([self.resourceLookup isFile]) {
+        [self showRemoteResource];
+    } else {
+        [self showSavedResource];
     }
-    self.isResourceLoaded = NO;
-
-    NSURL *url = [NSURL fileURLWithPath:fullReportPath];
-    self.resourceRequest = [NSURLRequest requestWithURL:url];
-    [self.webView loadRequest:self.resourceRequest];
 
     // Analytics
     NSString *resourcesType = @"Saved Item (Unknown type)";
@@ -183,20 +184,6 @@
     NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
     NSURL *url = [NSURL fileURLWithPath:fullReportPath];
     [self showResourceWithURL:url];
-
-    // Analytics
-    NSString *resourcesType = @"Saved Item (Unknown type)";
-    if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-        resourcesType = @"Saved Item (HTML)";
-    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
-        resourcesType = @"Saved Item (PDF)";
-    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
-        resourcesType = @"Saved Item (XLS)";
-    }
-    [JMUtils logEventWithName:@"User opened resource"
-                 additionInfo:@{
-                         @"Resource's Type" : resourcesType
-                 }];
 }
 
 - (void)showRemoteResource
@@ -239,6 +226,8 @@
                                                                                                      NSURL *savedResourceURL = [NSURL fileURLWithPath:outputResourcePath];
                                                                                                      if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_IMG]) {
                                                                                                          [strongSelf showImageWithURL:savedResourceURL];
+                                                                                                     } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+                                                                                                         [strongSelf showRemoveHTMLForResource:resource];
                                                                                                      } else {
                                                                                                          [strongSelf showResourceWithURL:savedResourceURL];
                                                                                                      }
@@ -265,6 +254,19 @@
     self.resourceRequest = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:self.resourceRequest];
 
+}
+
+- (void)showRemoveHTMLForResource:(JSContentResource *)resource
+{
+    NSString *baseURLString = [NSString stringWithFormat:@"%@/fileview/fileview/%@", self.restClient.serverProfile.serverUrl, resource.uri];
+
+    NSError *error;
+    NSString *htmlString = [NSString stringWithContentsOfFile:self.savedResourcePath
+                                                     encoding:NSUTF8StringEncoding
+                                                        error:&error];
+
+    [self.webView loadHTMLString:htmlString
+                         baseURL:[NSURL URLWithString:baseURLString]];
 }
 
 - (void)showImageWithURL:(NSURL *)url
@@ -309,10 +311,8 @@
 
 - (BOOL)isSupportedResource:(JSContentResource *)resource
 {
-    NSString *resourceFullName = resource.uri.lastPathComponent;
-    NSString *format = resourceFullName.pathExtension;
-    BOOL isHTML = [format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML];
-    return !isHTML;
+    // TODO: need add supported resources
+    return YES;
 }
 
 - (UIScrollView *)createScrollViewWithImage:(UIImage *)image

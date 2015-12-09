@@ -58,6 +58,8 @@
         return @"JMDashboardViewerVC";
     } else if ([self isSavedReport]) {
         return @"JMSavedResourceViewerViewController";
+    } else if ([self isFile]) {
+        return @"JMSavedResourceViewerViewController";
     }
     return nil;
 }

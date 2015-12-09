@@ -130,7 +130,8 @@
                                                                         [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT,
                                                                         [JSConstants sharedInstance].WS_TYPE_DASHBOARD,
                                                                         [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY,
-                                                                        [JSConstants sharedInstance].WS_TYPE_FOLDER
+                                                                        [JSConstants sharedInstance].WS_TYPE_FOLDER,
+                                                                        [JSConstants sharedInstance].WS_TYPE_FILE
                                                                         ]
                      }
             ];
