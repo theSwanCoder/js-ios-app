@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #import "JMJavascriptRequest.h"
 #import "JMDashboardLoader.h"
 #import "JMDashboard.h"
+#import "JMWebViewManager.h"
 
 @interface JMVisDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
@@ -75,7 +76,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     self.loadCompletion = completion;
 
-    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
+    if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
 
         [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
             if (success) {
@@ -85,7 +86,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
             }
         }];
     } else {
-        [self destroyDashboard];
         [self handleOnScriptLoaded];
     }
 }
@@ -110,10 +110,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     [self.bridge sendRequest:request];
 }
 
-- (void)reset
+- (void)cancel
 {
     [self destroyDashboard];
-    [self.bridge reset];
+}
+
+- (void)destroy
+{
+    [self destroyDashboard];
 }
 
 - (void)minimizeDashlet
@@ -140,7 +144,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)destroyDashboard
 {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileDashboard.destroyDashboard();";
+    request.command = @"MobileDashboard.destroy();";
     request.parametersAsString = @"";
     [self.bridge sendRequest:request];
 }
@@ -176,6 +180,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - JMJavascriptNativeBridgeDelegate
 - (void)javascriptNativeBridge:(id <JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback
 {
+    JMLog(@"callback type: %@", callback.type);
     JMLog(@"callback parameters: %@", callback.parameters[@"parameters"]);
     if ([callback.type isEqualToString:@"onScriptLoaded"]) {
         [self handleOnScriptLoaded];
@@ -191,6 +196,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         [self handleOnReferenceClick:callback.parameters[@"parameters"]];
     } else if ([callback.type isEqualToString:@"onAuthError"]) {
         [self javascriptNativeBridgeDidReceiveAuthRequest:self.bridge];
+    } else if ([callback.type isEqualToString:@"onWindowError"]) {
+        [self.bridge reset];
+        // waiting for resetting of webview
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self loadDashboardWithCompletion:self.loadCompletion];
+        });
     }
 }
 
@@ -211,7 +222,13 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     if (request.URL.host) {
         self.externalURL = request.URL;
         shouldLoad = YES;
+    } else {
+        // Request for cleaning webview
+        if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
+            shouldLoad = YES;
+        }
     }
+
     return shouldLoad;
 }
 

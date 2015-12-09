@@ -35,6 +35,7 @@
 #import "SWRevealViewController.h"
 #import "JMMenuViewController.h"
 #import "JMEULAViewController.h"
+#import "JMServerProfile+Helpers.h"
 
 
 void jmDebugLog(NSString *format, ...) {
@@ -388,9 +389,33 @@ void jmDebugLog(NSString *format, ...) {
     return [launchStoryboard instantiateInitialViewController];
 }
 
++ (BOOL)isCompactWidth
+{
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    return (rootViewController.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact);
+}
+
++ (BOOL)isCompactHeight
+{
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    return (rootViewController.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact);
+}
+
+
++ (BOOL)isDemoAccount
+{
+    BOOL isDemoAccount = [self.restClient.serverProfile.serverUrl isEqualToString:[JMServerProfile demoServerProfile].serverUrl];
+    return isDemoAccount;
+}
+
 #pragma mark - Analytics
 + (void)logEventWithName:(NSString *)eventName additionInfo:(NSDictionary *)additionInfo
 {
+    // Disable analytics for demo profile
+    if ([self isDemoAccount]) {
+        return;
+    }
+
     // Crashlytics - Answers
     [Answers logCustomEventWithName:eventName
                    customAttributes:additionInfo];
@@ -406,6 +431,11 @@ void jmDebugLog(NSString *format, ...) {
 
 + (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
 {
+    // Disable analytics for demo profile
+    if ([self isDemoAccount]) {
+        return;
+    }
+
     // Crashlytics - Answers
     [Answers logLoginWithMethod:@"Digits"
                         success:@(success)
@@ -418,18 +448,6 @@ void jmDebugLog(NSString *format, ...) {
                                                           action:[additionInfo allKeys].firstObject                  // Event action (required)
                                                            label:[additionInfo allValues].firstObject                // Event label
                                                            value:nil] build]];                                       // Event value
-}
-
-+ (BOOL)isCompactWidth
-{
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    return (rootViewController.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact);
-}
-
-+ (BOOL)isCompactHeight
-{
-    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    return (rootViewController.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact);
 }
 
 @end

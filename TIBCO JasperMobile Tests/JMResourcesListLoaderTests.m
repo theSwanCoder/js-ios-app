@@ -113,35 +113,6 @@
     XCTAssertEqual(self.resourceLoader.resourceCount, resources.count, @"Count of resources should be equal 2");
 }
 
-- (void)testThatLoaderCanSortResources
-{
-    TestResource *resourceA = [TestResource new];
-    resourceA.label = @"A";
-    TestResource *resourceB = [TestResource new];
-    resourceB.label = @"B";
-    
-    NSArray *resources = @[
-                           resourceB,
-                           resourceA
-                           ];
-    [self.resourceLoader addResourcesWithResources:resources];
-
-    TestResource *firstResource = [self.resourceLoader resourceAtIndex:0];
-
-    // for begin, first object is "B"
-    XCTAssertEqualObjects(firstResource.label, @"B");
-    
-    [self measureBlock:^{
-        [self.resourceLoader sortLoadedResourcesUsingComparator:^NSComparisonResult(TestResource *obj1, TestResource *obj2) {
-            return [obj1.label compare:obj2.label options:NSCaseInsensitiveSearch];
-        }];
-    }];
-    
-    firstResource = [self.resourceLoader resourceAtIndex:0];
-    // after sort, first object is "A"
-    XCTAssertEqualObjects(firstResource.label, @"A");
-}
-
 #pragma mark - Test search
 // TODO: how we can test search??? it's server feature
 

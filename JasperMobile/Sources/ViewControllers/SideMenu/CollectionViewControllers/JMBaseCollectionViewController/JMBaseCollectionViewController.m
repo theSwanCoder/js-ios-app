@@ -39,9 +39,10 @@
 
 #import "JMRepositoryCollectionViewController.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMBaseReportViewerViewController.h"
+#import "JMReportViewerVC.h"
 #import "JMResourceInfoViewController.h"
 #import "UIViewController+Additions.h"
+#import "JMExportManager.h"
 
 CGFloat const kJMBaseCollectionViewGridWidth = 310;
 
@@ -434,6 +435,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         repositoryViewController.representationTypeKey = self.representationTypeKey;
         repositoryViewController.representationType = self.representationType;
         nextVC = repositoryViewController;
+    } else if ([resourceLookup isTempExportedReport]) {
+        // TODO: add canceling task
+//        [[JMExportManager sharedInstance] cancelAll];
+//        JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *) self.view).collectionView cellForItemAtIndexPath:indexPath];
+//        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:cell.resourceLookup];
+//        [[JMExportManager sharedInstance] cancelTaskForSavedResource:savedReport];
     } else if ([resourceLookup isSavedReport]) {
         nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
         if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {

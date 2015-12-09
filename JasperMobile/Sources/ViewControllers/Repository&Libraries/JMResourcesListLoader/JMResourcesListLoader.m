@@ -28,10 +28,10 @@ NSString * const kJMResourceListLoaderOptionItemTitleKey = @"JMResourceListLoade
 NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoaderFilterItemValueKey";
 
 @interface JMResourcesListLoader ()
-@property (atomic, strong) NSMutableArray *resources;
 
 @property (atomic, strong) NSMutableArray *resourcesFolders;
 @property (atomic, strong) NSMutableArray *resourcesItems;
+@property (nonatomic, strong) NSMutableArray *allResources;
 
 @property (nonatomic, assign) BOOL needUpdateData;
 @property (nonatomic, assign) BOOL isLoadingNow;
@@ -51,7 +51,6 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     self = [super init];
     if (self) {
         _isLoadingNow = NO;
-        _resources = [NSMutableArray array];
         _resourcesFolders = [NSMutableArray array];
         _resourcesItems = [NSMutableArray array];
         _filterBySelectedIndex = 0;
@@ -85,7 +84,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     self.offset = 0;
     self.totalCount = 0;
     self.hasNextPage = NO;
-    [self.resources removeAllObjects];
+    self.allResources = nil;
     [self.resourcesFolders removeAllObjects];
     [self.resourcesItems removeAllObjects];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
@@ -115,49 +114,44 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     return kJMResourceLimit;
 }
 
-#pragma mark - Public API
-- (NSArray *)loadedResources
+- (NSMutableArray *)allResources
 {
-    return [self.resources copy];
+    if (!_allResources && [_allResources count] == 0) {
+        _allResources = [NSMutableArray arrayWithArray:self.resourcesFolders];
+        [_allResources addObjectsFromArray:self.resourcesItems];
+    }
+    return _allResources;
 }
 
+#pragma mark - Public API
 - (NSUInteger)resourceCount
 {
-    return self.resources.count;
+    return self.allResources.count;
 }
 
 - (id)resourceAtIndex:(NSInteger)index
 {
-    if (index < self.resources.count) {
-        return self.resources[index];
+    if (index < [self resourceCount]) {
+        return self.allResources[index];
     }
     return nil;
 }
 
 - (void)addResourcesWithResource:(id)resource
 {
-    [self.resources addObject:resource];
+    if ([resource isFolder]) {
+        [self.resourcesFolders addObject:resource];
+    } else {
+        [self.resourcesItems addObject:resource];
+    }
+    self.allResources = nil;
 }
 
 - (void)addResourcesWithResources:(NSArray *)resources
 {
-    [self.resources addObjectsFromArray:resources];
-}
-
-- (void)sortLoadedResourcesUsingComparator:(NSComparator)compartor
-{
-    [self.resources sortUsingComparator:compartor];
-}
-
-- (NSArray *)loadedResourcesMatchName:(NSString *)name
-{
-    NSMutableArray *resources = [NSMutableArray array];
-    for (JSResourceLookup *resourceLookup in self.resources) {
-        if ([resourceLookup.label containsString:name]) {
-            [resources addObject:resourceLookup];
-        }
+    for (id resource in resources) {
+        [self addResourcesWithResource:resource];
     }
-    return [resources copy];
 }
 
 #pragma mark - JMPagination
@@ -196,16 +190,8 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                              }
                          } else {
                              for (JSResourceLookup *resourceLookup in result.objects) {
-                                 if ([resourceLookup isFolder]) {
-                                     [strongSelf.resourcesFolders addObject:resourceLookup];
-                                 } else {
-                                     [strongSelf.resourcesItems addObject:resourceLookup];
-                                 }
+                                 [strongSelf addResourcesWithResource:resourceLookup];
                              }
-                             
-                             [strongSelf addResourcesWithResources:strongSelf.resourcesFolders];
-                             [strongSelf addResourcesWithResources:strongSelf.resourcesItems];
-                             
                              
                              if (result.allHeaderFields[@"Next-Offset"]) {
                                  strongSelf.offset = [result.allHeaderFields[@"Next-Offset"] integerValue];
@@ -229,7 +215,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     if (error) {
         [self.delegate resourceListLoaderDidFailed:self withError:error];
     } else {
-        [self.delegate resourceListLoaderDidEndLoad:self withResources:[self loadedResources]];
+        [self.delegate resourceListLoaderDidEndLoad:self withResources:self.allResources];
     }
 }
 

@@ -116,6 +116,20 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                 resourceImage = [UIImage imageNamed:@"res_type_xls"];
             }
         }
+        self.alpha = 1;
+    } else if ([self.resourceLookup isTempExportedReport]) {
+        resourceImage = [UIImage imageNamed:@"res_type_report"];
+        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
+        if (savedReport) {
+            if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+                resourceImage = [UIImage imageNamed:@"res_type_html"];
+            } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+                resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+            } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
+                resourceImage = [UIImage imageNamed:@"res_type_xls"];
+            }
+        }
+        self.alpha = 0.5;
     } else if ([self.resourceLookup isDashboard]) {
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
     } else if ([self.resourceLookup isFolder]) {

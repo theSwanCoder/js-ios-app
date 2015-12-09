@@ -39,6 +39,11 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMConstants.h"
 
+typedef NS_ENUM(NSInteger, JMMenuButtonState) {
+    JMMenuButtonStateNormal,
+    JMMenuButtonStateNotification,
+};
+
 @interface JMMenuViewController() <UITableViewDataSource, UITableViewDelegate, MFMailComposeViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
@@ -59,13 +64,24 @@
 #pragma mark - LifeCycle
 -(void)dealloc
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(exportedResouceDidLoad:)
+                                                 name:kJMExportedResourceDidLoadNotification
+                                               object:nil];
+}
+
+#pragma mark - UIViewController LifeCycle
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     self.view.backgroundColor = [[JMThemesManager sharedManager] menuViewBackgroundColor];
     self.userNameLabel.textColor = [[JMThemesManager sharedManager] menuViewUserNameTextColor];
     self.serverNameLabel.textColor = [[JMThemesManager sharedManager] menuViewAdditionalInfoTextColor];
@@ -169,6 +185,8 @@
 
                 id nextVC;
                 if([item vcIdentifierForSelectedItem]) {
+                    [self hideNoteInMenuItem];
+
                     // Analytics
                     [JMUtils logEventWithName:@"User opened section"
                                  additionInfo:@{
@@ -176,8 +194,8 @@
                                  }];
 
                     nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-                    UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStylePlain target:self action:@selector(menuButtonTapped:)];
-                    [nextVC topViewController].navigationItem.leftBarButtonItem = menuItem;
+                    UIBarButtonItem *bbi = [self barButtonItemForState:JMMenuButtonStateNormal];
+                    [nextVC topViewController].navigationItem.leftBarButtonItem = bbi;
                     [[nextVC topViewController].view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
                 } else {
                     nextVC = [JMUtils launchScreenViewController];
@@ -214,6 +232,7 @@
 {
     [self.revealViewController.frontViewController.view endEditing:YES];
     [self.revealViewController revealToggle:sender];
+    [self hideNoteInMenuButton];
 }
 
 
@@ -241,6 +260,71 @@
 - (void)closeMenu
 {
     [self.revealViewController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+}
+
+- (UIBarButtonItem *)barButtonItemForState:(JMMenuButtonState)buttonState
+{
+    UIImage *menuButtonImage;
+    switch (buttonState) {
+        case JMMenuButtonStateNormal: {
+            menuButtonImage = [UIImage imageNamed:@"menu_icon"];
+            break;
+        }
+        case JMMenuButtonStateNotification: {
+            menuButtonImage = [UIImage imageNamed:@"menu_icon_note"];
+            break;
+        }
+    }
+
+    CGRect buttonFrame = CGRectMake(0, 0, menuButtonImage.size.width, menuButtonImage.size.height);
+    UIButton *button = [[UIButton alloc] initWithFrame:buttonFrame];
+    [button setImage:menuButtonImage forState:UIControlStateNormal];
+    [button addTarget:self
+               action:@selector(menuButtonTapped:)
+     forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithCustomView:button];
+
+    return bbi;
+}
+
+- (void)showNoteInMenuButton
+{
+    UINavigationController *navController = (UINavigationController *) self.revealViewController.frontViewController;
+    for (UIViewController *viewController in navController.viewControllers) {
+        if ([viewController isKindOfClass:[JMBaseCollectionViewController class]]) {
+            UIButton *button = (UIButton *) viewController.navigationItem.leftBarButtonItem.customView;
+            [button setImage:[UIImage imageNamed:@"menu_icon_note"] forState:UIControlStateNormal];
+        }
+    }
+}
+
+- (void)hideNoteInMenuButton
+{
+    UINavigationController *navController = (UINavigationController *) self.revealViewController.frontViewController;
+    for (UIViewController *viewController in navController.viewControllers) {
+        if ([viewController isKindOfClass:[JMBaseCollectionViewController class]]) {
+            UIButton *button = (UIButton *) viewController.navigationItem.leftBarButtonItem.customView;
+            [button setImage:[UIImage imageNamed:@"menu_icon"] forState:UIControlStateNormal];
+        }
+    }
+}
+
+- (void)showNoteInMenuItem
+{
+    // TODO: extend for any menu items
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"resourceType == %@", @(JMResourceTypeSavedItems)];
+    NSArray *filterdItems = [self.menuItems filteredArrayUsingPredicate:predicate];
+    JMMenuItem *savedItem = filterdItems.firstObject;
+    [savedItem showNote];
+}
+
+- (void)hideNoteInMenuItem
+{
+    // TODO: extend for any menu items
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"resourceType == %@", @(JMResourceTypeSavedItems)];
+    NSArray *filterdItems = [self.menuItems filteredArrayUsingPredicate:predicate];
+    JMMenuItem *savedItem = filterdItems.firstObject;
+    [savedItem hideNote];
 }
 
 #pragma mark - Feedback
@@ -293,6 +377,17 @@
     [self dismissViewControllerAnimated:YES completion:NULL];
 
     [self closeMenu];
+}
+
+#pragma mark - Notifications
+- (void)exportedResouceDidLoad:(NSNotification *)notification
+{
+    UINavigationController *navController = (UINavigationController *) self.revealViewController.frontViewController;
+    UIViewController *topVC = navController.topViewController;
+    if (![topVC isKindOfClass:[JMSavedItemsCollectionViewController class]]) {
+        [self showNoteInMenuButton];
+        [self showNoteInMenuItem];
+    }
 }
 
 @end

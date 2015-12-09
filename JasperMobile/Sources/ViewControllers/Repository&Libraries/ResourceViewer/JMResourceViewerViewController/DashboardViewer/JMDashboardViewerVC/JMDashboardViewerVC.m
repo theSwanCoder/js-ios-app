@@ -32,6 +32,7 @@
 #import "JMDashboardLoader.h"
 #import "JMReportViewerVC.h"
 #import "JMDashboard.h"
+#import "JMWebViewManager.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -122,8 +123,7 @@
     }
     self.configurator.viewportScaleFactor = initialScaleViewport;
 
-    CGRect rootViewBounds = self.navigationController.view.bounds;
-    id dashboardView = [self.configurator webViewWithFrame:rootViewBounds asSecondary:NO];
+    id dashboardView = [self.configurator webViewAsSecondary:NO];
     [self.view addSubview:dashboardView];
 
     ((UIView *)dashboardView).translatesAutoresizingMaskIntoConstraints = NO;
@@ -160,7 +160,8 @@
 
 - (void)resetSubViews
 {
-    [[JMVisualizeWebViewManager sharedInstance] reset];
+    [self.dashboardLoader destroy];
+    [[JMWebViewManager sharedInstance] resetZoom];
 }
 
 
@@ -185,7 +186,7 @@
             [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
                                        cancelBlock:^(void) {
                                            __strong typeof(self)strongSelf = weakSelf;
-                                           [strongSelf.dashboardLoader reset];
+                                           [strongSelf.dashboardLoader cancel];
                                            [super cancelResourceViewingAndExit:YES];
                                        }];
             [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
@@ -230,7 +231,7 @@
 
             [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
                                  cancelBlock:^(void) {
-                                         [strongSelf.dashboardLoader reset];
+                                         [strongSelf.dashboardLoader cancel];
                                          [super cancelResourceViewingAndExit:YES];
                                      }];
             __weak typeof(self)weakSelf = strongSelf;

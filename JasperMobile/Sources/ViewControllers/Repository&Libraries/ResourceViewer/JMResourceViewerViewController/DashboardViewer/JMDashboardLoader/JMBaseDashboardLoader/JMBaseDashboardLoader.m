@@ -109,7 +109,12 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
     [self.bridge sendRequest:request];
 }
 
-- (void)reset
+- (void)cancel
+{
+    [self.bridge reset];
+}
+
+- (void)destroy
 {
     [self.bridge reset];
 }

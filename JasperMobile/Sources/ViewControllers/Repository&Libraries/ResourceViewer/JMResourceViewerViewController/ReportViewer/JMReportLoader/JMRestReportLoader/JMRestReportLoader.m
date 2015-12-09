@@ -28,7 +28,7 @@
 
 #import "JMRestReportLoader.h"
 #import "NSObject+Additions.h"
-#import "JMBaseReportViewerViewController.h"
+#import "JMReportViewerVC.h"
 #import "JMJavascriptNativeBridgeProtocol.h"
 
 static NSInteger const kJMReportViewerStatusCheckingInterval = 1.f;
@@ -101,7 +101,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
     [self startExportExecutionForPage:pageNumber];
 }
 
-- (void) cancelReport
+- (void)cancel
 {
     [self.restClient cancelAllRequests];
     [self.statusCheckingTimer invalidate];
@@ -120,6 +120,11 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 - (void)applyReportParametersWithCompletion:(void (^)(BOOL success, NSError *error))completion
 {
     [self runReportWithPage:1 completion:completion];
+}
+
+- (void)destroy
+{
+    [self.bridge reset];
 }
 
 #pragma mark - Private API
