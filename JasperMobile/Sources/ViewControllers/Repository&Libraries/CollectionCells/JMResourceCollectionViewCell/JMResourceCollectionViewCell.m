@@ -109,11 +109,11 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
         JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
         if (savedReport) {
             if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-                resourceImage = [UIImage imageNamed:@"res_type_html"];
+                resourceImage = [UIImage imageNamed:@"res_type_file_html"];
             } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
-                resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+                resourceImage = [UIImage imageNamed:@"res_type_file_pdf"];
             } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
-                resourceImage = [UIImage imageNamed:@"res_type_xls"];
+                resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
             }
         }
         self.alpha = 1;
@@ -122,11 +122,11 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
         JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
         if (savedReport) {
             if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-                resourceImage = [UIImage imageNamed:@"res_type_html"];
+                resourceImage = [UIImage imageNamed:@"res_type_file_html"];
             } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
-                resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+                resourceImage = [UIImage imageNamed:@"res_type_file_pdf"];
             } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
-                resourceImage = [UIImage imageNamed:@"res_type_xls"];
+                resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
             }
         }
         self.alpha = 0.5;
@@ -135,18 +135,39 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     } else if ([self.resourceLookup isFolder]) {
         resourceImage = [UIImage imageNamed:@"res_type_folder"];
     } else if([self.resourceLookup isFile]) {
-        resourceImage = [UIImage imageNamed:@"res_type_report"];
+        resourceImage = [UIImage imageNamed:@"res_type_file"];
 
-        // TODO: change this hack with request for getting resource type
-        NSString *resourceFullName = self.resourceLookup.uri.lastPathComponent;
-        NSString *format = resourceFullName.pathExtension;
-        if ([format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-            resourceImage = [UIImage imageNamed:@"res_type_html"];
-        } else if ([format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
-            resourceImage = [UIImage imageNamed:@"res_type_pdf"];
-        } else if ([format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS] || [format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLSX]) {
-            resourceImage = [UIImage imageNamed:@"res_type_xls"];
-        }
+        __typeof(self) weakSelf = self;
+        [self.restClient contentResourceWithResourceLookup:self.resourceLookup
+                                                completion:^(JSContentResource *resource, NSError *error) {
+                                                    __typeof(self) strongSelf = weakSelf;
+                                                    if (resource) {
+                                                        NSString *imageName = @"res_type_file";
+                                                        if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+                                                            imageName = @"res_type_file_html";
+                                                        } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+                                                            imageName = @"res_type_file_pdf";
+                                                        } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS] || [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLSX]) {
+                                                            imageName = @"res_type_file_xls";
+                                                        } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_IMG]) {
+                                                            imageName = @"res_type_file_img";
+                                                        } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_RTF]) {
+                                                            imageName = @"res_type_file_rtf";
+                                                        } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_CSV]) {
+                                                            imageName = @"res_type_file_csv";
+                                                        } else if ([resource.type isEqualToString:@"odt"]) {
+                                                            imageName = @"res_type_file_odt";
+                                                        } else if ([resource.type isEqualToString:@"ods"]) {
+                                                            imageName = @"res_type_file_ods";
+                                                        } else if ([resource.type isEqualToString:@"json"]) {
+                                                            imageName = @"res_type_file_json";
+                                                        } else if ([resource.type isEqualToString:@"pptx"]) {
+                                                            imageName = @"res_type_file_pptx";
+                                                        }
+                                                        UIImage *image = [UIImage imageNamed:imageName];
+                                                        [strongSelf updateResourceImage:image thumbnails:NO];
+                                                    }
+                                                }];
     }
     
     if (resourceImage || _thumbnailImage) {
