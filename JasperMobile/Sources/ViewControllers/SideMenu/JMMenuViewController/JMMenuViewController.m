@@ -168,10 +168,10 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
         } else if (item.resourceType == JMResourceTypeAbout) {
             [self closeMenu];
 
-            JMAboutViewController *aboutViewController = (JMAboutViewController *) [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-            aboutViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+            JMMainNavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+            navController.modalPresentationStyle = UIModalPresentationFormSheet;
 
-            [self.revealViewController.frontViewController presentViewController:aboutViewController
+            [self.revealViewController.frontViewController presentViewController:navController
                                                                         animated:YES
                                                                       completion:nil];
         } else if (item.resourceType == JMResourceTypeFeedback) {
