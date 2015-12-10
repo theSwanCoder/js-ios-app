@@ -311,8 +311,12 @@
 
 - (BOOL)isSupportedResource:(JSContentResource *)resource
 {
-    // TODO: need add supported resources
-    return YES;
+    BOOL isHTML = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML];
+    BOOL isPDF = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF];
+    BOOL isXLS = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS];
+    BOOL isXLSX = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLSX];
+    BOOL isIMG = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_IMG];
+    return isHTML || isPDF || isXLS || isXLSX || isIMG;
 }
 
 - (UIScrollView *)createScrollViewWithImage:(UIImage *)image
