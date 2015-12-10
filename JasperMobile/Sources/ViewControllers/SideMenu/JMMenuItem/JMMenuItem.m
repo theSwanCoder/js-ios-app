@@ -110,9 +110,6 @@
             return [UIImage imageNamed:@"ic_saved_items"];
         case JMResourceTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites"];
-        case JMResourceTypeAbout:
-#warning NEED TO ADD NEW ICON!
-            return [UIImage imageNamed:@"ic_settings"];
         default:
             return nil;
     }
@@ -131,9 +128,6 @@
             return [UIImage imageNamed:@"ic_saved_items_selected"];
         case JMResourceTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites_selected"];
-        case JMResourceTypeAbout:
-#warning NEED TO ADD NEW ICON!
-            return [UIImage imageNamed:@"ic_settings_selected"];
         default:
             return nil;
     }
