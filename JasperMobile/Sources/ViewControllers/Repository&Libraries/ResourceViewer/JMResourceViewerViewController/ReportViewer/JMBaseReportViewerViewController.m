@@ -282,6 +282,8 @@
 #pragma mark - Print
 - (void)printResource
 {
+    [super printResource];
+
     // TODO: we don't have events when JIVE is applied to a report.
 
     [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {

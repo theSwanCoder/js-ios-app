@@ -154,10 +154,16 @@
                 id nextVC;
                 if([item vcIdentifierForSelectedItem]) {
                     // Analytics
-                    [JMUtils logEventWithName:@"User opened section"
-                                 additionInfo:@{
-                                         @"Section's Name" : [item nameForCrashlytics]
-                                 }];
+                    NSString *version = self.restClient.serverInfo.version;
+                    if ([JMUtils isDemoAccount]) {
+                        version = [version stringByAppendingString:@"(Demo)"];
+                    }
+                    [JMUtils logEventWithInfo:@{
+                            kJMAnalyticsCategoryKey      : kJMAnalyticsRepositoryEventCategoryTitle,
+                            kJMAnalyticsActionKey        : kJMAnalyticsRepositoryEventActionOpen,
+                            kJMAnalyticsLabelKey         : [item nameForCrashlytics],
+                            kJMAnalyticsServerVersionKey : version
+                    }];
 
                     nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
                     UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"] style:UIBarButtonItemStylePlain target:self action:@selector(menuButtonTapped:)];

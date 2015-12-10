@@ -223,9 +223,16 @@
         [JMCancelRequestPopup dismiss];
         if (success) {
             // Analytics
+            NSString *version = jsServerProfile.serverInfo.version;
+            if ([JMUtils isDemoAccount]) {
+                version = [version stringByAppendingString:@"(Demo)"];
+            }
             [JMUtils logLoginSuccess:YES
                         additionInfo:@{
-                                @"Server version" : jsServerProfile.serverInfo.version
+                                kJMAnalyticsCategoryKey      : kJMAnalyticsAuthenticationEventCategoryTitle,
+                                kJMAnalyticsActionKey        : kJMAnalyticsAuthenticationEventActionLoginTitle,
+                                kJMAnalyticsLabelKey         : kJMAnalyticsAuthenticationEventLabelSuccess,
+                                kJMAnalyticsServerVersionKey : version
                         }];
 
             strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
@@ -235,9 +242,16 @@
             }
         } else {
             // Analytics
-            [JMUtils logLoginSuccess:NO
+            NSString *version = jsServerProfile.serverInfo.version;
+            if ([JMUtils isDemoAccount]) {
+                version = [version stringByAppendingString:@"(Demo)"];
+            }
+            [JMUtils logLoginSuccess:YES
                         additionInfo:@{
-                                @"Reason of failure" : @"Wrong Credentials"
+                                kJMAnalyticsCategoryKey      : kJMAnalyticsAuthenticationEventCategoryTitle,
+                                kJMAnalyticsActionKey        : kJMAnalyticsAuthenticationEventActionLoginTitle,
+                                kJMAnalyticsLabelKey         : kJMAnalyticsAuthenticationEventLabelFailure,
+                                kJMAnalyticsServerVersionKey : version
                         }];
 
             NSString *errorTitle = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);

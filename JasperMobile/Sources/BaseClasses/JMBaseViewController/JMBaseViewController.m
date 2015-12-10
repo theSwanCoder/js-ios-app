@@ -41,6 +41,9 @@
     [super viewWillAppear:animated];
 
     // Google Analitycs
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:[GAIFields customDimensionForIndex:1]
+           value:self.restClient.serverInfo.version];
     self.screenName = NSStringFromClass(self.class);
 }
 

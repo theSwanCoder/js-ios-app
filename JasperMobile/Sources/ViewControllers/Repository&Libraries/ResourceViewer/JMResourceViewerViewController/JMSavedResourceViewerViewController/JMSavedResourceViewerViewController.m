@@ -81,18 +81,27 @@
     [self.webView loadRequest:self.resourceRequest];
 
     // Analytics
-    NSString *resourcesType = @"Saved Item (Unknown type)";
-    if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-        resourcesType = @"Saved Item (HTML)";
-    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
-        resourcesType = @"Saved Item (PDF)";
-    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
-        resourcesType = @"Saved Item (XLS)";
+
+    // Analytics
+    NSString *version = self.restClient.serverInfo.version;
+    if ([JMUtils isDemoAccount]) {
+        version = [version stringByAppendingString:@"(Demo)"];
     }
-    [JMUtils logEventWithName:@"User opened resource"
-                 additionInfo:@{
-                         @"Resource's Type" : resourcesType
-                 }];
+
+    NSString *label = kJMAnalyticsResourceEventLabelSavedResource;
+    if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+        label = [kJMAnalyticsResourceEventLabelSavedResource stringByAppendingString:@" (HTML)"];
+    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+        label = [kJMAnalyticsResourceEventLabelSavedResource stringByAppendingString:@" (PDF)"];
+    } else if ([self.savedReports.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
+        label = [kJMAnalyticsResourceEventLabelSavedResource stringByAppendingString:@" (XLS)"];
+    }
+    [JMUtils logEventWithInfo:@{
+                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
+                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
+                        kJMAnalyticsLabelKey         : label,
+                        kJMAnalyticsServerVersionKey : version
+                }];
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource

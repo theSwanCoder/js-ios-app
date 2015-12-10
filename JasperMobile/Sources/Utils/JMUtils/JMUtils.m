@@ -400,34 +400,25 @@ void jmDebugLog(NSString *format, ...) {
 }
 
 #pragma mark - Analytics
-+ (void)logEventWithName:(NSString *)eventName additionInfo:(NSDictionary *)additionInfo
++ (void)logEventWithInfo:(NSDictionary *)eventInfo
 {
-    // Disable analytics for demo profile
-    if ([self isDemoAccount]) {
-        return;
-    }
-
     // Crashlytics - Answers
-    [Answers logCustomEventWithName:eventName
-                   customAttributes:additionInfo];
+    [Answers logCustomEventWithName:eventInfo[kJMAnalyticsCategoryKey]
+                   customAttributes:eventInfo];
 
     // Google Analytics
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:eventName                                           // Event category (required)
-                                                          action:[additionInfo allKeys].firstObject                  // Event action (required)
-                                                           label:[additionInfo allValues].firstObject                // Event label
-                                                           value:nil] build]];                                       // Event value
-
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:eventInfo[kJMAnalyticsCategoryKey]                 // Event category (required)
+                                                                           action:eventInfo[kJMAnalyticsActionKey]                   // Event action (required)
+                                                                            label:eventInfo[kJMAnalyticsLabelKey]                    // Event label
+                                                                            value:nil];                                              // Event value
+    [tracker set:[GAIFields customDimensionForIndex:1]
+           value:eventInfo[kJMAnalyticsServerVersionKey]];
+    [tracker send:[builder build]];
 }
 
 + (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
 {
-    // Disable analytics for demo profile
-    if ([self isDemoAccount]) {
-        JMLog(@"Demo account");
-        return;
-    }
-
     // Crashlytics - Answers
     [Answers logLoginWithMethod:@"Digits"
                         success:@(success)
@@ -435,11 +426,15 @@ void jmDebugLog(NSString *format, ...) {
 
     // Google Analytics
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    NSString *action = success ? @"Login_Success" : @"Login_Failed";
-    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:action                                              // Event category (required)
-                                                          action:[additionInfo allKeys].firstObject                  // Event action (required)
-                                                           label:[additionInfo allValues].firstObject                // Event label
-                                                           value:nil] build]];                                       // Event value
+    [tracker set:@"Server Version"
+           value:additionInfo[kJMAnalyticsLabelKey]];
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:additionInfo[kJMAnalyticsCategoryKey]                 // Event category (required)
+                                                                           action:additionInfo[kJMAnalyticsActionKey]                   // Event action (required)
+                                                                            label:additionInfo[kJMAnalyticsLabelKey]                    // Event label
+                                                                            value:nil];                                                 // Event value
+    [tracker set:[GAIFields customDimensionForIndex:1]
+           value:additionInfo[kJMAnalyticsServerVersionKey]];
+    [tracker send:[builder build]];
 }
 
 @end

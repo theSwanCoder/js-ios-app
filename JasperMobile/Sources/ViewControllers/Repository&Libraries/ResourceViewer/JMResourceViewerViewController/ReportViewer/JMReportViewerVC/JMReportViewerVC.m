@@ -167,11 +167,17 @@
         
         if (success) {
             // Analytics
-            NSString *resourcesType = [JMUtils isSupportVisualize] ? @"Report (Visualize)" : @"Report (REST)";
-            [JMUtils logEventWithName:@"User opened resource"
-                         additionInfo:@{
-                                 @"Resource's Type" : resourcesType
-                         }];
+            NSString *version = self.restClient.serverInfo.version;
+            if ([JMUtils isDemoAccount]) {
+                version = [version stringByAppendingString:@"(Demo)"];
+            }
+            NSString *label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
+            [JMUtils logEventWithInfo:@{
+                                kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
+                                kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
+                                kJMAnalyticsLabelKey         : label,
+                                kJMAnalyticsServerVersionKey : version
+                        }];
 
             [strongSelf showReportView];
         } else {
