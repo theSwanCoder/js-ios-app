@@ -102,7 +102,13 @@
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    return ([super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn);
+    JMMenuActionsViewAction action = JMMenuActionsViewAction_None;
+    if (![self.resourceLookup isFile]) {
+        action = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn ;
+    } else {
+        action = JMMenuActionsViewAction_Info | JMMenuActionsViewAction_OpenIn;
+    }
+    return action;
 }
 
 #pragma mark - JMMenuActionsViewDelegate
