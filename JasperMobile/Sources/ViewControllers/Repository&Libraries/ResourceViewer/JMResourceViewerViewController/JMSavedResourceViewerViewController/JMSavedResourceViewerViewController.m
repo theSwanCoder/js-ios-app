@@ -204,10 +204,20 @@
                                                 __typeof(self) strongSelf = weakSelf;
                                                 [strongSelf stopShowLoader];
                                                 if (error) {
-                                                    [strongSelf showErrorWithMessage:error.localizedDescription
-                                                                          completion:^{
-                                                                              [strongSelf cancelResourceViewingAndExit:YES];
-                                                                          }];
+                                                    if (error.code == JSSessionExpiredErrorCode) {
+                                                        [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                                            if (self.restClient.keepSession && isSessionAuthorized) {
+                                                                [strongSelf showRemoteResource];
+                                                            } else {
+                                                                [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                            }
+                                                        }];
+                                                    } else {
+                                                        [strongSelf showErrorWithMessage:error.localizedDescription
+                                                                              completion:^{
+                                                                                  [strongSelf cancelResourceViewingAndExit:YES];
+                                                                              }];
+                                                    }
                                                 } else {
                                                     if ([strongSelf isSupportedResource:resource]) {
 
