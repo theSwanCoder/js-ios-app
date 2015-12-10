@@ -153,7 +153,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                                      if (requestId) {
                                          [self.report updateRequestId:requestId];
                                          
-                                         self.isReportExecutingStatusReady = [response.status.status isEqualToString:kJMRestStatusReady];
+                                         self.isReportExecutingStatusReady = response.status.status == kJS_EXECUTION_STATUS_READY;
                                          
                                          if (self.isReportExecutingStatusReady) {
                                              NSInteger countOfPages = response.totalPages.integerValue;
@@ -163,7 +163,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                                              [self startStatusChecking];
                                          }
                                          
-                                         BOOL isStatusCanceled = [response.status.status isEqualToString:kJMRestStatusCanceled];
+                                         BOOL isStatusCanceled = response.status.status == kJS_EXECUTION_STATUS_CANCELED;
                                          if (!isStatusCanceled) {
                                              if (self.report.countOfPages > 0) {
                                                  [self startExportExecutionForPage:self.report.currentPage];
@@ -349,7 +349,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
         if (!result.error) {
             JSExecutionStatus *status = [result.objects firstObject];
             if (!self.isReportExecutingStatusReady) {
-                self.isReportExecutingStatusReady = [status.status isEqualToString:kJMRestStatusReady];
+                self.isReportExecutingStatusReady = status.status == kJS_EXECUTION_STATUS_READY;
                 
                 if (self.isReportExecutingStatusReady) {
                     [self stopStatusChecking];

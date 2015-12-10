@@ -106,17 +106,17 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(multipageNotification)
-                                                 name:kJMReportIsMutlipageDidChangedNotification
+                                                 name:kJSReportIsMutlipageDidChangedNotification
                                                object:self.report];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportLoaderDidChangeCountOfPages:)
-                                                 name:kJMReportCountOfPagesDidChangeNotification
+                                                 name:kJSReportCountOfPagesDidChangeNotification
                                                object:self.report];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reportLoaderDidChangeCurrentPage:)
-                                                 name:kJMReportCurrentPageDidChangeNotification
+                                                 name:kJSReportCurrentPageDidChangeNotification
                                                object:self.report];
 }
 
@@ -292,9 +292,7 @@
                                                                   NSMutableArray *reportOptions = [NSMutableArray array];
                                                                   for (id reportOption in result.objects) {
                                                                       if ([reportOption isKindOfClass:[JSReportOption class]] && [reportOption identifier]) {
-                                                                          JMExtendedReportOption *extendedOption = [JMExtendedReportOption new];
-                                                                          extendedOption.reportOption = reportOption;
-                                                                          [reportOptions addObject:extendedOption];
+                                                                          [reportOptions addObject:reportOption];
                                                                       }
                                                                   }
                                                                   
@@ -509,12 +507,12 @@
     }];
 }
 
-- (void)updateReportWithNewActiveReportOption:(JMExtendedReportOption *)newActiveOption
+- (void)updateReportWithNewActiveReportOption:(JSReportOption *)newActiveOption
 {
     NSString *currentReportURI = self.report.reportURI;
     self.report.activeReportOption = newActiveOption;
     
-    BOOL uriDidChanged = (!currentReportURI && newActiveOption.reportOption.uri) || ![currentReportURI isEqualToString:newActiveOption.reportOption.uri];
+    BOOL uriDidChanged = (!currentReportURI && newActiveOption.uri) || ![currentReportURI isEqualToString:newActiveOption.uri];
     
     if (self.report.isReportAlreadyLoaded && !uriDidChanged) {
         [self hideEmptyReportMessage];
@@ -694,7 +692,7 @@
 {
     JMInputControlsViewController *inputControlsViewController = (JMInputControlsViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMInputControlsViewController"];
     inputControlsViewController.report = self.report;
-    inputControlsViewController.completionBlock = ^(JMExtendedReportOption *reportOption) {
+    inputControlsViewController.completionBlock = ^(JSReportOption *reportOption) {
         [self updateReportWithNewActiveReportOption:reportOption];
     };
 

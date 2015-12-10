@@ -32,60 +32,10 @@
  @since 2.0
  */
 
-#import "JMExtendedReportOption.h"
+#import "JSReport.h"
 
-extern NSString * const kJMReportIsMutlipageDidChangedNotification;
-extern NSString * const kJMReportCountOfPagesDidChangeNotification;
-extern NSString * const kJMReportCurrentPageDidChangeNotification;
-
-@interface JMReport : NSObject
-// getters
-@property (nonatomic, strong, readonly) JSResourceLookup *resourceLookup;
-
-@property (nonatomic, copy, readonly) NSArray *reportParameters;
-@property (nonatomic, copy, readonly) NSString *reportURI;
-@property (nonatomic, assign, readonly) NSInteger currentPage;
-@property (nonatomic, assign, readonly) NSInteger countOfPages;
-@property (nonatomic, assign, readonly) BOOL isMultiPageReport;
-@property (nonatomic, assign, readonly) BOOL isReportWithInputControls;
-@property (nonatomic, assign, readonly) BOOL isReportEmpty;
-@property (nonatomic, strong, readonly) NSString *requestId;
-@property (nonatomic, assign) BOOL isReportAlreadyLoaded;
-
-
-// html
-@property (nonatomic, copy, readonly) NSString *HTMLString;
-@property (nonatomic, copy, readonly) NSString *baseURLString;
-// input controls
-@property (nonatomic, assign, readonly) BOOL isInputControlsLoaded;
-// thumbnails
+@interface JMReport : JSReport
 @property (nonatomic, strong) UIImage *thumbnailImage;
 
-// report options
-@property (nonatomic, strong, readonly) NSArray *reportOptions;
-@property (nonatomic, strong) JMExtendedReportOption *activeReportOption;
-
-
-- (instancetype)initWithResourceLookup:(JSResourceLookup *)resourceLookup;
-+ (instancetype)reportWithResourceLookup:(JSResourceLookup *)resourceLookup;
-
-// update state
-- (void)generateReportOptionsWithInputControls:(NSArray *)inputControls;
-- (void)addReportOptions:(NSArray *)reportOptions;
-- (void)removeReportOption:(JMExtendedReportOption *)reportOption;
-
-- (void)updateReportParameters:(NSArray *)reportParameters;
-- (void)updateCurrentPage:(NSInteger)currentPage;
-- (void)updateCountOfPages:(NSInteger)countOfPages;
-- (void)updateHTMLString:(NSString *)HTMLString
-            baseURLSring:(NSString *)baseURLString;
-- (void)updateRequestId:(NSString *)requestId;
-- (void)updateIsMultiPageReport:(BOOL)isMultiPageReport;
-// restore state
-- (void)restoreDefaultState;
-// cache
-- (void)cacheHTMLString:(NSString *)HTMLString forPageNumber:(NSInteger)pageNumber;
-- (NSDictionary *)cachedReportPages;
-- (void)clearCachedReportPages;
 
 @end

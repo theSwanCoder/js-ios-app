@@ -29,13 +29,13 @@
 #import "JMReportOptionsCell.h"
 #import "JMInputControlCell.h"
 #import "JMReportOptionsViewController.h"
-#import "JMExtendedReportOption.h"
+#import "JSReportOption.h"
 
 @interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *runReportButton;
 
-@property (nonatomic, strong) JMExtendedReportOption *currentReportOption;
+@property (nonatomic, strong) JSReportOption *currentReportOption;
 @property (nonatomic, strong) NSArray *currentInputControls;
 
 @property (nonatomic, strong) JSResourceLookup *parentFolderLookup;
@@ -138,7 +138,7 @@
     [self checkParentFolderPermissionWithCompletion:^(BOOL reportOptionsEditingAvailable) {
         __strong typeof(self) strongSelf = weakSelf;
         if (reportOptionsEditingAvailable) {
-                NSString *confirmationMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.report.options.remove.confirmation.message", nil), strongSelf.currentReportOption.reportOption.label];
+                NSString *confirmationMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.report.options.remove.confirmation.message", nil), strongSelf.currentReportOption.label];
                 UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
                                                                                                   message:confirmationMessage
                                                                                         cancelButtonTitle:@"dialog.button.cancel"
@@ -148,7 +148,7 @@
                     __strong typeof(self) strongSelf = weakSelf;
                     if (strongSelf) {
                         [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
-                        [self.restClient deleteReportOption:strongSelf.currentReportOption.reportOption withReportURI:strongSelf.report.reportURI completion:^(JSOperationResult * _Nullable result) {
+                        [self.restClient deleteReportOption:strongSelf.currentReportOption withReportURI:strongSelf.report.reportURI completion:^(JSOperationResult * _Nullable result) {
                             [JMCancelRequestPopup dismiss];
                             if (result.error) {
                                 if (result.error.code == JSSessionExpiredErrorCode) {
@@ -306,7 +306,7 @@
     // Configure the cell for this indexPath
     if ([self isMultyReportOptions] && indexPath.section == 0) {
         JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
-        roCell.titleLabel.text = self.currentReportOption.reportOption.label;
+        roCell.titleLabel.text = self.currentReportOption.label;
     } else {
         JSInputControlDescriptor *inputControlDescriptor = self.currentInputControls[indexPath.row];
         JMInputControlCell *icCell = (JMInputControlCell *)cell;
@@ -347,7 +347,7 @@
     // Configure the cell for this indexPath
     if ([self isMultyReportOptions] && indexPath.section == 0) {
         JMReportOptionsCell *roCell = (JMReportOptionsCell *)cell;
-        roCell.titleLabel.text = self.currentReportOption.reportOption.label;
+        roCell.titleLabel.text = self.currentReportOption.label;
     } else {
         JSInputControlDescriptor *inputControlDescriptor = self.currentInputControls[indexPath.row];
         JMInputControlCell *icCell = (JMInputControlCell *)cell;
@@ -390,7 +390,7 @@
 {
     if ([self.report.reportOptions indexOfObject:self.currentReportOption] != NSNotFound ||
         self.report.activeReportOption == self.currentReportOption) {
-        _currentReportOption = [JMExtendedReportOption defaultReportOption];
+        _currentReportOption = [JSReportOption defaultReportOption];
         _currentReportOption.inputControls = self.currentInputControls;
 
         [self updateRightBurButtonItem];
@@ -399,17 +399,17 @@
 }
 
 #pragma mark - JMReportOptionsViewControllerDelegate
-- (void)reportOptionsViewController:(JMReportOptionsViewController *)controller didSelectOption:(JMExtendedReportOption *)option
+- (void)reportOptionsViewController:(JMReportOptionsViewController *)controller didSelectOption:(JSReportOption *)option
 {
     if (self.currentReportOption != option) {
-        JMExtendedReportOption *oldActiveReportOption = self.currentReportOption;
+        JSReportOption *oldActiveReportOption = self.currentReportOption;
         self.currentReportOption = option;
         
         if (![self.currentInputControls count]) {
             [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:nil];
             
             __weak typeof(self)weakSelf = self;
-            [self.restClient inputControlsForReport:self.currentReportOption.reportOption.uri
+            [self.restClient inputControlsForReport:self.currentReportOption.uri
                                                 ids:nil
                                      selectedValues:nil
                                     completionBlock:^(JSOperationResult *result) {
@@ -488,9 +488,7 @@
                 NSMutableArray *reportOptions = [NSMutableArray array];
                 for (id reportOption in result.objects) {
                     if ([reportOption isKindOfClass:[JSReportOption class]] && [reportOption identifier]) {
-                        JMExtendedReportOption *extendedOption = [JMExtendedReportOption new];
-                        extendedOption.reportOption = reportOption;
-                        [reportOptions addObject:extendedOption];
+                        [reportOptions addObject:reportOption];
                     }
                 }
                 [strongSelf.report addReportOptions:reportOptions];
@@ -500,7 +498,7 @@
     }
 }
 
-- (void)setCurrentReportOption:(JMExtendedReportOption *)currentReportOption
+- (void)setCurrentReportOption:(JSReportOption *)currentReportOption
 {
     if (_currentReportOption != currentReportOption) {
         _currentReportOption = currentReportOption;
@@ -526,7 +524,7 @@
                                      [self.restClient cancelAllRequests];
                                      [self backButtonTapped:nil];
                                  }];
-    NSString *resourceURI = self.currentReportOption.reportOption.uri;
+    NSString *resourceURI = self.currentReportOption.uri;
     if (![resourceURI length]) {
         resourceURI = self.report.resourceLookup.uri;
     }
@@ -631,19 +629,17 @@
             JSReportOption *reportOption = [result.objects objectAtIndex:0];
             if (reportOption) {
                 __strong typeof(self)strongSelf = weakSelf;
-                JMExtendedReportOption *extendedReportOption = [JMExtendedReportOption new];
-                extendedReportOption.reportOption = reportOption;
-                extendedReportOption.inputControls = strongSelf.currentInputControls;
+                reportOption.inputControls = strongSelf.currentInputControls;
                 if (![strongSelf isUniqueNewReportOptionName:reportOption.label]) {
-                    for (JMExtendedReportOption *existedReportOption in strongSelf.report.reportOptions) {
-                        if ([reportOption.label isEqualToString:existedReportOption.reportOption.label]) {
+                    for (JSReportOption *existedReportOption in strongSelf.report.reportOptions) {
+                        if ([reportOption.label isEqualToString:existedReportOption.label]) {
                             [strongSelf.report removeReportOption:existedReportOption];
                             break;
                         }
                     }
                 }
-                [strongSelf.report addReportOptions:@[extendedReportOption]];
-                strongSelf.currentReportOption= extendedReportOption;
+                [strongSelf.report addReportOptions:@[reportOption]];
+                strongSelf.currentReportOption= reportOption;
             }
         }
     }];
@@ -651,8 +647,8 @@
 
 - (BOOL)isUniqueNewReportOptionName:(NSString *)name
 {
-    for (JMExtendedReportOption *reportOption in self.report.reportOptions) {
-        if ([name isEqualToString:reportOption.reportOption.label]) {
+    for (JSReportOption *reportOption in self.report.reportOptions) {
+        if ([name isEqualToString:reportOption.label]) {
             return NO;
         }
     }

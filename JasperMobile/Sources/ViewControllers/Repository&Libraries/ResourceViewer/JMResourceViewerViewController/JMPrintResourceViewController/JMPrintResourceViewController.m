@@ -76,7 +76,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     [self.printButton setTitle:JMCustomLocalizedString(@"resource.viewer.print.button.title", nil)
                       forState:UIControlStateNormal];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reportLoaderDidChangeCountOfPages:) name:kJMReportCountOfPagesDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reportLoaderDidChangeCountOfPages:) name:kJSReportCountOfPagesDidChangeNotification object:nil];
     // TODO: setup this notification
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupSections) name:kJMReportIsMutlipageDidChangedNotification object:nil];
 

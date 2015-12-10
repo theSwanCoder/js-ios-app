@@ -29,8 +29,8 @@
 #import "JMReportSaver.h"
 #import "JMSavedResources+Helpers.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMReportExecutor.h"
-#import "JMReportPagesRange.h"
+#import "JSReportExecutor.h"
+#import "JSReportPagesRange.h"
 
 typedef void(^JMReportSaverCompletion)(NSError *error);
 typedef void(^JMReportSaverDownloadCompletion)(BOOL sholdAddToDB);
@@ -42,13 +42,11 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
 @interface JMReportSaver()
 @property (nonatomic, weak, readonly) JMReport *report;
 @property (nonatomic, strong) JMSavedResources *savedReport;
-//@property (nonatomic, strong) NSString *temporaryDirectory;
-//@property (nonatomic, strong) NSString *originalDirectory;
 @property (nonatomic, strong) JSReportExecutionResponse *requestExecution;
 @property (nonatomic, strong) JSExportExecutionResponse *exportExecution;
 @property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
-@property (nonatomic, strong) JMReportExecutor *reportExecutor;
-@property (nonatomic, strong) JMReportPagesRange *pagesRange;
+@property (nonatomic, strong) JSReportExecutor *reportExecutor;
+@property (nonatomic, strong) JSReportPagesRange *pagesRange;
 @property (nonatomic, copy) JMReportSaverDownloadCompletion downloadCompletion;
 @end
 
@@ -60,7 +58,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
     self = [super init];
     if (self) {
         _report = report;
-        _reportExecutor = [JMReportExecutor executorWithReport:_report];
+        _reportExecutor = [JSReportExecutor executorWithReport:_report forRestClient:self.restClient];
         
         __weak typeof(self)weakSelf = self;
         self.downloadCompletion = ^(BOOL shouldAddToDB) {
@@ -150,55 +148,6 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                                                             });
                                                         }
                                                     }];
-    }
-}
-
-- (void)saveReportWithName:(NSString *)name
-                    format:(NSString *)format
-              resourcePath:(NSString *)resourcePath
-                completion:(SaveReportCompletion)completion
-{
-    if ([format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
-        
-        [self createNewSavedReportWithReport:self.report
-                                        name:name
-                                      format:format];
-        BOOL isPrepeared = [self preparePathsForSavedReport:self.savedReport];
-        if (!isPrepeared) {
-            if (completion) {
-                // TODO: add error of creating the paths
-                NSError *error = [NSError errorWithDomain:kJMReportSaverErrorDomain
-                                                     code:JMReportSaverErrorTypesUndefined
-                                                 userInfo:nil];
-                completion(nil, error);
-            }
-        } else {
-            __weak typeof(self)weakSelf = self;
-            [self downloadSavedReport:self.savedReport
-          withOutputResourceURLString:resourcePath
-                           completion:^(NSError *error) {
-                               __strong typeof(self)strongSelf = weakSelf;
-                               
-                               if (error) {
-                                   [strongSelf cancelReport];
-                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                       if (completion) {
-                                           completion(nil, error);
-                                       }
-                                   });
-                               } else {
-                                   strongSelf.downloadCompletion(YES);
-                                   
-                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                       if (completion) {
-                                           completion(strongSelf.savedReport, nil);
-                                       }
-                                   });
-                               }
-                           }];
-        }
-    } else{
-        // at the moment HTML doesn't support
     }
 }
 
@@ -406,7 +355,7 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
     NSString *exportID = self.exportExecution.uuid;
     // Fix for JRS version smaller 5.6.0
     if (self.restClient.serverInfo.versionAsFloat < kJS_SERVER_VERSION_CODE_EMERALD_5_6_0) {
-        exportID = [NSString stringWithFormat:@"%@;pages=%@;", self.savedReport.format, self.pagesRange.pagesFormat];
+        exportID = [NSString stringWithFormat:@"%@;pages=%@;", self.savedReport.format, self.pagesRange.formattedPagesRange];
         NSString *attachmentPrefix = kJMAttachmentPrefix;
         exportID = [exportID stringByAppendingFormat:@"attachmentsPrefix=%@;", attachmentPrefix];
     }
@@ -485,11 +434,10 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
                                                    pages:(NSString *)pages
                                               completion:(void(^)(BOOL success, NSError *error))completion
 {
-    self.reportExecutor.shouldExecuteAsync = YES;
+    self.reportExecutor.asyncExecution = YES;
     self.reportExecutor.interactive = NO;
     self.reportExecutor.attachmentsPrefix = kJMAttachmentPrefix;
     self.reportExecutor.format = format;
-    self.reportExecutor.pagesRange = self.pagesRange;
     
     __weak typeof (self) weakSelf = self;
     [self.reportExecutor executeWithCompletion:^(JSReportExecutionResponse *executionResponse, NSError *executionError) {
@@ -498,7 +446,7 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
             self.requestExecution = executionResponse;
 
             __weak typeof (self) weakSelf = strongSelf;
-            [self.reportExecutor exportWithCompletion:^(JSExportExecutionResponse *exportResponse, NSError *exportError) {
+            [self.reportExecutor exportForRange:self.pagesRange withCompletion:^(JSExportExecutionResponse * _Nullable exportResponse, NSError * _Nullable exportError) {
                 __strong typeof(self)strongSelf = weakSelf;
                 if (exportResponse) {
                     strongSelf.exportExecution = exportResponse;
@@ -538,7 +486,7 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
         startPage = endPage = (NSUInteger) ((NSString *)components.firstObject).integerValue;
     }
     
-    self.pagesRange = [JMReportPagesRange rangeWithStartPage:startPage endPage:endPage];
+    self.pagesRange = [JSReportPagesRange rangeWithStartPage:startPage endPage:endPage];
 }
 
 @end

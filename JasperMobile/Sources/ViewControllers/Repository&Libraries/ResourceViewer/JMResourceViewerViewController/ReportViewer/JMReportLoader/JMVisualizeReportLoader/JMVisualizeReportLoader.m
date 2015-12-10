@@ -40,6 +40,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 };
 
 @interface JMVisualizeReportLoader() <JMJavascriptNativeBridgeDelegate>
+@property (nonatomic, weak, readwrite) JMReport *report;
+
 @property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
 
 @property (nonatomic, copy) void(^reportLoadCompletion)(BOOL success, NSError *error);
@@ -56,6 +58,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     self = [super init];
     if (self) {
+        _report = report;
         _visualizeManager = [JMVisualizeManager new];
     }
     return self;

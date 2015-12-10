@@ -88,8 +88,8 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
     [self setupSections];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reportLoaderDidChangeCountOfPages:) name:kJMReportCountOfPagesDidChangeNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupSections) name:kJMReportIsMutlipageDidChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reportLoaderDidChangeCountOfPages:) name:kJSReportCountOfPagesDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupSections) name:kJSReportIsMutlipageDidChangedNotification object:nil];
 }
 
 #pragma mark - Setups

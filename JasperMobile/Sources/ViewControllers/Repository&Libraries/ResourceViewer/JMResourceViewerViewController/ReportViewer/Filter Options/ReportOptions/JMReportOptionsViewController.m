@@ -72,7 +72,7 @@
     return self.filteredListOfValues ? self.filteredListOfValues : _listOfValues;
 }
 
-- (void)setSelectedReportOption:(JMExtendedReportOption *)selectedReportOption
+- (void)setSelectedReportOption:(JSReportOption *)selectedReportOption
 {
     if (_selectedReportOption != selectedReportOption && [self.listOfValues indexOfObject:selectedReportOption] != NSNotFound) {
         _selectedReportOption = selectedReportOption;
@@ -101,9 +101,9 @@
         cell.textLabel.textColor = [[JMThemesManager sharedManager] tableViewCellTitleTextColor];
     }
     
-    JMExtendedReportOption *option = self.listOfValues[indexPath.row];
-    cell.textLabel.text = option.reportOption.label;
-    cell.accessoryType = (option == self.selectedReportOption) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    JSReportOption *reportOption = self.listOfValues[indexPath.row];
+    cell.textLabel.text = reportOption.label;
+    cell.accessoryType = (reportOption == self.selectedReportOption) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     
     return cell;
 }
@@ -123,7 +123,7 @@
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     if (searchBar.text.length) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.reportOption.label LIKE[cd] %@", [NSString stringWithFormat:@"*%@*", searchBar.text]];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.label LIKE[cd] %@", [NSString stringWithFormat:@"*%@*", searchBar.text]];
         self.filteredListOfValues = [self.listOfValues filteredArrayUsingPredicate:predicate];
     } else {
         self.filteredListOfValues = nil;
