@@ -163,6 +163,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                             imageName = @"res_type_file_json";
                                                         } else if ([resource.type isEqualToString:@"pptx"]) {
                                                             imageName = @"res_type_file_pptx";
+                                                        } else if ([resource.type isEqualToString:@"doc"] || [resource.type isEqualToString:@"docx"]) {
+                                                            imageName = @"res_type_file_doc";
                                                         }
                                                         UIImage *image = [UIImage imageNamed:imageName];
                                                         [strongSelf updateResourceImage:image thumbnails:NO];
