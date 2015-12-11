@@ -31,7 +31,14 @@
 @since 2.1
 */
 
-#import "JMBaseReportViewerViewController.h"
+#import "JMResourceViewerViewController.h"
+#import "JMRefreshable.h"
+#import "JMReport.h"
+#import "JMReportLoader.h"
 
-@interface JMReportViewerVC : JMBaseReportViewerViewController
+@interface JMReportViewerVC : JMResourceViewerViewController <JMRefreshable>
+@property (nonatomic, strong, readonly) id <JMReportLoader> reportLoader;
+@property (nonatomic, strong, readonly) JMReport *report;
+@property (nonatomic, assign) BOOL isChildReport;
+@property (nonatomic, copy) void(^exitBlock)(void);
 @end

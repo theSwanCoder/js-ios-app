@@ -72,6 +72,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
             // move saved report from temp location to origin
             if ([strongSelf isExistSavedReport:strongSelf.savedReport]) {
                 [strongSelf removeReportAtPath:originalDirectory];
+                [strongSelf createLocationAtPath:originalDirectory];
             }
             
             [strongSelf moveContentFromPath:temporaryDirectory
@@ -241,6 +242,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
     }];
     
     [self removeTempDirectory];
+    [self.savedReport removeFromDB];
 }
 
 #pragma mark - Private API
@@ -476,7 +478,7 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
 
 - (void)removeTempDirectory
 {
-    NSString *tempDirectory = [JMSavedResources pathToTempReportsFolder];
+    NSString *tempDirectory = [JMSavedResources pathToTempFolderForSavedReport:self.savedReport];
     [self removeReportAtPath:tempDirectory];
 }
 

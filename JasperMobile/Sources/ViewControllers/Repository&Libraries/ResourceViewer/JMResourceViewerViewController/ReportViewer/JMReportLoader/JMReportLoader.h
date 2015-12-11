@@ -32,14 +32,14 @@ typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
 
 - (void)runReportWithPage:(NSInteger)page completion:(void(^)(BOOL success, NSError *error))completionBlock;
 - (void)fetchPageNumber:(NSInteger)pageNumber withCompletion:(void(^)(BOOL success, NSError *error))completionBlock;
-- (void)cancelReport;
+- (void)cancel;
+- (void)destroy;
 
 @optional
 - (void)changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage withCompletion:(void (^)(BOOL success, NSError *error))completion;
 - (void)applyReportParametersWithCompletion:(void (^)(BOOL success, NSError *error))completion;
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion;
 - (void)exportReportWithFormat:(NSString *)exportFormat;
-- (void)destroyReport;
 - (void)authenticate;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 @end

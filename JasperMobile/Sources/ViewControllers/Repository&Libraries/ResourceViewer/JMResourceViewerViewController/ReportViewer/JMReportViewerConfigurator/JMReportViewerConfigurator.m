@@ -33,6 +33,7 @@
 #import "JMRestReportLoader.h"
 #import "JMReport.h"
 #import "JMVisualizeManager.h"
+#import "JMWebViewManager.h"
 
 @interface JMReportViewerConfigurator()
 @property (nonatomic, weak) JMReport *report;
@@ -56,10 +57,10 @@
     return [[self alloc] initWithReport:report];
 }
 
-- (id)webViewWithFrame:(CGRect)frame asSecondary:(BOOL)asSecondary
+- (id)webViewAsSecondary:(BOOL)asSecondary
 {
     if (!_webView) {
-        _webView = [[JMVisualizeWebViewManager sharedInstance] webViewWithParentFrame:frame asSecondary:asSecondary];
+        _webView = [[JMWebViewManager sharedInstance] webViewAsSecondary:asSecondary];
     }
     return _webView;
 }

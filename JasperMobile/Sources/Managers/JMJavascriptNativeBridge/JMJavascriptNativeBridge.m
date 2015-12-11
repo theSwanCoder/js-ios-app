@@ -77,7 +77,8 @@
 - (void)reset
 {
     self.isJSInitCodeInjected = NO;
-    [(UIWebView *) self.webView loadHTMLString:@"" baseURL:nil];
+    NSURLRequest *clearingRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@""]];
+    [(UIWebView *) self.webView loadRequest:clearingRequest];
 }
 
 #pragma mark - UIWebViewDelegate

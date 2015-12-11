@@ -26,13 +26,14 @@
 //  TIBCO JasperMobile
 //
 
-#import "JMBaseReportViewerViewController.h"
+#import "JMReportViewerVC.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMVisualizeReport.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMJavascriptRequest.h"
 #import "JMVisualizeManager.h"
 #import "JMJavascriptCallback.h"
+#import "JMWebViewManager.h"
 
 typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     JMReportViewerAlertViewTypeEmptyReport,
@@ -87,8 +88,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     self.isReportInLoadingProcess = YES;
     [self.report updateLoadingStatusWithValue:NO];
     [self.report updateCountOfPages:NSNotFound];
+    [self.report updateCurrentPage:page];
 
-    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
+    if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
         self.reportLoadCompletion = completionBlock;
         [self.report updateCurrentPage:page];
         [self.report updateCountOfPages:NSNotFound];
@@ -135,7 +137,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.bridge sendRequest:request];
 }
 
-- (void) cancelReport
+- (void)cancel
 {
     // TODO: need cancel?
 #warning WHY NOT??????
@@ -143,7 +145,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)applyReportParametersWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
+    if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
         self.isReportInLoadingProcess = YES;
         [self.report updateLoadingStatusWithValue:NO];
 
@@ -198,7 +200,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.bridge sendRequest:request];
 }
 
-- (void)destroyReport
+- (void)destroy
 {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileReport.destroy(%@);";
@@ -259,6 +261,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)javascriptNativeBridge:(JMJavascriptNativeBridge *)bridge didReceiveCallback:(JMJavascriptCallback *)callback
 {
     JMLog(@"response parameters: %@", callback.parameters);
+    JMLog(@"callback type: %@", callback.type);
     if ([callback.type isEqualToString:@"DOMContentLoaded"]) {
         [self handleDOMContentLoaded];
     } else if ([callback.type isEqualToString:@"runReport"]) {
@@ -281,12 +284,31 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         [self handleRefreshDidEndFailedWithParameters:callback.parameters];
     } else if ([callback.type isEqualToString:@"reportOnPageChange"]) {
         [self handleReportOnPageChangeWithParameters:callback.parameters];
+    } else if ([callback.type isEqualToString:@"onWindowError"]) {
+        [self.bridge reset];
+        // waiting for resetting of webview
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self runReportWithPage:self.report.currentPage completion:self.reportLoadCompletion];
+        });
     }
 }
 
 - (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
 {
     // TODO: handle auth requests.
+}
+
+- (BOOL)javascriptNativeBridge:(id<JMJavascriptNativeBridgeProtocol>)bridge shouldLoadExternalRequest:(NSURLRequest *)request
+{
+    BOOL shouldLoad = NO;
+    // TODO: verify all cases
+
+    // Request for cleaning webview
+    if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
+        shouldLoad = YES;
+    }
+
+    return shouldLoad;
 }
 
 #pragma mark - Helpers

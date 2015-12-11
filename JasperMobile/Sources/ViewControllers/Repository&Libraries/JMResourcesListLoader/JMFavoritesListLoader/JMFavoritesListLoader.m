@@ -52,18 +52,10 @@
     if (error) {
         [self finishLoadingWithError:error];
     } else {
-        NSMutableArray *folders = [NSMutableArray array];
-        NSMutableArray *resources = [NSMutableArray array];
         for(JMFavorites *favorite in fetchedObjects) {
-            if ([favorite.wsType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FOLDER]) {
-                [folders addObject:[favorite wrapperFromFavorite]];
-            } else {
-                [resources addObject:[favorite wrapperFromFavorite]];
-            }
+            [self addResourcesWithResource:[favorite wrapperFromFavorite]];
         }
-        [self addResourcesWithResources:folders];
-        [self addResourcesWithResources:resources];
-                
+        
         _needUpdateData = NO;
         
         [self finishLoadingWithError:nil];

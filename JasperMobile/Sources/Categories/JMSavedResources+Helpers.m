@@ -25,6 +25,7 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMFavorites+Helpers.h"
 #import "JMSessionManager.h"
+#import "JMExportResource.h"
 
 
 NSString * const kJMSavedResources = @"SavedResources";
@@ -64,9 +65,22 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return savedReport;
 }
 
++ (void)createSavedResourceWithExportedResource:(JMExportResource *)exportResource
+{
+    JSResourceLookup *resourceLookup = [exportResource.resource performSelector:@selector(resourceLookup)];
+    JMSavedResources *savedReport = [self addReport:resourceLookup withName:exportResource.name format:exportResource.format];
+    savedReport.wsType = kJMTempExportedReportUnit;
+    exportResource.savedResource = savedReport;
+}
+
+- (void)updateWSTypeWith:(NSString *)wsType
+{
+    self.wsType = wsType;
+    [[JMCoreDataManager sharedInstance] save:nil];
+}
+
 - (void)removeFromDB
 {
-    [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
     [self.managedObjectContext deleteObject:self];
     [self.managedObjectContext save:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
@@ -74,14 +88,12 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 
 - (void)removeReport
 {
+    [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
+
     NSString *pathToReport = [JMSavedResources pathToFolderForSavedReport:self];
     [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
-    
-    [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
-    
-    [self.managedObjectContext deleteObject:self];
-    [self.managedObjectContext save:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
+
+    [self removeFromDB];
 }
 
 - (UIImage *)thumbnailImage

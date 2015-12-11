@@ -47,27 +47,19 @@
 - (void)loadNextPage {
     NSFetchRequest *fetchRequest = [self fetchRequest];
     fetchRequest.predicate = [self predicates];
-    
+
     NSError *error;
     NSArray *fetchedObjects = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest
                                                                                                      error:&error];
     if (error) {
         [self finishLoadingWithError:error];
     } else {
-        NSMutableArray *folders = [NSMutableArray array];
-        NSMutableArray *resources = [NSMutableArray array];
         for(JMSavedResources *savedResource in fetchedObjects) {
-            if ([savedResource.wsType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FOLDER]) {
-                [folders addObject:[savedResource wrapperFromSavedReports]];
-            } else {
-                [resources addObject:[savedResource wrapperFromSavedReports]];
-            }
+            [self addResourcesWithResource:[savedResource wrapperFromSavedReports]];
         }
-        [self addResourcesWithResources:folders];
-        [self addResourcesWithResources:resources];
 
         _needUpdateData = NO;
-        
+
         [self finishLoadingWithError:nil];
     }
 }
@@ -80,12 +72,12 @@
         case JMResourcesListLoaderOption_Filter: {
             NSMutableArray *filterItems = [NSMutableArray array];
             [filterItems addObject:@{kJMResourceListLoaderOptionItemTitleKey : JMCustomLocalizedString(@"resources.filterby.type.all", nil),
-                                     kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
+                    kJMResourceListLoaderOptionItemValueKey: [JMUtils supportedFormatsForReportSaving]}];
 
             for (NSString *format in [JMUtils supportedFormatsForReportSaving]) {
                 [filterItems addObject:
-                 @{kJMResourceListLoaderOptionItemTitleKey: [format uppercaseString],
-                   kJMResourceListLoaderOptionItemValueKey: @[format]}];
+                        @{kJMResourceListLoaderOptionItemTitleKey: [format uppercaseString],
+                                kJMResourceListLoaderOptionItemValueKey: @[format]}];
             }
             return filterItems;
         }
@@ -102,9 +94,9 @@
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[self parameterForQueryWithOption:JMResourcesListLoaderOption_Sort] ascending:ascending];
         [fetchRequest setSortDescriptors:@[sortDescriptor]];
     }
-    
+
     [fetchRequest setEntity:entity];
-    
+
     return fetchRequest;
 }
 

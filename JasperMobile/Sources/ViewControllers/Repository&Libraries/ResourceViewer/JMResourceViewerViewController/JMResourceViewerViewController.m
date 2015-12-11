@@ -36,11 +36,6 @@
 
 @implementation JMResourceViewerViewController
 
-- (void)dealloc
-{
-    [[JMWebViewManager sharedInstance] reset];
-}
-
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
 {
@@ -74,8 +69,7 @@
 #pragma mark - Setups
 - (void)setupSubviews
 {
-    CGRect rootViewBounds = self.navigationController.view.bounds;
-    UIWebView *webView = [[JMWebViewManager sharedInstance] webViewWithParentFrame:rootViewBounds];
+    UIWebView *webView = [[JMWebViewManager sharedInstance] webView];
     webView.delegate = self;
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
@@ -100,7 +94,7 @@
 - (void)resetSubViews
 {
     [self.webView stopLoading];
-    [self.webView loadHTMLString:@"" baseURL:nil];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
 }
 
 - (void)cancelResourceViewingAndExit:(BOOL)exit

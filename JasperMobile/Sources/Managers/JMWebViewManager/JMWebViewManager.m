@@ -36,7 +36,11 @@
 
 @implementation JMWebViewManager
 
-#pragma mark - Public API
+#pragma mark - Lifecycle
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
 
 + (instancetype)sharedInstance {
     static JMWebViewManager *sharedMyManager = nil;
@@ -47,12 +51,13 @@
     return sharedMyManager;
 }
 
-- (UIWebView *)webViewWithParentFrame:(CGRect)frame
+#pragma mark - Public API
+- (UIWebView *)webView
 {
-    return [self webViewWithParentFrame:frame asSecondary:NO];
+    return [self webViewAsSecondary:NO];
 }
 
-- (UIWebView *)webViewWithParentFrame:(CGRect)frame asSecondary:(BOOL)asSecondary
+- (UIWebView *)webViewAsSecondary:(BOOL)asSecondary
 {
     UIWebView *webView;
     if (asSecondary) {
@@ -61,26 +66,41 @@
         webView = self.primaryWebView;
     }
 
-    [self updateFrame:frame forWebView:webView];
-
+    webView.scrollView.zoomScale = 1;
     webView.scrollView.minimumZoomScale = 1;
     webView.scrollView.maximumZoomScale = 2;
 
     return webView;
 }
 
+- (BOOL)isWebViewEmpty:(UIWebView *)webView
+{
+    NSString *jsCommand = @"document.getElementsByTagName('body')[0].innerHTML";
+    NSString *result = [webView stringByEvaluatingJavaScriptFromString:jsCommand];
+    BOOL isWebViewEmpty = result.length == 0;
+    return isWebViewEmpty;
+}
+
 - (void)reset
 {
-    _primaryWebView.delegate = nil;
-    _primaryWebView = nil;
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    self.primaryWebView.delegate = nil;
+    self.primaryWebView = nil;
 
     [self resetChildWebView];
 }
 
 - (void)resetChildWebView
 {
-    _secondaryWebView.delegate = nil;
-    _secondaryWebView = nil;
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    self.secondaryWebView.delegate = nil;
+    self.secondaryWebView = nil;
+}
+
+- (void)resetZoom
+{
+    [self.primaryWebView.scrollView setZoomScale:0.1 animated:YES];
+    [self.secondaryWebView.scrollView setZoomScale:0.1 animated:YES];
 }
 
 #pragma mark - Private API
@@ -103,19 +123,13 @@
 
 - (UIWebView *)createWebView
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     webView.scrollView.bounces = NO;
     webView.scalesPageToFit = YES;
     webView.dataDetectorTypes = UIDataDetectorTypeNone;
     webView.suppressesIncrementalRendering = YES;
     return webView;
 }
-
-- (void)updateFrame:(CGRect)frame forWebView:(UIWebView *)webView
-{
-    webView.frame = frame;
-}
-
 
 @end

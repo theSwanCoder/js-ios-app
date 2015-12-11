@@ -33,6 +33,8 @@
 #import "JMReport.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMReportSaver.h"
+#import "JMExportResource.h"
+#import "JMExportManager.h"
 
 NSString * const kJMSaveReportViewControllerSegue = @"SaveReportViewControllerSegue";
 NSString * const kJMSavePageFromKey = @"kJMSavePageFromKey";
@@ -290,19 +292,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 }
 
 #pragma mark - Private
-
-- (BOOL)createReportDirectory:(NSString *)reportDirectory errorMessage:(NSString **)errorMessage
-{
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    NSError *error;
-    BOOL isCreated = [fileManager createDirectoryAtPath:reportDirectory
-                            withIntermediateDirectories:YES
-                                             attributes:nil
-                                                  error:&error];
-    return isCreated;
-}
-
 - (void)runSaveAction
 {
     [self.view endEditing:YES];
@@ -384,59 +373,23 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         [self.tableView reloadData];
     }
 
-    JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
-    [JMCancelRequestPopup presentWithMessage:@"report.viewer.save.saving.status.title" cancelBlock:^{
-        [reportSaver cancelReport];
+    JMExportResource *exportResource = [JMExportResource new];
+    exportResource.resourceType = JMExportResourceTypeReport;
+    exportResource.resource = self.report;
+    exportResource.name = self.reportName;
+    exportResource.format = self.selectedReportFormat;
+    exportResource.startPage = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
+    exportResource.endPage = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
+
+    [[JMExportManager sharedInstance] addTaskWithResource:exportResource];
+
+    // Animation
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [self.delegate reportDidSavedSuccessfully];
     }];
-    [reportSaver saveReportWithName:self.reportName
-                             format:self.selectedReportFormat
-                              pages:[self makePagesFormat]
-                            addToDB:YES
-                         completion:^(JMSavedResources *savedReport, NSError *error) {
-                             [JMCancelRequestPopup dismiss];
-
-                             if (error) {
-                                 if (error.code == JSSessionExpiredErrorCode) {
-                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                             if (self.restClient.keepSession && isSessionAuthorized) {
-                                                 [self saveReport];
-                                             } else {
-                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
-                                             }
-                                         }];
-                                 } else {
-                                     [JMUtils presentAlertControllerWithError:error completion:nil];
-                                     [savedReport removeReport];
-                                 }
-                             } else {
-                                 // Animation
-                                 [CATransaction begin];
-                                 [CATransaction setCompletionBlock:^{
-                                     [self.delegate reportDidSavedSuccessfully];
-                                 }];
-
-                                 [self.navigationController popViewControllerAnimated:YES];
-                                 [CATransaction commit];
-                             }
-                         }];
-}
-
-- (NSString *)makePagesFormat
-{
-    NSString *pagesFormat = nil;
-    if (self.pagesType != JMSaveReportPagesType_All) {
-        NSInteger fromPageNumber = ((NSNumber *)self.pages[kJMSavePageFromKey]).integerValue;
-        NSInteger toPageNumber = ((NSNumber *)self.pages[kJMSavePageToKey]).integerValue;
-        
-        if (fromPageNumber != 1 || toPageNumber != self.report.countOfPages) {
-            if (fromPageNumber == toPageNumber) {
-                pagesFormat = [NSString stringWithFormat:@"%@", self.pages[kJMSavePageFromKey]];
-            } else {
-                pagesFormat = [NSString stringWithFormat:@"%@-%@", self.pages[kJMSavePageFromKey], self.pages[kJMSavePageToKey]];
-            }
-        }
-    }
-    return pagesFormat;
+    [self.navigationController popViewControllerAnimated:YES];
+    [CATransaction commit];
 }
 
 - (void) reportLoaderDidChangeCountOfPages:(NSNotification *) notification

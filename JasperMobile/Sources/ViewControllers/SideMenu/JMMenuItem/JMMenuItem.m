@@ -54,6 +54,18 @@
     _selected = selected;
 }
 
+- (void)showNote
+{
+    _itemIcon = [self iconWithNoteWithResourceType];
+    _selectedItemIcon = [self selectedIconWithNoteWithResourceType];
+}
+
+- (void)hideNote
+{
+    _itemIcon = [self iconWithResourceType];
+    _selectedItemIcon = [self selectedIconWithResourceType];
+}
+
 #pragma mark - Private API
 - (NSString *) vcIdentifierForSelectedItem
 {
@@ -128,6 +140,42 @@
             return [UIImage imageNamed:@"ic_repository_selected"];
         case JMResourceTypeSavedItems:
             return [UIImage imageNamed:@"ic_saved_items_selected"];
+        case JMResourceTypeFavorites:
+            return [UIImage imageNamed:@"ic_favorites_selected"];
+        default:
+            return nil;
+    }
+}
+
+- (UIImage *)iconWithNoteWithResourceType
+{
+    switch (self.resourceType) {
+        case JMResourceTypeLibrary:
+            return [UIImage imageNamed:@"ic_library"];
+        case JMResourceTypeRecentViews:
+            return [UIImage imageNamed:@"ic_recent_views"];
+        case JMResourceTypeRepository:
+            return [UIImage imageNamed:@"ic_repository"];
+        case JMResourceTypeSavedItems:
+            return [UIImage imageNamed:@"ic_saved_items_note"];
+        case JMResourceTypeFavorites:
+            return [UIImage imageNamed:@"ic_favorites"];
+        default:
+            return nil;
+    }
+}
+
+- (UIImage *)selectedIconWithNoteWithResourceType
+{
+    switch (self.resourceType) {
+        case JMResourceTypeLibrary:
+            return [UIImage imageNamed:@"ic_library_selected"];
+        case JMResourceTypeRecentViews:
+            return [UIImage imageNamed:@"ic_recent_views_selected"];
+        case JMResourceTypeRepository:
+            return [UIImage imageNamed:@"ic_repository_selected"];
+        case JMResourceTypeSavedItems:
+            return [UIImage imageNamed:@"ic_saved_items_selected_note"];
         case JMResourceTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites_selected"];
         default:
