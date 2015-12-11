@@ -1,5 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, "7.0"
+platform :ios, "8.0"
 
 pod 'Appirater'
 pod 'SWRevealViewController', '>=2.3.0'
