@@ -117,31 +117,31 @@
     [super actionsView:view didSelectAction:action];
     if (action == JMMenuActionsViewAction_Rename) {
         __weak typeof(self) weakSelf = self;
-        UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@"savedreport.viewer.modify.title"
+        UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@""
                                                                                                       message:nil
-        textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
-            __strong typeof(self) strongSelf = weakSelf;
-            textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
-            textField.text = [strongSelf.resourceLookup.label copy];
-        } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
-            NSString *errorMessage = nil;
-            __strong typeof(self) strongSelf = weakSelf;
-            if (strongSelf) {
-                [JMUtils validateReportName:text errorMessage:&errorMessage];
-                if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
-                    errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
-                }
-            }
-            return errorMessage;
-        } textEditCompletionHandler:^(NSString * _Nullable text) {
-            __strong typeof(self) strongSelf = weakSelf;
-            if ([strongSelf.savedReports renameReportTo:text]) {
-                strongSelf.title = text;
-                strongSelf.resourceLookup = [strongSelf.savedReports wrapperFromSavedReports];
-                [strongSelf setupRightBarButtonItems];
-                [strongSelf startResourceViewing];
-            }
-        }];
+                                                                                textFieldConfigurationHandler:^(UITextField *textField) {
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
+                                                                                    textField.text = [strongSelf.resourceLookup.label copy];
+                                                                                } textValidationHandler:^NSString *(NSString *text) {
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    NSString *errorMessage = nil;
+                                                                                    if (strongSelf) {
+                                                                                        [JMUtils validateReportName:text errorMessage:&errorMessage];
+                                                                                        if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
+                                                                                            errorMessage = JMCustomLocalizedString(@"report.viewer.save.name.errmsg.notunique", nil);
+                                                                                        }
+                                                                                    }
+                                                                                    return errorMessage;
+                                                                                } textEditCompletionHandler:^(NSString *text) {
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                    if ([strongSelf.savedReports renameReportTo:text]) {
+                                                                                        strongSelf.title = text;
+                                                                                        strongSelf.resourceLookup = [strongSelf.savedReports wrapperFromSavedReports];
+                                                                                        [strongSelf setupRightBarButtonItems];
+                                                                                        [strongSelf startResourceViewing];
+                                                                                    }
+                                                                                }];
         [self presentViewController:alertController animated:YES completion:nil];
     } else if(action == JMMenuActionsViewAction_Delete) {
         UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.confirmation"
@@ -164,15 +164,7 @@
         }];
         [self presentViewController:alertController animated:YES completion:nil];
     } else if (action == JMMenuActionsViewAction_OpenIn) {
-        self.documentController = [self setupDocumentControllerWithURL:self.resourceRequest.URL
-                                                         usingDelegate:self];
-
-        BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
-        if (!canOpen) {
-            NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);
-            NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-            [JMUtils presentAlertControllerWithError:error completion:nil];
-        }
+        [self showResourceWithDocumentController];
     }
 }
 
@@ -185,6 +177,19 @@
 }
 
 #pragma mark - Viewers
+- (void)showResourceWithDocumentController
+{
+    self.documentController = [self setupDocumentControllerWithURL:self.resourceRequest.URL
+                                                     usingDelegate:self];
+
+    BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+    if (!canOpen) {
+        NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);
+        NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+        [JMUtils presentAlertControllerWithError:error completion:nil];
+    }
+}
+
 - (void)showSavedResource
 {
     NSString *fullReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReports];
@@ -219,26 +224,27 @@
                                                                               }];
                                                     }
                                                 } else {
-                                                    if ([strongSelf isSupportedResource:resource]) {
 
-                                                        [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
-                                                            [self cancelResourceViewingAndExit:YES];
-                                                        }];
+                                                    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
+                                                        [self cancelResourceViewingAndExit:YES];
+                                                    }];
 
-                                                        NSString *resourcePath = [NSString stringWithFormat:@"%@/rest_v2/resources%@", strongSelf.restClient.serverProfile.serverUrl, resource.uri];
-                                                        NSURL *url = [NSURL URLWithString:resourcePath];
-                                                        __typeof(self) weakSelf = strongSelf;
-                                                        [strongSelf.reportSaver downloadResourceFromURL:url
-                                                                                             completion:^(NSString *outputResourcePath, NSError *error) {
-                                                                                                 __typeof(self) strongSelf = weakSelf;
-                                                                                                 [strongSelf stopShowLoader];
-                                                                                                 if (error) {
-                                                                                                     [strongSelf showErrorWithMessage:error.localizedDescription
-                                                                                                                           completion:^{
-                                                                                                                               [strongSelf cancelResourceViewingAndExit:YES];
-                                                                                                                           }];
-                                                                                                 } else {
-                                                                                                     strongSelf.savedResourcePath = outputResourcePath;
+                                                    NSString *resourcePath = [NSString stringWithFormat:@"%@/rest_v2/resources%@", strongSelf.restClient.serverProfile.serverUrl, resource.uri];
+                                                    NSURL *url = [NSURL URLWithString:resourcePath];
+                                                    __typeof(self) weakSelf = strongSelf;
+                                                    [strongSelf.reportSaver downloadResourceFromURL:url
+                                                                                         completion:^(NSString *outputResourcePath, NSError *error) {
+                                                                                             __typeof(self) strongSelf = weakSelf;
+                                                                                             [strongSelf stopShowLoader];
+                                                                                             if (error) {
+                                                                                                 [strongSelf showErrorWithMessage:error.localizedDescription
+                                                                                                                       completion:^{
+                                                                                                                           [strongSelf cancelResourceViewingAndExit:YES];
+                                                                                                                       }];
+                                                                                             } else {
+                                                                                                 strongSelf.savedResourcePath = outputResourcePath;
+
+                                                                                                 if ([strongSelf isSupportedResource:resource]) {
                                                                                                      NSURL *savedResourceURL = [NSURL fileURLWithPath:outputResourcePath];
                                                                                                      if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_IMG]) {
                                                                                                          [strongSelf showImageWithURL:savedResourceURL];
@@ -247,15 +253,13 @@
                                                                                                      } else {
                                                                                                          [strongSelf showResourceWithURL:savedResourceURL];
                                                                                                      }
+                                                                                                 } else {
+                                                                                                     // TODO: add showing with ...
+//                                                                                                     strongSelf.resourceRequest = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:outputResourcePath]];
+//                                                                                                     [strongSelf showResourceWithDocumentController];
                                                                                                  }
-                                                                                             }];
-                                                    } else {
-                                                        [strongSelf showErrorWithMessage:JMCustomLocalizedString(@"savedreport.viewer.format.not.supported", nil)
-                                                                              completion:^{
-                                                                                  [strongSelf cancelResourceViewingAndExit:YES];
-                                                                              }];
-                                                    }
-
+                                                                                             }
+                                                                                         }];
                                                 }
                                             }];
 }
