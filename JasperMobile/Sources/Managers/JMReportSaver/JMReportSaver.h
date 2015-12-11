@@ -32,6 +32,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "JSReportPagesRange.h"
 #import "JMReport.h"
 
 typedef void(^SaveReportCompletion)(JMSavedResources *savedReport, NSError *error);
@@ -45,8 +46,7 @@ typedef NS_ENUM(NSInteger, JMReportSaverErrorTypes) {
 
 - (instancetype)initWithReport:(JMReport *)report;
 
-- (void)saveReportWithName:(NSString *)name format:(NSString *)format pages:(NSString *)pages addToDB:(BOOL)addToDB completion:(SaveReportCompletion)completionBlock;
-- (void)downloadResourceFromURL:(NSURL *)url completion:(void (^)(NSString *resourcePath, NSError *error))completion;
-- (void) cancelReport;
+- (void) saveReportWithName:(NSString *)name format:(NSString *)format pagesRange:(JSReportPagesRange *)pagesRange addToDB:(BOOL)addToDB completion:(SaveReportCompletion)completionBlock;
+- (void) cancelSavingReport;
 
 @end

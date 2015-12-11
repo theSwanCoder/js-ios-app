@@ -36,8 +36,6 @@
 #import "JMSavedResources+Helpers.h"
 
 
-NSString * const kJMPrintPageFromKey = @"kJMPrintPageFromKey";
-NSString * const kJMPrintPageToKey = @"kJMPrintPageToKey";
 NSString * const kJMPrintReportPagesCellIdentifier = @"PagesCell";
 NSString * const kJMPrintReportPageRangeCellIdentifier = @"PageRangeCell";
 NSString * const kJMPrintReportPagePreviewIdentifier = @"PreviewCell";
@@ -55,7 +53,8 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 
 @property (nonatomic, assign) JMSaveReportPagesType pagesType;
-@property (nonatomic, strong) NSMutableDictionary *pages;
+@property (nonatomic, strong) JSReportPagesRange *pagesRange;
+
 
 @end
 
@@ -89,17 +88,12 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 }
 
 #pragma mark - Custom Accessories
-- (NSMutableDictionary *)pages
+- (JSReportPagesRange *)pagesRange
 {
-    if (!_pages) {
-        _pages = [@{kJMPrintPageFromKey : @(1)} mutableCopy];
-        if (self.report && self.report.isMultiPageReport) {
-            _pages[kJMPrintPageToKey] = @(self.report.countOfPages);
-        } else {
-            _pages[kJMPrintPageToKey] = @(1);
-        }
+    if (!_pagesRange) {
+        _pagesRange = [JSReportPagesRange rangeWithStartPage:1 endPage:self.report.countOfPages];
     }
-    return _pages;
+    return _pagesRange;
 }
 
 - (NSString *)jobName
@@ -150,22 +144,21 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     if (self.report.countOfPages != NSNotFound) {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
         if (indexPath.row == 1) {
-            return NSMakeRange(1, ((NSNumber *)self.pages[kJMPrintPageToKey]).integerValue);
+            return NSMakeRange(1, self.pagesRange.startPage);
         } else {
-            NSInteger toPage = ((NSNumber *)self.pages[kJMPrintPageFromKey]).integerValue;
-            return NSMakeRange(toPage, self.report.countOfPages - toPage + 1);
+            return NSMakeRange(self.pagesRange.startPage, self.report.countOfPages - self.pagesRange.startPage + 1);
         }
     }
     return NSMakeRange(NSNotFound, 0);
 }
 
-- (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSNumber *)page
+- (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSInteger)page
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     if (indexPath.row == 1) {
-        self.pages[kJMPrintPageFromKey] = page;
+        self.pagesRange.startPage = page;
     } else if (indexPath.row == 2) {
-        self.pages[kJMPrintPageToKey] = page;
+        self.pagesRange.endPage = page;
     }
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
@@ -245,10 +238,10 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
             pageRangeCell.cellDelegate = self;
             if (indexPath.row == 1) {
                 pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.fromPage", nil);
-                pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMPrintPageFromKey]).integerValue;
+                pageRangeCell.currentPage = self.pagesRange.startPage;
             } else if (indexPath.row == 2) {
                 pageRangeCell.textLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.toPage", nil);
-                pageRangeCell.currentPage = ((NSNumber *)self.pages[kJMPrintPageToKey]).integerValue;
+                pageRangeCell.currentPage = self.pagesRange.endPage;
             }
             [pageRangeCell setTopSeparatorWithHeight:1.f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
             return pageRangeCell;
@@ -281,13 +274,13 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
             JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
 
             [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title" cancelBlock:^{
-                [reportSaver cancelReport];
+                [reportSaver cancelSavingReport];
             }];
 
             __weak typeof(self)weakSelf = self;
             [reportSaver saveReportWithName:[self tempReportName]
                                      format:kJS_CONTENT_TYPE_PDF
-                                      pages:[self makePagesFormat]
+                                 pagesRange:self.pagesRange
                                     addToDB:NO
                                  completion:^(JMSavedResources *savedReport, NSError *error) {
                                      __strong typeof(self)strongSelf = weakSelf;
@@ -360,24 +353,6 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
     });
 }
 
-- (NSString *)makePagesFormat
-{
-    NSString *pagesFormat = nil;
-    if (self.pagesType != JMSaveReportPagesType_All) {
-        NSInteger fromPageNumber = ((NSNumber *)self.pages[kJMPrintPageFromKey]).integerValue;
-        NSInteger toPageNumber = ((NSNumber *)self.pages[kJMPrintPageToKey]).integerValue;
-        
-        if (fromPageNumber != 1 || toPageNumber != self.report.countOfPages) {
-            if (fromPageNumber == toPageNumber) {
-                pagesFormat = [NSString stringWithFormat:@"%@", self.pages[kJMPrintPageFromKey]];
-            } else {
-                pagesFormat = [NSString stringWithFormat:@"%@-%@", self.pages[kJMPrintPageFromKey], self.pages[kJMPrintPageToKey]];
-            }
-        }
-    }
-    return pagesFormat;
-}
-
 #pragma mark - Actions
 - (void)backButtonTapped:(id)sender
 {
@@ -399,7 +374,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 
 - (void) reportLoaderDidChangeCountOfPages:(NSNotification *) notification
 {
-    self.pages[kJMPrintPageToKey] = @(self.report.countOfPages);
+    self.pagesRange.endPage = self.report.countOfPages;
     [self.tableView reloadData];
 }
 
@@ -416,7 +391,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 
 - (void) updatePrintJob
 {
-    self.pages = nil;
+    self.pagesRange = nil;
     self.title = [self jobName];
     self.printingItem = nil;
     [self.tableView reloadData];

@@ -58,6 +58,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
     self = [super init];
     if (self) {
         _report = report;
+#warning NEED TRY TO USE REPORTEXECUTOR FROM REPORT VIEWER - maybe we shouldn't create new one
         _reportExecutor = [JSReportExecutor executorWithReport:_report forRestClient:self.restClient];
         
         __weak typeof(self)weakSelf = self;
@@ -92,10 +93,11 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
 #pragma mark - Public API
 - (void)saveReportWithName:(NSString *)name
                     format:(NSString *)format
-                     pages:(NSString *)pages
+                pagesRange:(JSReportPagesRange *)pagesRange
                    addToDB:(BOOL)addToDB
                 completion:(SaveReportCompletion)completionBlock
 {
+    self.pagesRange = pagesRange;
     [self createNewSavedReportWithReport:self.report
                                     name:name
                                   format:format];
@@ -110,12 +112,8 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
             completionBlock(nil, error);
         }
     } else {
-        
-        [self createPagesRangeFromPagesString:pages];
-        
         __weak typeof(self)weakSelf = self;
         [self fetchOutputResourceURLForReportWithFileExtension:format
-                                                         pages:pages
                                                     completion:^(BOOL success, NSError *error) {
                                                         __strong typeof(self)strongSelf = weakSelf;
                                                         if (success) {
@@ -140,7 +138,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                                                                                      }
                                                                                  }];
                                                         } else {
-                                                            [strongSelf cancelReport];
+                                                            [strongSelf cancelSavingReport];
                                                             dispatch_async(dispatch_get_main_queue(), ^{
                                                                 if (completionBlock) {
                                                                     completionBlock(nil, error);
@@ -183,7 +181,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
                              }];
 }
 
-- (void)cancelReport
+- (void)cancelSavingReport
 {
     [self.reportExecutor cancel];
     [self.downloadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData){
@@ -431,7 +429,6 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
 
 #pragma mark - Helpers
 - (void)fetchOutputResourceURLForReportWithFileExtension:(NSString *)format
-                                                   pages:(NSString *)pages
                                               completion:(void(^)(BOOL success, NSError *error))completion
 {
     self.reportExecutor.asyncExecution = YES;
@@ -472,21 +469,6 @@ withOutputResourceURLString:(NSString *)outputResourceURLString
     NSString *fileReportPath = [JMSavedResources absolutePathToSavedReport:self.savedReport];
     BOOL isExistInFS = [[NSFileManager defaultManager] fileExistsAtPath:fileReportPath];
     return isExistInFS;
-}
-
-- (void)createPagesRangeFromPagesString:(NSString *)pages
-{
-    NSArray *components = [pages componentsSeparatedByString:@"-"];
-    NSUInteger startPage = 0;
-    NSUInteger endPage = 0;
-    if (components.count == 2) {
-        startPage = ((NSString *)components[0]).integerValue;
-        endPage = ((NSString *)components[1]).integerValue;
-    } else if (components.count == 1) {
-        startPage = endPage = (NSUInteger) ((NSString *)components.firstObject).integerValue;
-    }
-    
-    self.pagesRange = [JSReportPagesRange rangeWithStartPage:startPage endPage:endPage];
 }
 
 @end

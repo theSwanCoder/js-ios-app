@@ -349,11 +349,11 @@
 {
     JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
     [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
-        [reportSaver cancelReport];
+        [reportSaver cancelSavingReport];
     }];
     [reportSaver saveReportWithName:[self tempReportName]
                              format:kJS_CONTENT_TYPE_PDF
-                              pages:[self makePagesFormat]
+                         pagesRange:[JSReportPagesRange allPagesRange]
                             addToDB:NO
                          completion:^(JMSavedResources *savedReport, NSError *error) {
                              [JMCancelRequestPopup dismiss];
@@ -377,17 +377,6 @@
 - (NSString *)tempReportName
 {
     return [[NSUUID UUID] UUIDString];
-}
-
-- (NSString *)makePagesFormat
-{
-    NSString *pagesFormat;
-    if (self.report.isMultiPageReport) {
-        pagesFormat = [NSString stringWithFormat:@"1-%@", @(self.report.countOfPages)];
-    } else {
-        pagesFormat = [NSString stringWithFormat:@"1"];
-    }
-    return pagesFormat;
 }
 
 - (void)removeResourceWithURL:(NSURL *)resourceURL
