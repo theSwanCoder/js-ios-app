@@ -257,6 +257,10 @@
                                                                                                      // TODO: add showing with ...
 //                                                                                                     strongSelf.resourceRequest = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:outputResourcePath]];
 //                                                                                                     [strongSelf showResourceWithDocumentController];
+                                                                                                     [strongSelf showErrorWithMessage:JMCustomLocalizedString(@"savedreport.viewer.format.not.supported", nil)
+                                                                                                                           completion:^{
+                                                                                                                               [strongSelf cancelResourceViewingAndExit:YES];
+                                                                                                                           }];
                                                                                                  }
                                                                                              }
                                                                                          }];
