@@ -48,6 +48,10 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 @property (nonatomic, strong) NSMutableDictionary *exportIdsDictionary;
 @property (nonatomic, assign) JMReportViewerOutputResourceType outputResourceType;
 @property (nonatomic, strong) NSTimer *statusCheckingTimer;
+
+// cache
+@property (nonatomic, strong) NSMutableDictionary *cachedPages;
+
 @end
 
 @implementation JMRestReportLoader
@@ -79,6 +83,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 #pragma mark - Public API
 - (void)runReportWithPage:(NSInteger)page completion:(void(^)(BOOL success, NSError *error))completionBlock;
 {
+    [self clearCachedReportPages];
     [self.report restoreDefaultState];
 
     self.loadPageCompletionBlock = completionBlock;
@@ -188,7 +193,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
 
 - (void) startExportExecutionForPage:(NSInteger)page
 {
-    NSDictionary *cachedPages = [self.report cachedReportPages];
+    NSDictionary *cachedPages = [self cachedReportPages];
     NSString *HTMLString = cachedPages[@(page)];
     if (HTMLString && self.loadPageCompletionBlock) { // show cached page
         JMLog(@"load cached page");
@@ -263,7 +268,7 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
                                   self.outputResourceType = [result.allHeaderFields[@"output-final"] boolValue]? JMReportViewerOutputResourceType_Final : JMReportViewerOutputResourceType_NotFinal;
                                   
                                   if (self.outputResourceType == JMReportViewerOutputResourceType_Final) {
-                                      [self.report cacheHTMLString:result.bodyAsString forPageNumber:page];
+                                      [self cacheHTMLString:result.bodyAsString forPageNumber:page];
                                   }
                                   
                                   if (page == self.report.currentPage) { // show current page
@@ -408,6 +413,23 @@ static NSString *const kJMRestStatusCanceled = @"canceled";
             [self.report updateCountOfPages:page - 1];
         }
     }
+}
+
+
+#pragma mark - Cache pages
+- (void)cacheHTMLString:(NSString *)HTMLString forPageNumber:(NSInteger)pageNumber
+{
+    self.cachedPages[@(pageNumber)] = HTMLString;
+}
+
+- (NSDictionary *)cachedReportPages
+{
+    return [self.cachedPages copy];
+}
+
+- (void)clearCachedReportPages;
+{
+    self.cachedPages = [@{} mutableCopy];
 }
 
 @end
