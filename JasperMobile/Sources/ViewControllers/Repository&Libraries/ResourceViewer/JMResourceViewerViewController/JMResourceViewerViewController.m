@@ -134,13 +134,11 @@
     if ([JMUtils isDemoAccount]) {
         version = [version stringByAppendingString:@"(Demo)"];
     }
-    NSString *label;
+    NSString *label = kJMAnalyticsResourceEventLabelSavedResource;
     if ([self.resourceLookup isReport]) {
         label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
     } else if ([self.resourceLookup isDashboard]) {
         label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
-    } else if ([self.resourceLookup isSavedReport]) {
-        label = kJMAnalyticsResourceEventLabelSavedResource;
     }
     [JMUtils logEventWithInfo:@{
                         kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
