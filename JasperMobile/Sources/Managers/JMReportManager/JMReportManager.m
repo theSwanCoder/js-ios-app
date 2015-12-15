@@ -30,6 +30,7 @@
 #import "JSReportOption.h"
 #import "JMVisualizeReport.h"
 #import "JMRestReport.h"
+#import "JSRESTBase+Session.h"
 
 
 @implementation JMReportManager
@@ -45,7 +46,7 @@
                               __strong typeof(self)strongSelf = weakSelf;
                               if (result.error) {
                                   __weak typeof(self)weakSelf = strongSelf;
-                                  [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                  [strongSelf.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                       __strong typeof(self)strongSelf = weakSelf;
                                       if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
                                           [strongSelf fetchReportLookupWithResourceURI:reportURI
@@ -72,7 +73,7 @@
                                 __strong typeof(self)strongSelf = weakSelf;
                                 if (result.error) {
                                     __weak typeof(self)weakSelf = strongSelf;
-                                    [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                    [strongSelf.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                         __strong typeof(self)strongSelf = weakSelf;
                                         
                                         if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
@@ -103,7 +104,7 @@
                                         __strong typeof(self)strongSelf = weakSelf;
                                         if (result.error) {
                                             __weak typeof(self)weakSelf = strongSelf;
-                                            [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                            [strongSelf.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                                 __strong typeof(self)strongSelf = weakSelf;
                                                 if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
                                                     [strongSelf fetchInputControlsWithReportURI:reportURI
@@ -136,7 +137,7 @@
                                  __strong typeof(self)strongSelf = weakSelf;
                                  if (result.error) {
                                      __weak typeof(self)weakSelf = strongSelf;
-                                     [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                     [strongSelf.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                          __strong typeof(self)strongSelf = weakSelf;
                                          if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
                                              [strongSelf deleteReportOption:reportOption
@@ -165,7 +166,7 @@
                                               __strong typeof(self)strongSelf = weakSelf;
                                               if (result.error) {
                                                   __weak typeof(self)weakSelf = strongSelf;
-                                                  [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                                  [strongSelf.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                                       __strong typeof(self)strongSelf = weakSelf;
                                                       if (result.error.code == JSSessionExpiredErrorCode && strongSelf.restClient.keepSession && isSessionAuthorized) {
                                                           [strongSelf createReportOptionWithReportURI:reportURI

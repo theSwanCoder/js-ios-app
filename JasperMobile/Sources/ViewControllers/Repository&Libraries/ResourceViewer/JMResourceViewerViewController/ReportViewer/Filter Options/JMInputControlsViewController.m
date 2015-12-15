@@ -31,6 +31,7 @@
 #import "JMReportOptionsViewController.h"
 #import "JMReportManager.h"
 #import "JMExtendedReportOption.h"
+#import "JSRESTBase+Session.h"
 
 @interface JMInputControlsViewController () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate, JMReportOptionsViewControllerDelegate>
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
@@ -521,7 +522,7 @@
 
                                     if (result.error) {
                                         if (result.error.code == JSSessionExpiredErrorCode) {
-                                            [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                            [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                                     if (self.restClient.keepSession && isSessionAuthorized) {
                                                         [self updatedInputControlsValuesWithCompletion:completion];
                                                     } else {
@@ -574,7 +575,7 @@
                                   
                                   if (result.error) {
                                       if (result.error.code == JSSessionExpiredErrorCode) {
-                                          [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                          [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                                   if (self.restClient.keepSession && isSessionAuthorized) {
                                                       [self checkParentFolderPermissionWithCompletion:completion];
                                                   } else {

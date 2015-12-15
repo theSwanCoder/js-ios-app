@@ -34,6 +34,7 @@
 #import "JMPrintPreviewTableViewCell.h"
 #import "JMCancelRequestPopup.h"
 #import "JMSavedResources+Helpers.h"
+#import "JSRESTBase+Session.h"
 
 
 NSString * const kJMPrintPageFromKey = @"kJMPrintPageFromKey";
@@ -297,7 +298,7 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                                      if (error) {
                                          if (error.code == JSSessionExpiredErrorCode) {
                                              __weak typeof(self)weakSelf = strongSelf;
-                                             [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                             [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                                  __strong typeof(self)strongSelf = weakSelf;
                                                  if (strongSelf.restClient.keepSession && isSessionAuthorized) {
                                                      [strongSelf prepareForPrint];

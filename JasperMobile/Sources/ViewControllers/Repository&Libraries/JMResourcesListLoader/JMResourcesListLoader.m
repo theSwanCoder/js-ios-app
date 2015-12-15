@@ -23,6 +23,7 @@
 
 #import "JMResourcesListLoader.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JSRESTBase+Session.h"
 
 NSString * const kJMResourceListLoaderOptionItemTitleKey = @"JMResourceListLoaderFilterItemTitleKey";
 NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoaderFilterItemValueKey";
@@ -180,7 +181,7 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
                              
                              if (result.error.code == JSSessionExpiredErrorCode) {
                                  __weak typeof(self)weakSelf = strongSelf;
-                                 [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                 [strongSelf.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                      __strong typeof(self)strongSelf = weakSelf;
                                      if (strongSelf.restClient.keepSession && isSessionAuthorized) {
                                          [strongSelf loadNextPage];

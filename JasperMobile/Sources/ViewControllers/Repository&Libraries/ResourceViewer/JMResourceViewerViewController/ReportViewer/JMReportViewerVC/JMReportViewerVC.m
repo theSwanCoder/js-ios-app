@@ -30,6 +30,7 @@
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMWebViewManager.h"
+#import "JSRESTBase+Session.h"
 
 @interface JMReportViewerVC () <JMReportLoaderDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
@@ -263,7 +264,7 @@
         [self.report restoreDefaultState];
         
         __weak typeof(self)weakSelf = self;
-        [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+        [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
             __strong typeof(self)strongSelf = weakSelf;
             if (strongSelf.restClient.keepSession && isSessionAuthorized) {
                 // TODO: Need add restoring for current page
@@ -279,7 +280,7 @@
         [self showEmptyReportMessage];
     } else if (error.code == JSSessionExpiredErrorCode) {
         __weak typeof(self)weakSelf = self;
-        [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+        [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
             __strong typeof(self)strongSelf = weakSelf;
             if (strongSelf.restClient.keepSession && isSessionAuthorized) {
                 [strongSelf runReportWithPage:strongSelf.report.currentPage];
@@ -381,7 +382,7 @@
                                      if (error) {
                                          if (error.code == JSSessionExpiredErrorCode) {
                                              __weak typeof(self)weakSelf = strongSelf;
-                                             [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                             [strongSelf.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                                  __strong typeof(self)strongSelf = weakSelf;
                                                  if (strongSelf.restClient.keepSession && isSessionAuthorized) {
                                                      [strongSelf preparePreviewForPrintWithCompletion:completion];

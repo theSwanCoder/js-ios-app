@@ -33,6 +33,7 @@
 #import "JMReport.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMReportSaver.h"
+#import "JSRESTBase+Session.h"
 
 NSString * const kJMSaveReportViewControllerSegue = @"SaveReportViewControllerSegue";
 NSString * const kJMSavePageFromKey = @"kJMSavePageFromKey";
@@ -397,7 +398,7 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
                              if (error) {
                                  if (error.code == JSSessionExpiredErrorCode) {
-                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                     [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                              if (self.restClient.keepSession && isSessionAuthorized) {
                                                  [self saveReport];
                                              } else {

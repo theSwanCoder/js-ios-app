@@ -32,6 +32,7 @@
 #import "JMDashboardLoader.h"
 #import "JMReportViewerVC.h"
 #import "JMDashboard.h"
+#import "JSRESTBase+Session.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -180,7 +181,7 @@
 - (void)reloadDashboard
 {
     __weak typeof(self)weakSelf = self;
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+    [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
         __strong typeof(self)strongSelf = weakSelf;
         if (strongSelf.restClient.keepSession && isSessionAuthorized) {
             __weak typeof(self)weakSelf = strongSelf;
@@ -226,7 +227,7 @@
 - (void)startResourceViewing
 {
     __weak typeof(self)weakSelf = self;
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+    [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
         __strong typeof(self)strongSelf = weakSelf;
         if (strongSelf.restClient.keepSession && isSessionAuthorized) {
 
@@ -357,7 +358,7 @@
                                 __strong typeof(self)strongSelf = weakSelf;
                                 if (result.error) {
                                     if (result.error.code == JSSessionExpiredErrorCode) {
-                                        [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                        [strongSelf.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                             if (strongSelf.restClient.keepSession && isSessionAuthorized) {
                                                 [strongSelf loadInputControlsWithReportURI:reportURI completion:completion];
                                             } else {

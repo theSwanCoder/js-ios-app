@@ -22,6 +22,7 @@
 
 
 #import "JMRepositoryListLoader.h"
+#import "JSRESTBase+Session.h"
 
 @interface JMRepositoryListLoader ()
 @property (nonatomic, strong) NSMutableArray *rootFoldersURIs;
@@ -77,7 +78,7 @@
                         if ([resourceURI isEqualToString:[strongSelf rootResourceURI]]) {
                             if (result.error.code == JSSessionExpiredErrorCode) {
                                 __weak typeof(self)weakSelf = strongSelf;
-                                [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                [strongSelf.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                     __strong typeof(self)strongSelf = weakSelf;
                                     if (strongSelf.restClient.keepSession && isSessionAuthorized) {
                                         [strongSelf loadResourceLookup:resourceURI];

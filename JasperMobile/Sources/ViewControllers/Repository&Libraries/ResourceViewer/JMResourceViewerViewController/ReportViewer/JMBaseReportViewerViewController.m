@@ -38,6 +38,7 @@
 #import "JMJavascriptNativeBridgeProtocol.h"
 #import "JMReportSaver.h"
 #import "JMReportManager.h"
+#import "JSRESTBase+Session.h"
 
 
 @interface JMBaseReportViewerViewController () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate>
@@ -314,7 +315,7 @@
                                  [JMCancelRequestPopup dismiss];
                                  if (error) {
                                      if (error.code == JSSessionExpiredErrorCode) {
-                                         [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                         [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
                                                  if (self.restClient.keepSession && isSessionAuthorized) {
                                                      [self preparePreviewForPrintWithCompletion:completion];
                                                  } else {
