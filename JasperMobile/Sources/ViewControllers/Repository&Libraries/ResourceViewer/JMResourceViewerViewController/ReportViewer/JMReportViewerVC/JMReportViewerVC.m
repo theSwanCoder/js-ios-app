@@ -88,12 +88,12 @@
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
                                                                         views:@{@"webView": webView}]];
-    
+
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
                                                                         views:@{@"webView": webView}]];
-    
+
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
@@ -153,21 +153,21 @@
     [self hideEmptyReportMessage];
     [self hideToolbar];
     [self hideReportView];
-    
+
     __weak typeof(self)weakSelf = self;
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf.reportLoader cancelReport];
         [strongSelf cancelResourceViewingAndExit:YES];
     }];
-    
+
     [self.reportLoader runReportWithPage:page completion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf stopShowLoader];
-        
+
         if (success) {
             // Analytics
-            NSString *version = self.restClient.serverInfo.version;
+            NSString *version = strongSelf.restClient.serverInfo.version;
             if ([JMUtils isDemoAccount]) {
                 version = [version stringByAppendingString:@"(Demo)"];
             }

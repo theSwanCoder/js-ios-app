@@ -242,7 +242,7 @@
                                                                                                              
                                                                                                              // get report options
                                                                                                              __weak typeof(self) weakSelf = strongSelf;
-                                                                                                             [JMReportManager fetchReportOptionsWithReportURI:self.report.reportURI completion:^(NSArray *reportOptions, NSError *error) {
+                                                                                                             [JMReportManager fetchReportOptionsWithReportURI:reportURI completion:^(NSArray *reportOptions, NSError *error) {
                                                                                                                  __strong typeof(self) strongSelf = weakSelf;
                                                                                                                  if (error && error.code == JSSessionExpiredErrorCode) {
                                                                                                                      errorHandlingBlock(error, @"Report Options Loading Error");
