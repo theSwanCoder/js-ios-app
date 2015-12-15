@@ -144,6 +144,9 @@
 
     if ([callbackType isEqualToString:@"json"]) {
         NSString *parameters = components[1];
+        parameters = [parameters stringByReplacingOccurrencesOfString:@"/\"" withString:@"\""];
+        parameters = [parameters stringByReplacingOccurrencesOfString:@"\"{" withString:@"{"];
+        parameters = [parameters stringByReplacingOccurrencesOfString:@"}\"" withString:@"}"];
         NSData *parametersAsData = [parameters dataUsingEncoding:NSUTF8StringEncoding];
         NSError *error;
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:parametersAsData
