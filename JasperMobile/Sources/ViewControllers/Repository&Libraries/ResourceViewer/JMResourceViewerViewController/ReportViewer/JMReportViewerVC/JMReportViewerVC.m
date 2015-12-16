@@ -256,13 +256,12 @@
 - (void)handleError:(NSError *)error
 {
     if (error.code == JMReportLoaderErrorTypeAuthentification) {
-        
+
         [self.restClient deleteCookies];
-        [self resetSubViews];
-        
+
         NSInteger reportCurrentPage = self.report.currentPage;
         [self.report restoreDefaultState];
-        
+
         __weak typeof(self)weakSelf = self;
         [self.restClient verifySessionWithCompletion:^(BOOL isSessionAuthorized) {
             __strong typeof(self)strongSelf = weakSelf;

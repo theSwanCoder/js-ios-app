@@ -44,7 +44,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 @property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
 
 @property (nonatomic, copy) void(^reportLoadCompletion)(BOOL success, NSError *error);
-@property (nonatomic, copy) void(^reportChangePageCompletion)(BOOL success, NSError *error);
 @property (nonatomic, copy) NSString *exportFormat;
 @property (nonatomic, strong) JMVisualizeManager *visualizeManager;
 @end
@@ -88,11 +87,10 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     self.isReportInLoadingProcess = YES;
     [self.report updateLoadingStatusWithValue:NO];
     [self.report updateCountOfPages:NSNotFound];
+    [self.report updateCurrentPage:page];
 
     if ([[JMVisualizeWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
         self.reportLoadCompletion = completionBlock;
-        [self.report updateCurrentPage:page];
-        [self.report updateCountOfPages:NSNotFound];
 
         [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
             if (success) {
@@ -128,7 +126,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage withCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    self.reportChangePageCompletion = completion;
+    self.reportLoadCompletion = completion;
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileReport.selectPage(%@);";
@@ -272,6 +270,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         JMLog(@"visualize log: %@", callback.parameters[@"parameters"][@"message"]);
     } else if ([callback.type isEqualToString:@"onWindowError"]) {
         [self handleOnWinwowErrorWithMessage:callback.parameters[@"error"]];
+    } else if ([callback.type isEqualToString:@"onPageLoadError"]) {
+        [self handleOnPageLoadErrorWithParameters:callback.parameters];
     } else {
         JMLog(@"response parameters: %@", callback.parameters);
     }
@@ -482,6 +482,21 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         self.reportLoadCompletion(NO, [self createErrorWithType:JMReportLoaderErrorTypeUndefined
                                                    errorMessage:message]);
         self.reportLoadCompletion = nil;
+    }
+}
+
+- (void)handleOnPageLoadErrorWithParameters:(NSDictionary *)parameters
+{
+    NSDictionary *params = parameters[@"parameters"];
+    NSString *errorCode = params[@"message"][@"errorCode"];
+    NSString *message = params[@"message"][@"message"];
+
+    if ([errorCode isEqualToString:@"authentication.error"]) {
+        if (self.reportLoadCompletion) {
+            self.reportLoadCompletion(NO, [self createErrorWithType:JMReportLoaderErrorTypeAuthentification
+                                                       errorMessage:message]);
+            self.reportLoadCompletion = nil;
+        }
     }
 }
 
