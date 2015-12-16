@@ -402,6 +402,8 @@ void jmDebugLog(NSString *format, ...) {
 #pragma mark - Analytics
 + (void)logEventWithInfo:(NSDictionary *)eventInfo
 {
+    JMLog(@"%@: %@", NSStringFromSelector(_cmd), eventInfo);
+#ifndef __RELEASE__
     // Crashlytics - Answers
     [Answers logCustomEventWithName:eventInfo[kJMAnalyticsCategoryKey]
                    customAttributes:eventInfo];
@@ -415,10 +417,13 @@ void jmDebugLog(NSString *format, ...) {
     [tracker set:[GAIFields customDimensionForIndex:1]
            value:eventInfo[kJMAnalyticsServerVersionKey]];
     [tracker send:[builder build]];
+#endif
 }
 
 + (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
 {
+    JMLog(@"%@: %@", NSStringFromSelector(_cmd), additionInfo);
+#ifndef __RELEASE__
     // Crashlytics - Answers
     [Answers logLoginWithMethod:@"Digits"
                         success:@(success)
@@ -435,6 +440,7 @@ void jmDebugLog(NSString *format, ...) {
     [tracker set:[GAIFields customDimensionForIndex:1]
            value:additionInfo[kJMAnalyticsServerVersionKey]];
     [tracker send:[builder build]];
+#endif
 }
 
 @end
