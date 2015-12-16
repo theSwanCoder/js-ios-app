@@ -55,7 +55,9 @@ NSString * const kJMThemeLoginViewTextFieldsTextColor = @"LoginView.textfields_t
 NSString * const kJMThemeLoginLoginButtonBackgroundColor = @"LoginView.login_button_background_color";
 NSString * const kJMThemeLoginLoginButtonTextColor = @"LoginView.login_button_text_color";
 NSString * const kJMThemeLoginTryDemoButtonBackgroundColor = @"LoginView.trydemo_button_background_color";
+NSString * const kJMThemeLoginTryDemoButtonDisabledBackgroundColor = @"LoginView.trydemo_button_disabled_background_color";
 NSString * const kJMThemeLoginTryDemoButtonTextColor = @"LoginView.trydemo_button_text_color";
+NSString * const kJMThemeLoginTryDemoDisabledButtonTextColor = @"LoginView.trydemo_disabled_button_text_color";
 
 // Menu View
 NSString * const kJMThemeMenuViewBackgroundColor = @"MenuView.background_color";
@@ -385,9 +387,19 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeLoginTryDemoButtonBackgroundColor];
 }
 
+- (UIColor *)loginViewTryDemoButtonDisabledBackgroundColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeLoginTryDemoButtonDisabledBackgroundColor];
+}
+
 - (UIColor *)loginViewTryDemoButtonTextColor
 {
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeLoginTryDemoButtonTextColor];
+}
+
+- (UIColor *)loginViewTryDemoDisabledButtonTextColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeLoginTryDemoDisabledButtonTextColor];
 }
 
 // Menu View

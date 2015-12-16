@@ -92,6 +92,8 @@
         self.userNameTextField.text = self.restClient.serverProfile.username;
         self.selectedServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
         self.tryDemoButton.enabled = NO;
+        self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonDisabledBackgroundColor];
+        [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoDisabledButtonTextColor] forState:UIControlStateNormal];
     }
 }
 
