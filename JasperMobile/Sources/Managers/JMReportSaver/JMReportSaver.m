@@ -239,7 +239,7 @@ NSString * const kJMReportSaverErrorDomain = @"kJMReportSaverErrorDomain";
     [self.reportExecutor cancel];
     [self.downloadTask cancelByProducingResumeData:^(NSData * _Nullable resumeData){
     }];
-    
+    [self.savedReport removeFromDB];
     [self removeTempDirectory];
 }
 
