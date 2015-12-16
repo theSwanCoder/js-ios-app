@@ -280,6 +280,7 @@ NSString * const kJSPrivateCredentialsTag = @"TIBCO.JasperServer.Private.Credent
     SecKeyRef privateKey;
     SecKeyGeneratePair((__bridge CFDictionaryRef)params, &publicKey, &privateKey);
     completion(publicKey, privateKey);
+    CFRelease(keySize);
 }
 
 @end
