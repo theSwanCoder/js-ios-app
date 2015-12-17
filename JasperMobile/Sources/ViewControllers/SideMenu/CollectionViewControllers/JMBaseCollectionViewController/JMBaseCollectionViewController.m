@@ -42,6 +42,8 @@
 #import "JMBaseReportViewerViewController.h"
 #import "JMResourceInfoViewController.h"
 
+CGFloat const kJMBaseCollectionViewGridWidth = 310;
+CGFloat const kJMBaseCollectionViewCompactGridWidth = 150;
 NSString * const kJMShowFolderContetnSegue = @"ShowFolderContetnSegue";
 
 NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentationTypeDidChangeNotification";
@@ -527,17 +529,27 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
     CGFloat itemHeight = 80.f;
     CGFloat itemWidth = collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right;
-    
+
     if (self.representationType == JMResourcesRepresentationType_Grid) {
         NSInteger countOfCellsInRow = 0;
-        itemWidth = [JMUtils isIphone] ? 150 : 310;
-        while (((countOfCellsInRow * itemWidth) + (countOfCellsInRow - 1) * flowLayout.minimumInteritemSpacing) < (collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right)) {
+        CGFloat minItemWidth = [JMUtils isIphone] ? kJMBaseCollectionViewCompactGridWidth : kJMBaseCollectionViewGridWidth;
+        itemWidth = minItemWidth;
+        while (((countOfCellsInRow + 1) * itemWidth + countOfCellsInRow * flowLayout.minimumInteritemSpacing) <= (collectionView.frame.size.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right)) {
             countOfCellsInRow ++;
         }
-        itemHeight = [JMUtils isIphone] ? 150 : 254;
-        itemWidth = floorf((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
+
+        CGFloat (^getItemWidth)(NSInteger) = ^CGFloat (NSInteger countOfCellsInRow){
+            return floorf((collectionView.frame.size.width - flowLayout.sectionInset.left * (countOfCellsInRow + 1)) / countOfCellsInRow);
+        };
+
+        itemWidth = getItemWidth(countOfCellsInRow);
+        if (itemWidth >= 1.5 * minItemWidth) {
+            itemWidth = getItemWidth(++countOfCellsInRow);
+        }
+
+        itemHeight = [JMUtils isIphone] ? itemWidth : ceil(0.8*itemWidth);
     }
-    
+
     return CGSizeMake(itemWidth, itemHeight);
 }
 
