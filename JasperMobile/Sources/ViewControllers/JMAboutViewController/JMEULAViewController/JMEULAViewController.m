@@ -55,7 +55,7 @@
         self.navigationItem.rightBarButtonItem = acceptButton;
     }
 
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"TIB_jsm-ios_2.2.0_license" ofType:@"pdf"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"EULA" ofType:@"pdf"];
     NSURL *url = [NSURL fileURLWithPath:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:request];
