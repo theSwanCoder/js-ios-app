@@ -36,6 +36,7 @@
 #import "JMMenuViewController.h"
 #import "JMEULAViewController.h"
 #import "JMServerProfile+Helpers.h"
+#import "JMServersGridViewController.h"
 
 
 void jmDebugLog(NSString *format, ...) {
@@ -191,8 +192,10 @@ void jmDebugLog(NSString *format, ...) {
     SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
     JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
 
-    if ([revealViewController.presentedViewController isKindOfClass:[UINavigationController class]] &&
-            [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMLoginViewController class]]) {
+    BOOL isPresentedByNavVC = [revealViewController.presentedViewController isKindOfClass:[UINavigationController class]];
+    BOOL isLoginVC = [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMLoginViewController class]];
+    BOOL isServersVC = [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMServersGridViewController class]];
+    if (isPresentedByNavVC && (isLoginVC || isServersVC)) {
         // if a nav view controller was loaded previously
         return;
     }
