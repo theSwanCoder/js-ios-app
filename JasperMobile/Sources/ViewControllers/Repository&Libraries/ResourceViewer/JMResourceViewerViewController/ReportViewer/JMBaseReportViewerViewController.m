@@ -42,7 +42,7 @@
 
 
 @interface JMBaseReportViewerViewController () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate>
-@property (nonatomic, weak) JMReportViewerToolBar *toolbar;
+@property (nonatomic, strong, readwrite) JMReportViewerToolBar *toolbar;
 @property (weak, nonatomic) IBOutlet UILabel *emptyReportMessageLabel;
 @property (nonatomic, strong, readwrite) JMReport *report;
 
@@ -78,7 +78,7 @@
 {
     [super viewWillDisappear:animated];
 
-    [_toolbar removeFromSuperview];
+    [self.toolbar removeFromSuperview];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -96,11 +96,13 @@
 {
     if (self.toolbar && self.report.isMultiPageReport && !self.report.isReportEmpty) {
         self.toolbar.currentPage = self.report.currentPage;
-        if (self.navigationController.visibleViewController == self) {
-            [self.navigationController setToolbarHidden:NO animated:YES];
+        if (self.navigationController.topViewController == self) {
+            [self.navigationController setToolbarHidden:NO
+                                               animated:YES];
         }
     } else {
-        [self.navigationController setToolbarHidden:YES animated:YES];
+        [self.navigationController setToolbarHidden:YES
+                                           animated:YES];
     }
 }
 
@@ -382,6 +384,8 @@
         _toolbar.currentPage = self.report.currentPage;
         _toolbar.countOfPages = self.report.countOfPages;
         _toolbar.frame = self.navigationController.toolbar.bounds;
+        [self.navigationController.toolbar addSubview: _toolbar];
+    } else if (!_toolbar.superview) {
         [self.navigationController.toolbar addSubview: _toolbar];
     }
     return _toolbar;

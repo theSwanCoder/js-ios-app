@@ -39,6 +39,39 @@
 
 @implementation JMReportViewerVC
 
+#pragma mark - NSObject Life Cycle
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - UIViewController Life Cycle
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillResignActiveNotification:)
+                                                 name:UIApplicationWillResignActiveNotification
+                                               object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIApplicationWillResignActiveNotification
+                                                  object:nil];
+}
+
+#pragma mark - Custom Accessors
+
 - (UIWebView *)webView
 {
     return self.configurator.webView;
@@ -66,6 +99,12 @@
 {
     [[JMVisualizeWebViewManager sharedInstance] resetChildWebView];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - Notifications
+- (void)applicationWillResignActiveNotification:(NSNotification *)notification
+{
+    [self.toolbar endEditing:YES];
 }
 
 #pragma mark - Setups
