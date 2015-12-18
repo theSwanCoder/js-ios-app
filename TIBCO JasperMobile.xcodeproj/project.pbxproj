@@ -86,7 +86,6 @@
 		089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16151AA757EA0021A915 /* jaspermobile.js */; };
 		089B161E1AA757EA0021A915 /* jaspermobile_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */; };
 		08B517BE1B15C60400B3F20A /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B517BB1B15C60400B3F20A /* PopoverView.m */; };
-		08B5187B1B18C79400B3F20A /* JMReportSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B5187A1B18C79400B3F20A /* JMReportSaver.m */; };
 		08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DB3D931A891640006F9620 /* MessageUI.framework */; };
 		08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18141B13390500856112 /* JMRecentViewsCollectionViewController.m */; };
 		08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD181E1B13426200856112 /* JMRecentViewsListLoader.m */; };
@@ -348,8 +347,6 @@
 		08B517BB1B15C60400B3F20A /* PopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverView.m; sourceTree = "<group>"; };
 		08B517BC1B15C60400B3F20A /* PopoverView_Configuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverView_Configuration.h; sourceTree = "<group>"; };
 		08B517BD1B15C60400B3F20A /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverViewCompatibility.h; sourceTree = "<group>"; };
-		08B518791B18C79400B3F20A /* JMReportSaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportSaver.h; sourceTree = "<group>"; };
-		08B5187A1B18C79400B3F20A /* JMReportSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportSaver.m; sourceTree = "<group>"; };
 		08B99F6D1A07CD7700E822B0 /* profiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = profiles.json; sourceTree = "<group>"; };
 		08DB3D931A891640006F9620 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		08DB677F1A137E370035F58F /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1259,15 +1256,6 @@
 			path = "PopoverView-v0.0.2";
 			sourceTree = "<group>";
 		};
-		08B518781B18C79400B3F20A /* JMReportSaver */ = {
-			isa = PBXGroup;
-			children = (
-				08B518791B18C79400B3F20A /* JMReportSaver.h */,
-				08B5187A1B18C79400B3F20A /* JMReportSaver.m */,
-			);
-			path = JMReportSaver;
-			sourceTree = "<group>";
-		};
 		08B99F6C1A07CD7700E822B0 /* ServerProfiles */ = {
 			isa = PBXGroup;
 			children = (
@@ -1697,7 +1685,6 @@
 			isa = PBXGroup;
 			children = (
 				BDB8B9EB1B57D90B00758441 /* JMThemesManager */,
-				08B518781B18C79400B3F20A /* JMReportSaver */,
 				08221C3F1AE54DA000F94F1D /* JMCoreDataManager */,
 				0801DF921AAF2CC000DD072C /* JMSessionManager */,
 				93D8C6421AAC7E9200117306 /* JMWebViewManager */,
@@ -2240,7 +2227,6 @@
 				0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */,
 				0801DFAD1AAF2CFB00DD072C /* JMConstants.m in Sources */,
 				089B15AC1AA756BD0021A915 /* JMCancelRequestPopup.m in Sources */,
-				08B5187B1B18C79400B3F20A /* JMReportSaver.m in Sources */,
 				BDF3D2531B8B03F40005AA28 /* JMReportOptionsViewController.m in Sources */,
 				089B15C01AA756BD0021A915 /* JMLoadingCollectionViewCell.m in Sources */,
 				08E2AC8C1B1E056900AC462B /* JMSingleSelectInputControlCell.m in Sources */,

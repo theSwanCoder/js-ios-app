@@ -40,7 +40,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
-+ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format
++ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format sourcesURL:(NSURL *)sourcesURL
 {
     NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:name, @"label", format, @"format", nil];
     JMSavedResources *savedReport = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
@@ -59,9 +59,16 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     }
     savedReport.creationDate = [NSDate date];
     savedReport.updateDate = [NSDate date];
-    [[JMCoreDataManager sharedInstance] save:nil];
-
-    return savedReport;
+    
+    NSError *error = [self moveResourceContentFromPath:[sourcesURL path] toPath:[JMSavedResources pathToFolderForSavedReport:savedReport]];
+    if (error) {
+        NSLog(@"%@", [error localizedDescription]);
+        [[JMCoreDataManager sharedInstance] resetPersistentStore];
+        return nil;
+    } else {
+        [[JMCoreDataManager sharedInstance] save:nil];
+        return savedReport;
+    }
 }
 
 - (void)removeFromDB
@@ -76,12 +83,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 {
     NSString *pathToReport = [JMSavedResources pathToFolderForSavedReport:self];
     [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
-    
-    [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
-    
-    [self.managedObjectContext deleteObject:self];
-    [self.managedObjectContext save:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
+    [self removeFromDB];
 }
 
 - (UIImage *)thumbnailImage
@@ -200,13 +202,13 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 + (NSString *)pathToFolderForSavedReport:(JMSavedResources *)savedReport
 {
     // Documents/
-    NSString *pathToReportsFolder = [self pathToReportsFolder];
+    NSString *pathToDocumentsFolder = [self pathToDocumentsFolder];
     // PathComponent/reports/reportName.format/reportName.format
     NSString *uri = savedReport.uri;
     // PathComponent/reports/reportName.format/
-    NSString *pathToFolder = [uri stringByDeletingLastPathComponent];
+    NSString *pathToReportsFolder = [uri stringByDeletingLastPathComponent];
     // Documents/PathComponent/reports/reportName.format/
-    NSString *absolutePath = [pathToReportsFolder stringByAppendingPathComponent:pathToFolder];
+    NSString *absolutePath = [pathToDocumentsFolder stringByAppendingPathComponent:pathToReportsFolder];
     return absolutePath;
 }
 
@@ -264,7 +266,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 }
 
 #pragma mark - Private API fo Paths
-+ (NSString *)pathToReportsFolder
++ (NSString *)pathToDocumentsFolder
 {
     // Documents
     NSString *documentsPath = [JMUtils applicationDocumentsDirectory];
@@ -377,19 +379,21 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 + (NSError *)moveResourceContentFromPath:(NSString *)fromPath toPath:(NSString *)toPath
 {
     NSError *error;
-
-    NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fromPath error:&error];
-
-    for (NSString *item in items) {
-        NSString *newItem = item;
-        if ([newItem isEqualToString:[fromPath lastPathComponent]] || [newItem.stringByDeletingPathExtension isEqualToString:kJMReportFilename]) {
-            newItem = [toPath lastPathComponent];
-        }
-        NSString *itemFromPath = [fromPath stringByAppendingPathComponent:item];
-        NSString *itemToPath = [toPath stringByAppendingPathComponent:newItem];
-        [[NSFileManager defaultManager] moveItemAtPath:itemFromPath toPath:itemToPath error:&error];
+    if ([self isExistsFolderAtPath:toPath]) {
+        error = [self removeResourceAtPath:toPath];
     }
-
+    
+    if (!error) {
+        NSString *reportsFolder = [toPath stringByDeletingLastPathComponent];
+        if (![self isExistsFolderAtPath:reportsFolder]) {
+            error = [self createFolderAtPath:reportsFolder];
+        }
+        
+        if (!error) {
+            [[NSFileManager defaultManager] moveItemAtPath:fromPath toPath:toPath error:&error];
+        }
+    }
+    
     return error;
 }
 
@@ -412,23 +416,20 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 
 + (BOOL)isExistItemAtPath:(NSString *)path
 {
-    BOOL isExistInFS = [[NSFileManager defaultManager] fileExistsAtPath:path];
-    return isExistInFS;
+    return [[NSFileManager defaultManager] fileExistsAtPath:path];
 }
 
 + (BOOL)isExistsFolderAtPath:(NSString *)folderPath
 {
-    NSError *error;
-    NSArray *content = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:folderPath error:&error];
-    BOOL isExistsFolder = content.count > 0;
-    return isExistsFolder;
+    BOOL isDirectory;
+    return ([[NSFileManager defaultManager] fileExistsAtPath:folderPath isDirectory:&isDirectory] && isDirectory);
 }
 
 #pragma mark - Updater
 + (NSString *)oldPathForSavedReport:(JMSavedResources *)savedResource
 {
     NSString *oldPath = @"";
-    NSString *documentFolderPath = [self pathToReportsFolder];
+    NSString *documentFolderPath = [self pathToDocumentsFolder];
     NSString *uri = savedResource.uri;
     NSString *oldReportsFolder = [documentFolderPath stringByAppendingPathComponent:savedResource.serverProfile.alias];
     BOOL isExistFolder = [self isExistsFolderAtPath:oldReportsFolder];

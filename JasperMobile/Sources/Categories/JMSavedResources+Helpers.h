@@ -41,7 +41,7 @@ extern NSString * const kJMSavedResources;
 + (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource;
 
 // Adds saved resource with path to CoreData
-+ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format;
++ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format sourcesURL:(NSURL *)sourcesURL;
 
 // Returns YES if report with name reportName with format reportFormat is absent
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat;

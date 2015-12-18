@@ -65,7 +65,8 @@
     [self imageFromWebViewWithCompletion:^(UIImage *image) {
         if (image) {
             [self printItem:image
-                   withName:self.dashboard.resourceLookup.label];
+                   withName:self.dashboard.resourceLookup.label
+                 completion:nil];
         }
     }];
 }

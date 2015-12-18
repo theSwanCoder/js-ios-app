@@ -27,7 +27,7 @@
 //
 
 #import "JMPrintResourceViewController.h"
-#import "JMReportSaver.h"
+#import "JSReportSaver.h"
 #import "JMSaveReportPagesCell.h"
 #import "JMSaveReportPageRangeCell.h"
 #import "UITableViewCell+Additions.h"
@@ -271,22 +271,18 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
 
         if (self.report && self.report.isMultiPageReport) {
 
-            JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
-
+            JSReportSaver *reportSaver = [[JSReportSaver alloc] initWithReport:self.report restClient:self.restClient];
             [JMCancelRequestPopup presentWithMessage:@"resource.viewer.print.prepare.title" cancelBlock:^{
                 [reportSaver cancelSavingReport];
             }];
 
             __weak typeof(self)weakSelf = self;
-            [reportSaver saveReportWithName:[self tempReportName]
+            NSString *reportName = [self tempReportName];
+            [reportSaver saveReportWithName:reportName
                                      format:kJS_CONTENT_TYPE_PDF
                                  pagesRange:self.pagesRange
-                                    addToDB:NO
-                                 completion:^(JMSavedResources *savedReport, NSError *error) {
-                                     __strong typeof(self)strongSelf = weakSelf;
-
+                                 completion:^(NSURL * _Nullable savedReportURL, NSError * _Nullable error) {
                                      [JMCancelRequestPopup dismiss];
-
                                      if (error) {
                                          if (error.code == JSSessionExpiredErrorCode) {
                                              [JMUtils showLoginViewAnimated:YES completion:nil];
@@ -294,11 +290,13 @@ NSInteger const kJMPrintPreviewImageMinimumHeight = 130;
                                              [JMUtils presentAlertControllerWithError:error completion:nil];
                                          }
                                      } else {
-                                         NSString *savedReportURL = [JMSavedResources absolutePathToSavedReport:savedReport];
-                                         strongSelf.printingItem = [NSURL fileURLWithPath:savedReportURL];
+                                         __strong typeof(self)strongSelf = weakSelf;
+                                         NSString *fullReportName = [reportName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
+                                         NSURL *reportURL = [savedReportURL URLByAppendingPathComponent:fullReportName];
+                                         strongSelf.printingItem = reportURL;
                                          [strongSelf printResource];
                                      }
-                                 }];
+            }];
         } else {
             [self imageFromWebViewWithCompletion:^(UIImage *image) {
                 self.printingItem = image;

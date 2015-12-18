@@ -32,7 +32,7 @@
 #import "JMSaveReportPageRangeCell.h"
 #import "JMReport.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMReportSaver.h"
+#import "JSReportSaver.h"
 
 NSString * const kJMSaveReportViewControllerSegue = @"SaveReportViewControllerSegue";
 NSString * const kJMSaveReportNameCellIdentifier = @"ReportNameCell";
@@ -377,35 +377,37 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         [self.tableView reloadData];
     }
 
-    JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
+    JSReportSaver *reportSaver = [[JSReportSaver alloc] initWithReport:self.report restClient:self.restClient];
     [JMCancelRequestPopup presentWithMessage:@"report.viewer.save.saving.status.title" cancelBlock:^{
         [reportSaver cancelSavingReport];
     }];
+    __weak typeof(self) weakSelf = self;
     [reportSaver saveReportWithName:self.reportName
                              format:self.selectedReportFormat
                          pagesRange:self.pagesRange
-                            addToDB:YES
-                         completion:^(JMSavedResources *savedReport, NSError *error) {
+                         completion:^(NSURL * _Nullable savedReportFolderURL, NSError * _Nullable error) {
                              [JMCancelRequestPopup dismiss];
-
                              if (error) {
                                  if (error.code == JSSessionExpiredErrorCode) {
                                      [JMUtils showLoginViewAnimated:YES completion:nil];
                                  } else {
                                      [JMUtils presentAlertControllerWithError:error completion:nil];
-                                     [savedReport removeReport];
                                  }
                              } else {
+                                 __strong typeof(self) strongSelf = weakSelf;
+                                 [JMSavedResources addReport:strongSelf.report.resourceLookup withName:strongSelf.reportName format:strongSelf.selectedReportFormat sourcesURL:savedReportFolderURL];
+                                 
                                  // Animation
                                  [CATransaction begin];
                                  [CATransaction setCompletionBlock:^{
                                      [self.delegate reportDidSavedSuccessfully];
                                  }];
-
+                                 
                                  [self.navigationController popViewControllerAnimated:YES];
                                  [CATransaction commit];
                              }
-                         }];
+
+    }];
 }
 
 - (void) reportLoaderDidChangeCountOfPages:(NSNotification *) notification

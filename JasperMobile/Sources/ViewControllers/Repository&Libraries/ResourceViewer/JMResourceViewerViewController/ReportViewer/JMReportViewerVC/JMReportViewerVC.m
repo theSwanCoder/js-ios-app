@@ -24,7 +24,7 @@
 #import "JMReportViewerVC.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMReportViewerConfigurator.h"
-#import "JMReportSaver.h"
+#import "JSReportSaver.h"
 #import "JMSavedResources.h"
 #import "JMSavedResources+Helpers.h"
 #import "JMJavascriptRequest.h"
@@ -347,15 +347,16 @@
 
 - (void)preparePreviewForPrintWithCompletion:(void(^)(NSURL *resourceURL))completion
 {
-    JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:self.report];
+    JSReportSaver *reportSaver = [[JSReportSaver alloc] initWithReport:self.report restClient:self.restClient];
     [JMCancelRequestPopup presentWithMessage:@"status.loading" cancelBlock:^{
         [reportSaver cancelSavingReport];
     }];
-    [reportSaver saveReportWithName:[self tempReportName]
+    
+    NSString *reportName = [self tempReportName];
+    [reportSaver saveReportWithName:reportName
                              format:kJS_CONTENT_TYPE_PDF
                          pagesRange:[JSReportPagesRange allPagesRange]
-                            addToDB:NO
-                         completion:^(JMSavedResources *savedReport, NSError *error) {
+                         completion:^(NSURL * _Nullable savedReportURL, NSError * _Nullable error) {
                              [JMCancelRequestPopup dismiss];
                              if (error) {
                                  if (error.code == JSSessionExpiredErrorCode) {
@@ -364,11 +365,10 @@
                                      [JMUtils presentAlertControllerWithError:error completion:nil];
                                  }
                              } else {
-                                 NSString *savedReportURL = [JMSavedResources absolutePathToSavedReport:savedReport];
-                                 NSURL *resourceURL = [NSURL fileURLWithPath:savedReportURL];
+                                 NSString *fullReportName = [reportName stringByAppendingPathExtension:kJS_CONTENT_TYPE_PDF];
+                                 NSURL *reportURL = [savedReportURL URLByAppendingPathComponent:fullReportName];
                                  if (completion) {
-                                     completion(resourceURL);
-                                     [savedReport removeFromDB];
+                                     completion(reportURL);
                                  }
                              }
                          }];

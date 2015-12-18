@@ -126,13 +126,6 @@
     // override in child
 }
 
-- (void)printItem:(id)printingItem withName:(NSString *)itemName
-{
-    [self printItem:printingItem
-           withName:itemName
-         completion:nil];
-}
-
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(BOOL completed, NSError *error))completion
 {
     UIPrintInfo *printInfo = [UIPrintInfo printInfo];
