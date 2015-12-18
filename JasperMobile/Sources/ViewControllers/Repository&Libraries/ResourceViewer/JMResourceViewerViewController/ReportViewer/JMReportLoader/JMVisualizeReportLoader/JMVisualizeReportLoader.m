@@ -448,7 +448,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                     if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
                         errorType = JMReportLoaderErrorTypeAuthentification;
                     }
-                    self.reportLoadCompletion(NO, [self createErrorWithType:errorType errorMessage:errorString]);
+                    if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventWithError:)]) {
+                        [self.delegate reportLoader:self didReceiveOnClickEventWithError:[self createErrorWithType:errorType errorMessage:errorString]];
+                    }
                 } else {
                     JSResourceLookup *resourceLookup = [result.objects firstObject];
                     if (resourceLookup) {

@@ -349,6 +349,11 @@
     [self.navigationController pushViewController:reportViewController animated:YES];
 }
 
+- (void)reportLoader:(id<JMReportLoader>)reportLoader didReceiveOnClickEventWithError:(NSError *)error
+{
+    [JMUtils presentAlertControllerWithError:error completion:nil];
+}
+
 -(void)reportLoader:(id<JMReportLoader>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
 {
     [[UIApplication sharedApplication] openURL:urlReference];
