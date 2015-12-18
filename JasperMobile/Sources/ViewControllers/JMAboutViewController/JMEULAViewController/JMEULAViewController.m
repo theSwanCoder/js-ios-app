@@ -28,7 +28,7 @@
 
 #import "JMEULAViewController.h"
 
-@interface JMEULAViewController()
+@interface JMEULAViewController() <UIWebViewDelegate>
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @end
 
@@ -68,5 +68,20 @@
         self.completion();
     }
 }
+
+#pragma mark - UIWebViewDelegate
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    JMLog(@"request: %@", request);
+    JMLog(@"navigationType: %@", @(navigationType));
+
+    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+        [[UIApplication sharedApplication] openURL:request.URL];
+        return NO;
+    }
+    return YES;
+}
+
 
 @end
