@@ -100,8 +100,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     [self addObservers];
     
     self.isScrollToTop = NO;
-    
-    [self showNavigationItems];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -110,6 +108,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
     self.screenName = NSStringFromClass(self.class);
     [self addKeyboardObservers];
+
+    [self showNavigationItems];
 
     [self updateIfNeeded];
     [self.resourceListLoader updateIfNeeded];
@@ -410,6 +410,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 - (UIBarButtonItem *)resourceRepresentationItem
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     NSString *imageName = ([self nextRepresentationTypeForType:self.representationType] == JMResourcesRepresentationType_Grid) ? @"grid_button" : @"horizontal_list_button";
     return [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:imageName]
                                             style:UIBarButtonItemStylePlain
@@ -427,6 +428,7 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 
 - (void)didSelectResourceAtIndexPath:(NSIndexPath *)indexPath
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JSResourceLookup *resourceLookup = [self loadedResourceForIndexPath:indexPath];
     id nextVC = nil;
     
@@ -439,6 +441,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         repositoryViewController.representationTypeKey = self.representationTypeKey;
         repositoryViewController.representationType = self.representationType;
         nextVC = repositoryViewController;
+        JMLog(@"show folder")
+        JMLog(@"current representation type: %@", self.representationType == JMResourcesRepresentationType_HorizontalList ? @"List" : @"Grid");
     } else if ([resourceLookup isSavedReport]) {
         nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
         if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
