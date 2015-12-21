@@ -22,20 +22,38 @@
 
 
 //
-//  JMPrintResourceViewController.h
+//  JMReportLoaderProtocol.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 2.1
+ @since 2.3
  */
 
-#import <UIKit/UIKit.h>
-#import "JMReport.h"
+#import <Foundation/Foundation.h>
+#import "JSReportLoaderProtocol.h"
 
-@interface JMPrintResourceViewController : JMBaseViewController
-@property (nonatomic, copy) void(^printCompletion)(void);
-- (void) setResourceLookup:(JSResourceLookup *)resourceLookup withWebView:(UIWebView *)webView;
-- (void) setReport:(JMReport *)report withWebView:(UIWebView *)webView;
+@protocol JMReportLoaderDelegate;
+@protocol JMJavascriptNativeBridgeProtocol;
+@protocol JMReportLoaderProtocol <JSReportLoaderProtocol>
+
+@required
+@property (nonatomic, weak) id<JMReportLoaderDelegate> delegate;
+@property (nonatomic, strong) id<JMJavascriptNativeBridgeProtocol>bridge;
+
+- (void)destroy;
+
+@optional
+- (void)exportReportWithFormat:(NSString *)exportFormat;
+- (void)authenticate;
+
 @end
+
+@protocol JMReportLoaderDelegate <NSObject>
+@optional
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSArray *)reportParameters;
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference;
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName;
+@end
+

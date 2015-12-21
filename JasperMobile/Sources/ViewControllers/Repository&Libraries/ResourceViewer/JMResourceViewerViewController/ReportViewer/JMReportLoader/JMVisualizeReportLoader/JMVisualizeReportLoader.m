@@ -25,7 +25,7 @@
 //  JMVisualizeReportLoader.h
 //  TIBCO JasperMobile
 //
-
+#import "JMReportLoaderProtocol.h"
 #import "JMReportViewerVC.h"
 #import "JMVisualizeReportLoader.h"
 #import "JMJavascriptNativeBridge.h"
@@ -54,7 +54,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 @synthesize bridge = _bridge, delegate = _delegate;
 
 #pragma mark - Lifecycle
-- (instancetype)initWithReport:(JMReport *)report
+- (instancetype)initWithReport:(JMReport *)report restClient:(nonnull JSRESTBase *)restClient
 {
     self = [super init];
     if (self) {
@@ -64,9 +64,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     return self;
 }
 
-+ (instancetype)loaderWithReport:(JMReport *)report
++ (instancetype)loaderWithReport:(JMReport *)report restClient:(nonnull JSRESTBase *)restClient
 {
-    return [[self alloc] initWithReport:report];
+    return [[self alloc] initWithReport:report restClient:restClient];
 }
 
 #pragma mark - Custom accessors
@@ -316,7 +316,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     return [parametersAsString copy];
 }
 
-- (NSError *)createErrorWithType:(JMReportLoaderErrorType)errorType errorMessage:(NSString *)errorMessage
+- (NSError *)createErrorWithType:(JSReportLoaderErrorType)errorType errorMessage:(NSString *)errorMessage
 {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report.viewer.visualize.render.error", nil) };
     NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
@@ -349,9 +349,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     if (self.reportLoadCompletion) {
         NSString *errorString = parameters[@"error"];
         errorString = [errorString stringByRemovingPercentEncoding];
-        JMReportLoaderErrorType errorType = JMReportLoaderErrorTypeUndefined;
+        JSReportLoaderErrorType errorType = JSReportLoaderErrorTypeUndefined;
         if (errorString && [errorString rangeOfString:@"authentication.error"].length) {
-            errorType = JMReportLoaderErrorTypeAuthentification;
+            errorType = JSReportLoaderErrorTypeAuthentification;
         }
         self.reportLoadCompletion(NO, [self createErrorWithType:errorType errorMessage:errorString]);
     }
@@ -442,9 +442,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                 NSError *error = result.error;
                 if (error) {
                     NSString *errorString = error.localizedDescription;
-                    JMReportLoaderErrorType errorType = JMReportLoaderErrorTypeUndefined;
+                    JSReportLoaderErrorType errorType = JSReportLoaderErrorTypeUndefined;
                     if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
-                        errorType = JMReportLoaderErrorTypeAuthentification;
+                        errorType = JSReportLoaderErrorTypeAuthentification;
                     }
                     self.reportLoadCompletion(NO, [self createErrorWithType:errorType errorMessage:errorString]);
                 } else {

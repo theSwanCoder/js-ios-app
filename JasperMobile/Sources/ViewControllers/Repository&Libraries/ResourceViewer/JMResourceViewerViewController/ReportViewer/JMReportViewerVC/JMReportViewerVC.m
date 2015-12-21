@@ -393,7 +393,7 @@
     return self.configurator.webView;
 }
 
-- (id<JMReportLoader>)reportLoader
+- (id<JMReportLoaderProtocol>)reportLoader
 {
     return [self.configurator reportLoader];
 }
@@ -565,7 +565,7 @@
 - (void)handleError:(NSError *)error
 {
 #warning NEED IMPROVE ERROR HANDLING - use should one method for handling error on all cases
-    if (error.code == JMReportLoaderErrorTypeAuthentification) {
+    if (error.code == JSReportLoaderErrorTypeAuthentification) {
         
         [self.restClient deleteCookies];
         [self resetSubViews];
@@ -586,7 +586,7 @@
             }
         }];
         
-    } else if (error.code == JMReportLoaderErrorTypeEmtpyReport) {
+    } else if (error.code == JSReportLoaderErrorTypeEmtpyReport) {
         [self showEmptyReportMessage];
     } else if (error.code == JSSessionExpiredErrorCode) {
         __weak typeof(self)weakSelf = self;
@@ -615,7 +615,7 @@
 }
 
 #pragma mark - JMVisualizeReportLoaderDelegate
-- (void)reportLoader:(id<JMReportLoader>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSArray *)reportParameters
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSArray *)reportParameters
 {
     JMReportViewerVC *reportViewController = (JMReportViewerVC *) [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
     reportViewController.resourceLookup = resourceLookup;
@@ -624,12 +624,12 @@
     [self.navigationController pushViewController:reportViewController animated:YES];
 }
 
--(void)reportLoader:(id<JMReportLoader>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
+-(void)reportLoader:(id<JMReportLoaderProtocol>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
 {
     [[UIApplication sharedApplication] openURL:urlReference];
 }
 
-- (void)reportLoader:(id<JMReportLoader>)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName
 {
     // sample
     // [self.reportLoader exportReportWithFormat:@"pdf"];

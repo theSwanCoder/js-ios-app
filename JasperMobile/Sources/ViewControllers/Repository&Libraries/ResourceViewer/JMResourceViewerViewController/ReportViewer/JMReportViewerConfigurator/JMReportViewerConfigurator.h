@@ -32,7 +32,7 @@
 @since 2.1
 */
 
-@protocol JMReportLoader;
+@protocol JMReportLoaderProtocol;
 @class JMReport;
 @protocol JMReportLoaderDelegate;
 
@@ -42,6 +42,6 @@
 - (instancetype)initWithReport:(JMReport *)report;
 + (instancetype)configuratorWithReport:(JMReport *)report;
 - (id)webViewAsSecondary:(BOOL)asSecondary;
-- (id<JMReportLoader>)reportLoader;
+- (id<JMReportLoaderProtocol>)reportLoader;
 - (void)updateReportLoaderDelegateWithObject:(id<JMReportLoaderDelegate>)delegate;
 @end

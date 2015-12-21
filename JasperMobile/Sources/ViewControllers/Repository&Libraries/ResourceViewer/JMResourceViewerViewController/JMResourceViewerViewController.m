@@ -25,7 +25,6 @@
 #import "JMWebViewManager.h"
 #import "ALToastView.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMPrintResourceViewController.h"
 #import "JMMainNavigationController.h"
 
 @interface JMResourceViewerViewController () <UIPrintInteractionControllerDelegate>

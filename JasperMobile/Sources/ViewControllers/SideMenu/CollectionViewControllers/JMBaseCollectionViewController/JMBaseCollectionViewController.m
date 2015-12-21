@@ -447,7 +447,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         // Customizing report viewer view controller
         if ([resourceLookup isReport]) {
             JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
-            [nextVC report].thumbnailImage = cell.thumbnailImage;
+            JMReport *report = (JMReport *)[nextVC report];
+            report.thumbnailImage = cell.thumbnailImage;
             __weak typeof(self)weakSelf = self;
             [nextVC setExitBlock:^(void) {
                 __strong typeof(self)strongSelf = weakSelf;
