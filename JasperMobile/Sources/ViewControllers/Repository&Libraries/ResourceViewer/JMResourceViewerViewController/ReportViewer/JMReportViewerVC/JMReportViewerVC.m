@@ -98,19 +98,6 @@
     }
 }
 
-#pragma mark - Setups
-- (void)updateToobarAppearence
-{
-    if (self.toolbar && self.report.isMultiPageReport && !self.report.isReportEmpty) {
-        self.toolbar.currentPage = self.report.currentPage;
-        if (self.navigationController.visibleViewController == self) {
-            [self.navigationController setToolbarHidden:NO animated:YES];
-        }
-    } else {
-        [self.navigationController setToolbarHidden:YES animated:YES];
-    }
-}
-
 #pragma mark - Observe Notifications
 - (void)addObservers
 {
@@ -190,21 +177,33 @@
 - (void)setupSubviews
 {
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
+
+    // Setup viewport scale factor
+    CGFloat initialScaleViewport = 0.75;
+    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+    if (isCompactWidth) {
+        initialScaleViewport = 0.25;
+    }
+    self.configurator.viewportScaleFactor = initialScaleViewport;
+
     UIWebView *webView = [self.configurator webViewAsSecondary:self.isChildReport];
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
-    
-    webView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"webView": webView}]];
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"webView": webView}]];
-    
+
+    [self setupWebViewLayout];
     [self.configurator updateReportLoaderDelegateWithObject:self];
+}
+
+
+- (void)updateToobarAppearence
+{
+    if (self.toolbar && self.report.isMultiPageReport && !self.report.isReportEmpty) {
+        self.toolbar.currentPage = self.report.currentPage;
+        if (self.navigationController.visibleViewController == self) {
+            [self.navigationController setToolbarHidden:NO animated:YES];
+        }
+    } else {
+        [self.navigationController setToolbarHidden:YES animated:YES];
+    }
 }
 
 #pragma mark - Overloaded methods
@@ -670,6 +669,11 @@
             // TODO: change save action
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
+        case JMMenuActionsViewAction_ExternalDisplay:
+            if ( [self createExternalWindow] ) {
+                [self showExternalWindow];
+            }
+            break;
         default:
             break;
     }
@@ -717,6 +721,9 @@
     if ([self isReportReady] && !self.report.isReportEmpty) {
         availableAction |= JMMenuActionsViewAction_Refresh;
     }
+    if ([self isExternalScreenAvailable]) {
+        availableAction |= JMMenuActionsViewAction_ExternalDisplay;
+    }
     return availableAction;
 }
 
@@ -724,7 +731,7 @@
 {
     JMMenuActionsViewAction disabledAction = [super disabledActionForResource:resource];
     if (![self isReportReady] || self.report.isReportEmpty) {
-        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Print;
+        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_ExternalDisplay;
     }
     return disabledAction;
 }
@@ -810,8 +817,7 @@
     }
     [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
 
-    [self.controlViewController.view removeFromSuperview];
-    [self hideExternalWindow];
+    self.controlViewController = nil;
 }
 
 @end
