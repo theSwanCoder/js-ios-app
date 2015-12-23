@@ -292,8 +292,6 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)shouldUseVisualize
 {
-    return NO;
-    
     if (![[NSUserDefaults standardUserDefaults] objectForKey:kJMDefaultUseVisualize]) {
         [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:kJMDefaultUseVisualize];
     }

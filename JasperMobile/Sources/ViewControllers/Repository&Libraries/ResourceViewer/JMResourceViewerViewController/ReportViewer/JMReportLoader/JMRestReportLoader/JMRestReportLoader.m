@@ -31,7 +31,9 @@
 #import "JMReportViewerVC.h"
 #import "JMJavascriptNativeBridgeProtocol.h"
 
-
+@interface JSReportLoader (LoadHTML)
+- (void)startLoadReportHTML;
+@end
 
 @interface JMRestReportLoader()
 
@@ -55,11 +57,6 @@
     [super refreshReportWithCompletion: completion];
 }
 
-- (void)applyReportParametersWithCompletion:(void (^)(BOOL success, NSError *error))completion
-{
-    [self runReportWithPage:1 completion:completion];
-}
-
 - (void)destroy
 {
     [self.bridge reset];
@@ -79,6 +76,8 @@
     [self.bridge injectJSInitCode:jsMobile];
     [self.bridge startLoadHTMLString:self.report.HTMLString
                              baseURL:[NSURL URLWithString:self.report.baseURLString]];
+    
+    [super startLoadReportHTML];
 }
 
 @end
