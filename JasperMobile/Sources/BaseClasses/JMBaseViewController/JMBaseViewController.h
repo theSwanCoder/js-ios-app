@@ -42,4 +42,6 @@
 - (void)hideExternalWindow;
 - (UIView *)viewForAddingToExternalWindow;
 - (UIView *)viewForRemovingFromExternalWindow;
+
+- (BOOL)isContentOnTV;
 @end

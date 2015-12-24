@@ -133,9 +133,12 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
             @(JMMenuActionsViewAction_OpenIn) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_OpenIn
                                                                          available:NO
                                                                            enabled:YES],
-            @(JMMenuActionsViewAction_ExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ExternalDisplay
-                                                                       available:NO
-                                                                         enabled:YES],
+            @(JMMenuActionsViewAction_ShowExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ShowExternalDisplay
+                                                                                      available:NO
+                                                                                        enabled:YES],
+            @(JMMenuActionsViewAction_HideExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_HideExternalDisplay
+                                                                                      available:NO
+                                                                                        enabled:YES],
     };
 }
 

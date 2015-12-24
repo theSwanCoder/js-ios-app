@@ -669,10 +669,14 @@
             // TODO: change save action
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
-        case JMMenuActionsViewAction_ExternalDisplay:
+        case JMMenuActionsViewAction_ShowExternalDisplay:
             if ( [self createExternalWindow] ) {
                 [self showExternalWindow];
             }
+            break;
+        case JMMenuActionsViewAction_HideExternalDisplay:
+            [self switchFromTV];
+            [self hideExternalWindow];
             break;
         default:
             break;
@@ -722,7 +726,7 @@
         availableAction |= JMMenuActionsViewAction_Refresh;
     }
     if ([self isExternalScreenAvailable]) {
-        availableAction |= JMMenuActionsViewAction_ExternalDisplay;
+        availableAction |= [self isContentOnTV] ? JMMenuActionsViewAction_ShowExternalDisplay : JMMenuActionsViewAction_HideExternalDisplay;
     }
     return availableAction;
 }
@@ -731,7 +735,7 @@
 {
     JMMenuActionsViewAction disabledAction = [super disabledActionForResource:resource];
     if (![self isReportReady] || self.report.isReportEmpty) {
-        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_ExternalDisplay;
+        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_ShowExternalDisplay;
     }
     return disabledAction;
 }
@@ -781,7 +785,7 @@
     UIView *reportView = self.configurator.webView;;
     reportView.translatesAutoresizingMaskIntoConstraints = YES;
 
-    JMLog(@"webView content size: %@", NSStringFromCGSize(self.webView.scrollView.contentSize));
+    // Need some time to layout content of webview
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self addControlsForExternalWindow];
     });
@@ -790,7 +794,6 @@
 }
 
 
-#pragma mark - Work with external window
 - (void)addControlsForExternalWindow
 {
     self.controlViewController = [[JMExternalWindowControlViewController alloc] initWithContentWebView:self.webView];
@@ -803,8 +806,7 @@
     [self.view addSubview:self.controlViewController.view];
 }
 
-#pragma mark - JMExternalWindowControlViewControllerDelegate
-- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlViewController *)viewController
+- (void)switchFromTV
 {
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.webView];
@@ -819,5 +821,13 @@
 
     self.controlViewController = nil;
 }
+
+#pragma mark - JMExternalWindowControlViewControllerDelegate
+- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlViewController *)viewController
+{
+    [self switchFromTV];
+    [self hideExternalWindow];
+}
+
 
 @end

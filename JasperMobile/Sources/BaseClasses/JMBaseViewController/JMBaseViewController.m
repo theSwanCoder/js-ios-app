@@ -105,4 +105,9 @@
     return self.externalWindow.subviews.firstObject;
 }
 
+- (BOOL)isContentOnTV
+{
+    return self.externalWindow == nil;
+}
+
 @end

@@ -126,16 +126,8 @@
     id dashboardView = [self.configurator webViewAsSecondary:NO];
     [self.view addSubview:dashboardView];
 
-    ((UIView *)dashboardView).translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[dashboardView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"dashboardView": dashboardView}]];
+    [self setupWebViewLayout];
 
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[dashboardView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"dashboardView": dashboardView}]];
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
@@ -266,7 +258,7 @@
 {
     JMMenuActionsViewAction menuActions = [super availableActionForResource:resource] | JMMenuActionsViewAction_Refresh;
     if ([self isExternalScreenAvailable]) {
-        menuActions |= JMMenuActionsViewAction_ExternalDisplay;
+        menuActions |= [self isContentOnTV] ? JMMenuActionsViewAction_ShowExternalDisplay : JMMenuActionsViewAction_HideExternalDisplay;
     }
     return menuActions;
 }
@@ -277,10 +269,13 @@
     [super actionsView:view didSelectAction:action];
     if (action == JMMenuActionsViewAction_Refresh) {
         [self reloadDashboard];
-    } else if (action == JMMenuActionsViewAction_ExternalDisplay) {
+    } else if (action == JMMenuActionsViewAction_ShowExternalDisplay) {
         if ( [self createExternalWindow] ) {
             [self showExternalWindow];
         }
+    } else if (action == JMMenuActionsViewAction_HideExternalDisplay) {
+        [self switchFromTV];
+        [self hideExternalWindow];
     }
 }
 
@@ -413,6 +408,20 @@
     UIView *dashboardView = self.configurator.webView;
     dashboardView.translatesAutoresizingMaskIntoConstraints = YES;
     return dashboardView;
+}
+
+- (void)switchFromTV
+{
+    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.webView];
+    [self setupWebViewLayout];
+
+    CGFloat initialScaleViewport = 0.75;
+    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+    if (isCompactWidth) {
+        initialScaleViewport = 0.25;
+    }
+    [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
 }
 
 @end

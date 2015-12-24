@@ -34,23 +34,24 @@
 */
 
 typedef NS_OPTIONS(NSInteger, JMMenuActionsViewAction) {
-    JMMenuActionsViewAction_None            = 0,
-    JMMenuActionsViewAction_MakeFavorite    = 1 << 0,
-    JMMenuActionsViewAction_MakeUnFavorite  = 1 << 1,
-    JMMenuActionsViewAction_Refresh         = 1 << 2,
-    JMMenuActionsViewAction_Filter          = 1 << 3,
-    JMMenuActionsViewAction_Edit            = 1 << 4,
-    JMMenuActionsViewAction_Sort            = 1 << 5,
-    JMMenuActionsViewAction_Save            = 1 << 6,
-    JMMenuActionsViewAction_Delete          = 1 << 7,
-    JMMenuActionsViewAction_Rename          = 1 << 8,
-    JMMenuActionsViewAction_SelectAll       = 1 << 9,
-    JMMenuActionsViewAction_ClearSelections = 1 << 10,
-    JMMenuActionsViewAction_Run             = 1 << 11,
-    JMMenuActionsViewAction_Print           = 1 << 12,
-    JMMenuActionsViewAction_Info            = 1 << 13,
-    JMMenuActionsViewAction_OpenIn          = 1 << 14,
-    JMMenuActionsViewAction_ExternalDisplay = 1 << 15
+    JMMenuActionsViewAction_None                = 0,
+    JMMenuActionsViewAction_MakeFavorite        = 1 << 0,
+    JMMenuActionsViewAction_MakeUnFavorite      = 1 << 1,
+    JMMenuActionsViewAction_Refresh             = 1 << 2,
+    JMMenuActionsViewAction_Filter              = 1 << 3,
+    JMMenuActionsViewAction_Edit                = 1 << 4,
+    JMMenuActionsViewAction_Sort                = 1 << 5,
+    JMMenuActionsViewAction_Save                = 1 << 6,
+    JMMenuActionsViewAction_Delete              = 1 << 7,
+    JMMenuActionsViewAction_Rename              = 1 << 8,
+    JMMenuActionsViewAction_SelectAll           = 1 << 9,
+    JMMenuActionsViewAction_ClearSelections     = 1 << 10,
+    JMMenuActionsViewAction_Run                 = 1 << 11,
+    JMMenuActionsViewAction_Print               = 1 << 12,
+    JMMenuActionsViewAction_Info                = 1 << 13,
+    JMMenuActionsViewAction_OpenIn              = 1 << 14,
+    JMMenuActionsViewAction_ShowExternalDisplay = 1 << 15,
+    JMMenuActionsViewAction_HideExternalDisplay = 1 << 16
 };
 
 @interface JMMenuAction : NSObject

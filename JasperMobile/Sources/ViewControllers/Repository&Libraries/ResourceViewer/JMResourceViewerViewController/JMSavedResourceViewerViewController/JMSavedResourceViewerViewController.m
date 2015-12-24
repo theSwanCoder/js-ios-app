@@ -100,7 +100,7 @@
 {
     JMMenuActionsViewAction menuActions = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn;
     if ([self isExternalScreenAvailable]) {
-        menuActions |= JMMenuActionsViewAction_ExternalDisplay;
+        menuActions |= JMMenuActionsViewAction_ShowExternalDisplay;
     }
     return menuActions;
 }
@@ -167,7 +167,7 @@
             NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
             [JMUtils presentAlertControllerWithError:error completion:nil];
         }
-    } else if (action == JMMenuActionsViewAction_ExternalDisplay) {
+    } else if (action == JMMenuActionsViewAction_ShowExternalDisplay) {
         if ( [self createExternalWindow] ) {
             [self showExternalWindow];
             [self addControlsForExternalWindow];

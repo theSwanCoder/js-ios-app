@@ -36,6 +36,11 @@
 
 @implementation JMExternalWindowControlViewController
 
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
 - (instancetype)initWithContentWebView:(UIWebView *)contentView
 {
     if (self = [super init]) {
