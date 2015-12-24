@@ -412,7 +412,6 @@
 
 - (void)switchFromTV
 {
-    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.webView];
     [self setupWebViewLayout];
 

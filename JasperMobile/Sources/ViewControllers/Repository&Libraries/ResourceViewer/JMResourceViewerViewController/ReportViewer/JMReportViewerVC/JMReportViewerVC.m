@@ -808,7 +808,6 @@
 
 - (void)switchFromTV
 {
-    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.webView];
     [self setupWebViewLayout];
 
@@ -819,7 +818,7 @@
     }
     [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
 
-//    self.controlViewController = nil;
+    [self.controlViewController.view removeFromSuperview];
 }
 
 #pragma mark - JMExternalWindowControlViewControllerDelegate
