@@ -52,8 +52,8 @@
 
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
-    NSLog(@"horizontal size class: %@", @(newCollection.horizontalSizeClass));
-    NSLog(@"vertical size class: %@", @(newCollection.verticalSizeClass));
+    JMLog(@"horizontal size class: %@", @(newCollection.horizontalSizeClass));
+    JMLog(@"vertical size class: %@", @(newCollection.verticalSizeClass));
 
     [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
 }
@@ -281,7 +281,7 @@
 
                                                                                                              // get report options
                                                                                                              __weak typeof(self) weakSelf = strongSelf;
-                                                                                                             [JMReportManager fetchReportOptionsWithReportURI:self.report.reportURI completion:^(NSArray *reportOptions, NSError *error) {
+                                                                                                             [JMReportManager fetchReportOptionsWithReportURI:strongSelf.report.reportURI completion:^(NSArray *reportOptions, NSError *error) {
                                                                                                                  __strong typeof(self) strongSelf = weakSelf;
                                                                                                                  if (error && error.code == JSSessionExpiredErrorCode) {
                                                                                                                      errorHandlingBlock(error, @"Report Options Loading Error");
@@ -819,7 +819,7 @@
     }
     [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
 
-    self.controlViewController = nil;
+//    self.controlViewController = nil;
 }
 
 #pragma mark - JMExternalWindowControlViewControllerDelegate
