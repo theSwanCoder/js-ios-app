@@ -100,7 +100,7 @@
 {
     JMMenuActionsViewAction menuActions = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn;
     if ([self isExternalScreenAvailable]) {
-        menuActions |= JMMenuActionsViewAction_ShowExternalDisplay;
+        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
     }
     return menuActions;
 }
@@ -172,6 +172,9 @@
             [self showExternalWindow];
             [self addControlsForExternalWindow];
         }
+    } else if (action == JMMenuActionsViewAction_HideExternalDisplay) {
+        [self switchFromTV];
+        [self hideExternalWindow];
     }
 }
 
@@ -202,13 +205,19 @@
     [self.view addSubview:self.controlViewController.view];
 }
 
+- (void)switchFromTV
+{
+    [self.view addSubview:self.webView];
+    [self setupWebViewLayout];
+
+    [self.controlViewController.view removeFromSuperview];
+}
+
 #pragma mark - JMExternalWindowControlViewControllerDelegate
 - (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlViewController *)viewController
 {
-    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addSubview:self.webView];
-    [self setupWebViewLayout];
-    [self.controlViewController.view removeFromSuperview];
+    [self switchFromTV];
+    [self hideExternalWindow];
 }
 
 @end
