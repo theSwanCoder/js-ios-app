@@ -726,7 +726,7 @@
         availableAction |= JMMenuActionsViewAction_Refresh;
     }
     if ([self isExternalScreenAvailable]) {
-        availableAction |= [self isContentOnTV] ? JMMenuActionsViewAction_ShowExternalDisplay : JMMenuActionsViewAction_HideExternalDisplay;
+        availableAction |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
     }
     return availableAction;
 }

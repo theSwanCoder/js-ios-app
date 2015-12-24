@@ -258,7 +258,7 @@
 {
     JMMenuActionsViewAction menuActions = [super availableActionForResource:resource] | JMMenuActionsViewAction_Refresh;
     if ([self isExternalScreenAvailable]) {
-        menuActions |= [self isContentOnTV] ? JMMenuActionsViewAction_ShowExternalDisplay : JMMenuActionsViewAction_HideExternalDisplay;
+        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
     }
     return menuActions;
 }

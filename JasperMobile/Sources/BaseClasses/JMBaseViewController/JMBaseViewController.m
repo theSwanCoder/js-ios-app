@@ -78,6 +78,8 @@
         viewForAdding.frame = rect;
         [self.externalWindow addSubview:viewForAdding];
 
+        self.externalWindow.hidden = YES;
+
         return YES;
     } else {
         return NO;
@@ -91,7 +93,7 @@
 
 - (void)hideExternalWindow
 {
-    self.externalWindow = nil;
+    self.externalWindow.hidden = YES;
 }
 
 - (UIView *)viewForAddingToExternalWindow
@@ -107,7 +109,9 @@
 
 - (BOOL)isContentOnTV
 {
-    return self.externalWindow == nil;
+    BOOL isContentOnTV = self.externalWindow && !self.externalWindow.hidden;
+    JMLog(@"is content on tv: %@", isContentOnTV ? @"YES" : @"NO");
+    return isContentOnTV;
 }
 
 @end
