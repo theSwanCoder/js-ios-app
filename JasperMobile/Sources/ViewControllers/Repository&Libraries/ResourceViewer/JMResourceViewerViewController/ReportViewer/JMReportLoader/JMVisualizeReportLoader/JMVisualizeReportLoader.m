@@ -34,6 +34,11 @@
 #import "JMJavascriptCallback.h"
 #import "JMWebViewManager.h"
 
+#import "JSReportParameter.h"
+#import "JSRESTBase+JSRESTReport.h"
+
+
+
 typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     JMReportViewerAlertViewTypeEmptyReport,
     JMReportViewerAlertViewTypeErrorLoad

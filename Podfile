@@ -3,8 +3,7 @@ platform :ios, "7.0"
 
 pod 'Appirater'
 pod 'SWRevealViewController', '>=2.3.0'
-pod 'JaspersoftSDK', :path => '../js-ios-sdk/JaspersoftSDK.podspec'
-
+pod 'JaspersoftSDK', :git => 'https://github.com/Jaspersoft/js-ios-sdk.git',  :tag => '2.3-beta', :subspecs => ['JSCore', 'JSSecurity', 'JSReportExtention']
 post_install do |installer_representation|
   installer_representation.pods_project.targets.each do |target|
     if target.name == "Pods-JaspersoftSDK"

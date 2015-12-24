@@ -563,7 +563,7 @@
                     __strong typeof(self)strongSelf = weakSelf;
                     if (isSessionAuthorized) {
                         // TODO: Need add restoring for current page
-                        [strongSelf runReportWithPage:reportCurrentPage];
+                        [strongSelf runReportWithPage:self.report.currentPage];
                     } else {
                         [JMUtils showLoginViewAnimated:YES completion:^{
                             [strongSelf cancelResourceViewingAndExit:YES];

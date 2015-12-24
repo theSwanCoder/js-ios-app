@@ -32,6 +32,7 @@
  */
 
 #import "JMSavedResources.h"
+#import "JSResourceLookup.h"
 
 extern NSString * const kJMSavedResources;
 
