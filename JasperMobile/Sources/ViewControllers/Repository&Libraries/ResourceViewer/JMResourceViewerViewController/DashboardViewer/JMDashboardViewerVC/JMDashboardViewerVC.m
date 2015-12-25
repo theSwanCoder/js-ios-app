@@ -270,9 +270,7 @@
     if (action == JMMenuActionsViewAction_Refresh) {
         [self reloadDashboard];
     } else if (action == JMMenuActionsViewAction_ShowExternalDisplay) {
-        if ( [self createExternalWindow] ) {
-            [self showExternalWindow];
-        }
+        [self showExternalWindow];
     } else if (action == JMMenuActionsViewAction_HideExternalDisplay) {
         [self switchFromTV];
         [self hideExternalWindow];

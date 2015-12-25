@@ -69,7 +69,11 @@
 
 - (void)showExternalWindow
 {
-    self.externalWindow.hidden = NO;
+    if ([self isExternalScreenAvailable] && [self createExternalWindow] ) {
+        self.externalWindow.hidden = NO;
+    } else {
+        // TODO: add handling this situation
+    }
 }
 
 - (void)hideExternalWindow
