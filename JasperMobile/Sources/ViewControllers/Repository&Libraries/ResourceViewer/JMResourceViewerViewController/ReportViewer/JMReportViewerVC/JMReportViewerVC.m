@@ -802,7 +802,6 @@
 {
     [self.reportLoader updateViewportScaleFactorWithValue:0.75];
     UIView *view = [UIView new];
-    view.backgroundColor = [UIColor redColor];
     UIView *reportView = self.webView;
 
     // Need some time to layout content of webview
