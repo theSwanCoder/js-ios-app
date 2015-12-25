@@ -151,10 +151,12 @@
     printInteractionController.printingItem = printingItem;
 
     UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
-            if (completion) {
-                completion(completed, error);
-            }
-        };
+        if (completion) {
+            completion(completed, error);
+        }
+        // reassign keyWindow status (there is an issue when using showing a report on tv and printing the report).
+        [self.view.window makeKeyWindow];
+    };
 
     if ([JMUtils isIphone]) {
         [printInteractionController presentAnimated:YES completionHandler:completionHandler];
