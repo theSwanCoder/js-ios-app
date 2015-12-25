@@ -670,9 +670,7 @@
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
         case JMMenuActionsViewAction_ShowExternalDisplay:
-            if ( [self createExternalWindow] ) {
-                [self showExternalWindow];
-            }
+            [self showExternalWindow];
             break;
         case JMMenuActionsViewAction_HideExternalDisplay:
             [self switchFromTV];
@@ -778,19 +776,57 @@
 }
 
 
+- (void)layoutEmptyReportLabelInView:(UIView *)view {
+
+    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.emptyReportMessageLabel
+                                                                  attribute:NSLayoutAttributeCenterX
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:view
+                                                                  attribute:NSLayoutAttributeCenterX
+                                                                 multiplier:1
+                                                                   constant:0];
+    [view addConstraint:constraint];
+
+    constraint = [NSLayoutConstraint constraintWithItem:self.emptyReportMessageLabel
+                                              attribute:NSLayoutAttributeCenterY
+                                              relatedBy:NSLayoutRelationEqual
+                                                 toItem:view
+                                              attribute:NSLayoutAttributeCenterY
+                                             multiplier:1
+                                               constant:0];
+    [view addConstraint:constraint];
+}
+
 #pragma mark - Work with external screen
 - (UIView *)viewForAddingToExternalWindow
 {
     [self.reportLoader updateViewportScaleFactorWithValue:0.75];
-    UIView *reportView = self.configurator.webView;;
-    reportView.translatesAutoresizingMaskIntoConstraints = YES;
+    UIView *view = [UIView new];
+    view.backgroundColor = [UIColor redColor];
+    UIView *reportView = self.webView;
 
     // Need some time to layout content of webview
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self addControlsForExternalWindow];
     });
 
-    return reportView;
+    [view addSubview:reportView];
+
+    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[reportView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"reportView": reportView}]];
+
+    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[reportView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"reportView": reportView}]];
+
+
+    [view addSubview:self.emptyReportMessageLabel];
+    [self layoutEmptyReportLabelInView:view];
+
+    return view;
 }
 
 
@@ -817,6 +853,9 @@
         initialScaleViewport = 0.25;
     }
     [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+
+    [self.view addSubview:self.emptyReportMessageLabel];
+    [self layoutEmptyReportLabelInView:self.view];
 
     [self.controlViewController.view removeFromSuperview];
 }
