@@ -39,10 +39,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #import "JMDashboardLoader.h"
 #import "JMDashboard.h"
 #import "JMWebViewManager.h"
+#import "JMDashlet.h"
 
 @interface JMVisDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
-@property (nonatomic, copy) void(^loadCompletion)(BOOL success, NSError *error);
+@property (nonatomic, copy) JMDashboardLoaderCompletion loadCompletion;
 @property (nonatomic, copy) NSURL *externalURL;
 @end
 
@@ -180,14 +181,12 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - JMJavascriptNativeBridgeDelegate
 - (void)javascriptNativeBridge:(id <JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback
 {
-    JMLog(@"callback type: %@", callback.type);
-    JMLog(@"callback parameters: %@", callback.parameters[@"parameters"]);
     if ([callback.type isEqualToString:@"onScriptLoaded"]) {
         [self handleOnScriptLoaded];
     } else if ([callback.type isEqualToString:@"onMaximizeStart"]) {
         [self handleDidStartMaximazeDashletWithParameters:callback.parameters[@"parameters"]];
     } else if ([callback.type isEqualToString:@"onLoadDone"]) {
-        [self handleOnLoadDone];
+        [self handleOnLoadDoneWithParameters:callback.parameters[@"parameters"]];
     } else if ([callback.type isEqualToString:@"onReportExecution"]) {
         [self handleOnReportExecution:callback.parameters[@"parameters"]];
     } else if ([callback.type isEqualToString:@"onAdHocExecution"]) {
@@ -202,6 +201,9 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self loadDashboardWithCompletion:self.loadCompletion];
         });
+    } else {
+        JMLog(@"callback type: %@", callback.type);
+        JMLog(@"callback parameters: %@", callback.parameters[@"parameters"]);
     }
 }
 
@@ -250,8 +252,18 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     [self.bridge sendRequest:runRequest];
 }
 
-- (void)handleOnLoadDone
+- (void)handleOnLoadDoneWithParameters:(NSDictionary *)parameters
 {
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    NSArray *rawDashlets = parameters[@"components"];
+    NSMutableArray *dashlets = [NSMutableArray array];
+    for (NSDictionary *rawDashlet in rawDashlets) {
+        JMDashlet *dashlet = [self parseDashletFromData:rawDashlet];
+        [dashlets addObject:dashlet];
+    }
+
+    self.dashboard.components = [dashlets copy];
+
     if (self.loadCompletion) {
         self.loadCompletion(YES, nil);
     }
@@ -329,6 +341,24 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                                             value:parameters[key]]];
     }
     return [reportParameters copy];
+}
+
+- (JMDashlet *)parseDashletFromData:(NSDictionary *)rawDashlet
+{
+    JMDashlet *dashlet = [JMDashlet new];
+    dashlet.identifier = rawDashlet[@"id"];
+    NSNumber *rawInterective = (NSNumber *)rawDashlet[@"interactive"];
+    dashlet.interactive = [rawInterective isKindOfClass:[NSNull class]] ? NO : rawInterective.boolValue;
+    NSNumber *rawMaximized = (NSNumber *)rawDashlet[@"maximized"];
+    dashlet.maximized = [rawMaximized isKindOfClass:[NSNull class]] ? NO : rawMaximized.boolValue;
+    dashlet.name = rawDashlet[@"name"];
+    NSString *dashletType = rawDashlet[@"type"];
+    if ([dashletType isEqualToString:@"value"]) {
+        dashlet.type = JMDashletTypeValue;
+    } else if ([dashletType isEqualToString:@"chart"]) {
+        dashlet.type = JMDashletTypeChart;
+    }
+    return dashlet;
 }
 
 @end

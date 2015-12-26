@@ -92,7 +92,7 @@ static const NSInteger kDashboardLoadTimeoutSec = 30;
     };
 }
 
-- (void)reloadDashboardWithCompletion:(void (^)(BOOL success, NSError *error))completion
+- (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion)completion
 {
     [self.bridge reset];
 

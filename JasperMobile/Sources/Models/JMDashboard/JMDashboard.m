@@ -27,6 +27,7 @@
 //
 
 #import "JMDashboard.h"
+#import "JMDashlet.h"
 
 @interface JMDashboard()
 // setters
