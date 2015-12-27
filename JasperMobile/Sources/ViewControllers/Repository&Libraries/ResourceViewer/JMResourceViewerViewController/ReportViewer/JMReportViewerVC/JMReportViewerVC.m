@@ -35,7 +35,7 @@
 #import "ALToastView.h"
 #import "JMInputControlsViewController.h"
 #import "JMReportViewerToolBar.h"
-#import "JMExternalWindowControlViewController.h"
+#import "JMExternalWindowControlsVC.h"
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMExternalWindowControlViewControllerDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
@@ -45,7 +45,7 @@
 @property (nonatomic, strong, readwrite) JMReport *report;
 @property (nonatomic, strong) NSArray *initialReportParameters;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
-@property (nonatomic) JMExternalWindowControlViewController *controlViewController;
+@property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
 @end
 
 @implementation JMReportViewerVC
@@ -831,14 +831,14 @@
 
 - (void)addControlsForExternalWindow
 {
-    self.controlViewController = [[JMExternalWindowControlViewController alloc] initWithContentWebView:self.webView];
-    self.controlViewController.delegate = self;
+    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentWebView:self.webView];
+    self.controlsViewController.delegate = self;
 
     CGRect controlViewFrame = self.view.frame;
     controlViewFrame.origin.y = 0;
-    self.controlViewController.view.frame = controlViewFrame;
+    self.controlsViewController.view.frame = controlViewFrame;
 
-    [self.view addSubview:self.controlViewController.view];
+    [self.view addSubview:self.controlsViewController.view];
 }
 
 - (void)switchFromTV
@@ -856,11 +856,11 @@
     [self.view addSubview:self.emptyReportMessageLabel];
     [self layoutEmptyReportLabelInView:self.view];
 
-    [self.controlViewController.view removeFromSuperview];
+    [self.controlsViewController.view removeFromSuperview];
 }
 
 #pragma mark - JMExternalWindowControlViewControllerDelegate
-- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlViewController *)viewController
+- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController
 {
     [self switchFromTV];
     [self hideExternalWindow];

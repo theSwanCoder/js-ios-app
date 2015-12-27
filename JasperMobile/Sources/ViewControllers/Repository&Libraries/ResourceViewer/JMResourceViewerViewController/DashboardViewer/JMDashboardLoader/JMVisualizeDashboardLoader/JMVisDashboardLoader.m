@@ -121,11 +121,30 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     [self destroyDashboard];
 }
 
+- (void)maximizeDashlet:(JMDashlet *)dashlet
+{
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    // MobileDashboard._instance._controller.dashboard.updateComponent(%@, {maximized: true,interactive: true});
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileDashboard._instance._controller.dashboard.updateComponent(\"%@\", {maximized: true,interactive: true});";
+    request.parametersAsString = dashlet.identifier;
+    [self.bridge sendRequest:request];
+}
+
+- (void)minimizeDashlet:(JMDashlet *)dashlet
+{
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    // MobileDashboard._instance._controller.dashboard.updateComponent(%@, {maximized: true,interactive: true});
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileDashboard._instance._controller.dashboard.updateComponent(\"%@\", {maximized: false,interactive: false});";
+    request.parametersAsString = dashlet.identifier;
+    [self.bridge sendRequest:request];
+}
+
 - (void)minimizeDashlet
 {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileDashboard.minimizeDashlet();";
-    request.parametersAsString = @"";
     [self.bridge sendRequest:request];
 }
 
@@ -196,6 +215,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     } else if ([callback.type isEqualToString:@"onAuthError"]) {
         [self javascriptNativeBridgeDidReceiveAuthRequest:self.bridge];
     } else if ([callback.type isEqualToString:@"onWindowError"]) {
+        JMLog(@"callback.parameters: %@", callback.parameters);
         [self.bridge reset];
         // waiting for resetting of webview
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

@@ -33,13 +33,15 @@
 #import "JMReportViewerVC.h"
 #import "JMDashboard.h"
 #import "JMWebViewManager.h"
+#import "JMExternalWindowDashboardControlsVC.h"
 
-@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate>
+@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
 @property (nonatomic, strong) UIBarButtonItem *leftButtonItem;
 
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
+@property (nonatomic) JMExternalWindowDashboardControlsVC *controlsViewController;
 @end
 
 
@@ -402,10 +404,34 @@
 #pragma mark - Work with external screen
 - (UIView *)viewForAddingToExternalWindow
 {
+    [self addControlsForExternalWindow];
+
     [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
     UIView *dashboardView = self.configurator.webView;
     dashboardView.translatesAutoresizingMaskIntoConstraints = YES;
     return dashboardView;
+}
+
+- (void)addControlsForExternalWindow
+{
+    self.controlsViewController = [JMExternalWindowDashboardControlsVC new];
+    self.controlsViewController.components = self.dashboard.components;
+    [self.view addSubview:self.controlsViewController.view];
+
+    self.controlsViewController.delegate = self;
+
+    self.controlsViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[controlsView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"controlsView": self.controlsViewController.view}]];
+
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[controlsView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"controlsView": self.controlsViewController.view}]];
+
+
 }
 
 - (void)switchFromTV
@@ -419,6 +445,24 @@
         initialScaleViewport = 0.25;
     }
     [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+
+    [self.controlsViewController.view removeFromSuperview];
+    self.controlsViewController = nil;
+}
+
+#pragma mark - JMExternalWindowDashboardControlsVCDelegate
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JMDashlet *)dashlet
+{
+    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
+        [self.dashboardLoader maximizeDashlet:dashlet];
+    }
+}
+
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JMDashlet *)dashlet
+{
+    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
+        [self.dashboardLoader minimizeDashlet:dashlet];
+    }
 }
 
 @end

@@ -23,13 +23,13 @@
 
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
-#import "JMExternalWindowControlViewController.h"
+#import "JMExternalWindowControlsVC.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate, JMExternalWindowControlViewControllerDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
-@property (nonatomic) JMExternalWindowControlViewController *controlViewController;
+@property (nonatomic) JMExternalWindowControlsVC *controlViewController;
 @end
 
 @implementation JMSavedResourceViewerViewController
@@ -198,7 +198,7 @@
     CGRect controlViewFrame = self.view.frame;
     controlViewFrame.origin.y = 0;
 
-    self.controlViewController = [[JMExternalWindowControlViewController alloc] initWithContentWebView:self.webView];
+    self.controlViewController = [[JMExternalWindowControlsVC alloc] initWithContentWebView:self.webView];
     self.controlViewController.view.frame = controlViewFrame;
     self.controlViewController.delegate = self;
 
@@ -214,7 +214,7 @@
 }
 
 #pragma mark - JMExternalWindowControlViewControllerDelegate
-- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlViewController *)viewController
+- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController
 {
     [self switchFromTV];
     [self hideExternalWindow];

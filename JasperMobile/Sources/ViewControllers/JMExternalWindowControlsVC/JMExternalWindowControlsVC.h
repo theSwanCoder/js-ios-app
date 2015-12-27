@@ -22,7 +22,7 @@
 
 
 //
-//  JMExternalWindowControlViewController.h
+//  JMExternalWindowControlsVC.h
 //  TIBCO JasperMobile
 //
 
@@ -33,7 +33,7 @@
 
 @protocol JMExternalWindowControlViewControllerDelegate;
 
-@interface JMExternalWindowControlViewController : UIViewController
+@interface JMExternalWindowControlsVC : UIViewController
 @property (nonatomic, weak) NSObject <JMExternalWindowControlViewControllerDelegate> *delegate;
 
 - (instancetype)initWithContentWebView:(UIWebView *)contentView;
@@ -42,5 +42,5 @@
 
 @protocol JMExternalWindowControlViewControllerDelegate
 @optional
-- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlViewController *)viewController;
+- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController;
 @end
