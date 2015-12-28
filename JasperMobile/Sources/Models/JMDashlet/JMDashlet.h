@@ -34,6 +34,8 @@
 typedef NS_ENUM(NSInteger, JMDashletType) {
     JMDashletTypeValue,
     JMDashletTypeChart,
+    JMDashletTypeReportUnit,
+    JMDashletTypeFilterGroup,
 };
 
 @interface JMDashlet : NSObject
