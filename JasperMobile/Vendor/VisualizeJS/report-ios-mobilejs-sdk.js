@@ -173,7 +173,23 @@
         return this._makeCallback("onWindowError&error=" + error);
       };
 
-      ReportCallback.prototype.onPageLoadError = function(error) {};
+      ReportCallback.prototype.onPageLoadError = function(error) {
+        this._makeCallback("json&" + JSON.stringify({
+          "command": "onPageLoadError",
+          "parameters": {
+            "message": error
+          }
+        }));
+      };
+
+      ReportCallback.prototype.logging = function(message) {
+        this._makeCallback("json&" + JSON.stringify({
+          "command": "logging",
+          "parameters": {
+            "message": message
+          }
+        }));
+      };
 
       ReportCallback.prototype._makeCallback = function(command) {
         return window.location.href = "http://jaspermobile.callback/" + command;
@@ -354,6 +370,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       ReportController.prototype.runReport = function() {
         js_mobile.log("runReport");
+        this.callback.logging("runReport");
         this._setGlobalErrorListener();
         this.scaler.applyScale();
         this.callback.onLoadStart();
@@ -362,11 +379,13 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       ReportController.prototype.refresh = function() {
         js_mobile.log("refresh");
+        this.callback.logging("refresh");
         return this.report.refresh(this._processSuccess, this._processErrors);
       };
 
       ReportController.prototype.applyReportParams = function(parameters) {
         js_mobile.log("applyReportParams");
+        this.callback.logging("applyReportParams");
         this.callback.onLoadStart();
         return this.report.params(parameters).run().done(this._processSuccess).fail(this._processErrors);
       };
@@ -392,6 +411,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         var isAmber2orHigher;
         isAmber2orHigher = version >= 6.1;
         js_mobile.log("Version: " + version + " Is amber2 or higher: " + isAmber2orHigher);
+        this.callback.logging("Version: " + version + " Is amber2 or higher: " + isAmber2orHigher);
         if (isAmber2orHigher) {
           return this._runReportWithoutAuth();
         } else {
@@ -401,14 +421,17 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       ReportController.prototype._runReportWithoutAuth = function() {
         js_mobile.log("_runReportWithoutAuth");
+        this.callback.logging("_runReportWithoutAuth");
         return visualize(this._executeReportForAmber2OrHigher, this._runReportWithoutAuthButWithHack);
       };
 
       ReportController.prototype._runReportWithoutAuthButWithHack = function(error) {
         var skipAuth;
         js_mobile.log("_runReportWithoutAuthButWithHack");
+        this.callback.logging("_runReportWithoutAuthButWithHack");
         if (error != null) {
           js_mobile.log(" Reason: " + error.message);
+          this.callback.logging(" Reason: " + error.message);
         }
         skipAuth = {
           auth: {
@@ -422,8 +445,10 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 
       ReportController.prototype._runReportWithAuth = function(error) {
         js_mobile.log("_runReportWithAuth");
+        this.callback.logging("_runReportWithAuth");
         if (error != null) {
           js_mobile.log(" Reason: " + error.message);
+          this.callback.logging(" Reason: " + error.message);
         }
         return visualize(this.session.authOptions(), this._executeReportForAmber, this._executeFailedCallback, this._executeAlways);
       };
@@ -447,6 +472,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         var actualParams, defaultParams;
         this.v = v;
         js_mobile.log("_executeReport");
+        this.callback.logging("_executeReport");
         defaultParams = {
           resource: this.uri,
           params: this.params,
@@ -476,7 +502,8 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       };
 
       ReportController.prototype._executeFailedCallback = function(error) {
-        return js_mobile.log(error.message);
+        js_mobile.log(error.message);
+        return this.callback.logging(error.message);
       };
 
       ReportController.prototype._checkMultipageState = function() {
@@ -541,11 +568,13 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       };
 
       ReportController.prototype._notifyPageChangeError = function(error) {
-        return this.callback.onPageLoadError(error.message, parseInt(this.report.pages()));
+        this.callback.onPageLoadError(error.message, parseInt(this.report.pages()));
+        return this.callback.logging(error.message);
       };
 
       ReportController.prototype._exportReport = function(format) {
         js_mobile.log("export with format: " + format);
+        this.callback.logging("export with format: " + format);
         return this.report["export"]({
           outputFormat: format
         }).done(this._exportResource);
@@ -609,35 +638,42 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       ReportController.prototype._getChartTypeList = function() {
         var chartTypeList;
         js_mobile.log("_getChartTypeList");
+        this.callback.logging("_getChartTypeList");
         chartTypeList = this.v.report.chart.types;
         return this.callback.onChartTypeListObtained(chartTypeList);
       };
 
       ReportController.prototype._processReportComplete = function(status, error) {
         js_mobile.log("onReportCompleted");
+        this.callback.logging("onReportCompleted");
         return this.callback.onReportCompleted(status, this.report.data().totalPages, error);
       };
 
       ReportController.prototype._processCurrentPageChanged = function(page) {
         js_mobile.log("Current page changed: " + page);
+        this.callback.logging("Current page changed: " + page);
         return this.callback.onPageChange(page);
       };
 
       ReportController.prototype._processMultipageState = function(isMultipage) {
         js_mobile.log("multi " + isMultipage);
+        this.callback.logging("multi " + isMultipage);
         return this.callback.onMultiPageStateObtained(isMultipage);
       };
 
       ReportController.prototype._processSuccess = function(parameters) {
         js_mobile.log("_processSuccess");
+        this.callback.logging("_processSuccess");
         this._checkMultipageState();
         return this.callback.onLoadDone(parameters);
       };
 
       ReportController.prototype._processErrors = function(error) {
         js_mobile.log(error);
+        this.callback.logging(error);
         if (error.errorCode === "authentication.error") {
           js_mobile.log("onLoadStart");
+          this.callback.logging("onLoadStart");
           this.callback.onLoadStart();
           return this._runReportWithAuth(error);
         } else {
