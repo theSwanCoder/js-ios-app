@@ -99,8 +99,8 @@
 
 - (void)resetZoom
 {
-    [self.primaryWebView.scrollView setZoomScale:0.1 animated:YES];
-    [self.secondaryWebView.scrollView setZoomScale:0.1 animated:YES];
+    [_primaryWebView.scrollView setZoomScale:0.1 animated:YES];
+    [_secondaryWebView.scrollView setZoomScale:0.1 animated:YES];
 }
 
 #pragma mark - Private API
