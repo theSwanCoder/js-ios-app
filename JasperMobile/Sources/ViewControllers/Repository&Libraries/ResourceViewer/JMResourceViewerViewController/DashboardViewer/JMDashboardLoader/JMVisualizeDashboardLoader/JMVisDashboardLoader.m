@@ -275,11 +275,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)handleOnLoadDoneWithParameters:(NSDictionary *)parameters
 {
     JMLog(@"%@", NSStringFromSelector(_cmd));
-    NSArray *rawDashlets = parameters[@"components"];
+    JMLog(@"parameters: %@", parameters);
+    NSArray *rawComponents = parameters[@"components"];
     NSMutableArray *dashlets = [NSMutableArray array];
-    for (NSDictionary *rawDashlet in rawDashlets) {
-        JMDashlet *dashlet = [self parseDashletFromData:rawDashlet];
-        [dashlets addObject:dashlet];
+    for (NSDictionary *rawComponent in rawComponents) {
+        JMDashlet *dashlet = [self parseComponentsFromData:rawComponent];
+        if (dashlet) {
+            [dashlets addObject:dashlet];
+        }
     }
 
     self.dashboard.components = [dashlets copy];
@@ -287,6 +290,23 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     if (self.loadCompletion) {
         self.loadCompletion(YES, nil);
     }
+
+    // get parameters
+    // TODO: replace this after rewriting js code
+    // we need delay because values are not ready
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        JMJavascriptRequest *request = [JMJavascriptRequest new];
+        request.command = @"JSON.stringify(MobileDashboard._instance._controller.dashboard.data().parameters);";
+        [self.bridge sendRequest:request completion:^(JMJavascriptCallback *callback, NSError *error) {
+            if (callback) {
+                JMLog(@"parameters: %@", callback.parameters);
+                // TODO: callback.parameters may not have @"parameters" key
+                self.dashboard.inputControls = callback.parameters[@"parameters"];
+            } else {
+                JMLog(@"error: %@", error.localizedDescription);
+            }
+        }];
+    });
 }
 
 - (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
@@ -363,20 +383,29 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     return [reportParameters copy];
 }
 
-- (JMDashlet *)parseDashletFromData:(NSDictionary *)rawDashlet
+- (JMDashlet *)parseComponentsFromData:(NSDictionary *)rawData
 {
+    NSString *type = rawData[@"type"];
+
+    if ([type isEqualToString:@"inputControl"]) {
+        return nil;
+    }
+
     JMDashlet *dashlet = [JMDashlet new];
-    dashlet.identifier = rawDashlet[@"id"];
-    NSNumber *rawInterective = (NSNumber *)rawDashlet[@"interactive"];
+    dashlet.identifier = rawData[@"id"];
+    NSNumber *rawInterective = (NSNumber *) rawData[@"interactive"];
     dashlet.interactive = [rawInterective isKindOfClass:[NSNull class]] ? NO : rawInterective.boolValue;
-    NSNumber *rawMaximized = (NSNumber *)rawDashlet[@"maximized"];
+    NSNumber *rawMaximized = (NSNumber *) rawData[@"maximized"];
     dashlet.maximized = [rawMaximized isKindOfClass:[NSNull class]] ? NO : rawMaximized.boolValue;
-    dashlet.name = rawDashlet[@"name"];
-    NSString *dashletType = rawDashlet[@"type"];
-    if ([dashletType isEqualToString:@"value"]) {
+    dashlet.name = rawData[@"name"];
+    if ([type isEqualToString:@"value"]) {
         dashlet.type = JMDashletTypeValue;
-    } else if ([dashletType isEqualToString:@"chart"]) {
+    } else if ([type isEqualToString:@"chart"]) {
         dashlet.type = JMDashletTypeChart;
+    } else if ([type isEqualToString:@"filterGroup"]) {
+        dashlet.type = JMDashletTypeFilterGroup;
+    } else if ([type isEqualToString:@"reportUnit"]) {
+        dashlet.type = JMDashletTypeReportUnit;
     }
     return dashlet;
 }

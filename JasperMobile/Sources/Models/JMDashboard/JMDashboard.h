@@ -39,6 +39,7 @@
 @property (nonatomic, copy, readonly) NSString *resourceURI;
 @property (nonatomic, strong, readonly) NSURLRequest *resourceRequest;
 @property (nonatomic, copy) NSArray <JMDashlet *>*components;
+@property (nonatomic, copy) NSArray *inputControls;
 
 - (instancetype)initWithResource:(JSResourceLookup *)resourceLookup;
 + (instancetype)dashboardWithResource:(JSResourceLookup *)resourceLookup;

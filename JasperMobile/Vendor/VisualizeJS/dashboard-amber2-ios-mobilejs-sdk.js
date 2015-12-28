@@ -148,11 +148,12 @@
         });
       };
 
-      IosCallback.prototype.onLoadDone = function(components) {
+      IosCallback.prototype.onLoadDone = function(data) {
         this._makeCallback({
           "command": "onLoadDone",
           "parameters": {
-            "components": components
+            "components": data["components"],
+            "values": data["values"]
           }
         });
       };
@@ -232,7 +233,7 @@
 
       IosCallback.prototype._makeCallback = function(command) {
         return this.dispatch(function() {
-          return window.location.href = "http://jaspermobile.callback/json&" + JSON.stringify(command);
+          return window.location.href = "http://jaspermobile.callback/json&" + JSON.stringify(command, null, 4);
         });
       };
 
@@ -444,7 +445,10 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         this._defineComponentsClickEvent();
         this._setupFiltersApperance();
         this._overrideApplyButton();
-        return this.callback.onLoadDone(this.components);
+        return this.callback.onLoadDone({
+          "components": this.components,
+          "values": this.data.parameters
+        });
       };
 
       DashboardController.prototype._refreshSuccess = function(dashboard) {
