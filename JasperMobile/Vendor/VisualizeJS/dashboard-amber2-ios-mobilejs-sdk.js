@@ -521,6 +521,19 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         })[0];
       };
 
+      DashboardController.prototype._applyParams = function(params) {
+        js_mobile.log("params: " + (JSON.stringify(params)));
+        return this.dashboard.params(params).run().fail((function(_this) {
+          return function(error) {
+            return _this.callback.logging("failed apply params: " + error);
+          };
+        })(this)).done((function(_this) {
+          return function(data) {
+            return _this.callback.logging("successed apply params: " + data);
+          };
+        })(this));
+      };
+
       DashboardController.prototype._processLinkClicks = function(event, link, defaultHandler) {
         var type;
         type = link.type;
@@ -765,6 +778,14 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       MobileDashboard.prototype.run = function(params) {
         this._controller = new DashboardController(this.callback, this.scaler, params);
         return this._controller.runDashboard();
+      };
+
+      MobileDashboard.applyParams = function(params) {
+        return this._instance._applyParams(params);
+      };
+
+      MobileDashboard.prototype._applyParams = function(params) {
+        return this._controller._applyParams(params);
       };
 
       MobileDashboard.destroy = function() {

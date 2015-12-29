@@ -111,6 +111,16 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     [self.bridge sendRequest:request];
 }
 
+- (void)applyParameters:(NSString *)parametersAsString
+{
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest new];
+    applyParamsRequest.command = @"MobileDashboard.applyParams(%@);";
+
+    applyParamsRequest.parametersAsString = parametersAsString;
+    [self.bridge sendRequest:applyParamsRequest];
+}
+
 - (void)cancel
 {
     [self destroyDashboard];

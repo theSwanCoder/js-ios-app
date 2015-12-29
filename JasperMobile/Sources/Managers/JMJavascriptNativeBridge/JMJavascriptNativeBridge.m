@@ -78,7 +78,7 @@
     NSString *fullJavascriptString = [NSString stringWithFormat:javascriptString, parameters];
 //    JMLog(@"send request: %@", fullJavascriptString);
     NSString *jsResponse = [self.webView stringByEvaluatingJavaScriptFromString:fullJavascriptString];
-    NSLog(@"jsResponse: %@", jsResponse);
+//    NSLog(@"jsResponse: %@", jsResponse);
 
     NSData *parametersAsData = [jsResponse dataUsingEncoding:NSUTF8StringEncoding];
     NSError *error;
