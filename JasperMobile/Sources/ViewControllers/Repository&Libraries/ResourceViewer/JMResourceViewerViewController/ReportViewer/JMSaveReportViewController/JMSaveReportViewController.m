@@ -33,6 +33,9 @@
 #import "JMReport.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JSReportSaver.h"
+#import "JMExportManager.h"
+#import "JMReportExportTask.h"
+
 
 NSString * const kJMSaveReportViewControllerSegue = @"SaveReportViewControllerSegue";
 NSString * const kJMSaveReportNameCellIdentifier = @"ReportNameCell";
@@ -285,19 +288,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 }
 
 #pragma mark - Private
-
-- (BOOL)createReportDirectory:(NSString *)reportDirectory errorMessage:(NSString **)errorMessage
-{
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    NSError *error;
-    BOOL isCreated = [fileManager createDirectoryAtPath:reportDirectory
-                            withIntermediateDirectories:YES
-                                             attributes:nil
-                                                  error:&error];
-    return isCreated;
-}
-
 - (void)runSaveAction
 {
     [self.view endEditing:YES];
@@ -376,38 +366,19 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         self.errorString = nil;
         [self.tableView reloadData];
     }
+    JMReportExportTask *task = [[JMReportExportTask alloc] initWithReport:self.report
+                                                                     name:self.reportName
+                                                                   format:self.selectedReportFormat
+                                                                    pages:self.pagesRange];
+    [[JMExportManager sharedInstance] addExportTask:task];
 
-    JSReportSaver *reportSaver = [[JSReportSaver alloc] initWithReport:self.report restClient:self.restClient];
-    [JMCancelRequestPopup presentWithMessage:@"report.viewer.save.saving.status.title" cancelBlock:^{
-        [reportSaver cancelSavingReport];
+    // Animation
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [self.delegate reportDidSavedSuccessfully];
     }];
-    __weak typeof(self) weakSelf = self;
-    [reportSaver saveReportWithName:self.reportName
-                             format:self.selectedReportFormat
-                         pagesRange:self.pagesRange
-                         completion:^(NSURL * _Nullable savedReportFolderURL, NSError * _Nullable error) {
-                             [JMCancelRequestPopup dismiss];
-                             if (error) {
-                                 if (error.code == JSSessionExpiredErrorCode) {
-                                     [JMUtils showLoginViewAnimated:YES completion:nil];
-                                 } else {
-                                     [JMUtils presentAlertControllerWithError:error completion:nil];
-                                 }
-                             } else {
-                                 __strong typeof(self) strongSelf = weakSelf;
-                                 [JMSavedResources addReport:strongSelf.report.resourceLookup withName:strongSelf.reportName format:strongSelf.selectedReportFormat sourcesURL:savedReportFolderURL];
-                                 
-                                 // Animation
-                                 [CATransaction begin];
-                                 [CATransaction setCompletionBlock:^{
-                                     [self.delegate reportDidSavedSuccessfully];
-                                 }];
-                                 
-                                 [self.navigationController popViewControllerAnimated:YES];
-                                 [CATransaction commit];
-                             }
-
-    }];
+    [self.navigationController popViewControllerAnimated:YES];
+    [CATransaction commit];
 }
 
 - (void) reportLoaderDidChangeCountOfPages:(NSNotification *) notification

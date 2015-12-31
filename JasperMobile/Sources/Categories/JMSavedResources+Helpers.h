@@ -34,6 +34,8 @@
 #import "JMSavedResources.h"
 #import "JSResourceLookup.h"
 
+@class JMExportResource;
+
 extern NSString * const kJMSavedResources;
 
 @interface JMSavedResources (Helpers)
@@ -54,9 +56,6 @@ extern NSString * const kJMSavedResources;
 // Rename saved resource
 - (BOOL)renameReportTo:(NSString *)newName;
 
-// Remove saved resource from DB
-- (void)removeFromDB;
-
 // Removes saved resource
 - (void)removeReport;
 
@@ -67,6 +66,8 @@ extern NSString * const kJMSavedResources;
 - (JSResourceLookup *)wrapperFromSavedReports;
 
 // paths
++ (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format;
+
 + (NSString *)pathToFolderForSavedReport:(JMSavedResources *)savedReport;
 + (NSString *)pathToTempFolderForSavedReport:(JMSavedResources *)savedReport;
 + (NSString *)absolutePathToSavedReport:(JMSavedResources *)savedReport;

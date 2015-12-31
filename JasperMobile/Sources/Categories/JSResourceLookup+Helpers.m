@@ -28,6 +28,11 @@
     return [self.resourceType isEqualToString:kJMSavedReportUnit];
 }
 
+- (BOOL) isTempExportedReport
+{
+    return [self.resourceType isEqualToString:kJMTempExportedReportUnit];
+}
+
 - (BOOL) isDashboard
 {
     return [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD] || [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD_LEGACY];
@@ -80,6 +85,8 @@
 - (NSString *)localizedResourceType
 {
     if ([self.resourceType isEqualToString:kJMSavedReportUnit]) {
+        return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
+    } else if ([self.resourceType isEqualToString:kJMTempExportedReportUnit]) {
         return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
     } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_REPORT_UNIT]) {
         return JMCustomLocalizedString(@"resources.type.reportUnit", nil);

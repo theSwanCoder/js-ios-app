@@ -71,19 +71,15 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     }
 }
 
-- (void)removeFromDB
+- (void)removeReport
 {
     [JMFavorites removeFromFavorites:[self wrapperFromSavedReports]];
+
+    NSString *pathToReport = [JMSavedResources pathToFolderForSavedReport:self];
+    [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
     [self.managedObjectContext deleteObject:self];
     [self.managedObjectContext save:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kJMSavedResourcesDidChangedNotification object:nil];
-}
-
-- (void)removeReport
-{
-    NSString *pathToReport = [JMSavedResources pathToFolderForSavedReport:self];
-    [[NSFileManager defaultManager] removeItemAtPath:pathToReport error:nil];
-    [self removeFromDB];
 }
 
 - (UIImage *)thumbnailImage
@@ -202,7 +198,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 + (NSString *)pathToFolderForSavedReport:(JMSavedResources *)savedReport
 {
     // Documents/
-    NSString *pathToDocumentsFolder = [self pathToDocumentsFolder];
+    NSString *pathToDocumentsFolder = [JMUtils applicationDocumentsDirectory];
     // PathComponent/reports/reportName.format/reportName.format
     NSString *uri = savedReport.uri;
     // PathComponent/reports/reportName.format/
@@ -266,12 +262,6 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 }
 
 #pragma mark - Private API fo Paths
-+ (NSString *)pathToDocumentsFolder
-{
-    // Documents
-    NSString *documentsPath = [JMUtils applicationDocumentsDirectory];
-    return documentsPath;
-}
 
 + (NSString *)pathToTempReportsFolder
 {
@@ -369,7 +359,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 
 + (NSString *)wsTypeWithSourceWSType:(NSString *)wsType
 {
-    if ([wsType isEqualToString:kJS_WS_TYPE_REPORT_UNIT]) {
+    if ([wsType isEqualToString:kJS_WS_TYPE_REPORT_UNIT] || [wsType isEqualToString:kJMTempExportedReportUnit]) {
         return kJMSavedReportUnit;
     }
     return nil;
@@ -429,7 +419,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 + (NSString *)oldPathForSavedReport:(JMSavedResources *)savedResource
 {
     NSString *oldPath = @"";
-    NSString *documentFolderPath = [self pathToDocumentsFolder];
+    NSString *documentFolderPath = [JMUtils applicationDocumentsDirectory];
     NSString *uri = savedResource.uri;
     NSString *oldReportsFolder = [documentFolderPath stringByAppendingPathComponent:savedResource.serverProfile.alias];
     BOOL isExistFolder = [self isExistsFolderAtPath:oldReportsFolder];

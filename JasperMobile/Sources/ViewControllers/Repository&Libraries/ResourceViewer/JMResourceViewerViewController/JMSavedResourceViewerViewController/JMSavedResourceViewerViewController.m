@@ -34,24 +34,6 @@
 @implementation JMSavedResourceViewerViewController
 @synthesize changedReportName;
 
-#pragma mark - Handle Memory Warnings
-- (void)didReceiveMemoryWarning
-{
-    [self.webView stopLoading];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
-
-#warning WHY ONLY FOR SAVED REPORT VIEWER WE HANDLE MEMORY WARNINGS???
-    NSString *errorMessage = JMCustomLocalizedString(@"savedreport.viewer.show.resource.error.message", nil);
-    NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-    __weak typeof(self) weakSelf = self;
-    [JMUtils presentAlertControllerWithError:error completion:^{
-        __strong typeof(self) strongSelf = weakSelf;
-        [strongSelf cancelResourceViewingAndExit:YES];
-    }];
-
-    [super didReceiveMemoryWarning];
-}
-
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
     [self.documentController dismissMenuAnimated:YES];

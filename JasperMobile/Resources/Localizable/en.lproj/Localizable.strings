@@ -135,6 +135,8 @@
 "resource.viewer.print.button.title" = "Print...";
 "resource.viewer.print.preview.title" = "Preview";
 "resource.viewer.print.prepare.title" = "Prepare...";
+"resource.viewer.memory.warning" = "Sorry, Your device is low on memory...";
+
 
 // Report viewer
 "report.viewer.error.title" = "Error while loading report.";
@@ -153,6 +155,7 @@
 "report.viewer.save.pages.range.fromPage" = "From page:";
 "report.viewer.save.pages.range.toPage" = "To page:";
 "report.viewer.save.saved" = "The report was saved successfully.";
+"report.viewer.save.addedToQueue" = "The report was added to queue.";
 "report.viewer.save.name.errmsg.empty" = "This field is required.";
 "report.viewer.save.name.errmsg.notunique" = "This name already exists, choose a unique name.";
 "report.viewer.save.name.errmsg.notunique.rewrite" = "This name already exists, do you want to overwrite it?";

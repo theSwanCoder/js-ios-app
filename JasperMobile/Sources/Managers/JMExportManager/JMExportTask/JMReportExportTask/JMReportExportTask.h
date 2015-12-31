@@ -22,40 +22,23 @@
 
 
 //
-//  JMMenuItem.h
+//  JMReportExportTask.h
 //  TIBCO JasperMobile
 //
 
+
 /**
- @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.3
  */
 
-typedef NS_ENUM(NSInteger, JMResourceType){
-    JMResourceTypeLibrary,
-    JMResourceTypeRepository,
-    JMResourceTypeRecentViews,
-    JMResourceTypeSavedItems,
-    JMResourceTypeFavorites,
-    JMResourceTypeAbout,
-    JMResourceTypeFeedback,
-    JMResourceTypeLogout,
-    
-    JMResourceTypeNone
-};
+#import "JMExportTask.h"
+#import "JSReport.h"
 
-@interface JMMenuItem : NSObject
-@property (nonatomic, readonly) JMResourceType resourceType;
-@property (nonatomic, readonly) NSString *itemTitle;
-@property (nonatomic, readonly) UIImage  *itemIcon;
-@property (nonatomic, readonly) UIImage  *selectedItemIcon;
+@interface JMReportExportTask : JMExportTask
+@property (nonatomic, strong, readonly) JSReport *report;
+@property (nonatomic, strong, readonly) JSReportPagesRange *pagesRange;
 
-@property (assign, nonatomic) BOOL selected;
-@property (assign, nonatomic) BOOL showNotes;
+- (instancetype)initWithReport:(JSReport *)report name:(NSString *)name format:(NSString *)format pages:(JSReportPagesRange *)pagesRange;
 
-- (instancetype)initWithResourceType:(JMResourceType)resourceType;
-+ (instancetype)menuItemWithResourceType:(JMResourceType)resourceType;
-
-- (NSString *) vcIdentifierForSelectedItem;
-- (NSString *) nameForCrashlytics;
 @end

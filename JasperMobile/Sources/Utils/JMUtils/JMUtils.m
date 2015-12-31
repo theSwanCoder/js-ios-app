@@ -38,7 +38,6 @@
 #import "JMServerProfile+Helpers.h"
 #import "JSConstants.h"
 
-
 void jmDebugLog(NSString *format, ...) {
 #ifndef __RELEASE__
     va_list argumentList;

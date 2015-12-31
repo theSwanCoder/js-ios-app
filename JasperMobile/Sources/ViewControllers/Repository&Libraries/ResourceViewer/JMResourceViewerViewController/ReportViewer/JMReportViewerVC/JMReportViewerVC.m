@@ -546,7 +546,6 @@
 
 - (void)handleError:(NSError *)error
 {
-#warning NEED IMPROVE ERROR HANDLING - use should one method for handling error on all cases
     switch (error.code) {
         case JSReportLoaderErrorTypeAuthentification:
             [self.restClient deleteCookies];
@@ -649,7 +648,7 @@
 - (void)reportDidSavedSuccessfully
 {
     [ALToastView toastInView:self.view
-                    withText:JMCustomLocalizedString(@"report.viewer.save.saved", nil)];
+                    withText:JMCustomLocalizedString(@"report.viewer.save.addedToQueue", nil)];
 }
 
 #pragma mark - Input Controls
