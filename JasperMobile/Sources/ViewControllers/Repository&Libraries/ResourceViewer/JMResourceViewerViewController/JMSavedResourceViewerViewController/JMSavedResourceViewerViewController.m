@@ -23,14 +23,12 @@
 
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
-#import "JMReportSaver.h"
 #import "JSResourceLookup+Helpers.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
-@property (nonatomic, strong) JMReportSaver *reportSaver;
 @property (nonatomic, strong) NSString *savedResourcePath;
 @property (nonatomic, weak) UIImageView *imageView;
 
@@ -181,73 +179,74 @@
 
 - (void)showRemoteResource
 {
-    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
-        [self cancelResourceViewingAndExit:YES];
-    }];
-
-    __typeof(self) weakSelf = self;
-    [self.restClient contentResourceWithResourceLookup:self.resourceLookup
-                                            completion:^(JSContentResource *resource, NSError *error) {
-                                                __typeof(self) strongSelf = weakSelf;
-                                                [strongSelf stopShowLoader];
-                                                if (error) {
-                                                    if (error.code == JSSessionExpiredErrorCode) {
-                                                        [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                                            if (self.restClient.keepSession && isSessionAuthorized) {
-                                                                [strongSelf showRemoteResource];
-                                                            } else {
-                                                                [JMUtils showLoginViewAnimated:YES completion:nil];
-                                                            }
-                                                        }];
-                                                    } else {
-                                                        [strongSelf showErrorWithMessage:error.localizedDescription
-                                                                              completion:^{
-                                                                                  [strongSelf cancelResourceViewingAndExit:YES];
-                                                                              }];
-                                                    }
-                                                } else {
-
-                                                    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
-                                                        [self cancelResourceViewingAndExit:YES];
-                                                    }];
-
-                                                    NSString *resourcePath = [NSString stringWithFormat:@"%@/rest_v2/resources%@", strongSelf.restClient.serverProfile.serverUrl, resource.uri];
-                                                    NSURL *url = [NSURL URLWithString:resourcePath];
-                                                    __typeof(self) weakSelf = strongSelf;
-                                                    [strongSelf.reportSaver downloadResourceFromURL:url
-                                                                                         completion:^(NSString *outputResourcePath, NSError *error) {
-                                                                                             __typeof(self) strongSelf = weakSelf;
-                                                                                             [strongSelf stopShowLoader];
-                                                                                             if (error) {
-                                                                                                 [strongSelf showErrorWithMessage:error.localizedDescription
-                                                                                                                       completion:^{
-                                                                                                                           [strongSelf cancelResourceViewingAndExit:YES];
-                                                                                                                       }];
-                                                                                             } else {
-                                                                                                 strongSelf.savedResourcePath = outputResourcePath;
-
-                                                                                                 if ([strongSelf isSupportedResource:resource]) {
-                                                                                                     NSURL *savedResourceURL = [NSURL fileURLWithPath:outputResourcePath];
-                                                                                                     if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_IMG]) {
-                                                                                                         [strongSelf showImageWithURL:savedResourceURL];
-                                                                                                     } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-                                                                                                         [strongSelf showRemoveHTMLForResource:resource];
-                                                                                                     } else {
-                                                                                                         [strongSelf showResourceWithURL:savedResourceURL];
-                                                                                                     }
-                                                                                                 } else {
-                                                                                                     // TODO: add showing with ...
-//                                                                                                     strongSelf.resourceRequest = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:outputResourcePath]];
-//                                                                                                     [strongSelf showResourceWithDocumentController];
-                                                                                                     [strongSelf showErrorWithMessage:JMCustomLocalizedString(@"savedreport.viewer.format.not.supported", nil)
-                                                                                                                           completion:^{
-                                                                                                                               [strongSelf cancelResourceViewingAndExit:YES];
-                                                                                                                           }];
-                                                                                                 }
-                                                                                             }
-                                                                                         }];
-                                                }
-                                            }];
+    // TODO: reimplement with new api from sdk
+//    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
+//        [self cancelResourceViewingAndExit:YES];
+//    }];
+//
+//    __typeof(self) weakSelf = self;
+//    [self.restClient contentResourceWithResourceLookup:self.resourceLookup
+//                                            completion:^(JSContentResource *resource, NSError *error) {
+//                                                __typeof(self) strongSelf = weakSelf;
+//                                                [strongSelf stopShowLoader];
+//                                                if (error) {
+//                                                    if (error.code == JSSessionExpiredErrorCode) {
+//                                                        [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+//                                                            if (self.restClient.keepSession && isSessionAuthorized) {
+//                                                                [strongSelf showRemoteResource];
+//                                                            } else {
+//                                                                [JMUtils showLoginViewAnimated:YES completion:nil];
+//                                                            }
+//                                                        }];
+//                                                    } else {
+//                                                        [strongSelf showErrorWithMessage:error.localizedDescription
+//                                                                              completion:^{
+//                                                                                  [strongSelf cancelResourceViewingAndExit:YES];
+//                                                                              }];
+//                                                    }
+//                                                } else {
+//
+//                                                    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
+//                                                        [self cancelResourceViewingAndExit:YES];
+//                                                    }];
+//
+//                                                    NSString *resourcePath = [NSString stringWithFormat:@"%@/rest_v2/resources%@", strongSelf.restClient.serverProfile.serverUrl, resource.uri];
+//                                                    NSURL *url = [NSURL URLWithString:resourcePath];
+//                                                    __typeof(self) weakSelf = strongSelf;
+//                                                    [strongSelf.reportSaver downloadResourceFromURL:url
+//                                                                                         completion:^(NSString *outputResourcePath, NSError *error) {
+//                                                                                             __typeof(self) strongSelf = weakSelf;
+//                                                                                             [strongSelf stopShowLoader];
+//                                                                                             if (error) {
+//                                                                                                 [strongSelf showErrorWithMessage:error.localizedDescription
+//                                                                                                                       completion:^{
+//                                                                                                                           [strongSelf cancelResourceViewingAndExit:YES];
+//                                                                                                                       }];
+//                                                                                             } else {
+//                                                                                                 strongSelf.savedResourcePath = outputResourcePath;
+//
+//                                                                                                 if ([strongSelf isSupportedResource:resource]) {
+//                                                                                                     NSURL *savedResourceURL = [NSURL fileURLWithPath:outputResourcePath];
+//                                                                                                     if ([resource.resourceType isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_IMG]) {
+//                                                                                                         [strongSelf showImageWithURL:savedResourceURL];
+//                                                                                                     } else if ([resource.resourceType isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+//                                                                                                         [strongSelf showRemoveHTMLForResource:resource];
+//                                                                                                     } else {
+//                                                                                                         [strongSelf showResourceWithURL:savedResourceURL];
+//                                                                                                     }
+//                                                                                                 } else {
+//                                                                                                     // TODO: add showing with ...
+////                                                                                                     strongSelf.resourceRequest = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:outputResourcePath]];
+////                                                                                                     [strongSelf showResourceWithDocumentController];
+//                                                                                                     [strongSelf showErrorWithMessage:JMCustomLocalizedString(@"savedreport.viewer.format.not.supported", nil)
+//                                                                                                                           completion:^{
+//                                                                                                                               [strongSelf cancelResourceViewingAndExit:YES];
+//                                                                                                                           }];
+//                                                                                                 }
+//                                                                                             }
+//                                                                                         }];
+//                                                }
+//                                            }];
 }
 
 - (void)showResourceWithURL:(NSURL *)url
@@ -288,13 +287,6 @@
 }
 
 #pragma mark - Helpers
-- (JMReportSaver *)reportSaver
-{
-    if (!_reportSaver) {
-        _reportSaver = [JMReportSaver new];
-    }
-    return _reportSaver;
-}
 - (void)removeSavedResource
 {
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.savedResourcePath]) {
@@ -317,11 +309,11 @@
 
 - (BOOL)isSupportedResource:(JSContentResource *)resource
 {
-    BOOL isHTML = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML];
-    BOOL isPDF = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF];
-    BOOL isXLS = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS];
-    BOOL isXLSX = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLSX];
-    BOOL isIMG = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_IMG];
+    BOOL isHTML = [resource.resourceType isEqualToString:kJS_CONTENT_TYPE_HTML];
+    BOOL isPDF = [resource.resourceType isEqualToString:kJS_CONTENT_TYPE_PDF];
+    BOOL isXLS = [resource.resourceType isEqualToString:kJS_CONTENT_TYPE_XLS];
+    BOOL isXLSX = [resource.resourceType isEqualToString:kJS_CONTENT_TYPE_XLSX];
+    BOOL isIMG = [resource.resourceType isEqualToString:kJS_CONTENT_TYPE_IMG];
     return isHTML || isPDF || isXLS || isXLSX || isIMG;
 }
 

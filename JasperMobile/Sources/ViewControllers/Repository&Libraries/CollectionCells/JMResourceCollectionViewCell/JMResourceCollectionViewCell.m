@@ -142,27 +142,27 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                     __typeof(self) strongSelf = weakSelf;
                                                     if (resource) {
                                                         NSString *imageName = @"res_type_file";
-                                                        if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+                                                        if ([resource.resourceType isEqualToString:kJS_CONTENT_TYPE_HTML]) {
                                                             imageName = @"res_type_file_html";
-                                                        } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
+                                                        } else if ([resource.resourceType isEqualToString:kJS_CONTENT_TYPE_PDF]) {
                                                             imageName = @"res_type_file_pdf";
-                                                        } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS] || [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLSX]) {
+                                                        } else if ([resource.resourceType isEqualToString:kJS_CONTENT_TYPE_XLS] || [resource.resourceType isEqualToString:kJS_CONTENT_TYPE_XLSX]) {
                                                             imageName = @"res_type_file_xls";
-                                                        } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_IMG]) {
+                                                        } else if ([resource.resourceType isEqualToString:kJS_CONTENT_TYPE_IMG]) {
                                                             imageName = @"res_type_file_img";
-                                                        } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_RTF]) {
+                                                        } else if ([resource.resourceType isEqualToString:kJS_CONTENT_TYPE_RTF]) {
                                                             imageName = @"res_type_file_rtf";
-                                                        } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_CSV]) {
+                                                        } else if ([resource.resourceType isEqualToString:kJS_CONTENT_TYPE_CSV]) {
                                                             imageName = @"res_type_file_csv";
-                                                        } else if ([resource.type isEqualToString:@"odt"]) {
+                                                        } else if ([resource.resourceType isEqualToString:kJS_CONTENT_TYPE_ODT]) {
                                                             imageName = @"res_type_file_odt";
-                                                        } else if ([resource.type isEqualToString:@"ods"]) {
+                                                        } else if ([resource.resourceType isEqualToString:kJS_CONTENT_TYPE_ODS]) {
                                                             imageName = @"res_type_file_ods";
-                                                        } else if ([resource.type isEqualToString:@"json"]) {
+                                                        } else if ([resource.resourceType isEqualToString:kJS_CONTENT_TYPE_JSON]) {
                                                             imageName = @"res_type_file_json";
-                                                        } else if ([resource.type isEqualToString:@"pptx"]) {
+                                                        } else if ([resource.resourceType isEqualToString:kJS_CONTENT_TYPE_PPTX]) {
                                                             imageName = @"res_type_file_pptx";
-                                                        } else if ([resource.type isEqualToString:@"doc"] || [resource.type isEqualToString:@"docx"]) {
+                                                        } else if ([resource.resourceType isEqualToString:kJS_CONTENT_TYPE_DOC] || [resource.resourceType isEqualToString:kJS_CONTENT_TYPE_DOCX]) {
                                                             imageName = @"res_type_file_doc";
                                                         }
                                                         UIImage *image = [UIImage imageNamed:imageName];
