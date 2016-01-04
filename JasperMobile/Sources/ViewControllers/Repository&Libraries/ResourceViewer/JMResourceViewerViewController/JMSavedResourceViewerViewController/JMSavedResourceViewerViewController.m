@@ -215,6 +215,8 @@
 
                                                     NSString *resourcePath = [NSString stringWithFormat:@"%@/rest_v2/resources%@", strongSelf.restClient.serverProfile.serverUrl, resource.uri];
                                                     __typeof(self) weakSelf = strongSelf;
+                                                    JSReport *report = [JSReport reportWithResourceLookup:strongSelf.resourceLookup];
+                                                    strongSelf.reportSaver = [[JSReportSaver alloc] initWithReport:report restClient:strongSelf.restClient];
                                                     [strongSelf.reportSaver downloadResourceFromURLString:resourcePath
                                                                                          completion:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                                                                                              __typeof(self) strongSelf = weakSelf;
