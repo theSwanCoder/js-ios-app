@@ -23,14 +23,14 @@
 
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
-#import "JMReportSaver.h"
+#import "JSReportSaver.h"
 #import "JSResourceLookup+Helpers.h"
 
 @interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
-@property (nonatomic, strong) JMReportSaver *reportSaver;
+@property (nonatomic, strong) JSReportSaver *reportSaver;
 @property (nonatomic, strong) NSString *savedResourcePath;
 @property (nonatomic, weak) UIImageView *imageView;
 
@@ -42,7 +42,9 @@
 - (void)cancelResourceViewingAndExit:(BOOL)exit
 {
     [self.documentController dismissMenuAnimated:YES];
-
+    
+    [self.reportSaver cancelSavingReport];
+    
     if (self.savedResourcePath) {
         [self removeSavedResource];
     }
@@ -212,10 +214,9 @@
                                                     }];
 
                                                     NSString *resourcePath = [NSString stringWithFormat:@"%@/rest_v2/resources%@", strongSelf.restClient.serverProfile.serverUrl, resource.uri];
-                                                    NSURL *url = [NSURL URLWithString:resourcePath];
                                                     __typeof(self) weakSelf = strongSelf;
-                                                    [strongSelf.reportSaver downloadResourceFromURL:url
-                                                                                         completion:^(NSString *outputResourcePath, NSError *error) {
+                                                    [strongSelf.reportSaver downloadResourceFromURLString:resourcePath
+                                                                                         completion:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                                                                                              __typeof(self) strongSelf = weakSelf;
                                                                                              [strongSelf stopShowLoader];
                                                                                              if (error) {
@@ -224,16 +225,15 @@
                                                                                                                            [strongSelf cancelResourceViewingAndExit:YES];
                                                                                                                        }];
                                                                                              } else {
-                                                                                                 strongSelf.savedResourcePath = outputResourcePath;
+                                                                                                 strongSelf.savedResourcePath = [location path];
 
                                                                                                  if ([strongSelf isSupportedResource:resource]) {
-                                                                                                     NSURL *savedResourceURL = [NSURL fileURLWithPath:outputResourcePath];
-                                                                                                     if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_IMG]) {
-                                                                                                         [strongSelf showImageWithURL:savedResourceURL];
-                                                                                                     } else if ([resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
+                                                                                                     if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_IMG]) {
+                                                                                                         [strongSelf showImageWithURL:location];
+                                                                                                     } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_HTML]) {
                                                                                                          [strongSelf showRemoveHTMLForResource:resource];
                                                                                                      } else {
-                                                                                                         [strongSelf showResourceWithURL:savedResourceURL];
+                                                                                                         [strongSelf showResourceWithURL:location];
                                                                                                      }
                                                                                                  } else {
                                                                                                      // TODO: add showing with ...
@@ -288,13 +288,6 @@
 }
 
 #pragma mark - Helpers
-- (JMReportSaver *)reportSaver
-{
-    if (!_reportSaver) {
-        _reportSaver = [JMReportSaver new];
-    }
-    return _reportSaver;
-}
 - (void)removeSavedResource
 {
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.savedResourcePath]) {
@@ -317,11 +310,11 @@
 
 - (BOOL)isSupportedResource:(JSContentResource *)resource
 {
-    BOOL isHTML = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML];
-    BOOL isPDF = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF];
-    BOOL isXLS = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS];
-    BOOL isXLSX = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLSX];
-    BOOL isIMG = [resource.type isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_IMG];
+    BOOL isHTML = [resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_HTML];
+    BOOL isPDF = [resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_PDF];
+    BOOL isXLS = [resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_XLS];
+    BOOL isXLSX = [resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_XLSX];
+    BOOL isIMG = [resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_IMG];
     return isHTML || isPDF || isXLS || isXLSX || isIMG;
 }
 

@@ -45,7 +45,7 @@
 
 - (BOOL)isFile
 {
-    return [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FILE];
+    return [self.resourceType isEqualToString:kJS_WS_TYPE_FILE];
 }
 
 - (NSString *)resourceViewerVCIdentifier
