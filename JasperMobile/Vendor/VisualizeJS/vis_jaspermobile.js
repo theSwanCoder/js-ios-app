@@ -336,6 +336,8 @@ MobileReport = {
 // Dashboard
 MobileDashboard = {
     dashboardObject: {},
+    refreshedDashboardObject: {},
+    canceledDashboardObject: {},
     dashboardFunction: {},
     selectedDashlet: {}, // DOM element
     selectedComponent: {}, // Model element
@@ -400,14 +402,31 @@ MobileDashboard = {
     refresh: function() {
         JasperMobile.Callback.log("start refresh");
         JasperMobile.Callback.log("dashboard object: " + MobileDashboard.dashboardObject);
-        MobileDashboard.dashboardObject.refresh()
+        MobileDashboard.refreshedDashboardObject = MobileDashboard.dashboardObject.refresh()
             .done(function() {
                 JasperMobile.Callback.log("success refresh");
                 var data = MobileDashboard.dashboardObject.data();
                 JasperMobile.Dashboard.Callback.onRunSuccess(data.components);
             })
             .fail(function(error) {
-                JasperMobile.Callback.log("failed refresh");
+                JasperMobile.Callback.log("failed refresh with error: " + error);
+            });
+        setTimeout(function() {
+            JasperMobile.Callback.log("state: " + MobileDashboard.refreshedDashboardObject.state());
+            if (MobileDashboard.refreshedDashboardObject.state() === "pending") {
+                MobileDashboard.run({"uri" : MobileDashboard.dashboardObject.properties().resource});
+            }
+        }, 20000);
+    },
+    cancel: function() {
+        JasperMobile.Callback.log("start cancel");
+        JasperMobile.Callback.log("dashboard object: " + MobileDashboard.dashboardObject);
+        MobileDashboard.canceledDashboardObject = MobileDashboard.dashboardObject.cancel()
+            .done(function() {
+                JasperMobile.Callback.log("success cancel");
+            })
+            .fail(function(error) {
+                JasperMobile.Callback.log("failed cancel");
             });
     },
     refreshDashlet: function() {

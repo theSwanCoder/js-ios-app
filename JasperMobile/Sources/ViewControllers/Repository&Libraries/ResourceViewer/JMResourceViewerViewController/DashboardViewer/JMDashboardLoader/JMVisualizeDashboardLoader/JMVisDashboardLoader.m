@@ -112,7 +112,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)cancel
 {
-    [self destroyDashboard];
+    [self cancelDashboard];
 }
 
 - (void)destroy
@@ -143,8 +143,18 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - Private API
 - (void)destroyDashboard
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileDashboard.destroy();";
+    request.parametersAsString = @"";
+    [self.bridge sendRequest:request];
+}
+
+- (void)cancelDashboard
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileDashboard.cancel();";
     request.parametersAsString = @"";
     [self.bridge sendRequest:request];
 }
