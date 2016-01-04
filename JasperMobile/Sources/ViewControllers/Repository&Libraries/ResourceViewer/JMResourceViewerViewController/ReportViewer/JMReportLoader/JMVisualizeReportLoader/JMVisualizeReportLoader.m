@@ -25,15 +25,19 @@
 //  JMVisualizeReportLoader.h
 //  TIBCO JasperMobile
 //
-
+#import "JMReportLoaderProtocol.h"
 #import "JMReportViewerVC.h"
 #import "JMVisualizeReportLoader.h"
-#import "JMVisualizeReport.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMJavascriptRequest.h"
 #import "JMVisualizeManager.h"
 #import "JMJavascriptCallback.h"
 #import "JMWebViewManager.h"
+
+#import "JSReportParameter.h"
+#import "JSRESTBase+JSRESTReport.h"
+
+
 
 typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     JMReportViewerAlertViewTypeEmptyReport,
@@ -41,7 +45,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 };
 
 @interface JMVisualizeReportLoader() <JMJavascriptNativeBridgeDelegate>
-@property (nonatomic, weak) JMVisualizeReport *report;
+@property (nonatomic, weak, readwrite) JMReport *report;
+
 @property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
 
 @property (nonatomic, copy) void(^reportLoadCompletion)(BOOL success, NSError *error);
@@ -54,7 +59,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 @synthesize bridge = _bridge, delegate = _delegate;
 
 #pragma mark - Lifecycle
-- (instancetype)initWithReport:(JMVisualizeReport *)report
+- (instancetype)initWithReport:(JMReport *)report restClient:(nonnull JSRESTBase *)restClient
 {
     self = [super init];
     if (self) {
@@ -64,9 +69,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     return self;
 }
 
-+ (instancetype)loaderWithReport:(JMVisualizeReport *)report
++ (instancetype)loaderWithReport:(JMReport *)report restClient:(nonnull JSRESTBase *)restClient
 {
-    return [[self alloc] initWithReport:report];
+    return [[self alloc] initWithReport:report restClient:restClient];
 }
 
 #pragma mark - Custom accessors
@@ -87,7 +92,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)runReportWithPage:(NSInteger)page completion:(void(^)(BOOL success, NSError *error))completionBlock
 {
     self.isReportInLoadingProcess = YES;
-    [self.report updateLoadingStatusWithValue:NO];
+    self.report.isReportAlreadyLoaded = NO;
     [self.report updateCountOfPages:NSNotFound];
     [self.report updateCurrentPage:page];
 
@@ -148,8 +153,8 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
         self.isReportInLoadingProcess = YES;
-        [self.report updateLoadingStatusWithValue:NO];
-
+        self.report.isReportAlreadyLoaded = NO;
+        
         self.reportLoadCompletion = completion;
         [self.report updateCurrentPage:1];
 
@@ -163,7 +168,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
             }];
     } else if (!self.report.isReportAlreadyLoaded) {
         self.isReportInLoadingProcess = YES;
-        [self.report updateLoadingStatusWithValue:NO];
+        self.report.isReportAlreadyLoaded = NO;
         [self.report updateCountOfPages:NSNotFound];
 
         [self fetchPageNumber:1 withCompletion:completion];
@@ -208,7 +213,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     request.parametersAsString = @"";
     [self.bridge sendRequest:request];
 
-    [self.report updateLoadingStatusWithValue:NO];
+    self.report.isReportAlreadyLoaded = NO;
 }
 
 - (void)authenticate
@@ -316,7 +321,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     return [parametersAsString copy];
 }
 
-- (NSError *)createErrorWithType:(JMReportLoaderErrorType)errorType errorMessage:(NSString *)errorMessage
+- (NSError *)createErrorWithType:(JSReportLoaderErrorType)errorType errorMessage:(NSString *)errorMessage
 {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey : errorMessage ?: JMCustomLocalizedString(@"report.viewer.visualize.render.error", nil) };
     NSError *error = [NSError errorWithDomain:kJMReportLoaderErrorDomain
@@ -337,7 +342,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 {
     JMLog(@"report rendering end");
 
-    [self.report updateLoadingStatusWithValue:YES];
+    self.report.isReportAlreadyLoaded = YES;
 
     if (self.reportLoadCompletion) {
         self.reportLoadCompletion(YES, nil);
@@ -349,9 +354,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     if (self.reportLoadCompletion) {
         NSString *errorString = parameters[@"error"];
         errorString = [errorString stringByRemovingPercentEncoding];
-        JMReportLoaderErrorType errorType = JMReportLoaderErrorTypeUndefined;
+        JSReportLoaderErrorType errorType = JSReportLoaderErrorTypeUndefined;
         if (errorString && [errorString rangeOfString:@"authentication.error"].length) {
-            errorType = JMReportLoaderErrorTypeAuthentification;
+            errorType = JSReportLoaderErrorTypeAuthentification;
         }
         self.reportLoadCompletion(NO, [self createErrorWithType:errorType errorMessage:errorString]);
     }
@@ -384,7 +389,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 #pragma mark - Handle refresh
 - (void)handleRefreshDidEndSuccessful
 {
-    [self.report updateLoadingStatusWithValue:YES];
+    self.report.isReportAlreadyLoaded = YES;
 
     if (self.reportLoadCompletion) {
         self.reportLoadCompletion(YES, nil);
@@ -438,19 +443,19 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         reportPath = json[@"resource"];
 
         if (reportPath) {
-            [self.restClient resourceLookupForURI:reportPath resourceType:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT modelClass:[JSResourceLookup class] completionBlock:^(JSOperationResult *result) {
+            [self.restClient resourceLookupForURI:reportPath resourceType:kJS_WS_TYPE_REPORT_UNIT modelClass:[JSResourceLookup class] completionBlock:^(JSOperationResult *result) {
                 NSError *error = result.error;
                 if (error) {
                     NSString *errorString = error.localizedDescription;
-                    JMReportLoaderErrorType errorType = JMReportLoaderErrorTypeUndefined;
+                    JSReportLoaderErrorType errorType = JSReportLoaderErrorTypeUndefined;
                     if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
-                        errorType = JMReportLoaderErrorTypeAuthentification;
+                        errorType = JSReportLoaderErrorTypeAuthentification;
                     }
                     self.reportLoadCompletion(NO, [self createErrorWithType:errorType errorMessage:errorString]);
                 } else {
                     JSResourceLookup *resourceLookup = [result.objects firstObject];
                     if (resourceLookup) {
-                        resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT;
+                        resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
 
                         NSMutableArray *reportParameters = [NSMutableArray array];
                         NSDictionary *rawParameters = json[@"params"];

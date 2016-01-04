@@ -50,7 +50,7 @@
     
     if ([[sourceInstance entity].name isEqualToString:@"Favorites"]) {
         JMFavorites *favorite = (JMFavorites *)sourceInstance;
-        if ([favorite.wsType isEqualToString:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT] && [self isSavedItem:favorite]) {
+        if ([favorite.wsType isEqualToString:kJS_WS_TYPE_REPORT_UNIT] && [self isSavedItem:favorite]) {
             sourceValues[@"wsType"] = kJMSavedReportUnit;
         }
     }

@@ -31,8 +31,8 @@
  @since 2.0
  */
 
-@protocol JMReportLoader;
+@protocol JMReportLoaderProtocol;
 
-@interface JMVisualizeReportLoader : NSObject <JMReportLoader>
+@interface JMVisualizeReportLoader : NSObject <JMReportLoaderProtocol>
 @end
 

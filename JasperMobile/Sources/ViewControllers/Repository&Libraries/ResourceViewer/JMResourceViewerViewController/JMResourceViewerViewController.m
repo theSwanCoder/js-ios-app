@@ -25,7 +25,6 @@
 #import "JMWebViewManager.h"
 #import "ALToastView.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMPrintResourceViewController.h"
 #import "JMMainNavigationController.h"
 
 @interface JMResourceViewerViewController () <UIPrintInteractionControllerDelegate>
@@ -35,6 +34,24 @@
 @end
 
 @implementation JMResourceViewerViewController
+
+#pragma mark - Handle Memory Warnings
+- (void)didReceiveMemoryWarning
+{
+    [self.webView stopLoading];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    
+    NSString *errorMessage = JMCustomLocalizedString(@"resource.viewer.memory.warning", nil);
+    NSError *error = [NSError errorWithDomain:@"dialod.title.attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    __weak typeof(self) weakSelf = self;
+    [JMUtils presentAlertControllerWithError:error completion:^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf cancelResourceViewingAndExit:YES];
+    }];
+    
+    [super didReceiveMemoryWarning];
+}
+
 
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
@@ -124,13 +141,6 @@
 - (void)printResource
 {
     // override in child
-}
-
-- (void)printItem:(id)printingItem withName:(NSString *)itemName
-{
-    [self printItem:printingItem
-           withName:itemName
-         completion:nil];
 }
 
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(BOOL completed, NSError *error))completion

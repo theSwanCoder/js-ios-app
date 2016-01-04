@@ -22,23 +22,38 @@
 
 
 //
-//  JMExtendedReportOption.h
+//  JMReportLoaderProtocol.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Alexey Gubarev ogubarie@tibco.com
- @since 2.2
+ @since 2.3
  */
 
 #import <Foundation/Foundation.h>
-#import "JSReportOption.h"
+#import "JSReportLoaderProtocol.h"
 
-@interface JMExtendedReportOption : NSObject <NSCopying>
+@protocol JMReportLoaderDelegate;
+@protocol JMJavascriptNativeBridgeProtocol;
+@protocol JMReportLoaderProtocol <JSReportLoaderProtocol>
 
-@property (nonatomic, strong) JSReportOption *reportOption;
-@property (nonatomic, strong) NSArray *inputControls;
+@required
+@property (nonatomic, weak) id<JMReportLoaderDelegate> delegate;
+@property (nonatomic, strong) id<JMJavascriptNativeBridgeProtocol>bridge;
 
+- (void)destroy;
 
-+ (JMExtendedReportOption *)defaultReportOption;
+@optional
+- (void)exportReportWithFormat:(NSString *)exportFormat;
+- (void)authenticate;
+
 @end
+
+@protocol JMReportLoaderDelegate <NSObject>
+@optional
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSArray *)reportParameters;
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference;
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName;
+@end
+

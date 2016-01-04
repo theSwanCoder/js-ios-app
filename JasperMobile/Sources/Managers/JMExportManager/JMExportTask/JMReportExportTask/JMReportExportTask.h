@@ -22,16 +22,23 @@
 
 
 //
-//  JMVisualizeReport.h
+//  JMReportExportTask.h
 //  TIBCO JasperMobile
 //
 
-/**
- @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
- */
-#import "JMReport.h"
 
-@interface JMVisualizeReport : JMReport
-- (void)updateLoadingStatusWithValue:(BOOL)loadingStatus;
+/**
+ @author Alexey Gubarev ogubarie@tibco.com
+ @since 2.3
+ */
+
+#import "JMExportTask.h"
+#import "JSReport.h"
+
+@interface JMReportExportTask : JMExportTask
+@property (nonatomic, strong, readonly) JSReport *report;
+@property (nonatomic, strong, readonly) JSReportPagesRange *pagesRange;
+
+- (instancetype)initWithReport:(JSReport *)report name:(NSString *)name format:(NSString *)format pages:(JSReportPagesRange *)pagesRange;
+
 @end

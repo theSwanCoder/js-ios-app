@@ -87,7 +87,6 @@ extern NSString * const kJMReportsDirectory;
 
 // Saved Items ws types
 extern NSString * const kJMSavedReportUnit;
-//extern NSString * const kJMExportedReportUnit;
 extern NSString * const kJMTempExportedReportUnit;
 
 // Name of the main report file (outputResource)

@@ -69,42 +69,30 @@
 {
     __weak typeof(self)weakSelf = self;
     [self.restClient resourceLookupForURI:resourceURI
-                             resourceType:[JSConstants sharedInstance].WS_TYPE_FOLDER
+                             resourceType:kJS_WS_TYPE_FOLDER
                                modelClass:[JSResourceLookup class]
                           completionBlock:^(JSOperationResult *result) {
-                    __strong typeof(self)strongSelf = weakSelf;
-                    if (result.error) {
-                        if ([resourceURI isEqualToString:[strongSelf rootResourceURI]]) {
-                            if (result.error.code == JSSessionExpiredErrorCode) {
-                                __weak typeof(self)weakSelf = strongSelf;
-                                [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                    __strong typeof(self)strongSelf = weakSelf;
-                                    if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                        [strongSelf loadResourceLookup:resourceURI];
-                                    } else {
-                                        [strongSelf finishLoadingWithError:result.error];
-                                        [JMUtils showLoginViewAnimated:YES
-                                                            completion:nil];
-                                    }
-                                }];
-                            } else {
-                                [strongSelf finishLoadingWithError:result.error];
-                            }
-                        } else {
-                            [strongSelf loadNextResourceForResource:resourceURI];
-                        }
-                    } else {
-                        JSResourceLookup *resourceLookup = result.objects.firstObject;
-                        if (resourceLookup) {
-                            if (!resourceLookup.resourceType) {
-                                resourceLookup.resourceType = [JSConstants sharedInstance].WS_TYPE_FOLDER;
-                            }
-                            [strongSelf addResourcesWithResource:resourceLookup];
-                        }
-
-                        [strongSelf loadNextResourceForResource:resourceURI];
-                    }
-    }];
+                              __strong typeof(self)strongSelf = weakSelf;
+                              if (result.error) {
+                                  if (result.error.code == JSSessionExpiredErrorCode) {
+                                      [JMUtils showLoginViewAnimated:YES completion:nil];
+                                  } else if ([resourceURI isEqualToString:[strongSelf rootResourceURI]]) {
+                                      [strongSelf finishLoadingWithError:result.error];
+                                  } else {
+                                      [strongSelf loadNextResourceForResource:resourceURI];
+                                  }
+                              } else {
+                                  JSResourceLookup *resourceLookup = result.objects.firstObject;
+                                  if (resourceLookup) {
+                                      if (!resourceLookup.resourceType) {
+                                          resourceLookup.resourceType = kJS_WS_TYPE_FOLDER;
+                                      }
+                                      [strongSelf addResourcesWithResource:resourceLookup];
+                                  }
+                                  
+                                  [strongSelf loadNextResourceForResource:resourceURI];
+                              }
+                          }];
 }
 
 #pragma mark - Utils
@@ -127,11 +115,11 @@
                      @{
                              kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
                              kJMResourceListLoaderOptionItemValueKey: @[
-                                                                        [JSConstants sharedInstance].WS_TYPE_REPORT_UNIT,
-                                                                        [JSConstants sharedInstance].WS_TYPE_DASHBOARD,
-                                                                        [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY,
-                                                                        [JSConstants sharedInstance].WS_TYPE_FOLDER,
-                                                                        [JSConstants sharedInstance].WS_TYPE_FILE
+                                                                        kJS_WS_TYPE_REPORT_UNIT,
+                                                                        kJS_WS_TYPE_DASHBOARD,
+                                                                        kJS_WS_TYPE_DASHBOARD_LEGACY,
+                                                                        kJS_WS_TYPE_FOLDER,
+                                                                        kJS_WS_TYPE_FILE
                                                                         ]
                      }
             ];

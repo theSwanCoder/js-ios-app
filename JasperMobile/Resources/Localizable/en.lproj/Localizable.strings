@@ -135,6 +135,8 @@
 "resource.viewer.print.button.title" = "Print...";
 "resource.viewer.print.preview.title" = "Preview";
 "resource.viewer.print.prepare.title" = "Prepare...";
+"resource.viewer.memory.warning" = "Sorry, Your device is low on memory...";
+
 
 // Report viewer
 "report.viewer.error.title" = "Error while loading report.";

@@ -160,7 +160,8 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     if (itemIndex < self.menuItems.count) {
         JMMenuItem *currentSelectedItem = self.selectedItem;
         JMMenuItem *item = self.menuItems[itemIndex];
-        
+        item.showNotes = NO;
+
         if (item.resourceType == JMResourceTypeLogout) {
             [[JMSessionManager sharedManager] logout];
             [JMUtils showLoginViewAnimated:YES completion:nil];
@@ -185,8 +186,6 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
                 id nextVC;
                 if([item vcIdentifierForSelectedItem]) {
-                    [self hideNoteInMenuItem];
-
                     // Analytics
                     [JMUtils logEventWithName:@"User opened section"
                                  additionInfo:@{
@@ -309,22 +308,10 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     }
 }
 
-- (void)showNoteInMenuItem
+- (JMMenuItem *)menuItemWithType:(JMResourceType)resourceType
 {
-    // TODO: extend for any menu items
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"resourceType == %@", @(JMResourceTypeSavedItems)];
-    NSArray *filterdItems = [self.menuItems filteredArrayUsingPredicate:predicate];
-    JMMenuItem *savedItem = filterdItems.firstObject;
-    [savedItem showNote];
-}
-
-- (void)hideNoteInMenuItem
-{
-    // TODO: extend for any menu items
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"resourceType == %@", @(JMResourceTypeSavedItems)];
-    NSArray *filterdItems = [self.menuItems filteredArrayUsingPredicate:predicate];
-    JMMenuItem *savedItem = filterdItems.firstObject;
-    [savedItem hideNote];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"resourceType == %@", @(resourceType)];
+    return [self.menuItems filteredArrayUsingPredicate:predicate].firstObject;
 }
 
 #pragma mark - Feedback
@@ -382,11 +369,10 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 #pragma mark - Notifications
 - (void)exportedResouceDidLoad:(NSNotification *)notification
 {
-    UINavigationController *navController = (UINavigationController *) self.revealViewController.frontViewController;
-    UIViewController *topVC = navController.topViewController;
-    if (![topVC isKindOfClass:[JMSavedItemsCollectionViewController class]]) {
+    if (self.selectedItem.resourceType != JMResourceTypeSavedItems) {
         [self showNoteInMenuButton];
-        [self showNoteInMenuItem];
+        JMMenuItem *savedItem = [self menuItemWithType:JMResourceTypeSavedItems];
+        savedItem.showNotes = YES;
     }
 }
 

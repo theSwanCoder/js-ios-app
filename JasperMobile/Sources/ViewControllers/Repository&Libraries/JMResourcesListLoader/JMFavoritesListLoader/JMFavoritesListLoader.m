@@ -70,17 +70,17 @@
         case JMResourcesListLoaderOption_Filter: {
             NSMutableArray *itemsArray = [@[
                                             @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
-                                              kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT, [JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY, [JSConstants sharedInstance].WS_TYPE_FOLDER, kJMSavedReportUnit]},
+                                              kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY, kJS_WS_TYPE_FOLDER, kJMSavedReportUnit]},
                                             @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil),
-                                              kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]},
+                                              kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_REPORT_UNIT]},
                                             @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.saved.reportUnit", nil),
                                               kJMResourceListLoaderOptionItemValueKey: @[kJMSavedReportUnit]},
                                             @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.folder", nil),
-                                              kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_FOLDER]}
+                                              kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_FOLDER]}
                                             ] mutableCopy];
             if ([JMUtils isServerProEdition]) {
                 id dashboardItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil),
-                                     kJMResourceListLoaderOptionItemValueKey: @[[JSConstants sharedInstance].WS_TYPE_DASHBOARD, [JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY]};
+                                     kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY]};
                 [itemsArray insertObject:dashboardItem atIndex:3];
             }
             return itemsArray;

@@ -36,7 +36,7 @@
 #import "JMMenuViewController.h"
 #import "JMEULAViewController.h"
 #import "JMServerProfile+Helpers.h"
-
+#import "JSConstants.h"
 
 void jmDebugLog(NSString *format, ...) {
 #ifndef __RELEASE__
@@ -150,9 +150,9 @@ void jmDebugLog(NSString *format, ...) {
     static NSArray *reportFormats;
     if (!reportFormats) {
         reportFormats = @[
-                           [JSConstants sharedInstance].CONTENT_TYPE_HTML,
-                           [JSConstants sharedInstance].CONTENT_TYPE_PDF,
-                           [JSConstants sharedInstance].CONTENT_TYPE_XLS,
+                           kJS_CONTENT_TYPE_HTML,
+                           kJS_CONTENT_TYPE_PDF,
+                           kJS_CONTENT_TYPE_XLS,
                            ];
     }
     return reportFormats;
@@ -309,22 +309,22 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)isServerVersionUpOrEqual6
 {
-    return self.restClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0;
+    return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_AMBER_6_0_0;
 }
 
 + (BOOL)isServerAmber2
 {
-    return self.restClient.serverProfile.serverInfo.versionAsFloat == [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_1_0;
+    return self.restClient.serverProfile.serverInfo.versionAsFloat == kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
 }
 
 + (BOOL)isServerAmber2OrHigher
 {
-    return self.restClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_1_0;
+    return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
 }
 
 + (BOOL)isServerProEdition
 {
-    return [self.restClient.serverProfile.serverInfo.edition isEqualToString: [JSConstants sharedInstance].SERVER_EDITION_PRO];
+    return [self.restClient.serverProfile.serverInfo.edition isEqualToString: kJS_SERVER_EDITION_PRO];
 }
 
 + (NSString *)localizedStringFromDate:(NSDate *)date

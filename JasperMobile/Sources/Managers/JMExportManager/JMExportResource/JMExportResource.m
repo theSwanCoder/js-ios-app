@@ -27,7 +27,7 @@
 //
 
 #import "JMExportResource.h"
-#import "JMSavedResources+Helpers.h"
 
 @implementation JMExportResource
+
 @end

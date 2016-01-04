@@ -49,7 +49,7 @@
 
 - (IBAction)switchChanged:(id)sender
 {
-    [self updateValue:[JSConstants stringFromBOOL:[sender isOn]]];
+    [self updateValue:[JSUtils stringFromBOOL:[sender isOn]]];
 }
 
 @end

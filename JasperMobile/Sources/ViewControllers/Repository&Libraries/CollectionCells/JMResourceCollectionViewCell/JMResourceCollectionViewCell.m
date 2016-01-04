@@ -29,6 +29,7 @@
 #import "UIImage+Additions.h"
 
 #import "JSResourceLookup+Helpers.h"
+#import "JMExportResource.h"
 
 NSString * kJMHorizontalResourceCell = @"JMHorizontalResourceCollectionViewCell";
 NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
@@ -81,6 +82,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 
 - (void)updateResourceImage
 {
+    self.alpha = 1;
     UIImage *resourceImage;
     if ([self.resourceLookup isReport]) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
@@ -108,26 +110,23 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
         resourceImage = [UIImage imageNamed:@"res_type_report"];
         JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
         if (savedReport) {
-            if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-                resourceImage = [UIImage imageNamed:@"res_type_file_html"];
-            } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
-                resourceImage = [UIImage imageNamed:@"res_type_file_pdf"];
-            } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
-                resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
+            if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
+                resourceImage = [UIImage imageNamed:@"res_type_html"];
+            } else if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
+                resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+            } else if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
+                resourceImage = [UIImage imageNamed:@"res_type_xls"];
             }
         }
-        self.alpha = 1;
     } else if ([self.resourceLookup isTempExportedReport]) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
-        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
-        if (savedReport) {
-            if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-                resourceImage = [UIImage imageNamed:@"res_type_file_html"];
-            } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
-                resourceImage = [UIImage imageNamed:@"res_type_file_pdf"];
-            } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
-                resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
-            }
+        JMExportResource *exportResource = (JMExportResource *)self.resourceLookup;
+        if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
+            resourceImage = [UIImage imageNamed:@"res_type_html"];
+        } else if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
+            resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+        } else if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
+            resourceImage = [UIImage imageNamed:@"res_type_xls"];
         }
         self.alpha = 0.5;
     } else if ([self.resourceLookup isDashboard]) {
@@ -188,7 +187,6 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.resourceImage.backgroundColor = thumbnails ? [UIColor clearColor] : [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
     self.resourceImage.image = resourceImage;
     [self layoutIfNeeded];
-#warning HERE NEED CHECK CONSTRAINTS - MAY BE IT'S CORRECT FOR LIST ONLY, NOT FOR GRID!!!
     self.imageWidthConstraint.constant = [JMUtils isCompactWidth] ? 100: 115;
     [self setNeedsUpdateConstraints];
 }
