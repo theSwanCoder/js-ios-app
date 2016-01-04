@@ -424,8 +424,8 @@ MobileDashboard = {
             });
     },
     destroy: function() {
-        if (MobileDashboard.dashboard) {
-            MobileDashboard.dashboard.destroy();
+        if (MobileDashboard.dashboardObject) {
+            MobileDashboard.dashboardObject.destroy();
         }
     },
     _configureComponents: function(components) {
