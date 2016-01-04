@@ -158,7 +158,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                 JMLog(@"visuzalise.js did end load");
                 NSString *baseURLString = self.restClient.serverProfile.serverUrl;
                 NSString *htmlString = [self.visualizeManager htmlStringForDashboard];
-                [self.bridge startLoadHTMLString:htmlString baseURL:[NSURL URLWithString:baseURLString]];
+                [self.bridge startLoadHTMLString:htmlString
+                                         baseURL:[NSURL URLWithString:baseURLString]];
 
                 if (completion) {
                     completion(YES, nil);
@@ -180,12 +181,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - JMJavascriptNativeBridgeDelegate
 - (void)javascriptNativeBridge:(id <JMJavascriptNativeBridgeProtocol>)bridge didReceiveCallback:(JMJavascriptCallback *)callback
 {
-    JMLog(@"callback type: %@", callback.type);
-    JMLog(@"callback parameters: %@", callback.parameters[@"parameters"]);
-    if ([callback.type isEqualToString:@"onScriptLoaded"]) {
+    if ([callback.type isEqualToString:@"DOMContentLoaded"]) {
         [self handleOnScriptLoaded];
-    } else if ([callback.type isEqualToString:@"onMaximizeStart"]) {
+    } else if ([callback.type isEqualToString:@"dashletWillMaximize"]) {
         [self handleDidStartMaximazeDashletWithParameters:callback.parameters[@"parameters"]];
+    }  else if ([callback.type isEqualToString:@"dashletDidMaximize"]) {
+        // TODO: add handling end of maximazing
+    }  else if ([callback.type isEqualToString:@"dashletFailedMaximize"]) {
+        // TODO: add handling mazimize error
     } else if ([callback.type isEqualToString:@"onLoadDone"]) {
         [self handleOnLoadDone];
     } else if ([callback.type isEqualToString:@"onReportExecution"]) {
@@ -202,6 +205,9 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self loadDashboardWithCompletion:self.loadCompletion];
         });
+    } else {
+        JMLog(@"callback type: %@", callback.type);
+        JMLog(@"callback parameters: %@", callback.parameters[@"parameters"]);
     }
 }
 
@@ -236,11 +242,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)handleOnScriptLoaded
 {
     // auth
-    JMJavascriptRequest *authRequest = [JMJavascriptRequest new];
-    authRequest.command = @"MobileDashboard.authorize(%@);";
-    NSString *authParameters = [NSString stringWithFormat:@"{'username': '%@', 'password': '%@', 'organization': '%@'}", self.restClient.serverProfile.username, self.restClient.serverProfile.password, self.restClient.serverProfile.organization];
-    authRequest.parametersAsString = authParameters;
-    [self.bridge sendRequest:authRequest];
+//    JMJavascriptRequest *authRequest = [JMJavascriptRequest new];
+//    authRequest.command = @"MobileDashboard.authorize(%@);";
+//    NSString *authParameters = [NSString stringWithFormat:@"{'username': '%@', 'password': '%@', 'organization': '%@'}", self.restClient.serverProfile.username, self.restClient.serverProfile.password, self.restClient.serverProfile.organization];
+//    authRequest.parametersAsString = authParameters;
+//    [self.bridge sendRequest:authRequest];
 
     // run
     JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
@@ -259,7 +265,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleDidStartMaximazeDashletWithParameters:(NSDictionary *)parameters
 {
-    NSString *title = parameters[@"title"];
+    JMLog(@"parameters: %@", parameters);
+    NSString *title = parameters[@"component"][@"name"];
     [self.delegate dashboardLoader:self didStartMaximazeDashletWithTitle:title];
 }
 
