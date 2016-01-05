@@ -1386,7 +1386,7 @@ your business wherever you are.</string>
                                                         <constraint firstAttribute="height" constant="30" id="a5g-Ui-55L"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numbersAndPunctuation" returnKeyType="done"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="R2p-Wz-V0j" id="whF-Nr-YQ0"/>
                                                     </connections>
