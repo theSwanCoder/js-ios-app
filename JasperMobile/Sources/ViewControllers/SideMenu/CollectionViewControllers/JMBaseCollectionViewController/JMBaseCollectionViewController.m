@@ -114,7 +114,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     self.screenName = NSStringFromClass(self.class);
     [self addKeyboardObservers];
 
-    [self updateIfNeeded];
+    if (self.needReloadData) {
+        [self updateStrong];
+    }
     [self.resourceListLoader updateIfNeeded];
 }
 
@@ -249,28 +251,33 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)updateIfNeeded
 {
     if ([self isVisible]) {
-        if (self.needReloadData) {
-            JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-            [baseCollectionView.collectionView reloadData];
-            
-            if (self.isScrollToTop) {
-                self.isScrollToTop = NO;
-                NSIndexPath *firstItemIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-                if ([baseCollectionView.collectionView cellForItemAtIndexPath:firstItemIndexPath]) {
-                    [baseCollectionView.collectionView scrollToItemAtIndexPath:firstItemIndexPath
-                                                              atScrollPosition:UICollectionViewScrollPositionBottom
-                                                                      animated:NO];
-                }
+        [self updateStrong];
+    }
+}
+
+- (void) updateStrong
+{
+    if (self.needReloadData) {
+        JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
+        [baseCollectionView.collectionView reloadData];
+        
+        if (self.isScrollToTop) {
+            self.isScrollToTop = NO;
+            NSIndexPath *firstItemIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            if ([baseCollectionView.collectionView cellForItemAtIndexPath:firstItemIndexPath]) {
+                [baseCollectionView.collectionView scrollToItemAtIndexPath:firstItemIndexPath
+                                                          atScrollPosition:UICollectionViewScrollPositionBottom
+                                                                  animated:NO];
             }
-            
-            _needReloadData = NO;
         }
         
-        if (self.needLayoutUI) {
-            [self.popoverView dismiss:YES];
-            [self showNavigationItemsForTraitCollection:self.traitCollection];
-            _needLayoutUI = NO;
-        }
+        _needReloadData = NO;
+    }
+    
+    if (self.needLayoutUI) {
+        [self.popoverView dismiss:YES];
+        [self showNavigationItemsForTraitCollection:self.traitCollection];
+        _needLayoutUI = NO;
     }
 }
 
