@@ -53,6 +53,7 @@
 @protocol JMReportLoaderDelegate <NSObject>
 @optional
 - (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventForResourceLookup:(JSResourceLookup *)resourceLookup withParameters:(NSArray *)reportParameters;
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventWithError:(NSError *)error;
 - (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference;
 - (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOutputResourcePath:(NSString *)resourcePath fullReportName:(NSString *)fullReportName;
 @end

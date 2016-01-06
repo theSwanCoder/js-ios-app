@@ -62,6 +62,8 @@
 #pragma mark - Print
 - (void)printResource
 {
+    [super printResource];
+
     [self imageFromWebViewWithCompletion:^(UIImage *image) {
         if (image) {
             [self printItem:image
@@ -242,11 +244,12 @@
 
                 if (success) {
                     // Analytics
-                    NSString *resourcesType = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? @"Dashboard (Visualize)" : @"Dashboard (REST)";
-                     [JMUtils logEventWithName:@"User opened resource"
-                                 additionInfo:@{
-                                         @"Resource's Type" : resourcesType
-                                 }];
+                    NSString *label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+                    [JMUtils logEventWithInfo:@{
+                                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
+                                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
+                                        kJMAnalyticsLabelKey         : label
+                                        }];
                 }
             }];
 

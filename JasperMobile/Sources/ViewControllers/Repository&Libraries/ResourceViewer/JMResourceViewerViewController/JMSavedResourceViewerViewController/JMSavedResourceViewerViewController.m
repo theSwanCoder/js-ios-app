@@ -70,18 +70,12 @@
     }
 
     // Analytics
-    NSString *resourcesType = @"Saved Item (Unknown type)";
-    if ([self.savedReports.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
-        resourcesType = @"Saved Item (HTML)";
-    } else if ([self.savedReports.format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
-        resourcesType = @"Saved Item (PDF)";
-    } else if ([self.savedReports.format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
-        resourcesType = @"Saved Item (XLS)";
-    }
-    [JMUtils logEventWithName:@"User opened resource"
-                 additionInfo:@{
-                         @"Resource's Type" : resourcesType
-                 }];
+    NSString *label = [kJMAnalyticsResourceEventLabelSavedResource stringByAppendingFormat:@" (%@)", [self.savedReports.format uppercaseString]];
+    [JMUtils logEventWithInfo:@{
+                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
+                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
+                        kJMAnalyticsLabelKey         : label
+                }];
 }
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource

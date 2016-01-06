@@ -179,7 +179,7 @@
     }
 }
 
-- (NSString *)nameForCrashlytics
+- (NSString *)nameForAnalytics
 {
     switch (self.resourceType) {
         case JMResourceTypeLibrary:

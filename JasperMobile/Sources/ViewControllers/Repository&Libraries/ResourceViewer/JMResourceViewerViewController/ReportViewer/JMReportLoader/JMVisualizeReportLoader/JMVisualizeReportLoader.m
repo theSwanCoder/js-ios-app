@@ -50,7 +50,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 @property (nonatomic, assign, readwrite) BOOL isReportInLoadingProcess;
 
 @property (nonatomic, copy) void(^reportLoadCompletion)(BOOL success, NSError *error);
-@property (nonatomic, copy) void(^reportChangePageCompletion)(BOOL success, NSError *error);
 @property (nonatomic, copy) NSString *exportFormat;
 @property (nonatomic, strong) JMVisualizeManager *visualizeManager;
 @end
@@ -98,8 +97,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
     if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
         self.reportLoadCompletion = completionBlock;
-        [self.report updateCurrentPage:page];
-        [self.report updateCountOfPages:NSNotFound];
 
         [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
             if (success) {
@@ -135,7 +132,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage withCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    self.reportChangePageCompletion = completion;
+    self.reportLoadCompletion = completion;
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileReport.selectPage(%@);";
@@ -254,8 +251,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 #pragma mark - JMJavascriptNativeBridgeDelegate
 - (void)javascriptNativeBridge:(JMJavascriptNativeBridge *)bridge didReceiveCallback:(JMJavascriptCallback *)callback
 {
-    JMLog(@"response parameters: %@", callback.parameters);
-    JMLog(@"callback type: %@", callback.type);
     if ([callback.type isEqualToString:@"DOMContentLoaded"]) {
         [self handleDOMContentLoaded];
     } else if ([callback.type isEqualToString:@"runReport"]) {
@@ -278,12 +273,14 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         [self handleRefreshDidEndFailedWithParameters:callback.parameters];
     } else if ([callback.type isEqualToString:@"reportOnPageChange"]) {
         [self handleReportOnPageChangeWithParameters:callback.parameters];
+    } else if ([callback.type isEqualToString:@"logging"]) {
+        JMLog(@"visualize log: %@", callback.parameters[@"parameters"][@"message"]);
     } else if ([callback.type isEqualToString:@"onWindowError"]) {
-        [self.bridge reset];
-        // waiting for resetting of webview
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self runReportWithPage:self.report.currentPage completion:self.reportLoadCompletion];
-        });
+        [self handleOnWinwowErrorWithMessage:callback.parameters[@"error"]];
+    } else if ([callback.type isEqualToString:@"onPageLoadError"]) {
+        [self handleOnPageLoadErrorWithParameters:callback.parameters];
+    } else {
+        JMLog(@"response parameters: %@", callback.parameters);
     }
 }
 
@@ -333,7 +330,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 #pragma mark - DOM listeners
 - (void)handleDOMContentLoaded
 {
-    [self authenticate];
+//    [self authenticate];
     [self fetchPageNumber:self.report.currentPage withCompletion:self.reportLoadCompletion];
 }
 
@@ -364,18 +361,28 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)handleEventReportRunDidCompletedWithParameters:(NSDictionary *)parameters
 {
-    NSInteger countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
+    NSInteger countOfPages = 0;
+    if (parameters[@"parameters"]) {
+        countOfPages = ((NSNumber *)parameters[@"parameters"][@"pages"]).integerValue;
+    } else {
+        countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
+    }
     [self.report updateCountOfPages:countOfPages];
 
-    if (self.reportChangePageCompletion) {
-        self.reportChangePageCompletion(YES, nil);
-        self.reportChangePageCompletion = nil;
+    if (self.reportLoadCompletion) {
+        self.reportLoadCompletion(YES, nil);
+        self.reportLoadCompletion = nil;
     }
 }
 
 - (void)handleReportOnPageChangeWithParameters:(NSDictionary *)parameters
 {
-    NSInteger currentPage = ((NSNumber *)parameters[@"page"]).integerValue;
+    NSInteger currentPage = 0;
+    if (parameters[@"parameters"]) {
+        currentPage = ((NSNumber *)parameters[@"parameters"][@"page"]).integerValue;
+    } else {
+        currentPage = ((NSNumber *)parameters[@"page"]).integerValue;
+    }
     [self.report updateCurrentPage:currentPage];
 }
 
@@ -407,7 +414,12 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 #pragma mark - Export report
 - (void)handleExportParameters:(NSDictionary *)parameters
 {
-    NSString *outputResourcesPath = parameters[@"link"];
+    NSString *outputResourcesPath = @"";
+    if (parameters[@"parameters"]) {
+        outputResourcesPath = parameters[@"parameters"][@"link"];
+    } else {
+        outputResourcesPath = parameters[@"link"];
+    }
     if (outputResourcesPath) {
         if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOutputResourcePath:fullReportName:)]) {
             NSString *fullReportName = [NSString stringWithFormat:@"%@.%@", self.report.resourceLookup.label, self.exportFormat];
@@ -430,13 +442,18 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)handleRunReportWithParameters:(NSDictionary *)parameters
 {
-    NSString *params = parameters[@"data"];
-    if (!params) {
-        return;
-    }
-    NSData *jsonData = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *json;
     NSError *jsonError;
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&jsonError];
+    if (parameters[@"parameters"]) {
+        json = parameters[@"parameters"][@"data"];
+    } else {
+        NSString *params = parameters[@"data"];
+        if (!params) {
+            return;
+        }
+        NSData *jsonData = [params dataUsingEncoding:NSUTF8StringEncoding];
+        json = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&jsonError];
+    }
 
     NSString *reportPath;
     if (json) {
@@ -451,7 +468,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                     if (errorString && [errorString rangeOfString:@"unauthorized"].length) {
                         errorType = JSReportLoaderErrorTypeAuthentification;
                     }
-                    self.reportLoadCompletion(NO, [self createErrorWithType:errorType errorMessage:errorString]);
+                    if ([self.delegate respondsToSelector:@selector(reportLoader:didReceiveOnClickEventWithError:)]) {
+                        [self.delegate reportLoader:self didReceiveOnClickEventWithError:[self createErrorWithType:errorType errorMessage:errorString]];
+                    }
                 } else {
                     JSResourceLookup *resourceLookup = [result.objects firstObject];
                     if (resourceLookup) {
@@ -474,7 +493,32 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         }
 
     } else {
-        NSLog(@"parse json with error: %@", jsonError.localizedDescription);
+        JMLog(@"parse json with error: %@", jsonError.localizedDescription);
+    }
+}
+
+#pragma mark - Error handlers
+- (void)handleOnWinwowErrorWithMessage:(NSString *)message
+{
+    if (self.reportLoadCompletion) {
+        self.reportLoadCompletion(NO, [self createErrorWithType:JSReportLoaderErrorTypeUndefined
+                                                   errorMessage:message]);
+        self.reportLoadCompletion = nil;
+    }
+}
+
+- (void)handleOnPageLoadErrorWithParameters:(NSDictionary *)parameters
+{
+    NSDictionary *params = parameters[@"parameters"];
+    NSString *errorCode = params[@"message"][@"errorCode"];
+    NSString *message = params[@"message"][@"message"];
+
+    if ([errorCode isEqualToString:@"authentication.error"]) {
+        if (self.reportLoadCompletion) {
+            self.reportLoadCompletion(NO, [self createErrorWithType:JSReportLoaderErrorTypeAuthentification
+                                                       errorMessage:message]);
+            self.reportLoadCompletion = nil;
+        }
     }
 }
 

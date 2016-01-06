@@ -73,12 +73,41 @@
 
 - (NSString *)htmlStringForReport
 {
-    BOOL isNeedNonOptimizedVisualize = [self isAmberServer];
-    NSString *htmlName = @"report_optimized";
+    BOOL isAmberServer = [self isAmberServer];
 
-    if (isNeedNonOptimizedVisualize) {
-        htmlName = @"report";
+    NSString *htmlString;
+    if (isAmberServer) {
+        htmlString = [self htmlStringForAmberServer];
+    } else {
+        NSString *htmlName = @"report";
+
+        NSString *htmlPath = [[NSBundle mainBundle] pathForResource:htmlName ofType:@"html"];
+        htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+
+        // Initial Scale for ViewPort
+        CGFloat initialScaleViewport = 0.75;
+        if ([JMUtils isIphone]) {
+            initialScaleViewport = 0.25;
+        }
+        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScaleViewport).stringValue];
+
+        // Visualize
+        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
+
+        // New JasperMobile
+        NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"vis_jaspermobile" ofType:@"js"];
+        NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath
+                                                                 encoding:NSUTF8StringEncoding
+                                                                    error:nil];
+        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
     }
+
+    return htmlString;
+}
+
+- (NSString *)htmlStringForAmberServer
+{
+    NSString *htmlName = @"report";
 
     NSString *htmlPath = [[NSBundle mainBundle] pathForResource:htmlName ofType:@"html"];
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
@@ -93,13 +122,6 @@
     // Visualize
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
 
-    // REQUIRE_JS
-    if (!isNeedNonOptimizedVisualize) {
-        NSString *requireJSPath = [[NSBundle mainBundle] pathForResource:@"require.min" ofType:@"js"];
-        NSString *requirejsString = [NSString stringWithContentsOfFile:requireJSPath encoding:NSUTF8StringEncoding error:nil];
-        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"REQUIRE_JS" withString:requirejsString];
-    }
-
     // JasperMobile
     NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"report-ios-mobilejs-sdk" ofType:@"js"];
     NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
@@ -107,7 +129,6 @@
 
     return htmlString;
 }
-
 
 - (NSString *)htmlStringForDashboard
 {

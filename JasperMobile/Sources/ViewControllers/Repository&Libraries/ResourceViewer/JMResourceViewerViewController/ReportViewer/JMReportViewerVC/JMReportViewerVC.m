@@ -165,6 +165,12 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark - Notifications
+- (void)applicationWillResignActiveNotification:(NSNotification *)notification
+{
+    [self.toolbar endEditing:YES];
+}
+
 #pragma mark - Setups
 - (void)setupLeftBarButtonItems
 {
@@ -186,12 +192,12 @@
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
                                                                         views:@{@"webView": webView}]];
-    
+
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
                                                                         views:@{@"webView": webView}]];
-    
+
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
@@ -312,7 +318,8 @@
 - (void)printResource
 {
     // TODO: we don't have events when JIVE is applied to a report.
-
+    [super printResource];
+    
     [self preparePreviewForPrintWithCompletion:^(NSURL *resourceURL) {
         if (resourceURL) {
             [self printItem:resourceURL
@@ -451,25 +458,26 @@
     [self hideEmptyReportMessage];
     [self hideToolbar];
     [self hideReportView];
-    
+
     __weak typeof(self)weakSelf = self;
     [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf.reportLoader cancel];
         [strongSelf cancelResourceViewingAndExit:YES];
     }];
-    
+
     [self.reportLoader runReportWithPage:page completion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf stopShowLoader];
-        
+
         if (success) {
             // Analytics
-            NSString *resourcesType = [JMUtils isSupportVisualize] ? @"Report (Visualize)" : @"Report (REST)";
-            [JMUtils logEventWithName:@"User opened resource"
-                         additionInfo:@{
-                                 @"Resource's Type" : resourcesType
-                         }];
+            NSString *label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
+            [JMUtils logEventWithInfo:@{
+                                kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
+                                kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
+                                kJMAnalyticsLabelKey         : label
+                        }];
 
             [strongSelf showReportView];
         } else {
@@ -597,6 +605,11 @@
     reportViewController.initialReportParameters = reportParameters;
     reportViewController.isChildReport = YES;
     [self.navigationController pushViewController:reportViewController animated:YES];
+}
+
+- (void)reportLoader:(id<JMReportLoaderProtocol>)reportLoader didReceiveOnClickEventWithError:(NSError *)error
+{
+    [JMUtils presentAlertControllerWithError:error completion:nil];
 }
 
 -(void)reportLoader:(id<JMReportLoaderProtocol>)reportLoder didReceiveOnClickEventForReference:(NSURL *)urlReference
@@ -747,6 +760,5 @@
 {
     ((UIView *)self.configurator.webView).hidden = NO;
 }
-
 
 @end

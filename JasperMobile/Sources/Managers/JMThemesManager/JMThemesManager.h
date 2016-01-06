@@ -93,7 +93,11 @@
 
 - (UIColor *)loginViewTryDemoButtonBackgroundColor;
 
+- (UIColor *)loginViewTryDemoButtonDisabledBackgroundColor;
+
 - (UIColor *)loginViewTryDemoButtonTextColor;
+
+- (UIColor *)loginViewTryDemoDisabledButtonTextColor;
 
 // Menu View
 - (UIColor *)menuViewBackgroundColor;

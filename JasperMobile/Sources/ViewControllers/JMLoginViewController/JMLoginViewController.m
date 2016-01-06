@@ -72,27 +72,25 @@
     [self.loginButton setTitleColor:[[JMThemesManager sharedManager] loginViewLoginButtonTextColor] forState:UIControlStateNormal];
     [self.loginButton setTitle:JMCustomLocalizedString(@"login.button.login", nil) forState:UIControlStateNormal];
     
-    self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
-    [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
     [self.tryDemoButton setTitle:JMCustomLocalizedString(@"login.button.try.demo", nil) forState:UIControlStateNormal];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
 
     if (self.showForRestoreSession) {
         // setup previous session
         self.userNameTextField.text = self.restClient.serverProfile.username;
         self.selectedServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
         self.tryDemoButton.enabled = NO;
+        self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonDisabledBackgroundColor];
+        [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoDisabledButtonTextColor] forState:UIControlStateNormal];
+    } else {
+        self.tryDemoButton.backgroundColor = [[JMThemesManager sharedManager] loginViewTryDemoButtonBackgroundColor];
+        [self.tryDemoButton setTitleColor:[[JMThemesManager sharedManager] loginViewTryDemoButtonTextColor] forState:UIControlStateNormal];
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [super viewWillAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -219,27 +217,22 @@
     
     [[JMSessionManager sharedManager] createSessionWithServerProfile:jsServerProfile keepLogged:[serverProfile.keepSession boolValue] completion:^(BOOL success) {
         __strong typeof(self)strongSelf = weakSelf;
-
         [JMCancelRequestPopup dismiss];
+        // Analytics
+        [JMUtils logLoginSuccess:success
+                    additionInfo:@{
+                                   kJMAnalyticsCategoryKey      : kJMAnalyticsAuthenticationEventCategoryTitle,
+                                   kJMAnalyticsActionKey        : kJMAnalyticsAuthenticationEventActionLoginTitle,
+                                   kJMAnalyticsLabelKey         : kJMAnalyticsAuthenticationEventLabelSuccess
+                                   }];
+        
         if (success) {
-            // Analytics
-            [JMUtils logLoginSuccess:YES
-                        additionInfo:@{
-                                @"Server version" : jsServerProfile.serverInfo.version
-                        }];
-
             strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
             [strongSelf dismissViewControllerAnimated:NO completion:nil];
             if (strongSelf.completion) {
                 strongSelf.completion();
             }
         } else {
-            // Analytics
-            [JMUtils logLoginSuccess:NO
-                        additionInfo:@{
-                                @"Reason of failure" : @"Wrong Credentials"
-                        }];
-
             NSString *errorTitle = JMCustomLocalizedString(@"error.authenication.dialog.title", nil);
             NSString *errorMessage = JMCustomLocalizedString(@"error.authenication.dialog.msg", nil);
             NSError *error = [NSError errorWithDomain:errorTitle code:JSInvalidCredentialsErrorCode userInfo:@{NSLocalizedDescriptionKey : errorMessage}];

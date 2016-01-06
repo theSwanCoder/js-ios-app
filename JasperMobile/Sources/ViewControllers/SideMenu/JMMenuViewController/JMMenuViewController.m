@@ -187,10 +187,11 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
                 id nextVC;
                 if([item vcIdentifierForSelectedItem]) {
                     // Analytics
-                    [JMUtils logEventWithName:@"User opened section"
-                                 additionInfo:@{
-                                         @"Section's Name" : [item nameForCrashlytics]
-                                 }];
+                    [JMUtils logEventWithInfo:@{
+                            kJMAnalyticsCategoryKey      : kJMAnalyticsRepositoryEventCategoryTitle,
+                            kJMAnalyticsActionKey        : kJMAnalyticsRepositoryEventActionOpen,
+                            kJMAnalyticsLabelKey         : [item nameForAnalytics]
+                    }];
 
                     nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
                     UIBarButtonItem *bbi = [self barButtonItemForState:JMMenuButtonStateNormal];

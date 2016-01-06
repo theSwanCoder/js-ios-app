@@ -57,5 +57,5 @@ typedef NS_ENUM(NSInteger, JMResourceType){
 + (instancetype)menuItemWithResourceType:(JMResourceType)resourceType;
 
 - (NSString *) vcIdentifierForSelectedItem;
-- (NSString *) nameForCrashlytics;
+- (NSString *) nameForAnalytics;
 @end

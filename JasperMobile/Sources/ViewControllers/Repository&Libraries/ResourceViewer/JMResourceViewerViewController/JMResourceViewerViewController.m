@@ -140,7 +140,18 @@
 #pragma mark - Print API
 - (void)printResource
 {
-    // override in child
+    // Analytics
+    NSString *label = kJMAnalyticsResourceEventLabelSavedResource;
+    if ([self.resourceLookup isReport]) {
+        label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
+    } else if ([self.resourceLookup isDashboard]) {
+        label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+    }
+    [JMUtils logEventWithInfo:@{
+                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
+                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionPrintTitle,
+                        kJMAnalyticsLabelKey         : label
+                }];
 }
 
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(BOOL completed, NSError *error))completion
