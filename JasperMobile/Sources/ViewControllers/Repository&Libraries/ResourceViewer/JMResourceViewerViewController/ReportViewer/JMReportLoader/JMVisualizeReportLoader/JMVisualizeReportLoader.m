@@ -206,7 +206,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)destroy
 {
     JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileReport.destroy(%@);";
+    request.command = @"MobileReport.destroyReport(%@);";
     request.parametersAsString = @"";
     [self.bridge sendRequest:request];
 
