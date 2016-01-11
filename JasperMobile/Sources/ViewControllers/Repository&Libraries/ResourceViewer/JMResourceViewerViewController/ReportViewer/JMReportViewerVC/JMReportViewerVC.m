@@ -140,6 +140,8 @@
     if (self.isChildReport) {
         [self closeChildReport];
     } else {
+        [self stopShowLoader];
+
         if (![self.restClient isRequestPoolEmpty]) {
             [self.restClient cancelAllRequests];
         }
