@@ -102,6 +102,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                failure:nil];
         }
     } else if ([self.resourceLookup isSavedReport]) {
+        JMLog(@"saved items");
 //        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
 //        self.thumbnailImage = [savedReport thumbnailImage];
 //        resourceImage = [UIImage imageNamed:[NSString stringWithFormat:@"res_type_%@", savedReport.format]];
@@ -111,22 +112,22 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
         JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
         if (savedReport) {
             if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
-                resourceImage = [UIImage imageNamed:@"res_type_html"];
+                resourceImage = [UIImage imageNamed:@"res_type_file_html"];
             } else if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
-                resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+                resourceImage = [UIImage imageNamed:@"res_type_file_pdf"];
             } else if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
-                resourceImage = [UIImage imageNamed:@"res_type_xls"];
+                resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
             }
         }
     } else if ([self.resourceLookup isTempExportedReport]) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
         JMExportResource *exportResource = (JMExportResource *)self.resourceLookup;
         if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
-            resourceImage = [UIImage imageNamed:@"res_type_html"];
+            resourceImage = [UIImage imageNamed:@"res_type_file_html"];
         } else if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
-            resourceImage = [UIImage imageNamed:@"res_type_pdf"];
+            resourceImage = [UIImage imageNamed:@"res_type_file_pdf"];
         } else if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
-            resourceImage = [UIImage imageNamed:@"res_type_xls"];
+            resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
         }
         self.alpha = 0.5;
     } else if ([self.resourceLookup isDashboard]) {
