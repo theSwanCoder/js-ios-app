@@ -1297,7 +1297,7 @@ your business wherever you are.</string>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z2K-QY-Ftv">
-                                                    <rect key="frame" x="521" y="15" width="51" height="31"/>
+                                                    <rect key="frame" x="521" y="7" width="51" height="31"/>
                                                     <connections>
                                                         <action selector="switchChanged:" destination="VEm-hm-4HK" eventType="valueChanged" id="res-xh-nGJ"/>
                                                     </connections>
@@ -1309,7 +1309,7 @@ your business wherever you are.</string>
                                                 <constraint firstItem="kKe-LA-KdH" firstAttribute="leading" secondItem="MVc-Xa-UDo" secondAttribute="leading" constant="10" id="On2-ni-Duh"/>
                                                 <constraint firstAttribute="bottom" secondItem="kKe-LA-KdH" secondAttribute="bottom" constant="5" id="TZs-NT-Odb"/>
                                                 <constraint firstAttribute="trailing" secondItem="Z2K-QY-Ftv" secondAttribute="trailing" constant="10" id="Xh0-GR-dCD"/>
-                                                <constraint firstItem="Z2K-QY-Ftv" firstAttribute="top" secondItem="MVc-Xa-UDo" secondAttribute="topMargin" constant="7" id="aqP-nN-9wJ"/>
+                                                <constraint firstItem="Z2K-QY-Ftv" firstAttribute="top" secondItem="MVc-Xa-UDo" secondAttribute="top" constant="7" id="aqP-nN-9wJ"/>
                                                 <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="Z2K-QY-Ftv" secondAttribute="bottom" constant="7" id="gXY-Z3-rEY"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -2081,8 +2081,7 @@ your business wherever you are.</string>
                                     <outlet property="delegate" destination="0MW-Od-gLJ" id="71U-kp-9Zb"/>
                                 </connections>
                             </tableView>
-                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results.
-Please Make Another Selection..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="Cqd-tw-uW1" userLabel="Label">
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results. Please Make Another Selection..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="0.0" translatesAutoresizingMaskIntoConstraints="NO" id="Cqd-tw-uW1" userLabel="Label">
                                 <rect key="frame" x="10" y="218" width="580" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="Csh-QF-cka"/>

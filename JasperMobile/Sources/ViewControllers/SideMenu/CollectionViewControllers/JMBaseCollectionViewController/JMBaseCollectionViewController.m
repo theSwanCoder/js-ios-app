@@ -383,7 +383,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             [navBarItems addObject:sortItem];
         }
         
-        BOOL shouldConcateItems = (navBarItems.count > 1) && (traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact) &&
+        UIUserInterfaceSizeClass horizontalSizeClass = traitCollection.horizontalSizeClass;
+        if (horizontalSizeClass == UIUserInterfaceSizeClassUnspecified && [JMUtils isIphone] && UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+            horizontalSizeClass = UIUserInterfaceSizeClassCompact;
+        }
+        
+        BOOL shouldConcateItems = (navBarItems.count > 1) && (horizontalSizeClass == UIUserInterfaceSizeClassCompact) &&
                                                              (traitCollection.verticalSizeClass != UIUserInterfaceSizeClassCompact);
         
         if (shouldConcateItems) {
