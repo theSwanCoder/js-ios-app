@@ -124,9 +124,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)maximizeDashlet:(JMDashlet *)dashlet
 {
     JMLog(@"%@", NSStringFromSelector(_cmd));
-    // MobileDashboard._instance._controller.dashboard.updateComponent(%@, {maximized: true,interactive: true});
     JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileDashboard._instance._controller.dashboard.updateComponent(\"%@\", {maximized: true,interactive: true});";
+    request.command = @"MobileDashboard.maximizeDashlet(\"%@\");";
     request.parametersAsString = dashlet.identifier;
     [self.bridge sendRequest:request];
 }
@@ -134,9 +133,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 - (void)minimizeDashlet:(JMDashlet *)dashlet
 {
     JMLog(@"%@", NSStringFromSelector(_cmd));
-    // MobileDashboard._instance._controller.dashboard.updateComponent(%@, {maximized: true,interactive: true});
     JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileDashboard._instance._controller.dashboard.updateComponent(\"%@\", {maximized: false,interactive: false});";
+    request.command = @"MobileDashboard.minimizeDashlet(\"%@\");";
     request.parametersAsString = dashlet.identifier;
     [self.bridge sendRequest:request];
 }
