@@ -32,7 +32,6 @@
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
 @property (nonatomic) JMExternalWindowControlsVC *controlViewController;
-@property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) JSReportSaver *reportSaver;
 @property (nonatomic, strong) NSString *savedResourcePath;
 @property (nonatomic, weak) UIImageView *imageView;
@@ -200,7 +199,7 @@
 - (void)switchFromTV
 {
     [self.view addSubview:self.webView];
-    [self setupWebViewLayout];
+//    [self setupWebViewLayout];
 
     [self.controlViewController.view removeFromSuperview];
 }
@@ -210,6 +209,7 @@
 {
     [self switchFromTV];
     [self hideExternalWindow];
+}
 
 #pragma mark - Viewers
 - (void)showResourceWithDocumentController

@@ -96,6 +96,7 @@
 
 - (void)setupWebViewLayout
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading

@@ -107,6 +107,7 @@
 
 - (UIWebView *)webView
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return self.configurator.webView;
 }
 
