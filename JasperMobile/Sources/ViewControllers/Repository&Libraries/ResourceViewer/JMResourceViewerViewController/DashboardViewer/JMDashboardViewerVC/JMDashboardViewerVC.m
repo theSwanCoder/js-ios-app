@@ -164,6 +164,17 @@
 }
 
 
+- (void)cancelResourceViewingAndExit:(BOOL)exit
+{
+    if ([self isContentOnTV]) {
+        [self switchFromTV];
+        [self hideExternalWindow];
+        [super cancelResourceViewingAndExit:exit];
+    } else {
+        [super cancelResourceViewingAndExit:exit];
+    }
+}
+
 #pragma mark - Actions
 - (void)minimizeDashlet
 {
@@ -471,9 +482,6 @@
         }
 
         self.leftButtonItem = self.navigationItem.leftBarButtonItem;
-        self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
-                                                                   target:self
-                                                                   action:@selector(minimizeDashlet)];
         self.navigationItem.title = dashlet.name;
     }
 }
