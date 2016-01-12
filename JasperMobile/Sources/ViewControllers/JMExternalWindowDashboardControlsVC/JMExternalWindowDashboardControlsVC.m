@@ -43,6 +43,7 @@
 
     UINib *cellNib = [UINib nibWithNibName:@"JMExternalWindowDashboardControlsTableViewCell" bundle:nil];
     [self.tableView registerNib:cellNib forCellReuseIdentifier:@"JMExternalWindowDashboardControlsTableViewCell"];
+    self.tableView.tableFooterView = [UIView new];
 }
 
 #pragma mark - UITableViewDataSource
@@ -59,6 +60,12 @@
     cell.nameLabel.text = dashlet.name;
     cell.delegate = self;
     return cell;
+}
+
+#pragma mark - UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - JMExternalWindowDashboardControlsTableViewCellDelegate
