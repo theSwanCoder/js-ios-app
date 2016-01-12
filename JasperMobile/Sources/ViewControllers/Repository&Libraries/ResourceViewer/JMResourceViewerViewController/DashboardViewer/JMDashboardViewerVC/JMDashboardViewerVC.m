@@ -34,6 +34,7 @@
 #import "JMDashboard.h"
 #import "JMWebViewManager.h"
 #import "JMExternalWindowDashboardControlsVC.h"
+#import "JMDashlet.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -458,6 +459,22 @@
 {
     if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
         [self.dashboardLoader maximizeDashlet:dashlet];
+
+        // TODO: move to separate method
+        self.navigationItem.rightBarButtonItems = nil;
+        if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
+            UIBarButtonItem *refreshDashlet = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_action"]
+                                                                               style:UIBarButtonItemStylePlain
+                                                                              target:self
+                                                                              action:@selector(reloadDashlet)];
+            self.navigationItem.rightBarButtonItem = refreshDashlet;
+        }
+
+        self.leftButtonItem = self.navigationItem.leftBarButtonItem;
+        self.navigationItem.leftBarButtonItem = [self backButtonWithTitle:self.title
+                                                                   target:self
+                                                                   action:@selector(minimizeDashlet)];
+        self.navigationItem.title = dashlet.name;
     }
 }
 
@@ -465,6 +482,12 @@
 {
     if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
         [self.dashboardLoader minimizeDashlet:dashlet];
+
+        // TODO: move to separate method
+        self.navigationItem.leftBarButtonItem = self.leftButtonItem;
+        self.navigationItem.rightBarButtonItems = self.rightButtonItems;
+        self.navigationItem.title = [self resourceLookup].label;
+        self.leftButtonItem = nil;
     }
 }
 
