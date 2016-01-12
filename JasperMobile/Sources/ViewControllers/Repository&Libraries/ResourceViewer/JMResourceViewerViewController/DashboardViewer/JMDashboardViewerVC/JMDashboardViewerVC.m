@@ -405,7 +405,9 @@
 {
     [self addControlsForExternalWindow];
 
-    [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
+    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
+    }
     UIView *dashboardView = self.configurator.webView;
     dashboardView.translatesAutoresizingMaskIntoConstraints = YES;
     return dashboardView;
@@ -438,12 +440,14 @@
     [self.view addSubview:self.webView];
     [self setupWebViewLayout];
 
-    CGFloat initialScaleViewport = 0.75;
-    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-    if (isCompactWidth) {
-        initialScaleViewport = 0.25;
+    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        CGFloat initialScaleViewport = 0.75;
+        BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+        if (isCompactWidth) {
+            initialScaleViewport = 0.25;
+        }
+        [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
     }
-    [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
 
     [self.controlsViewController.view removeFromSuperview];
     self.controlsViewController = nil;
