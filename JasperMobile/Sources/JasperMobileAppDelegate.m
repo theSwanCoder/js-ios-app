@@ -141,18 +141,6 @@ static const NSInteger kSplashViewTag = 100;
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
-- (void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
-    NSString *localNotificationIdentifier = notification.userInfo[kJMLocalNotificationKey];
-    if ([localNotificationIdentifier isEqualToString:kJMExportResourceLocalNotification]) {
-        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:kJMExportedResourceDidLoadNotification
-                                                                                             object:nil
-                                                                                           userInfo:@{
-                                                                                                   @"resource" : notification.alertBody
-                                                                                           }]];
-    }
-}
-
 #pragma mark - Private
 - (void)coreDataInit
 {

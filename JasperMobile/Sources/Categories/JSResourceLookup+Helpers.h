@@ -20,6 +20,7 @@
 
 - (BOOL) isDashboard;
 - (BOOL) isNewDashboard;
+- (BOOL) isFile;
 
 - (NSString *) resourceViewerVCIdentifier;
 

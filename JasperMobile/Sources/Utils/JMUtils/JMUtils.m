@@ -36,6 +36,9 @@
 #import "JMMenuViewController.h"
 #import "JMEULAViewController.h"
 #import "JMServerProfile+Helpers.h"
+#import "JSConstants.h"
+#import "JMServersGridViewController.h"
+#import "JMServerOptionsViewController.h"
 
 
 void jmDebugLog(NSString *format, ...) {
@@ -150,9 +153,9 @@ void jmDebugLog(NSString *format, ...) {
     static NSArray *reportFormats;
     if (!reportFormats) {
         reportFormats = @[
-                           [JSConstants sharedInstance].CONTENT_TYPE_HTML,
-                           [JSConstants sharedInstance].CONTENT_TYPE_PDF,
-                           [JSConstants sharedInstance].CONTENT_TYPE_XLS,
+                           kJS_CONTENT_TYPE_HTML,
+                           kJS_CONTENT_TYPE_PDF,
+                           kJS_CONTENT_TYPE_XLS,
                            ];
     }
     return reportFormats;
@@ -190,8 +193,11 @@ void jmDebugLog(NSString *format, ...) {
     SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
     JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
 
-    if ([revealViewController.presentedViewController isKindOfClass:[UINavigationController class]] &&
-            [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMLoginViewController class]]) {
+    BOOL isPresentedByNavVC = [revealViewController.presentedViewController isKindOfClass:[UINavigationController class]];
+    BOOL isLoginVC = [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMLoginViewController class]];
+    BOOL isServersVC = [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMServersGridViewController class]];
+    BOOL isNewServerVC = [((UINavigationController *) revealViewController.presentedViewController).topViewController isKindOfClass:[JMServerOptionsViewController class]];
+    if (isPresentedByNavVC && (isLoginVC || isServersVC || isNewServerVC)) {
         // if a nav view controller was loaded previously
         return;
     }
@@ -309,22 +315,22 @@ void jmDebugLog(NSString *format, ...) {
 
 + (BOOL)isServerVersionUpOrEqual6
 {
-    return self.restClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_0_0;
+    return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_AMBER_6_0_0;
 }
 
 + (BOOL)isServerAmber2
 {
-    return self.restClient.serverProfile.serverInfo.versionAsFloat == [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_1_0;
+    return self.restClient.serverProfile.serverInfo.versionAsFloat == kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
 }
 
 + (BOOL)isServerAmber2OrHigher
 {
-    return self.restClient.serverProfile.serverInfo.versionAsFloat >= [JSConstants sharedInstance].SERVER_VERSION_CODE_AMBER_6_1_0;
+    return self.restClient.serverProfile.serverInfo.versionAsFloat >= kJS_SERVER_VERSION_CODE_AMBER_6_1_0;
 }
 
 + (BOOL)isServerProEdition
 {
-    return [self.restClient.serverProfile.serverInfo.edition isEqualToString: [JSConstants sharedInstance].SERVER_EDITION_PRO];
+    return [self.restClient.serverProfile.serverInfo.edition isEqualToString: kJS_SERVER_EDITION_PRO];
 }
 
 + (NSString *)localizedStringFromDate:(NSDate *)date
@@ -401,53 +407,69 @@ void jmDebugLog(NSString *format, ...) {
     return (rootViewController.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact);
 }
 
-
 + (BOOL)isDemoAccount
 {
-    BOOL isDemoAccount = [self.restClient.serverProfile.serverUrl isEqualToString:[JMServerProfile demoServerProfile].serverUrl];
+    BOOL isDemoServer = [self.restClient.serverProfile.serverUrl isEqualToString:kJMDemoServerUrl];
+    BOOL isDemoUser = [self.restClient.serverProfile.username isEqualToString:kJMDemoServerUsername];
+    BOOL isDemoOrganization = [self.restClient.serverProfile.organization isEqualToString:kJMDemoServerOrganization];
+    BOOL isDemoAccount = isDemoServer && isDemoUser && isDemoOrganization;
     return isDemoAccount;
 }
 
 #pragma mark - Analytics
-+ (void)logEventWithName:(NSString *)eventName additionInfo:(NSDictionary *)additionInfo
++ (void)logEventWithInfo:(NSDictionary *)eventInfo
 {
-    // Disable analytics for demo profile
-    if ([self isDemoAccount]) {
-        return;
+#ifndef __RELEASE__
+    NSString *version = self.restClient.serverInfo.version;
+    if ([JMUtils isDemoAccount]) {
+        version = [version stringByAppendingString:@"(Demo)"];
     }
-
+    
     // Crashlytics - Answers
-    [Answers logCustomEventWithName:eventName
-                   customAttributes:additionInfo];
+    NSMutableDictionary *extendedEventInfo = [eventInfo mutableCopy];
+    extendedEventInfo[kJMAnalyticsServerVersionKey] = version;
+    [Answers logCustomEventWithName:eventInfo[kJMAnalyticsCategoryKey]
+                   customAttributes:extendedEventInfo];
 
     // Google Analytics
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:eventName                                           // Event category (required)
-                                                          action:[additionInfo allKeys].firstObject                  // Event action (required)
-                                                           label:[additionInfo allValues].firstObject                // Event label
-                                                           value:nil] build]];                                       // Event value
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:eventInfo[kJMAnalyticsCategoryKey]                 // Event category (required)
+                                                                           action:eventInfo[kJMAnalyticsActionKey]                   // Event action (required)
+                                                                            label:eventInfo[kJMAnalyticsLabelKey]                    // Event label
+                                                                            value:nil];                                              // Event value
+    [tracker set:[GAIFields customDimensionForIndex:1]
+           value:version];
 
+    [tracker send:[builder build]];
+#endif
 }
 
 + (void)logLoginSuccess:(BOOL)success additionInfo:(NSDictionary *)additionInfo
 {
-    // Disable analytics for demo profile
-    if ([self isDemoAccount]) {
-        return;
+#ifndef __RELEASE__
+    NSString *version = self.restClient.serverInfo.version;
+    if ([JMUtils isDemoAccount]) {
+        version = [version stringByAppendingString:@"(Demo)"];
     }
 
     // Crashlytics - Answers
+    NSMutableDictionary *extendedEventInfo = [additionInfo mutableCopy];
+    extendedEventInfo[kJMAnalyticsServerVersionKey] = version;
     [Answers logLoginWithMethod:@"Digits"
                         success:@(success)
-               customAttributes:additionInfo];
-
+               customAttributes:extendedEventInfo];
+    
     // Google Analytics
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    NSString *action = success ? @"Login_Success" : @"Login_Failed";
-    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:action                                              // Event category (required)
-                                                          action:[additionInfo allKeys].firstObject                  // Event action (required)
-                                                           label:[additionInfo allValues].firstObject                // Event label
-                                                           value:nil] build]];                                       // Event value
+    GAIDictionaryBuilder *builder = [GAIDictionaryBuilder createEventWithCategory:additionInfo[kJMAnalyticsCategoryKey]                 // Event category (required)
+                                                                           action:additionInfo[kJMAnalyticsActionKey]                   // Event action (required)
+                                                                            label:additionInfo[kJMAnalyticsLabelKey]                    // Event label
+                                                                            value:nil];                                                 // Event value
+    [tracker set:[GAIFields customDimensionForIndex:1]
+           value:version];
+
+    [tracker send:[builder build]];
+#endif
 }
 
 @end

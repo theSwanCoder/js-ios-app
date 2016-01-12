@@ -29,16 +29,24 @@
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
+ @author Alexey Gubarev ogubarie@tibco.com
  @since 2.3
  */
 
-@class JMExportResource;
-@class JMExportTask;
+#import "JMExportTask.h"
+#import "JMExportResource.h"
 
 @interface JMExportManager : NSObject
 + (instancetype)sharedInstance;
-- (void)addTaskWithResource:(JMExportResource *)resource;
+
+- (void)addExportTask:(JMExportTask *)task;
+
 - (void)cancelAll;
 - (void)cancelTask:(JMExportTask *)task;
-- (void)cancelTaskForSavedResource:(JMSavedResources *)savedResource;
+- (void)cancelTaskForResource:(JMExportResource *)resource;
+
+- (NSArray <JMExportResource *> *)exportedResources;
+
+- (JMExportTask *)taskForResource:(JMExportResource *)resource;
+
 @end

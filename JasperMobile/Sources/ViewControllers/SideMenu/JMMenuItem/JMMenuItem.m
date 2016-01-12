@@ -36,9 +36,7 @@
     if (self) {
         _resourceType = resourceType;
         _itemTitle = [self titleWithResourceType];
-        _itemIcon = [self iconWithResourceType];
-        _selectedItemIcon = [self selectedIconWithResourceType];
-        
+        _showNotes = NO;
         _selected = NO;
     }
     return self;
@@ -54,16 +52,14 @@
     _selected = selected;
 }
 
-- (void)showNote
+- (UIImage *)itemIcon
 {
-    _itemIcon = [self iconWithNoteWithResourceType];
-    _selectedItemIcon = [self selectedIconWithNoteWithResourceType];
+    return self.showNotes ? [self iconWithNoteWithResourceType] : [self iconWithResourceType];
 }
 
-- (void)hideNote
+- (UIImage *)selectedItemIcon
 {
-    _itemIcon = [self iconWithResourceType];
-    _selectedItemIcon = [self selectedIconWithResourceType];
+    return self.showNotes ? [self selectedIconWithNoteWithResourceType] : [self selectedIconWithResourceType];
 }
 
 #pragma mark - Private API
@@ -183,7 +179,7 @@
     }
 }
 
-- (NSString *)nameForCrashlytics
+- (NSString *)nameForAnalytics
 {
     switch (self.resourceType) {
         case JMResourceTypeLibrary:

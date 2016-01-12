@@ -56,7 +56,7 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
 
     // start point of loading resource
     [self startResourceViewing];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(favoriteMarkDidChanged:) name:kJMFavoritesDidChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interfaceOrientationDidChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
@@ -333,8 +333,13 @@ NSString * const kJMShowSavedRecourcesViewerSegue = @"ShowSavedRecourcesViewer";
     NSString *backItemTitle = title;
     if (!backItemTitle) {
         NSArray *viewControllers = self.navigationController.viewControllers;
-        UIViewController *previousViewController = viewControllers[[viewControllers indexOfObject:self] - 1];
-        backItemTitle = previousViewController.title;
+        NSUInteger index = [viewControllers indexOfObject:self];
+        if ((index != NSNotFound) && (viewControllers.count - 1) >= index) {
+            UIViewController *previousViewController = viewControllers[index - 1];
+            backItemTitle = previousViewController.title;
+        } else {
+            backItemTitle = JMCustomLocalizedString(@"back.button.title", nil);
+        }
     }
 
     UIImage *backButtonImage = [UIImage imageNamed:@"back_item"];

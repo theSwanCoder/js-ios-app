@@ -87,7 +87,6 @@ extern NSString * const kJMReportsDirectory;
 
 // Saved Items ws types
 extern NSString * const kJMSavedReportUnit;
-//extern NSString * const kJMExportedReportUnit;
 extern NSString * const kJMTempExportedReportUnit;
 
 // Name of the main report file (outputResource)
@@ -114,3 +113,30 @@ NSInteger  const kJMRecentResourcesLimit;
 extern NSString * const kJMDefaultThemeFileName;
 extern NSString * const kJMThemesFileFormat;
 extern NSString * const kJMCurrentThemeFileName;
+
+// Analytics - Common
+extern NSString * const kJMAnalyticsServerVersionKey;
+extern NSString * const kJMAnalyticsCategoryKey;
+extern NSString * const kJMAnalyticsActionKey;
+extern NSString * const kJMAnalyticsLabelKey;
+
+// Analytics - Authentication
+extern NSString * const kJMAnalyticsAuthenticationEventCategoryTitle;
+extern NSString * const kJMAnalyticsAuthenticationEventActionLoginTitle;
+extern NSString * const kJMAnalyticsAuthenticationEventLabelSuccess;
+extern NSString * const kJMAnalyticsAuthenticationEventLabelFailure;
+
+// Analytics - Resource
+extern NSString * const kJMAnalyticsResourceEventCategoryTitle;
+extern NSString * const kJMAnalyticsResourceEventActionOpenTitle;
+extern NSString * const kJMAnalyticsResourceEventActionPrintTitle;
+extern NSString * const kJMAnalyticsResourceEventActionExportTitle;
+extern NSString * const kJMAnalyticsResourceEventLabelReportREST;
+extern NSString * const kJMAnalyticsResourceEventLabelReportVisualize;
+extern NSString * const kJMAnalyticsResourceEventLabelDashboardFlow;
+extern NSString * const kJMAnalyticsResourceEventLabelDashboardVisualize;
+extern NSString * const kJMAnalyticsResourceEventLabelSavedResource;
+
+// Analytics - Repository
+extern NSString * const kJMAnalyticsRepositoryEventCategoryTitle;
+extern NSString * const kJMAnalyticsRepositoryEventActionOpen;

@@ -64,10 +64,13 @@
 #pragma mark - Print
 - (void)printResource
 {
+    [super printResource];
+
     [self imageFromWebViewWithCompletion:^(UIImage *image) {
         if (image) {
             [self printItem:image
-                   withName:self.dashboard.resourceLookup.label];
+                   withName:self.dashboard.resourceLookup.label
+                 completion:nil];
         }
     }];
 }
@@ -240,11 +243,12 @@
 
                 if (success) {
                     // Analytics
-                    NSString *resourcesType = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? @"Dashboard (Visualize)" : @"Dashboard (REST)";
-                    [JMUtils logEventWithName:@"User opened resource"
-                                 additionInfo:@{
-                                         @"Resource's Type" : resourcesType
-                                 }];
+                    NSString *label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+                    [JMUtils logEventWithInfo:@{
+                                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
+                                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
+                                        kJMAnalyticsLabelKey         : label
+                                        }];
                 }
             }];
 
@@ -358,14 +362,8 @@
                                 __strong typeof(self)strongSelf = weakSelf;
                                 if (result.error) {
                                     if (result.error.code == JSSessionExpiredErrorCode) {
-                                        [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                            if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                                [strongSelf loadInputControlsWithReportURI:reportURI completion:completion];
-                                            } else {
-                                                [JMUtils showLoginViewAnimated:YES completion:^{
-                                                    [strongSelf cancelResourceViewingAndExit:YES];
-                                                }];
-                                            }
+                                        [JMUtils showLoginViewAnimated:YES completion:^{
+                                            [strongSelf cancelResourceViewingAndExit:YES];
                                         }];
                                     } else {
                                         if (completion) {

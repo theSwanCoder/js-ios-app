@@ -28,8 +28,7 @@
 
 #import "JMExportManager.h"
 #import "JMExportTask.h"
-#import "JMExportResource.h"
-#import "JMReportSaver.h"
+#import "JSReportSaver.h"
 #import "JMSaveReportPagesCell.h"
 #import "JMSavedResources+Helpers.h"
 
@@ -60,99 +59,47 @@
 }
 
 #pragma mark - Public API
-- (void)addTaskWithResource:(JMExportResource *)resource
+- (void)addExportTask:(JMExportTask *)task
 {
-    JMExportTask *task = [JMExportTask taskWithResource:resource];
-    [self addTaskToQueue:task];
+    [self.operationQueue addOperation:task];
 }
 
 - (void)cancelAll
 {
-    // TODO: implement
+    // TODO: Should check the implementation
+    [self.operationQueue cancelAllOperations];
 }
 
 - (void)cancelTask:(JMExportTask *)task
 {
-    // TODO: implement
+    // TODO: Should check the implementation
+    [task cancel];
 }
 
-- (void)cancelTaskForSavedResource:(JMSavedResources *)savedResource
+- (void)cancelTaskForResource:(JMExportResource *)resource;
 {
-    // TODO: implement
+    // TODO: Should check the implementation
+    [self cancelTask:[self taskForResource:resource]];
 }
 
-#pragma mark - Private API
-- (void)addTaskToQueue:(JMExportTask *)task
+- (NSArray <JMExportResource *> *)exportedResources
 {
-    [self.operationQueue addOperationWithBlock:^{
-        [JMSavedResources createSavedResourceWithExportedResource:task.exportResource];
-        task.taskState = JMExportTaskStateProgress;
-        [self executeTask:task completion:^{
-            task.taskState = JMExportTaskStateFinish;
-            [task.exportResource.savedResource updateWSTypeWith:kJMSavedReportUnit];
-            [self notifyTaskDidEnd:task];
-        }];
-    }];
-}
-
-- (void)executeTask:(JMExportTask *)task completion:(void(^)(void))completion
-{
-    JMReportSaver *reportSaver = [[JMReportSaver alloc] initWithReport:task.exportResource.resource];
-    [reportSaver saveReportWithName:task.exportResource.name
-                             format:task.exportResource.format
-                              pages:[self makePagesFormatFromPage:task.exportResource.startPage
-                                                           toPage:task.exportResource.endPage]
-                            addToDB:YES
-                         completion:^(JMSavedResources *savedReport, NSError *error) {
-                             if (error) {
-                                 if (error.code == JSSessionExpiredErrorCode) {
-                                     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                         if (self.restClient.keepSession && isSessionAuthorized) {
-                                             [self executeTask:task completion:completion];
-                                         } else {
-                                             [JMUtils showLoginViewAnimated:YES completion:nil];
-                                         }
-                                     }];
-                                 } else {
-                                     [JMUtils presentAlertControllerWithError:error completion:nil];
-                                     [savedReport removeReport];
-                                 }
-                             } else {
-                                 completion();
-                             }
-                         }];
-    task.cancelCompletion = ^{
-        [reportSaver cancelReport];
-    };
-}
-
-#pragma mark - Helpers
-- (void)notifyTaskDidEnd:(JMExportTask *)task
-{
-    UILocalNotification* notification = [UILocalNotification new];
-    notification.fireDate = [NSDate date];
-    notification.alertBody = task.exportResource.name;
-    notification.userInfo = @{
-            kJMLocalNotificationKey : kJMExportResourceLocalNotification
-    };
-    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-}
-
-- (void)notifyTaskDidCancel
-{
-    [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:kJMExportedResourceDidCancelNotification
-                                                                                         object:nil]];
-}
-
-- (NSString *)makePagesFormatFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage
-{
-    NSString *pagesFormat = nil;
-    if (fromPage == toPage) {
-        pagesFormat = [NSString stringWithFormat:@"%@", @(fromPage)];
-    } else {
-        pagesFormat = [NSString stringWithFormat:@"%@-%@", @(fromPage), @(toPage)];
+    NSMutableArray *resources = [NSMutableArray new];
+    for (JMExportTask *task in self.operationQueue.operations) {
+        if (!task.isFinished) {
+            [resources addObject:task.exportResource];
+        }
     }
-    return pagesFormat;
+    return resources;
 }
 
+- (JMExportTask *)taskForResource:(JMExportResource *)resource
+{
+    for (JMExportTask *exportTask in self.operationQueue.operations) {
+        if (exportTask.exportResource == resource) {
+            return exportTask;
+        }
+    }
+    return nil;
+}
 @end
