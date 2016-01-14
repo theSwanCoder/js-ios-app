@@ -51,7 +51,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JSInputControlOption *option = self.listOfValues[indexPath.row];
-    option.selected = [JSConstants stringFromBOOL:!option.selected.boolValue];
+    option.selected = [JSUtils stringFromBOOL:!option.selected.boolValue];
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
@@ -104,7 +104,7 @@
     }
     
     for (JSInputControlOption *option in self.listOfValues) {
-        option.selected = [JSConstants stringFromBOOL:(action == JMMenuActionsViewAction_SelectAll)];
+        option.selected = [JSUtils stringFromBOOL:(action == JMMenuActionsViewAction_SelectAll)];
     }
     [self.tableView reloadData];
     

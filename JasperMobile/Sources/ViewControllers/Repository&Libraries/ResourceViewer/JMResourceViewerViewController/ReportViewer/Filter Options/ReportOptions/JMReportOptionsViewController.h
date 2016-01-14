@@ -33,19 +33,19 @@
 
 
 #import "GAITrackedViewController.h"
-#import "JMExtendedReportOption.h"
+#import "JSReportOption.h"
 
 @class JMReportOptionsViewController;
 @protocol JMReportOptionsViewControllerDelegate <NSObject>
 
 @required
-- (void) reportOptionsViewController:(JMReportOptionsViewController *)controller didSelectOption:(JMExtendedReportOption *)option;
+- (void) reportOptionsViewController:(JMReportOptionsViewController *)controller didSelectOption:(JSReportOption *)option;
 
 @end
 
 @interface JMReportOptionsViewController : GAITrackedViewController
 
 @property (nonatomic, strong) NSArray *listOfValues;
-@property (nonatomic, strong) JMExtendedReportOption *selectedReportOption;
+@property (nonatomic, strong) JSReportOption *selectedReportOption;
 @property (nonatomic, weak) id <JMReportOptionsViewControllerDelegate> delegate;
 @end

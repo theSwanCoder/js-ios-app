@@ -48,5 +48,5 @@
 - (NSRange)availableRangeForPageRangeCell:(JMSaveReportPageRangeCell *)cell;
 
 @optional
-- (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSNumber *)page;
+- (void)pageRangeCell:(JMSaveReportPageRangeCell *)cell didSelectPage:(NSInteger)page;
 @end

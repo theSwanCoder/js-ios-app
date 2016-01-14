@@ -32,6 +32,7 @@
 
 @interface JMExternalWindowDashboardControlsVC () <UITableViewDelegate, UITableViewDataSource, JMExternalWindowDashboardControlsTableViewCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, copy) NSArray *visibleComponents;
 @end
 
 @implementation JMExternalWindowDashboardControlsVC
@@ -43,29 +44,45 @@
 
     UINib *cellNib = [UINib nibWithNibName:@"JMExternalWindowDashboardControlsTableViewCell" bundle:nil];
     [self.tableView registerNib:cellNib forCellReuseIdentifier:@"JMExternalWindowDashboardControlsTableViewCell"];
+    self.tableView.tableFooterView = [UIView new];
+
+    NSMutableArray *visibleComponents = [NSMutableArray array];
+    for (JMDashlet *dashlet in self.components) {
+        if (dashlet.type == JMDashletTypeChart) {
+            [visibleComponents addObject:dashlet];
+        }
+    }
+    self.visibleComponents = visibleComponents;
+
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.components.count;
+    return self.visibleComponents.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     JMExternalWindowDashboardControlsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JMExternalWindowDashboardControlsTableViewCell"
                                                                                            forIndexPath:indexPath];
-    JMDashlet *dashlet = self.components[indexPath.row];
+    JMDashlet *dashlet = self.visibleComponents[indexPath.row];
     cell.nameLabel.text = dashlet.name;
     cell.delegate = self;
     return cell;
+}
+
+#pragma mark - UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - JMExternalWindowDashboardControlsTableViewCellDelegate
 - (void)externalWindowDashboardControlsTableViewCellDidMaximize:(JMExternalWindowDashboardControlsTableViewCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    JMDashlet *dashlet = self.components[indexPath.row];
+    JMDashlet *dashlet = self.visibleComponents[indexPath.row];
     JMLog(@"need maximize dashlet: %@", dashlet.name);
     if ([self.delegate respondsToSelector:@selector(externalWindowDashboardControlsVC:didAskMaximizeDashlet:)]) {
         [self.delegate externalWindowDashboardControlsVC:self didAskMaximizeDashlet:dashlet];
@@ -75,7 +92,7 @@
 - (void)externalWindowDashboardControlsTableViewCellDidMinimize:(JMExternalWindowDashboardControlsTableViewCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    JMDashlet *dashlet = self.components[indexPath.row];
+    JMDashlet *dashlet = self.visibleComponents[indexPath.row];
     JMLog(@"need minimize dashlet: %@", dashlet.name);
     if ([self.delegate respondsToSelector:@selector(externalWindowDashboardControlsVC:didAskMinimizeDashlet:)]) {
         [self.delegate externalWindowDashboardControlsVC:self didAskMinimizeDashlet:dashlet];

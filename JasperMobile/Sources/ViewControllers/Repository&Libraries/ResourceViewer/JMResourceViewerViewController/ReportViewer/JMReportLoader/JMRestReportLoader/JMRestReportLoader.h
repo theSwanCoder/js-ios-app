@@ -32,16 +32,9 @@
  @since 2.0
  */
 
-#import "JMReportLoader.h"
+#import "JSReportLoader.h"
+#import "JMReportLoaderProtocol.h"
 
-typedef NS_ENUM(NSInteger, JMReportViewerOutputResourceType) {
-    JMReportViewerOutputResourceType_None = 0,
-    JMReportViewerOutputResourceType_LoadingNow,
-    JMReportViewerOutputResourceType_NotFinal,
-    JMReportViewerOutputResourceType_Final,
-    JMReportViewerOutputResourceType_AlreadyLoaded = JMReportViewerOutputResourceType_NotFinal | JMReportViewerOutputResourceType_Final
-};
-
-@interface JMRestReportLoader : NSObject <JMReportLoader>
+@interface JMRestReportLoader : JSReportLoader <JMReportLoaderProtocol>
 
 @end

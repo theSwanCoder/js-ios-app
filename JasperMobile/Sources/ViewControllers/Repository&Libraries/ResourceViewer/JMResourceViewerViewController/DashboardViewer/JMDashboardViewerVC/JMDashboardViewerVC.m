@@ -35,6 +35,7 @@
 #import "JMWebViewManager.h"
 #import "JMExternalWindowDashboardControlsVC.h"
 #import "JMDashboardInputControlsVC.h"
+#import "JMDashlet.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -65,10 +66,13 @@
 #pragma mark - Print
 - (void)printResource
 {
+    [super printResource];
+
     [self imageFromWebViewWithCompletion:^(UIImage *image) {
         if (image) {
             [self printItem:image
-                   withName:self.dashboard.resourceLookup.label];
+                   withName:self.dashboard.resourceLookup.label
+                 completion:nil];
         }
     }];
 }
@@ -105,6 +109,7 @@
 
 - (UIWebView *)webView
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return self.configurator.webView;
 }
 
@@ -159,6 +164,17 @@
     [[JMWebViewManager sharedInstance] resetZoom];
 }
 
+
+- (void)cancelResourceViewingAndExit:(BOOL)exit
+{
+    if ([self isContentOnTV]) {
+        [self switchFromTV];
+        [self hideExternalWindow];
+        [super cancelResourceViewingAndExit:exit];
+    } else {
+        [super cancelResourceViewingAndExit:exit];
+    }
+}
 
 #pragma mark - Actions
 - (void)minimizeDashlet
@@ -241,11 +257,12 @@
 
                 if (success) {
                     // Analytics
-                    NSString *resourcesType = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? @"Dashboard (Visualize)" : @"Dashboard (REST)";
-                    [JMUtils logEventWithName:@"User opened resource"
-                                 additionInfo:@{
-                                         @"Resource's Type" : resourcesType
-                                 }];
+                    NSString *label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+                    [JMUtils logEventWithInfo:@{
+                                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
+                                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
+                                        kJMAnalyticsLabelKey         : label
+                                        }];
                 }
             }];
 
@@ -374,14 +391,8 @@
                                 __strong typeof(self)strongSelf = weakSelf;
                                 if (result.error) {
                                     if (result.error.code == JSSessionExpiredErrorCode) {
-                                        [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                            if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                                [strongSelf loadInputControlsWithReportURI:reportURI completion:completion];
-                                            } else {
-                                                [JMUtils showLoginViewAnimated:YES completion:^{
-                                                    [strongSelf cancelResourceViewingAndExit:YES];
-                                                }];
-                                            }
+                                        [JMUtils showLoginViewAnimated:YES completion:^{
+                                            [strongSelf cancelResourceViewingAndExit:YES];
                                         }];
                                     } else {
                                         if (completion) {
@@ -448,7 +459,9 @@
 {
     [self addControlsForExternalWindow];
 
-    [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
+    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
+    }
     UIView *dashboardView = self.configurator.webView;
     dashboardView.translatesAutoresizingMaskIntoConstraints = YES;
     return dashboardView;
@@ -481,12 +494,14 @@
     [self.view addSubview:self.webView];
     [self setupWebViewLayout];
 
-    CGFloat initialScaleViewport = 0.75;
-    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-    if (isCompactWidth) {
-        initialScaleViewport = 0.25;
+    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        CGFloat initialScaleViewport = 0.75;
+        BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+        if (isCompactWidth) {
+            initialScaleViewport = 0.25;
+        }
+        [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
     }
-    [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
 
     [self.controlsViewController.view removeFromSuperview];
     self.controlsViewController = nil;
@@ -497,6 +512,19 @@
 {
     if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
         [self.dashboardLoader maximizeDashlet:dashlet];
+
+        // TODO: move to separate method
+        self.navigationItem.rightBarButtonItems = nil;
+        if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
+            UIBarButtonItem *refreshDashlet = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_action"]
+                                                                               style:UIBarButtonItemStylePlain
+                                                                              target:self
+                                                                              action:@selector(reloadDashlet)];
+            self.navigationItem.rightBarButtonItem = refreshDashlet;
+        }
+
+        self.leftButtonItem = self.navigationItem.leftBarButtonItem;
+        self.navigationItem.title = dashlet.name;
     }
 }
 
@@ -504,6 +532,12 @@
 {
     if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
         [self.dashboardLoader minimizeDashlet:dashlet];
+
+        // TODO: move to separate method
+        self.navigationItem.leftBarButtonItem = self.leftButtonItem;
+        self.navigationItem.rightBarButtonItems = self.rightButtonItems;
+        self.navigationItem.title = [self resourceLookup].label;
+        self.leftButtonItem = nil;
     }
 }
 

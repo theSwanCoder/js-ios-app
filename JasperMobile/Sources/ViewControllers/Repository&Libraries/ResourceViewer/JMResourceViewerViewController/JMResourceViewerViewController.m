@@ -25,7 +25,6 @@
 #import "JMWebViewManager.h"
 #import "ALToastView.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMPrintResourceViewController.h"
 #import "JMMainNavigationController.h"
 
 @interface JMResourceViewerViewController () <UIPrintInteractionControllerDelegate>
@@ -35,6 +34,24 @@
 @end
 
 @implementation JMResourceViewerViewController
+
+#pragma mark - Handle Memory Warnings
+- (void)didReceiveMemoryWarning
+{
+    [self.webView stopLoading];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+    
+    NSString *errorMessage = JMCustomLocalizedString(@"resource.viewer.memory.warning", nil);
+    NSError *error = [NSError errorWithDomain:@"dialod.title.attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    __weak typeof(self) weakSelf = self;
+    [JMUtils presentAlertControllerWithError:error completion:^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf cancelResourceViewingAndExit:YES];
+    }];
+    
+    [super didReceiveMemoryWarning];
+}
+
 
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
@@ -79,6 +96,7 @@
 
 - (void)setupWebViewLayout
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
@@ -128,14 +146,18 @@
 #pragma mark - Print API
 - (void)printResource
 {
-    // override in child
-}
-
-- (void)printItem:(id)printingItem withName:(NSString *)itemName
-{
-    [self printItem:printingItem
-           withName:itemName
-         completion:nil];
+    // Analytics
+    NSString *label = kJMAnalyticsResourceEventLabelSavedResource;
+    if ([self.resourceLookup isReport]) {
+        label = [JMUtils isSupportVisualize] ? kJMAnalyticsResourceEventLabelReportVisualize : kJMAnalyticsResourceEventLabelReportREST;
+    } else if ([self.resourceLookup isDashboard]) {
+        label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+    }
+    [JMUtils logEventWithInfo:@{
+                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
+                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionPrintTitle,
+                        kJMAnalyticsLabelKey         : label
+                }];
 }
 
 - (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void(^)(BOOL completed, NSError *error))completion

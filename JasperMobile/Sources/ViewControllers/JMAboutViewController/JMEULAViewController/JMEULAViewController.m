@@ -28,7 +28,7 @@
 
 #import "JMEULAViewController.h"
 
-@interface JMEULAViewController()
+@interface JMEULAViewController() <UIWebViewDelegate>
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @end
 
@@ -55,7 +55,7 @@
         self.navigationItem.rightBarButtonItem = acceptButton;
     }
 
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"TIB_jsm-ios_2.2.0_license" ofType:@"pdf"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"EULA" ofType:@"pdf"];
     NSURL *url = [NSURL fileURLWithPath:path];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:request];
@@ -68,5 +68,20 @@
         self.completion();
     }
 }
+
+#pragma mark - UIWebViewDelegate
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    JMLog(@"request: %@", request);
+    JMLog(@"navigationType: %@", @(navigationType));
+
+    if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+        [[UIApplication sharedApplication] openURL:request.URL];
+        return NO;
+    }
+    return YES;
+}
+
 
 @end

@@ -32,6 +32,7 @@
  */
 
 #import "JMSavedResources.h"
+#import "JSResourceLookup.h"
 
 @class JMExportResource;
 
@@ -43,7 +44,7 @@ extern NSString * const kJMSavedResources;
 + (JMSavedResources *)savedReportsFromResourceLookup:(JSResourceLookup *)resource;
 
 // Adds saved resource with path to CoreData
-+ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format;
++ (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format sourcesURL:(NSURL *)sourcesURL;
 
 // Returns YES if report with name reportName with format reportFormat is absent
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat;
@@ -55,13 +56,6 @@ extern NSString * const kJMSavedResources;
 // Rename saved resource
 - (BOOL)renameReportTo:(NSString *)newName;
 
-+ (void)createSavedResourceWithExportedResource:(JMExportResource *)exportResource;
-
-- (void)updateWSTypeWith:(NSString *)wsType;
-
-// Remove saved resource from DB
-- (void)removeFromDB;
-
 // Removes saved resource
 - (void)removeReport;
 
@@ -72,6 +66,8 @@ extern NSString * const kJMSavedResources;
 - (JSResourceLookup *)wrapperFromSavedReports;
 
 // paths
++ (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format;
+
 + (NSString *)pathToFolderForSavedReport:(JMSavedResources *)savedReport;
 + (NSString *)pathToTempFolderForSavedReport:(JMSavedResources *)savedReport;
 + (NSString *)absolutePathToSavedReport:(JMSavedResources *)savedReport;

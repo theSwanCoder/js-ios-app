@@ -28,24 +28,19 @@
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
+ @author Alexey Gubarev ogubarie@tibco.com
  @since 2.3
  */
 
-@class JMExportResource;
-@class JMReportSaver;
+#import "JMExportResource.h"
 
-typedef NS_ENUM(NSInteger, JMExportTaskState) {
-    JMExportTaskStateUndefined,
-    JMExportTaskStateProgress,
-    JMExportTaskStateCancel,
-    JMExportTaskStateFinish
-};
+@interface JMExportTask : NSOperation
+@property (nonatomic, strong, readonly) JMExportResource *exportResource;
 
-@interface JMExportTask : NSObject
-@property (nonatomic, strong) JMExportResource *exportResource;
-@property (nonatomic, assign) JMExportTaskState taskState;
-@property (nonatomic, copy) void(^cancelCompletion)(void);
-@property (nonatomic, copy) void(^finishCompletion)(void);
-- (instancetype)initWithResource:(JMExportResource *)resource;
-+ (instancetype)taskWithResource:(JMExportResource *)resource;
+- (instancetype)initWithResource:(JSResourceLookup *)resource name:(NSString *)name format:(NSString *)format;
++ (instancetype)taskWithResource:(JSResourceLookup *)resource name:(NSString *)name format:(NSString *)format;
+
+- (NSString *)resourceTypeForResource;
+- (NSString *)resourceURIForResourceWithFormat:(NSString *)format;
+
 @end

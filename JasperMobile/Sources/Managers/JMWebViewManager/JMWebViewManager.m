@@ -84,8 +84,8 @@
 - (void)reset
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    self.primaryWebView.delegate = nil;
-    self.primaryWebView = nil;
+    _primaryWebView.delegate = nil;
+    _primaryWebView = nil;
 
     [self resetChildWebView];
 }
@@ -93,14 +93,16 @@
 - (void)resetChildWebView
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    self.secondaryWebView.delegate = nil;
-    self.secondaryWebView = nil;
+    _secondaryWebView.delegate = nil;
+    _secondaryWebView = nil;
 }
 
 - (void)resetZoom
 {
-    [_primaryWebView.scrollView setZoomScale:0.1 animated:YES];
-    [_secondaryWebView.scrollView setZoomScale:0.1 animated:YES];
+    [_primaryWebView.scrollView setZoomScale:0.1
+                                        animated:YES];
+    [_secondaryWebView.scrollView setZoomScale:0.1
+                                          animated:YES];
 }
 
 #pragma mark - Private API
