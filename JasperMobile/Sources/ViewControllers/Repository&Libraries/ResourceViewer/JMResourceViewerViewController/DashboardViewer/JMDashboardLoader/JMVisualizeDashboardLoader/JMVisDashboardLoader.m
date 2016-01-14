@@ -334,8 +334,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
                                     if (resourceLookup) {
                                         resourceLookup.resourceType = kJS_WS_TYPE_REPORT_UNIT;
 
-                                        NSArray *reportParameters = [self createReportParametersFromParameters:params];
-                                        [strongSelf.delegate dashboardLoader:self
+                                        NSArray *reportParameters = [strongSelf createReportParametersFromParameters:params];
+                                        [strongSelf.delegate dashboardLoader:strongSelf
                                                  didReceiveHyperlinkWithType:JMHyperlinkTypeReportExecution
                                                               resourceLookup:resourceLookup
                                                                   parameters:reportParameters];

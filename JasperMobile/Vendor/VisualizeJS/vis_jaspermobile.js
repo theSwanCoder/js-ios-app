@@ -191,6 +191,24 @@ JasperMobile.Dashboard.Callback = {
                 }
             }
         );
+    },
+    onReportExecution: function(data) {
+        JasperMobile.Callback.createCallback(
+            {
+                "command" : "onReportExecution",
+                "parameters" : data
+            }
+        );
+    },
+    onReferenceClick: function(location) {
+        JasperMobile.Callback.createCallback(
+            {
+                "command" : "onReferenceClick",
+                "parameters" : {
+                    "location" : location
+                }
+            }
+        );
     }
 };
 
@@ -224,13 +242,13 @@ MobileReport = {
                 linkOptions: {
                     events: {
                         click : function(event, link){
-                            JasperMobile.Callback.log("click to: " + link);
-                            JasperMobile.Callback.log("link.parameters: " + link.parameters);
-                            JasperMobile.Callback.log("link.parameters: " + JSON.stringify(link.parameters));
-                            JasperMobile.Callback.log("link.parameters._report: " + link.parameters._report);
-                            JasperMobile.Callback.log("JasperMobile.Helper.collectReportParams(link): " + JasperMobile.Helper.collectReportParams(link));
+                            //JasperMobile.Callback.log("click to: " + link);
+                            //JasperMobile.Callback.log("link.parameters: " + link.parameters);
+                            //JasperMobile.Callback.log("link.parameters: " + JSON.stringify(link.parameters));
+                            //JasperMobile.Callback.log("link.parameters._report: " + link.parameters._report);
+                            //JasperMobile.Callback.log("JasperMobile.Helper.collectReportParams(link): " + JasperMobile.Helper.collectReportParams(link));
                             var type = link.type;
-                            JasperMobile.Callback.log("link type: " + type);
+                            //JasperMobile.Callback.log("link type: " + type);
 
                             switch (type) {
                                 case "ReportExecution": {
@@ -360,6 +378,37 @@ MobileDashboard = {
                         click: function(event, link) {
                             var type = link.type;
                             JasperMobile.Callback.log("link type: " + type);
+
+                            switch (type) {
+                                case "ReportExecution": {
+                                    var data = {
+                                        resource: link.parameters._report,
+                                        params: JasperMobile.Helper.collectReportParams(link)
+                                    };
+                                    var dataString = JSON.stringify(data);
+                                    JasperMobile.Dashboard.Callback.onReportExecution(data);
+                                    break;
+                                }
+                                case "LocalAnchor": {
+                                    defaultHandler.call(this);
+                                    break;
+                                }
+                                case "LocalPage": {
+                                    defaultHandler.call(this);
+                                    break;
+                                }
+                                case "Reference": {
+                                    var href = link.href;
+                                    JasperMobile.Dashboard.Callback.onReferenceClick(href);
+                                    break;
+                                }
+                                case "AdHocExecution":
+                                    defaultHandler.call(this);
+                                    break;
+                                default: {
+                                    defaultHandler.call(this);
+                                }
+                            }
                         }
                     }
                 },
