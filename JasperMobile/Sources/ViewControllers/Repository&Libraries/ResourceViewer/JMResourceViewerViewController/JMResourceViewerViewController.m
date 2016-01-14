@@ -91,16 +91,22 @@
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
 
+    [self setupWebViewLayout];
+}
+
+- (void)setupWebViewLayout
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": webView}]];
+                                                                        views:@{@"webView": self.webView}]];
 
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": webView}]];
+                                                                        views:@{@"webView": self.webView}]];
 }
 
 - (void)resetSubViews
@@ -167,10 +173,12 @@
     printInteractionController.printingItem = printingItem;
 
     UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
-            if (completion) {
-                completion(completed, error);
-            }
-        };
+        if (completion) {
+            completion(completed, error);
+        }
+        // reassign keyWindow status (there is an issue when using showing a report on tv and printing the report).
+        [self.view.window makeKeyWindow];
+    };
 
     if ([JMUtils isIphone]) {
         [printInteractionController presentAnimated:YES completionHandler:completionHandler];

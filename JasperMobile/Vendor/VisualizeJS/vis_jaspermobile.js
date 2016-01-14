@@ -376,28 +376,45 @@ MobileDashboard = {
             MobileDashboard.dashboardObject = dashboard;
         });
     },
-    minimizeDashlet: function() {
-        // TODO: need this?
-        //this._showDashlets();
+    minimizeDashlet: function(dashletId) {
+        if (dashletId) {
+            MobileDashboard.dashboardObject.updateComponent(dashletId, {
+                maximized: false,
+                interactive: false
+            });
+        } else {
+            // TODO: need this?
+            //this._showDashlets();
 
-        // stop showing buttons for changing chart type.
-        var chartWrappers = document.querySelectorAll('.show_chartTypeSelector_wrapper');
-        for (var i = 0; i < chartWrappers.length; ++i) {
-            chartWrappers[i].style.display = 'none';
+            // stop showing buttons for changing chart type.
+            var chartWrappers = document.querySelectorAll('.show_chartTypeSelector_wrapper');
+            for (var i = 0; i < chartWrappers.length; ++i) {
+                chartWrappers[i].style.display = 'none';
+            }
+
+            MobileDashboard.selectedDashlet.classList.remove('originalDashletInScaledCanvas');
+
+            MobileDashboard.dashboardObject.updateComponent(MobileDashboard.selectedComponent.id, {
+                maximized: false,
+                interactive: false
+            }, function() {
+                MobileDashboard.selectedDashlet = {};
+                MobileDashboard.selectedComponent = {};
+                // TODO: need add callbacks?
+            }, function(error) {
+                // TODO: need add callbacks?
+            });
         }
-
-        MobileDashboard.selectedDashlet.classList.remove('originalDashletInScaledCanvas');
-
-        MobileDashboard.dashboardObject.updateComponent(MobileDashboard.selectedComponent.id, {
-            maximized: false,
-            interactive: false
-        }, function() {
-            MobileDashboard.selectedDashlet = {};
-            MobileDashboard.selectedComponent = {};
-            // TODO: need add callbacks?
-        }, function(error) {
-            // TODO: need add callbacks?
-        });
+    },
+    maximizeDashlet: function(dashletId) {
+        if (dashletId) {
+            MobileDashboard.dashboardObject.updateComponent(dashletId, {
+                maximized: true,
+                interactive: true
+            });
+        } else {
+            JasperMobile.Callback.log("Try maximize dashelt without 'id'");
+        }
     },
     refresh: function() {
         JasperMobile.Callback.log("start refresh");

@@ -22,20 +22,26 @@
 
 
 //
-//  JMResourceViewerViewController.h
+//  JMExternalWindowDashboardControlsVC.h
 //  TIBCO JasperMobile
 //
 
+@class JMDashlet;
+@protocol JMExternalWindowDashboardControlsVCDelegate;
+
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
- */
+@author Olexandr Dakhno odahno@tibco.com
+@since 2.3
+*/
 
-#import "JMBaseResourceViewerVC.h"
+@interface JMExternalWindowDashboardControlsVC : UIViewController
+@property (nonatomic, copy) NSArray <JMDashlet *>* components;
+@property (nonatomic, weak) NSObject <JMExternalWindowDashboardControlsVCDelegate> *delegate;
+@end
 
-@interface JMResourceViewerViewController : JMBaseResourceViewerVC <UIWebViewDelegate>
-@property (nonatomic, weak, readonly) IBOutlet UIWebView *webView;
-- (void)setupWebViewLayout;
-- (void)printResource __attribute__((objc_requires_super));
-- (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void (^)(BOOL completed, NSError *error))completion;
+
+@protocol JMExternalWindowDashboardControlsVCDelegate
+@optional
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JMDashlet *)dashlet;
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JMDashlet *)dashlet;
 @end

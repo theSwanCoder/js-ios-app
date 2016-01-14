@@ -236,6 +236,8 @@
 "action.title.print" = "Print";
 "action.title.openIn" = "Open with...";
 "action.title.accept" = "Accept";
+"action.title.showExternalDisplay" = "Show on TV";
+"action.title.hideExternalDisplay" = "Show on Device";
 
 /* Error messages */
 

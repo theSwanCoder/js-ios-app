@@ -22,20 +22,12 @@
 
 
 //
-//  JMResourceViewerViewController.h
+//  JMDashlet.h
 //  TIBCO JasperMobile
 //
 
-/**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
- */
+#import "JMDashlet.h"
 
-#import "JMBaseResourceViewerVC.h"
 
-@interface JMResourceViewerViewController : JMBaseResourceViewerVC <UIWebViewDelegate>
-@property (nonatomic, weak, readonly) IBOutlet UIWebView *webView;
-- (void)setupWebViewLayout;
-- (void)printResource __attribute__((objc_requires_super));
-- (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void (^)(BOOL completed, NSError *error))completion;
+@implementation JMDashlet
 @end

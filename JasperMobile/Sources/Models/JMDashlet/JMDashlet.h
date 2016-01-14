@@ -22,20 +22,25 @@
 
 
 //
-//  JMResourceViewerViewController.h
+//  JMDashlet.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
+ @author Aleksandr Dakhno odahno@tibco.com
+ @since 2.3
  */
 
-#import "JMBaseResourceViewerVC.h"
+typedef NS_ENUM(NSInteger, JMDashletType) {
+    JMDashletTypeValue,
+    JMDashletTypeChart,
+};
 
-@interface JMResourceViewerViewController : JMBaseResourceViewerVC <UIWebViewDelegate>
-@property (nonatomic, weak, readonly) IBOutlet UIWebView *webView;
-- (void)setupWebViewLayout;
-- (void)printResource __attribute__((objc_requires_super));
-- (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void (^)(BOOL completed, NSError *error))completion;
+@interface JMDashlet : NSObject
+@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, assign, getter=isInteractive) BOOL interactive;
+@property (nonatomic, assign, getter=isMaximized) BOOL maximized;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *resource;
+@property (nonatomic, assign) JMDashletType type;
 @end

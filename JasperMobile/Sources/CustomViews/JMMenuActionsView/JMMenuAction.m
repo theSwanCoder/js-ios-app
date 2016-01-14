@@ -81,6 +81,10 @@
             return @"action.title.print";
         case JMMenuActionsViewAction_OpenIn:
             return @"action.title.openIn";
+        case JMMenuActionsViewAction_ShowExternalDisplay:
+            return @"action.title.showExternalDisplay";
+        case JMMenuActionsViewAction_HideExternalDisplay:
+            return @"action.title.hideExternalDisplay";
     }
 }
 
@@ -119,6 +123,10 @@
             return @"print_action";
         case JMMenuActionsViewAction_OpenIn:
             return @"open_in_new";
+        case JMMenuActionsViewAction_ShowExternalDisplay:
+            return @"print_action";
+        case JMMenuActionsViewAction_HideExternalDisplay:
+            return @"print_action";
     }
 }
 

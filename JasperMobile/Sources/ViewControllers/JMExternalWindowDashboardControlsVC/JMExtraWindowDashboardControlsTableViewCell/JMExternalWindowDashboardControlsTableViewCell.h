@@ -22,20 +22,25 @@
 
 
 //
-//  JMResourceViewerViewController.h
+//  JMExternalWindowDashboardControlsTableViewCell.h
 //  TIBCO JasperMobile
 //
 
+@protocol JMExternalWindowDashboardControlsTableViewCellDelegate;
+
 /**
- @author Alexey Gubarev ogubarie@tibco.com
- @since 1.9
- */
+@author Olexandr Dakhno odahno@tibco.com
+@since 2.3
+*/
 
-#import "JMBaseResourceViewerVC.h"
+@interface JMExternalWindowDashboardControlsTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UIButton *maximizeButton;
+@property (weak, nonatomic) NSObject <JMExternalWindowDashboardControlsTableViewCellDelegate> *delegate;
+@end
 
-@interface JMResourceViewerViewController : JMBaseResourceViewerVC <UIWebViewDelegate>
-@property (nonatomic, weak, readonly) IBOutlet UIWebView *webView;
-- (void)setupWebViewLayout;
-- (void)printResource __attribute__((objc_requires_super));
-- (void)printItem:(id)printingItem withName:(NSString *)itemName completion:(void (^)(BOOL completed, NSError *error))completion;
+@protocol JMExternalWindowDashboardControlsTableViewCellDelegate
+@optional
+- (void)externalWindowDashboardControlsTableViewCellDidMaximize:(JMExternalWindowDashboardControlsTableViewCell *)cell;
+- (void)externalWindowDashboardControlsTableViewCellDidMinimize:(JMExternalWindowDashboardControlsTableViewCell *)cell;
 @end
