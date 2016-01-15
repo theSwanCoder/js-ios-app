@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #import "JMDashboard.h"
 #import "JMWebViewManager.h"
 #import "JMDashlet.h"
+#import "JMDashboardParameter.h"
 
 @interface JMVisDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
@@ -313,7 +314,13 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     self.dashboard.components = [dashlets copy];
 
     // Parameters
-    self.dashboard.inputControls = parameters[@"params"];
+    NSArray *rawInputControls = parameters[@"params"];
+    NSMutableArray *inputControls = [NSMutableArray array];
+    for (NSDictionary *param in rawInputControls) {
+        JMDashboardParameter *dashboardParameter = [JMDashboardParameter parameterWithData:param];
+        [inputControls addObject:dashboardParameter];
+    }
+    self.dashboard.inputControls = inputControls;
 
     if (self.completion) {
         self.completion(YES, nil);

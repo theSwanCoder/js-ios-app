@@ -36,6 +36,7 @@
 #import "JMExternalWindowDashboardControlsVC.h"
 #import "JMDashboardInputControlsVC.h"
 #import "JMDashlet.h"
+#import "JMDashboardParameter.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -439,20 +440,22 @@
         // generate parameters
 
         // expected format {"id":["value1", "value2", ...]}
-        // array of parameters is not valid
-        // need send only one parameter
-        NSDictionary *firstParameter = self.dashboard.inputControls[0];
-        NSString *identifier = firstParameter[@"id"];
-        NSArray *values = firstParameter[@"value"];
-        NSString *valuesAsString = @"";
-        for (NSString *value in values) {
-            valuesAsString = [valuesAsString stringByAppendingFormat:@"\"%@\",", value];
+        NSString *parametersAsString = @"{";
+        for (JMDashboardParameter *parameter in self.dashboard.inputControls) {
+
+            NSString *identifier = parameter.identifier;
+            NSArray *values = parameter.values;
+            NSString *valuesAsString = @"";
+            for (NSString *value in values) {
+                valuesAsString = [valuesAsString stringByAppendingFormat:@"\"%@\",", value];
+            }
+
+            parametersAsString = [parametersAsString stringByAppendingFormat:@"\"%@\":[%@], ", identifier, valuesAsString];
         }
-        NSString *parameterAsString = [NSString stringWithFormat:@"{\"%@\":[%@]}", identifier, valuesAsString];
+        parametersAsString = [parametersAsString stringByAppendingString:@"}"];
+        JMLog(@"parametersAsString: %@", parametersAsString);
 
-        JMLog(@"%@", parameterAsString);
-
-        [self.dashboardLoader applyParameters:parameterAsString];
+        [self.dashboardLoader applyParameters:parametersAsString];
     };
     [self.navigationController pushViewController:inputControlsVC animated:YES];
 }

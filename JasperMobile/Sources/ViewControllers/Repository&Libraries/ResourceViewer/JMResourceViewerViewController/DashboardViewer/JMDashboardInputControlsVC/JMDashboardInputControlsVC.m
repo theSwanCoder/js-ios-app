@@ -30,6 +30,7 @@
 #import "JMDashboard.h"
 #import "JMDashboardInputControlsCell.h"
 #import "JMTextInputControlCell.h"
+#import "JMDashboardParameter.h"
 
 @interface JMDashboardInputControlsVC () <UITabBarDelegate, UITableViewDataSource, JMDashboardInputControlsCellDelegate, JMInputControlCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -59,15 +60,11 @@
 {
     JMTextInputControlCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TextEditCell"
                                                             forIndexPath:indexPath];
-    NSDictionary *inputControl = self.dashboard.inputControls[indexPath.row];
-    cell.titleLabel.text = inputControl[@"id"];
+    JMDashboardParameter *dashboardParameter = self.dashboard.inputControls[indexPath.row];
+    cell.titleLabel.text = dashboardParameter.identifier;
+    cell.textField.text = [dashboardParameter valuesAsString];
 
     cell.delegate = self;
-
-    NSArray *values = inputControl[@"value"];
-    if (values.count == 1) {
-        cell.textField.text = values.firstObject;
-    }
 
     return cell;
 }
@@ -106,18 +103,14 @@
 
 - (void)inputControlCellDidChangedValue:(JMInputControlCell *)cell
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    NSDictionary *inputControl = self.dashboard.inputControls[indexPath.row];
-    NSMutableDictionary *updatedInputControl = [inputControl mutableCopy];
-    JMTextInputControlCell *textInputControlCell = (JMTextInputControlCell *) cell;
-    NSArray *value = @[textInputControlCell.textField.text];
-    updatedInputControl[@"value"] = value;
+    JMDashboardParameter *dashboardParameter = self.dashboard.inputControls[indexPath.row];
 
-    NSMutableArray *updatedInputControls = [self.dashboard.inputControls mutableCopy];
-    updatedInputControls[indexPath.row] = updatedInputControl;
-    self.dashboard.inputControls = updatedInputControls;
+    JMTextInputControlCell *textInputControlCell = (JMTextInputControlCell *) cell;
+    NSString *newValue = textInputControlCell.textField.text;
+
+    // TODO: replace with another approach for saving values.
+    [dashboardParameter updateValuesWithString:newValue];
 }
 
 - (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor
