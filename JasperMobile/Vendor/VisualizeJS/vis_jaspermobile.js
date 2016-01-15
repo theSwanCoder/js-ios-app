@@ -147,7 +147,8 @@ JasperMobile.Dashboard.Callback = {
             {
                 "command" : "onLoadDone",
                 "parameters" : {
-                    "components" : data
+                    "components" : data.components,
+                    "params" : data.parameters
                 }
             }
         );
@@ -206,6 +207,16 @@ JasperMobile.Dashboard.Callback = {
                 "command" : "onReferenceClick",
                 "parameters" : {
                     "location" : location
+                }
+            }
+        );
+    },
+    dashboardParameters: function (data) {
+        JasperMobile.Callback.createCallback(
+            {
+                "command" : "dashboardParameters",
+                "parameters" : {
+                    "params" : data
                 }
             }
         );
@@ -413,8 +424,11 @@ MobileDashboard = {
                     }
                 },
                 success: function() {
-                    var data = MobileDashboard.dashboardObject.data();
-                    JasperMobile.Dashboard.Callback.onRunSuccess(data.components);
+                    //// Hack to get parameters' values
+                    setTimeout(function(){
+                        var data = MobileDashboard.dashboardObject.data();
+                        JasperMobile.Dashboard.Callback.onRunSuccess(data);
+                    }, 6000);
                     MobileDashboard._configureComponents(data.components);
                     MobileDashboard._defineComponentsClickEvent();
                 },
@@ -424,6 +438,10 @@ MobileDashboard = {
             });
             MobileDashboard.dashboardObject = dashboard;
         });
+    },
+    getDashboardParameters: function() {
+        var data = MobileDashboard.dashboardObject.data();
+        JasperMobile.Dashboard.Callback.dashboardParameters(data.parameters);
     },
     minimizeDashlet: function(dashletId) {
         if (dashletId) {
@@ -506,6 +524,16 @@ MobileDashboard = {
             })
             .fail(function(error) {
                 JasperMobile.Callback.log("failed refresh");
+            });
+    },
+    applyParams: function(parameters) {
+
+        MobileDashboard.dashboardObject.params(parameters).run()
+            .done(function() {
+                JasperMobile.Callback.log("success apply");
+            })
+            .fail(function() {
+                JasperMobile.Callback.log("failed apply");
             });
     },
     destroy: function() {
