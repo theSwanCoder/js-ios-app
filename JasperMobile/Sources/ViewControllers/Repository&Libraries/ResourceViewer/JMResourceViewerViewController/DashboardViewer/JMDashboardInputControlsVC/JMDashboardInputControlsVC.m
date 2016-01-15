@@ -29,16 +29,24 @@
 #import "JMDashboardInputControlsVC.h"
 #import "JMDashboard.h"
 #import "JMDashboardInputControlsCell.h"
+#import "JMTextInputControlCell.h"
 
-@interface JMDashboardInputControlsVC () <UITabBarDelegate, UITableViewDataSource, JMDashboardInputControlsCellDelegate>
+@interface JMDashboardInputControlsVC () <UITabBarDelegate, UITableViewDataSource, JMDashboardInputControlsCellDelegate, JMInputControlCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *applyButton;
 @end
 
 @implementation JMDashboardInputControlsVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    // setup "Run Report" button
+    self.applyButton.backgroundColor = [[JMThemesManager sharedManager] reportOptionsRunReportButtonBackgroundColor];
+    [self.applyButton setTitleColor:[[JMThemesManager sharedManager] reportOptionsRunReportButtonTextColor]
+                               forState:UIControlStateNormal];
+    [self.applyButton setTitle:JMCustomLocalizedString(@"dialog.button.applyUpdate", nil)
+                          forState:UIControlStateNormal];
 }
 
 #pragma mark - UITableViewDataSource
@@ -49,10 +57,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMDashboardInputControlsCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JMDashboardInputControlsCell"
+    JMTextInputControlCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TextEditCell"
                                                             forIndexPath:indexPath];
     NSDictionary *inputControl = self.dashboard.inputControls[indexPath.row];
-    cell.nameLabel.text = inputControl[@"id"];
+    cell.titleLabel.text = inputControl[@"id"];
 
     cell.delegate = self;
 
@@ -89,5 +97,33 @@
     updatedInputControls[indexPath.row] = updatedInputControl;
     self.dashboard.inputControls = updatedInputControls;
 }
+
+#pragma mark - JMInputControlCellDelegate
+- (void)reloadTableViewCell:(JMInputControlCell *)cell
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
+- (void)inputControlCellDidChangedValue:(JMInputControlCell *)cell
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    NSDictionary *inputControl = self.dashboard.inputControls[indexPath.row];
+    NSMutableDictionary *updatedInputControl = [inputControl mutableCopy];
+    JMTextInputControlCell *textInputControlCell = (JMTextInputControlCell *) cell;
+    NSArray *value = @[textInputControlCell.textField.text];
+    updatedInputControl[@"value"] = value;
+
+    NSMutableArray *updatedInputControls = [self.dashboard.inputControls mutableCopy];
+    updatedInputControls[indexPath.row] = updatedInputControl;
+    self.dashboard.inputControls = updatedInputControls;
+}
+
+- (void)updatedInputControlsValuesWithDescriptor:(JSInputControlDescriptor *)descriptor
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
 
 @end
