@@ -281,7 +281,10 @@
         menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
     }
     // TODO: verify if input controls available
-    menuActions |= JMMenuActionsViewAction_Edit;
+
+    if ([self isInputControlsAvailable]) {
+        menuActions |= JMMenuActionsViewAction_Edit;
+    }
     return menuActions;
 }
 
@@ -452,6 +455,11 @@
         [self.dashboardLoader applyParameters:parameterAsString];
     };
     [self.navigationController pushViewController:inputControlsVC animated:YES];
+}
+
+- (BOOL)isInputControlsAvailable
+{
+    return self.dashboard.inputControls.count > 0;
 }
 
 #pragma mark - Work with external screen
