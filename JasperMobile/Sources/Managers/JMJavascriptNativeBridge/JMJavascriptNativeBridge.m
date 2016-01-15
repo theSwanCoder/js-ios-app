@@ -49,8 +49,10 @@
 #pragma mark - Public API
 - (void)startLoadHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL
 {
-    [(UIWebView *)self.webView stopLoading];
-    [(UIWebView *)self.webView loadHTMLString:HTMLString baseURL:baseURL];
+    if (baseURL) {
+        [(UIWebView *)self.webView stopLoading];
+        [(UIWebView *)self.webView loadHTMLString:HTMLString baseURL:baseURL];
+    }
 }
 
 - (void)loadRequest:(NSURLRequest *)request
