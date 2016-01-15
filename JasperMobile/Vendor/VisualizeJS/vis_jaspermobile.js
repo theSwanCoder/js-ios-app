@@ -424,7 +424,7 @@ MobileDashboard = {
                     }
                 },
                 success: function() {
-                    //// Hack to get parameters' values
+                    // Hack to get parameters' values
                     setTimeout(function(){
                         var data = MobileDashboard.dashboardObject.data();
                         JasperMobile.Dashboard.Callback.onRunSuccess(data);
@@ -490,7 +490,7 @@ MobileDashboard = {
             .done(function() {
                 JasperMobile.Callback.log("success refresh");
                 var data = MobileDashboard.dashboardObject.data();
-                JasperMobile.Dashboard.Callback.onRunSuccess(data.components);
+                JasperMobile.Dashboard.Callback.onRunSuccess(data);
             })
             .fail(function(error) {
                 JasperMobile.Callback.log("failed refresh with error: " + error);
