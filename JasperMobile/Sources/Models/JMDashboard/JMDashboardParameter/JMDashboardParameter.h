@@ -33,4 +33,10 @@
 
 
 @interface JMDashboardParameter : NSObject
+@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, copy) NSArray <NSString *>*values;
+- (instancetype)initWithData:(NSDictionary *)data;
++ (instancetype)parameterWithData:(NSDictionary *)data;
+- (void)updateValuesWithString:(NSString *)stringValues;
+- (NSString *)valuesAsString;
 @end
