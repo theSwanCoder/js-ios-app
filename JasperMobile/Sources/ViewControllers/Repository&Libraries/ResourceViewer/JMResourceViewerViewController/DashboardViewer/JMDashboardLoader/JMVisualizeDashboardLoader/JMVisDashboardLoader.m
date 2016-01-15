@@ -40,10 +40,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #import "JMDashboard.h"
 #import "JMWebViewManager.h"
 #import "JMDashlet.h"
+#import "JMDashboardParameter.h"
 
 @interface JMVisDashboardLoader() <JMJavascriptNativeBridgeDelegate>
 @property (nonatomic, weak) JMDashboard *dashboard;
-@property (nonatomic, copy) JMDashboardLoaderCompletion loadCompletion;
+@property (nonatomic, copy) JMDashboardLoaderCompletion completion;
 @property (nonatomic, copy) NSURL *externalURL;
 @end
 
@@ -75,7 +76,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - Public API
 - (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion
 {
-    self.loadCompletion = completion;
+    self.completion = completion;
 
     if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
 
@@ -93,7 +94,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion
 {
-    self.loadCompletion = completion;
+    self.completion = completion;
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileDashboard.refresh();";
@@ -103,12 +104,31 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion) completion
 {
-    self.loadCompletion = completion;
+    self.completion = completion;
 
     JMJavascriptRequest *request = [JMJavascriptRequest new];
     request.command = @"MobileDashboard.refreshDashlet();";
     request.parametersAsString = @"";
     [self.bridge sendRequest:request];
+}
+
+- (void)fetchParametersWithCompletion:(JMDashboardLoaderCompletion) completion
+{
+    self.completion = completion;
+
+    JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest new];
+    applyParamsRequest.command = @"MobileDashboard.getDashboardParameters();";
+    [self.bridge sendRequest:applyParamsRequest];
+}
+
+- (void)applyParameters:(NSString *)parametersAsString
+{
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    JMJavascriptRequest *applyParamsRequest = [JMJavascriptRequest new];
+    applyParamsRequest.command = @"MobileDashboard.applyParams(%@);";
+
+    applyParamsRequest.parametersAsString = parametersAsString;
+    [self.bridge sendRequest:applyParamsRequest];
 }
 
 - (void)cancel
@@ -227,12 +247,14 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         [self handleOnReferenceClick:callback.parameters[@"parameters"]];
     } else if ([callback.type isEqualToString:@"onAuthError"]) {
         [self javascriptNativeBridgeDidReceiveAuthRequest:self.bridge];
+    } else if ([callback.type isEqualToString:@"dashboardParameters"]) {
+        [self handleDidFetchDashboardParameters:callback.parameters[@"parameters"]];
     } else if ([callback.type isEqualToString:@"onWindowError"]) {
         JMLog(@"callback.parameters: %@", callback.parameters);
         [self.bridge reset];
         // waiting for resetting of webview
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self loadDashboardWithCompletion:self.loadCompletion];
+            [self loadDashboardWithCompletion:self.completion];
         });
     } else {
         JMLog(@"callback type: %@", callback.type);
@@ -242,9 +264,9 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)javascriptNativeBridgeDidReceiveAuthRequest:(id <JMJavascriptNativeBridgeProtocol>)bridge
 {
-    if (self.loadCompletion) {
+    if (self.completion) {
         // TODO: Need add auth error
-        self.loadCompletion(NO, nil);
+        self.completion(NO, nil);
     }
     [self.delegate dashboardLoaderDidReceiveAuthRequest:self];
 }
@@ -270,13 +292,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 #pragma mark - Handle JS callbacks
 - (void)handleOnScriptLoaded
 {
-    // auth
-//    JMJavascriptRequest *authRequest = [JMJavascriptRequest new];
-//    authRequest.command = @"MobileDashboard.authorize(%@);";
-//    NSString *authParameters = [NSString stringWithFormat:@"{'username': '%@', 'password': '%@', 'organization': '%@'}", self.restClient.serverProfile.username, self.restClient.serverProfile.password, self.restClient.serverProfile.organization];
-//    authRequest.parametersAsString = authParameters;
-//    [self.bridge sendRequest:authRequest];
-
     // run
     JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
     runRequest.command = @"MobileDashboard.run(%@);";
@@ -287,18 +302,28 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
 - (void)handleOnLoadDoneWithParameters:(NSDictionary *)parameters
 {
-    JMLog(@"%@", NSStringFromSelector(_cmd));
-    NSArray *rawDashlets = parameters[@"components"];
+    // Components
+    NSArray *rawComponents = parameters[@"components"];
     NSMutableArray *dashlets = [NSMutableArray array];
-    for (NSDictionary *rawDashlet in rawDashlets) {
-        JMDashlet *dashlet = [self parseDashletFromData:rawDashlet];
-        [dashlets addObject:dashlet];
+    for (NSDictionary *rawComponent in rawComponents) {
+        JMDashlet *dashlet = [self parseComponentsFromData:rawComponent];
+        if (dashlet) {
+            [dashlets addObject:dashlet];
+        }
     }
-
     self.dashboard.components = [dashlets copy];
 
-    if (self.loadCompletion) {
-        self.loadCompletion(YES, nil);
+    // Parameters
+    NSArray *rawInputControls = parameters[@"params"];
+    NSMutableArray *inputControls = [NSMutableArray array];
+    for (NSDictionary *param in rawInputControls) {
+        JMDashboardParameter *dashboardParameter = [JMDashboardParameter parameterWithData:param];
+        [inputControls addObject:dashboardParameter];
+    }
+    self.dashboard.inputControls = inputControls;
+
+    if (self.completion) {
+        self.completion(YES, nil);
     }
 }
 
@@ -366,6 +391,15 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     }
 }
 
+- (void)handleDidFetchDashboardParameters:(NSDictionary *)parameters
+{
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    JMLog(@"parameters: %@", parameters);
+    if (self.completion) {
+        // TODO: complete
+    }
+}
+
 #pragma mark - Helpers
 - (NSArray *)createReportParametersFromParameters:(NSDictionary *)parameters
 {
@@ -377,20 +411,29 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     return [reportParameters copy];
 }
 
-- (JMDashlet *)parseDashletFromData:(NSDictionary *)rawDashlet
+- (JMDashlet *)parseComponentsFromData:(NSDictionary *)rawData
 {
+    NSString *type = rawData[@"type"];
+
+    if ([type isEqualToString:@"inputControl"]) {
+        return nil;
+    }
+
     JMDashlet *dashlet = [JMDashlet new];
-    dashlet.identifier = rawDashlet[@"id"];
-    NSNumber *rawInterective = (NSNumber *)rawDashlet[@"interactive"];
+    dashlet.identifier = rawData[@"id"];
+    NSNumber *rawInterective = (NSNumber *) rawData[@"interactive"];
     dashlet.interactive = [rawInterective isKindOfClass:[NSNull class]] ? NO : rawInterective.boolValue;
-    NSNumber *rawMaximized = (NSNumber *)rawDashlet[@"maximized"];
+    NSNumber *rawMaximized = (NSNumber *) rawData[@"maximized"];
     dashlet.maximized = [rawMaximized isKindOfClass:[NSNull class]] ? NO : rawMaximized.boolValue;
-    dashlet.name = rawDashlet[@"name"];
-    NSString *dashletType = rawDashlet[@"type"];
-    if ([dashletType isEqualToString:@"value"]) {
+    dashlet.name = rawData[@"name"];
+    if ([type isEqualToString:@"value"]) {
         dashlet.type = JMDashletTypeValue;
-    } else if ([dashletType isEqualToString:@"chart"]) {
+    } else if ([type isEqualToString:@"chart"]) {
         dashlet.type = JMDashletTypeChart;
+    } else if ([type isEqualToString:@"filterGroup"]) {
+        dashlet.type = JMDashletTypeFilterGroup;
+    } else if ([type isEqualToString:@"reportUnit"]) {
+        dashlet.type = JMDashletTypeReportUnit;
     }
     return dashlet;
 }

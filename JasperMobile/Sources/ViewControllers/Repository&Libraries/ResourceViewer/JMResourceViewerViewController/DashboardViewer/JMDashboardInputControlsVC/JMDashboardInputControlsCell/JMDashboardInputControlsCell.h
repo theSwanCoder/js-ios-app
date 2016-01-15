@@ -22,27 +22,26 @@
 
 
 //
-//  JMDashlet.h
+//  JMDashboardInputControlsCell.h
 //  TIBCO JasperMobile
 //
+
+
+@protocol JMDashboardInputControlsCellDelegate;
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
  @since 2.3
  */
 
-typedef NS_ENUM(NSInteger, JMDashletType) {
-    JMDashletTypeValue,
-    JMDashletTypeChart,
-    JMDashletTypeReportUnit,
-    JMDashletTypeFilterGroup,
-};
+@interface JMDashboardInputControlsCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UITextField *textField;
+@property (weak, nonatomic) NSObject <JMDashboardInputControlsCellDelegate> *delegate;
+@end
 
-@interface JMDashlet : NSObject
-@property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, assign, getter=isInteractive) BOOL interactive;
-@property (nonatomic, assign, getter=isMaximized) BOOL maximized;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *resource;
-@property (nonatomic, assign) JMDashletType type;
+
+@protocol JMDashboardInputControlsCellDelegate
+@optional
+- (void)dashboardInputControlsCell:(JMDashboardInputControlsCell *)cell didChangeText:(NSString *)text;
 @end

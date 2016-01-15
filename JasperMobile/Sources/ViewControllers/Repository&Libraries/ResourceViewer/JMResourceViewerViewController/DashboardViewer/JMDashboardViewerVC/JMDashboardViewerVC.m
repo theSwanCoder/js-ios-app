@@ -34,7 +34,9 @@
 #import "JMDashboard.h"
 #import "JMWebViewManager.h"
 #import "JMExternalWindowDashboardControlsVC.h"
+#import "JMDashboardInputControlsVC.h"
 #import "JMDashlet.h"
+#import "JMDashboardParameter.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -279,6 +281,11 @@
     if ([self isExternalScreenAvailable]) {
         menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
     }
+    // TODO: verify if input controls available
+
+    if ([self isInputControlsAvailable]) {
+        menuActions |= JMMenuActionsViewAction_Edit;
+    }
     return menuActions;
 }
 
@@ -286,13 +293,26 @@
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     [super actionsView:view didSelectAction:action];
-    if (action == JMMenuActionsViewAction_Refresh) {
-        [self reloadDashboard];
-    } else if (action == JMMenuActionsViewAction_ShowExternalDisplay) {
-        [self showExternalWindow];
-    } else if (action == JMMenuActionsViewAction_HideExternalDisplay) {
-        [self switchFromTV];
-        [self hideExternalWindow];
+
+    switch (action) {
+        case JMMenuActionsViewAction_Refresh: {
+            [self reloadDashboard];
+            break;
+        }
+        case JMMenuActionsViewAction_ShowExternalDisplay: {
+            [self showExternalWindow];
+            break;
+        }
+        case JMMenuActionsViewAction_HideExternalDisplay: {
+            [self switchFromTV];
+            [self hideExternalWindow];
+            break;
+        }
+        case JMMenuActionsViewAction_Edit: {
+            [self showInputControlsVC];
+            break;
+        }
+        default:{break;}
     }
 }
 
@@ -410,6 +430,39 @@
 - (BOOL)isDashletShown
 {
     return self.leftButtonItem != nil;
+}
+
+- (void)showInputControlsVC
+{
+    JMDashboardInputControlsVC *inputControlsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMDashboardInputControlsVC"];
+    inputControlsVC.dashboard = self.dashboard;
+    inputControlsVC.exitBlock = ^(void) {
+        // generate parameters
+
+        // expected format {"id":["value1", "value2", ...]}
+        NSString *parametersAsString = @"{";
+        for (JMDashboardParameter *parameter in self.dashboard.inputControls) {
+
+            NSString *identifier = parameter.identifier;
+            NSArray *values = parameter.values;
+            NSString *valuesAsString = @"";
+            for (NSString *value in values) {
+                valuesAsString = [valuesAsString stringByAppendingFormat:@"\"%@\",", value];
+            }
+
+            parametersAsString = [parametersAsString stringByAppendingFormat:@"\"%@\":[%@], ", identifier, valuesAsString];
+        }
+        parametersAsString = [parametersAsString stringByAppendingString:@"}"];
+        JMLog(@"parametersAsString: %@", parametersAsString);
+
+        [self.dashboardLoader applyParameters:parametersAsString];
+    };
+    [self.navigationController pushViewController:inputControlsVC animated:YES];
+}
+
+- (BOOL)isInputControlsAvailable
+{
+    return self.dashboard.inputControls.count > 0;
 }
 
 #pragma mark - Work with external screen

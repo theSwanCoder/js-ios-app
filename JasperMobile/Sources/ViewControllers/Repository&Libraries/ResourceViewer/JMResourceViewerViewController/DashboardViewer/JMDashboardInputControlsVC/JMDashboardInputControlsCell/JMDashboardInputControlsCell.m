@@ -22,27 +22,35 @@
 
 
 //
-//  JMDashlet.h
+//  JMDashboardInputControlsCell.m
 //  TIBCO JasperMobile
 //
 
-/**
- @author Aleksandr Dakhno odahno@tibco.com
- @since 2.3
- */
+#import "JMDashboardInputControlsCell.h"
 
-typedef NS_ENUM(NSInteger, JMDashletType) {
-    JMDashletTypeValue,
-    JMDashletTypeChart,
-    JMDashletTypeReportUnit,
-    JMDashletTypeFilterGroup,
-};
+@interface JMDashboardInputControlsCell() <UITextFieldDelegate>
+@end
 
-@interface JMDashlet : NSObject
-@property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, assign, getter=isInteractive) BOOL interactive;
-@property (nonatomic, assign, getter=isMaximized) BOOL maximized;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *resource;
-@property (nonatomic, assign) JMDashletType type;
+@implementation JMDashboardInputControlsCell
+
+- (void)awakeFromNib {
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    if ([self.delegate respondsToSelector:@selector(dashboardInputControlsCell:didChangeText:)]) {
+        [self.delegate dashboardInputControlsCell:self didChangeText:textField.text];
+    }
+    return YES;
+}
+
 @end

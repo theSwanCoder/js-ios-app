@@ -22,27 +22,19 @@
 
 
 //
-//  JMDashlet.h
+//  JMDashboardInputControlsVC.h
 //  TIBCO JasperMobile
 //
+
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
  @since 2.3
  */
 
-typedef NS_ENUM(NSInteger, JMDashletType) {
-    JMDashletTypeValue,
-    JMDashletTypeChart,
-    JMDashletTypeReportUnit,
-    JMDashletTypeFilterGroup,
-};
+@class JMDashboard;
 
-@interface JMDashlet : NSObject
-@property (nonatomic, copy) NSString *identifier;
-@property (nonatomic, assign, getter=isInteractive) BOOL interactive;
-@property (nonatomic, assign, getter=isMaximized) BOOL maximized;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *resource;
-@property (nonatomic, assign) JMDashletType type;
+@interface JMDashboardInputControlsVC : UIViewController
+@property (nonatomic, strong) JMDashboard *dashboard;
+@property (nonatomic, copy) void(^exitBlock)(void);
 @end
