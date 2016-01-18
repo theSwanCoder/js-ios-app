@@ -52,10 +52,11 @@ typedef NS_ENUM(NSInteger, JMResourceType){
 @property (nonatomic, readonly) UIImage  *selectedItemIcon;
 
 @property (assign, nonatomic) BOOL selected;
+@property (assign, nonatomic) BOOL showNotes;
 
 - (instancetype)initWithResourceType:(JMResourceType)resourceType;
 + (instancetype)menuItemWithResourceType:(JMResourceType)resourceType;
 
 - (NSString *) vcIdentifierForSelectedItem;
-- (NSString *)nameForCrashlytics;
+- (NSString *) nameForAnalytics;
 @end

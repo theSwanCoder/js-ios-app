@@ -53,6 +53,13 @@
 			<key>AttributeValue</key>
 			<string>428EC0</string>
 		</dict>
+		<key>trydemo_button_disabled_background_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>5499c6</string>
+		</dict>
 		<key>trydemo_button_text_color</key>
 		<dict>
 			<key>AttributeType</key>
@@ -60,6 +67,13 @@
 			<key>AttributeValue</key>
 			<string>FFFFFF</string>
 		</dict>
+        <key>trydemo_button_disabled_text_color</key>
+        <dict>
+            <key>AttribureType</key>
+            <string>Color</string>
+            <key>AttributeValue</key>
+            <string>b3b5b6</string>
+        </dict>
 	</dict>
 	<key>MenuView</key>
 	<dict>

@@ -42,6 +42,7 @@
 #import "JMReportViewerVC.h"
 #import "JMResourceInfoViewController.h"
 #import "UIViewController+Additions.h"
+#import "JMExportManager.h"
 
 CGFloat const kJMBaseCollectionViewGridWidth = 310;
 
@@ -113,7 +114,9 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
     self.screenName = NSStringFromClass(self.class);
     [self addKeyboardObservers];
 
-    [self updateIfNeeded];
+    if (self.needReloadData) {
+        [self updateStrong];
+    }
     [self.resourceListLoader updateIfNeeded];
 }
 
@@ -248,28 +251,33 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
 - (void)updateIfNeeded
 {
     if ([self isVisible]) {
-        if (self.needReloadData) {
-            JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
-            [baseCollectionView.collectionView reloadData];
-            
-            if (self.isScrollToTop) {
-                self.isScrollToTop = NO;
-                NSIndexPath *firstItemIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-                if ([baseCollectionView.collectionView cellForItemAtIndexPath:firstItemIndexPath]) {
-                    [baseCollectionView.collectionView scrollToItemAtIndexPath:firstItemIndexPath
-                                                              atScrollPosition:UICollectionViewScrollPositionBottom
-                                                                      animated:NO];
-                }
+        [self updateStrong];
+    }
+}
+
+- (void) updateStrong
+{
+    if (self.needReloadData) {
+        JMBaseCollectionView *baseCollectionView = (JMBaseCollectionView *)self.view;
+        [baseCollectionView.collectionView reloadData];
+        
+        if (self.isScrollToTop) {
+            self.isScrollToTop = NO;
+            NSIndexPath *firstItemIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            if ([baseCollectionView.collectionView cellForItemAtIndexPath:firstItemIndexPath]) {
+                [baseCollectionView.collectionView scrollToItemAtIndexPath:firstItemIndexPath
+                                                          atScrollPosition:UICollectionViewScrollPositionBottom
+                                                                  animated:NO];
             }
-            
-            _needReloadData = NO;
         }
         
-        if (self.needLayoutUI) {
-            [self.popoverView dismiss:YES];
-            [self showNavigationItemsForTraitCollection:self.traitCollection];
-            _needLayoutUI = NO;
-        }
+        _needReloadData = NO;
+    }
+    
+    if (self.needLayoutUI) {
+        [self.popoverView dismiss:YES];
+        [self showNavigationItemsForTraitCollection:self.traitCollection];
+        _needLayoutUI = NO;
     }
 }
 
@@ -375,7 +383,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             [navBarItems addObject:sortItem];
         }
         
-        BOOL shouldConcateItems = (navBarItems.count > 1) && (traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact) &&
+        UIUserInterfaceSizeClass horizontalSizeClass = traitCollection.horizontalSizeClass;
+        if (horizontalSizeClass == UIUserInterfaceSizeClassUnspecified && [JMUtils isIphone] && UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+            horizontalSizeClass = UIUserInterfaceSizeClassCompact;
+        }
+        
+        BOOL shouldConcateItems = (navBarItems.count > 1) && (horizontalSizeClass == UIUserInterfaceSizeClassCompact) &&
                                                              (traitCollection.verticalSizeClass != UIUserInterfaceSizeClassCompact);
         
         if (shouldConcateItems) {
@@ -434,6 +447,12 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         repositoryViewController.representationTypeKey = self.representationTypeKey;
         repositoryViewController.representationType = self.representationType;
         nextVC = repositoryViewController;
+    } else if ([resourceLookup isTempExportedReport]) {
+        // TODO: add canceling task
+//        [[JMExportManager sharedInstance] cancelAll];
+//        JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *) self.view).collectionView cellForItemAtIndexPath:indexPath];
+//        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:cell.resourceLookup];
+//        [[JMExportManager sharedInstance] cancelTaskForSavedResource:savedReport];
     } else if ([resourceLookup isSavedReport]) {
         nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[resourceLookup resourceViewerVCIdentifier]];
         if ([nextVC respondsToSelector:@selector(setResourceLookup:)]) {
@@ -447,7 +466,8 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
         // Customizing report viewer view controller
         if ([resourceLookup isReport]) {
             JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
-            [nextVC report].thumbnailImage = cell.thumbnailImage;
+            JMReport *report = (JMReport *)[nextVC report];
+            report.thumbnailImage = cell.thumbnailImage;
             __weak typeof(self)weakSelf = self;
             [nextVC setExitBlock:^(void) {
                 __strong typeof(self)strongSelf = weakSelf;

@@ -259,7 +259,7 @@ NSInteger const kJMReportOptionsTableViewCellHeight = 44.f;
                                     if (result.error) {
                                         if (result.error.code == JSSessionExpiredErrorCode) {
                                             if (self.restClient.keepSession) {
-                                                [self.restClient verifyIsSessionAuthorizedWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
+                                                [self.restClient verifySessionWithCompletion:@weakself(^(BOOL isSessionAuthorized)) {
                                                     if (isSessionAuthorized) {
                                                         [self updatedInputControlsValuesWithCompletion:completion];
                                                     } else {

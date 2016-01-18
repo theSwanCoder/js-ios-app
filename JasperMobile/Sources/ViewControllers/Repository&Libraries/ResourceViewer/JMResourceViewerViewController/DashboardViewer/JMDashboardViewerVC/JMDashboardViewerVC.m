@@ -33,13 +33,18 @@
 #import "JMReportViewerVC.h"
 #import "JMDashboard.h"
 #import "JMWebViewManager.h"
+#import "JMExternalWindowDashboardControlsVC.h"
+#import "JMDashboardInputControlsVC.h"
+#import "JMDashlet.h"
+#import "JMDashboardParameter.h"
 
-@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate>
+@interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
 @property (nonatomic, strong) UIBarButtonItem *leftButtonItem;
 
 @property (nonatomic, strong, readwrite) JMDashboard *dashboard;
 @property (nonatomic, strong) JMDashboardViewerConfigurator *configurator;
+@property (nonatomic) JMExternalWindowDashboardControlsVC *controlsViewController;
 @end
 
 
@@ -62,10 +67,13 @@
 #pragma mark - Print
 - (void)printResource
 {
+    [super printResource];
+
     [self imageFromWebViewWithCompletion:^(UIImage *image) {
         if (image) {
             [self printItem:image
-                   withName:self.dashboard.resourceLookup.label];
+                   withName:self.dashboard.resourceLookup.label
+                 completion:nil];
         }
     }];
 }
@@ -102,6 +110,7 @@
 
 - (UIWebView *)webView
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return self.configurator.webView;
 }
 
@@ -126,16 +135,8 @@
     id dashboardView = [self.configurator webViewAsSecondary:NO];
     [self.view addSubview:dashboardView];
 
-    ((UIView *)dashboardView).translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[dashboardView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"dashboardView": dashboardView}]];
+    [self setupWebViewLayout];
 
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[dashboardView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"dashboardView": dashboardView}]];
     [self.configurator updateReportLoaderDelegateWithObject:self];
 }
 
@@ -164,6 +165,17 @@
     [[JMWebViewManager sharedInstance] resetZoom];
 }
 
+
+- (void)cancelResourceViewingAndExit:(BOOL)exit
+{
+    if ([self isContentOnTV]) {
+        [self switchFromTV];
+        [self hideExternalWindow];
+        [super cancelResourceViewingAndExit:exit];
+    } else {
+        [super cancelResourceViewingAndExit:exit];
+    }
+}
 
 #pragma mark - Actions
 - (void)minimizeDashlet
@@ -224,6 +236,11 @@
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
+    [self startShowDashboard];
+}
+
+- (void)startShowDashboard
+{
     __weak typeof(self)weakSelf = self;
     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
         __strong typeof(self)strongSelf = weakSelf;
@@ -241,11 +258,12 @@
 
                 if (success) {
                     // Analytics
-                    NSString *resourcesType = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? @"Dashboard (Visualize)" : @"Dashboard (REST)";
-                     [JMUtils logEventWithName:@"User opened resource"
-                                 additionInfo:@{
-                                         @"Resource's Type" : resourcesType
-                                 }];
+                    NSString *label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+                    [JMUtils logEventWithInfo:@{
+                                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
+                                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
+                                        kJMAnalyticsLabelKey         : label
+                                        }];
                 }
             }];
 
@@ -259,15 +277,42 @@
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    return [super availableActionForResource:resource] | JMMenuActionsViewAction_Refresh;
+    JMMenuActionsViewAction menuActions = [super availableActionForResource:resource] | JMMenuActionsViewAction_Refresh;
+    if ([self isExternalScreenAvailable]) {
+        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+    }
+    // TODO: verify if input controls available
+
+    if ([self isInputControlsAvailable]) {
+        menuActions |= JMMenuActionsViewAction_Edit;
+    }
+    return menuActions;
 }
 
 #pragma mark - JMMenuActionsViewDelegate
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
     [super actionsView:view didSelectAction:action];
-    if (action == JMMenuActionsViewAction_Refresh) {
-        [self reloadDashboard];
+
+    switch (action) {
+        case JMMenuActionsViewAction_Refresh: {
+            [self reloadDashboard];
+            break;
+        }
+        case JMMenuActionsViewAction_ShowExternalDisplay: {
+            [self showExternalWindow];
+            break;
+        }
+        case JMMenuActionsViewAction_HideExternalDisplay: {
+            [self switchFromTV];
+            [self hideExternalWindow];
+            break;
+        }
+        case JMMenuActionsViewAction_Edit: {
+            [self showInputControlsVC];
+            break;
+        }
+        default:{break;}
     }
 }
 
@@ -350,14 +395,8 @@
                                 __strong typeof(self)strongSelf = weakSelf;
                                 if (result.error) {
                                     if (result.error.code == JSSessionExpiredErrorCode) {
-                                        [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                            if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-                                                [strongSelf loadInputControlsWithReportURI:reportURI completion:completion];
-                                            } else {
-                                                [JMUtils showLoginViewAnimated:YES completion:^{
-                                                    [strongSelf cancelResourceViewingAndExit:YES];
-                                                }];
-                                            }
+                                        [JMUtils showLoginViewAnimated:YES completion:^{
+                                            [strongSelf cancelResourceViewingAndExit:YES];
                                         }];
                                     } else {
                                         if (completion) {
@@ -391,6 +430,126 @@
 - (BOOL)isDashletShown
 {
     return self.leftButtonItem != nil;
+}
+
+- (void)showInputControlsVC
+{
+    JMDashboardInputControlsVC *inputControlsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMDashboardInputControlsVC"];
+    inputControlsVC.dashboard = self.dashboard;
+    inputControlsVC.exitBlock = ^(void) {
+        // generate parameters
+
+        // expected format {"id":["value1", "value2", ...]}
+        NSString *parametersAsString = @"{";
+        for (JMDashboardParameter *parameter in self.dashboard.inputControls) {
+
+            NSString *identifier = parameter.identifier;
+            NSArray *values = parameter.values;
+            NSString *valuesAsString = @"";
+            for (NSString *value in values) {
+                valuesAsString = [valuesAsString stringByAppendingFormat:@"\"%@\",", value];
+            }
+
+            parametersAsString = [parametersAsString stringByAppendingFormat:@"\"%@\":[%@], ", identifier, valuesAsString];
+        }
+        parametersAsString = [parametersAsString stringByAppendingString:@"}"];
+        JMLog(@"parametersAsString: %@", parametersAsString);
+
+        [self.dashboardLoader applyParameters:parametersAsString];
+    };
+    [self.navigationController pushViewController:inputControlsVC animated:YES];
+}
+
+- (BOOL)isInputControlsAvailable
+{
+    return self.dashboard.inputControls.count > 0;
+}
+
+#pragma mark - Work with external screen
+- (UIView *)viewForAddingToExternalWindow
+{
+    [self addControlsForExternalWindow];
+
+    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
+    }
+    UIView *dashboardView = self.configurator.webView;
+    dashboardView.translatesAutoresizingMaskIntoConstraints = YES;
+    return dashboardView;
+}
+
+- (void)addControlsForExternalWindow
+{
+    self.controlsViewController = [JMExternalWindowDashboardControlsVC new];
+    self.controlsViewController.components = self.dashboard.components;
+    [self.view addSubview:self.controlsViewController.view];
+
+    self.controlsViewController.delegate = self;
+
+    self.controlsViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[controlsView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"controlsView": self.controlsViewController.view}]];
+
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[controlsView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"controlsView": self.controlsViewController.view}]];
+
+
+}
+
+- (void)switchFromTV
+{
+    [self.view addSubview:self.webView];
+    [self setupWebViewLayout];
+
+    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        CGFloat initialScaleViewport = 0.75;
+        BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+        if (isCompactWidth) {
+            initialScaleViewport = 0.25;
+        }
+        [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+    }
+
+    [self.controlsViewController.view removeFromSuperview];
+    self.controlsViewController = nil;
+}
+
+#pragma mark - JMExternalWindowDashboardControlsVCDelegate
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JMDashlet *)dashlet
+{
+    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
+        [self.dashboardLoader maximizeDashlet:dashlet];
+
+        // TODO: move to separate method
+        self.navigationItem.rightBarButtonItems = nil;
+        if ([self.dashboardLoader respondsToSelector:@selector(reloadMaximizedDashletWithCompletion:)]) {
+            UIBarButtonItem *refreshDashlet = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"refresh_action"]
+                                                                               style:UIBarButtonItemStylePlain
+                                                                              target:self
+                                                                              action:@selector(reloadDashlet)];
+            self.navigationItem.rightBarButtonItem = refreshDashlet;
+        }
+
+        self.leftButtonItem = self.navigationItem.leftBarButtonItem;
+        self.navigationItem.title = dashlet.name;
+    }
+}
+
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JMDashlet *)dashlet
+{
+    if ([self.dashboardLoader respondsToSelector:@selector(maximizeDashlet:)]) {
+        [self.dashboardLoader minimizeDashlet:dashlet];
+
+        // TODO: move to separate method
+        self.navigationItem.leftBarButtonItem = self.leftButtonItem;
+        self.navigationItem.rightBarButtonItems = self.rightButtonItems;
+        self.navigationItem.title = [self resourceLookup].label;
+        self.leftButtonItem = nil;
+    }
 }
 
 @end

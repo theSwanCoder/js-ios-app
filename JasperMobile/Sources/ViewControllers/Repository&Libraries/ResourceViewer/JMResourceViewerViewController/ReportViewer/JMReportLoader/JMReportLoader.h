@@ -41,7 +41,7 @@ typedef NS_ENUM(NSInteger, JMReportLoaderErrorType) {
 - (void)refreshReportWithCompletion:(void(^)(BOOL success, NSError *error))completion;
 - (void)exportReportWithFormat:(NSString *)exportFormat;
 - (void)authenticate;
-
+- (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 @end
 
 

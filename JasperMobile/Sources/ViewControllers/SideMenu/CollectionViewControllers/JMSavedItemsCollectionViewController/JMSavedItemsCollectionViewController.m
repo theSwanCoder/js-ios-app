@@ -35,11 +35,36 @@
 @implementation JMSavedItemsCollectionViewController
 
 #pragma mark -LifeCycle
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:kJMExportedResourceDidLoadNotification
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:kJMExportedResourceDidCancelNotification
+                                                  object:nil];
+}
 
 -(void)awakeFromNib
 {
     [super awakeFromNib];
     self.title = JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
+}
+
+#pragma mark - UIViewController Life Cycle
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.title = JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(exportedResourceDidLoad:)
+                                                 name:kJMExportedResourceDidLoadNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(exportedResourceDidCancel:)
+                                                 name:kJMExportedResourceDidCancelNotification
+                                               object:nil];
 }
 
 #pragma mark - Overloaded methods
@@ -58,6 +83,21 @@
 - (NSString *)noResultText
 {
     return JMCustomLocalizedString(@"resources.noresults.saveditems.msg", nil);
+}
+
+#pragma mark - Exported Resource Notifications
+- (void)exportedResourceDidLoad:(NSNotification *)notification
+{
+    [self.resourceListLoader setNeedsUpdate];
+    [self.resourceListLoader updateIfNeeded];
+    self.needReloadData = YES;
+}
+
+- (void)exportedResourceDidCancel:(NSNotification *)notification
+{
+    [self.resourceListLoader setNeedsUpdate];
+    [self.resourceListLoader updateIfNeeded];
+    self.needReloadData = YES;
 }
 
 @end

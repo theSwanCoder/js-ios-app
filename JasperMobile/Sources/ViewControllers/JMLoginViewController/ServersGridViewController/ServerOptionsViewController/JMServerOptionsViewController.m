@@ -132,11 +132,15 @@
 {
     [self.view endEditing:YES];
     if ([self.serverOptions isValidData]) {
-        [self.serverOptions saveChanges];
-        [self.navigationController popViewControllerAnimated:YES];
-
-        if ([self.delegate respondsToSelector:@selector(serverProfileDidChanged:)]) {
-            [self.delegate serverProfileDidChanged:self.serverProfile];
+        // verify https scheme
+        NSString *scheme = [NSURL URLWithString:self.serverProfile.serverUrl].scheme;
+        BOOL isHTTPSScheme = [scheme isEqualToString:@"https"];
+        if (isHTTPSScheme) {
+            [self saveServerOptions];
+            [self.navigationController popViewControllerAnimated:YES];
+        } else {
+            // show alert
+            [self showSecurityHTTPAlert];
         }
     } else {
         [self.tableView reloadData];
@@ -150,6 +154,30 @@
     if (indexPath) {
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+}
+
+#pragma mark - Helpers
+- (void)saveServerOptions
+{
+    [self.serverOptions saveChanges];
+
+    if ([self.delegate respondsToSelector:@selector(serverProfileDidChanged:)]) {
+        [self.delegate serverProfileDidChanged:self.serverProfile];
+    }
+}
+
+- (void)showSecurityHTTPAlert
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
+                                                                                      message:@"secutiry.http.message"
+                                                                            cancelButtonTitle:@"ok"
+                                                                      cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
+                                                                          [self saveServerOptions];
+                                                                          [self.navigationController popViewControllerAnimated:YES];
+                                                                      }];
+    [self presentViewController:alertController
+                       animated:YES
+                     completion:nil];
 }
 
 @end

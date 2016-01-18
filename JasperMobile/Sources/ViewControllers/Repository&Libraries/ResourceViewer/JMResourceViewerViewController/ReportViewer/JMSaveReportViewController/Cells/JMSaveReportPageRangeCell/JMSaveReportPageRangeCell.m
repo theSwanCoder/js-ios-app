@@ -137,7 +137,7 @@
 - (void)done:(id)sender
 {
     if ([self.cellDelegate respondsToSelector:@selector(pageRangeCell:didSelectPage:)]) {
-        [self.cellDelegate pageRangeCell:self didSelectPage:@([self.pickerView selectedRowInComponent:0] + self.availableRange.location)];
+        [self.cellDelegate pageRangeCell:self didSelectPage:[self.pickerView selectedRowInComponent:0] + self.availableRange.location];
     }
     [self hidePicker];
 }

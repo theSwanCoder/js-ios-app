@@ -29,6 +29,7 @@
 #import "UIImage+Additions.h"
 
 #import "JSResourceLookup+Helpers.h"
+#import "JMExportResource.h"
 
 NSString * kJMHorizontalResourceCell = @"JMHorizontalResourceCollectionViewCell";
 NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
@@ -81,6 +82,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 
 - (void)updateResourceImage
 {
+    self.alpha = 1;
     UIImage *resourceImage;
     if ([self.resourceLookup isReport]) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
@@ -100,6 +102,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
                                                failure:nil];
         }
     } else if ([self.resourceLookup isSavedReport]) {
+        JMLog(@"saved items");
 //        JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
 //        self.thumbnailImage = [savedReport thumbnailImage];
 //        resourceImage = [UIImage imageNamed:[NSString stringWithFormat:@"res_type_%@", savedReport.format]];
@@ -108,18 +111,65 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
         resourceImage = [UIImage imageNamed:@"res_type_report"];
         JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
         if (savedReport) {
-            if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_HTML]) {
-                resourceImage = [UIImage imageNamed:@"res_type_html"];
-            } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_PDF]) {
-                resourceImage = [UIImage imageNamed:@"res_type_pdf"];
-            } else if ([savedReport.format isEqualToString:[JSConstants sharedInstance].CONTENT_TYPE_XLS]) {
-                resourceImage = [UIImage imageNamed:@"res_type_xls"];
+            if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
+                resourceImage = [UIImage imageNamed:@"res_type_file_html"];
+            } else if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
+                resourceImage = [UIImage imageNamed:@"res_type_file_pdf"];
+            } else if ([savedReport.format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
+                resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
             }
         }
+    } else if ([self.resourceLookup isTempExportedReport]) {
+        resourceImage = [UIImage imageNamed:@"res_type_report"];
+        JMExportResource *exportResource = (JMExportResource *)self.resourceLookup;
+        if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_HTML]) {
+            resourceImage = [UIImage imageNamed:@"res_type_file_html"];
+        } else if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_PDF]) {
+            resourceImage = [UIImage imageNamed:@"res_type_file_pdf"];
+        } else if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
+            resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
+        }
+        self.alpha = 0.5;
     } else if ([self.resourceLookup isDashboard]) {
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
     } else if ([self.resourceLookup isFolder]) {
         resourceImage = [UIImage imageNamed:@"res_type_folder"];
+    } else if([self.resourceLookup isFile]) {
+        resourceImage = [UIImage imageNamed:@"res_type_file"];
+
+        __typeof(self) weakSelf = self;
+        [self.restClient contentResourceWithResourceLookup:self.resourceLookup
+                                                completion:^(JSContentResource *resource, NSError *error) {
+                                                    __typeof(self) strongSelf = weakSelf;
+                                                    if (resource) {
+                                                        NSString *imageName = @"res_type_file";
+                                                        if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_HTML]) {
+                                                            imageName = @"res_type_file_html";
+                                                        } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_PDF]) {
+                                                            imageName = @"res_type_file_pdf";
+                                                        } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_IMG]) {
+                                                            imageName = @"res_type_file_img";
+                                                        } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_RTF]) {
+                                                            imageName = @"res_type_file_rtf";
+                                                        } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_CSV]) {
+                                                            imageName = @"res_type_file_csv";
+                                                        } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_ODT]) {
+                                                            imageName = @"res_type_file_odt";
+                                                        } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_ODS]) {
+                                                            imageName = @"res_type_file_ods";
+                                                        } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_JSON]) {
+                                                            imageName = @"res_type_file_json";
+                                                        } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_XLS] || [resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_XLSX]) {
+                                                            imageName = @"res_type_file_xls";
+                                                        } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_PPT] || [resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_PPTX]) {
+                                                            imageName = @"res_type_file_pptx";
+                                                        } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_DOC] || [resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_DOCX]) {
+                                                            imageName = @"res_type_file_doc";
+                                                        }
+                                                        UIImage *image = [UIImage imageNamed:imageName];
+                                                        [strongSelf updateResourceImage:image thumbnails:NO];
+                                                    }
+                                                }];
     }
     
     if (resourceImage || _thumbnailImage) {
@@ -138,7 +188,6 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.resourceImage.backgroundColor = thumbnails ? [UIColor clearColor] : [[JMThemesManager sharedManager] resourceViewResourceCellPreviewBackgroundColor];
     self.resourceImage.image = resourceImage;
     [self layoutIfNeeded];
-#warning HERE NEED CHECK CONSTRAINTS - MAY BE IT'S CORRECT FOR LIST ONLY, NOT FOR GRID!!!
     self.imageWidthConstraint.constant = [JMUtils isCompactWidth] ? 100: 115;
     [self setNeedsUpdateConstraints];
 }

@@ -30,6 +30,7 @@
 
 @interface JMVisualizeManager()
 @property (nonatomic, strong) NSString *visualizePath;
+@property (nonatomic, strong) NSURLSessionDownloadTask *downloadTask;
 @end
 
 @implementation JMVisualizeManager
@@ -37,70 +38,85 @@
 #pragma mark - Custom Accessors
 - (void)loadVisualizeJSWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    if ([self isVisualizeLoaded]) {
-        if (completion) {
-            completion(YES, nil);
-        }
+    if (!completion) {
         return;
     }
 
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+    if ([self isVisualizeLoaded]) {
+        completion(YES, nil);
+        return;
+    }
 
-        NSURLResponse *response;
-        NSError *error;
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURL *url = [NSURL URLWithString:self.visualizePath];
+    self.downloadTask = [session downloadTaskWithURL:url
+                                   completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+                                       NSData *visEngineData = [[NSData alloc] initWithContentsOfFile:location.path];
+                                       if (visEngineData) {
+                                           // cache visualize.js
+                                           NSCachedURLResponse *cachedURLResponse = [[NSCachedURLResponse alloc] initWithResponse:response
+                                                                                                                             data:visEngineData];
+                                           [[NSURLCache sharedURLCache] storeCachedResponse:cachedURLResponse
+                                                                                 forRequest:[NSURLRequest requestWithURL:url]];
 
-        NSURLRequest *visualizeJSRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:self.visualizePath]];
-        NSData *data = [NSURLConnection sendSynchronousRequest:visualizeJSRequest returningResponse:&response error:&error];
-        if (data) {
-            // cache visualize.js
-            NSCachedURLResponse *cachedURLResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:data];
-            [[NSURLCache sharedURLCache] storeCachedResponse:cachedURLResponse forRequest:visualizeJSRequest];
-
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                if (completion) {
-                    completion(YES, nil);
-                }
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                if (completion) {
-                    completion(NO, error);
-                }
-            });
-        }
-    });
-
-
+                                           dispatch_async(dispatch_get_main_queue(), ^(void){
+                                               completion(YES, nil);
+                                           });
+                                       } else {
+                                           dispatch_async(dispatch_get_main_queue(), ^(void) {
+                                               completion(NO, error);
+                                           });
+                                       }
+                                   }];
+    [self.downloadTask resume];
 }
 
 - (NSString *)htmlStringForReport
 {
-    BOOL isNeedNonOptimizedVisualize = [self isAmberServer];
-    NSString *htmlName = @"report_optimized";
+    BOOL isAmberServer = [self isAmberServer];
 
-    if (isNeedNonOptimizedVisualize) {
-        htmlName = @"report";
+    NSString *htmlString;
+    if (isAmberServer) {
+        htmlString = [self htmlStringForAmberServer];
+    } else {
+        NSString *htmlName = @"report";
+
+        NSString *htmlPath = [[NSBundle mainBundle] pathForResource:htmlName ofType:@"html"];
+        htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+
+        // Initial Scale for ViewPort
+        CGFloat initialScaleViewport = 0.75;
+        if ([JMUtils isIphone]) {
+            initialScaleViewport = 0.25;
+        }
+        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScaleViewport).stringValue];
+
+        // Visualize
+        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
+
+        // New JasperMobile
+        NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"vis_jaspermobile" ofType:@"js"];
+        NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath
+                                                                 encoding:NSUTF8StringEncoding
+                                                                    error:nil];
+        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
     }
+
+    return htmlString;
+}
+
+- (NSString *)htmlStringForAmberServer
+{
+    NSString *htmlName = @"report";
 
     NSString *htmlPath = [[NSBundle mainBundle] pathForResource:htmlName ofType:@"html"];
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
 
     // Initial Scale for ViewPort
-    CGFloat initialScaleViewport = 0.75;
-    if ([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) {
-        initialScaleViewport = 0.25;
-    }
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScaleViewport).stringValue];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(self.viewportScaleFactor).stringValue];
 
     // Visualize
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
-
-    // REQUIRE_JS
-    if (!isNeedNonOptimizedVisualize) {
-        NSString *requireJSPath = [[NSBundle mainBundle] pathForResource:@"require.min" ofType:@"js"];
-        NSString *requirejsString = [NSString stringWithContentsOfFile:requireJSPath encoding:NSUTF8StringEncoding error:nil];
-        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"REQUIRE_JS" withString:requirejsString];
-    }
 
     // JasperMobile
     NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"report-ios-mobilejs-sdk" ofType:@"js"];
@@ -109,7 +125,6 @@
 
     return htmlString;
 }
-
 
 - (NSString *)htmlStringForDashboard
 {
@@ -123,13 +138,8 @@
     visualizeURLString = [visualizeURLString stringByAppendingString:@"&_showInputControls=true&_opt=true"];
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:visualizeURLString];
 
-    // REQUIRE_JS
-    NSString *requireJSPath = [[NSBundle mainBundle] pathForResource:@"require.min" ofType:@"js"];
-    NSString *requirejsString = [NSString stringWithContentsOfFile:requireJSPath encoding:NSUTF8StringEncoding error:nil];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"REQUIRE_JS" withString:requirejsString];
-
     // JasperMobile
-    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"dashboard-amber2-ios-mobilejs-sdk" ofType:@"js"];
+    NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"vis_jaspermobile" ofType:@"js"];
     NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath encoding:NSUTF8StringEncoding error:nil];
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
 

@@ -30,6 +30,8 @@
 #import "JMServerProfile+Helpers.h"
 #import "JMCancelRequestPopup.h"
 #import "JMWebViewManager.h"
+#import "JMExportManager.h"
+
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 
@@ -127,6 +129,8 @@ static JMSessionManager *_sharedManager = nil;
 
 - (void) logout
 {
+    [[JMExportManager sharedInstance] cancelAll];
+    
     [self.restClient cancelAllRequests];
     [self.restClient deleteCookies];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMSavedSessionKey];

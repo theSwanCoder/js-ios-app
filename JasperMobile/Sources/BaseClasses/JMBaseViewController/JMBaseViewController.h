@@ -33,5 +33,15 @@
 
 #import "GAITrackedViewController.h"
 
+
 @interface JMBaseViewController : GAITrackedViewController
+- (BOOL)isExternalScreenAvailable;
+
+- (BOOL)createExternalWindow;
+- (void)showExternalWindow;
+- (void)hideExternalWindow;
+- (UIView *)viewForAddingToExternalWindow;
+- (UIView *)viewForRemovingFromExternalWindow;
+
+- (BOOL)isContentOnTV;
 @end

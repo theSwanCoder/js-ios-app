@@ -28,6 +28,10 @@
 
 #import "JMFavoritesCollectionViewController.h"
 
+@interface JMFavoritesCollectionViewController()
+@property (nonatomic) JMResourcesRepresentationType repositoryRepresentationType;
+@end
+
 @implementation JMFavoritesCollectionViewController
 
 #pragma mark - LifeCycle
@@ -35,6 +39,21 @@
 {
     [super awakeFromNib];
     self.title = JMCustomLocalizedString(@"menuitem.favorites.label", nil);
+}
+
+#pragma mark - UIViewController LifeCycle
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [self saveRepositoryRepresentaionType];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    [self restoreRepositoryRepresentaionType];
 }
 
 #pragma mark - Overloaded methods
@@ -53,6 +72,32 @@
 - (NSString *)noResultText
 {
     return JMCustomLocalizedString(@"resources.noresults.favorites.msg", nil);
+}
+
+#pragma mark - Helpers
+- (NSString *)repositoryDefaultRepresentationTypeKey
+{
+    NSString * keyString = @"RepresentationTypeKey";
+    keyString = [@"Repository" stringByAppendingString:keyString];
+    return keyString;
+}
+
+- (void)saveRepositoryRepresentaionType
+{
+    JMResourcesRepresentationType repositoryRepresentationType = JMResourcesRepresentationTypeFirst();
+    NSString *repositoryDefaultRepresentationTypeKey = [self repositoryDefaultRepresentationTypeKey];
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:repositoryDefaultRepresentationTypeKey]) {
+        repositoryRepresentationType = (JMResourcesRepresentationType) [[NSUserDefaults standardUserDefaults] integerForKey:repositoryDefaultRepresentationTypeKey];
+    }
+    self.repositoryRepresentationType = repositoryRepresentationType;
+}
+
+- (void)restoreRepositoryRepresentaionType
+{
+    NSString *repositoryDefaultRepresentationTypeKey = [self repositoryDefaultRepresentationTypeKey];
+    [[NSUserDefaults standardUserDefaults] setInteger:self.repositoryRepresentationType
+                                               forKey:repositoryDefaultRepresentationTypeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

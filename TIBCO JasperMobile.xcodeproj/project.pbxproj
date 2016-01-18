@@ -19,12 +19,10 @@
 		0801DFBD1AAF2E7500DD072C /* JMIntroModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFB61AAF2E7500DD072C /* JMIntroModel.m */; };
 		0801DFBE1AAF2E7500DD072C /* JMIntroModelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFB91AAF2E7500DD072C /* JMIntroModelManager.m */; };
 		0801DFBF1AAF2E7500DD072C /* JMOnboardIntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */; };
-		081CE2701B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 081CE26F1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m */; };
 		08221C421AE54DA000F94F1D /* JMCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C411AE54DA000F94F1D /* JMCoreDataManager.m */; };
 		08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C921AE78CD300F94F1D /* JMMigrationManager.m */; };
 		08221C9E1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m in Sources */ = {isa = PBXBuildFile; fileRef = 08221C9D1AE7A08D00F94F1D /* JMMigrateTo_v_2_0.m */; };
 		082D1E921AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */; };
-		084D23DE1BFB4F9F00CF4322 /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 084D23DD1BFB4F9E00CF4322 /* UIViewController+Additions.m */; };
 		0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */; };
 		0854B3731BC6A53E0004E5B8 /* UIAlertController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0854B3721BC6A53E0004E5B8 /* UIAlertController+Additions.m */; };
 		0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0871503B19F1265B00C5875E /* CoreTelephony.framework */; };
@@ -85,8 +83,12 @@
 		089B16001AA756BD0021A915 /* JMMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15841AA756BD0021A915 /* JMMenuViewController.m */; };
 		089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16151AA757EA0021A915 /* jaspermobile.js */; };
 		089B161E1AA757EA0021A915 /* jaspermobile_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */; };
+		089F664A1C3D465200ED683B /* JMExportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66401C3D465200ED683B /* JMExportManager.m */; };
+		089F664B1C3D465200ED683B /* JMExportResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66431C3D465200ED683B /* JMExportResource.m */; };
+		089F664C1C3D465200ED683B /* JMExportTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66461C3D465200ED683B /* JMExportTask.m */; };
+		089F664D1C3D465200ED683B /* JMReportExportTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66491C3D465200ED683B /* JMReportExportTask.m */; };
+		089F66501C3D727700ED683B /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F664F1C3D727700ED683B /* UIViewController+Additions.m */; };
 		08B517BE1B15C60400B3F20A /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B517BB1B15C60400B3F20A /* PopoverView.m */; };
-		08B5187B1B18C79400B3F20A /* JMReportSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B5187A1B18C79400B3F20A /* JMReportSaver.m */; };
 		08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DB3D931A891640006F9620 /* MessageUI.framework */; };
 		08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18141B13390500856112 /* JMRecentViewsCollectionViewController.m */; };
 		08DD181F1B13426200856112 /* JMRecentViewsListLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD181E1B13426200856112 /* JMRecentViewsListLoader.m */; };
@@ -103,7 +105,6 @@
 		08E0D1A01B0CF27200BFBFE5 /* Icon-512.png in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19C1B0CF27200BFBFE5 /* Icon-512.png */; };
 		08E0D1A11B0CF27200BFBFE5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08E0D19D1B0CF27200BFBFE5 /* Images.xcassets */; };
 		08E2AC7C1B1E056900AC462B /* JMBaseResourceViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC291B1E056900AC462B /* JMBaseResourceViewerVC.m */; };
-		08E2AC821B1E056900AC462B /* JMPrintResourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC371B1E056900AC462B /* JMPrintResourceViewController.m */; };
 		08E2AC841B1E056900AC462B /* JMResourceViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC3A1B1E056900AC462B /* JMResourceViewerViewController.m */; };
 		08E2AC851B1E056900AC462B /* JMSavedResourceViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC3D1B1E056900AC462B /* JMSavedResourceViewerViewController.m */; };
 		08E2AC861B1E056900AC462B /* JMBooleanInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC431B1E056900AC462B /* JMBooleanInputControlCell.m */; };
@@ -128,7 +129,6 @@
 		08E2AC9B1B1E056900AC462B /* JMSaveReportPageRangeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC761B1E056900AC462B /* JMSaveReportPageRangeCell.m */; };
 		08E2AC9C1B1E056900AC462B /* JMSaveReportSection.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC791B1E056900AC462B /* JMSaveReportSection.m */; };
 		08E2AC9D1B1E056900AC462B /* JMSaveReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC7B1B1E056900AC462B /* JMSaveReportViewController.m */; };
-		08E31CF71B8DE141008C0B49 /* JMExtendedReportOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E31CF61B8DE141008C0B49 /* JMExtendedReportOption.m */; };
 		08E62C8319922B0B0081CA83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E62C8019922B0B0081CA83 /* main.m */; };
 		7F0FBEF9123360B7837DA1F6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F2BB4A15CA6AA8BFE0ECF1C /* libPods.a */; };
 		93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93047D5C1AB6F5750047C982 /* libGoogleAnalyticsServices.a */; };
@@ -140,37 +140,45 @@
 		930F8D461ABB1CDF005F93FB /* report.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D441ABB1CDF005F93FB /* report.html */; };
 		930F8D481ABB1D9F005F93FB /* require.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D471ABB1D9F005F93FB /* require.min.js */; };
 		930F8D4A1ABB28B0005F93FB /* report_optimized.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D491ABB28B0005F93FB /* report_optimized.html */; };
-		9342341A1AAC3D5300D34478 /* JMVisualizeReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 934234191AAC3D5300D34478 /* JMVisualizeReport.m */; };
-		9342341E1AAC3DC100D34478 /* JMRestReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9342341D1AAC3DC100D34478 /* JMRestReport.m */; };
+		9331B2C61C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */; };
+		9331B2C71C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */; };
 		9348F4E81A35C616006F5677 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */; };
 		9348F4EA1A35D103006F5677 /* profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 08B99F6D1A07CD7700E822B0 /* profiles.json */; };
 		9356ECA31A30755200ACE2C6 /* JMServerOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */; };
 		9356ECA51A3075F500ACE2C6 /* JMUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */; };
+		936A1B971C22B72C00559F16 /* EULA.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 936A1B961C22B72C00559F16 /* EULA.pdf */; };
 		937AD98E1AC83D6900076855 /* JMResourcesListLoaderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */; };
-		9386BA2D1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */; };
+		93826C7E1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93826C7C1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m */; };
+		93826C7F1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 93826C7D1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib */; };
+		938E1F991C1EEF6C009E1B79 /* vis_jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = A1478BF95DE687CDEB03D288 /* vis_jaspermobile.js */; };
 		9397F97D1AAACADF006B89C6 /* JMReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 9397F97C1AAACADF006B89C6 /* JMReport.m */; };
 		939917321BC67737006CC2A7 /* old_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = A14785AF90B597E785B4A30A /* old_dashboard.js */; };
 		93C37C6A1A39D49900CEE7CF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 08E62CF819922BA40081CA83 /* Localizable.strings */; };
 		93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6441AAC7E9200117306 /* JMWebViewManager.m */; };
 		93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6541AAD69CD00117306 /* JMDashboard.m */; };
 		93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */; };
+		93E34C441C317DB7005A6571 /* JMDashboardInputControlsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E34C431C317DB7005A6571 /* JMDashboardInputControlsVC.m */; };
+		93E34C481C3184AB005A6571 /* JMDashboardInputControlsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E34C471C3184AB005A6571 /* JMDashboardInputControlsCell.m */; };
 		93EEB4661AC55430000718C7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93EEB4651AC55430000718C7 /* WebKit.framework */; };
 		93F54FDB1BD7975E00355A30 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FD91BD7975E00355A30 /* Fabric.framework */; };
 		93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F54FDA1BD7975E00355A30 /* Crashlytics.framework */; };
+		A1478208EF52280BF30EDEEE /* JMExternalWindowControlsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = A147875D25959A63159192C8 /* JMExternalWindowControlsVC.xib */; };
 		A147820FB57EFF402452B6E9 /* JMVisDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478B04CE024F4DDDFDF22D /* JMVisDashboardLoader.m */; };
 		A14782BCF3499821EAB23934 /* JMJavascriptCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = A147810144F2E290F3B7FF83 /* JMJavascriptCallback.m */; };
 		A147840152F978C37C268CD9 /* JMJavascriptNativeBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = A147880E387FEFB88BBD19B4 /* JMJavascriptNativeBridge.m */; };
 		A14784AF61EB18E6AD372AEB /* JMDashboardViewerConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478D6859B60B36A4F9FCC8 /* JMDashboardViewerConfigurator.m */; };
+		A1478554E4FD8C3321C48845 /* JMDashlet.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478986F8AAADBC9A5CC783 /* JMDashlet.m */; };
 		A14785D6EB9D46719DE946BD /* JMBaseDashboardLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A147866AB6450EAF0CD1CE44 /* JMBaseDashboardLoader.m */; };
 		A14786928BC032D283AE0FC9 /* JMNewJobVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478A1ED0BFADF01712DBE9 /* JMNewJobVC.m */; };
 		A14787DB1604CF2D4408BA7C /* JMJobCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478E6EECD7B128EAF8FCC6 /* JMJobCell.m */; };
 		A14789C39DF01A718B92E97C /* JMDashboardViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478203D1D9D597184D040F /* JMDashboardViewerVC.m */; };
 		A14789DF4B8E0F46BE25CB83 /* JMSchedulingVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A147835F4FC43C3E20FF1ED4 /* JMSchedulingVC.m */; };
+		A147864EBDE7A5C24D8D3588 /* JMExternalWindowControlsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478E3C1428657C98ECC2A2 /* JMExternalWindowControlsVC.m */; };
+		A14789C39DF01A718B92E97C /* JMDashboardViewerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478203D1D9D597184D040F /* JMDashboardViewerVC.m */; };
+		A14789DAD19DCADECAAAC548 /* JMDashboardParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = A14781FFF7CCBB2CBA23D0D0 /* JMDashboardParameter.m */; };
 		A1478A179D378E8F76BDD03C /* JMMenuAction.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478B758E018C4B68EDB8F3 /* JMMenuAction.m */; };
 		A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = A147833F01EC956738C2E56A /* JMReportViewerToolBar.xib */; };
 		A1478B843A55B9FA52664AA5 /* JMJavascriptRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478374AAA1B5E8D1DB41E5 /* JMJavascriptRequest.m */; };
-		A1478D310566300F565A1697 /* JMReportPagesRange.m in Sources */ = {isa = PBXBuildFile; fileRef = A147827F4B0F4B9D35B838E9 /* JMReportPagesRange.m */; };
-		A1478D49CA28213AC1C5FD4A /* JMReportExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = A14781B537B5076FA38FD7B7 /* JMReportExecutor.m */; };
 		A1478D6B609C61DEF3A3AC92 /* JMVisualizeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1478AE10405430D44256CA0 /* JMVisualizeManager.m */; };
 		A1478D98799B56B89F12EF44 /* JMSchedulingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A147829187C5D97258707F9D /* JMSchedulingManager.m */; };
 		A1478EFBFF648E171A39F2BF /* JMReportViewerToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */; };
@@ -183,7 +191,6 @@
 		BDE6A0861B5A891000A7FDEC /* JMTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BDE6A0851B5A891000A7FDEC /* JMTextField.m */; };
 		BDF3D2531B8B03F40005AA28 /* JMReportOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF3D2521B8B03F40005AA28 /* JMReportOptionsViewController.m */; };
 		BDF3D25A1B8B166B0005AA28 /* JMReportOptionsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF3D2591B8B166B0005AA28 /* JMReportOptionsCell.m */; };
-		BDF3D25E1B8B2DF20005AA28 /* JMReportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF3D25D1B8B2DF20005AA28 /* JMReportManager.m */; };
 		F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A01752FAA90009E2BE /* CoreData.framework */; };
 		F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A21752FAAD0009E2BE /* Security.framework */; };
 		F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */; };
@@ -231,8 +238,6 @@
 		0801DFB91AAF2E7500DD072C /* JMIntroModelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMIntroModelManager.m; sourceTree = "<group>"; };
 		0801DFBA1AAF2E7500DD072C /* JMOnboardIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMOnboardIntroViewController.h; sourceTree = "<group>"; };
 		0801DFBB1AAF2E7500DD072C /* JMOnboardIntroViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMOnboardIntroViewController.m; sourceTree = "<group>"; };
-		081CE26E1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPrintPreviewTableViewCell.h; sourceTree = "<group>"; };
-		081CE26F1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPrintPreviewTableViewCell.m; sourceTree = "<group>"; };
 		08221C401AE54DA000F94F1D /* JMCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMCoreDataManager.h; sourceTree = "<group>"; };
 		08221C411AE54DA000F94F1D /* JMCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMCoreDataManager.m; sourceTree = "<group>"; };
 		08221C911AE78CD300F94F1D /* JMMigrationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMigrationManager.h; sourceTree = "<group>"; };
@@ -242,8 +247,6 @@
 		08221C9F1AE7A3B100F94F1D /* TIBCO JasperMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TIBCO JasperMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		082D1E901AB70FB700E0C0C6 /* JSResourceLookup+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JSResourceLookup+Helpers.h"; sourceTree = "<group>"; };
 		082D1E911AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSResourceLookup+Helpers.m"; sourceTree = "<group>"; };
-		084D23DC1BFB4F9E00CF4322 /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Additions.h"; sourceTree = "<group>"; };
-		084D23DD1BFB4F9E00CF4322 /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Additions.m"; sourceTree = "<group>"; };
 		0854B36E1BC54FFB0004E5B8 /* JMBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseViewController.h; sourceTree = "<group>"; };
 		0854B36F1BC54FFB0004E5B8 /* JMBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseViewController.m; sourceTree = "<group>"; };
 		0854B3711BC6A53E0004E5B8 /* UIAlertController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Additions.h"; sourceTree = "<group>"; };
@@ -354,12 +357,21 @@
 		089B15881AA756BD0021A915 /* JMResourceClientHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceClientHolder.h; sourceTree = "<group>"; };
 		089B16151AA757EA0021A915 /* jaspermobile.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jaspermobile.js; sourceTree = "<group>"; };
 		089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jaspermobile_dashboard.js; sourceTree = "<group>"; };
+		089F663F1C3D465200ED683B /* JMExportManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExportManager.h; sourceTree = "<group>"; };
+		089F66401C3D465200ED683B /* JMExportManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExportManager.m; sourceTree = "<group>"; };
+		089F66421C3D465200ED683B /* JMExportResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExportResource.h; sourceTree = "<group>"; };
+		089F66431C3D465200ED683B /* JMExportResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExportResource.m; sourceTree = "<group>"; };
+		089F66451C3D465200ED683B /* JMExportTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExportTask.h; sourceTree = "<group>"; };
+		089F66461C3D465200ED683B /* JMExportTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExportTask.m; sourceTree = "<group>"; };
+		089F66481C3D465200ED683B /* JMReportExportTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportExportTask.h; sourceTree = "<group>"; };
+		089F66491C3D465200ED683B /* JMReportExportTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportExportTask.m; sourceTree = "<group>"; };
+		089F664E1C3D727700ED683B /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Additions.h"; sourceTree = "<group>"; };
+		089F664F1C3D727700ED683B /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Additions.m"; sourceTree = "<group>"; };
+		089F66511C3D72C200ED683B /* JMReportLoaderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportLoaderProtocol.h; sourceTree = "<group>"; };
 		08B517BA1B15C60400B3F20A /* PopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverView.h; sourceTree = "<group>"; };
 		08B517BB1B15C60400B3F20A /* PopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverView.m; sourceTree = "<group>"; };
 		08B517BC1B15C60400B3F20A /* PopoverView_Configuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverView_Configuration.h; sourceTree = "<group>"; };
 		08B517BD1B15C60400B3F20A /* PopoverViewCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverViewCompatibility.h; sourceTree = "<group>"; };
-		08B518791B18C79400B3F20A /* JMReportSaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportSaver.h; sourceTree = "<group>"; };
-		08B5187A1B18C79400B3F20A /* JMReportSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportSaver.m; sourceTree = "<group>"; };
 		08B99F6D1A07CD7700E822B0 /* profiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = profiles.json; sourceTree = "<group>"; };
 		08DB3D931A891640006F9620 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		08DB677F1A137E370035F58F /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -388,8 +400,6 @@
 		08E0D19D1B0CF27200BFBFE5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		08E2AC281B1E056900AC462B /* JMBaseResourceViewerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseResourceViewerVC.h; sourceTree = "<group>"; };
 		08E2AC291B1E056900AC462B /* JMBaseResourceViewerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseResourceViewerVC.m; sourceTree = "<group>"; };
-		08E2AC361B1E056900AC462B /* JMPrintResourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMPrintResourceViewController.h; sourceTree = "<group>"; };
-		08E2AC371B1E056900AC462B /* JMPrintResourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMPrintResourceViewController.m; sourceTree = "<group>"; };
 		08E2AC391B1E056900AC462B /* JMResourceViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceViewerViewController.h; sourceTree = "<group>"; };
 		08E2AC3A1B1E056900AC462B /* JMResourceViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourceViewerViewController.m; sourceTree = "<group>"; };
 		08E2AC3C1B1E056900AC462B /* JMSavedResourceViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSavedResourceViewerViewController.h; sourceTree = "<group>"; };
@@ -419,7 +429,6 @@
 		08E2AC581B1E056900AC462B /* JMSingleSelectTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMSingleSelectTableViewController.xib; sourceTree = "<group>"; };
 		08E2AC5A1B1E056900AC462B /* JMInputControlsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMInputControlsViewController.h; sourceTree = "<group>"; };
 		08E2AC5B1B1E056900AC462B /* JMInputControlsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMInputControlsViewController.m; sourceTree = "<group>"; };
-		08E2AC5F1B1E056900AC462B /* JMReportLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportLoader.h; sourceTree = "<group>"; };
 		08E2AC611B1E056900AC462B /* JMRestReportLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRestReportLoader.h; sourceTree = "<group>"; };
 		08E2AC621B1E056900AC462B /* JMRestReportLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRestReportLoader.m; sourceTree = "<group>"; };
 		08E2AC641B1E056900AC462B /* JMVisualizeReportLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeReportLoader.h; sourceTree = "<group>"; };
@@ -438,8 +447,6 @@
 		08E2AC791B1E056900AC462B /* JMSaveReportSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSaveReportSection.m; sourceTree = "<group>"; };
 		08E2AC7A1B1E056900AC462B /* JMSaveReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSaveReportViewController.h; sourceTree = "<group>"; };
 		08E2AC7B1B1E056900AC462B /* JMSaveReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSaveReportViewController.m; sourceTree = "<group>"; };
-		08E31CF51B8DE141008C0B49 /* JMExtendedReportOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExtendedReportOption.h; sourceTree = "<group>"; };
-		08E31CF61B8DE141008C0B49 /* JMExtendedReportOption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExtendedReportOption.m; sourceTree = "<group>"; };
 		08E62C7D19922B0B0081CA83 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		08E62C7E19922B0B0081CA83 /* TIBCO JasperMobile.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TIBCO JasperMobile.plist"; sourceTree = "<group>"; };
 		08E62C7F19922B0B0081CA83 /* TIBCO JasperMobile.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TIBCO JasperMobile.pch"; sourceTree = "<group>"; };
@@ -473,17 +480,19 @@
 		930F8D441ABB1CDF005F93FB /* report.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = report.html; sourceTree = "<group>"; };
 		930F8D471ABB1D9F005F93FB /* require.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = require.min.js; sourceTree = "<group>"; };
 		930F8D491ABB28B0005F93FB /* report_optimized.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = report_optimized.html; sourceTree = "<group>"; };
-		934234181AAC3D5300D34478 /* JMVisualizeReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeReport.h; sourceTree = "<group>"; };
-		934234191AAC3D5300D34478 /* JMVisualizeReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeReport.m; sourceTree = "<group>"; };
-		9342341C1AAC3DC100D34478 /* JMRestReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRestReport.h; sourceTree = "<group>"; };
-		9342341D1AAC3DC100D34478 /* JMRestReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMRestReport.m; sourceTree = "<group>"; };
+		9331B2C31C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowDashboardControlsTableViewCell.h; sourceTree = "<group>"; };
+		9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowDashboardControlsTableViewCell.m; sourceTree = "<group>"; };
+		9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMExternalWindowDashboardControlsTableViewCell.xib; sourceTree = "<group>"; };
 		9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		9356EC971A30752800ACE2C6 /* TIBCO JasperMobile Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TIBCO JasperMobile Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9356EC9A1A30752900ACE2C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9356ECA21A30755200ACE2C6 /* JMServerOptionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMServerOptionsTests.m; sourceTree = "<group>"; };
 		9356ECA41A3075F500ACE2C6 /* JMUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMUtilsTests.m; sourceTree = "<group>"; };
+		936A1B961C22B72C00559F16 /* EULA.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = EULA.pdf; sourceTree = "<group>"; };
 		937AD98D1AC83D6900076855 /* JMResourcesListLoaderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMResourcesListLoaderTests.m; sourceTree = "<group>"; };
-		9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "TIB_jsm-ios_2.2.0_license.pdf"; sourceTree = "<group>"; };
+		93826C7B1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowDashboardControlsVC.h; sourceTree = "<group>"; };
+		93826C7C1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowDashboardControlsVC.m; sourceTree = "<group>"; };
+		93826C7D1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMExternalWindowDashboardControlsVC.xib; sourceTree = "<group>"; };
 		9397F97B1AAACADF006B89C6 /* JMReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReport.h; sourceTree = "<group>"; };
 		9397F97C1AAACADF006B89C6 /* JMReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReport.m; sourceTree = "<group>"; };
 		93D8C6431AAC7E9200117306 /* JMWebViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMWebViewManager.h; sourceTree = "<group>"; };
@@ -492,14 +501,19 @@
 		93D8C6541AAD69CD00117306 /* JMDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboard.m; sourceTree = "<group>"; };
 		93D8C6571AAD778400117306 /* JMVisualizeDashboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeDashboard.h; sourceTree = "<group>"; };
 		93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeDashboard.m; sourceTree = "<group>"; };
+		93E34C421C317DB7005A6571 /* JMDashboardInputControlsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardInputControlsVC.h; sourceTree = "<group>"; };
+		93E34C431C317DB7005A6571 /* JMDashboardInputControlsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardInputControlsVC.m; sourceTree = "<group>"; };
+		93E34C461C3184AB005A6571 /* JMDashboardInputControlsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardInputControlsCell.h; sourceTree = "<group>"; };
+		93E34C471C3184AB005A6571 /* JMDashboardInputControlsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardInputControlsCell.m; sourceTree = "<group>"; };
 		93EEB4651AC55430000718C7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		93F54FD91BD7975E00355A30 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		93F54FDA1BD7975E00355A30 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		9E5DA5FFC1245027CC0B4F01 /* Pods.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.adhoc.xcconfig; path = "Pods/Target Support Files/Pods/Pods.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A14780910681CCC0058A8C68 /* JMSchedulingVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSchedulingVC.h; sourceTree = "<group>"; };
+		A1478080DB621855A002EE47 /* JMDashlet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashlet.h; sourceTree = "<group>"; };
 		A147810144F2E290F3B7FF83 /* JMJavascriptCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptCallback.m; sourceTree = "<group>"; };
 		A1478109BED20F430D9E6D81 /* JMJavascriptRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptRequest.h; sourceTree = "<group>"; };
-		A14781B537B5076FA38FD7B7 /* JMReportExecutor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportExecutor.m; sourceTree = "<group>"; };
+		A14781FFF7CCBB2CBA23D0D0 /* JMDashboardParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardParameter.m; sourceTree = "<group>"; };
 		A1478203D1D9D597184D040F /* JMDashboardViewerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardViewerVC.m; sourceTree = "<group>"; };
 		A147823C5CE47413BF9A93FC /* JMJavascriptNativeBridgeProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptNativeBridgeProtocol.h; sourceTree = "<group>"; };
 		A1478266E2F8FDC96D2EEEC0 /* JMReportViewerToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportViewerToolBar.h; sourceTree = "<group>"; };
@@ -510,25 +524,30 @@
 		A147835F4FC43C3E20FF1ED4 /* JMSchedulingVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSchedulingVC.m; sourceTree = "<group>"; };
 		A1478374AAA1B5E8D1DB41E5 /* JMJavascriptRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptRequest.m; sourceTree = "<group>"; };
 		A14783E141F16BAE2FCA32F3 /* JMMenuAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMMenuAction.h; sourceTree = "<group>"; };
-		A1478436F163AF086CC411BC /* JMReportPagesRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportPagesRange.h; sourceTree = "<group>"; };
 		A147843EA31EC3E684E7AB63 /* JMDashboardViewerConfigurator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardViewerConfigurator.h; sourceTree = "<group>"; };
 		A147844D223E28F977A2E2B9 /* JMNewJobVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMNewJobVC.h; sourceTree = "<group>"; };
+		A14785ABAB3DF7E0FD2962BD /* JMExternalWindowControlsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowControlsVC.h; sourceTree = "<group>"; };
 		A14785AF90B597E785B4A30A /* old_dashboard.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = old_dashboard.js; sourceTree = "<group>"; };
 		A147866AB6450EAF0CD1CE44 /* JMBaseDashboardLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMBaseDashboardLoader.m; sourceTree = "<group>"; };
 		A147869A54D397CEE0940006 /* JMReportViewerToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportViewerToolBar.m; sourceTree = "<group>"; };
 		A14786AA8DB3F07D6540663D /* JMVisDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisDashboardLoader.h; sourceTree = "<group>"; };
 		A14787325B030C99ACEAFA49 /* JMDashboardViewerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardViewerVC.h; sourceTree = "<group>"; };
+		A147875D25959A63159192C8 /* JMExternalWindowControlsVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = JMExternalWindowControlsVC.xib; sourceTree = "<group>"; };
 		A14787FFFE47A9E26BFB7469 /* JMJavascriptNativeBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptNativeBridge.h; sourceTree = "<group>"; };
 		A147880E387FEFB88BBD19B4 /* JMJavascriptNativeBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJavascriptNativeBridge.m; sourceTree = "<group>"; };
 		A1478935CB12E39D40C6D7BF /* JMDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardLoader.h; sourceTree = "<group>"; };
 		A14789AD990EF711BFEA8CCA /* JMReportExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportExecutor.h; sourceTree = "<group>"; };
 		A1478A1ED0BFADF01712DBE9 /* JMNewJobVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMNewJobVC.m; sourceTree = "<group>"; };
+		A14789652CAAA6F45433A045 /* JMDashboardParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMDashboardParameter.h; sourceTree = "<group>"; };
+		A1478986F8AAADBC9A5CC783 /* JMDashlet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashlet.m; sourceTree = "<group>"; };
 		A1478A35341BFE2392AC1191 /* JMBaseDashboardLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMBaseDashboardLoader.h; sourceTree = "<group>"; };
 		A1478AE10405430D44256CA0 /* JMVisualizeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisualizeManager.m; sourceTree = "<group>"; };
 		A1478B04CE024F4DDDFDF22D /* JMVisDashboardLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMVisDashboardLoader.m; sourceTree = "<group>"; };
 		A1478B758E018C4B68EDB8F3 /* JMMenuAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMenuAction.m; sourceTree = "<group>"; };
+		A1478BF95DE687CDEB03D288 /* vis_jaspermobile.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = vis_jaspermobile.js; sourceTree = "<group>"; };
 		A1478D6859B60B36A4F9FCC8 /* JMDashboardViewerConfigurator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMDashboardViewerConfigurator.m; sourceTree = "<group>"; };
 		A1478E6EECD7B128EAF8FCC6 /* JMJobCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMJobCell.m; sourceTree = "<group>"; };
+		A1478E3C1428657C98ECC2A2 /* JMExternalWindowControlsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowControlsVC.m; sourceTree = "<group>"; };
 		A1478EA56C0D8D23BDD84C37 /* JMJavascriptCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJavascriptCallback.h; sourceTree = "<group>"; };
 		A1478EEB9FB0CCB7D652FF2F /* JMVisualizeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMVisualizeManager.h; sourceTree = "<group>"; };
 		A1478EF1687A5A61D39C2EA4 /* JMJobCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMJobCell.h; sourceTree = "<group>"; };
@@ -547,8 +566,6 @@
 		BDF3D2521B8B03F40005AA28 /* JMReportOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportOptionsViewController.m; sourceTree = "<group>"; };
 		BDF3D2581B8B166B0005AA28 /* JMReportOptionsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportOptionsCell.h; sourceTree = "<group>"; };
 		BDF3D2591B8B166B0005AA28 /* JMReportOptionsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportOptionsCell.m; sourceTree = "<group>"; };
-		BDF3D25C1B8B2DF20005AA28 /* JMReportManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportManager.h; sourceTree = "<group>"; };
-		BDF3D25D1B8B2DF20005AA28 /* JMReportManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMReportManager.m; sourceTree = "<group>"; };
 		F54C91A01752FAA90009E2BE /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F54C91A21752FAAD0009E2BE /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F54C91A41752FAB30009E2BE /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -694,15 +711,6 @@
 				0801DFB91AAF2E7500DD072C /* JMIntroModelManager.m */,
 			);
 			path = JMIntroModelManager;
-			sourceTree = "<group>";
-		};
-		081CE26D1B21BBDE00F923FB /* JMPrintPreviewTableViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				081CE26E1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.h */,
-				081CE26F1B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m */,
-			);
-			path = JMPrintPreviewTableViewCell;
 			sourceTree = "<group>";
 		};
 		08221C3F1AE54DA000F94F1D /* JMCoreDataManager */ = {
@@ -867,8 +875,8 @@
 				089B14A21AA756BD0021A915 /* UITableViewCell+Additions.m */,
 				089B14A31AA756BD0021A915 /* UIView+Additions.h */,
 				089B14A41AA756BD0021A915 /* UIView+Additions.m */,
-				084D23DC1BFB4F9E00CF4322 /* UIViewController+Additions.h */,
-				084D23DD1BFB4F9E00CF4322 /* UIViewController+Additions.m */,
+				089F664E1C3D727700ED683B /* UIViewController+Additions.h */,
+				089F664F1C3D727700ED683B /* UIViewController+Additions.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -935,6 +943,8 @@
 				089B15661AA756BD0021A915 /* SideMenu */,
 				087A71AE1BD95FD1007B98A4 /* JMAboutViewController */,
 				A147829B5658BAFB675D3811 /* Scheduling */,
+				A1478BEB9CBFEFF30EAAA2F2 /* JMExternalWindowControlsVC */,
+				A14783AAF9E490A2628E772C /* JMExternalWindowDashboardControlsVC */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1275,8 +1285,48 @@
 				089B16151AA757EA0021A915 /* jaspermobile.js */,
 				089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */,
 				A14785AF90B597E785B4A30A /* old_dashboard.js */,
+				A1478BF95DE687CDEB03D288 /* vis_jaspermobile.js */,
 			);
 			path = VisualizeJS;
+			sourceTree = "<group>";
+		};
+		089F663E1C3D465200ED683B /* JMExportManager */ = {
+			isa = PBXGroup;
+			children = (
+				089F663F1C3D465200ED683B /* JMExportManager.h */,
+				089F66401C3D465200ED683B /* JMExportManager.m */,
+				089F66411C3D465200ED683B /* JMExportResource */,
+				089F66441C3D465200ED683B /* JMExportTask */,
+			);
+			path = JMExportManager;
+			sourceTree = "<group>";
+		};
+		089F66411C3D465200ED683B /* JMExportResource */ = {
+			isa = PBXGroup;
+			children = (
+				089F66421C3D465200ED683B /* JMExportResource.h */,
+				089F66431C3D465200ED683B /* JMExportResource.m */,
+			);
+			path = JMExportResource;
+			sourceTree = "<group>";
+		};
+		089F66441C3D465200ED683B /* JMExportTask */ = {
+			isa = PBXGroup;
+			children = (
+				089F66451C3D465200ED683B /* JMExportTask.h */,
+				089F66461C3D465200ED683B /* JMExportTask.m */,
+				089F66471C3D465200ED683B /* JMReportExportTask */,
+			);
+			path = JMExportTask;
+			sourceTree = "<group>";
+		};
+		089F66471C3D465200ED683B /* JMReportExportTask */ = {
+			isa = PBXGroup;
+			children = (
+				089F66481C3D465200ED683B /* JMReportExportTask.h */,
+				089F66491C3D465200ED683B /* JMReportExportTask.m */,
+			);
+			path = JMReportExportTask;
 			sourceTree = "<group>";
 		};
 		08B517B91B15C60400B3F20A /* PopoverView-v0.0.2 */ = {
@@ -1288,16 +1338,6 @@
 				08B517BD1B15C60400B3F20A /* PopoverViewCompatibility.h */,
 			);
 			path = "PopoverView-v0.0.2";
-			sourceTree = "<group>";
-		};
-		08B518781B18C79400B3F20A /* JMReportSaver */ = {
-			isa = PBXGroup;
-			children = (
-				08B518791B18C79400B3F20A /* JMReportSaver.h */,
-				08B5187A1B18C79400B3F20A /* JMReportSaver.m */,
-				A14782A8DF567686676089C8 /* JMReportPageRange */,
-			);
-			path = JMReportSaver;
 			sourceTree = "<group>";
 		};
 		08B99F6C1A07CD7700E822B0 /* ServerProfiles */ = {
@@ -1394,7 +1434,6 @@
 		08E2AC2A1B1E056900AC462B /* JMResourceViewerViewController */ = {
 			isa = PBXGroup;
 			children = (
-				08E2AC351B1E056900AC462B /* JMPrintResourceViewController */,
 				08E2AC3B1B1E056900AC462B /* JMSavedResourceViewerViewController */,
 				08E2AC3E1B1E056900AC462B /* ReportViewer */,
 				A1478624CCF4C28F681912E0 /* DashboardViewer */,
@@ -1402,16 +1441,6 @@
 				08E2AC3A1B1E056900AC462B /* JMResourceViewerViewController.m */,
 			);
 			path = JMResourceViewerViewController;
-			sourceTree = "<group>";
-		};
-		08E2AC351B1E056900AC462B /* JMPrintResourceViewController */ = {
-			isa = PBXGroup;
-			children = (
-				081CE26D1B21BBDE00F923FB /* JMPrintPreviewTableViewCell */,
-				08E2AC361B1E056900AC462B /* JMPrintResourceViewController.h */,
-				08E2AC371B1E056900AC462B /* JMPrintResourceViewController.m */,
-			);
-			path = JMPrintResourceViewController;
 			sourceTree = "<group>";
 		};
 		08E2AC3B1B1E056900AC462B /* JMSavedResourceViewerViewController */ = {
@@ -1487,7 +1516,7 @@
 		08E2AC5E1B1E056900AC462B /* JMReportLoader */ = {
 			isa = PBXGroup;
 			children = (
-				08E2AC5F1B1E056900AC462B /* JMReportLoader.h */,
+				089F66511C3D72C200ED683B /* JMReportLoaderProtocol.h */,
 				08E2AC601B1E056900AC462B /* JMRestReportLoader */,
 				08E2AC631B1E056900AC462B /* JMVisualizeReportLoader */,
 			);
@@ -1588,15 +1617,6 @@
 			path = JMSaveReportSection;
 			sourceTree = "<group>";
 		};
-		08E31CF41B8DE141008C0B49 /* JMExtendedReportOption */ = {
-			isa = PBXGroup;
-			children = (
-				08E31CF51B8DE141008C0B49 /* JMExtendedReportOption.h */,
-				08E31CF61B8DE141008C0B49 /* JMExtendedReportOption.m */,
-			);
-			path = JMExtendedReportOption;
-			sourceTree = "<group>";
-		};
 		08E62C7C19922B0B0081CA83 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -1687,22 +1707,14 @@
 			path = Library;
 			sourceTree = "<group>";
 		};
-		934234171AAC3D3900D34478 /* JMVisualizeReport */ = {
+		9331B2C01C2FC6F10057233B /* JMExtraWindowDashboardControlsTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
-				934234181AAC3D5300D34478 /* JMVisualizeReport.h */,
-				934234191AAC3D5300D34478 /* JMVisualizeReport.m */,
+				9331B2C31C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.h */,
+				9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */,
+				9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */,
 			);
-			path = JMVisualizeReport;
-			sourceTree = "<group>";
-		};
-		9342341B1AAC3DB100D34478 /* JMRestReport */ = {
-			isa = PBXGroup;
-			children = (
-				9342341C1AAC3DC100D34478 /* JMRestReport.h */,
-				9342341D1AAC3DC100D34478 /* JMRestReport.m */,
-			);
-			path = JMRestReport;
+			path = JMExtraWindowDashboardControlsTableViewCell;
 			sourceTree = "<group>";
 		};
 		9356EC981A30752900ACE2C6 /* TIBCO JasperMobile Tests */ = {
@@ -1727,7 +1739,7 @@
 		93618E111BD4BFBF007995D7 /* EULA */ = {
 			isa = PBXGroup;
 			children = (
-				9386BA2C1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf */,
+				936A1B961C22B72C00559F16 /* EULA.pdf */,
 			);
 			path = EULA;
 			sourceTree = "<group>";
@@ -1735,13 +1747,11 @@
 		9397F9791AAACA94006B89C6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				08E31CF41B8DE141008C0B49 /* JMExtendedReportOption */,
 				0801DF961AAF2CC900DD072C /* CoreDataEntities */,
 				93D8C6561AAD777200117306 /* JMVisualizeDashboard */,
 				93D8C6521AAD69BE00117306 /* JMDashboard */,
-				9342341B1AAC3DB100D34478 /* JMRestReport */,
-				934234171AAC3D3900D34478 /* JMVisualizeReport */,
 				9397F97A1AAACAD1006B89C6 /* JMReport */,
+				A14780480292919423C05A33 /* JMDashlet */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1758,15 +1768,13 @@
 		93D8C6411AAC7E9200117306 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				BDF3D25B1B8B2DF20005AA28 /* JMReportManager */,
+				089F663E1C3D465200ED683B /* JMExportManager */,
 				BDB8B9EB1B57D90B00758441 /* JMThemesManager */,
-				08B518781B18C79400B3F20A /* JMReportSaver */,
 				08221C3F1AE54DA000F94F1D /* JMCoreDataManager */,
 				0801DF921AAF2CC000DD072C /* JMSessionManager */,
 				93D8C6421AAC7E9200117306 /* JMWebViewManager */,
 				A147898DB80B9E88171DCD17 /* JMJavascriptNativeBridge */,
 				A14786A84BEF08E4A786B76A /* JMVisualizeManager */,
-				A1478A5C788015F2AC6CBC1E /* JMReportExecutor */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1785,6 +1793,7 @@
 			children = (
 				93D8C6531AAD69CD00117306 /* JMDashboard.h */,
 				93D8C6541AAD69CD00117306 /* JMDashboard.m */,
+				A14786EE67EACA9CE085FD53 /* JMDashboardParameter */,
 			);
 			path = JMDashboard;
 			sourceTree = "<group>";
@@ -1796,6 +1805,34 @@
 				93D8C6581AAD778400117306 /* JMVisualizeDashboard.m */,
 			);
 			path = JMVisualizeDashboard;
+			sourceTree = "<group>";
+		};
+		93E34C411C317C1B005A6571 /* JMDashboardInputControlsVC */ = {
+			isa = PBXGroup;
+			children = (
+				93E34C451C318490005A6571 /* JMDashboardInputControlsCell */,
+				93E34C421C317DB7005A6571 /* JMDashboardInputControlsVC.h */,
+				93E34C431C317DB7005A6571 /* JMDashboardInputControlsVC.m */,
+			);
+			path = JMDashboardInputControlsVC;
+			sourceTree = "<group>";
+		};
+		93E34C451C318490005A6571 /* JMDashboardInputControlsCell */ = {
+			isa = PBXGroup;
+			children = (
+				93E34C461C3184AB005A6571 /* JMDashboardInputControlsCell.h */,
+				93E34C471C3184AB005A6571 /* JMDashboardInputControlsCell.m */,
+			);
+			path = JMDashboardInputControlsCell;
+			sourceTree = "<group>";
+		};
+		A14780480292919423C05A33 /* JMDashlet */ = {
+			isa = PBXGroup;
+			children = (
+				A1478986F8AAADBC9A5CC783 /* JMDashlet.m */,
+				A1478080DB621855A002EE47 /* JMDashlet.h */,
+			);
+			path = JMDashlet;
 			sourceTree = "<group>";
 		};
 		A1478114D887FD01093A3B51 /* JMJavascriptRequest */ = {
@@ -1818,13 +1855,15 @@
 			path = Scheduling;
 			sourceTree = "<group>";
 		};
-		A14782A8DF567686676089C8 /* JMReportPageRange */ = {
+		A14783AAF9E490A2628E772C /* JMExternalWindowDashboardControlsVC */ = {
 			isa = PBXGroup;
 			children = (
-				A1478436F163AF086CC411BC /* JMReportPagesRange.h */,
-				A147827F4B0F4B9D35B838E9 /* JMReportPagesRange.m */,
+				9331B2C01C2FC6F10057233B /* JMExtraWindowDashboardControlsTableViewCell */,
+				93826C7B1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.h */,
+				93826C7C1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m */,
+				93826C7D1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib */,
 			);
-			path = JMReportPageRange;
+			path = JMExternalWindowDashboardControlsVC;
 			sourceTree = "<group>";
 		};
 		A147851FB746D1FF5F9F6F4B /* JMSchedulingListLoader */ = {
@@ -1859,6 +1898,7 @@
 		A1478624CCF4C28F681912E0 /* DashboardViewer */ = {
 			isa = PBXGroup;
 			children = (
+				93E34C411C317C1B005A6571 /* JMDashboardInputControlsVC */,
 				A14786096E01FBBE597FAAF2 /* JMDashboardLoader */,
 				A1478D6FFDF1DC92958EA14E /* JMDashboardViewerVC */,
 				A14788FD4C7D8B358BDD55EE /* JMDashboardViewerConfigurator */,
@@ -1873,6 +1913,15 @@
 				A1478EEB9FB0CCB7D652FF2F /* JMVisualizeManager.h */,
 			);
 			path = JMVisualizeManager;
+			sourceTree = "<group>";
+		};
+		A14786EE67EACA9CE085FD53 /* JMDashboardParameter */ = {
+			isa = PBXGroup;
+			children = (
+				A14781FFF7CCBB2CBA23D0D0 /* JMDashboardParameter.m */,
+				A14789652CAAA6F45433A045 /* JMDashboardParameter.h */,
+			);
+			path = JMDashboardParameter;
 			sourceTree = "<group>";
 		};
 		A147883223D06D7C540388D9 /* JMBaseDashboardLoader */ = {
@@ -1923,13 +1972,14 @@
 			path = JMSchedulingListVC;
 			sourceTree = "<group>";
 		};
-		A1478A5C788015F2AC6CBC1E /* JMReportExecutor */ = {
+		A1478BEB9CBFEFF30EAAA2F2 /* JMExternalWindowControlsVC */ = {
 			isa = PBXGroup;
 			children = (
-				A14789AD990EF711BFEA8CCA /* JMReportExecutor.h */,
-				A14781B537B5076FA38FD7B7 /* JMReportExecutor.m */,
+				A14785ABAB3DF7E0FD2962BD /* JMExternalWindowControlsVC.h */,
+				A1478E3C1428657C98ECC2A2 /* JMExternalWindowControlsVC.m */,
+				A147875D25959A63159192C8 /* JMExternalWindowControlsVC.xib */,
 			);
-			path = JMReportExecutor;
+			path = JMExternalWindowControlsVC;
 			sourceTree = "<group>";
 		};
 		A1478CDC419FC51FE351D059 /* JMVisualizeDashboardLoader */ = {
@@ -2022,15 +2072,6 @@
 				BDF3D2591B8B166B0005AA28 /* JMReportOptionsCell.m */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		BDF3D25B1B8B2DF20005AA28 /* JMReportManager */ = {
-			isa = PBXGroup;
-			children = (
-				BDF3D25C1B8B2DF20005AA28 /* JMReportManager.h */,
-				BDF3D25D1B8B2DF20005AA28 /* JMReportManager.m */,
-			);
-			path = JMReportManager;
 			sourceTree = "<group>";
 		};
 		C29D4E3B2FABEFC512F0762C /* Pods */ = {
@@ -2209,6 +2250,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				938E1F991C1EEF6C009E1B79 /* vis_jaspermobile.js in Resources */,
 				939917321BC67737006CC2A7 /* old_dashboard.js in Resources */,
 				089B161E1AA757EA0021A915 /* jaspermobile_dashboard.js in Resources */,
 				93C37C6A1A39D49900CEE7CF /* Localizable.strings in Resources */,
@@ -2222,6 +2264,7 @@
 				930F8D421ABB1C35005F93FB /* report-ios-mobilejs-sdk.js in Resources */,
 				930F8D411ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js in Resources */,
 				930F8D401ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js in Resources */,
+				9331B2C71C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib in Resources */,
 				08E2AC911B1E056900AC462B /* JMSingleSelectTableViewController.xib in Resources */,
 				089B15FC1AA756BD0021A915 /* JMBaseCollectionView.xib in Resources */,
 				930F8D461ABB1CDF005F93FB /* report.html in Resources */,
@@ -2233,14 +2276,16 @@
 				BD3A1E4C1BC3F3830007552C /* Launch Screen.storyboard in Resources */,
 				930F8D451ABB1CDF005F93FB /* dashboard.html in Resources */,
 				089B15C81AA756BD0021A915 /* JMHorizontalResourceCollectionViewCell.xib in Resources */,
-				9386BA2D1BD4DFFF000ABA1E /* TIB_jsm-ios_2.2.0_license.pdf in Resources */,
 				089B15AD1AA756BD0021A915 /* JMCancelRequestPopup.xib in Resources */,
 				930F8D3F1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js in Resources */,
 				089B15C31AA756BD0021A915 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */,
 				930F8D4A1ABB28B0005F93FB /* report_optimized.html in Resources */,
 				08E0D19F1B0CF27200BFBFE5 /* Icon-1024.png in Resources */,
 				089B15AF1AA756BD0021A915 /* JMListOptionsPopupView.xib in Resources */,
+				936A1B971C22B72C00559F16 /* EULA.pdf in Resources */,
 				A1478B4EB6490628B761FA27 /* JMReportViewerToolBar.xib in Resources */,
+				93826C7F1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.xib in Resources */,
+				A1478208EF52280BF30EDEEE /* JMExternalWindowControlsVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2322,10 +2367,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				BDB8B9EE1B57D90B00758441 /* JMThemesManager.m in Sources */,
-				08E31CF71B8DE141008C0B49 /* JMExtendedReportOption.m in Sources */,
-				9342341E1AAC3DC100D34478 /* JMRestReport.m in Sources */,
 				08DD18391B136B8A00856112 /* JMDashboardInfoViewController.m in Sources */,
 				089B15B61AA756BD0021A915 /* JMLoginViewController.m in Sources */,
+				089F664D1C3D465200ED683B /* JMReportExportTask.m in Sources */,
 				08DD183C1B136B8A00856112 /* JMSavedItemsInfoViewController.m in Sources */,
 				08E2AC8D1B1E056900AC462B /* JMTextInputControlCell.m in Sources */,
 				089B15FA1AA756BD0021A915 /* JMSavedItemsCollectionViewController.m in Sources */,
@@ -2335,12 +2379,13 @@
 				089B15B81AA756BD0021A915 /* JMServersGridViewController.m in Sources */,
 				08E2AC881B1E056900AC462B /* JMDateTimeInputControlCell.m in Sources */,
 				089B15CE1AA756BD0021A915 /* JMResourcesListLoader.m in Sources */,
+				089F664B1C3D465200ED683B /* JMExportResource.m in Sources */,
+				089F664C1C3D465200ED683B /* JMExportTask.m in Sources */,
 				089B15AE1AA756BD0021A915 /* JMListOptionsPopupView.m in Sources */,
-				08E2AC821B1E056900AC462B /* JMPrintResourceViewController.m in Sources */,
 				089B15CA1AA756BD0021A915 /* JMResourceInfoViewController.m in Sources */,
 				089B15A41AA756BD0021A915 /* UIImage+Additions.m in Sources */,
-				084D23DE1BFB4F9F00CF4322 /* UIViewController+Additions.m in Sources */,
 				BDF3D25A1B8B166B0005AA28 /* JMReportOptionsCell.m in Sources */,
+				089F66501C3D727700ED683B /* UIViewController+Additions.m in Sources */,
 				0801DFBD1AAF2E7500DD072C /* JMIntroModel.m in Sources */,
 				089B15BC1AA756BD0021A915 /* JMServerOptionsViewController.m in Sources */,
 				93D8C6451AAC7E9200117306 /* JMWebViewManager.m in Sources */,
@@ -2359,8 +2404,6 @@
 				089B15BA1AA756BD0021A915 /* JMServerOptionCell.m in Sources */,
 				08DD182D1B135BE500856112 /* MigrateTo_v_2_0.xcmappingmodel in Sources */,
 				089B15BD1AA756BD0021A915 /* JMServerOption.m in Sources */,
-				081CE2701B21BBDE00F923FB /* JMPrintPreviewTableViewCell.m in Sources */,
-				BDF3D25E1B8B2DF20005AA28 /* JMReportManager.m in Sources */,
 				93D8C6591AAD778400117306 /* JMVisualizeDashboard.m in Sources */,
 				08E2AC851B1E056900AC462B /* JMSavedResourceViewerViewController.m in Sources */,
 				087A71B91BD95FEE007B98A4 /* JMEULAViewController.m in Sources */,
@@ -2373,7 +2416,6 @@
 				08E2AC7C1B1E056900AC462B /* JMBaseResourceViewerVC.m in Sources */,
 				089B15A31AA756BD0021A915 /* UIColor+RGBComponent.m in Sources */,
 				0801DF9D1AAF2CC900DD072C /* JMFavorites.m in Sources */,
-				9342341A1AAC3D5300D34478 /* JMVisualizeReport.m in Sources */,
 				089B159E1AA756BD0021A915 /* JMFavorites+Helpers.m in Sources */,
 				089B15C51AA756BD0021A915 /* JMResourceCollectionViewCell.m in Sources */,
 				08221C931AE78CD300F94F1D /* JMMigrationManager.m in Sources */,
@@ -2381,8 +2423,8 @@
 				089B15CB1AA756BD0021A915 /* JMFavoritesListLoader.m in Sources */,
 				0854B3701BC54FFB0004E5B8 /* JMBaseViewController.m in Sources */,
 				0801DFAD1AAF2CFB00DD072C /* JMConstants.m in Sources */,
+				93E34C481C3184AB005A6571 /* JMDashboardInputControlsCell.m in Sources */,
 				089B15AC1AA756BD0021A915 /* JMCancelRequestPopup.m in Sources */,
-				08B5187B1B18C79400B3F20A /* JMReportSaver.m in Sources */,
 				BDF3D2531B8B03F40005AA28 /* JMReportOptionsViewController.m in Sources */,
 				089B15C01AA756BD0021A915 /* JMLoadingCollectionViewCell.m in Sources */,
 				08E2AC8C1B1E056900AC462B /* JMSingleSelectInputControlCell.m in Sources */,
@@ -2395,6 +2437,7 @@
 				0801DFBC1AAF2E7500DD072C /* JMIntroImageView.m in Sources */,
 				089B159F1AA756BD0021A915 /* JMSavedResources+Helpers.m in Sources */,
 				93D8C6551AAD69CD00117306 /* JMDashboard.m in Sources */,
+				93826C7E1C2E77AB00F39CF2 /* JMExternalWindowDashboardControlsVC.m in Sources */,
 				08E2AC9B1B1E056900AC462B /* JMSaveReportPageRangeCell.m in Sources */,
 				08E2AC9A1B1E056900AC462B /* JMSaveReportNameCell.m in Sources */,
 				089B15A01AA756BD0021A915 /* JMServerProfile+Helpers.m in Sources */,
@@ -2402,6 +2445,7 @@
 				08E2AC8E1B1E056900AC462B /* JMTimeInputControlCell.m in Sources */,
 				089B15A51AA756BD0021A915 /* UITableViewCell+Additions.m in Sources */,
 				087A71B51BD95FD1007B98A4 /* JMPrivacyPolicyViewController.m in Sources */,
+				9331B2C61C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m in Sources */,
 				08E2AC871B1E056900AC462B /* JMDateInputControlCell.m in Sources */,
 				08B517BE1B15C60400B3F20A /* PopoverView.m in Sources */,
 				089590FF19E3D514001471DA /* ALToastView.m in Sources */,
@@ -2416,6 +2460,7 @@
 				0801DF951AAF2CC000DD072C /* JMSessionManager.m in Sources */,
 				089B15CC1AA756BD0021A915 /* JMLibraryListLoader.m in Sources */,
 				BDABBD291A41D8CC00EDA100 /* RNCachingURLProtocol.m in Sources */,
+				93E34C441C317DB7005A6571 /* JMDashboardInputControlsVC.m in Sources */,
 				082D1E921AB70FB700E0C0C6 /* JSResourceLookup+Helpers.m in Sources */,
 				08E2AC9D1B1E056900AC462B /* JMSaveReportViewController.m in Sources */,
 				089B15F91AA756BD0021A915 /* JMRepositoryCollectionViewController.m in Sources */,
@@ -2444,6 +2489,7 @@
 				08E2AC971B1E056900AC462B /* JMReportViewerConfigurator.m in Sources */,
 				08E2AC8F1B1E056900AC462B /* JMMultiSelectTableViewController.m in Sources */,
 				A14785D6EB9D46719DE946BD /* JMBaseDashboardLoader.m in Sources */,
+				089F664A1C3D465200ED683B /* JMExportManager.m in Sources */,
 				A147820FB57EFF402452B6E9 /* JMVisDashboardLoader.m in Sources */,
 				A14789C39DF01A718B92E97C /* JMDashboardViewerVC.m in Sources */,
 				A14784AF61EB18E6AD372AEB /* JMDashboardViewerConfigurator.m in Sources */,
@@ -2454,6 +2500,9 @@
 				A1478D98799B56B89F12EF44 /* JMSchedulingManager.m in Sources */,
 				A14787DB1604CF2D4408BA7C /* JMJobCell.m in Sources */,
 				A14786928BC032D283AE0FC9 /* JMNewJobVC.m in Sources */,
+				A1478554E4FD8C3321C48845 /* JMDashlet.m in Sources */,
+				A147864EBDE7A5C24D8D3588 /* JMExternalWindowControlsVC.m in Sources */,
+				A14789DAD19DCADECAAAC548 /* JMDashboardParameter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2528,6 +2577,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2561,7 +2611,7 @@
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/Pods\"/**";
 				VALID_ARCHS = "i386 armv7 armv7s x86_64 arm64";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2769,6 +2819,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2803,7 +2854,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/Pods\"/**";
 				VALID_ARCHS = "i386 armv7 armv7s x86_64 arm64";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2819,6 +2870,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2852,7 +2904,7 @@
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "JasperMobile/Supporting Files/TIBCO JasperMobile-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"";
+				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\" \"${PROJECT_DIR}/Pods\"/**";
 				VALID_ARCHS = "i386 armv7 armv7s x86_64 arm64";
 				WRAPPER_EXTENSION = app;
 			};

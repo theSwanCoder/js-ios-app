@@ -37,6 +37,12 @@ NSString * const kJMDefaultsIntroDidApear = @"JMDefaultsIntroDidApear";
 NSString * const kJMResetApplicationNotification = @"resetApplication";
 NSString * const kJMFavoritesDidChangedNotification = @"JMFavoritesDidChangedNotification";
 NSString * const kJMSavedResourcesDidChangedNotification = @"JMSavedResourcesDidChangedNotification";
+NSString * const kJMExportedResourceDidLoadNotification = @"kJMExportedResourceDidLoadNotification";
+NSString * const kJMExportedResourceDidCancelNotification = @"kJMExportedResourceDidCancelNotification";
+
+// Local Notifications
+NSString * const kJMLocalNotificationKey = @"kJMLocalNotificationKey";
+NSString * const kJMExportResourceLocalNotification = @"kJMExportResourceLocalNotification";
 
 // Shared keys for NSDictionary
 NSString * const kJMTitleKey = @"title";
@@ -75,7 +81,7 @@ NSString * const kJMReportsDirectory = @"reports";
 
 // Saved Items ws types
 NSString * const kJMSavedReportUnit = @"savedReportUnit";
-
+NSString * const kJMTempExportedReportUnit = @"kJMTempExportedReportUnit";
 
 // Name of the main report file (outputResource)
 NSString * const kJMReportFilename = @"report";
@@ -102,3 +108,29 @@ NSString * const kJMDefaultThemeFileName = @"DefaultTheme";
 NSString * const kJMThemesFileFormat= @"plist";
 NSString * const kJMCurrentThemeFileName = @"CurrentTheme";
 
+// Analytics - Common
+NSString * const kJMAnalyticsServerVersionKey = @"kJMAnalyticsServerVersionKey";
+NSString * const kJMAnalyticsCategoryKey      = @"kJMAnalyticsCategoryKey";
+NSString * const kJMAnalyticsActionKey        = @"kJMAnalyticsActionKey";
+NSString * const kJMAnalyticsLabelKey         = @"kJMAnalyticsLabelKey";
+
+// Analytics - Authentication
+NSString * const kJMAnalyticsAuthenticationEventCategoryTitle     = @"Authentication";
+NSString * const kJMAnalyticsAuthenticationEventActionLoginTitle  = @"Login";
+NSString * const kJMAnalyticsAuthenticationEventLabelSuccess      = @"Success";
+NSString * const kJMAnalyticsAuthenticationEventLabelFailure      = @"Failure";
+
+// Analytics - Resource
+NSString * const kJMAnalyticsResourceEventCategoryTitle           = @"Resource";
+NSString * const kJMAnalyticsResourceEventActionOpenTitle         = @"Open";
+NSString * const kJMAnalyticsResourceEventActionPrintTitle        = @"Print";
+NSString * const kJMAnalyticsResourceEventActionExportTitle       = @"Export";
+NSString * const kJMAnalyticsResourceEventLabelReportREST         = @"Report (REST)";
+NSString * const kJMAnalyticsResourceEventLabelReportVisualize    = @"Report (Visualize)";
+NSString * const kJMAnalyticsResourceEventLabelDashboardFlow      = @"Dashboard (Flow)";
+NSString * const kJMAnalyticsResourceEventLabelDashboardVisualize = @"Dashboard (Visualize)";
+NSString * const kJMAnalyticsResourceEventLabelSavedResource      = @"Saved Resource";
+
+// Analytics - Repository
+NSString * const kJMAnalyticsRepositoryEventCategoryTitle     = @"Repository";
+NSString * const kJMAnalyticsRepositoryEventActionOpen        = @"Open";

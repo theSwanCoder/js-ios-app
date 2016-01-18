@@ -9,19 +9,18 @@
 #import "JSResourceLookup+Helpers.h"
 #import "JMVisualizeDashboard.h"
 #import "JMDashboard.h"
-#import "JMVisualizeReport.h"
-#import "JMRestReport.h"
+#import "JMReport.h"
 
 @implementation JSResourceLookup (Helpers)
 
 - (BOOL) isFolder
 {
-    return [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FOLDER];
+    return [self.resourceType isEqualToString:kJS_WS_TYPE_FOLDER];
 }
 
 - (BOOL) isReport
 {
-    return [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT];
+    return [self.resourceType isEqualToString:kJS_WS_TYPE_REPORT_UNIT];
 }
 
 - (BOOL) isSavedReport
@@ -29,14 +28,24 @@
     return [self.resourceType isEqualToString:kJMSavedReportUnit];
 }
 
+- (BOOL) isTempExportedReport
+{
+    return [self.resourceType isEqualToString:kJMTempExportedReportUnit];
+}
+
 - (BOOL) isDashboard
 {
-    return [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD] || [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY];
+    return [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD] || [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD_LEGACY];
 }
 
 - (BOOL)isNewDashboard
 {
-    return [JMUtils isServerVersionUpOrEqual6] && [self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD];
+    return [JMUtils isServerVersionUpOrEqual6] && [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD];
+}
+
+- (BOOL)isFile
+{
+    return [self.resourceType isEqualToString:kJS_WS_TYPE_FILE];
 }
 
 - (NSString *)resourceViewerVCIdentifier
@@ -47,6 +56,8 @@
     } else if ([self isDashboard]) {
         return @"JMDashboardViewerVC";
     } else if ([self isSavedReport]) {
+        return @"JMSavedResourceViewerViewController";
+    } else if ([self isFile]) {
         return @"JMSavedResourceViewerViewController";
     }
     return nil;
@@ -66,11 +77,7 @@
 
 - (JMReport *)reportModel
 {
-    if ([JMUtils isSupportVisualize]) {
-        return [JMVisualizeReport reportWithResourceLookup:self];
-    } else {
-        return [JMRestReport reportWithResourceLookup:self];
-    }
+    return [JMReport reportWithResourceLookup:self];
 }
 
 - (JMDashboard *)dashboardModel
@@ -86,13 +93,15 @@
 {
     if ([self.resourceType isEqualToString:kJMSavedReportUnit]) {
         return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
-    } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_REPORT_UNIT]) {
+    } else if ([self.resourceType isEqualToString:kJMTempExportedReportUnit]) {
+        return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
+    } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_REPORT_UNIT]) {
         return JMCustomLocalizedString(@"resources.type.reportUnit", nil);
-    } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD]) {
+    } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD]) {
         return JMCustomLocalizedString(@"resources.type.dashboard", nil);
-    } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_DASHBOARD_LEGACY]) {
+    } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD_LEGACY]) {
         return JMCustomLocalizedString(@"resources.type.dashboard.legacy", nil);
-    } else if ([self.resourceType isEqualToString:[JSConstants sharedInstance].WS_TYPE_FOLDER]) {
+    } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_FOLDER]) {
         return JMCustomLocalizedString(@"resources.type.folder", nil);
     }
     return nil;

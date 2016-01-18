@@ -54,7 +54,7 @@
 
 + (float) minSupportedServerVersion
 {
-    return [JSConstants sharedInstance].SERVER_VERSION_CODE_EMERALD_5_5_0;
+    return kJS_SERVER_VERSION_CODE_EMERALD_5_5_0;
 }
 
 + (JMServerProfile *)serverProfileForJSProfile:(JSProfile *)profile
