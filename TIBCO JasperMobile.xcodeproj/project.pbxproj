@@ -118,7 +118,6 @@
 		08E2AC8E1B1E056900AC462B /* JMTimeInputControlCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC531B1E056900AC462B /* JMTimeInputControlCell.m */; };
 		08E2AC8F1B1E056900AC462B /* JMMultiSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC551B1E056900AC462B /* JMMultiSelectTableViewController.m */; };
 		08E2AC901B1E056900AC462B /* JMSingleSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC571B1E056900AC462B /* JMSingleSelectTableViewController.m */; };
-		08E2AC911B1E056900AC462B /* JMSingleSelectTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08E2AC581B1E056900AC462B /* JMSingleSelectTableViewController.xib */; };
 		08E2AC931B1E056900AC462B /* JMInputControlsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC5B1B1E056900AC462B /* JMInputControlsViewController.m */; };
 		08E2AC951B1E056900AC462B /* JMRestReportLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC621B1E056900AC462B /* JMRestReportLoader.m */; };
 		08E2AC961B1E056900AC462B /* JMVisualizeReportLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E2AC651B1E056900AC462B /* JMVisualizeReportLoader.m */; };
@@ -411,7 +410,6 @@
 		08E2AC551B1E056900AC462B /* JMMultiSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMMultiSelectTableViewController.m; sourceTree = "<group>"; };
 		08E2AC561B1E056900AC462B /* JMSingleSelectTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMSingleSelectTableViewController.h; sourceTree = "<group>"; };
 		08E2AC571B1E056900AC462B /* JMSingleSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMSingleSelectTableViewController.m; sourceTree = "<group>"; };
-		08E2AC581B1E056900AC462B /* JMSingleSelectTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMSingleSelectTableViewController.xib; sourceTree = "<group>"; };
 		08E2AC5A1B1E056900AC462B /* JMInputControlsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMInputControlsViewController.h; sourceTree = "<group>"; };
 		08E2AC5B1B1E056900AC462B /* JMInputControlsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMInputControlsViewController.m; sourceTree = "<group>"; };
 		08E2AC611B1E056900AC462B /* JMRestReportLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRestReportLoader.h; sourceTree = "<group>"; };
@@ -1438,7 +1436,6 @@
 				08E2AC551B1E056900AC462B /* JMMultiSelectTableViewController.m */,
 				08E2AC561B1E056900AC462B /* JMSingleSelectTableViewController.h */,
 				08E2AC571B1E056900AC462B /* JMSingleSelectTableViewController.m */,
-				08E2AC581B1E056900AC462B /* JMSingleSelectTableViewController.xib */,
 			);
 			path = InputControls;
 			sourceTree = "<group>";
@@ -2101,7 +2098,6 @@
 				930F8D421ABB1C35005F93FB /* report-ios-mobilejs-sdk.js in Resources */,
 				930F8D411ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js in Resources */,
 				930F8D401ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js in Resources */,
-				08E2AC911B1E056900AC462B /* JMSingleSelectTableViewController.xib in Resources */,
 				089B15FC1AA756BD0021A915 /* JMBaseCollectionView.xib in Resources */,
 				930F8D461ABB1CDF005F93FB /* report.html in Resources */,
 				08E0D19E1B0CF27200BFBFE5 /* AppIcon120x120.png in Resources */,

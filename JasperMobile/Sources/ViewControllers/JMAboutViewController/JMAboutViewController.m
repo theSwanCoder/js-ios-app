@@ -22,7 +22,6 @@
 
 
 #import "JMAboutViewController.h"
-#import "UITableViewCell+Additions.h"
 #import <QuartzCore/QuartzCore.h>
 #import "JMServerProfile+Helpers.h"
 #import "JMPopupView.h"

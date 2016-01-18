@@ -23,7 +23,6 @@
 
 #import "JMListOptionsPopupView.h"
 #import "JMResourcesListLoader.h"
-#import "UITableViewCell+Additions.h"
 
 
 #define kJMList
@@ -53,7 +52,7 @@
         }
         nibView.frame = neededRect;
         self.listOptionsTableView.scrollEnabled = (self.listOptionsTableView.contentSize.height > self.listOptionsTableView.frame.size.height);
-
+        self.listOptionsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
         self.contentView = nibView;
     }
     
@@ -95,9 +94,6 @@
     
     cell.textLabel.text = [self.items[indexPath.row] objectForKey:kJMResourceListLoaderOptionItemTitleKey];
     cell.accessoryType = indexPath.row == self.selectedIndex ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-    if (indexPath.row) {
-        [cell setTopSeparatorWithHeight:0.55f color:tableView.separatorColor tableViewStyle:UITableViewStylePlain];
-    }
     return cell;
 }
 

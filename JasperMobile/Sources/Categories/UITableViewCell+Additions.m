@@ -28,56 +28,7 @@
 #import "UITableViewCell+Additions.h"
 #import "JMUtils.h"
 
-NSInteger static kJMTopSeparatorTagIndex = 10;
-NSInteger static kJMBottomSeparatorTagIndex = 11;
-
 @implementation UITableViewCell (Additions)
-
-- (void)setTopSeparatorWithHeight:(CGFloat)height color:(UIColor *)color tableViewStyle:(UITableViewStyle)style
-{
-    if (![self isSeparatorNeeded:style]) return;
-    
-    UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, height)];
-    separator.backgroundColor = color;
-    separator.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    // TODO: we need oportunity to remove this separator
-    separator.tag = kJMTopSeparatorTagIndex;
-    [self addSubview:separator];
-}
-
-- (void)removeTopSeparator
-{
-    NSArray *subviews = self.subviews;
-    for (UIView *subview in subviews) {
-        if (subview.tag == kJMTopSeparatorTagIndex) {
-            [subview removeFromSuperview];
-        }
-    }
-}
-
-- (void)setBottomSeparatorWithHeight:(CGFloat)height color:(UIColor *)color tableViewStyle:(UITableViewStyle)style
-{
-    if (![self isSeparatorNeeded:style]) return;
-    
-    UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0, self.frame.size.height - height, self.frame.size.width, height)];
-    separator.backgroundColor = color;
-    separator.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-    // TODO: we need oportunity to remove this separator
-    separator.tag = kJMBottomSeparatorTagIndex;
-    [self addSubview:separator];
-}
-
-- (void)removeBottomSeparator
-{
-    NSArray *subviews = self.subviews;
-    for (UIView *subview in subviews) {
-        if (subview.tag == kJMBottomSeparatorTagIndex) {
-            [subview removeFromSuperview];
-        }
-    }
-}
-
-#pragma mark - Private
 
 - (BOOL)isSeparatorNeeded:(UITableViewStyle)style
 {
