@@ -13,6 +13,7 @@
 @property (nonatomic) JMSchedulingManager *jobsManager;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) UIRefreshControl *refreshControl;
+@property (weak, nonatomic) IBOutlet UILabel *noJobsLabel;
 @end
 
 @implementation JMSchedulingVC
@@ -22,15 +23,16 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Scheduling";
+    self.title = JMCustomLocalizedString(@"schedules.title", nil);
 
     self.view.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
 
     self.jobsManager = [JMSchedulingManager new];
     [self.jobsManager loadJobsWithCompletion:^(NSArray *jobs, NSError *error) {
-        JMLog(@"jobs: %@", jobs);
         self.jobs = jobs;
         [self.tableView reloadData];
+
+        [self showNoJobsLabel:(self.jobs.count == 0)];
     }];
 
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
@@ -41,6 +43,9 @@
              forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     self.refreshControl = refreshControl;
+
+    self.noJobsLabel.text = JMCustomLocalizedString(@"schedules.no.jobs.message", nil);
+    [self showNoJobsLabel:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -53,14 +58,12 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return self.jobs.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    JMJobCell *jobCell = (JMJobCell *) [tableView dequeueReusableCellWithIdentifier:@"JMJobCell" forIndexPath:indexPath];
+    JMJobCell *jobCell = [tableView dequeueReusableCellWithIdentifier:@"JMJobCell" forIndexPath:indexPath];
     jobCell.delegate = self;
     NSDictionary *job = self.jobs[indexPath.row];
     jobCell.titleLabel.text = job[@"label"];
@@ -109,6 +112,12 @@
                                           self.jobs = [jobs copy];
                                           [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
                                       }];
+}
+
+#pragma mark - Helpers
+-(void)showNoJobsLabel:(BOOL)shouldShow
+{
+    self.noJobsLabel.hidden = !shouldShow;
 }
 
 @end
