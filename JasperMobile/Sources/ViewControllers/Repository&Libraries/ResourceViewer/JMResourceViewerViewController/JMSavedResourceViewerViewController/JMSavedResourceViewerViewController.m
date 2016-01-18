@@ -33,26 +33,15 @@
 @property (nonatomic) UIDocumentInteractionController *documentController;
 @property (nonatomic) JMExternalWindowControlsVC *controlViewController;
 @property (nonatomic, strong) JSReportSaver *reportSaver;
-@property (nonatomic, strong) NSString *savedResourcePath;
+@property (nonatomic, strong) NSURL *savedResourceURL;
 @property (nonatomic, weak) UIImageView *imageView;
 @end
 
 @implementation JMSavedResourceViewerViewController
 @synthesize changedReportName;
 
-- (void)cancelResourceViewingAndExit:(BOOL)exit
-{
-    [self.documentController dismissMenuAnimated:YES];
-    
-    [self.reportSaver cancelSavingReport];
-    
-    if (self.savedResourcePath) {
-        [self removeSavedResource];
-    }
 
-    [super cancelResourceViewingAndExit:exit];
-}
-
+#pragma mark - Accessors
 - (JMSavedResources *)savedReports
 {
     if (!_savedReports) {
@@ -61,6 +50,21 @@
 
     return _savedReports;
 }
+
+#pragma mark - Overrided methods
+- (void)cancelResourceViewingAndExit:(BOOL)exit
+{
+    [self.documentController dismissMenuAnimated:YES];
+
+    [self.reportSaver cancelSavingReport];
+
+    if (self.savedResourceURL) {
+        [self removeSavedResource];
+    }
+
+    [super cancelResourceViewingAndExit:exit];
+}
+
 
 - (void)startResourceViewing
 {
@@ -245,8 +249,8 @@
                                                 [strongSelf stopShowLoader];
                                                 if (error) {
                                                     if (error.code == JSSessionExpiredErrorCode) {
-                                                        [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                                                            if (self.restClient.keepSession && isSessionAuthorized) {
+                                                        [strongSelf.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+                                                            if (strongSelf.restClient.keepSession && isSessionAuthorized) {
                                                                 [strongSelf showRemoteResource];
                                                             } else {
                                                                 [JMUtils showLoginViewAnimated:YES completion:nil];
@@ -260,8 +264,8 @@
                                                     }
                                                 } else {
 
-                                                    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
-                                                        [self cancelResourceViewingAndExit:YES];
+                                                    [strongSelf startShowLoaderWithMessage:@"status.loading" cancelBlock:^{
+                                                        [strongSelf cancelResourceViewingAndExit:YES];
                                                     }];
 
                                                     NSString *resourcePath = [NSString stringWithFormat:@"%@/rest_v2/resources%@", strongSelf.restClient.serverProfile.serverUrl, resource.uri];
@@ -278,15 +282,24 @@
                                                                                                                            [strongSelf cancelResourceViewingAndExit:YES];
                                                                                                                        }];
                                                                                              } else {
-                                                                                                 strongSelf.savedResourcePath = [location path];
+                                                                                                 strongSelf.savedResourceURL = location;
 
                                                                                                  if ([strongSelf isSupportedResource:resource]) {
                                                                                                      if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_IMG]) {
-                                                                                                         [strongSelf showImageWithURL:location];
+                                                                                                         [strongSelf showImageWithURL:strongSelf.savedResourceURL];
                                                                                                      } else if ([resource.fileFormat isEqualToString:kJS_CONTENT_TYPE_HTML]) {
+                                                                                                         NSURL *fileURL = [strongSelf updateFormatForURL:strongSelf.savedResourceURL withFormat:kJS_CONTENT_TYPE_HTML];
+                                                                                                         [strongSelf moveResourceFromPath:strongSelf.savedResourceURL.path
+                                                                                                                                   toPath:fileURL.path];
+                                                                                                         self.savedResourceURL = fileURL;
+
                                                                                                          [strongSelf showRemoveHTMLForResource:resource];
                                                                                                      } else {
-                                                                                                         [strongSelf showResourceWithURL:location];
+                                                                                                         NSURL *fileURL = [strongSelf updateFormatForURL:strongSelf.savedResourceURL withFormat:kJS_CONTENT_TYPE_PDF];
+                                                                                                         [strongSelf moveResourceFromPath:strongSelf.savedResourceURL.path
+                                                                                                                                   toPath:fileURL.path];
+                                                                                                         self.savedResourceURL = fileURL;
+                                                                                                         [strongSelf showResourceWithURL:fileURL];
                                                                                                      }
                                                                                                  } else {
                                                                                                      // TODO: add showing with ...
@@ -320,7 +333,7 @@
     NSString *baseURLString = [NSString stringWithFormat:@"%@/fileview/fileview/%@", self.restClient.serverProfile.serverUrl, resource.uri];
 
     NSError *error;
-    NSString *htmlString = [NSString stringWithContentsOfFile:self.savedResourcePath
+    NSString *htmlString = [NSString stringWithContentsOfFile:self.savedResourceURL.path
                                                      encoding:NSUTF8StringEncoding
                                                         error:&error];
 
@@ -343,9 +356,26 @@
 #pragma mark - Helpers
 - (void)removeSavedResource
 {
-    if ([[NSFileManager defaultManager] fileExistsAtPath:self.savedResourcePath]) {
-        [[NSFileManager defaultManager] removeItemAtPath:self.savedResourcePath error:nil];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.savedResourceURL.path]) {
+        [[NSFileManager defaultManager] removeItemAtPath:self.savedResourceURL.path error:nil];
     }
+    _savedResourceURL = nil;
+}
+
+- (NSError *)moveResourceFromPath:(NSString *)fromPath toPath:(NSString *)toPath
+{
+    NSError *error;
+    [[NSFileManager defaultManager] moveItemAtPath:fromPath
+                                            toPath:toPath
+                                             error:&error];
+    return error;
+}
+
+- (NSURL *)updateFormatForURL:(NSURL *)fromURL withFormat:(NSString *)newFormat
+{
+    NSString *fullPathWithoutFormat = [fromURL.path stringByDeletingPathExtension];
+    NSString *fullPathWithNewFormat = [fullPathWithoutFormat stringByAppendingPathExtension:newFormat];
+    return [NSURL URLWithString:fullPathWithNewFormat];
 }
 
 - (void)showErrorWithMessage:(NSString *)message completion:(void(^)(void))completion
