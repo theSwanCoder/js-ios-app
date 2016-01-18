@@ -22,19 +22,26 @@
 
 
 //
-//  JMVisualizeReportLoader.h
+//  JMExternalWindowDashboardControlsVC.h
 //  TIBCO JasperMobile
 //
 
+@class JMDashlet;
+@protocol JMExternalWindowDashboardControlsVCDelegate;
+
 /**
- @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
- */
+@author Olexandr Dakhno odahno@tibco.com
+@since 2.3
+*/
 
-@protocol JMReportLoaderProtocol;
-@class JMVisualizeManager;
-
-@interface JMVisualizeReportLoader : NSObject <JMReportLoaderProtocol>
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
+@interface JMExternalWindowDashboardControlsVC : UIViewController
+@property (nonatomic, copy) NSArray <JMDashlet *>* components;
+@property (nonatomic, weak) NSObject <JMExternalWindowDashboardControlsVCDelegate> *delegate;
 @end
 
+
+@protocol JMExternalWindowDashboardControlsVCDelegate
+@optional
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMaximizeDashlet:(JMDashlet *)dashlet;
+- (void)externalWindowDashboardControlsVC:(JMExternalWindowDashboardControlsVC *)dashboardControlsVC didAskMinimizeDashlet:(JMDashlet *)dashlet;
+@end

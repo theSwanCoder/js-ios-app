@@ -22,19 +22,27 @@
 
 
 //
-//  JMVisualizeReportLoader.h
+//  JMDashlet.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
+ @since 2.3
  */
 
-@protocol JMReportLoaderProtocol;
-@class JMVisualizeManager;
+typedef NS_ENUM(NSInteger, JMDashletType) {
+    JMDashletTypeValue,
+    JMDashletTypeChart,
+    JMDashletTypeReportUnit,
+    JMDashletTypeFilterGroup,
+};
 
-@interface JMVisualizeReportLoader : NSObject <JMReportLoaderProtocol>
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
+@interface JMDashlet : NSObject
+@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, assign, getter=isInteractive) BOOL interactive;
+@property (nonatomic, assign, getter=isMaximized) BOOL maximized;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *resource;
+@property (nonatomic, assign) JMDashletType type;
 @end
-

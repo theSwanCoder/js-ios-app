@@ -148,11 +148,12 @@
         });
       };
 
-      IosCallback.prototype.onLoadDone = function(components) {
+      IosCallback.prototype.onLoadDone = function(data) {
         this._makeCallback({
           "command": "onLoadDone",
           "parameters": {
-            "components": components
+            "components": data["components"],
+            "values": data["values"]
           }
         });
       };
@@ -232,7 +233,7 @@
 
       IosCallback.prototype._makeCallback = function(command) {
         return this.dispatch(function() {
-          return window.location.href = "http://jaspermobile.callback/json&" + JSON.stringify(command);
+          return window.location.href = "http://jaspermobile.callback/json&" + JSON.stringify(command, null, 4);
         });
       };
 
@@ -444,7 +445,10 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         this._defineComponentsClickEvent();
         this._setupFiltersApperance();
         this._overrideApplyButton();
-        return this.callback.onLoadDone(this.components);
+        return this.callback.onLoadDone({
+          "components": this.components,
+          "values": this.data.parameters
+        });
       };
 
       DashboardController.prototype._refreshSuccess = function(dashboard) {
@@ -515,6 +519,19 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         return this.dashboard.data().components.filter(function(c) {
           return c.id === id;
         })[0];
+      };
+
+      DashboardController.prototype._applyParams = function(params) {
+        js_mobile.log("params: " + (JSON.stringify(params)));
+        return this.dashboard.params(params).run().fail((function(_this) {
+          return function(error) {
+            return _this.callback.logging("failed apply params: " + error);
+          };
+        })(this)).done((function(_this) {
+          return function(data) {
+            return _this.callback.logging("successed apply params: " + data);
+          };
+        })(this));
       };
 
       DashboardController.prototype._processLinkClicks = function(event, link, defaultHandler) {
@@ -761,6 +778,14 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       MobileDashboard.prototype.run = function(params) {
         this._controller = new DashboardController(this.callback, this.scaler, params);
         return this._controller.runDashboard();
+      };
+
+      MobileDashboard.applyParams = function(params) {
+        return this._instance._applyParams(params);
+      };
+
+      MobileDashboard.prototype._applyParams = function(params) {
+        return this._controller._applyParams(params);
       };
 
       MobileDashboard.destroy = function() {

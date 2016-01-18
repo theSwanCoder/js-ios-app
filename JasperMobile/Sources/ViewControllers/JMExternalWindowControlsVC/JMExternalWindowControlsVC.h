@@ -22,19 +22,25 @@
 
 
 //
-//  JMVisualizeReportLoader.h
+//  JMExternalWindowControlsVC.h
 //  TIBCO JasperMobile
 //
 
 /**
- @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
- */
+@author Olexandr Dakhno odahno@tibco.com
+@since 2.3
+*/
 
-@protocol JMReportLoaderProtocol;
-@class JMVisualizeManager;
+@protocol JMExternalWindowControlViewControllerDelegate;
 
-@interface JMVisualizeReportLoader : NSObject <JMReportLoaderProtocol>
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
+@interface JMExternalWindowControlsVC : UIViewController
+@property (nonatomic, weak) NSObject <JMExternalWindowControlViewControllerDelegate> *delegate;
+
+- (instancetype)initWithContentWebView:(UIWebView *)contentView;
 @end
 
+
+@protocol JMExternalWindowControlViewControllerDelegate
+@optional
+- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController;
+@end

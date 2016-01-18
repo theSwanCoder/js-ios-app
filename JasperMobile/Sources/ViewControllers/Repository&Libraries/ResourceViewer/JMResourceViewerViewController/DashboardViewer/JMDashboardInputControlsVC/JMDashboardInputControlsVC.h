@@ -22,19 +22,19 @@
 
 
 //
-//  JMVisualizeReportLoader.h
+//  JMDashboardInputControlsVC.h
 //  TIBCO JasperMobile
 //
 
+
 /**
  @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
+ @since 2.3
  */
 
-@protocol JMReportLoaderProtocol;
-@class JMVisualizeManager;
+@class JMDashboard;
 
-@interface JMVisualizeReportLoader : NSObject <JMReportLoaderProtocol>
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
+@interface JMDashboardInputControlsVC : UIViewController
+@property (nonatomic, strong) JMDashboard *dashboard;
+@property (nonatomic, copy) void(^exitBlock)(void);
 @end
-

@@ -22,19 +22,12 @@
 
 
 //
-//  JMVisualizeReportLoader.h
+//  JMDashlet.h
 //  TIBCO JasperMobile
 //
 
-/**
- @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
- */
+#import "JMDashlet.h"
 
-@protocol JMReportLoaderProtocol;
-@class JMVisualizeManager;
 
-@interface JMVisualizeReportLoader : NSObject <JMReportLoaderProtocol>
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
+@implementation JMDashlet
 @end
-

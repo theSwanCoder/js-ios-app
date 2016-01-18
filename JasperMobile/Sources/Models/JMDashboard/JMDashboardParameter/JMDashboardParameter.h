@@ -22,19 +22,21 @@
 
 
 //
-//  JMVisualizeReportLoader.h
+//  JMDashboardParameter.h
 //  TIBCO JasperMobile
 //
 
 /**
  @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
+ @since 2.3
  */
 
-@protocol JMReportLoaderProtocol;
-@class JMVisualizeManager;
 
-@interface JMVisualizeReportLoader : NSObject <JMReportLoaderProtocol>
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
+@interface JMDashboardParameter : NSObject
+@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, copy) NSArray <NSString *>*values;
+- (instancetype)initWithData:(NSDictionary *)data;
++ (instancetype)parameterWithData:(NSDictionary *)data;
+- (void)updateValuesWithString:(NSString *)stringValues;
+- (NSString *)valuesAsString;
 @end
-

@@ -31,6 +31,7 @@
 @property (nonatomic, weak, readwrite) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) UINavigationController *printNavController;
 @property (nonatomic, assign) CGSize printSettingsPreferredContentSize;
+@property (nonatomic, assign) NSInteger lowMemoryWarningsCount;
 @end
 
 @implementation JMResourceViewerViewController
@@ -38,17 +39,13 @@
 #pragma mark - Handle Memory Warnings
 - (void)didReceiveMemoryWarning
 {
-    [self.webView stopLoading];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
-    
-    NSString *errorMessage = JMCustomLocalizedString(@"resource.viewer.memory.warning", nil);
-    NSError *error = [NSError errorWithDomain:@"dialod.title.attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-    __weak typeof(self) weakSelf = self;
-    [JMUtils presentAlertControllerWithError:error completion:^{
-        __strong typeof(self) strongSelf = weakSelf;
-        [strongSelf cancelResourceViewingAndExit:YES];
-    }];
-    
+    // Skip first warning.
+    // TODO: Consider replace this approach.
+    //
+    if (self.lowMemoryWarningsCount++ >= 1) {
+        [self handleLowMemory];
+    }
+
     [super didReceiveMemoryWarning];
 }
 
@@ -59,6 +56,13 @@
     [super viewDidLoad];
 
     self.printSettingsPreferredContentSize = CGSizeMake(540, 580);
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    self.lowMemoryWarningsCount = 0;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -91,16 +95,22 @@
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     self.webView = webView;
 
+    [self setupWebViewLayout];
+}
+
+- (void)setupWebViewLayout
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": webView}]];
+                                                                        views:@{@"webView": self.webView}]];
 
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
                                                                       options:NSLayoutFormatAlignAllLeading
                                                                       metrics:nil
-                                                                        views:@{@"webView": webView}]];
+                                                                        views:@{@"webView": self.webView}]];
 }
 
 - (void)resetSubViews
@@ -167,10 +177,12 @@
     printInteractionController.printingItem = printingItem;
 
     UIPrintInteractionCompletionHandler completionHandler = ^(UIPrintInteractionController *printController, BOOL completed, NSError *error) {
-            if (completion) {
-                completion(completed, error);
-            }
-        };
+        if (completion) {
+            completion(completed, error);
+        }
+        // reassign keyWindow status (there is an issue when using showing a report on tv and printing the report).
+        [self.view.window makeKeyWindow];
+    };
 
     if ([JMUtils isIphone]) {
         [printInteractionController presentAnimated:YES completionHandler:completionHandler];
@@ -255,6 +267,22 @@
 {
     [self stopShowLoadingIndicators];
     self.isResourceLoaded = NO;
+}
+
+#pragma mark - Helpers
+- (void)handleLowMemory
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self.webView stopLoading];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+
+    NSString *errorMessage = JMCustomLocalizedString(@"resource.viewer.memory.warning", nil);
+    NSError *error = [NSError errorWithDomain:@"dialod.title.attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    __weak typeof(self) weakSelf = self;
+    [JMUtils presentAlertControllerWithError:error completion:^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf cancelResourceViewingAndExit:YES];
+    }];
 }
 
 @end

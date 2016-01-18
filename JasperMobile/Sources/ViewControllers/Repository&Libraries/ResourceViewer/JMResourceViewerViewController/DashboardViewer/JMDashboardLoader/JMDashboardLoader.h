@@ -34,6 +34,7 @@
 @protocol JMJavascriptNativeBridgeProtocol;
 @protocol JMDashboardLoaderDelegate;
 @class JMDashboard;
+@class JMDashlet;
 
 typedef void(^JMDashboardLoaderCompletion)(BOOL success, NSError *error);
 
@@ -60,12 +61,16 @@ typedef NS_ENUM(NSInteger, JMHyperlinkType) {
 - (instancetype)initWithDashboard:(JMDashboard *)dashboard;
 + (instancetype)loaderWithDashboard:(JMDashboard *)dashboard;
 
+@optional
 - (void)loadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion;
 - (void)reloadDashboardWithCompletion:(JMDashboardLoaderCompletion) completion;
+- (void)fetchParametersWithCompletion:(JMDashboardLoaderCompletion) completion;
+- (void)applyParameters:(NSString *)parametersAsString;
+- (void)maximizeDashlet:(JMDashlet *)dashlet;
+- (void)minimizeDashlet:(JMDashlet *)dashlet;
 - (void)minimizeDashlet;
 - (void)cancel;
 - (void)destroy;
-@optional
 - (void)reloadMaximizedDashletWithCompletion:(JMDashboardLoaderCompletion) completion;
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor;
 @end

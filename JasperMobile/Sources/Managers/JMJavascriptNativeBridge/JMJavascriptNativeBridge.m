@@ -49,8 +49,10 @@
 #pragma mark - Public API
 - (void)startLoadHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL
 {
-    [(UIWebView *)self.webView stopLoading];
-    [(UIWebView *)self.webView loadHTMLString:HTMLString baseURL:baseURL];
+    if (baseURL) {
+        [(UIWebView *)self.webView stopLoading];
+        [(UIWebView *)self.webView loadHTMLString:HTMLString baseURL:baseURL];
+    }
 }
 
 - (void)loadRequest:(NSURLRequest *)request
@@ -66,6 +68,37 @@
     NSString *fullJavascriptString = [NSString stringWithFormat:javascriptString, parameters];
 //    JMLog(@"send request: %@", fullJavascriptString);
     [self.webView stringByEvaluatingJavaScriptFromString:fullJavascriptString];
+}
+
+- (void)sendRequest:(JMJavascriptRequest *)request completion:(void(^)(JMJavascriptCallback *callback, NSError *error))completion
+{
+    if (!completion) {
+        return;
+    }
+    NSString *javascriptString = request.command;
+    NSString *parameters = request.parametersAsString ?: @"";
+    NSString *fullJavascriptString = [NSString stringWithFormat:javascriptString, parameters];
+//    JMLog(@"send request: %@", fullJavascriptString);
+    NSString *jsResponse = [self.webView stringByEvaluatingJavaScriptFromString:fullJavascriptString];
+//    NSLog(@"jsResponse: %@", jsResponse);
+
+    NSData *parametersAsData = [jsResponse dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error;
+    id json = [NSJSONSerialization JSONObjectWithData:parametersAsData
+                                                         options:NSJSONReadingMutableContainers
+                                                           error:&error];
+    if (json) {
+        JMJavascriptCallback *response = [JMJavascriptCallback new];
+        response.type = @"callback";
+        if ([json isKindOfClass:[NSDictionary class]]) {
+            response.parameters = json;
+        } else if ([json isKindOfClass:[NSArray class]]) {
+            response.parameters = @{@"parameters" : json };
+        }
+        completion(response, nil);
+    } else {
+        completion(nil, error);
+    }
 }
 
 - (void)injectJSInitCode:(NSString *)jsCode

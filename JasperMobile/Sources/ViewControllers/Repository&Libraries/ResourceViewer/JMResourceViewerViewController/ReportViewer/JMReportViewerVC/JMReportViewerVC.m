@@ -34,9 +34,9 @@
 #import "ALToastView.h"
 #import "JMInputControlsViewController.h"
 #import "JMReportViewerToolBar.h"
+#import "JMExternalWindowControlsVC.h"
 
-
-@interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate>
+@interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMExternalWindowControlViewControllerDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
 @property (nonatomic, copy) void(^exportCompletion)(NSString *resourcePath);
 @property (nonatomic, weak) JMReportViewerToolBar *toolbar;
@@ -44,9 +44,18 @@
 @property (nonatomic, strong, readwrite) JMReport *report;
 @property (nonatomic, strong) NSArray *initialReportParameters;
 @property (nonatomic, assign) BOOL isReportAlreadyConfigured;
+@property (nonatomic) JMExternalWindowControlsVC *controlsViewController;
 @end
 
 @implementation JMReportViewerVC
+
+- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    JMLog(@"horizontal size class: %@", @(newCollection.horizontalSizeClass));
+    JMLog(@"vertical size class: %@", @(newCollection.verticalSizeClass));
+
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+}
 
 #pragma mark - Lifecycle
 - (void)dealloc
@@ -83,19 +92,6 @@
         JMSaveReportViewController *destinationViewController = segue.destinationViewController;
         destinationViewController.report = self.report;
         destinationViewController.delegate = self;
-    }
-}
-
-#pragma mark - Setups
-- (void)updateToobarAppearence
-{
-    if (self.toolbar && self.report.isMultiPageReport && !self.report.isReportEmpty) {
-        self.toolbar.currentPage = self.report.currentPage;
-        if (self.navigationController.visibleViewController == self) {
-            [self.navigationController setToolbarHidden:NO animated:YES];
-        }
-    } else {
-        [self.navigationController setToolbarHidden:YES animated:YES];
     }
 }
 
@@ -186,21 +182,32 @@
 - (void)setupSubviews
 {
     self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
+
+    // Setup viewport scale factor
+    CGFloat initialScaleViewport = 0.75;
+    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+    if (isCompactWidth) {
+        initialScaleViewport = 0.25;
+    }
+    self.configurator.viewportScaleFactor = initialScaleViewport;
+
     UIWebView *webView = [self.configurator webViewAsSecondary:self.isChildReport];
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
-    
-    webView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"webView": webView}]];
-
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|"
-                                                                      options:NSLayoutFormatAlignAllLeading
-                                                                      metrics:nil
-                                                                        views:@{@"webView": webView}]];
-
+    [self setupWebViewLayout];
     [self.configurator updateReportLoaderDelegateWithObject:self];
+}
+
+
+- (void)updateToobarAppearence
+{
+    if (self.toolbar && self.report.isMultiPageReport && !self.report.isReportEmpty) {
+        self.toolbar.currentPage = self.report.currentPage;
+        if (self.navigationController.visibleViewController == self) {
+            [self.navigationController setToolbarHidden:NO animated:YES];
+        }
+    } else {
+        [self.navigationController setToolbarHidden:YES animated:YES];
+    }
 }
 
 #pragma mark - Overloaded methods
@@ -314,6 +321,12 @@
                                   }
                               }
                           }];
+}
+
+- (void)handleLowMemory
+{
+    [self.restClient cancelAllRequests];
+    [super handleLowMemory];
 }
 
 #pragma mark - Print
@@ -654,6 +667,13 @@
             // TODO: change save action
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
+        case JMMenuActionsViewAction_ShowExternalDisplay:
+            [self showExternalWindow];
+            break;
+        case JMMenuActionsViewAction_HideExternalDisplay:
+            [self switchFromTV];
+            [self hideExternalWindow];
+            break;
         default:
             break;
     }
@@ -714,6 +734,9 @@
     if ([self isReportReady] && !self.report.isReportEmpty) {
         availableAction |= JMMenuActionsViewAction_Refresh;
     }
+    if ([self isExternalScreenAvailable]) {
+        availableAction |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+    }
     return availableAction;
 }
 
@@ -721,7 +744,7 @@
 {
     JMMenuActionsViewAction disabledAction = [super disabledActionForResource:resource];
     if (![self isReportReady] || self.report.isReportEmpty) {
-        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Print;
+        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_ShowExternalDisplay;
     }
     return disabledAction;
 }
@@ -761,6 +784,96 @@
 - (void)showReportView
 {
     ((UIView *)self.configurator.webView).hidden = NO;
+}
+
+- (void)layoutEmptyReportLabelInView:(UIView *)view {
+
+    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.emptyReportMessageLabel
+                                                                  attribute:NSLayoutAttributeCenterX
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:view
+                                                                  attribute:NSLayoutAttributeCenterX
+                                                                 multiplier:1
+                                                                   constant:0];
+    [view addConstraint:constraint];
+
+    constraint = [NSLayoutConstraint constraintWithItem:self.emptyReportMessageLabel
+                                              attribute:NSLayoutAttributeCenterY
+                                              relatedBy:NSLayoutRelationEqual
+                                                 toItem:view
+                                              attribute:NSLayoutAttributeCenterY
+                                             multiplier:1
+                                               constant:0];
+    [view addConstraint:constraint];
+}
+
+#pragma mark - Work with external screen
+- (UIView *)viewForAddingToExternalWindow
+{
+    [self.reportLoader updateViewportScaleFactorWithValue:0.75];
+    UIView *view = [UIView new];
+    UIView *reportView = self.webView;
+
+    // Need some time to layout content of webview
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self addControlsForExternalWindow];
+    });
+
+    [view addSubview:reportView];
+
+    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[reportView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"reportView": reportView}]];
+
+    [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[reportView]-0-|"
+                                                                      options:NSLayoutFormatAlignAllLeading
+                                                                      metrics:nil
+                                                                        views:@{@"reportView": reportView}]];
+
+
+    [view addSubview:self.emptyReportMessageLabel];
+    [self layoutEmptyReportLabelInView:view];
+
+    return view;
+}
+
+
+- (void)addControlsForExternalWindow
+{
+    self.controlsViewController = [[JMExternalWindowControlsVC alloc] initWithContentWebView:self.webView];
+    self.controlsViewController.delegate = self;
+
+    CGRect controlViewFrame = self.view.frame;
+    controlViewFrame.origin.y = 0;
+    self.controlsViewController.view.frame = controlViewFrame;
+
+    [self.view addSubview:self.controlsViewController.view];
+}
+
+- (void)switchFromTV
+{
+    [self.view addSubview:self.webView];
+    [self setupWebViewLayout];
+
+    CGFloat initialScaleViewport = 0.75;
+    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
+    if (isCompactWidth) {
+        initialScaleViewport = 0.25;
+    }
+    [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+
+    [self.view addSubview:self.emptyReportMessageLabel];
+    [self layoutEmptyReportLabelInView:self.view];
+
+    [self.controlsViewController.view removeFromSuperview];
+}
+
+#pragma mark - JMExternalWindowControlViewControllerDelegate
+- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController
+{
+    [self switchFromTV];
+    [self hideExternalWindow];
 }
 
 @end

@@ -22,19 +22,25 @@
 
 
 //
-//  JMVisualizeReportLoader.h
+//  JMExternalWindowDashboardControlsTableViewCell.h
 //  TIBCO JasperMobile
 //
 
+@protocol JMExternalWindowDashboardControlsTableViewCellDelegate;
+
 /**
- @author Aleksandr Dakhno odahno@tibco.com
- @since 2.0
- */
+@author Olexandr Dakhno odahno@tibco.com
+@since 2.3
+*/
 
-@protocol JMReportLoaderProtocol;
-@class JMVisualizeManager;
-
-@interface JMVisualizeReportLoader : NSObject <JMReportLoaderProtocol>
-@property (nonatomic, strong) JMVisualizeManager *visualizeManager;
+@interface JMExternalWindowDashboardControlsTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UIButton *maximizeButton;
+@property (weak, nonatomic) NSObject <JMExternalWindowDashboardControlsTableViewCellDelegate> *delegate;
 @end
 
+@protocol JMExternalWindowDashboardControlsTableViewCellDelegate
+@optional
+- (void)externalWindowDashboardControlsTableViewCellDidMaximize:(JMExternalWindowDashboardControlsTableViewCell *)cell;
+- (void)externalWindowDashboardControlsTableViewCellDidMinimize:(JMExternalWindowDashboardControlsTableViewCell *)cell;
+@end

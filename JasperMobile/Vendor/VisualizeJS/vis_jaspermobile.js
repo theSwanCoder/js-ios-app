@@ -147,7 +147,8 @@ JasperMobile.Dashboard.Callback = {
             {
                 "command" : "onLoadDone",
                 "parameters" : {
-                    "components" : data
+                    "components" : data.components,
+                    "params" : data.parameters
                 }
             }
         );
@@ -191,6 +192,34 @@ JasperMobile.Dashboard.Callback = {
                 }
             }
         );
+    },
+    onReportExecution: function(data) {
+        JasperMobile.Callback.createCallback(
+            {
+                "command" : "onReportExecution",
+                "parameters" : data
+            }
+        );
+    },
+    onReferenceClick: function(location) {
+        JasperMobile.Callback.createCallback(
+            {
+                "command" : "onReferenceClick",
+                "parameters" : {
+                    "location" : location
+                }
+            }
+        );
+    },
+    dashboardParameters: function (data) {
+        JasperMobile.Callback.createCallback(
+            {
+                "command" : "dashboardParameters",
+                "parameters" : {
+                    "params" : data
+                }
+            }
+        );
     }
 };
 
@@ -224,13 +253,13 @@ MobileReport = {
                 linkOptions: {
                     events: {
                         click : function(event, link){
-                            JasperMobile.Callback.log("click to: " + link);
-                            JasperMobile.Callback.log("link.parameters: " + link.parameters);
-                            JasperMobile.Callback.log("link.parameters: " + JSON.stringify(link.parameters));
-                            JasperMobile.Callback.log("link.parameters._report: " + link.parameters._report);
-                            JasperMobile.Callback.log("JasperMobile.Helper.collectReportParams(link): " + JasperMobile.Helper.collectReportParams(link));
+                            //JasperMobile.Callback.log("click to: " + link);
+                            //JasperMobile.Callback.log("link.parameters: " + link.parameters);
+                            //JasperMobile.Callback.log("link.parameters: " + JSON.stringify(link.parameters));
+                            //JasperMobile.Callback.log("link.parameters._report: " + link.parameters._report);
+                            //JasperMobile.Callback.log("JasperMobile.Helper.collectReportParams(link): " + JasperMobile.Helper.collectReportParams(link));
                             var type = link.type;
-                            JasperMobile.Callback.log("link type: " + type);
+                            //JasperMobile.Callback.log("link type: " + type);
 
                             switch (type) {
                                 case "ReportExecution": {
@@ -360,12 +389,46 @@ MobileDashboard = {
                         click: function(event, link) {
                             var type = link.type;
                             JasperMobile.Callback.log("link type: " + type);
+
+                            switch (type) {
+                                case "ReportExecution": {
+                                    var data = {
+                                        resource: link.parameters._report,
+                                        params: JasperMobile.Helper.collectReportParams(link)
+                                    };
+                                    var dataString = JSON.stringify(data);
+                                    JasperMobile.Dashboard.Callback.onReportExecution(data);
+                                    break;
+                                }
+                                case "LocalAnchor": {
+                                    defaultHandler.call(this);
+                                    break;
+                                }
+                                case "LocalPage": {
+                                    defaultHandler.call(this);
+                                    break;
+                                }
+                                case "Reference": {
+                                    var href = link.href;
+                                    JasperMobile.Dashboard.Callback.onReferenceClick(href);
+                                    break;
+                                }
+                                case "AdHocExecution":
+                                    defaultHandler.call(this);
+                                    break;
+                                default: {
+                                    defaultHandler.call(this);
+                                }
+                            }
                         }
                     }
                 },
                 success: function() {
-                    var data = MobileDashboard.dashboardObject.data();
-                    JasperMobile.Dashboard.Callback.onRunSuccess(data.components);
+                    // Hack to get parameters' values
+                    setTimeout(function(){
+                        var data = MobileDashboard.dashboardObject.data();
+                        JasperMobile.Dashboard.Callback.onRunSuccess(data);
+                    }, 6000);
                     MobileDashboard._configureComponents(data.components);
                     MobileDashboard._defineComponentsClickEvent();
                 },
@@ -376,28 +439,49 @@ MobileDashboard = {
             MobileDashboard.dashboardObject = dashboard;
         });
     },
-    minimizeDashlet: function() {
-        // TODO: need this?
-        //this._showDashlets();
+    getDashboardParameters: function() {
+        var data = MobileDashboard.dashboardObject.data();
+        JasperMobile.Dashboard.Callback.dashboardParameters(data.parameters);
+    },
+    minimizeDashlet: function(dashletId) {
+        if (dashletId) {
+            MobileDashboard.dashboardObject.updateComponent(dashletId, {
+                maximized: false,
+                interactive: false
+            });
+        } else {
+            // TODO: need this?
+            //this._showDashlets();
 
-        // stop showing buttons for changing chart type.
-        var chartWrappers = document.querySelectorAll('.show_chartTypeSelector_wrapper');
-        for (var i = 0; i < chartWrappers.length; ++i) {
-            chartWrappers[i].style.display = 'none';
+            // stop showing buttons for changing chart type.
+            var chartWrappers = document.querySelectorAll('.show_chartTypeSelector_wrapper');
+            for (var i = 0; i < chartWrappers.length; ++i) {
+                chartWrappers[i].style.display = 'none';
+            }
+
+            MobileDashboard.selectedDashlet.classList.remove('originalDashletInScaledCanvas');
+
+            MobileDashboard.dashboardObject.updateComponent(MobileDashboard.selectedComponent.id, {
+                maximized: false,
+                interactive: false
+            }, function() {
+                MobileDashboard.selectedDashlet = {};
+                MobileDashboard.selectedComponent = {};
+                // TODO: need add callbacks?
+            }, function(error) {
+                // TODO: need add callbacks?
+            });
         }
-
-        MobileDashboard.selectedDashlet.classList.remove('originalDashletInScaledCanvas');
-
-        MobileDashboard.dashboardObject.updateComponent(MobileDashboard.selectedComponent.id, {
-            maximized: false,
-            interactive: false
-        }, function() {
-            MobileDashboard.selectedDashlet = {};
-            MobileDashboard.selectedComponent = {};
-            // TODO: need add callbacks?
-        }, function(error) {
-            // TODO: need add callbacks?
-        });
+    },
+    maximizeDashlet: function(dashletId) {
+        if (dashletId) {
+            MobileDashboard.dashboardObject.updateComponent(dashletId, {
+                maximized: true,
+                interactive: true
+            });
+        } else {
+            JasperMobile.Callback.log("Try maximize dashelt without 'id'");
+        }
     },
     refresh: function() {
         JasperMobile.Callback.log("start refresh");
@@ -406,7 +490,7 @@ MobileDashboard = {
             .done(function() {
                 JasperMobile.Callback.log("success refresh");
                 var data = MobileDashboard.dashboardObject.data();
-                JasperMobile.Dashboard.Callback.onRunSuccess(data.components);
+                JasperMobile.Dashboard.Callback.onRunSuccess(data);
             })
             .fail(function(error) {
                 JasperMobile.Callback.log("failed refresh with error: " + error);
@@ -440,6 +524,16 @@ MobileDashboard = {
             })
             .fail(function(error) {
                 JasperMobile.Callback.log("failed refresh");
+            });
+    },
+    applyParams: function(parameters) {
+
+        MobileDashboard.dashboardObject.params(parameters).run()
+            .done(function() {
+                JasperMobile.Callback.log("success apply");
+            })
+            .fail(function() {
+                JasperMobile.Callback.log("failed apply");
             });
     },
     destroy: function() {

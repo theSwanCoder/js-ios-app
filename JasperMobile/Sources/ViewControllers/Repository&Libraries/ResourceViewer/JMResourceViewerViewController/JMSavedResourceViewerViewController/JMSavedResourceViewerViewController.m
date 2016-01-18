@@ -23,17 +23,18 @@
 
 #import "JMSavedResourceViewerViewController.h"
 #import "JMSavedResources+Helpers.h"
+#import "JMExternalWindowControlsVC.h"
 #import "JSReportSaver.h"
 #import "JSResourceLookup+Helpers.h"
 
-@interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate>
+@interface JMSavedResourceViewerViewController () <UIDocumentInteractionControllerDelegate, UIScrollViewDelegate, JMExternalWindowControlViewControllerDelegate>
 @property (nonatomic, strong) JMSavedResources *savedReports;
 @property (nonatomic, strong) NSString *changedReportName;
 @property (nonatomic) UIDocumentInteractionController *documentController;
+@property (nonatomic) JMExternalWindowControlsVC *controlViewController;
 @property (nonatomic, strong) JSReportSaver *reportSaver;
 @property (nonatomic, strong) NSString *savedResourcePath;
 @property (nonatomic, weak) UIImageView *imageView;
-
 @end
 
 @implementation JMSavedResourceViewerViewController
@@ -80,6 +81,12 @@
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
+    JMMenuActionsViewAction menuActions = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn;
+    if ([self isExternalScreenAvailable]) {
+        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+    }
+    return menuActions;
+
     JMMenuActionsViewAction action = JMMenuActionsViewAction_None;
     if (![self.resourceLookup isFile]) {
         action = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn ;
@@ -97,13 +104,13 @@
         __weak typeof(self) weakSelf = self;
         UIAlertController *alertController = [UIAlertController alertTextDialogueControllerWithLocalizedTitle:@""
                                                                                                       message:nil
-                                                                                textFieldConfigurationHandler:^(UITextField *textField) {
+                                                                                textFieldConfigurationHandler:^(UITextField * _Nonnull textField) {
                                                                                     __strong typeof(self) strongSelf = weakSelf;
                                                                                     textField.placeholder = JMCustomLocalizedString(@"savedreport.viewer.modify.reportname", nil);
                                                                                     textField.text = [strongSelf.resourceLookup.label copy];
-                                                                                } textValidationHandler:^NSString *(NSString *text) {
-                                                                                    __strong typeof(self) strongSelf = weakSelf;
+                                                                                } textValidationHandler:^NSString * _Nonnull(NSString * _Nullable text) {
                                                                                     NSString *errorMessage = nil;
+                                                                                    __strong typeof(self) strongSelf = weakSelf;
                                                                                     if (strongSelf) {
                                                                                         [JMUtils validateReportName:text errorMessage:&errorMessage];
                                                                                         if (!errorMessage && ![JMSavedResources isAvailableReportName:text format:strongSelf.savedReports.format]) {
@@ -111,7 +118,7 @@
                                                                                         }
                                                                                     }
                                                                                     return errorMessage;
-                                                                                } textEditCompletionHandler:^(NSString *text) {
+                                                                                } textEditCompletionHandler:^(NSString * _Nullable text) {
                                                                                     __strong typeof(self) strongSelf = weakSelf;
                                                                                     if ([strongSelf.savedReports renameReportTo:text]) {
                                                                                         strongSelf.title = text;
@@ -135,14 +142,30 @@
             }
             [strongSelf cancelResourceViewingAndExit:shouldCloseViewer];
             [strongSelf.savedReports removeReport];
-
+            
             if (strongSelf.delegate && [strongSelf.delegate respondsToSelector:@selector(resourceViewer:didDeleteResource:)]) {
                 [strongSelf.delegate resourceViewer:strongSelf didDeleteResource:strongSelf.resourceLookup];
             }
         }];
         [self presentViewController:alertController animated:YES completion:nil];
     } else if (action == JMMenuActionsViewAction_OpenIn) {
-        [self showResourceWithDocumentController];
+        self.documentController = [self setupDocumentControllerWithURL:self.resourceRequest.URL
+                                                         usingDelegate:self];
+        
+        BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+        if (!canOpen) {
+            NSString *errorMessage = JMCustomLocalizedString(@"error.openIn.message", nil);
+            NSError *error = [NSError errorWithDomain:@"dialod.title.error" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+            [JMUtils presentAlertControllerWithError:error completion:nil];
+        }
+    } else if (action == JMMenuActionsViewAction_ShowExternalDisplay) {
+        if ( [self createExternalWindow] ) {
+            [self showExternalWindow];
+            [self addControlsForExternalWindow];
+        }
+    } else if (action == JMMenuActionsViewAction_HideExternalDisplay) {
+        [self switchFromTV];
+        [self hideExternalWindow];
     }
 }
 
@@ -152,6 +175,40 @@
     UIDocumentInteractionController *interactionController = [UIDocumentInteractionController interactionControllerWithURL: fileURL];
     interactionController.delegate = interactionDelegate;
     return interactionController;
+}
+
+#pragma mark - Work with external screen
+- (UIView *)viewForAddingToExternalWindow
+{
+    self.webView.translatesAutoresizingMaskIntoConstraints = YES;
+    return self.webView;
+}
+
+- (void)addControlsForExternalWindow
+{
+    CGRect controlViewFrame = self.view.frame;
+    controlViewFrame.origin.y = 0;
+
+    self.controlViewController = [[JMExternalWindowControlsVC alloc] initWithContentWebView:self.webView];
+    self.controlViewController.view.frame = controlViewFrame;
+    self.controlViewController.delegate = self;
+
+    [self.view addSubview:self.controlViewController.view];
+}
+
+- (void)switchFromTV
+{
+    [self.view addSubview:self.webView];
+//    [self setupWebViewLayout];
+
+    [self.controlViewController.view removeFromSuperview];
+}
+
+#pragma mark - JMExternalWindowControlViewControllerDelegate
+- (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController
+{
+    [self switchFromTV];
+    [self hideExternalWindow];
 }
 
 #pragma mark - Viewers
