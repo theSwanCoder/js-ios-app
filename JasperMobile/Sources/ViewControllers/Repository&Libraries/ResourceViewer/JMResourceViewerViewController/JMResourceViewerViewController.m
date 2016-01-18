@@ -31,6 +31,7 @@
 @property (nonatomic, weak, readwrite) IBOutlet UIWebView *webView;
 @property (nonatomic, strong) UINavigationController *printNavController;
 @property (nonatomic, assign) CGSize printSettingsPreferredContentSize;
+@property (nonatomic, assign) NSInteger lowMemoryWarningsCount;
 @end
 
 @implementation JMResourceViewerViewController
@@ -38,17 +39,13 @@
 #pragma mark - Handle Memory Warnings
 - (void)didReceiveMemoryWarning
 {
-    [self.webView stopLoading];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
-    
-    NSString *errorMessage = JMCustomLocalizedString(@"resource.viewer.memory.warning", nil);
-    NSError *error = [NSError errorWithDomain:@"dialod.title.attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
-    __weak typeof(self) weakSelf = self;
-    [JMUtils presentAlertControllerWithError:error completion:^{
-        __strong typeof(self) strongSelf = weakSelf;
-        [strongSelf cancelResourceViewingAndExit:YES];
-    }];
-    
+    // Skip first warning.
+    // TODO: Consider replace this approach.
+    //
+    if (self.lowMemoryWarningsCount++ >= 1) {
+        [self handleLowMemory];
+    }
+
     [super didReceiveMemoryWarning];
 }
 
@@ -59,6 +56,13 @@
     [super viewDidLoad];
 
     self.printSettingsPreferredContentSize = CGSizeMake(540, 580);
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    self.lowMemoryWarningsCount = 0;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -263,6 +267,22 @@
 {
     [self stopShowLoadingIndicators];
     self.isResourceLoaded = NO;
+}
+
+#pragma mark - Helpers
+- (void)handleLowMemory
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self.webView stopLoading];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
+
+    NSString *errorMessage = JMCustomLocalizedString(@"resource.viewer.memory.warning", nil);
+    NSError *error = [NSError errorWithDomain:@"dialod.title.attention" code:NSNotFound userInfo:@{NSLocalizedDescriptionKey : errorMessage}];
+    __weak typeof(self) weakSelf = self;
+    [JMUtils presentAlertControllerWithError:error completion:^{
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf cancelResourceViewingAndExit:YES];
+    }];
 }
 
 @end

@@ -323,6 +323,12 @@
                           }];
 }
 
+- (void)handleLowMemory
+{
+    [self.restClient cancelAllRequests];
+    [super handleLowMemory];
+}
+
 #pragma mark - Print
 - (void)printResource
 {
