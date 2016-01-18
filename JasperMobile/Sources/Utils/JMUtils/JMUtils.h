@@ -171,4 +171,7 @@ void jmDebugLog(NSString * __nonnull format, ...);
 
 + (BOOL)isCompactHeight;
 
+
++ (NSArray * __nonnull)getSubClasses:(Class __nonnull)parentClass;
+
 @end

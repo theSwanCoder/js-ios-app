@@ -23,6 +23,9 @@
 
 #import "JMResourcesListLoader.h"
 #import "JSResourceLookup+Helpers.h"
+#import <CoreSpotlight/CoreSpotlight.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import "JMMenuViewController.h"
 
 NSString * const kJMResourceListLoaderOptionItemTitleKey = @"JMResourceListLoaderFilterItemTitleKey";
 NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoaderFilterItemValueKey";
@@ -88,6 +91,8 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     [self.resourcesFolders removeAllObjects];
     [self.resourcesItems removeAllObjects];
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
+
+#warning NEED DELETE ALL ITEMS FROM SEARCHABLEINDEX
 }
 
 #pragma mark - Properties
@@ -137,12 +142,39 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
     return nil;
 }
 
-- (void)addResourcesWithResource:(id)resource
+- (void)addResourcesWithResource:(JSResourceLookup *)resource
 {
     if ([resource isFolder]) {
         [self.resourcesFolders addObject:resource];
     } else {
         [self.resourcesItems addObject:resource];
+
+        if ([CSSearchableItemAttributeSet class]) {
+            CSSearchableItemAttributeSet *attributeSet = [[CSSearchableItemAttributeSet alloc] initWithItemContentType:(NSString *)kUTTypeItem];
+            attributeSet.relatedUniqueIdentifier = resource.uri;
+            attributeSet.title = resource.label;
+            attributeSet.contentDescription = resource.resourceDescription;
+            attributeSet.contentCreationDate = resource.creationDate;
+#warning HERE NEED REPLACE IMAGE FOR CORRECT!!!
+            attributeSet.thumbnailData = UIImagePNGRepresentation([UIImage imageNamed:@"res_type_report"]);
+            
+            NSMutableArray *keywords = [NSMutableArray array];
+            [keywords addObjectsFromArray:[resource.label componentsSeparatedByString:@" "]];
+            [keywords addObjectsFromArray:[resource.resourceDescription componentsSeparatedByString:@" "]];
+            [keywords addObject:resource.resourceType];
+
+            attributeSet.keywords = keywords;
+            
+            NSUserActivity *userActivity = [[NSUserActivity alloc] initWithActivityType:[self domainIdentifier]];
+            userActivity.title = resource.label;
+            userActivity.keywords = [NSSet setWithArray:keywords];
+            userActivity.eligibleForSearch = YES;
+            userActivity.eligibleForHandoff = YES;
+            userActivity.eligibleForPublicIndexing = YES;
+            userActivity.contentAttributeSet = attributeSet;
+            [userActivity addUserInfoEntriesFromDictionary:@{kJMCustomAttributeResourceKey : resource}];
+//            [userActivity becomeCurrent];
+        }
     }
     self.allResources = nil;
 }
@@ -291,6 +323,16 @@ NSString * const kJMResourceListLoaderOptionItemValueKey = @"JMResourceListLoade
             return JMCustomLocalizedString(@"resources.sortby.title", nil);
     }
     return nil;
+}
+
+- (NSString *)domainIdentifier
+{
+#warning NEED TO ADD ALL SUPPORTED DOMAINIDENTIFIERS TO INFO.PLIST
+    NSString *bundleID = [NSBundle mainBundle].bundleIdentifier;
+    SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
+    JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
+    NSString *itemName = [[menuViewController.selectedItem nameForAnalytics] lowercaseString];
+    return [bundleID stringByAppendingPathExtension:itemName];
 }
 
 @end

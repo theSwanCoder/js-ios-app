@@ -88,6 +88,7 @@
 		089F664C1C3D465200ED683B /* JMExportTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66461C3D465200ED683B /* JMExportTask.m */; };
 		089F664D1C3D465200ED683B /* JMReportExportTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66491C3D465200ED683B /* JMReportExportTask.m */; };
 		089F66501C3D727700ED683B /* UIViewController+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F664F1C3D727700ED683B /* UIViewController+Additions.m */; };
+		089F66531C47EC7F00ED683B /* CoreSpotlight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 089F66521C47EC7F00ED683B /* CoreSpotlight.framework */; };
 		08B517BE1B15C60400B3F20A /* PopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B517BB1B15C60400B3F20A /* PopoverView.m */; };
 		08DB3D941A891640006F9620 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DB3D931A891640006F9620 /* MessageUI.framework */; };
 		08DD18151B13390500856112 /* JMRecentViewsCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DD18141B13390500856112 /* JMRecentViewsCollectionViewController.m */; };
@@ -353,6 +354,7 @@
 		089F664E1C3D727700ED683B /* UIViewController+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Additions.h"; sourceTree = "<group>"; };
 		089F664F1C3D727700ED683B /* UIViewController+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Additions.m"; sourceTree = "<group>"; };
 		089F66511C3D72C200ED683B /* JMReportLoaderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMReportLoaderProtocol.h; sourceTree = "<group>"; };
+		089F66521C47EC7F00ED683B /* CoreSpotlight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSpotlight.framework; path = System/Library/Frameworks/CoreSpotlight.framework; sourceTree = SDKROOT; };
 		08B517BA1B15C60400B3F20A /* PopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverView.h; sourceTree = "<group>"; };
 		08B517BB1B15C60400B3F20A /* PopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverView.m; sourceTree = "<group>"; };
 		08B517BC1B15C60400B3F20A /* PopoverView_Configuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverView_Configuration.h; sourceTree = "<group>"; };
@@ -549,6 +551,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */,
+				089F66531C47EC7F00ED683B /* CoreSpotlight.framework in Frameworks */,
 				93047D5E1AB6F5750047C982 /* libGoogleAnalyticsServices.a in Frameworks */,
 				9348F4E81A35C616006F5677 /* libsqlite3.0.dylib in Frameworks */,
 				93F54FDC1BD7975E00355A30 /* Crashlytics.framework in Frameworks */,
@@ -562,7 +566,6 @@
 				0871503C19F1265B00C5875E /* CoreTelephony.framework in Frameworks */,
 				F54C91A91752FAC20009E2BE /* QuartzCore.framework in Frameworks */,
 				F54C91A71752FAB80009E2BE /* SystemConfiguration.framework in Frameworks */,
-				F54C91A51752FAB30009E2BE /* MobileCoreServices.framework in Frameworks */,
 				F54C91A31752FAAD0009E2BE /* Security.framework in Frameworks */,
 				F54C91A11752FAA90009E2BE /* CoreData.framework in Frameworks */,
 				F55CC333174CFFCE00CEB39E /* UIKit.framework in Frameworks */,
@@ -1947,6 +1950,7 @@
 		F55CC331174CFFCE00CEB39E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				089F66521C47EC7F00ED683B /* CoreSpotlight.framework */,
 				93EEB4651AC55430000718C7 /* WebKit.framework */,
 				08DB3D931A891640006F9620 /* MessageUI.framework */,
 				9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */,

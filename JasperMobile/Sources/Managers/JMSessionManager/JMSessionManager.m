@@ -131,6 +131,8 @@ static JMSessionManager *_sharedManager = nil;
 {
     [[JMExportManager sharedInstance] cancelAll];
     
+    [self cleanSearchIndexes];
+    
     [self.restClient cancelAllRequests];
     [self.restClient deleteCookies];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kJMSavedSessionKey];
@@ -162,6 +164,11 @@ static JMSessionManager *_sharedManager = nil;
 - (void)setDefaults
 {
     self.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
+}
+
+- (void) cleanSearchIndexes
+{
+#warning NEED IMPLEMENT!!!!!
 }
 
 @end

@@ -58,6 +58,10 @@ NSString * const kJMFilterByTag = @"filterByTag";
 NSString * const kJMReportKey = @"reportKey";
 NSString * const kJMDashboardKey = @"dashboardKey";
 
+// Resource key for CoreSpotlight
+NSString * const kJMCSSearchableIndexName = @"kJMCSSearchableIndexName";
+NSString * const kJMCustomAttributeResourceKey = @"kJMCustomAttributeResourceKey";
+
 // Settings keys
 NSString * const kJMDefaultRequestTimeout = @"defaultRequestTimeout";
 NSString * const kJMDefaultSendingCrashReport = @"jaspersoft.crashreportsending.enabled";

@@ -65,6 +65,10 @@ extern NSString * const kJMFilterByTag;
 extern NSString * const kJMReportKey;
 extern NSString * const kJMDashboardKey;
 
+// Resource key for CoreSpotlight
+extern NSString * const kJMCSSearchableIndexName;
+extern NSString * const kJMCustomAttributeResourceKey;
+
 // Settings keys
 extern NSString * const kJMDefaultRequestTimeout;
 extern NSString * const kJMDefaultSendingCrashReport;

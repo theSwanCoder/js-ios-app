@@ -35,7 +35,7 @@
 #import "JMMenuViewController.h"
 #import "JMOnboardIntroViewController.h"
 #import "UIImage+Additions.h"
-
+#import <CoreSpotlight/CoreSpotlight.h>
 
 static NSString * const kGAITrackingID = @"UA-57445224-1";
 static const NSInteger kSplashViewTag = 100;
@@ -139,6 +139,21 @@ static const NSInteger kSplashViewTag = 100;
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
+{
+#warning NEED TO ADD RESTORE SESSION!!!!!
+    if ([userActivity.activityType isEqualToString:CSSearchableItemActionType]) {
+//        JSResourceLookup *resource = userActivity.userInfo[CSSearchableItemActivityIdentifier];
+//                if (<#condition#>) {
+//                    <#statements#>
+//                }
+//        
+        
+        return true;
+    }
+    return false;
 }
 
 #pragma mark - Private
