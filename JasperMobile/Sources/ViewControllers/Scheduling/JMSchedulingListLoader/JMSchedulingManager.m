@@ -28,7 +28,7 @@
     }
 
     NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/%@", self.restClient.serverProfile.serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, @"jobs", @(identifier)];
+    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/%@", self.restClient.serverProfile.serverUrl, kJS_REST_SERVICES_V2_URI, @"jobs", @(identifier)];
     JMLog(@"url: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -74,7 +74,7 @@
     }
 
     NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, @"jobs"];
+    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, kJS_REST_SERVICES_V2_URI, @"jobs"];
     JMLog(@"url: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -137,7 +137,7 @@
     }
 
     NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/%@", self.restClient.serverProfile.serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, @"jobs", @(identifier)];
+    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/%@", self.restClient.serverProfile.serverUrl, kJS_REST_SERVICES_V2_URI, @"jobs", @(identifier)];
     JMLog(@"url: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -171,7 +171,7 @@
     }
 
     NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, @"jobs"];
+    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, kJS_REST_SERVICES_V2_URI, @"jobs"];
 //    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, @"jobs?owner=superuser"];
 //    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, @"jobs?username=superuser"];
 //    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, @"jobs/2891"];

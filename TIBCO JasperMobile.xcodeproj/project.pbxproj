@@ -2494,8 +2494,6 @@
 				A14789C39DF01A718B92E97C /* JMDashboardViewerVC.m in Sources */,
 				A14784AF61EB18E6AD372AEB /* JMDashboardViewerConfigurator.m in Sources */,
 				A1478A179D378E8F76BDD03C /* JMMenuAction.m in Sources */,
-				A1478D49CA28213AC1C5FD4A /* JMReportExecutor.m in Sources */,
-				A1478D310566300F565A1697 /* JMReportPagesRange.m in Sources */,
 				A14789DF4B8E0F46BE25CB83 /* JMSchedulingVC.m in Sources */,
 				A1478D98799B56B89F12EF44 /* JMSchedulingManager.m in Sources */,
 				A14787DB1604CF2D4408BA7C /* JMJobCell.m in Sources */,
