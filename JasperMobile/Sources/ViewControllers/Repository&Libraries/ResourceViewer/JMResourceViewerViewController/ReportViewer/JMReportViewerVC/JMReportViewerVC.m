@@ -145,6 +145,11 @@
         if (self.exitBlock) {
             self.exitBlock();
         }
+
+        if ([self isContentOnTV]) {
+            [self hideExternalWindow];
+        }
+
         [super cancelResourceViewingAndExit:exit];
     }
 }
