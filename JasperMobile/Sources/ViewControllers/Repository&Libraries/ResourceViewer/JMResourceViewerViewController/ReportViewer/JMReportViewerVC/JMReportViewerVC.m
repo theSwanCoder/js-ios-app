@@ -195,6 +195,8 @@
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     [self setupWebViewLayout];
     [self.configurator updateReportLoaderDelegateWithObject:self];
+
+    [self hideReportView];
 }
 
 
@@ -778,12 +780,12 @@
 
 - (void)hideReportView
 {
-    ((UIView *)self.configurator.webView).hidden = YES;
+    self.webView.hidden = YES;
 }
 
 - (void)showReportView
 {
-    ((UIView *)self.configurator.webView).hidden = NO;
+    self.webView.hidden = NO;
 }
 
 - (void)layoutEmptyReportLabelInView:(UIView *)view {
