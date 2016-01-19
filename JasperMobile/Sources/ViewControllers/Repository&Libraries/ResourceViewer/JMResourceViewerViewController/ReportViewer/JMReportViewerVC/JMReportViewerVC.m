@@ -810,7 +810,9 @@
 #pragma mark - Work with external screen
 - (UIView *)viewForAddingToExternalWindow
 {
-    [self.reportLoader updateViewportScaleFactorWithValue:0.75];
+    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        [self.reportLoader updateViewportScaleFactorWithValue:0.75];
+    }
     UIView *view = [UIView new];
     UIView *reportView = self.webView;
 
@@ -861,7 +863,9 @@
     if (isCompactWidth) {
         initialScaleViewport = 0.25;
     }
-    [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+    }
 
     [self.view addSubview:self.emptyReportMessageLabel];
     [self layoutEmptyReportLabelInView:self.view];
