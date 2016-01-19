@@ -60,6 +60,10 @@ var JasperMobile = {
                 }
             }
             return params;
+        },
+        updateViewPortInitialScale: function (scale) {
+            var viewport = document.querySelector("meta[name=viewport]");
+            viewport.setAttribute('content', 'width=device-width, initial-scale='+ scale + ', maximum-scale=1.0, user-scalable=0');
         }
     }
 };
