@@ -432,9 +432,9 @@ MobileDashboard = {
                     setTimeout(function(){
                         var data = MobileDashboard.dashboardObject.data();
                         JasperMobile.Dashboard.Callback.onRunSuccess(data);
+                        MobileDashboard._configureComponents(data.components);
+                        MobileDashboard._defineComponentsClickEvent();
                     }, 6000);
-                    MobileDashboard._configureComponents(data.components);
-                    MobileDashboard._defineComponentsClickEvent();
                 },
                 error: function(error) {
                     JasperMobile.Dashboard.Callback.onRunFailed(error);
