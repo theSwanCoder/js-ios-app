@@ -159,6 +159,8 @@
 
 - (UIColor *)reportOptionsNoResultLabelTextColor;
 
+- (UIColor *)reportOptionsItemsSegmentedTintColor;
+
 // Save Report
 - (UIColor *)saveReportSaveReportButtonBackgroundColor;
 

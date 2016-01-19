@@ -23,7 +23,6 @@
 
 #import "JMInputControlsViewController.h"
 #import "JMSingleSelectTableViewController.h"
-#import "UITableViewCell+Additions.h"
 
 #import "JMCancelRequestPopup.h"
 #import "JMReportOptionsCell.h"

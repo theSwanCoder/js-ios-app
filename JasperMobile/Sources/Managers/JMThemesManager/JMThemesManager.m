@@ -95,6 +95,8 @@ NSString * const kJMThemeReportOptionsRunReportButtonBackgroundColor = @"ReportO
 NSString * const kJMThemeReportOptionsRunReportButtonTextColor = @"ReportOptions.runreport_button_text_color";
 NSString * const kJMThemeReportOptionsTitleLabelTextColor = @"ReportOptions.title_label_text_color";
 NSString * const kJMThemeReportOptionsNoResultLabelTextColor = @"ReportOptions.noresult_label_text_color";
+NSString * const kJMThemeReportOptionsItemsSegmentedControlTintColor = @"ReportOptions.items_segmented_control_tint_color";
+
 
 // Save Report
 NSString * const kJMThemeSaveReportSaveReportButtonBackgroundColor = @"SaveReport.savereport_button_background_color";
@@ -556,6 +558,11 @@ NSString * const kJMThemeAttributeCollectionViewBackgroundColor = @"collectionvi
 - (UIColor *)reportOptionsNoResultLabelTextColor
 {
     return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeReportOptionsNoResultLabelTextColor];
+}
+
+- (UIColor *)reportOptionsItemsSegmentedTintColor
+{
+    return [self attributeValueFromDictionary:self.themesDictionary forKeyPath:kJMThemeReportOptionsItemsSegmentedControlTintColor];
 }
 
 // Save Report

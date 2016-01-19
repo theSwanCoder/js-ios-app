@@ -282,6 +282,13 @@
 			<key>AttributeValue</key>
 			<string>999999</string>
 		</dict>
+		<key>items_segmented_control_tint_color</key>
+		<dict>
+			<key>AttributeType</key>
+			<string>Color</string>
+			<key>AttributeValue</key>
+			<string>428EC0</string>
+		</dict>
 	</dict>
 	<key>SaveReport</key>
 	<dict>

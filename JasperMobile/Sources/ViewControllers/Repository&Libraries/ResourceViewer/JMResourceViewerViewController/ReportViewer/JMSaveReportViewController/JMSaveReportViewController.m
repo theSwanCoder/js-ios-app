@@ -23,7 +23,6 @@
 
 #import "JMSaveReportViewController.h"
 #import "JMSavedResources+Helpers.h"
-#import "UITableViewCell+Additions.h"
 #import "JMCancelRequestPopup.h"
 #import "JMSaveReportSection.h"
 #import "JMSaveReportNameCell.h"
@@ -79,7 +78,8 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
     
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
     self.tableView.backgroundColor = [UIColor clearColor];
-    
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+
     [self.tableView setRowHeight:([JMUtils isCompactWidth] || [JMUtils isCompactHeight]) ? 44.f : 50.f];
 
     self.saveReportButton.backgroundColor = [[JMThemesManager sharedManager] saveReportSaveReportButtonBackgroundColor];
@@ -189,12 +189,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
         case JMSaveReportSectionTypeFormat: {
             JMSaveReportFormatCell *formatCell = [tableView dequeueReusableCellWithIdentifier:kJMSaveReportFormatCellIdentifier
                                                                                  forIndexPath:indexPath];
-            if (indexPath.row) {
-                [formatCell setTopSeparatorWithHeight:1.f color:self.view.backgroundColor tableViewStyle:UITableViewStylePlain];
-            } else {
-                [formatCell removeTopSeparator];
-            }
-            
             NSString *currentFormat = [JMUtils supportedFormatsForReportSaving][indexPath.row];
             formatCell.titleLabel.text = currentFormat;
             formatCell.accessoryType = [self.selectedReportFormat isEqualToString:currentFormat] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
@@ -206,7 +200,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                                                                                            forIndexPath:indexPath];
                 pagesCell.cellDelegate = self;
                 pagesCell.pagesType = self.pagesType;
-                [pagesCell removeTopSeparator];
                 return pagesCell;
             } else {
                 JMSaveReportPageRangeCell *pageRangeCell = [tableView dequeueReusableCellWithIdentifier:kJMSaveReportPageRangeCellIdentifier
@@ -220,7 +213,6 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
                     pageRangeCell.titleLabel.text = JMCustomLocalizedString(@"report.viewer.save.pages.range.toPage", nil);
                     pageRangeCell.currentPage = self.pagesRange.endPage;
                 }
-                [pageRangeCell setTopSeparatorWithHeight:1.f color:self.view.backgroundColor tableViewStyle:UITableViewStylePlain];
                 return pageRangeCell;
             }
         }

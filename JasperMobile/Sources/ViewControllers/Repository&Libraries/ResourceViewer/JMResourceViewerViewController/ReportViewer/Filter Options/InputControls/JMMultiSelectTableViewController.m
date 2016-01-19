@@ -27,6 +27,7 @@
 
 @interface JMMultiSelectTableViewController () <JMMenuActionsViewDelegate, PopoverViewDelegate>
 @property (nonatomic, strong) PopoverView *popoverView;
+@property (nonatomic, weak) IBOutlet UISegmentedControl *itemsSegmentedControl;
 
 @end
 
@@ -34,16 +35,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.titleLabel.text = JMCustomLocalizedString(@"report.viewer.options.multiselect.titlelabel.title", nil);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonClicked:)];
 
+    self.itemsSegmentedControl.tintColor = [[JMThemesManager sharedManager] reportOptionsItemsSegmentedTintColor];
+    [self setupSegmentedControlAppearence];
 }
 
-#pragma mark - Initialization
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
+- (void) setupSegmentedControlAppearence
 {
-    return [super initWithNibName:NSStringFromClass([JMSingleSelectTableViewController class]) bundle:nil];
+    NSString *availableTitle = JMCustomLocalizedString(@"report.viewer.options.multiselect.available.title", nil);
+    availableTitle = [availableTitle stringByAppendingFormat:@": %zd", self.cell.inputControlDescriptor.state.options.count];
+    [self.itemsSegmentedControl setTitle:availableTitle forSegmentAtIndex:0];
+    
+    NSString *selectedTitle = JMCustomLocalizedString(@"report.viewer.options.multiselect.selected.title", nil);
+    selectedTitle = [selectedTitle stringByAppendingFormat:@": %zd", self.selectedValues.count];
+    [self.itemsSegmentedControl setTitle:selectedTitle forSegmentAtIndex:1];
 }
 
 #pragma mark - Table view delegate
@@ -53,17 +61,12 @@
     JSInputControlOption *option = self.listOfValues[indexPath.row];
     option.selected = [JSUtils stringFromBOOL:!option.selected.boolValue];
     
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
-    if (option.selected.boolValue) {
-        [self.selectedValues addObject:option];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    if (self.itemsSegmentedControl.selectedSegmentIndex != 0) {
+        [self applyFiltering];
     } else {
-        if ([self.selectedValues containsObject:option]) {
-            [self.selectedValues removeObject:option];
-        }
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+    [self setupSegmentedControlAppearence];
 }
 
 #pragma mark - Actions
@@ -82,6 +85,33 @@
                                               delegate:self];
 }
 
+- (IBAction)itemsSegmentedControlDidChangedValue:(id)sender
+{
+    [self applyFiltering];
+    [self.tableView reloadData];
+}
+
+- (NSPredicate *)filteredPredicateWithText:(NSString *)text
+{
+    NSMutableArray *predicates = [NSMutableArray array];
+    NSPredicate *filterPredicate = [super filteredPredicateWithText:text];
+    if (filterPredicate) {
+        [predicates addObject:filterPredicate];
+    }
+    if (self.itemsSegmentedControl.selectedSegmentIndex != 0) {
+        [predicates addObject:[super selectedValuesPredicate]];
+    }
+    
+    if (predicates.count) {
+        if (predicates.count > 1) {
+            return [NSCompoundPredicate andPredicateWithSubpredicates:predicates];
+        } else {
+            return [predicates firstObject];
+        }
+    }
+    return nil;
+}
+
 #pragma mark - PopoverViewDelegate Methods
 - (void)popoverViewDidDismiss:(PopoverView *)popoverView
 {
@@ -98,11 +128,6 @@
 #pragma mark - JMMenuActionsViewDelegate
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
 {
-    [self.selectedValues removeAllObjects];
-    if (action == JMMenuActionsViewAction_SelectAll) {
-        [self.selectedValues addObjectsFromArray:self.listOfValues];
-    }
-    
     for (JSInputControlOption *option in self.listOfValues) {
         option.selected = [JSUtils stringFromBOOL:(action == JMMenuActionsViewAction_SelectAll)];
     }

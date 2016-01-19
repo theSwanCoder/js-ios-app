@@ -28,11 +28,10 @@
 
 #import "JMDashboardInputControlsVC.h"
 #import "JMDashboard.h"
-#import "JMDashboardInputControlsCell.h"
 #import "JMTextInputControlCell.h"
 #import "JMDashboardParameter.h"
 
-@interface JMDashboardInputControlsVC () <UITabBarDelegate, UITableViewDataSource, JMDashboardInputControlsCellDelegate, JMInputControlCellDelegate>
+@interface JMDashboardInputControlsVC () <UITabBarDelegate, UITableViewDataSource, JMInputControlCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *applyButton;
 @end
@@ -78,21 +77,6 @@
         self.exitBlock();
     }
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-
-#pragma mark - JMDashboardInputControlsCellDelegate
-- (void)dashboardInputControlsCell:(JMDashboardInputControlsCell *)cell didChangeText:(NSString *)text
-{
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    NSDictionary *inputControl = self.dashboard.inputControls[indexPath.row];
-    NSMutableDictionary *updatedInputControl = [inputControl mutableCopy];
-    NSArray *value = @[text];
-    updatedInputControl[@"value"] = value;
-
-    NSMutableArray *updatedInputControls = [self.dashboard.inputControls mutableCopy];
-    updatedInputControls[indexPath.row] = updatedInputControl;
-    self.dashboard.inputControls = updatedInputControls;
 }
 
 #pragma mark - JMInputControlCellDelegate

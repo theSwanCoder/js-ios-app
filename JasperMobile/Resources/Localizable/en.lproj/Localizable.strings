@@ -168,6 +168,8 @@
 "report.viewer.options.title" = "Filters";
 "report.viewer.options.singleselect.titlelabel.title" = "Select a single item";
 "report.viewer.options.multiselect.titlelabel.title" = "Select one or more items";
+"report.viewer.options.multiselect.available.title" = "Available";
+"report.viewer.options.multiselect.selected.title" = "Selected";
 "report.viewer.options.search.value.placeholder" = "Search Values";
 "report.viewer.options.ic.title.date" = "Date";
 "report.viewer.options.ic.title.time" = "Time";

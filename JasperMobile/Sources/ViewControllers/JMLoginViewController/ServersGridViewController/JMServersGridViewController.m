@@ -219,7 +219,7 @@ NSString * const kJMServerProfileEditableKey = @"kJMServerProfileEditableKey";
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
                                                                                       message:@"secutiry.http.message"
-                                                                            cancelButtonTitle:@"ok"
+                                                                            cancelButtonTitle:@"dialog.button.ok"
                                                                       cancelCompletionHandler:^(UIAlertController *controller, UIAlertAction *action) {
                                                                           if ([self.delegate respondsToSelector:@selector(serverGridControllerDidSelectProfile:)]) {
                                                                               [self.delegate serverGridControllerDidSelectProfile:serverProfile];

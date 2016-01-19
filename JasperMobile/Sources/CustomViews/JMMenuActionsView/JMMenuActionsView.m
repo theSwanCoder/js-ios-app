@@ -22,7 +22,6 @@
 
 
 #import "JMMenuActionsView.h"
-#import "UITableViewCell+Additions.h"
 #import "UIImage+Additions.h"
 #import "JMLocalization.h"
 #import "JMMenuAction.h"
@@ -63,6 +62,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     tableView.backgroundView = nil;
     tableView.delegate = self;
     tableView.dataSource = self;
+    tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     return tableView;
 }
 
