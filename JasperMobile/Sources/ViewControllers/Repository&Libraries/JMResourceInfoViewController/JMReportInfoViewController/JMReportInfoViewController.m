@@ -27,6 +27,9 @@
 //
 #import "JMReportInfoViewController.h"
 #import "JSResourceLookup+Helpers.h"
+#import "JMNewJobVC.h"
+#import "JMSchedulingManager.h"
+#import "JMSchedulingVC.h"
 
 @interface JMReportInfoViewController ()
 
@@ -36,7 +39,7 @@
 #pragma mark - Overloaded methods
 - (JMMenuActionsViewAction)availableAction
 {
-    return ([super availableAction] | JMMenuActionsViewAction_Run);
+    return ([super availableAction] | JMMenuActionsViewAction_Run | JMMenuActionsViewAction_Schedule);
 }
 
 - (void)actionsView:(JMMenuActionsView *)view didSelectAction:(JMMenuActionsViewAction)action
@@ -44,9 +47,13 @@
     [super actionsView:view didSelectAction:action];
     if (action == JMMenuActionsViewAction_Run) {
         [self runReport];
+    } else if (action == JMMenuActionsViewAction_Schedule) {
+        [self scheduleReport];
     }
 }
 
+
+#pragma mark - Private API
 - (void)runReport
 {
     id nextVC = [[JMUtils mainStoryBoard] instantiateViewControllerWithIdentifier:[self.resourceLookup resourceViewerVCIdentifier]];
@@ -58,4 +65,20 @@
         [self.navigationController pushViewController:nextVC animated:YES];
     }
 }
+
+- (void)scheduleReport {
+    JMNewJobVC *newJobVC = (JMNewJobVC *) [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewJobVC"];
+    newJobVC.resourceLookup = self.resourceLookup;
+    newJobVC.exitBlock = ^() {
+
+    };
+
+    JMSchedulingVC *schedulingVC = (JMSchedulingVC *) [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMSchedulingVC"];
+    NSMutableArray *viewControllers = [self.navigationController.viewControllers mutableCopy];
+
+    [viewControllers addObject:schedulingVC];
+    [viewControllers addObject:newJobVC];
+    [self.navigationController setViewControllers:viewControllers animated:YES];
+}
+
 @end

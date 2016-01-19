@@ -79,21 +79,21 @@
 {
     __weak typeof(self) weakSelf = self;
     [self.reportSaver saveReportWithName:self.name
-                                        format:self.exportResource.format
-                                    pagesRange:self.pagesRange
-                                    completion:^(NSURL * _Nullable savedReportFolderURL, NSError * _Nullable error) {
-                                        __strong typeof(self) strongSelf = weakSelf;
-                                        if (error) {
-                                            if (error.code == JSSessionExpiredErrorCode) {
-                                                [JMUtils showLoginViewAnimated:YES completion:nil];
-                                            } else {
-                                                [JMUtils presentAlertControllerWithError:error completion:nil];
-                                            }
-                                        } else {
-                                            [JMSavedResources addReport:strongSelf.exportResource withName:strongSelf.name format:strongSelf.exportResource.format sourcesURL:savedReportFolderURL];
-                                        }
-                                        [strongSelf completeOperation];
-                                    }];
+                                  format:self.exportResource.format
+                              pagesRange:self.pagesRange
+                              completion:^(NSURL * _Nullable savedReportFolderURL, NSError * _Nullable error) {
+                                  __strong typeof(self) strongSelf = weakSelf;
+                                  if (error) {
+                                      if (error.code == JSSessionExpiredErrorCode) {
+                                          [JMUtils showLoginViewAnimated:YES completion:nil];
+                                      } else {
+                                          [JMUtils presentAlertControllerWithError:error completion:nil];
+                                      }
+                                  } else {
+                                      [JMSavedResources addReport:strongSelf.exportResource withName:strongSelf.name format:strongSelf.exportResource.format sourcesURL:savedReportFolderURL];
+                                  }
+                                  [strongSelf completeOperation];
+                              }];
 }
 
 - (void)completeOperation {

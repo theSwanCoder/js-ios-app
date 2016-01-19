@@ -172,7 +172,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         self.visualizeManager.viewportScaleFactor = scaleFactor;
 
         JMJavascriptRequest *request = [JMJavascriptRequest new];
-        request.command = @"jQuery(\"meta[name='viewport']\")[0].content = \"initial-scale=%@, width=device-width, minimum-scale=0.1, maximum-scale=2, user-scalable=yes\";";
+        request.command = @"JasperMobile.Helper.updateViewPortInitialScale(%@);";
         request.parametersAsString = [NSString stringWithFormat:@"%@", @(scaleFactor)];
         [self.bridge sendRequest:request];
     }

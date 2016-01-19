@@ -74,6 +74,8 @@
             return @"JMSavedItemsNavigationViewController";
         case JMResourceTypeFavorites:
             return @"JMFavoritesNavigationViewController";
+        case JMResourceTypeScheduling:
+            return @"JMSchedulingListNC";
         case JMResourceTypeRepository:
             return @"JMRepositoryNavigationViewController";
         case JMResourceTypeAbout:
@@ -94,6 +96,8 @@
             return JMCustomLocalizedString(@"menuitem.saveditems.label", nil);
         case JMResourceTypeFavorites:
             return JMCustomLocalizedString(@"menuitem.favorites.label", nil);
+        case JMResourceTypeScheduling:
+            return @"Scheduling";
         case JMResourceTypeRepository:
             return JMCustomLocalizedString(@"menuitem.repository.label", nil);
         case JMResourceTypeAbout:
@@ -120,6 +124,8 @@
             return [UIImage imageNamed:@"ic_saved_items"];
         case JMResourceTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites"];
+        case JMResourceTypeScheduling:
+            return [UIImage imageNamed:@"ic_scheduling"];
         default:
             return nil;
     }
@@ -138,6 +144,8 @@
             return [UIImage imageNamed:@"ic_saved_items_selected"];
         case JMResourceTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites_selected"];
+        case JMResourceTypeScheduling:
+            return [UIImage imageNamed:@"ic_scheduling"];
         default:
             return nil;
     }
@@ -192,6 +200,8 @@
             return @"Saved Items";
         case JMResourceTypeFavorites:
             return @"Favorites";
+        case JMResourceTypeScheduling:
+            return @"Scheduling";
         case JMResourceTypeAbout:
             return @"AboutApp";
         default:

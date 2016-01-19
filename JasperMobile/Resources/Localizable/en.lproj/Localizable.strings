@@ -291,3 +291,7 @@
 
 /* Security */
 "secutiry.http.message" = "You are using unsecure HTTP protocol. Please consider migrating to HTTPS.";
+
+/*Schedules*/
+"schedules.title" = "Schedules";
+"schedules.no.jobs.message" = "No job is scheduled.";

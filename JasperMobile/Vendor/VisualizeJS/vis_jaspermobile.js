@@ -60,6 +60,10 @@ var JasperMobile = {
                 }
             }
             return params;
+        },
+        updateViewPortInitialScale: function (scale) {
+            var viewport = document.querySelector("meta[name=viewport]");
+            viewport.setAttribute('content', 'width=device-width, initial-scale='+ scale + ', maximum-scale=1.0, user-scalable=0');
         }
     }
 };
@@ -428,9 +432,9 @@ MobileDashboard = {
                     setTimeout(function(){
                         var data = MobileDashboard.dashboardObject.data();
                         JasperMobile.Dashboard.Callback.onRunSuccess(data);
+                        MobileDashboard._configureComponents(data.components);
+                        MobileDashboard._defineComponentsClickEvent();
                     }, 6000);
-                    MobileDashboard._configureComponents(data.components);
-                    MobileDashboard._defineComponentsClickEvent();
                 },
                 error: function(error) {
                     JasperMobile.Dashboard.Callback.onRunFailed(error);

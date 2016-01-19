@@ -131,8 +131,11 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
                                                                        available:NO
                                                                          enabled:YES],
             @(JMMenuActionsViewAction_OpenIn) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_OpenIn
-                                                                         available:NO
-                                                                           enabled:YES],
+                                                                       available:NO
+                                                                         enabled:YES],
+            @(JMMenuActionsViewAction_Schedule) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_Schedule
+                                                                       available:NO
+                                                                         enabled:YES],
             @(JMMenuActionsViewAction_ShowExternalDisplay) : [JMMenuAction menuActionWithAction:JMMenuActionsViewAction_ShowExternalDisplay
                                                                                       available:NO
                                                                                         enabled:YES],

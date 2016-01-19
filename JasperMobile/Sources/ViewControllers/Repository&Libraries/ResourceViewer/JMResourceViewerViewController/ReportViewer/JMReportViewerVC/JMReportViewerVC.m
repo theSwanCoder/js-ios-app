@@ -145,6 +145,11 @@
         if (self.exitBlock) {
             self.exitBlock();
         }
+
+        if ([self isContentOnTV]) {
+            [self hideExternalWindow];
+        }
+
         [super cancelResourceViewingAndExit:exit];
     }
 }
@@ -195,6 +200,8 @@
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
     [self setupWebViewLayout];
     [self.configurator updateReportLoaderDelegateWithObject:self];
+
+    [self hideReportView];
 }
 
 
@@ -778,12 +785,12 @@
 
 - (void)hideReportView
 {
-    ((UIView *)self.configurator.webView).hidden = YES;
+    self.webView.hidden = YES;
 }
 
 - (void)showReportView
 {
-    ((UIView *)self.configurator.webView).hidden = NO;
+    self.webView.hidden = NO;
 }
 
 - (void)layoutEmptyReportLabelInView:(UIView *)view {
@@ -810,7 +817,9 @@
 #pragma mark - Work with external screen
 - (UIView *)viewForAddingToExternalWindow
 {
-    [self.reportLoader updateViewportScaleFactorWithValue:0.75];
+    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        [self.reportLoader updateViewportScaleFactorWithValue:0.75];
+    }
     UIView *view = [UIView new];
     UIView *reportView = self.webView;
 
@@ -861,7 +870,9 @@
     if (isCompactWidth) {
         initialScaleViewport = 0.25;
     }
-    [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+    }
 
     [self.view addSubview:self.emptyReportMessageLabel];
     [self layoutEmptyReportLabelInView:self.view];
