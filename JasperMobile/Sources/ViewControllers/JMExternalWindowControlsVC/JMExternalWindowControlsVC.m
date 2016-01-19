@@ -29,9 +29,11 @@
 #import "JMExternalWindowControlsVC.h"
 
 @interface JMExternalWindowControlsVC () <UIScrollViewDelegate>
-@property (weak, nonatomic) IBOutlet UIButton *unplugButton;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) UIWebView *contentWebView;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageViewHightConstraint;
+@property (nonatomic, assign) CGFloat contentViewProportions;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @end
 
 @implementation JMExternalWindowControlsVC
@@ -50,36 +52,57 @@
 }
 
 #pragma mark - UIViewController LifeCycle
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    // Setup for zooming
-//    self.scrollView.minimumZoomScale = 1.0;
-//    self.scrollView.maximumZoomScale = 2.0;
-//    self.scrollView.zoomScale = 1.0;
-    JMLog(@"%@", NSStringFromSelector(_cmd));
-}
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.frame), self.contentWebView.scrollView.contentSize.height);
-    JMLog(@"content size: %@", NSStringFromCGSize(self.scrollView.contentSize));
-}
 
-#pragma mark - Actions
-- (IBAction)unplug:(UIButton *)sender
-{
-    if ([self.delegate respondsToSelector:@selector(externalWindowControlViewControllerDidUnplugControlView:)] ) {
-        [self.delegate externalWindowControlViewControllerDidUnplugControlView:self];
-    }
+    self.contentWebView.frame = CGRectMake(0, 0, self.contentWebView.scrollView.contentSize.width, self.contentWebView.scrollView.contentSize.height);
+
+    [self.activityIndicator startAnimating];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        // Screenshot rendering from webView
+        CGSize renderSize = self.contentWebView.scrollView.contentSize;
+        UIGraphicsBeginImageContextWithOptions(renderSize, self.contentWebView.opaque, 0);
+        [self.contentWebView.scrollView.layer renderInContext:UIGraphicsGetCurrentContext()];
+
+        UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+
+        // Resize Image View
+        CGFloat k = self.contentWebView.scrollView.contentSize.width / self.contentWebView.scrollView.contentSize.height;
+
+        renderSize = CGSizeMake(CGRectGetWidth(self.scrollView.frame), CGRectGetWidth(self.scrollView.frame) / k);
+        UIGraphicsBeginImageContextWithOptions(renderSize, self.contentWebView.opaque, 0);
+        CGRect rect = CGRectMake(0, 0, renderSize.width, renderSize.height);
+        rect = CGRectIntegral(rect);
+        [viewImage drawInRect:rect];
+        viewImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            [self.activityIndicator stopAnimating];
+
+            CGRect conentWebViewFrame = CGRectMake(0, 0, 1024, 768);
+            self.contentWebView.frame = conentWebViewFrame;
+
+            self.imageView.image = viewImage;
+
+            CGSize size = CGSizeMake(viewImage.size.width, viewImage.size.height + 50);
+            self.scrollView.contentSize = size;
+            self.imageViewHightConstraint.constant = size.height;
+            self.contentViewProportions = self.contentWebView.scrollView.contentSize.height / viewImage.size.height;
+        });
+    });
+
 }
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    self.contentWebView.scrollView.contentOffset = scrollView.contentOffset;
+    CGPoint contentOffset = scrollView.contentOffset;
+    contentOffset.y *= self.contentViewProportions;
+    self.contentWebView.scrollView.contentOffset = contentOffset;
 }
 
 @end
