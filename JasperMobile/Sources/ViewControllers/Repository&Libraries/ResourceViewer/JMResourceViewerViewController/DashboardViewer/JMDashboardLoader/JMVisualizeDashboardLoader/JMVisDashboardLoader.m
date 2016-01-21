@@ -313,15 +313,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     }
     self.dashboard.components = [dashlets copy];
 
-    // Parameters
-    NSArray *rawInputControls = parameters[@"params"];
-    NSMutableArray *inputControls = [NSMutableArray array];
-    for (NSDictionary *param in rawInputControls) {
-        JMDashboardParameter *dashboardParameter = [JMDashboardParameter parameterWithData:param];
-        [inputControls addObject:dashboardParameter];
-    }
-    self.dashboard.inputControls = inputControls;
-
     if (self.completion) {
         self.completion(YES, nil);
     }
