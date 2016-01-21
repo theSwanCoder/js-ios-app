@@ -1875,7 +1875,7 @@
 				A14788FD4C7D8B358BDD55EE /* JMDashboardViewerConfigurator */,
 				A14786096E01FBBE597FAAF2 /* JMDashboardLoader */,
 				A1478D6FFDF1DC92958EA14E /* JMDashboardViewerVC */,
-				A1478C180A44B216E0D091B2 /* JMDashboardICVC */,
+				A1478C180A44B216E0D091B2 /* JMDashboardInputControlsVC */,
 			);
 			path = DashboardViewer;
 			sourceTree = "<group>";
@@ -1956,13 +1956,13 @@
 			path = JMExternalWindowControlsVC;
 			sourceTree = "<group>";
 		};
-		A1478C180A44B216E0D091B2 /* JMDashboardICVC */ = {
+		A1478C180A44B216E0D091B2 /* JMDashboardInputControlsVC */ = {
 			isa = PBXGroup;
 			children = (
 				A1478E970FE9B5FF46756AFF /* JMDashboardInputControlsVC.m */,
 				A1478D0FCDA0DF93D32FBD00 /* JMDashboardInputControlsVC.h */,
 			);
-			path = JMDashboardICVC;
+			path = JMDashboardInputControlsVC;
 			sourceTree = "<group>";
 		};
 		A1478CDC419FC51FE351D059 /* JMVisualizeDashboardLoader */ = {
