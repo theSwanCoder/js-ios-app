@@ -487,7 +487,7 @@
                                                                         if ([visibleInputControls count]) {
                                                                             [strongSelf showInputControlsViewControllerWithControls:visibleInputControls];
                                                                         } else  {
-//                                                                            [strongSelf startLoadReportWithPage:1];
+                                                                            // show message about absent input controls
                                                                         }
                                                                     }
                                                                 }];
@@ -595,7 +595,22 @@
     inputControlsViewController.inputControls = inputControls;
 
     inputControlsViewController.exitBlock = ^(NSArray *changedInputControls) {
-        JMLog(@"changed input controls: %@", changedInputControls);
+        NSString *parametersAsString = @"{";
+        for (JSInputControlDescriptor *inputControlDescriptor in changedInputControls) {
+
+            NSString *identifier = inputControlDescriptor.uuid;
+            NSArray *values = [inputControlDescriptor selectedValues];
+            NSString *valuesAsString = @"";
+            for (NSString *value in values) {
+                valuesAsString = [valuesAsString stringByAppendingFormat:@"\"%@\",", value];
+            }
+
+            parametersAsString = [parametersAsString stringByAppendingFormat:@"\"%@\":[%@], ", identifier, valuesAsString];
+        }
+        parametersAsString = [parametersAsString stringByAppendingString:@"}"];
+        JMLog(@"parametersAsString: %@", parametersAsString);
+
+        [self.dashboardLoader applyParameters:parametersAsString];
     };
 
     [self.navigationController pushViewController:inputControlsViewController animated:YES];
