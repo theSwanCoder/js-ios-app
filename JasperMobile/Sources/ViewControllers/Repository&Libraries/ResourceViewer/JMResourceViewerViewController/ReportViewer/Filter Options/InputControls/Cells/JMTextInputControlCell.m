@@ -56,7 +56,7 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [self updateValue:textField.text.length ? textField.text : nil];
+    [self updateValue:textField.text.length ? textField.text : @""];
     self.inputControlDescriptor.state.error = nil;
     [self updateDisplayingOfErrorMessage];
 }

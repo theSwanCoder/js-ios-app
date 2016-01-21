@@ -150,7 +150,7 @@
 "report.viewer.save.name.errmsg.maxlength" = "Muss kürzer als %i Zeichen sein.";
 "report.viewer.save.name.errmsg.characters" = "Die Zeichen %@ sind nicht zulässig.";
 "report.viewer.save.saving.status.title" = "Bericht speichern...";
-"report.viewer.save.name.errmsg.tooBigRange" = "Bericht mit mehr als %@ Seiten im HTML-Format konnte nicht gespeichert werden. Möchten Sie ihn im PDF-Format speichern?";
+"report.viewer.save.name.errmsg.tooBigRange" = "Bericht mit mehr als %@ Seiten im %@-Format konnte nicht gespeichert werden. Möchten Sie ihn im PDF-Format speichern?";
 
 // Report viewer Options view
 "report.viewer.options.singleselect.titlelabel.title" = "Ein einzelnes Element auswählen";
