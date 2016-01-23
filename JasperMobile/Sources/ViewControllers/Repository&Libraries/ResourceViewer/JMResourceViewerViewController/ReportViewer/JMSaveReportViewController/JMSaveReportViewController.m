@@ -318,10 +318,10 @@ NSString * const kJMSaveReportPageRangeCellIdentifier = @"PageRangeCell";
 
 - (void)verifyRangePagesWithCompletion:(void(^)(void))completion
 {
-    BOOL isHTML = [self.selectedReportFormat isEqualToString:kJS_CONTENT_TYPE_HTML];
-    if (isHTML) {
+    BOOL isNotPDF = ![self.selectedReportFormat isEqualToString:kJS_CONTENT_TYPE_PDF];
+    if (isNotPDF) {
         if ( (self.pagesRange.endPage - self.pagesRange.startPage) + 1 > kJMSaveReportMaxRangePages ) {
-            NSString *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.tooBigRange", nil), @(kJMSaveReportMaxRangePages)];
+            NSString *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.tooBigRange", nil), @(kJMSaveReportMaxRangePages), [self.selectedReportFormat uppercaseString]];
             
             UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.error"
                                                                                               message:errorMessage

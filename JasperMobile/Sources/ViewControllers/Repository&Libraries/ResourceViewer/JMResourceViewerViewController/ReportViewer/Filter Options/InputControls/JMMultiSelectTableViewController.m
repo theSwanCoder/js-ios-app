@@ -73,9 +73,14 @@
 
 - (void)actionButtonClicked:(id) sender
 {
+    JMMenuActionsViewAction availableAction = JMMenuActionsViewAction_ClearSelections;
+    if (self.itemsSegmentedControl.selectedSegmentIndex == 0) {
+        availableAction |= JMMenuActionsViewAction_SelectAll;
+    }
+    
     JMMenuActionsView *actionsView = [JMMenuActionsView new];
     actionsView.delegate = self;
-    actionsView.availableActions = JMMenuActionsViewAction_SelectAll | JMMenuActionsViewAction_ClearSelections;
+    actionsView.availableActions = availableAction;
     CGPoint point = CGPointMake(CGRectGetWidth(self.view.frame), -10);
     
     self.popoverView = [PopoverView showPopoverAtPoint:point
@@ -88,7 +93,6 @@
 - (IBAction)itemsSegmentedControlDidChangedValue:(id)sender
 {
     [self applyFiltering];
-    [self.tableView reloadData];
 }
 
 - (NSPredicate *)filteredPredicateWithText:(NSString *)text
@@ -131,8 +135,9 @@
     for (JSInputControlOption *option in self.listOfValues) {
         option.selected = [JSUtils stringFromBOOL:(action == JMMenuActionsViewAction_SelectAll)];
     }
-    [self.tableView reloadData];
-    
+    [self applyFiltering];
+    [self setupSegmentedControlAppearence];
+
     [self.popoverView performSelector:@selector(dismiss) withObject:nil afterDelay:0.2f];
 }
 

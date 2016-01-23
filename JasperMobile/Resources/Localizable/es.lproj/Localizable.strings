@@ -150,7 +150,7 @@
 "report.viewer.save.name.errmsg.maxlength" = "Debe tener menos de %i caracteres.";
 "report.viewer.save.name.errmsg.characters" = "No se admiten los caracteres %@.";
 "report.viewer.save.saving.status.title" = "Guardando informe...";
-"report.viewer.save.name.errmsg.tooBigRange" = "No se puede guardar un informe de más de %@ páginas en formato HTML. ¿Desea guardarlo en formato PDF?";
+"report.viewer.save.name.errmsg.tooBigRange" = "No se puede guardar un informe de más de %@ páginas en formato %@. ¿Desea guardarlo en formato PDF?";
 
 // Report viewer Options view
 "report.viewer.options.singleselect.titlelabel.title" = "Seleccione un único elemento";

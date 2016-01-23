@@ -35,7 +35,7 @@
 #import "JMMenuViewController.h"
 #import "JMOnboardIntroViewController.h"
 #import "UIImage+Additions.h"
-
+#import "JMExportManager.h"
 
 static NSString * const kGAITrackingID = @"UA-57445224-1";
 static const NSInteger kSplashViewTag = 100;
@@ -130,6 +130,7 @@ static const NSInteger kSplashViewTag = 100;
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [self addSplashView];
+    [[JMExportManager sharedInstance] cancelAll];
 }
 
 - (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier {

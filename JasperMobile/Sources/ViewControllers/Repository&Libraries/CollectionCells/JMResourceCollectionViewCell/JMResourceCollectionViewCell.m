@@ -68,10 +68,13 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.thumbnailImage = nil;
     [self updateResourceImage];
     
-    // Add file extension for saved items
+    // Add file extension for saved & temp exported items
     if ([self.resourceLookup isSavedReport]) {
         JMSavedResources *savedReport = [JMSavedResources savedReportsFromResourceLookup:self.resourceLookup];
         self.resourceName.text = [resourceLookup.label stringByAppendingPathExtension:savedReport.format];
+    } else if ([self.resourceLookup isTempExportedReport]) {
+        JMExportResource *exportResource = (JMExportResource *)resourceLookup;
+        self.resourceName.text = [exportResource.label stringByAppendingPathExtension:exportResource.format];
     }
 }
 
