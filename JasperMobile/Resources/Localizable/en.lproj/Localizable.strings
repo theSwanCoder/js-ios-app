@@ -146,6 +146,9 @@
 "report.viewer.pagecount" = "of %d";
 "report.viewer.wrongNumberOfCurrentPage" = "The requested page is out of range (%@).";
 
+// Dashboard Viewer
+"dashboard.viewer.absent.input.controls.alert.message" = "Filters are absent";
+
 // Report Saver view
 "report.viewer.save.title" = "Save Report";
 "report.viewer.save.name" = "Report name";

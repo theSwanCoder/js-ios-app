@@ -20,9 +20,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
  */
 
+#import "JSDashboardResource.h"
+#import "JMDashboard.h"
+
 #import "JMDashboardInputControlsVC.h"
 #import "JMSingleSelectTableViewController.h"
 #import "JMCancelRequestPopup.h"
+#import "JSRESTBase+JSRESTDashboard.h"
 
 
 @interface JMDashboardInputControlsVC () <UITableViewDelegate, UITableViewDataSource, JMInputControlCellDelegate>
@@ -70,7 +74,7 @@
 #pragma mark - Private API
 - (BOOL) validateInputControls
 {
-    for (JSInputControlDescriptor *descriptor in self.inputControls) {
+    for (JSInputControlDescriptor *descriptor in self.dashboard.inputControls) {
         if ([[descriptor errorString] length]) {
             return NO;
         }
@@ -90,7 +94,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     NSInteger numberOfSections = 0;
-    if ([self.inputControls count]) {
+    if ([self.dashboard.inputControls count]) {
         numberOfSections++;
     }
     return numberOfSections;
@@ -122,7 +126,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.inputControls.count;
+    return self.dashboard.inputControls.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -131,7 +135,7 @@
 
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 
-    JSInputControlDescriptor *inputControlDescriptor = self.inputControls[indexPath.row];
+    JSInputControlDescriptor *inputControlDescriptor = self.dashboard.inputControls[indexPath.row];
     JMInputControlCell *icCell = (JMInputControlCell *)cell;
     [icCell setInputControlDescriptor:inputControlDescriptor];
 
@@ -151,7 +155,7 @@
     NSString *cellIdentifier = [self cellIdentifierForIndexPath:indexPath];
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 
-    JSInputControlDescriptor *inputControlDescriptor = self.inputControls[indexPath.row];
+    JSInputControlDescriptor *inputControlDescriptor = self.dashboard.inputControls[indexPath.row];
     JMInputControlCell *icCell = (JMInputControlCell *)cell;
     [icCell setInputControlDescriptor:inputControlDescriptor];
     icCell.delegate = self;
@@ -186,13 +190,16 @@
             [JMCancelRequestPopup dismiss];
         }];
     }
-    NSMutableArray *changedInputControls = [self.chagedInputControls mutableCopy];
-    [changedInputControls addObject:descriptor];
-    self.chagedInputControls = changedInputControls;
 }
 
 - (void)inputControlCellDidChangedValue:(JMInputControlCell *)cell
 {
+    if (![self.chagedInputControls containsObject:cell.inputControlDescriptor]) {
+        NSMutableArray *changedInputControls = [self.chagedInputControls mutableCopy];
+        [changedInputControls addObject:cell.inputControlDescriptor];
+        self.chagedInputControls = changedInputControls;
+    }
+
     [self.tableView reloadData];
 }
 
@@ -200,7 +207,7 @@
 
 - (NSString *)cellIdentifierForIndexPath:(NSIndexPath *)indexPath
 {
-    JSInputControlDescriptor *inputControlDescriptor = self.inputControls[indexPath.row];
+    JSInputControlDescriptor *inputControlDescriptor = self.dashboard.inputControls[indexPath.row];
     NSDictionary *inputControlDescriptorTypes = @{
             kJS_ICD_TYPE_BOOL                     : @"BooleanCell",
             kJS_ICD_TYPE_SINGLE_VALUE_TEXT        : @"TextEditCell",
@@ -219,29 +226,60 @@
 
 - (void)updatedInputControlsValuesWithCompletion:(void(^)(BOOL dataIsValid))completion
 {
-    NSMutableArray *selectedValues = [NSMutableArray array];
-    NSMutableArray *allInputControls = [NSMutableArray array];
-    // Get values from Input Controls
-    for (JSInputControlDescriptor *descriptor in self.inputControls) {
-        [selectedValues addObject:[[JSReportParameter alloc] initWithName:descriptor.uuid
-                                                                    value:descriptor.selectedValues]];
-        [allInputControls addObject:descriptor.uuid];
-    }
-
     [JMCancelRequestPopup presentWithMessage:@"status.loading"
                                  cancelBlock:^(void) {
                                      [self.restClient cancelAllRequests];
                                      [self backButtonTapped:nil];
                                  }];
+
+    for (JSInputControlDescriptor *inputControlDescriptor in self.chagedInputControls) {
+
+        JSReportParameter *reportParameter = [[JSReportParameter alloc] initWithName:inputControlDescriptor.uuid
+                                                                               value:inputControlDescriptor.selectedValues];
+
+        NSString *URI = [inputControlDescriptor.uri stringByReplacingOccurrencesOfString:@"repo:" withString:@""];
+        [self.restClient updatedInputControlValuesForDashboardWithURI:URI
+                                                                  ids:nil
+                                                       selectedValues:@[reportParameter]
+                                                                async:NO
+                                                      completionBlock:^(JSOperationResult *result) {
+
+                                                          if (result.error) {
+                                                              if (result.error.code == JSSessionExpiredErrorCode) {
+                                                                  [JMUtils showLoginViewAnimated:YES completion:nil];
+                                                              } else {
+                                                                  [JMUtils presentAlertControllerWithError:result.error completion:nil];
+                                                              }
+                                                          } else {
+                                                              JSInputControlState *state = result.objects.firstObject;
+                                                              inputControlDescriptor.state = state;
+                                                          }
+                                                      }];
+    }
+
+    [JMCancelRequestPopup dismiss];
+
+    [self.tableView reloadData];
+    if (completion) {
+        completion([self validateInputControls]);
+    }
 }
 
 #pragma mark - Helpers
 - (void)applyAction
 {
-    if (self.exitBlock) {
-        self.exitBlock(self.chagedInputControls);
+    if ([self validateInputControls]) { // Local validation
+        [self updatedInputControlsValuesWithCompletion:^(BOOL dataIsValid) { // Server validation
+            if (dataIsValid) {
+                if (self.exitBlock) {
+                    self.exitBlock(self.chagedInputControls);
+                }
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+        }];
+    } else {
+        [self.tableView reloadData];
     }
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

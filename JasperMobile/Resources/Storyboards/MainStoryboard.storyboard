@@ -1545,7 +1545,7 @@ your business wherever you are.</string>
             </objects>
             <point key="canvasLocation" x="-490" y="1305"/>
         </scene>
-        <!--DashboardICVC-->
+        <!--Dashboard Input ControlsVC-->
         <scene sceneID="RAt-6O-aOu">
             <objects>
                 <viewController storyboardIdentifier="JMDashboardInputControlsVC" id="lfF-9E-neQ" customClass="JMDashboardInputControlsVC" sceneMemberID="viewController">
@@ -2470,7 +2470,7 @@ your business wherever you are.</string>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="applyButtonDidTap:" destination="Udh-pd-kGH" eventType="touchUpInside" id="oJu-vD-3fp"/>
+                                    <action selector="runReportAction:" destination="Udh-pd-kGH" eventType="touchUpInside" id="OD3-Jj-HQh"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -2489,7 +2489,7 @@ your business wherever you are.</string>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="applyButton" destination="jv1-lW-hJw" id="9Ot-wN-wqC"/>
+                        <outlet property="runReportButton" destination="jv1-lW-hJw" id="BH8-Ca-Wd7"/>
                         <outlet property="tableView" destination="Xrc-ML-gfI" id="Q2u-1B-iwg"/>
                     </connections>
                 </viewController>

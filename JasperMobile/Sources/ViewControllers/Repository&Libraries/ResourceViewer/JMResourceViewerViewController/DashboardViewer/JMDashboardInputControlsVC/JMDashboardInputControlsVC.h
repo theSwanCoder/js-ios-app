@@ -4,7 +4,9 @@
 //
 
 
+@class JMDashboard;
+
 @interface JMDashboardInputControlsVC : UIViewController
-@property (nonatomic, strong) NSArray <JSInputControlDescriptor *>*inputControls;
+@property (nonatomic, strong) JMDashboard *dashboard;
 @property (nonatomic, copy) void(^exitBlock)(NSArray <JSInputControlDescriptor *>*changedInputControls);
 @end

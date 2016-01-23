@@ -40,6 +40,8 @@
 #import "JSDashboardResource.h"
 #import "JMInputControlsViewController.h"
 #import "JMDashboardInputControlsVC.h"
+#import "JSRESTBase+JSRESTDashboard.h"
+#import "JSDashboardComponent.h"
 
 @interface JMDashboardViewerVC() <JMDashboardLoaderDelegate, JMExternalWindowDashboardControlsVCDelegate>
 @property (nonatomic, copy) NSArray *rightButtonItems;
@@ -285,10 +287,9 @@
         menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
     }
     // TODO: verify if input controls available
-
-//    if ([self isInputControlsAvailable]) {
-//    }
-    menuActions |= JMMenuActionsViewAction_Edit;
+    if (![self isInputControlsAvailable] || ([self isInputControlsAvailable] && self.dashboard.inputControls.count > 0)) {
+        menuActions |= JMMenuActionsViewAction_Edit;
+    }
     return menuActions;
 }
 
@@ -435,65 +436,113 @@
     return self.leftButtonItem != nil;
 }
 
+- (void)fetchDashboardMetaDataWithCompletion:(void(^)(NSArray <JSDashboardComponent *> *components, NSArray <JSInputControlDescriptor *> *inputControls, NSError *error))completion
+{
+    if (!completion) {
+        return;
+    }
+
+    __weak __typeof(self) weakSelf = self;
+    [self.restClient fetchDashboardComponentsWithURI:self.dashboard.resourceURI
+                                          completion:^(JSOperationResult *result) {
+                                              __typeof(self) strongSelf = weakSelf;
+
+                                              if (result.error) {
+                                                  completion(nil, nil, result.error);
+                                              } else {
+                                                  // Get components
+                                                  NSArray <JSDashboardComponent *> *components = result.objects;
+
+                                                  NSMutableArray <JSDashboardComponent *> *inputControlComponents = [NSMutableArray array];
+                                                  for (JSDashboardComponent *component in components) {
+                                                      if ([component.type isEqualToString:@"inputControl"]) {
+                                                          [inputControlComponents addObject:component];
+                                                      }
+                                                  }
+
+                                                  // Form URLs for getting input controls
+                                                  NSMutableDictionary <NSString *, NSArray *> *inputControlsURLs = [NSMutableDictionary dictionary];
+                                                  for (JSDashboardComponent *component in inputControlComponents) {
+                                                      if (inputControlsURLs[component.ownerResourceURI]) {
+                                                          NSMutableArray *params = [inputControlsURLs[component.ownerResourceURI] mutableCopy];
+                                                          [params addObject:component.ownerResourceParameterName];
+                                                          inputControlsURLs[component.ownerResourceURI] = [params copy];
+                                                      } else {
+                                                          inputControlsURLs[component.ownerResourceURI] = @[component.ownerResourceParameterName];
+                                                      }
+                                                  }
+
+                                                  JMLog(@"inputControlsURLs: %@", inputControlsURLs);
+                                                  // Get input controls
+                                                  NSMutableArray *inputControls = [NSMutableArray array];
+                                                  for (NSString *inputControlURI in inputControlsURLs.allKeys) {
+                                                      NSString *URI = inputControlURI;
+                                                      if ([inputControlURI hasPrefix:@"/temp"]) {
+                                                          NSString *dashboardFilesURI = [NSString stringWithFormat:@"%@_files", strongSelf.dashboard.resourceURI];
+                                                          URI = [inputControlURI stringByReplacingOccurrencesOfString:@"/temp" withString:dashboardFilesURI];
+                                                      }
+                                                      [strongSelf.restClient inputControlsForDashboardWithURI:URI
+                                                                                                    ids:inputControlsURLs[inputControlURI]
+                                                                                         selectedValues:nil
+                                                                                                  async:NO
+                                                                                        completionBlock:^(JSOperationResult *_Nullable result) {
+
+                                                                                            if (result.error) {
+                                                                                                JMLog(@"error: %@", result.error);
+                                                                                            } else {
+                                                                                                [inputControls addObjectsFromArray:result.objects];
+                                                                                            }
+                                                                                        }];
+                                                  }
+
+                                                  // Callback
+
+                                                  if (inputControls.count > 0) {
+                                                      NSMutableArray *visibleInputControls = [NSMutableArray array];
+                                                      for (JSInputControlDescriptor *inputControl in inputControls) {
+                                                          if (inputControl.visible.boolValue) {
+                                                              [visibleInputControls addObject:inputControl];
+                                                          }
+                                                      }
+                                                      completion(components, visibleInputControls, nil);
+                                                  } else {
+                                                      completion(components, @[], nil);
+                                                  }
+                                              }
+                                          }];
+}
+
 - (void)showInputControls
 {
     if ([self isInputControlsAvailable]) {
-        [self showInputControlsViewControllerWithControls:self.dashboard.inputControls];
+        [self showInputControlsVC];
         return;
     }
 
     [self startShowLoaderWithMessage:@"status.loading"];
 
-    NSString *dashboardURI = self.resourceLookup.uri;
     __weak __typeof(self) weakSelf = self;
-    [self.restClient resourceLookupForURI:dashboardURI
-                             resourceType:kJS_WS_TYPE_DASHBOARD
-                               modelClass:[JSResourceDashboardUnit class]
-                          completionBlock:^(JSOperationResult *result) {
-                              __typeof(self) strongSelf = weakSelf;
+    [self fetchDashboardMetaDataWithCompletion:^(NSArray *components, NSArray *inputControls, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf stopShowLoader];
 
-                              JSResourceDashboardUnit *dashboardUnit = result.objects.firstObject;
-                              JSDashboardResource *inputControlResource;
-                              for (JSDashboardResource *resource in dashboardUnit.resources) {
-                                  if ([resource.type isEqualToString:@"inputControl"]) {
-                                      inputControlResource = resource;
-                                      break;
-                                  }
-                              }
+        if (error) {
+            [JMUtils presentAlertControllerWithError:error completion:nil];
+        } else {
+            strongSelf.dashboard.components = components;
+            strongSelf.dashboard.inputControls = inputControls;
 
-                              if (inputControlResource) {
-                                  // get input control meta data
-                                  __weak __typeof(self) weakSelf = strongSelf;
-                                  [strongSelf.restClient inputControlsForReport:inputControlResource.uri
-                                                                            ids:nil
-                                                                 selectedValues:nil
-                                                                completionBlock:^(JSOperationResult *_Nullable result) {
-                                                                    __typeof(self) strongSelf = weakSelf;
-
-                                                                    [strongSelf stopShowLoader];
-
-                                                                    if (result.error) {
-                                                                        //errorHandlingBlock(result.error, @"Report Input Controls Loading Error");
-                                                                    } else {
-                                                                        NSMutableArray *visibleInputControls = [NSMutableArray array];
-                                                                        for (JSInputControlDescriptor *inputControl in result.objects) {
-                                                                            if (inputControl.visible.boolValue) {
-                                                                                [visibleInputControls addObject:inputControl];
-                                                                            }
-                                                                        }
-
-                                                                        self.dashboard.inputControls = visibleInputControls;
-
-                                                                        if ([visibleInputControls count]) {
-                                                                            [strongSelf showInputControlsViewControllerWithControls:visibleInputControls];
-                                                                        } else  {
-                                                                            // show message about absent input controls
-                                                                        }
-                                                                    }
-                                                                }];
-                              }
-
-                          }];
+            if (inputControls.count) {
+                [strongSelf showInputControlsVC];
+            } else {
+                UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
+                                                                                                  message:@"dashboard.viewer.absent.input.controls.alert.message"
+                                                                                        cancelButtonTitle:@"dialog.button.ok"
+                                                                                  cancelCompletionHandler:nil];
+                [self presentViewController:alertController animated:YES completion:nil];
+            }
+        }
+    }];
 }
 
 - (BOOL)isInputControlsAvailable
@@ -517,7 +566,7 @@
 - (void)addControlsForExternalWindow
 {
     self.controlsViewController = [JMExternalWindowDashboardControlsVC new];
-    self.controlsViewController.components = self.dashboard.components;
+    self.controlsViewController.components = self.dashboard.dashlets;
     [self.view addSubview:self.controlsViewController.view];
 
     self.controlsViewController.delegate = self;
@@ -589,28 +638,41 @@
 }
 
 #pragma mark - Input Controls
-- (void)showInputControlsViewControllerWithControls:(NSArray *)inputControls
+- (void)showInputControlsVC
 {
     JMDashboardInputControlsVC *inputControlsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMDashboardInputControlsVC"];
-    inputControlsViewController.inputControls = inputControls;
+    inputControlsViewController.dashboard = self.dashboard;
 
+    __weak __typeof(self) weakSelf = self;
     inputControlsViewController.exitBlock = ^(NSArray *changedInputControls) {
+        __typeof(self) strongSelf = weakSelf;
+        JMLog(@"changed input controls: %@", changedInputControls);
+
         NSString *parametersAsString = @"{";
         for (JSInputControlDescriptor *inputControlDescriptor in changedInputControls) {
 
-            NSString *identifier = inputControlDescriptor.uuid;
+            NSString *inputControlID = inputControlDescriptor.uuid;
+
+            NSString *componentID;
+
+            for (JSDashboardComponent *component in strongSelf.dashboard.components) {
+                if ([component.ownerResourceParameterName isEqualToString:inputControlID]) {
+                    componentID = component.identifier;
+                }
+            }
+
             NSArray *values = [inputControlDescriptor selectedValues];
             NSString *valuesAsString = @"";
             for (NSString *value in values) {
                 valuesAsString = [valuesAsString stringByAppendingFormat:@"\"%@\",", value];
             }
 
-            parametersAsString = [parametersAsString stringByAppendingFormat:@"\"%@\":[%@], ", identifier, valuesAsString];
+            parametersAsString = [parametersAsString stringByAppendingFormat:@"\"%@\":[%@], ", componentID, valuesAsString];
         }
         parametersAsString = [parametersAsString stringByAppendingString:@"}"];
         JMLog(@"parametersAsString: %@", parametersAsString);
 
-        [self.dashboardLoader applyParameters:parametersAsString];
+        [strongSelf.dashboardLoader applyParameters:parametersAsString];
     };
 
     [self.navigationController pushViewController:inputControlsViewController animated:YES];
