@@ -311,7 +311,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
             [dashlets addObject:dashlet];
         }
     }
-    self.dashboard.components = [dashlets copy];
+    self.dashboard.dashlets = [dashlets copy];
 
     if (self.completion) {
         self.completion(YES, nil);
