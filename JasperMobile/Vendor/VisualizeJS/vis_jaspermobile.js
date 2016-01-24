@@ -434,6 +434,7 @@ MobileDashboard = {
                         JasperMobile.Dashboard.Callback.onRunSuccess(data);
                         MobileDashboard._configureComponents(data.components);
                         MobileDashboard._defineComponentsClickEvent();
+                        MobileDashboard._setupFiltersApperance();
                     }, 6000);
                 },
                 error: function(error) {
@@ -613,6 +614,17 @@ MobileDashboard = {
                 return components[i];
             }
         }
+    },
+    _setupFiltersApperance: function() {
+        var interval = window.setInterval(function() {
+            var divHeight;
+            divHeight = document.querySelector(".msPlaceholder > div").style.height;
+            if (divHeight !== 'undefined') {
+                window.clearInterval(interval);
+                document.querySelector(".msPlaceholder > div").style.height = "";
+            }
+            document.querySelector(".filterRow > div > div").style.height = "";
+        }, 500);
     }
 };
 
