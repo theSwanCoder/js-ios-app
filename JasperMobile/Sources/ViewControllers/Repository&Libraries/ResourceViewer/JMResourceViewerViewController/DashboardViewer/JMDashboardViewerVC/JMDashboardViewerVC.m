@@ -304,7 +304,14 @@
             break;
         }
         case JMMenuActionsViewAction_ShowExternalDisplay: {
-            [self showExternalWindow];
+            [self showExternalWindowWithCompletion:^(BOOL success) {
+                if (success) {
+                    [self addControlsForExternalWindow];
+                } else {
+                    // TODO: add handling this situation
+                    JMLog(@"error of showing on tv");
+                }
+            }];
             break;
         }
         case JMMenuActionsViewAction_HideExternalDisplay: {
@@ -551,10 +558,8 @@
 }
 
 #pragma mark - Work with external screen
-- (UIView *)viewForAddingToExternalWindow
+- (UIView *)viewToShowOnExternalWindow
 {
-    [self addControlsForExternalWindow];
-
     if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
         [self.dashboardLoader updateViewportScaleFactorWithValue:0.75];
     }

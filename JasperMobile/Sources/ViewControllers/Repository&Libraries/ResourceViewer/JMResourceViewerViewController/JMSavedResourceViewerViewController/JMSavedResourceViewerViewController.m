@@ -164,8 +164,14 @@
         }
     } else if (action == JMMenuActionsViewAction_ShowExternalDisplay) {
         if ( [self createExternalWindow] ) {
-            [self showExternalWindow];
-            [self addControlsForExternalWindow];
+            [self showExternalWindowWithCompletion:^(BOOL success) {
+                if (success) {
+                    [self addControlsForExternalWindow];
+                } else {
+                    // TODO: add handling this situation
+                    JMLog(@"error of showing on tv");
+                }
+            }];
         }
     } else if (action == JMMenuActionsViewAction_HideExternalDisplay) {
         [self switchFromTV];
@@ -182,7 +188,7 @@
 }
 
 #pragma mark - Work with external screen
-- (UIView *)viewForAddingToExternalWindow
+- (UIView *)viewToShowOnExternalWindow
 {
     self.webView.translatesAutoresizingMaskIntoConstraints = YES;
     return self.webView;
