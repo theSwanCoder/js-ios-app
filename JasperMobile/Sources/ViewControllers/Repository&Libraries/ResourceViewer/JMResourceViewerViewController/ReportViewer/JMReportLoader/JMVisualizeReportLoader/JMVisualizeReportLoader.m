@@ -222,7 +222,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)updateViewportScaleFactorWithValue:(CGFloat)scaleFactor
 {
-    if ( fabs(self.visualizeManager.viewportScaleFactor - scaleFactor) >= 0.49 ) {
+    BOOL isInitialScaleFactorSet = self.visualizeManager.viewportScaleFactor > 0.01;
+    BOOL isInitialScaleFactorTheSame = fabs(self.visualizeManager.viewportScaleFactor - scaleFactor) >= 0.49;
+    if ( !isInitialScaleFactorSet || isInitialScaleFactorTheSame ) {
         self.visualizeManager.viewportScaleFactor = scaleFactor;
 
         JMJavascriptRequest *request = [JMJavascriptRequest new];
