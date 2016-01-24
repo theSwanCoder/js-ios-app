@@ -55,7 +55,14 @@
 
 @implementation JMDashboardViewerVC
 
-#pragma mark -
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [self configViewport];
+}
+
+#pragma mark - Rotation
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
     if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
@@ -125,17 +132,22 @@
 }
 
 #pragma mark - Setups
-- (void)setupSubviews
+- (void)configViewport
 {
-    self.configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard];
-
-    // Setup viewport scale factor
     CGFloat initialScaleViewport = 0.75;
     BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
     if (isCompactWidth) {
         initialScaleViewport = 0.25;
     }
-    self.configurator.viewportScaleFactor = initialScaleViewport;
+
+    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+    }
+}
+
+- (void)setupSubviews
+{
+    self.configurator = [JMDashboardViewerConfigurator configuratorWithDashboard:self.dashboard];
 
     id dashboardView = [self.configurator webViewAsSecondary:NO];
     [self.view addSubview:dashboardView];
