@@ -82,7 +82,6 @@
 		089B15FF1AA756BD0021A915 /* JMMenuItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15811AA756BD0021A915 /* JMMenuItemTableViewCell.m */; };
 		089B16001AA756BD0021A915 /* JMMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 089B15841AA756BD0021A915 /* JMMenuViewController.m */; };
 		089B161D1AA757EA0021A915 /* jaspermobile.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16151AA757EA0021A915 /* jaspermobile.js */; };
-		089B161E1AA757EA0021A915 /* jaspermobile_dashboard.js in Resources */ = {isa = PBXBuildFile; fileRef = 089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */; };
 		089F664A1C3D465200ED683B /* JMExportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66401C3D465200ED683B /* JMExportManager.m */; };
 		089F664B1C3D465200ED683B /* JMExportResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66431C3D465200ED683B /* JMExportResource.m */; };
 		089F664C1C3D465200ED683B /* JMExportTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 089F66461C3D465200ED683B /* JMExportTask.m */; };
@@ -138,7 +137,6 @@
 		930F8D451ABB1CDF005F93FB /* dashboard.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D431ABB1CDF005F93FB /* dashboard.html */; };
 		930F8D461ABB1CDF005F93FB /* report.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D441ABB1CDF005F93FB /* report.html */; };
 		930F8D481ABB1D9F005F93FB /* require.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D471ABB1D9F005F93FB /* require.min.js */; };
-		930F8D4A1ABB28B0005F93FB /* report_optimized.html in Resources */ = {isa = PBXBuildFile; fileRef = 930F8D491ABB28B0005F93FB /* report_optimized.html */; };
 		9331B2C61C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */; };
 		9331B2C71C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */; };
 		9348F4E81A35C616006F5677 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9348F4E71A35C616006F5677 /* libsqlite3.0.dylib */; };
@@ -353,7 +351,6 @@
 		089B15871AA756BD0021A915 /* JMRefreshable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMRefreshable.h; sourceTree = "<group>"; };
 		089B15881AA756BD0021A915 /* JMResourceClientHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMResourceClientHolder.h; sourceTree = "<group>"; };
 		089B16151AA757EA0021A915 /* jaspermobile.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jaspermobile.js; sourceTree = "<group>"; };
-		089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jaspermobile_dashboard.js; sourceTree = "<group>"; };
 		089F663F1C3D465200ED683B /* JMExportManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExportManager.h; sourceTree = "<group>"; };
 		089F66401C3D465200ED683B /* JMExportManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExportManager.m; sourceTree = "<group>"; };
 		089F66421C3D465200ED683B /* JMExportResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExportResource.h; sourceTree = "<group>"; };
@@ -475,7 +472,6 @@
 		930F8D431ABB1CDF005F93FB /* dashboard.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = dashboard.html; sourceTree = "<group>"; };
 		930F8D441ABB1CDF005F93FB /* report.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = report.html; sourceTree = "<group>"; };
 		930F8D471ABB1D9F005F93FB /* require.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = require.min.js; sourceTree = "<group>"; };
-		930F8D491ABB28B0005F93FB /* report_optimized.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = report_optimized.html; sourceTree = "<group>"; };
 		9331B2C31C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JMExternalWindowDashboardControlsTableViewCell.h; sourceTree = "<group>"; };
 		9331B2C41C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JMExternalWindowDashboardControlsTableViewCell.m; sourceTree = "<group>"; };
 		9331B2C51C2FC7300057233B /* JMExternalWindowDashboardControlsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JMExternalWindowDashboardControlsTableViewCell.xib; sourceTree = "<group>"; };
@@ -1271,13 +1267,11 @@
 				930F8D471ABB1D9F005F93FB /* require.min.js */,
 				930F8D431ABB1CDF005F93FB /* dashboard.html */,
 				930F8D441ABB1CDF005F93FB /* report.html */,
-				930F8D491ABB28B0005F93FB /* report_optimized.html */,
 				930F8D3B1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js */,
 				930F8D3C1ABB1C35005F93FB /* dashboard-amber2-ios-mobilejs-sdk.js */,
 				930F8D3D1ABB1C35005F93FB /* dashboard-legacy-mobilejs-sdk.js */,
 				930F8D3E1ABB1C35005F93FB /* report-ios-mobilejs-sdk.js */,
 				089B16151AA757EA0021A915 /* jaspermobile.js */,
-				089B16161AA757EA0021A915 /* jaspermobile_dashboard.js */,
 				A14785AF90B597E785B4A30A /* old_dashboard.js */,
 				A1478BF95DE687CDEB03D288 /* vis_jaspermobile.js */,
 			);
@@ -2235,7 +2229,6 @@
 			files = (
 				938E1F991C1EEF6C009E1B79 /* vis_jaspermobile.js in Resources */,
 				939917321BC67737006CC2A7 /* old_dashboard.js in Resources */,
-				089B161E1AA757EA0021A915 /* jaspermobile_dashboard.js in Resources */,
 				93C37C6A1A39D49900CEE7CF /* Localizable.strings in Resources */,
 				08E0D1A01B0CF27200BFBFE5 /* Icon-512.png in Resources */,
 				9348F4EA1A35D103006F5677 /* profiles.json in Resources */,
@@ -2261,7 +2254,6 @@
 				089B15AD1AA756BD0021A915 /* JMCancelRequestPopup.xib in Resources */,
 				930F8D3F1ABB1C35005F93FB /* dashboard-amber-ios-mobilejs-sdk.js in Resources */,
 				089B15C31AA756BD0021A915 /* JMHorizontalLoadingCollectionViewCell.xib in Resources */,
-				930F8D4A1ABB28B0005F93FB /* report_optimized.html in Resources */,
 				08E0D19F1B0CF27200BFBFE5 /* Icon-1024.png in Resources */,
 				089B15AF1AA756BD0021A915 /* JMListOptionsPopupView.xib in Resources */,
 				936A1B971C22B72C00559F16 /* EULA.pdf in Resources */,
