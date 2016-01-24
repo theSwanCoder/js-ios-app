@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JMExternalWindowControlsVC">
             <connections>
                 <outlet property="activityIndicator" destination="urg-vA-mvD" id="ojC-Ws-A84"/>
                 <outlet property="imageView" destination="i94-lK-V6T" id="r37-b0-zZH"/>
-                <outlet property="imageViewHightConstraint" destination="3u3-m9-cvf" id="gbG-Cf-Ufa"/>
+                <outlet property="imageViewHightConstraint" destination="I4c-ix-Zsg" id="etG-5E-BrH"/>
                 <outlet property="scrollView" destination="qks-XH-3nP" id="RFd-VY-l0p"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -20,22 +21,24 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qks-XH-3nP">
-                    <rect key="frame" x="50" y="200" width="220" height="265"/>
+                    <rect key="frame" x="50" y="189" width="220" height="123"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="i94-lK-V6T">
-                            <rect key="frame" x="0.0" y="0.0" width="220" height="265"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="i94-lK-V6T">
+                            <rect key="frame" x="0.0" y="0.0" width="220" height="123"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="265" id="3u3-m9-cvf"/>
+                                <constraint firstAttribute="height" constant="123" id="I4c-ix-Zsg"/>
                             </constraints>
                         </imageView>
                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="urg-vA-mvD">
-                            <rect key="frame" x="100" y="123" width="20" height="20"/>
+                            <rect key="frame" x="100" y="52" width="20" height="20"/>
                         </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="i94-lK-V6T" secondAttribute="bottom" id="1Kd-RY-A3v"/>
                         <constraint firstAttribute="trailing" secondItem="i94-lK-V6T" secondAttribute="trailing" id="BQ3-gb-Gcj"/>
+                        <constraint firstAttribute="width" secondItem="qks-XH-3nP" secondAttribute="height" multiplier="16:9" id="DZT-vq-40o"/>
                         <constraint firstItem="i94-lK-V6T" firstAttribute="top" secondItem="qks-XH-3nP" secondAttribute="top" id="GLW-AT-ER7"/>
                         <constraint firstItem="urg-vA-mvD" firstAttribute="centerY" secondItem="qks-XH-3nP" secondAttribute="centerY" id="VGT-13-NCc"/>
                         <constraint firstItem="i94-lK-V6T" firstAttribute="width" secondItem="qks-XH-3nP" secondAttribute="width" id="cTm-7e-O4P"/>
@@ -54,16 +57,27 @@
             </subviews>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
             <constraints>
-                <constraint firstItem="qks-XH-3nP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="200" id="BcR-aI-2UQ"/>
+                <constraint firstItem="qks-XH-3nP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="10" id="BcR-aI-2UQ"/>
+                <constraint firstItem="qks-XH-3nP" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="U3A-8T-gCO"/>
                 <constraint firstAttribute="trailing" secondItem="qks-XH-3nP" secondAttribute="trailing" constant="50" id="aeh-Nr-Ewc">
                     <variation key="widthClass=compact" constant="10"/>
                 </constraint>
-                <constraint firstAttribute="bottom" secondItem="qks-XH-3nP" secondAttribute="bottom" constant="35" id="lx1-Qs-9mN"/>
                 <constraint firstItem="qks-XH-3nP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="50" id="nbB-rA-hzd">
                     <variation key="widthClass=compact" constant="10"/>
                 </constraint>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="BcR-aI-2UQ"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=compact-widthClass=compact">
+                <mask key="constraints">
+                    <include reference="BcR-aI-2UQ"/>
+                    <exclude reference="U3A-8T-gCO"/>
+                </mask>
+            </variation>
         </view>
     </objects>
 </document>

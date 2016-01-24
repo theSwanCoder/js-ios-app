@@ -71,6 +71,13 @@
     [self addObservers];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [self configViewport];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -184,17 +191,22 @@
     }
 }
 
-- (void)setupSubviews
+- (void)configViewport
 {
-    self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
-
-    // Setup viewport scale factor
     CGFloat initialScaleViewport = 0.75;
     BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
     if (isCompactWidth) {
         initialScaleViewport = 0.25;
     }
-    self.configurator.viewportScaleFactor = initialScaleViewport;
+
+    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
+        [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
+    }
+}
+
+- (void)setupSubviews
+{
+    self.configurator = [JMReportViewerConfigurator configuratorWithReport:self.report];
 
     UIWebView *webView = [self.configurator webViewAsSecondary:self.isChildReport];
     [self.view insertSubview:webView belowSubview:self.activityIndicator];
@@ -434,43 +446,42 @@
 - (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage completion:(void (^)(BOOL success))completion
 {
     [[self webView].scrollView setZoomScale:0.1 animated:YES];
+
     __weak typeof(self)weakSelf = self;
-    if ([self.reportLoader respondsToSelector:@selector(changeFromPage:toPage:withCompletion:)]) {
-        [self.reportLoader changeFromPage:fromPage toPage:toPage withCompletion:^(BOOL success, NSError *error) {
-            __strong typeof(self)strongSelf = weakSelf;
-            if (success) {
-                if (completion) {
-                    completion(YES);
-                }
-            } else {
-                if (completion) {
-                    completion(NO);
-                }
-                [strongSelf handleError:error];
-            }
-        }];
-    } else {
-        [self.reportLoader fetchPageNumber:toPage withCompletion:^(BOOL success, NSError *error) {
-            __strong typeof(self)strongSelf = weakSelf;
-            
-            // fix an issue in webview after zooming and changing page (black areas)
+    void(^changePageCompletion)(BOOL, NSError*) = ^(BOOL success, NSError *error) {
+        __strong typeof(self)strongSelf = weakSelf;
+
+        // fix an issue in webview after zooming and changing page (black areas)
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
+            runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
+            [((JMJavascriptNativeBridge *)[strongSelf reportLoader].bridge) sendRequest:runRequest];
+        });
+
+        if ([strongSelf isContentOnTV]) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
-                runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
-                [((JMJavascriptNativeBridge *)[strongSelf reportLoader].bridge) sendRequest:runRequest];
+                [strongSelf.controlsViewController updateInterface];
             });
-            
-            if (success) {
-                if (completion) {
-                    completion(YES);
-                }
-            } else {
-                if (completion) {
-                    completion(NO);
-                }
-                [strongSelf handleError:error];
+        }
+
+        if (success) {
+            if (completion) {
+                completion(YES);
             }
-        }];
+        } else {
+            if (completion) {
+                completion(NO);
+            }
+            [strongSelf handleError:error];
+        }
+    };
+
+    if ([self.reportLoader respondsToSelector:@selector(changeFromPage:toPage:withCompletion:)]) {
+        // via visualize
+        [self.reportLoader changeFromPage:fromPage toPage:toPage withCompletion:changePageCompletion];
+    } else {
+        // via REST
+        [self.reportLoader fetchPageNumber:toPage withCompletion:changePageCompletion];
     }
 }
 
@@ -674,9 +685,17 @@
             // TODO: change save action
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
-        case JMMenuActionsViewAction_ShowExternalDisplay:
-            [self showExternalWindow];
+        case JMMenuActionsViewAction_ShowExternalDisplay: {
+            [self showExternalWindowWithCompletion:^(BOOL success) {
+                if (success) {
+                    [self addControlsForExternalWindow];
+                } else {
+                    // TODO: add handling this situation
+                    JMLog(@"error of showing on tv");
+                }
+            }];
             break;
+        }
         case JMMenuActionsViewAction_HideExternalDisplay:
             [self switchFromTV];
             [self hideExternalWindow];
@@ -815,18 +834,13 @@
 }
 
 #pragma mark - Work with external screen
-- (UIView *)viewForAddingToExternalWindow
+- (UIView *)viewToShowOnExternalWindow
 {
     if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
         [self.reportLoader updateViewportScaleFactorWithValue:0.75];
     }
     UIView *view = [UIView new];
     UIView *reportView = self.webView;
-
-    // Need some time to layout content of webview
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self addControlsForExternalWindow];
-    });
 
     [view addSubview:reportView];
 
@@ -865,14 +879,7 @@
     [self.view addSubview:self.webView];
     [self setupWebViewLayout];
 
-    CGFloat initialScaleViewport = 0.75;
-    BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-    if (isCompactWidth) {
-        initialScaleViewport = 0.25;
-    }
-    if ([self.reportLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        [self.reportLoader updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
+    [self configViewport];
 
     [self.view addSubview:self.emptyReportMessageLabel];
     [self layoutEmptyReportLabelInView:self.view];

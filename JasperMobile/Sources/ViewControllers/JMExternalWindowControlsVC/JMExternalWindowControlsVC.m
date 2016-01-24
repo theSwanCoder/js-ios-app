@@ -32,12 +32,14 @@
 @property (weak, nonatomic) UIWebView *contentWebView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageViewHightConstraint;
-@property (nonatomic, assign) CGFloat contentViewProportions;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, assign) CGFloat contentViewProportions;
+@property (nonatomic, assign) CGSize originalWebViewSize;
 @end
 
 @implementation JMExternalWindowControlsVC
 
+#pragma mark - Object LifeCycle
 - (void)dealloc
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
@@ -57,44 +59,26 @@
 {
     [super viewDidAppear:animated];
 
-    self.contentWebView.frame = CGRectMake(0, 0, self.contentWebView.scrollView.contentSize.width, self.contentWebView.scrollView.contentSize.height);
+    [self updateInterface];
+}
 
-    [self.activityIndicator startAnimating];
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-        // Screenshot rendering from webView
-        CGSize renderSize = self.contentWebView.scrollView.contentSize;
-        UIGraphicsBeginImageContextWithOptions(renderSize, self.contentWebView.opaque, 0);
-        [self.contentWebView.scrollView.layer renderInContext:UIGraphicsGetCurrentContext()];
+- (void)viewDidLayoutSubviews
+{
 
-        UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+    [self layoutControlView];
 
-        // Resize Image View
-        CGFloat k = self.contentWebView.scrollView.contentSize.width / self.contentWebView.scrollView.contentSize.height;
+    [super viewDidLayoutSubviews];
+}
 
-        renderSize = CGSizeMake(CGRectGetWidth(self.scrollView.frame), CGRectGetWidth(self.scrollView.frame) / k);
-        UIGraphicsBeginImageContextWithOptions(renderSize, self.contentWebView.opaque, 0);
-        CGRect rect = CGRectMake(0, 0, renderSize.width, renderSize.height);
-        rect = CGRectIntegral(rect);
-        [viewImage drawInRect:rect];
-        viewImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+#pragma mark - Public API
+- (void)updateInterface
+{
+    [self starShowingProgress];
+    [self createContentScreenshotWithCompletion:^(UIImage *screenshotImage) {
+        [self endShowingProgress];
 
-        dispatch_async(dispatch_get_main_queue(), ^(void){
-            [self.activityIndicator stopAnimating];
-
-            CGRect conentWebViewFrame = CGRectMake(0, 0, 1024, 768);
-            self.contentWebView.frame = conentWebViewFrame;
-
-            self.imageView.image = viewImage;
-
-            CGSize size = CGSizeMake(viewImage.size.width, viewImage.size.height + 50);
-            self.scrollView.contentSize = size;
-            self.imageViewHightConstraint.constant = size.height;
-            self.contentViewProportions = self.contentWebView.scrollView.contentSize.height / viewImage.size.height;
-        });
-    });
-
+        [self setupControlViewWithImage:screenshotImage];
+    }];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -103,6 +87,70 @@
     CGPoint contentOffset = scrollView.contentOffset;
     contentOffset.y *= self.contentViewProportions;
     self.contentWebView.scrollView.contentOffset = contentOffset;
+}
+
+
+#pragma mark - Helpers
+- (void)createContentScreenshotWithCompletion:(void(^)(UIImage *screenshotImage))completion
+{
+    if (!completion) {
+        return;
+    }
+
+    self.originalWebViewSize = self.contentWebView.frame.size;
+    CGSize contentSize = self.contentWebView.scrollView.contentSize;
+    self.contentWebView.frame = CGRectMake(0, 0, contentSize.width, contentSize.height);
+
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+
+        UIGraphicsBeginImageContextWithOptions(contentSize, NO, 0);
+        [self.contentWebView.scrollView.layer renderInContext:UIGraphicsGetCurrentContext()];
+
+        UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            CGRect conentWebViewFrame = CGRectMake(0, 0, self.originalWebViewSize.width, self.originalWebViewSize.height);
+            self.contentWebView.frame = conentWebViewFrame;
+
+            completion(viewImage);
+        });
+    });
+}
+
+- (void)setupControlViewWithImage:(UIImage *)image
+{
+    self.imageView.image = image;
+}
+
+- (void)layoutControlView
+{
+    CGFloat contentWidth = self.contentWebView.scrollView.contentSize.width;
+    CGFloat contentHeight = self.contentWebView.scrollView.contentSize.height;
+
+    CGFloat k = contentWidth / contentHeight;
+
+    // Calculate control scroll view size
+    CGFloat controlViewContentWidth = self.scrollView.contentSize.width;
+    CGFloat controlViewContentHeight = self.scrollView.contentSize.width / k;
+    CGSize controlViewSize = CGSizeMake(controlViewContentWidth, controlViewContentHeight);
+    self.scrollView.contentSize = controlViewSize;
+
+    self.imageViewHightConstraint.constant = controlViewContentHeight;
+    self.contentViewProportions = contentHeight / controlViewContentHeight;
+}
+
+#pragma mark - Progress indicators
+- (void)starShowingProgress
+{
+    [self.activityIndicator startAnimating];
+    self.imageView.hidden = YES;
+}
+
+- (void)endShowingProgress
+{
+    [self.activityIndicator stopAnimating];
+    self.imageView.hidden = NO;
 }
 
 @end
