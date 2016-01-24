@@ -38,10 +38,9 @@
 - (BOOL)isExternalScreenAvailable;
 
 - (BOOL)createExternalWindow;
-- (void)showExternalWindow;
+- (void)showExternalWindowWithCompletion:(void(^)(BOOL success))completion;
 - (void)hideExternalWindow;
-- (UIView *)viewForAddingToExternalWindow;
-- (UIView *)viewForRemovingFromExternalWindow;
+- (UIView *)viewToShowOnExternalWindow;
 
 - (BOOL)isContentOnTV;
 @end

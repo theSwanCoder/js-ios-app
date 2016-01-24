@@ -72,12 +72,21 @@
     }
 }
 
-- (void)showExternalWindow
+- (void)showExternalWindowWithCompletion:(void(^)(BOOL success))completion
 {
+    if (!completion) {
+        return;
+    }
+
     if ([self isExternalScreenAvailable] && [self createExternalWindow] ) {
         self.externalWindow.hidden = NO;
+
+        // TODO: need other approach for detecting end of
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            completion(YES);
+        });
     } else {
-        // TODO: add handling this situation
+        completion(NO);
     }
 }
 
@@ -88,15 +97,10 @@
     });
 }
 
-- (UIView *)viewForAddingToExternalWindow
+- (UIView *)viewToShowOnExternalWindow
 {
     // override
     return nil;
-}
-
-- (UIView *)viewForRemovingFromExternalWindow
-{
-    return self.externalWindow.subviews.firstObject;
 }
 
 - (BOOL)isContentOnTV
@@ -130,7 +134,7 @@
     rect.size = desiredMode.size;
     self.externalWindow.frame = rect;
 
-    UIView *viewForAdding = [self viewForAddingToExternalWindow];
+    UIView *viewForAdding = [self viewToShowOnExternalWindow];
     viewForAdding.frame = rect;
     [self.externalWindow addSubview:viewForAdding];
 
