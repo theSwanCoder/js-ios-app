@@ -89,41 +89,29 @@
 {
     NSInteger currentPage = self.currentPage;
     NSInteger nextPage = 1;
-    self.previousButton.enabled = NO;
-    self.firstButton.enabled = NO;
     [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-            self.previousButton.enabled = YES;
-            self.firstButton.enabled = YES;
-            if (success) {
-                self.currentPage = nextPage;
-            }
-        }];
+        if (success) {
+            self.currentPage = nextPage;
+        }
+    }];
 }
 
 - (IBAction)lastButtonTapped:(id)sender
 {
     NSInteger currentPage = self.currentPage;
     NSInteger nextPage = self.countOfPages;
-    self.nextButton.enabled = NO;
-    self.lastButton.enabled = NO;
     [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-            self.nextButton.enabled = YES;
-            self.lastButton.enabled = YES;
-            if (success) {
-                self.currentPage = nextPage;
-            }
-        }];
+        if (success) {
+            self.currentPage = nextPage;
+        }
+    }];
 }
 
 - (IBAction)nextButtonTapped:(id)sender
 {
     NSInteger currentPage = self.currentPage;
     NSInteger nextPage = currentPage+1;
-    self.nextButton.enabled = NO;
-    self.lastButton.enabled = NO;
     [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-        self.nextButton.enabled = YES;
-        self.lastButton.enabled = YES;
         if (success) {
             self.currentPage = nextPage;
         }
@@ -134,15 +122,11 @@
 {
     NSInteger currentPage = self.currentPage;
     NSInteger nextPage = currentPage-1;
-    self.previousButton.enabled = NO;
-    self.firstButton.enabled = NO;
     [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-            self.previousButton.enabled = YES;
-            self.firstButton.enabled = YES;
-            if (success) {
-                self.currentPage = nextPage;
-            }
-        }];
+        if (success) {
+            self.currentPage = nextPage;
+        }
+    }];
 }
 
 #pragma mark - UITextFieldDelegate

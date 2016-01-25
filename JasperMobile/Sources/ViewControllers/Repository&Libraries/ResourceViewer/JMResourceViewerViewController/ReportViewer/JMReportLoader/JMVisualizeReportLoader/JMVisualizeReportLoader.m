@@ -128,17 +128,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     }
 }
 
-
-- (void)changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage withCompletion:(void(^)(BOOL success, NSError *error))completion
-{
-    self.reportLoadCompletion = completion;
-
-    JMJavascriptRequest *request = [JMJavascriptRequest new];
-    request.command = @"MobileReport.selectPage(%@);";
-    request.parametersAsString = @(toPage).stringValue;
-    [self.bridge sendRequest:request];
-}
-
 - (void)cancel
 {
     // TODO: need cancel?
@@ -381,6 +370,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
         countOfPages = ((NSNumber *)parameters[@"pages"]).integerValue;
     }
     [self.report updateCountOfPages:countOfPages];
+    self.report.isReportAlreadyLoaded = YES;
 
     if (self.reportLoadCompletion) {
         self.reportLoadCompletion(YES, nil);

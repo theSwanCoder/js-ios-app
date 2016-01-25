@@ -463,6 +463,7 @@
         }
 
         if (success) {
+            [self.report updateCurrentPage:toPage];
             if (completion) {
                 completion(YES);
             }
@@ -473,14 +474,8 @@
             [strongSelf handleError:error];
         }
     };
-
-    if ([self.reportLoader respondsToSelector:@selector(changeFromPage:toPage:withCompletion:)]) {
-        // via visualize
-        [self.reportLoader changeFromPage:fromPage toPage:toPage withCompletion:changePageCompletion];
-    } else {
-        // via REST
-        [self.reportLoader fetchPageNumber:toPage withCompletion:changePageCompletion];
-    }
+#warning Should update logic for load new report page after session expiration
+    [self.reportLoader fetchPageNumber:toPage withCompletion:changePageCompletion];
 }
 
 #pragma mark - Run report
@@ -597,8 +592,10 @@
         case JSSessionExpiredErrorCode:
             if (self.restClient.keepSession) {
                 __weak typeof(self)weakSelf = self;
+                [self startShowLoaderWithMessage:@"status.loading"];
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
                     __strong typeof(self)strongSelf = weakSelf;
+                    [strongSelf stopShowLoader];
                     if (isSessionAuthorized) {
                         // TODO: Need add restoring for current page
                         [strongSelf runReportWithPage:self.report.currentPage];
