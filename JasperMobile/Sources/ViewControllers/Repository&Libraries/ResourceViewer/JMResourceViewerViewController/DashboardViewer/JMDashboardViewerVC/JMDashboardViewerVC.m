@@ -316,10 +316,14 @@
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
     JMMenuActionsViewAction menuActions = [super availableActionForResource:resource] | JMMenuActionsViewAction_Refresh;
-    if ([self isExternalScreenAvailable]) {
-        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+
+    // TODO: enable in next releases
+    if ([JMUtils isServerAmber2OrHigher]) {
+        if ([self isExternalScreenAvailable]) {
+            menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+        }
     }
-    // TODO: verify if input controls available
+
     if ([self isInputControlsAvailable]) {
         menuActions |= JMMenuActionsViewAction_Edit;
     }
