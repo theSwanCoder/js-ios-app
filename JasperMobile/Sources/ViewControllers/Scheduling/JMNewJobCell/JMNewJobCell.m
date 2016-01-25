@@ -22,16 +22,27 @@
 
 
 //
-//  JMNewJobVC.h
+//  JMNewJobCell.m
 //  TIBCO JasperMobile
 //
 
-/**
-@author Aleksandr Dakhno odahno@tibco.com
-@since 2.3
-*/
+#import "JMNewJobCell.h"
 
-@interface JMNewJobVC : JMBaseViewController
-@property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, copy) void(^exitBlock)(void);
+
+@implementation JMNewJobCell
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if ([self.delegate respondsToSelector:@selector(jobCell:didChangeValue:)]) {
+        [self.delegate jobCell:self didChangeValue:textField.text];
+    }
+}
+
 @end

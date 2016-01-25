@@ -67,18 +67,12 @@
 }
 
 - (void)scheduleReport {
-    JMNewJobVC *newJobVC = (JMNewJobVC *) [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewJobVC"];
+    JMNewJobVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewJobVC"];
     newJobVC.resourceLookup = self.resourceLookup;
     newJobVC.exitBlock = ^() {
 
     };
-
-    JMSchedulingVC *schedulingVC = (JMSchedulingVC *) [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMSchedulingVC"];
-    NSMutableArray *viewControllers = [self.navigationController.viewControllers mutableCopy];
-
-    [viewControllers addObject:schedulingVC];
-    [viewControllers addObject:newJobVC];
-    [self.navigationController setViewControllers:viewControllers animated:YES];
+    [self.navigationController pushViewController:newJobVC animated:YES];
 }
 
 @end

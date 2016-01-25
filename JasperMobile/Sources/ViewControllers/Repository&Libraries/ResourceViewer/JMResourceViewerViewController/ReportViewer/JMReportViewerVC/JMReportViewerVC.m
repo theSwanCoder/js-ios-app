@@ -24,9 +24,6 @@
 #import "JMReportViewerVC.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMReportViewerConfigurator.h"
-#import "JSReportSaver.h"
-#import "JMSavedResources.h"
-#import "JMSavedResources+Helpers.h"
 #import "JMJavascriptRequest.h"
 #import "JMJavascriptNativeBridge.h"
 #import "JMWebViewManager.h"
@@ -35,6 +32,7 @@
 #import "JMInputControlsViewController.h"
 #import "JMReportViewerToolBar.h"
 #import "JMExternalWindowControlsVC.h"
+#import "JMNewJobVC.h"
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMExternalWindowControlViewControllerDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
@@ -685,6 +683,10 @@
             // TODO: change save action
             [self performSegueWithIdentifier:kJMSaveReportViewControllerSegue sender:nil];
             break;
+        case JMMenuActionsViewAction_Schedule: {
+            [self scheduleReport];
+            break;
+        }
         case JMMenuActionsViewAction_ShowExternalDisplay: {
             [self showExternalWindowWithCompletion:^(BOOL success) {
                 if (success) {
@@ -753,7 +755,7 @@
 
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
-    JMMenuActionsViewAction availableAction = [super availableActionForResource:resource] | JMMenuActionsViewAction_Save;
+    JMMenuActionsViewAction availableAction = [super availableActionForResource:resource] | JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule;
     if (self.report.isReportWithInputControls) {
         availableAction |= JMMenuActionsViewAction_Edit;
     }
@@ -770,7 +772,7 @@
 {
     JMMenuActionsViewAction disabledAction = [super disabledActionForResource:resource];
     if (![self isReportReady] || self.report.isReportEmpty) {
-        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_ShowExternalDisplay;
+        disabledAction |= JMMenuActionsViewAction_Save | JMMenuActionsViewAction_Schedule | JMMenuActionsViewAction_Print | JMMenuActionsViewAction_ShowExternalDisplay;
     }
     return disabledAction;
 }
@@ -892,6 +894,17 @@
 {
     [self switchFromTV];
     [self hideExternalWindow];
+}
+
+
+#pragma mark - Scheduling
+- (void)scheduleReport {
+    JMNewJobVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewJobVC"];
+    newJobVC.resourceLookup = self.resourceLookup;
+    newJobVC.exitBlock = ^() {
+
+    };
+    [self.navigationController pushViewController:newJobVC animated:YES];
 }
 
 @end

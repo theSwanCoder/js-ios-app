@@ -22,7 +22,7 @@
 
 
 //
-//  JMNewJobVC.h
+//  JMNewJobCell.h
 //  TIBCO JasperMobile
 //
 
@@ -31,7 +31,15 @@
 @since 2.3
 */
 
-@interface JMNewJobVC : JMBaseViewController
-@property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, copy) void(^exitBlock)(void);
+@protocol JMNewJobCellDelegate;
+
+@interface JMNewJobCell : UITableViewCell <UITextFieldDelegate>
+@property(nonatomic, weak) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UITextField *valueTextField;
+@property (nonatomic, weak) NSObject <JMNewJobCellDelegate> *delegate;
+@end
+
+@protocol JMNewJobCellDelegate
+@optional
+- (void)jobCell:(JMNewJobCell *)cell didChangeValue:(NSString *)newValue;
 @end

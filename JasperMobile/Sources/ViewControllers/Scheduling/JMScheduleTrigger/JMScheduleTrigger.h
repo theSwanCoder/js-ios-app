@@ -22,7 +22,7 @@
 
 
 //
-//  JMNewJobVC.h
+//  JMScheduleTrigger.h
 //  TIBCO JasperMobile
 //
 
@@ -31,7 +31,10 @@
 @since 2.3
 */
 
-@interface JMNewJobVC : JMBaseViewController
-@property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, copy) void(^exitBlock)(void);
+
+@interface JMScheduleTrigger : NSObject
+@property (nonatomic, strong) NSString *timezone;
+@property (nonatomic, strong) NSDate *startDate;
+@property (nonatomic, assign) NSInteger startType;
+@property (nonatomic, assign) NSInteger occurrenceCount;
 @end
