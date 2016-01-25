@@ -813,7 +813,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
         return this._instance.run(options);
       };
 
-      MobileReport.destroy = function() {
+      MobileReport.destroyReport = function() {
         return this._instance._destroyReport();
       };
 
