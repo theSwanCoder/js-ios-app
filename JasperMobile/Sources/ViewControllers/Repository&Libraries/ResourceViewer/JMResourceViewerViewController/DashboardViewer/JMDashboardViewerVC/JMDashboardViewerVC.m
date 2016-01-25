@@ -253,7 +253,22 @@
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
-    [self startShowDashboard];
+    [self startShowLoaderWithMessage:@"status.loading"];
+
+    __weak __typeof(self) weakSelf = self;
+    [self fetchDashboardMetaDataWithCompletion:^(NSArray *components, NSArray *inputControls, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        [strongSelf stopShowLoader];
+
+        if (error) {
+            [JMUtils presentAlertControllerWithError:error completion:nil];
+        } else {
+            strongSelf.dashboard.components = components;
+            strongSelf.dashboard.inputControls = inputControls;
+            [strongSelf startShowDashboard];
+        }
+    }];
+
 }
 
 - (void)startShowDashboard
@@ -332,7 +347,7 @@
             break;
         }
         case JMMenuActionsViewAction_Edit: {
-            [self showInputControls];
+            [self showInputControlsVC];
             break;
         }
         default:{break;}
@@ -531,38 +546,13 @@
                                           }];
 }
 
-- (void)showInputControls
-{
-    if ([self isInputControlsAvailable]) {
-        [self showInputControlsVC];
-        return;
-    }
-
-    [self startShowLoaderWithMessage:@"status.loading"];
-
-    __weak __typeof(self) weakSelf = self;
-    [self fetchDashboardMetaDataWithCompletion:^(NSArray *components, NSArray *inputControls, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        [strongSelf stopShowLoader];
-
-        if (error) {
-            [JMUtils presentAlertControllerWithError:error completion:nil];
-        } else {
-            strongSelf.dashboard.components = components;
-            strongSelf.dashboard.inputControls = inputControls;
-
-            if (inputControls.count) {
-                [strongSelf showInputControlsVC];
-            } else {
-                UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"dialod.title.attention"
-                                                                                                  message:@"dashboard.viewer.absent.input.controls.alert.message"
-                                                                                        cancelButtonTitle:@"dialog.button.ok"
-                                                                                  cancelCompletionHandler:nil];
-                [self presentViewController:alertController animated:YES completion:nil];
-            }
-        }
-    }];
-}
+//- (void)showInputControls
+//{
+//    if ([self isInputControlsAvailable]) {
+//        [self showInputControlsVC];
+//        return;
+//    }
+//}
 
 - (BOOL)isInputControlsAvailable
 {
