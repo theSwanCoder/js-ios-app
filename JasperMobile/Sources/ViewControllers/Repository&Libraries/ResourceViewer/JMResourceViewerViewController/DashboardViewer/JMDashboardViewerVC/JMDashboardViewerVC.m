@@ -122,7 +122,6 @@
 
 - (UIWebView *)webView
 {
-    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     return self.configurator.webView;
 }
 
@@ -253,22 +252,29 @@
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
-    [self startShowLoaderWithMessage:@"status.loading"];
 
-    __weak __typeof(self) weakSelf = self;
-    [self fetchDashboardMetaDataWithCompletion:^(NSArray *components, NSArray *inputControls, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        [strongSelf stopShowLoader];
+    if ([JMUtils isServerAmber2OrHigher]) {
+        [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+                                   cancelBlock:^(void) {
+                                       [super cancelResourceViewingAndExit:YES];
+                                   }];
 
-        if (error) {
-            [JMUtils presentAlertControllerWithError:error completion:nil];
-        } else {
-            strongSelf.dashboard.components = components;
-            strongSelf.dashboard.inputControls = inputControls;
-            [strongSelf startShowDashboard];
-        }
-    }];
+        __weak __typeof(self) weakSelf = self;
+        [self fetchDashboardMetaDataWithCompletion:^(NSArray *components, NSArray *inputControls, NSError *error) {
+            __typeof(self) strongSelf = weakSelf;
+            [strongSelf stopShowLoader];
 
+            if (error) {
+                [JMUtils presentAlertControllerWithError:error completion:nil];
+            } else {
+                strongSelf.dashboard.components = components;
+                strongSelf.dashboard.inputControls = inputControls;
+                [strongSelf startShowDashboard];
+            }
+        }];
+    } else {
+        [self startShowDashboard];
+    }
 }
 
 - (void)startShowDashboard
@@ -314,7 +320,7 @@
         menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
     }
     // TODO: verify if input controls available
-    if (![self isInputControlsAvailable] || ([self isInputControlsAvailable] && self.dashboard.inputControls.count > 0)) {
+    if ([self isInputControlsAvailable]) {
         menuActions |= JMMenuActionsViewAction_Edit;
     }
     return menuActions;
