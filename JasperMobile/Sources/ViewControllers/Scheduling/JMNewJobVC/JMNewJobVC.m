@@ -49,13 +49,6 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
 @implementation JMNewJobVC
 
-#pragma mark - Object LifeCycle
-//- (void)awakeFromNib
-//{
-//    [super awakeFromNib];
-//
-//}
-
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
 {
@@ -63,27 +56,12 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     self.title = @"New Job";
     self.view.backgroundColor = [[JMThemesManager sharedManager] viewBackgroundColor];
 
-    // textfields
-//    self.jobNameTextField.text = self.resourceLookup.label;
-
     // date text field
     UIDatePicker *datePicker = [[UIDatePicker alloc]init];
     [datePicker setDate:[NSDate date]];
     [datePicker addTarget:self
                    action:@selector(updateDate:)
          forControlEvents:UIControlEventValueChanged];
-//    self.dateTextField.inputView = datePicker;
-
-//    UIToolbar *toolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, -40, 320, 40)];
-//    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(setDate:)];
-//    [toolbar setItems:@[doneButton] animated:YES];
-//    self.dateTextField.inputAccessoryView = toolbar;
-
-//    self.dateTextField.text = [self dateStringFromDate:[NSDate date]];
-
-    // format button
-//    self.format = @"PDF";
-//    [self.formatButton setTitle:self.format forState:UIControlStateNormal];
 
     [self createJobRepresentation];
     self.job = [JMScheduleJob jobWithReportURI:self.resourceLookup.uri
@@ -97,7 +75,6 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 #pragma mark - Actions
 - (void)updateDate:(UIDatePicker *)sender
 {
-    JMLog(@"new date: %@", sender.date);
     self.job.startDate = sender.date;
 
     // find text field for date
@@ -123,11 +100,13 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
 - (IBAction)selectFormat:(id)sender
 {
-    JMLog(@"select format");
+    NSArray *availableFormats = @[
+            kJS_CONTENT_TYPE_HTML,
+            kJS_CONTENT_TYPE_PDF,
+            kJS_CONTENT_TYPE_XLS
+    ];
 
-    NSArray *availableFormats = @[@"HTML", @"PDF", @"XLS"];
-
-    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:@"Output Format"
+    UIAlertController *alertController = [UIAlertController alertControllerWithLocalizedTitle:JMCustomLocalizedString(@"schedules.new.job.output.format", nil)
                                                                                       message:nil
                                                                             cancelButtonTitle:@"dialog.button.cancel"
                                                                       cancelCompletionHandler:nil];
@@ -139,8 +118,8 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     for (NSString *format in availableFormats) {
         [alertController addActionWithLocalizedTitle:format style:UIAlertActionStyleDefault
                                              handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                                 formatCell.valueTextField.text = format;
-                                                 self.job.outputFormat = format;
+                                                 self.job.outputFormat = format.uppercaseString;
+                                                 formatCell.valueTextField.text = self.job.outputFormat;
                                              }];
     }
 
@@ -153,14 +132,8 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     NSString *jobProperty = self.jobRepresentationProperties[indexPath.row];
-    if ([jobProperty isEqualToString:kJMJobLabel]) {
-
-    } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
-
-    } else if ([jobProperty isEqualToString:kJMJobFormat]) {
+    if ([jobProperty isEqualToString:kJMJobFormat]) {
         [self selectFormat:nil];
-    } else if ([jobProperty isEqualToString:kJMJobStartDate]) {
-
     }
 }
 
@@ -179,17 +152,17 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     NSString *propertyTitle;
     NSString *propertyValue;
     if ([jobProperty isEqualToString:kJMJobLabel]) {
-        propertyTitle = @"Job Label";
+        propertyTitle = JMCustomLocalizedString(@"schedules.new.job.label", nil);
         propertyValue = self.job.label;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
-        propertyTitle = @"Output File Name";
+        propertyTitle = JMCustomLocalizedString(@"schedules.new.job.output.file.name", nil);
         propertyValue = self.job.baseOutputFilename;
     } else if ([jobProperty isEqualToString:kJMJobFormat]) {
-        propertyTitle = @"Format";
+        propertyTitle = JMCustomLocalizedString(@"schedules.new.job.format", nil);
         propertyValue = self.job.outputFormat;
         cell.valueTextField.userInteractionEnabled = NO;
     } else if ([jobProperty isEqualToString:kJMJobStartDate]) {
-        propertyTitle = @"Start Date";
+        propertyTitle = JMCustomLocalizedString(@"schedules.new.job.start.date", nil);
         propertyValue = [self dateStringFromDate:self.job.startDate];
         [self setupToolbarForTextField:cell.valueTextField];
     }
@@ -226,10 +199,6 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
         self.job.label = newValue;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
         self.job.baseOutputFilename = newValue;
-    } else if ([jobProperty isEqualToString:kJMJobFormat]) {
-
-    } else if ([jobProperty isEqualToString:kJMJobStartDate]) {
-
     }
 }
 

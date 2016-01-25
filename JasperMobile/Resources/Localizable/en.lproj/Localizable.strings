@@ -297,4 +297,10 @@
 
 /*Schedules*/
 "schedules.title" = "Schedules";
-"schedules.no.jobs.message" = "No job is scheduled.";
+"schedules.no.jobs.message" = "No jobs is scheduled.";
+// New Job
+"schedules.new.job.label" = "Job Label";
+"schedules.new.job.output.file.name" = "Output File Name";
+"schedules.new.job.format" = "Format";
+"schedules.new.job.start.date" = "Start Date";
+"schedules.new.job.output.format" = "Output Format"; //title of alert
