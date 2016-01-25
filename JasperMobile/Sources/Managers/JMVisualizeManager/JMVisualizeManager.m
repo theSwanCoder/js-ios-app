@@ -79,27 +79,7 @@
     if (isAmberServer) {
         htmlString = [self htmlStringForAmberServer];
     } else {
-        NSString *htmlName = @"report";
-
-        NSString *htmlPath = [[NSBundle mainBundle] pathForResource:htmlName ofType:@"html"];
-        htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-
-        // Initial Scale for ViewPort
-        CGFloat initialScaleViewport = 0.75;
-        if ([JMUtils isIphone]) {
-            initialScaleViewport = 0.25;
-        }
-        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"INITIAL_SCALE_VIEWPORT" withString:@(initialScaleViewport).stringValue];
-
-        // Visualize
-        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"VISUALIZE_PATH" withString:self.visualizePath];
-
-        // New JasperMobile
-        NSString *jaspermobilePath = [[NSBundle mainBundle] pathForResource:@"vis_jaspermobile" ofType:@"js"];
-        NSString *jaspermobileString = [NSString stringWithContentsOfFile:jaspermobilePath
-                                                                 encoding:NSUTF8StringEncoding
-                                                                    error:nil];
-        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"JASPERMOBILE_SCRIPT" withString:jaspermobileString];
+        htmlString = [self htmlStringForDashboard];
     }
 
     return htmlString;
