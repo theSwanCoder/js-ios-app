@@ -38,11 +38,6 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
 @interface JMNewJobVC() <UITableViewDataSource, UITableViewDelegate, JMNewJobCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-//@property (weak, nonatomic) IBOutlet UITextField *jobNameTextField;
-//@property (weak, nonatomic) IBOutlet UITextField *fileNameTextField;
-//@property (weak, nonatomic) IBOutlet UITextField *dateTextField;
-//@property (weak, nonatomic) IBOutlet UIButton *formatButton;
-//@property (nonatomic) NSString *format;
 @property (nonatomic, strong) JMScheduleJob *job;
 @property (nonatomic, strong) NSArray *jobRepresentationProperties;
 @end
