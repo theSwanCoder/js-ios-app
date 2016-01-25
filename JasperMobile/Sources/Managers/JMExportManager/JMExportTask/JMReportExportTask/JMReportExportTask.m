@@ -138,8 +138,8 @@
 
 - (void)cancel
 {
-    [self.reportSaver cancelSavingReport];
     [super cancel];
+    [self completeOperation];
 }
 
 - (NSString *)resourceTypeForResource
