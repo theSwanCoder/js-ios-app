@@ -22,16 +22,13 @@
 
 
 //
-//  JMNewJobVC.h
+//  JMScheduleTrigger.m
 //  TIBCO JasperMobile
 //
 
-/**
-@author Aleksandr Dakhno odahno@tibco.com
-@since 2.3
-*/
 
-@interface JMNewJobVC : JMBaseViewController
-@property (nonatomic, strong) JSResourceLookup *resourceLookup;
-@property (nonatomic, copy) void(^exitBlock)(void);
+#import "JMScheduleTrigger.h"
+
+
+@implementation JMScheduleTrigger
 @end
