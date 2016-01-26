@@ -38,11 +38,26 @@
     return YES;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if ([self.delegate respondsToSelector:@selector(jobCell:didChangeValue:)]) {
-        [self.delegate jobCell:self didChangeValue:textField.text];
+    NSString *currentString = textField.text;
+
+    NSString *changedString;
+
+    if (range.length) {
+        // remove symbol
+        NSRange lastSymbolRange = NSMakeRange(currentString.length - 1, 1);
+        changedString = [currentString stringByReplacingCharactersInRange:lastSymbolRange withString:@""];
+    } else {
+        // add symbol
+        changedString = [currentString stringByAppendingString:string];
     }
+
+    if ([self.delegate respondsToSelector:@selector(jobCell:didChangeValue:)]) {
+        [self.delegate jobCell:self didChangeValue:changedString];
+    }
+
+    return YES;
 }
 
 @end
