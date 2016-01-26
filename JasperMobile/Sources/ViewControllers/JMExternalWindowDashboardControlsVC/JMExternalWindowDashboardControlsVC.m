@@ -38,6 +38,25 @@
 
 @implementation JMExternalWindowDashboardControlsVC
 
+#pragma mark - Custom Accessor
+- (void)setComponents:(NSArray *)components
+{
+    _components = components;
+
+    NSMutableArray *visibleComponents = [NSMutableArray array];
+    NSMutableDictionary *maximizedComponets = [NSMutableDictionary dictionary];
+    for (JMDashlet *dashlet in components) {
+        if (dashlet.type == JMDashletTypeChart) {
+            [visibleComponents addObject:dashlet];
+            maximizedComponets[dashlet.identifier] = @(NO);
+        }
+    }
+    self.visibleComponents = visibleComponents;
+    self.maximizedComponents = maximizedComponets;
+
+    [self.tableView reloadData];
+}
+
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
 {
@@ -46,17 +65,6 @@
     UINib *cellNib = [UINib nibWithNibName:@"JMExternalWindowDashboardControlsTableViewCell" bundle:nil];
     [self.tableView registerNib:cellNib forCellReuseIdentifier:@"JMExternalWindowDashboardControlsTableViewCell"];
     self.tableView.tableFooterView = [UIView new];
-
-    NSMutableArray *visibleComponents = [NSMutableArray array];
-    NSMutableDictionary *maximizedComponets = [NSMutableDictionary dictionary];
-    for (JMDashlet *dashlet in self.components) {
-        if (dashlet.type == JMDashletTypeChart) {
-            [visibleComponents addObject:dashlet];
-            maximizedComponets[dashlet.identifier] = @(NO);
-        }
-    }
-    self.visibleComponents = visibleComponents;
-    self.maximizedComponents = maximizedComponets;
 }
 
 #pragma mark - UITableViewDataSource

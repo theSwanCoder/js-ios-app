@@ -160,7 +160,7 @@ JasperMobile.Dashboard.Callback = {
     onRunFailed: function(error) {
         JasperMobile.Callback.createCallback(
             {
-                "command" : "onLoadError",
+                "command" : "onRunFailed",
                 "parameters" : {
                     "error" : error
                 }
@@ -521,7 +521,7 @@ MobileDashboard = {
     refreshDashlet: function() {
         JasperMobile.Callback.log("start refresh component");
         JasperMobile.Callback.log("dashboard object: " + MobileDashboard.dashboardObject);
-        MobileDashboard.dashboardObject.refresh(MobileDashboard.selectedComponent.id)
+        MobileDashboard.refreshedDashboardObject = MobileDashboard.dashboardObject.refresh(MobileDashboard.selectedComponent.id)
             .done(function() {
                 JasperMobile.Callback.log("success refresh");
                 var data = MobileDashboard.dashboardObject.data();
@@ -529,7 +529,14 @@ MobileDashboard = {
             })
             .fail(function(error) {
                 JasperMobile.Callback.log("failed refresh");
+                JasperMobile.Dashboard.Callback.onRunFailed(error);
             });
+        setTimeout(function() {
+            JasperMobile.Callback.log("state: " + MobileDashboard.refreshedDashboardObject.state());
+            if (MobileDashboard.refreshedDashboardObject.state() === "pending") {
+                MobileDashboard.run({"uri" : MobileDashboard.dashboardObject.properties().resource});
+            }
+        }, 20000);
     },
     applyParams: function(parameters) {
 

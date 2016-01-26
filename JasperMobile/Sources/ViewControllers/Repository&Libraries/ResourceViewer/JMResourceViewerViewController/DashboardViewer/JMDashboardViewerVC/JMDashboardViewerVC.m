@@ -241,6 +241,13 @@
         [self.dashboardLoader reloadMaximizedDashletWithCompletion:^(BOOL success, NSError *error){
             __weak typeof(self)strongSelf = weakSelf;
             [strongSelf stopShowLoader];
+            if (!success) {
+                if (error.code == JSSessionExpiredErrorCode) {
+                    [strongSelf startShowDashboard];
+                } else {
+                    [JMUtils presentAlertControllerWithError:error completion:nil];
+                }
+            }
         }];
 
     } else {
@@ -302,6 +309,17 @@
                                         kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
                                         kJMAnalyticsLabelKey         : label
                                         }];
+                } else {
+                    if (error.code == JSSessionExpiredErrorCode) {
+                        [strongSelf.restClient deleteCookies];
+                        [strongSelf startShowDashboard];
+                    } else {
+                        [JMUtils presentAlertControllerWithError:error completion:nil];
+                    }
+
+                    if ([strongSelf isContentOnTV]) {
+                        strongSelf.controlsViewController.components = self.dashboard.dashlets;
+                    }
                 }
             }];
 
@@ -555,14 +573,6 @@
                                               }
                                           }];
 }
-
-//- (void)showInputControls
-//{
-//    if ([self isInputControlsAvailable]) {
-//        [self showInputControlsVC];
-//        return;
-//    }
-//}
 
 - (BOOL)isInputControlsAvailable
 {

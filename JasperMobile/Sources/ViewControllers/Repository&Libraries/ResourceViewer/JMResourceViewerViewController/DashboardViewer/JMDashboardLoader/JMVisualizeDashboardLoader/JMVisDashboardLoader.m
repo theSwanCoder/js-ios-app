@@ -249,6 +249,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         [self handleOnReferenceClick:callback.parameters[@"parameters"]];
     } else if ([callback.type isEqualToString:@"onAuthError"]) {
         [self javascriptNativeBridgeDidReceiveAuthRequest:self.bridge];
+    }  else if ([callback.type isEqualToString:@"onRunFailed"]) {
+        [self handleOnRunFailed:callback.parameters[@"parameters"]];
     } else if ([callback.type isEqualToString:@"dashboardParameters"]) {
         [self handleDidFetchDashboardParameters:callback.parameters[@"parameters"]];
     } else if ([callback.type isEqualToString:@"onWindowError"]) {
@@ -390,6 +392,25 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
     JMLog(@"parameters: %@", parameters);
     if (self.completion) {
         // TODO: complete
+    }
+}
+
+- (void)handleOnRunFailed:(NSDictionary *)parameters
+{
+    JMLog(@"%@", NSStringFromSelector(_cmd));
+    JMLog(@"parameters: %@", parameters);
+    if (self.completion) {
+        // TODO: complete
+        NSString *errorCode = parameters[@"error"][@"errorCode"];
+        NSString *message = parameters[@"error"][@"message"];
+        NSInteger code = 0;
+        if ([errorCode isEqualToString:@"authentication.error"]) {
+            code = JSSessionExpiredErrorCode;
+        }
+        NSError *error = [[NSError alloc] initWithDomain:@"Visualize.Dashboard.Error"
+                                                    code:code
+                                                userInfo:@{NSLocalizedDescriptionKey : message}];
+        self.completion(NO, error);
     }
 }
 
