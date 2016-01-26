@@ -97,7 +97,7 @@
         case JMResourceTypeFavorites:
             return JMCustomLocalizedString(@"menuitem.favorites.label", nil);
         case JMResourceTypeScheduling:
-            return @"Scheduling";
+            return JMCustomLocalizedString(@"menuitem.schedules.label", nil);
         case JMResourceTypeRepository:
             return JMCustomLocalizedString(@"menuitem.repository.label", nil);
         case JMResourceTypeAbout:
@@ -145,7 +145,7 @@
         case JMResourceTypeFavorites:
             return [UIImage imageNamed:@"ic_favorites_selected"];
         case JMResourceTypeScheduling:
-            return [UIImage imageNamed:@"ic_scheduling"];
+            return [UIImage imageNamed:@"ic_scheduling_selected"];
         default:
             return nil;
     }
