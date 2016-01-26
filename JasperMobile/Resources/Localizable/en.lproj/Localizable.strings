@@ -301,7 +301,7 @@
 
 /*Schedules*/
 "schedules.title" = "Schedules";
-"schedules.no.jobs.message" = "No jobs is scheduled.";
+"schedules.no.jobs.message" = "No jobs are scheduled.";
 // New Job
 "schedules.new.job.label" = "Job Label";
 "schedules.new.job.output.file.name" = "Output File Name";
