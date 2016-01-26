@@ -247,7 +247,7 @@
 "action.title.showExternalDisplay" = "Show on TV";
 "action.title.hideExternalDisplay" = "Show on Device";
 "external.screen.button.title.maximize" = "Tap to maximize";
-"external.screen.button.title.manimize" = "Tap to manimize";
+"external.screen.button.title.manimize" = "Tap to minimize";
 /* Error messages */
 
 "error.readingresponse.dialog.msg" = "Failed to load data!";
