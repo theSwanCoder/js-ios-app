@@ -242,9 +242,12 @@
 "action.title.print" = "Print";
 "action.title.openIn" = "Open with...";
 "action.title.accept" = "Accept";
+
+/* External screens*/
 "action.title.showExternalDisplay" = "Show on TV";
 "action.title.hideExternalDisplay" = "Show on Device";
-
+"external.screen.button.title.maximize" = "Tap to maximize";
+"external.screen.button.title.manimize" = "Tap to manimize";
 /* Error messages */
 
 "error.readingresponse.dialog.msg" = "Failed to load data!";
