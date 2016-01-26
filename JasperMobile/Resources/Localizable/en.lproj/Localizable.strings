@@ -305,3 +305,6 @@
 "schedules.new.job.format" = "Format";
 "schedules.new.job.start.date" = "Start Date";
 "schedules.new.job.output.format" = "Output Format"; //title of alert
+"schedules.error.domain" = "Validation of creating new schedule job";
+"schedules.error.empty.filename" = "File name is empty";
+"schedules.error.empty.format" = "Output file format not selected";

@@ -178,14 +178,20 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 #pragma mark - Save
 - (IBAction)saveJob:(id)sender
 {
-    [self createJobWithCompletion:^(NSError *error) {
-        if (error) {
-            [JMUtils presentAlertControllerWithError:error completion:nil];
+    [self validateJobWithCompletion:^(BOOL success, NSError *error) {
+        if (success) {
+            [self createJobWithCompletion:^(NSError *error) {
+                if (error) {
+                    [JMUtils presentAlertControllerWithError:error completion:nil];
+                } else {
+                    if (self.exitBlock) {
+                        self.exitBlock();
+                    }
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+            }];
         } else {
-            if (self.exitBlock) {
-                self.exitBlock();
-            }
-            [self.navigationController popViewControllerAnimated:YES];
+            [JMUtils presentAlertControllerWithError:error completion:nil];
         }
     }];
 }
@@ -263,6 +269,30 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
                                                                                    action:nil];
     [toolbar setItems:@[flexibleSpace, doneButton] animated:YES];
     textField.inputAccessoryView = toolbar;
+}
+
+- (void)validateJobWithCompletion:(void(^)(BOOL success, NSError *error))completion
+{
+    if (!completion) {
+        return;
+    }
+
+    NSString *message;
+
+    if (!self.job.baseOutputFilename) {
+        message = JMCustomLocalizedString(@"schedules.error.empty.filename", nil);
+    } else if (!self.job.outputFormat) {
+        message = JMCustomLocalizedString(@"schedules.error.empty.format", nil);
+    }
+
+    if (message) {
+        NSError *error = [[NSError alloc] initWithDomain:JMCustomLocalizedString(@"schedules.error.domain", nil)
+                                                    code:0
+                                                userInfo:@{ NSLocalizedDescriptionKey : message }];
+        completion(NO, error);
+    } else {
+        completion(YES, nil);
+    }
 }
 
 @end
