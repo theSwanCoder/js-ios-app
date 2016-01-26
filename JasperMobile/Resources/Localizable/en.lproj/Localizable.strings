@@ -301,6 +301,7 @@
 // New Job
 "schedules.new.job.label" = "Job Label";
 "schedules.new.job.output.file.name" = "Output File Name";
+"schedules.new.job.output.file.path" = "Output Folder Path";
 "schedules.new.job.format" = "Format";
 "schedules.new.job.start.date" = "Start Date";
 "schedules.new.job.output.format" = "Output Format"; //title of alert

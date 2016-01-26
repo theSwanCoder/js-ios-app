@@ -33,6 +33,7 @@
 
 NSString *const kJMJobLabel = @"kJMJobLabel";
 NSString *const kJMJobOutputFileURI = @"kJMJobOutputFileURI";
+NSString *const kJMJobOutputFolderURI = @"kJMJobOutputFolderURI";
 NSString *const kJMJobFormat = @"kJMJobFormat";
 NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
@@ -62,6 +63,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     self.job = [JMScheduleJob jobWithReportURI:self.resourceLookup.uri
                                          label:self.resourceLookup.label
                                 outputFilename:nil
+                                     folderURI:nil
                                         format:nil
                                      startDate:nil];
 
@@ -152,6 +154,9 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
         propertyTitle = JMCustomLocalizedString(@"schedules.new.job.output.file.name", nil);
         propertyValue = self.job.baseOutputFilename;
+    }  else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
+        propertyTitle = JMCustomLocalizedString(@"schedules.new.job.output.file.path", nil);
+        propertyValue = self.job.folderURI;
     } else if ([jobProperty isEqualToString:kJMJobFormat]) {
         propertyTitle = JMCustomLocalizedString(@"schedules.new.job.format", nil);
         propertyValue = self.job.outputFormat;
@@ -194,6 +199,8 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
         self.job.label = newValue;
     } else if ([jobProperty isEqualToString:kJMJobOutputFileURI]) {
         self.job.baseOutputFilename = newValue;
+    } else if ([jobProperty isEqualToString:kJMJobOutputFolderURI]) {
+        self.job.folderURI = newValue;
     }
 }
 
@@ -215,6 +222,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     self.jobRepresentationProperties = @[
             kJMJobLabel,
             kJMJobOutputFileURI,
+            kJMJobOutputFolderURI,
             kJMJobFormat,
             kJMJobStartDate
     ];

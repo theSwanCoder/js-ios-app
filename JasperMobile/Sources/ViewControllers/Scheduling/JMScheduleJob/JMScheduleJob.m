@@ -38,6 +38,7 @@
 - (instancetype)initWithReportURI:(NSString *)reportURI
                             label:(NSString *)label
                    outputFilename:(NSString *)outputFilename
+                        folderURI:(NSString *)folderURI
                            format:(NSString *)format
                         startDate:(NSDate *)startDate
 {
@@ -46,6 +47,7 @@
         _reportUnitURI = reportURI;
         _label = label;
         _baseOutputFilename = outputFilename;
+        _folderURI = folderURI;
         _outputFormat = format;
         _startDate = startDate;
     }
@@ -55,12 +57,14 @@
 + (instancetype)jobWithReportURI:(NSString *)reportURI
                            label:(NSString *)label
                   outputFilename:(NSString *)outputFilename
+                       folderURI:(NSString *)folderURI
                           format:(NSString *)format
                        startDate:(NSDate *)startDate
 {
     return [[self alloc] initWithReportURI:reportURI
                                      label:label
                             outputFilename:outputFilename
+                                 folderURI:folderURI
                                     format:format
                                  startDate:startDate];
 }

@@ -48,11 +48,14 @@
 - (instancetype)initWithReportURI:(NSString *)reportURI
                             label:(NSString *)label
                    outputFilename:(NSString *)outputFilename
+                        folderURI:(NSString *)folderURI
                            format:(NSString *)format
                         startDate:(NSDate *)startDate;
+
 + (instancetype)jobWithReportURI:(NSString *)reportURI
                            label:(NSString *)label
                   outputFilename:(NSString *)outputFilename
+                       folderURI:(NSString *)folderURI
                           format:(NSString *)format
                        startDate:(NSDate *)startDate;
 - (NSData *)jobAsData;
