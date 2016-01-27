@@ -429,6 +429,8 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     NSString *type = rawData[@"type"];
 
+    JMLog(@"dashlet: %@", rawData);
+
     if ([type isEqualToString:@"inputControl"]) {
         return nil;
     }
@@ -448,6 +450,10 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
         dashlet.type = JMDashletTypeFilterGroup;
     } else if ([type isEqualToString:@"reportUnit"]) {
         dashlet.type = JMDashletTypeReportUnit;
+    } else if ([type isEqualToString:@"adhocDataView"]) {
+        dashlet.type = JMDashletTypeAdhocView;
+    } else if ([type isEqualToString:@"image"]) {
+        dashlet.type = JMDashletTypeImage;
     }
     return dashlet;
 }
