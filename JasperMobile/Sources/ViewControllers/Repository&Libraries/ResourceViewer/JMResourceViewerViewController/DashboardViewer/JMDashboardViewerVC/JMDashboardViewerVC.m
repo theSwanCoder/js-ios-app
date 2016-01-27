@@ -217,9 +217,21 @@
                                            [strongSelf.dashboardLoader cancel];
                                            [super cancelResourceViewingAndExit:YES];
                                        }];
-            [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
+            [strongSelf.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
                 __weak typeof(self)strongSelf = weakSelf;
                 [strongSelf stopShowLoader];
+
+                if (!success) {
+                    JMLog(@"error of refreshing dashboard: %@", error);
+                    if (error.code == JSSessionExpiredErrorCode) {
+                        [strongSelf.restClient deleteCookies];
+                        [strongSelf resetSubViews];
+                        [strongSelf startShowDashboard];
+                    } else {
+                        [JMUtils presentAlertControllerWithError:error completion:nil];
+                    }
+                }
+
             }];
         } else {
             __weak typeof(self)weakSelf = strongSelf;
@@ -243,6 +255,8 @@
             [strongSelf stopShowLoader];
             if (!success) {
                 if (error.code == JSSessionExpiredErrorCode) {
+                    [strongSelf.restClient deleteCookies];
+                    [strongSelf resetSubViews];
                     [strongSelf startShowDashboard];
                 } else {
                     [JMUtils presentAlertControllerWithError:error completion:nil];
@@ -312,6 +326,7 @@
                 } else {
                     if (error.code == JSSessionExpiredErrorCode) {
                         [strongSelf.restClient deleteCookies];
+                        [strongSelf resetSubViews];
                         [strongSelf startShowDashboard];
                     } else {
                         [JMUtils presentAlertControllerWithError:error completion:nil];

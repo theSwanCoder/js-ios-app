@@ -498,6 +498,7 @@ MobileDashboard = {
                 JasperMobile.Dashboard.Callback.onRunSuccess(data);
             })
             .fail(function(error) {
+                JasperMobile.Dashboard.Callback.onRunFailed(error);
                 JasperMobile.Callback.log("failed refresh with error: " + error);
             });
         setTimeout(function() {
@@ -515,7 +516,8 @@ MobileDashboard = {
                 JasperMobile.Callback.log("success cancel");
             })
             .fail(function(error) {
-                JasperMobile.Callback.log("failed cancel");
+                JasperMobile.Dashboard.Callback.onRunFailed(error);
+                JasperMobile.Callback.log("failed cancel with error: " + error);
             });
     },
     refreshDashlet: function() {
@@ -528,7 +530,7 @@ MobileDashboard = {
                 JasperMobile.Dashboard.Callback.onRunSuccess(data.components);
             })
             .fail(function(error) {
-                JasperMobile.Callback.log("failed refresh");
+                JasperMobile.Callback.log("failed refresh dashlet with error: " + error);
                 JasperMobile.Dashboard.Callback.onRunFailed(error);
             });
         setTimeout(function() {
