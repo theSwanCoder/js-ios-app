@@ -900,7 +900,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="r35-PB-Kd6">
-                                <rect key="frame" x="10" y="10" width="580" height="516"/>
+                                <rect key="frame" x="10" y="10" width="580" height="456"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="9S0-B7-cZO">
@@ -956,24 +956,40 @@
                                     <outlet property="delegate" destination="Rfc-7O-lBF" id="rEJ-Nt-STS"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jbz-ox-ulJ">
+                                <rect key="frame" x="10" y="476" width="580" height="50"/>
+                                <color key="backgroundColor" red="0.25882352939999997" green="0.5568627451" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="q9X-07-8RT">
+                                        <variation key="widthClass=compact" constant="30"/>
+                                    </constraint>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="saveJob:" destination="Rfc-7O-lBF" eventType="touchUpInside" id="0F8-aN-XAx"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.89803921568627454" green="0.9137254901960784" blue="0.92156862745098034" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="jbz-ox-ulJ" secondAttribute="trailing" constant="10" id="7zn-rH-psA"/>
+                            <constraint firstItem="fID-P4-Zex" firstAttribute="top" secondItem="jbz-ox-ulJ" secondAttribute="bottom" constant="10" id="Mss-yG-myl"/>
+                            <constraint firstItem="jbz-ox-ulJ" firstAttribute="leading" secondItem="CcA-kB-BZr" secondAttribute="leading" constant="10" id="RHq-wf-dqQ"/>
                             <constraint firstAttribute="trailing" secondItem="r35-PB-Kd6" secondAttribute="trailing" constant="10" id="RT9-X3-Jbw"/>
                             <constraint firstItem="r35-PB-Kd6" firstAttribute="top" secondItem="gIg-cO-5KQ" secondAttribute="bottom" constant="10" id="XQ8-Q4-uRN"/>
+                            <constraint firstItem="jbz-ox-ulJ" firstAttribute="top" secondItem="r35-PB-Kd6" secondAttribute="bottom" constant="10" id="XZ8-LT-J8d"/>
                             <constraint firstItem="r35-PB-Kd6" firstAttribute="leading" secondItem="CcA-kB-BZr" secondAttribute="leading" constant="10" id="r8Q-Qn-ODr"/>
-                            <constraint firstItem="fID-P4-Zex" firstAttribute="top" secondItem="r35-PB-Kd6" secondAttribute="bottom" constant="10" id="vuS-qE-Nnb"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="c4R-ev-g6u">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Noe-Pt-g0F">
-                            <connections>
-                                <action selector="saveJob:" destination="Rfc-7O-lBF" id="Sse-sD-q5G"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="c4R-ev-g6u"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
+                        <outlet property="createJobButton" destination="jbz-ox-ulJ" id="Kzt-oT-sdL"/>
                         <outlet property="tableView" destination="r35-PB-Kd6" id="TGI-cD-P2i"/>
                     </connections>
                 </viewController>

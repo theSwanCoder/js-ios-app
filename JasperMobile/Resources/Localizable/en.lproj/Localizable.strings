@@ -304,6 +304,7 @@
 "schedules.no.jobs.message" = "No jobs are scheduled.";
 // New Job
 "schedules.new.job.label" = "Job Label";
+"schedules.new.job.button.create" = "Create Job";
 "schedules.new.job.output.file.name" = "Output File Name";
 "schedules.new.job.output.file.path" = "Output Folder Path";
 "schedules.new.job.format" = "Format";

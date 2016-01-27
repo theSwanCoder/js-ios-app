@@ -41,6 +41,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) JSScheduleJob *job;
 @property (nonatomic, strong) NSArray *jobRepresentationProperties;
+@property (weak, nonatomic) IBOutlet UIButton *createJobButton;
 @end
 
 @implementation JMNewJobVC
@@ -66,7 +67,8 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
                                      folderURI:nil
                                        formats:nil
                                      startDate:nil];
-
+    [self.createJobButton setTitle:JMCustomLocalizedString(@"schedules.new.job.button.create", nil)
+                          forState:UIControlStateNormal];
 }
 
 #pragma mark - Actions
