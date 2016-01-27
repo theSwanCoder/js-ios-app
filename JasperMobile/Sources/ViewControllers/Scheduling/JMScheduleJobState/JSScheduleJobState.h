@@ -22,13 +22,17 @@
 
 
 //
-//  JMScheduleTrigger.m
+//  JSScheduleJobState.h
 //  TIBCO JasperMobile
 //
 
 
-#import "JMScheduleTrigger.h"
+/**
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.3
+*/
 
-
-@implementation JMScheduleTrigger
+@interface JSScheduleJobState : NSObject <JSSerializationDescriptorHolder>
+@property (nonatomic, strong) NSDate *nextFireTime;
+@property (nonatomic, assign) NSString *value;
 @end

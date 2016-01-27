@@ -22,41 +22,43 @@
 
 
 //
-//  JMScheduleJob.h
+//  JSScheduleJob.h
 //  TIBCO JasperMobile
 //
 
-@class JMScheduleTrigger;
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.3
 */
 
+@class JSScheduleTrigger;
 
-@interface JMScheduleJob : NSObject
+@interface JSScheduleJob : NSObject <JSSerializationDescriptorHolder>
 @property (nonatomic, strong) NSString *reportUnitURI;
 @property (nonatomic, strong) NSString *label;
 @property (nonatomic, strong) NSString *baseOutputFilename;
-@property (nonatomic, strong) NSString *outputFormat;
+@property (nonatomic, strong) NSArray *outputFormats;
 @property (nonatomic, strong) NSDate *startDate;
 
 @property (nonatomic, strong) NSString *folderURI;
 @property (nonatomic, strong) NSString *outputTimeZone;
-@property (nonatomic, strong) JMScheduleTrigger *trigger;
+@property (nonatomic, strong) JSScheduleTrigger *trigger;
+
+@property (nonatomic, strong) NSString *errorDescription;
 
 - (instancetype)initWithReportURI:(NSString *)reportURI
                             label:(NSString *)label
                    outputFilename:(NSString *)outputFilename
                         folderURI:(NSString *)folderURI
-                           format:(NSString *)format
+                          formats:(NSArray *)format
                         startDate:(NSDate *)startDate;
 
 + (instancetype)jobWithReportURI:(NSString *)reportURI
                            label:(NSString *)label
                   outputFilename:(NSString *)outputFilename
                        folderURI:(NSString *)folderURI
-                          format:(NSString *)format
+                         formats:(NSArray *)format
                        startDate:(NSDate *)startDate;
 - (NSData *)jobAsData;
 @end

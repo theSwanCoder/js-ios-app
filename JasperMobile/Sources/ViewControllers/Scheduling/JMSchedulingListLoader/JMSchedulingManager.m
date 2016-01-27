@@ -27,129 +27,53 @@
 //
 
 #import "JMSchedulingManager.h"
-
-@interface JMSchedulingManager ()
-@property (nonatomic, readwrite) NSArray *jobs;
-@property (nonatomic, strong) NSURLSessionDataTask *downloadTask;
-@end
+#import "JSScheduleJobResource.h"
+#import "JSScheduleJobState.h"
+#import "JSRESTBase+JSSchedule.h"
+#import "JSScheduleJob.h"
 
 @implementation JMSchedulingManager
 
 #pragma mark - Public API
-- (void)loadJobsWithCompletion:(void(^)(NSArray *jobs, NSError *error))completion
+- (void)loadJobsWithCompletion:(void(^)(NSArray <JSScheduleJobResource *>*jobs, NSError *error))completion
 {
     [self loadResourcesWithCompletion:^(NSArray *jobs, NSError *error) {
-        self.jobs = jobs;
         completion(jobs, error);
     }];
 }
 
-- (void)jobInfoWithJobIdentifier:(NSInteger)identifier completion:(void(^)(NSDictionary *jobInfo, NSError *error))completion
+- (void)createJobWithData:(JSScheduleJob *)jobData completion:(void(^)(JSScheduleJob * job, NSError *error))completion
 {
     if (!completion) {
         return;
     }
 
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/%@", self.restClient.serverProfile.serverUrl, kJS_REST_SERVICES_V2_URI, @"jobs", @(identifier)];
-    JMLog(@"url: %@", urlString);
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    request.allHTTPHeaderFields = @{
-            @"Accept" : @"application/job+json"
-    };
-    self.downloadTask = [session dataTaskWithRequest:request
-                                   completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                       JMLog(@"request end");
-                                       JMLog(@"data: %@", data);
-
-                                       if (data) {
-                                           NSError *jsonParseError;
-                                           NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonParseError];
-//                                           JMLog(@"json parse error: %@", jsonParseError.localizedDescription);
-//                                           JMLog(@"json: %@", json);
-
-                                           if (!json) {
-                                               NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                                               JMLog(@"error message: %@", message);
-                                               dispatch_async(dispatch_get_main_queue(), ^{
-                                                   completion(nil, jsonParseError);
-                                               });
-                                           } else {
-                                               dispatch_async(dispatch_get_main_queue(), ^{
-                                                   completion(json, nil);
-                                               });
-                                           }
-                                       } else {
-                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                               completion(nil, error);
-                                           });
-                                       }
-                                   }];
-    JMLog(@"request start");
-    [self.downloadTask resume];
-}
-
-- (void)createJobWithData:(NSData *)jobData completion:(void(^)(NSDictionary * job, NSError *error))completion
-{
-    if (!completion) {
-        return;
-    }
-
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, kJS_REST_SERVICES_V2_URI, @"jobs"];
-    JMLog(@"url: %@", urlString);
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    request.HTTPMethod = @"PUT";
-    request.allHTTPHeaderFields = @{
-            @"Accept" : @"application/job+json",
-            @"Content-Type" : @"application/job+json"
-    };
-    request.HTTPBody = jobData;
-    self.downloadTask = [session dataTaskWithRequest:request
-                                   completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                       JMLog(@"request end");
-                                       JMLog(@"data: %@", data);
-
-                                       if (data) {
-                                           NSError *jsonParseError;
-                                           NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonParseError];
-//                                           JMLog(@"json parse error: %@", jsonParseError.localizedDescription);
-//                                           JMLog(@"json: %@", json);
-
-                                           if (!json) {
-                                               NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                                               JMLog(@"error message: %@", message);
-                                               dispatch_async(dispatch_get_main_queue(), ^{
-                                                   completion(nil, jsonParseError);
-                                               });
-                                           } else {
-                                               NSDictionary *errorData = ((NSArray *)json[@"error"]).firstObject;
-                                               if (errorData) {
-                                                   NSString *errorCode = errorData[@"errorCode"];
-                                                   NSString *field = errorData[@"field"];
-                                                   NSString *errorMessage = [NSString stringWithFormat:@"%@ in %@", errorCode, field];
-                                                   NSError *logicError = [NSError errorWithDomain:@"CreateJobLogicError" code:0 userInfo:@{
-                                                           NSLocalizedDescriptionKey : errorMessage
-                                                   }];
-                                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                                       completion(nil, logicError);
-                                                   });
-                                               } else {
-                                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                                       completion(json, nil);
-                                                   });
-                                               }
-                                           }
-                                       } else {
-                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                               completion(nil, error);
-                                           });
-                                       }
-                                   }];
-    JMLog(@"request start");
-    [self.downloadTask resume];
+    [self.restClient createScheduledJobWithJob:jobData
+                                    completion:^(JSOperationResult *result) {
+                                        JMLog(@"error: %@", result.error);
+                                        NSError *error = result.error;
+                                        if (error) {
+                                            if (error.code == 1000) {
+                                                NSDictionary *bodyJSON = [NSJSONSerialization JSONObjectWithData:result.body options:NSJSONReadingMutableContainers error:nil];
+                                                if (bodyJSON) {
+                                                    NSArray *errors = bodyJSON[@"error"];
+                                                    NSString *message = errors.firstObject[@"defaultMessage"];
+                                                    NSString *field = errors.firstObject[@"field"];
+                                                    NSString *fullMessage = [NSString stringWithFormat:@"%@ in %@", message, field];
+                                                    NSError *createScheduledJobError = [[NSError alloc] initWithDomain:@"Error"
+                                                                                                                  code:0
+                                                                                                              userInfo:@{NSLocalizedDescriptionKey: fullMessage}];
+                                                    completion(nil, createScheduledJobError);
+                                                }
+                                            } else {
+                                                completion(nil, result.error);
+                                            }
+                                        } else {
+                                            JMLog(@"result.objects: %@", result.objects);
+                                            JSScheduleJob *scheduledJob = result.objects.firstObject;
+                                            completion(scheduledJob, nil);
+                                        }
+                                    }];
 }
 
 - (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void(^)(NSError *error))completion
@@ -158,76 +82,30 @@
         return;
     }
 
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@/%@", self.restClient.serverProfile.serverUrl, kJS_REST_SERVICES_V2_URI, @"jobs", @(identifier)];
-    JMLog(@"url: %@", urlString);
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    request.HTTPMethod = @"DELETE";
-    self.downloadTask = [session dataTaskWithRequest:request
-                                   completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                       JMLog(@"request end");
-                                       JMLog(@"data: %@", data);
-
-                                       if (data) {
-                                           NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                                           JMLog(@"message: %@", message);
-                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                               completion(nil);
-                                           });
-                                       } else {
-                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                               completion(error);
-                                           });
-                                       }
-                                   }];
-    JMLog(@"request start");
-    [self.downloadTask resume];
+    [self.restClient deleteScheduledJobWithIdentifier:identifier
+                                           completion:^(JSOperationResult *result) {
+                                                if (result.error) {
+                                                    completion(result.error);
+                                                } else {
+                                                    completion(nil);
+                                                }
+                                            }];
 }
 
 #pragma mark - Private API
-- (void)loadResourcesWithCompletion:(void(^)(NSArray *jobs, NSError *error))completion
+- (void)loadResourcesWithCompletion:(void(^)(NSArray <JSScheduleJobResource *>*jobs, NSError *error))completion
 {
     if (!completion) {
         return;
     }
 
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, kJS_REST_SERVICES_V2_URI, @"jobs"];
-//    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, @"jobs?owner=superuser"];
-//    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, @"jobs?username=superuser"];
-//    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.restClient.serverProfile.serverUrl, [JSConstants sharedInstance].REST_SERVICES_V2_URI, @"jobs/2891"];
-
-    JMLog(@"url: %@", urlString);
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    request.allHTTPHeaderFields = @{
-            @"Accept" : @"application/json"
-    };
-    self.downloadTask = [session dataTaskWithRequest:request
-                                   completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                       JMLog(@"request end");
-                                       JMLog(@"data: %@", data);
-
-                                       if (data) {
-                                           NSError *jsonParseError;
-                                           NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonParseError];
-//                                           JMLog(@"json parse error: %@", jsonParseError);
-//                                           JMLog(@"json: %@", json);
-
-                                           NSArray *jobs = json[@"jobsummary"];
-                                           JMLog(@"jobs: %@", jobs);
-                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                               completion(jobs, nil);
-                                           });
-                                       }  else {
-                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                               completion(nil, error);
-                                           });
-                                       }
-                                   }];
-    JMLog(@"request start");
-    [self.downloadTask resume];
+    [self.restClient fetchScheduledJobResourcesWithCompletion:^(JSOperationResult *result) {
+        if (result.error) {
+            completion(nil, result.error);
+        } else {
+            completion(result.objects, nil);
+        }
+    }];
 }
 
 @end

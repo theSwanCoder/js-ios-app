@@ -28,7 +28,7 @@
 
 #import "JMNewJobVC.h"
 #import "JMSchedulingManager.h"
-#import "JMScheduleJob.h"
+#import "JSScheduleJob.h"
 #import "JMNewJobCell.h"
 
 NSString *const kJMJobLabel = @"kJMJobLabel";
@@ -39,7 +39,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
 @interface JMNewJobVC() <UITableViewDataSource, UITableViewDelegate, JMNewJobCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) JMScheduleJob *job;
+@property (nonatomic, strong) JSScheduleJob *job;
 @property (nonatomic, strong) NSArray *jobRepresentationProperties;
 @end
 
@@ -60,11 +60,11 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
          forControlEvents:UIControlEventValueChanged];
 
     [self createJobRepresentation];
-    self.job = [JMScheduleJob jobWithReportURI:self.resourceLookup.uri
+    self.job = [JSScheduleJob jobWithReportURI:self.resourceLookup.uri
                                          label:self.resourceLookup.label
                                 outputFilename:nil
                                      folderURI:nil
-                                        format:nil
+                                       formats:nil
                                      startDate:nil];
 
 }
@@ -73,6 +73,8 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 - (void)updateDate:(UIDatePicker *)sender
 {
     self.job.startDate = sender.date;
+    // reset trigger
+    self.job.trigger = nil;
 
     // find text field for date
     NSInteger rowDateCell = [self.jobRepresentationProperties indexOfObject:kJMJobStartDate];
@@ -115,8 +117,8 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     for (NSString *format in availableFormats) {
         [alertController addActionWithLocalizedTitle:format style:UIAlertActionStyleDefault
                                              handler:^(UIAlertController * _Nonnull controller, UIAlertAction * _Nonnull action) {
-                                                 self.job.outputFormat = format.uppercaseString;
-                                                 formatCell.valueTextField.text = self.job.outputFormat;
+                                                 self.job.outputFormats = @[format.uppercaseString];
+                                                 formatCell.valueTextField.text = self.job.outputFormats.firstObject;
                                              }];
     }
 
@@ -159,7 +161,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
         propertyValue = self.job.folderURI;
     } else if ([jobProperty isEqualToString:kJMJobFormat]) {
         propertyTitle = JMCustomLocalizedString(@"schedules.new.job.format", nil);
-        propertyValue = self.job.outputFormat;
+        propertyValue = self.job.outputFormats.firstObject;
         cell.valueTextField.userInteractionEnabled = NO;
     } else if ([jobProperty isEqualToString:kJMJobStartDate]) {
         propertyTitle = JMCustomLocalizedString(@"schedules.new.job.start.date", nil);
@@ -218,7 +220,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     }
 
     JMSchedulingManager *jobsManager = [JMSchedulingManager new];
-    [jobsManager createJobWithData:[self.job jobAsData] completion:^(NSDictionary *job, NSError *error) {
+    [jobsManager createJobWithData:self.job completion:^(JSScheduleJob *job, NSError *error) {
         completion(error);
     }];
 }
@@ -281,7 +283,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
     if (!self.job.baseOutputFilename) {
         message = JMCustomLocalizedString(@"schedules.error.empty.filename", nil);
-    } else if (!self.job.outputFormat) {
+    } else if (!self.job.outputFormats.count) {
         message = JMCustomLocalizedString(@"schedules.error.empty.format", nil);
     }
 
