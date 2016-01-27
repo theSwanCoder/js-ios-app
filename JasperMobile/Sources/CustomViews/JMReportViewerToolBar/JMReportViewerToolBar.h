@@ -37,8 +37,7 @@
 @optional
 - (void)toolbar:(JMReportViewerToolBar *)toolbar
  changeFromPage:(NSInteger)fromPage
-         toPage:(NSInteger)toPage
-     completion:(void(^)(BOOL success))completion;
+         toPage:(NSInteger)toPage;
 @end
 
 @interface JMReportViewerToolBar : UIView
@@ -48,4 +47,5 @@
 @property (nonatomic, assign) NSInteger countOfPages;
 @property (nonatomic, assign) NSInteger currentPage;
 
+@property (nonatomic, assign) BOOL enable;
 @end
