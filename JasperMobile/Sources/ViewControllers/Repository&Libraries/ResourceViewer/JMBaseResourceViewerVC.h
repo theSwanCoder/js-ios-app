@@ -60,7 +60,6 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 - (void)setupLeftBarButtonItems NS_REQUIRES_SUPER;
 - (void)setupRightBarButtonItems NS_REQUIRES_SUPER;
 - (void)resetSubViews;
-- (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle;
 
 
 // Resource Viewing
@@ -82,9 +81,6 @@ extern NSString * const kJMShowSavedRecourcesViewerSegue;
 // UIBarButtonItem helpers
 - (UIBarButtonItem *)backBarButtonItemWithTarget:(id)target
                                           action:(SEL)action;
-- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title
-                                  target:(id)target
-                                  action:(SEL)action;
 
 - (void) backButtonTapped:(id)sender;
 @end

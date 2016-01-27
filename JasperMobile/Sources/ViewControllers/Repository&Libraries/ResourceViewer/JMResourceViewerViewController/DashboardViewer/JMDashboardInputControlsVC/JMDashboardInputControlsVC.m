@@ -33,6 +33,7 @@
 @property (nonatomic, weak) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *applyButton;
 @property (nonatomic, copy) NSArray <JSInputControlDescriptor *> *chagedInputControls;
+@property (nonatomic, copy) NSArray <JSInputControlDescriptor *> *currentInputControls;
 @end
 
 @implementation JMDashboardInputControlsVC
@@ -58,6 +59,9 @@
     self.tableView.estimatedRowHeight = UITableViewAutomaticDimension;
 
     self.chagedInputControls = [NSMutableArray array];
+    self.currentInputControls = [[NSArray alloc] initWithArray:self.dashboard.inputControls copyItems:YES];
+
+    [self setupNavigationItems];
 }
 
 #pragma mark - Actions
@@ -68,7 +72,8 @@
 
 - (void)backButtonTapped:(id)sender
 {
-    [self applyAction];
+    self.dashboard.inputControls = self.currentInputControls;
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - Private API
@@ -280,6 +285,14 @@
     } else {
         [self.tableView reloadData];
     }
+}
+
+- (void)setupNavigationItems
+{
+    UIBarButtonItem *backItem = [self backButtonWithTitle:nil
+                                                   target:self
+                                                   action:@selector(backButtonTapped:)];
+    self.navigationItem.leftBarButtonItem = backItem;
 }
 
 @end

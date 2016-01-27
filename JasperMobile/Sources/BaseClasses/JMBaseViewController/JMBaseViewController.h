@@ -43,4 +43,7 @@
 - (UIView *)viewToShowOnExternalWindow;
 
 - (BOOL)isContentOnTV;
+
+- (UIBarButtonItem *)backButtonWithTitle:(NSString *)title target:(id)target action:(SEL)action;
+- (NSString *)croppedBackButtonTitle:(NSString *)backButtonTitle;
 @end

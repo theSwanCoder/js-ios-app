@@ -22,23 +22,24 @@
 
 
 //
-//  JMScheduleJob.m
+//  JSScheduleJob.m
 //  TIBCO JasperMobile
 //
 
-#import "JMScheduleJob.h"
-#import "JMScheduleTrigger.h"
+#import "JSScheduleJob.h"
+#import "JSScheduleTrigger.h"
 
-@interface JMScheduleJob()
+@interface JSScheduleJob ()
 @end
 
-@implementation JMScheduleJob
+@implementation JSScheduleJob
 
 #pragma mark - Object Lifecycle
 - (instancetype)initWithReportURI:(NSString *)reportURI
                             label:(NSString *)label
                    outputFilename:(NSString *)outputFilename
-                           format:(NSString *)format
+                        folderURI:(NSString *)folderURI
+                          formats:(NSArray *)formats
                         startDate:(NSDate *)startDate
 {
     self = [super init];
@@ -46,7 +47,8 @@
         _reportUnitURI = reportURI;
         _label = label;
         _baseOutputFilename = outputFilename;
-        _outputFormat = format;
+        _folderURI = folderURI;
+        _outputFormats = formats;
         _startDate = startDate;
     }
     return self;
@@ -55,18 +57,20 @@
 + (instancetype)jobWithReportURI:(NSString *)reportURI
                            label:(NSString *)label
                   outputFilename:(NSString *)outputFilename
-                          format:(NSString *)format
+                       folderURI:(NSString *)folderURI
+                         formats:(NSArray *)formats
                        startDate:(NSDate *)startDate
 {
     return [[self alloc] initWithReportURI:reportURI
                                      label:label
                             outputFilename:outputFilename
-                                    format:format
+                                 folderURI:folderURI
+                                   formats:formats
                                  startDate:startDate];
 }
 
 #pragma mark - Custom Accessors
-- (JMScheduleTrigger *)trigger
+- (JSScheduleTrigger *)trigger
 {
     if (!_trigger) {
         _trigger = [self simpleTrigger];
@@ -115,7 +119,7 @@
             },
             @"outputTimeZone" : self.outputTimeZone,
             @"outputFormats" : @{
-                @"outputFormat" : @[self.outputFormat]
+                @"outputFormat" : self.outputFormats
             }
     };
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:0 error:nil];
@@ -123,9 +127,9 @@
 }
 
 #pragma mark - Helpers
-- (JMScheduleTrigger *)simpleTrigger
+- (JSScheduleTrigger *)simpleTrigger
 {
-    JMScheduleTrigger *simpleTrigger = [JMScheduleTrigger new];
+    JSScheduleTrigger *simpleTrigger = [JSScheduleTrigger new];
     simpleTrigger.timezone = self.outputTimeZone;
     simpleTrigger.startType = 2;
     simpleTrigger.occurrenceCount = 1;
@@ -133,7 +137,7 @@
     return simpleTrigger;
 }
 
-- (NSDictionary *)triggerAsJSON:(JMScheduleTrigger *)trigger
+- (NSDictionary *)triggerAsJSON:(JSScheduleTrigger *)trigger
 {
     NSString *dateAsString = [self dateStringFromDate:trigger.startDate];
     NSDictionary *triggerAsJSON = @{
@@ -161,5 +165,60 @@
     NSString *dateString = [outputFormatter stringFromDate:date];
     return dateString;
 }
+
+
+#pragma mark - JSSerializationDescriptorHolder
+
++ (nonnull NSString *)resourceRootKeyPath
+{
+    return @"scheduleJob";
+}
+
++ (nonnull NSArray <RKRequestDescriptor *> *)rkRequestDescriptorsForServerProfile:(nonnull JSProfile *)serverProfile {
+    NSMutableArray *descriptorsArray = [NSMutableArray array];
+    [descriptorsArray addObject:[RKRequestDescriptor requestDescriptorWithMapping:[[self classMappingForServerProfile:serverProfile] inverseMapping]
+                                                                      objectClass:self
+                                                                      rootKeyPath:nil
+                                                                           method:RKRequestMethodAny]];
+    return descriptorsArray;
+}
+
++ (nonnull NSArray <RKResponseDescriptor *> *)rkResponseDescriptorsForServerProfile:(nonnull JSProfile *)serverProfile {
+    NSMutableArray *descriptorsArray = [NSMutableArray array];
+    for (NSString *keyPath in [self classMappingPathes]) {
+        [descriptorsArray addObject:[RKResponseDescriptor responseDescriptorWithMapping:[self classMappingForServerProfile:serverProfile]
+                                                                                 method:RKRequestMethodAny
+                                                                            pathPattern:nil
+                                                                                keyPath:keyPath
+                                                                            statusCodes:nil]];
+    }
+    return descriptorsArray;
+}
+
++ (nonnull RKObjectMapping *)classMappingForServerProfile:(nonnull JSProfile *)serverProfile {
+    RKObjectMapping *classMapping = [RKObjectMapping mappingForClass:self];
+    [classMapping addAttributeMappingsFromDictionary:@{
+            @"source.reportUnitURI"            : @"reportUnitURI",
+            @"label"                           : @"label",
+            @"baseOutputFilename"              : @"baseOutputFilename",
+            @"outputFormats.outputFormat"      : @"outputFormats",
+            @"startDate"                       : @"startDate",
+            @"repositoryDestination.folderURI" : @"folderURI",
+            @"outputTimeZone"                  : @"outputTimeZone",
+            @"error.defaultMessage"            : @"errorDescription"
+    }];
+
+    [classMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"trigger.simpleTrigger"
+                                                                                 toKeyPath:@"trigger"
+                                                                               withMapping:[JSScheduleTrigger classMappingForServerProfile:serverProfile]]];
+
+
+    return classMapping;
+}
+
++ (nonnull NSArray *)classMappingPathes {
+    return @[[self resourceRootKeyPath], @""];
+}
+
 
 @end

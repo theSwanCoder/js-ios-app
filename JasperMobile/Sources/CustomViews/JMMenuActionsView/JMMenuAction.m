@@ -126,7 +126,7 @@
         case JMMenuActionsViewAction_OpenIn:
             return @"open_in_new";
         case JMMenuActionsViewAction_Schedule:
-            return @"ic_scheduling";
+            return @"schedule_action";
         case JMMenuActionsViewAction_ShowExternalDisplay:
             return @"print_action";
         case JMMenuActionsViewAction_HideExternalDisplay:

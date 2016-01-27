@@ -83,6 +83,7 @@
 "menuitem.recentviews.label" = "Recently Viewed";
 "menuitem.saveditems.label" = "Saved Items";
 "menuitem.settings.label" = "Settings";
+"menuitem.schedules.label" = "Schedules";
 "menuitem.about.label" = "About";
 "menuitem.repository.label" = "Repository";
 "menuitem.favorites.label" = "Favorites";
@@ -241,9 +242,12 @@
 "action.title.print" = "Print";
 "action.title.openIn" = "Open with...";
 "action.title.accept" = "Accept";
+
+/* External screens*/
 "action.title.showExternalDisplay" = "Show on TV";
 "action.title.hideExternalDisplay" = "Show on Device";
-
+"external.screen.button.title.maximize" = "Tap to maximize";
+"external.screen.button.title.manimize" = "Tap to minimize";
 /* Error messages */
 
 "error.readingresponse.dialog.msg" = "Failed to load data!";
@@ -297,10 +301,15 @@
 
 /*Schedules*/
 "schedules.title" = "Schedules";
-"schedules.no.jobs.message" = "No jobs is scheduled.";
+"schedules.no.jobs.message" = "No jobs are scheduled.";
 // New Job
 "schedules.new.job.label" = "Job Label";
+"schedules.new.job.button.create" = "Create Job";
 "schedules.new.job.output.file.name" = "Output File Name";
+"schedules.new.job.output.file.path" = "Output Folder Path";
 "schedules.new.job.format" = "Format";
 "schedules.new.job.start.date" = "Start Date";
 "schedules.new.job.output.format" = "Output Format"; //title of alert
+"schedules.error.domain" = "Validation of creating new schedule job";
+"schedules.error.empty.filename" = "File name is empty";
+"schedules.error.empty.format" = "Output file format not selected";

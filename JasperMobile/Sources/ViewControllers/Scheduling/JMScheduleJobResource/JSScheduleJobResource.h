@@ -22,24 +22,25 @@
 
 
 //
-//  JMJobCell.h
+//  JSScheduleJobResource.h
 //  TIBCO JasperMobile
 //
+
+
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.3
 */
 
-@protocol JMJobCellDelegate;
+@class JSScheduleJobState;
 
-@interface JMJobCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *detailLabel;
-@property (nonatomic, weak) NSObject <JMJobCellDelegate> *delegate;
-@end
-
-@protocol JMJobCellDelegate
-@optional
-- (void)jobCellDidReceiveDeleteJobAction:(JMJobCell *)cell;
+@interface JSScheduleJobResource : NSObject <JSSerializationDescriptorHolder>
+@property (nonatomic, assign) NSInteger identifier;
+@property (nonatomic, strong) NSString *label;
+@property (nonatomic, strong) NSString *jobDescription;
+@property (nonatomic, strong) NSString *reportLabel;
+@property (nonatomic, strong) NSString *reportUnitURI;
+@property (nonatomic, strong) NSString *owner;
+@property (nonatomic, strong) JSScheduleJobState *state;
 @end

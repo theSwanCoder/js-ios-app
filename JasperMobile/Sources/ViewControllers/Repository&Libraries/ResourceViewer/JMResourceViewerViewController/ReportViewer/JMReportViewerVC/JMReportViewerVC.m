@@ -191,6 +191,10 @@
 
 - (void)configViewport
 {
+    if ([self isContentOnTV]) {
+        return;
+    }
+
     CGFloat initialScaleViewport = 0.75;
     BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
     if (isCompactWidth) {
@@ -500,6 +504,12 @@
                         }];
 
             [strongSelf showReportView];
+
+            if ([strongSelf isContentOnTV]) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [strongSelf.controlsViewController updateInterface];
+                });
+            }
         } else {
             [strongSelf handleError:error];
         }
@@ -526,6 +536,11 @@
             
             if (success) {
                 [strongSelf showReportView];
+                if ([strongSelf isContentOnTV]) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [strongSelf.controlsViewController updateInterface];
+                    });
+                }
             } else {
                 [strongSelf handleError:error];
             }

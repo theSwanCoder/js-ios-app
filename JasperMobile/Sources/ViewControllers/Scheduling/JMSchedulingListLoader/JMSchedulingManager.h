@@ -33,11 +33,12 @@
 
 #import "JMResourcesListLoader.h"
 
+@class JSScheduleJobResource;
+@class JSScheduleJob;
+
 @interface JMSchedulingManager : NSObject
 @property (nonatomic, readonly) NSArray *jobs;
-- (void)loadJobsWithCompletion:(void (^)(NSArray *jobs, NSError *error))completion;
-- (void)jobInfoWithJobIdentifier:(NSInteger)identifier completion:(void (^)(NSDictionary *jobInfo, NSError *error))completion;
-- (void)createJobWithData:(NSData *)jobData completion:(void (^)(NSDictionary *job, NSError *error))completion;
-
+- (void)loadJobsWithCompletion:(void (^)(NSArray <JSScheduleJobResource *> *jobs, NSError *error))completion;
+- (void)createJobWithData:(JSScheduleJob *)jobData completion:(void (^)(JSScheduleJob *job, NSError *error))completion;
 - (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void (^)(NSError *error))completion;
 @end

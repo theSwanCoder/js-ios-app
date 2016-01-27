@@ -32,10 +32,39 @@
 
 @interface JMExternalWindowDashboardControlsVC () <UITableViewDelegate, UITableViewDataSource, JMExternalWindowDashboardControlsTableViewCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, copy) NSArray *visibleComponents;
+@property (nonatomic, copy) NSArray <JMDashlet *> *visibleComponents;
+@property (nonatomic, strong) NSMutableDictionary <NSString *, NSNumber *>*maximizedComponents;
 @end
 
 @implementation JMExternalWindowDashboardControlsVC
+
+#pragma mark - Custom Accessor
+- (void)setComponents:(NSArray *)components
+{
+    _components = components;
+
+    NSMutableArray *visibleComponents = [NSMutableArray array];
+    NSMutableDictionary *maximizedComponets = [NSMutableDictionary dictionary];
+    for (JMDashlet *dashlet in components) {
+        JMDashletType type = dashlet.type;
+        switch(type) {
+            case JMDashletTypeChart:
+            case JMDashletTypeReportUnit:
+            case JMDashletTypeAdhocView: {
+                [visibleComponents addObject:dashlet];
+                maximizedComponets[dashlet.identifier] = @(NO);
+                break;
+            }
+            default:{
+                break;
+            }
+        }
+    }
+    self.visibleComponents = visibleComponents;
+    self.maximizedComponents = maximizedComponets;
+
+    [self.tableView reloadData];
+}
 
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
@@ -45,15 +74,6 @@
     UINib *cellNib = [UINib nibWithNibName:@"JMExternalWindowDashboardControlsTableViewCell" bundle:nil];
     [self.tableView registerNib:cellNib forCellReuseIdentifier:@"JMExternalWindowDashboardControlsTableViewCell"];
     self.tableView.tableFooterView = [UIView new];
-
-    NSMutableArray *visibleComponents = [NSMutableArray array];
-    for (JMDashlet *dashlet in self.components) {
-        if (dashlet.type == JMDashletTypeChart) {
-            [visibleComponents addObject:dashlet];
-        }
-    }
-    self.visibleComponents = visibleComponents;
-
 }
 
 #pragma mark - UITableViewDataSource
@@ -68,6 +88,17 @@
                                                                                            forIndexPath:indexPath];
     JMDashlet *dashlet = self.visibleComponents[indexPath.row];
     cell.nameLabel.text = dashlet.name;
+    BOOL isMaximized = self.maximizedComponents[dashlet.identifier].boolValue;
+    NSString *buttonTitle;
+    if (isMaximized) {
+        buttonTitle = JMCustomLocalizedString(@"external.screen.button.title.manimize", nil);
+        cell.backgroundColor = [UIColor lightGrayColor];
+    } else {
+        buttonTitle = JMCustomLocalizedString(@"external.screen.button.title.maximize", nil);
+        cell.backgroundColor = [UIColor whiteColor];
+    }
+    [cell.maximizeButton setTitle:buttonTitle
+                         forState:UIControlStateNormal];
     cell.delegate = self;
     return cell;
 }
@@ -76,27 +107,37 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
 
-#pragma mark - JMExternalWindowDashboardControlsTableViewCellDelegate
-- (void)externalWindowDashboardControlsTableViewCellDidMaximize:(JMExternalWindowDashboardControlsTableViewCell *)cell
-{
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    JMDashlet *dashlet = self.visibleComponents[indexPath.row];
-    JMLog(@"need maximize dashlet: %@", dashlet.name);
-    if ([self.delegate respondsToSelector:@selector(externalWindowDashboardControlsVC:didAskMaximizeDashlet:)]) {
-        [self.delegate externalWindowDashboardControlsVC:self didAskMaximizeDashlet:dashlet];
-    }
-}
+    // find maximized component
+    JMDashlet *selectedDashlet = self.visibleComponents[indexPath.row];
+    NSString *selectedComponentID = selectedDashlet.identifier;
+    BOOL isSelectedComponentMaximized = self.maximizedComponents[selectedComponentID].boolValue;
+    if (isSelectedComponentMaximized) {
+        // minimize
+        self.maximizedComponents[selectedComponentID] = @(NO);
+        if ([self.delegate respondsToSelector:@selector(externalWindowDashboardControlsVC:didAskMinimizeDashlet:)]) {
+            [self.delegate externalWindowDashboardControlsVC:self didAskMinimizeDashlet:selectedDashlet];
+        }
+    } else {
+        // maximize if there aren't any other maximized
+        NSString *maximizedComponentID;
+        for (NSString *componentID in self.maximizedComponents.allKeys) {
+            BOOL isMaximized = self.maximizedComponents[componentID].boolValue;
+            if (isMaximized) {
+                maximizedComponentID = componentID;
+                break;
+            }
+        }
 
-- (void)externalWindowDashboardControlsTableViewCellDidMinimize:(JMExternalWindowDashboardControlsTableViewCell *)cell
-{
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    JMDashlet *dashlet = self.visibleComponents[indexPath.row];
-    JMLog(@"need minimize dashlet: %@", dashlet.name);
-    if ([self.delegate respondsToSelector:@selector(externalWindowDashboardControlsVC:didAskMinimizeDashlet:)]) {
-        [self.delegate externalWindowDashboardControlsVC:self didAskMinimizeDashlet:dashlet];
+        if (!maximizedComponentID) {
+            // maximize
+            self.maximizedComponents[selectedComponentID] = @(YES);
+            if ([self.delegate respondsToSelector:@selector(externalWindowDashboardControlsVC:didAskMaximizeDashlet:)]) {
+                [self.delegate externalWindowDashboardControlsVC:self didAskMaximizeDashlet:selectedDashlet];
+            }
+        }
     }
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

@@ -4,9 +4,11 @@
 //
 
 
+#import "JMEditabledViewController.h"
+
 @class JMDashboard;
 
-@interface JMDashboardInputControlsVC : UIViewController
+@interface JMDashboardInputControlsVC : JMEditabledViewController
 @property (nonatomic, strong) JMDashboard *dashboard;
 @property (nonatomic, copy) void(^exitBlock)(NSArray <JSInputControlDescriptor *>*changedInputControls);
 @end

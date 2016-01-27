@@ -22,7 +22,7 @@
 
 
 //
-//  JMScheduleTrigger.h
+//  JSScheduleTrigger.h
 //  TIBCO JasperMobile
 //
 
@@ -32,7 +32,7 @@
 */
 
 
-@interface JMScheduleTrigger : NSObject
+@interface JSScheduleTrigger : NSObject <JSSerializationDescriptorHolder>
 @property (nonatomic, strong) NSString *timezone;
 @property (nonatomic, strong) NSDate *startDate;
 @property (nonatomic, assign) NSInteger startType;

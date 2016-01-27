@@ -217,9 +217,21 @@
                                            [strongSelf.dashboardLoader cancel];
                                            [super cancelResourceViewingAndExit:YES];
                                        }];
-            [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
+            [strongSelf.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
                 __weak typeof(self)strongSelf = weakSelf;
                 [strongSelf stopShowLoader];
+
+                if (!success) {
+                    JMLog(@"error of refreshing dashboard: %@", error);
+                    if (error.code == JSSessionExpiredErrorCode) {
+                        [strongSelf.restClient deleteCookies];
+                        [strongSelf resetSubViews];
+                        [strongSelf startShowDashboard];
+                    } else {
+                        [JMUtils presentAlertControllerWithError:error completion:nil];
+                    }
+                }
+
             }];
         } else {
             __weak typeof(self)weakSelf = strongSelf;
@@ -241,6 +253,15 @@
         [self.dashboardLoader reloadMaximizedDashletWithCompletion:^(BOOL success, NSError *error){
             __weak typeof(self)strongSelf = weakSelf;
             [strongSelf stopShowLoader];
+            if (!success) {
+                if (error.code == JSSessionExpiredErrorCode) {
+                    [strongSelf.restClient deleteCookies];
+                    [strongSelf resetSubViews];
+                    [strongSelf startShowDashboard];
+                } else {
+                    [JMUtils presentAlertControllerWithError:error completion:nil];
+                }
+            }
         }];
 
     } else {
@@ -302,6 +323,18 @@
                                         kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
                                         kJMAnalyticsLabelKey         : label
                                         }];
+                } else {
+                    if (error.code == JSSessionExpiredErrorCode) {
+                        [strongSelf.restClient deleteCookies];
+                        [strongSelf resetSubViews];
+                        [strongSelf startShowDashboard];
+                    } else {
+                        [JMUtils presentAlertControllerWithError:error completion:nil];
+                    }
+
+                    if ([strongSelf isContentOnTV]) {
+                        strongSelf.controlsViewController.components = self.dashboard.dashlets;
+                    }
                 }
             }];
 
@@ -316,10 +349,14 @@
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
     JMMenuActionsViewAction menuActions = [super availableActionForResource:resource] | JMMenuActionsViewAction_Refresh;
-    if ([self isExternalScreenAvailable]) {
-        menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+
+    // TODO: enable in next releases
+    if ([JMUtils isServerAmber2OrHigher]) {
+        if ([self isExternalScreenAvailable]) {
+            menuActions |= [self isContentOnTV] ?  JMMenuActionsViewAction_HideExternalDisplay : JMMenuActionsViewAction_ShowExternalDisplay;
+        }
     }
-    // TODO: verify if input controls available
+
     if ([self isInputControlsAvailable]) {
         menuActions |= JMMenuActionsViewAction_Edit;
     }
@@ -551,14 +588,6 @@
                                               }
                                           }];
 }
-
-//- (void)showInputControls
-//{
-//    if ([self isInputControlsAvailable]) {
-//        [self showInputControlsVC];
-//        return;
-//    }
-//}
 
 - (BOOL)isInputControlsAvailable
 {
