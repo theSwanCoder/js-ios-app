@@ -429,8 +429,6 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 {
     NSString *type = rawData[@"type"];
 
-    JMLog(@"dashlet: %@", rawData);
-
     if ([type isEqualToString:@"inputControl"]) {
         return nil;
     }

@@ -46,9 +46,18 @@
     NSMutableArray *visibleComponents = [NSMutableArray array];
     NSMutableDictionary *maximizedComponets = [NSMutableDictionary dictionary];
     for (JMDashlet *dashlet in components) {
-        if (dashlet.type == JMDashletTypeChart) {
-            [visibleComponents addObject:dashlet];
-            maximizedComponets[dashlet.identifier] = @(NO);
+        JMDashletType type = dashlet.type;
+        switch(type) {
+            case JMDashletTypeChart:
+            case JMDashletTypeReportUnit:
+            case JMDashletTypeAdhocView: {
+                [visibleComponents addObject:dashlet];
+                maximizedComponets[dashlet.identifier] = @(NO);
+                break;
+            }
+            default:{
+                break;
+            }
         }
     }
     self.visibleComponents = visibleComponents;
@@ -83,8 +92,10 @@
     NSString *buttonTitle;
     if (isMaximized) {
         buttonTitle = JMCustomLocalizedString(@"external.screen.button.title.manimize", nil);
+        cell.backgroundColor = [UIColor lightGrayColor];
     } else {
         buttonTitle = JMCustomLocalizedString(@"external.screen.button.title.maximize", nil);
+        cell.backgroundColor = [UIColor whiteColor];
     }
     [cell.maximizeButton setTitle:buttonTitle
                          forState:UIControlStateNormal];
