@@ -186,7 +186,7 @@
 {
     if ([self isContentOnTV]) {
         [self switchFromTV];
-        [self hideExternalWindow];
+        [self hideExternalWindowWithCompletion:nil];
         [super cancelResourceViewingAndExit:exit];
     } else {
         [super cancelResourceViewingAndExit:exit];
@@ -386,7 +386,9 @@
         }
         case JMMenuActionsViewAction_HideExternalDisplay: {
             [self switchFromTV];
-            [self hideExternalWindow];
+            [self hideExternalWindowWithCompletion:^(void) {
+                [self configViewport];
+            }];
             break;
         }
         case JMMenuActionsViewAction_Edit: {
@@ -631,15 +633,6 @@
 {
     [self.view addSubview:self.webView];
     [self setupWebViewLayout];
-
-    if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
-        CGFloat initialScaleViewport = 0.75;
-        BOOL isCompactWidth = self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
-        if (isCompactWidth) {
-            initialScaleViewport = 0.25;
-        }
-        [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
-    }
 
     [self.controlsViewController.view removeFromSuperview];
     self.controlsViewController = nil;

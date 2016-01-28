@@ -37,9 +37,17 @@
 - (void)dealloc
 {
     JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    [self discardScreenConnectionNotifications];
 }
 
 #pragma mark - UIViewController LifeCycle
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    [self setupScreenConnectionNotifications];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -90,10 +98,14 @@
     }
 }
 
-- (void)hideExternalWindow
+- (void)hideExternalWindowWithCompletion:(void(^)(void))completion
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         self.externalWindow.hidden = YES;
+        self.externalWindow = nil;
+        if (completion) {
+            completion();
+        }
     });
 }
 
@@ -105,7 +117,7 @@
 
 - (BOOL)isContentOnTV
 {
-    BOOL isContentOnTV = self.externalWindow && !self.externalWindow.hidden;
+    BOOL isContentOnTV = _externalWindow && !_externalWindow.hidden;
     JMLog(@"is content on tv: %@", isContentOnTV ? @"YES" : @"NO");
     return isContentOnTV;
 }
@@ -114,7 +126,9 @@
 
 - (UIWindow *)externalWindow
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if (!_externalWindow) {
+        JMLog(@"creating new window");
         _externalWindow = [UIWindow new];
         _externalWindow.clipsToBounds = YES;
         _externalWindow.backgroundColor = [UIColor whiteColor];
@@ -139,6 +153,45 @@
     [self.externalWindow addSubview:viewForAdding];
 
     self.externalWindow.hidden = YES;
+}
+
+
+#pragma mark - Notifications
+- (void)setupScreenConnectionNotifications
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+
+    [center addObserver:self
+               selector:@selector(handleScreenDidConnectNotification:)
+                   name:UIScreenDidConnectNotification
+                 object:nil];
+    [center addObserver:self
+               selector:@selector(handleScreenDidDisconnectNotification:)
+                   name:UIScreenDidDisconnectNotification
+                 object:nil];
+}
+
+- (void)discardScreenConnectionNotifications
+{
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self
+                      name:UIScreenDidConnectNotification
+                    object:nil];
+    [center removeObserver:self
+                      name:UIScreenDidDisconnectNotification
+                    object:nil];
+}
+
+- (void)handleScreenDidConnectNotification:(NSNotification *)notification
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    // TODO: update working with TV with this
+}
+
+- (void)handleScreenDidDisconnectNotification:(NSNotification *)notification
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    // TODO: update working with TV with this
 }
 
 #pragma mark - Work with navigation items
