@@ -55,6 +55,15 @@
 }
 
 #pragma mark - Properties
+- (BOOL)enable
+{
+    return self.userInteractionEnabled;
+}
+
+- (void)setEnable:(BOOL)enable
+{
+    self.userInteractionEnabled = enable;
+}
 
 - (void)setCountOfPages:(NSInteger)countOfPages
 {
@@ -87,46 +96,22 @@
 
 - (IBAction)firstButtonTapped:(id)sender
 {
-    NSInteger currentPage = self.currentPage;
-    NSInteger nextPage = 1;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-        if (success) {
-            self.currentPage = nextPage;
-        }
-    }];
+    [self.toolbarDelegate toolbar:self changeFromPage:self.currentPage toPage:1];
 }
 
 - (IBAction)lastButtonTapped:(id)sender
 {
-    NSInteger currentPage = self.currentPage;
-    NSInteger nextPage = self.countOfPages;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-        if (success) {
-            self.currentPage = nextPage;
-        }
-    }];
+    [self.toolbarDelegate toolbar:self changeFromPage:self.currentPage toPage:self.countOfPages];
 }
 
 - (IBAction)nextButtonTapped:(id)sender
 {
-    NSInteger currentPage = self.currentPage;
-    NSInteger nextPage = currentPage+1;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-        if (success) {
-            self.currentPage = nextPage;
-        }
-    }];
+    [self.toolbarDelegate toolbar:self changeFromPage:self.currentPage toPage:(self.currentPage + 1)];
 }
 
 - (IBAction)previousButtonTapped:(id)sender
 {
-    NSInteger currentPage = self.currentPage;
-    NSInteger nextPage = currentPage-1;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-        if (success) {
-            self.currentPage = nextPage;
-        }
-    }];
+    [self.toolbarDelegate toolbar:self changeFromPage:self.currentPage toPage:(self.currentPage - 1)];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -183,21 +168,8 @@
 
 - (void)done:(id)sender
 {
-    NSInteger currentPage = self.currentPage;
     NSInteger nextPage = [self.pickerView selectedRowInComponent:0] + 1;
-    self.previousButton.enabled = NO;
-    self.firstButton.enabled = NO;
-    self.nextButton.enabled = NO;
-    self.lastButton.enabled = NO;
-    [self.toolbarDelegate toolbar:self changeFromPage:currentPage toPage:nextPage completion:^(BOOL success) {
-            self.previousButton.enabled = YES;
-            self.firstButton.enabled = YES;
-            self.nextButton.enabled = YES;
-            self.lastButton.enabled = YES;
-            if (success) {
-                self.currentPage = nextPage;
-            }
-        }];
+    [self.toolbarDelegate toolbar:self changeFromPage:self.currentPage toPage:nextPage];
 
     [self hidePicker];
 }

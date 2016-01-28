@@ -445,40 +445,37 @@
 }
 
 #pragma mark - JMReportViewerToolBarDelegate
-- (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage completion:(void (^)(BOOL success))completion
+- (void)toolbar:(JMReportViewerToolBar *)toolbar changeFromPage:(NSInteger)fromPage toPage:(NSInteger)toPage
 {
+    toolbar.enable = NO;
     [[self webView].scrollView setZoomScale:0.1 animated:YES];
 
     __weak typeof(self)weakSelf = self;
     void(^changePageCompletion)(BOOL, NSError*) = ^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
-
-        // fix an issue in webview after zooming and changing page (black areas)
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
-            runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
-            [((JMJavascriptNativeBridge *)[strongSelf reportLoader].bridge) sendRequest:runRequest];
-        });
-
-        if ([strongSelf isContentOnTV]) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [strongSelf.controlsViewController updateInterface];
-            });
-        }
-
+        [strongSelf stopShowLoader];
         if (success) {
-            [self.report updateCurrentPage:toPage];
-            if (completion) {
-                completion(YES);
+            toolbar.enable = YES;
+            [strongSelf.report updateCurrentPage:toPage];
+            // fix an issue in webview after zooming and changing page (black areas)
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                JMJavascriptRequest *runRequest = [JMJavascriptRequest new];
+                runRequest.command = @"document.body.style.height = '100%%'; document.body.style.width = '100%%';";
+                [((JMJavascriptNativeBridge *)[strongSelf reportLoader].bridge) sendRequest:runRequest];
+            });
+            
+            if ([strongSelf isContentOnTV]) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [strongSelf.controlsViewController updateInterface];
+                });
             }
         } else {
-            if (completion) {
-                completion(NO);
-            }
             [strongSelf handleError:error];
         }
     };
-#warning Should update logic for load new report page after session expiration
+    if ([self.reportLoader respondsToSelector:@selector(shouldDisplayLoadingView)] && [self.reportLoader shouldDisplayLoadingView]) {
+        [self startShowLoaderWithMessage:@"status.loading"];
+    }
     [self.reportLoader fetchPageNumber:toPage withCompletion:changePageCompletion];
 }
 
@@ -488,17 +485,14 @@
     [self hideEmptyReportMessage];
     [self hideToolbar];
     [self hideReportView];
+    self.toolbar.enable = NO;
 
     __weak typeof(self)weakSelf = self;
-    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
-        __strong typeof(self)strongSelf = weakSelf;
-        [strongSelf.reportLoader cancel];
-        [strongSelf cancelResourceViewingAndExit:YES];
-    }];
-
+    [self startShowLoaderWithMessage:@"status.loading"];
     [self.reportLoader runReportWithPage:page completion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
         [strongSelf stopShowLoader];
+        strongSelf.toolbar.enable = YES;
 
         if (success) {
             // Analytics
@@ -535,11 +529,7 @@
         [self hideReportView];
         
         __weak typeof(self)weakSelf = self;
-        [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
-            __strong typeof(self)strongSelf = weakSelf;
-            [strongSelf.reportLoader cancel];
-            [strongSelf cancelResourceViewingAndExit:YES];
-        }];
+        [self startShowLoaderWithMessage:@"status.loading"];
         [self.reportLoader applyReportParametersWithCompletion:^(BOOL success, NSError *error) {
             __strong typeof(self)strongSelf = weakSelf;
             [strongSelf stopShowLoader];
@@ -575,11 +565,7 @@
     [self hideReportView];
     
     __weak typeof(self)weakSelf = self;
-    [self startShowLoaderWithMessage:@"status.loading" cancelBlock:^(void) {
-        __strong typeof(self)strongSelf = weakSelf;
-        [strongSelf.reportLoader cancel];
-        [strongSelf cancelResourceViewingAndExit:YES];
-    }];
+    [self startShowLoaderWithMessage:@"status.loading"];
     
     [self.reportLoader refreshReportWithCompletion:^(BOOL success, NSError *error) {
         __strong typeof(self)strongSelf = weakSelf;
