@@ -379,7 +379,9 @@
 {
     NSString *fullPathWithoutFormat = [fromURL.path stringByDeletingPathExtension];
     NSString *fullPathWithNewFormat = [fullPathWithoutFormat stringByAppendingPathExtension:newFormat];
-    return [NSURL URLWithString:fullPathWithNewFormat];
+    fullPathWithNewFormat = [NSString stringWithFormat:@"file://%@", fullPathWithNewFormat];
+    NSURL *URLWithFormat = [NSURL URLWithString:fullPathWithNewFormat];
+    return URLWithFormat;
 }
 
 - (void)showErrorWithMessage:(NSString *)message completion:(void(^)(void))completion
