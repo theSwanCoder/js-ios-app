@@ -333,7 +333,7 @@
                     }
 
                     if ([strongSelf isContentOnTV]) {
-                        strongSelf.controlsViewController.components = self.dashboard.dashlets;
+                        strongSelf.controlsViewController.components = strongSelf.dashboard.dashlets;
                     }
                 }
             }];
