@@ -32,7 +32,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet UIButton *previousButton;
 @property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
-@property (nonatomic, strong) UIView *inputAccessoryView;
 @end
 
 @implementation JMReportViewerToolBar
@@ -45,7 +44,7 @@
 
     self.currentPageField.backgroundColor = [[JMThemesManager sharedManager] barsBackgroundColor];
     self.currentPageField.inputView = self.pickerView;
-    self.currentPageField.inputAccessoryView = self.inputAccessoryView;
+    self.currentPageField.inputAccessoryView = [self pickerToolbar];
 }
 
 - (void)dealloc
@@ -117,6 +116,9 @@
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
+    UIPickerView *pickerView = self.inputAccessoryView.subviews.firstObject;
+    [pickerView sizeToFit];
+
     if (self.countOfPages != NSNotFound) {
         [self.pickerView selectRow:self.currentPage - 1 inComponent:0 animated:NO];
         return YES;
@@ -151,17 +153,6 @@
     [pickerToolbar setItems:@[flexibleSpace, cancel, done]];
 
     return pickerToolbar;
-}
-
-- (UIView *)inputAccessoryView
-{
-    if (!_inputAccessoryView) {
-        CGRect viewFrame = CGRectMake(0, 0, CGRectGetWidth(self.frame), 44);
-        _inputAccessoryView = [[UIView alloc] initWithFrame:viewFrame];
-        UIToolbar *toolbar = [self pickerToolbar];
-        [_inputAccessoryView addSubview:toolbar];
-    }
-    return _inputAccessoryView;
 }
 
 #pragma mark - Actions
