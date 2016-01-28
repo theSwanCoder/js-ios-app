@@ -19,7 +19,7 @@
 
 @implementation JMSchedulingVC
 
-#pragma mark -LifeCycle
+#pragma mark - LifeCycle
 
 -(void)viewDidLoad
 {
@@ -35,7 +35,7 @@
         strongSelf.jobs = jobs;
         [strongSelf.tableView reloadData];
 
-        [strongSelf showNoJobsLabel:(strongSelf.jobs.count == 0)];
+        [strongSelf updateNoJobsLabelAppearence];
     }];
 
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
@@ -96,7 +96,7 @@
     JSScheduleJobResource *job = self.jobs[indexPath.row];
 
     __weak __typeof(self) weakSelf = self;
-    [self.jobsManager deleteJobWithJobIdentifier:job.identifier
+    [self.jobsManager deleteJobWithJobIdentifier:job.jobIdentifier
                                       completion:^(NSError *error) {
                                           __typeof(self) strongSelf = weakSelf;
 
@@ -105,6 +105,8 @@
                                           strongSelf.jobs = [jobs copy];
                                           [strongSelf.tableView deleteRowsAtIndexPaths:@[indexPath]
                                                                 withRowAnimation:UITableViewRowAnimationLeft];
+
+                                          [strongSelf updateNoJobsLabelAppearence];
                                       }];
 }
 
@@ -124,6 +126,11 @@
 
     NSString *dateString = [outputFormatter stringFromDate:date];
     return dateString;
+}
+
+- (void)updateNoJobsLabelAppearence
+{
+    [self showNoJobsLabel:(self.jobs.count == 0)];
 }
 
 @end
