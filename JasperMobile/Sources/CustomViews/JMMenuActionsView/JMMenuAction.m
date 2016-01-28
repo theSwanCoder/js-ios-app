@@ -82,7 +82,7 @@
         case JMMenuActionsViewAction_OpenIn:
             return @"action.title.openIn";
         case JMMenuActionsViewAction_Schedule:
-            return @"schedule";
+            return @"action.title.schedule";
         case JMMenuActionsViewAction_ShowExternalDisplay:
             return @"action.title.showExternalDisplay";
         case JMMenuActionsViewAction_HideExternalDisplay:

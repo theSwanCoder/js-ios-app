@@ -242,6 +242,7 @@
 "action.title.print" = "Print";
 "action.title.openIn" = "Open with...";
 "action.title.accept" = "Accept";
+"action.title.schedule" = "Schedule";
 
 /* External screens*/
 "action.title.showExternalDisplay" = "Show on TV";
