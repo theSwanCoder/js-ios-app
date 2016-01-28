@@ -103,6 +103,8 @@
         return JMCustomLocalizedString(@"resources.type.dashboard.legacy", nil);
     } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_FOLDER]) {
         return JMCustomLocalizedString(@"resources.type.folder", nil);
+    } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_FILE]) {
+        return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
     }
     return nil;
 }
