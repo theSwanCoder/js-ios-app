@@ -66,19 +66,16 @@
 
 - (void)cancelAll
 {
-    // TODO: Should check the implementation
     [self.operationQueue cancelAllOperations];
 }
 
 - (void)cancelTask:(JMExportTask *)task
 {
-    // TODO: Should check the implementation
     [task cancel];
 }
 
 - (void)cancelTaskForResource:(JMExportResource *)resource;
 {
-    // TODO: Should check the implementation
     [self cancelTask:[self taskForResource:resource]];
 }
 
@@ -101,5 +98,15 @@
         }
     }
     return nil;
+}
+
++ (JMExportResource *)exportResourceWithName:(NSString *)reportName format:(NSString *)reportFormat;
+{
+    NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"label == %@", reportName];
+    NSPredicate *predicateFormat = [NSPredicate predicateWithFormat:@"format == %@", reportFormat];
+    NSPredicate *predicateAll = [[NSCompoundPredicate alloc] initWithType:NSAndPredicateType subpredicates:@[predicateName, predicateFormat]];
+    
+    NSArray *allExportResources = [[[self sharedInstance] exportedResources] filteredArrayUsingPredicate:predicateAll];
+    return [allExportResources firstObject];
 }
 @end

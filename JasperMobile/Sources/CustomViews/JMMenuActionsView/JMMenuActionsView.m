@@ -29,7 +29,8 @@
 #import "UIColor+RGBComponent.h"
 
 
-CGFloat static kJMMenuActionsViewCellHeight = 40;
+CGFloat static kJMMenuActionsViewCellPortraitHeight = 40;
+CGFloat static kJMMenuActionsViewCellLandscapeHeight = 34;
 
 @interface JMMenuActionsView () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -210,7 +211,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return kJMMenuActionsViewCellHeight;
+    return [self actionCellHeight];
 }
 
 - (void)tableView: (UITableView*)tableView willDisplayCell: (UITableViewCell*)cell forRowAtIndexPath: (NSIndexPath*)indexPath
@@ -231,7 +232,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
 - (void)updateFrameFitContent
 {
     NSInteger countOfActions = self.availableMenuActions.count;
-    CGFloat tableViewHeight = kJMMenuActionsViewCellHeight * countOfActions;
+    CGFloat tableViewHeight = [self actionCellHeight] * countOfActions;
     CGRect selfRect = self.frame;
     selfRect.size.height = tableViewHeight;
     CGFloat leftPadding = 20;
@@ -242,7 +243,7 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
     self.tableView.frame = CGRectIntegral(selfRect);
     
     [self.tableView sizeToFit];
-    self.tableView.scrollEnabled = NO;
+    self.tableView.scrollEnabled = CGRectGetHeight(self.tableView.frame) < self.tableView.contentSize.height;
 }
 
 - (CGFloat)maxTextWidth
@@ -269,6 +270,11 @@ CGFloat static kJMMenuActionsViewCellHeight = 40;
         }
     }
     return maxImageWidth;
+}
+
+- (CGFloat) actionCellHeight
+{
+    return [JMUtils isCompactHeight] ? kJMMenuActionsViewCellLandscapeHeight : kJMMenuActionsViewCellPortraitHeight;
 }
 
 #pragma mark - Helpers

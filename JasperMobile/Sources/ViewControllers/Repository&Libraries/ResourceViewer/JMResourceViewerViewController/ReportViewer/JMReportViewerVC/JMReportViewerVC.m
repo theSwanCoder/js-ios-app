@@ -708,7 +708,7 @@
 #pragma mark - JMSaveReportControllerDelegate
 - (void)reportDidSavedSuccessfully
 {
-    [ALToastView toastInView:self.view
+    [ALToastView toastInView:self.navigationController.view
                     withText:JMCustomLocalizedString(@"report.viewer.save.addedToQueue", nil)];
 }
 

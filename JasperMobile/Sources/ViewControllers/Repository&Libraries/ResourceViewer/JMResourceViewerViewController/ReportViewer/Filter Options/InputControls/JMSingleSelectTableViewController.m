@@ -66,6 +66,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    JMLog(@"\nPrevious Selection :%@\nNew Selection: %@", self.previousSelectedValues, self.selectedValues);
     if (![self.previousSelectedValues isEqualToSet:[NSSet setWithArray:self.selectedValues]]) {
         [self.cell updateWithParameters:self.selectedValues];
     }

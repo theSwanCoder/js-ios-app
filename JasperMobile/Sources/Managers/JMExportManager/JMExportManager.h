@@ -49,4 +49,6 @@
 
 - (JMExportTask *)taskForResource:(JMExportResource *)resource;
 
++ (JMExportResource *)exportResourceWithName:(NSString *)reportName format:(NSString *)reportFormat;
+
 @end
