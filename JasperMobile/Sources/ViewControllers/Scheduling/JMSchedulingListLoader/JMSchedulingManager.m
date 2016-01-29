@@ -57,13 +57,25 @@
                                                 NSDictionary *bodyJSON = [NSJSONSerialization JSONObjectWithData:result.body options:NSJSONReadingMutableContainers error:nil];
                                                 if (bodyJSON) {
                                                     NSArray *errors = bodyJSON[@"error"];
-                                                    NSString *message = errors.firstObject[@"defaultMessage"];
-                                                    NSString *field = errors.firstObject[@"field"];
-                                                    NSString *fullMessage = [NSString stringWithFormat:@"%@ in %@", message, field];
-                                                    NSError *createScheduledJobError = [[NSError alloc] initWithDomain:@"Error"
-                                                                                                                  code:0
-                                                                                                              userInfo:@{NSLocalizedDescriptionKey: fullMessage}];
-                                                    completion(nil, createScheduledJobError);
+                                                    if (errors.count > 0) {
+                                                        NSString *fullMessage = @"";
+                                                        for (NSDictionary *errorJSON in errors) {
+                                                            NSString *message = errorJSON[@"defaultMessage"];
+                                                            NSString *errorMessage = @"";
+                                                            NSString *field = errorJSON[@"field"];
+                                                            if (message) {
+                                                                errorMessage = [NSString stringWithFormat:@"%@ in (%@). ", message, field];
+                                                            } else {
+                                                                NSString *errorCode = errorJSON[@"errorCode"];
+                                                                errorMessage = errorCode;
+                                                            }
+                                                            fullMessage = [fullMessage stringByAppendingString:errorMessage];
+                                                        }
+                                                        NSError *createScheduledJobError = [[NSError alloc] initWithDomain:@"Error"
+                                                                                                                      code:0
+                                                                                                                  userInfo:@{NSLocalizedDescriptionKey: fullMessage}];
+                                                        completion(nil, createScheduledJobError);
+                                                    }
                                                 }
                                             } else {
                                                 completion(nil, result.error);
