@@ -29,14 +29,8 @@
     self.view.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
 
     self.jobsManager = [JMSchedulingManager new];
-    __weak __typeof(self) weakSelf = self;
-    [self.jobsManager loadJobsWithCompletion:^(NSArray <JSScheduleJobResource *>*jobs, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        strongSelf.jobs = jobs;
-        [strongSelf.tableView reloadData];
 
-        [strongSelf updateNoJobsLabelAppearence];
-    }];
+    [self updateNoJobsLabelAppearence];
 
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.tintColor = [UIColor whiteColor];
@@ -48,6 +42,20 @@
 
     self.noJobsLabel.text = JMCustomLocalizedString(@"schedules.no.jobs.message", nil);
     [self showNoJobsLabel:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    __weak __typeof(self) weakSelf = self;
+    [self.jobsManager loadJobsWithCompletion:^(NSArray <JSScheduleJobResource *>*jobs, NSError *error) {
+        __typeof(self) strongSelf = weakSelf;
+        strongSelf.jobs = jobs;
+        [strongSelf.tableView reloadData];
+
+        [strongSelf updateNoJobsLabelAppearence];
+    }];
 }
 
 #pragma mark - UITableViewDataSource
