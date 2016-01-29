@@ -97,9 +97,10 @@
       };
 
       ReportCallback.prototype.onLoadError = function(error) {
-        this.dispatch(function() {
-          return this._makeCallback("reportDidEndRenderFailured&error=" + error);
-        });
+        this._makeCallback("json&" + JSON.stringify({
+              "command": "reportDidEndRenderFailured",
+              "parameters": error
+            }));
       };
 
       ReportCallback.prototype.onReportCompleted = function(status, pages, error) {
@@ -679,14 +680,9 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
       ReportController.prototype._processErrors = function(error) {
         js_mobile.log(error);
         this.callback.logging(error);
-        if (error.errorCode === "authentication.error") {
-          js_mobile.log("onLoadStart");
-          this.callback.logging("onLoadStart");
-          this.callback.onLoadStart();
-          return this._runReportWithAuth(error);
-        } else {
-          return this.callback.onLoadError(error.message);
-        }
+        this.callback.onLoadError({
+          "code": error.errorCode,
+          "message": error.message});
       };
 
       ReportController.prototype._processLinkClicks = function(event, link) {

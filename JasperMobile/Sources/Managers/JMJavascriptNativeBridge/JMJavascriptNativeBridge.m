@@ -178,9 +178,11 @@
 
     if ([callbackType isEqualToString:@"json"]) {
         NSString *parameters = components[1];
+//        JMLog(@"origin parameters: %@", parameters);
         parameters = [parameters stringByReplacingOccurrencesOfString:@"/\"" withString:@"\""];
         parameters = [parameters stringByReplacingOccurrencesOfString:@"\"{" withString:@"{"];
         parameters = [parameters stringByReplacingOccurrencesOfString:@"}\"" withString:@"}"];
+//        JMLog(@"sanitized parameters: %@", parameters);
         NSData *parametersAsData = [parameters dataUsingEncoding:NSUTF8StringEncoding];
         NSError *error;
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:parametersAsData
@@ -197,6 +199,7 @@
         result[@"callback.type"] = callbackType;
 
         NSMutableArray *parameters = [NSMutableArray arrayWithArray:components];
+//        JMLog(@"origin parameters: %@", parameters);
         [parameters removeObjectAtIndex:0];
         for (NSString *component in parameters) {
             NSArray *keyValue = [component componentsSeparatedByString:@"="];

@@ -351,13 +351,17 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 - (void)handleReportEndRenderFailedWithParameters:(NSDictionary *)parameters
 {
     if (self.reportLoadCompletion) {
-        NSString *errorString = parameters[@"error"];
-        errorString = [errorString stringByRemovingPercentEncoding];
-        JSReportLoaderErrorType errorType = JSReportLoaderErrorTypeUndefined;
-        if (errorString && [errorString rangeOfString:@"authentication.error"].length) {
-            errorType = JSReportLoaderErrorTypeAuthentification;
+        NSString *errorCode = parameters[@"parameters"][@"code"];
+        NSString *message = parameters[@"parameters"][@"message"];
+        NSInteger code = 0;
+        if ([errorCode isEqualToString:@"authentication.error"]) {
+            code = JSSessionExpiredErrorCode;
         }
-        self.reportLoadCompletion(NO, [self createErrorWithType:errorType errorMessage:errorString]);
+        NSError *error = [[NSError alloc] initWithDomain:@"Visualize.Report.Error"
+                                                    code:code
+                                                userInfo:@{NSLocalizedDescriptionKey : message}];
+
+        self.reportLoadCompletion(NO, error);
     }
 }
 
