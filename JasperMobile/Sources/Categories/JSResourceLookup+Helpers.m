@@ -38,6 +38,11 @@
     return [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD] || [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD_LEGACY];
 }
 
+- (BOOL) isLegacyDashboard
+{
+    return [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD_LEGACY];
+}
+
 - (BOOL)isNewDashboard
 {
     return [JMUtils isServerVersionUpOrEqual6] && [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD];
