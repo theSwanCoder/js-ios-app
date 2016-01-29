@@ -244,13 +244,6 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 {
     NSDateFormatter* outputFormatter = [[NSDateFormatter alloc]init];
     [outputFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-
-    // Increase to 1 min for test purposes
-    // TODO: remove this
-    NSTimeInterval timeInterval = [date timeIntervalSince1970];
-    timeInterval += 60;
-    date = [NSDate dateWithTimeIntervalSince1970:timeInterval];
-
     NSString *dateString = [outputFormatter stringFromDate:date];
     return dateString;
 }
