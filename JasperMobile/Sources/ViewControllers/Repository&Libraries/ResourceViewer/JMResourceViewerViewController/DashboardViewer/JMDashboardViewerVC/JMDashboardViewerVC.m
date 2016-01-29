@@ -65,6 +65,8 @@
 #pragma mark - Rotation
 - (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
 {
+    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
+
     if ([self.dashboardLoader respondsToSelector:@selector(updateViewportScaleFactorWithValue:)]) {
         CGFloat initialScaleViewport = 0.75;
         BOOL isCompactWidth = newCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact;
@@ -73,7 +75,6 @@
         }
         [self.dashboardLoader updateViewportScaleFactorWithValue:initialScaleViewport];
     }
-    [super willTransitionToTraitCollection:newCollection withTransitionCoordinator:coordinator];
 }
 
 #pragma mark - Print
@@ -274,7 +275,7 @@
 - (void)startResourceViewing
 {
 
-    if ([JMUtils isServerAmber2OrHigher]) {
+    if ([JMUtils isServerAmber2OrHigher] && ![self.resourceLookup isLegacyDashboard]) {
         [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
                                    cancelBlock:^(void) {
                                        [super cancelResourceViewingAndExit:YES];
