@@ -51,6 +51,11 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 @implementation JMVisDashboardLoader
 @synthesize bridge = _bridge, delegate = _delegate;
 
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
 - (void)setBridge:(JMJavascriptNativeBridge *)bridge
 {
     _bridge = bridge;
@@ -282,7 +287,7 @@ typedef NS_ENUM(NSInteger, JMDashboardViewerAlertViewType) {
 
     if (request.URL.host) {
         self.externalURL = request.URL;
-        shouldLoad = YES;
+        shouldLoad = NO;
     } else {
         // Request for cleaning webview
         if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {

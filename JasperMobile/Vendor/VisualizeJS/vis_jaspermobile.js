@@ -205,6 +205,14 @@ JasperMobile.Dashboard.Callback = {
             }
         );
     },
+    onAdHocExecution: function() {
+        JasperMobile.Callback.createCallback(
+            {
+                "command" : "onAdHocExecution",
+                "parameters" : {}
+            }
+        );
+    },
     onReferenceClick: function(location) {
         JasperMobile.Callback.createCallback(
             {
@@ -390,7 +398,7 @@ MobileDashboard = {
                 },
                 linkOptions: {
                     events: {
-                        click: function(event, link) {
+                        click: function(event, link, defaultHandler) {
                             var type = link.type;
                             JasperMobile.Callback.log("link type: " + type);
 
@@ -400,16 +408,15 @@ MobileDashboard = {
                                         resource: link.parameters._report,
                                         params: JasperMobile.Helper.collectReportParams(link)
                                     };
-                                    var dataString = JSON.stringify(data);
                                     JasperMobile.Dashboard.Callback.onReportExecution(data);
                                     break;
                                 }
                                 case "LocalAnchor": {
-                                    defaultHandler.call(this);
+                                    defaultHandler.call();
                                     break;
                                 }
                                 case "LocalPage": {
-                                    defaultHandler.call(this);
+                                    defaultHandler.call();
                                     break;
                                 }
                                 case "Reference": {
@@ -418,10 +425,11 @@ MobileDashboard = {
                                     break;
                                 }
                                 case "AdHocExecution":
-                                    defaultHandler.call(this);
+                                    defaultHandler.call();
+                                    JasperMobile.Dashboard.Callback.onAdHocExecution();
                                     break;
                                 default: {
-                                    defaultHandler.call(this);
+                                    defaultHandler.call();
                                 }
                             }
                         }
@@ -626,13 +634,16 @@ MobileDashboard = {
     },
     _setupFiltersApperance: function() {
         var interval = window.setInterval(function() {
-            var divHeight;
-            divHeight = document.querySelector(".msPlaceholder > div").style.height;
-            if (divHeight !== 'undefined') {
-                window.clearInterval(interval);
-                document.querySelector(".msPlaceholder > div").style.height = "";
+            window.clearInterval(interval);
+            var div = document.querySelector(".msPlaceholder > div");
+            if (div !== null) {
+                var divHeight;
+                divHeight = document.querySelector(".msPlaceholder > div").style.height;
+                if (divHeight !== 'undefined') {
+                    document.querySelector(".msPlaceholder > div").style.height = "";
+                }
+                document.querySelector(".filterRow > div > div").style.height = "";
             }
-            document.querySelector(".filterRow > div > div").style.height = "";
         }, 500);
     }
 };

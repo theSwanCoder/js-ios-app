@@ -151,7 +151,13 @@
         }];
         [self presentViewController:alertController animated:YES completion:nil];
     } else if (action == JMMenuActionsViewAction_OpenIn) {
-        self.documentController = [self setupDocumentControllerWithURL:self.resourceRequest.URL
+        NSURL *url;
+        if ([self.resourceLookup isFile]) {
+            url = self.savedResourceURL;
+        } else {
+            url = self.resourceRequest.URL;
+        }
+        self.documentController = [self setupDocumentControllerWithURL:url
                                                          usingDelegate:self];
         
         BOOL canOpen = [self.documentController presentOpenInMenuFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
@@ -173,7 +179,7 @@
         }
     } else if (action == JMMenuActionsViewAction_HideExternalDisplay) {
         [self switchFromTV];
-        [self hideExternalWindow];
+        [self hideExternalWindowWithCompletion:nil];
     }
 }
 
@@ -216,7 +222,7 @@
 - (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController
 {
     [self switchFromTV];
-    [self hideExternalWindow];
+    [self hideExternalWindowWithCompletion:nil];
 }
 
 #pragma mark - Viewers
@@ -295,14 +301,13 @@
                                                                                                          NSURL *fileURL = [strongSelf updateFormatForURL:strongSelf.savedResourceURL withFormat:kJS_CONTENT_TYPE_HTML];
                                                                                                          [strongSelf moveResourceFromPath:strongSelf.savedResourceURL.path
                                                                                                                                    toPath:fileURL.path];
-                                                                                                         self.savedResourceURL = fileURL;
-
+                                                                                                         strongSelf.savedResourceURL = fileURL;
                                                                                                          [strongSelf showRemoveHTMLForResource:resource];
                                                                                                      } else {
-                                                                                                         NSURL *fileURL = [strongSelf updateFormatForURL:strongSelf.savedResourceURL withFormat:kJS_CONTENT_TYPE_PDF];
+                                                                                                         NSURL *fileURL = [strongSelf updateFormatForURL:strongSelf.savedResourceURL withFormat:resource.fileFormat];
                                                                                                          [strongSelf moveResourceFromPath:strongSelf.savedResourceURL.path
                                                                                                                                    toPath:fileURL.path];
-                                                                                                         self.savedResourceURL = fileURL;
+                                                                                                         strongSelf.savedResourceURL = fileURL;
                                                                                                          [strongSelf showResourceWithURL:fileURL];
                                                                                                      }
                                                                                                  } else {
@@ -381,6 +386,7 @@
     NSString *fullPathWithNewFormat = [fullPathWithoutFormat stringByAppendingPathExtension:newFormat];
     fullPathWithNewFormat = [NSString stringWithFormat:@"file://%@", fullPathWithNewFormat];
     NSURL *URLWithFormat = [NSURL URLWithString:fullPathWithNewFormat];
+    JMLog(@"%@", URLWithFormat);
     return URLWithFormat;
 }
 

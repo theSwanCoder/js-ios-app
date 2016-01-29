@@ -62,8 +62,8 @@
     jobCell.delegate = self;
 
     JSScheduleJobResource *job = self.jobs[indexPath.row];
-    jobCell.titleLabel.text = job.label;
-    jobCell.detailLabel.text = [NSString stringWithFormat:@"%@ (%@)", job.jobDescription ?: @"", [self dateStringFromDate:job.state.nextFireTime]];
+    jobCell.titleLabel.text = [NSString stringWithFormat:@"%@ (state: %@)", job.label, job.state.value];
+    jobCell.detailLabel.text = [NSString stringWithFormat:@"%@ (next run: %@)", job.jobDescription ?: @"", [self dateStringFromDate:job.state.nextFireTime]];
 
     jobCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return jobCell;

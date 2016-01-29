@@ -43,6 +43,11 @@
 
 @implementation JMDashboardViewerConfigurator
 
+- (void)dealloc
+{
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+}
+
 #pragma mark - Initializers
 - (instancetype)initWithDashboard:(JMDashboard *)dashboard
 {

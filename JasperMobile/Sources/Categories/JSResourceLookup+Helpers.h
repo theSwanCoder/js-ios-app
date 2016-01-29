@@ -19,6 +19,7 @@
 - (BOOL) isTempExportedReport;
 
 - (BOOL) isDashboard;
+- (BOOL) isLegacyDashboard;
 - (BOOL) isNewDashboard;
 - (BOOL) isFile;
 

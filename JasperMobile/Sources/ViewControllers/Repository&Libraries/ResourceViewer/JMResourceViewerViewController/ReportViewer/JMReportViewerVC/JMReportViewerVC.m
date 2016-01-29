@@ -152,7 +152,7 @@
         }
 
         if ([self isContentOnTV]) {
-            [self hideExternalWindow];
+            [self hideExternalWindowWithCompletion:nil];
         }
 
         [super cancelResourceViewingAndExit:exit];
@@ -191,6 +191,7 @@
 
 - (void)configViewport
 {
+    JMLog(@"%@ - %@", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     if ([self isContentOnTV]) {
         return;
     }
@@ -696,10 +697,13 @@
             }];
             break;
         }
-        case JMMenuActionsViewAction_HideExternalDisplay:
+        case JMMenuActionsViewAction_HideExternalDisplay: {
             [self switchFromTV];
-            [self hideExternalWindow];
+            [self hideExternalWindowWithCompletion:^(void) {
+                [self configViewport];
+            }];
             break;
+        }
         default:
             break;
     }
@@ -876,22 +880,22 @@
 
 - (void)switchFromTV
 {
+    [self.controlsViewController.view removeFromSuperview];
+
     [self.view addSubview:self.webView];
     [self setupWebViewLayout];
 
-    [self configViewport];
-
     [self.view addSubview:self.emptyReportMessageLabel];
     [self layoutEmptyReportLabelInView:self.view];
-
-    [self.controlsViewController.view removeFromSuperview];
 }
 
 #pragma mark - JMExternalWindowControlViewControllerDelegate
 - (void)externalWindowControlViewControllerDidUnplugControlView:(JMExternalWindowControlsVC *)viewController
 {
     [self switchFromTV];
-    [self hideExternalWindow];
+    [self hideExternalWindowWithCompletion:^(void) {
+        [self configViewport];
+    }];
 }
 
 

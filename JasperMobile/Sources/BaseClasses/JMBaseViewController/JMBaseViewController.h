@@ -39,7 +39,7 @@
 
 - (BOOL)createExternalWindow;
 - (void)showExternalWindowWithCompletion:(void(^)(BOOL success))completion;
-- (void)hideExternalWindow;
+- (void)hideExternalWindowWithCompletion:(void(^)(void))completion;
 - (UIView *)viewToShowOnExternalWindow;
 
 - (BOOL)isContentOnTV;

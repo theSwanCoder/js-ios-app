@@ -61,10 +61,12 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
          forControlEvents:UIControlEventValueChanged];
 
     [self createJobRepresentation];
+    NSString *resourceURI = self.resourceLookup.uri;
+    NSString *resourceFolder = [resourceURI stringByDeletingLastPathComponent];
     self.job = [JSScheduleJob jobWithReportURI:self.resourceLookup.uri
                                          label:self.resourceLookup.label
                                 outputFilename:nil
-                                     folderURI:nil
+                                     folderURI:resourceFolder
                                        formats:nil
                                      startDate:nil];
     [self.createJobButton setTitle:JMCustomLocalizedString(@"schedules.new.job.button.create", nil)

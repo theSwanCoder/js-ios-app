@@ -38,6 +38,11 @@
     return [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD] || [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD_LEGACY];
 }
 
+- (BOOL) isLegacyDashboard
+{
+    return [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD_LEGACY];
+}
+
 - (BOOL)isNewDashboard
 {
     return [JMUtils isServerVersionUpOrEqual6] && [self.resourceType isEqualToString:kJS_WS_TYPE_DASHBOARD];
@@ -103,6 +108,8 @@
         return JMCustomLocalizedString(@"resources.type.dashboard.legacy", nil);
     } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_FOLDER]) {
         return JMCustomLocalizedString(@"resources.type.folder", nil);
+    } else if ([self.resourceType isEqualToString:kJS_WS_TYPE_FILE]) {
+        return JMCustomLocalizedString(@"resources.type.saved.reportUnit", nil);
     }
     return nil;
 }
