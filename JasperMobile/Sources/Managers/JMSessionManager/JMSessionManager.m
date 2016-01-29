@@ -58,7 +58,8 @@ static JMSessionManager *_sharedManager = nil;
 {
     self.restClient = [[JSRESTBase alloc] initWithServerProfile:serverProfile keepLogged:keepLogged];
     [self setDefaults];
-    
+    [self.restClient deleteCookies];
+
     [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
             if (completionBlock) {
                 BOOL isServerInfoExists = self.restClient.serverInfo != nil;
