@@ -594,7 +594,7 @@
 
 - (BOOL)isInputControlsAvailable
 {
-    return self.dashboard.inputControls != nil;
+    return self.dashboard.inputControls.count > 0;
 }
 
 #pragma mark - Work with external screen
