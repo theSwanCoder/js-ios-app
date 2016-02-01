@@ -113,6 +113,7 @@
 "resources.filterby.type.reportUnit" = "Reports";
 "resources.filterby.type.dashboard" = "Dashboards";
 "resources.filterby.type.folder" = "Folders";
+"resources.filterby.type.files" = "Content Resources";
 "resources.filterby.type.saved.reportUnit" = "Saved Items";
 
 // Sort by
