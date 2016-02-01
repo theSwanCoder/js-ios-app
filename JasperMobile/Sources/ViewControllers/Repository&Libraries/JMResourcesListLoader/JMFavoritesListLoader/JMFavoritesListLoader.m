@@ -70,13 +70,15 @@
         case JMResourcesListLoaderOption_Filter: {
             NSMutableArray *itemsArray = [@[
                                             @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.all", nil),
-                                              kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY, kJS_WS_TYPE_FOLDER, kJMSavedReportUnit]},
+                                              kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_REPORT_UNIT, kJS_WS_TYPE_DASHBOARD, kJS_WS_TYPE_DASHBOARD_LEGACY, kJS_WS_TYPE_FOLDER, kJS_WS_TYPE_FILE, kJMSavedReportUnit]},
                                             @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.reportUnit", nil),
                                               kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_REPORT_UNIT]},
                                             @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.saved.reportUnit", nil),
                                               kJMResourceListLoaderOptionItemValueKey: @[kJMSavedReportUnit]},
                                             @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.folder", nil),
-                                              kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_FOLDER]}
+                                              kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_FOLDER]},
+                                            @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.files", nil),
+                                              kJMResourceListLoaderOptionItemValueKey: @[kJS_WS_TYPE_FILE]}
                                             ] mutableCopy];
             if ([JMUtils isServerProEdition]) {
                 id dashboardItem = @{kJMResourceListLoaderOptionItemTitleKey: JMCustomLocalizedString(@"resources.filterby.type.dashboard", nil),

@@ -63,7 +63,7 @@ var JasperMobile = {
         },
         updateViewPortInitialScale: function (scale) {
             var viewport = document.querySelector("meta[name=viewport]");
-            viewport.setAttribute('content', 'width=device-width, initial-scale='+ scale + ', maximum-scale=1.0, user-scalable=0');
+            viewport.setAttribute('content', 'initial-scale='+ scale + ', width=device-width, maximum-scale=2.0, user-scalable=yes');
         }
     }
 };

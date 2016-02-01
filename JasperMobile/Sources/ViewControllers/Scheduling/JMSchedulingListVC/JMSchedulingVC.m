@@ -52,9 +52,9 @@
     [self.jobsManager loadJobsWithCompletion:^(NSArray <JSScheduleJobResource *>*jobs, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
         strongSelf.jobs = jobs;
-        [strongSelf.tableView reloadData];
-
         [strongSelf updateNoJobsLabelAppearence];
+
+        [strongSelf.tableView reloadData];
     }];
 }
 
@@ -93,6 +93,8 @@
         [strongSelf.refreshControl endRefreshing];
 
         strongSelf.jobs = jobs;
+        [strongSelf updateNoJobsLabelAppearence];
+
         [strongSelf.tableView reloadData];
     }];
 }
@@ -111,10 +113,11 @@
                                           NSMutableArray *jobs = [strongSelf.jobs mutableCopy];
                                           [jobs removeObject:job];
                                           strongSelf.jobs = [jobs copy];
+                                          [strongSelf updateNoJobsLabelAppearence];
+
                                           [strongSelf.tableView deleteRowsAtIndexPaths:@[indexPath]
                                                                 withRowAnimation:UITableViewRowAnimationLeft];
 
-                                          [strongSelf updateNoJobsLabelAppearence];
                                       }];
 }
 

@@ -116,6 +116,7 @@ extern NSString * const kJMCurrentThemeFileName;
 
 // Analytics - Common
 extern NSString * const kJMAnalyticsServerVersionKey;
+extern NSString * const kJMAnalyticsServerEditionKey;
 extern NSString * const kJMAnalyticsCategoryKey;
 extern NSString * const kJMAnalyticsActionKey;
 extern NSString * const kJMAnalyticsLabelKey;
@@ -140,3 +141,7 @@ extern NSString * const kJMAnalyticsResourceEventLabelSavedResource;
 // Analytics - Repository
 extern NSString * const kJMAnalyticsRepositoryEventCategoryTitle;
 extern NSString * const kJMAnalyticsRepositoryEventActionOpen;
+
+// Custom Dimensions
+extern NSUInteger  const kJMAnalyticsCustomDimensionServerVersionIndex;
+extern NSUInteger  const kJMAnalyticsCustomDimensionServerEditionIndex;

@@ -35,7 +35,7 @@
 + (instancetype)sharedInstance;
 - (UIWebView *)webView;
 - (UIWebView *)webViewAsSecondary:(BOOL)asSecondary;
-- (BOOL)isWebViewEmpty:(UIWebView *)webView;
+- (BOOL)isWebViewLoadedVisualize:(UIWebView *)webView;
 - (void)resetZoom;
 - (void)reset;
 - (void)resetChildWebView;

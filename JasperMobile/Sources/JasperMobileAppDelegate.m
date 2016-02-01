@@ -93,12 +93,7 @@ static const NSInteger kSplashViewTag = 100;
     [[JMThemesManager sharedManager] applyCurrentTheme];
     [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:^(BOOL isSessionRestored) {
 
-        SWRevealViewController *revealViewController = (SWRevealViewController *) self.window.rootViewController;
-        JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
-
         LoginCompletionBlock loginCompletionBlock = ^{
-            [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
-
             // Configure Appirater
             [Appirater setAppId:@"467317446"];
             [Appirater setDaysUntilPrompt:0];
@@ -111,9 +106,7 @@ static const NSInteger kSplashViewTag = 100;
         };
 
         if (isSessionRestored) {
-            if (!menuViewController.selectedItem) {
-                loginCompletionBlock();
-            }
+            loginCompletionBlock();
         } else {
             JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
             if (activeServerProfile && activeServerProfile.askPassword.boolValue) {

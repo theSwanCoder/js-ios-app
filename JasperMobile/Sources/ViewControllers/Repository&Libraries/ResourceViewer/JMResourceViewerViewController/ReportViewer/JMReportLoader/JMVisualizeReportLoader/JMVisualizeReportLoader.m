@@ -94,7 +94,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
     [self.report updateCountOfPages:NSNotFound];
     [self.report updateCurrentPage:page];
 
-    if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
+    if ([[JMWebViewManager sharedInstance] isWebViewLoadedVisualize:self.bridge.webView]) {
+        [self fetchPageNumber:page withCompletion:completionBlock];
+    } else {
         self.reportLoadCompletion = completionBlock;
 
         [self startLoadHTMLWithCompletion:^(BOOL success, NSError *error) {
@@ -105,8 +107,6 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
                 NSLog(@"Error loading HTML%@", error.localizedDescription);
             }
         }];
-    } else {
-        [self fetchPageNumber:page withCompletion:completionBlock];
     }
 }
 
@@ -136,7 +136,7 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)applyReportParametersWithCompletion:(void(^)(BOOL success, NSError *error))completion
 {
-    if ([[JMWebViewManager sharedInstance] isWebViewEmpty:self.bridge.webView]) {
+    if ([[JMWebViewManager sharedInstance] isWebViewLoadedVisualize:self.bridge.webView]) {
         self.isReportInLoadingProcess = YES;
         self.report.isReportAlreadyLoaded = NO;
         

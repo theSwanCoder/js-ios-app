@@ -94,15 +94,23 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     NSString *version = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
     NSString *build = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
     self.appVersionLabel.text = [NSString stringWithFormat:@"v. %@ (%@)", version, build];
+
+    [self updateServerInfo];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self updateServerInfo];
 
     [self.tableView reloadData];
+}
+
+#pragma mark - Public API
+- (void)reset
+{
+    self.menuItems = nil;
+    [self setSelectedItemIndex:[[self class] defaultItemIndex]];
+    [self updateServerInfo];
 }
 
 #pragma mark - Utils

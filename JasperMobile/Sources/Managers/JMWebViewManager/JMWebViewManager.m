@@ -73,12 +73,12 @@
     return webView;
 }
 
-- (BOOL)isWebViewEmpty:(UIWebView *)webView
+- (BOOL)isWebViewLoadedVisualize:(UIWebView *)webView
 {
-    NSString *jsCommand = @"document.getElementsByTagName('body')[0].innerHTML";
+    NSString *jsCommand = @"typeof(visualize)";
     NSString *result = [webView stringByEvaluatingJavaScriptFromString:jsCommand];
-    BOOL isWebViewEmpty = result.length == 0;
-    return isWebViewEmpty;
+    BOOL isWebViewLoadedVisualize = [result isEqualToString:@"function"];
+    return isWebViewLoadedVisualize;
 }
 
 - (void)reset
@@ -131,6 +131,12 @@
     webView.scalesPageToFit = YES;
     webView.dataDetectorTypes = UIDataDetectorTypeNone;
     webView.suppressesIncrementalRendering = YES;
+
+    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"resource_viewer" ofType:@"html"];
+    NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+    [webView loadHTMLString:htmlString
+                    baseURL:[NSURL URLWithString:self.restClient.serverProfile.serverUrl]];
+
     return webView;
 }
 
