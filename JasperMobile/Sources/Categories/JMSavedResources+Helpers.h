@@ -71,11 +71,7 @@ extern NSString * const kJMSavedResources;
 + (NSString *)uriForSavedReportWithName:(NSString *)name format:(NSString *)format;
 
 + (NSString *)pathToFolderForSavedReport:(JMSavedResources *)savedReport;
-+ (NSString *)pathToTempFolderForSavedReport:(JMSavedResources *)savedReport;
 + (NSString *)absolutePathToSavedReport:(JMSavedResources *)savedReport;
-+ (NSString *)absoluteTempPathToSavedReport:(JMSavedResources *)savedReport;
-
-+ (NSString *)pathToTempReportsFolder;
 
 + (NSString *)oldPathForSavedReport:(JMSavedResources *)savedResource;
 + (NSString *)newURIForSavedReport:(JMSavedResources *)savedResource;
