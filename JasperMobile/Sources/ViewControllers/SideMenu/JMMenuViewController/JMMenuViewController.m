@@ -94,13 +94,13 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     NSString *version = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
     NSString *build = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
     self.appVersionLabel.text = [NSString stringWithFormat:@"v. %@ (%@)", version, build];
+
+    [self updateServerInfo];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self updateServerInfo];
 
     [self.tableView reloadData];
 }
@@ -164,7 +164,12 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
         if (item.resourceType == JMResourceTypeLogout) {
             [[JMSessionManager sharedManager] logout];
-            [JMUtils showLoginViewAnimated:YES completion:nil];
+            __weak typeof(self) weakSelf = self;
+            [JMUtils showLoginViewAnimated:YES completion:nil loginCompletion:^(void) {
+                __typeof(self) strongSelf = weakSelf;
+                [strongSelf updateServerInfo];
+                [strongSelf setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
+            }];
             self.menuItems = nil;
         } else if (item.resourceType == JMResourceTypeAbout) {
             [self closeMenu];

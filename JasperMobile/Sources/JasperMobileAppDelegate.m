@@ -97,6 +97,7 @@ static const NSInteger kSplashViewTag = 100;
         JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
 
         LoginCompletionBlock loginCompletionBlock = ^{
+            [menuViewController updateServerInfo];
             [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
 
             // Configure Appirater
@@ -116,7 +117,7 @@ static const NSInteger kSplashViewTag = 100;
             }
         } else {
             JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
-            if (activeServerProfile && activeServerProfile.askPassword.boolValue) {
+            if (activeServerProfile && (activeServerProfile.askPassword.boolValue || !activeServerProfile.keepSession.boolValue)) {
                 [JMUtils showLoginViewForRestoreSessionWithCompletion:loginCompletionBlock];
             } else {
                 [JMUtils showLoginViewAnimated:NO
