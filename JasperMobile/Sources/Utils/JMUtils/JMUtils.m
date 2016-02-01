@@ -69,20 +69,7 @@ void jmDebugLog(NSString *format, ...) {
     } else if (reportName.length > kJMNameMax) {
         *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.maxlength", nil), kJMNameMax];
     } else if ([reportName rangeOfCharacterFromSet:characterSet].location != NSNotFound) {
-        NSMutableString *invalidCharsString = [NSMutableString string];
-
-        NSInteger subLocation = 0;
-        while (subLocation < (reportName.length)) {
-            NSString *subString = [reportName substringWithRange:NSMakeRange(subLocation ++, 1)];
-            if ([kJMInvalidCharacters rangeOfString:subString].location != NSNotFound) {
-                if ([invalidCharsString length]) {
-                    [invalidCharsString appendString:@", "];
-                }
-                [invalidCharsString appendFormat:@"'%@'", subString];
-            }
-
-        }
-        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.characters", nil), invalidCharsString];
+        *errorMessage = [NSString stringWithFormat:JMCustomLocalizedString(@"report.viewer.save.name.errmsg.characters", nil), kJMInvalidCharacters];
     }
     return [*errorMessage length] == 0;
 }
@@ -270,6 +257,15 @@ void jmDebugLog(NSString *format, ...) {
 
 + (void)presentAlertControllerWithError:(NSError *)error completion:(void (^)(void))completion
 {
+    NSString *sourceString = [[NSThread callStackSymbols] objectAtIndex:1];
+    
+    NSCharacterSet *separatorSet = [NSCharacterSet characterSetWithCharactersInString:@" -[]+?.,"];
+    NSMutableArray *array = [NSMutableArray arrayWithArray:[sourceString  componentsSeparatedByCharactersInSet:separatorSet]];
+    [array removeObject:@""];
+    
+    NSLog(@"Class caller = %@", [array objectAtIndex:3]);
+    NSLog(@"Method caller = %@", [array objectAtIndex:4]);
+    
     NSString *title = error.domain;
     NSString *message = error.localizedDescription;
 //    if (![title isEqualToString:@"dialod.title.error"]) {

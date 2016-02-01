@@ -40,6 +40,14 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
 }
 
++ (JMSavedResources *)savedResourceWithReportName:(NSString *)reportName format:(NSString *)reportFormat;
+{
+    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:reportName, @"label", reportFormat, @"format", nil];
+    NSArray <JMSavedResources*> *savedReports = [[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    
+    return [savedReports firstObject];
+}
+
 + (JMSavedResources *)addReport:(JSResourceLookup *)resource withName:(NSString *)name format:(NSString *)format sourcesURL:(NSURL *)sourcesURL
 {
     NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:name, @"label", format, @"format", nil];
@@ -98,10 +106,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
 
 + (BOOL)isAvailableReportName:(NSString *)reportName format:(NSString *)reportFormat
 {
-    NSFetchRequest *fetchRequest = [self savedReportsFetchRequestWithValuesAndFields:reportName, @"label", reportFormat, @"format", nil];
-    JMSavedResources *savedReport = [[[JMCoreDataManager sharedInstance].managedObjectContext executeFetchRequest:fetchRequest error:nil] lastObject];
-    
-    return (!savedReport);
+    return (![self savedReportNameWithName:reportName format:reportFormat]);
 }
 
 + (NSArray *)allSavedItems
