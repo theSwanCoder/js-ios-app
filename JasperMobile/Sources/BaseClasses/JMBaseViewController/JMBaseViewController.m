@@ -55,8 +55,10 @@
     // Google Analitycs
 #ifndef __RELEASE__
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker set:[GAIFields customDimensionForIndex:1]
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
            value:self.restClient.serverInfo.version];
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
+           value:self.restClient.serverInfo.edition];
     self.screenName = NSStringFromClass(self.class);
 #endif
 }

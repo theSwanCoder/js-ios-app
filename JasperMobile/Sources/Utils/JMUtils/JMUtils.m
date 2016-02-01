@@ -417,6 +417,7 @@ void jmDebugLog(NSString *format, ...) {
 {
 #ifndef __RELEASE__
     NSString *version = self.restClient.serverInfo.version;
+    NSString *edition = self.restClient.serverInfo.edition;
     if ([JMUtils isDemoAccount]) {
         version = [version stringByAppendingString:@"(Demo)"];
     }
@@ -424,6 +425,7 @@ void jmDebugLog(NSString *format, ...) {
     // Crashlytics - Answers
     NSMutableDictionary *extendedEventInfo = [eventInfo mutableCopy];
     extendedEventInfo[kJMAnalyticsServerVersionKey] = version;
+    extendedEventInfo[kJMAnalyticsServerEditionKey] = edition;
     [Answers logCustomEventWithName:eventInfo[kJMAnalyticsCategoryKey]
                    customAttributes:extendedEventInfo];
 
@@ -433,8 +435,10 @@ void jmDebugLog(NSString *format, ...) {
                                                                            action:eventInfo[kJMAnalyticsActionKey]                   // Event action (required)
                                                                             label:eventInfo[kJMAnalyticsLabelKey]                    // Event label
                                                                             value:nil];                                              // Event value
-    [tracker set:[GAIFields customDimensionForIndex:1]
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
            value:version];
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
+           value:edition];
 
     [tracker send:[builder build]];
 #endif
@@ -444,6 +448,7 @@ void jmDebugLog(NSString *format, ...) {
 {
 #ifndef __RELEASE__
     NSString *version = self.restClient.serverInfo.version;
+    NSString *edition = self.restClient.serverInfo.edition;
     if ([JMUtils isDemoAccount]) {
         version = [version stringByAppendingString:@"(Demo)"];
     }
@@ -451,6 +456,7 @@ void jmDebugLog(NSString *format, ...) {
     // Crashlytics - Answers
     NSMutableDictionary *extendedEventInfo = [additionInfo mutableCopy];
     extendedEventInfo[kJMAnalyticsServerVersionKey] = version;
+    extendedEventInfo[kJMAnalyticsServerEditionKey] = edition;
     [Answers logLoginWithMethod:@"Digits"
                         success:@(success)
                customAttributes:extendedEventInfo];
@@ -461,8 +467,10 @@ void jmDebugLog(NSString *format, ...) {
                                                                            action:additionInfo[kJMAnalyticsActionKey]                   // Event action (required)
                                                                             label:additionInfo[kJMAnalyticsLabelKey]                    // Event label
                                                                             value:nil];                                                 // Event value
-    [tracker set:[GAIFields customDimensionForIndex:1]
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerVersionIndex]
            value:version];
+    [tracker set:[GAIFields customDimensionForIndex:kJMAnalyticsCustomDimensionServerEditionIndex]
+           value:edition];
 
     [tracker send:[builder build]];
 #endif

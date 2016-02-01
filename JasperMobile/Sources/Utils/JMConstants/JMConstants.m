@@ -110,6 +110,7 @@ NSString * const kJMCurrentThemeFileName = @"CurrentTheme";
 
 // Analytics - Common
 NSString * const kJMAnalyticsServerVersionKey = @"kJMAnalyticsServerVersionKey";
+NSString * const kJMAnalyticsServerEditionKey = @"kJMAnalyticsServerEditionKey";
 NSString * const kJMAnalyticsCategoryKey      = @"kJMAnalyticsCategoryKey";
 NSString * const kJMAnalyticsActionKey        = @"kJMAnalyticsActionKey";
 NSString * const kJMAnalyticsLabelKey         = @"kJMAnalyticsLabelKey";
@@ -134,3 +135,5 @@ NSString * const kJMAnalyticsResourceEventLabelSavedResource      = @"Saved Reso
 // Analytics - Repository
 NSString * const kJMAnalyticsRepositoryEventCategoryTitle     = @"Repository";
 NSString * const kJMAnalyticsRepositoryEventActionOpen        = @"Open";
+NSUInteger  const kJMAnalyticsCustomDimensionServerVersionIndex = 1;
+NSUInteger  const kJMAnalyticsCustomDimensionServerEditionIndex = 2;
