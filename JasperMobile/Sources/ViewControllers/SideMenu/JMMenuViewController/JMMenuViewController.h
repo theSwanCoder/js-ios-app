@@ -39,7 +39,7 @@
 
 + (NSInteger)defaultItemIndex;
 
-- (void)updateServerInfo;
+- (void)reset;
 
 - (void)setSelectedItemIndex:(NSUInteger)itemIndex;
 

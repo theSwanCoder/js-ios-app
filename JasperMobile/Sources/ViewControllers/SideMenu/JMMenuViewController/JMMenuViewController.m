@@ -105,6 +105,14 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
     [self.tableView reloadData];
 }
 
+#pragma mark - Public API
+- (void)reset
+{
+    self.menuItems = nil;
+    [self setSelectedItemIndex:[[self class] defaultItemIndex]];
+    [self updateServerInfo];
+}
+
 #pragma mark - Utils
 - (void)updateServerInfo
 {
@@ -164,12 +172,7 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 
         if (item.resourceType == JMResourceTypeLogout) {
             [[JMSessionManager sharedManager] logout];
-            __weak typeof(self) weakSelf = self;
-            [JMUtils showLoginViewAnimated:YES completion:nil loginCompletion:^(void) {
-                __typeof(self) strongSelf = weakSelf;
-                [strongSelf updateServerInfo];
-                [strongSelf setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
-            }];
+            [JMUtils showLoginViewAnimated:YES completion:nil];
             self.menuItems = nil;
         } else if (item.resourceType == JMResourceTypeAbout) {
             [self closeMenu];
