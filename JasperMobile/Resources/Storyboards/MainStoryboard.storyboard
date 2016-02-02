@@ -53,7 +53,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Server: Mobile Demo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tdb-5S-HEk">
-                                        <rect key="frame" x="10" y="57" width="580" height="21"/>
+                                        <rect key="frame" x="10" y="55" width="580" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="rhS-DK-5uV"/>
                                         </constraints>
@@ -62,7 +62,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Organization:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="17l-oA-jNd">
-                                        <rect key="frame" x="10" y="78" width="580" height="21"/>
+                                        <rect key="frame" x="10" y="76" width="580" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="21" id="2QT-q9-e9X"/>
                                         </constraints>
@@ -86,14 +86,23 @@
                                     <constraint firstItem="17l-oA-jNd" firstAttribute="top" secondItem="Tdb-5S-HEk" secondAttribute="bottom" id="6kS-Ny-gxA"/>
                                     <constraint firstAttribute="trailing" secondItem="Tdb-5S-HEk" secondAttribute="trailing" constant="10" id="Avx-2q-WYd"/>
                                     <constraint firstAttribute="trailing" secondItem="9th-Pu-SKy" secondAttribute="trailing" constant="10" id="O84-qt-37U"/>
-                                    <constraint firstItem="Tdb-5S-HEk" firstAttribute="top" secondItem="9th-Pu-SKy" secondAttribute="bottom" constant="2" id="Rob-e5-MT4"/>
+                                    <constraint firstItem="Tdb-5S-HEk" firstAttribute="top" secondItem="9th-Pu-SKy" secondAttribute="bottom" id="Rob-e5-MT4"/>
                                     <constraint firstAttribute="trailing" secondItem="17l-oA-jNd" secondAttribute="trailing" constant="10" id="Tb4-QU-oJw"/>
                                     <constraint firstAttribute="trailing" secondItem="xE3-Ku-nFU" secondAttribute="trailing" id="dRN-ok-Csu"/>
-                                    <constraint firstItem="9th-Pu-SKy" firstAttribute="top" secondItem="mtY-8Y-ro8" secondAttribute="top" constant="29" id="dnQ-9g-SSB"/>
-                                    <constraint firstAttribute="height" constant="110" id="eB4-sJ-tU9"/>
+                                    <constraint firstItem="9th-Pu-SKy" firstAttribute="top" secondItem="mtY-8Y-ro8" secondAttribute="top" constant="29" id="dnQ-9g-SSB">
+                                        <variation key="heightClass=compact-widthClass=compact" constant="5"/>
+                                    </constraint>
+                                    <constraint firstAttribute="height" constant="110" id="eB4-sJ-tU9">
+                                        <variation key="heightClass=compact-widthClass=compact" constant="55"/>
+                                    </constraint>
                                     <constraint firstAttribute="bottom" secondItem="xE3-Ku-nFU" secondAttribute="bottom" constant="1" id="jFT-QH-1gZ"/>
                                     <constraint firstItem="9th-Pu-SKy" firstAttribute="leading" secondItem="mtY-8Y-ro8" secondAttribute="leading" constant="10" id="kvk-qr-W6v"/>
                                 </constraints>
+                                <variation key="heightClass=compact-widthClass=compact">
+                                    <mask key="subviews">
+                                        <exclude reference="17l-oA-jNd"/>
+                                    </mask>
+                                </variation>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="hU8-xn-4eY">
                                 <rect key="frame" x="0.0" y="110" width="600" height="440"/>
