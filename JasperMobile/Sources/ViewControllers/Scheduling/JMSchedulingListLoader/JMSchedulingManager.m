@@ -64,12 +64,23 @@
                                                             NSString *errorMessage = @"";
                                                             NSString *field = errorJSON[@"field"];
                                                             if (message) {
-                                                                errorMessage = [NSString stringWithFormat:@"%@ in (%@). ", message, field];
+                                                                errorMessage = [NSString stringWithFormat:@"Message: '%@', field: %@", message, field];
                                                             } else {
                                                                 NSString *errorCode = errorJSON[@"errorCode"];
-                                                                errorMessage = errorCode;
+                                                                errorMessage = [NSString stringWithFormat:@"Error Code: '%@'", errorCode];
                                                             }
-                                                            fullMessage = [fullMessage stringByAppendingString:errorMessage];
+                                                            NSArray *arguments = errorJSON[@"errorArguments"];
+                                                            NSString *argumentsString = @"";
+                                                            if (arguments) {
+                                                                for (NSString *argument in arguments) {
+                                                                    argumentsString = [argumentsString stringByAppendingFormat:@"'%@', ", argument];
+                                                                }
+                                                            }
+                                                            if (arguments.count) {
+                                                                fullMessage = [fullMessage stringByAppendingFormat:@"%@.\nArguments: %@.\n", errorMessage, argumentsString];
+                                                            } else {
+                                                                fullMessage = [fullMessage stringByAppendingFormat:@"%@.\n", errorMessage];
+                                                            }
                                                         }
                                                         NSError *createScheduledJobError = [[NSError alloc] initWithDomain:@"Error"
                                                                                                                       code:0

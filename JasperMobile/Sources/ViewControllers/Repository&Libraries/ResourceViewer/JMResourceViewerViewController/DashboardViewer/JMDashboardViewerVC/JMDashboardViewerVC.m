@@ -207,40 +207,30 @@
 
 - (void)reloadDashboard
 {
+    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+                               cancelBlock:^(void) {
+                                   [self.dashboardLoader cancel];
+                                   [super cancelResourceViewingAndExit:YES];
+                               }];
     __weak typeof(self)weakSelf = self;
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-        __strong typeof(self)strongSelf = weakSelf;
-        if (strongSelf.restClient.keepSession && isSessionAuthorized) {
-            __weak typeof(self)weakSelf = strongSelf;
-            [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
-                                       cancelBlock:^(void) {
-                                           __strong typeof(self)strongSelf = weakSelf;
-                                           [strongSelf.dashboardLoader cancel];
-                                           [super cancelResourceViewingAndExit:YES];
-                                       }];
-            [strongSelf.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
-                __weak typeof(self)strongSelf = weakSelf;
-                [strongSelf stopShowLoader];
+    [self.dashboardLoader reloadDashboardWithCompletion:^(BOOL success, NSError *error) {
+        __weak typeof(self)strongSelf = weakSelf;
+        [strongSelf stopShowLoader];
 
-                if (!success) {
-                    JMLog(@"error of refreshing dashboard: %@", error);
-                    if (error.code == JSSessionExpiredErrorCode) {
-                        [strongSelf.restClient deleteCookies];
-                        [strongSelf resetSubViews];
-                        [strongSelf startShowDashboard];
-                    } else {
-                        [JMUtils presentAlertControllerWithError:error completion:nil];
-                    }
-                }
-
-            }];
-        } else {
-            __weak typeof(self)weakSelf = strongSelf;
-            [JMUtils showLoginViewAnimated:YES completion:^{
-                __weak typeof(self)strongSelf = weakSelf;
-                [strongSelf cancelResourceViewingAndExit:YES];
-            }];
+        if (!success) {
+            JMLog(@"error of refreshing dashboard: %@", error);
+            if (error.code == JSSessionExpiredErrorCode) {
+                __weak typeof(self)weakSelf = strongSelf;
+                [strongSelf handleAuthErrorWithCompletion:^(void) {
+                    __weak typeof(self)strongSelf = weakSelf;
+                    [strongSelf startShowDashboard];
+                }];
+            } else {
+                [JMUtils presentAlertControllerWithError:error
+                                              completion:nil];
+            }
         }
+
     }];
 }
 
@@ -256,11 +246,14 @@
             [strongSelf stopShowLoader];
             if (!success) {
                 if (error.code == JSSessionExpiredErrorCode) {
-                    [strongSelf.restClient deleteCookies];
-                    [strongSelf resetSubViews];
-                    [strongSelf startShowDashboard];
+                    __weak typeof(self)weakSelf = strongSelf;
+                    [strongSelf handleAuthErrorWithCompletion:^(void) {
+                        __weak typeof(self)strongSelf = weakSelf;
+                        [strongSelf startShowDashboard];
+                    }];
                 } else {
-                    [JMUtils presentAlertControllerWithError:error completion:nil];
+                    [JMUtils presentAlertControllerWithError:error
+                                                  completion:nil];
                 }
             }
         }];
@@ -274,7 +267,6 @@
 #pragma mark - Overriden methods
 - (void)startResourceViewing
 {
-
     if ([JMUtils isServerAmber2OrHigher] && ![self.resourceLookup isLegacyDashboard]) {
         [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
                                    cancelBlock:^(void) {
@@ -287,7 +279,16 @@
             [strongSelf stopShowLoader];
 
             if (error) {
-                [JMUtils presentAlertControllerWithError:error completion:nil];
+                if (error.code == JSSessionExpiredErrorCode) {
+                    __weak typeof(self)weakSelf = self;
+                    [strongSelf handleAuthErrorWithCompletion:^(void) {
+                        __weak typeof(self)strongSelf = weakSelf;
+                        [strongSelf startResourceViewing];
+                    }];
+                } else {
+                    [JMUtils presentAlertControllerWithError:error
+                                                  completion:nil];
+                }
             } else {
                 strongSelf.dashboard.components = components;
                 strongSelf.dashboard.inputControls = inputControls;
@@ -301,48 +302,40 @@
 
 - (void)startShowDashboard
 {
+    [self startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
+                               cancelBlock:^(void) {
+                                   [self.dashboardLoader cancel];
+                                   [super cancelResourceViewingAndExit:YES];
+                               }];
+
     __weak typeof(self)weakSelf = self;
-    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-        __strong typeof(self)strongSelf = weakSelf;
-        if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+    [self.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
+        __weak typeof(self)strongSelf = weakSelf;
+        [strongSelf stopShowLoader];
 
-            [strongSelf startShowLoaderWithMessage:JMCustomLocalizedString(@"resources.loading.msg", nil)
-                                 cancelBlock:^(void) {
-                                         [strongSelf.dashboardLoader cancel];
-                                         [super cancelResourceViewingAndExit:YES];
-                                     }];
-            __weak typeof(self)weakSelf = strongSelf;
-            [strongSelf.dashboardLoader loadDashboardWithCompletion:^(BOOL success, NSError *error) {
-                __weak typeof(self)strongSelf = weakSelf;
-                [strongSelf stopShowLoader];
-
-                if (success) {
-                    // Analytics
-                    NSString *label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
-                    [JMUtils logEventWithInfo:@{
-                                        kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
-                                        kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
-                                        kJMAnalyticsLabelKey         : label
-                                        }];
-                } else {
-                    if (error.code == JSSessionExpiredErrorCode) {
-                        [strongSelf.restClient deleteCookies];
-                        [strongSelf resetSubViews];
-                        [strongSelf startShowDashboard];
-                    } else {
-                        [JMUtils presentAlertControllerWithError:error completion:nil];
-                    }
-
-                    if ([strongSelf isContentOnTV]) {
-                        strongSelf.controlsViewController.components = strongSelf.dashboard.dashlets;
-                    }
-                }
+        if (success) {
+            // Analytics
+            NSString *label = ([JMUtils isSupportVisualize] && [JMUtils isServerAmber2OrHigher]) ? kJMAnalyticsResourceEventLabelDashboardVisualize : kJMAnalyticsResourceEventLabelDashboardFlow;
+            [JMUtils logEventWithInfo:@{
+                    kJMAnalyticsCategoryKey      : kJMAnalyticsResourceEventCategoryTitle,
+                    kJMAnalyticsActionKey        : kJMAnalyticsResourceEventActionOpenTitle,
+                    kJMAnalyticsLabelKey         : label
             }];
 
+            if ([strongSelf isContentOnTV]) {
+                strongSelf.controlsViewController.components = strongSelf.dashboard.dashlets;
+            }
         } else {
-            [JMUtils showLoginViewAnimated:YES completion:^(void) {
-                [strongSelf cancelResourceViewingAndExit:YES];
-            }];
+            if (error.code == JSSessionExpiredErrorCode) {
+                __weak typeof(self)weakSelf = strongSelf;
+                [strongSelf handleAuthErrorWithCompletion:^(void) {
+                    __weak typeof(self)strongSelf = weakSelf;
+                    [strongSelf startShowDashboard];
+                }];
+            } else {
+                [JMUtils presentAlertControllerWithError:error
+                                              completion:nil];
+            }
         }
     }];
 }
@@ -595,6 +588,28 @@
 - (BOOL)isInputControlsAvailable
 {
     return self.dashboard.inputControls.count > 0;
+}
+
+- (void)handleAuthErrorWithCompletion:(void(^)(void))completion
+{
+    [self.restClient deleteCookies];
+    [self resetSubViews];
+
+    __weak typeof(self)weakSelf = self;
+    [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
+        __weak typeof(self)strongSelf = weakSelf;
+        if (strongSelf.restClient.keepSession && isSessionAuthorized) {
+            if (completion) {
+                completion();
+            }
+        } else {
+            __weak typeof(self)weakSelf = strongSelf;
+            [JMUtils showLoginViewAnimated:YES completion:^{
+                __weak typeof(self)strongSelf = weakSelf;
+                [strongSelf cancelResourceViewingAndExit:YES];
+            }];
+        }
+    }];
 }
 
 #pragma mark - Work with external screen
