@@ -102,8 +102,8 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
 
 - (void)showEULA
 {
-    JMEULAViewController *EULAViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMEULAViewController"];
-    [self.navigationController pushViewController:EULAViewController animated:YES];
+    UINavigationController *EULANavViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"EULANavViewController"];
+    [self presentViewController:EULANavViewController animated:YES completion:nil];
 }
 
 - (void)showWhatsNew
