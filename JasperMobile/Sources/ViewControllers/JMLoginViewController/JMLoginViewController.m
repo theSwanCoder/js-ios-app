@@ -230,11 +230,6 @@
         if (success) {
             strongSelf.restClient.timeoutInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kJMDefaultRequestTimeout] ?: 120;
 
-            // TODO: remove reseting of session's 'environment'
-            SWRevealViewController *revealViewController = (SWRevealViewController *) strongSelf.view.window.rootViewController;
-            JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
-            [menuViewController reset];
-
             [strongSelf dismissViewControllerAnimated:NO completion:nil];
             if (strongSelf.completion) {
                 strongSelf.completion();

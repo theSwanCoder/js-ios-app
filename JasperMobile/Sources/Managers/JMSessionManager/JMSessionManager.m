@@ -32,6 +32,8 @@
 #import "JMWebViewManager.h"
 #import "JMExportManager.h"
 
+#import "JMMenuViewController.h"
+#import "SWRevealViewController.h"
 
 NSString * const kJMSavedSessionKey = @"JMSavedSessionKey";
 
@@ -103,11 +105,11 @@ static JMSessionManager *_sharedManager = nil;
             JMServerProfile *activeServerProfile = [JMServerProfile serverProfileForJSProfile:self.restClient.serverProfile];
             if (activeServerProfile && !activeServerProfile.askPassword.boolValue) {
                 [self.restClient verifyIsSessionAuthorizedWithCompletion:^(BOOL isSessionAuthorized) {
-                    BOOL isRestoredSession = (isSessionAuthorized && self.restClient.serverInfo);
-                    if (isRestoredSession) {
-                        [self setDefaults];
-                    }
                     dispatch_async(dispatch_get_main_queue(), ^(void){
+                        BOOL isRestoredSession = (isSessionAuthorized && self.restClient.serverInfo);
+                        if (isRestoredSession) {
+                            [self setDefaults];
+                        }
                         if (completion) {
                             completion(isRestoredSession);
                         }
