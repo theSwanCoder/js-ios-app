@@ -46,11 +46,16 @@
 
     if (range.length) {
         // remove symbol
-        NSRange lastSymbolRange = NSMakeRange(currentString.length - 1, 1);
-        changedString = [currentString stringByReplacingCharactersInRange:lastSymbolRange withString:@""];
+        changedString = [currentString stringByReplacingCharactersInRange:range withString:@""];
     } else {
         // add symbol
-        changedString = [currentString stringByAppendingString:string];
+        NSRange firstPartOfStringRange = NSMakeRange(0, range.location);
+        NSString *firstPartOfString = [currentString substringWithRange:firstPartOfStringRange];
+
+        NSRange lastPartOfStringRange = NSMakeRange(range.location, currentString.length - range.location);
+        NSString *lastPartOfString = [currentString substringWithRange:lastPartOfStringRange];
+
+        changedString = [NSString stringWithFormat:@"%@%@%@", firstPartOfString, string, lastPartOfString];
     }
 
     if ([self.delegate respondsToSelector:@selector(jobCell:didChangeValue:)]) {
