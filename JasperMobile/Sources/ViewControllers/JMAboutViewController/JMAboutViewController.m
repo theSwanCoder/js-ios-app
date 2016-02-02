@@ -102,10 +102,7 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
 
 - (void)showEULA
 {
-    JMEULAViewController *EULAViewController = (JMEULAViewController *) [self.storyboard instantiateViewControllerWithIdentifier:@"JMEULAViewController"];
-    EULAViewController.completion = nil;
-    EULAViewController.shouldUserAccept = NO;
-
+    JMEULAViewController *EULAViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"JMEULAViewController"];
     [self.navigationController pushViewController:EULAViewController animated:YES];
 }
 
