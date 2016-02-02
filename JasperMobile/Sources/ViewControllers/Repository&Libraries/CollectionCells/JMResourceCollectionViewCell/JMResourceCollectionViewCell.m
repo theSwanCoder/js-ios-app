@@ -58,6 +58,8 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
     self.resourceDescription.font = [[JMThemesManager sharedManager] collectionResourceDescriptionFont];
     self.resourceDescription.textColor = [[JMThemesManager sharedManager] resourceViewResourceCellDetailsTextColor];
     self.infoButton.tintColor = [[JMThemesManager sharedManager] resourceViewResourceInfoButtonTintColor];
+
+    self.contentView.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)setResourceLookup:(JSResourceLookup *)resourceLookup
@@ -85,7 +87,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
 
 - (void)updateResourceImage
 {
-    self.alpha = 1;
+    self.contentView.alpha = 1;
     UIImage *resourceImage;
     if ([self.resourceLookup isReport]) {
         resourceImage = [UIImage imageNamed:@"res_type_report"];
@@ -132,7 +134,7 @@ NSString * kJMGridResourceCell = @"JMGridResourceCollectionViewCell";
         } else if ([exportResource.format isEqualToString:kJS_CONTENT_TYPE_XLS]) {
             resourceImage = [UIImage imageNamed:@"res_type_file_xls"];
         }
-        self.alpha = 0.5;
+        self.contentView.alpha = 0.5;
     } else if ([self.resourceLookup isDashboard]) {
         resourceImage = [UIImage imageNamed:@"res_type_dashboard"];
     } else if ([self.resourceLookup isFolder]) {
