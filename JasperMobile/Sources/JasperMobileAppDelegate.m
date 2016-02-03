@@ -94,11 +94,6 @@ static const NSInteger kSplashViewTag = 100;
     [[JMSessionManager sharedManager] restoreLastSessionWithCompletion:^(BOOL isSessionRestored) {
 
         LoginCompletionBlock loginCompletionBlock = ^{
-            // TODO: remove reseting of session's 'environment'
-            SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
-            JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
-            [menuViewController reset];
-
             // Configure Appirater
             [Appirater setAppId:@"467317446"];
             [Appirater setDaysUntilPrompt:0];
@@ -112,6 +107,10 @@ static const NSInteger kSplashViewTag = 100;
 
         if (isSessionRestored) {
             loginCompletionBlock();
+            // TODO: remove reseting of session's 'environment'
+            SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
+            JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
+            [menuViewController reset];
         } else {
             [JMUtils showLoginViewAnimated:NO
                                 completion:nil

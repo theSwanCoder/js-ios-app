@@ -193,10 +193,10 @@ void jmDebugLog(NSString *format, ...) {
     JMLoginViewController *loginViewController = (JMLoginViewController *)loginNavController.topViewController;
     loginViewController.showForRestoreSession = restoreSession;
     loginViewController.completion = ^(void){
+        [menuViewController reset];
+
         if (loginCompletion) {
             loginCompletion();
-        } else {
-            [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
         }
     };
 
