@@ -133,7 +133,9 @@
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
     JMMenuActionsViewAction availableActions = [super availableActionForResource:resource];
-    if (![self.resourceLookup isSavedReport]) {
+    BOOL isSaveReport = [self.resourceLookup isSavedReport];
+    BOOL isFile = [self.resourceLookup isFile];
+    if ( !(isSaveReport || isFile) ) {
         availableActions |= JMMenuActionsViewAction_Print;
     }
     return availableActions;

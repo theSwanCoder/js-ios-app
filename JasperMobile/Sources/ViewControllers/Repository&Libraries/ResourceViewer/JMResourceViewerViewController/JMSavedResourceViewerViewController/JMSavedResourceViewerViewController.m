@@ -86,10 +86,10 @@
 - (JMMenuActionsViewAction)availableActionForResource:(JSResourceLookup *)resource
 {
     JMMenuActionsViewAction action = JMMenuActionsViewAction_None;
-    if (![self.resourceLookup isFile]) {
-        action = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn ;
+    if ([self.resourceLookup isFile]) {
+        action = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_OpenIn;
     } else {
-        action = JMMenuActionsViewAction_Info | JMMenuActionsViewAction_OpenIn;
+        action = [super availableActionForResource:[self resourceLookup]] | JMMenuActionsViewAction_Rename | JMMenuActionsViewAction_Delete | JMMenuActionsViewAction_OpenIn ;
     }
 
     if ([self isExternalScreenAvailable]) {
