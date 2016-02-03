@@ -91,7 +91,8 @@ NSString * const kJMWhatsNewInternalLink = @"whats_new";
 #pragma mark - Private Actions
 - (void)showPrivacyPolicy
 {
-    [self performSegueWithIdentifier:@"showPrivacyPolicy" sender:self];
+    NSURL *url = [NSURL URLWithString:kJMPrivacyPolicyURI];
+    [[UIApplication sharedApplication] openURL:url];
 }
 
 - (void)showCommunitySite
