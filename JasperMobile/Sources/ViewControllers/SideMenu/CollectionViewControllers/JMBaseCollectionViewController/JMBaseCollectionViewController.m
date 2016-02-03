@@ -468,11 +468,6 @@ NSString * const kJMRepresentationTypeDidChangeNotification = @"JMRepresentation
             JMResourceCollectionViewCell *cell = (JMResourceCollectionViewCell *) [((JMBaseCollectionView *)self.view).collectionView cellForItemAtIndexPath:indexPath];
             JMReport *report = (JMReport *)[nextVC report];
             report.thumbnailImage = cell.thumbnailImage;
-            __weak typeof(self)weakSelf = self;
-            [nextVC setExitBlock:^(void) {
-                __strong typeof(self)strongSelf = weakSelf;
-                [((JMBaseCollectionView *)strongSelf.view).collectionView reloadItemsAtIndexPaths:@[indexPath]];
-            }];
         }
     }
     
