@@ -110,7 +110,7 @@ static const NSInteger kSplashViewTag = 100;
             // TODO: remove reseting of session's 'environment'
             SWRevealViewController *revealViewController = (SWRevealViewController *) [UIApplication sharedApplication].delegate.window.rootViewController;
             JMMenuViewController *menuViewController = (JMMenuViewController *) revealViewController.rearViewController;
-            [menuViewController reset];
+            [menuViewController setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
         } else {
             [JMUtils showLoginViewAnimated:NO
                                 completion:nil
