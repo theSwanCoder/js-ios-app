@@ -320,6 +320,17 @@ MobileReport = {
             MobileReport.report = report;
         });
     },
+    cancel: function() {
+        JasperMobile.Callback.log("start cancel");
+        MobileReport.report.cancel()
+            .done(function() {
+                JasperMobile.Callback.log("success cancel");
+            })
+            .fail(function(error) {
+                JasperMobile.Report.Callback.onLoadError(error);
+                JasperMobile.Callback.log("failed cancel with error: " + error);
+            });
+    },
     refresh: function() {
         if (this.report) {
             this.report.refresh(

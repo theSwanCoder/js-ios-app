@@ -130,8 +130,9 @@ typedef NS_ENUM(NSInteger, JMReportViewerAlertViewType) {
 
 - (void)cancel
 {
-    // TODO: need cancel?
-#warning WHY NOT??????
+    JMJavascriptRequest *request = [JMJavascriptRequest new];
+    request.command = @"MobileReport.cancel();";
+    [self.bridge sendRequest:request];
 }
 
 - (void)applyReportParametersWithCompletion:(void(^)(BOOL success, NSError *error))completion
