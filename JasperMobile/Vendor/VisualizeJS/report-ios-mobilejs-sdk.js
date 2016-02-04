@@ -396,10 +396,7 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
           this.callback.logging("selectPage: " + page);
           return this.report.pages(page).run()
               .done(this._processSuccess)
-              .fail(
-                  function(error) {
-                    MobileReport._instance.callback.onLoadError(error)
-                  });
+              .fail(this._processErrors);
         } else {
           this.callback.logging("error of selectPage: " + page + ". report is null");
         }
