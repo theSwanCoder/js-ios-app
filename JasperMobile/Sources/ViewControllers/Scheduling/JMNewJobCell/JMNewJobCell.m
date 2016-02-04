@@ -44,9 +44,12 @@
 
     NSString *changedString;
 
-    if (range.length) {
+    if (range.length == 1) {
         // remove symbol
         changedString = [currentString stringByReplacingCharactersInRange:range withString:@""];
+    } else if (range.location == 0 && range.length == string.length) {
+        // autocompleted text
+        changedString = string;
     } else {
         // add symbol
         NSRange firstPartOfStringRange = NSMakeRange(0, range.location);
@@ -61,6 +64,8 @@
     if ([self.delegate respondsToSelector:@selector(jobCell:didChangeValue:)]) {
         [self.delegate jobCell:self didChangeValue:changedString];
     }
+
+    JMLog(@"changed string: %@", changedString);
 
     return YES;
 }
