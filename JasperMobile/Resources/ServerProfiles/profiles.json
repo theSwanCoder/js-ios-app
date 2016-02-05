@@ -6,58 +6,13 @@
       "mOrganization" : ""
     },
     {
-      "mAlias" : "PRO 6.1",
-      "mServerUrl" : "http://192.168.88.44:8090/jasperserver-pro-6.1",
+      "mAlias" : "local 5.5",
+      "mServerUrl" : "http://192.168.88.55:8087/jasperserver-pro-55",
       "mOrganization" : ""
     },
     {
-      "mAlias" : "PRO 6.0.1",
-      "mServerUrl" : "http://192.168.88.44:8088/jasperserver-pro-6.0.1",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "PRO 6.0",
-      "mServerUrl" : "http://192.168.88.44:8087/jasperserver-pro-6.0",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "PRO 5.6.1",
-      "mServerUrl" : "http://192.168.88.44:8086/jasperserver-pro-5.6.1",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "PRO 5.6.0",
-      "mServerUrl" : "http://192.168.88.44:8085/jasperserver-pro-5.6.0",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "PRO 5.5",
-      "mServerUrl" : "http://192.168.88.44:8084/jasperserver-pro-5.5",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "CE TRUNK",
-      "mServerUrl" : "http://build-master.jaspersoft.com:6080/jrs-ce-trunk-ce",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "CE 6.0.1",
-      "mServerUrl" : "http://192.168.88.44:8089/jasperserver-ce-6.0.1",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "CE 5.6.1",
-      "mServerUrl" : "http://192.168.88.44:8083/jasperserver-ce-5.6.1",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "CE 5.6.0",
-      "mServerUrl" : "http://192.168.88.44:8082/jasperserver-ce-5.6.0",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "CE 5.5",
-      "mServerUrl" : "http://192.168.88.44:8081/jasperserver-ce-5.5",
+      "mAlias" : "local 5.6.1",
+      "mServerUrl" : "http://192.168.88.55:8082/jasperserver-pro-561",
       "mOrganization" : ""
     },
     {
@@ -71,23 +26,13 @@
       "mOrganization" : ""
     },
     {
-      "mAlias" : "proxy 6.1",
-      "mServerUrl" : "http://192.168.88.59/jasperserver-pro-61",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "local 5.6.1",
-      "mServerUrl" : "http://192.168.88.55:8082/jasperserver-pro-561",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "local proxy 6.1",
-      "mServerUrl" : "http://www.jasperMobile.proxy/jasperserver-pro-61",
-      "mOrganization" : ""
-    },
-    {
       "mAlias" : "local 6.1.1",
       "mServerUrl" : "http://192.168.88.55:8086/jasperserver-pro-611",
+      "mOrganization" : ""
+    },
+    {
+      "mAlias" : "local 6.2",
+      "mServerUrl" : "http://192.168.88.55:8088/jasperserver-pro-62",
       "mOrganization" : ""
     },
     {
@@ -98,11 +43,6 @@
     {
       "mAlias" : "mobile demo 5.5",
       "mServerUrl" : "http://mobiledemo.jaspersoft.com/jasperserver-pro",
-      "mOrganization" : ""
-    },
-    {
-      "mAlias" : "local 6.2",
-      "mServerUrl" : "http://192.168.88.55:8088/jasperserver-pro-62",
       "mOrganization" : ""
     }
   ]
