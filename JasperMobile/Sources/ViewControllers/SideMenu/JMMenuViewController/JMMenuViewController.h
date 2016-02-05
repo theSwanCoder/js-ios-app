@@ -42,5 +42,6 @@
 - (void)reset;
 
 - (void)setSelectedItemIndex:(NSUInteger)itemIndex;
+- (void)openCurrentSection;
 
 @end

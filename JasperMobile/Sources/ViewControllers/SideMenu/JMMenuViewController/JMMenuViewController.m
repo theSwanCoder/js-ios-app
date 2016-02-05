@@ -165,54 +165,66 @@ typedef NS_ENUM(NSInteger, JMMenuButtonState) {
 #pragma mark - Public API
 - (void) setSelectedItemIndex:(NSUInteger)itemIndex
 {
-    if (itemIndex < self.menuItems.count) {
-        JMMenuItem *currentSelectedItem = self.selectedItem;
-        JMMenuItem *item = self.menuItems[itemIndex];
-        item.showNotes = NO;
+    if (itemIndex > self.menuItems.count) {
+        return;
+    }
 
-        if (item.resourceType == JMResourceTypeLogout) {
-            [[JMSessionManager sharedManager] logout];
-            [JMUtils showLoginViewAnimated:YES completion:nil];
-            self.menuItems = nil;
-        } else if (item.resourceType == JMResourceTypeAbout) {
-            [self closeMenu];
+    JMMenuItem *currentSelectedItem = self.selectedItem;
+    JMMenuItem *item = self.menuItems[itemIndex];
+    item.showNotes = NO;
 
-            JMMainNavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-            navController.modalPresentationStyle = UIModalPresentationFormSheet;
+    if (item.resourceType == JMResourceTypeLogout) {
+        [[JMSessionManager sharedManager] logout];
+        [JMUtils showLoginViewAnimated:YES completion:nil];
+        self.menuItems = nil;
+    } else if (item.resourceType == JMResourceTypeAbout) {
+        [self closeMenu];
 
-            [self.revealViewController.frontViewController presentViewController:navController
-                                                                        animated:YES
-                                                                      completion:nil];
-        } else if (item.resourceType == JMResourceTypeFeedback) {
-            [self showFeedback];
-        } else {
-            if (!currentSelectedItem || currentSelectedItem != item) {
-                [self unselectItems];
-                item.selected = YES;
+        JMMainNavigationController *navController = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+        navController.modalPresentationStyle = UIModalPresentationFormSheet;
 
-                [self.tableView reloadData];
+        [self.revealViewController.frontViewController presentViewController:navController
+                                                                    animated:YES
+                                                                  completion:nil];
+    } else if (item.resourceType == JMResourceTypeFeedback) {
+        [self showFeedback];
+    } else {
+        if (!currentSelectedItem || currentSelectedItem != item) {
+            [self unselectItems];
+            item.selected = YES;
 
-                id nextVC;
-                if([item vcIdentifierForSelectedItem]) {
-                    // Analytics
-                    [JMUtils logEventWithInfo:@{
-                            kJMAnalyticsCategoryKey      : kJMAnalyticsRepositoryEventCategoryTitle,
-                            kJMAnalyticsActionKey        : kJMAnalyticsRepositoryEventActionOpen,
-                            kJMAnalyticsLabelKey         : [item nameForAnalytics]
-                    }];
+            [self.tableView reloadData];
 
-                    nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
-                    UIBarButtonItem *bbi = [self barButtonItemForState:JMMenuButtonStateNormal];
-                    [nextVC topViewController].navigationItem.leftBarButtonItem = bbi;
-                    [[nextVC topViewController].view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-                } else {
-                    nextVC = [JMUtils launchScreenViewController];
-                }
-                self.revealViewController.frontViewController = nextVC;
+            id nextVC;
+            if([item vcIdentifierForSelectedItem]) {
+                // Analytics
+                [JMUtils logEventWithInfo:@{
+                        kJMAnalyticsCategoryKey      : kJMAnalyticsRepositoryEventCategoryTitle,
+                        kJMAnalyticsActionKey        : kJMAnalyticsRepositoryEventActionOpen,
+                        kJMAnalyticsLabelKey         : [item nameForAnalytics]
+                }];
+
+                nextVC = [self.storyboard instantiateViewControllerWithIdentifier:[item vcIdentifierForSelectedItem]];
+                UIBarButtonItem *bbi = [self barButtonItemForState:JMMenuButtonStateNormal];
+                [nextVC topViewController].navigationItem.leftBarButtonItem = bbi;
+                [[nextVC topViewController].view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+            } else {
+                nextVC = [JMUtils launchScreenViewController];
             }
-            [self.revealViewController setFrontViewPosition:FrontViewPositionLeft
-                                                   animated:YES];
+            self.revealViewController.frontViewController = nextVC;
         }
+        [self.revealViewController setFrontViewPosition:FrontViewPositionLeft
+                                               animated:YES];
+    }
+}
+
+- (void)openCurrentSection
+{
+    if (self.selectedItem) {
+        [self.revealViewController setFrontViewPosition:FrontViewPositionLeft
+                                               animated:YES];
+    } else {
+        [self setSelectedItemIndex:[JMMenuViewController defaultItemIndex]];
     }
 }
 
