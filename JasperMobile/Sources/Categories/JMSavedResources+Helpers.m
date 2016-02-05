@@ -136,9 +136,23 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
         [self createFolderAtPath:newFolderPath];
     }
 
-    NSError *moveContentError = [self moveResourceContentFromPath:currentFolderPath toPath:newFolderPath];
+    NSError *error;
 
-    return !(moveContentError);
+    NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:currentFolderPath error:&error];
+
+    for (NSString *item in items) {
+        NSString *newItem = item;
+        if ([newItem isEqualToString:[currentFolderPath lastPathComponent]] || [newItem.stringByDeletingPathExtension isEqualToString:kJMReportFilename]) {
+            newItem = [newFolderPath lastPathComponent];
+        }
+        NSString *itemFromPath = [currentFolderPath stringByAppendingPathComponent:item];
+        NSString *itemToPath = [newFolderPath stringByAppendingPathComponent:newItem];
+        [[NSFileManager defaultManager] moveItemAtPath:itemFromPath toPath:itemToPath error:&error];
+    }
+
+    [self removeResourceAtPath:currentFolderPath];
+
+    return !(error);
 }
 
 - (BOOL)renameReportTo:(NSString *)newName
@@ -336,6 +350,24 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
         error = [self removeResourceAtPath:fromPath];
     }
     return error;
+
+
+
+//    NSError *error;
+//
+//    NSArray *items = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fromPath error:&error];
+//
+//    for (NSString *item in items) {
+//        NSString *newItem = item;
+//        if ([newItem isEqualToString:[fromPath lastPathComponent]] || [newItem.stringByDeletingPathExtension isEqualToString:kJMReportFilename]) {
+//            newItem = [toPath lastPathComponent];
+//        }
+//        NSString *itemFromPath = [fromPath stringByAppendingPathComponent:item];
+//        NSString *itemToPath = [toPath stringByAppendingPathComponent:newItem];
+//        [[NSFileManager defaultManager] moveItemAtPath:itemFromPath toPath:itemToPath error:&error];
+//    }
+//
+//    return error;
 }
 
 + (NSError *)copyResourceContentFromPath:(NSString *)fromPath toPath:(NSString *)toPath
