@@ -60,10 +60,10 @@
                                                     if (errors.count > 0) {
                                                         NSString *fullMessage = @"";
                                                         for (NSDictionary *errorJSON in errors) {
-                                                            NSString *message = errorJSON[@"defaultMessage"];
+                                                            id message = errorJSON[@"defaultMessage"];
                                                             NSString *errorMessage = @"";
                                                             NSString *field = errorJSON[@"field"];
-                                                            if (message) {
+                                                            if (message && [message isKindOfClass:[NSString class]]) {
                                                                 errorMessage = [NSString stringWithFormat:@"Message: '%@', field: %@", message, field];
                                                             } else {
                                                                 NSString *errorCode = errorJSON[@"errorCode"];
