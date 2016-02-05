@@ -203,7 +203,7 @@ static NSString * const kJMDefaultsUpdatedVersions = @"jaspersoft.mobile.updated
         NSString *newPath = [documentPath stringByAppendingPathComponent:newURI];
 
         // 3. move from old path to new path
-        [JMSavedResources moveSavedItemFromPath:oldPath toPath:newPath];
+        [JMSavedResources migrateSavedItemFromPath:oldPath toPath:newPath];
 
         // 4. save new uri
         savedResource.uri = newURI;

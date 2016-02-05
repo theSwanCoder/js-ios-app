@@ -53,7 +53,7 @@ extern NSString * const kJMSavedResources;
 
 + (NSArray *)allSavedItems;
 
-+ (BOOL)moveSavedItemFromPath:(NSString *)fromPath toPath:(NSString *)toPath;
++ (BOOL)migrateSavedItemFromPath:(NSString *)fromPath toPath:(NSString *)toPath;
 
 // Rename saved resource
 - (BOOL)renameReportTo:(NSString *)newName;

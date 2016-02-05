@@ -116,7 +116,7 @@ static NSString *const kJMSavedResourcesTempIdentifier = @"Temp_";
     return savedItems;
 }
 
-+ (BOOL)moveSavedItemFromPath:(NSString *)fromPath toPath:(NSString *)toPath
++ (BOOL)migrateSavedItemFromPath:(NSString *)fromPath toPath:(NSString *)toPath
 {
     NSString *currentFolderPath = [fromPath stringByDeletingLastPathComponent];
     NSString *newFolderPath = [toPath stringByDeletingLastPathComponent];
