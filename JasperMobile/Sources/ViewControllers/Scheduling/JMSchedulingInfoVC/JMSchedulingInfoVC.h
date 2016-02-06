@@ -22,7 +22,7 @@
 
 
 //
-//  JMScheduleCell.h
+//  JMSchedulingInfoVC.h
 //  TIBCO JasperMobile
 //
 
@@ -31,16 +31,6 @@
 @since 2.3
 */
 
-@protocol JMScheduleCellDelegate;
-
-@interface JMScheduleCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *detailLabel;
-@property (nonatomic, weak) NSObject <JMScheduleCellDelegate> *delegate;
-@end
-
-@protocol JMScheduleCellDelegate
-@optional
-- (void)scheduleCellDidReceiveDeleteScheduleAction:(JMScheduleCell *)cell;
-- (void)scheduleCellDidReceiveEditScheduleAction:(JMScheduleCell *)cell;
+@interface JMSchedulingInfoVC : JMBaseViewController
+@property (nonatomic, strong) JSResourceLookup *resourceLookup;
 @end

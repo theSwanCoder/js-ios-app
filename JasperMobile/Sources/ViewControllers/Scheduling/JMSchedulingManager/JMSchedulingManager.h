@@ -38,7 +38,8 @@
 
 @interface JMSchedulingManager : NSObject
 @property (nonatomic, readonly) NSArray *jobs;
-- (void)loadJobsWithCompletion:(void (^)(NSArray <JSScheduleJobResource *> *jobs, NSError *error))completion;
-- (void)createJobWithData:(JSScheduleJob *)jobData completion:(void (^)(JSScheduleJob *job, NSError *error))completion;
-- (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void (^)(NSError *error))completion;
+- (void)loadSchedulesWithCompletion:(void (^)(NSArray <JSScheduleJobResource *> *, NSError *))completion;
+- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleJobResource *> *, NSError *))completion;
+- (void)createJobWithData:(JSScheduleJob *)jobData completion:(void (^)(JSScheduleJob *, NSError *))completion;
+- (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void (^)(NSError *))completion;
 @end

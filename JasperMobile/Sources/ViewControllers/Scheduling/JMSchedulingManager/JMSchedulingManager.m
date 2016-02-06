@@ -31,18 +31,34 @@
 #import "JSScheduleJobState.h"
 #import "JSRESTBase+JSSchedule.h"
 #import "JSScheduleJob.h"
+#import "JSRESTBase+JMScheduleExtended.h"
 
 @implementation JMSchedulingManager
 
 #pragma mark - Public API
-- (void)loadJobsWithCompletion:(void(^)(NSArray <JSScheduleJobResource *>*jobs, NSError *error))completion
+- (void)loadSchedulesWithCompletion:(void(^)(NSArray <JSScheduleJobResource *>*jobs, NSError *error))completion
 {
     [self loadResourcesWithCompletion:^(NSArray *jobs, NSError *error) {
         completion(jobs, error);
     }];
 }
 
-- (void)createJobWithData:(JSScheduleJob *)jobData completion:(void(^)(JSScheduleJob * job, NSError *error))completion
+- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleJobResource *> *, NSError *))completion
+{
+    if (!completion) {
+        return;
+    }
+
+    [self.restClient fetchScheduledJobResourcesWithResourceURI:resourceLookup.uri completion:^(JSOperationResult *result) {
+        if (result.error) {
+            completion(nil, result.error);
+        } else {
+            completion(result.objects, nil);
+        }
+    }];
+}
+
+- (void)createJobWithData:(JSScheduleJob *)jobData completion:(void(^)(JSScheduleJob *, NSError *))completion
 {
     if (!completion) {
         return;
@@ -99,7 +115,7 @@
                                     }];
 }
 
-- (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void(^)(NSError *error))completion
+- (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void(^)(NSError *))completion
 {
     if (!completion) {
         return;
@@ -116,7 +132,7 @@
 }
 
 #pragma mark - Private API
-- (void)loadResourcesWithCompletion:(void(^)(NSArray <JSScheduleJobResource *>*jobs, NSError *error))completion
+- (void)loadResourcesWithCompletion:(void(^)(NSArray <JSScheduleJobResource *>*, NSError *))completion
 {
     if (!completion) {
         return;

@@ -34,8 +34,15 @@
 #pragma mark - Actions
 - (IBAction)deleteJob:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(jobCellDidReceiveDeleteJobAction:)]) {
-        [self.delegate jobCellDidReceiveDeleteJobAction:self];
+    if ([self.delegate respondsToSelector:@selector(scheduleCellDidReceiveDeleteScheduleAction:)]) {
+        [self.delegate scheduleCellDidReceiveDeleteScheduleAction:self];
+    }
+}
+
+- (IBAction)editJob:(UIButton *)sender
+{
+    if ([self.delegate respondsToSelector:@selector(scheduleCellDidReceiveEditScheduleAction:)]) {
+        [self.delegate scheduleCellDidReceiveEditScheduleAction:self];
     }
 }
 

@@ -835,7 +835,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMJobCell" rowHeight="70" id="SlF-FM-HC0" customClass="JMJobCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMScheduleCell" rowHeight="70" id="SlF-FM-HC0" customClass="JMScheduleCell">
                                         <rect key="frame" x="0.0" y="18" width="600" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SlF-FM-HC0" id="nhD-vx-F8L">
@@ -931,10 +931,10 @@
             </objects>
             <point key="canvasLocation" x="-490" y="-2273"/>
         </scene>
-        <!--New JobVC-->
+        <!--New ScheduleVC-->
         <scene sceneID="340-MM-7JM">
             <objects>
-                <viewController storyboardIdentifier="JMNewJobVC" id="Rfc-7O-lBF" customClass="JMNewJobVC" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="JMNewScheduleVC" id="Rfc-7O-lBF" customClass="JMNewScheduleVC" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gIg-cO-5KQ"/>
                         <viewControllerLayoutGuide type="bottom" id="fID-P4-Zex"/>
@@ -953,7 +953,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMNewJobCell" id="MKQ-VM-tbH" customClass="JMNewScheduleCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMNewScheduleCell" id="MKQ-VM-tbH" customClass="JMNewScheduleCell">
                                         <rect key="frame" x="0.0" y="18" width="580" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MKQ-VM-tbH" id="S6T-zm-Iq6">
@@ -1125,11 +1125,107 @@
                     <connections>
                         <outlet property="searchBar" destination="V9t-6A-HOJ" id="44M-Kq-u88"/>
                         <outlet property="tableView" destination="w8U-Uk-IUJ" id="ZI0-P4-tUK"/>
+                        <segue destination="2ly-sh-8d8" kind="show" identifier="showSchedulingInfo" id="Qz1-1Y-rKX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iDU-Y1-5a4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="270" y="-2273"/>
+        </scene>
+        <!--Scheduling InfoVC-->
+        <scene sceneID="eSU-Lf-Ffo">
+            <objects>
+                <viewController storyboardIdentifier="JMSchedulingInfoVC" id="2ly-sh-8d8" customClass="JMSchedulingInfoVC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="60E-rE-Csc"/>
+                        <viewControllerLayoutGuide type="bottom" id="h8w-Re-FYJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gzL-vH-u8i">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7Uu-hY-XEq">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <view key="tableFooterView" contentMode="scaleToFill" id="nPK-KD-cEi">
+                                    <rect key="frame" x="0.0" y="98" width="600" height="0.0"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMScheduleCell" id="bVJ-UA-cbm" customClass="JMScheduleCell">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="70"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bVJ-UA-cbm" id="xcc-Ci-Gow">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="69"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zcG-JO-uZj">
+                                                    <rect key="frame" x="13" y="10" width="529" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="115-Bg-i6R">
+                                                    <rect key="frame" x="13" y="44" width="529" height="15"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jAs-J6-RWB">
+                                                    <rect key="frame" x="552" y="14" width="40" height="42"/>
+                                                    <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                                                    <state key="normal" image="edit_schedule"/>
+                                                    <connections>
+                                                        <action selector="editJob:" destination="bVJ-UA-cbm" eventType="touchUpInside" id="BaJ-qQ-Mb3"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="jAs-J6-RWB" firstAttribute="leading" secondItem="zcG-JO-uZj" secondAttribute="trailing" constant="10" id="0Ak-n4-tbA"/>
+                                                <constraint firstItem="115-Bg-i6R" firstAttribute="leading" secondItem="xcc-Ci-Gow" secondAttribute="leadingMargin" constant="5" id="FBc-nD-m1y"/>
+                                                <constraint firstItem="zcG-JO-uZj" firstAttribute="leading" secondItem="xcc-Ci-Gow" secondAttribute="leadingMargin" constant="5" id="WQS-at-RAp"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="115-Bg-i6R" secondAttribute="bottom" constant="2" id="Wjq-eb-egt"/>
+                                                <constraint firstItem="jAs-J6-RWB" firstAttribute="centerY" secondItem="xcc-Ci-Gow" secondAttribute="centerY" id="YYH-II-gbH"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="jAs-J6-RWB" secondAttribute="trailing" id="aqL-SH-YYr"/>
+                                                <constraint firstItem="zcG-JO-uZj" firstAttribute="top" secondItem="xcc-Ci-Gow" secondAttribute="topMargin" constant="2" id="o1J-wG-Zs7"/>
+                                                <constraint firstItem="jAs-J6-RWB" firstAttribute="leading" secondItem="115-Bg-i6R" secondAttribute="trailing" constant="10" id="pyX-8K-dPI"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="detailLabel" destination="115-Bg-i6R" id="VWO-f5-pz6"/>
+                                            <outlet property="titleLabel" destination="zcG-JO-uZj" id="KJ4-tE-Lb5"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="2ly-sh-8d8" id="7jH-xB-hq4"/>
+                                    <outlet property="delegate" destination="2ly-sh-8d8" id="AaL-c8-AhY"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="7Uu-hY-XEq" secondAttribute="trailing" id="Wrf-tp-YvX"/>
+                            <constraint firstItem="7Uu-hY-XEq" firstAttribute="top" secondItem="60E-rE-Csc" secondAttribute="bottom" id="XR0-ch-Pgr"/>
+                            <constraint firstItem="h8w-Re-FYJ" firstAttribute="top" secondItem="7Uu-hY-XEq" secondAttribute="bottom" id="kjA-rB-OW2"/>
+                            <constraint firstItem="7Uu-hY-XEq" firstAttribute="leading" secondItem="gzL-vH-u8i" secondAttribute="leading" id="xxn-L1-YSv"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="fvW-oj-7jk">
+                        <barButtonItem key="rightBarButtonItem" title="New" id="vhr-pc-YZ6">
+                            <connections>
+                                <action selector="newSchedule:" destination="2ly-sh-8d8" id="Xvg-H0-mea"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="7Uu-hY-XEq" id="Dpd-A7-CQd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TqQ-Un-slP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="979" y="-2273"/>
         </scene>
         <!--Recent Views Collection View Controller-->
         <scene sceneID="k1k-fm-eic">
@@ -3101,6 +3197,7 @@ your business wherever you are.</string>
     <resources>
         <image name="arrow_up" width="21" height="12"/>
         <image name="checked_checkbox" width="36" height="36"/>
+        <image name="edit_schedule" width="20" height="20"/>
         <image name="home_screen" width="605" height="658"/>
         <image name="icon_stop" width="24" height="24"/>
         <image name="im_full_name" width="300" height="30"/>

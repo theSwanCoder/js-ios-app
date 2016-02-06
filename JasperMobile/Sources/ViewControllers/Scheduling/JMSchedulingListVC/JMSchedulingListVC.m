@@ -34,7 +34,7 @@
 #import "JMNewScheduleVC.h"
 #import "JMScheduleResourcesListVC.h"
 
-@interface JMSchedulingListVC () <UITableViewDelegate, UITableViewDataSource, JMJobCellDelegate>
+@interface JMSchedulingListVC () <UITableViewDelegate, UITableViewDataSource, JMScheduleCellDelegate>
 @property (nonatomic, copy) NSArray <JSScheduleJobResource *> *jobs;
 @property (nonatomic) JMSchedulingManager *jobsManager;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -74,7 +74,7 @@
     [super viewWillAppear:animated];
 
     __weak __typeof(self) weakSelf = self;
-    [self.jobsManager loadJobsWithCompletion:^(NSArray <JSScheduleJobResource *>*jobs, NSError *error) {
+    [self.jobsManager loadSchedulesWithCompletion:^(NSArray <JSScheduleJobResource *> *jobs, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
         strongSelf.jobs = jobs;
         [strongSelf updateNoJobsLabelAppearence];
@@ -113,7 +113,7 @@
 - (IBAction)refresh:(id)sender
 {
     __weak __typeof(self) weakSelf = self;
-    [self.jobsManager loadJobsWithCompletion:^(NSArray <JSScheduleJobResource *>*jobs, NSError *error) {
+    [self.jobsManager loadSchedulesWithCompletion:^(NSArray <JSScheduleJobResource *> *jobs, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
         [strongSelf.refreshControl endRefreshing];
 
@@ -131,7 +131,7 @@
 }
 
 #pragma mark - JMJobCellDelegate
-- (void)jobCellDidReceiveDeleteJobAction:(JMScheduleCell *)cell
+- (void)scheduleCellDidReceiveDeleteScheduleAction:(JMScheduleCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     JSScheduleJobResource *job = self.jobs[indexPath.row];
