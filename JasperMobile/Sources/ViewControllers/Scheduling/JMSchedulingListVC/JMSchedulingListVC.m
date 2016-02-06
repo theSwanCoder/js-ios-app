@@ -1,15 +1,39 @@
+/*
+ * TIBCO JasperMobile for iOS
+ * Copyright © 2005-2016 TIBCO Software, Inc. All rights reserved.
+ * http://community.jaspersoft.com/project/jaspermobile-ios
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
+
 //
-// Created by Aleksandr Dakhno on 11/30/15.
-// Copyright (c) 2015 TIBCO JasperMobile. All rights reserved.
+//  JMSchedulingListVC.h
+//  TIBCO JasperMobile
 //
 
-#import "JMSchedulingVC.h"
+#import "JMSchedulingListVC.h"
 #import "JMSchedulingManager.h"
-#import "JMJobCell.h"
+#import "JMScheduleCell.h"
 #import "JSScheduleJobResource.h"
 #import "JSScheduleJobState.h"
+#import "JMNewScheduleVC.h"
 
-@interface JMSchedulingVC() <UITableViewDelegate, UITableViewDataSource, JMJobCellDelegate>
+@interface JMSchedulingListVC () <UITableViewDelegate, UITableViewDataSource, JMJobCellDelegate>
 @property (nonatomic, copy) NSArray <JSScheduleJobResource *> *jobs;
 @property (nonatomic) JMSchedulingManager *jobsManager;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -17,7 +41,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *noJobsLabel;
 @end
 
-@implementation JMSchedulingVC
+@implementation JMSchedulingListVC
 
 #pragma mark - LifeCycle
 
@@ -66,7 +90,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMJobCell *jobCell = [tableView dequeueReusableCellWithIdentifier:@"JMJobCell" forIndexPath:indexPath];
+    JMScheduleCell *jobCell = [tableView dequeueReusableCellWithIdentifier:@"JMScheduleCell" forIndexPath:indexPath];
     jobCell.delegate = self;
 
     JSScheduleJobResource *job = self.jobs[indexPath.row];
@@ -99,8 +123,14 @@
     }];
 }
 
+- (IBAction)addNewSchedule:(id)sender
+{
+//    JMNewScheduleVC *newJobVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
+//    [self.navigationController pushViewController:newJobVC animated:YES];
+}
+
 #pragma mark - JMJobCellDelegate
-- (void)jobCellDidReceiveDeleteJobAction:(JMJobCell *)cell
+- (void)jobCellDidReceiveDeleteJobAction:(JMScheduleCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     JSScheduleJobResource *job = self.jobs[indexPath.row];

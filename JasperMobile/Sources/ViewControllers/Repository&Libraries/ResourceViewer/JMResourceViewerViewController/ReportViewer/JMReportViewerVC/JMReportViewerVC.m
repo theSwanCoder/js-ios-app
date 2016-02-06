@@ -32,7 +32,7 @@
 #import "JMInputControlsViewController.h"
 #import "JMReportViewerToolBar.h"
 #import "JMExternalWindowControlsVC.h"
-#import "JMNewJobVC.h"
+#import "JMNewScheduleVC.h"
 
 @interface JMReportViewerVC () <JMSaveReportViewControllerDelegate, JMReportViewerToolBarDelegate, JMReportLoaderDelegate, JMExternalWindowControlViewControllerDelegate>
 @property (nonatomic, strong) JMReportViewerConfigurator *configurator;
@@ -895,7 +895,7 @@
 
 #pragma mark - Scheduling
 - (void)scheduleReport {
-    JMNewJobVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewJobVC"];
+    JMNewScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
     newJobVC.resourceLookup = self.resourceLookup;
     newJobVC.exitBlock = ^() {
 

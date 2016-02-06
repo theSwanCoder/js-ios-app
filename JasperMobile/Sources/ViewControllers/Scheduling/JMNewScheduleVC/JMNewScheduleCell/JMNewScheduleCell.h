@@ -22,7 +22,7 @@
 
 
 //
-//  JMNewJobCell.h
+//  JMNewScheduleCell.h
 //  TIBCO JasperMobile
 //
 
@@ -33,7 +33,7 @@
 
 @protocol JMNewJobCellDelegate;
 
-@interface JMNewJobCell : UITableViewCell <UITextFieldDelegate>
+@interface JMNewScheduleCell : UITableViewCell <UITextFieldDelegate>
 @property(nonatomic, weak) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITextField *valueTextField;
 @property (nonatomic, weak) NSObject <JMNewJobCellDelegate> *delegate;
@@ -41,5 +41,5 @@
 
 @protocol JMNewJobCellDelegate
 @optional
-- (void)jobCell:(JMNewJobCell *)cell didChangeValue:(NSString *)newValue;
+- (void)jobCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue;
 @end

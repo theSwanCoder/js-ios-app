@@ -22,14 +22,14 @@
 
 
 //
-//  JMNewJobVC.m
+//  JMNewScheduleVC.m
 //  TIBCO JasperMobile
 //
 
-#import "JMNewJobVC.h"
+#import "JMNewScheduleVC.h"
 #import "JMSchedulingManager.h"
 #import "JSScheduleJob.h"
-#import "JMNewJobCell.h"
+#import "JMNewScheduleCell.h"
 
 NSString *const kJMJobLabel = @"kJMJobLabel";
 NSString *const kJMJobOutputFileURI = @"kJMJobOutputFileURI";
@@ -37,14 +37,14 @@ NSString *const kJMJobOutputFolderURI = @"kJMJobOutputFolderURI";
 NSString *const kJMJobFormat = @"kJMJobFormat";
 NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
-@interface JMNewJobVC() <UITableViewDataSource, UITableViewDelegate, JMNewJobCellDelegate>
+@interface JMNewScheduleVC () <UITableViewDataSource, UITableViewDelegate, JMNewJobCellDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) JSScheduleJob *job;
 @property (nonatomic, strong) NSArray *jobRepresentationProperties;
 @property (weak, nonatomic) IBOutlet UIButton *createJobButton;
 @end
 
-@implementation JMNewJobVC
+@implementation JMNewScheduleVC
 
 #pragma mark - UIViewController LifeCycle
 - (void)viewDidLoad
@@ -83,7 +83,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     // find text field for date
     NSInteger rowDateCell = [self.jobRepresentationProperties indexOfObject:kJMJobStartDate];
     NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell inSection:0];
-    JMNewJobCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
+    JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
 
     // set new value
     dateCell.valueTextField.text = [self dateStringFromDate:self.job.startDate];
@@ -94,7 +94,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
     // find text field for date
     NSInteger rowDateCell = [self.jobRepresentationProperties indexOfObject:kJMJobStartDate];
     NSIndexPath *dateCellIndexPath = [NSIndexPath indexPathForRow:rowDateCell inSection:0];
-    JMNewJobCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
+    JMNewScheduleCell *dateCell = [self.tableView cellForRowAtIndexPath:dateCellIndexPath];
 
     // set new value
     dateCell.valueTextField.text = [self dateStringFromDate:self.job.startDate];
@@ -116,7 +116,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
     NSInteger rowFormatCell = [self.jobRepresentationProperties indexOfObject:kJMJobFormat];
     NSIndexPath *formatCellIndexPath = [NSIndexPath indexPathForRow:rowFormatCell inSection:0];
-    JMNewJobCell *formatCell = [self.tableView cellForRowAtIndexPath:formatCellIndexPath];
+    JMNewScheduleCell *formatCell = [self.tableView cellForRowAtIndexPath:formatCellIndexPath];
 
     for (NSString *format in availableFormats) {
         [alertController addActionWithLocalizedTitle:format style:UIAlertActionStyleDefault
@@ -148,7 +148,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    JMNewJobCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JMNewJobCell" forIndexPath:indexPath];
+    JMNewScheduleCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JMNewScheduleCell" forIndexPath:indexPath];
 
     NSString *jobProperty = self.jobRepresentationProperties[indexPath.row];
 
@@ -203,7 +203,7 @@ NSString *const kJMJobStartDate = @"kJMJobStartDate";
 }
 
 #pragma mark - JMNewJobCellDelegate
-- (void)jobCell:(JMNewJobCell *)cell didChangeValue:(NSString *)newValue
+- (void)jobCell:(JMNewScheduleCell *)cell didChangeValue:(NSString *)newValue
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     NSString *jobProperty = self.jobRepresentationProperties[indexPath.row];

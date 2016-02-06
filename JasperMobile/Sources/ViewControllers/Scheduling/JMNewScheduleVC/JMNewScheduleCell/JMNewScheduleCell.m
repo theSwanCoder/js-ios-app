@@ -22,14 +22,14 @@
 
 
 //
-//  JMNewJobCell.m
+//  JMNewScheduleCell.m
 //  TIBCO JasperMobile
 //
 
-#import "JMNewJobCell.h"
+#import "JMNewScheduleCell.h"
 
 
-@implementation JMNewJobCell
+@implementation JMNewScheduleCell
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

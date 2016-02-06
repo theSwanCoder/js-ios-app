@@ -22,24 +22,21 @@
 
 
 //
-//  JMJobCell.h
+//  JMScheduleCell.m
 //  TIBCO JasperMobile
 //
 
-/**
-@author Aleksandr Dakhno odahno@tibco.com
-@since 2.3
-*/
+#import "JMScheduleCell.h"
 
-@protocol JMJobCellDelegate;
 
-@interface JMJobCell : UITableViewCell
-@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *detailLabel;
-@property (nonatomic, weak) NSObject <JMJobCellDelegate> *delegate;
-@end
+@implementation JMScheduleCell
 
-@protocol JMJobCellDelegate
-@optional
-- (void)jobCellDidReceiveDeleteJobAction:(JMJobCell *)cell;
+#pragma mark - Actions
+- (IBAction)deleteJob:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(jobCellDidReceiveDeleteJobAction:)]) {
+        [self.delegate jobCellDidReceiveDeleteJobAction:self];
+    }
+}
+
 @end

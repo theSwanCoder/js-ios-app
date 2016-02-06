@@ -27,9 +27,9 @@
 //
 #import "JMReportInfoViewController.h"
 #import "JSResourceLookup+Helpers.h"
-#import "JMNewJobVC.h"
+#import "JMNewScheduleVC.h"
 #import "JMSchedulingManager.h"
-#import "JMSchedulingVC.h"
+#import "JMSchedulingListVC.h"
 
 @interface JMReportInfoViewController ()
 
@@ -67,7 +67,7 @@
 }
 
 - (void)scheduleReport {
-    JMNewJobVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewJobVC"];
+    JMNewScheduleVC *newJobVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
     newJobVC.resourceLookup = self.resourceLookup;
     newJobVC.exitBlock = ^() {
 

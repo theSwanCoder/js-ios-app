@@ -22,21 +22,15 @@
 
 
 //
-//  JMJobCell.m
+//  JMScheduleResourcesListVC.h
 //  TIBCO JasperMobile
 //
 
-#import "JMJobCell.h"
+/**
+@author Aleksandr Dakhno odahno@tibco.com
+@since 2.3
+*/
 
 
-@implementation JMJobCell
-
-#pragma mark - Actions
-- (IBAction)deleteJob:(id)sender
-{
-    if ([self.delegate respondsToSelector:@selector(jobCellDidReceiveDeleteJobAction:)]) {
-        [self.delegate jobCellDidReceiveDeleteJobAction:self];
-    }
-}
-
+@interface JMScheduleResourcesListVC : JMBaseViewController
 @end
