@@ -1052,8 +1052,80 @@
                     <view key="view" contentMode="scaleToFill" id="FJ9-7p-SBy">
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JAp-la-GES">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                <color key="backgroundColor" red="0.25882352939999997" green="0.5568627451" blue="0.75294117650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <items>
+                                    <navigationItem id="v82-OX-riN"/>
+                                </items>
+                            </navigationBar>
+                            <searchBar contentMode="redraw" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="V9t-6A-HOJ">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="vRI-RL-ANj" id="xSa-6w-xbZ"/>
+                                </connections>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="w8U-Uk-IUJ">
+                                <rect key="frame" x="0.0" y="44" width="600" height="492"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <view key="tableFooterView" contentMode="scaleToFill" id="6zh-hL-QgL">
+                                    <rect key="frame" x="0.0" y="78" width="600" height="0.0"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="JMScheduleResourceCell" textLabel="cCt-U3-u5M" detailTextLabel="l4x-j0-eEx" style="IBUITableViewCellStyleSubtitle" id="UBR-aD-pve">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UBR-aD-pve" id="wm6-DZ-zKQ">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="49"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cCt-U3-u5M">
+                                                    <rect key="frame" x="15" y="8" width="32" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="l4x-j0-eEx">
+                                                    <rect key="frame" x="15" y="28" width="41" height="14"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="vRI-RL-ANj" id="UFc-P5-eem"/>
+                                    <outlet property="delegate" destination="vRI-RL-ANj" id="hSa-em-Lid"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="V9t-6A-HOJ" firstAttribute="leading" secondItem="JAp-la-GES" secondAttribute="leading" id="2fA-h5-2ny"/>
+                            <constraint firstItem="V9t-6A-HOJ" firstAttribute="trailing" secondItem="JAp-la-GES" secondAttribute="trailing" id="3f5-JO-NrE"/>
+                            <constraint firstItem="w8U-Uk-IUJ" firstAttribute="top" secondItem="JAp-la-GES" secondAttribute="bottom" id="4BM-ey-lGC"/>
+                            <constraint firstItem="JAp-la-GES" firstAttribute="top" secondItem="y6w-g1-G45" secondAttribute="bottom" id="7U5-Jw-lS8"/>
+                            <constraint firstAttribute="trailing" secondItem="JAp-la-GES" secondAttribute="trailing" id="A6Z-oK-c1q"/>
+                            <constraint firstAttribute="trailing" secondItem="w8U-Uk-IUJ" secondAttribute="trailing" id="DEY-ai-OfV"/>
+                            <constraint firstItem="V9t-6A-HOJ" firstAttribute="bottom" secondItem="JAp-la-GES" secondAttribute="bottom" id="FJb-9E-uKU"/>
+                            <constraint firstItem="2VW-1k-9J8" firstAttribute="top" secondItem="w8U-Uk-IUJ" secondAttribute="bottom" id="aYK-BV-edJ"/>
+                            <constraint firstItem="JAp-la-GES" firstAttribute="leading" secondItem="FJ9-7p-SBy" secondAttribute="leading" id="euJ-oK-6Us"/>
+                            <constraint firstItem="w8U-Uk-IUJ" firstAttribute="leading" secondItem="FJ9-7p-SBy" secondAttribute="leading" id="mGK-ZZ-KQo"/>
+                            <constraint firstItem="V9t-6A-HOJ" firstAttribute="top" secondItem="JAp-la-GES" secondAttribute="top" id="oKB-gE-IyU"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="searchBar" destination="V9t-6A-HOJ" id="44M-Kq-u88"/>
+                        <outlet property="tableView" destination="w8U-Uk-IUJ" id="ZI0-P4-tUK"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iDU-Y1-5a4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

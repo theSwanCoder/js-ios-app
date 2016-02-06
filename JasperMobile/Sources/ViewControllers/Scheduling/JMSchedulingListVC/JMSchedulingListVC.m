@@ -32,6 +32,7 @@
 #import "JSScheduleJobResource.h"
 #import "JSScheduleJobState.h"
 #import "JMNewScheduleVC.h"
+#import "JMScheduleResourcesListVC.h"
 
 @interface JMSchedulingListVC () <UITableViewDelegate, UITableViewDataSource, JMJobCellDelegate>
 @property (nonatomic, copy) NSArray <JSScheduleJobResource *> *jobs;
@@ -125,8 +126,8 @@
 
 - (IBAction)addNewSchedule:(id)sender
 {
-//    JMNewScheduleVC *newJobVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
-//    [self.navigationController pushViewController:newJobVC animated:YES];
+    JMScheduleResourcesListVC *resourcesListVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleResourcesListVC"];
+    [self.navigationController pushViewController:resourcesListVC animated:YES];
 }
 
 #pragma mark - JMJobCellDelegate
