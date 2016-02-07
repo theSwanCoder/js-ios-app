@@ -22,28 +22,33 @@
 
 
 //
-//  JMSchedulingManager.m
+//  JMScheduleManager.m
 //  TIBCO JasperMobile
 //
 
-#import "JMSchedulingManager.h"
-#import "JSScheduleJobResource.h"
-#import "JSScheduleJobState.h"
-#import "JSRESTBase+JSSchedule.h"
-#import "JSScheduleJob.h"
+#import "JMScheduleManager.h"
 #import "JSRESTBase+JMScheduleExtended.h"
+#import "JSScheduleSummary.h"
 
-@implementation JMSchedulingManager
+@implementation JMScheduleManager
 
 #pragma mark - Public API
-- (void)loadSchedulesWithCompletion:(void(^)(NSArray <JSScheduleJobResource *>*jobs, NSError *error))completion
+- (void)loadSchedulesWithCompletion:(void(^)(NSArray <JSScheduleSummary *>*, NSError *))completion
 {
-    [self loadResourcesWithCompletion:^(NSArray *jobs, NSError *error) {
-        completion(jobs, error);
+    if (!completion) {
+        return;
+    }
+
+    [self.restClient fetchScheduledJobResourcesWithCompletion:^(JSOperationResult *result) {
+        if (result.error) {
+            completion(nil, result.error);
+        } else {
+            completion(result.objects, nil);
+        }
     }];
 }
 
-- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleJobResource *> *, NSError *))completion
+- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleSummary *> *, NSError *))completion
 {
     if (!completion) {
         return;
@@ -58,13 +63,28 @@
     }];
 }
 
-- (void)createJobWithData:(JSScheduleJob *)jobData completion:(void(^)(JSScheduleJob *, NSError *))completion
+- (void)loadScheduleInfoWithScheduleId:(NSInteger)scheduleId completion:(void(^)(JSScheduleResponse *, NSError *))completion
 {
     if (!completion) {
         return;
     }
 
-    [self.restClient createScheduledJobWithJob:jobData
+    [self.restClient fetchScheduleMetadataWithId:scheduleId completion:^(JSOperationResult *result) {
+        if (result.error) {
+            completion(nil, result.error);
+        } else {
+            completion(result.objects.firstObject, nil);
+        }
+    }];
+}
+
+- (void)createJobWithData:(JSScheduleResponse *)schedule completion:(void(^)(JSScheduleResponse *, NSError *))completion
+{
+    if (!completion) {
+        return;
+    }
+
+    [self.restClient createScheduledJobWithJob:schedule
                                     completion:^(JSOperationResult *result) {
                                         JMLog(@"error: %@", result.error);
                                         NSError *error = result.error;
@@ -109,10 +129,26 @@
                                             }
                                         } else {
                                             JMLog(@"result.objects: %@", result.objects);
-                                            JSScheduleJob *scheduledJob = result.objects.firstObject;
+                                            JSScheduleResponse *scheduledJob = result.objects.firstObject;
                                             completion(scheduledJob, nil);
                                         }
                                     }];
+}
+
+- (void)updateSchedule:(JSScheduleResponse *)schedule completion:(void(^)(JSScheduleResponse *, NSError *))completion
+{
+    if (!completion) {
+        return;
+    }
+
+    [self.restClient updateSchedule:schedule
+                         completion:^(JSOperationResult *result) {
+                             if (result.error) {
+                                 completion(nil, result.error);
+                             } else {
+                                 completion(result.objects.firstObject, nil);
+                             }
+                         }];
 }
 
 - (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void(^)(NSError *))completion
@@ -129,22 +165,6 @@
                                                     completion(nil);
                                                 }
                                             }];
-}
-
-#pragma mark - Private API
-- (void)loadResourcesWithCompletion:(void(^)(NSArray <JSScheduleJobResource *>*, NSError *))completion
-{
-    if (!completion) {
-        return;
-    }
-
-    [self.restClient fetchScheduledJobResourcesWithCompletion:^(JSOperationResult *result) {
-        if (result.error) {
-            completion(nil, result.error);
-        } else {
-            completion(result.objects, nil);
-        }
-    }];
 }
 
 @end

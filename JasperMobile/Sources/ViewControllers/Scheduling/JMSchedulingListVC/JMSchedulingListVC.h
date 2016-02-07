@@ -33,4 +33,5 @@
 #import "JMBaseCollectionViewController.h"
 
 @interface JMSchedulingListVC : JMBaseViewController
+@property (nonatomic, strong) JSResourceLookup *resourceLookup;
 @end

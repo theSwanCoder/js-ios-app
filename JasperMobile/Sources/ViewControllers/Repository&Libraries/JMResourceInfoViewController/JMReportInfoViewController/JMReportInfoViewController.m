@@ -28,7 +28,7 @@
 #import "JMReportInfoViewController.h"
 #import "JSResourceLookup+Helpers.h"
 #import "JMNewScheduleVC.h"
-#import "JMSchedulingManager.h"
+#import "JMScheduleManager.h"
 #import "JMSchedulingListVC.h"
 
 @interface JMReportInfoViewController ()

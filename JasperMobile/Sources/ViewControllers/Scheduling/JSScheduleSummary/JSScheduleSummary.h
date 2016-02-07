@@ -22,15 +22,24 @@
 
 
 //
-//  JMSchedulingInfoVC.h
+//  JSScheduleSummary.h
 //  TIBCO JasperMobile
 //
+
 
 /**
 @author Aleksandr Dakhno odahno@tibco.com
 @since 2.3
 */
 
-@interface JMSchedulingInfoVC : JMBaseViewController
-@property (nonatomic, strong) JSResourceLookup *resourceLookup;
+
+@interface JSScheduleSummary : NSObject
+@property (nonatomic, assign) NSInteger jobIdentifier;
+@property (nonatomic, assign) NSInteger version;
+@property (nonatomic, strong) NSString *reportUnitURI;
+@property (nonatomic, strong) NSString *label;
+@property (nonatomic, strong) NSString *scheduleDescription;
+@property (nonatomic, strong) NSString *owner;
+@property (nonatomic, strong) NSString *reportLabel;
+@property (nonatomic, strong) JSScheduleJobState *state;
 @end

@@ -22,7 +22,7 @@
 
 
 //
-//  JMSchedulingManager.h
+//  JMScheduleManager.h
 //  TIBCO JasperMobile
 //
 
@@ -33,13 +33,15 @@
 
 #import "JMResourcesListLoader.h"
 
-@class JSScheduleJobResource;
-@class JSScheduleJob;
+@class JSScheduleResponse;
+@class JSScheduleRequest;
+@class JSScheduleSummary;
 
-@interface JMSchedulingManager : NSObject
-@property (nonatomic, readonly) NSArray *jobs;
-- (void)loadSchedulesWithCompletion:(void (^)(NSArray <JSScheduleJobResource *> *, NSError *))completion;
-- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleJobResource *> *, NSError *))completion;
-- (void)createJobWithData:(JSScheduleJob *)jobData completion:(void (^)(JSScheduleJob *, NSError *))completion;
+@interface JMScheduleManager : NSObject
+- (void)loadSchedulesWithCompletion:(void (^)(NSArray <JSScheduleSummary *> *, NSError *))completion;
+- (void)loadSchedulesForResourceLookup:(JSResourceLookup *)resourceLookup completion:(void (^)(NSArray <JSScheduleSummary *> *, NSError *))completion;
+- (void)loadScheduleInfoWithScheduleId:(NSInteger)scheduleId completion:(void(^)(JSScheduleResponse *, NSError *))completion;
+- (void)createJobWithData:(JSScheduleResponse *)jobData completion:(void (^)(JSScheduleResponse *, NSError *))completion;
+- (void)updateSchedule:(JSScheduleResponse *)schedule completion:(void(^)(JSScheduleResponse *, NSError *))completion;
 - (void)deleteJobWithJobIdentifier:(NSInteger)identifier completion:(void (^)(NSError *))completion;
 @end

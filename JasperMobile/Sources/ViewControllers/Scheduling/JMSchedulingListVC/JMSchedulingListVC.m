@@ -27,16 +27,17 @@
 //
 
 #import "JMSchedulingListVC.h"
-#import "JMSchedulingManager.h"
+#import "JMScheduleManager.h"
 #import "JMScheduleCell.h"
-#import "JSScheduleJobResource.h"
-#import "JSScheduleJobState.h"
-#import "JMNewScheduleVC.h"
 #import "JMScheduleResourcesListVC.h"
+#import "JSScheduleResponse.h"
+#import "JSScheduleJobState.h"
+#import "JSScheduleSummary.h"
+#import "JMNewScheduleVC.h"
 
 @interface JMSchedulingListVC () <UITableViewDelegate, UITableViewDataSource, JMScheduleCellDelegate>
-@property (nonatomic, copy) NSArray <JSScheduleJobResource *> *jobs;
-@property (nonatomic) JMSchedulingManager *jobsManager;
+@property (nonatomic, copy) NSArray <JSScheduleSummary *> *scheduleSummaries;
+@property (nonatomic) JMScheduleManager *schedulesManager;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) UIRefreshControl *refreshControl;
 @property (weak, nonatomic) IBOutlet UILabel *noJobsLabel;
@@ -53,14 +54,14 @@
 
     self.view.backgroundColor = [[JMThemesManager sharedManager] resourceViewBackgroundColor];
 
-    self.jobsManager = [JMSchedulingManager new];
+    self.schedulesManager = [JMScheduleManager new];
 
     [self updateNoJobsLabelAppearence];
 
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     refreshControl.tintColor = [UIColor whiteColor];
     [refreshControl addTarget:self
-                       action:@selector(refresh:)
+                       action:@selector(refresh)
              forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     self.refreshControl = refreshControl;
@@ -73,20 +74,13 @@
 {
     [super viewWillAppear:animated];
 
-    __weak __typeof(self) weakSelf = self;
-    [self.jobsManager loadSchedulesWithCompletion:^(NSArray <JSScheduleJobResource *> *jobs, NSError *error) {
-        __typeof(self) strongSelf = weakSelf;
-        strongSelf.jobs = jobs;
-        [strongSelf updateNoJobsLabelAppearence];
-
-        [strongSelf.tableView reloadData];
-    }];
+    [self refresh];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.jobs.count;
+    return self.scheduleSummaries.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -94,9 +88,9 @@
     JMScheduleCell *jobCell = [tableView dequeueReusableCellWithIdentifier:@"JMScheduleCell" forIndexPath:indexPath];
     jobCell.delegate = self;
 
-    JSScheduleJobResource *job = self.jobs[indexPath.row];
+    JSScheduleSummary *job = self.scheduleSummaries[indexPath.row];
     jobCell.titleLabel.text = [NSString stringWithFormat:@"%@ (state: %@)", job.label, job.state.value];
-    jobCell.detailLabel.text = [NSString stringWithFormat:@"%@ (next run: %@)", job.jobDescription ?: @"", [self dateStringFromDate:job.state.nextFireTime]];
+    jobCell.detailLabel.text = [NSString stringWithFormat:@"%@ (next run: %@)", job.scheduleDescription ?: @"", [self dateStringFromDate:job.state.nextFireTime]];
 
     jobCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return jobCell;
@@ -107,17 +101,20 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    JSScheduleSummary *scheduleSummary = self.scheduleSummaries[indexPath.row];
+    [self editSchedule:scheduleSummary];
 }
 
 #pragma mark - Actions
-- (IBAction)refresh:(id)sender
+- (void)refresh
 {
     __weak __typeof(self) weakSelf = self;
-    [self.jobsManager loadSchedulesWithCompletion:^(NSArray <JSScheduleJobResource *> *jobs, NSError *error) {
+    [self.schedulesManager loadSchedulesForResourceLookup:self.resourceLookup completion:^(NSArray <JSScheduleResponse *> *jobs, NSError *error) {
         __typeof(self) strongSelf = weakSelf;
         [strongSelf.refreshControl endRefreshing];
 
-        strongSelf.jobs = jobs;
+        strongSelf.scheduleSummaries = jobs;
         [strongSelf updateNoJobsLabelAppearence];
 
         [strongSelf.tableView reloadData];
@@ -126,30 +123,53 @@
 
 - (IBAction)addNewSchedule:(id)sender
 {
-    JMScheduleResourcesListVC *resourcesListVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleResourcesListVC"];
-    [self.navigationController pushViewController:resourcesListVC animated:YES];
+    if (self.resourceLookup) {
+        JMNewScheduleVC *newScheduleVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
+        newScheduleVC.resourceLookup = self.resourceLookup;
+        newScheduleVC.mode = JMScheduleModeNew;
+        [self.navigationController pushViewController:newScheduleVC animated:YES];
+    } else {
+        JMScheduleResourcesListVC *resourcesListVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMScheduleResourcesListVC"];
+        [self.navigationController pushViewController:resourcesListVC animated:YES];
+    }
+}
+
+- (void)editSchedule:(JSScheduleSummary *)schedule
+{
+    JMNewScheduleVC *newScheduleVC = [self.navigationController.storyboard instantiateViewControllerWithIdentifier:@"JMNewScheduleVC"];
+    newScheduleVC.resourceLookup = self.resourceLookup;
+    newScheduleVC.scheduleSummary = schedule;
+    newScheduleVC.mode = JMScheduleModeEdit;
+    [self.navigationController pushViewController:newScheduleVC animated:YES];
+}
+
+- (void)deleteSchedule:(JSScheduleSummary *)scheduleSummary
+{
+    __weak __typeof(self) weakSelf = self;
+    [self.schedulesManager deleteJobWithJobIdentifier:scheduleSummary.jobIdentifier
+                                           completion:^(NSError *error) {
+                                               __typeof(self) strongSelf = weakSelf;
+
+                                               NSInteger scheduleSummaryIndex = [strongSelf.scheduleSummaries indexOfObjectIdenticalTo:scheduleSummary];
+
+                                               NSMutableArray *jobs = [strongSelf.scheduleSummaries mutableCopy];
+                                               [jobs removeObject:scheduleSummary];
+                                               strongSelf.scheduleSummaries = [jobs copy];
+
+                                               NSIndexPath *indexPath = [NSIndexPath indexPathForRow:scheduleSummaryIndex inSection:0];
+                                               [strongSelf.tableView deleteRowsAtIndexPaths:@[indexPath]
+                                                                           withRowAnimation:UITableViewRowAnimationLeft];
+
+                                           }];
 }
 
 #pragma mark - JMJobCellDelegate
 - (void)scheduleCellDidReceiveDeleteScheduleAction:(JMScheduleCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    JSScheduleJobResource *job = self.jobs[indexPath.row];
+    JSScheduleSummary *scheduleSummary = self.scheduleSummaries[indexPath.row];
 
-    __weak __typeof(self) weakSelf = self;
-    [self.jobsManager deleteJobWithJobIdentifier:job.jobIdentifier
-                                      completion:^(NSError *error) {
-                                          __typeof(self) strongSelf = weakSelf;
-
-                                          NSMutableArray *jobs = [strongSelf.jobs mutableCopy];
-                                          [jobs removeObject:job];
-                                          strongSelf.jobs = [jobs copy];
-                                          [strongSelf updateNoJobsLabelAppearence];
-
-                                          [strongSelf.tableView deleteRowsAtIndexPaths:@[indexPath]
-                                                                withRowAnimation:UITableViewRowAnimationLeft];
-
-                                      }];
+    [self deleteSchedule:scheduleSummary];
 }
 
 #pragma mark - Helpers
@@ -172,7 +192,7 @@
 
 - (void)updateNoJobsLabelAppearence
 {
-    [self showNoJobsLabel:(self.jobs.count == 0)];
+    [self showNoJobsLabel:(self.scheduleSummaries.count == 0)];
 }
 
 @end

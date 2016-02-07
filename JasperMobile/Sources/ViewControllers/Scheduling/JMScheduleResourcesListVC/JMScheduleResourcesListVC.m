@@ -26,7 +26,7 @@
 //  TIBCO JasperMobile
 //
 #import "JMScheduleResourcesListVC.h"
-#import "JMSchedulingInfoVC.h"
+#import "JMSchedulingListVC.h"
 
 
 @interface JMScheduleResourcesListVC() <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
@@ -150,7 +150,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     JSResourceLookup *resourceLookup = self.resources[indexPath.row];
-    JMSchedulingInfoVC *schedulingInfoVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMSchedulingInfoVC"];
+    JMSchedulingListVC *schedulingInfoVC = [self.storyboard instantiateViewControllerWithIdentifier:@"JMSchedulingListVC"];
     schedulingInfoVC.resourceLookup = resourceLookup;
 
     [self.navigationController pushViewController:schedulingInfoVC animated:YES];
